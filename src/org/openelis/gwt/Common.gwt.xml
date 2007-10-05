@@ -1,0 +1,10 @@
+<module>
+	<source path="common"/>
+	<source path="client/services"/>
+    <public path="public"/>
+    <stylesheet src="CSS/EditTable.css"/>
+    <stylesheet src="CSS/calendar.css"/>    
+    <stylesheet src="CSS/popwindow.css"/>
+    <stylesheet src="CSS/menu.css"/>
+   <!-- <stylesheet src="CSS/Common.css"/> -->
+</module>

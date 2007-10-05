@@ -1,0 +1,128 @@
+.Table{
+    background:#d8d8d8;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+}
+
+.TableRow{
+    background:white;
+}
+.AltTableRow{
+    background:#f8f8f9;
+}
+.TableCell {
+    padding:2;
+    height:25px;
+    overflow:hidden;
+    cursor:pointer;
+    color: #616a76;
+}
+.RowNum {
+    height:25px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    background:#dde0e3;
+    text-align:center;
+}
+
+.Selected .TableCell{
+    color:#333;
+    background:#ffe290;
+}
+
+.Enabled{
+    width:100%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    border:1px solid #f6be00;
+}
+.Selected .gwt-CheckBox{
+    padding-top:6;
+}
+.Focused{
+    background:#ffffff;
+}
+.TitlePanel{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    background:#dde0e3;
+}
+.Header{
+     border-collapse:collapse;
+}
+.HeaderBar{
+    width:1px;
+    height:17px;
+    background:#d8d8d8;
+    cursor:ew-resize;
+}
+.HeaderCell{
+    height:17;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    background:#dde0e3;
+}
+.HeaderIMG {
+	position:relative;
+	top:3;
+}
+.HeaderLabel {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color:#333;
+#    color:#9199a4;
+    cursor:default;
+}
+.hide{
+	display:none;
+}
+
+.navindex{
+    display:block;
+    padding:1px;
+    border:1px solid #e6eaf6;
+    text-align:center;
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 10px;
+    color:#333333;
+    cursor:pointer;
+}
+a.navindex:hover{
+    color:#333333;
+    background:#ffe290;
+#    background:#f8f8f9;
+    text-decoration:none;
+}
+.current .navIndex {
+    display:block;
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 10px;
+    color:white;
+    background:#ffe290;
+    cursor:pointer;
+}	
+.current a.navIndex:hover{
+    color:white;
+    background:#ffe290;
+    text-decoration:none;
+    cursor:default;
+}
+a.index:hover{
+   color:white;
+   background:#ac0000;
+   text-decoration:none;
+}
+.index{
+    display:block;
+    width:100%;
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 10px;
+    color:#333333;
+    cursor:pointer;
+}
+.indexselected {
+   color:white;
+   background:#ac0000;
+   text-decoration:none;
+}
+

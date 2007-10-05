@@ -1,0 +1,500 @@
+.disabled{
+    cursor:default;
+}
+
+.navIndex{
+}
+
+a.navIndex:hover {
+}
+
+.gwt-HTML-separator{
+    width:1px;
+#    width:2px;
+    height:16px;
+    margin-top:3px;
+    background:#bbc0c7;
+    border-bottom:1px solid #f8f8f9;
+    border-right:1px solid #f8f8f9;
+}
+
+.ScreenButtonPanel{
+    border-top:1px solid white;
+    border-bottom:1px solid #f0f1f2;
+    background:url("../Images/listheadergrad_obsidian.gif");
+}
+
+.ScreenPanelButton .ScreenLabel {
+    padding-top:3px;
+    padding-left:1px;
+    padding-right:1px;
+    padding-bottom:5px;
+    color: #616a76;
+    text-align:center;
+    width:100px;
+}
+
+.ScreenButtonPanel .Hover .ScreenLabel{
+    padding-top:2px;
+    padding-left:0px;
+    padding-right:0px;
+    padding-bottom:4px;
+    background-image:url("../Images/menubuttonhover.gif");
+    border:1px solid #6f9dd9;
+    cursor:pointer;
+    color:#333;
+}
+
+.ScreenButtonPanel .disabled .ScreenLabel{
+    padding-top:3px;
+    padding-left:1px;
+    padding-right:1px;
+    background:transparent;
+    border:none;
+    cursor:default;
+    color:#f8f8f9;
+}
+
+.CloseButton {
+    padding:2px;
+}
+.Hover .CloseButton {
+    padding:1px;
+    border:1px solid #6f9dd9;
+    background-image:url("../Images/menubuttonhover.gif");
+    cursor:pointer;
+}
+
+.AppBackground {
+    background:#535353;
+}
+
+.WindowPanel {
+    background:white;
+    border:1px solid #76808e;
+}
+
+.Caption{
+    background-image: url("../Images/topnavunselected_obsidian.gif");
+    background-repeat: repeat-x;
+    background-color: #dde0e3;
+    height:19;
+    cursor:move;
+}
+.StatusBar {
+    background-image: url("../Images/topnavunselected_obsidian.gif");
+    background-repeat: repeat-x;
+    background-color: #dde0e3;
+    height:19;
+    cursor:move;
+}
+
+.ScreenMenuLabel{
+    font-family:Verdana;
+    font-size:12px;
+}
+
+.ScreenWindowLabel{
+    font-family:Verdana;
+    font-size:12px;
+    color: #616a76;
+    padding-left:6px;
+    padding-top:2px;
+}
+
+.ScreenMenuList {
+    background:#f8f8f9;
+    width:85%;
+    halign:center;
+}
+
+.ScreenMenuLabel {
+    width:100%;
+}
+
+.ListItem{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    cursor:pointer;
+    color:#276cff;
+    padding:4px;
+}
+
+.ListSubItem{
+    cursor:pointer;
+    color:#276cff;
+    padding:4px;
+}
+
+.ListHeader {
+    height:16;
+    background-color:#dde0e3;
+    border-top:1px solid #c7cbd1;
+    border-bottom:1px solid #c7cbd1;
+    color:#373c43;
+    cursor:default;
+    padding-left:6px;
+}
+
+.Hover .ListItem{
+    color:#000000;
+}
+
+.Hover .ListSubItem{
+    color:#000000;
+}
+
+.ScreenTable {
+}
+
+.TitlePanel{
+    padding-top:2px;
+    padding-left:5px;
+    background:white;
+    border-bottom:1px solid #fb8c3c;
+}
+
+.ScreenWindowLabel .MenuText{
+    border-bottom: none;
+    color: white;
+    font-weight:bold;
+    padding-left:3px;
+}
+
+.ScreenTable .TitlePanel .gwt-Label{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    font-weight:bold;
+    color:#fb8c3c;
+    text-align:left;
+}
+
+
+
+.gwt-TabPanel {
+	background:#f1ecdd;
+}
+.gwt-TabBar .gwt-TabBarItem {
+	border:1px solid lightgrey;
+}
+.gwt-TabBar .gwt-TabBarItem-selected {
+	border-top:1px solid lightgrey;
+	border-left:1px solid lightgrey;	
+	border-right:1px solid lightgrey;
+}
+
+.ScreenAbsolute{
+
+}
+
+.ScreenDeck{
+
+}
+
+.ScreenDisclosure{
+
+}
+
+.ScreenDock{
+
+}
+
+.ScreenHPVP{
+
+}
+
+.ScreenSplit {
+    background:#383838;
+}
+
+.ScreenSplit .hsplitter{
+    width:3px;
+    background:#f0f1f6;
+    cursor:ew-resize;
+    height:100%
+}
+
+.ScreenSplit .vsplitter{
+    width:100%;
+    background:#f0f1f6;
+    cursor:ns-resize;
+    height:3px;
+}
+
+.ScreenStack{
+
+}
+
+.ScreenTab{
+  	background:#f1ecdd;
+}
+
+.ScreenTab .gwt-TabBarItem {
+	border:1px solid lightgrey;
+}
+.ScreenTab .gwt-TabBarItem-selected {
+	border-top:1px solid lightgrey;
+	border-left:1px solid lightgrey;	
+	border-right:1px solid lightgrey;
+}
+
+.ScreenTablePanel{
+
+}
+
+.Screen{
+
+}
+
+.ScreenAuto {
+    border:1px solid lightgrey;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    cursor:default;	
+}
+
+.AutoCompleteChoices select {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weght:normal;
+    font-size:11px;
+    background:#ffffee;
+}
+
+.Commit {
+}
+
+.Commit-disabled{
+    cursor:default;
+}
+
+.Previous {
+}
+
+.Previous-disabled {
+    cursor:default;
+}
+
+.Next {
+}
+
+.Next-disabled {
+    cursor:default;
+}
+
+.Delete {
+}
+
+.Delete-disabled {
+    cursor:default;
+}
+
+.Abort {
+}
+
+.Abort-disabled {
+    cursor:default;
+}
+
+.Reload {
+}
+
+.Reload-disabled {
+    cursor:default;
+}
+
+.Query {
+}
+
+.Query-disabled {
+    cursor:default;
+}
+
+.Update {
+}
+
+.Update-disabled {
+    cursor:default;
+}
+
+.Add {
+}
+
+.Add-disabled {
+    cursor:default;
+}
+
+.ScreenCalendar {
+
+}
+
+.ScreenCalendar-box {
+    border:1px solid lightgrey;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+
+.ScreenCalendar-button {
+    margin:2px;
+    cursor:pointer;
+    background:white;	
+}
+
+.ScreenCheck {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+}
+
+.ScreenDragSelect {
+    background:white;
+}
+
+.locked{
+    -moz-user-select:none;
+}
+
+.DragContainer{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size:8pt;
+    border:2px solid #d8d8d8;
+}
+
+.DragItem{
+    cursor:ew-resize;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weght:normal;
+    font-size:11px;
+}
+
+.ScreenError {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    color:#fb8c3c;
+}
+
+.ScreenHTML img{
+    background-image:url("../Images/listheadergrad_obsidian.gif");
+    border:solid 1px #c5cad0;
+    cursor:pointer;
+    margin-right:2px;
+}
+
+.ScreenImage {
+    margin:2px;
+    cursor:pointer;
+}
+
+.ScreenMaskedBox{
+    border:1px solid lightgrey;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+
+.MenuImage{
+##    width:24;
+##    height:24;
+}
+
+.ScreenOption{
+
+}
+
+.ScreenPassword {
+
+}
+
+.ScreenRadio {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+}
+
+.ScreenTabBrowser{
+
+}
+
+.ScreenTextArea{
+    border:1px solid lightgrey;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:150px;
+}
+
+.ScreenTextBox{
+    border:1px solid lightgrey;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+
+.ScreenTree{
+
+}
+
+.ScreenWindowBrowser{
+}
+
+.WindowDragPanel {
+	background:lightblue;
+	border:1px dashed black;
+	opacity:.5;
+}
+.ScreenWindowBrowser {
+}
+.Inactive {
+    cursor:default;
+    color:#d8d8d8;
+}
+.selected{
+	background:#e6eaf6;
+}
+
+.ScreenStack {
+    width:100%;
+    background:#e6eaf6;
+}
+.ScreenDragList {
+	-moz-user-select:none;
+    background:#e6eaf6;
+}
+.gwt-StackPanelItem {
+    font-family:Verdana;
+    font-size:12px;
+    cursor:pointer;
+    border-bottom:1px solid #73d216;
+    background:white;
+}
+.gwt-StackPanelItem-Selected {
+    background:#e6eaf6;
+}
+.ScreenLabel{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+}
+.StatusBar a.header{
+    text-decoration:none;
+}
+.StatusBar .ScreenWindowLabel {
+    background:white;
+    color:#fb8c3c;
+    text-align:center;
+    padding:8px;
+}
+
