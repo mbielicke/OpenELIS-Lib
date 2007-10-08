@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -334,10 +333,6 @@ public class TableController implements
             view.table.getFlexCellFormatter().addStyleName(index,
                                                            i,
                                                            view.cellStyle);
-            /*
-             * if(curColWidth[i] > 0)
-             * view.table.getFlexCellFormatter().setWidth(index,i,curColWidth[i]+"px");
-             */
             if (colAlign != null && colAlign[i] != null) {
                 view.table.getFlexCellFormatter()
                           .setHorizontalAlignment(index, i, colAlign[i]);
@@ -649,9 +644,9 @@ public class TableController implements
         }
         for (int i = 0; i < view.header.getCellCount(0); i++) {
             if (i % 2 == 0) {
-                ((Image)((HorizontalPanel)view.header.getWidget(0, i)).getWidget(1)).removeStyleName("hide");
+                ((Image)((HorizontalPanel)((HorizontalPanel)view.header.getWidget(0, i)).getWidget(0)).getWidget(1)).removeStyleName("hide");
                 if (!sortable[i / 2] && !filterable[i / 2]) {
-                    ((Image)((HorizontalPanel)view.header.getWidget(0, i)).getWidget(1)).addStyleName("hide");
+                    ((Image)((HorizontalPanel)((HorizontalPanel)view.header.getWidget(0, i)).getWidget(0)).getWidget(1)).addStyleName("hide");
                 }
             } else {
                 FocusPanel img = (FocusPanel)view.header.getWidget(0, i);
@@ -704,10 +699,13 @@ public class TableController implements
                     view.hsc.setWidth((view.table.getOffsetWidth())+"px");
                     view.vsc.setHeight(view.table.getOffsetHeight()+"px");
                     for(int i = 0; i < curColWidth.length; i++){
-                        if( i > 0)
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i] -2)+"px");
-                        else
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i] + 6)+"px");
+                        if( i > 0){
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i])+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-8)+"px");
+                        }else{
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i])+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-4)+"px");
+                        }
                             
                     }
                 }
@@ -1089,10 +1087,10 @@ public class TableController implements
         if (sender instanceof FocusPanel) {
             resizing = true;
             startx = x;
-            for (int i = 0; i < view.header.getCellCount(1); i++) {
-                if (sender == view.header.getWidget(1, i)) {
+            for (int i = 0; i < view.header.getCellCount(0); i++) {
+                if (sender == view.header.getWidget(0, i)) {
                     resizeColumn = i - 1;
-                    i = view.header.getCellCount(1);
+                    i = view.header.getCellCount(0);
                 }
             }
             DOM.setCapture(sender.getElement());
@@ -1120,19 +1118,26 @@ public class TableController implements
     public void onMouseMove(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
         if (resizing) {
-            int width = DOM.getIntAttribute(view.header.getFlexCellFormatter()
-                                                       .getElement(1,
-                                                                   resizeColumn),
-                                            "offsetWidth");
-            if (width + (x - startx - 6) <= colwidth[resizeColumn / 2])
+            int colA = curColWidth[resizeColumn / 2] + (x - startx);
+            int colB = curColWidth[(resizeColumn / 2)+1] - (x - startx);
+            if(colA <= 16 || colB <= 16) 
                 return;
-            view.header.getFlexCellFormatter()
-                       .setWidth(0, resizeColumn, (width + (x - startx)) + "px");
-            view.table.getFlexCellFormatter()
-                      .setWidth(0,
-                                resizeColumn / 2,
-                                (width + (x - startx - 6)) + "px");
-            curColWidth[resizeColumn / 2] = width + (x - startx - 6);
+            curColWidth[resizeColumn / 2] = colA;
+            curColWidth[(resizeColumn / 2)+1] = colB;
+            //for(int i = 0; i < curColWidth.length; i++){
+                if( resizeColumn == 0 ){
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2])+"px");
+                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-4)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1])+"px");
+                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-8)+"px");
+                }else{
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2])+"px");
+                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-8)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1])+"px");
+                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-8)+"px");
+                }
+                    
+            //}
         }
     }
 
@@ -1144,7 +1149,15 @@ public class TableController implements
         if (resizing) {
             DOM.releaseCapture(sender.getElement());
             resizing = false;
-            view.size();
+            for (int j = 0; j < model.numRows(); j++) {
+                for (int i = 0; i < curColWidth.length; i++) {
+                    if (curColWidth[i] > 0) {
+                        view.table.getFlexCellFormatter()
+                                  .setWidth(j, i, curColWidth[i] + "px");
+                        view.table.getWidget(j, i).setWidth((curColWidth[i] -4) + "px");
+                    }
+                }
+            }
         }
     }
 

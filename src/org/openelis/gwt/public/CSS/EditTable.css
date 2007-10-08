@@ -57,6 +57,9 @@
     cursor:ew-resize;
 }
 .HeaderCell{
+    padding:2;
+    overflow:hidden;
+    cursor:pointer;
     height:17;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 10px;
@@ -71,6 +74,7 @@
     font-size: 10px;
     color:#333;
 #    color:#9199a4;
+    overflow:hidden;
     cursor:default;
 }
 .hide{

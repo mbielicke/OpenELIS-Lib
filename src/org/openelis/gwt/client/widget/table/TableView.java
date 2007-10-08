@@ -1,9 +1,6 @@
 package org.openelis.gwt.client.widget.table;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -71,6 +68,7 @@ public class TableView extends Composite implements ScrollListener {
     
     public void initTable() {
         if(headers != null){
+            header.setCellSpacing(0);
             titleLabel.setText(title);
             titlePanel.add(titleLabel);
             titlePanel.addStyleName("TitlePanel");
@@ -86,25 +84,26 @@ public class TableView extends Composite implements ScrollListener {
                     header.getFlexCellFormatter().setWidth(0, j, "1px");
                     j++;
                 }
+                HorizontalPanel hp0 = new HorizontalPanel();
+                DOM.setStyleAttribute(hp0.getElement(), "overflow", "hidden");
                 HorizontalPanel hp = new HorizontalPanel();
                 hLabels[i].addStyleName("HeaderLabel");
                 Image img = new Image("Images/unapply.png");
                 img.setHeight("10px");
                 img.setWidth("10px");
+                DOM.setStyleAttribute(img.getElement(),"overflow","hidden");
                 img.addStyleName("HeaderIMG");
                 img.addStyleName("hide");
                 hp.add(hLabels[i]);
-                
+                hLabels[i].setWordWrap(false);
                 hp.add(img);
                 hp.setCellHorizontalAlignment(hLabels[i],
                                               HasHorizontalAlignment.ALIGN_RIGHT);
                 hp.setCellHorizontalAlignment(img,
                                               HasHorizontalAlignment.ALIGN_LEFT);
-                hp.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
-                hp.setSpacing(1);
-                header.setWidget(0, j, hp);
-                header.getFlexCellFormatter()
-                      .setHorizontalAlignment(0, j, HasAlignment.ALIGN_CENTER);
+                hp0.add(hp);
+                hp0.setCellHorizontalAlignment(hp, HasAlignment.ALIGN_CENTER);              
+                header.setWidget(0, j, hp0);
                 header.getFlexCellFormatter().addStyleName(0,
                                                            j,
                                                            headerCellStyle);
@@ -140,46 +139,8 @@ public class TableView extends Composite implements ScrollListener {
         ft.setWidget(2,0,hScroll);
         ft.setWidget(1,1,vScroll);
         vp.add(ft);
-        Window.addWindowResizeListener(new WindowResizeListener() {
-            public void onWindowResized(int x, int y) {
-                if (table.isAttached())
-                    size();
-            }
-        });
     }
     
-    public void size() {
-        hsc.setWidth((table.getOffsetWidth())+"px");
-        vsc.setHeight(table.getOffsetHeight()+"px");
-/*        try {
-        if (!header.isAttached())
-            return;
-        int firstRow = 0;
-        header.setWidth((table.getOffsetWidth())+"px");
-        rows.setHeight(table.getOffsetHeight()+"px");
-        //staticGrid.setHeight(table.getOffsetHeight()+"px");
-        hsc.setWidth((table.getOffsetWidth())+"px");
-        vsc.setHeight(table.getOffsetHeight()+"px");
-        
-        while (firstRow < table.getRowCount() && table.getRowFormatter()
-                                                      .getStyleName(firstRow)
-                                                      .indexOf("hide") > -1)
-            firstRow++;
-        for (int i = 0; i < headers.length * 2; i++) {
-            if (i % 2 == 0 || i == 0) {
-                Element bElem = table.getFlexCellFormatter()
-                                     .getElement(firstRow, i / 2);
-                int width = DOM.getIntAttribute(bElem, "offsetWidth");
-                if (i == 0)
-                    width += 5;
-                header.getFlexCellFormatter().setWidth(0, i, (width) + "px");
-            }
-        }
-        }catch(Exception e){
-          
-        }
-        */
-    }
     
     public void setHeight(String height) {
         cellView.setHeight(height);
