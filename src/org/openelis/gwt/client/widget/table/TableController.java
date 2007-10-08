@@ -453,8 +453,6 @@ public class TableController implements
         for (int i = 0; i < view.table.getCellCount(row); i++) {
             if (selectedCell == i) {
                 saveValue(row, i);
-                if (manager != null)
-                    manager.finishedEditing(row, i, this);
                 if(model.autoAdd){
                     if(manager != null && manager.doAutoAdd(row,i,this))
                         addRow();
@@ -490,8 +488,6 @@ public class TableController implements
             if (selectedCell != col) {
                 if (selectedCell > -1) {
                     saveValue(row, selectedCell);
-                    if (manager != null)
-                        manager.finishedEditing(row, col, this);
                     if(model.autoAdd){
                         if(manager != null && manager.doAutoAdd(row,col,this))
                             addRow();
@@ -781,8 +777,6 @@ public class TableController implements
                 if (selectedCell > -1) {
                     saveValue(selected, selectedCell);
                     setCellDisplay(selected, selectedCell);
-                    if (manager != null)
-                        manager.finishedEditing(selected, selectedCell, this);
                     if(model.autoAdd){
                         if(manager != null && manager.doAutoAdd(selected,selectedCell,this))
                             addRow();
