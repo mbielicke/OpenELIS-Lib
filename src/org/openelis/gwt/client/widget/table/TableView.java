@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TableView extends Composite implements ScrollListener {
     
     public AbsolutePanel cellView = new AbsolutePanel();
-    private AbsolutePanel headerView = new AbsolutePanel();
+    public AbsolutePanel headerView = new AbsolutePanel();
     private AbsolutePanel rowsView = new AbsolutePanel();
     private AbsolutePanel statView = new AbsolutePanel();
     private FlexTable ft = new FlexTable();
@@ -61,6 +61,7 @@ public class TableView extends Composite implements ScrollListener {
     public String navLinks = "NavLinks";
     protected HorizontalPanel navPanel = new HorizontalPanel();
     private VerticalPanel vp = new VerticalPanel();
+    public String width;
     
     public TableView() {
         initWidget(vp);
@@ -151,6 +152,7 @@ public class TableView extends Composite implements ScrollListener {
     }
 
     public void setWidth(String width) {
+        this.width = width;
         cellView.setWidth(width);
         headerView.setWidth(width);
         vScroll.setWidth("18px");

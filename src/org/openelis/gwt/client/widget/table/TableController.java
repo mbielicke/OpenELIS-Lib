@@ -689,10 +689,15 @@ public class TableController implements
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     view.header.setWidth((view.table.getOffsetWidth())+"px");
-                    if(view.table.getOffsetWidth() > view.cellView.getOffsetWidth()){
-                        view.hScroll.setAlwaysShowScrollBars(true);
+                    if(view.width.equals("auto")){
+                        view.cellView.setWidth(view.table.getOffsetWidth()+"px");
+                        view.headerView.setWidth(view.table.getOffsetWidth()+"px");
+                    }else{
+                        if(view.table.getOffsetWidth() > view.cellView.getOffsetWidth())
+                            view.hScroll.setAlwaysShowScrollBars(true);
                     }
                     view.hsc.setWidth((view.table.getOffsetWidth())+"px");
+                    DOM.setStyleAttribute(view.hScroll.getElement(), "overflowY", "hidden");
                     view.vsc.setHeight(view.table.getOffsetHeight()+"px");
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0){
