@@ -118,6 +118,7 @@ a.navIndex:hover {
     cursor:pointer;
     color:#276cff;
     padding:4px;
+    border-top:1px solid #d8d8d8;
 }
 
 .ListSubItem{
@@ -127,12 +128,11 @@ a.navIndex:hover {
 }
 
 .ListHeader {
-    height:16;
-    background-color:#dde0e3;
-    border-top:1px solid #c7cbd1;
-    border-bottom:1px solid #c7cbd1;
+    height:18;
+    background-image:url("../Images/listheaderbg.jpg");
     color:#373c43;
     cursor:default;
+    padding-top:4px;
     padding-left:6px;
 }
 

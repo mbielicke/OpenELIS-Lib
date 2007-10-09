@@ -56,6 +56,7 @@ public class WidgetMap {
                     TEXT = "text", // ScreenText
                     TEXT_AREA = "textarea", // ScreenTextArea
                     TEXBOX = "textbox", // ScreenTexBox
+                    TOGGLE_BUTTON = "toggle", //ScreenToggleButton
                     TREE = "tree", // ScreenTree
                     DRAGLIST = "draglist", // ScreenDragList
                     WINBROWSER = "winbrowser", //ScreenWindowBrowser

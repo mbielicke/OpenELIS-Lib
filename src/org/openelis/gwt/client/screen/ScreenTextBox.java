@@ -24,7 +24,7 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
 	 */
     private TextBox textbox;
     private String fieldCase;
-    private boolean enabled;
+  
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -47,7 +47,12 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
                         screen.doTab(event, this);
                     }
-                } else {
+                } else if(DOM.eventGetType(event) == Event.ONKEYUP){
+                    if(fieldCase.equals("upper"))
+                        setText(getText().toUpperCase());
+                    else
+                        setText(getText().toLowerCase());   
+                }else{
                     super.onBrowserEvent(event);
                 }
             }
