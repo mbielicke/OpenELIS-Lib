@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
@@ -620,6 +621,7 @@ public class TableController implements
             view.table.setText(row, col, (String)display);
         } else {
             ((Widget)display).addStyleName(view.widgetStyle);
+            DOM.setStyleAttribute(((Widget)display).getElement(), "overflowX", "hidden");
             ((Widget)display).setWidth((curColWidth[col] -4)+ "px");
             view.table.setWidget(row, col, (Widget)display);
            
@@ -640,9 +642,9 @@ public class TableController implements
         }
         for (int i = 0; i < view.header.getCellCount(0); i++) {
             if (i % 2 == 0) {
-                ((Image)((HorizontalPanel)((HorizontalPanel)view.header.getWidget(0, i)).getWidget(0)).getWidget(1)).removeStyleName("hide");
+                ((Image)((HorizontalPanel)((SimplePanel)view.header.getWidget(0, i)).getWidget()).getWidget(1)).removeStyleName("hide");
                 if (!sortable[i / 2] && !filterable[i / 2]) {
-                    ((Image)((HorizontalPanel)((HorizontalPanel)view.header.getWidget(0, i)).getWidget(0)).getWidget(1)).addStyleName("hide");
+                    ((Image)((HorizontalPanel)((SimplePanel)view.header.getWidget(0, i)).getWidget()).getWidget(1)).addStyleName("hide");
                 }
             } else {
                 FocusPanel img = (FocusPanel)view.header.getWidget(0, i);
@@ -701,11 +703,11 @@ public class TableController implements
                     view.vsc.setHeight(view.table.getOffsetHeight()+"px");
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0){
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i])+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-8)+"px");
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-2)+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-10)+"px");
                         }else{
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i])+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-4)+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-6)+"px");
                         }
                             
                     }
@@ -915,7 +917,7 @@ public class TableController implements
      */
     public void filter(int col, Filter[] filter) {
         filters.set(col, filter);
-        Image img = (Image)((HorizontalPanel)view.header.getWidget(0, col * 2)).getWidget(1);
+        Image img = (Image)((HorizontalPanel)((SimplePanel)view.header.getWidget(0, col * 2)).getWidget()).getWidget(1);
         if (!filter[0].filtered)
             img.setUrl("Images/apply.png");
         else
@@ -1126,14 +1128,14 @@ public class TableController implements
             //for(int i = 0; i < curColWidth.length; i++){
                 if( resizeColumn == 0 ){
                     view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2])+"px");
-                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-4)+"px");
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1])+"px");
-                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-8)+"px");
+                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-6)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1] -2)+"px");
+                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-10)+"px");
                 }else{
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2])+"px");
-                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-8)+"px");
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1])+"px");
-                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-8)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2] -2)+"px");
+                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-10)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1] -2)+"px");
+                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-10)+"px");
                 }
                     
             //}

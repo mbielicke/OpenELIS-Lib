@@ -54,7 +54,13 @@
     width:1px;
     height:17px;
     background:#d8d8d8;
-    cursor:ew-resize;
+    cursor:e-resize;
+}
+.HeaderBarPad{
+    width:1px;
+    height:17px;
+    background:#dde0e3;
+    cursor:e-resize;
 }
 .HeaderCell{
     padding:2;

@@ -154,8 +154,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     public void setContent(Widget content){
         this.content = content;
         outer.insert(content, 1);
-        if(content instanceof ScreenForm)
+        if(content instanceof ScreenForm){
             ((ScreenForm)content).message =  message;
+            ((ScreenForm)content).window = this;
+        }
     }
     
     public void onClick(Widget sender) {

@@ -29,6 +29,8 @@ public class ScreenForm extends Screen implements FormInt {
      */
     public Label message;
     
+    public ScreenWindow window;
+    
     public ScreenForm() {
         super();
     }

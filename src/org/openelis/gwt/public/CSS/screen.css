@@ -5,6 +5,9 @@
 .navIndex{
 }
 
+.ScreenLoad{
+  cursor:wait;
+}
 a.navIndex:hover {
 }
 
@@ -455,6 +458,7 @@ a.navIndex:hover {
 	background:lightblue;
 	border:1px dashed black;
 	opacity:.5;
+filter: alpha(opacity=50);
 }
 .ScreenWindowBrowser {
 }

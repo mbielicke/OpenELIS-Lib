@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -77,22 +78,33 @@ public class TableView extends Composite implements ScrollListener {
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
                     FocusPanel bar = new FocusPanel();
-                    bar.addStyleName("HeaderBar");
+                    HorizontalPanel hpBar = new HorizontalPanel();
+                    AbsolutePanel ap1 = new AbsolutePanel();
+                    ap1.addStyleName("HeaderBarPad");
+                    AbsolutePanel ap2 = new AbsolutePanel();
+                    ap2.addStyleName("HeaderBar");
+                    AbsolutePanel ap3 = new AbsolutePanel();
+                    ap3.addStyleName("HeaderBarPad");
+                    hpBar.add(ap1);
+                    hpBar.add(ap2);
+                    hpBar.add(ap3);
+                    bar.add(hpBar);
                     header.setWidget(0, j, bar);
                     header.getFlexCellFormatter().addStyleName(0,
                                                                j,
                                                                headerCellStyle);
-                    header.getFlexCellFormatter().setWidth(0, j, "1px");
+                    header.getFlexCellFormatter().setWidth(0, j, "3px");
                     j++;
                 }
-                HorizontalPanel hp0 = new HorizontalPanel();
+                SimplePanel hp0 = new SimplePanel();
                 DOM.setStyleAttribute(hp0.getElement(), "overflow", "hidden");
+                DOM.setStyleAttribute(hp0.getElement(), "overflowX", "hidden");
                 HorizontalPanel hp = new HorizontalPanel();
                 hLabels[i].addStyleName("HeaderLabel");
                 Image img = new Image("Images/unapply.png");
                 img.setHeight("10px");
                 img.setWidth("10px");
-                DOM.setStyleAttribute(img.getElement(),"overflow","hidden");
+                DOM.setStyleAttribute(hLabels[i].getElement(),"overflowX","hidden");
                 img.addStyleName("HeaderIMG");
                 img.addStyleName("hide");
                 hp.add(hLabels[i]);
@@ -102,8 +114,8 @@ public class TableView extends Composite implements ScrollListener {
                                               HasHorizontalAlignment.ALIGN_RIGHT);
                 hp.setCellHorizontalAlignment(img,
                                               HasHorizontalAlignment.ALIGN_LEFT);
-                hp0.add(hp);
-                hp0.setCellHorizontalAlignment(hp, HasAlignment.ALIGN_CENTER);              
+                hp0.setWidget(hp);
+                DOM.setElementProperty(hp0.getElement(),"align","center");              
                 header.setWidget(0, j, hp0);
                 header.getFlexCellFormatter().addStyleName(0,
                                                            j,
@@ -111,10 +123,20 @@ public class TableView extends Composite implements ScrollListener {
                 j++;
             }
             FocusPanel bar = new FocusPanel();
-            bar.addStyleName("HeaderBar");
+            HorizontalPanel hpBar = new HorizontalPanel();
+            AbsolutePanel ap1 = new AbsolutePanel();
+            ap1.addStyleName("HeaderBarPad");
+            AbsolutePanel ap2 = new AbsolutePanel();
+            ap2.addStyleName("HeaderBar");
+            AbsolutePanel ap3 = new AbsolutePanel();
+            ap3.addStyleName("HeaderBarPad");
+            hpBar.add(ap1);
+            hpBar.add(ap2);
+            hpBar.add(ap3);
+            bar.add(hpBar);
             header.setWidget(0, j, bar);
             header.getFlexCellFormatter().addStyleName(0, j, headerCellStyle);
-            header.getFlexCellFormatter().setWidth(0, j, "1px");
+            header.getFlexCellFormatter().setWidth(0, j, "3px");
             header.setStyleName(headerStyle);
             
         }
@@ -130,7 +152,6 @@ public class TableView extends Composite implements ScrollListener {
         hScroll.setWidget(hsc);
         vScroll.addScrollListener(this);
         hScroll.addScrollListener(this);
-        //hScroll.setAlwaysShowScrollBars(true);
         vp.add(titlePanel);
         //ft.setWidget(0,1,staticCols);
         ft.setWidget(0,0,headerView);
@@ -182,7 +203,6 @@ public class TableView extends Composite implements ScrollListener {
     }
 
     public void setHeaders(String[] headers) {
-        try{
         this.headers = headers;
         if(hLabels == null){
             hLabels = new Label[headers.length];
@@ -193,9 +213,6 @@ public class TableView extends Composite implements ScrollListener {
             for(int i = 0; i < headers.length; i++){
                 hLabels[i].setText(headers[i]);
             }
-        }
-        }catch(Exception e){
-           // Window.alert(e.getMessage());
         }
     }
 
