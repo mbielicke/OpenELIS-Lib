@@ -2,6 +2,7 @@ package org.openelis.gwt.client.screen;
 
 import org.openelis.gwt.common.AbstractField;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.xml.client.Document;
@@ -51,6 +52,7 @@ public class ScreenTree extends ScreenWidget {
         createTree(node);
         initWidget(tree);
         tree.setStyleName("ScreenTree");
+        DOM.setStyleAttribute(tree.getElement(),"overflow","auto");
         setDefaults(node, screen);
     }
     
