@@ -46,17 +46,16 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
                         screen.doTab(event, this);
+                        return;
                     }
                 } else if(DOM.eventGetType(event) == Event.ONKEYUP){
                     if(fieldCase.equals("upper"))
                         setText(getText().toUpperCase());
                     else
                         setText(getText().toLowerCase());   
-                }else{
-                    super.onBrowserEvent(event);
                 }
+                super.onBrowserEvent(event);
             }
-            
         };
         if (node.getAttributes().getNamedItem("tab") != null) {
             screen.addTab(textbox, node.getAttributes()
