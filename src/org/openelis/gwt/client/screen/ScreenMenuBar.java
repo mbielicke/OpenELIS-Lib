@@ -1,5 +1,6 @@
 package org.openelis.gwt.client.screen;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.xml.client.Document;
@@ -86,15 +87,16 @@ public class ScreenMenuBar extends ScreenWidget {
             	if(items.item(i).hasChildNodes()){
             		MenuBar subMenu = null;
             		if(items.item(i).getAttributes().getNamedItem("vertical") != null){
-            			if(node.getAttributes().getNamedItem("vertical").getNodeValue().equals("true"))
+            			if(items.item(i).getAttributes().getNamedItem("vertical").getNodeValue().equals("true"))
             				subMenu = new MenuBar(true);
             			else
             				subMenu = new MenuBar();
             		}
             		if(items.item(i).getAttributes().getNamedItem("autoOpen") != null){
-            			if(node.getAttributes().getNamedItem("autoOpen").getNodeValue().equals("true"))
+            			if(items.item(i).getAttributes().getNamedItem("autoOpen").getNodeValue().equals("true"))
             				subMenu.setAutoOpen(true);
             		}
+
             		createMenu(items.item(i),subMenu);
             		mb.addItem(items.item(i).getAttributes().getNamedItem("text").getNodeValue(),subMenu);
             	}else{
