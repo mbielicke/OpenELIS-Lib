@@ -54,5 +54,10 @@ public class ScreenWindowBrowser extends ScreenWidget {
         return new ScreenWindowBrowser(node,screen);
     }
     
+    public void destroy() {
+        browser = null;
+        super.destroy();
+    }
+    
 
 }

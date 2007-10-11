@@ -107,4 +107,9 @@ public class ScreenDragList extends ScreenWidget {
         list.enable(enabled);
     }
     
+    public void destroy() {
+        list = null;
+        super.destroy();
+    }
+    
 }

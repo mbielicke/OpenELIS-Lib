@@ -104,5 +104,11 @@ public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
 			clickListeners.remove(listener);
 		}
 	}
+    
+    public void destroy(){
+        clickListeners = null;
+        check = null;
+        super.destroy();
+    }
 
 }

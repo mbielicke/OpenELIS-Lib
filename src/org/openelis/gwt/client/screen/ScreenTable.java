@@ -71,5 +71,10 @@ public class ScreenTable extends ScreenWidget {
     public Widget getWidget() {
         return table;
     }
+    
+    public void destroy(){
+        table = null;
+        super.destroy();
+    }
 
 }

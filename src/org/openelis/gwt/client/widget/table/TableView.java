@@ -1,6 +1,7 @@
 package org.openelis.gwt.client.widget.table;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -14,9 +15,13 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,9 +33,39 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableView extends Composite implements ScrollListener {
+public class TableView extends Composite implements ScrollListener, MouseWheelListener {
     
-    public AbsolutePanel cellView = new AbsolutePanel();
+    protected class TableCellView extends AbsolutePanel implements SourcesMouseWheelEvents {
+        private MouseWheelListenerCollection wheelListeners;
+        
+        public TableCellView() {
+            sinkEvents(Event.ONMOUSEWHEEL);
+        }
+        public void onBrowserEvent(Event event) {
+            if(DOM.eventGetType(event) == Event.ONMOUSEWHEEL){
+                wheelListeners.fireMouseWheelEvent(this,event);
+            }
+            super.onBrowserEvent(event);
+        }
+        
+        public void addMouseWheelListener(MouseWheelListener listener) {
+            // TODO Auto-generated method stub
+            if(wheelListeners == null){
+                wheelListeners = new MouseWheelListenerCollection();
+            }
+            wheelListeners.add(listener);
+        }
+
+        public void removeMouseWheelListener(MouseWheelListener listener) {
+            if(wheelListeners != null){
+                wheelListeners.remove(listener);
+            }
+            
+        }
+        
+    }
+
+    public TableCellView cellView = new TableCellView();
     public AbsolutePanel headerView = new AbsolutePanel();
     private AbsolutePanel rowsView = new AbsolutePanel();
     private AbsolutePanel statView = new AbsolutePanel();
@@ -161,6 +196,7 @@ public class TableView extends Composite implements ScrollListener {
         ft.setWidget(2,0,hScroll);
         ft.setWidget(1,1,vScroll);
         vp.add(ft);
+        cellView.addMouseWheelListener(this);
     }
     
     
@@ -313,6 +349,14 @@ public class TableView extends Composite implements ScrollListener {
             }
         }
         
+    }
+
+    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
+        // TODO Auto-generated method stub
+        if(velocity.isSouth())
+            vScroll.setScrollPosition(vScroll.getScrollPosition() + 5);
+        else
+            vScroll.setScrollPosition(vScroll.getScrollPosition() - 5);
     }
 
 }

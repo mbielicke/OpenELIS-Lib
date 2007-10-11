@@ -117,4 +117,9 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
         textbox.setFocus(focus);
     }
     
+    public void destroy() {
+        textbox = null;
+        super.destroy();
+    }
+    
 }

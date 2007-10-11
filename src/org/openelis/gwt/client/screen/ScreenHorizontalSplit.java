@@ -112,4 +112,9 @@ public class ScreenHorizontalSplit extends ScreenWidget {
             wid.setWidth((Window.getClientWidth() - wid.getAbsoluteLeft() - 10) + "px");
         }
     }
+    
+    public void destroy(){
+        hp = null;
+        super.destroy();
+    }
 }

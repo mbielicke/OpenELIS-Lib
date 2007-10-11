@@ -72,8 +72,13 @@ public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
     public void removeClickListener(ClickListener listener) {
        if(clickListeners != null){
            clickListeners.remove(listener);
-       }
-        
+       }   
+    }
+    
+    public void destroy() {
+        clickListeners = null;
+        label = null;
+        super.destroy();
     }
 
 }

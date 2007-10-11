@@ -107,5 +107,10 @@ public class ScreenHorizontal extends ScreenWidget {
     public ScreenWidget getInstance(Node node, Screen screen) {
         return new ScreenHorizontal(node, screen);
     }
+    
+    public void destroy(){
+        panel = null;
+        super.destroy();
+    }
    
 }

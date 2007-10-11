@@ -62,5 +62,10 @@ public class ScreenText extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenText(node, screen);
     }
+    
+    public void destroy() {
+        text = null;
+        super.destroy();
+    }
 
 }

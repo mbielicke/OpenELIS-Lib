@@ -370,4 +370,14 @@ public class ScreenWidget extends SimplePanel implements
         this.screen = screen; 
     }
     
+    public void destroy() {
+        dropListeners = null;
+        dragListeners = null;
+        mouseListeners = null;
+        userObject = null;
+        dropTargets = null;
+        screen = null;
+        clear();
+    }
+    
 }

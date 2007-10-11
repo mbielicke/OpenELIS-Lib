@@ -80,4 +80,9 @@ public class ScreenStack extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenStack(node, screen);
     }
+    
+    public void destroy() {
+        stack = null;
+        super.destroy();
+    }
 }

@@ -111,5 +111,10 @@ public class ScreenTree extends ScreenWidget {
         Document doc = XMLParser.parse(xml);
         createTree(doc.getDocumentElement());
     }
+    
+    public void destroy() {
+        tree = null;
+        super.destroy();
+    }
 
 }

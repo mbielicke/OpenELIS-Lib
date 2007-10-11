@@ -90,6 +90,11 @@ public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
 	public void removeClickListener(ClickListener listener) {
 		if(clickListeners != null)
 			clickListeners.remove(listener);
-		
 	}
+    
+    public void destroy() {
+        clickListeners = null;
+        button = null;
+        super.destroy();
+    }
 }

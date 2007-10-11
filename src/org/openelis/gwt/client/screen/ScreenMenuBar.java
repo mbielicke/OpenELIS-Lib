@@ -105,6 +105,12 @@ public class ScreenMenuBar extends ScreenWidget {
             }
         }
     }
+    
+    public void destroy() {
+        menuBar = null;
+        mcs = null;
+        super.destroy();
+    }
 	
 
 }

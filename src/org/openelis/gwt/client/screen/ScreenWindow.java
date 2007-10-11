@@ -174,10 +174,23 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                 	return;
                 }
             }
-            
+            removeFromParent();
             browser.browser.remove(this);
             browser.windows.remove(name);
+            destroy();
         }
+    }
+    
+    public void close() {
+        if(content instanceof FormInt){
+            if(((FormInt)content).hasChanges()){
+                return;
+            }
+        }
+        removeFromParent();
+        browser.browser.remove(this);
+        browser.windows.remove(name);
+        
     }
     
     public void onDragDropEnd(Widget sender, Widget target) {
@@ -269,6 +282,19 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     public void onMouseUp(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void destroy() {
+        cap = null;
+        outer = null;
+        status = null;
+        sp = null;
+        fp = null;
+        close = null;
+        name = null;
+        content = null;
+        dropMap = null;
+        message = null;
     }
 
 }

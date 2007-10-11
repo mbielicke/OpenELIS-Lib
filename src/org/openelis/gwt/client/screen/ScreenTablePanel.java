@@ -155,5 +155,10 @@ public class ScreenTablePanel extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenTablePanel(node, screen);
     }
+    
+    public void destroy() {
+        panel = null;
+        super.destroy();
+    }
 
 }

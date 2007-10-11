@@ -115,5 +115,10 @@ public class ScreenDock extends ScreenWidget {
     public ScreenWidget getInstance(Node node, Screen screen) {
         return new ScreenDock(node, screen);
     }
+    
+    public void destroy() {
+        panel = null;
+        super.destroy();
+    }
 
 }

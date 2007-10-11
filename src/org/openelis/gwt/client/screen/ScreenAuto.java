@@ -91,4 +91,8 @@ public class ScreenAuto extends ScreenWidget {
     public void enabled(boolean enabled){
         auto.setReadOnly(!enabled);
     }
+    public void destroy() {
+        auto = null;
+        super.destroy();
+    }
 }

@@ -82,5 +82,10 @@ public class ScreenTab extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenTab(node, screen);
     }
+    
+    public void destroy(){
+        panel = null;
+        super.destroy();
+    }
 
 }

@@ -109,5 +109,9 @@ public class ScreenVertical extends ScreenWidget {
     public ScreenWidget getInstance(Node node, Screen screen) {
         return new ScreenVertical(node, screen);
     }
+    
+    public void destroy() {
+        panel = null;
+    }
 
 }

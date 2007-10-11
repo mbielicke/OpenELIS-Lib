@@ -54,4 +54,9 @@ public class ScreenConstant extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenConstant(node, screen);
     }
+    
+    public void destroy() {
+        label = null;
+        super.destroy();
+    }
 }

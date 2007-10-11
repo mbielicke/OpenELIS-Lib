@@ -94,5 +94,10 @@ public class ScreenMenuPanel extends ScreenWidget {
         panel.clear();
         createPanel(doc.getDocumentElement());
     }
+    
+    public void destroy() {
+        panel = null;
+        super.destroy();
+    }
 
 }

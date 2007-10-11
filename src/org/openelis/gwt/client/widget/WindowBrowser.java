@@ -29,7 +29,7 @@ public class WindowBrowser extends Composite{
     public AbsolutePanel browser = new AbsolutePanel();
     public HashMap windows = new HashMap();
     public int index ;
-    public int limit;
+    public int limit ;
     
     public static native void setIndex(Element elem, int index) /*-{
         elem.style.zIndex = index;

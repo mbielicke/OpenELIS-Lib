@@ -112,4 +112,9 @@ public class ScreenVerticalSplit extends ScreenWidget{
             wid.setWidth((Window.getClientWidth() - wid.getAbsoluteLeft() - 10) + "px");
         }
     }
+    
+    public void destroy() {
+        vp = null;
+        super.destroy();
+    }
 }

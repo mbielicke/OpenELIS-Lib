@@ -684,4 +684,29 @@ public class Screen extends Composite implements
         // TODO Auto-generated method stub
 
     }
+    
+    protected void onDetach() {
+        // TODO Auto-generated method stub
+        Iterator wids = widgets.values().iterator();
+        while (wids.hasNext()) {
+            Widget wid = (Widget)wids.next();
+            if(wid instanceof ScreenWidget)
+                ((ScreenWidget)wid).destroy();
+        }
+        widgets.clear();
+        widgets = null;
+        xmlUrl = null;
+        xml = null;
+        errors.clear();
+        errors = null;
+        tabOrder.clear();
+        tabOrder = null;
+        tabBack.clear();
+        tabBack = null;
+        constants = null;
+        screenService = null;
+        target = null;
+        rpc = null;
+        super.onDetach();
+    }
 }

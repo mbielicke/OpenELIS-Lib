@@ -133,4 +133,9 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
     public void setFocus(boolean focus){
         optionlist.setFocus(focus);
     }
+    
+    public void destroy() {
+        optionlist = null;
+        super.destroy();
+    }
 }

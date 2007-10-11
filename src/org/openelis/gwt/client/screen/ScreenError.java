@@ -51,5 +51,10 @@ public class ScreenError extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenError(node, screen);
     }
+    
+    public void destroy() {
+        panel = null;
+        super.destroy();
+    }
 
 }

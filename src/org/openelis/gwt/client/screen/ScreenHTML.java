@@ -1,5 +1,6 @@
 package org.openelis.gwt.client.screen;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
 import com.google.gwt.user.client.ui.HTML;
@@ -68,6 +69,12 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
      public void removeClickListener(ClickListener arg0) {
          if(clickListeners != null)
              clickListeners.remove(arg0);
+     }
+     
+     public void destroy(){
+         DOM.setEventListener(html.getElement(), null);
+         html = null;
+         super.destroy();
      }
 
 }

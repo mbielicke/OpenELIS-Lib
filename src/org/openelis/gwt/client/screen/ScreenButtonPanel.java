@@ -63,5 +63,10 @@ public class ScreenButtonPanel extends ScreenWidget {
         return new ScreenButtonPanel(node, screen);
     }
     
+    public void destroy(){
+        bPanel = null;
+        super.destroy();
+    }
+    
 
 }

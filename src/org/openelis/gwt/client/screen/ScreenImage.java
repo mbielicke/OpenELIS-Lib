@@ -87,4 +87,10 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
         if(clickListeners != null)
             clickListeners.remove(listener);
     }
+    
+    public void destroy(){
+        image = null;
+        clickListeners = null;
+        super.destroy();
+    }
 }

@@ -74,4 +74,9 @@ public class ScreenToggleButton extends ScreenWidget {
 	public void setFocus(boolean focus) {
 
 	}
+    
+    public void destroy() {
+        button = null;
+        super.destroy();
+    }
 }

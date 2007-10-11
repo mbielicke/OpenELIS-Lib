@@ -80,4 +80,9 @@ public class ScreenPassword extends ScreenWidget {
     public void setFocus(boolean focus){
         textbox.setFocus(focus);
     }
+    
+    public void destroy(){
+        textbox = null;
+        super.destroy();
+    }
 }

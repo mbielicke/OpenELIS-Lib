@@ -84,5 +84,10 @@ public class ScreenRadio extends ScreenWidget {
     public void setFocus(boolean focus){
         radio.setFocus(focus);
     }
+    
+    public void destroy() {
+        radio = null;
+        super.destroy();
+    }
 
 }

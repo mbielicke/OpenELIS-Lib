@@ -93,4 +93,10 @@ public class ScreenMaskedBox extends ScreenWidget {
         maskbox.setFocus(focus);
     }
     
+    public void destroy(){
+        maskbox = null;
+        next = null;
+        super.destroy();
+    }
+    
 }

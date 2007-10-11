@@ -103,5 +103,11 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
         if(clickListeners != null)
             clickListeners.remove(arg0);
     }
+    
+    public void destroy(){
+        label = null;
+        clickListeners = null;
+        super.destroy();
+    }
   
 }

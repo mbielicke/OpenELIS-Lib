@@ -255,5 +255,12 @@ public class ScreenForm extends Screen implements FormInt {
         }
         return false;
     }
+    
+    public void onDetach() {
+        bpanel = null;
+        message = null;      
+        window = null;
+        super.onDetach();
+    }
 
 }

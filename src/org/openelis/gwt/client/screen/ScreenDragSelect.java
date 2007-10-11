@@ -101,5 +101,10 @@ public class ScreenDragSelect extends ScreenWidget {
             dragselect.addStyleName("disabled");
         dragselect.setEnabled(enabled);
     }
+    
+    public void destroy() {
+        dragselect = null;
+        super.destroy();
+    }
 
 }

@@ -45,4 +45,9 @@ public class ScreenAppMessage extends ScreenWidget {
 	public ScreenWidget getInstance(Node node, Screen screen) {
 		return new ScreenAppMessage(node, screen);
 	}
+    
+    public void destroy() {
+        msg = null;
+        super.destroy();
+    }
 }

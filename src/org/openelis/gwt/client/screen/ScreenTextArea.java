@@ -89,5 +89,10 @@ public class ScreenTextArea extends ScreenWidget {
     public void setFocus(boolean focus){
         textarea.setFocus(focus);
     }
+    
+    public void destroy() {
+        textarea = null;
+        super.destroy();
+    }
 
 }

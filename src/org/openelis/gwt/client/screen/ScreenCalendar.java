@@ -111,5 +111,10 @@ public class ScreenCalendar extends ScreenWidget {
     public void enable(boolean enabled){
         cal.setEnabled(enabled);
     }
+    
+    public void destroy() {
+        cal = null;
+        super.destroy();
+    }
 
 }

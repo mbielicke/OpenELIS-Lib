@@ -85,5 +85,10 @@ public class ScreenAbsolute extends ScreenWidget {
     public ScreenWidget getInstance(Node node, Screen screen) {
         return new ScreenAbsolute(node, screen);
     }
+    
+    public void destroy() {
+        panel = null;
+        super.destroy();
+    }
 
 }

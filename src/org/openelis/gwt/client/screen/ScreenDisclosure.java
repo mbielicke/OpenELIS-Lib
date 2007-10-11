@@ -73,4 +73,9 @@ public class ScreenDisclosure extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenDisclosure(node, screen);
     }
+    
+    public void destroy(){
+        dp = null;
+        super.destroy();
+    }
 }
