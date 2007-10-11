@@ -20,7 +20,7 @@ public class ScreenForm extends Screen implements FormInt {
 	 * Screen.  This needs to be set by the Extending class 
 	 * after the screen is drawn.
 	 */
-    public ButtonPanel bpanel;
+    public ButtonPanel bpanel = null;
     /**
      * Reference to the Label that will display the Form Messages to
      * the User.  If this Screen is set in a ScreenWindow this 
@@ -247,6 +247,8 @@ public class ScreenForm extends Screen implements FormInt {
      */
     public boolean hasChanges() {
         // TODO Auto-generated method stub
+        if(bpanel == null)
+            return false;
         if(bpanel.state == FormInt.ADD ||
            bpanel.state == FormInt.QUERY ||
            bpanel.state == FormInt.UPDATE){

@@ -169,15 +169,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             }
         }
         if(sender == close){
-            if(content instanceof FormInt){
-                if(((FormInt)content).hasChanges()){
-                	return;
-                }
-            }
-            removeFromParent();
-            browser.browser.remove(this);
-            browser.windows.remove(name);
-            destroy();
+            close();
         }
     }
     
@@ -190,6 +182,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         removeFromParent();
         browser.browser.remove(this);
         browser.windows.remove(name);
+        destroy();
         
     }
     
