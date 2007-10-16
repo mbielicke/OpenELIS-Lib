@@ -20,9 +20,7 @@ public class TableModel implements Serializable {
     public int shown;
     public boolean showIndex;
     public boolean autoAdd;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.AbstractField>
-     */
+
     private AbstractField[] fields;
     
     /**
