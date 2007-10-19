@@ -215,8 +215,7 @@ public class Screen extends Composite implements
         try {
             Node display = xml.getElementsByTagName("display").item(0);
             if (display.getAttributes().getNamedItem("constants") != null) {
-                constants = (ConstantsWithLookup)WIDGET_MAP.getWidget(display,
-                                                                   this);
+                constants = (ConstantsWithLookup)WIDGET_MAP.get(display.getAttributes().getNamedItem("constants").getNodeValue());
             }
             NodeList widgets = display.getChildNodes();
             for (int i = 0; i < widgets.getLength(); i++) {
