@@ -305,8 +305,9 @@ public class FormTable extends Composite {
             controller.getModel();
         else {
             for (int m = 0; m < rows; m++) {
-                controller.addRow();
+                controller.model.addRow(null);
             }
+            controller.reset();
         }
     }
 }
