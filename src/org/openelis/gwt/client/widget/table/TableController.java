@@ -653,8 +653,10 @@ public class TableController implements
         if(model.autoAdd){
             model.addRow(null);
         }
-        view.reset(model.numRows(),model.getRow(0).numColumns());
-        view.table.addTableListener(this);
+        if(model.numRows() > 0){
+            view.reset(model.numRows(),model.getRow(0).numColumns());
+            view.table.addTableListener(this);
+        }
         if (view.header != null) {
             view.header.removeTableListener(this);
             view.header.addTableListener(this);
