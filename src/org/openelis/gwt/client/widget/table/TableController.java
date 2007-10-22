@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -74,6 +75,7 @@ public class TableController implements
     private boolean resizing;
     private int startx;
     private int resizeColumn = -1;
+    private int tableCol = -1;
     private TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)tableService;
     private ChangeListenerCollection changeListeners;
@@ -240,6 +242,7 @@ public class TableController implements
      */
     public void addRow() {
         model.addRow(null);
+        view.table.resizeRows(model.numRows());
         int rowIndex = model.numRows() - 1;
         if (rowIndex > -1) {
             loadRow(rowIndex);
@@ -286,7 +289,7 @@ public class TableController implements
         if (manager == null || (manager != null && manager.canInsert(index,
                                                                      this))) {
             model.insertRow(index, null);
-            view.table.insertRow(index);
+            //view.table.insertRow(index);
             loadRow(index);
             if (model.paged)
                 view.setShown("(" + model.shown
@@ -306,7 +309,7 @@ public class TableController implements
         if (manager == null || (manager != null && manager.canInsert(index,
                                                                      this))) {
             model.insertRow(index, row);
-            view.table.insertRow(index);
+            //view.table.insertRow(index);
             loadRow(index);
             if (model.paged)
                 view.setShown("(" + model.shown
@@ -331,13 +334,14 @@ public class TableController implements
     private void loadRow(int index) {
         for (int i = 0; i < model.getRow(0).numColumns(); i++) {
             setCellDisplay(index, i);
-            view.table.getFlexCellFormatter().addStyleName(index,
+            view.table.getCellFormatter().addStyleName(index,
                                                            i,
                                                            view.cellStyle);
             if (colAlign != null && colAlign[i] != null) {
-                view.table.getFlexCellFormatter()
+                view.table.getCellFormatter()
                           .setHorizontalAlignment(index, i, colAlign[i]);
             }
+            view.table.getCellFormatter().setWidth(index, i, curColWidth[i] + "px");
         }
         view.table.getRowFormatter().addStyleName(index, view.rowStyle);
         //Label rowNum = new Label(String.valueOf(index+1));
@@ -364,7 +368,7 @@ public class TableController implements
             selected = -1;
         }
         if (manager == null || (manager != null && manager.canDelete(row, this))) {
-            view.table.removeRow(row);
+            //view.table.removeRow(row);
             model.deleteRow(row);
         }
         shown--;
@@ -478,7 +482,7 @@ public class TableController implements
         if (manager == null || (manager != null && manager.canSelect(row, this))){
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
-                if(view.table.getFlexCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
+                if(view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
                     view.table.getWidget(row,i).addStyleName("disabled");
                 }
             }
@@ -547,8 +551,16 @@ public class TableController implements
             wid.setWidth((curColWidth[col] - 18) + "px");
             ((TableCalendar)wid).setEnabled(true);
         }
-        wid.setWidth((curColWidth[col] -4)+ "px");
-        view.table.setWidget(row, col, wid);
+        if(wid instanceof TableCheck){
+            SimplePanel simp = new SimplePanel();
+            simp.setWidget(wid);
+            simp.setWidth((curColWidth[col] -4)+ "px");
+            DOM.setElementProperty(simp.getElement(),"align","center");
+            view.table.setWidget(row, col, simp);
+        }else{
+            wid.setWidth((curColWidth[col] -4)+ "px");
+            view.table.setWidget(row, col, wid);
+        }
         if (wid instanceof FocusWidget) {
             ((FocusWidget)wid).setFocus(true);
         }
@@ -565,7 +577,7 @@ public class TableController implements
     public void setCellDisplay(int row, int col) {
         TableCellWidget cell = editors[col];
         if (!(cell instanceof TableOption) || !(((TableOption)cell).loadFromModel || ((TableOption)cell).loadFromHidden != null))
-            cell.setValue(model.getFieldAt(row, col).getValue());
+            cell.setValue(model.getFieldAt(row, col).getValue());    
         Object display;
         if (staticTitles != null && staticTitles[col] != null) {
             if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
@@ -616,6 +628,12 @@ public class TableController implements
             }else{
                 ((CheckBox)display).setEnabled(false);
             }
+            SimplePanel simp = new SimplePanel();
+            simp.setWidget((Widget)display);
+            simp.setWidth((curColWidth[col] -4)+ "px");
+            DOM.setElementProperty(simp.getElement(),"align","center");
+            view.table.setWidget(row, col, simp);
+            return;
         }
         if (display instanceof String) {
             view.table.setText(row, col, (String)display);
@@ -626,15 +644,13 @@ public class TableController implements
             view.table.setWidget(row, col, (Widget)display);
            
         }
-        
-
     }
 
     /**
      * This method will clear and redraw the table
      */
     public void reset() {
-        view.reset();
+        view.reset(model.numRows(),model.getRow(0).numColumns());
         view.table.addTableListener(this);
         if (view.header != null) {
             view.header.removeTableListener(this);
@@ -656,6 +672,7 @@ public class TableController implements
         for (int j = 0; j < model.numRows(); j++) {
             loadRow(j);
         }
+        view.setTable();
         selected = -1;
         selectedCell = -1;
         sizeTable();
@@ -674,7 +691,7 @@ public class TableController implements
      * 
      */
     private void sizeTable() {
-        for (int j = 0; j < model.numRows(); j++) {
+        /*for (int j = 0; j < model.numRows(); j++) {
             for (int i = 0; i < curColWidth.length; i++) {
                 if (curColWidth[i] > 0) {
                     view.table.getFlexCellFormatter()
@@ -687,20 +704,27 @@ public class TableController implements
                 }
             }
         }
+        */
         //if (model.numRows() > 0) {
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     view.header.setWidth((view.table.getOffsetWidth())+"px");
                     if(view.width.equals("auto")){
-                        view.cellView.setWidth(view.table.getOffsetWidth()+"px");
+                        view.cellView.setWidth((view.table.getOffsetWidth()+20)+"px");
                         view.headerView.setWidth(view.table.getOffsetWidth()+"px");
                     }else{
-                        if(view.table.getOffsetWidth() > view.cellView.getOffsetWidth())
-                            view.hScroll.setAlwaysShowScrollBars(true);
+                    	final int width = view.cellView.getOffsetWidth() +20;
+                    	DeferredCommand.addCommand(new Command() {
+                    		public void execute() {
+                    			view.cellView.setWidth(width+"px");
+                    		}
+                    	});
+                       // if(view.table.getOffsetWidth() > view.cellView.getOffsetWidth())
+                            //view.hScroll.setAlwaysShowScrollBars(true);
                     }
-                    view.hsc.setWidth((view.table.getOffsetWidth())+"px");
-                    DOM.setStyleAttribute(view.hScroll.getElement(), "overflowY", "hidden");
-                    view.vsc.setHeight(view.table.getOffsetHeight()+"px");
+                    //view.hsc.setWidth((view.table.getOffsetWidth())+"px");
+                    //DOM.setStyleAttribute(view.hScroll.getElement(), "overflowY", "hidden");
+                    //view.vsc.setHeight(view.table.getOffsetHeight()+"px");
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0){
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-2)+"px");
@@ -724,11 +748,17 @@ public class TableController implements
      * @param col
      */
     public void saveValue(int row, int col) {
-        TableCellWidget wid = (TableCellWidget)view.table.getWidget(row, col);
+    	TableCellWidget wid = null;
+        if (view.table.getWidget(row,col) instanceof SimplePanel){
+        	wid = (TableCellWidget)((SimplePanel)view.table.getWidget(row,col)).getWidget();
+        }else{
+        	wid = (TableCellWidget)view.table.getWidget(row, col);
+        }
         if (wid instanceof TableLabel)
             return;
         if (wid instanceof TableMaskedTextBox)
             ((TableMaskedTextBox)wid).format();
+
         model.getFieldAt(row, col).setValue(wid.getValue());
         if (manager != null) {
             manager.finishedEditing(row, col, this);
@@ -1091,6 +1121,7 @@ public class TableController implements
             for (int i = 0; i < view.header.getCellCount(0); i++) {
                 if (sender == view.header.getWidget(0, i)) {
                     resizeColumn = i - 1;
+                    tableCol = resizeColumn / 2;
                     i = view.header.getCellCount(0);
                 }
             }
@@ -1119,23 +1150,23 @@ public class TableController implements
     public void onMouseMove(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
         if (resizing) {
-            int colA = curColWidth[resizeColumn / 2] + (x - startx);
-            int colB = curColWidth[(resizeColumn / 2)+1] - (x - startx);
+            int colA = curColWidth[tableCol] + (x - startx);
+            int colB = curColWidth[(tableCol)+1] - (x - startx);
             if(colA <= 16 || colB <= 16) 
                 return;
-            curColWidth[resizeColumn / 2] = colA;
-            curColWidth[(resizeColumn / 2)+1] = colB;
+            curColWidth[tableCol] = colA;
+            curColWidth[(tableCol)+1] = colB;
             //for(int i = 0; i < curColWidth.length; i++){
                 if( resizeColumn == 0 ){
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2])+"px");
-                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-6)+"px");
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1] -2)+"px");
-                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-10)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol])+"px");
+                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-6)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
+                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
                 }else{
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[resizeColumn/2] -2)+"px");
-                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[resizeColumn/2]-10)+"px");
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(resizeColumn / 2)+1] -2)+"px");
-                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(resizeColumn / 2)+1]-10)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol] -2)+"px");
+                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-10)+"px");
+                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
+                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
                 }
                     
             //}
@@ -1153,9 +1184,10 @@ public class TableController implements
             for (int j = 0; j < model.numRows(); j++) {
                 for (int i = 0; i < curColWidth.length; i++) {
                     if (curColWidth[i] > 0) {
-                        view.table.getFlexCellFormatter()
+                        view.table.getCellFormatter()
                                   .setWidth(j, i, curColWidth[i] + "px");
                         view.table.getWidget(j, i).setWidth((curColWidth[i] -4) + "px");
+                       
                     }
                 }
             }
