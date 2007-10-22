@@ -650,6 +650,9 @@ public class TableController implements
      * This method will clear and redraw the table
      */
     public void reset() {
+        if(model.autoAdd){
+            model.addRow(null);
+        }
         view.reset(model.numRows(),model.getRow(0).numColumns());
         view.table.addTableListener(this);
         if (view.header != null) {
@@ -681,9 +684,6 @@ public class TableController implements
             view.setShown("(" + model.shown + " of " + model.totalRows + ")");
         } else
             view.setShown("(" + shown + " of " + model.numRows() + ")");
-        if(model.autoAdd){
-            addRow();
-        }
     }
 
     /**
@@ -710,10 +710,13 @@ public class TableController implements
                 public void execute() {
                     view.header.setWidth((view.table.getOffsetWidth())+"px");
                     if(view.width.equals("auto")){
-                        view.cellView.setWidth((view.table.getOffsetWidth()+20)+"px");
+                        if(view.table.getOffsetHeight() > view.cellView.getOffsetHeight())
+                            view.cellView.setWidth((view.table.getOffsetWidth()+17)+"px");
+                        else
+                            view.cellView.setWidth((view.table.getOffsetWidth())+"px");
                         view.headerView.setWidth(view.table.getOffsetWidth()+"px");
                     }else{
-                    	final int width = view.cellView.getOffsetWidth() +20;
+                    	final int width = view.cellView.getOffsetWidth();
                     	DeferredCommand.addCommand(new Command() {
                     		public void execute() {
                     			view.cellView.setWidth(width+"px");
