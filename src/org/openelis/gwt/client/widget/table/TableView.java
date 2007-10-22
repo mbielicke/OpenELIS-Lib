@@ -65,22 +65,22 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         
     }
 
-    public TableCellView cellView = new TableCellView();
+    public ScrollPanel cellView = new ScrollPanel();
     public AbsolutePanel headerView = new AbsolutePanel();
     private AbsolutePanel rowsView = new AbsolutePanel();
     private AbsolutePanel statView = new AbsolutePanel();
     private FlexTable ft = new FlexTable();
     private final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
-    public ScrollPanel vScroll = new ScrollPanel();
-    public ScrollPanel hScroll = new ScrollPanel();
-    public AbsolutePanel vsc = new AbsolutePanel();
-    public AbsolutePanel hsc = new AbsolutePanel();
-    public FlexTable table = new FlexTable();
+    //public ScrollPanel vScroll = new ScrollPanel();
+    //public ScrollPanel hScroll = new ScrollPanel();
+    //public AbsolutePanel vsc = new AbsolutePanel();
+    //public AbsolutePanel hsc = new AbsolutePanel();
+    public Grid table = new Grid();
     public FlexTable header = new FlexTable();
     public FlexTable rows = new FlexTable();
-    private Grid staticGrid = new Grid(50,1);
-    private Grid staticCols = new Grid(1,1);
+    //private Grid staticGrid = new Grid(50,1);
+    //private Grid staticCols = new Grid(1,1);
     private int left = 0;
     private int top = 0;
     private String[] headers;
@@ -179,31 +179,32 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         headerView.add(header);
         rowsView.add(rows);
         DOM.setStyleAttribute(rowsView.getElement(), "overflow", "hidden");
-        cellView.add(table,0,0);
-        cellView.setWidgetPosition(table, 0, 0);
-        DOM.setStyleAttribute(cellView.getElement(), "overflow", "hidden");
+        cellView.setWidget(table);
+        //cellView.setWidgetPosition(table, 0, 0);
+        //DOM.setStyleAttribute(cellView.getElement(), "overflow", "hidden");
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
-        vScroll.setWidget(vsc);
-        hScroll.setWidget(hsc);
-        vScroll.addScrollListener(this);
-        hScroll.addScrollListener(this);
+        //vScroll.setWidget(vsc);
+        //hScroll.setWidget(hsc);
+        cellView.addScrollListener(this);
+        //vScroll.addScrollListener(this);
+        //hScroll.addScrollListener(this);
         vp.add(titlePanel);
         //ft.setWidget(0,1,staticCols);
         ft.setWidget(0,0,headerView);
         //ft.setWidget(1,0,rowsView);
         //ft.setWidget(1,1,statView);
         ft.setWidget(1,0,cellView);
-        ft.setWidget(2,0,hScroll);
-        ft.setWidget(1,1,vScroll);
+        //ft.setWidget(2,0,hScroll);
+        //ft.setWidget(1,1,vScroll);
         vp.add(ft);
-        cellView.addMouseWheelListener(this);
+        //cellView.addMouseWheelListener(this);
     }
     
     
     public void setHeight(String height) {
         cellView.setHeight(height);
-        vScroll.setHeight(height);
-        hScroll.setHeight("18px");
+        //vScroll.setHeight(height);
+        //hScroll.setHeight("18px");
         //rowsView.setHeight(height);
         headerView.setHeight("18px");
     }
@@ -212,8 +213,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         this.width = width;
         cellView.setWidth(width);
         headerView.setWidth(width);
-        vScroll.setWidth("18px");
-        hScroll.setWidth(width);
+        //vScroll.setWidth("18px");
+        //hScroll.setWidth(width);
         //rows.setWidth("20px");
         //rowsView.setWidth("18px");
     }
@@ -228,14 +229,17 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             ((FocusWidget)widget).setFocus(true);
     }
 
-    public void reset() {
-        table = new FlexTable();
+    public void reset(int rows, int cols) {
+        table = new Grid(rows,cols);
         table.setWidth("100%");
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
+        //cellView.setWidgetPosition(table, 0, 0);
+    }
+    
+    public void setTable(){
         cellView.clear();
-        cellView.add(table,0,0);
-        cellView.setWidgetPosition(table, 0, 0);
+        cellView.setWidget(table);
     }
 
     public void setHeaders(String[] headers) {
@@ -299,21 +303,21 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     }
 
     public void onScroll(Widget widget, int scrollLeft, int scrollTop) {
-        if(widget == vScroll){
-            cellView.setWidgetPosition(table, left, -scrollTop);
-            top = -scrollTop;
+        //if(widget == vScroll){
+          //  cellView.setWidgetPosition(table, left, -scrollTop);
+            //top = -scrollTop;
             //statView.setWidgetPosition(staticGrid, 0, -scrollTop);
             //rowsView.setWidgetPosition(rows, 0, -scrollTop);
-        }
-        if(widget == hScroll){
-           cellView.setWidgetPosition(table, -scrollLeft, top);
-           left = -scrollLeft;
+        //}
+        //if(widget == hScroll){
+           //cellView.setWidgetPosition(table, -scrollLeft, top);
+           //left = -scrollLeft;
            headerView.setWidgetPosition(header, -scrollLeft, 0);
-        }
+       // }
     }
     
     public void checkScrolls(int row, int col) {
-        Widget wid = table.getWidget(row, col);
+    /*    Widget wid = table.getWidget(row, col);
         int widTop = wid.getAbsoluteTop();
         int widLeft = wid.getAbsoluteLeft();
         int widWidth = wid.getOffsetWidth();
@@ -348,15 +352,16 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
                 vScroll.setScrollPosition(scrollPos);
             }
         }
-        
+       */ 
     }
 
     public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
-        // TODO Auto-generated method stub
+        /* TODO Auto-generated method stub
         if(velocity.isSouth())
             vScroll.setScrollPosition(vScroll.getScrollPosition() + 5);
         else
             vScroll.setScrollPosition(vScroll.getScrollPosition() - 5);
+            */
     }
 
 }
