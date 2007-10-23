@@ -89,6 +89,10 @@ public class FormTable extends Composite {
             controller.view.setTitle(node.getAttributes()
                               .getNamedItem("title")
                               .getNodeValue());
+            if(node.getAttributes().getNamedItem("autoAdd") != null){
+                if(node.getAttributes().getNamedItem("autoAdd").getNodeValue().equals("true"))
+                    controller.setAutoAdd(true);
+            }
             if (widthsNode != null) {
                 String[] widths = widthsNode.getFirstChild()
                                             .getNodeValue()
