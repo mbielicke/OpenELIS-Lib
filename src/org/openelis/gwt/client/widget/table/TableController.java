@@ -260,6 +260,7 @@ public class TableController implements
     public void addRow(TableRow row) {
         adjustScroll();
         model.addRow(row);
+        view.table.resizeRows(model.numRows());
         int rowIndex = model.numRows() - 1;
         if (rowIndex > -1) {
             loadRow(rowIndex);
@@ -280,7 +281,10 @@ public class TableController implements
                                                                      this))) {
             adjustScroll();
             model.insertRow(index, null);
-            loadRow(index);
+            view.table.resizeRows(model.numRows());
+            start = 0;
+            end = 0;
+            scrollLoad(view.cellView.getScrollPosition());
         }
         if(manager != null){
             manager.rowAdded(index,this);
@@ -292,7 +296,10 @@ public class TableController implements
                                                                      this))) {
             adjustScroll();
             model.insertRow(index, row);
-            loadRow(index);
+            view.table.resizeRows(model.numRows());
+            start = 0;
+            end = 0;
+            scrollLoad(view.cellView.getScrollPosition());
         }
         if(manager != null){
             manager.rowAdded(index,this);
@@ -343,6 +350,9 @@ public class TableController implements
             adjustScroll();
             model.deleteRow(row);
             view.table.resizeRows(model.numRows());
+            start = 0;
+            end = 0;
+            scrollLoad(view.cellView.getScrollPosition());
         }
 
     }
