@@ -4,6 +4,17 @@
     font-size: 10px;
 }
 
+.TableWidget{
+
+}
+
+.Table td {
+   background:white;
+   height:25px;
+   color: #616a76;
+   padding:2;
+}
+
 .TableRow{
     background:white;
 }
@@ -16,6 +27,7 @@
     overflow:hidden;
     cursor:pointer;
     color: #616a76;
+    background:;
 }
 .RowNum {
     height:25px;
