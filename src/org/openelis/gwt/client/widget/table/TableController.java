@@ -68,7 +68,6 @@ public class TableController implements
     private boolean[] filterable;
     private ArrayList statFilters = new ArrayList();
     private ArrayList filters = new ArrayList();
-    private int shown;
     private TableCallback callback = new TableCallback();
     private HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
     private boolean resizing;
@@ -78,7 +77,6 @@ public class TableController implements
     private TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)tableService;
     private ChangeListenerCollection changeListeners;
-    private int loaded = 0;
     private int start = 0;
     private int end = 0;
     private boolean autoAdd;
@@ -253,7 +251,6 @@ public class TableController implements
         int rowIndex = model.numRows() - 1;
         if (rowIndex > -1) {
             loadRow(rowIndex);
-            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(rowIndex,this);
@@ -266,7 +263,6 @@ public class TableController implements
         int rowIndex = model.numRows() - 1;
         if (rowIndex > -1) {
             loadRow(rowIndex);
-            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(rowIndex,this);
@@ -284,9 +280,7 @@ public class TableController implements
                                                                      this))) {
             adjustScroll();
             model.insertRow(index, null);
-            //view.table.insertRow(index);
             loadRow(index);
-            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(index,this);
@@ -298,9 +292,7 @@ public class TableController implements
                                                                      this))) {
             adjustScroll();
             model.insertRow(index, row);
-            //view.table.insertRow(index);
             loadRow(index);
-            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(index,this);
@@ -348,11 +340,11 @@ public class TableController implements
             selected = -1;
         }
         if (manager == null || (manager != null && manager.canDelete(row, this))) {
-            //view.table.removeRow(row);
             adjustScroll();
             model.deleteRow(row);
+            view.table.resizeRows(model.numRows());
         }
-        //sizeTable();
+
     }
 
     /**
@@ -739,6 +731,14 @@ public class TableController implements
      * 
      */
     private void sizeTable() {
+            if (model.numRows() == 0){
+                int width = 0;
+                for(int i = 0; i < curColWidth.length; i++){
+                    width += curColWidth[i];
+                }
+                view.table.setWidth(width+"px");
+                view.table.setHeight("17px");
+            }
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     for(int i = 0; i < curColWidth.length; i++){
@@ -751,8 +751,6 @@ public class TableController implements
                         }
                             
                     }
-                    //if(view.table.getOffsetWidth() > 0)
-                    //    view.header.setWidth((view.table.getOffsetWidth())+"px");
                     if(view.width.equals("auto") && view.table.getOffsetWidth() > 0){
                         view.cellView.setWidth((view.table.getOffsetWidth()+17)+"px");
                         view.headerView.setWidth(view.table.getOffsetWidth()+"px");
@@ -1177,14 +1175,13 @@ public class TableController implements
      * Catches mouses Events for resizing columns.
      */
     public void onMouseLeave(Widget sender) {
-        // TODO Auto-generated method stub
+
     }
 
     /**
      * Catches mouses Events for resizing columns.
      */
     public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
         if (resizing) {
             int colA = curColWidth[tableCol] + (x - startx);
             int colB = curColWidth[(tableCol)+1] - (x - startx);
@@ -1192,20 +1189,17 @@ public class TableController implements
                 return;
             curColWidth[tableCol] = colA;
             curColWidth[(tableCol)+1] = colB;
-            //for(int i = 0; i < curColWidth.length; i++){
-                if( resizeColumn == 0 ){
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol])+"px");
-                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-6)+"px");
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
-                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
-                }else{
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol] -2)+"px");
-                    view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-10)+"px");
-                    view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
-                    view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
-                }
-                    
-            //}
+            if( resizeColumn == 0 ){
+                view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol])+"px");
+                view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-6)+"px");
+                view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
+                view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
+            }else{
+                view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol] -2)+"px");
+                view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-10)+"px");
+                view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
+                view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
+            }                    
         }
     }
 
@@ -1213,7 +1207,6 @@ public class TableController implements
      * Catches mouses Events for resizing columns.
      */
     public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
         if (resizing) {
             DOM.releaseCapture(sender.getElement());
             resizing = false;
