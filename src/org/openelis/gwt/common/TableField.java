@@ -21,7 +21,10 @@ public class TableField extends AbstractField {
 
     public void setValue(Object val) {
         // TODO Auto-generated method stub
-        value = (TableModel)val;
+        if(val == null)
+            value = null;
+        else
+            value = (TableModel)val;
     }
 
     public Object getValue() {
