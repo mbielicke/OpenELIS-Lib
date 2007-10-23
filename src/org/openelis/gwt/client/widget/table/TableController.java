@@ -641,6 +641,8 @@ public class TableController implements
      * This method will clear and redraw the table
      */
     public void reset() {
+        start = 0;
+        end = 0;
         view.controller = this;
         if(model.autoAdd || autoAdd){
             model.addRow(null);
