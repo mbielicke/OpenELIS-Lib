@@ -207,8 +207,10 @@ public class TableView extends Composite implements ScrollListener {
     }
 
     public void reset(int rows, int cols) {
-        table = new Grid(rows,cols);
-        //table.setWidth("100%");
+        if (rows == 0)
+            table = new Grid();
+        else
+            table = new Grid(rows,cols);
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
