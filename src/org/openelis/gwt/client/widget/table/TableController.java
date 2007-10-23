@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -79,6 +78,10 @@ public class TableController implements
     private TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)tableService;
     private ChangeListenerCollection changeListeners;
+    private int loaded = 0;
+    private int start = 0;
+    private int end = 0;
+    private boolean autoAdd;
     /**
      * This Method will set the url for the TableService.
      * 
@@ -236,24 +239,21 @@ public class TableController implements
         colAlign = align;
     }
 
+    public void setAutoAdd(boolean auto){
+        this.autoAdd = auto;
+    }
     /**
      * This method will add a new row to the model and the table view.
      * 
      */
     public void addRow() {
+        adjustScroll();
         model.addRow(null);
         view.table.resizeRows(model.numRows());
         int rowIndex = model.numRows() - 1;
         if (rowIndex > -1) {
             loadRow(rowIndex);
-            if (model.paged)
-                view.setShown("(" + model.shown
-                              + " of "
-                              + model.totalRows
-                              + ")");
-            else
-                view.setShown("(" + shown + " of " + model.numRows() + ")");
-            sizeTable();
+            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(rowIndex,this);
@@ -261,18 +261,12 @@ public class TableController implements
     }
 
     public void addRow(TableRow row) {
+        adjustScroll();
         model.addRow(row);
         int rowIndex = model.numRows() - 1;
         if (rowIndex > -1) {
             loadRow(rowIndex);
-            if (model.paged)
-                view.setShown("(" + model.shown
-                              + " of "
-                              + model.totalRows
-                              + ")");
-            else
-                view.setShown("(" + shown + " of " + model.numRows() + ")");
-            sizeTable();
+            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(rowIndex,this);
@@ -288,17 +282,11 @@ public class TableController implements
     public void insertRow(int index) {
         if (manager == null || (manager != null && manager.canInsert(index,
                                                                      this))) {
+            adjustScroll();
             model.insertRow(index, null);
             //view.table.insertRow(index);
             loadRow(index);
-            if (model.paged)
-                view.setShown("(" + model.shown
-                              + " of "
-                              + model.totalRows
-                              + ")");
-            else
-                view.setShown("(" + shown + " of " + model.numRows() + ")");
-            sizeTable();
+            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(index,this);
@@ -308,17 +296,11 @@ public class TableController implements
     public void insertRow(int index, TableRow row) {
         if (manager == null || (manager != null && manager.canInsert(index,
                                                                      this))) {
+            adjustScroll();
             model.insertRow(index, row);
             //view.table.insertRow(index);
             loadRow(index);
-            if (model.paged)
-                view.setShown("(" + model.shown
-                              + " of "
-                              + model.totalRows
-                              + ")");
-            else
-                view.setShown("(" + shown + " of " + model.numRows() + ")");
-            sizeTable();
+            //sizeTable();
         }
         if(manager != null){
             manager.rowAdded(index,this);
@@ -352,8 +334,6 @@ public class TableController implements
         }
         if (!model.getRow(index).show())
             view.table.getRowFormatter().addStyleName(index, "hide");
-        else
-            shown++;
     }
 
     /**
@@ -369,14 +349,10 @@ public class TableController implements
         }
         if (manager == null || (manager != null && manager.canDelete(row, this))) {
             //view.table.removeRow(row);
+            adjustScroll();
             model.deleteRow(row);
         }
-        shown--;
-        if (model.paged)
-            view.setShown("(" + model.shown + " of " + model.totalRows + ")");
-        else
-            view.setShown("(" + shown + " of " + model.numRows() + ")");
-        sizeTable();
+        //sizeTable();
     }
 
     /**
@@ -450,6 +426,7 @@ public class TableController implements
      * @param row
      */
     public void unselect(int row) {
+        try{
         if(row < 0 && selected < 0)
             return;
         else
@@ -458,7 +435,7 @@ public class TableController implements
         for (int i = 0; i < view.table.getCellCount(row); i++) {
             if (selectedCell == i) {
                 saveValue(row, i);
-                if(model.autoAdd){
+                if(model.autoAdd || autoAdd){
                     if(manager != null && manager.doAutoAdd(row,i,this))
                         addRow();
                     else if(manager == null && row == model.numRows() -1)
@@ -468,6 +445,9 @@ public class TableController implements
             setCellDisplay(row, i);
         }
         selectedCell = -1;
+        }catch(Exception e){
+            Window.alert("unselect "+e.getMessage());
+        }
     }
 
     /**
@@ -479,6 +459,7 @@ public class TableController implements
      * @param col
      */
     public void select(int row, int col) {
+        try{
         if (manager == null || (manager != null && manager.canSelect(row, this))){
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
@@ -493,7 +474,7 @@ public class TableController implements
             if (selectedCell != col) {
                 if (selectedCell > -1) {
                     saveValue(row, selectedCell);
-                    if(model.autoAdd){
+                    if(model.autoAdd || autoAdd){
                         if(manager != null && manager.doAutoAdd(row,col,this))
                             addRow();
                         else if(manager == null && row == model.numRows() -1)
@@ -512,6 +493,9 @@ public class TableController implements
         selected = row;
         if (manager != null && col > -1)
             manager.action(row, col, this);
+        }catch(Exception e){
+            Window.alert("select "+e.getMessage());
+        }
     }
 
     /**
@@ -529,6 +513,7 @@ public class TableController implements
      * @param col
      */
     public void setCellEditor(int row, int col) {
+        try{
         TableCellWidget cell = editors[col];
         if (cell instanceof TableLabel) {
             selectedCell = -1;
@@ -565,6 +550,9 @@ public class TableController implements
             ((FocusWidget)wid).setFocus(true);
         }
         selectedCell = col;
+        }catch(Exception e){
+            Window.alert("set Editor "+e.getMessage());
+        }
     }
 
     /**
@@ -575,9 +563,11 @@ public class TableController implements
      * @param col
      */
     public void setCellDisplay(int row, int col) {
+        try{
         TableCellWidget cell = editors[col];
         if (!(cell instanceof TableOption) || !(((TableOption)cell).loadFromModel || ((TableOption)cell).loadFromHidden != null))
-            cell.setValue(model.getFieldAt(row, col).getValue());    
+            cell.setValue(model.getFieldAt(row, col).getValue());
+                
         Object display;
         if (staticTitles != null && staticTitles[col] != null) {
             if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
@@ -635,22 +625,22 @@ public class TableController implements
             view.table.setWidget(row, col, simp);
             return;
         }
-        if (display instanceof String) {
-            view.table.setText(row, col, (String)display);
-        } else {
-            ((Widget)display).addStyleName(view.widgetStyle);
-            DOM.setStyleAttribute(((Widget)display).getElement(), "overflowX", "hidden");
-            ((Widget)display).setWidth((curColWidth[col] -4)+ "px");
-            view.table.setWidget(row, col, (Widget)display);
-           
+        ((Widget)display).addStyleName(view.widgetStyle);
+        DOM.setStyleAttribute(((Widget)display).getElement(), "overflowX", "hidden");
+        ((Widget)display).setWidth((curColWidth[col] -4)+ "px");
+        view.table.setWidget(row, col, (Widget)display);
+        }catch(Exception e){
+            Window.alert("setCell Display "+e.getMessage());
         }
-    }
+           
+     }
 
     /**
      * This method will clear and redraw the table
      */
     public void reset() {
-        if(model.autoAdd){
+        view.controller = this;
+        if(model.autoAdd || autoAdd){
             model.addRow(null);
         }
         if(model.numRows() > 0){
@@ -673,19 +663,75 @@ public class TableController implements
                 img.addMouseListener(this);
             }
         }
-        shown = 0;
-        for (int j = 0; j < model.numRows(); j++) {
-            loadRow(j);
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                scrollLoad(0);
+                selected = -1;
+                selectedCell = -1;
+                sizeTable();
+                if (model.paged)
+                    view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
+            }
+        });
+    }
+    
+    public void scrollLoad(int scrollPos){
+        try{
+        int newStart = 0;
+        int newEnd = 0;
+        int rowsPer = (view.cellView.getOffsetHeight()/(view.table.getOffsetHeight()/model.numRows()));
+        newStart = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) - rowsPer * 2;
+        if(newStart < 0){
+            newStart = 0;
         }
-        view.setTable();
-        selected = -1;
-        selectedCell = -1;
-        sizeTable();
-        if (model.paged) {
-            view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex, this);
-            view.setShown("(" + model.shown + " of " + model.totalRows + ")");
-        } else
-            view.setShown("(" + shown + " of " + model.numRows() + ")");
+        newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer * 2;
+        if(newEnd > model.numRows()){
+            newEnd = model.numRows();
+        }
+        if(newEnd < start || newStart > end){
+            for(int i = newStart; i < newEnd; i++){
+                loadRow(i);
+            }
+            clearRows(start,end);
+        }else{
+            if(start < newStart){
+                clearRows(start,newStart);
+            }
+            if(end > newEnd){
+                clearRows(newEnd,end);
+            }
+            int i = 0;
+            int stop = 0;
+            if(newEnd > end && view.table.getWidget(newEnd -1,0) == null){
+                 i = end;
+                 stop = newEnd;
+            }else{
+                i = newStart;
+                stop = start;
+            }
+            for(;i < stop; i++){
+                loadRow(i);
+            }
+        }
+        start = newStart;
+        end = newEnd;
+        }catch(Exception e){
+            Window.alert("scrollLoad "+e.getMessage());
+        }
+        //view.setShown("("+ (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) +":"+start+":"+end);
+    }
+    
+    private void clearRows(final int start, final int stop){
+        //DeferredCommand.addCommand(new Command() {
+         //   public void execute(){
+                if(selected >= start && selected <= stop)
+                    unselect(selected);
+                for(int i = start; i < stop; i++){
+                    for(int j = 0; j < model.getRow(i).numColumns(); j++)
+                        view.table.clearCell(i,j);
+                }
+         // }
+       // });
     }
 
     /**
@@ -693,43 +739,8 @@ public class TableController implements
      * 
      */
     private void sizeTable() {
-        /*for (int j = 0; j < model.numRows(); j++) {
-            for (int i = 0; i < curColWidth.length; i++) {
-                if (curColWidth[i] > 0) {
-                    view.table.getFlexCellFormatter()
-                              .setWidth(j, i, curColWidth[i] + "px");
-                    //view.table.getWidget(j, i).setWidth(curColWidth[i] + "px");
-                    DOM.setStyleAttribute(view.table.getFlexCellFormatter()
-                                                    .getElement(j, i),
-                                          "overflow",
-                                          "hidden");
-                }
-            }
-        }
-        */
-        //if (model.numRows() > 0) {
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
-                    view.header.setWidth((view.table.getOffsetWidth())+"px");
-                    if(view.width.equals("auto")){
-                        if(view.table.getOffsetHeight() > view.cellView.getOffsetHeight())
-                            view.cellView.setWidth((view.table.getOffsetWidth()+17)+"px");
-                        else
-                            view.cellView.setWidth((view.table.getOffsetWidth())+"px");
-                        view.headerView.setWidth(view.table.getOffsetWidth()+"px");
-                    }else{
-                    	final int width = view.cellView.getOffsetWidth();
-                    	DeferredCommand.addCommand(new Command() {
-                    		public void execute() {
-                    			view.cellView.setWidth(width+"px");
-                    		}
-                    	});
-                       // if(view.table.getOffsetWidth() > view.cellView.getOffsetWidth())
-                            //view.hScroll.setAlwaysShowScrollBars(true);
-                    }
-                    //view.hsc.setWidth((view.table.getOffsetWidth())+"px");
-                    //DOM.setStyleAttribute(view.hScroll.getElement(), "overflowY", "hidden");
-                    //view.vsc.setHeight(view.table.getOffsetHeight()+"px");
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0){
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-2)+"px");
@@ -740,9 +751,38 @@ public class TableController implements
                         }
                             
                     }
+                    //if(view.table.getOffsetWidth() > 0)
+                    //    view.header.setWidth((view.table.getOffsetWidth())+"px");
+                    if(view.width.equals("auto") && view.table.getOffsetWidth() > 0){
+                        view.cellView.setWidth((view.table.getOffsetWidth()+17)+"px");
+                        view.headerView.setWidth(view.table.getOffsetWidth()+"px");
+                    }else if(view.cellView.getOffsetHeight()-17 < view.table.getOffsetHeight() && view.table.getOffsetHeight() > 0){
+                    	final int width = view.headerView.getOffsetWidth();
+                    	DeferredCommand.addCommand(new Command() {
+                    		public void execute() {
+                    			view.headerView.setWidth((width-17)+"px");
+                    		}
+                    	});
+                    }
                 }
             });
-        //}
+    }
+    
+    public void adjustScroll() {
+        if(!view.width.equals("auto") && view.cellView.getOffsetHeight()-17 > view.table.getOffsetHeight() ){
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    if(view.cellView.getOffsetHeight()-17 < view.table.getOffsetHeight()){
+                        final int width = view.headerView.getOffsetWidth();
+                        DeferredCommand.addCommand(new Command() {
+                            public void execute() {
+                                view.headerView.setWidth((width-17)+"px");
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -753,6 +793,7 @@ public class TableController implements
      * @param col
      */
     public void saveValue(int row, int col) {
+        try{
     	TableCellWidget wid = null;
         if (view.table.getWidget(row,col) instanceof SimplePanel){
         	wid = (TableCellWidget)((SimplePanel)view.table.getWidget(row,col)).getWidget();
@@ -771,6 +812,9 @@ public class TableController implements
         if(changeListeners != null){
             changeListeners.fireChange(view);
         }
+        }catch(Exception e){
+            Window.alert("save Value "+e.getMessage());
+        }
     }
 
     /**
@@ -787,7 +831,6 @@ public class TableController implements
             if (selected >= 0 && selected != view.table.getRowCount() - 1) {
                 final int row = selected + 1;
                 final int col = selectedCell;
-                view.checkScrolls(row,col);
                 DeferredCommand.addCommand(new Command() {
                    public void execute() {
                       onCellClicked(view.table, row, col);
@@ -803,7 +846,6 @@ public class TableController implements
                 final int row = selected - 1;
                 final int col = selectedCell;
                 //unselect(selected);
-                view.checkScrolls(row, col);
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                         onCellClicked(view.table, row, col);
@@ -819,7 +861,7 @@ public class TableController implements
                 if (selectedCell > -1) {
                     saveValue(selected, selectedCell);
                     setCellDisplay(selected, selectedCell);
-                    if(model.autoAdd){
+                    if(model.autoAdd || autoAdd){
                         if(manager != null && manager.doAutoAdd(selected,selectedCell,this))
                             addRow();
                         else if(manager == null && selected == model.numRows() -1)
@@ -848,25 +890,16 @@ public class TableController implements
                     row = 0;
                 while ((editors[col] instanceof TableLabel))
                     col++;
-                view.checkScrolls(row, col);
                 final int fRow = row;
                 final int fCol = col;
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        onCellClicked(view.table, fRow, fCol);
-                    }
-                });
+                onCellClicked(view.table, fRow, fCol);
+                onCellClicked(view.table,fRow,fCol);
             } else {
                 int col = selectedCell + 1;
                 while ((editors[col] instanceof TableLabel))
                     col++;
-                view.checkScrolls(selected, col);
                 final int fCol = col;
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        onCellClicked(view.table, selected, fCol);
-                    }
-                });
+                onCellClicked(view.table, selected, fCol);
             }
             DOM.eventCancelBubble(event, true);
             DOM.eventPreventDefault(event);
@@ -880,7 +913,6 @@ public class TableController implements
                 int col = model.getRow(row).numColumns() - 1;
                 while ((editors[col] instanceof TableLabel))
                     col--;
-                view.checkScrolls(row, col);
                 final int fRow = row;
                 final int fCol = col;
                 DeferredCommand.addCommand(new Command() {
@@ -892,7 +924,6 @@ public class TableController implements
                 int col = selectedCell - 1;
                 while ((editors[col] instanceof TableLabel))
                     col--;
-                view.checkScrolls(selected, col);
                 final int fCol = col;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
