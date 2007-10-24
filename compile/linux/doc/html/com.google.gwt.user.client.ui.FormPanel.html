@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            FormPanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.FormHandlerCollection.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.FormSubmitCompleteEvent.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">FormPanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class FormPanel</h1>
+<div class="classSig">public 
+            class 
+            FormPanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.SimplePanel.html">SimplePanel</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.FiresFormEvents.html">FiresFormEvents</a>, FormPanelImplHost</div>A panel that wraps its contents in an HTML &lt;FORM&gt; element.
+ 
+ <p>
+ This panel can be used to achieve interoperability with servers that accept
+ traditional HTML form encoding. The following widgets (those that implement
+ <a href="com.google.gwt.user.client.ui.HasName.html">HasName</a>) will be submitted to the
+ server if they are contained within this panel:
+ <ul>
+<li>
+<a href="com.google.gwt.user.client.ui.TextBox.html">TextBox</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.PasswordTextBox.html">PasswordTextBox</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.RadioButton.html">RadioButton</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.CheckBox.html">CheckBox</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.TextArea.html">TextArea</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.ListBox.html">ListBox</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.FileUpload.html">FileUpload</a>
+</li>
+<li>
+<a href="com.google.gwt.user.client.ui.Hidden.html">Hidden</a>
+</li>
+</ul>
+ In particular, <a href="com.google.gwt.user.client.ui.FileUpload.html">FileUpload</a> is <i>only</i>
+ useful when used within a FormPanel, because the browser will only upload
+ files using form submission.
+ </p>
+<p>
+<h3>Example</h3>
+<pre class="code">public class FormPanelExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Create a FormPanel and point it at a service.
+    final FormPanel form = new FormPanel();
+    form.setAction("/myFormHandler");
+
+    // Because we're going to add a FileUpload widget, we'll need to set the
+    // form to use the POST method, and multipart MIME encoding.
+    form.setEncoding(FormPanel.ENCODING_MULTIPART);
+    form.setMethod(FormPanel.METHOD_POST);
+
+    // Create a panel to hold all of the form widgets.
+    VerticalPanel panel = new VerticalPanel();
+    form.setWidget(panel);
+
+    // Create a TextBox, giving it a name so that it will be submitted.
+    final TextBox tb = new TextBox();
+    tb.setName("textBoxFormElement");
+    panel.add(tb);
+
+    // Create a ListBox, giving it a name and some values to be associated with
+    // its options.
+    ListBox lb = new ListBox();
+    lb.setName("listBoxFormElement");
+    lb.addItem("foo", "fooValue");
+    lb.addItem("bar", "barValue");
+    lb.addItem("baz", "bazValue");
+    panel.add(lb);
+
+    // Create a FileUpload widget.
+    FileUpload upload = new FileUpload();
+    upload.setName("uploadFormElement");
+    panel.add(upload);
+
+    // Add a 'submit' button.
+    panel.add(new Button("Submit", new ClickListener() {
+      public void onClick(Widget sender) {
+        form.submit();
+      }
+    }));
+
+    // Add an event handler to the form.
+    form.addFormHandler(new FormHandler() {
+      public void onSubmit(FormSubmitEvent event) {
+        // This event is fired just before the form is submitted. We can take
+        // this opportunity to perform validation.
+        if (tb.getText().length() == 0) {
+          Window.alert("The text box must not be empty");
+          event.setCancelled(true);
+        }
+      }
+
+      public void onSubmitComplete(FormSubmitCompleteEvent event) {
+        // When the form submission is successfully completed, this event is
+        // fired. Assuming the service returned a response of type text/html,
+        // we can get the result text here (see the FormPanel documentation for
+        // further explanation).
+        Window.alert(event.getResults());
+      }
+    });
+
+    RootPanel.get().add(form);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>ENCODING_MULTIPART</td><td>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setEncoding(java.lang.String)">setEncoding(String)</a> to specify that the form will be
+ submitted using MIME encoding (necessary for <a href="com.google.gwt.user.client.ui.FileUpload.html">FileUpload</a> to work
+ properly). </td>
+</tr>
+<tr>
+<td>ENCODING_URLENCODED</td><td>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setEncoding(java.lang.String)">setEncoding(String)</a> to specify that the form will be
+ submitted using traditional URL encoding. </td>
+</tr>
+<tr>
+<td>METHOD_GET</td><td>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setMethod(java.lang.String)">setMethod(String)</a> to specify that the form will be
+ submitted using an HTTP GET request. </td>
+</tr>
+<tr>
+<td>METHOD_POST</td><td>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setMethod(java.lang.String)">setMethod(String)</a> to specify that the form will be
+ submitted using an HTTP POST request (necessary for <a href="com.google.gwt.user.client.ui.FileUpload.html">FileUpload</a> to
+ work properly). </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#FormPanel()">FormPanel()</a></td><td>Creates a new FormPanel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#FormPanel(com.google.gwt.user.client.ui.NamedFrame)">FormPanel(NamedFrame)</a></td><td>Creates a FormPanel that targets a <a href="com.google.gwt.user.client.ui.NamedFrame.html">NamedFrame</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#FormPanel(java.lang.String)">FormPanel(String)</a></td><td>Creates a new FormPanel. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#addFormHandler(com.google.gwt.user.client.ui.FormHandler)">addFormHandler(FormHandler)</a></td><td>Adds a handler interface to receive click events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#getAction()">getAction()</a></td><td>Gets the 'action' associated with this form. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#getEncoding()">getEncoding()</a></td><td>Gets the encoding used for submitting this form. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#getMethod()">getMethod()</a></td><td>Gets the HTTP method used for submitting this form. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#getTarget()">getTarget()</a></td><td>Gets the form's 'target'. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#onAttach()">onAttach()</a></td><td>This method is called when a widget is attached to the browser's document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#onDetach()">onDetach()</a></td><td>This method is called when a widget is detached from the browser's
+ document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#onFormSubmit()">onFormSubmit()</a></td><td>Called when the form is submitted. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#onFrameLoad()">onFrameLoad()</a></td><td>Called when the target frame is done loading. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#removeFormHandler(com.google.gwt.user.client.ui.FormHandler)">removeFormHandler(FormHandler)</a></td><td>Removes a previously added handler interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#setAction(java.lang.String)">setAction(String)</a></td><td>Sets the 'action' associated with this form. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#setEncoding(java.lang.String)">setEncoding(String)</a></td><td>Sets the encoding used for submitting this form. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#setMethod(java.lang.String)">setMethod(String)</a></td><td>Sets the HTTP method used for submitting this form. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FormPanel.html#submit()">submit()</a></td><td>Submits the form. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">ENCODING_MULTIPART</h3>
+<div class="memberSig">public static final String <b>ENCODING_MULTIPART</b>
+</div>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setEncoding(java.lang.String)">setEncoding(String)</a> to specify that the form will be
+ submitted using MIME encoding (necessary for <a href="com.google.gwt.user.client.ui.FileUpload.html">FileUpload</a> to work
+ properly).<hr>
+<h3 class="api">ENCODING_URLENCODED</h3>
+<div class="memberSig">public static final String <b>ENCODING_URLENCODED</b>
+</div>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setEncoding(java.lang.String)">setEncoding(String)</a> to specify that the form will be
+ submitted using traditional URL encoding.<hr>
+<h3 class="api">METHOD_GET</h3>
+<div class="memberSig">public static final String <b>METHOD_GET</b>
+</div>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setMethod(java.lang.String)">setMethod(String)</a> to specify that the form will be
+ submitted using an HTTP GET request.<hr>
+<h3 class="api">METHOD_POST</h3>
+<div class="memberSig">public static final String <b>METHOD_POST</b>
+</div>Used with <a href="com.google.gwt.user.client.ui.FormPanel.html#setMethod(java.lang.String)">setMethod(String)</a> to specify that the form will be
+ submitted using an HTTP POST request (necessary for <a href="com.google.gwt.user.client.ui.FileUpload.html">FileUpload</a> to
+ work properly).<h2 class="api">Constructor Detail</h2>
+<a name="FormPanel()"></a>
+<h3 class="api">FormPanel</h3>
+<div class="memberSig">public <b> FormPanel</b>()</div>Creates a new FormPanel. When created using this constructor, it will be
+ submitted to a hidden &lt;iframe&gt; element, and the results of the
+ submission made available via <a href="com.google.gwt.user.client.ui.FormHandler.html">FormHandler</a>.
+ 
+ <p>
+ The back-end server is expected to respond with a content-type of
+ 'text/html', meaning that the text returned will be treated as HTML. If any
+ other content-type is specified by the server, then the result html sent in
+ the onFormSubmit event will be unpredictable across browsers, and the
+ <a href="com.google.gwt.user.client.ui.FormHandler.html#onSubmitComplete(com.google.gwt.user.client.ui.FormSubmitCompleteEvent)">FormHandler.onSubmitComplete(FormSubmitCompleteEvent)</a> event may not
+ fire at all.
+ </p>
+<hr>
+<a name="FormPanel(com.google.gwt.user.client.ui.NamedFrame)"></a>
+<h3 class="api">FormPanel</h3>
+<div class="memberSig">public <b> FormPanel</b>(<nobr><a href="com.google.gwt.user.client.ui.NamedFrame.html">NamedFrame</a> frameTarget</nobr>)</div>Creates a FormPanel that targets a <a href="com.google.gwt.user.client.ui.NamedFrame.html">NamedFrame</a>. The target frame is
+ not physically attached to the form, and must therefore still be added to a
+ panel elsewhere.
+ 
+ <p>
+ When the FormPanel targets an external frame in this way, it will not fire
+ the onFormSubmit event.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>frameTarget</dt>
+<dd>the <a href="com.google.gwt.user.client.ui.NamedFrame.html">NamedFrame</a> to be targetted</dd>
+</dl>
+<hr>
+<a name="FormPanel(java.lang.String)"></a>
+<h3 class="api">FormPanel</h3>
+<div class="memberSig">public <b> FormPanel</b>(<nobr><a href="java.lang.String.html">String</a> target</nobr>)</div>Creates a new FormPanel. When created using this constructor, it will be
+ submitted either by replacing the current page, or to the named
+ &lt;iframe&gt;.
+ 
+ <p>
+ When the FormPanel targets an external frame in this way, it will not fire
+ the onFormSubmit event.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>target</dt>
+<dd>the name of the &lt;iframe&gt; to receive the results of the
+          submission, or <code>null</code> to specify that the current
+          page be replaced</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="addFormHandler(com.google.gwt.user.client.ui.FormHandler)"></a>
+<h3 class="api">addFormHandler</h3>
+<div class="memberSig">public void<b> addFormHandler</b>(<nobr><a href="com.google.gwt.user.client.ui.FormHandler.html">FormHandler</a> handler</nobr>)</div>Adds a handler interface to receive click events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>handler</dt>
+<dd>the handler interface to add</dd>
+</dl>
+<hr>
+<a name="getAction()"></a>
+<h3 class="api">getAction</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getAction</b>()</div>Gets the 'action' associated with this form. This is the URL to which it
+ will be submitted.<h4 class="api">Return Value</h4>the form's action<hr>
+<a name="getEncoding()"></a>
+<h3 class="api">getEncoding</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getEncoding</b>()</div>Gets the encoding used for submitting this form. This should be either
+ <a href="com.google.gwt.user.client.ui.FormPanel.html#ENCODING_MULTIPART">ENCODING_MULTIPART</a> or <a href="com.google.gwt.user.client.ui.FormPanel.html#ENCODING_URLENCODED">ENCODING_URLENCODED</a>.<h4 class="api">Return Value</h4>the form's encoding<hr>
+<a name="getMethod()"></a>
+<h3 class="api">getMethod</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getMethod</b>()</div>Gets the HTTP method used for submitting this form. This should be either
+ <a href="com.google.gwt.user.client.ui.FormPanel.html#METHOD_GET">METHOD_GET</a> or <a href="com.google.gwt.user.client.ui.FormPanel.html#METHOD_POST">METHOD_POST</a>.<h4 class="api">Return Value</h4>the form's method<hr>
+<a name="getTarget()"></a>
+<h3 class="api">getTarget</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getTarget</b>()</div>Gets the form's 'target'. This is the name of the <a href="com.google.gwt.user.client.ui.NamedFrame.html">NamedFrame</a> that
+ will receive the results of submission, or <code>null</code> if none has
+ been specified.<h4 class="api">Return Value</h4>the form's target.<hr>
+<a name="onAttach()"></a>
+<h3 class="api">onAttach</h3>
+<div class="memberSig">protected void<b> onAttach</b>()</div>This method is called when a widget is attached to the browser's document.
+ To receive notification after a Widget has been added to the document,
+ override the <a href="com.google.gwt.user.client.ui.Widget.html#onLoad()">onLoad</a> method.
+ 
+ <p>
+ Subclasses that override this method must call
+ <code>super.onAttach()</code> to ensure that the Widget has been attached
+ to its underlying Element.
+ </p>
+<hr>
+<a name="onDetach()"></a>
+<h3 class="api">onDetach</h3>
+<div class="memberSig">protected void<b> onDetach</b>()</div>This method is called when a widget is detached from the browser's
+ document. To receive notification before a Widget is removed from the
+ document, override the <a href="com.google.gwt.user.client.ui.Widget.html#onUnload()">onUnload</a> method.
+ 
+ <p>
+ Subclasses that override this method must call
+ <code>super.onDetach()</code> to ensure that the Widget has been detached
+ from the underlying Element. Failure to do so will result in application
+ memory leaks due to circular references between DOM Elements and JavaScript
+ objects.
+ </p>
+<hr>
+<a name="onFormSubmit()"></a>
+<h3 class="api">onFormSubmit</h3>
+<div class="memberSig">public boolean<b> onFormSubmit</b>()</div>Called when the form is submitted.<h4 class="api">Return Value</h4>
+<code>false</code> to cancel the submit<hr>
+<a name="onFrameLoad()"></a>
+<h3 class="api">onFrameLoad</h3>
+<div class="memberSig">public void<b> onFrameLoad</b>()</div>Called when the target frame is done loading.<hr>
+<a name="removeFormHandler(com.google.gwt.user.client.ui.FormHandler)"></a>
+<h3 class="api">removeFormHandler</h3>
+<div class="memberSig">public void<b> removeFormHandler</b>(<nobr><a href="com.google.gwt.user.client.ui.FormHandler.html">FormHandler</a> handler</nobr>)</div>Removes a previously added handler interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>handler</dt>
+<dd>the handler interface to remove</dd>
+</dl>
+<hr>
+<a name="setAction(java.lang.String)"></a>
+<h3 class="api">setAction</h3>
+<div class="memberSig">public void<b> setAction</b>(<nobr><a href="java.lang.String.html">String</a> url</nobr>)</div>Sets the 'action' associated with this form. This is the URL to which it
+ will be submitted.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>url</dt>
+<dd>the form's action</dd>
+</dl>
+<hr>
+<a name="setEncoding(java.lang.String)"></a>
+<h3 class="api">setEncoding</h3>
+<div class="memberSig">public void<b> setEncoding</b>(<nobr><a href="java.lang.String.html">String</a> encodingType</nobr>)</div>Sets the encoding used for submitting this form. This should be either
+ <a href="com.google.gwt.user.client.ui.FormPanel.html#ENCODING_MULTIPART">ENCODING_MULTIPART</a> or <a href="com.google.gwt.user.client.ui.FormPanel.html#ENCODING_URLENCODED">ENCODING_URLENCODED</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>encodingType</dt>
+<dd>the form's encoding</dd>
+</dl>
+<hr>
+<a name="setMethod(java.lang.String)"></a>
+<h3 class="api">setMethod</h3>
+<div class="memberSig">public void<b> setMethod</b>(<nobr><a href="java.lang.String.html">String</a> method</nobr>)</div>Sets the HTTP method used for submitting this form. This should be either
+ <a href="com.google.gwt.user.client.ui.FormPanel.html#METHOD_GET">METHOD_GET</a> or <a href="com.google.gwt.user.client.ui.FormPanel.html#METHOD_POST">METHOD_POST</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>method</dt>
+<dd>the form's method</dd>
+</dl>
+<hr>
+<a name="submit()"></a>
+<h3 class="api">submit</h3>
+<div class="memberSig">public void<b> submit</b>()</div>Submits the form.
+ 
+ <p>
+ The FormPanel must <em>not</em> be detached (i.e. removed from its parent
+ or otherwise disconnected from a <a href="com.google.gwt.user.client.ui.RootPanel.html">RootPanel</a>) until the submission
+ is complete. Otherwise, notification of submission will fail.
+ </p>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

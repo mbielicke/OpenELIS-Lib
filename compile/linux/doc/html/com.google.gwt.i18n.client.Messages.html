@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Messages</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.i18n.client.Localizable.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.json.client.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.i18n.client.html">com.google.gwt.i18n.client</a></span> &gt;
+            <span class="selected item">Messages</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface Messages</h1>
+<div class="classSig">public 
+            interface 
+            <b>Messages</b>
+<br>extends 
+                <a xmlns="" href="com.google.gwt.i18n.client.Localizable.html">Localizable</a>
+</div>A tag interface that facilitates locale-sensitive, compile-time binding of
+ messages supplied from properties files. Using
+ <code>GWT.create(<i>class</i>)</code> to "instantiate" an interface that
+ extends <code>Messages</code> returns an instance of an automatically
+ generated subclass that is implemented using message templates from a
+ property file selected based on locale. Message templates are based on a
+ subset of the format used by <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/text/MessageFormat.html"><code>MessageFormat</code></a>.
+ 
+ <p>
+ Locale is specified at run time using a meta tag or query string as described
+ for <a href="com.google.gwt.i18n.client.Localizable.html">Localizable</a>.
+ </p>
+<h3>Extending <code>Messages</code>
+</h3>
+ To use <code>Messages</code>, begin by defining an interface that extends
+ it. Each interface method is referred to as a <i>message accessor</i>, and
+ the name of each message accessor is assumed to match the name of a property
+ defined in a properties file. For example,
+ 
+ <pre class="code">public interface GameStatusMessages extends Messages {
+  /**
+   * @param username the name of a player
+   * @param numTurns the number of turns remaining
+   * @return a message specifying the remaining turns for a player
+   */
+  String turnsLeft(String username, int numTurns);
+
+  /**
+   * @param numPoints the number of points
+   * @return a message describing the current score for the current player
+   */
+  String currentScore(int numPoints);
+}
+</pre>
+
+ 
+ expects to find properties named <code>turnsLeft</code> and
+ <code>currentScore</code> in an associated properties file, formatted as
+ message templates taking two arguments and one argument, respectively. For
+ example, the following properties would correctly bind to the
+ <code>GameStatusMessages</code> interface:
+ 
+ <pre class="code">turnsLeft = Turns left for player ''{0}'': {1}
+currentScore = Current score: {0}
+</pre>
+<p>
+ The following example demonstrates how to use constant accessors defined in
+ the interface above:
+ 
+ <pre class="code">public void beginNewGameRound(String username) {
+  GameStatusMessages messages = (GameStatusMessages) GWT.create(GameStatusMessages.class);
+
+  // Tell the new player how many turns he or she has left.
+  int turnsLeft = computeTurnsLeftForPlayer(username);
+  showMessage(messages.turnsLeft(username, turnsLeft));
+
+  // Tell the current player his or her score.
+  int currentScore = computeScore(username);
+  setCurrentPlayer(username);
+  showMessage(messages.currentScore(currentScore));
+}
+</pre>
+</p>
+<p>
+ It is possible to change the property name bound to a message accessor using
+ the <code>gwt.key</code> doc comment, exactly as is done for constant
+ accessors. See <a href="com.google.gwt.i18n.client.Constants.html">Constants</a> for an example.
+ </p>
+<h3>Defining Message Accessors</h3>
+ Message accessors must be of the form
+ 
+ <pre>String methodName(<i>optional-params</i>)</pre>
+ 
+ and parameters may be of any type. Arguments are converted into strings at
+ runtime using Java string concatenation syntax (the '+' operator), which
+ uniformly handles primitives, <code>null</code>, and invoking
+ <code>toString()</code> to format objects.
+ 
+ <p>
+ Compile-time checks are performed to ensure that the number of placeholders
+ in a message template (e.g. <code>{0}</code>) matches the number of
+ parameters supplied.
+ </p>
+<h3>Binding to Properties Files</h3>
+ Interfaces extending <code>Messages</code> are bound to properties file
+ using the same algorithm as interfaces extending <code>Constants</code>.
+ See the documentation for <a href="com.google.gwt.i18n.client.Constants.html">Constants</a> for a description of the
+ algorithm.
+ 
+ <h3>Required Module</h3>
+ Modules that use this interface should inherit
+ <code>com.google.gwt.i18n.I18N</code>.
+ 
+ <pre class="code">&lt;!--                                                                        --&gt;
+&lt;!-- Copyright 2007 Google Inc.                                             --&gt;
+&lt;!-- Licensed under the Apache License, Version 2.0 (the "License"); you    --&gt;
+&lt;!-- may not use this file except in compliance with the License. You may   --&gt;
+&lt;!-- may obtain a copy of the License at                                    --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- http://www.apache.org/licenses/LICENSE-2.0                             --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- Unless required by applicable law or agreed to in writing, software    --&gt;
+&lt;!-- distributed under the License is distributed on an "AS IS" BASIS,      --&gt;
+&lt;!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        --&gt;
+&lt;!-- implied. License for the specific language governing permissions and   --&gt;
+&lt;!-- limitations under the License.                                         --&gt;
+
+&lt;module&gt;
+  &lt;!-- other inherited modules, such as com.google.gwt.user.User --&gt;
+  &lt;inherits name="com.google.gwt.i18n.I18N"/&gt;
+  &lt;!-- additional module settings --&gt;
+&lt;/module&gt;
+</pre>
+<h3>Note</h3>
+ You should not directly implement this interface or interfaces derived from
+ it since an implementation is generated automatically when message interfaces
+ are created using <a href="com.google.gwt.core.client.GWT.html#create(java.lang.Class)">GWT.create(Class)</a>.</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

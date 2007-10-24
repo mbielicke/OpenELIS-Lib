@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Timer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.Random.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.Window.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.html">com.google.gwt.user.client</a></span> &gt;
+            <span class="selected item">Timer</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class Timer</h1>
+<div class="classSig">public 
+            class 
+            Timer<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+</div>A simplified, browser-safe timer class. This class serves the same purpose as
+ java.util.Timer, but is simplified because of the single-threaded
+ environment.
+ 
+ To schedule a timer, simply create a subclass of it (overriding <a href="com.google.gwt.user.client.Timer.html#run()">run</a>)
+ and call <a href="com.google.gwt.user.client.Timer.html#schedule(int)">schedule</a> or <a href="com.google.gwt.user.client.Timer.html#scheduleRepeating(int)">scheduleRepeating</a>.
+ 
+ <p>
+<h3>Example</h3>
+<pre class="code">public class TimerExample implements EntryPoint, ClickListener {
+
+  public void onModuleLoad() {
+    Button b = new Button("Click and wait 5 seconds");
+    b.addClickListener(this);
+
+    RootPanel.get().add(b);
+  }
+
+  public void onClick(Widget sender) {
+    // Create a new timer that calls Window.alert().
+    Timer t = new Timer() {
+      public void run() {
+        Window.alert("Nifty, eh?");
+      }
+    };
+
+    // Schedule the timer to run once in 5 seconds.
+    t.schedule(5000);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.Timer.html#cancel()">cancel()</a></td><td>Cancels this timer. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Timer.html#run()">run()</a></td><td>This method will be called when a timer fires. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Timer.html#schedule(int)">schedule(int)</a></td><td>Schedules a timer to elapse in the future. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Timer.html#scheduleRepeating(int)">scheduleRepeating(int)</a></td><td>Schedules a timer that elapses repeatedly. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="cancel()"></a>
+<h3 class="api">cancel</h3>
+<div class="memberSig">public void<b> cancel</b>()</div>Cancels this timer.<hr>
+<a name="run()"></a>
+<h3 class="api">run</h3>
+<div class="memberSig">public abstract void<b> run</b>()</div>This method will be called when a timer fires. Override it to implement the
+ timer's logic.<hr>
+<a name="schedule(int)"></a>
+<h3 class="api">schedule</h3>
+<div class="memberSig">public void<b> schedule</b>(<nobr>int delayMillis</nobr>)</div>Schedules a timer to elapse in the future.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>delayMillis</dt>
+<dd>how long to wait before the timer elapses, in
+          milliseconds</dd>
+</dl>
+<hr>
+<a name="scheduleRepeating(int)"></a>
+<h3 class="api">scheduleRepeating</h3>
+<div class="memberSig">public void<b> scheduleRepeating</b>(<nobr>int periodMillis</nobr>)</div>Schedules a timer that elapses repeatedly.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>periodMillis</dt>
+<dd>how long to wait before the timer elapses, in
+          milliseconds, between each repetition</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

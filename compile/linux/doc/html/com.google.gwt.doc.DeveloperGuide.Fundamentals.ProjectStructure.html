@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Project Structure</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ServerSide.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.html">Fundamentals</a></span> &gt;
+						<span class="selected item">Project Structure</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Project Structure</h1>GWT projects are overlaid onto Java packages such that most of the
+ configuration can be inferred from the classpath and your
+ <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">module definitions</a>.
+ 
+ <p>
+ If you are starting a GWT project from scratch, you should use the
+ standard GWT package layout, which makes it easy to differentiate
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ClientSide.html">client-side code</a> from
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ServerSide.html">server-side code</a>. For
+ example, suppose your new project is called "Calendar". The standard
+ package layout would look like this:
+ </p>
+<table align="center" width="80%">
+<tr>
+<th align="left" width="50%"> Package </th><th align="left" width="50%"> Purpose </th>
+</tr>
+<tr>
+<td><code>com/example/cal/</code></td><td>The project root package contains
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.ModuleXml.html">module XML files</a></td>
+</tr>
+<tr>
+<td><code>com/example/cal/client/</code></td><td>Client-side source files and subpackages</td>
+</tr>
+<tr>
+<td><code>com/example/cal/server/</code></td><td>Server-side code and subpackages</td>
+</tr>
+<tr>
+<td><code>com/example/cal/public/</code></td><td>Static resources that can be served publicly</td>
+</tr>
+</table>
+<p>
+ and examples files would be arranged like so:
+ </p>
+<table align="center" width="80%">
+<tr>
+<th align="left" width="50%">File</th><th align="left" width="50%">Purpose</th>
+</tr>
+<tr>
+<td><code>com/example/cal/Calendar.gwt.xml</code></td><td>A common base <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">module</a> for
+ your project that inherits <code>com.google.gwt.user.User</code> module</td>
+</tr>
+<tr>
+<td><code>com/example/cal/CalendarApp.gwt.xml</code></td><td>Inherits the <code>com.example.cal.Calendar</code> module (above)
+ and adds an entry point class</td>
+</tr>
+<tr>
+<td><code>com/example/cal/CalendarTest.gwt.xml</code></td><td>A <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">module</a> defined by your
+ project</td>
+</tr>
+<tr>
+<td><code>com/example/cal/client/CalendarApp.java</code></td><td>Client-side Java source for the entry-point class</td>
+</tr>
+<tr>
+<td><code>com/example/cal/client/spelling/SpellingService.java</code></td><td>An RPC service interface defined in a subpackage</td>
+</tr>
+<tr>
+<td><code>com/example/cal/server/spelling/SpellingServiceImpl.java</code></td><td>Server-side Java source that implements the logic of the spelling
+ service</td>
+</tr>
+<tr>
+<td><code>com/example/cal/public/Calendar.html</code></td><td>An HTML page that loads the calendar app</td>
+</tr>
+<tr>
+<td><code>com/example/cal/public/Calendar.css</code></td><td>A stylesheet that styles the calendar app</td>
+</tr>
+<tr>
+<td><code>com/example/cal/public/images/logo.gif</code></td><td>A logo</td>
+</tr>
+</table>
+<div class="tipContainer" xmlns="http://www.w3.org/1999/xhtml">
+<div class="tipCallout">Tip</div>
+<div class="tipBody">The easiest way to create a GWT project from scratch is to use the
+      <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.CommandLineTools.projectCreator.html">projectCreator script</a>.</div>
+</div>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

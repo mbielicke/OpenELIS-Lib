@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Specifying a Locale</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.Internationalization.DynamicStringInternationalization.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.Internationalization.PropertiesFiles.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Internationalization.html">Internationalization</a></span> &gt;
+						<span class="selected item">Specifying a Locale</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Specifying a Locale</h1>GWT represents <code>locale</code> as a client property whose value can
+ be set either using a meta tag embedded in the
+ <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.HostPage.html">host page</a>
+ or in the query string of the host page's URL. Rather than being supplied
+ by GWT, the set of possible values for the <code>locale</code> client
+ property is entirely a function of your
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">module configuration</a>.
+ 
+ <p>
+ If that sounded like gibberish (and it probably did), a quick digression
+ into the purpose of client properties is in order...
+ </p>
+<h2>Client Properties and the GWT Compilation Process</h2>
+<i>Client properties</i> are key/value pairs that can be used to
+ configure GWT modules. User agent, for example, is represented by a
+ client property. Each client property can have any number of values, but
+ all of the values must be enumerable when the GWT compiler runs.
+ 
+ <p>
+ GWT modules can define and extend the set of available client properties
+ along with the potential values each property might assume when loaded in
+ an end user's browser. At compile time, the GWT compiler determines all
+ the possible permutations of a module's client properties, from which it
+ produces multiple <i>compilations</i>. Each compilation is optimized for
+ a different set of client properties and is recorded into a file ending
+ with the suffix <code>.cache.html</code>.
+ </p>
+<p>
+ In deployment, the end-user's browser only needs one particular
+ compilation, which is determined by mapping the end user's client
+ properties onto the available compiled permutations. Thus, only the exact
+ code required by the end user is downloaded, no more. By making locale a
+ client property, the standard startup process in <code>gwt.js</code>
+ chooses the appropriate localized version of an application, providing
+ ease of use (it's easier than it might sound!), optimized performance,
+ and minimum script size.
+ </p>
+<h2>The Default Locale</h2>
+ The <code>com.google.gwt.i18n.I18N</code> module defines only one
+ locale by default, called <code>default</code>. This default locale is
+ used when the <code>locale</code> client property goes unspecified in
+ deployment. The default locale is used internally as a last-resort match
+ between a <a href="com.google.gwt.i18n.client.Localizable.html">Localizable</a> interface and a
+ localized resource or class.
+ 
+ <h2>Adding Locale Choices to a Module</h2>
+ In any real-world application, you will define at least one locale in
+ addition to the default locale. "Adding a locale" means extending the set
+ of values of the <code>locale</code> client property using the
+ <code>&lt;extend-property&gt;</code> element in your
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.ModuleXml.html">module XML</a>.
+ 
+ <p>
+ For example, the following module adds multiple locale values:
+ 
+ <pre class="code">&lt;!--                                                                        --&gt;
+&lt;!-- Copyright 2007 Google Inc.                                             --&gt;
+&lt;!-- Licensed under the Apache License, Version 2.0 (the "License"); you    --&gt;
+&lt;!-- may not use this file except in compliance with the License. You may   --&gt;
+&lt;!-- may obtain a copy of the License at                                    --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- http://www.apache.org/licenses/LICENSE-2.0                             --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- Unless required by applicable law or agreed to in writing, software    --&gt;
+&lt;!-- distributed under the License is distributed on an "AS IS" BASIS,      --&gt;
+&lt;!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        --&gt;
+&lt;!-- implied. License for the specific language governing permissions and   --&gt;
+&lt;!-- limitations under the License.                                         --&gt;
+
+&lt;module&gt;
+  &lt;inherits name="com.google.gwt.user.User"/&gt;
+  &lt;inherits name="com.google.gwt.i18n.I18N"/&gt;
+  
+  &lt;!-- French language, independent of country --&gt;
+  &lt;extend-property name="locale" values="fr"/&gt;
+
+  &lt;!-- French in France --&gt;
+  &lt;extend-property name="locale" values="fr_FR"/&gt;
+
+  &lt;!-- French in Canada --&gt;
+  &lt;extend-property name="locale" values="fr_CA"/&gt;
+  
+  &lt;!-- English language, independent of country --&gt;
+  &lt;extend-property name="locale" values="en"/&gt;
+&lt;/module&gt;
+</pre>
+</p>
+<h2>Choosing a Locale at Runtime</h2>
+ The locale client property can be specified using either a meta tag or as
+ part of the query string in the host page's URL. If both are specified,
+ the query string takes precedence.
+ 
+ <p>
+ To specify the <code>locale</code> client property using a meta tag in
+ the
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.HostPage.html">host page</a>,
+ embed a meta tag for <code>gwt:property</code> as follows:
+ 
+ <pre>&lt;meta name="gwt:property" content="locale=x_Y"&gt;</pre>
+ 
+ For example, the following host HTML page sets the locale to "ja_JP":
+ 
+ <pre class="code">&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta name="gwt:module" content="com.google.gwt.examples.i18n.ColorNameLookupExample"&gt;
+    &lt;meta name="gwt:property" content="locale=ja_JP"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;script src="gwt.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</p>
+<p>
+ To specify the <code>locale</code> client property using a query
+ string, specify a value for the name <code>locale</code>. For example,
+ 
+ <pre>http://www.example.org/myapp.html?locale=fr_CA</pre>
+</p>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Element</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.xml.client.DocumentFragment.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.xml.client.EntityReference.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.xml.client.html">com.google.gwt.xml.client</a></span> &gt;
+            <span class="selected item">Element</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface Element</h1>
+<div class="classSig">public 
+            interface 
+            <b>Element</b>
+<br>extends 
+                <a xmlns="" href="com.google.gwt.xml.client.Node.html">Node</a>
+</div>This interface represents XML DOM elements, which are the basic building
+ block of XML. An example follows:
+ 
+ <pre>
+<sample my_attribute="one">
+      Some text<child></child> more text
+   </sample>
+</pre>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#getAttribute(java.lang.String)">getAttribute(String)</a></td><td>This method retrieves the attribute which has a name of <code>name</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#getAttributeNode(java.lang.String)">getAttributeNode(String)</a></td><td>This method retrieves the attribute node which has a name of
+ <code>name</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#getElementsByTagName(java.lang.String)">getElementsByTagName(String)</a></td><td>This method retrieves the elements by tag name which has a name of
+ <code>name</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#getTagName()">getTagName()</a></td><td>This method retrieves the tag name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#hasAttribute(java.lang.String)">hasAttribute(String)</a></td><td>This method determines whether this <code>Element</code> has an attribute
+ with the supplied name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#removeAttribute(java.lang.String)">removeAttribute(String)</a></td><td>This method removes the attribute which has the specified name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Element.html#setAttribute(java.lang.String, java.lang.String)">setAttribute(String, String)</a></td><td>This method sets the attribute specified by <code>name</code> to
+ <code>value</code>. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="getAttribute(java.lang.String)"></a>
+<h3 class="api">getAttribute</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getAttribute</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>This method retrieves the attribute which has a name of <code>name</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the attribute to get the value of</dd>
+</dl>
+<h4 class="api">Return Value</h4>the value of the attribute specified by <code>name</code>
+<hr>
+<a name="getAttributeNode(java.lang.String)"></a>
+<h3 class="api">getAttributeNode</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Attr.html">Attr</a><b> getAttributeNode</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>This method retrieves the attribute node which has a name of
+ <code>name</code>. This <code>Attr</code> will have the same value as
+ would be gotten with <code>getAttribute</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the <code>Attr</code> to get</dd>
+</dl>
+<h4 class="api">Return Value</h4>the attribute node of this <code>Element</code>which has a name
+         of <code>name</code>
+<hr>
+<a name="getElementsByTagName(java.lang.String)"></a>
+<h3 class="api">getElementsByTagName</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.NodeList.html">NodeList</a><b> getElementsByTagName</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>This method retrieves the elements by tag name which has a name of
+ <code>name</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the <code>Element</code> to get</dd>
+</dl>
+<h4 class="api">Return Value</h4>the elements by tag name of this <code>Element</code> which has a
+         name of <code>name</code>
+<hr>
+<a name="getTagName()"></a>
+<h3 class="api">getTagName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getTagName</b>()</div>This method retrieves the tag name.<h4 class="api">Return Value</h4>the tag name of this <code>Element</code>
+<hr>
+<a name="hasAttribute(java.lang.String)"></a>
+<h3 class="api">hasAttribute</h3>
+<div class="memberSig">public boolean<b> hasAttribute</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>This method determines whether this <code>Element</code> has an attribute
+ with the supplied name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the attribute</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if this <code>Element</code> has an attribute
+         that name.<hr>
+<a name="removeAttribute(java.lang.String)"></a>
+<h3 class="api">removeAttribute</h3>
+<div class="memberSig">public void<b> removeAttribute</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>This method removes the attribute which has the specified name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the attribute to remove</dd>
+</dl>
+<hr>
+<a name="setAttribute(java.lang.String, java.lang.String)"></a>
+<h3 class="api">setAttribute</h3>
+<div class="memberSig">public void<b> setAttribute</b>(<nobr><a href="java.lang.String.html">String</a> name, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>This method sets the attribute specified by <code>name</code> to
+ <code>value</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the attribute to set</dd>
+<dt>value</dt>
+<dd>the new value this attribute is to have</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

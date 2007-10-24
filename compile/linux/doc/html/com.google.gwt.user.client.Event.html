@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Event</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.Element.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.History.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.html">com.google.gwt.user.client</a></span> &gt;
+            <span class="selected item">Event</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class Event</h1>
+<div class="classSig">public final 
+            class 
+            Event<br>extends
+                <a xmlns="" href="com.google.gwt.core.client.JavaScriptObject.html">JavaScriptObject</a>
+</div>An opaque handle to a native DOM Event. An <code>Event</code> cannot be
+ created directly. Instead, use the <code>Event</code> type when returning a
+ native DOM event from JSNI methods. An <code>Event</code> passed back into
+ JSNI becomes the original DOM event the <code>Event</code> was created
+ from, and can be accessed in JavaScript code as expected. This is typically
+ done by calling methods in the <a href="com.google.gwt.user.client.DOM.html">DOM</a> class.<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>BUTTON_LEFT</td><td>The left mouse button (used in <a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">DOM.eventGetButton(Event)</a>). </td>
+</tr>
+<tr>
+<td>BUTTON_MIDDLE</td><td>The middle mouse button (used in <a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">DOM.eventGetButton(Event)</a>). </td>
+</tr>
+<tr>
+<td>BUTTON_RIGHT</td><td>The right mouse button (used in <a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">DOM.eventGetButton(Event)</a>). </td>
+</tr>
+<tr>
+<td>FOCUSEVENTS</td><td>A bit-mask covering both focus events (focus and blur). </td>
+</tr>
+<tr>
+<td>KEYEVENTS</td><td>A bit-mask covering all keyboard events (down, up, and press). </td>
+</tr>
+<tr>
+<td>MOUSEEVENTS</td><td>A bit-mask covering all mouse events (down, up, move, over, and out), but
+ not click, dblclick, or wheel events. </td>
+</tr>
+<tr>
+<td>ONBLUR</td><td>Fired when an element loses keyboard focus. </td>
+</tr>
+<tr>
+<td>ONCHANGE</td><td>Fired when the value of an input element changes. </td>
+</tr>
+<tr>
+<td>ONCLICK</td><td>Fired when the user clicks on an element. </td>
+</tr>
+<tr>
+<td>ONDBLCLICK</td><td>Fired when the user double-clicks on an element. </td>
+</tr>
+<tr>
+<td>ONERROR</td><td>Fired when an image encounters an error. </td>
+</tr>
+<tr>
+<td>ONFOCUS</td><td>Fired when an element receives keyboard focus. </td>
+</tr>
+<tr>
+<td>ONKEYDOWN</td><td>Fired when the user depresses a key. </td>
+</tr>
+<tr>
+<td>ONKEYPRESS</td><td>Fired when the a character is generated from a keypress (either directly or
+ through auto-repeat). </td>
+</tr>
+<tr>
+<td>ONKEYUP</td><td>Fired when the user releases a key. </td>
+</tr>
+<tr>
+<td>ONLOAD</td><td>Fired when an element (normally an IMG) finishes loading. </td>
+</tr>
+<tr>
+<td>ONLOSECAPTURE</td><td>Fired when an element that has mouse capture loses it. </td>
+</tr>
+<tr>
+<td>ONMOUSEDOWN</td><td>Fired when the user depresses a mouse button over an element. </td>
+</tr>
+<tr>
+<td>ONMOUSEMOVE</td><td>Fired when the mouse is moved within an element's area. </td>
+</tr>
+<tr>
+<td>ONMOUSEOUT</td><td>Fired when the mouse is moved out of an element's area. </td>
+</tr>
+<tr>
+<td>ONMOUSEOVER</td><td>Fired when the mouse is moved into an element's area. </td>
+</tr>
+<tr>
+<td>ONMOUSEUP</td><td>Fired when the user releases a mouse button over an element. </td>
+</tr>
+<tr>
+<td>ONMOUSEWHEEL</td><td>Fired when the user scrolls the mouse wheel over an element. </td>
+</tr>
+<tr>
+<td>ONSCROLL</td><td>Fired when a scrollable element's scroll offset changes. </td>
+</tr>
+<tr>
+<td>UNDEFINED</td><td>Error code returned by DOM.getEventXXX methods when the actual integer
+ value is undefined. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.Event.html#Event()">Event()</a></td><td>Not directly instantiable. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.Event.html#equals(java.lang.Object)">equals(Object)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Event.html#hashCode()">hashCode()</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Event.html#toString()">toString()</a></td><td></td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">BUTTON_LEFT</h3>
+<div class="memberSig">public static final int <b>BUTTON_LEFT</b>
+</div>The left mouse button (used in <a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">DOM.eventGetButton(Event)</a>).<hr>
+<h3 class="api">BUTTON_MIDDLE</h3>
+<div class="memberSig">public static final int <b>BUTTON_MIDDLE</b>
+</div>The middle mouse button (used in <a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">DOM.eventGetButton(Event)</a>).<hr>
+<h3 class="api">BUTTON_RIGHT</h3>
+<div class="memberSig">public static final int <b>BUTTON_RIGHT</b>
+</div>The right mouse button (used in <a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">DOM.eventGetButton(Event)</a>).<hr>
+<h3 class="api">FOCUSEVENTS</h3>
+<div class="memberSig">public static final int <b>FOCUSEVENTS</b>
+</div>A bit-mask covering both focus events (focus and blur).<hr>
+<h3 class="api">KEYEVENTS</h3>
+<div class="memberSig">public static final int <b>KEYEVENTS</b>
+</div>A bit-mask covering all keyboard events (down, up, and press).<hr>
+<h3 class="api">MOUSEEVENTS</h3>
+<div class="memberSig">public static final int <b>MOUSEEVENTS</b>
+</div>A bit-mask covering all mouse events (down, up, move, over, and out), but
+ not click, dblclick, or wheel events.<hr>
+<h3 class="api">ONBLUR</h3>
+<div class="memberSig">public static final int <b>ONBLUR</b>
+</div>Fired when an element loses keyboard focus.<hr>
+<h3 class="api">ONCHANGE</h3>
+<div class="memberSig">public static final int <b>ONCHANGE</b>
+</div>Fired when the value of an input element changes.<hr>
+<h3 class="api">ONCLICK</h3>
+<div class="memberSig">public static final int <b>ONCLICK</b>
+</div>Fired when the user clicks on an element.<hr>
+<h3 class="api">ONDBLCLICK</h3>
+<div class="memberSig">public static final int <b>ONDBLCLICK</b>
+</div>Fired when the user double-clicks on an element.<hr>
+<h3 class="api">ONERROR</h3>
+<div class="memberSig">public static final int <b>ONERROR</b>
+</div>Fired when an image encounters an error.<hr>
+<h3 class="api">ONFOCUS</h3>
+<div class="memberSig">public static final int <b>ONFOCUS</b>
+</div>Fired when an element receives keyboard focus.<hr>
+<h3 class="api">ONKEYDOWN</h3>
+<div class="memberSig">public static final int <b>ONKEYDOWN</b>
+</div>Fired when the user depresses a key.<hr>
+<h3 class="api">ONKEYPRESS</h3>
+<div class="memberSig">public static final int <b>ONKEYPRESS</b>
+</div>Fired when the a character is generated from a keypress (either directly or
+ through auto-repeat).<hr>
+<h3 class="api">ONKEYUP</h3>
+<div class="memberSig">public static final int <b>ONKEYUP</b>
+</div>Fired when the user releases a key.<hr>
+<h3 class="api">ONLOAD</h3>
+<div class="memberSig">public static final int <b>ONLOAD</b>
+</div>Fired when an element (normally an IMG) finishes loading.<hr>
+<h3 class="api">ONLOSECAPTURE</h3>
+<div class="memberSig">public static final int <b>ONLOSECAPTURE</b>
+</div>Fired when an element that has mouse capture loses it.<hr>
+<h3 class="api">ONMOUSEDOWN</h3>
+<div class="memberSig">public static final int <b>ONMOUSEDOWN</b>
+</div>Fired when the user depresses a mouse button over an element.<hr>
+<h3 class="api">ONMOUSEMOVE</h3>
+<div class="memberSig">public static final int <b>ONMOUSEMOVE</b>
+</div>Fired when the mouse is moved within an element's area.<hr>
+<h3 class="api">ONMOUSEOUT</h3>
+<div class="memberSig">public static final int <b>ONMOUSEOUT</b>
+</div>Fired when the mouse is moved out of an element's area.<hr>
+<h3 class="api">ONMOUSEOVER</h3>
+<div class="memberSig">public static final int <b>ONMOUSEOVER</b>
+</div>Fired when the mouse is moved into an element's area.<hr>
+<h3 class="api">ONMOUSEUP</h3>
+<div class="memberSig">public static final int <b>ONMOUSEUP</b>
+</div>Fired when the user releases a mouse button over an element.<hr>
+<h3 class="api">ONMOUSEWHEEL</h3>
+<div class="memberSig">public static final int <b>ONMOUSEWHEEL</b>
+</div>Fired when the user scrolls the mouse wheel over an element.<hr>
+<h3 class="api">ONSCROLL</h3>
+<div class="memberSig">public static final int <b>ONSCROLL</b>
+</div>Fired when a scrollable element's scroll offset changes.<hr>
+<h3 class="api">UNDEFINED</h3>
+<div class="memberSig">public static final int <b>UNDEFINED</b>
+</div>Error code returned by DOM.getEventXXX methods when the actual integer
+ value is undefined.  For example, DOM.getEventKeyCode returns UNDEFINED
+ for some non-keyboard events.
+ 
+ For some events, some browsers return undefined while others return data
+ for certain events.<h2 class="api">Constructor Detail</h2>
+<a name="Event()"></a>
+<h3 class="api">Event</h3>
+<div class="memberSig">protected <b> Event</b>()</div>Not directly instantiable.  Subclasses should also define a protected
+ no-arg constructor to prevent client code from directly instantiating
+ the class.<h2 class="api">Method Detail</h2>
+<a name="equals(java.lang.Object)"></a>
+<h3 class="api">equals</h3>
+<div class="memberSig">public boolean<b> equals</b>(<nobr><a href="java.lang.Object.html">Object</a> other</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>other</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="hashCode()"></a>
+<h3 class="api">hashCode</h3>
+<div class="memberSig">public int<b> hashCode</b>()</div>
+<hr>
+<a name="toString()"></a>
+<h3 class="api">toString</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> toString</b>()</div>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

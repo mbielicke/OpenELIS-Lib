@@ -1,0 +1,331 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            GWTTestCase</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.junit.client.Benchmark.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.junit.client.IntRange.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.junit.client.html">com.google.gwt.junit.client</a></span> &gt;
+            <span class="selected item">GWTTestCase</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class GWTTestCase</h1>
+<div class="classSig">public 
+            class 
+            GWTTestCase<br>extends
+                TestCase<br>
+<br>// Superclass of <code><a xmlns="" href="com.google.gwt.junit.client.Benchmark.html">Benchmark</a></code>
+</div>Acts as a bridge between the JUnit environment and the GWT environment. We
+ hook the run method and stash the TestResult object for later communication
+ between the test runner and the unit test shell that drives the test case
+ inside a hosted browser.
+ 
+ <p>
+ There are two versions of this class. This version is the binary version that
+ derives from JUnit's TestCase and handles all the work of starting up
+ the GWT environment. The other version is a translatable class that is used
+ within the browser. See the <code>translatable</code> subpackage for the
+ translatable implementation.
+ </p>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#addCheckpoint(java.lang.String)">addCheckpoint(String)</a></td><td>Add a checkpoint message to the current test. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#catchExceptions()">catchExceptions()</a></td><td>Determines whether or not exceptions will be caught by the test fixture. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#clearCheckpoints()">clearCheckpoints()</a></td><td>Clears the accumulated list of checkpoint messages. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#delayTestFinish(int)">delayTestFinish(int)</a></td><td>Put the current test in asynchronous mode. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#finishTest()">finishTest()</a></td><td>Cause this test to succeed during asynchronous mode. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#getCheckpoints()">getCheckpoints()</a></td><td>Returns the current set of checkpoint messages. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#getModuleName()">getModuleName()</a></td><td>Specifies a module to use when running this test case. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#getTestResults()">getTestResults()</a></td><td>Returns the overall test results for this unit test. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#run(junit.framework.TestResult)">run(TestResult)</a></td><td>Stashes <code>result</code> so that it can be accessed during
+ <a href="com.google.gwt.junit.client.GWTTestCase.html#runTest()">runTest()</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.junit.client.GWTTestCase.html#runTest()">runTest()</a></td><td>Runs the test via the JUnitShell environment. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="addCheckpoint(java.lang.String)"></a>
+<h3 class="api">addCheckpoint</h3>
+<div class="memberSig">public final void<b> addCheckpoint</b>(<nobr><a href="java.lang.String.html">String</a> msg</nobr>)</div>Add a checkpoint message to the current test. If this test fails, all
+ checkpoint messages will be appended to the getException description. This can
+ be useful in web mode for determining how far test execution progressed
+ before a failure occurs.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>msg</dt>
+<dd>the checkpoint message to add</dd>
+</dl>
+<hr>
+<a name="catchExceptions()"></a>
+<h3 class="api">catchExceptions</h3>
+<div class="memberSig">public boolean<b> catchExceptions</b>()</div>Determines whether or not exceptions will be caught by the test fixture.
+ Override this method and return <code>false</code> to let exceptions
+ escape to the browser. This will break the normal JUnit reporting
+ functionality, but can be useful in web mode with a JavaScript debugger to
+ pin down where exceptions are originating.<h4 class="api">Return Value</h4>
+<code>true</code> for normal JUnit behavior, or
+         <code>false</code> to disable normal JUnit getException reporting<hr>
+<a name="clearCheckpoints()"></a>
+<h3 class="api">clearCheckpoints</h3>
+<div class="memberSig">public final void<b> clearCheckpoints</b>()</div>Clears the accumulated list of checkpoint messages.<h4 class="api">See Also</h4>
+<a href="com.google.gwt.junit.client.GWTTestCase.html#addCheckpoint(java.lang.String)">addCheckpoint(String)</a>
+<hr>
+<a name="delayTestFinish(int)"></a>
+<h3 class="api">delayTestFinish</h3>
+<div class="memberSig">protected final void<b> delayTestFinish</b>(<nobr>int timeoutMillis</nobr>)</div>Put the current test in asynchronous mode. If the test method completes
+ normally, this test will not immediately succeed. Instead, a <i>delay
+ period</i> begins. During the delay period, the test system will wait for
+ one of three things to happen:
+ 
+ <ol>
+<li> If <a href="com.google.gwt.junit.client.GWTTestCase.html#finishTest()">finishTest()</a> is called before the delay period expires,
+ the test will succeed.</li>
+<li> If any getException escapes from an event handler during the delay
+ period, the test will error with the thrown getException.</li>
+<li> If the delay period expires and neither of the above has happened, the
+ test will error with a <a href="com.google.gwt.junit.client.TimeoutException.html">TimeoutException</a>. </li>
+</ol>
+<p>
+ This method is typically used to test event driven functionality.
+ </p>
+<p>
+<b>Example:</b>
+<pre class="code">public void testTimer() {
+  // Setup an asynchronous event handler.
+  Timer timer = new Timer() {
+    public void run() {
+      // do some validation logic
+
+      // tell the test system the test is now done
+      finishTest();
+    }
+  };
+
+  // Set a delay period significantly longer than the
+  // event is expected to take.
+  delayTestFinish(500);
+
+  // Schedule the event and return control to the test system.
+  timer.schedule(100);
+}
+</pre>
+</p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>timeoutMillis</dt>
+<dd>how long to wait before the current test will time out</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.junit.client.GWTTestCase.html#finishTest()">finishTest()</a>
+<hr>
+<a name="finishTest()"></a>
+<h3 class="api">finishTest</h3>
+<div class="memberSig">protected final void<b> finishTest</b>()</div>Cause this test to succeed during asynchronous mode. After calling
+ <a href="com.google.gwt.junit.client.GWTTestCase.html#delayTestFinish(int)">delayTestFinish(int)</a>, call this method during the delay period to
+ cause this test to succeed. This method is typically called from an event
+ handler some time after the test method returns control to the caller.
+ 
+ <p>
+ Calling this method before the test method completes, will undo the effect
+ of having called <code>delayTestFinish()</code>. The test will revert to
+ normal, non-asynchronous mode.
+ </p>
+<p>
+<b>Example:</b>
+<pre class="code">public void testTimer() {
+  // Setup an asynchronous event handler.
+  Timer timer = new Timer() {
+    public void run() {
+      // do some validation logic
+
+      // tell the test system the test is now done
+      finishTest();
+    }
+  };
+
+  // Set a delay period significantly longer than the
+  // event is expected to take.
+  delayTestFinish(500);
+
+  // Schedule the event and return control to the test system.
+  timer.schedule(100);
+}
+</pre>
+</p>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.junit.client.GWTTestCase.html#delayTestFinish(int)">delayTestFinish(int)</a>
+<hr>
+<a name="getCheckpoints()"></a>
+<h3 class="api">getCheckpoints</h3>
+<div class="memberSig">public final <a href="java.lang.String.html">String[]</a><b> getCheckpoints</b>()</div>Returns the current set of checkpoint messages.<h4 class="api">Return Value</h4>a non-<code>null</code> array of checkpoint messages<h4 class="api">See Also</h4>
+<a href="com.google.gwt.junit.client.GWTTestCase.html#addCheckpoint(java.lang.String)">addCheckpoint(String)</a>
+<hr>
+<a name="getModuleName()"></a>
+<h3 class="api">getModuleName</h3>
+<div class="memberSig">public abstract <a href="java.lang.String.html">String</a><b> getModuleName</b>()</div>Specifies a module to use when running this test case. Subclasses must
+ return the name of a module that will cause the source for that subclass to
+ be included.<h4 class="api">Return Value</h4>the fully qualified name of a module<hr>
+<a name="getTestResults()"></a>
+<h3 class="api">getTestResults</h3>
+<div class="memberSig">protected final TestResults<b> getTestResults</b>()</div>Returns the overall test results for this unit test.
+
+ These TestResults are more comprehensive than JUnit's default test results,
+ and are automatically collected by GWT's testing infrastructure.<hr>
+<a name="run(junit.framework.TestResult)"></a>
+<h3 class="api">run</h3>
+<div class="memberSig">public final void<b> run</b>(<nobr>TestResult result</nobr>)</div>Stashes <code>result</code> so that it can be accessed during
+ <a href="com.google.gwt.junit.client.GWTTestCase.html#runTest()">runTest()</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>result</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="runTest()"></a>
+<h3 class="api">runTest</h3>
+<div class="memberSig">protected final void<b> runTest</b>()<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="java.lang.Throwable.html">Throwable</a>
+</div>Runs the test via the JUnitShell environment.</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,1373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            DOM</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.DeferredCommand.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.Element.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.html">com.google.gwt.user.client</a></span> &gt;
+            <span class="selected item">DOM</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class DOM</h1>
+<div class="classSig">public 
+            class 
+            DOM<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+</div>This class provides a set of static methods that allow you to manipulate the
+ browser's Document Object Model (DOM). It contains methods for manipulating
+ both <a href="com.google.gwt.user.client.Element.html">elements</a> and
+ <a href="com.google.gwt.user.client.Event.html">events</a>.<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#addEventPreview(com.google.gwt.user.client.EventPreview)">addEventPreview(EventPreview)</a></td><td>Adds an event preview to the preview stack. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#appendChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">appendChild(Element, Element)</a></td><td>Appends one element to another's list of children. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#compare(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">compare(Element, Element)</a></td><td>Compares two elements for equality (note that reference equality is not
+ sufficient to determine equality among elements on most browsers). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createAnchor()">createAnchor()</a></td><td>Creates an HTML A element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createButton()">createButton()</a></td><td>Creates an HTML BUTTON element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createCaption()">createCaption()</a></td><td>Creates an HTML CAPTION element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createCol()">createCol()</a></td><td>Creates an HTML COL element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createColGroup()">createColGroup()</a></td><td>Creates an HTML COLGROUP element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createDiv()">createDiv()</a></td><td>Creates an HTML DIV element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createElement(java.lang.String)">createElement(String)</a></td><td>Creates an HTML element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createFieldSet()">createFieldSet()</a></td><td>Creates an HTML FIELDSET element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createForm()">createForm()</a></td><td>Creates an HTML FORM element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createIFrame()">createIFrame()</a></td><td>Creates an HTML IFRAME element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createImg()">createImg()</a></td><td>Creates an HTML IMG element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createInputCheck()">createInputCheck()</a></td><td>Creates an HTML INPUT type='CHECK' element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createInputPassword()">createInputPassword()</a></td><td>Creates an HTML INPUT type='PASSWORD' element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createInputRadio(java.lang.String)">createInputRadio(String)</a></td><td>Creates an HTML INPUT type='RADIO' element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createInputText()">createInputText()</a></td><td>Creates an HTML INPUT type='TEXT' element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createLabel()">createLabel()</a></td><td>Creates an HTML LABEL element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createLegend()">createLegend()</a></td><td>Creates an HTML LEGEND element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createOptions()">createOptions()</a></td><td>Creates an HTML OPTIONS element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createSelect()">createSelect()</a></td><td>Creates a single-selection HTML SELECT element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createSelect(boolean)">createSelect(boolean)</a></td><td>Creates an HTML SELECT element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createSpan()">createSpan()</a></td><td>Creates an HTML SPAN element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTable()">createTable()</a></td><td>Creates an HTML TABLE element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTBody()">createTBody()</a></td><td>Creates an HTML TBODY element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTD()">createTD()</a></td><td>Creates an HTML TD element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTextArea()">createTextArea()</a></td><td>Creates an HTML TEXTAREA element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTFoot()">createTFoot()</a></td><td>Creates an HTML TFOOT element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTH()">createTH()</a></td><td>Creates an HTML TH element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTHead()">createTHead()</a></td><td>Creates an HTML THEAD element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#createTR()">createTR()</a></td><td>Creates an HTML TR element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventCancelBubble(com.google.gwt.user.client.Event, boolean)">eventCancelBubble(Event, boolean)</a></td><td>Cancels bubbling for the given event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetAltKey(com.google.gwt.user.client.Event)">eventGetAltKey(Event)</a></td><td>Gets whether the ALT key was depressed when the given event occurred. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetButton(com.google.gwt.user.client.Event)">eventGetButton(Event)</a></td><td>Gets the mouse buttons that were depressed when the given event occurred. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetClientX(com.google.gwt.user.client.Event)">eventGetClientX(Event)</a></td><td>Gets the mouse x-position within the browser window's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetClientY(com.google.gwt.user.client.Event)">eventGetClientY(Event)</a></td><td>Gets the mouse y-position within the browser window's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetCtrlKey(com.google.gwt.user.client.Event)">eventGetCtrlKey(Event)</a></td><td>Gets whether the CTRL key was depressed when the given event occurred. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetCurrentEvent()">eventGetCurrentEvent()</a></td><td>Gets the current event that is being fired. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetCurrentTarget(com.google.gwt.user.client.Event)">eventGetCurrentTarget(Event)</a></td><td>Gets the current target element of the given event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetFromElement(com.google.gwt.user.client.Event)">eventGetFromElement(Event)</a></td><td>Gets the element from which the mouse pointer was moved (only valid for
+ <a href="com.google.gwt.user.client.Event.html#ONMOUSEOVER">Event.ONMOUSEOVER</a>). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetKeyCode(com.google.gwt.user.client.Event)">eventGetKeyCode(Event)</a></td><td>Gets the key code associated with this event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetMetaKey(com.google.gwt.user.client.Event)">eventGetMetaKey(Event)</a></td><td>Gets whether the META key was depressed when the given event occurred. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetMouseWheelVelocityY(com.google.gwt.user.client.Event)">eventGetMouseWheelVelocityY(Event)</a></td><td>Gets the velocity of the mouse wheel associated with the event along the
+ Y axis. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetRepeat(com.google.gwt.user.client.Event)">eventGetRepeat(Event)</a></td><td>Gets the key-repeat state of this event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetScreenX(com.google.gwt.user.client.Event)">eventGetScreenX(Event)</a></td><td>Gets the mouse x-position on the user's display. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetScreenY(com.google.gwt.user.client.Event)">eventGetScreenY(Event)</a></td><td>Gets the mouse y-position on the user's display. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetShiftKey(com.google.gwt.user.client.Event)">eventGetShiftKey(Event)</a></td><td>Gets whether the shift key was depressed when the given event occurred. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetTarget(com.google.gwt.user.client.Event)">eventGetTarget(Event)</a></td><td>Returns the element that was the actual target of the given event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetToElement(com.google.gwt.user.client.Event)">eventGetToElement(Event)</a></td><td>Gets the element to which the mouse pointer was moved (only valid for
+ <a href="com.google.gwt.user.client.Event.html#ONMOUSEOUT">Event.ONMOUSEOUT</a>). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetType(com.google.gwt.user.client.Event)">eventGetType(Event)</a></td><td>Gets the enumerated type of this event (as defined in <a href="com.google.gwt.user.client.Event.html">Event</a>). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventGetTypeString(com.google.gwt.user.client.Event)">eventGetTypeString(Event)</a></td><td>Gets the type of the given event as a string. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventPreventDefault(com.google.gwt.user.client.Event)">eventPreventDefault(Event)</a></td><td>Prevents the browser from taking its default action for the given event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventSetKeyCode(com.google.gwt.user.client.Event, char)">eventSetKeyCode(Event, char)</a></td><td>Sets the key code associated with the given keyboard event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#eventToString(com.google.gwt.user.client.Event)">eventToString(Event)</a></td><td>Returns a stringized version of the event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getAbsoluteLeft(com.google.gwt.user.client.Element)">getAbsoluteLeft(Element)</a></td><td>Gets an element's absolute left coordinate in the document's coordinate
+ system. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getAbsoluteTop(com.google.gwt.user.client.Element)">getAbsoluteTop(Element)</a></td><td>Gets an element's absolute top coordinate in the document's coordinate
+ system. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getAttribute(com.google.gwt.user.client.Element, java.lang.String)">getAttribute(Element, String)</a></td><td>Gets any named attribute from an element, as a string. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getBooleanAttribute(com.google.gwt.user.client.Element, java.lang.String)">getBooleanAttribute(Element, String)</a></td><td>Gets a boolean attribute on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getCaptureElement()">getCaptureElement()</a></td><td>Gets the element that currently has mouse capture. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getChild(com.google.gwt.user.client.Element, int)">getChild(Element, int)</a></td><td>Gets an element's n-th child element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getChildCount(com.google.gwt.user.client.Element)">getChildCount(Element)</a></td><td>Gets the number of child elements present in a given parent element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getChildIndex(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">getChildIndex(Element, Element)</a></td><td>Gets the index of a given child element within its parent. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getElementAttribute(com.google.gwt.user.client.Element, java.lang.String)">getElementAttribute(Element, String)</a></td><td>Gets the named attribute from the element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getElementById(java.lang.String)">getElementById(String)</a></td><td>Gets the element associated with the given unique id within the entire
+ document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getElementProperty(com.google.gwt.user.client.Element, java.lang.String)">getElementProperty(Element, String)</a></td><td>Gets any named property from an element, as a string. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getElementPropertyBoolean(com.google.gwt.user.client.Element, java.lang.String)">getElementPropertyBoolean(Element, String)</a></td><td>Gets any named property from an element, as a boolean. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getElementPropertyInt(com.google.gwt.user.client.Element, java.lang.String)">getElementPropertyInt(Element, String)</a></td><td>Gets any named property from an element, as an int. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getEventsSunk(com.google.gwt.user.client.Element)">getEventsSunk(Element)</a></td><td>Gets the current set of events sunk by a given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getFirstChild(com.google.gwt.user.client.Element)">getFirstChild(Element)</a></td><td>Gets the first child element of the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getImgSrc(com.google.gwt.user.client.Element)">getImgSrc(Element)</a></td><td>Gets the src attribute of an img element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getInnerHTML(com.google.gwt.user.client.Element)">getInnerHTML(Element)</a></td><td>Gets an HTML representation of an element's children. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getInnerText(com.google.gwt.user.client.Element)">getInnerText(Element)</a></td><td>Gets the text contained within an element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getIntAttribute(com.google.gwt.user.client.Element, java.lang.String)">getIntAttribute(Element, String)</a></td><td>Gets an integer attribute on a given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getIntStyleAttribute(com.google.gwt.user.client.Element, java.lang.String)">getIntStyleAttribute(Element, String)</a></td><td>Gets an integer attribute on a given element's style. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getNextSibling(com.google.gwt.user.client.Element)">getNextSibling(Element)</a></td><td>Gets an element's next sibling element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getParent(com.google.gwt.user.client.Element)">getParent(Element)</a></td><td>Gets an element's parent element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#getStyleAttribute(com.google.gwt.user.client.Element, java.lang.String)">getStyleAttribute(Element, String)</a></td><td>Gets an attribute of the given element's style. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#insertBefore(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">insertBefore(Element, Element, Element)</a></td><td>Inserts an element as a child of the given parent element, before another
+ child of that parent. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#insertChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element, int)">insertChild(Element, Element, int)</a></td><td>Inserts an element as a child of the given parent element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#insertListItem(com.google.gwt.user.client.Element, java.lang.String, java.lang.String, int)">insertListItem(Element, String, String, int)</a></td><td>Creates an <code>&lt;option&gt;</code> element and inserts it as a child
+ of the specified <code>&lt;select&gt;</code> element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#isOrHasChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">isOrHasChild(Element, Element)</a></td><td>Determine whether one element is equal to, or the child of, another. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#releaseCapture(com.google.gwt.user.client.Element)">releaseCapture(Element)</a></td><td>Releases mouse capture on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#removeChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">removeChild(Element, Element)</a></td><td>Removes a child element from the given parent element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#removeElementAttribute(com.google.gwt.user.client.Element, java.lang.String)">removeElementAttribute(Element, String)</a></td><td>Removes the named attribute from the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#removeEventPreview(com.google.gwt.user.client.EventPreview)">removeEventPreview(EventPreview)</a></td><td>Removes an element from the preview stack. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#scrollIntoView(com.google.gwt.user.client.Element)">scrollIntoView(Element)</a></td><td>Scrolls the given element into view. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setAttribute(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)">setAttribute(Element, String, String)</a></td><td>Sets an attribute on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setBooleanAttribute(com.google.gwt.user.client.Element, java.lang.String, boolean)">setBooleanAttribute(Element, String, boolean)</a></td><td>Sets a boolean attribute on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setCapture(com.google.gwt.user.client.Element)">setCapture(Element)</a></td><td>Sets mouse-capture on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setElementAttribute(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)">setElementAttribute(Element, String, String)</a></td><td>Sets an attribute on a given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setElementProperty(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)">setElementProperty(Element, String, String)</a></td><td>Sets a property on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setElementPropertyBoolean(com.google.gwt.user.client.Element, java.lang.String, boolean)">setElementPropertyBoolean(Element, String, boolean)</a></td><td>Sets a boolean property on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setElementPropertyInt(com.google.gwt.user.client.Element, java.lang.String, int)">setElementPropertyInt(Element, String, int)</a></td><td>Sets an int property on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setEventListener(com.google.gwt.user.client.Element, com.google.gwt.user.client.EventListener)">setEventListener(Element, EventListener)</a></td><td>Sets the <a href="com.google.gwt.user.client.EventListener.html">EventListener</a> to receive events for the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setImgSrc(com.google.gwt.user.client.Element, java.lang.String)">setImgSrc(Element, String)</a></td><td>Sets the src attribute of an img element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setInnerHTML(com.google.gwt.user.client.Element, java.lang.String)">setInnerHTML(Element, String)</a></td><td>Sets the HTML contained within an element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setInnerText(com.google.gwt.user.client.Element, java.lang.String)">setInnerText(Element, String)</a></td><td>Sets the text contained within an element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setIntAttribute(com.google.gwt.user.client.Element, java.lang.String, int)">setIntAttribute(Element, String, int)</a></td><td>Sets an integer attribute on the given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setIntStyleAttribute(com.google.gwt.user.client.Element, java.lang.String, int)">setIntStyleAttribute(Element, String, int)</a></td><td>Sets an integer attribute on the given element's style. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setOptionText(com.google.gwt.user.client.Element, java.lang.String, int)">setOptionText(Element, String, int)</a></td><td>Sets the option text of the given select object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#setStyleAttribute(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)">setStyleAttribute(Element, String, String)</a></td><td>Sets an attribute on the given element's style. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#sinkEvents(com.google.gwt.user.client.Element, int)">sinkEvents(Element, int)</a></td><td>Sets the current set of events sunk by a given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#toString(com.google.gwt.user.client.Element)">toString(Element)</a></td><td>Returns a stringized version of the element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#windowGetClientHeight()">windowGetClientHeight()</a></td><td>Gets the height of the browser window's client area excluding the
+ scroll bar. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html#windowGetClientWidth()">windowGetClientWidth()</a></td><td>Gets the width of the browser window's client area excluding the
+ vertical scroll bar. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="addEventPreview(com.google.gwt.user.client.EventPreview)"></a>
+<h3 class="api">addEventPreview</h3>
+<div class="memberSig">public static void<b> addEventPreview</b>(<nobr><a href="com.google.gwt.user.client.EventPreview.html">EventPreview</a> preview</nobr>)</div>Adds an event preview to the preview stack. As long as this preview remains
+ on the top of the stack, it will receive all events before they are fired
+ to their listeners. Note that the event preview will receive <u>all </u>
+ events, including those received due to bubbling, whereas normal event
+ handlers only receive explicitly sunk events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>preview</dt>
+<dd>the event preview to be added to the stack.</dd>
+</dl>
+<hr>
+<a name="appendChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">appendChild</h3>
+<div class="memberSig">public static void<b> appendChild</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> child</nobr>)</div>Appends one element to another's list of children.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the parent element</dd>
+<dt>child</dt>
+<dd>its new child</dd>
+</dl>
+<hr>
+<a name="compare(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">compare</h3>
+<div class="memberSig">public static boolean<b> compare</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem1, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem2</nobr>)</div>Compares two elements for equality (note that reference equality is not
+ sufficient to determine equality among elements on most browsers).<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem1</dt>
+<dd>the first element to be compared</dd>
+<dt>elem2</dt>
+<dd>the second element to be compared</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if they are in fact the same element<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.DOM.html#isOrHasChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">isOrHasChild(Element, Element)</a>
+<hr>
+<a name="createAnchor()"></a>
+<h3 class="api">createAnchor</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createAnchor</b>()</div>Creates an HTML A element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createButton()"></a>
+<h3 class="api">createButton</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createButton</b>()</div>Creates an HTML BUTTON element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createCaption()"></a>
+<h3 class="api">createCaption</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createCaption</b>()</div>Creates an HTML CAPTION element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createCol()"></a>
+<h3 class="api">createCol</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createCol</b>()</div>Creates an HTML COL element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createColGroup()"></a>
+<h3 class="api">createColGroup</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createColGroup</b>()</div>Creates an HTML COLGROUP element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createDiv()"></a>
+<h3 class="api">createDiv</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createDiv</b>()</div>Creates an HTML DIV element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createElement(java.lang.String)"></a>
+<h3 class="api">createElement</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createElement</b>(<nobr><a href="java.lang.String.html">String</a> tagName</nobr>)</div>Creates an HTML element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>tagName</dt>
+<dd>the HTML tag of the element to be created</dd>
+</dl>
+<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createFieldSet()"></a>
+<h3 class="api">createFieldSet</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createFieldSet</b>()</div>Creates an HTML FIELDSET element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createForm()"></a>
+<h3 class="api">createForm</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createForm</b>()</div>Creates an HTML FORM element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createIFrame()"></a>
+<h3 class="api">createIFrame</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createIFrame</b>()</div>Creates an HTML IFRAME element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createImg()"></a>
+<h3 class="api">createImg</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createImg</b>()</div>Creates an HTML IMG element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createInputCheck()"></a>
+<h3 class="api">createInputCheck</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createInputCheck</b>()</div>Creates an HTML INPUT type='CHECK' element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createInputPassword()"></a>
+<h3 class="api">createInputPassword</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createInputPassword</b>()</div>Creates an HTML INPUT type='PASSWORD' element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createInputRadio(java.lang.String)"></a>
+<h3 class="api">createInputRadio</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createInputRadio</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>Creates an HTML INPUT type='RADIO' element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the name of the group with which this radio button will be
+          associated</dd>
+</dl>
+<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createInputText()"></a>
+<h3 class="api">createInputText</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createInputText</b>()</div>Creates an HTML INPUT type='TEXT' element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createLabel()"></a>
+<h3 class="api">createLabel</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createLabel</b>()</div>Creates an HTML LABEL element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createLegend()"></a>
+<h3 class="api">createLegend</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createLegend</b>()</div>Creates an HTML LEGEND element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createOptions()"></a>
+<h3 class="api">createOptions</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createOptions</b>()</div>Creates an HTML OPTIONS element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createSelect()"></a>
+<h3 class="api">createSelect</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createSelect</b>()</div>Creates a single-selection HTML SELECT element. Equivalent to 
+ <pre>
+ createSelect(false)
+ </pre>
+<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createSelect(boolean)"></a>
+<h3 class="api">createSelect</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createSelect</b>(<nobr>boolean multiple</nobr>)</div>Creates an HTML SELECT element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>multiple</dt>
+<dd>true if multiple selection of options is allowed</dd>
+</dl>
+<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createSpan()"></a>
+<h3 class="api">createSpan</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createSpan</b>()</div>Creates an HTML SPAN element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTable()"></a>
+<h3 class="api">createTable</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTable</b>()</div>Creates an HTML TABLE element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTBody()"></a>
+<h3 class="api">createTBody</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTBody</b>()</div>Creates an HTML TBODY element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTD()"></a>
+<h3 class="api">createTD</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTD</b>()</div>Creates an HTML TD element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTextArea()"></a>
+<h3 class="api">createTextArea</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTextArea</b>()</div>Creates an HTML TEXTAREA element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTFoot()"></a>
+<h3 class="api">createTFoot</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTFoot</b>()</div>Creates an HTML TFOOT element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTH()"></a>
+<h3 class="api">createTH</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTH</b>()</div>Creates an HTML TH element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTHead()"></a>
+<h3 class="api">createTHead</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTHead</b>()</div>Creates an HTML THEAD element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="createTR()"></a>
+<h3 class="api">createTR</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> createTR</b>()</div>Creates an HTML TR element.<h4 class="api">Return Value</h4>the newly-created element<hr>
+<a name="eventCancelBubble(com.google.gwt.user.client.Event, boolean)"></a>
+<h3 class="api">eventCancelBubble</h3>
+<div class="memberSig">public static void<b> eventCancelBubble</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt, </nobr><nobr>boolean cancel</nobr>)</div>Cancels bubbling for the given event. This will stop the event from being
+ propagated to parent elements.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event on which to cancel bubbling</dd>
+<dt>cancel</dt>
+<dd>
+<code>true</code> to cancel bubbling</dd>
+</dl>
+<hr>
+<a name="eventGetAltKey(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetAltKey</h3>
+<div class="memberSig">public static boolean<b> eventGetAltKey</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets whether the ALT key was depressed when the given event occurred.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if ALT was depressed when the event occurred<hr>
+<a name="eventGetButton(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetButton</h3>
+<div class="memberSig">public static int<b> eventGetButton</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the mouse buttons that were depressed when the given event occurred.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>a bit-field, defined by <a href="com.google.gwt.user.client.Event.html#BUTTON_LEFT">Event.BUTTON_LEFT</a>,
+         <a href="com.google.gwt.user.client.Event.html#BUTTON_MIDDLE">Event.BUTTON_MIDDLE</a>, and <a href="com.google.gwt.user.client.Event.html#BUTTON_RIGHT">Event.BUTTON_RIGHT</a>
+<hr>
+<a name="eventGetClientX(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetClientX</h3>
+<div class="memberSig">public static int<b> eventGetClientX</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the mouse x-position within the browser window's client area.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the mouse x-position<hr>
+<a name="eventGetClientY(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetClientY</h3>
+<div class="memberSig">public static int<b> eventGetClientY</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the mouse y-position within the browser window's client area.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the mouse y-position<hr>
+<a name="eventGetCtrlKey(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetCtrlKey</h3>
+<div class="memberSig">public static boolean<b> eventGetCtrlKey</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets whether the CTRL key was depressed when the given event occurred.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if CTRL was depressed when the event occurred<hr>
+<a name="eventGetCurrentEvent()"></a>
+<h3 class="api">eventGetCurrentEvent</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Event.html">Event</a><b> eventGetCurrentEvent</b>()</div>Gets the current event that is being fired.  The current event
+ is only available within the lifetime of the onBrowserEvent function.
+ Once the onBrowserEvent method returns, the current event is reset
+ to null.<h4 class="api">Return Value</h4>the current event<hr>
+<a name="eventGetCurrentTarget(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetCurrentTarget</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> eventGetCurrentTarget</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the current target element of the given event. This is the element
+ whose listener fired last, not the element which fired the event
+ initially.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event</dd>
+</dl>
+<h4 class="api">Return Value</h4>the event's current target element<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.DOM.html#eventGetTarget(com.google.gwt.user.client.Event)">DOM.eventGetTarget(Event)</a>
+<hr>
+<a name="eventGetFromElement(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetFromElement</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> eventGetFromElement</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the element from which the mouse pointer was moved (only valid for
+ <a href="com.google.gwt.user.client.Event.html#ONMOUSEOVER">Event.ONMOUSEOVER</a>).<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the element from which the mouse pointer was moved<hr>
+<a name="eventGetKeyCode(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetKeyCode</h3>
+<div class="memberSig">public static int<b> eventGetKeyCode</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the key code associated with this event.
+
+ <p>
+ For <a href="com.google.gwt.user.client.Event.html#ONKEYPRESS">Event.ONKEYPRESS</a>, this method returns the Unicode value of the
+ character generated. For <a href="com.google.gwt.user.client.Event.html#ONKEYDOWN">Event.ONKEYDOWN</a> and <a href="com.google.gwt.user.client.Event.html#ONKEYUP">Event.ONKEYUP</a>,
+ it returns the code associated with the physical key.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the Unicode character or key code.<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a>
+<hr>
+<a name="eventGetMetaKey(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetMetaKey</h3>
+<div class="memberSig">public static boolean<b> eventGetMetaKey</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets whether the META key was depressed when the given event occurred.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if META was depressed when the event occurred<hr>
+<a name="eventGetMouseWheelVelocityY(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetMouseWheelVelocityY</h3>
+<div class="memberSig">public static int<b> eventGetMouseWheelVelocityY</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the velocity of the mouse wheel associated with the event along the
+ Y axis.
+ <p>
+ The velocity of the event is an artifical measurement for relative
+ comparisons of wheel activity.  It is affected by some non-browser
+ factors, including choice of input hardware and mouse acceleration
+ settings.  The sign of the velocity measurement agrees with the screen
+ coordinate system; negative values are towards the origin and positive
+ values are away from the origin.  Standard scrolling speed is approximately
+ ten units per event.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be examined.</dd>
+</dl>
+<h4 class="api">Return Value</h4>The velocity of the mouse wheel.<hr>
+<a name="eventGetRepeat(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetRepeat</h3>
+<div class="memberSig">public static boolean<b> eventGetRepeat</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the key-repeat state of this event.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if this key event was an auto-repeat<hr>
+<a name="eventGetScreenX(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetScreenX</h3>
+<div class="memberSig">public static int<b> eventGetScreenX</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the mouse x-position on the user's display.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the mouse x-position<hr>
+<a name="eventGetScreenY(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetScreenY</h3>
+<div class="memberSig">public static int<b> eventGetScreenY</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the mouse y-position on the user's display.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the mouse y-position<hr>
+<a name="eventGetShiftKey(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetShiftKey</h3>
+<div class="memberSig">public static boolean<b> eventGetShiftKey</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets whether the shift key was depressed when the given event occurred.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if shift was depressed when the event occurred<hr>
+<a name="eventGetTarget(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetTarget</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> eventGetTarget</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Returns the element that was the actual target of the given event.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the target element<hr>
+<a name="eventGetToElement(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetToElement</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> eventGetToElement</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the element to which the mouse pointer was moved (only valid for
+ <a href="com.google.gwt.user.client.Event.html#ONMOUSEOUT">Event.ONMOUSEOUT</a>).<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the element to which the mouse pointer was moved<hr>
+<a name="eventGetType(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetType</h3>
+<div class="memberSig">public static int<b> eventGetType</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the enumerated type of this event (as defined in <a href="com.google.gwt.user.client.Event.html">Event</a>).<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the event's enumerated type<hr>
+<a name="eventGetTypeString(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventGetTypeString</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> eventGetTypeString</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Gets the type of the given event as a string.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>the event's type name<hr>
+<a name="eventPreventDefault(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventPreventDefault</h3>
+<div class="memberSig">public static void<b> eventPreventDefault</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Prevents the browser from taking its default action for the given event.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event whose default action is to be prevented</dd>
+</dl>
+<hr>
+<a name="eventSetKeyCode(com.google.gwt.user.client.Event, char)"></a>
+<h3 class="api">eventSetKeyCode</h3>
+<div class="memberSig">public static void<b> eventSetKeyCode</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt, </nobr><nobr>char key</nobr>)</div>Sets the key code associated with the given keyboard event.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event whose key code is to be set</dd>
+<dt>key</dt>
+<dd>the new key code</dd>
+</dl>
+<hr>
+<a name="eventToString(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">eventToString</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> eventToString</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> evt</nobr>)</div>Returns a stringized version of the event. This string is for debugging
+ purposes and will NOT be consistent on different browsers.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>evt</dt>
+<dd>the event to stringize</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string form of the event<hr>
+<a name="getAbsoluteLeft(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getAbsoluteLeft</h3>
+<div class="memberSig">public static int<b> getAbsoluteLeft</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets an element's absolute left coordinate in the document's coordinate
+ system.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element to be measured</dd>
+</dl>
+<h4 class="api">Return Value</h4>the element's absolute left coordinate<hr>
+<a name="getAbsoluteTop(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getAbsoluteTop</h3>
+<div class="memberSig">public static int<b> getAbsoluteTop</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets an element's absolute top coordinate in the document's coordinate
+ system.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element to be measured</dd>
+</dl>
+<h4 class="api">Return Value</h4>the element's absolute top coordinate<hr>
+<a name="getAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getAttribute</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Gets any named attribute from an element, as a string.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be retrieved</dd>
+<dt>attr</dt>
+<dd>the name of the attribute</dd>
+</dl>
+<h4 class="api">Return Value</h4>the attribute's value<hr>
+<a name="getBooleanAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getBooleanAttribute</h3>
+<div class="memberSig">public static boolean<b> getBooleanAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Gets a boolean attribute on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the attribute to be set</dd>
+</dl>
+<h4 class="api">Return Value</h4>the attribute's value as a boolean<hr>
+<a name="getCaptureElement()"></a>
+<h3 class="api">getCaptureElement</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> getCaptureElement</b>()</div>Gets the element that currently has mouse capture.<h4 class="api">Return Value</h4>a handle to the capture element, or <code>null</code> if none
+         exists<hr>
+<a name="getChild(com.google.gwt.user.client.Element, int)"></a>
+<h3 class="api">getChild</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> getChild</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr>int index</nobr>)</div>Gets an element's n-th child element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the element whose child is to be retrieved</dd>
+<dt>index</dt>
+<dd>the index of the child element</dd>
+</dl>
+<h4 class="api">Return Value</h4>the n-th child element<hr>
+<a name="getChildCount(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getChildCount</h3>
+<div class="memberSig">public static int<b> getChildCount</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent</nobr>)</div>Gets the number of child elements present in a given parent element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the element whose children are to be counted</dd>
+</dl>
+<h4 class="api">Return Value</h4>the number of children<hr>
+<a name="getChildIndex(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getChildIndex</h3>
+<div class="memberSig">public static int<b> getChildIndex</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> child</nobr>)</div>Gets the index of a given child element within its parent.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the parent element</dd>
+<dt>child</dt>
+<dd>the child element</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child's index within its parent, or <code>-1</code> if it is
+         not a child of the given parent<hr>
+<a name="getElementAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getElementAttribute</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getElementAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Gets the named attribute from the element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be retrieved</dd>
+<dt>attr</dt>
+<dd>the name of the attribute</dd>
+</dl>
+<h4 class="api">Return Value</h4>the value of the attribute<hr>
+<a name="getElementById(java.lang.String)"></a>
+<h3 class="api">getElementById</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> getElementById</b>(<nobr><a href="java.lang.String.html">String</a> id</nobr>)</div>Gets the element associated with the given unique id within the entire
+ document.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>id</dt>
+<dd>the id whose associated element is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the associated element, or <code>null</code> if none is found<hr>
+<a name="getElementProperty(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getElementProperty</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getElementProperty</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> prop</nobr>)</div>Gets any named property from an element, as a string.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be retrieved</dd>
+<dt>prop</dt>
+<dd>the name of the property</dd>
+</dl>
+<h4 class="api">Return Value</h4>the property's value<hr>
+<a name="getElementPropertyBoolean(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getElementPropertyBoolean</h3>
+<div class="memberSig">public static boolean<b> getElementPropertyBoolean</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> prop</nobr>)</div>Gets any named property from an element, as a boolean.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be retrieved</dd>
+<dt>prop</dt>
+<dd>the name of the property</dd>
+</dl>
+<h4 class="api">Return Value</h4>the property's value as a boolean<hr>
+<a name="getElementPropertyInt(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getElementPropertyInt</h3>
+<div class="memberSig">public static int<b> getElementPropertyInt</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> prop</nobr>)</div>Gets any named property from an element, as an int.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be retrieved</dd>
+<dt>prop</dt>
+<dd>the name of the property</dd>
+</dl>
+<h4 class="api">Return Value</h4>the property's value as an int<hr>
+<a name="getEventsSunk(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getEventsSunk</h3>
+<div class="memberSig">public static int<b> getEventsSunk</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets the current set of events sunk by a given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose events are to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>a bitfield describing the events sunk on this element (its possible
+         values are described in <a href="com.google.gwt.user.client.Event.html">Event</a>)<hr>
+<a name="getFirstChild(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getFirstChild</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> getFirstChild</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets the first child element of the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose child is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child element<hr>
+<a name="getImgSrc(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getImgSrc</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getImgSrc</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> img</nobr>)</div>Gets the src attribute of an img element. This method is paired with
+ <a href="com.google.gwt.user.client.DOM.html#setImgSrc(com.google.gwt.user.client.Element, java.lang.String)">setImgSrc(Element, String)</a> so that it always returns the correct
+ url.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>img</dt>
+<dd>a non-null img whose src attribute is to be read.</dd>
+</dl>
+<h4 class="api">Return Value</h4>the src url of the img<hr>
+<a name="getInnerHTML(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getInnerHTML</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getInnerHTML</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets an HTML representation of an element's children.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose HTML is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the HTML representation of the element's children<hr>
+<a name="getInnerText(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getInnerText</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getInnerText</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets the text contained within an element. If the element has child
+ elements, only the text between them will be retrieved.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose inner text is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the text inside this element<hr>
+<a name="getIntAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getIntAttribute</h3>
+<div class="memberSig">public static int<b> getIntAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Gets an integer attribute on a given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be retrieved</dd>
+<dt>attr</dt>
+<dd>the name of the attribute to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the attribute's value as an integer<hr>
+<a name="getIntStyleAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getIntStyleAttribute</h3>
+<div class="memberSig">public static int<b> getIntStyleAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Gets an integer attribute on a given element's style.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style attribute is to be retrieved</dd>
+<dt>attr</dt>
+<dd>the name of the attribute to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the style attribute's value as an integer<hr>
+<a name="getNextSibling(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getNextSibling</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> getNextSibling</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets an element's next sibling element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose sibling is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the sibling element<hr>
+<a name="getParent(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getParent</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.client.Element.html">Element</a><b> getParent</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets an element's parent element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose parent is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the parent element<hr>
+<a name="getStyleAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">getStyleAttribute</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getStyleAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Gets an attribute of the given element's style.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style attribute is to be retrieved</dd>
+<dt>attr</dt>
+<dd>the name of the style attribute to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the style attribute's value<hr>
+<a name="insertBefore(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">insertBefore</h3>
+<div class="memberSig">public static void<b> insertBefore</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> child, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> before</nobr>)</div>Inserts an element as a child of the given parent element, before another
+ child of that parent.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the parent element</dd>
+<dt>child</dt>
+<dd>the child element to add to <code>parent</code>
+</dd>
+<dt>before</dt>
+<dd>an existing child element of <code>parent</code> before
+          which <code>child</code> will be inserted</dd>
+</dl>
+<hr>
+<a name="insertChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element, int)"></a>
+<h3 class="api">insertChild</h3>
+<div class="memberSig">public static void<b> insertChild</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> child, </nobr><nobr>int index</nobr>)</div>Inserts an element as a child of the given parent element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the parent element</dd>
+<dt>child</dt>
+<dd>the child element to add to <code>parent</code>
+</dd>
+<dt>index</dt>
+<dd>the index before which the child will be inserted (any value
+          greater than the number of existing children will cause the child
+          to be appended)</dd>
+</dl>
+<hr>
+<a name="insertListItem(com.google.gwt.user.client.Element, java.lang.String, java.lang.String, int)"></a>
+<h3 class="api">insertListItem</h3>
+<div class="memberSig">public static void<b> insertListItem</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> select, </nobr><nobr><a href="java.lang.String.html">String</a> item, </nobr><nobr><a href="java.lang.String.html">String</a> value, </nobr><nobr>int index</nobr>)</div>Creates an <code>&lt;option&gt;</code> element and inserts it as a child
+ of the specified <code>&lt;select&gt;</code> element. If the index is
+ less than zero, or greater than or equal to the length of the list, then
+ the option element will be appended to the end of the list.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>select</dt>
+<dd>the <code>&lt;select&gt;</code> element</dd>
+<dt>item</dt>
+<dd>the text of the new item; cannot be <code>null</code>
+</dd>
+<dt>value</dt>
+<dd>the <code>value</code> attribute for the new
+          <code>&lt;option&gt;</code>; cannot be <code>null</code>
+</dd>
+<dt>index</dt>
+<dd>the index at which to insert the child</dd>
+</dl>
+<hr>
+<a name="isOrHasChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">isOrHasChild</h3>
+<div class="memberSig">public static boolean<b> isOrHasChild</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> child</nobr>)</div>Determine whether one element is equal to, or the child of, another.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the potential parent element</dd>
+<dt>child</dt>
+<dd>the potential child element</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if the relationship holds<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.DOM.html#compare(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)">compare(Element, Element)</a>
+<hr>
+<a name="releaseCapture(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">releaseCapture</h3>
+<div class="memberSig">public static void<b> releaseCapture</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Releases mouse capture on the given element. Calling this method has no
+ effect if the element does not currently have mouse capture.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element to release capture</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.DOM.html#setCapture(com.google.gwt.user.client.Element)">setCapture(Element)</a>
+<hr>
+<a name="removeChild(com.google.gwt.user.client.Element, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">removeChild</h3>
+<div class="memberSig">public static void<b> removeChild</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> parent, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> child</nobr>)</div>Removes a child element from the given parent element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>parent</dt>
+<dd>the parent element</dd>
+<dt>child</dt>
+<dd>the child element to be removed</dd>
+</dl>
+<hr>
+<a name="removeElementAttribute(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">removeElementAttribute</h3>
+<div class="memberSig">public static void<b> removeElementAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr</nobr>)</div>Removes the named attribute from the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be removed</dd>
+<dt>attr</dt>
+<dd>the name of the element to remove</dd>
+</dl>
+<hr>
+<a name="removeEventPreview(com.google.gwt.user.client.EventPreview)"></a>
+<h3 class="api">removeEventPreview</h3>
+<div class="memberSig">public static void<b> removeEventPreview</b>(<nobr><a href="com.google.gwt.user.client.EventPreview.html">EventPreview</a> preview</nobr>)</div>Removes an element from the preview stack. This element will no longer
+ capture events, though any preview underneath it will begin to do so.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>preview</dt>
+<dd>the event preview to be removed from the stack</dd>
+</dl>
+<hr>
+<a name="scrollIntoView(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">scrollIntoView</h3>
+<div class="memberSig">public static void<b> scrollIntoView</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Scrolls the given element into view.
+
+ <p>
+ This method crawls up the DOM hierarchy, adjusting the scrollLeft and
+ scrollTop properties of each scrollable element to ensure that the
+ specified element is completely in view. It adjusts each scroll position by
+ the minimum amount necessary.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element to be made visible</dd>
+</dl>
+<hr>
+<a name="setAttribute(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)"></a>
+<h3 class="api">setAttribute</h3>
+<div class="memberSig">public static void<b> setAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Sets an attribute on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the attribute to be set</dd>
+<dt>value</dt>
+<dd>the new attribute value</dd>
+</dl>
+<hr>
+<a name="setBooleanAttribute(com.google.gwt.user.client.Element, java.lang.String, boolean)"></a>
+<h3 class="api">setBooleanAttribute</h3>
+<div class="memberSig">public static void<b> setBooleanAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr, </nobr><nobr>boolean value</nobr>)</div>Sets a boolean attribute on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the attribute to be set</dd>
+<dt>value</dt>
+<dd>the attribute's new boolean value</dd>
+</dl>
+<hr>
+<a name="setCapture(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">setCapture</h3>
+<div class="memberSig">public static void<b> setCapture</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Sets mouse-capture on the given element. This element will directly receive
+ all mouse events until <a href="com.google.gwt.user.client.DOM.html#releaseCapture(com.google.gwt.user.client.Element)">releaseCapture(Element)</a> is called on it.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element on which to set mouse capture</dd>
+</dl>
+<hr>
+<a name="setElementAttribute(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)"></a>
+<h3 class="api">setElementAttribute</h3>
+<div class="memberSig">public static void<b> setElementAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Sets an attribute on a given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>element whose attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the attribute</dd>
+<dt>value</dt>
+<dd>the value to which the attribute should be set</dd>
+</dl>
+<hr>
+<a name="setElementProperty(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)"></a>
+<h3 class="api">setElementProperty</h3>
+<div class="memberSig">public static void<b> setElementProperty</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> prop, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Sets a property on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be set</dd>
+<dt>prop</dt>
+<dd>the name of the property to be set</dd>
+<dt>value</dt>
+<dd>the new property value</dd>
+</dl>
+<hr>
+<a name="setElementPropertyBoolean(com.google.gwt.user.client.Element, java.lang.String, boolean)"></a>
+<h3 class="api">setElementPropertyBoolean</h3>
+<div class="memberSig">public static void<b> setElementPropertyBoolean</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> prop, </nobr><nobr>boolean value</nobr>)</div>Sets a boolean property on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be set</dd>
+<dt>prop</dt>
+<dd>the name of the property to be set</dd>
+<dt>value</dt>
+<dd>the new property value as a boolean</dd>
+</dl>
+<hr>
+<a name="setElementPropertyInt(com.google.gwt.user.client.Element, java.lang.String, int)"></a>
+<h3 class="api">setElementPropertyInt</h3>
+<div class="memberSig">public static void<b> setElementPropertyInt</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> prop, </nobr><nobr>int value</nobr>)</div>Sets an int property on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose property is to be set</dd>
+<dt>prop</dt>
+<dd>the name of the property to be set</dd>
+<dt>value</dt>
+<dd>the new property value as an int</dd>
+</dl>
+<hr>
+<a name="setEventListener(com.google.gwt.user.client.Element, com.google.gwt.user.client.EventListener)"></a>
+<h3 class="api">setEventListener</h3>
+<div class="memberSig">public static void<b> setEventListener</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="com.google.gwt.user.client.EventListener.html">EventListener</a> listener</nobr>)</div>Sets the <a href="com.google.gwt.user.client.EventListener.html">EventListener</a> to receive events for the given element.
+ Only one such listener may exist for a single element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose listener is to be set</dd>
+<dt>listener</dt>
+<dd>the listener to receive <a href="com.google.gwt.user.client.Event.html">events</a>
+</dd>
+</dl>
+<hr>
+<a name="setImgSrc(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">setImgSrc</h3>
+<div class="memberSig">public static void<b> setImgSrc</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> img, </nobr><nobr><a href="java.lang.String.html">String</a> src</nobr>)</div>Sets the src attribute of an img element. This method ensures that imgs
+ only ever have their contents requested one single time from the server.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>img</dt>
+<dd>a non-null img whose src attribute will be set.</dd>
+<dt>src</dt>
+<dd>a non-null url for the img</dd>
+</dl>
+<hr>
+<a name="setInnerHTML(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">setInnerHTML</h3>
+<div class="memberSig">public static void<b> setInnerHTML</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> html</nobr>)</div>Sets the HTML contained within an element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose inner HTML is to be set</dd>
+<dt>html</dt>
+<dd>the new html</dd>
+</dl>
+<hr>
+<a name="setInnerText(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">setInnerText</h3>
+<div class="memberSig">public static void<b> setInnerText</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> text</nobr>)</div>Sets the text contained within an element. If the element already has
+ children, they will be destroyed.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose inner text is to be set</dd>
+<dt>text</dt>
+<dd>the new text</dd>
+</dl>
+<hr>
+<a name="setIntAttribute(com.google.gwt.user.client.Element, java.lang.String, int)"></a>
+<h3 class="api">setIntAttribute</h3>
+<div class="memberSig">public static void<b> setIntAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr, </nobr><nobr>int value</nobr>)</div>Sets an integer attribute on the given element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the attribute to be set</dd>
+<dt>value</dt>
+<dd>the attribute's new integer value</dd>
+</dl>
+<hr>
+<a name="setIntStyleAttribute(com.google.gwt.user.client.Element, java.lang.String, int)"></a>
+<h3 class="api">setIntStyleAttribute</h3>
+<div class="memberSig">public static void<b> setIntStyleAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr, </nobr><nobr>int value</nobr>)</div>Sets an integer attribute on the given element's style.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the style attribute to be set</dd>
+<dt>value</dt>
+<dd>the style attribute's new integer value</dd>
+</dl>
+<hr>
+<a name="setOptionText(com.google.gwt.user.client.Element, java.lang.String, int)"></a>
+<h3 class="api">setOptionText</h3>
+<div class="memberSig">public static void<b> setOptionText</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> select, </nobr><nobr><a href="java.lang.String.html">String</a> text, </nobr><nobr>int index</nobr>)</div>Sets the option text of the given select object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>select</dt>
+<dd>the select object whose option text is being set</dd>
+<dt>text</dt>
+<dd>the text to set</dd>
+<dt>index</dt>
+<dd>the index of the option whose text should be set</dd>
+</dl>
+<hr>
+<a name="setStyleAttribute(com.google.gwt.user.client.Element, java.lang.String, java.lang.String)"></a>
+<h3 class="api">setStyleAttribute</h3>
+<div class="memberSig">public static void<b> setStyleAttribute</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> attr, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Sets an attribute on the given element's style.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style attribute is to be set</dd>
+<dt>attr</dt>
+<dd>the name of the style attribute to be set</dd>
+<dt>value</dt>
+<dd>the style attribute's new value</dd>
+</dl>
+<hr>
+<a name="sinkEvents(com.google.gwt.user.client.Element, int)"></a>
+<h3 class="api">sinkEvents</h3>
+<div class="memberSig">public static void<b> sinkEvents</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr>int eventBits</nobr>)</div>Sets the current set of events sunk by a given element. These events will
+ be fired to the nearest <a href="com.google.gwt.user.client.EventListener.html">EventListener</a> specified on any of the
+ element's parents.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose events are to be retrieved</dd>
+<dt>eventBits</dt>
+<dd>a bitfield describing the events sunk on this element (its
+          possible values are described in <a href="com.google.gwt.user.client.Event.html">Event</a>)</dd>
+</dl>
+<hr>
+<a name="toString(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">toString</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> toString</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Returns a stringized version of the element. This string is for debugging
+ purposes and will NOT be consistent on different browsers.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element to stringize</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string form of the element<hr>
+<a name="windowGetClientHeight()"></a>
+<h3 class="api">windowGetClientHeight</h3>
+<div class="memberSig">public static int<b> windowGetClientHeight</b>()</div>Gets the height of the browser window's client area excluding the
+ scroll bar.<h4 class="api">Return Value</h4>the window's client height<hr>
+<a name="windowGetClientWidth()"></a>
+<h3 class="api">windowGetClientWidth</h3>
+<div class="memberSig">public static int<b> windowGetClientWidth</b>()</div>Gets the width of the browser window's client area excluding the
+ vertical scroll bar.<h4 class="api">Return Value</h4>the window's client width</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

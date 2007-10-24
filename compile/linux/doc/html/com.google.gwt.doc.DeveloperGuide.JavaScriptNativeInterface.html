@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            JavaScript Native Interface (JSNI)</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.Internationalization.PropertiesFiles.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JavaScriptFromJava.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="selected item">JavaScript Native Interface (JSNI)</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>JavaScript Native Interface (JSNI)</h1>The
+ <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.JavaToJavaScriptCompiler.html">GWT compiler</a>
+ translates Java source into JavaScript. Sometimes it's very useful to mix
+ handwritten JavaScript into your Java source code. For example, the
+ lowest-level functionality of certain core GWT classes are handwritten in
+ JavaScript. GWT borrows from the Java Native Interface (JNI) concept to
+ implement Java<i>Script</i> Native Interface (JSNI).
+ 
+ <p>
+ Writing JSNI methods is a powerful technique, but should be used sparingly.
+ JSNI code is less portable across browsers, more likely to leak memory,
+ less amenable to Java tools, and hard for the compiler to optimize.
+ </p>
+<p>
+ We think of JSNI as the web equivalent of inline assembly code. You can:
+ <ul class="featurelist">
+<li>Implement a Java method directly in JavaScript</li>
+<li>Wrap type-safe Java method signatures around existing JavaScript</li>
+<li>Call from JavaScript into Java code and vice-versa</li>
+<li>Throw exceptions across Java/JavaScript boundaries</li>
+<li>Read and write Java fields from JavaScript</li>
+<li>Use hosted mode to debug both Java source (with a Java debugger) and
+ JavaScript (with a script debugger, only in Windows right now)</li>
+</ul>
+</p>
+<div class="tipContainer" xmlns="http://www.w3.org/1999/xhtml">
+<div class="tipCallout">Tip</div>
+<div class="tipBody">When accessing the browser's window and document objects from JSNI,
+      you must reference them as <code>$wnd</code> and <code>$doc</code>,
+      respectively. Your compiled script runs in a nested frame, and
+      <code>$wnd</code> and <code>$doc</code> are automatically
+      initialized to correctly refer to the host page's window and document.</div>
+</div>
+<h2>Specifics</h2>
+<ul class="childToc">
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JavaScriptFromJava.html">Writing Native JavaScript Methods</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">Declare a <code>native</code> method and write the body into
+           a specially formatted comment.</div>
+</li>
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JavaFromJavaScript.html">Accessing Java Methods and Fields from JavaScript</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">Handwritten JavaScript can invoke methods and access fields on
+           Java objects.</div>
+</li>
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.Marshaling.html">Sharing objects between Java source and JavaScript</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">How Java objects appear to JavaScript code and vice-versa.</div>
+</li>
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JsniExceptions.html">Exceptions and JSNI</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">How JavaScript exceptions interact with Java exceptions and
+           vice-versa.</div>
+</li>
+</ul>
+</div>
+<div id="footer">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            TreeLogger</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.core.ext.PropertyOracle.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.core.ext.TreeLogger.Type.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.core.ext.html">com.google.gwt.core.ext</a></span> &gt;
+            <span class="selected item">TreeLogger</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface TreeLogger</h1>
+<div class="classSig">public 
+            interface 
+            <b>TreeLogger</b>
+</div>An interface used to log messages in deferred binding generators.<h2 class="api">Nested Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a xmlns="" href="com.google.gwt.core.ext.TreeLogger.Type.html">TreeLogger.Type</a></td><td>A type-safe enum of all possible logging severity types. </td>
+</tr>
+</table>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>ALL</td><td>Logs everything -- quite a bit of stuff. </td>
+</tr>
+<tr>
+<td>DEBUG</td><td>Logs detailed information that could be useful during debugging. </td>
+</tr>
+<tr>
+<td>ERROR</td><td>Logs an error. </td>
+</tr>
+<tr>
+<td>INFO</td><td>Logs information. </td>
+</tr>
+<tr>
+<td>NULL</td><td>A valid logger that ignores all messages. </td>
+</tr>
+<tr>
+<td>SPAM</td><td>Logs extremely verbose and detailed information that is typically useful
+ only to product implementors. </td>
+</tr>
+<tr>
+<td>TRACE</td><td>Logs information related to lower-level operation. </td>
+</tr>
+<tr>
+<td>WARN</td><td>Logs a warning. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.core.ext.TreeLogger.html#branch(com.google.gwt.core.ext.TreeLogger.Type, java.lang.String, java.lang.Throwable)">branch(TreeLogger.Type, String, Throwable)</a></td><td>Produces a branched logger, which can be used to write messages that are
+ logically grouped together underneath the current logger. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.TreeLogger.html#isLoggable(com.google.gwt.core.ext.TreeLogger.Type)">isLoggable(TreeLogger.Type)</a></td><td>Determines whether or not a log entry of the specified type would actually
+ be logged. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.TreeLogger.html#log(com.google.gwt.core.ext.TreeLogger.Type, java.lang.String, java.lang.Throwable)">log(TreeLogger.Type, String, Throwable)</a></td><td>Logs a message and/or an exception. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">ALL</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>ALL</b>
+</div>Logs everything -- quite a bit of stuff.<hr>
+<h3 class="api">DEBUG</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>DEBUG</b>
+</div>Logs detailed information that could be useful during debugging.<hr>
+<h3 class="api">ERROR</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>ERROR</b>
+</div>Logs an error.<hr>
+<h3 class="api">INFO</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>INFO</b>
+</div>Logs information.<hr>
+<h3 class="api">NULL</h3>
+<div class="memberSig">public static final TreeLogger <b>NULL</b>
+</div>A valid logger that ignores all messages. Occasionally useful when calling
+ methods that require a logger parameter.<hr>
+<h3 class="api">SPAM</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>SPAM</b>
+</div>Logs extremely verbose and detailed information that is typically useful
+ only to product implementors.<hr>
+<h3 class="api">TRACE</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>TRACE</b>
+</div>Logs information related to lower-level operation.<hr>
+<h3 class="api">WARN</h3>
+<div class="memberSig">public static final TreeLogger.Type <b>WARN</b>
+</div>Logs a warning.<h2 class="api">Method Detail</h2>
+<a name="branch(com.google.gwt.core.ext.TreeLogger.Type, java.lang.String, java.lang.Throwable)"></a>
+<h3 class="api">branch</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.TreeLogger.html">TreeLogger</a><b> branch</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.Type.html">TreeLogger.Type</a> type, </nobr><nobr><a href="java.lang.String.html">String</a> msg, </nobr><nobr><a href="java.lang.Throwable.html">Throwable</a> caught</nobr>)</div>Produces a branched logger, which can be used to write messages that are
+ logically grouped together underneath the current logger. The details of
+ how/if the resulting messages are displayed is implementation-dependent.
+ 
+ <p>
+ The log message supplied when branching serves two purposes. First, the
+ message should be considered a heading for all the child messages below it.
+ Second, the <code>type</code> of the message provides a hint as to the
+ importance of the children below it. As an optimization, an implementation
+ could return a "no-op" logger if messages of the specified type weren't
+ being logged, which the implication being that all nested log messages were
+ no more important than the level of their branch parent.
+ </p>
+<p>
+ As an example of how hierarchical logging can be used, a branched logger in
+ a GUI could write log message as child items of a parent node in a tree
+ control. If logging to streams, such as a text console, the branched logger
+ could prefix each entry with a unique string and indent its text so that it
+ could be sorted later to reconstruct a proper hierarchy.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>type</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>msg</dt>
+<dd>An optional message to log, which can be <code>null</code> if
+          only an exception is being logged</dd>
+<dt>caught</dt>
+<dd>An optional exception to log, which can be <code>null</code>
+          if only a message is being logged</dd>
+</dl>
+<h4 class="api">Return Value</h4>an instance of <a href="com.google.gwt.core.ext.TreeLogger.html">TreeLogger</a> representing the new branch of
+         the log. May be the same instance on which this method is called<hr>
+<a name="isLoggable(com.google.gwt.core.ext.TreeLogger.Type)"></a>
+<h3 class="api">isLoggable</h3>
+<div class="memberSig">public boolean<b> isLoggable</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.Type.html">TreeLogger.Type</a> type</nobr>)</div>Determines whether or not a log entry of the specified type would actually
+ be logged. Caller use this method to avoid constructing log messages that
+ would be thrown away.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>type</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="log(com.google.gwt.core.ext.TreeLogger.Type, java.lang.String, java.lang.Throwable)"></a>
+<h3 class="api">log</h3>
+<div class="memberSig">public void<b> log</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.Type.html">TreeLogger.Type</a> type, </nobr><nobr><a href="java.lang.String.html">String</a> msg, </nobr><nobr><a href="java.lang.Throwable.html">Throwable</a> caught</nobr>)</div>Logs a message and/or an exception. It is also legal to call this method
+ using <code>null</code> arguments for <i>both</i><code>msg</code> and
+ <code>caught</code>, in which case the log event can be ignored.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>type</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>msg</dt>
+<dd>An optional message to log, which can be <code>null</code> if
+          only an exception is being logged</dd>
+<dt>caught</dt>
+<dd>An optional exception to log, which can be <code>null</code>
+          if only a message is being logged</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

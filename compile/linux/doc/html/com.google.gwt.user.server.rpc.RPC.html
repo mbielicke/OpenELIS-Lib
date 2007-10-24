@@ -1,0 +1,498 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            RPC</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.server.rpc.RPCRequest.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.server.rpc.html">com.google.gwt.user.server.rpc</a></span> &gt;
+            <span class="selected item">RPC</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class RPC</h1>
+<div class="classSig">public final 
+            class 
+            RPC<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+</div>Utility class for integrating with the RPC system. This class exposes methods
+ for decoding of RPC requests, encoding of RPC responses, and invocation of
+ RPC calls on service objects. The operations exposed by this class can be
+ reused by framework implementors such as Spring and G4jsf to support a wide
+ range of service invocation policies.
+ 
+ <h3>Canonical Example</h3>
+ The following example demonstrates the canonical way to use this class.
+ 
+ <pre class="code">public String processCall(String payload) throws SerializationException {
+  try {
+    RPCRequest rpcRequest = RPC.decodeRequest(payload, this.getClass());
+    return RPC.invokeAndEncodeResponse(this, rpcRequest.getMethod(),
+        rpcRequest.getParameters());
+  } catch (IncompatibleRemoteServiceException ex) {
+    return RPC.encodeResponseForFailure(null, ex);
+  }
+}
+</pre>
+<h3>Advanced Example</h3>
+ The following example shows a more advanced way of using this class to create
+ an adapter between GWT RPC entities and POJOs.
+ 
+ <pre class="code">public void doPost(HttpServletRequest httpRequest,
+    HttpServletResponse httpResponse) {
+  String payload = readPayloadAsUtf8(httpRequest);
+
+  try {
+    try {
+      RPCRequest rpcRequest = RPC.decodeRequest(payload);
+
+      Object targetInstance = getInstanceToHandleRequest(httpRequest,
+          rpcRequest);
+
+      Method targetMethod = maybeMapRequestedMethod(targetInstance,
+          rpcRequest.getMethod());
+
+      Object[] targetParameters = maybeMapParameters(rpcRequest.getParameters());
+
+      try {
+        Object result = targetMethod.invoke(targetInstance, targetParameters);
+
+        result = maybeMapResult(rpcRequest.getMethod(), result);
+
+        /*
+         * Encode the object that will be given to the client code's
+         * AsyncCallback::onSuccess(Object) method.
+         */
+        String encodedResult = RPC.encodeResponseForSuccess(
+            rpcRequest.getMethod(), result);
+
+        sendResponseForSuccess(httpResponse, encodedResult);
+      } catch (IllegalArgumentException e) {
+        SecurityException securityException = new SecurityException(
+            "Blocked attempt to invoke method " + targetMethod);
+        securityException.initCause(e);
+        throw securityException;
+      } catch (IllegalAccessException e) {
+        SecurityException securityException = new SecurityException(
+            "Blocked attempt to access inaccessible method "
+                + targetMethod
+                + (targetInstance != null ? " on target " + targetInstance
+                    : ""));
+        securityException.initCause(e);
+        throw securityException;
+      } catch (InvocationTargetException e) {
+        Throwable cause = e.getCause();
+
+        Throwable mappedThrowable = maybeMapThrowable(cause,
+            rpcRequest.getMethod());
+
+        /*
+         * Encode the exception that will be passed back to the client's
+         * client code's AsyncCallback::onFailure(Throwable) method.
+         */
+        String failurePayload = RPC.encodeResponseForFailure(
+            rpcRequest.getMethod(), mappedThrowable);
+
+        sendResponseForFailure(httpResponse, failurePayload);
+      }
+    } catch (IncompatibleRemoteServiceException e) {
+      sendResponseForFailure(httpResponse, RPC.encodeResponseForFailure(null,
+          e));
+    }
+  } catch (Throwable e) {
+    /*
+     * Return a generic error which will be passed to the client code's
+     * AsyncCallback::onFailure(Throwable) method.
+     */
+    sendResponseForGenericFailure(httpResponse);
+  }
+}
+</pre>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#decodeRequest(java.lang.String)">decodeRequest(String)</a></td><td>Returns an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> that is built by decoding the contents of an
+ encoded RPC request. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#decodeRequest(java.lang.String, java.lang.Class)">decodeRequest(String, Class)</a></td><td>Returns an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> that is built by decoding the contents of an
+ encoded RPC request and optionally validating that type can handle the
+ request. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#decodeRequest(java.lang.String, java.lang.Class, com.google.gwt.user.server.rpc.SerializationPolicyProvider)">decodeRequest(String, Class, SerializationPolicyProvider)</a></td><td>Returns an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> that is built by decoding the contents of an
+ encoded RPC request and optionally validating that type can handle the
+ request. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#encodeResponseForFailure(java.lang.reflect.Method, java.lang.Throwable)">encodeResponseForFailure(Method, Throwable)</a></td><td>Returns a string that encodes an exception. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#encodeResponseForFailure(java.lang.reflect.Method, java.lang.Throwable, com.google.gwt.user.server.rpc.SerializationPolicy)">encodeResponseForFailure(Method, Throwable, SerializationPolicy)</a></td><td>Returns a string that encodes an exception. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#encodeResponseForSuccess(java.lang.reflect.Method, java.lang.Object)">encodeResponseForSuccess(Method, Object)</a></td><td>Returns a string that encodes the object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#encodeResponseForSuccess(java.lang.reflect.Method, java.lang.Object, com.google.gwt.user.server.rpc.SerializationPolicy)">encodeResponseForSuccess(Method, Object, SerializationPolicy)</a></td><td>Returns a string that encodes the object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#getDefaultSerializationPolicy()">getDefaultSerializationPolicy()</a></td><td>Returns a default serialization policy. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#invokeAndEncodeResponse(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])">invokeAndEncodeResponse(Object, Method, Object[])</a></td><td>Returns a string that encodes the result of calling a service method, which
+ could be the value returned by the method or an exception thrown by it. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html#invokeAndEncodeResponse(java.lang.Object, java.lang.reflect.Method, java.lang.Object[], com.google.gwt.user.server.rpc.SerializationPolicy)">invokeAndEncodeResponse(Object, Method, Object[], SerializationPolicy)</a></td><td>Returns a string that encodes the result of calling a service method, which
+ could be the value returned by the method or an exception thrown by it. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="decodeRequest(java.lang.String)"></a>
+<h3 class="api">decodeRequest</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a><b> decodeRequest</b>(<nobr><a href="java.lang.String.html">String</a> encodedRequest</nobr>)</div>Returns an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> that is built by decoding the contents of an
+ encoded RPC request.
+ 
+ <p>
+ This method is equivalent to calling <a href="com.google.gwt.user.server.rpc.RPC.html#decodeRequest(java.lang.String, java.lang.Class)">decodeRequest(String, Class)</a>
+ with <code>null</code> for the type parameter.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>encodedRequest</dt>
+<dd>a string that encodes the <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a>
+          interface, the service method to call, and the arguments to for
+          the service method</dd>
+</dl>
+<h4 class="api">Return Value</h4>an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> instance<hr>
+<a name="decodeRequest(java.lang.String, java.lang.Class)"></a>
+<h3 class="api">decodeRequest</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a><b> decodeRequest</b>(<nobr><a href="java.lang.String.html">String</a> encodedRequest, </nobr><nobr><a href="java.lang.Class.html">Class</a> type</nobr>)</div>Returns an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> that is built by decoding the contents of an
+ encoded RPC request and optionally validating that type can handle the
+ request. If the type parameter is not <code>null</code>, the
+ implementation checks that the type is assignable to the
+ <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> interface requested in the encoded request string.
+ 
+ <p>
+ Invoking this method with <code>null</code> for the type parameter,
+ <code>decodeRequest(encodedRequest, null)</code>, is equivalent to
+ calling <code>decodeRequest(encodedRequest)</code>.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>encodedRequest</dt>
+<dd>a string that encodes the <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a>
+          interface, the service method, and the arguments to pass to the
+          service method</dd>
+<dt>type</dt>
+<dd>if not <code>null</code>, the implementation checks that the
+          type is assignable to the <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> interface encoded
+          in the encoded request string.</dd>
+</dl>
+<h4 class="api">Return Value</h4>an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> instance<hr>
+<a name="decodeRequest(java.lang.String, java.lang.Class, com.google.gwt.user.server.rpc.SerializationPolicyProvider)"></a>
+<h3 class="api">decodeRequest</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a><b> decodeRequest</b>(<nobr><a href="java.lang.String.html">String</a> encodedRequest, </nobr><nobr><a href="java.lang.Class.html">Class</a> type, </nobr><nobr><a href="com.google.gwt.user.server.rpc.SerializationPolicyProvider.html">SerializationPolicyProvider</a> serializationPolicyProvider</nobr>)</div>Returns an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> that is built by decoding the contents of an
+ encoded RPC request and optionally validating that type can handle the
+ request. If the type parameter is not <code>null</code>, the
+ implementation checks that the type is assignable to the
+ <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> interface requested in the encoded request string.
+ 
+ <p>
+ If the serializationPolicyProvider parameter is not <code>null</code>, it is
+ asked for a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> to use to restrict the set of types
+ that can be decoded from the request. If this parameter is
+ <code>null</code>, then only subtypes of
+ <a href="com.google.gwt.user.client.rpc.IsSerializable.html">IsSerializable</a> or
+ types which have custom field serializers can be decoded.
+ </p>
+<p>
+ Invoking this method with <code>null</code> for the type parameter,
+ <code>decodeRequest(encodedRequest, null)</code>, is equivalent to
+ calling <code>decodeRequest(encodedRequest)</code>.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>encodedRequest</dt>
+<dd>a string that encodes the <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a>
+          interface, the service method, and the arguments to pass to the
+          service method</dd>
+<dt>type</dt>
+<dd>if not <code>null</code>, the implementation checks that the
+          type is assignable to the <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> interface encoded
+          in the encoded request string.</dd>
+<dt>serializationPolicyProvider</dt>
+<dd>if not <code>null</code>, the
+          implementation asks this provider for a
+          <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> which will be used to restrict the set
+          of types that can be decoded from this request</dd>
+</dl>
+<h4 class="api">Return Value</h4>an <a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a> instance<hr>
+<a name="encodeResponseForFailure(java.lang.reflect.Method, java.lang.Throwable)"></a>
+<h3 class="api">encodeResponseForFailure</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> encodeResponseForFailure</b>(<nobr>Method serviceMethod, </nobr><nobr><a href="java.lang.Throwable.html">Throwable</a> cause</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Returns a string that encodes an exception. If method is not
+ <code>null</code>, it is an error if the exception is not in the
+ method's list of checked exceptions.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>serviceMethod</dt>
+<dd>the method that threw the exception, may be
+          <code>null</code>
+</dd>
+<dt>cause</dt>
+<dd>the <a href="java.lang.Throwable.html">Throwable</a> that was thrown</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string that encodes the exception<hr>
+<a name="encodeResponseForFailure(java.lang.reflect.Method, java.lang.Throwable, com.google.gwt.user.server.rpc.SerializationPolicy)"></a>
+<h3 class="api">encodeResponseForFailure</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> encodeResponseForFailure</b>(<nobr>Method serviceMethod, </nobr><nobr><a href="java.lang.Throwable.html">Throwable</a> cause, </nobr><nobr><a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> serializationPolicy</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Returns a string that encodes an exception. If method is not
+ <code>null</code>, it is an error if the exception is not in the
+ method's list of checked exceptions.
+ 
+ <p>
+ If the serializationPolicy parameter is not <code>null</code>, it is used to
+ determine what types can be encoded as part of this response. If this
+ parameter is <code>null</code>, then only subtypes of
+ <a href="com.google.gwt.user.client.rpc.IsSerializable.html">IsSerializable</a> or
+ types which have custom field serializers may be encoded.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>serviceMethod</dt>
+<dd>the method that threw the exception, may be
+          <code>null</code>
+</dd>
+<dt>cause</dt>
+<dd>the <a href="java.lang.Throwable.html">Throwable</a> that was thrown</dd>
+<dt>serializationPolicy</dt>
+<dd>determines the serialization policy to be used</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string that encodes the exception<hr>
+<a name="encodeResponseForSuccess(java.lang.reflect.Method, java.lang.Object)"></a>
+<h3 class="api">encodeResponseForSuccess</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> encodeResponseForSuccess</b>(<nobr>Method serviceMethod, </nobr><nobr><a href="java.lang.Object.html">Object</a> object</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Returns a string that encodes the object. It is an error to try to encode
+ an object that is not assignable to the service method's return type.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>serviceMethod</dt>
+<dd>the method whose result we are encoding</dd>
+<dt>object</dt>
+<dd>the instance that we wish to encode</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string that encodes the object, if the object is compatible with
+         the service method's declared return type<hr>
+<a name="encodeResponseForSuccess(java.lang.reflect.Method, java.lang.Object, com.google.gwt.user.server.rpc.SerializationPolicy)"></a>
+<h3 class="api">encodeResponseForSuccess</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> encodeResponseForSuccess</b>(<nobr>Method serviceMethod, </nobr><nobr><a href="java.lang.Object.html">Object</a> object, </nobr><nobr><a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> serializationPolicy</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Returns a string that encodes the object. It is an error to try to encode
+ an object that is not assignable to the service method's return type.
+ 
+ <p>
+ If the serializationPolicy parameter is not <code>null</code>, it is used to
+ determine what types can be encoded as part of this response. If this
+ parameter is <code>null</code>, then only subtypes of
+ <a href="com.google.gwt.user.client.rpc.IsSerializable.html">IsSerializable</a> or
+ types which have custom field serializers may be encoded.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>serviceMethod</dt>
+<dd>the method whose result we are encoding</dd>
+<dt>object</dt>
+<dd>the instance that we wish to encode</dd>
+<dt>serializationPolicy</dt>
+<dd>determines the serialization policy to be used</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string that encodes the object, if the object is compatible with
+         the service method's declared return type<hr>
+<a name="getDefaultSerializationPolicy()"></a>
+<h3 class="api">getDefaultSerializationPolicy</h3>
+<div class="memberSig">public static <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a><b> getDefaultSerializationPolicy</b>()</div>Returns a default serialization policy.<h4 class="api">Return Value</h4>the default serialization policy.<hr>
+<a name="invokeAndEncodeResponse(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])"></a>
+<h3 class="api">invokeAndEncodeResponse</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> invokeAndEncodeResponse</b>(<nobr><a href="java.lang.Object.html">Object</a> target, </nobr><nobr>Method serviceMethod, </nobr><nobr><a href="java.lang.Object.html">Object[]</a> args</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Returns a string that encodes the result of calling a service method, which
+ could be the value returned by the method or an exception thrown by it.
+ 
+ <p>
+ This method does no security checking; security checking must be done on
+ the method prior to this invocation.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>target</dt>
+<dd>instance on which to invoke the serviceMethod</dd>
+<dt>serviceMethod</dt>
+<dd>the method to invoke</dd>
+<dt>args</dt>
+<dd>arguments used for the method invocation</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string which encodes either the method's return or a checked
+         exception thrown by the method<hr>
+<a name="invokeAndEncodeResponse(java.lang.Object, java.lang.reflect.Method, java.lang.Object[], com.google.gwt.user.server.rpc.SerializationPolicy)"></a>
+<h3 class="api">invokeAndEncodeResponse</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> invokeAndEncodeResponse</b>(<nobr><a href="java.lang.Object.html">Object</a> target, </nobr><nobr>Method serviceMethod, </nobr><nobr><a href="java.lang.Object.html">Object[]</a> args, </nobr><nobr><a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> serializationPolicy</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Returns a string that encodes the result of calling a service method, which
+ could be the value returned by the method or an exception thrown by it.
+ 
+ <p>
+ If the serializationPolicy parameter is not <code>null</code>, it is used to
+ determine what types can be encoded as part of this response. If this
+ parameter is <code>null</code>, then only subtypes of
+ <a href="com.google.gwt.user.client.rpc.IsSerializable.html">IsSerializable</a> or
+ types which have custom field serializers may be encoded.
+ </p>
+<p>
+ This method does no security checking; security checking must be done on
+ the method prior to this invocation.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>target</dt>
+<dd>instance on which to invoke the serviceMethod</dd>
+<dt>serviceMethod</dt>
+<dd>the method to invoke</dd>
+<dt>args</dt>
+<dd>arguments used for the method invocation</dd>
+<dt>serializationPolicy</dt>
+<dd>determines the serialization policy to be used</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string which encodes either the method's return or a checked
+         exception thrown by the method</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

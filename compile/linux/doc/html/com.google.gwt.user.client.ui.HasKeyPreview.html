@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            HasKeyPreview</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.HasHTML.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.HasName.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">HasKeyPreview</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface HasKeyPreview</h1>
+<div class="classSig">public 
+            interface 
+            <b>HasKeyPreview</b>
+</div>A class that implements this interface receives a preview of keyboard events
+ before they are passed to the focused widget.<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a xmlns="" href="com.google.gwt.user.client.ui.HasKeyPreview.html#onKeyDownPreview(char, int)">onKeyDownPreview(char, int)</a></td><td>Called when a key-down event is received. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.HasKeyPreview.html#onKeyPressPreview(char, int)">onKeyPressPreview(char, int)</a></td><td>Called when a key-press event is received. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.HasKeyPreview.html#onKeyUpPreview(char, int)">onKeyUpPreview(char, int)</a></td><td>Called when a key-up event is received. </td>
+</tr>
+</table>
+<h2 class="api">See Also</h2>
+<a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a>
+<h2 class="api">Method Detail</h2>
+<a name="onKeyDownPreview(char, int)"></a>
+<h3 class="api">onKeyDownPreview</h3>
+<div class="memberSig">public boolean<b> onKeyDownPreview</b>(<nobr>char key, </nobr><nobr>int modifiers</nobr>)</div>Called when a key-down event is received.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the physical key that was depressed. Constants for this value
+          are defined in this interface with the KEYCODE prefix.</dd>
+<dt>modifiers</dt>
+<dd>the modifier keys pressed at when the event occurred. This
+          value is a combination of the bits defined by
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_SHIFT">KeyboardListener.MODIFIER_SHIFT</a>,
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_CTRL">KeyboardListener.MODIFIER_CTRL</a>, and
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_ALT">KeyboardListener.MODIFIER_ALT</a>.</dd>
+</dl>
+<hr>
+<a name="onKeyPressPreview(char, int)"></a>
+<h3 class="api">onKeyPressPreview</h3>
+<div class="memberSig">public boolean<b> onKeyPressPreview</b>(<nobr>char key, </nobr><nobr>int modifiers</nobr>)</div>Called when a key-press event is received.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the Unicode character that was generated by the keyboard action.</dd>
+<dt>modifiers</dt>
+<dd>the modifier keys pressed at when the event occurred. This
+          value is a combination of the bits defined by
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_SHIFT">KeyboardListener.MODIFIER_SHIFT</a>,
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_CTRL">KeyboardListener.MODIFIER_CTRL</a>, and
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_ALT">KeyboardListener.MODIFIER_ALT</a>.</dd>
+</dl>
+<hr>
+<a name="onKeyUpPreview(char, int)"></a>
+<h3 class="api">onKeyUpPreview</h3>
+<div class="memberSig">public boolean<b> onKeyUpPreview</b>(<nobr>char key, </nobr><nobr>int modifiers</nobr>)</div>Called when a key-up event is received.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the physical key that was released. Constants for this value are
+          defined in this interface with the KEYCODE prefix.</dd>
+<dt>modifiers</dt>
+<dd>the modifier keys pressed at when the event occurred. This
+          value is a combination of the bits defined by
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_SHIFT">KeyboardListener.MODIFIER_SHIFT</a>,
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_CTRL">KeyboardListener.MODIFIER_CTRL</a>, and
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_ALT">KeyboardListener.MODIFIER_ALT</a>.</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

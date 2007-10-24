@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            ToggleButton</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.Tree.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">ToggleButton</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class ToggleButton</h1>
+<div class="classSig">public 
+            class 
+            ToggleButton<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.CustomButton.html">CustomButton</a>
+</div>A <code>ToggleButton</code> is a stylish stateful button which allows the
+ user to toggle between <code>up</code> and <code>down</code> states.
+ 
+ <p>
+<img class="gallery" src="ToggleButton.png"></p>
+<h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-ToggleButton-up/down/up-hovering/down-hovering/up-disabled/down-disabled {.html-face}</li>
+</ul>
+<p>
+<h3>Example</h3>
+<pre class="code">public class ToggleButtonExample implements EntryPoint {
+  public void onModuleLoad() {
+    // Make a new button that does something when you click it.
+    final ToggleButton toggleButton = new ToggleButton("Up", "Down");
+    toggleButton.addClickListener(new ClickListener() {
+      public void onClick(Widget sender) {
+        if (toggleButton.isDown()) {
+          Window.alert("I have been toggled down");
+        } else {
+          Window.alert("I have been toggled up");
+        }
+      }
+    });
+
+    // In a real application, you would have to have css styles defined for
+    // gwt-ToggleButton-up,gwt-ToggleButton-up-hovering,gwt-ToggleButton-up-disabled,
+    // gwt-ToggleButton-down,.gwt-ToggleButton-down-hovering,.gwt-ToggleButton-down-disabled
+
+    // Add the ToggleButton to the root panel.
+    RootPanel.get().add(toggleButton);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton()">ToggleButton()</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(com.google.gwt.user.client.ui.Image)">ToggleButton(Image)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.ClickListener)">ToggleButton(Image, ClickListener)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.Image)">ToggleButton(Image, Image)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.ClickListener)">ToggleButton(Image, Image, ClickListener)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(java.lang.String)">ToggleButton(String)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(java.lang.String, com.google.gwt.user.client.ui.ClickListener)">ToggleButton(String, ClickListener)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#ToggleButton(java.lang.String, java.lang.String)">ToggleButton(String, String)</a></td><td>Constructor for <code>ToggleButton</code>. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#isDown()">isDown()</a></td><td>Is this button down? </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#onClick()">onClick()</a></td><td>Called when the user finishes clicking on this button. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ToggleButton.html#setDown(boolean)">setDown(boolean)</a></td><td>Sets whether this button is down. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="ToggleButton()"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>()</div>Constructor for <code>ToggleButton</code>.<hr>
+<a name="ToggleButton(com.google.gwt.user.client.ui.Image)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="com.google.gwt.user.client.ui.Image.html">Image</a> upImage</nobr>)</div>Constructor for <code>ToggleButton</code>. The supplied image is used to
+ construct the default face.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upImage</dt>
+<dd>image for the default face of the button</dd>
+</dl>
+<hr>
+<a name="ToggleButton(com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.ClickListener)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="com.google.gwt.user.client.ui.Image.html">Image</a> upImage, </nobr><nobr><a href="com.google.gwt.user.client.ui.ClickListener.html">ClickListener</a> listener</nobr>)</div>Constructor for <code>ToggleButton</code>. The supplied image is used to
+ construct the default face of the button.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upImage</dt>
+<dd>image for the default (up) face of the button</dd>
+<dt>listener</dt>
+<dd>the click listener</dd>
+</dl>
+<hr>
+<a name="ToggleButton(com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.Image)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="com.google.gwt.user.client.ui.Image.html">Image</a> upImage, </nobr><nobr><a href="com.google.gwt.user.client.ui.Image.html">Image</a> downImage</nobr>)</div>Constructor for <code>ToggleButton</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upImage</dt>
+<dd>image for the default(up) face of the button</dd>
+<dt>downImage</dt>
+<dd>image for the down face of the button</dd>
+</dl>
+<hr>
+<a name="ToggleButton(com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.Image, com.google.gwt.user.client.ui.ClickListener)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="com.google.gwt.user.client.ui.Image.html">Image</a> upImage, </nobr><nobr><a href="com.google.gwt.user.client.ui.Image.html">Image</a> downImage, </nobr><nobr><a href="com.google.gwt.user.client.ui.ClickListener.html">ClickListener</a> listener</nobr>)</div>Constructor for <code>ToggleButton</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upImage</dt>
+<dd>image for the default(up) face of the button</dd>
+<dt>downImage</dt>
+<dd>image for the down face of the button</dd>
+<dt>listener</dt>
+<dd>clickListener</dd>
+</dl>
+<hr>
+<a name="ToggleButton(java.lang.String)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="java.lang.String.html">String</a> upText</nobr>)</div>Constructor for <code>ToggleButton</code>. The supplied text is used to
+ construct the default face of the button.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upText</dt>
+<dd>the text for the default (up) face of the button.</dd>
+</dl>
+<hr>
+<a name="ToggleButton(java.lang.String, com.google.gwt.user.client.ui.ClickListener)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="java.lang.String.html">String</a> upText, </nobr><nobr><a href="com.google.gwt.user.client.ui.ClickListener.html">ClickListener</a> listener</nobr>)</div>Constructor for <code>ToggleButton</code>. The supplied text is used to
+ construct the default face of the button.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upText</dt>
+<dd>the text for the default (up) face of the button</dd>
+<dt>listener</dt>
+<dd>the click listener</dd>
+</dl>
+<hr>
+<a name="ToggleButton(java.lang.String, java.lang.String)"></a>
+<h3 class="api">ToggleButton</h3>
+<div class="memberSig">public <b> ToggleButton</b>(<nobr><a href="java.lang.String.html">String</a> upText, </nobr><nobr><a href="java.lang.String.html">String</a> downText</nobr>)</div>Constructor for <code>ToggleButton</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>upText</dt>
+<dd>the text for the default (up) face of the button</dd>
+<dt>downText</dt>
+<dd>the text for down face of the button</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="isDown()"></a>
+<h3 class="api">isDown</h3>
+<div class="memberSig">protected boolean<b> isDown</b>()</div>Is this button down?<h4 class="api">Return Value</h4>
+<code>true</code> if the button is down<hr>
+<a name="onClick()"></a>
+<h3 class="api">onClick</h3>
+<div class="memberSig">protected void<b> onClick</b>()</div>Called when the user finishes clicking on this button. The default behavior
+ is to fire the click event to listeners. Subclasses that override
+ <a href="com.google.gwt.user.client.ui.CustomButton.html#onClickStart()">onClickStart()</a> should override this method to restore the normal
+ widget display.<hr>
+<a name="setDown(boolean)"></a>
+<h3 class="api">setDown</h3>
+<div class="memberSig">protected void<b> setDown</b>(<nobr>boolean down</nobr>)</div>Sets whether this button is down.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>down</dt>
+<dd>
+<code>true</code> to press the button, <code>false</code>
+          otherwise</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

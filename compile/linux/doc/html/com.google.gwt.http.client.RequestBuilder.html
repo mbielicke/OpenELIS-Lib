@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            RequestBuilder</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.http.client.Request.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.http.client.RequestBuilder.Method.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.http.client.html">com.google.gwt.http.client</a></span> &gt;
+            <span class="selected item">RequestBuilder</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class RequestBuilder</h1>
+<div class="classSig">public 
+            class 
+            RequestBuilder<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+</div>Builder for constructing <a href="com.google.gwt.http.client.Request.html">Request</a> objects.
+ 
+ <p>
+ By default, this builder is restricted to building HTTP GET and POST requests
+ due to a bug in Safari's implementation of the <code>XmlHttpRequest</code>
+ object.
+ </p>
+<p>
+ Please see <a href="http://bugs.webkit.org/show_bug.cgi?id=3812">
+ http://bugs.webkit.org/show_bug.cgi?id=3812</a> for more details.
+ </p>
+<h3>Required Module</h3>
+ Modules that use this class should inherit
+ <code>com.google.gwt.http.HTTP</code>.
+ 
+ <pre class="code">&lt;!--                                                                        --&gt;
+&lt;!-- Copyright 2007 Google Inc.                                             --&gt;
+&lt;!-- Licensed under the Apache License, Version 2.0 (the "License"); you    --&gt;
+&lt;!-- may not use this file except in compliance with the License. You may   --&gt;
+&lt;!-- may obtain a copy of the License at                                    --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- http://www.apache.org/licenses/LICENSE-2.0                             --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- Unless required by applicable law or agreed to in writing, software    --&gt;
+&lt;!-- distributed under the License is distributed on an "AS IS" BASIS,      --&gt;
+&lt;!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        --&gt;
+&lt;!-- implied. License for the specific language governing permissions and   --&gt;
+&lt;!-- limitations under the License.                                         --&gt;
+
+&lt;module&gt;
+  &lt;!-- other inherited modules, such as com.google.gwt.user.User --&gt;
+  &lt;inherits name="com.google.gwt.http.HTTP"/&gt;
+  &lt;!-- additional module settings --&gt;
+&lt;/module&gt;
+</pre>
+<h2 class="api">Nested Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.Method.html">RequestBuilder.Method</a></td><td>HTTP request method constants. </td>
+</tr>
+</table>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>GET</td><td>Specifies that the HTTP GET method should be used. </td>
+</tr>
+<tr>
+<td>POST</td><td>Specifies that the HTTP POST method should be used. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#RequestBuilder(com.google.gwt.http.client.RequestBuilder.Method, java.lang.String)">RequestBuilder(RequestBuilder.Method, String)</a></td><td>Creates a builder using the parameters for configuration. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#RequestBuilder(java.lang.String, java.lang.String)">RequestBuilder(String, String)</a></td><td>Creates a builder using the parameters values for configuration. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#sendRequest(java.lang.String, com.google.gwt.http.client.RequestCallback)">sendRequest(String, RequestCallback)</a></td><td>Sends an HTTP request based on the current builder configuration. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#setHeader(java.lang.String, java.lang.String)">setHeader(String, String)</a></td><td>Sets a request header with the given name and value. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#setPassword(java.lang.String)">setPassword(String)</a></td><td>Sets the password to use in the request URL. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#setTimeoutMillis(int)">setTimeoutMillis(int)</a></td><td>Sets the number of milliseconds to wait for a request to complete. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html#setUser(java.lang.String)">setUser(String)</a></td><td>Sets the user name that will be used in the request URL. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">GET</h3>
+<div class="memberSig">public static final RequestBuilder.Method <b>GET</b>
+</div>Specifies that the HTTP GET method should be used.<hr>
+<h3 class="api">POST</h3>
+<div class="memberSig">public static final RequestBuilder.Method <b>POST</b>
+</div>Specifies that the HTTP POST method should be used.<h2 class="api">Constructor Detail</h2>
+<a name="RequestBuilder(com.google.gwt.http.client.RequestBuilder.Method, java.lang.String)"></a>
+<h3 class="api">RequestBuilder</h3>
+<div class="memberSig">public <b> RequestBuilder</b>(<nobr><a href="com.google.gwt.http.client.RequestBuilder.Method.html">RequestBuilder.Method</a> httpMethod, </nobr><nobr><a href="java.lang.String.html">String</a> url</nobr>)</div>Creates a builder using the parameters for configuration.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>httpMethod</dt>
+<dd>HTTP method to use for the request</dd>
+<dt>url</dt>
+<dd>URL that has already has already been encoded. Please see
+          <a href="com.google.gwt.http.client.URL.html#encode(java.lang.String)">URL.encode(String)</a> and
+          <a href="com.google.gwt.http.client.URL.html#encodeComponent(java.lang.String)">URL.encodeComponent(String)</a> for
+          how to do this.</dd>
+</dl>
+<hr>
+<a name="RequestBuilder(java.lang.String, java.lang.String)"></a>
+<h3 class="api">RequestBuilder</h3>
+<div class="memberSig">protected <b> RequestBuilder</b>(<nobr><a href="java.lang.String.html">String</a> httpMethod, </nobr><nobr><a href="java.lang.String.html">String</a> url</nobr>)</div>Creates a builder using the parameters values for configuration.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>httpMethod</dt>
+<dd>HTTP method to use for the request</dd>
+<dt>url</dt>
+<dd>URL that has already has already been URL encoded. Please see
+          <a href="com.google.gwt.http.client.URL.html#encode(java.lang.String)">URL.encode(String)</a> and
+          <a href="com.google.gwt.http.client.URL.html#encodeComponent(java.lang.String)">URL.encodeComponent(String)</a> for
+          how to do this.</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="sendRequest(java.lang.String, com.google.gwt.http.client.RequestCallback)"></a>
+<h3 class="api">sendRequest</h3>
+<div class="memberSig">public <a href="com.google.gwt.http.client.Request.html">Request</a><b> sendRequest</b>(<nobr><a href="java.lang.String.html">String</a> requestData, </nobr><nobr><a href="com.google.gwt.http.client.RequestCallback.html">RequestCallback</a> callback</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.http.client.RequestException.html">RequestException</a>
+</div>Sends an HTTP request based on the current builder configuration. If no
+ request headers have been set, the header "Content-Type" will be used with
+ a value of "text/plain; charset=utf-8".<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>requestData</dt>
+<dd>the data to send as part of the request</dd>
+<dt>callback</dt>
+<dd>the response handler to be notified when the request fails
+          or completes</dd>
+</dl>
+<h4 class="api">Return Value</h4>a <a href="com.google.gwt.http.client.Request.html">Request</a> object that can be used to track the request<hr>
+<a name="setHeader(java.lang.String, java.lang.String)"></a>
+<h3 class="api">setHeader</h3>
+<div class="memberSig">public void<b> setHeader</b>(<nobr><a href="java.lang.String.html">String</a> header, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Sets a request header with the given name and value. If a header with the
+ specified name has already been set then the new value overwrites the
+ current value.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>header</dt>
+<dd>the name of the header</dd>
+<dt>value</dt>
+<dd>the value of the header</dd>
+</dl>
+<hr>
+<a name="setPassword(java.lang.String)"></a>
+<h3 class="api">setPassword</h3>
+<div class="memberSig">public void<b> setPassword</b>(<nobr><a href="java.lang.String.html">String</a> password</nobr>)</div>Sets the password to use in the request URL. This is ignored if there is no
+ user specified.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>password</dt>
+<dd>password to use in the request URL</dd>
+</dl>
+<hr>
+<a name="setTimeoutMillis(int)"></a>
+<h3 class="api">setTimeoutMillis</h3>
+<div class="memberSig">public void<b> setTimeoutMillis</b>(<nobr>int timeoutMillis</nobr>)</div>Sets the number of milliseconds to wait for a request to complete. Should
+ the request timeout, the
+ <a href="com.google.gwt.http.client.RequestCallback.html#onError(com.google.gwt.http.client.Request, java.lang.Throwable)">RequestCallback.onError(Request, Throwable)</a>
+ method will be called on the callback instance given to the
+ <a href="com.google.gwt.http.client.RequestBuilder.html#sendRequest(java.lang.String, com.google.gwt.http.client.RequestCallback)">RequestBuilder.sendRequest(String, RequestCallback)</a>
+ method. The callback method will receive an instance of the
+ <a href="com.google.gwt.http.client.RequestTimeoutException.html">RequestTimeoutException</a> class as its
+ <a href="java.lang.Throwable.html">Throwable</a> argument.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>timeoutMillis</dt>
+<dd>number of milliseconds to wait before canceling the
+          request, a value of zero disables timeouts</dd>
+</dl>
+<hr>
+<a name="setUser(java.lang.String)"></a>
+<h3 class="api">setUser</h3>
+<div class="memberSig">public void<b> setUser</b>(<nobr><a href="java.lang.String.html">String</a> user</nobr>)</div>Sets the user name that will be used in the request URL.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>user</dt>
+<dd>user name to use</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Modules</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ProjectStructure.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.ModuleXml.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.html">Fundamentals</a></span> &gt;
+						<span class="selected item">Modules</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Modules</h1>Individual units of GWT configuration are XML files called <i>modules</i>.
+ A module bundles together all the configuration settings that your GWT
+ project needs, namely
+ 
+ <ul>
+<li>Inherited modules</li>
+<li>An entry point application class name; these are optional, although
+ any module referred to in HTML must have at least one entry-point class
+ specified</li>
+<li>Source path entries</li>
+<li>Public path entries</li>
+<li>Deferred binding rules, including property providers and class
+ generators</li>
+</ul>
+ 
+ Modules may appear in any package in your classpath, although it is
+ strongly recommended that they appear in the root package of a
+ <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ProjectStructure.html">standard project layout</a>.
+ 
+ <h2>Entry-Point Classes</h2>
+ A module entry-point is any class that is assignable to
+ <a href="com.google.gwt.core.client.EntryPoint.html">EntryPoint</a> and that can be constructed
+ without parameters. When a module is loaded, every entry point class is
+ instantiated and its
+ <a href="com.google.gwt.core.client.EntryPoint.html#onModuleLoad()">EntryPoint.onModuleLoad()</a> method gets
+ called.
+ 
+ <h2>Source Path</h2>
+ Modules can specify which subpackages contain translatable <i>source</i>,
+ causing the named package and its subpackages to be added to the
+ <i>source path</i>. Only files found on the source path are candidates
+ to be translated into JavaScript, making it possible to mix
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ClientSide.html">client-side</a> and
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ServerSide.html">server-side</a> code together
+ in the same classpath without conflict.
+ 
+ <p>
+ When module inherit other modules, their source paths are combined so
+ that each module will have access to the translatable source it requires.
+ </p>
+<h2>Public Path</h2>
+ Modules can specify which subpackages are <i>public</i>, causing the
+ named package and its subpackages to be added to the <i>public path</i>.
+ When you compile your application into JavaScript, all the files that can
+ be found on your public path are copied to the module's output directory.
+ The net effect is that user-visible URLs need not include a full package
+ name.
+ 
+ <p>
+ When module inherit other modules, their public paths are combined so
+ that each module will have access to the static resources it expects.
+ </p>
+<h2 xmlns="http://www.w3.org/1999/xhtml">Specifics</h2>
+<ul class="childToc">
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.ModuleXml.html">Module XML Format</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">Modules are defined in XML and placed into your
+           <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ProjectStructure.html">project's package hierarchy</a>.</div>
+</li>
+<li xmlns="http://www.w3.org/1999/xhtml">
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.AutomaticResourceInjection.html">Automatic Resource Inclusion</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">Modules can contain references to external JavaScript and CSS
+           files, causing them to be automatically loaded when the
+           module itself is loaded.</div>
+</li>
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.PublicPackageFiltering.html">Filtering Public Packages</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">Filter files into and out of your public path to avoid
+           publishing files unintentionally.</div>
+</li>
+</ul>
+</div>
+<div id="footer">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

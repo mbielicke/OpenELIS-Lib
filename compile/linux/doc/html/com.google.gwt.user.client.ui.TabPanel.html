@@ -1,0 +1,444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            TabPanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.TabListenerCollection.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.TextArea.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">TabPanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class TabPanel</h1>
+<div class="classSig">public 
+            class 
+            TabPanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.Composite.html">Composite</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.TabListener.html">TabListener</a>, <a href="com.google.gwt.user.client.ui.SourcesTabEvents.html">SourcesTabEvents</a>, <a href="com.google.gwt.user.client.ui.HasWidgets.html">HasWidgets</a>, <a href="com.google.gwt.user.client.ui.IndexedPanel.html">IndexedPanel</a>
+</div>A panel that represents a tabbed set of pages, each of which contains another
+ widget. Its child widgets are shown as the user selects the various tabs
+ associated with them. The tabs can contain arbitrary HTML.
+ 
+ <p>
+<img class="gallery" src="TabPanel.png"></p>
+<p>
+ Note that this widget is not a panel per se, but rather a
+ <a href="com.google.gwt.user.client.ui.Composite.html">Composite</a> that aggregates a
+ <a href="com.google.gwt.user.client.ui.TabBar.html">TabBar</a> and a
+ <a href="com.google.gwt.user.client.ui.DeckPanel.html">DeckPanel</a>. It does, however, implement
+ <a href="com.google.gwt.user.client.ui.HasWidgets.html">HasWidgets</a>.
+ </p>
+<h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-TabPanel { the tab panel itself }</li>
+<li>.gwt-TabPanelBottom { the bottom section of the tab panel (the deck
+ containing the widget) }</li>
+</ul>
+<p>
+<h3>Example</h3>
+<pre class="code">public class TabPanelExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Create a tab panel with three tabs, each of which displays a different
+    // piece of text.
+    TabPanel tp = new TabPanel();
+    tp.add(new HTML("Foo"), "foo");
+    tp.add(new HTML("Bar"), "bar");
+    tp.add(new HTML("Baz"), "baz");
+
+    // Show the 'bar' tab initially.
+    tp.selectTab(1);
+
+    // Add it to the root panel.
+    RootPanel.get().add(tp);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#TabPanel()">TabPanel()</a></td><td>Creates an empty tab panel. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#add(com.google.gwt.user.client.ui.Widget)">add(Widget)</a></td><td>Adds a child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#add(com.google.gwt.user.client.ui.Widget, java.lang.String)">add(Widget, String)</a></td><td>Adds a widget to the tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#add(com.google.gwt.user.client.ui.Widget, java.lang.String, boolean)">add(Widget, String, boolean)</a></td><td>Adds a widget to the tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.Widget)">add(Widget, Widget)</a></td><td>Adds a widget to the tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#addTabListener(com.google.gwt.user.client.ui.TabListener)">addTabListener(TabListener)</a></td><td>Adds a listener interface to receive click events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#clear()">clear()</a></td><td>Removes all child widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#getDeckPanel()">getDeckPanel()</a></td><td>Gets the deck panel within this tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#getTabBar()">getTabBar()</a></td><td>Gets the tab bar within this tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#getWidget(int)">getWidget(int)</a></td><td>Gets the child widget at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#getWidgetCount()">getWidgetCount()</a></td><td>Gets the number of child widgets in this panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#getWidgetIndex(com.google.gwt.user.client.ui.Widget)">getWidgetIndex(Widget)</a></td><td>Gets the index of the specified child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#insert(com.google.gwt.user.client.ui.Widget, java.lang.String, boolean, int)">insert(Widget, String, boolean, int)</a></td><td>Inserts a widget into the tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.Widget, int)">insert(Widget, Widget, int)</a></td><td>Inserts a widget into the tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#insert(com.google.gwt.user.client.ui.Widget, java.lang.String, int)">insert(Widget, String, int)</a></td><td>Inserts a widget into the tab panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#iterator()">iterator()</a></td><td>Gets an iterator for the contained widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)">onBeforeTabSelected(SourcesTabEvents, int)</a></td><td>Fired just before a tab is selected. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)">onTabSelected(SourcesTabEvents, int)</a></td><td>Fired when a tab is selected. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#remove(int)">remove(int)</a></td><td>Removes the widget at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a></td><td>Removes the given widget, and its associated tab. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#removeTabListener(com.google.gwt.user.client.ui.TabListener)">removeTabListener(TabListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TabPanel.html#selectTab(int)">selectTab(int)</a></td><td>Programmatically selects the specified tab. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="TabPanel()"></a>
+<h3 class="api">TabPanel</h3>
+<div class="memberSig">public <b> TabPanel</b>()</div>Creates an empty tab panel.<h2 class="api">Method Detail</h2>
+<a name="add(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Adds a child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+</dl>
+<hr>
+<a name="add(com.google.gwt.user.client.ui.Widget, java.lang.String)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="java.lang.String.html">String</a> tabText</nobr>)</div>Adds a widget to the tab panel. If the Widget is already attached to the
+ TabPanel, it will be moved to the right-most index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+<dt>tabText</dt>
+<dd>the text to be shown on its tab</dd>
+</dl>
+<hr>
+<a name="add(com.google.gwt.user.client.ui.Widget, java.lang.String, boolean)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="java.lang.String.html">String</a> tabText, </nobr><nobr>boolean asHTML</nobr>)</div>Adds a widget to the tab panel. If the Widget is already attached to the
+ TabPanel, it will be moved to the right-most index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+<dt>tabText</dt>
+<dd>the text to be shown on its tab</dd>
+<dt>asHTML</dt>
+<dd>
+<code>true</code> to treat the specified text as HTML</dd>
+</dl>
+<hr>
+<a name="add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> tabWidget</nobr>)</div>Adds a widget to the tab panel. If the Widget is already attached to the
+ TabPanel, it will be moved to the right-most index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+<dt>tabWidget</dt>
+<dd>the widget to be shown in the tab</dd>
+</dl>
+<hr>
+<a name="addTabListener(com.google.gwt.user.client.ui.TabListener)"></a>
+<h3 class="api">addTabListener</h3>
+<div class="memberSig">public void<b> addTabListener</b>(<nobr><a href="com.google.gwt.user.client.ui.TabListener.html">TabListener</a> listener</nobr>)</div>Adds a listener interface to receive click events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="clear()"></a>
+<h3 class="api">clear</h3>
+<div class="memberSig">public void<b> clear</b>()</div>Removes all child widgets.<hr>
+<a name="getDeckPanel()"></a>
+<h3 class="api">getDeckPanel</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.DeckPanel.html">DeckPanel</a><b> getDeckPanel</b>()</div>Gets the deck panel within this tab panel. Adding or removing Widgets from
+ the DeckPanel is not supported and will throw
+ UnsupportedOperationExceptions.<h4 class="api">Return Value</h4>the deck panel<hr>
+<a name="getTabBar()"></a>
+<h3 class="api">getTabBar</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.TabBar.html">TabBar</a><b> getTabBar</b>()</div>Gets the tab bar within this tab panel. Adding or removing tabs from from
+ the TabBar is not supported and will throw UnsupportedOperationExceptions.<h4 class="api">Return Value</h4>the tab bar<hr>
+<a name="getWidget(int)"></a>
+<h3 class="api">getWidget</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a><b> getWidget</b>(<nobr>int index</nobr>)</div>Gets the child widget at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the child widget's index</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child widget<hr>
+<a name="getWidgetCount()"></a>
+<h3 class="api">getWidgetCount</h3>
+<div class="memberSig">public int<b> getWidgetCount</b>()</div>Gets the number of child widgets in this panel.<h4 class="api">Return Value</h4>the number of children<hr>
+<a name="getWidgetIndex(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">getWidgetIndex</h3>
+<div class="memberSig">public int<b> getWidgetIndex</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child</nobr>)</div>Gets the index of the specified child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>the widget to be found</dd>
+</dl>
+<h4 class="api">Return Value</h4>the widget's index, or <code>-1</code> if it is not a child of
+         this panel<hr>
+<a name="insert(com.google.gwt.user.client.ui.Widget, java.lang.String, boolean, int)"></a>
+<h3 class="api">insert</h3>
+<div class="memberSig">public void<b> insert</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget, </nobr><nobr><a href="java.lang.String.html">String</a> tabText, </nobr><nobr>boolean asHTML, </nobr><nobr>int beforeIndex</nobr>)</div>Inserts a widget into the tab panel. If the Widget is already attached to
+ the TabPanel, it will be moved to the requested index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be inserted</dd>
+<dt>tabText</dt>
+<dd>the text to be shown on its tab</dd>
+<dt>asHTML</dt>
+<dd>
+<code>true</code> to treat the specified text as HTML</dd>
+<dt>beforeIndex</dt>
+<dd>the index before which it will be inserted</dd>
+</dl>
+<hr>
+<a name="insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.Widget, int)"></a>
+<h3 class="api">insert</h3>
+<div class="memberSig">public void<b> insert</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget, </nobr><nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> tabWidget, </nobr><nobr>int beforeIndex</nobr>)</div>Inserts a widget into the tab panel. If the Widget is already attached to
+ the TabPanel, it will be moved to the requested index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be inserted.</dd>
+<dt>tabWidget</dt>
+<dd>the widget to be shown on its tab.</dd>
+<dt>beforeIndex</dt>
+<dd>the index before which it will be inserted.</dd>
+</dl>
+<hr>
+<a name="insert(com.google.gwt.user.client.ui.Widget, java.lang.String, int)"></a>
+<h3 class="api">insert</h3>
+<div class="memberSig">public void<b> insert</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget, </nobr><nobr><a href="java.lang.String.html">String</a> tabText, </nobr><nobr>int beforeIndex</nobr>)</div>Inserts a widget into the tab panel. If the Widget is already attached to
+ the TabPanel, it will be moved to the requested index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be inserted</dd>
+<dt>tabText</dt>
+<dd>the text to be shown on its tab</dd>
+<dt>beforeIndex</dt>
+<dd>the index before which it will be inserted</dd>
+</dl>
+<hr>
+<a name="iterator()"></a>
+<h3 class="api">iterator</h3>
+<div class="memberSig">public <a href="java.util.Iterator.html">Iterator</a><b> iterator</b>()</div>Gets an iterator for the contained widgets. This iterator is required to
+ implement <a href="java.util.Iterator.html#remove()">Iterator.remove()</a>.<hr>
+<a name="onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)"></a>
+<h3 class="api">onBeforeTabSelected</h3>
+<div class="memberSig">public boolean<b> onBeforeTabSelected</b>(<nobr><a href="com.google.gwt.user.client.ui.SourcesTabEvents.html">SourcesTabEvents</a> sender, </nobr><nobr>int tabIndex</nobr>)</div>Fired just before a tab is selected.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>sender</dt>
+<dd>the <a href="com.google.gwt.user.client.ui.TabBar.html">TabBar</a> or <a href="com.google.gwt.user.client.ui.TabPanel.html">TabPanel</a> whose tab was
+          selected.</dd>
+<dt>tabIndex</dt>
+<dd>the index of the tab about to be selected</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> to disallow the selection. If any listener
+         returns false, then the selection will be disallowed.<hr>
+<a name="onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)"></a>
+<h3 class="api">onTabSelected</h3>
+<div class="memberSig">public void<b> onTabSelected</b>(<nobr><a href="com.google.gwt.user.client.ui.SourcesTabEvents.html">SourcesTabEvents</a> sender, </nobr><nobr>int tabIndex</nobr>)</div>Fired when a tab is selected.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>sender</dt>
+<dd>the <a href="com.google.gwt.user.client.ui.TabBar.html">TabBar</a> or <a href="com.google.gwt.user.client.ui.TabPanel.html">TabPanel</a> whose tab was selected</dd>
+<dt>tabIndex</dt>
+<dd>the index of the tab that was selected</dd>
+</dl>
+<hr>
+<a name="remove(int)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr>int index</nobr>)</div>Removes the widget at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the widget to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> if the widget is not present<hr>
+<a name="remove(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget</nobr>)</div>Removes the given widget, and its associated tab.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be removed</dd>
+</dl>
+<hr>
+<a name="removeTabListener(com.google.gwt.user.client.ui.TabListener)"></a>
+<h3 class="api">removeTabListener</h3>
+<div class="memberSig">public void<b> removeTabListener</b>(<nobr><a href="com.google.gwt.user.client.ui.TabListener.html">TabListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="selectTab(int)"></a>
+<h3 class="api">selectTab</h3>
+<div class="memberSig">public void<b> selectTab</b>(<nobr>int index</nobr>)</div>Programmatically selects the specified tab.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the tab to be selected</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

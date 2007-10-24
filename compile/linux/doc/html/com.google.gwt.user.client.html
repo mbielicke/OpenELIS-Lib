@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            com.google.gwt.user.client</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.junit.client.Range.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.CommandCanceledException.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="selected item">com.google.gwt.user.client</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Package com.google.gwt.user.client</h1>Fundamental user-interface classes used in client-side GWT code.
+
+This package contains classes representing fundamental concepts, such as browser
+history, the browser window, DOM manipulation, and event handling.  It also
+contains convenience classes such as Timer and Random.<h2 class="api">Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a xmlns="" href="com.google.gwt.user.client.CommandCanceledException.html">CommandCanceledException</a></td><td>Exception reported to the current
+ <a href="com.google.gwt.core.client.GWT.UncaughtExceptionHandler.html">UncaughtExceptionHandler</a> when a
+ deferred <a href="com.google.gwt.user.client.Command.html">Command</a> is canceled as a result of a slow script warning. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Cookies.html">Cookies</a></td><td>Provides access to browser cookies stored on the client. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DeferredCommand.html">DeferredCommand</a></td><td>This class allows you to execute code after all currently pending event
+ handlers have completed, using the <a href="com.google.gwt.user.client.DeferredCommand.html#addCommand(com.google.gwt.user.client.Command)">addCommand(Command)</a> or
+ <a href="com.google.gwt.user.client.DeferredCommand.html#addCommand(com.google.gwt.user.client.IncrementalCommand)">addCommand(IncrementalCommand)</a> methods. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.DOM.html">DOM</a></td><td>This class provides a set of static methods that allow you to manipulate the
+ browser's Document Object Model (DOM). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Element.html">Element</a></td><td>An opaque handle to a native DOM Element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Event.html">Event</a></td><td>An opaque handle to a native DOM Event. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.History.html">History</a></td><td>This class allows you to interact with the browser's history stack. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.HTTPRequest.html">HTTPRequest</a></td><td>This class allows you to make asynchronous HTTP requests to the originating
+ server. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.IncrementalCommandCanceledException.html">IncrementalCommandCanceledException</a></td><td>Exception reported to the current
+ <a href="com.google.gwt.core.client.GWT.UncaughtExceptionHandler.html">UncaughtExceptionHandler</a> when a
+ deferred <a href="com.google.gwt.user.client.IncrementalCommand.html">IncrementalCommand</a> is canceled as a result of a slow script
+ warning. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Random.html">Random</a></td><td>This class can be used as a substitute for Random. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Timer.html">Timer</a></td><td>A simplified, browser-safe timer class. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.Window.html">Window</a></td><td>This class provides access to the browser window's methods, properties, and
+ events. </td>
+</tr>
+</table>
+<h2 class="api">Interfaces</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.Command.html">Command</a></td><td>Encapsulates an action for later execution, often from a different context. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.EventListener.html">EventListener</a></td><td>Receives low-level browser events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.EventPreview.html">EventPreview</a></td><td>A listener interface for previewing browser events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.HistoryListener.html">HistoryListener</a></td><td>Implement this interface to receive notification of changes to the browser
+ history state. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.IncrementalCommand.html">IncrementalCommand</a></td><td>An <code>IncrementalCommand</code> is a command that is broken into one or
+ more substeps, each substep brings the whole command nearer to completion. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ResponseTextHandler.html">ResponseTextHandler</a></td><td>Implement this interface to receive HTTP completion events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.WindowCloseListener.html">WindowCloseListener</a></td><td>Implement this interface to receive closing events from the browser window. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.WindowResizeListener.html">WindowResizeListener</a></td><td>Implement this interface to receive resize events from the browser window. </td>
+</tr>
+</table>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

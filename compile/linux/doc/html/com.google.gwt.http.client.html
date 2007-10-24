@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            com.google.gwt.http.client</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.core.ext.typeinfo.HasMetaData.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.http.client.Header.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="selected item">com.google.gwt.http.client</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Package com.google.gwt.http.client</h1>Provides the client-side classes and interfaces for making HTTP requests and 
+processing the associated responses. 
+
+<p>
+Most applications will be interested in the <a xmlns="" href="com.google.gwt.http.client.Request.html">Request</a>, <a href="com.google.gwt.http.client.RequestBuilder.html">RequestBuilder</a>, 
+<a href="com.google.gwt.http.client.RequestCallback.html">RequestCallback</a> and <a href="com.google.gwt.http.client.Response.html">Response</a> classes.
+</p>
+<h2>Caveats</h2>
+<h3>Same-Origin Security Policy</h3>
+Modern web browsers restrict client-side scripts from accessing items outside
+of their source origin.  This means that a script loaded form <code>www.foo.com</code> cannot access
+content from <code>www.bar.com</code>.  For more details plesae see, <a href="http://en.wikipedia.org/wiki/Same_origin_policy">Same-Origin Security
+Policy</a>.
+
+<h3>Pending Request Limit</h3>
+Modern web browsers are limited to having only two HTTP requests outstanding at
+any one time.  If your server experiences and error that prevents it from sending 
+a response, it can tie up your outstanding requests.  If you are concerned about 
+this, you can always set timeouts for the request via <a href="com.google.gwt.http.client.RequestBuilder.html#setTimeoutMillis(int)">RequestBuilder.setTimeoutMillis(int)</a>.
+
+<h3>Required Module</h3>
+Modules that use the classes and interfaces in this package should inherit
+the <code>com.google.gwt.http.HTTP</code> module.
+
+<pre class="code">&lt;!--                                                                        --&gt;
+&lt;!-- Copyright 2007 Google Inc.                                             --&gt;
+&lt;!-- Licensed under the Apache License, Version 2.0 (the "License"); you    --&gt;
+&lt;!-- may not use this file except in compliance with the License. You may   --&gt;
+&lt;!-- may obtain a copy of the License at                                    --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- http://www.apache.org/licenses/LICENSE-2.0                             --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- Unless required by applicable law or agreed to in writing, software    --&gt;
+&lt;!-- distributed under the License is distributed on an "AS IS" BASIS,      --&gt;
+&lt;!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        --&gt;
+&lt;!-- implied. License for the specific language governing permissions and   --&gt;
+&lt;!-- limitations under the License.                                         --&gt;
+
+&lt;module&gt;
+  &lt;!-- other inherited modules, such as com.google.gwt.user.User --&gt;
+  &lt;inherits name="com.google.gwt.http.HTTP"/&gt;
+  &lt;!-- additional module settings --&gt;
+&lt;/module&gt;
+</pre>
+<h2>Quick Howto's</h2>
+<h3>How should I write a RequestCallback handler class?</h3>
+The following code shows how a <a href="com.google.gwt.http.client.RequestCallback.html">RequestCallback</a> instance should be written.
+<pre class="code">public class RequestCallbackExample implements RequestCallback {
+
+  private static final int STATUS_CODE_OK = 200;
+
+  public void onError(Request request, Throwable exception) {
+    if (exception instanceof RequestTimeoutException) {
+      // handle a request timeout
+    } else {
+      // handle other request errors
+    }
+  }
+
+  public void onResponseReceived(Request request, Response response) {
+    if (STATUS_CODE_OK == response.getStatusCode()) {
+      // handle OK response from the server 
+    } else {
+      // handle non-OK response from the server
+    }
+  }
+}
+</pre>
+<h3>How do I make a GET request?</h3>
+The following example demonstrates how to perform an HTTP GET request.
+<pre class="code">public class GetExample implements EntryPoint {
+  public static final int STATUS_CODE_OK = 200;
+  
+  public static void doGet(String url) {
+    RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+
+    try {
+      Request response = builder.sendRequest(null, new RequestCallback() {
+        public void onError(Request request, Throwable exception) {
+          // Code omitted for clarity
+        }
+
+        public void onResponseReceived(Request request, Response response) {
+          // Code omitted for clarity
+        }
+      });
+    } catch (RequestException e) {
+      // Code omitted for clarity
+    }
+  }
+
+  public void onModuleLoad() {
+    doGet("/");
+  }
+}
+</pre>
+<h3>How do I make a POST request?</h3>
+The following example demonstrates how to perform an HTTP POST request.
+<pre class="code">public class PostExample {
+  public static void doPost(String url, String postData) {
+    RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
+
+    try {
+      Request response = builder.sendRequest(postData, new RequestCallback() {
+
+        public void onError(Request request, Throwable exception) {
+          // code omitted for clarity
+        }
+
+        public void onResponseReceived(Request request, Response response) {
+          // code omitted for clarity
+        }
+      });
+    } catch (RequestException e) {
+      Window.alert("Failed to send the request: " + e.getMessage());
+    }
+  }
+
+  public void onModuleLoad() {
+    doPost("/", "Hello World!");
+  }
+}
+</pre>
+<h3>How do I use request timeouts?</h3>
+The following example demonstrates how to use the timeout feature.
+<pre class="code">public class TimeoutExample implements EntryPoint {
+  public static void doGetWithTimeout(String url) {
+    RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+
+    try {
+      /*
+       * wait 2000 milliseconds for the request to complete
+       */
+      builder.setTimeoutMillis(2000);
+      
+      Request response = builder.sendRequest(null, new RequestCallback() {
+        public void onError(Request request, Throwable exception) {
+          if (exception instanceof RequestTimeoutException) {
+            // handle a request timeout
+          } else {
+            // handle other request errors
+          }
+        }
+
+        public void onResponseReceived(Request request, Response response) {
+          // code omitted for clarity
+        }
+      });
+    } catch (RequestException e) {
+      Window.alert("Failed to send the request: " + e.getMessage());
+    }
+  }
+
+  public void onModuleLoad() {
+    doGetWithTimeout("/");
+  }
+}
+</pre>
+<h3>How do I construct a string for use in a query or POST body?</h3>
+The following example demonstrates how to build a x-www-form-urlencoded string that can be used as a query string or as the body of a POST request.
+<pre class="code">public class QueryAndFormDataExample {
+  
+  public static interface Entry {
+    String getName();
+    String getValue();
+  }
+
+  public static String buildQueryString(Entry[] queryEntries) {
+    StringBuffer sb = new StringBuffer();
+
+    for (int i = 0, n = queryEntries.length; i &lt; n; ++i) {
+      Entry queryEntry = queryEntries[i];
+
+      if (i &gt; 0) {
+        sb.append("&amp;");
+      }
+
+      // encode the characters in the name
+      String encodedName = URL.encodeComponent(queryEntry.getName());
+      sb.append(encodedName);
+      
+      sb.append("=");
+    
+      // encode the characters in the value
+      String encodedValue = URL.encodeComponent(queryEntry.getValue());
+      sb.append(encodedValue);
+    }
+    
+    return sb.toString();
+  }
+}
+</pre>
+<h3>How can I make a <a href="com.google.gwt.http.client.RequestBuilder.html">RequestBuilder</a> send a request other than GET or POST?</h3>
+The following example demonstrates how to allow an HTTP request other than a GET or a POST to be made.  <em>Beware: if you plan on supporting Safari, you cannot use this scheme.</em>
+<pre class="code">public class RequestBuilderForAnyHTTPMethodTypeExample extends RequestBuilder {
+  
+  /**
+   * Constructor that allows a developer to override the HTTP method 
+   * restrictions imposed by the RequestBuilder class.  Note if you override the 
+   * RequestBuilder's HTTP method restrictions in this manner, your application 
+   * may not work correctly on Safari browsers.
+   * 
+   * @param httpMethod any non-null, non-empty string is considered valid
+   * @param url any non-null, non-empty string is considered valid
+   *
+   * @throws IllegalArgumentException if httpMethod or url are empty
+   * @throws NullPointerException if httpMethod or url are null
+   */
+  public RequestBuilderForAnyHTTPMethodTypeExample(String httpMethod, String url) {
+    super(httpMethod, url);
+  }
+}
+</pre>
+<h2 class="api">Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.http.client.Header.html">Header</a></td><td>Class for describing an HTTP header. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.Request.html">Request</a></td><td>An HTTP request that is waiting for a response. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestBuilder.html">RequestBuilder</a></td><td>Builder for constructing <a href="com.google.gwt.http.client.Request.html">Request</a> objects. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestException.html">RequestException</a></td><td>RequestException is the superclass for the HTTP request related exceptions. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestPermissionException.html">RequestPermissionException</a></td><td>Exception thrown when the <a href="com.google.gwt.http.client.RequestBuilder.html">RequestBuilder</a> attempts to make a request
+ to a URL which violates the <a href="http://en.wikipedia.org/wiki/Same_origin_policy">Same-Origin Security
+ Policy</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.RequestTimeoutException.html">RequestTimeoutException</a></td><td>Thrown to indicate that an HTTP request has timed out. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.Response.html">Response</a></td><td>Wrapper which provides access to the components of an HTTP response. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.http.client.URL.html">URL</a></td><td>Utility class for the encoding and decoding URLs in their entirety or by
+ their individual components. </td>
+</tr>
+</table>
+<h2 class="api">Interfaces</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.http.client.RequestCallback.html">RequestCallback</a></td><td>The primary interface a caller must implement to receive a response to a
+ <a href="com.google.gwt.http.client.Request.html">Request</a>. </td>
+</tr>
+</table>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

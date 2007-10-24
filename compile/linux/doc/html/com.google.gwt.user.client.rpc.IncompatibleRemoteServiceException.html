@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            IncompatibleRemoteServiceException</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.rpc.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.rpc.InvocationException.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.rpc.html">com.google.gwt.user.client.rpc</a></span> &gt;
+            <span class="selected item">IncompatibleRemoteServiceException</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class IncompatibleRemoteServiceException</h1>
+<div class="classSig">public final 
+            class 
+            IncompatibleRemoteServiceException<br>extends
+                <a xmlns="" href="java.lang.RuntimeException.html">RuntimeException</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.rpc.IsSerializable.html">IsSerializable</a>
+</div>Exception that will be passed to the
+ <a href="com.google.gwt.user.client.rpc.AsyncCallback.html#onFailure(java.lang.Throwable)">AsyncCallback.onFailure(Throwable)</a> method when an incompatibility is
+ detected between a <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> client and its corresponding
+ <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> server.
+ 
+ <p>
+ The correct response to receiving an instance of this exception in the
+ <a href="com.google.gwt.user.client.rpc.AsyncCallback.html#onFailure(java.lang.Throwable)">AsyncCallback.onFailure(Throwable)</a> method is to get the application
+ into a state where a browser refresh can be done.
+ </p>
+<p>
+ This exception can be caused by the following problems:
+ <ul>
+<li>The requested <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> cannot be located via
+ <a href="java.lang.Class.html">Class.forName(String)</a> on the server.</li>
+<li>The requested <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> interface is not implemented by the
+ <a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html">RemoteServiceServlet</a>
+ instance which is configured to process the request.</li>
+<li>The requested service method is not defined or inherited by the
+ requested <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> interface.</li>
+<li>One of the types used in the <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a> method invocation has
+ had fields added or removed.</li>
+<li>The client code receives a type from the server which it cannot
+ deserialize.</li>
+</ul>
+</p>
+<p>
+ Note that on the client, the <a href="java.lang.Throwable.html#getCause()">getCause()</a> always return
+ <code>null</code>.
+ </p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException.html#IncompatibleRemoteServiceException()">IncompatibleRemoteServiceException()</a></td><td>Constructor used by RPC serialization. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException.html#IncompatibleRemoteServiceException(java.lang.String)">IncompatibleRemoteServiceException(String)</a></td><td>Constructs an instance with the specified message. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException.html#IncompatibleRemoteServiceException(java.lang.String, java.lang.Throwable)">IncompatibleRemoteServiceException(String, Throwable)</a></td><td>Constructs an instance with the specified message and cause. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="IncompatibleRemoteServiceException()"></a>
+<h3 class="api">IncompatibleRemoteServiceException</h3>
+<div class="memberSig">public <b> IncompatibleRemoteServiceException</b>()</div>Constructor used by RPC serialization. Note that the client side code will
+ always get a generic error message.<hr>
+<a name="IncompatibleRemoteServiceException(java.lang.String)"></a>
+<h3 class="api">IncompatibleRemoteServiceException</h3>
+<div class="memberSig">public <b> IncompatibleRemoteServiceException</b>(<nobr><a href="java.lang.String.html">String</a> msg</nobr>)</div>Constructs an instance with the specified message.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>msg</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="IncompatibleRemoteServiceException(java.lang.String, java.lang.Throwable)"></a>
+<h3 class="api">IncompatibleRemoteServiceException</h3>
+<div class="memberSig">public <b> IncompatibleRemoteServiceException</b>(<nobr><a href="java.lang.String.html">String</a> msg, </nobr><nobr><a href="java.lang.Throwable.html">Throwable</a> cause</nobr>)</div>Constructs an instance with the specified message and cause.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>msg</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>cause</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

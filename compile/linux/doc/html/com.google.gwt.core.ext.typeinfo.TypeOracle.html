@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            TypeOracle</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.core.ext.typeinfo.ParseException.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.core.ext.typeinfo.TypeOracleException.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.core.ext.typeinfo.html">com.google.gwt.core.ext.typeinfo</a></span> &gt;
+            <span class="selected item">TypeOracle</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class TypeOracle</h1>
+<div class="classSig">public 
+            class 
+            TypeOracle<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+</div>Provides type-related information about a set of source files, including doc
+ comment metadata.
+ <p>
+ All type objects exposed, such as
+ <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a> and others, have a stable
+ identity relative to this type oracle instance. Consequently, you can
+ reliably compare object identity of any objects this type oracle produces.
+ For example, the following code relies on this stable identity guarantee:
+ 
+ <pre>
+ JClassType o = typeOracle.getJavaLangObject();
+ JClassType s1 = typeOracle.getType("java.lang.String");
+ JClassType s2 = typeOracle.getType("java.lang.String");
+ assert(s1 == s2);
+ assert(o == s1.getSuperclass());
+ JParameterizedType ls = typeOracle.parse("java.util.List&lt;java.lang.String&gt;");
+ assert(ls.getTypeArgs()[0] == s1);
+ </pre>
+</p>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>TAG_TYPEARGS</td><td>A reserved metadata tag to indicates that a field type, method return type
+ or method parameter type is intended to be parameterized. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#TypeOracle()">TypeOracle()</a></td><td></td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#findPackage(java.lang.String)">findPackage(String)</a></td><td>Attempts to find a package by name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#findType(java.lang.String)">findType(String)</a></td><td>Finds a class or interface given its fully-qualified name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#findType(java.lang.String, java.lang.String)">findType(String, String)</a></td><td>Finds a type given its package-relative name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getArrayType(com.google.gwt.core.ext.typeinfo.JType)">getArrayType(JType)</a></td><td>Gets the type object that represents an array of the specified type. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getJavaLangObject()">getJavaLangObject()</a></td><td>Gets a reference to the type object representing
+ <code>java.lang.Object</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getOrCreatePackage(java.lang.String)">getOrCreatePackage(String)</a></td><td>Ensure that a package with the specified name exists as well as its parent
+ packages. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getPackage(java.lang.String)">getPackage(String)</a></td><td>Gets a package by name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getPackages()">getPackages()</a></td><td>Gets an array of all packages known to this type oracle. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getParameterizedType(com.google.gwt.core.ext.typeinfo.JClassType, com.google.gwt.core.ext.typeinfo.JType[])">getParameterizedType(JClassType, JType[])</a></td><td>Gets the parameterized type object that represents the combination of a
+ specified raw type and a set of type arguments. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getReloadCount()">getReloadCount()</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getType(java.lang.String)">getType(String)</a></td><td>Finds a type given its fully qualified name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getType(java.lang.String, java.lang.String)">getType(String, String)</a></td><td>Finds a type given its package-relative name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getTypes()">getTypes()</a></td><td>Gets all types, both top-level and nested. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#getTypesInCompilationUnit(com.google.gwt.core.ext.typeinfo.CompilationUnitProvider)">getTypesInCompilationUnit(CompilationUnitProvider)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#parse(java.lang.String)">parse(String)</a></td><td>Parses the string form of a type to produce the corresponding type object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#sort(com.google.gwt.core.ext.typeinfo.JClassType[])">sort(JClassType[])</a></td><td>Convenience method to sort class types in a consistent way. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#sort(com.google.gwt.core.ext.typeinfo.JConstructor[])">sort(JConstructor[])</a></td><td>Convenience method to sort constructors in a consistent way. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#sort(com.google.gwt.core.ext.typeinfo.JField[])">sort(JField[])</a></td><td>Convenience method to sort fields in a consistent way. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html#sort(com.google.gwt.core.ext.typeinfo.JMethod[])">sort(JMethod[])</a></td><td>Convenience method to sort methods in a consistent way. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">TAG_TYPEARGS</h3>
+<div class="memberSig">public static final String <b>TAG_TYPEARGS</b>
+</div>A reserved metadata tag to indicates that a field type, method return type
+ or method parameter type is intended to be parameterized. Note that
+ constructor type parameters are not supported at present.<h2 class="api">Constructor Detail</h2>
+<a name="TypeOracle()"></a>
+<h3 class="api">TypeOracle</h3>
+<div class="memberSig">public <b> TypeOracle</b>()</div>
+<h2 class="api">Method Detail</h2>
+<a name="findPackage(java.lang.String)"></a>
+<h3 class="api">findPackage</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JPackage.html">JPackage</a><b> findPackage</b>(<nobr><a href="java.lang.String.html">String</a> pkgName</nobr>)</div>Attempts to find a package by name. All requests for the same package
+ return the same package object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>pkgName</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>null</code> if the package could not be found<hr>
+<a name="findType(java.lang.String)"></a>
+<h3 class="api">findType</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a><b> findType</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>Finds a class or interface given its fully-qualified name. For nested
+ classes, use its source name rather than its binary name (that is, use a
+ "." rather than a "$").<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>null</code> if the type is not found<hr>
+<a name="findType(java.lang.String, java.lang.String)"></a>
+<h3 class="api">findType</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a><b> findType</b>(<nobr><a href="java.lang.String.html">String</a> pkgName, </nobr><nobr><a href="java.lang.String.html">String</a> typeName</nobr>)</div>Finds a type given its package-relative name. For nested classes, use its
+ source name rather than its binary name (that is, use a "." rather than a
+ "$").<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>pkgName</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>typeName</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>null</code> if the type is not found<hr>
+<a name="getArrayType(com.google.gwt.core.ext.typeinfo.JType)"></a>
+<h3 class="api">getArrayType</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JArrayType.html">JArrayType</a><b> getArrayType</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.JType.html">JType</a> componentType</nobr>)</div>Gets the type object that represents an array of the specified type. The
+ returned type always has a stable identity so as to guarantee that all
+ calls to this method with the same argument return the same object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>componentType</dt>
+<dd>the component type of the array, which can itself be
+          an array type</dd>
+</dl>
+<h4 class="api">Return Value</h4>a type object representing an array of the component type<hr>
+<a name="getJavaLangObject()"></a>
+<h3 class="api">getJavaLangObject</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a><b> getJavaLangObject</b>()</div>Gets a reference to the type object representing
+ <code>java.lang.Object</code>.<hr>
+<a name="getOrCreatePackage(java.lang.String)"></a>
+<h3 class="api">getOrCreatePackage</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JPackage.html">JPackage</a><b> getOrCreatePackage</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>Ensure that a package with the specified name exists as well as its parent
+ packages.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="getPackage(java.lang.String)"></a>
+<h3 class="api">getPackage</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JPackage.html">JPackage</a><b> getPackage</b>(<nobr><a href="java.lang.String.html">String</a> pkgName</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.core.ext.typeinfo.NotFoundException.html">NotFoundException</a>
+</div>Gets a package by name. All requests for the same package return the same
+ package object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>pkgName</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>the package object associated with the specified name<hr>
+<a name="getPackages()"></a>
+<h3 class="api">getPackages</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JPackage.html">JPackage[]</a><b> getPackages</b>()</div>Gets an array of all packages known to this type oracle.<h4 class="api">Return Value</h4>an array of packages, possibly of zero-length<hr>
+<a name="getParameterizedType(com.google.gwt.core.ext.typeinfo.JClassType, com.google.gwt.core.ext.typeinfo.JType[])"></a>
+<h3 class="api">getParameterizedType</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JType.html">JType</a><b> getParameterizedType</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a> rawType, </nobr><nobr><a href="com.google.gwt.core.ext.typeinfo.JType.html">JType[]</a> typeArgs</nobr>)</div>Gets the parameterized type object that represents the combination of a
+ specified raw type and a set of type arguments. The returned type always
+ has a stable identity so as to guarantee that all calls to this method with
+ the same arguments return the same object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>rawType</dt>
+<dd>the raw type of the array, which must be a class or
+          interface type and cannot be a primitive, array, or another
+          parameterized type</dd>
+<dt>typeArgs</dt>
+<dd>the type arguments bound to the specified raw type</dd>
+</dl>
+<h4 class="api">Return Value</h4>a type object representing this particular binding of type
+         arguments to the specified raw type<hr>
+<a name="getReloadCount()"></a>
+<h3 class="api">getReloadCount</h3>
+<div class="memberSig">public long<b> getReloadCount</b>()</div>
+<hr>
+<a name="getType(java.lang.String)"></a>
+<h3 class="api">getType</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a><b> getType</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.core.ext.typeinfo.NotFoundException.html">NotFoundException</a>
+</div>Finds a type given its fully qualified name. For nested classes, use its
+ source name rather than its binary name (that is, use a "." rather than a
+ "$").<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>the specified type<hr>
+<a name="getType(java.lang.String, java.lang.String)"></a>
+<h3 class="api">getType</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType</a><b> getType</b>(<nobr><a href="java.lang.String.html">String</a> pkgName, </nobr><nobr><a href="java.lang.String.html">String</a> topLevelTypeSimpleName</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.core.ext.typeinfo.NotFoundException.html">NotFoundException</a>
+</div>Finds a type given its package-relative name. For nested classes, use its
+ source name rather than its binary name (that is, use a "." rather than a
+ "$").<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>pkgName</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>topLevelTypeSimpleName</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>the specified type<hr>
+<a name="getTypes()"></a>
+<h3 class="api">getTypes</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType[]</a><b> getTypes</b>()</div>Gets all types, both top-level and nested.<h4 class="api">Return Value</h4>an array of types, possibly of zero length<hr>
+<a name="getTypesInCompilationUnit(com.google.gwt.core.ext.typeinfo.CompilationUnitProvider)"></a>
+<h3 class="api">getTypesInCompilationUnit</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType[]</a><b> getTypesInCompilationUnit</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.CompilationUnitProvider.html">CompilationUnitProvider</a> cup</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>cup</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="parse(java.lang.String)"></a>
+<h3 class="api">parse</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.JType.html">JType</a><b> parse</b>(<nobr><a href="java.lang.String.html">String</a> type</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.core.ext.typeinfo.TypeOracleException.html">TypeOracleException</a>
+</div>Parses the string form of a type to produce the corresponding type object.
+ The types that can be parsed include primitives, class and interface names,
+ simple parameterized types (those without wildcards or bounds), and arrays
+ of the preceding.
+ <p>
+ Examples of types that can be parsed by this method.
+ <ul>
+<li>
+<code>int</code>
+</li>
+<li>
+<code>java.lang.Object</code>
+</li>
+<li>
+<code>java.lang.String[]</code>
+</li>
+<li>
+<code>char[][]</code>
+</li>
+<li>
+<code>void</code>
+</li>
+<li>
+<code>List&lt;Shape&gt;</code>
+</li>
+<li>
+<code>List&lt;List&lt;Shape&gt;&gt;</code>
+</li>
+</ul>
+</p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>type</dt>
+<dd>a type signature to be parsed</dd>
+</dl>
+<h4 class="api">Return Value</h4>the type object corresponding to the parse type<hr>
+<a name="sort(com.google.gwt.core.ext.typeinfo.JClassType[])"></a>
+<h3 class="api">sort</h3>
+<div class="memberSig">public void<b> sort</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.JClassType.html">JClassType[]</a> types</nobr>)</div>Convenience method to sort class types in a consistent way. Note that the
+ order is subject to change and is intended to generate an "aesthetically
+ pleasing" order rather than a computationally reliable order.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>types</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="sort(com.google.gwt.core.ext.typeinfo.JConstructor[])"></a>
+<h3 class="api">sort</h3>
+<div class="memberSig">public void<b> sort</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.JConstructor.html">JConstructor[]</a> ctors</nobr>)</div>Convenience method to sort constructors in a consistent way. Note that the
+ order is subject to change and is intended to generate an "aesthetically
+ pleasing" order rather than a computationally reliable order.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>ctors</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="sort(com.google.gwt.core.ext.typeinfo.JField[])"></a>
+<h3 class="api">sort</h3>
+<div class="memberSig">public void<b> sort</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.JField.html">JField[]</a> fields</nobr>)</div>Convenience method to sort fields in a consistent way. Note that the order
+ is subject to change and is intended to generate an "aesthetically
+ pleasing" order rather than a computationally reliable order.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>fields</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="sort(com.google.gwt.core.ext.typeinfo.JMethod[])"></a>
+<h3 class="api">sort</h3>
+<div class="memberSig">public void<b> sort</b>(<nobr><a href="com.google.gwt.core.ext.typeinfo.JMethod.html">JMethod[]</a> methods</nobr>)</div>Convenience method to sort methods in a consistent way. Note that the order
+ is subject to change and is intended to generate an "aesthetically
+ pleasing" order rather than a computationally reliable order.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methods</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

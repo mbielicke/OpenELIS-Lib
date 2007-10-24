@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Sharing objects between Java source and JavaScript</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JavaFromJavaScript.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JsniExceptions.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.html">JavaScript Native Interface (JSNI)</a></span> &gt;
+						<span class="selected item">Sharing objects between Java source and JavaScript</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Sharing objects between Java source and JavaScript</h1>Parameters and return types in JSNI methods are declared as Java types.
+ There are very specific rules for how values passing in and out of
+ JavaScript code must be treated. These rules must be followed whether the
+ values enter and leave through normal method call semantics, or through
+ the
+ <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JavaFromJavaScript.html">special syntax</a>.
+ 
+ <p>
+<h2>Passing Java values into JavaScript</h2>
+</p>
+<table align="center" width="80%">
+<tr valign="top">
+<th align="left" width="30%">Incoming Java type</th><th align="left" width="70%">How it appears to JavaScript code</th>
+</tr>
+<tr valign="top">
+<td><nobr>a Java numeric primitive</nobr></td><td>a JavaScript numeric value, as in <nobr><code>var x = 42;</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><code>String</code></td><td> a JavaScript string, as in <nobr><code>var s = "my string";</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><code>boolean</code></td><td>a JavaScript boolean value, as in <nobr><code>var b = true;</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><nobr><a href="com.google.gwt.core.client.JavaScriptObject.html">JavaScriptObject</a> (see
+ notes)</nobr></td><td>a <code>JavaScriptObject</code> that must have originated from
+ JavaScript code, typically as the return value of some other JSNI method
+ </td>
+</tr>
+<tr valign="top">
+<td><nobr>Java array</nobr></td><td> an opaque value that can only be passed back into Java code</td>
+</tr>
+<tr valign="top">
+<td><nobr>any other Java <code>Object</code></nobr></td><td> an opaque value accessible through
+ <a href="com.google.gwt.doc.DeveloperGuide.JavaScriptNativeInterface.JavaFromJavaScript.html">special syntax</a></td>
+</tr>
+</table>
+<p>
+<h2>Passing JavaScript values into Java code</h2>
+</p>
+<table align="center" width="80%">
+<tr valign="top">
+<th align="left" width="30%">Outgoing Java type</th><th align="left" width="70%">What must be passed</th>
+</tr>
+<tr valign="top">
+<td><nobr>a Java numeric primitive</nobr></td><td>a JavaScript numeric value, as in <nobr><code>return 19;</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><code>String</code></td><td>a JavaScript string, as in <nobr><code>return "boo";</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><code>boolean</code></td><td> a JavaScript boolean value, as in <nobr><code>return false;</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><nobr><a href="com.google.gwt.core.client.JavaScriptObject.html">JavaScriptObject</a> (see notes)</nobr></td><td> a native JavaScript object, as in <nobr><code>return
+ document.createElement("div")</code></nobr></td>
+</tr>
+<tr valign="top">
+<td><nobr>any other Java <code>Object</code> (including arrays)</nobr></td><td>a Java <code>Object</code> of the correct type that must have
+ originated in Java code; Java objects cannot be constructed from "thin
+ air" in JavaScript</td>
+</tr>
+</table>
+<h2>Important Notes</h2>
+<ul>
+<li> A Java numeric primitive is one of <code>byte</code>,
+ <code>short</code>, <code>char</code>, <code>int</code>,
+ <code>long</code>, <code>float</code>, or <code>double</code>.
+ You must ensure the value is appropriate for the declared type. Returning
+ <code>3.7</code> when the declared type is <code>int</code> will
+ cause unpredictable behavior. </li>
+<li> Java <code>null</code> and JavaScript <code>null</code> are
+ identical and always legal values for any non-primitive Java type.
+ JavaScript <code>undefined</code> is <i>not</i> identical to
+ <code>null</code>; never return <code>undefined</code> from a JSNI
+ method or unpredictable behavior will occur. </li>
+<li> Violating any of these marshaling rules in
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.HostedMode.html">hosted mode</a> will generate
+ a <code>com.google.gwt.dev.shell.HostedModeException</code> detailing
+ the problem. This exception is not
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ClientSide.html">translatable</a> and never
+ thrown in <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.WebMode.html">web mode</a>. </li>
+<li>
+<a href="com.google.gwt.core.client.JavaScriptObject.html">JavaScriptObject</a> is a magical type that gets special
+ treatment from the GWT compiler and hosted browser. Its purpose is to
+ provide an opaque representation of native JavaScript objects to Java
+ code.</li>
+</ul>
+<div class="tipContainer" xmlns="http://www.w3.org/1999/xhtml">
+<div class="tipCallout">Tip</div>
+<div class="tipBody">When returning a possibly undefined value from a JSNI method, we
+      suggest using the idiom <blockquote>
+<code>return (value == null) ? null : value;</code>
+</blockquote>
+      to avoid returning <code>undefined</code>.</div>
+</div>
+</div>
+<div id="footer">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

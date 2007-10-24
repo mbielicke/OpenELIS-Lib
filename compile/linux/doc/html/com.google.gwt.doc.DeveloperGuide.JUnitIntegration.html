@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            JUnit Integration</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.RemoteProcedureCalls.ArchitecturalPerspectives.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.JUnitIntegration.JUnitAsync.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="selected item">JUnit Integration</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>JUnit Integration</h1>GWT includes a special <a xmlns="" href="com.google.gwt.junit.client.GWTTestCase.html">GWTTestCase</a> base class that provides <a href="http://www.junit.org">JUnit</a> integration. Running a compiled
+ <a href="com.google.gwt.junit.client.GWTTestCase.html">GWTTestCase</a> subclass under JUnit launches an invisible GWT browser.
+ 
+ <p>
+ By default, tests run in
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.HostedMode.html">hosted mode</a> as normal Java
+ bytecode in a JVM. Overriding this default behavior requires passing
+ arguments to the GWT shell. Arguments cannot be passed directly through the
+ command line, because normal command-line arguments go directly to the
+ JUnit runner. Instead, define the system property <code>gwt.args</code>
+ to pass arguments to GWT. For example, to run in
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.WebMode.html">web mode</a>, declare
+ <code>-Dgwt.args="-web"</code> as a JVM argument when invoking JUnit. To
+ get a full list of supported options, declare
+ <code>-Dgwt.args="-help"</code> (instead of running the test, help is
+ printed to the console).
+ </p>
+<h2>Creating a Test Case</h2>
+<p>
+ GWT includes a handy
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.CommandLineTools.junitCreator.html">junitCreator</a> tool that
+ will generate a starter test case for you, plus scripts for testing in both
+ hosted mode and web mode. But here are the steps if you want to set it up
+ by hand:
+ </p>
+<ol>
+<li>Define a class that extends <a href="com.google.gwt.junit.client.GWTTestCase.html">GWTTestCase</a>.</li>
+<li>Create a <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">module</a> that
+ causes the source for your test case to be included. If you are adding a
+ test case to an existing GWT app, you can usually just use the existing
+ module.</li>
+<li>Implement the method <a href="com.google.gwt.junit.client.GWTTestCase.html#getModuleName()">GWTTestCase.getModuleName()</a> to return the
+ fully-qualified name of the module. </li>
+<li>Compile your test case class to bytecode (using <a href="http://java.sun.com/j2se/1.4.2/docs/tooldocs/windows/javac.html">javac</a>
+ or a Java IDE).</li>
+<li>When running the test case, make sure your classpath includes:
+ 
+ <ul>
+<li>your project's <code>src</code> directory</li>
+<li>your project's <code>bin</code> directory</li>
+<li>
+<code>gwt-user.jar</code>
+</li>
+<li>
+<code>gwt-dev-windows.jar</code> (or <code>gwt-dev-linux.jar</code>)</li>
+<li>
+<code>junit.jar</code>
+</li>
+</ul>
+</li>
+</ol>
+<p>
+<h2>Example</h2>
+ Write the <code>com.example.foo.client.FooTest</code> test case.
+ 
+ <pre class="code">public class FooTest extends GWTTestCase {
+
+  /*
+   * Specifies a module to use when running this test case. The returned
+   * module must cause the source for this class to be included.
+   * 
+   * @see com.google.gwt.junit.client.GWTTestCase#getModuleName()
+   */
+  public String getModuleName() {
+    return "com.example.foo.Foo";
+  }
+
+  public void testStuff() {
+    assertTrue(2 + 2 == 4);
+  }
+}
+</pre>
+
+ 
+ Create the <code>com.example.foo.Foo</code> module.
+ 
+ <pre class="code">&lt;!--                                                                        --&gt;
+&lt;!-- Copyright 2007 Google Inc.                                             --&gt;
+&lt;!-- Licensed under the Apache License, Version 2.0 (the "License"); you    --&gt;
+&lt;!-- may not use this file except in compliance with the License. You may   --&gt;
+&lt;!-- may obtain a copy of the License at                                    --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- http://www.apache.org/licenses/LICENSE-2.0                             --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- Unless required by applicable law or agreed to in writing, software    --&gt;
+&lt;!-- distributed under the License is distributed on an "AS IS" BASIS,      --&gt;
+&lt;!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        --&gt;
+&lt;!-- implied. License for the specific language governing permissions and   --&gt;
+&lt;!-- limitations under the License.                                         --&gt;
+
+&lt;module&gt;
+  &lt;!-- Module com.example.foo.Foo --&gt;
+
+  &lt;!-- Standard inherit.                                           --&gt;
+  &lt;inherits name='com.google.gwt.user.User'/&gt;
+
+  &lt;!-- implicitly includes com.example.foo.client package          --&gt;
+
+  &lt;!-- OPTIONAL STUFF FOLLOWS --&gt;
+
+  &lt;!-- It's okay for your module to declare an entry point.        --&gt;
+  &lt;!-- This gets ignored when running under JUnit.                 --&gt;
+  &lt;entry-point class='com.example.foo.FooModule'/&gt;
+
+  &lt;!-- You can also test remote services during a JUnit run.       --&gt;
+  &lt;servlet path='/foo' class='com.example.foo.server.FooServiceImpl'/&gt;
+&lt;/module&gt;
+</pre>
+</p>
+<div class="tipContainer" xmlns="http://www.w3.org/1999/xhtml">
+<div class="tipCallout">Tip</div>
+<div class="tipBody">You don't need to create a separate module for every test case. In the
+      example above, any test cases in <code>com.example.foo.client</code>
+      (or any subpackage) can share the <code>com.example.foo.Foo</code>
+      module.</div>
+</div>
+<h2>Advanced Topics</h2>
+<ul class="childToc">
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JUnitIntegration.JUnitAsync.html">Asynchronous Testing</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">How to test event-driven features such as server calls or
+           timers.</div>
+</li>
+<li>
+<div class="heading">
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.JUnitIntegration.JUnitBenchmarking.html">Benchmarking</a>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" class="synopsis">How to use GWT's JUnit support to create and report on
+           benchmarks to help you optimize your code.</div>
+</li>
+</ul>
+</div>
+<div id="footer">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

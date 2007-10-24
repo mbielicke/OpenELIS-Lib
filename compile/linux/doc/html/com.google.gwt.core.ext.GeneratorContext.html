@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            GeneratorContext</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.core.ext.UnableToCompleteException.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.core.ext.PropertyOracle.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.core.ext.html">com.google.gwt.core.ext</a></span> &gt;
+            <span class="selected item">GeneratorContext</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface GeneratorContext</h1>
+<div class="classSig">public 
+            interface 
+            <b>GeneratorContext</b>
+</div>Provides metadata to deferred binding generators.<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a xmlns="" href="com.google.gwt.core.ext.GeneratorContext.html#commit(com.google.gwt.core.ext.TreeLogger, java.io.PrintWriter)">commit(TreeLogger, PrintWriter)</a></td><td>Commits source generation begun with
+ <a href="com.google.gwt.core.ext.GeneratorContext.html#tryCreate(com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String)">tryCreate(TreeLogger, String, String)</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.GeneratorContext.html#commitResource(com.google.gwt.core.ext.TreeLogger, java.io.OutputStream)">commitResource(TreeLogger, OutputStream)</a></td><td>Commits resource generation begun with
+ <a href="com.google.gwt.core.ext.GeneratorContext.html#tryCreateResource(com.google.gwt.core.ext.TreeLogger, java.lang.String)">tryCreateResource(TreeLogger, String)</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.GeneratorContext.html#getPropertyOracle()">getPropertyOracle()</a></td><td>Gets the property oracle for the current generator context. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.GeneratorContext.html#getTypeOracle()">getTypeOracle()</a></td><td>Gets the type oracle for the current generator context. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.GeneratorContext.html#tryCreate(com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String)">tryCreate(TreeLogger, String, String)</a></td><td>Attempts to get a <code>PrintWriter</code> so that the caller can
+ generate the source code for the named type. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.ext.GeneratorContext.html#tryCreateResource(com.google.gwt.core.ext.TreeLogger, java.lang.String)">tryCreateResource(TreeLogger, String)</a></td><td>Attempts to get an <code>OutputStream</code> so that the caller can write
+ file contents into the named file underneath the compilation output
+ directory. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="commit(com.google.gwt.core.ext.TreeLogger, java.io.PrintWriter)"></a>
+<h3 class="api">commit</h3>
+<div class="memberSig">public void<b> commit</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.html">TreeLogger</a> logger, </nobr><nobr>PrintWriter pw</nobr>)</div>Commits source generation begun with
+ <a href="com.google.gwt.core.ext.GeneratorContext.html#tryCreate(com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String)">tryCreate(TreeLogger, String, String)</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>logger</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>pw</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="commitResource(com.google.gwt.core.ext.TreeLogger, java.io.OutputStream)"></a>
+<h3 class="api">commitResource</h3>
+<div class="memberSig">public void<b> commitResource</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.html">TreeLogger</a> logger, </nobr><nobr>OutputStream os</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.core.ext.UnableToCompleteException.html">UnableToCompleteException</a>
+</div>Commits resource generation begun with
+ <a href="com.google.gwt.core.ext.GeneratorContext.html#tryCreateResource(com.google.gwt.core.ext.TreeLogger, java.lang.String)">tryCreateResource(TreeLogger, String)</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>logger</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>os</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="getPropertyOracle()"></a>
+<h3 class="api">getPropertyOracle</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.PropertyOracle.html">PropertyOracle</a><b> getPropertyOracle</b>()</div>Gets the property oracle for the current generator context. Generators can
+ use the property oracle to query deferred binding properties.<hr>
+<a name="getTypeOracle()"></a>
+<h3 class="api">getTypeOracle</h3>
+<div class="memberSig">public <a href="com.google.gwt.core.ext.typeinfo.TypeOracle.html">TypeOracle</a><b> getTypeOracle</b>()</div>Gets the type oracle for the current generator context. Generators can use
+ the type oracle to ask questions about the entire translatable code base.<h4 class="api">Return Value</h4>a TypeOracle over all the relevant translatable compilation units
+         in the source path<hr>
+<a name="tryCreate(com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String)"></a>
+<h3 class="api">tryCreate</h3>
+<div class="memberSig">public PrintWriter<b> tryCreate</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.html">TreeLogger</a> logger, </nobr><nobr><a href="java.lang.String.html">String</a> packageName, </nobr><nobr><a href="java.lang.String.html">String</a> simpleName</nobr>)</div>Attempts to get a <code>PrintWriter</code> so that the caller can
+ generate the source code for the named type. If the named types already
+ exists, <code>null</code> is returned to indicate that no work needs to
+ be done. The file is not committed until
+ <a href="com.google.gwt.core.ext.GeneratorContext.html#commit(com.google.gwt.core.ext.TreeLogger, java.io.PrintWriter)">commit(TreeLogger, PrintWriter)</a> is called.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>logger</dt>
+<dd>a logger; normally the logger passed into
+          <a href="com.google.gwt.core.ext.Generator.html#generate(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.GeneratorContext, java.lang.String)">Generator.generate(TreeLogger, GeneratorContext, String)</a>
+          or a branch thereof</dd>
+<dt>packageName</dt>
+<dd>the name of the package to which the create type belongs</dd>
+<dt>simpleName</dt>
+<dd>the unqualified source name of the type being generated</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>null</code> if the package and class already exists,
+         otherwise a <code>PrintWriter</code> is returned.<hr>
+<a name="tryCreateResource(com.google.gwt.core.ext.TreeLogger, java.lang.String)"></a>
+<h3 class="api">tryCreateResource</h3>
+<div class="memberSig">public OutputStream<b> tryCreateResource</b>(<nobr><a href="com.google.gwt.core.ext.TreeLogger.html">TreeLogger</a> logger, </nobr><nobr><a href="java.lang.String.html">String</a> partialPath</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.core.ext.UnableToCompleteException.html">UnableToCompleteException</a>
+</div>Attempts to get an <code>OutputStream</code> so that the caller can write
+ file contents into the named file underneath the compilation output
+ directory. The file is not committed until
+ <a href="com.google.gwt.core.ext.GeneratorContext.html#commitResource(com.google.gwt.core.ext.TreeLogger, java.io.OutputStream)">commitResource(TreeLogger, OutputStream)</a> is called.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>logger</dt>
+<dd>a logger; normally the logger passed into
+          <a href="com.google.gwt.core.ext.Generator.html#generate(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.GeneratorContext, java.lang.String)">Generator.generate(TreeLogger, GeneratorContext, String)</a>
+          or a branch thereof</dd>
+<dt>partialPath</dt>
+<dd>the name of the file whose contents are to be written;
+          the name can include subdirectories separated by forward slashes
+          ('/')</dd>
+</dl>
+<h4 class="api">Return Value</h4>an <code>OutputStream</code> into which file contents can be
+         written, or <code>null</code> if a resource by that name is
+         already pending or already exists</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

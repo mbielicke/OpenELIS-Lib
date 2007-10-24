@@ -1,0 +1,436 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            TextBoxBase</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.TextBox.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">TextBoxBase</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class TextBoxBase</h1>
+<div class="classSig">public 
+            class 
+            TextBoxBase<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.FocusWidget.html">FocusWidget</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.SourcesKeyboardEvents.html">SourcesKeyboardEvents</a>, <a href="com.google.gwt.user.client.ui.SourcesChangeEvents.html">SourcesChangeEvents</a>, <a href="com.google.gwt.user.client.ui.SourcesClickEvents.html">SourcesClickEvents</a>, <a href="com.google.gwt.user.client.ui.HasText.html">HasText</a>, <a href="com.google.gwt.user.client.ui.HasName.html">HasName</a>
+<br>
+<br>// Superclass of <code><a href="com.google.gwt.user.client.ui.PasswordTextBox.html">PasswordTextBox</a></code>, <code><a href="com.google.gwt.user.client.ui.TextArea.html">TextArea</a></code>, <code><a href="com.google.gwt.user.client.ui.TextBox.html">TextBox</a></code>
+</div>Abstract base class for all text entry widgets.<h2 class="api">Nested Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant.html">TextBoxBase.TextAlignConstant</a></td><td>Text alignment constant, used in
+ <a href="com.google.gwt.user.client.ui.TextBoxBase.html#setTextAlignment(com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant)">TextAlignConstant)</a>. </td>
+</tr>
+</table>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>ALIGN_CENTER</td><td>Center the text. </td>
+</tr>
+<tr>
+<td>ALIGN_JUSTIFY</td><td>Justify the text. </td>
+</tr>
+<tr>
+<td>ALIGN_LEFT</td><td>Align the text to the left edge. </td>
+</tr>
+<tr>
+<td>ALIGN_RIGHT</td><td>Align the text to the right. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#TextBoxBase(com.google.gwt.user.client.Element)">TextBoxBase(Element)</a></td><td>Creates a text box that wraps the given browser element handle. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#addChangeListener(com.google.gwt.user.client.ui.ChangeListener)">addChangeListener(ChangeListener)</a></td><td>Adds a listener interface to receive change events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#addClickListener(com.google.gwt.user.client.ui.ClickListener)">addClickListener(ClickListener)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#addKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)">addKeyboardListener(KeyboardListener)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#cancelKey()">cancelKey()</a></td><td>If a keyboard event is currently being handled on this text box, calling
+ this method will suppress it. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#getCursorPos()">getCursorPos()</a></td><td>Gets the current position of the cursor (this also serves as the beginning
+ of the text selection). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#getImpl()">getImpl()</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#getName()">getName()</a></td><td>Gets the widget's name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#getSelectedText()">getSelectedText()</a></td><td>Gets the text currently selected within this text box. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#getSelectionLength()">getSelectionLength()</a></td><td>Gets the length of the current text selection. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#getText()">getText()</a></td><td>Gets this object's text. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#isReadOnly()">isReadOnly()</a></td><td>Determines whether or not the widget is read-only. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#onBrowserEvent(com.google.gwt.user.client.Event)">onBrowserEvent(Event)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#removeChangeListener(com.google.gwt.user.client.ui.ChangeListener)">removeChangeListener(ChangeListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#removeClickListener(com.google.gwt.user.client.ui.ClickListener)">removeClickListener(ClickListener)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#removeKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)">removeKeyboardListener(KeyboardListener)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#selectAll()">selectAll()</a></td><td>Selects all of the text in the box. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setCursorPos(int)">setCursorPos(int)</a></td><td>Sets the cursor position. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setKey(char)">setKey(char)</a></td><td>If a keyboard event is currently being handled by the text box, this method
+ replaces the unicode character or key code associated with it. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setName(java.lang.String)">setName(String)</a></td><td>Sets the widget's name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setReadOnly(boolean)">setReadOnly(boolean)</a></td><td>Turns read-only mode on or off. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setSelectionRange(int, int)">setSelectionRange(int, int)</a></td><td>Sets the range of text to be selected. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setText(java.lang.String)">setText(String)</a></td><td>Sets this object's text. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.TextBoxBase.html#setTextAlignment(com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant)">setTextAlignment(TextBoxBase.TextAlignConstant)</a></td><td>Sets the alignment of the text in the text box. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">ALIGN_CENTER</h3>
+<div class="memberSig">public static final TextBoxBase.TextAlignConstant <b>ALIGN_CENTER</b>
+</div>Center the text.<hr>
+<h3 class="api">ALIGN_JUSTIFY</h3>
+<div class="memberSig">public static final TextBoxBase.TextAlignConstant <b>ALIGN_JUSTIFY</b>
+</div>Justify the text.<hr>
+<h3 class="api">ALIGN_LEFT</h3>
+<div class="memberSig">public static final TextBoxBase.TextAlignConstant <b>ALIGN_LEFT</b>
+</div>Align the text to the left edge.<hr>
+<h3 class="api">ALIGN_RIGHT</h3>
+<div class="memberSig">public static final TextBoxBase.TextAlignConstant <b>ALIGN_RIGHT</b>
+</div>Align the text to the right.<h2 class="api">Constructor Detail</h2>
+<a name="TextBoxBase(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">TextBoxBase</h3>
+<div class="memberSig">protected <b> TextBoxBase</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Creates a text box that wraps the given browser element handle. This is
+ only used by subclasses.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the browser element to wrap</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="addChangeListener(com.google.gwt.user.client.ui.ChangeListener)"></a>
+<h3 class="api">addChangeListener</h3>
+<div class="memberSig">public void<b> addChangeListener</b>(<nobr><a href="com.google.gwt.user.client.ui.ChangeListener.html">ChangeListener</a> listener</nobr>)</div>Adds a listener interface to receive change events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="addClickListener(com.google.gwt.user.client.ui.ClickListener)"></a>
+<h3 class="api">addClickListener</h3>
+<div class="memberSig">public void<b> addClickListener</b>(<nobr><a href="com.google.gwt.user.client.ui.ClickListener.html">ClickListener</a> listener</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="addKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)"></a>
+<h3 class="api">addKeyboardListener</h3>
+<div class="memberSig">public void<b> addKeyboardListener</b>(<nobr><a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a> listener</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="cancelKey()"></a>
+<h3 class="api">cancelKey</h3>
+<div class="memberSig">public void<b> cancelKey</b>()</div>If a keyboard event is currently being handled on this text box, calling
+ this method will suppress it. This allows listeners to easily filter
+ keyboard input.<hr>
+<a name="getCursorPos()"></a>
+<h3 class="api">getCursorPos</h3>
+<div class="memberSig">public int<b> getCursorPos</b>()</div>Gets the current position of the cursor (this also serves as the beginning
+ of the text selection).<h4 class="api">Return Value</h4>the cursor's position<hr>
+<a name="getImpl()"></a>
+<h3 class="api">getImpl</h3>
+<div class="memberSig">protected TextBoxImpl<b> getImpl</b>()</div>
+<hr>
+<a name="getName()"></a>
+<h3 class="api">getName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getName</b>()</div>Gets the widget's name.<h4 class="api">Return Value</h4>the widget's name<hr>
+<a name="getSelectedText()"></a>
+<h3 class="api">getSelectedText</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getSelectedText</b>()</div>Gets the text currently selected within this text box.<h4 class="api">Return Value</h4>the selected text, or an empty string if none is selected<hr>
+<a name="getSelectionLength()"></a>
+<h3 class="api">getSelectionLength</h3>
+<div class="memberSig">public int<b> getSelectionLength</b>()</div>Gets the length of the current text selection.<h4 class="api">Return Value</h4>the text selection length<hr>
+<a name="getText()"></a>
+<h3 class="api">getText</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getText</b>()</div>Gets this object's text.<h4 class="api">Return Value</h4>the object's text<hr>
+<a name="isReadOnly()"></a>
+<h3 class="api">isReadOnly</h3>
+<div class="memberSig">public boolean<b> isReadOnly</b>()</div>Determines whether or not the widget is read-only.<h4 class="api">Return Value</h4>
+<code>true</code> if the widget is currently read-only,
+         <code>false</code> if the widget is currently editable<hr>
+<a name="onBrowserEvent(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">onBrowserEvent</h3>
+<div class="memberSig">public void<b> onBrowserEvent</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> event</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>event</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="removeChangeListener(com.google.gwt.user.client.ui.ChangeListener)"></a>
+<h3 class="api">removeChangeListener</h3>
+<div class="memberSig">public void<b> removeChangeListener</b>(<nobr><a href="com.google.gwt.user.client.ui.ChangeListener.html">ChangeListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="removeClickListener(com.google.gwt.user.client.ui.ClickListener)"></a>
+<h3 class="api">removeClickListener</h3>
+<div class="memberSig">public void<b> removeClickListener</b>(<nobr><a href="com.google.gwt.user.client.ui.ClickListener.html">ClickListener</a> listener</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="removeKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)"></a>
+<h3 class="api">removeKeyboardListener</h3>
+<div class="memberSig">public void<b> removeKeyboardListener</b>(<nobr><a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a> listener</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="selectAll()"></a>
+<h3 class="api">selectAll</h3>
+<div class="memberSig">public void<b> selectAll</b>()</div>Selects all of the text in the box.<hr>
+<a name="setCursorPos(int)"></a>
+<h3 class="api">setCursorPos</h3>
+<div class="memberSig">public void<b> setCursorPos</b>(<nobr>int pos</nobr>)</div>Sets the cursor position.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>pos</dt>
+<dd>the new cursor position</dd>
+</dl>
+<hr>
+<a name="setKey(char)"></a>
+<h3 class="api">setKey</h3>
+<div class="memberSig">public void<b> setKey</b>(<nobr>char key</nobr>)</div>If a keyboard event is currently being handled by the text box, this method
+ replaces the unicode character or key code associated with it. This allows
+ listeners to easily filter keyboard input.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the new key value</dd>
+</dl>
+<hr>
+<a name="setName(java.lang.String)"></a>
+<h3 class="api">setName</h3>
+<div class="memberSig">public void<b> setName</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>Sets the widget's name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the widget's new name</dd>
+</dl>
+<hr>
+<a name="setReadOnly(boolean)"></a>
+<h3 class="api">setReadOnly</h3>
+<div class="memberSig">public void<b> setReadOnly</b>(<nobr>boolean readOnly</nobr>)</div>Turns read-only mode on or off.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>readOnly</dt>
+<dd>if <code>true</code>, the widget becomes read-only; if
+          <code>false</code> the widget becomes editable</dd>
+</dl>
+<hr>
+<a name="setSelectionRange(int, int)"></a>
+<h3 class="api">setSelectionRange</h3>
+<div class="memberSig">public void<b> setSelectionRange</b>(<nobr>int pos, </nobr><nobr>int length</nobr>)</div>Sets the range of text to be selected.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>pos</dt>
+<dd>the position of the first character to be selected</dd>
+<dt>length</dt>
+<dd>the number of characters to be selected</dd>
+</dl>
+<hr>
+<a name="setText(java.lang.String)"></a>
+<h3 class="api">setText</h3>
+<div class="memberSig">public void<b> setText</b>(<nobr><a href="java.lang.String.html">String</a> text</nobr>)</div>Sets this object's text.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>text</dt>
+<dd>the object's new text</dd>
+</dl>
+<hr>
+<a name="setTextAlignment(com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant)"></a>
+<h3 class="api">setTextAlignment</h3>
+<div class="memberSig">public void<b> setTextAlignment</b>(<nobr><a href="com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant.html">TextBoxBase.TextAlignConstant</a> align</nobr>)</div>Sets the alignment of the text in the text box.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>align</dt>
+<dd>the text alignment (as specified by <a href="com.google.gwt.user.client.ui.TextBoxBase.html#ALIGN_CENTER">ALIGN_CENTER</a>,
+          <a href="com.google.gwt.user.client.ui.TextBoxBase.html#ALIGN_JUSTIFY">ALIGN_JUSTIFY</a>, <a href="com.google.gwt.user.client.ui.TextBoxBase.html#ALIGN_LEFT">ALIGN_LEFT</a>, and
+          <a href="com.google.gwt.user.client.ui.TextBoxBase.html#ALIGN_RIGHT">ALIGN_RIGHT</a>)</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

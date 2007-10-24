@@ -1,0 +1,524 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            PopupPanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.PopupListenerCollection.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.PopupPanel.PositionCallback.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">PopupPanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class PopupPanel</h1>
+<div class="classSig">public 
+            class 
+            PopupPanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.SimplePanel.html">SimplePanel</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.SourcesPopupEvents.html">SourcesPopupEvents</a>, <a href="com.google.gwt.user.client.EventPreview.html">EventPreview</a>
+<br>
+<br>// Superclass of <code><a href="com.google.gwt.user.client.ui.DialogBox.html">DialogBox</a></code>
+</div>A panel that can "pop up" over other widgets. It overlays the browser's
+ client area (and any previously-created popups). <p></p> The width and height of
+ the PopupPanel cannot be explicitly set; they are determined by the
+ PopupPanel's widget. Calls to <a href="com.google.gwt.user.client.ui.PopupPanel.html#setWidth(java.lang.String)">setWidth(String)</a> and
+ <a href="com.google.gwt.user.client.ui.PopupPanel.html#setHeight(java.lang.String)">setHeight(String)</a> will call these methods on the PopupPanel's
+ widget.
+ <p>
+<img class="gallery" src="PopupPanel.png"></p>
+<p>
+<h3>Example</h3>
+<pre class="code">public class PopupPanelExample implements EntryPoint {
+
+  private static class MyPopup extends PopupPanel {
+
+    public MyPopup() {
+      // PopupPanel's constructor takes 'auto-hide' as its boolean parameter.
+      // If this is set, the panel closes itself automatically when the user
+      // clicks outside of it.
+      super(true);
+
+      // PopupPanel is a SimplePanel, so you have to set it's widget property to
+      // whatever you want its contents to be.
+      setWidget(new Label("Click outside of this popup to close it"));
+    }
+  }
+
+  public void onModuleLoad() {
+    Button b1 = new Button("Click me to show popup");
+    b1.addClickListener(new ClickListener() {
+      public void onClick(Widget sender) {
+        // Instantiate the popup and show it.
+        new MyPopup().show();
+      }
+    });
+
+    RootPanel.get().add(b1);
+
+    Button b2 = new Button("Click me to show popup partway across the screen");
+
+    b2.addClickListener(new ClickListener() {
+      public void onClick(Widget sender) {
+        // Create the new popup.
+        final MyPopup popup = new MyPopup();
+        // Position the popup 1/3rd of the way down and across the screen, and
+        // show the popup. Since the position calculation is based on the
+        // offsetWidth and offsetHeight of the popup, you have to use the
+        // setPopupPositionAndShow(callback) method. The alternative would
+        // be to call show(), calculate the left and top positions, and
+        // call setPopupPosition(left, top). This would have the ugly side
+        // effect of the popup jumping from its original position to its
+        // new position.
+        popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+          public void setPosition(int offsetWidth, int offsetHeight) {
+            int left = (Window.getClientWidth() - offsetWidth) / 3;
+            int top = (Window.getClientHeight() - offsetHeight) / 3;
+            popup.setPopupPosition(left, top);
+          }
+        });
+      }
+    });
+
+    RootPanel.get().add(b2);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Nested Interfaces</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.PositionCallback.html">PopupPanel.PositionCallback</a></td><td>A callback that is used to set the position of a <a href="com.google.gwt.user.client.ui.PopupPanel.html">PopupPanel</a> right
+ before it is shown. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#PopupPanel()">PopupPanel()</a></td><td>Creates an empty popup panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#PopupPanel(boolean)">PopupPanel(boolean)</a></td><td>Creates an empty popup panel, specifying its "auto-hide" property. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#PopupPanel(boolean, boolean)">PopupPanel(boolean, boolean)</a></td><td>Creates an empty popup panel, specifying its "auto-hide" property. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#addPopupListener(com.google.gwt.user.client.ui.PopupListener)">addPopupListener(PopupListener)</a></td><td>Adds a listener interface to receive popup events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#center()">center()</a></td><td>Centers the popup in the browser window and shows it. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getContainerElement()">getContainerElement()</a></td><td>Override this method to specify that an element other than the root element
+ be the container for the panel's child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getOffsetHeight()">getOffsetHeight()</a></td><td>Gets the panel's offset height in pixels. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getOffsetWidth()">getOffsetWidth()</a></td><td>Gets the panel's offset width in pixels. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getPopupLeft()">getPopupLeft()</a></td><td>Gets the popup's left position relative to the browser's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getPopupTop()">getPopupTop()</a></td><td>Gets the popup's top position relative to the browser's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getStyleElement()">getStyleElement()</a></td><td>Template method that returns the element to which style names will be
+ applied. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#getTitle()">getTitle()</a></td><td>Gets the title associated with this object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#hide()">hide()</a></td><td>Hides the popup. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#onDetach()">onDetach()</a></td><td>This method is called when a widget is detached from the browser's
+ document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#onEventPreview(com.google.gwt.user.client.Event)">onEventPreview(Event)</a></td><td>Called when a browser event occurs and this event preview is on top of the
+ preview stack. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#onKeyDownPreview(char, int)">onKeyDownPreview(char, int)</a></td><td>Popups get an opportunity to preview keyboard events before they are passed
+ to a widget contained by the Popup. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#onKeyPressPreview(char, int)">onKeyPressPreview(char, int)</a></td><td>Popups get an opportunity to preview keyboard events before they are passed
+ to a widget contained by the Popup. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#onKeyUpPreview(char, int)">onKeyUpPreview(char, int)</a></td><td>Popups get an opportunity to preview keyboard events before they are passed
+ to a widget contained by the Popup. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#removePopupListener(com.google.gwt.user.client.ui.PopupListener)">removePopupListener(PopupListener)</a></td><td>Removes a previously added popup listener. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setHeight(java.lang.String)">setHeight(String)</a></td><td>Sets the height of the panel's child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setPopupPosition(int, int)">setPopupPosition(int, int)</a></td><td>Sets the popup's position relative to the browser's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setPopupPositionAndShow(com.google.gwt.user.client.ui.PopupPanel.PositionCallback)">setPopupPositionAndShow(PopupPanel.PositionCallback)</a></td><td>Sets the popup's position using a <a href="com.google.gwt.user.client.ui.PopupPanel.PositionCallback.html">PositionCallback</a>, and shows
+ the popup. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setTitle(java.lang.String)">setTitle(String)</a></td><td>Sets the title associated with this object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setVisible(boolean)">setVisible(boolean)</a></td><td>Sets whether this object is visible. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setWidget(com.google.gwt.user.client.ui.Widget)">setWidget(Widget)</a></td><td>Sets this panel's widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#setWidth(java.lang.String)">setWidth(String)</a></td><td>Sets the width of the panel's child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.PopupPanel.html#show()">show()</a></td><td>Shows the popup. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="PopupPanel()"></a>
+<h3 class="api">PopupPanel</h3>
+<div class="memberSig">public <b> PopupPanel</b>()</div>Creates an empty popup panel. A child widget must be added to it before it
+ is shown.<hr>
+<a name="PopupPanel(boolean)"></a>
+<h3 class="api">PopupPanel</h3>
+<div class="memberSig">public <b> PopupPanel</b>(<nobr>boolean autoHide</nobr>)</div>Creates an empty popup panel, specifying its "auto-hide" property.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>autoHide</dt>
+<dd>
+<code>true</code> if the popup should be automatically
+          hidden when the user clicks outside of it</dd>
+</dl>
+<hr>
+<a name="PopupPanel(boolean, boolean)"></a>
+<h3 class="api">PopupPanel</h3>
+<div class="memberSig">public <b> PopupPanel</b>(<nobr>boolean autoHide, </nobr><nobr>boolean modal</nobr>)</div>Creates an empty popup panel, specifying its "auto-hide" property.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>autoHide</dt>
+<dd>
+<code>true</code> if the popup should be automatically
+          hidden when the user clicks outside of it</dd>
+<dt>modal</dt>
+<dd>
+<code>true</code> if keyboard or mouse events that do not
+          target the PopupPanel or its children should be ignored</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="addPopupListener(com.google.gwt.user.client.ui.PopupListener)"></a>
+<h3 class="api">addPopupListener</h3>
+<div class="memberSig">public void<b> addPopupListener</b>(<nobr><a href="com.google.gwt.user.client.ui.PopupListener.html">PopupListener</a> listener</nobr>)</div>Adds a listener interface to receive popup events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add.</dd>
+</dl>
+<hr>
+<a name="center()"></a>
+<h3 class="api">center</h3>
+<div class="memberSig">public void<b> center</b>()</div>Centers the popup in the browser window and shows it. If the popup was
+ already showing, then the popup is centered.<hr>
+<a name="getContainerElement()"></a>
+<h3 class="api">getContainerElement</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.client.Element.html">Element</a><b> getContainerElement</b>()</div>Override this method to specify that an element other than the root element
+ be the container for the panel's child widget. This can be useful when you
+ want to create a simple panel that decorates its contents.<h4 class="api">Return Value</h4>the element to be used as the panel's container<hr>
+<a name="getOffsetHeight()"></a>
+<h3 class="api">getOffsetHeight</h3>
+<div class="memberSig">public int<b> getOffsetHeight</b>()</div>Gets the panel's offset height in pixels. Calls to <a href="com.google.gwt.user.client.ui.PopupPanel.html#setHeight(java.lang.String)">setHeight(String)</a>
+ before the panel's child widget is set will not influence the offset height.<h4 class="api">Return Value</h4>the object's offset height<hr>
+<a name="getOffsetWidth()"></a>
+<h3 class="api">getOffsetWidth</h3>
+<div class="memberSig">public int<b> getOffsetWidth</b>()</div>Gets the panel's offset width in pixels. Calls to <a href="com.google.gwt.user.client.ui.PopupPanel.html#setWidth(java.lang.String)">setWidth(String)</a>
+ before the panel's child widget is set will not influence the offset width.<h4 class="api">Return Value</h4>the object's offset width<hr>
+<a name="getPopupLeft()"></a>
+<h3 class="api">getPopupLeft</h3>
+<div class="memberSig">public int<b> getPopupLeft</b>()</div>Gets the popup's left position relative to the browser's client area.<h4 class="api">Return Value</h4>the popup's left position<hr>
+<a name="getPopupTop()"></a>
+<h3 class="api">getPopupTop</h3>
+<div class="memberSig">public int<b> getPopupTop</b>()</div>Gets the popup's top position relative to the browser's client area.<h4 class="api">Return Value</h4>the popup's top position<hr>
+<a name="getStyleElement()"></a>
+<h3 class="api">getStyleElement</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.client.Element.html">Element</a><b> getStyleElement</b>()</div>Template method that returns the element to which style names will be
+ applied. By default it returns the root element, but this method may be
+ overridden to apply styles to a child element.<h4 class="api">Return Value</h4>the element to which style names will be applied<hr>
+<a name="getTitle()"></a>
+<h3 class="api">getTitle</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getTitle</b>()</div>Gets the title associated with this object. The title is the 'tool-tip'
+ displayed to users when they hover over the object.<h4 class="api">Return Value</h4>the object's title<hr>
+<a name="hide()"></a>
+<h3 class="api">hide</h3>
+<div class="memberSig">public void<b> hide</b>()</div>Hides the popup. This has no effect if it is not currently visible.<hr>
+<a name="onDetach()"></a>
+<h3 class="api">onDetach</h3>
+<div class="memberSig">protected void<b> onDetach</b>()</div>This method is called when a widget is detached from the browser's
+ document. To receive notification before the PopupPanel is removed from the
+ document, override the <a href="com.google.gwt.user.client.ui.Widget.html#onUnload()">Widget.onUnload()</a> method instead.<hr>
+<a name="onEventPreview(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">onEventPreview</h3>
+<div class="memberSig">public boolean<b> onEventPreview</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> event</nobr>)</div>Called when a browser event occurs and this event preview is on top of the
+ preview stack.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>event</dt>
+<dd>the browser event</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> to cancel the event<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.DOM.html#addEventPreview(com.google.gwt.user.client.EventPreview)">DOM.addEventPreview(EventPreview)</a>
+<hr>
+<a name="onKeyDownPreview(char, int)"></a>
+<h3 class="api">onKeyDownPreview</h3>
+<div class="memberSig">public boolean<b> onKeyDownPreview</b>(<nobr>char key, </nobr><nobr>int modifiers</nobr>)</div>Popups get an opportunity to preview keyboard events before they are passed
+ to a widget contained by the Popup.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the key code of the depressed key</dd>
+<dt>modifiers</dt>
+<dd>keyboard modifiers, as specified in
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a>.</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> to suppress the event<hr>
+<a name="onKeyPressPreview(char, int)"></a>
+<h3 class="api">onKeyPressPreview</h3>
+<div class="memberSig">public boolean<b> onKeyPressPreview</b>(<nobr>char key, </nobr><nobr>int modifiers</nobr>)</div>Popups get an opportunity to preview keyboard events before they are passed
+ to a widget contained by the Popup.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the unicode character pressed</dd>
+<dt>modifiers</dt>
+<dd>keyboard modifiers, as specified in
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a>.</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> to suppress the event<hr>
+<a name="onKeyUpPreview(char, int)"></a>
+<h3 class="api">onKeyUpPreview</h3>
+<div class="memberSig">public boolean<b> onKeyUpPreview</b>(<nobr>char key, </nobr><nobr>int modifiers</nobr>)</div>Popups get an opportunity to preview keyboard events before they are passed
+ to a widget contained by the Popup.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the key code of the released key</dd>
+<dt>modifiers</dt>
+<dd>keyboard modifiers, as specified in
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a>.</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> to suppress the event<hr>
+<a name="removePopupListener(com.google.gwt.user.client.ui.PopupListener)"></a>
+<h3 class="api">removePopupListener</h3>
+<div class="memberSig">public void<b> removePopupListener</b>(<nobr><a href="com.google.gwt.user.client.ui.PopupListener.html">PopupListener</a> listener</nobr>)</div>Removes a previously added popup listener.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove.</dd>
+</dl>
+<hr>
+<a name="setHeight(java.lang.String)"></a>
+<h3 class="api">setHeight</h3>
+<div class="memberSig">public void<b> setHeight</b>(<nobr><a href="java.lang.String.html">String</a> height</nobr>)</div>Sets the height of the panel's child widget. If the panel's child widget
+ has not been set, the height passed in will be cached and used to set
+ the height immediately after the child widget is set.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>height</dt>
+<dd>the object's new height, in CSS units (e.g. "10px", "1em")</dd>
+</dl>
+<hr>
+<a name="setPopupPosition(int, int)"></a>
+<h3 class="api">setPopupPosition</h3>
+<div class="memberSig">public void<b> setPopupPosition</b>(<nobr>int left, </nobr><nobr>int top</nobr>)</div>Sets the popup's position relative to the browser's client area. The
+ popup's position may be set before calling <a href="com.google.gwt.user.client.ui.PopupPanel.html#show()">show()</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>left</dt>
+<dd>the left position, in pixels</dd>
+<dt>top</dt>
+<dd>the top position, in pixels</dd>
+</dl>
+<hr>
+<a name="setPopupPositionAndShow(com.google.gwt.user.client.ui.PopupPanel.PositionCallback)"></a>
+<h3 class="api">setPopupPositionAndShow</h3>
+<div class="memberSig">public void<b> setPopupPositionAndShow</b>(<nobr><a href="com.google.gwt.user.client.ui.PopupPanel.PositionCallback.html">PopupPanel.PositionCallback</a> callback</nobr>)</div>Sets the popup's position using a <a href="com.google.gwt.user.client.ui.PopupPanel.PositionCallback.html">PositionCallback</a>, and shows
+ the popup. The callback allows positioning to be performed based on
+ the offsetWidth and offsetHeight of the popup, which are normally
+ not available until the popup is showing. By positioning the popup
+ before it is shown, the the popup will not jump from its original
+ position to the new position.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>callback</dt>
+<dd>the callback to set the position of the popup</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.PopupPanel.PositionCallback.html#setPosition(int, int)">PositionCallback.setPosition(int offsetWidth, int offsetHeight)</a>
+<hr>
+<a name="setTitle(java.lang.String)"></a>
+<h3 class="api">setTitle</h3>
+<div class="memberSig">public void<b> setTitle</b>(<nobr><a href="java.lang.String.html">String</a> title</nobr>)</div>Sets the title associated with this object. The title is the 'tool-tip'
+ displayed to users when they hover over the object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>title</dt>
+<dd>the object's new title</dd>
+</dl>
+<hr>
+<a name="setVisible(boolean)"></a>
+<h3 class="api">setVisible</h3>
+<div class="memberSig">public void<b> setVisible</b>(<nobr>boolean visible</nobr>)</div>Sets whether this object is visible.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>visible</dt>
+<dd>
+<code>true</code> to show the object, <code>false</code>
+          to hide it</dd>
+</dl>
+<hr>
+<a name="setWidget(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">setWidget</h3>
+<div class="memberSig">public void<b> setWidget</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Sets this panel's widget. Any existing child widget will be removed.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the panel's new widget, or <code>null</code> to clear the panel</dd>
+</dl>
+<hr>
+<a name="setWidth(java.lang.String)"></a>
+<h3 class="api">setWidth</h3>
+<div class="memberSig">public void<b> setWidth</b>(<nobr><a href="java.lang.String.html">String</a> width</nobr>)</div>Sets the width of the panel's child widget. If the panel's child widget
+ has not been set, the width passed in will be cached and used to set
+ the width immediately after the child widget is set.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>width</dt>
+<dd>the object's new width, in CSS units (e.g. "10px", "1em")</dd>
+</dl>
+<hr>
+<a name="show()"></a>
+<h3 class="api">show</h3>
+<div class="memberSig">public void<b> show</b>()</div>Shows the popup. It must have a child widget before this method is called.</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

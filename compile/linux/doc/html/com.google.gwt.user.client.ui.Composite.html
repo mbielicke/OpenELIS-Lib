@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Composite</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.ComplexPanel.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.CustomButton.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">Composite</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class Composite</h1>
+<div class="classSig">public 
+            class 
+            Composite<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.Widget.html">Widget</a>
+<br>
+<br>// Superclass of <code><a href="com.google.gwt.user.client.ui.DisclosurePanel.html">DisclosurePanel</a></code>, <code><a href="com.google.gwt.user.client.ui.SuggestBox.html">SuggestBox</a></code>, <code><a href="com.google.gwt.user.client.ui.TabBar.html">TabBar</a></code>, <code><a href="com.google.gwt.user.client.ui.TabPanel.html">TabPanel</a></code>
+</div>A type of widget that can wrap another widget, hiding the wrapped widget's
+ methods. When added to a panel, a composite behaves exactly as if the widget
+ it wraps had been added.
+ 
+ <p>
+ The composite is useful for creating a single widget out of an aggregate of
+ multiple other widgets contained in a single panel.
+ </p>
+<p>
+<h3>Example</h3>
+<pre class="code">public class CompositeExample implements EntryPoint {
+
+  /**
+   * A composite of a TextBox and a CheckBox that optionally enables it.
+   */
+  private static class OptionalTextBox extends Composite implements
+      ClickListener {
+
+    private TextBox textBox = new TextBox();
+    private CheckBox checkBox = new CheckBox();
+
+    /**
+     * Constructs an OptionalTextBox with the given caption on the check.
+     * 
+     * @param caption the caption to be displayed with the check box
+     */
+    public OptionalTextBox(String caption) {
+      // Place the check above the text box using a vertical panel.
+      VerticalPanel panel = new VerticalPanel();
+      panel.add(checkBox);
+      panel.add(textBox);
+
+      // Set the check box's caption, and check it by default.
+      checkBox.setText(caption);
+      checkBox.setChecked(true);
+      checkBox.addClickListener(this);
+
+      // All composites must call initWidget() in their constructors.
+      initWidget(panel);
+
+      // Give the overall composite a style name.
+      setStyleName("example-OptionalCheckBox");
+    }
+
+    public void onClick(Widget sender) {
+      if (sender == checkBox) {
+        // When the check box is clicked, update the text box's enabled state.
+        textBox.setEnabled(checkBox.isChecked());
+      }
+    }
+
+    /**
+     * Sets the caption associated with the check box.
+     * 
+     * @param caption the check box's caption
+     */
+    public void setCaption(String caption) {
+      // Note how we use the use composition of the contained widgets to provide
+      // only the methods that we want to.
+      checkBox.setText(caption);
+    }
+
+    /**
+     * Gets the caption associated with the check box.
+     * 
+     * @return the check box's caption
+     */
+    public String getCaption() {
+      return checkBox.getText();
+    }
+  }
+
+  public void onModuleLoad() {
+    // Create an optional text box and add it to the root panel.
+    OptionalTextBox otb = new OptionalTextBox("Check this to enable me");
+    RootPanel.get().add(otb);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#getElement()">getElement()</a></td><td>This override checks to ensure <a href="com.google.gwt.user.client.ui.Composite.html#initWidget(com.google.gwt.user.client.ui.Widget)">initWidget(Widget)</a> has been called. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#getWidget()">getWidget()</a></td><td>Provides subclasses access to the topmost widget that defines this
+ composite. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#initWidget(com.google.gwt.user.client.ui.Widget)">initWidget(Widget)</a></td><td>Sets the widget to be wrapped by the composite. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#isAttached()">isAttached()</a></td><td>Determines whether this widget is currently attached to the browser's
+ document (i.e., there is an unbroken chain of widgets between this widget
+ and the underlying browser document). </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#onAttach()">onAttach()</a></td><td>This method is called when a widget is attached to the browser's document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#onDetach()">onDetach()</a></td><td>This method is called when a widget is detached from the browser's
+ document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Composite.html#setWidget(com.google.gwt.user.client.ui.Widget)">setWidget(Widget)</a></td><td>This method was for initializing the Widget to be wrapped by this
+ Composite, but has been deprecated in favor of <a href="com.google.gwt.user.client.ui.Composite.html#initWidget(com.google.gwt.user.client.ui.Widget)">initWidget(Widget)</a>. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="getElement()"></a>
+<h3 class="api">getElement</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.Element.html">Element</a><b> getElement</b>()</div>This override checks to ensure <a href="com.google.gwt.user.client.ui.Composite.html#initWidget(com.google.gwt.user.client.ui.Widget)">initWidget(Widget)</a> has been called.<hr>
+<a name="getWidget()"></a>
+<h3 class="api">getWidget</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a><b> getWidget</b>()</div>Provides subclasses access to the topmost widget that defines this
+ composite.<h4 class="api">Return Value</h4>the widget<hr>
+<a name="initWidget(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">initWidget</h3>
+<div class="memberSig">protected void<b> initWidget</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget</nobr>)</div>Sets the widget to be wrapped by the composite. The wrapped widget must be
+ set before calling any <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> methods on this object, or adding it
+ to a panel. This method may only be called once for a given composite.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be wrapped</dd>
+</dl>
+<hr>
+<a name="isAttached()"></a>
+<h3 class="api">isAttached</h3>
+<div class="memberSig">public boolean<b> isAttached</b>()</div>Determines whether this widget is currently attached to the browser's
+ document (i.e., there is an unbroken chain of widgets between this widget
+ and the underlying browser document).<h4 class="api">Return Value</h4>
+<code>true</code> if the widget is attached<hr>
+<a name="onAttach()"></a>
+<h3 class="api">onAttach</h3>
+<div class="memberSig">protected void<b> onAttach</b>()</div>This method is called when a widget is attached to the browser's document.
+ To receive notification after a Widget has been added to the document,
+ override the <a href="com.google.gwt.user.client.ui.Widget.html#onLoad()">onLoad</a> method.
+ 
+ <p>
+ Subclasses that override this method must call
+ <code>super.onAttach()</code> to ensure that the Widget has been attached
+ to its underlying Element.
+ </p>
+<hr>
+<a name="onDetach()"></a>
+<h3 class="api">onDetach</h3>
+<div class="memberSig">protected void<b> onDetach</b>()</div>This method is called when a widget is detached from the browser's
+ document. To receive notification before a Widget is removed from the
+ document, override the <a href="com.google.gwt.user.client.ui.Widget.html#onUnload()">onUnload</a> method.
+ 
+ <p>
+ Subclasses that override this method must call
+ <code>super.onDetach()</code> to ensure that the Widget has been detached
+ from the underlying Element. Failure to do so will result in application
+ memory leaks due to circular references between DOM Elements and JavaScript
+ objects.
+ </p>
+<hr>
+<a name="setWidget(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">setWidget</h3>
+<div class="memberSig">protected void<b> setWidget</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget</nobr>)</div>This method was for initializing the Widget to be wrapped by this
+ Composite, but has been deprecated in favor of <a href="com.google.gwt.user.client.ui.Composite.html#initWidget(com.google.gwt.user.client.ui.Widget)">initWidget(Widget)</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

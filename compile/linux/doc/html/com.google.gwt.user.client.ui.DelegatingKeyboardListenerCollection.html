@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            DelegatingKeyboardListenerCollection</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.DelegatingFocusListenerCollection.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.DialogBox.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">DelegatingKeyboardListenerCollection</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class DelegatingKeyboardListenerCollection</h1>
+<div class="classSig">public 
+            class 
+            DelegatingKeyboardListenerCollection<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.KeyboardListenerCollection.html">KeyboardListenerCollection</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a>
+</div>
+<a href="com.google.gwt.user.client.ui.KeyboardListenerCollection.html">KeyboardListenerCollection</a> used to correctly hook up event listeners
+ to the composite's wrapped widget.
+ 
+ <p>
+ For example, <a href="com.google.gwt.user.client.ui.Composite.html">Composite</a> widgets often need to listen to events
+ generated on their wrapped widget. Upon the firing of a wrapped widget's
+ event, the composite widget must fire its own listeners with itself as the
+ source of the event. To use a <a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html">DelegatingKeyboardListenerCollection</a>,
+ simply use the <a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html">DelegatingKeyboardListenerCollection</a> instead of a
+ <a href="com.google.gwt.user.client.ui.KeyboardListenerCollection.html">KeyboardListenerCollection</a>. For example, in <a href="com.google.gwt.user.client.ui.SuggestBox.html">SuggestBox</a>, the
+ following code is used to listen to keyboard events on the <a href="com.google.gwt.user.client.ui.SuggestBox.html">SuggestBox</a>'s
+ underlying widget.
+ </p>
+<pre>
+  public void addKeyboardListener(KeyboardListener listener) {
+    if (keyboardListeners == null) {
+      keyboardListeners = new DelegatingKeyboardListenerCollection(this, box);
+    }
+    keyboardListeners.add(listener);
+  }
+</pre>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html#DelegatingKeyboardListenerCollection(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.SourcesKeyboardEvents)">DelegatingKeyboardListenerCollection(Widget, SourcesKeyboardEvents)</a></td><td>Constructor for <a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html">DelegatingKeyboardListenerCollection</a>. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html#onKeyDown(com.google.gwt.user.client.ui.Widget, char, int)">onKeyDown(Widget, char, int)</a></td><td>Fired when the user depresses a physical key. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html#onKeyPress(com.google.gwt.user.client.ui.Widget, char, int)">onKeyPress(Widget, char, int)</a></td><td>Fired when a keyboard action generates a character. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html#onKeyUp(com.google.gwt.user.client.ui.Widget, char, int)">onKeyUp(Widget, char, int)</a></td><td>Fired when the user releases a physical key. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="DelegatingKeyboardListenerCollection(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.SourcesKeyboardEvents)"></a>
+<h3 class="api">DelegatingKeyboardListenerCollection</h3>
+<div class="memberSig">public <b> DelegatingKeyboardListenerCollection</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> owner, </nobr><nobr><a href="com.google.gwt.user.client.ui.SourcesKeyboardEvents.html">SourcesKeyboardEvents</a> delegatedTo</nobr>)</div>Constructor for <a href="com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection.html">DelegatingKeyboardListenerCollection</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>owner</dt>
+<dd>owner of listeners</dd>
+<dt>delegatedTo</dt>
+<dd>source of events</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="onKeyDown(com.google.gwt.user.client.ui.Widget, char, int)"></a>
+<h3 class="api">onKeyDown</h3>
+<div class="memberSig">public void<b> onKeyDown</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> sender, </nobr><nobr>char keyCode, </nobr><nobr>int modifiers</nobr>)</div>Fired when the user depresses a physical key.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>sender</dt>
+<dd>the widget that was focused when the event occurred.</dd>
+<dt>keyCode</dt>
+<dd>the physical key that was depressed. Constants for this
+          value are defined in this interface with the KEY prefix.</dd>
+<dt>modifiers</dt>
+<dd>the modifier keys pressed at when the event occurred. This
+          value is a combination of the bits defined by
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_SHIFT">KeyboardListener.MODIFIER_SHIFT</a>,
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_CTRL">KeyboardListener.MODIFIER_CTRL</a>, and
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_ALT">KeyboardListener.MODIFIER_ALT</a>.</dd>
+</dl>
+<hr>
+<a name="onKeyPress(com.google.gwt.user.client.ui.Widget, char, int)"></a>
+<h3 class="api">onKeyPress</h3>
+<div class="memberSig">public void<b> onKeyPress</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> sender, </nobr><nobr>char keyCode, </nobr><nobr>int modifiers</nobr>)</div>Fired when a keyboard action generates a character. This occurs after
+ onKeyDown and onKeyUp are fired for the physical key that was pressed.
+
+ <p>
+ It should be noted that many browsers do not generate keypress events
+ for non-printing keyCode values, such as <a href="com.google.gwt.user.client.ui.KeyboardListener.html#KEY_ENTER">KeyboardListener.KEY_ENTER</a>
+ or arrow keys.  These keyCodes can be reliably captured either with
+ <a href="com.google.gwt.user.client.ui.KeyboardListener.html#onKeyDown(com.google.gwt.user.client.ui.Widget, char, int)">KeyboardListener.onKeyDown(Widget, char, int)</a> or
+ <a href="com.google.gwt.user.client.ui.KeyboardListener.html#onKeyUp(com.google.gwt.user.client.ui.Widget, char, int)">KeyboardListener.onKeyUp(Widget, char, int)</a>.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>sender</dt>
+<dd>the widget that was focused when the event occurred.</dd>
+<dt>keyCode</dt>
+<dd>the Unicode character that was generated by the keyboard
+          action.</dd>
+<dt>modifiers</dt>
+<dd>the modifier keys pressed at when the event occurred. This
+          value is a combination of the bits defined by
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_SHIFT">KeyboardListener.MODIFIER_SHIFT</a>,
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_CTRL">KeyboardListener.MODIFIER_CTRL</a>, and
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_ALT">KeyboardListener.MODIFIER_ALT</a>.</dd>
+</dl>
+<hr>
+<a name="onKeyUp(com.google.gwt.user.client.ui.Widget, char, int)"></a>
+<h3 class="api">onKeyUp</h3>
+<div class="memberSig">public void<b> onKeyUp</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> sender, </nobr><nobr>char keyCode, </nobr><nobr>int modifiers</nobr>)</div>Fired when the user releases a physical key.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>sender</dt>
+<dd>the widget that was focused when the event occurred.</dd>
+<dt>keyCode</dt>
+<dd>the physical key that was released. Constants for this value
+          are defined in this interface with the KEY prefix.</dd>
+<dt>modifiers</dt>
+<dd>the modifier keys pressed at when the event occurred. This
+          value is a combination of the bits defined by
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_SHIFT">KeyboardListener.MODIFIER_SHIFT</a>,
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_CTRL">KeyboardListener.MODIFIER_CTRL</a>, and
+          <a href="com.google.gwt.user.client.ui.KeyboardListener.html#MODIFIER_ALT">KeyboardListener.MODIFIER_ALT</a>.</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

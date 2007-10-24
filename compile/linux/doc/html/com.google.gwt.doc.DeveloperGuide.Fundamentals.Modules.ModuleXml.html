@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Module XML Format</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.AutomaticResourceInjection.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.html">Fundamentals</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">Modules</a></span> &gt;
+						<span class="selected item">Module XML Format</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Module XML Format</h1>Modules are defined in XML files whose file extension is
+ <code>.gwt.xml</code>. Module XML files should reside in your
+ project's root package.
+ 
+ <p>
+ If you are using the
+ <a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.ProjectStructure.html">standard project structure</a>,
+ your module XML can be as simple as this:
+ 
+ <pre class="code">
+ &lt;module&gt;
+    &lt;inherits name="com.google.gwt.user.User"/&gt;
+    &lt;entry-point class="com.example.cal.client.CalendarApp"/&gt;
+ &lt;/module&gt;</pre>
+</p>
+<h2>Loading Modules</h2>
+ Module XML files are found on the Java classpath, referenced by their
+ logical module names from
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.HostPage.html">host pages</a> and by being
+ inherited by other modules.
+ 
+ <p>
+ Modules are always referred to by their logical names. The logical name
+ of a module is of the form <code>pkg1.pkg2.ModuleName</code>
+ (although any number of packages may be present) and includes neither
+ the actual file system path nor the file extension. For example, the
+ logical name of a module XML file located at
+ 
+ <pre>~/src/com/example/cal/Calendar.gwt.xml</pre>
+ 
+ is
+ 
+ <pre>com.example.cal.Calendar</pre>
+</p>
+<h2>Available Elements</h2>
+<dl class="fixed">
+<dt>&lt;inherits name="<i>logical-module-name</i>"/&gt;</dt>
+<dd>Inherits all the settings from the specified module as if the
+ contents of the inherited module's XML were copied verbatim. Any number
+ of modules can be inherited in this manner.</dd>
+<dt>&lt;entry-point class="<i>classname</i>"/&gt;</dt>
+<dd>Specifies an
+ <a href="com.google.gwt.core.client.EntryPoint.html">entry point</a> class. Any
+ number of entry-point classes can be added, including those from
+ inherited modules.</dd>
+<dt>&lt;source path="<i>path</i>"/&gt;</dt>
+<dd>Adds packages to the
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">source path</a> by combining
+ the package in which the module XML is found with the specified path to
+ a subpackage. Any Java source file appearing in this subpackage or any
+ of its subpackages is assumed to be translatable.
+ <p>
+ If no <code>&lt;source&gt;</code> element is defined in a module XML
+ file, the <code>client</code> subpackage is implicitly added to the
+ source path as if <code>&lt;source path="client"&gt;</code> had been
+ found in the XML. This default helps keep module XML compact for
+ standard project layouts.
+ </p>
+</dd>
+<dt>&lt;public path="<i>path</i>"/&gt;</dt>
+<dd>Adds packages to the
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.html">public path</a> by combining
+ the package in which the module XML is found with the specified path to
+ identify the root of a public path entry. Any file appearing in this
+ package or any of its subpackages will be treated as a
+ publicly-accessible resource. The <code>&lt;public&gt;</code> element
+ supports
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.PublicPackageFiltering.html">pattern-based filtering</a>
+ to allow fine-grained control over which resources get copied into the
+ output directory during a GWT compile.
+ 
+ <p>
+ If no <code>&lt;public&gt;</code> element is defined in a module XML
+ file, the <code>public</code> subpackage is implicitly added to the
+ public path as if <code>&lt;public path="public"&gt;</code> had been
+ found in the XML. This default helps keep module XML compact for
+ standard project layouts.
+ </p>
+</dd>
+<dt>&lt;servlet path="<i>url-path</i>" class="<i>classname</i>"/&gt;</dt>
+<dd>For convenient RPC testing, this element loads a servlet class
+ mounted at the specified URL path. The URL path should be absolute and
+ have the form of a directory (for example, <code>/spellcheck</code>).
+ Your client code then specifies this URL mapping in a call to
+ <a href="com.google.gwt.user.client.rpc.ServiceDefTarget.html#setServiceEntryPoint(java.lang.String)">ServiceDefTarget.setServiceEntryPoint(String)</a>. Any number of
+ servlets may be loaded in this manner, including those from inherited
+ modules.</dd>
+<dt>&lt;script src="<i>js-url</i>"/&gt;</dt>
+<dd>Automatically injects the external JavaScript file located at the
+ location specified by <i>src</i>. See
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.AutomaticResourceInjection.html">automatic resource inclusion</a>
+ for details.</dd>
+<dt>&lt;stylesheet src="<i>css-url</i>"/&gt;</dt>
+<dd>Automatically injects the external CSS file located at the
+ location specified by <i>src</i>. See
+ <a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.Modules.AutomaticResourceInjection.html">automatic resource inclusion</a>
+ for details.</dd>
+<dt>&lt;extend-property name="<i>client-property-name</i>" values="<i>comma-separated-values</i>"/&gt;</dt>
+<dd>Extends the set of values for an existing client property. Any
+ number of values may be added in this manner, and client property
+ values accumulate through inherited modules. You will likely only find
+ this useful for
+ <a href="com.google.gwt.doc.DeveloperGuide.Internationalization.SpecifyingLocale.html">specifying locales in internationalization</a>.</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

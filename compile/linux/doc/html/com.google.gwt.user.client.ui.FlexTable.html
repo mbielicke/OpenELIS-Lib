@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            FlexTable</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.FileUpload.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">FlexTable</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class FlexTable</h1>
+<div class="classSig">public 
+            class 
+            FlexTable<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.HTMLTable.html">HTMLTable</a>
+</div>A flexible table that creates cells on demand. It can be jagged (that is,
+ each row can contain a different number of cells) and individual cells can be
+ set to span multiple rows or columns.
+ <p>
+<img class="gallery" src="Table.png"></p>
+<p>
+<h3>Example</h3>
+<pre class="code">public class FlexTableExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Tables have no explicit size -- they resize automatically on demand.
+    FlexTable t = new FlexTable();
+
+    // Put some text at the table's extremes.  This forces the table to be
+    // 3 by 3.
+    t.setText(0, 0, "upper-left corner");
+    t.setText(2, 2, "bottom-right corner");
+
+    // Let's put a button in the middle...
+    t.setWidget(1, 0, new Button("Wide Button"));
+
+    // ...and set it's column span so that it takes up the whole row.
+    t.getFlexCellFormatter().setColSpan(1, 0, 3);
+
+    RootPanel.get().add(t);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Nested Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter.html">FlexTable.FlexCellFormatter</a></td><td>FlexTable-specific implementation of <a href="com.google.gwt.user.client.ui.HTMLTable.CellFormatter.html">CellFormatter</a>. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#FlexTable()">FlexTable()</a></td><td></td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#addCell(int)">addCell(int)</a></td><td>Appends a cell to the specified row. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#getCellCount(int)">getCellCount(int)</a></td><td>Gets the number of cells on a given row. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#getFlexCellFormatter()">getFlexCellFormatter()</a></td><td>Explicitly gets the <a href="com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter.html">FlexCellFormatter</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#getRowCount()">getRowCount()</a></td><td>Gets the number of rows. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#insertCell(int, int)">insertCell(int, int)</a></td><td>Inserts a cell into the FlexTable. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#insertRow(int)">insertRow(int)</a></td><td>Inserts a row into the FlexTable. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#prepareCell(int, int)">prepareCell(int, int)</a></td><td>Ensure that the cell exists. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#prepareRow(int)">prepareRow(int)</a></td><td>Ensure that the row exists. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#removeCell(int, int)">removeCell(int, int)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#removeCells(int, int, int)">removeCells(int, int, int)</a></td><td>Removes a number of cells from a row in the table. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FlexTable.html#removeRow(int)">removeRow(int)</a></td><td>Removes the specified row from the table. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="FlexTable()"></a>
+<h3 class="api">FlexTable</h3>
+<div class="memberSig">public <b> FlexTable</b>()</div>
+<h2 class="api">Method Detail</h2>
+<a name="addCell(int)"></a>
+<h3 class="api">addCell</h3>
+<div class="memberSig">public void<b> addCell</b>(<nobr>int row</nobr>)</div>Appends a cell to the specified row.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the row to which the new cell will be added</dd>
+</dl>
+<hr>
+<a name="getCellCount(int)"></a>
+<h3 class="api">getCellCount</h3>
+<div class="memberSig">public int<b> getCellCount</b>(<nobr>int row</nobr>)</div>Gets the number of cells on a given row.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the row whose cells are to be counted</dd>
+</dl>
+<h4 class="api">Return Value</h4>the number of cells present<hr>
+<a name="getFlexCellFormatter()"></a>
+<h3 class="api">getFlexCellFormatter</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter.html">FlexTable.FlexCellFormatter</a><b> getFlexCellFormatter</b>()</div>Explicitly gets the <a href="com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter.html">FlexCellFormatter</a>. The results of
+ <a href="com.google.gwt.user.client.ui.HTMLTable.html#getCellFormatter()">HTMLTable.getCellFormatter()</a> may also be downcast to a
+ <a href="com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter.html">FlexCellFormatter</a>.<h4 class="api">Return Value</h4>the FlexTable's cell formatter<hr>
+<a name="getRowCount()"></a>
+<h3 class="api">getRowCount</h3>
+<div class="memberSig">public int<b> getRowCount</b>()</div>Gets the number of rows.<h4 class="api">Return Value</h4>number of rows<hr>
+<a name="insertCell(int, int)"></a>
+<h3 class="api">insertCell</h3>
+<div class="memberSig">public void<b> insertCell</b>(<nobr>int beforeRow, </nobr><nobr>int beforeColumn</nobr>)</div>Inserts a cell into the FlexTable.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>beforeRow</dt>
+<dd>the cell's row</dd>
+<dt>beforeColumn</dt>
+<dd>the cell's column</dd>
+</dl>
+<hr>
+<a name="insertRow(int)"></a>
+<h3 class="api">insertRow</h3>
+<div class="memberSig">public int<b> insertRow</b>(<nobr>int beforeRow</nobr>)</div>Inserts a row into the FlexTable.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>beforeRow</dt>
+<dd>the row to insert</dd>
+</dl>
+<hr>
+<a name="prepareCell(int, int)"></a>
+<h3 class="api">prepareCell</h3>
+<div class="memberSig">protected void<b> prepareCell</b>(<nobr>int row, </nobr><nobr>int column</nobr>)</div>Ensure that the cell exists.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the row to prepare.</dd>
+<dt>column</dt>
+<dd>the column to prepare.</dd>
+</dl>
+<hr>
+<a name="prepareRow(int)"></a>
+<h3 class="api">prepareRow</h3>
+<div class="memberSig">protected void<b> prepareRow</b>(<nobr>int row</nobr>)</div>Ensure that the row exists.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>The row to prepare.</dd>
+</dl>
+<hr>
+<a name="removeCell(int, int)"></a>
+<h3 class="api">removeCell</h3>
+<div class="memberSig">public void<b> removeCell</b>(<nobr>int row, </nobr><nobr>int col</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>col</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.HTMLTable.html#removeCell(int, int)">HTMLTable.removeCell(int, int)</a>
+<hr>
+<a name="removeCells(int, int, int)"></a>
+<h3 class="api">removeCells</h3>
+<div class="memberSig">public void<b> removeCells</b>(<nobr>int row, </nobr><nobr>int column, </nobr><nobr>int num</nobr>)</div>Removes a number of cells from a row in the table.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the row of the cells to be removed</dd>
+<dt>column</dt>
+<dd>the column of the first cell to be removed</dd>
+<dt>num</dt>
+<dd>the number of cells to be removed</dd>
+</dl>
+<hr>
+<a name="removeRow(int)"></a>
+<h3 class="api">removeRow</h3>
+<div class="memberSig">protected void<b> removeRow</b>(<nobr>int row</nobr>)</div>Removes the specified row from the table.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the index of the row to be removed</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

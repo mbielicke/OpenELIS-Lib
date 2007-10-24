@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            UnableToCompleteException</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.core.ext.Generator.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.core.ext.GeneratorContext.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.core.ext.html">com.google.gwt.core.ext</a></span> &gt;
+            <span class="selected item">UnableToCompleteException</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class UnableToCompleteException</h1>
+<div class="classSig">public 
+            class 
+            UnableToCompleteException<br>extends
+                <a xmlns="" href="java.lang.Exception.html">Exception</a>
+</div>Used to indicate that some part of a multi-step process failed. Typically,
+ operation can continue after this exception is caught.
+ 
+ Before throwing an object of this type, the thrower
+ <ul>
+<li>must log a detailed user-facing message describing the failure,</li>
+<li>must report any caught exception using the logger that contributed to
+ the failure, and </li>
+<li>must not include the cause of the failure in the thrown exception
+ because (1) it will already have been associated with the detailed log entry
+ above and (2) doing so would create a misunderstanding of how to find the
+ causes of low-level errors in that sometimes there is an underlying an
+ exception, sometimes not, but there can <em>always</em> be a preceding log
+ entry. </li>
+</ul>
+ 
+ After catching an object of this type, the catcher
+ <ul>
+<li>can be assured that the thrower has already logged a message about the
+ lower-level problem</li>
+<li>can optionally itself log a higher-level description of the process that
+ was interrupted and the implications of the failure, and if so,</li>
+<li>should report this caught exception via the logger as well.</li>
+</ul>
+<pre>
+  void lowLevel(Logger logger) throws UnableToCompleteException {
+      try {
+          doSomethingThatMightFail();
+      catch (SomeException e) {
+          // Log low-level detail and the caught exception.
+          //
+          logger.log("detailed problem explanation for user eyes...", e);
+          
+          // Do not include the caught exception.
+          //
+          throw new UnableToCompleteException();
+      }
+  }
+  
+  void highLevel(Logger logger) {
+      try {
+          // Multiple calls are shown to indicate that the process can 
+          // include any number of steps.
+          //
+          lowLevel(logger);
+          lowLevel(logger);
+          lowLevel(logger);
+      }
+      catch (UnableToCompleteException e) {
+          logger.log("high-level thing failed", e);
+      }    
+  }
+ </pre>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.core.ext.UnableToCompleteException.html#UnableToCompleteException()">UnableToCompleteException()</a></td><td></td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="UnableToCompleteException()"></a>
+<h3 class="api">UnableToCompleteException</h3>
+<div class="memberSig">public <b> UnableToCompleteException</b>()</div>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

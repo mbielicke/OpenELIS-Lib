@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            DisclosurePanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.DisclosureEvent.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.DockPanel.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">DisclosurePanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class DisclosurePanel</h1>
+<div class="classSig">public final 
+            class 
+            DisclosurePanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.Composite.html">Composite</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.FiresDisclosureEvents.html">FiresDisclosureEvents</a>, <a href="com.google.gwt.user.client.ui.HasWidgets.html">HasWidgets</a>
+</div>A widget that consists of a header and a content panel that discloses the
+ content when a user clicks on the header.
+ 
+ <h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-DisclosurePanel { the panel's primary style }</li>
+<li>.gwt-DisclosurePanel-open { dependent style set when panel is open }</li>
+<li>.gwt-DisclosurePanel-closed { dependent style set when panel is closed }</li>
+<li>.header { the header section }</li>
+<li>.content { the content section }</li>
+</ul>
+<p>
+<img class="gallery" src="DisclosurePanel.png"></p>
+<p>
+ The header and content sections can be easily selected using css with a child
+ selector:<br> .gwt-DisclosurePanel-open .header { ... }
+ </p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#DisclosurePanel()">DisclosurePanel()</a></td><td>Creates an empty DisclosurePanel that is initially closed. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#DisclosurePanel(com.google.gwt.user.client.ui.DisclosurePanelImages, java.lang.String, boolean)">DisclosurePanel(DisclosurePanelImages, String, boolean)</a></td><td>Creates a DisclosurePanel with the specified header text, an initial
+ open/close state and a bundle of images to be used in the default header
+ widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#DisclosurePanel(java.lang.String)">DisclosurePanel(String)</a></td><td>Creates a DisclosurePanel that will be initially closed using the specified
+ text in the header. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#DisclosurePanel(java.lang.String, boolean)">DisclosurePanel(String, boolean)</a></td><td>Creates a DisclosurePanel with the specified header text and an initial
+ open/close state. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#DisclosurePanel(com.google.gwt.user.client.ui.Widget)">DisclosurePanel(Widget)</a></td><td>Creates a DisclosurePanel that will be initially closed using a widget as
+ the header. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#DisclosurePanel(com.google.gwt.user.client.ui.Widget, boolean)">DisclosurePanel(Widget, boolean)</a></td><td>Creates a DisclosurePanel using a widget as the header and an initial
+ open/close state. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#add(com.google.gwt.user.client.ui.Widget)">add(Widget)</a></td><td>Adds a child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#addEventHandler(com.google.gwt.user.client.ui.DisclosureHandler)">addEventHandler(DisclosureHandler)</a></td><td>Attaches an event handler to the panel to receive <a href="com.google.gwt.user.client.ui.DisclosureEvent.html">DisclosureEvent</a>
+ notification. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#clear()">clear()</a></td><td>Removes all child widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#getContent()">getContent()</a></td><td>Gets the widget that was previously set in <a href="com.google.gwt.user.client.ui.DisclosurePanel.html#setContent(com.google.gwt.user.client.ui.Widget)">setContent(Widget)</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#getHeader()">getHeader()</a></td><td>Gets the widget that is currently being used as a header. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#getHeaderTextAccessor()">getHeaderTextAccessor()</a></td><td>Gets a <a href="com.google.gwt.user.client.ui.HasText.html">HasText</a> instance to provide access to the headers's text, if
+ the header widget does provide such access. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#isOpen()">isOpen()</a></td><td>Determines whether the panel is open. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#iterator()">iterator()</a></td><td>Gets an iterator for the contained widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a></td><td>Removes a child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#removeEventHandler(com.google.gwt.user.client.ui.DisclosureHandler)">removeEventHandler(DisclosureHandler)</a></td><td>Removes an event handler from the panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#setContent(com.google.gwt.user.client.ui.Widget)">setContent(Widget)</a></td><td>Sets the content widget which can be opened and closed by this panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#setHeader(com.google.gwt.user.client.ui.Widget)">setHeader(Widget)</a></td><td>Sets the widget used as the header for the panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DisclosurePanel.html#setOpen(boolean)">setOpen(boolean)</a></td><td>Changes the visible state of this <code>DisclosurePanel</code>. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="DisclosurePanel()"></a>
+<h3 class="api">DisclosurePanel</h3>
+<div class="memberSig">public <b> DisclosurePanel</b>()</div>Creates an empty DisclosurePanel that is initially closed.<hr>
+<a name="DisclosurePanel(com.google.gwt.user.client.ui.DisclosurePanelImages, java.lang.String, boolean)"></a>
+<h3 class="api">DisclosurePanel</h3>
+<div class="memberSig">public <b> DisclosurePanel</b>(<nobr><a href="com.google.gwt.user.client.ui.DisclosurePanelImages.html">DisclosurePanelImages</a> images, </nobr><nobr><a href="java.lang.String.html">String</a> headerText, </nobr><nobr>boolean isOpen</nobr>)</div>Creates a DisclosurePanel with the specified header text, an initial
+ open/close state and a bundle of images to be used in the default header
+ widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>images</dt>
+<dd>a bundle that provides disclosure panel specific images</dd>
+<dt>headerText</dt>
+<dd>the text to be displayed in the header</dd>
+<dt>isOpen</dt>
+<dd>the initial open/close state of the content panel</dd>
+</dl>
+<hr>
+<a name="DisclosurePanel(java.lang.String)"></a>
+<h3 class="api">DisclosurePanel</h3>
+<div class="memberSig">public <b> DisclosurePanel</b>(<nobr><a href="java.lang.String.html">String</a> headerText</nobr>)</div>Creates a DisclosurePanel that will be initially closed using the specified
+ text in the header.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>headerText</dt>
+<dd>the text to be displayed in the header.</dd>
+</dl>
+<hr>
+<a name="DisclosurePanel(java.lang.String, boolean)"></a>
+<h3 class="api">DisclosurePanel</h3>
+<div class="memberSig">public <b> DisclosurePanel</b>(<nobr><a href="java.lang.String.html">String</a> headerText, </nobr><nobr>boolean isOpen</nobr>)</div>Creates a DisclosurePanel with the specified header text and an initial
+ open/close state.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>headerText</dt>
+<dd>the text to be displayed in the header</dd>
+<dt>isOpen</dt>
+<dd>the initial open/close state of the content panel</dd>
+</dl>
+<hr>
+<a name="DisclosurePanel(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">DisclosurePanel</h3>
+<div class="memberSig">public <b> DisclosurePanel</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> header</nobr>)</div>Creates a DisclosurePanel that will be initially closed using a widget as
+ the header.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>header</dt>
+<dd>the widget to be used as a header</dd>
+</dl>
+<hr>
+<a name="DisclosurePanel(com.google.gwt.user.client.ui.Widget, boolean)"></a>
+<h3 class="api">DisclosurePanel</h3>
+<div class="memberSig">public <b> DisclosurePanel</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> header, </nobr><nobr>boolean isOpen</nobr>)</div>Creates a DisclosurePanel using a widget as the header and an initial
+ open/close state.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>header</dt>
+<dd>the widget to be used as a header</dd>
+<dt>isOpen</dt>
+<dd>the initial open/close state of the content panel</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="add(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Adds a child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+</dl>
+<hr>
+<a name="addEventHandler(com.google.gwt.user.client.ui.DisclosureHandler)"></a>
+<h3 class="api">addEventHandler</h3>
+<div class="memberSig">public final void<b> addEventHandler</b>(<nobr><a href="com.google.gwt.user.client.ui.DisclosureHandler.html">DisclosureHandler</a> handler</nobr>)</div>Attaches an event handler to the panel to receive <a href="com.google.gwt.user.client.ui.DisclosureEvent.html">DisclosureEvent</a>
+ notification.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>handler</dt>
+<dd>the handler to be added (should not be null)</dd>
+</dl>
+<hr>
+<a name="clear()"></a>
+<h3 class="api">clear</h3>
+<div class="memberSig">public void<b> clear</b>()</div>Removes all child widgets.<hr>
+<a name="getContent()"></a>
+<h3 class="api">getContent</h3>
+<div class="memberSig">public final <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a><b> getContent</b>()</div>Gets the widget that was previously set in <a href="com.google.gwt.user.client.ui.DisclosurePanel.html#setContent(com.google.gwt.user.client.ui.Widget)">setContent(Widget)</a>.<h4 class="api">Return Value</h4>the panel's current content widget<hr>
+<a name="getHeader()"></a>
+<h3 class="api">getHeader</h3>
+<div class="memberSig">public final <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a><b> getHeader</b>()</div>Gets the widget that is currently being used as a header.<h4 class="api">Return Value</h4>the widget currently being used as a header<hr>
+<a name="getHeaderTextAccessor()"></a>
+<h3 class="api">getHeaderTextAccessor</h3>
+<div class="memberSig">public final <a href="com.google.gwt.user.client.ui.HasText.html">HasText</a><b> getHeaderTextAccessor</b>()</div>Gets a <a href="com.google.gwt.user.client.ui.HasText.html">HasText</a> instance to provide access to the headers's text, if
+ the header widget does provide such access.<h4 class="api">Return Value</h4>a reference to the header widget if it implements <a href="com.google.gwt.user.client.ui.HasText.html">HasText</a>,
+         <code>null</code> otherwise<hr>
+<a name="isOpen()"></a>
+<h3 class="api">isOpen</h3>
+<div class="memberSig">public final boolean<b> isOpen</b>()</div>Determines whether the panel is open.<h4 class="api">Return Value</h4>
+<code>true</code> if panel is in open state<hr>
+<a name="iterator()"></a>
+<h3 class="api">iterator</h3>
+<div class="memberSig">public <a href="java.util.Iterator.html">Iterator</a><b> iterator</b>()</div>Gets an iterator for the contained widgets. This iterator is required to
+ implement <a href="java.util.Iterator.html#remove()">Iterator.remove()</a>.<hr>
+<a name="remove(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Removes a child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if the widget was present<hr>
+<a name="removeEventHandler(com.google.gwt.user.client.ui.DisclosureHandler)"></a>
+<h3 class="api">removeEventHandler</h3>
+<div class="memberSig">public final void<b> removeEventHandler</b>(<nobr><a href="com.google.gwt.user.client.ui.DisclosureHandler.html">DisclosureHandler</a> handler</nobr>)</div>Removes an event handler from the panel.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>handler</dt>
+<dd>the handler to be removed</dd>
+</dl>
+<hr>
+<a name="setContent(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">setContent</h3>
+<div class="memberSig">public final void<b> setContent</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> content</nobr>)</div>Sets the content widget which can be opened and closed by this panel. If
+ there is a preexisting content widget, it will be detached.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>content</dt>
+<dd>the widget to be used as the content panel</dd>
+</dl>
+<hr>
+<a name="setHeader(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">setHeader</h3>
+<div class="memberSig">public final void<b> setHeader</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> headerWidget</nobr>)</div>Sets the widget used as the header for the panel.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>headerWidget</dt>
+<dd>the widget to be used as the header</dd>
+</dl>
+<hr>
+<a name="setOpen(boolean)"></a>
+<h3 class="api">setOpen</h3>
+<div class="memberSig">public final void<b> setOpen</b>(<nobr>boolean isOpen</nobr>)</div>Changes the visible state of this <code>DisclosurePanel</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>isOpen</dt>
+<dd>
+<code>true</code> to open the panel, <code>false</code>
+          to close</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

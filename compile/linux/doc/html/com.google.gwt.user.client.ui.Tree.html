@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Tree</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.ToggleButton.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.TreeItem.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">Tree</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class Tree</h1>
+<div class="classSig">public 
+            class 
+            Tree<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.Widget.html">Widget</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.HasWidgets.html">HasWidgets</a>, <a href="com.google.gwt.user.client.ui.SourcesTreeEvents.html">SourcesTreeEvents</a>, <a href="com.google.gwt.user.client.ui.HasFocus.html">HasFocus</a>
+</div>A standard hierarchical tree widget. The tree contains a hierarchy of
+ <a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItems</a> that the user can
+ open, close, and select.
+ <p>
+<img class="gallery" src="Tree.png"></p>
+<h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-Tree { the tree itself }</li>
+<li>.gwt-Tree .gwt-TreeItem { a tree item }</li>
+<li>.gwt-Tree .gwt-TreeItem-selected { a selected tree item }</li>
+</ul>
+<p>
+<h3>Example</h3>
+<pre class="code">public class TreeExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Create a tree with a few items in it.
+    TreeItem root = new TreeItem("root");
+    root.addItem("item0");
+    root.addItem("item1");
+    root.addItem("item2");
+
+    // Add a CheckBox to the tree
+    TreeItem item = new TreeItem(new CheckBox("item3"));
+    root.addItem(item);
+
+    Tree t = new Tree();
+    t.addItem(root);
+
+    // Add it to the root panel.
+    RootPanel.get().add(t);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#Tree()">Tree()</a></td><td>Constructs an empty tree. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#Tree(com.google.gwt.user.client.ui.TreeImages)">Tree(TreeImages)</a></td><td>Constructs a tree that uses the specified image bundle for images. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#add(com.google.gwt.user.client.ui.Widget)">add(Widget)</a></td><td>Adds the widget as a root tree item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addFocusListener(com.google.gwt.user.client.ui.FocusListener)">addFocusListener(FocusListener)</a></td><td>Adds a listener interface to receive mouse events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addItem(java.lang.String)">addItem(String)</a></td><td>Adds a simple tree item containing the specified text. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addItem(com.google.gwt.user.client.ui.TreeItem)">addItem(TreeItem)</a></td><td>Adds an item to the root level of this tree. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addItem(com.google.gwt.user.client.ui.Widget)">addItem(Widget)</a></td><td>Adds a new tree item containing the specified widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)">addKeyboardListener(KeyboardListener)</a></td><td>Adds a listener interface to receive keyboard events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addMouseListener(com.google.gwt.user.client.ui.MouseListener)">addMouseListener(MouseListener)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#addTreeListener(com.google.gwt.user.client.ui.TreeListener)">addTreeListener(TreeListener)</a></td><td>Adds a listener interface to receive tree events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#clear()">clear()</a></td><td>Clears all tree items from the current tree. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#doAttachChildren()">doAttachChildren()</a></td><td>If a widget implements HasWidgets, it must override this method and call
+ onAttach() for each of its child widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#doDetachChildren()">doDetachChildren()</a></td><td>If a widget implements HasWidgets, it must override this method and call
+ onDetach() for each of its child widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#ensureSelectedItemVisible()">ensureSelectedItemVisible()</a></td><td>Ensures that the currently-selected item is visible, opening its parents
+ and scrolling the tree as necessary. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#getImageBase()">getImageBase()</a></td><td>Gets this tree's default image package. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#getItem(int)">getItem(int)</a></td><td>Gets the top-level tree item at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#getItemCount()">getItemCount()</a></td><td>Gets the number of items contained at the root of this tree. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#getSelectedItem()">getSelectedItem()</a></td><td>Gets the currently selected item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#getTabIndex()">getTabIndex()</a></td><td>Gets the widget's position in the tab index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#isKeyboardNavigationEnabled(com.google.gwt.user.client.ui.TreeItem)">isKeyboardNavigationEnabled(TreeItem)</a></td><td>Indicates if keyboard navigation is enabled for the Tree and for a given
+ TreeItem. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#iterator()">iterator()</a></td><td>Gets an iterator for the contained widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#onBrowserEvent(com.google.gwt.user.client.Event)">onBrowserEvent(Event)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#onLoad()">onLoad()</a></td><td>This method is called immediately after a widget becomes attached to the
+ browser's document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a></td><td>Removes a child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#removeFocusListener(com.google.gwt.user.client.ui.FocusListener)">removeFocusListener(FocusListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#removeItem(com.google.gwt.user.client.ui.TreeItem)">removeItem(TreeItem)</a></td><td>Removes an item from the root level of this tree. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#removeItems()">removeItems()</a></td><td>Removes all items from the root level of this tree. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#removeKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)">removeKeyboardListener(KeyboardListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#removeTreeListener(com.google.gwt.user.client.ui.TreeListener)">removeTreeListener(TreeListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#setAccessKey(char)">setAccessKey(char)</a></td><td>Sets the widget's 'access key'. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#setFocus(boolean)">setFocus(boolean)</a></td><td>Explicitly focus/unfocus this widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#setImageBase(java.lang.String)">setImageBase(String)</a></td><td>Sets the base URL under which this tree will find its default images. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#setSelectedItem(com.google.gwt.user.client.ui.TreeItem)">setSelectedItem(TreeItem)</a></td><td>Selects a specified item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#setSelectedItem(com.google.gwt.user.client.ui.TreeItem, boolean)">setSelectedItem(TreeItem, boolean)</a></td><td>Selects a specified item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#setTabIndex(int)">setTabIndex(int)</a></td><td>Sets the widget's position in the tab index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Tree.html#treeItemIterator()">treeItemIterator()</a></td><td>Iterator of tree items. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="Tree()"></a>
+<h3 class="api">Tree</h3>
+<div class="memberSig">public <b> Tree</b>()</div>Constructs an empty tree.<hr>
+<a name="Tree(com.google.gwt.user.client.ui.TreeImages)"></a>
+<h3 class="api">Tree</h3>
+<div class="memberSig">public <b> Tree</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeImages.html">TreeImages</a> images</nobr>)</div>Constructs a tree that uses the specified image bundle for images.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>images</dt>
+<dd>a bundle that provides tree specific images</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="add(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget</nobr>)</div>Adds the widget as a root tree item.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>widget to add.</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.HasWidgets.html#add(com.google.gwt.user.client.ui.Widget)">Widget)</a>
+<hr>
+<a name="addFocusListener(com.google.gwt.user.client.ui.FocusListener)"></a>
+<h3 class="api">addFocusListener</h3>
+<div class="memberSig">public void<b> addFocusListener</b>(<nobr><a href="com.google.gwt.user.client.ui.FocusListener.html">FocusListener</a> listener</nobr>)</div>Adds a listener interface to receive mouse events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="addItem(java.lang.String)"></a>
+<h3 class="api">addItem</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a><b> addItem</b>(<nobr><a href="java.lang.String.html">String</a> itemText</nobr>)</div>Adds a simple tree item containing the specified text.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>itemText</dt>
+<dd>the text of the item to be added</dd>
+</dl>
+<h4 class="api">Return Value</h4>the item that was added<hr>
+<a name="addItem(com.google.gwt.user.client.ui.TreeItem)"></a>
+<h3 class="api">addItem</h3>
+<div class="memberSig">public void<b> addItem</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a> item</nobr>)</div>Adds an item to the root level of this tree.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the item to be added</dd>
+</dl>
+<hr>
+<a name="addItem(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">addItem</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a><b> addItem</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget</nobr>)</div>Adds a new tree item containing the specified widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be added</dd>
+</dl>
+<hr>
+<a name="addKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)"></a>
+<h3 class="api">addKeyboardListener</h3>
+<div class="memberSig">public void<b> addKeyboardListener</b>(<nobr><a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a> listener</nobr>)</div>Adds a listener interface to receive keyboard events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="addMouseListener(com.google.gwt.user.client.ui.MouseListener)"></a>
+<h3 class="api">addMouseListener</h3>
+<div class="memberSig">public void<b> addMouseListener</b>(<nobr><a href="com.google.gwt.user.client.ui.MouseListener.html">MouseListener</a> listener</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="addTreeListener(com.google.gwt.user.client.ui.TreeListener)"></a>
+<h3 class="api">addTreeListener</h3>
+<div class="memberSig">public void<b> addTreeListener</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeListener.html">TreeListener</a> listener</nobr>)</div>Adds a listener interface to receive tree events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="clear()"></a>
+<h3 class="api">clear</h3>
+<div class="memberSig">public void<b> clear</b>()</div>Clears all tree items from the current tree.<hr>
+<a name="doAttachChildren()"></a>
+<h3 class="api">doAttachChildren</h3>
+<div class="memberSig">protected void<b> doAttachChildren</b>()</div>If a widget implements HasWidgets, it must override this method and call
+ onAttach() for each of its child widgets.<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.Widget.html#onAttach()">Panel.onAttach()</a>
+<hr>
+<a name="doDetachChildren()"></a>
+<h3 class="api">doDetachChildren</h3>
+<div class="memberSig">protected void<b> doDetachChildren</b>()</div>If a widget implements HasWidgets, it must override this method and call
+ onDetach() for each of its child widgets.<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.Widget.html#onDetach()">Panel.onDetach()</a>
+<hr>
+<a name="ensureSelectedItemVisible()"></a>
+<h3 class="api">ensureSelectedItemVisible</h3>
+<div class="memberSig">public void<b> ensureSelectedItemVisible</b>()</div>Ensures that the currently-selected item is visible, opening its parents
+ and scrolling the tree as necessary.<hr>
+<a name="getImageBase()"></a>
+<h3 class="api">getImageBase</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getImageBase</b>()</div>Gets this tree's default image package.<h4 class="api">Return Value</h4>the tree's image package<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.Tree.html#setImageBase(java.lang.String)">setImageBase</a>
+<hr>
+<a name="getItem(int)"></a>
+<h3 class="api">getItem</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a><b> getItem</b>(<nobr>int index</nobr>)</div>Gets the top-level tree item at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the item at that index<hr>
+<a name="getItemCount()"></a>
+<h3 class="api">getItemCount</h3>
+<div class="memberSig">public int<b> getItemCount</b>()</div>Gets the number of items contained at the root of this tree.<h4 class="api">Return Value</h4>this tree's item count<hr>
+<a name="getSelectedItem()"></a>
+<h3 class="api">getSelectedItem</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a><b> getSelectedItem</b>()</div>Gets the currently selected item.<h4 class="api">Return Value</h4>the selected item<hr>
+<a name="getTabIndex()"></a>
+<h3 class="api">getTabIndex</h3>
+<div class="memberSig">public int<b> getTabIndex</b>()</div>Gets the widget's position in the tab index.<h4 class="api">Return Value</h4>the widget's tab index<hr>
+<a name="isKeyboardNavigationEnabled(com.google.gwt.user.client.ui.TreeItem)"></a>
+<h3 class="api">isKeyboardNavigationEnabled</h3>
+<div class="memberSig">protected boolean<b> isKeyboardNavigationEnabled</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a> currentItem</nobr>)</div>Indicates if keyboard navigation is enabled for the Tree and for a given
+ TreeItem. Subclasses of Tree can override this function to selectively
+ enable or disable keyboard navigation.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>currentItem</dt>
+<dd>the currently selected TreeItem</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if the Tree will response to arrow keys by
+         changing the currently selected item<hr>
+<a name="iterator()"></a>
+<h3 class="api">iterator</h3>
+<div class="memberSig">public <a href="java.util.Iterator.html">Iterator</a><b> iterator</b>()</div>Gets an iterator for the contained widgets. This iterator is required to
+ implement <a href="java.util.Iterator.html#remove()">Iterator.remove()</a>.<hr>
+<a name="onBrowserEvent(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">onBrowserEvent</h3>
+<div class="memberSig">public void<b> onBrowserEvent</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> event</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>event</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="onLoad()"></a>
+<h3 class="api">onLoad</h3>
+<div class="memberSig">protected void<b> onLoad</b>()</div>This method is called immediately after a widget becomes attached to the
+ browser's document.<hr>
+<a name="remove(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Removes a child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if the widget was present<hr>
+<a name="removeFocusListener(com.google.gwt.user.client.ui.FocusListener)"></a>
+<h3 class="api">removeFocusListener</h3>
+<div class="memberSig">public void<b> removeFocusListener</b>(<nobr><a href="com.google.gwt.user.client.ui.FocusListener.html">FocusListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="removeItem(com.google.gwt.user.client.ui.TreeItem)"></a>
+<h3 class="api">removeItem</h3>
+<div class="memberSig">public void<b> removeItem</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a> item</nobr>)</div>Removes an item from the root level of this tree.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the item to be removed</dd>
+</dl>
+<hr>
+<a name="removeItems()"></a>
+<h3 class="api">removeItems</h3>
+<div class="memberSig">public void<b> removeItems</b>()</div>Removes all items from the root level of this tree.<hr>
+<a name="removeKeyboardListener(com.google.gwt.user.client.ui.KeyboardListener)"></a>
+<h3 class="api">removeKeyboardListener</h3>
+<div class="memberSig">public void<b> removeKeyboardListener</b>(<nobr><a href="com.google.gwt.user.client.ui.KeyboardListener.html">KeyboardListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="removeTreeListener(com.google.gwt.user.client.ui.TreeListener)"></a>
+<h3 class="api">removeTreeListener</h3>
+<div class="memberSig">public void<b> removeTreeListener</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeListener.html">TreeListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="setAccessKey(char)"></a>
+<h3 class="api">setAccessKey</h3>
+<div class="memberSig">public void<b> setAccessKey</b>(<nobr>char key</nobr>)</div>Sets the widget's 'access key'. This key is used (in conjunction with a
+ browser-specific modifier key) to automatically focus the widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>key</dt>
+<dd>the widget's access key</dd>
+</dl>
+<hr>
+<a name="setFocus(boolean)"></a>
+<h3 class="api">setFocus</h3>
+<div class="memberSig">public void<b> setFocus</b>(<nobr>boolean focused</nobr>)</div>Explicitly focus/unfocus this widget. Only one widget can have focus at a
+ time, and the widget that does will receive all keyboard events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>focused</dt>
+<dd>whether this widget should take focus or release it</dd>
+</dl>
+<hr>
+<a name="setImageBase(java.lang.String)"></a>
+<h3 class="api">setImageBase</h3>
+<div class="memberSig">public void<b> setImageBase</b>(<nobr><a href="java.lang.String.html">String</a> baseUrl</nobr>)</div>Sets the base URL under which this tree will find its default images. These
+ images must be named "tree_white.gif", "tree_open.gif", and
+ "tree_closed.gif".<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>baseUrl</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="setSelectedItem(com.google.gwt.user.client.ui.TreeItem)"></a>
+<h3 class="api">setSelectedItem</h3>
+<div class="memberSig">public void<b> setSelectedItem</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a> item</nobr>)</div>Selects a specified item.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the item to be selected, or <code>null</code> to deselect all
+          items</dd>
+</dl>
+<hr>
+<a name="setSelectedItem(com.google.gwt.user.client.ui.TreeItem, boolean)"></a>
+<h3 class="api">setSelectedItem</h3>
+<div class="memberSig">public void<b> setSelectedItem</b>(<nobr><a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a> item, </nobr><nobr>boolean fireEvents</nobr>)</div>Selects a specified item.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the item to be selected, or <code>null</code> to deselect all
+          items</dd>
+<dt>fireEvents</dt>
+<dd>
+<code>true</code> to allow selection events to be fired</dd>
+</dl>
+<hr>
+<a name="setTabIndex(int)"></a>
+<h3 class="api">setTabIndex</h3>
+<div class="memberSig">public void<b> setTabIndex</b>(<nobr>int index</nobr>)</div>Sets the widget's position in the tab index. If more than one widget has
+ the same tab index, each such widget will receive focus in an arbitrary
+ order. Setting the tab index to <code>-1</code> will cause this widget to
+ be removed from the tab order.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the widget's tab index</dd>
+</dl>
+<hr>
+<a name="treeItemIterator()"></a>
+<h3 class="api">treeItemIterator</h3>
+<div class="memberSig">public <a href="java.util.Iterator.html">Iterator</a><b> treeItemIterator</b>()</div>Iterator of tree items.</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

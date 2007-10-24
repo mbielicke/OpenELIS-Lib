@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Image Bundles and Localization</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.ImageBundles.DefiningAndUsingImageBundle.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.RemoteProcedureCalls.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.html">Building User Interfaces</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.ImageBundles.html">Image Bundles</a></span> &gt;
+						<span class="selected item">Image Bundles and Localization</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Image Bundles and Localization</h1>Sometimes applications need different images depending on the locale
+ that the user is in. When using image bundles, this means that we need
+ different image bundles for different locales. Although image bundles
+ and localization are orthogonal concepts, they can work together by
+ having locale-specific factories create instances of image bundles.
+ 
+ <p>
+ The best way to explain this technique is with an example. Suppose that
+ we define the following <code>ImageBundle</code> for use by a mail
+ application:
+ </p>
+<pre class="code">public interface MailImageBundle extends ImageBundle {
+
+  /**
+   * The default 'Compose New Message' icon if no locale-specific
+   * image is specified.
+   *
+   * @gwt.resource compose_new_message_icon.gif
+   */
+  public AbstractImagePrototype composeNewMessageIcon();
+
+  /**
+   * The default 'Help' icon if no locale-specific image is specified.
+   * Will match 'help_icon.png', 'help_icon.gif', or 'help_icon.jpg' in
+   * the same package as this type.
+   */
+  public AbstractImagePrototype help_icon();
+}
+</pre>
+
+
+ Suppose the application has to handle both English and French users. We
+ define English and French variations of each image in
+ <code>MailImageBundle</code> by creating locale-specific image
+ bundles that extend <code>MailImageBundle</code>:
+
+ <pre class="code">public interface MailImageBundle_en extends MailImageBundle {
+
+  /**
+   * The English version of the 'Compose New Message' icon.
+   * Since we are not overriding the help_icon() method, this bundle
+   * uses the inherited method from MailImageBundle.
+   *
+   * @gwt.resource compose_new_message_icon_en.gif
+   */
+  public AbstractImagePrototype composeNewMessageIcon();
+}
+</pre>
+<pre class="code">public interface MailImageBundle_fr extends MailImageBundle {
+
+  /**
+   * The French version of the 'Compose New Message' icon.
+   *
+   * @gwt.resource compose_new_message_icon_fr.gif
+   */
+  public AbstractImagePrototype composeNewMessageIcon();
+
+  /**
+   * The French version of the 'Help' icon.
+   *
+   * @gwt.resource help_icon_fr.gif
+   */
+  public AbstractImagePrototype help_icon();
+}
+</pre>
+
+
+ The final step is to create a mechanism for choosing the correct image
+ bundle based on the user's locale. By extending
+ <a xmlns="" href="com.google.gwt.i18n.client.Localizable.html">Localizable</a>, we can
+ create a locale-sensitive factory that will return new instances of
+ <code>MailImageBundle</code> that match the factory's locale:
+
+ <pre class="code">public interface MailImageBundleFactory extends Localizable {
+
+  public MailImageBundle createImageBundle();
+}
+</pre>
+<pre class="code">public class MailImageBundleFactory_en implements MailImageBundleFactory {
+
+  public MailImageBundle createImageBundle() {
+    return (MailImageBundle) GWT.create(MailImageBundle_en.class);
+  }
+}
+</pre>
+<pre class="code">public class MailImageBundleFactory_fr implements MailImageBundleFactory {
+
+  public MailImageBundle createImageBundle() {
+    return (MailImageBundle) GWT.create(MailImageBundle_fr.class);
+  }
+}
+</pre>
+
+
+ The application code that utilizes a locale-sensitive image bundle
+ would look something like this:
+
+ <pre class="code">public void useLocalizedImageBundle() {
+  // Create a locale-sensitive MailImageBundleFactory
+  MailImageBundleFactory mailImageBundleFactory = (MailImageBundleFactory) GWT
+      .create(MailImageBundleFactory.class);
+
+  // This will return a locale-sensitive MailImageBundle, since we are using
+  // a locale-sensitive factory to create it.
+  MailImageBundle mailImageBundle = mailImageBundleFactory.createImageBundle();
+
+  // Get the image prototype for the icon that we are interested in.
+  AbstractImagePrototype helpIconProto = mailImageBundle.help_icon();
+
+  // Create an Image object from the prototype and add it to a panel.
+  HorizontalPanel panel = new HorizontalPanel();
+  panel.add(helpIconProto.createImage());
+}
+</pre>
+<div class="topicSeeAlso" xmlns="http://www.w3.org/1999/xhtml">
+<h2>Related topics</h2>
+<a xmlns="" href="com.google.gwt.user.client.ui.ImageBundle.html">ImageBundle</a>, <a href="com.google.gwt.i18n.client.Localizable.html">Localizable</a>
+</div>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

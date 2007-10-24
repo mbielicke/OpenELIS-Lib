@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Grid</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.Frame.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.Hidden.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">Grid</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class Grid</h1>
+<div class="classSig">public 
+            class 
+            Grid<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.HTMLTable.html">HTMLTable</a>
+</div>A rectangular grid that can contain text, html, or a child
+ <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> within its cells. It must be
+ resized explicitly to the desired number of rows and columns.
+ <p>
+<img class="gallery" src="Table.png"></p>
+<p>
+<h3>Example</h3>
+<pre class="code">public class GridExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Grids must be sized explicitly, though they can be resized later.
+    Grid g = new Grid(5, 5);
+
+    // Put some values in the grid cells.
+    for (int row = 0; row &lt; 5; ++row) {
+      for (int col = 0; col &lt; 5; ++col)
+        g.setText(row, col, "" + row + ", " + col);
+    }
+
+    // Just for good measure, let's put a button in the center.
+    g.setWidget(2, 2, new Button("Does nothing, but could"));
+
+    // You can use the CellFormatter to affect the layout of the grid's cells.
+    g.getCellFormatter().setWidth(0, 2, "256px");
+
+    RootPanel.get().add(g);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>numColumns</td><td>Number of columns in the current grid. </td>
+</tr>
+<tr>
+<td>numRows</td><td>Number of rows in the current grid. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#Grid()">Grid()</a></td><td>Constructor for <code>Grid</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#Grid(int, int)">Grid(int, int)</a></td><td>Constructs a grid with the requested size. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#clearCell(int, int)">clearCell(int, int)</a></td><td>Replaces the contents of the specified cell with a single space. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#createCell()">createCell()</a></td><td>Creates a new, empty cell. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#getCellCount(int)">getCellCount(int)</a></td><td>Return number of columns. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#getColumnCount()">getColumnCount()</a></td><td>Gets the number of columns in this grid. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#getRowCount()">getRowCount()</a></td><td>Return number of rows. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#prepareCell(int, int)">prepareCell(int, int)</a></td><td>Checks that a cell is a valid cell in the table. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#prepareColumn(int)">prepareColumn(int)</a></td><td>Checks that the column index is valid. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#prepareRow(int)">prepareRow(int)</a></td><td>Checks that the row index is valid. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#resize(int, int)">resize(int, int)</a></td><td>Resizes the grid. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#resizeColumns(int)">resizeColumns(int)</a></td><td>Resizes the grid to the specified number of columns. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.Grid.html#resizeRows(int)">resizeRows(int)</a></td><td>Resizes the grid to the specified number of rows. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">numColumns</h3>
+<div class="memberSig">protected int <b>numColumns</b>
+</div>Number of columns in the current grid.<hr>
+<h3 class="api">numRows</h3>
+<div class="memberSig">protected int <b>numRows</b>
+</div>Number of rows in the current grid.<h2 class="api">Constructor Detail</h2>
+<a name="Grid()"></a>
+<h3 class="api">Grid</h3>
+<div class="memberSig">public <b> Grid</b>()</div>Constructor for <code>Grid</code>.<hr>
+<a name="Grid(int, int)"></a>
+<h3 class="api">Grid</h3>
+<div class="memberSig">public <b> Grid</b>(<nobr>int rows, </nobr><nobr>int columns</nobr>)</div>Constructs a grid with the requested size.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>rows</dt>
+<dd>the number of rows</dd>
+<dt>columns</dt>
+<dd>the number of columns</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="clearCell(int, int)"></a>
+<h3 class="api">clearCell</h3>
+<div class="memberSig">public boolean<b> clearCell</b>(<nobr>int row, </nobr><nobr>int column</nobr>)</div>Replaces the contents of the specified cell with a single space.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the cell's row</dd>
+<dt>column</dt>
+<dd>the cell's column</dd>
+</dl>
+<hr>
+<a name="createCell()"></a>
+<h3 class="api">createCell</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.client.Element.html">Element</a><b> createCell</b>()</div>Creates a new, empty cell.<hr>
+<a name="getCellCount(int)"></a>
+<h3 class="api">getCellCount</h3>
+<div class="memberSig">public int<b> getCellCount</b>(<nobr>int row</nobr>)</div>Return number of columns. For grid, row argument is ignored as all grids
+ are rectangular.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="getColumnCount()"></a>
+<h3 class="api">getColumnCount</h3>
+<div class="memberSig">public int<b> getColumnCount</b>()</div>Gets the number of columns in this grid.<h4 class="api">Return Value</h4>the number of columns<hr>
+<a name="getRowCount()"></a>
+<h3 class="api">getRowCount</h3>
+<div class="memberSig">public int<b> getRowCount</b>()</div>Return number of rows.<hr>
+<a name="prepareCell(int, int)"></a>
+<h3 class="api">prepareCell</h3>
+<div class="memberSig">protected void<b> prepareCell</b>(<nobr>int row, </nobr><nobr>int column</nobr>)</div>Checks that a cell is a valid cell in the table.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>the cell's row</dd>
+<dt>column</dt>
+<dd>the cell's column</dd>
+</dl>
+<hr>
+<a name="prepareColumn(int)"></a>
+<h3 class="api">prepareColumn</h3>
+<div class="memberSig">protected void<b> prepareColumn</b>(<nobr>int column</nobr>)</div>Checks that the column index is valid.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>column</dt>
+<dd>The column index to be checked</dd>
+</dl>
+<hr>
+<a name="prepareRow(int)"></a>
+<h3 class="api">prepareRow</h3>
+<div class="memberSig">protected void<b> prepareRow</b>(<nobr>int row</nobr>)</div>Checks that the row index is valid.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>row</dt>
+<dd>The row index to be checked</dd>
+</dl>
+<hr>
+<a name="resize(int, int)"></a>
+<h3 class="api">resize</h3>
+<div class="memberSig">public void<b> resize</b>(<nobr>int rows, </nobr><nobr>int columns</nobr>)</div>Resizes the grid.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>rows</dt>
+<dd>the number of rows</dd>
+<dt>columns</dt>
+<dd>the number of columns</dd>
+</dl>
+<hr>
+<a name="resizeColumns(int)"></a>
+<h3 class="api">resizeColumns</h3>
+<div class="memberSig">public void<b> resizeColumns</b>(<nobr>int columns</nobr>)</div>Resizes the grid to the specified number of columns.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>columns</dt>
+<dd>the number of columns</dd>
+</dl>
+<hr>
+<a name="resizeRows(int)"></a>
+<h3 class="api">resizeRows</h3>
+<div class="memberSig">public void<b> resizeRows</b>(<nobr>int rows</nobr>)</div>Resizes the grid to the specified number of rows.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>rows</dt>
+<dd>the number of rows</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Node</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.xml.client.NamedNodeMap.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.xml.client.NodeList.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.xml.client.html">com.google.gwt.xml.client</a></span> &gt;
+            <span class="selected item">Node</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface Node</h1>
+<div class="classSig">public 
+            interface 
+            <b>Node</b>
+<br>
+<br>// Extended by <code><a xmlns="" href="com.google.gwt.xml.client.Attr.html">Attr</a></code>, <code><a href="com.google.gwt.xml.client.CharacterData.html">CharacterData</a></code>, <code><a href="com.google.gwt.xml.client.Document.html">Document</a></code>, <code><a href="com.google.gwt.xml.client.DocumentFragment.html">DocumentFragment</a></code>, <code><a href="com.google.gwt.xml.client.Element.html">Element</a></code>, <code><a href="com.google.gwt.xml.client.EntityReference.html">EntityReference</a></code>, <code><a href="com.google.gwt.xml.client.ProcessingInstruction.html">ProcessingInstruction</a></code>
+</div>This is the base interface for DOM nodes, as obtained from using
+ <code>XMLParser</code> methods. Methods for iterating over and accessing
+ values from nodes are supplied here.<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>ATTRIBUTE_NODE</td><td>The constant 2 denotes DOM nodes of type Attribute. </td>
+</tr>
+<tr>
+<td>CDATA_SECTION_NODE</td><td>The constant 4 denotes DOM nodes of type CdataSection. </td>
+</tr>
+<tr>
+<td>COMMENT_NODE</td><td>The constant 8 denotes DOM nodes of type Comment. </td>
+</tr>
+<tr>
+<td>DOCUMENT_FRAGMENT_NODE</td><td>The constant 11 denotes DOM nodes of type DocumentFragment. </td>
+</tr>
+<tr>
+<td>DOCUMENT_NODE</td><td>The constant 9 denotes DOM nodes of type Document. </td>
+</tr>
+<tr>
+<td>DOCUMENT_TYPE_NODE</td><td>The constant 10 denotes DOM nodes of type DocumentType. </td>
+</tr>
+<tr>
+<td>ELEMENT_NODE</td><td>The constant 1 denotes DOM nodes of type Element. </td>
+</tr>
+<tr>
+<td>ENTITY_NODE</td><td>The constant 6 denotes DOM nodes of type Entity. </td>
+</tr>
+<tr>
+<td>ENTITY_REFERENCE_NODE</td><td>The constant 5 denotes DOM nodes of type EntityReference. </td>
+</tr>
+<tr>
+<td>NOTATION_NODE</td><td>The constant 12 denotes DOM nodes of type Notation. </td>
+</tr>
+<tr>
+<td>PROCESSING_INSTRUCTION_NODE</td><td>The constant 7 denotes DOM nodes of type ProcessingInstruction. </td>
+</tr>
+<tr>
+<td>TEXT_NODE</td><td>The constant 3 denotes DOM nodes of type Text. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#appendChild(com.google.gwt.xml.client.Node)">appendChild(Node)</a></td><td>This method appends child <code>newChild</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#cloneNode(boolean)">cloneNode(boolean)</a></td><td>This method copies this <code>Node</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getAttributes()">getAttributes()</a></td><td>This method retrieves the attributes. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getChildNodes()">getChildNodes()</a></td><td>This method retrieves the child nodes. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getFirstChild()">getFirstChild()</a></td><td>This method retrieves the first child. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getLastChild()">getLastChild()</a></td><td>This method retrieves the last child. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getNamespaceURI()">getNamespaceURI()</a></td><td>This method retrieves the namespace URI. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getNextSibling()">getNextSibling()</a></td><td>This method retrieves the next sibling. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getNodeName()">getNodeName()</a></td><td>This method retrieves the name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getNodeType()">getNodeType()</a></td><td>This method retrieves the type. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getNodeValue()">getNodeValue()</a></td><td>This method retrieves the value. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getOwnerDocument()">getOwnerDocument()</a></td><td>This method retrieves the owner document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getParentNode()">getParentNode()</a></td><td>This method retrieves the parent. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getPrefix()">getPrefix()</a></td><td>This method retrieves the prefix. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#getPreviousSibling()">getPreviousSibling()</a></td><td>This method retrieves the previous sibling. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#hasAttributes()">hasAttributes()</a></td><td>This method determines whether this <code>Node</code> has any attributes. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#hasChildNodes()">hasChildNodes()</a></td><td>This method determines whether this <code>Node</code> has any child
+ nodes. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#insertBefore(com.google.gwt.xml.client.Node, com.google.gwt.xml.client.Node)">insertBefore(Node, Node)</a></td><td>This method inserts before <code>newChild</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#normalize()">normalize()</a></td><td>This method may collapse adjacent text nodes into one text node, depending
+ on the implementation. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#removeChild(com.google.gwt.xml.client.Node)">removeChild(Node)</a></td><td>This method removes child <code>oldChild</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#replaceChild(com.google.gwt.xml.client.Node, com.google.gwt.xml.client.Node)">replaceChild(Node, Node)</a></td><td>This method replaces the child <code>oldChild</code> with
+ <code>newChild</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.xml.client.Node.html#setNodeValue(java.lang.String)">setNodeValue(String)</a></td><td>This method sets the value to <code>nodeValue</code>. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">ATTRIBUTE_NODE</h3>
+<div class="memberSig">public static final short <b>ATTRIBUTE_NODE</b>
+</div>The constant 2 denotes DOM nodes of type Attribute.<hr>
+<h3 class="api">CDATA_SECTION_NODE</h3>
+<div class="memberSig">public static final short <b>CDATA_SECTION_NODE</b>
+</div>The constant 4 denotes DOM nodes of type CdataSection.<hr>
+<h3 class="api">COMMENT_NODE</h3>
+<div class="memberSig">public static final short <b>COMMENT_NODE</b>
+</div>The constant 8 denotes DOM nodes of type Comment.<hr>
+<h3 class="api">DOCUMENT_FRAGMENT_NODE</h3>
+<div class="memberSig">public static final short <b>DOCUMENT_FRAGMENT_NODE</b>
+</div>The constant 11 denotes DOM nodes of type DocumentFragment.<hr>
+<h3 class="api">DOCUMENT_NODE</h3>
+<div class="memberSig">public static final short <b>DOCUMENT_NODE</b>
+</div>The constant 9 denotes DOM nodes of type Document.<hr>
+<h3 class="api">DOCUMENT_TYPE_NODE</h3>
+<div class="memberSig">public static final short <b>DOCUMENT_TYPE_NODE</b>
+</div>The constant 10 denotes DOM nodes of type DocumentType.<hr>
+<h3 class="api">ELEMENT_NODE</h3>
+<div class="memberSig">public static final short <b>ELEMENT_NODE</b>
+</div>The constant 1 denotes DOM nodes of type Element.<hr>
+<h3 class="api">ENTITY_NODE</h3>
+<div class="memberSig">public static final short <b>ENTITY_NODE</b>
+</div>The constant 6 denotes DOM nodes of type Entity.<hr>
+<h3 class="api">ENTITY_REFERENCE_NODE</h3>
+<div class="memberSig">public static final short <b>ENTITY_REFERENCE_NODE</b>
+</div>The constant 5 denotes DOM nodes of type EntityReference.<hr>
+<h3 class="api">NOTATION_NODE</h3>
+<div class="memberSig">public static final short <b>NOTATION_NODE</b>
+</div>The constant 12 denotes DOM nodes of type Notation.<hr>
+<h3 class="api">PROCESSING_INSTRUCTION_NODE</h3>
+<div class="memberSig">public static final short <b>PROCESSING_INSTRUCTION_NODE</b>
+</div>The constant 7 denotes DOM nodes of type ProcessingInstruction.<hr>
+<h3 class="api">TEXT_NODE</h3>
+<div class="memberSig">public static final short <b>TEXT_NODE</b>
+</div>The constant 3 denotes DOM nodes of type Text.<h2 class="api">Method Detail</h2>
+<a name="appendChild(com.google.gwt.xml.client.Node)"></a>
+<h3 class="api">appendChild</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> appendChild</b>(<nobr><a href="com.google.gwt.xml.client.Node.html">Node</a> newChild</nobr>)</div>This method appends child <code>newChild</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>newChild</dt>
+<dd>the <code>Node</code> to be added</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child <code>Node</code> appended<hr>
+<a name="cloneNode(boolean)"></a>
+<h3 class="api">cloneNode</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> cloneNode</b>(<nobr>boolean deep</nobr>)</div>This method copies this <code>Node</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>deep</dt>
+<dd>whether to recurse to children</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>Node</code> cloned<hr>
+<a name="getAttributes()"></a>
+<h3 class="api">getAttributes</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.NamedNodeMap.html">NamedNodeMap</a><b> getAttributes</b>()</div>This method retrieves the attributes.<h4 class="api">Return Value</h4>the attributes of this <code>Node</code>
+<hr>
+<a name="getChildNodes()"></a>
+<h3 class="api">getChildNodes</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.NodeList.html">NodeList</a><b> getChildNodes</b>()</div>This method retrieves the child nodes.<h4 class="api">Return Value</h4>the child nodes of this <code>Node</code>
+<hr>
+<a name="getFirstChild()"></a>
+<h3 class="api">getFirstChild</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> getFirstChild</b>()</div>This method retrieves the first child.<h4 class="api">Return Value</h4>the first child of this <code>Node</code>
+<hr>
+<a name="getLastChild()"></a>
+<h3 class="api">getLastChild</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> getLastChild</b>()</div>This method retrieves the last child.<h4 class="api">Return Value</h4>the last child of this <code>Node</code>
+<hr>
+<a name="getNamespaceURI()"></a>
+<h3 class="api">getNamespaceURI</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getNamespaceURI</b>()</div>This method retrieves the namespace URI.<h4 class="api">Return Value</h4>the namespace URI of this <code>Node</code>
+<hr>
+<a name="getNextSibling()"></a>
+<h3 class="api">getNextSibling</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> getNextSibling</b>()</div>This method retrieves the next sibling.<h4 class="api">Return Value</h4>the next sibling of this <code>Node</code>
+<hr>
+<a name="getNodeName()"></a>
+<h3 class="api">getNodeName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getNodeName</b>()</div>This method retrieves the name.<h4 class="api">Return Value</h4>the name of this <code>Node</code>
+<hr>
+<a name="getNodeType()"></a>
+<h3 class="api">getNodeType</h3>
+<div class="memberSig">public short<b> getNodeType</b>()</div>This method retrieves the type.<h4 class="api">Return Value</h4>the type of this <code>Node</code>
+<hr>
+<a name="getNodeValue()"></a>
+<h3 class="api">getNodeValue</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getNodeValue</b>()</div>This method retrieves the value.<h4 class="api">Return Value</h4>the value of this <code>Node</code>
+<hr>
+<a name="getOwnerDocument()"></a>
+<h3 class="api">getOwnerDocument</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Document.html">Document</a><b> getOwnerDocument</b>()</div>This method retrieves the owner document.<h4 class="api">Return Value</h4>the owner document of this <code>Node</code>
+<hr>
+<a name="getParentNode()"></a>
+<h3 class="api">getParentNode</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> getParentNode</b>()</div>This method retrieves the parent.<h4 class="api">Return Value</h4>the parent of this <code>Node</code>
+<hr>
+<a name="getPrefix()"></a>
+<h3 class="api">getPrefix</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getPrefix</b>()</div>This method retrieves the prefix.<h4 class="api">Return Value</h4>the prefix of this <code>Node</code>
+<hr>
+<a name="getPreviousSibling()"></a>
+<h3 class="api">getPreviousSibling</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> getPreviousSibling</b>()</div>This method retrieves the previous sibling.<h4 class="api">Return Value</h4>the previous sibling of this <code>Node</code>
+<hr>
+<a name="hasAttributes()"></a>
+<h3 class="api">hasAttributes</h3>
+<div class="memberSig">public boolean<b> hasAttributes</b>()</div>This method determines whether this <code>Node</code> has any attributes.<h4 class="api">Return Value</h4>
+<code>true</code> if this <code>Node</code> has any attributes<hr>
+<a name="hasChildNodes()"></a>
+<h3 class="api">hasChildNodes</h3>
+<div class="memberSig">public boolean<b> hasChildNodes</b>()</div>This method determines whether this <code>Node</code> has any child
+ nodes.<h4 class="api">Return Value</h4>
+<code>true</code> if this <code>Node</code> has any child nodes<hr>
+<a name="insertBefore(com.google.gwt.xml.client.Node, com.google.gwt.xml.client.Node)"></a>
+<h3 class="api">insertBefore</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> insertBefore</b>(<nobr><a href="com.google.gwt.xml.client.Node.html">Node</a> newChild, </nobr><nobr><a href="com.google.gwt.xml.client.Node.html">Node</a> refChild</nobr>)</div>This method inserts before <code>newChild</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>newChild</dt>
+<dd>the <code>Node</code> to be added</dd>
+<dt>refChild</dt>
+<dd>the <code>Node</code> which determines the position to
+          insert</dd>
+</dl>
+<h4 class="api">Return Value</h4>the before <code>Node</code> inserted<hr>
+<a name="normalize()"></a>
+<h3 class="api">normalize</h3>
+<div class="memberSig">public void<b> normalize</b>()</div>This method may collapse adjacent text nodes into one text node, depending
+ on the implementation.<hr>
+<a name="removeChild(com.google.gwt.xml.client.Node)"></a>
+<h3 class="api">removeChild</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> removeChild</b>(<nobr><a href="com.google.gwt.xml.client.Node.html">Node</a> oldChild</nobr>)</div>This method removes child <code>oldChild</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>oldChild</dt>
+<dd>the <code>Node</code> to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child <code>Node</code> removed<hr>
+<a name="replaceChild(com.google.gwt.xml.client.Node, com.google.gwt.xml.client.Node)"></a>
+<h3 class="api">replaceChild</h3>
+<div class="memberSig">public <a href="com.google.gwt.xml.client.Node.html">Node</a><b> replaceChild</b>(<nobr><a href="com.google.gwt.xml.client.Node.html">Node</a> newChild, </nobr><nobr><a href="com.google.gwt.xml.client.Node.html">Node</a> oldChild</nobr>)</div>This method replaces the child <code>oldChild</code> with
+ <code>newChild</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>newChild</dt>
+<dd>the <code>Node</code> to be added</dd>
+<dt>oldChild</dt>
+<dd>the <code>Node</code> to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child <code>Node</code> replaced<hr>
+<a name="setNodeValue(java.lang.String)"></a>
+<h3 class="api">setNodeValue</h3>
+<div class="memberSig">public void<b> setNodeValue</b>(<nobr><a href="java.lang.String.html">String</a> nodeValue</nobr>)</div>This method sets the value to <code>nodeValue</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>nodeValue</dt>
+<dd>the new value</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

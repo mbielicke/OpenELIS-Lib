@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            com.google.gwt.user.server.rpc</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.VerticalSplitPanelImages.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="selected item">com.google.gwt.user.server.rpc</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Package com.google.gwt.user.server.rpc</h1>Classes used in server-side implementation of remote procedure calls.
+
+<p>
+The <a xmlns="" href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html">RemoteServiceServlet</a>
+class provides the most convenient implementation
+of server-side GWT RPC.  This class can be used in two ways:  it can be
+subclassed by servlets that directly implement one or more service
+interfaces, in which case incoming RPC calls will be directed to the
+servlet subclass itself; or it can be overridden to give finer control over
+routing RPC calls within a server framework.  (For more details on the
+latter, see the <a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#processCall(java.lang.String)">RemoteServiceServlet.processCall(String)</a> method.)
+</p>
+<p>
+Alternatively, GWT RPC can be integrated into an existing framework, by using 
+the <a href="com.google.gwt.user.server.rpc.RPC.html">RPC</a> class to perform GWT 
+RPC decoding, invocation, and encoding.  RemoteServiceServlet need not 
+be subclassed at all in this case, though reading its source is advisable.
+</p>
+<p>
+Note that the default RemoteServiceServlet implementation never throws
+exceptions to the servlet container.  All exceptions that escape the the 
+<a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#processCall(java.lang.String)">RemoteServiceServlet.processCall(String)</a>
+method will be caught, logged in the servlet context, and will cause a generic 
+failure message to be sent to the GWT client -- with a 500 status code.  To 
+customize this behavior, override 
+<a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#doUnexpectedFailure(java.lang.Throwable)">RemoteServiceServlet.doUnexpectedFailure(java.lang.Throwable)</a>.
+</p>
+<h2 class="api">Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html">RemoteServiceServlet</a></td><td>The servlet base class for your RPC service implementations that
+ automatically deserializes incoming requests from the client and serializes
+ outgoing responses for client/server RPCs. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPC.html">RPC</a></td><td>Utility class for integrating with the RPC system. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RPCRequest.html">RPCRequest</a></td><td>Describes an incoming RPC request in terms of a resolved Method and
+ an array of arguments. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a></td><td>This is an abstract class for representing the serialization policy for a
+ given module and
+ <a href="com.google.gwt.user.client.rpc.RemoteService.html">RemoteService</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.SerializationPolicyLoader.html">SerializationPolicyLoader</a></td><td>API for loading a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.UnexpectedException.html">UnexpectedException</a></td><td>The GWT RPC class throws UnexpectedException when a service method, being
+ invoked by GWT RPC, throws a checked exception that is not in the service
+ method's signature. </td>
+</tr>
+</table>
+<h2 class="api">Interfaces</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.SerializationPolicyProvider.html">SerializationPolicyProvider</a></td><td>Used to obtain a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for a given module base URL and
+ serialization policy strong name. </td>
+</tr>
+</table>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

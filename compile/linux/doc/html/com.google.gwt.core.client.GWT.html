@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            GWT</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.core.client.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.core.client.GWT.UncaughtExceptionHandler.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.core.client.html">com.google.gwt.core.client</a></span> &gt;
+            <span class="selected item">GWT</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class GWT</h1>
+<div class="classSig">public final 
+            class 
+            GWT<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+</div>Supports core functionality that in some cases requires direct support from
+ the compiler and runtime systems such as runtime type information and
+ deferred binding.<h2 class="api">Nested Interfaces</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.UncaughtExceptionHandler.html">GWT.UncaughtExceptionHandler</a></td><td>This interface is used to catch exceptions at the "top level" just before
+ they escape to the browser. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#create(java.lang.Class)">create(Class)</a></td><td>Instantiates a class via deferred binding. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#getHostPageBaseURL()">getHostPageBaseURL()</a></td><td>Gets the URL prefix of the hosting page, useful for prepending to relative
+ paths of resources which may be relative to the host page. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#getModuleBaseURL()">getModuleBaseURL()</a></td><td>Gets the URL prefix of the module which should be prepended to URLs that
+ are intended to be module-relative, such as RPC entry points and files in
+ the module's public path. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#getModuleName()">getModuleName()</a></td><td>Gets the name of the running module. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#getTypeName(java.lang.Object)">getTypeName(Object)</a></td><td>Gets the class name of the specified object, as would be returned by
+ <code>o.getClass().getName()</code>. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#getUncaughtExceptionHandler()">getUncaughtExceptionHandler()</a></td><td>Returns the currently active uncaughtExceptionHandler. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#isScript()">isScript()</a></td><td>Determines whether or not the running program is script or bytecode. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#log(java.lang.String, java.lang.Throwable)">log(String, Throwable)</a></td><td>Logs a message to the development shell logger in hosted mode. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.core.client.GWT.html#setUncaughtExceptionHandler(com.google.gwt.core.client.GWT.UncaughtExceptionHandler)">setUncaughtExceptionHandler(GWT.UncaughtExceptionHandler)</a></td><td>Sets a custom uncaught exception handler. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="create(java.lang.Class)"></a>
+<h3 class="api">create</h3>
+<div class="memberSig">public static <a href="java.lang.Object.html">Object</a><b> create</b>(<nobr><a href="java.lang.Class.html">Class</a> classLiteral</nobr>)</div>Instantiates a class via deferred binding.
+ 
+ <p>
+ The argument to <a href="com.google.gwt.core.client.GWT.html#create(java.lang.Class)">create(Class)</a>&nbsp;<i>must</i> be a class
+ literal because the web mode compiler must be able to statically determine
+ the requested type at compile-time. This can be tricky because using a
+ <a href="java.lang.Class.html">Class</a> variable may appear to work correctly in hosted mode.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>classLiteral</dt>
+<dd>a class literal specifying the base class to be
+          instantiated</dd>
+</dl>
+<h4 class="api">Return Value</h4>the new instance, which must be typecast to the requested class.<hr>
+<a name="getHostPageBaseURL()"></a>
+<h3 class="api">getHostPageBaseURL</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getHostPageBaseURL</b>()</div>Gets the URL prefix of the hosting page, useful for prepending to relative
+ paths of resources which may be relative to the host page. Typically, you
+ should use <a href="com.google.gwt.core.client.GWT.html#getModuleBaseURL()">getModuleBaseURL()</a> unless you have a specific reason to
+ load a resource relative to the host page.<h4 class="api">Return Value</h4>if non-empty, the base URL is guaranteed to end with a slash<hr>
+<a name="getModuleBaseURL()"></a>
+<h3 class="api">getModuleBaseURL</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getModuleBaseURL</b>()</div>Gets the URL prefix of the module which should be prepended to URLs that
+ are intended to be module-relative, such as RPC entry points and files in
+ the module's public path.<h4 class="api">Return Value</h4>if non-empty, the base URL is guaranteed to end with a slash<hr>
+<a name="getModuleName()"></a>
+<h3 class="api">getModuleName</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getModuleName</b>()</div>Gets the name of the running module.<hr>
+<a name="getTypeName(java.lang.Object)"></a>
+<h3 class="api">getTypeName</h3>
+<div class="memberSig">public static <a href="java.lang.String.html">String</a><b> getTypeName</b>(<nobr><a href="java.lang.Object.html">Object</a> o</nobr>)</div>Gets the class name of the specified object, as would be returned by
+ <code>o.getClass().getName()</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>o</dt>
+<dd>the object whose class name is being sought, or <code>null</code>
+</dd>
+</dl>
+<h4 class="api">Return Value</h4>the class name of the specified object, or <code>null</code> if
+         <code>o</code> is <code>null</code>
+<hr>
+<a name="getUncaughtExceptionHandler()"></a>
+<h3 class="api">getUncaughtExceptionHandler</h3>
+<div class="memberSig">public static <a href="com.google.gwt.core.client.GWT.UncaughtExceptionHandler.html">GWT.UncaughtExceptionHandler</a><b> getUncaughtExceptionHandler</b>()</div>Returns the currently active uncaughtExceptionHandler. "Top level" methods
+ that dispatch events from the browser into user code must call this method
+ on entry to get the active handler. If the active handler is null, the
+ entry point must allow exceptions to escape into the browser. If the
+ handler is non-null, exceptions must be caught and routed to the handler.
+ See the source code for <code>DOM.dispatchEvent()</code> for an example
+ of how to handle this correctly.<h4 class="api">Return Value</h4>the currently active handler, or null if no handler is active.<hr>
+<a name="isScript()"></a>
+<h3 class="api">isScript</h3>
+<div class="memberSig">public static boolean<b> isScript</b>()</div>Determines whether or not the running program is script or bytecode.<hr>
+<a name="log(java.lang.String, java.lang.Throwable)"></a>
+<h3 class="api">log</h3>
+<div class="memberSig">public static void<b> log</b>(<nobr><a href="java.lang.String.html">String</a> message, </nobr><nobr><a href="java.lang.Throwable.html">Throwable</a> e</nobr>)</div>Logs a message to the development shell logger in hosted mode. Calls are
+ optimized out in web mode.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>message</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>e</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="setUncaughtExceptionHandler(com.google.gwt.core.client.GWT.UncaughtExceptionHandler)"></a>
+<h3 class="api">setUncaughtExceptionHandler</h3>
+<div class="memberSig">public static void<b> setUncaughtExceptionHandler</b>(<nobr><a href="com.google.gwt.core.client.GWT.UncaughtExceptionHandler.html">GWT.UncaughtExceptionHandler</a> handler</nobr>)</div>Sets a custom uncaught exception handler. See
+ <a href="com.google.gwt.core.client.GWT.html#getUncaughtExceptionHandler()">getUncaughtExceptionHandler()</a> for details.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>handler</dt>
+<dd>the handler that should be called when an exception is about
+          to escape to the browser, or <code>null</code> to clear the
+          handler and allow exceptions to escape.</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Language Support</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.JavaToJavaScriptCompiler.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.JavaToJavaScriptCompiler.JavaRuntimeSupport.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.html">Fundamentals</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.Fundamentals.JavaToJavaScriptCompiler.html">GWT Compiler</a></span> &gt;
+						<span class="selected item">Language Support</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Language Support</h1>GWT compiles Java source that is compatible with J2SE 1.4.2 or earlier.
+ 
+ <ul class="featurelist">
+<li>
+<div class="heading">Intrinsic types</div>
+<div>
+<code>byte</code>, <code>char</code>, <code>short</code>,
+ <code>int</code>, <code>long</code>, <code>float</code>,
+ <code>double</code>, <code>Object</code>, <code>String</code>,
+ and arrays are supported. However, there is no 64-bit integral type in
+ JavaScript, so variables of type <code>long</code> are mapped onto
+ JavaScript double-precision floating point values. To ensure maximum
+ consistency between hosted mode and web mode, we recommend that you use
+ <code>int</code> variables.</div>
+</li>
+<li>
+<div class="heading">Exceptions</div>
+<div>
+<code>try</code>, <code>catch</code>, <code>finally</code>
+ and user-defined exceptions are supported as normal, although
+ <code>Throwable.getStackTrace()</code> is not supported for web mode.
+ See <a xmlns="" href="java.lang.Throwable.html">Throwable</a> for additional details.</div>
+</li>
+<li>
+<div class="heading">Assertions</div>
+<div>The GWT compiler parses Java <code>assert</code> statements, but
+ it does not emit code JavaScript code for them.</div>
+</li>
+<li>
+<div class="heading">Multithreading and Synchronization</div>
+<div> JavaScript interpreters are single-threaded, so while GWT
+ silently accepts the <code>synchronized</code> keyword, it has no
+ real effect. Synchronization-related library methods are not available,
+ including <code>Object.wait()</code>, <code>Object.notify()</code>,
+ and <code>Object.notifyAll()</code>
+</div>
+</li>
+<li>
+<div class="heading">Reflection</div>
+<div>For maximum efficiency, GWT compiles your Java source into a
+ monolithic script, and does not support subsequent dynamic loading of
+ classes. This and other optimizations preclude general support for
+ reflection. It is possible to query an object for its class name using
+ <a href="com.google.gwt.core.client.GWT.html#getTypeName(java.lang.Object)">GWT.getTypeName(Object)</a>. </div>
+</li>
+<li>
+<div class="heading">Finalization</div>
+<div>JavaScript does not support object finalization during garbage
+ collection, so GWT isn't able to be honor Java finalizers in web mode.
+ </div>
+</li>
+<li>
+<div class="heading">Strict Floating-Point</div>
+<div>The Java language specification precisely defines floating-point
+ support, including single-precision and double-precision numbers as
+ well as the <code>strictfp</code> keyword. GWT does not support the
+ <code>strictfp</code> keyword and can't ensure any particular degree
+ of floating-point precision in translated code, so you may want to
+ avoid calculations in client-side code that require a guaranteed level
+ of floating-point precision.</div>
+</li>
+</ul>
+<div class="topicSeeAlso" xmlns="http://www.w3.org/1999/xhtml">
+<h2>Related topics</h2>
+<a xmlns="" href="com.google.gwt.doc.DeveloperGuide.Fundamentals.JavaToJavaScriptCompiler.JavaRuntimeSupport.html">Runtime Library Support</a>
+</div>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

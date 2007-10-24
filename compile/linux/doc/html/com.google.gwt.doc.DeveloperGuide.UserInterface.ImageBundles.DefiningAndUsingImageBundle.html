@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            Creating and Using an Image Bundle</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.ImageBundles.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.ImageBundles.InteractionWithLocalization.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.html">Building User Interfaces</a></span> &gt;
+						<span class="item"><a href="com.google.gwt.doc.DeveloperGuide.UserInterface.ImageBundles.html">Image Bundles</a></span> &gt;
+						<span class="selected item">Creating and Using an Image Bundle</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a class="selected" href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Creating and Using an Image Bundle</h1>To define an image bundle, the user needs to extend the
+ <a xmlns="" href="com.google.gwt.user.client.ui.ImageBundle.html">ImageBundle</a>
+ interface. The ImageBundle interface is a tag interface that can be
+ extended to define new image bundles.
+ 
+ <p>
+ The derived interface can have zero or more methods, where each method
+ <ul>
+<li>takes no parameters,</li>
+<li>has a return type of
+ <a href="com.google.gwt.user.client.ui.AbstractImagePrototype.html">AbstractImagePrototype</a>, and</li>
+<li>may have an optional <code>gwt.resource</code> metadata tag
+ which specifies the name of the image file in the module's classpath
+ </li>
+</ul>
+</p>
+<p>
+ Valid image file types are <code>png</code>, <code>gif</code>,
+ and <code>jpg</code>. If the image name contains '<code>/</code>'
+ characters, it is assumed to be the name of a resource on the
+ classpath, formatted as would be expected by
+ <code>ClassLoader.getResource(String)</code>. Otherwise, the image
+ must be located in the same package as the user-defined image bundle.
+ </p>
+<p>
+ If the <code>gwt.resource</code> metadata tag is not specified, then
+ </p>
+<ul>
+<li>the image filename is assumed to match the method name,</li>
+<li>the extension is assumed to be either <code>.png</code>,
+ <code>.gif</code>, or <code>.jpg</code>, and </li>
+<li>the file is assumed to be in the same package as the derived
+ interface</li>
+</ul>
+<p>
+ In the event that there are multiple image files with different
+ extensions, the order of extension precedence is (1) <code>png</code>,
+ (2) <code>gif</code>, then (3) <code>jpg</code>.
+ </p>
+<p>
+ An image bundle for icons in a word processor application could be
+ defined as follows:
+ </p>
+<pre class="code">public interface WordProcessorImageBundle extends ImageBundle {
+
+  /**
+   * Would match the file 'new_file_icon.png', 'new_file_icon.gif', or
+   * 'new_file_icon.png' located in the same package as this type.
+   */
+  public AbstractImagePrototype new_file_icon();
+
+  /**
+   * Would match the file 'open_file_icon.gif' located in the same
+   * package as this type.
+   * 
+   * @gwt.resource open_file_icon.gif
+   */
+  public AbstractImagePrototype openFileIcon();
+
+  /**
+   * Would match the file 'savefile.gif' located in the package
+   * 'com.mycompany.mygwtapp.icons', provided that this package is part
+   * of the module's classpath.
+   * 
+   * @gwt.resource com/mycompany/mygwtapp/icons/savefile.gif
+   */
+  public AbstractImagePrototype saveFileIcon();
+}
+</pre>
+<p>
+ Methods in an image bundle return <code>AbstractImagePrototype</code>
+ objects (rather than <code>Image</code> objects, as you might have
+ expected) because <code>AbstractImagePrototype</code> objects provide
+ additional lightweight representations of an image. For example, the
+ <a href="com.google.gwt.user.client.ui.AbstractImagePrototype.html#getHTML()">AbstractImagePrototype.getHTML()</a>
+ method provides an HTML fragment representing an image without having
+ to create an actual instance of the <a href="com.google.gwt.user.client.ui.Image.html">Image</a> widget. In some
+ cases, it can be more efficient to manage images using these HTML
+ fragments.
+ </p>
+<p>
+ Another use of <code>AbstractImagePrototype</code> is to use
+ <a href="com.google.gwt.user.client.ui.AbstractImagePrototype.html#applyTo(com.google.gwt.user.client.ui.Image)">AbstractImagePrototype.applyTo(Image)</a>
+ to transform an existing <code>Image</code> into one that matches the
+ prototype without having to instantiate another <code>Image</code>
+ object. This can be useful if your application has an image that needs
+ to be swapped depending on some user-initiated action. Of course, if an
+ <code>Image</code> is exactly what you need, the
+ <a href="com.google.gwt.user.client.ui.AbstractImagePrototype.html#createImage()">AbstractImagePrototype.createImage()</a>
+ method can be used to generate new <code>Image</code> instances.
+ </p>
+<p>
+ The following example shows how to use the image bundle that we just
+ defined in your application:
+ </p>
+<pre class="code">public void useImageBundle() {
+  WordProcessorImageBundle wpImageBundle = (WordProcessorImageBundle) GWT.create(WordProcessorImageBundle.class);
+  HorizontalPanel tbPanel = new HorizontalPanel();
+  tbPanel.add(wpImageBundle.new_file_icon().createImage());
+  tbPanel.add(wpImageBundle.openFileIcon().createImage());
+  tbPanel.add(wpImageBundle.saveFileIcon().createImage());
+}
+</pre>
+<div class="tipContainer" xmlns="http://www.w3.org/1999/xhtml">
+<div class="tipCallout">Tip</div>
+<div class="tipBody">Image bundles are immutable, so you can keep a reference to a
+      singleton instance of an image bundle instead of creating a new
+      instance every time the image bundle is needed.</div>
+</div>
+<div class="topicSeeAlso">
+<h2>Related topics</h2>
+<a xmlns="" href="com.google.gwt.user.client.ui.ImageBundle.html">ImageBundle</a>, <a href="com.google.gwt.user.client.ui.AbstractImagePrototype.html">AbstractImagePrototype</a>
+</div>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            ComplexPanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.ClickListenerCollection.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.Composite.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">ComplexPanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class ComplexPanel</h1>
+<div class="classSig">public 
+            class 
+            ComplexPanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.Panel.html">Panel</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.IndexedPanel.html">IndexedPanel</a>
+<br>
+<br>// Superclass of <code><a href="com.google.gwt.user.client.ui.AbsolutePanel.html">AbsolutePanel</a></code>, <code><a href="com.google.gwt.user.client.ui.CellPanel.html">CellPanel</a></code>, <code><a href="com.google.gwt.user.client.ui.DeckPanel.html">DeckPanel</a></code>, <code><a href="com.google.gwt.user.client.ui.FlowPanel.html">FlowPanel</a></code>, <code><a href="com.google.gwt.user.client.ui.HTMLPanel.html">HTMLPanel</a></code>, <code><a href="com.google.gwt.user.client.ui.StackPanel.html">StackPanel</a></code>
+</div>Abstract base class for panels that can contain multiple child widgets.<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element)">add(Widget, Element)</a></td><td>Adds a new child widget to the panel, attaching its Element to the
+ specified container Element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#adjustIndex(com.google.gwt.user.client.ui.Widget, int)">adjustIndex(Widget, int)</a></td><td>Adjusts beforeIndex to account for the possibility that the given widget is
+ already a child of this panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#checkIndexBoundsForAccess(int)">checkIndexBoundsForAccess(int)</a></td><td>Checks that <code>index</code> is in the range [0, getWidgetCount()),
+ which is the valid range on accessible indexes. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#checkIndexBoundsForInsertion(int)">checkIndexBoundsForInsertion(int)</a></td><td>Checks that <code>index</code> is in the range [0, getWidgetCount()],
+ which is the valid range for indexes on an insertion. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#getChildren()">getChildren()</a></td><td>Gets the list of children contained in this panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#getWidget(int)">getWidget(int)</a></td><td>Gets the child widget at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#getWidgetCount()">getWidgetCount()</a></td><td>Gets the number of child widgets in this panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#getWidgetIndex(com.google.gwt.user.client.ui.Widget)">getWidgetIndex(Widget)</a></td><td>Gets the index of the specified child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element, int)">insert(Widget, Element, int)</a></td><td>This method was used by subclasses to insert a new child Widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element, int, boolean)">insert(Widget, Element, int, boolean)</a></td><td>Insert a new child Widget into this Panel at a specified index, attaching
+ its Element to the specified container Element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#iterator()">iterator()</a></td><td>Gets an iterator for the contained widgets. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#remove(int)">remove(int)</a></td><td>Removes the widget at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ComplexPanel.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a></td><td>Removes a child widget. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">protected void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> container</nobr>)</div>Adds a new child widget to the panel, attaching its Element to the
+ specified container Element.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>the child widget to be added</dd>
+<dt>container</dt>
+<dd>the element within which the child will be contained</dd>
+</dl>
+<hr>
+<a name="adjustIndex(com.google.gwt.user.client.ui.Widget, int)"></a>
+<h3 class="api">adjustIndex</h3>
+<div class="memberSig">protected int<b> adjustIndex</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child, </nobr><nobr>int beforeIndex</nobr>)</div>Adjusts beforeIndex to account for the possibility that the given widget is
+ already a child of this panel.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>the widget that might be an existing child</dd>
+<dt>beforeIndex</dt>
+<dd>the index at which it will be added to this panel</dd>
+</dl>
+<h4 class="api">Return Value</h4>the modified index<hr>
+<a name="checkIndexBoundsForAccess(int)"></a>
+<h3 class="api">checkIndexBoundsForAccess</h3>
+<div class="memberSig">protected void<b> checkIndexBoundsForAccess</b>(<nobr>int index</nobr>)</div>Checks that <code>index</code> is in the range [0, getWidgetCount()),
+ which is the valid range on accessible indexes.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index being accessed</dd>
+</dl>
+<hr>
+<a name="checkIndexBoundsForInsertion(int)"></a>
+<h3 class="api">checkIndexBoundsForInsertion</h3>
+<div class="memberSig">protected void<b> checkIndexBoundsForInsertion</b>(<nobr>int index</nobr>)</div>Checks that <code>index</code> is in the range [0, getWidgetCount()],
+ which is the valid range for indexes on an insertion.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index where insertion will occur</dd>
+</dl>
+<hr>
+<a name="getChildren()"></a>
+<h3 class="api">getChildren</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.client.ui.WidgetCollection.html">WidgetCollection</a><b> getChildren</b>()</div>Gets the list of children contained in this panel.<h4 class="api">Return Value</h4>a collection of child widgets<hr>
+<a name="getWidget(int)"></a>
+<h3 class="api">getWidget</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a><b> getWidget</b>(<nobr>int index</nobr>)</div>Gets the child widget at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the child widget's index</dd>
+</dl>
+<h4 class="api">Return Value</h4>the child widget<hr>
+<a name="getWidgetCount()"></a>
+<h3 class="api">getWidgetCount</h3>
+<div class="memberSig">public int<b> getWidgetCount</b>()</div>Gets the number of child widgets in this panel.<h4 class="api">Return Value</h4>the number of children<hr>
+<a name="getWidgetIndex(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">getWidgetIndex</h3>
+<div class="memberSig">public int<b> getWidgetIndex</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child</nobr>)</div>Gets the index of the specified child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>the widget to be found</dd>
+</dl>
+<h4 class="api">Return Value</h4>the widget's index, or <code>-1</code> if it is not a child of
+         this panel<hr>
+<a name="insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element, int)"></a>
+<h3 class="api">insert</h3>
+<div class="memberSig">protected void<b> insert</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> container, </nobr><nobr>int beforeIndex</nobr>)</div>This method was used by subclasses to insert a new child Widget. It is now
+ deprecated because it was ambiguous whether the <code>child</code> should
+ be appended to <code>container</code> element versus inserted into
+ <code>container</code> at <code>beforeIndex</code>. Use
+ <a href="com.google.gwt.user.client.ui.ComplexPanel.html#insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element, int, boolean)">insert(Widget, Element, int, boolean)</a>, which clarifies this
+ ambiguity.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>container</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>beforeIndex</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="insert(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Element, int, boolean)"></a>
+<h3 class="api">insert</h3>
+<div class="memberSig">protected void<b> insert</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child, </nobr><nobr><a href="com.google.gwt.user.client.Element.html">Element</a> container, </nobr><nobr>int beforeIndex, </nobr><nobr>boolean domInsert</nobr>)</div>Insert a new child Widget into this Panel at a specified index, attaching
+ its Element to the specified container Element. The child Element will
+ either be attached to the container at the same index, or simply appended
+ to the container, depending on the value of <code>domInsert</code>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>the child Widget to be added</dd>
+<dt>container</dt>
+<dd>the Element within which <code>child</code> will be
+          contained</dd>
+<dt>beforeIndex</dt>
+<dd>the index before which <code>child</code> will be
+          inserted</dd>
+<dt>domInsert</dt>
+<dd>if <code>true</code>, insert <code>child</code> into
+          <code>container</code> at <code>beforeIndex</code>; otherwise
+          append <code>child</code> to the end of <code>container</code>.</dd>
+</dl>
+<hr>
+<a name="iterator()"></a>
+<h3 class="api">iterator</h3>
+<div class="memberSig">public <a href="java.util.Iterator.html">Iterator</a><b> iterator</b>()</div>Gets an iterator for the contained widgets. This iterator is required to
+ implement <a href="java.util.Iterator.html#remove()">Iterator.remove()</a>.<hr>
+<a name="remove(int)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr>int index</nobr>)</div>Removes the widget at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the widget to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>false</code> if the widget is not present<hr>
+<a name="remove(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public abstract boolean<b> remove</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> child</nobr>)</div>Removes a child widget.
+ 
+ <p>
+<b>How to Override this Method</b>
+</p>
+<p>
+ There are several important things that must take place in the correct
+ order to properly remove a Widget from a Panel. Not all of these steps will
+ be relevant to every Panel, but all of the steps must be considered.
+ <ol>
+<li>
+<b>Validate:</b> Make sure this Panel is actually the parent of the
+ child Widget; return <code>false</code> if it is not.</li>
+<li>
+<b>Orphan:</b> Call <a href="com.google.gwt.user.client.ui.Panel.html#orphan(com.google.gwt.user.client.ui.Widget)">orphan(Widget)</a> first while the child
+ Widget is still attached.</li>
+<li>
+<b>Physical Detach:</b> Adjust the DOM to account for the removal of
+ the child Widget. The Widget's Element must be physically removed from the
+ DOM.</li>
+<li>
+<b>Logical Detach:</b> Update the Panel's state variables to reflect
+ the removal of the child Widget. Example: the Widget is removed from the
+ Panel's <a href="com.google.gwt.user.client.ui.WidgetCollection.html">WidgetCollection</a>.</li>
+</ol>
+</p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>child</dt>
+<dd>the widget to be removed</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if the child was present</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

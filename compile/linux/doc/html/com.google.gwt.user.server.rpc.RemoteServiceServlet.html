@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            RemoteServiceServlet</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.server.rpc.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.server.rpc.RPC.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.server.rpc.html">com.google.gwt.user.server.rpc</a></span> &gt;
+            <span class="selected item">RemoteServiceServlet</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class RemoteServiceServlet</h1>
+<div class="classSig">public 
+            class 
+            RemoteServiceServlet<br>extends
+                HttpServlet<br>implements 
+                <a xmlns="" href="com.google.gwt.user.server.rpc.SerializationPolicyProvider.html">SerializationPolicyProvider</a>
+</div>The servlet base class for your RPC service implementations that
+ automatically deserializes incoming requests from the client and serializes
+ outgoing responses for client/server RPCs.<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#RemoteServiceServlet()">RemoteServiceServlet()</a></td><td>The default constructor. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#doGetSerializationPolicy(javax.servlet.http.HttpServletRequest, java.lang.String, java.lang.String)">doGetSerializationPolicy(HttpServletRequest, String, String)</a></td><td>Gets the <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for given module base URL and strong
+ name if there is one. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">doPost(HttpServletRequest, HttpServletResponse)</a></td><td>Standard HttpServlet method: handle the POST. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#doUnexpectedFailure(java.lang.Throwable)">doUnexpectedFailure(Throwable)</a></td><td>Override this method to control what should happen when an exception
+ escapes the <a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#processCall(java.lang.String)">processCall(String)</a> method. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#getSerializationPolicy(java.lang.String, java.lang.String)">getSerializationPolicy(String, String)</a></td><td>Returns a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for a given module base URL and
+ serialization policy strong name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#getThreadLocalRequest()">getThreadLocalRequest()</a></td><td>Gets the <code>HttpServletRequest</code> object for the current call. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#getThreadLocalResponse()">getThreadLocalResponse()</a></td><td>Gets the <code>HttpServletResponse</code> object for the current call. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#onAfterResponseSerialized(java.lang.String)">onAfterResponseSerialized(String)</a></td><td>Override this method to examine the serialized response that will be
+ returned to the client. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#onBeforeRequestDeserialized(java.lang.String)">onBeforeRequestDeserialized(String)</a></td><td>Override this method to examine the serialized version of the request
+ payload before it is deserialized into objects. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#processCall(java.lang.String)">processCall(String)</a></td><td>Process a call originating from the given request. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#shouldCompressResponse(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.String)">shouldCompressResponse(HttpServletRequest, HttpServletResponse, String)</a></td><td>Determines whether the response to a given servlet request should or should
+ not be GZIP compressed. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="RemoteServiceServlet()"></a>
+<h3 class="api">RemoteServiceServlet</h3>
+<div class="memberSig">public <b> RemoteServiceServlet</b>()</div>The default constructor.<h2 class="api">Method Detail</h2>
+<a name="doGetSerializationPolicy(javax.servlet.http.HttpServletRequest, java.lang.String, java.lang.String)"></a>
+<h3 class="api">doGetSerializationPolicy</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a><b> doGetSerializationPolicy</b>(<nobr>HttpServletRequest request, </nobr><nobr><a href="java.lang.String.html">String</a> moduleBaseURL, </nobr><nobr><a href="java.lang.String.html">String</a> strongName</nobr>)</div>Gets the <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for given module base URL and strong
+ name if there is one.
+ 
+ Override this method to provide a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> using an
+ alternative approach.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>request</dt>
+<dd>the HTTP request being serviced</dd>
+<dt>moduleBaseURL</dt>
+<dd>as specified in the incoming payload</dd>
+<dt>strongName</dt>
+<dd>a strong name that uniquely identifies a serialization
+          policy file</dd>
+</dl>
+<h4 class="api">Return Value</h4>a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for the given module base URL and
+         strong name, or <code>null</code> if there is none<hr>
+<a name="doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)"></a>
+<h3 class="api">doPost</h3>
+<div class="memberSig">public final void<b> doPost</b>(<nobr>HttpServletRequest request, </nobr><nobr>HttpServletResponse response</nobr>)</div>Standard HttpServlet method: handle the POST.
+ 
+ This doPost method swallows ALL exceptions, logs them in the
+ ServletContext, and returns a GENERIC_FAILURE_MSG response with status code
+ 500.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>request</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>response</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="doUnexpectedFailure(java.lang.Throwable)"></a>
+<h3 class="api">doUnexpectedFailure</h3>
+<div class="memberSig">protected void<b> doUnexpectedFailure</b>(<nobr><a href="java.lang.Throwable.html">Throwable</a> e</nobr>)</div>Override this method to control what should happen when an exception
+ escapes the <a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#processCall(java.lang.String)">processCall(String)</a> method. The default implementation
+ will log the failure and send a generic failure response to the client.<p></p>
+ 
+ An "expected failure" is an exception thrown by a service method that is
+ declared in the signature of the service method. These exceptions are
+ serialized back to the client, and are not passed to this method. This
+ method is called only for exceptions or errors that are not part of the
+ service method's signature, or that result from SecurityExceptions,
+ SerializationExceptions, or other failures within the RPC framework.<p></p>
+ 
+ Note that if the desired behavior is to both send the GENERIC_FAILURE_MSG
+ response AND to rethrow the exception, then this method should first send
+ the GENERIC_FAILURE_MSG response itself (using getThreadLocalResponse), and
+ then rethrow the exception. Rethrowing the exception will cause it to
+ escape into the servlet container.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>e</dt>
+<dd>the exception which was thrown</dd>
+</dl>
+<hr>
+<a name="getSerializationPolicy(java.lang.String, java.lang.String)"></a>
+<h3 class="api">getSerializationPolicy</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a><b> getSerializationPolicy</b>(<nobr><a href="java.lang.String.html">String</a> moduleBaseURL, </nobr><nobr><a href="java.lang.String.html">String</a> serializationPolicyStrongName</nobr>)</div>Returns a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for a given module base URL and
+ serialization policy strong name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>moduleBaseURL</dt>
+<dd>the URL for the module</dd>
+<dt>serializationPolicyStrongName</dt>
+<dd>strong name of the serialization
+          policy for the specified module URL</dd>
+</dl>
+<h4 class="api">Return Value</h4>a <a href="com.google.gwt.user.server.rpc.SerializationPolicy.html">SerializationPolicy</a> for a given module base URL and RPC
+         strong name; must not return <code>null</code>
+<hr>
+<a name="getThreadLocalRequest()"></a>
+<h3 class="api">getThreadLocalRequest</h3>
+<div class="memberSig">protected final HttpServletRequest<b> getThreadLocalRequest</b>()</div>Gets the <code>HttpServletRequest</code> object for the current call. It
+ is stored thread-locally so that simultaneous invocations can have
+ different request objects.<hr>
+<a name="getThreadLocalResponse()"></a>
+<h3 class="api">getThreadLocalResponse</h3>
+<div class="memberSig">protected final HttpServletResponse<b> getThreadLocalResponse</b>()</div>Gets the <code>HttpServletResponse</code> object for the current call. It
+ is stored thread-locally so that simultaneous invocations can have
+ different response objects.<hr>
+<a name="onAfterResponseSerialized(java.lang.String)"></a>
+<h3 class="api">onAfterResponseSerialized</h3>
+<div class="memberSig">protected void<b> onAfterResponseSerialized</b>(<nobr><a href="java.lang.String.html">String</a> serializedResponse</nobr>)</div>Override this method to examine the serialized response that will be
+ returned to the client. The default implementation does nothing and need
+ not be called by subclasses.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>serializedResponse</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="onBeforeRequestDeserialized(java.lang.String)"></a>
+<h3 class="api">onBeforeRequestDeserialized</h3>
+<div class="memberSig">protected void<b> onBeforeRequestDeserialized</b>(<nobr><a href="java.lang.String.html">String</a> serializedRequest</nobr>)</div>Override this method to examine the serialized version of the request
+ payload before it is deserialized into objects. The default implementation
+ does nothing and need not be called by subclasses.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>serializedRequest</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="processCall(java.lang.String)"></a>
+<h3 class="api">processCall</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> processCall</b>(<nobr><a href="java.lang.String.html">String</a> payload</nobr>)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+                throws
+                 <a href="com.google.gwt.user.client.rpc.SerializationException.html">SerializationException</a>
+</div>Process a call originating from the given request. Uses the
+ <a href="com.google.gwt.user.server.rpc.RPC.html#invokeAndEncodeResponse(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])">Method, Object[])</a>
+ method to do the actual work.
+ <p>
+ Subclasses may optionally override this method to handle the payload in any
+ way they desire (by routing the request to a framework component, for
+ instance). The HttpServletRequest and HttpServletResponse
+ can be accessed via the <a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#getThreadLocalRequest()">getThreadLocalRequest()</a> and
+ <a href="com.google.gwt.user.server.rpc.RemoteServiceServlet.html#getThreadLocalResponse()">getThreadLocalResponse()</a> methods.
+ </p>
+ This is public so that it can be unit tested easily without HTTP.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>payload</dt>
+<dd>the UTF-8 request payload</dd>
+</dl>
+<h4 class="api">Return Value</h4>a string which encodes either the method's return, a checked
+         exception thrown by the method, or an
+         <a href="com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException.html">IncompatibleRemoteServiceException</a>
+<hr>
+<a name="shouldCompressResponse(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.String)"></a>
+<h3 class="api">shouldCompressResponse</h3>
+<div class="memberSig">protected boolean<b> shouldCompressResponse</b>(<nobr>HttpServletRequest request, </nobr><nobr>HttpServletResponse response, </nobr><nobr><a href="java.lang.String.html">String</a> responsePayload</nobr>)</div>Determines whether the response to a given servlet request should or should
+ not be GZIP compressed. This method is only called in cases where the
+ requestor accepts GZIP encoding.
+ <p>
+ This implementation currently returns <code>true</code> if the response
+ string's estimated byte length is longer than 256 bytes. Subclasses can
+ override this logic.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>request</dt>
+<dd>the request being served</dd>
+<dt>response</dt>
+<dd>the response that will be written into</dd>
+<dt>responsePayload</dt>
+<dd>the payload that is about to be sent to the client</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if responsePayload should be GZIP compressed,
+         otherwise <code>false</code>.</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

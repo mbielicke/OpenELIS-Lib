@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            StackPanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.SimplePanel.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.SuggestBox.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">StackPanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class StackPanel</h1>
+<div class="classSig">public 
+            class 
+            StackPanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.ComplexPanel.html">ComplexPanel</a>
+</div>A panel that stacks its children vertically, displaying only one at a time,
+ with a header for each child which the user can click to display.
+ <p>
+<img class="gallery" src="StackPanel.png"></p>
+<h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-StackPanel { the panel itself }</li>
+<li>.gwt-StackPanel .gwt-StackPanelItem { unselected items }</li>
+<li>.gwt-StackPanel .gwt-StackPanelItem-selected { selected items }</li>
+</ul>
+<p>
+<h3>Example</h3>
+<pre class="code">public class StackPanelExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Create a stack panel containing three labels.
+    StackPanel panel = new StackPanel();
+    panel.add(new Label("Foo"), "foo");
+    panel.add(new Label("Bar"), "bar");
+    panel.add(new Label("Baz"), "baz");
+
+    // Add it to the root panel.
+    RootPanel.get().add(panel);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#StackPanel()">StackPanel()</a></td><td>Creates an empty stack panel. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#add(com.google.gwt.user.client.ui.Widget)">add(Widget)</a></td><td>Adds a new child with the given widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#add(com.google.gwt.user.client.ui.Widget, java.lang.String)">add(Widget, String)</a></td><td>Adds a new child with the given widget and header. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#add(com.google.gwt.user.client.ui.Widget, java.lang.String, boolean)">add(Widget, String, boolean)</a></td><td>Adds a new child with the given widget and header, optionally interpreting
+ the header as HTML. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#getSelectedIndex()">getSelectedIndex()</a></td><td>Gets the currently selected child index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#insert(com.google.gwt.user.client.ui.Widget, int)">insert(Widget, int)</a></td><td>Inserts a widget before the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#onBrowserEvent(com.google.gwt.user.client.Event)">onBrowserEvent(Event)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#remove(int)">remove(int)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#setStackText(int, java.lang.String)">setStackText(int, String)</a></td><td>Sets the text associated with a child by its index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#setStackText(int, java.lang.String, boolean)">setStackText(int, String, boolean)</a></td><td>Sets the text associated with a child by its index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.StackPanel.html#showStack(int)">showStack(int)</a></td><td>Shows the widget at the specified child index. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="StackPanel()"></a>
+<h3 class="api">StackPanel</h3>
+<div class="memberSig">public <b> StackPanel</b>()</div>Creates an empty stack panel.<h2 class="api">Method Detail</h2>
+<a name="add(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Adds a new child with the given widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+</dl>
+<hr>
+<a name="add(com.google.gwt.user.client.ui.Widget, java.lang.String)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="java.lang.String.html">String</a> stackText</nobr>)</div>Adds a new child with the given widget and header.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+<dt>stackText</dt>
+<dd>the header text associated with this widget</dd>
+</dl>
+<hr>
+<a name="add(com.google.gwt.user.client.ui.Widget, java.lang.String, boolean)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="java.lang.String.html">String</a> stackText, </nobr><nobr>boolean asHTML</nobr>)</div>Adds a new child with the given widget and header, optionally interpreting
+ the header as HTML.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be added</dd>
+<dt>stackText</dt>
+<dd>the header text associated with this widget</dd>
+<dt>asHTML</dt>
+<dd>
+<code>true</code> to treat the specified text as HTML</dd>
+</dl>
+<hr>
+<a name="getSelectedIndex()"></a>
+<h3 class="api">getSelectedIndex</h3>
+<div class="memberSig">public int<b> getSelectedIndex</b>()</div>Gets the currently selected child index.<h4 class="api">Return Value</h4>selected child<hr>
+<a name="insert(com.google.gwt.user.client.ui.Widget, int)"></a>
+<h3 class="api">insert</h3>
+<div class="memberSig">public void<b> insert</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr>int beforeIndex</nobr>)</div>Inserts a widget before the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be inserted</dd>
+<dt>beforeIndex</dt>
+<dd>the index before which it will be inserted</dd>
+</dl>
+<hr>
+<a name="onBrowserEvent(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">onBrowserEvent</h3>
+<div class="memberSig">public void<b> onBrowserEvent</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> event</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>event</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="remove(int)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr>int index</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="remove(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="setStackText(int, java.lang.String)"></a>
+<h3 class="api">setStackText</h3>
+<div class="memberSig">public void<b> setStackText</b>(<nobr>int index, </nobr><nobr><a href="java.lang.String.html">String</a> text</nobr>)</div>Sets the text associated with a child by its index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the child whose text is to be set</dd>
+<dt>text</dt>
+<dd>the text to be associated with it</dd>
+</dl>
+<hr>
+<a name="setStackText(int, java.lang.String, boolean)"></a>
+<h3 class="api">setStackText</h3>
+<div class="memberSig">public void<b> setStackText</b>(<nobr>int index, </nobr><nobr><a href="java.lang.String.html">String</a> text, </nobr><nobr>boolean asHTML</nobr>)</div>Sets the text associated with a child by its index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the child whose text is to be set</dd>
+<dt>text</dt>
+<dd>the text to be associated with it</dd>
+<dt>asHTML</dt>
+<dd>
+<code>true</code> to treat the specified text as HTML</dd>
+</dl>
+<hr>
+<a name="showStack(int)"></a>
+<h3 class="api">showStack</h3>
+<div class="memberSig">public void<b> showStack</b>(<nobr>int index</nobr>)</div>Shows the widget at the specified child index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the child to be shown</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

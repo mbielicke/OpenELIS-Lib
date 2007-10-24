@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            ListBox</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.Label.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.LoadListenerCollection.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">ListBox</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class ListBox</h1>
+<div class="classSig">public 
+            class 
+            ListBox<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.FocusWidget.html">FocusWidget</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.SourcesChangeEvents.html">SourcesChangeEvents</a>, <a href="com.google.gwt.user.client.ui.HasName.html">HasName</a>
+</div>A widget that presents a list of choices to the user, either as a list box or
+ as a drop-down list.
+ 
+ <p>
+<img class="gallery" src="ListBox.png"></p>
+<h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-ListBox { }</li>
+</ul>
+<p>
+<h3>Example</h3>
+<pre class="code">public class ListBoxExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Make a new list box, adding a few items to it.
+    ListBox lb = new ListBox();
+    lb.addItem("foo");
+    lb.addItem("bar");
+    lb.addItem("baz");
+    lb.addItem("toto");
+    lb.addItem("tintin");
+
+    // Make enough room for all five items (setting this value to 1 turns it
+    // into a drop-down list).
+    lb.setVisibleItemCount(5);
+
+    // Add it to the root panel.
+    RootPanel.get().add(lb);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#ListBox()">ListBox()</a></td><td>Creates an empty list box in single selection mode. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#ListBox(boolean)">ListBox(boolean)</a></td><td>Creates an empty list box. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#addChangeListener(com.google.gwt.user.client.ui.ChangeListener)">addChangeListener(ChangeListener)</a></td><td>Adds a listener interface to receive change events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#addItem(java.lang.String)">addItem(String)</a></td><td>Adds an item to the list box. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#addItem(java.lang.String, java.lang.String)">addItem(String, String)</a></td><td>Adds an item to the list box, specifying an initial value for the item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#clear()">clear()</a></td><td>Removes all items from the list box. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#getItemCount()">getItemCount()</a></td><td>Gets the number of items present in the list box. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#getItemText(int)">getItemText(int)</a></td><td>Gets the text associated with the item at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#getName()">getName()</a></td><td>Gets the widget's name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#getSelectedIndex()">getSelectedIndex()</a></td><td>Gets the currently-selected item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#getValue(int)">getValue(int)</a></td><td>Gets the value associated with the item at a given index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#getVisibleItemCount()">getVisibleItemCount()</a></td><td>Gets the number of items that are visible. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#insertItem(java.lang.String, int)">insertItem(String, int)</a></td><td>Inserts an item into the list box. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#insertItem(java.lang.String, java.lang.String, int)">insertItem(String, String, int)</a></td><td>Inserts an item into the list box, specifying an initial value for the
+ item. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#isItemSelected(int)">isItemSelected(int)</a></td><td>Determines whether an individual list item is selected. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#isMultipleSelect()">isMultipleSelect()</a></td><td>Gets whether this list allows multiple selection. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#onBrowserEvent(com.google.gwt.user.client.Event)">onBrowserEvent(Event)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#removeChangeListener(com.google.gwt.user.client.ui.ChangeListener)">removeChangeListener(ChangeListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#removeItem(int)">removeItem(int)</a></td><td>Removes the item at the specified index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setItemSelected(int, boolean)">setItemSelected(int, boolean)</a></td><td>Sets whether an individual list item is selected. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setItemText(int, java.lang.String)">setItemText(int, String)</a></td><td>Sets the text associated with the item at a given index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setMultipleSelect(boolean)">setMultipleSelect(boolean)</a></td><td>Sets whether this list allows multiple selections. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setName(java.lang.String)">setName(String)</a></td><td>Sets the widget's name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setSelectedIndex(int)">setSelectedIndex(int)</a></td><td>Sets the currently selected index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setValue(int, java.lang.String)">setValue(int, String)</a></td><td>Sets the value associated with the item at a given index. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.ListBox.html#setVisibleItemCount(int)">setVisibleItemCount(int)</a></td><td>Sets the number of items that are visible. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="ListBox()"></a>
+<h3 class="api">ListBox</h3>
+<div class="memberSig">public <b> ListBox</b>()</div>Creates an empty list box in single selection mode.<hr>
+<a name="ListBox(boolean)"></a>
+<h3 class="api">ListBox</h3>
+<div class="memberSig">public <b> ListBox</b>(<nobr>boolean isMultipleSelect</nobr>)</div>Creates an empty list box. The preferred way to enable multiple selections
+ is to use this constructor rather than <a href="com.google.gwt.user.client.ui.ListBox.html#setMultipleSelect(boolean)">setMultipleSelect(boolean)</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>isMultipleSelect</dt>
+<dd>specifies if multiple selection is enabled</dd>
+</dl>
+<h2 class="api">Method Detail</h2>
+<a name="addChangeListener(com.google.gwt.user.client.ui.ChangeListener)"></a>
+<h3 class="api">addChangeListener</h3>
+<div class="memberSig">public void<b> addChangeListener</b>(<nobr><a href="com.google.gwt.user.client.ui.ChangeListener.html">ChangeListener</a> listener</nobr>)</div>Adds a listener interface to receive change events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="addItem(java.lang.String)"></a>
+<h3 class="api">addItem</h3>
+<div class="memberSig">public void<b> addItem</b>(<nobr><a href="java.lang.String.html">String</a> item</nobr>)</div>Adds an item to the list box. This method has the same effect as
+ 
+ <pre>
+ addItem(item, item)
+ </pre>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the text of the item to be added</dd>
+</dl>
+<hr>
+<a name="addItem(java.lang.String, java.lang.String)"></a>
+<h3 class="api">addItem</h3>
+<div class="memberSig">public void<b> addItem</b>(<nobr><a href="java.lang.String.html">String</a> item, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Adds an item to the list box, specifying an initial value for the item.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the text of the item to be added</dd>
+<dt>value</dt>
+<dd>the item's value, to be submitted if it is part of a
+          <a href="com.google.gwt.user.client.ui.FormPanel.html">FormPanel</a>; cannot be <code>null</code>
+</dd>
+</dl>
+<hr>
+<a name="clear()"></a>
+<h3 class="api">clear</h3>
+<div class="memberSig">public void<b> clear</b>()</div>Removes all items from the list box.<hr>
+<a name="getItemCount()"></a>
+<h3 class="api">getItemCount</h3>
+<div class="memberSig">public int<b> getItemCount</b>()</div>Gets the number of items present in the list box.<h4 class="api">Return Value</h4>the number of items<hr>
+<a name="getItemText(int)"></a>
+<h3 class="api">getItemText</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getItemText</b>(<nobr>int index</nobr>)</div>Gets the text associated with the item at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item whose text is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the text associated with the item<hr>
+<a name="getName()"></a>
+<h3 class="api">getName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getName</b>()</div>Gets the widget's name.<h4 class="api">Return Value</h4>the widget's name<hr>
+<a name="getSelectedIndex()"></a>
+<h3 class="api">getSelectedIndex</h3>
+<div class="memberSig">public int<b> getSelectedIndex</b>()</div>Gets the currently-selected item. If multiple items are selected, this
+ method will return the first selected item (<a href="com.google.gwt.user.client.ui.ListBox.html#isItemSelected(int)">isItemSelected(int)</a>
+ can be used to query individual items).<h4 class="api">Return Value</h4>the selected index, or <code>-1</code> if none is selected<hr>
+<a name="getValue(int)"></a>
+<h3 class="api">getValue</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getValue</b>(<nobr>int index</nobr>)</div>Gets the value associated with the item at a given index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the item's associated value<hr>
+<a name="getVisibleItemCount()"></a>
+<h3 class="api">getVisibleItemCount</h3>
+<div class="memberSig">public int<b> getVisibleItemCount</b>()</div>Gets the number of items that are visible. If only one item is visible,
+ then the box will be displayed as a drop-down list.<h4 class="api">Return Value</h4>the visible item count<hr>
+<a name="insertItem(java.lang.String, int)"></a>
+<h3 class="api">insertItem</h3>
+<div class="memberSig">public void<b> insertItem</b>(<nobr><a href="java.lang.String.html">String</a> item, </nobr><nobr>int index</nobr>)</div>Inserts an item into the list box. Has the same effect as
+ 
+ <pre>
+ insertItem(item, item, index)
+ </pre>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the text of the item to be inserted</dd>
+<dt>index</dt>
+<dd>the index at which to insert it</dd>
+</dl>
+<hr>
+<a name="insertItem(java.lang.String, java.lang.String, int)"></a>
+<h3 class="api">insertItem</h3>
+<div class="memberSig">public void<b> insertItem</b>(<nobr><a href="java.lang.String.html">String</a> item, </nobr><nobr><a href="java.lang.String.html">String</a> value, </nobr><nobr>int index</nobr>)</div>Inserts an item into the list box, specifying an initial value for the
+ item. If the index is less than zero, or greater than or equal to
+ the length of the list, then the item will be appended to the end of
+ the list.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>item</dt>
+<dd>the text of the item to be inserted</dd>
+<dt>value</dt>
+<dd>the item's value, to be submitted if it is part of a
+          <a href="com.google.gwt.user.client.ui.FormPanel.html">FormPanel</a>.</dd>
+<dt>index</dt>
+<dd>the index at which to insert it</dd>
+</dl>
+<hr>
+<a name="isItemSelected(int)"></a>
+<h3 class="api">isItemSelected</h3>
+<div class="memberSig">public boolean<b> isItemSelected</b>(<nobr>int index</nobr>)</div>Determines whether an individual list item is selected.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be tested</dd>
+</dl>
+<h4 class="api">Return Value</h4>
+<code>true</code> if the item is selected<hr>
+<a name="isMultipleSelect()"></a>
+<h3 class="api">isMultipleSelect</h3>
+<div class="memberSig">public boolean<b> isMultipleSelect</b>()</div>Gets whether this list allows multiple selection.<h4 class="api">Return Value</h4>
+<code>true</code> if multiple selection is allowed<hr>
+<a name="onBrowserEvent(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">onBrowserEvent</h3>
+<div class="memberSig">public void<b> onBrowserEvent</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> event</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>event</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="removeChangeListener(com.google.gwt.user.client.ui.ChangeListener)"></a>
+<h3 class="api">removeChangeListener</h3>
+<div class="memberSig">public void<b> removeChangeListener</b>(<nobr><a href="com.google.gwt.user.client.ui.ChangeListener.html">ChangeListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="removeItem(int)"></a>
+<h3 class="api">removeItem</h3>
+<div class="memberSig">public void<b> removeItem</b>(<nobr>int index</nobr>)</div>Removes the item at the specified index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be removed</dd>
+</dl>
+<hr>
+<a name="setItemSelected(int, boolean)"></a>
+<h3 class="api">setItemSelected</h3>
+<div class="memberSig">public void<b> setItemSelected</b>(<nobr>int index, </nobr><nobr>boolean selected</nobr>)</div>Sets whether an individual list item is selected.
+ 
+ <p>
+ Note that setting the selection programmatically does <em>not</em> cause
+ the <a href="com.google.gwt.user.client.ui.ChangeListener.html#onChange(com.google.gwt.user.client.ui.Widget)">ChangeListener.onChange(Widget)</a> event to be fired.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be selected or unselected</dd>
+<dt>selected</dt>
+<dd>
+<code>true</code> to select the item</dd>
+</dl>
+<hr>
+<a name="setItemText(int, java.lang.String)"></a>
+<h3 class="api">setItemText</h3>
+<div class="memberSig">public void<b> setItemText</b>(<nobr>int index, </nobr><nobr><a href="java.lang.String.html">String</a> text</nobr>)</div>Sets the text associated with the item at a given index.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be set</dd>
+<dt>text</dt>
+<dd>the item's new text</dd>
+</dl>
+<hr>
+<a name="setMultipleSelect(boolean)"></a>
+<h3 class="api">setMultipleSelect</h3>
+<div class="memberSig">public void<b> setMultipleSelect</b>(<nobr>boolean multiple</nobr>)</div>Sets whether this list allows multiple selections. <em>NOTE: The preferred
+ way of enabling multiple selections in a list box is by using the
+ <a href="com.google.gwt.user.client.ui.ListBox.html#ListBox(boolean)">ListBox(boolean)</a> constructor. Using this method can spuriously
+ fail on Internet Explorer 6.0.</em>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>multiple</dt>
+<dd>
+<code>true</code> to allow multiple selections</dd>
+</dl>
+<hr>
+<a name="setName(java.lang.String)"></a>
+<h3 class="api">setName</h3>
+<div class="memberSig">public void<b> setName</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>Sets the widget's name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the widget's new name</dd>
+</dl>
+<hr>
+<a name="setSelectedIndex(int)"></a>
+<h3 class="api">setSelectedIndex</h3>
+<div class="memberSig">public void<b> setSelectedIndex</b>(<nobr>int index</nobr>)</div>Sets the currently selected index.
+ 
+ <p>
+ Note that setting the selected index programmatically does <em>not</em>
+ cause the <a href="com.google.gwt.user.client.ui.ChangeListener.html#onChange(com.google.gwt.user.client.ui.Widget)">ChangeListener.onChange(Widget)</a> event to be fired.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be selected</dd>
+</dl>
+<hr>
+<a name="setValue(int, java.lang.String)"></a>
+<h3 class="api">setValue</h3>
+<div class="memberSig">public void<b> setValue</b>(<nobr>int index, </nobr><nobr><a href="java.lang.String.html">String</a> value</nobr>)</div>Sets the value associated with the item at a given index. This value can be
+ used for any purpose, but is also what is passed to the server when the
+ list box is submitted as part of a <a href="com.google.gwt.user.client.ui.FormPanel.html">FormPanel</a>.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>index</dt>
+<dd>the index of the item to be set</dd>
+<dt>value</dt>
+<dd>the item's new value; cannot be <code>null</code>
+</dd>
+</dl>
+<hr>
+<a name="setVisibleItemCount(int)"></a>
+<h3 class="api">setVisibleItemCount</h3>
+<div class="memberSig">public void<b> setVisibleItemCount</b>(<nobr>int visibleItems</nobr>)</div>Sets the number of items that are visible. If only one item is visible,
+ then the box will be displayed as a drop-down list.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>visibleItems</dt>
+<dd>the visible item count</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

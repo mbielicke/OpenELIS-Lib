@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            DockPanel</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.DisclosurePanel.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">DockPanel</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class DockPanel</h1>
+<div class="classSig">public 
+            class 
+            DockPanel<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.CellPanel.html">CellPanel</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.HasAlignment.html">HasAlignment</a>
+</div>A panel that lays its child widgets out "docked" at its outer edges, and
+ allows its last widget to take up the remaining space in its center.
+ 
+ <p>
+<img class="gallery" src="DockPanel.png"></p>
+<h2 class="api">Nested Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant.html">DockPanel.DockLayoutConstant</a></td><td>DockPanel layout constant, used in
+ <a href="com.google.gwt.user.client.ui.DockPanel.html#add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant)">DockLayoutConstant)</a>. </td>
+</tr>
+</table>
+<h2 class="api">Fields</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td>CENTER</td><td>Specifies that a widget be added at the center of the dock. </td>
+</tr>
+<tr>
+<td>EAST</td><td>Specifies that a widget be added at the east edge of the dock. </td>
+</tr>
+<tr>
+<td>NORTH</td><td>Specifies that a widget be added at the north edge of the dock. </td>
+</tr>
+<tr>
+<td>SOUTH</td><td>Specifies that a widget be added at the south edge of the dock. </td>
+</tr>
+<tr>
+<td>WEST</td><td>Specifies that a widget be added at the west edge of the dock. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#DockPanel()">DockPanel()</a></td><td>Creates an empty dock panel. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant)">add(Widget, DockPanel.DockLayoutConstant)</a></td><td>Adds a widget to the specified edge of the dock. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#getHorizontalAlignment()">getHorizontalAlignment()</a></td><td>Gets the horizontal alignment. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#getVerticalAlignment()">getVerticalAlignment()</a></td><td>Gets the vertical alignment. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#getWidgetDirection(com.google.gwt.user.client.ui.Widget)">getWidgetDirection(Widget)</a></td><td>Gets the layout direction of the given child widget. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#setCellHeight(com.google.gwt.user.client.ui.Widget, java.lang.String)">setCellHeight(Widget, String)</a></td><td>Sets the height of the cell associated with the given widget, related to
+ the panel as a whole. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#setCellHorizontalAlignment(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant)">setCellHorizontalAlignment(Widget, HasHorizontalAlignment.HorizontalAlignmentConstant)</a></td><td>Sets the horizontal alignment of the given widget within its cell. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#setCellVerticalAlignment(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant)">setCellVerticalAlignment(Widget, HasVerticalAlignment.VerticalAlignmentConstant)</a></td><td>Sets the vertical alignment of the given widget within its cell. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#setCellWidth(com.google.gwt.user.client.ui.Widget, java.lang.String)">setCellWidth(Widget, String)</a></td><td>Sets the width of the cell associated with the given widget, related to the
+ panel as a whole. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#setHorizontalAlignment(com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant)">setHorizontalAlignment(HasHorizontalAlignment.HorizontalAlignmentConstant)</a></td><td>Sets the default horizontal alignment to be used for widgets added to this
+ panel. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.DockPanel.html#setVerticalAlignment(com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant)">setVerticalAlignment(HasVerticalAlignment.VerticalAlignmentConstant)</a></td><td>Sets the default vertical alignment to be used for widgets added to this
+ panel. </td>
+</tr>
+</table>
+<h2 class="api">Field Detail</h2>
+<h3 class="api">CENTER</h3>
+<div class="memberSig">public static final DockPanel.DockLayoutConstant <b>CENTER</b>
+</div>Specifies that a widget be added at the center of the dock.<hr>
+<h3 class="api">EAST</h3>
+<div class="memberSig">public static final DockPanel.DockLayoutConstant <b>EAST</b>
+</div>Specifies that a widget be added at the east edge of the dock.<hr>
+<h3 class="api">NORTH</h3>
+<div class="memberSig">public static final DockPanel.DockLayoutConstant <b>NORTH</b>
+</div>Specifies that a widget be added at the north edge of the dock.<hr>
+<h3 class="api">SOUTH</h3>
+<div class="memberSig">public static final DockPanel.DockLayoutConstant <b>SOUTH</b>
+</div>Specifies that a widget be added at the south edge of the dock.<hr>
+<h3 class="api">WEST</h3>
+<div class="memberSig">public static final DockPanel.DockLayoutConstant <b>WEST</b>
+</div>Specifies that a widget be added at the west edge of the dock.<h2 class="api">Constructor Detail</h2>
+<a name="DockPanel()"></a>
+<h3 class="api">DockPanel</h3>
+<div class="memberSig">public <b> DockPanel</b>()</div>Creates an empty dock panel.<h2 class="api">Method Detail</h2>
+<a name="add(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant)"></a>
+<h3 class="api">add</h3>
+<div class="memberSig">public void<b> add</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> widget, </nobr><nobr><a href="com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant.html">DockPanel.DockLayoutConstant</a> direction</nobr>)</div>Adds a widget to the specified edge of the dock. If the widget is already a
+ child of this panel, this method behaves as though <a href="com.google.gwt.user.client.ui.DockPanel.html#remove(com.google.gwt.user.client.ui.Widget)">remove(Widget)</a>
+ had already been called.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>widget</dt>
+<dd>the widget to be added</dd>
+<dt>direction</dt>
+<dd>the widget's direction in the dock</dd>
+</dl>
+<hr>
+<a name="getHorizontalAlignment()"></a>
+<h3 class="api">getHorizontalAlignment</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant.html">HasHorizontalAlignment.HorizontalAlignmentConstant</a><b> getHorizontalAlignment</b>()</div>Gets the horizontal alignment.<h4 class="api">Return Value</h4>the current horizontal alignment.<hr>
+<a name="getVerticalAlignment()"></a>
+<h3 class="api">getVerticalAlignment</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant.html">HasVerticalAlignment.VerticalAlignmentConstant</a><b> getVerticalAlignment</b>()</div>Gets the vertical alignment.<h4 class="api">Return Value</h4>the current vertical alignment.<hr>
+<a name="getWidgetDirection(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">getWidgetDirection</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant.html">DockPanel.DockLayoutConstant</a><b> getWidgetDirection</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>Gets the layout direction of the given child widget.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget to be queried</dd>
+</dl>
+<h4 class="api">Return Value</h4>the widget's layout direction, or <code>null</code> if it is not
+         a child of this panel<hr>
+<a name="remove(com.google.gwt.user.client.ui.Widget)"></a>
+<h3 class="api">remove</h3>
+<div class="memberSig">public boolean<b> remove</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="setCellHeight(com.google.gwt.user.client.ui.Widget, java.lang.String)"></a>
+<h3 class="api">setCellHeight</h3>
+<div class="memberSig">public void<b> setCellHeight</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="java.lang.String.html">String</a> height</nobr>)</div>Sets the height of the cell associated with the given widget, related to
+ the panel as a whole.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget whose cell height is to be set</dd>
+<dt>height</dt>
+<dd>the cell's height, in CSS units</dd>
+</dl>
+<hr>
+<a name="setCellHorizontalAlignment(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant)"></a>
+<h3 class="api">setCellHorizontalAlignment</h3>
+<div class="memberSig">public void<b> setCellHorizontalAlignment</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant.html">HasHorizontalAlignment.HorizontalAlignmentConstant</a> align</nobr>)</div>Sets the horizontal alignment of the given widget within its cell.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget whose horizontal alignment is to be set</dd>
+<dt>align</dt>
+<dd>the widget's horizontal alignment, as defined in
+          <a href="com.google.gwt.user.client.ui.HasHorizontalAlignment.html">HasHorizontalAlignment</a>.</dd>
+</dl>
+<hr>
+<a name="setCellVerticalAlignment(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant)"></a>
+<h3 class="api">setCellVerticalAlignment</h3>
+<div class="memberSig">public void<b> setCellVerticalAlignment</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant.html">HasVerticalAlignment.VerticalAlignmentConstant</a> align</nobr>)</div>Sets the vertical alignment of the given widget within its cell.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget whose vertical alignment is to be set</dd>
+<dt>align</dt>
+<dd>the widget's vertical alignment, as defined in
+          <a href="com.google.gwt.user.client.ui.HasVerticalAlignment.html">HasVerticalAlignment</a>.</dd>
+</dl>
+<hr>
+<a name="setCellWidth(com.google.gwt.user.client.ui.Widget, java.lang.String)"></a>
+<h3 class="api">setCellWidth</h3>
+<div class="memberSig">public void<b> setCellWidth</b>(<nobr><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a> w, </nobr><nobr><a href="java.lang.String.html">String</a> width</nobr>)</div>Sets the width of the cell associated with the given widget, related to the
+ panel as a whole.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>w</dt>
+<dd>the widget whose cell width is to be set</dd>
+<dt>width</dt>
+<dd>the cell's width, in CSS units</dd>
+</dl>
+<hr>
+<a name="setHorizontalAlignment(com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant)"></a>
+<h3 class="api">setHorizontalAlignment</h3>
+<div class="memberSig">public void<b> setHorizontalAlignment</b>(<nobr><a href="com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant.html">HasHorizontalAlignment.HorizontalAlignmentConstant</a> align</nobr>)</div>Sets the default horizontal alignment to be used for widgets added to this
+ panel. It only applies to widgets added after this property is set.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>align</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.HasHorizontalAlignment.html#setHorizontalAlignment(com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant)">HorizontalAlignmentConstant)</a>
+<hr>
+<a name="setVerticalAlignment(com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant)"></a>
+<h3 class="api">setVerticalAlignment</h3>
+<div class="memberSig">public void<b> setVerticalAlignment</b>(<nobr><a href="com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant.html">HasVerticalAlignment.VerticalAlignmentConstant</a> align</nobr>)</div>Sets the default vertical alignment to be used for widgets added to this
+ panel. It only applies to widgets added after this property is set.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>align</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.HasVerticalAlignment.html#setVerticalAlignment(com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant)">VerticalAlignmentConstant)</a>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

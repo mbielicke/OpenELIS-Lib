@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            FileUpload</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.FlexTable.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">FileUpload</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class FileUpload</h1>
+<div class="classSig">public 
+            class 
+            FileUpload<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.Widget.html">Widget</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.HasName.html">HasName</a>
+</div>A widget that wraps the HTML &lt;input type='file'&gt; element. This widget
+ must be used with <a href="com.google.gwt.user.client.ui.FormPanel.html">FormPanel</a> if it is
+ to be submitted to a server.
+ 
+ <p>
+<h3>Example</h3>
+<pre class="code">public class FormPanelExample implements EntryPoint {
+
+  public void onModuleLoad() {
+    // Create a FormPanel and point it at a service.
+    final FormPanel form = new FormPanel();
+    form.setAction("/myFormHandler");
+
+    // Because we're going to add a FileUpload widget, we'll need to set the
+    // form to use the POST method, and multipart MIME encoding.
+    form.setEncoding(FormPanel.ENCODING_MULTIPART);
+    form.setMethod(FormPanel.METHOD_POST);
+
+    // Create a panel to hold all of the form widgets.
+    VerticalPanel panel = new VerticalPanel();
+    form.setWidget(panel);
+
+    // Create a TextBox, giving it a name so that it will be submitted.
+    final TextBox tb = new TextBox();
+    tb.setName("textBoxFormElement");
+    panel.add(tb);
+
+    // Create a ListBox, giving it a name and some values to be associated with
+    // its options.
+    ListBox lb = new ListBox();
+    lb.setName("listBoxFormElement");
+    lb.addItem("foo", "fooValue");
+    lb.addItem("bar", "barValue");
+    lb.addItem("baz", "bazValue");
+    panel.add(lb);
+
+    // Create a FileUpload widget.
+    FileUpload upload = new FileUpload();
+    upload.setName("uploadFormElement");
+    panel.add(upload);
+
+    // Add a 'submit' button.
+    panel.add(new Button("Submit", new ClickListener() {
+      public void onClick(Widget sender) {
+        form.submit();
+      }
+    }));
+
+    // Add an event handler to the form.
+    form.addFormHandler(new FormHandler() {
+      public void onSubmit(FormSubmitEvent event) {
+        // This event is fired just before the form is submitted. We can take
+        // this opportunity to perform validation.
+        if (tb.getText().length() == 0) {
+          Window.alert("The text box must not be empty");
+          event.setCancelled(true);
+        }
+      }
+
+      public void onSubmitComplete(FormSubmitCompleteEvent event) {
+        // When the form submission is successfully completed, this event is
+        // fired. Assuming the service returned a response of type text/html,
+        // we can get the result text here (see the FormPanel documentation for
+        // further explanation).
+        Window.alert(event.getResults());
+      }
+    });
+
+    RootPanel.get().add(form);
+  }
+}
+</pre>
+</p>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FileUpload.html#FileUpload()">FileUpload()</a></td><td>Constructs a new file upload widget. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FileUpload.html#getFilename()">getFilename()</a></td><td>Gets the filename selected by the user. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FileUpload.html#getName()">getName()</a></td><td>Gets the widget's name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.FileUpload.html#setName(java.lang.String)">setName(String)</a></td><td>Sets the widget's name. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="FileUpload()"></a>
+<h3 class="api">FileUpload</h3>
+<div class="memberSig">public <b> FileUpload</b>()</div>Constructs a new file upload widget.<h2 class="api">Method Detail</h2>
+<a name="getFilename()"></a>
+<h3 class="api">getFilename</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getFilename</b>()</div>Gets the filename selected by the user. This property has no mutator, as
+ browser security restrictions preclude setting it.<h4 class="api">Return Value</h4>the widget's filename<hr>
+<a name="getName()"></a>
+<h3 class="api">getName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getName</b>()</div>Gets the widget's name.<h4 class="api">Return Value</h4>the widget's name<hr>
+<a name="setName(java.lang.String)"></a>
+<h3 class="api">setName</h3>
+<div class="memberSig">public void<b> setName</b>(<nobr><a href="java.lang.String.html">String</a> name</nobr>)</div>Sets the widget's name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>name</dt>
+<dd>the widget's new name</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

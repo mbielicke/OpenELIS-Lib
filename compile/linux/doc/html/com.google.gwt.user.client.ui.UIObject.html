@@ -1,0 +1,670 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            UIObject</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.TreeListenerCollection.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.VerticalPanel.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">UIObject</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class UIObject</h1>
+<div class="classSig">public 
+            class 
+            UIObject<br>extends
+                <a xmlns="" href="java.lang.Object.html">Object</a>
+<br>
+<br>// Superclass of <code><a href="com.google.gwt.user.client.ui.MenuItem.html">MenuItem</a></code>, <code><a href="com.google.gwt.user.client.ui.TreeItem.html">TreeItem</a></code>, <code><a href="com.google.gwt.user.client.ui.Widget.html">Widget</a></code>
+</div>The superclass for all user-interface objects. It simply wraps a DOM element,
+ and cannot receive events. Most interesting user-interface classes derive
+ from <a href="com.google.gwt.user.client.ui.Widget.html">Widget</a>.
+ 
+ <h3>Styling With CSS</h3>
+<p>
+ All <code>UIObject</code> objects can be styled using CSS. Style names that
+ are specified programmatically in Java source are implicitly associated with
+ CSS style rules. In terms of HTML and CSS, a GWT style name is the element's
+ CSS "class". By convention, GWT style names are of the form
+ <code>[project]-[widget]</code>.
+ </p>
+<p>
+ For example, the <a href="com.google.gwt.user.client.ui.Button.html">Button</a> widget has the style name
+ <code>gwt-Button</code>, meaning that within the <code>Button</code>
+ constructor, the following call occurs:
+ 
+ <pre class="code">
+ setStyleName("gwt-Button");</pre>
+ 
+ A corresponding CSS style rule can then be written as follows:
+ 
+ <pre class="code">
+ // Example of how you might choose to style a Button widget 
+ .gwt-Button {
+   background-color: yellow;
+   color: black;
+   font-size: 24pt;
+ }</pre>
+ 
+ Note the dot prefix in the CSS style rule. This syntax is called a <a href="http://www.w3.org/TR/REC-CSS2/selector.html#class-html">CSS class
+ selector</a>.
+ </p>
+<h3>Style Name Specifics</h3>
+<p>
+ Every <code>UIObject</code> has a <i>primary style name</i> that
+ identifies the key CSS style rule that should always be applied to it. Use
+ <a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(java.lang.String)">setStylePrimaryName(String)</a> to specify an object's primary style
+ name. In most cases, the primary style name is set in a widget's constructor
+ and never changes again during execution. In the case that no primary style
+ name is specified, it defaults to the first style name that is added.
+ </p>
+<p>
+ More complex styling behavior can be achieved by manipulating an object's
+ <i>secondary style names</i>. Secondary style names can be added and removed
+ using <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a> and <a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleName(java.lang.String)">removeStyleName(String)</a>.
+ The purpose of secondary style names is to associate a variety of CSS style
+ rules over time as an object progresses through different visual states.
+ </p>
+<p>
+ There is an important special formulation of secondary style names called
+ <i>dependent style names</i>. A dependent style name is a secondary style
+ name prefixed with the primary style name of the widget itself. See
+ <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a> for details.
+ </p>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#addStyleDependentName(java.lang.String)">addStyleDependentName(String)</a></td><td>Adds a dependent style name by specifying the style name's suffix. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a></td><td>Adds a secondary or dependent style name to this object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getAbsoluteLeft()">getAbsoluteLeft()</a></td><td>Gets the object's absolute left position in pixels, as measured from the
+ browser window's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getAbsoluteTop()">getAbsoluteTop()</a></td><td>Gets the object's absolute top position in pixels, as measured from the
+ browser window's client area. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getElement()">getElement()</a></td><td>Gets a handle to the object's underlying DOM element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getOffsetHeight()">getOffsetHeight()</a></td><td>Gets the object's offset height in pixels. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getOffsetWidth()">getOffsetWidth()</a></td><td>Gets the object's offset width in pixels. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getStyleElement()">getStyleElement()</a></td><td>Template method that returns the element to which style names will be
+ applied. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getStyleName(com.google.gwt.user.client.Element)">getStyleName(Element)</a></td><td>Gets all of the element's style names, as a space-separated list. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getStyleName()">getStyleName()</a></td><td>Gets all of the object's style names, as a space-separated list. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getStylePrimaryName(com.google.gwt.user.client.Element)">getStylePrimaryName(Element)</a></td><td>Gets the element's primary style name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getStylePrimaryName()">getStylePrimaryName()</a></td><td>Gets the primary style name associated with the object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#getTitle()">getTitle()</a></td><td>Gets the title associated with this object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#isVisible(com.google.gwt.user.client.Element)">isVisible(Element)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#isVisible()">isVisible()</a></td><td>Determines whether or not this object is visible. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleDependentName(java.lang.String)">removeStyleDependentName(String)</a></td><td>Removes a dependent style name by specifying the style name's suffix. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleName(java.lang.String)">removeStyleName(String)</a></td><td>Removes a style name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setElement(com.google.gwt.user.client.Element)">setElement(Element)</a></td><td>Sets this object's browser element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setHeight(java.lang.String)">setHeight(String)</a></td><td>Sets the object's height. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setPixelSize(int, int)">setPixelSize(int, int)</a></td><td>Sets the object's size, in pixels, not including decorations such as
+ border, margin, and padding. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setSize(java.lang.String, java.lang.String)">setSize(String, String)</a></td><td>Sets the object's size. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setStyleName(com.google.gwt.user.client.Element, java.lang.String)">setStyleName(Element, String)</a></td><td>Clears all of the element's style names and sets it to the given style. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setStyleName(com.google.gwt.user.client.Element, java.lang.String, boolean)">setStyleName(Element, String, boolean)</a></td><td>This convenience method adds or removes a style name for a given element. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setStyleName(java.lang.String)">setStyleName(String)</a></td><td>Clears all of the object's style names and sets it to the given style. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(com.google.gwt.user.client.Element, java.lang.String)">setStylePrimaryName(Element, String)</a></td><td>Sets the element's primary style name and updates all dependent style
+ names. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(java.lang.String)">setStylePrimaryName(String)</a></td><td>Sets the object's primary style name and updates all dependent style names. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setTitle(java.lang.String)">setTitle(String)</a></td><td>Sets the title associated with this object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setVisible(com.google.gwt.user.client.Element, boolean)">setVisible(Element, boolean)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setVisible(boolean)">setVisible(boolean)</a></td><td>Sets whether this object is visible. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#setWidth(java.lang.String)">setWidth(String)</a></td><td>Sets the object's width. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#sinkEvents(int)">sinkEvents(int)</a></td><td>Adds a set of events to be sunk by this object. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#toString()">toString()</a></td><td>This method is overridden so that any object can be viewed in the debugger
+ as an HTML snippet. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.UIObject.html#unsinkEvents(int)">unsinkEvents(int)</a></td><td>Removes a set of events from this object's event list. </td>
+</tr>
+</table>
+<h2 class="api">Method Detail</h2>
+<a name="addStyleDependentName(java.lang.String)"></a>
+<h3 class="api">addStyleDependentName</h3>
+<div class="memberSig">public void<b> addStyleDependentName</b>(<nobr><a href="java.lang.String.html">String</a> styleSuffix</nobr>)</div>Adds a dependent style name by specifying the style name's suffix. The
+ actual form of the style name that is added is:
+ 
+ <pre class="code">
+ getStylePrimaryName() + '-' + styleSuffix
+ </pre>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>styleSuffix</dt>
+<dd>the suffix of the dependent style to be added.</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(java.lang.String)">setStylePrimaryName(String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleDependentName(java.lang.String)">removeStyleDependentName(String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a>
+<hr>
+<a name="addStyleName(java.lang.String)"></a>
+<h3 class="api">addStyleName</h3>
+<div class="memberSig">public void<b> addStyleName</b>(<nobr><a href="java.lang.String.html">String</a> style</nobr>)</div>Adds a secondary or dependent style name to this object. A secondary style
+ name is an additional style name that is, in HTML/CSS terms, included as a
+ space-separated token in the value of the CSS <code>class</code>
+ attribute for this object's root element.
+ 
+ <p>
+ The most important use for this method is to add a special kind of
+ secondary style name called a <i>dependent style name</i>. To add a
+ dependent style name, use <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleDependentName(java.lang.String)">addStyleDependentName(String)</a>, which
+ will prefix the 'style' argument with the result of
+ <a href="com.google.gwt.user.client.ui.UIObject.html#getStylePrimaryName()">getStylePrimaryName()</a> (followed by a '-'). For example, suppose
+ the primary style name is <code>gwt-TextBox</code>. If the following
+ method is called as <code>obj.setReadOnly(true)</code>:
+ </p>
+<pre class="code">
+ public void setReadOnly(boolean readOnly) {
+   isReadOnlyMode = readOnly;
+   
+   // Create a dependent style name.
+   String readOnlyStyle = "readonly";
+    
+   if (readOnly) {
+     addStyleDependentName(readOnlyStyle);
+   } else {
+     removeStyleDependentName(readOnlyStyle);
+   }
+ }</pre>
+<p>
+ then both of the CSS style rules below will be applied:
+ </p>
+<pre class="code">
+
+ // This rule is based on the primary style name and is always active.
+ .gwt-TextBox {
+   font-size: 12pt;
+ }
+ 
+ // This rule is based on a dependent style name that is only active
+ // when the widget has called addStyleName(getStylePrimaryName() +
+ // "-readonly").
+ .gwt-TextBox-readonly {
+   background-color: lightgrey;
+   border: none;
+ }</pre>
+<p>
+ Dependent style names are powerful because they are automatically updated
+ whenever the primary style name changes. Continuing with the example above,
+ if the primary style name changed due to the following call:
+ </p>
+<pre class="code">setStylePrimaryName("my-TextThingy");</pre>
+<p>
+ then the object would be re-associated with following style rules, removing
+ those that were shown above.
+ </p>
+<pre class="code">
+ .my-TextThingy {
+   font-size: 20pt;
+ }
+ 
+ .my-TextThingy-readonly {
+   background-color: red;
+   border: 2px solid yellow;
+ }</pre>
+<p>
+ Secondary style names that are not dependent style names are not
+ automatically updated when the primary style name changes.
+ </p>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>style</dt>
+<dd>the secondary style name to be added</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html">UIObject</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleName(java.lang.String)">removeStyleName(String)</a>
+<hr>
+<a name="getAbsoluteLeft()"></a>
+<h3 class="api">getAbsoluteLeft</h3>
+<div class="memberSig">public int<b> getAbsoluteLeft</b>()</div>Gets the object's absolute left position in pixels, as measured from the
+ browser window's client area.<h4 class="api">Return Value</h4>the object's absolute left position<hr>
+<a name="getAbsoluteTop()"></a>
+<h3 class="api">getAbsoluteTop</h3>
+<div class="memberSig">public int<b> getAbsoluteTop</b>()</div>Gets the object's absolute top position in pixels, as measured from the
+ browser window's client area.<h4 class="api">Return Value</h4>the object's absolute top position<hr>
+<a name="getElement()"></a>
+<h3 class="api">getElement</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.Element.html">Element</a><b> getElement</b>()</div>Gets a handle to the object's underlying DOM element.<h4 class="api">Return Value</h4>the object's browser element<hr>
+<a name="getOffsetHeight()"></a>
+<h3 class="api">getOffsetHeight</h3>
+<div class="memberSig">public int<b> getOffsetHeight</b>()</div>Gets the object's offset height in pixels. This is the total height of the
+ object, including decorations such as border, margin, and padding.<h4 class="api">Return Value</h4>the object's offset height<hr>
+<a name="getOffsetWidth()"></a>
+<h3 class="api">getOffsetWidth</h3>
+<div class="memberSig">public int<b> getOffsetWidth</b>()</div>Gets the object's offset width in pixels. This is the total width of the
+ object, including decorations such as border, margin, and padding.<h4 class="api">Return Value</h4>the object's offset width<hr>
+<a name="getStyleElement()"></a>
+<h3 class="api">getStyleElement</h3>
+<div class="memberSig">protected <a href="com.google.gwt.user.client.Element.html">Element</a><b> getStyleElement</b>()</div>Template method that returns the element to which style names will be
+ applied. By default it returns the root element, but this method may be
+ overridden to apply styles to a child element.<h4 class="api">Return Value</h4>the element to which style names will be applied<hr>
+<a name="getStyleName(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getStyleName</h3>
+<div class="memberSig">protected static <a href="java.lang.String.html">String</a><b> getStyleName</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets all of the element's style names, as a space-separated list.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the objects's space-separated style names<hr>
+<a name="getStyleName()"></a>
+<h3 class="api">getStyleName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getStyleName</b>()</div>Gets all of the object's style names, as a space-separated list. If you
+ wish to retrieve only the primary style name, call
+ <a href="com.google.gwt.user.client.ui.UIObject.html#getStylePrimaryName()">getStylePrimaryName()</a>.<h4 class="api">Return Value</h4>the objects's space-separated style names<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#getStylePrimaryName()">getStylePrimaryName()</a>
+<hr>
+<a name="getStylePrimaryName(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">getStylePrimaryName</h3>
+<div class="memberSig">protected static <a href="java.lang.String.html">String</a><b> getStylePrimaryName</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Gets the element's primary style name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose primary style name is to be retrieved</dd>
+</dl>
+<h4 class="api">Return Value</h4>the element's primary style name<hr>
+<a name="getStylePrimaryName()"></a>
+<h3 class="api">getStylePrimaryName</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getStylePrimaryName</b>()</div>Gets the primary style name associated with the object.<h4 class="api">Return Value</h4>the object's primary style name<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#setStyleName(java.lang.String)">setStyleName(String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleName(java.lang.String)">removeStyleName(String)</a>
+<hr>
+<a name="getTitle()"></a>
+<h3 class="api">getTitle</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getTitle</b>()</div>Gets the title associated with this object. The title is the 'tool-tip'
+ displayed to users when they hover over the object.<h4 class="api">Return Value</h4>the object's title<hr>
+<a name="isVisible(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">isVisible</h3>
+<div class="memberSig">public static boolean<b> isVisible</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="isVisible()"></a>
+<h3 class="api">isVisible</h3>
+<div class="memberSig">public boolean<b> isVisible</b>()</div>Determines whether or not this object is visible.<h4 class="api">Return Value</h4>
+<code>true</code> if the object is visible<hr>
+<a name="removeStyleDependentName(java.lang.String)"></a>
+<h3 class="api">removeStyleDependentName</h3>
+<div class="memberSig">public void<b> removeStyleDependentName</b>(<nobr><a href="java.lang.String.html">String</a> styleSuffix</nobr>)</div>Removes a dependent style name by specifying the style name's suffix.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>styleSuffix</dt>
+<dd>the suffix of the dependent style to be removed</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(com.google.gwt.user.client.Element, java.lang.String)">setStylePrimaryName(Element, String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleDependentName(java.lang.String)">addStyleDependentName(String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a>
+<hr>
+<a name="removeStyleName(java.lang.String)"></a>
+<h3 class="api">removeStyleName</h3>
+<div class="memberSig">public void<b> removeStyleName</b>(<nobr><a href="java.lang.String.html">String</a> style</nobr>)</div>Removes a style name. This method is typically used to remove secondary
+ style names, but it can be used to remove primary stylenames as well. That
+ use is not recommended.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>style</dt>
+<dd>the secondary style name to be removed</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a>
+<hr>
+<a name="setElement(com.google.gwt.user.client.Element)"></a>
+<h3 class="api">setElement</h3>
+<div class="memberSig">protected void<b> setElement</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem</nobr>)</div>Sets this object's browser element. UIObject subclasses must call this
+ method before attempting to call any other methods.
+ 
+ If the browser element has already been set, then the current element's
+ position is located in the DOM and removed. The new element is added into
+ the previous element's position.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the object's new element</dd>
+</dl>
+<hr>
+<a name="setHeight(java.lang.String)"></a>
+<h3 class="api">setHeight</h3>
+<div class="memberSig">public void<b> setHeight</b>(<nobr><a href="java.lang.String.html">String</a> height</nobr>)</div>Sets the object's height. This height does not include decorations such as
+ border, margin, and padding.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>height</dt>
+<dd>the object's new height, in CSS units (e.g. "10px", "1em")</dd>
+</dl>
+<hr>
+<a name="setPixelSize(int, int)"></a>
+<h3 class="api">setPixelSize</h3>
+<div class="memberSig">public void<b> setPixelSize</b>(<nobr>int width, </nobr><nobr>int height</nobr>)</div>Sets the object's size, in pixels, not including decorations such as
+ border, margin, and padding.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>width</dt>
+<dd>the object's new width, in pixels</dd>
+<dt>height</dt>
+<dd>the object's new height, in pixels</dd>
+</dl>
+<hr>
+<a name="setSize(java.lang.String, java.lang.String)"></a>
+<h3 class="api">setSize</h3>
+<div class="memberSig">public void<b> setSize</b>(<nobr><a href="java.lang.String.html">String</a> width, </nobr><nobr><a href="java.lang.String.html">String</a> height</nobr>)</div>Sets the object's size. This size does not include decorations such as
+ border, margin, and padding.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>width</dt>
+<dd>the object's new width, in CSS units (e.g. "10px", "1em")</dd>
+<dt>height</dt>
+<dd>the object's new height, in CSS units (e.g. "10px", "1em")</dd>
+</dl>
+<hr>
+<a name="setStyleName(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">setStyleName</h3>
+<div class="memberSig">protected static void<b> setStyleName</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> styleName</nobr>)</div>Clears all of the element's style names and sets it to the given style.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style is to be modified</dd>
+<dt>styleName</dt>
+<dd>the new style name</dd>
+</dl>
+<hr>
+<a name="setStyleName(com.google.gwt.user.client.Element, java.lang.String, boolean)"></a>
+<h3 class="api">setStyleName</h3>
+<div class="memberSig">protected static void<b> setStyleName</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> style, </nobr><nobr>boolean add</nobr>)</div>This convenience method adds or removes a style name for a given element.
+ This method is typically used to add and remove secondary style names, but
+ it can be used to remove primary stylenames as well, but that is not
+ recommended. See <a href="com.google.gwt.user.client.ui.UIObject.html#setStyleName(java.lang.String)">setStyleName(String)</a> for a description of how
+ primary and secondary style names are used.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style is to be modified</dd>
+<dt>style</dt>
+<dd>the secondary style name to be added or removed</dd>
+<dt>add</dt>
+<dd>
+<code>true</code> to add the given style, <code>false</code>
+          to remove it</dd>
+</dl>
+<hr>
+<a name="setStyleName(java.lang.String)"></a>
+<h3 class="api">setStyleName</h3>
+<div class="memberSig">public void<b> setStyleName</b>(<nobr><a href="java.lang.String.html">String</a> style</nobr>)</div>Clears all of the object's style names and sets it to the given style. You
+ should normally use <a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(java.lang.String)">setStylePrimaryName(String)</a> unless you wish to
+ explicitly remove all existing styles.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>style</dt>
+<dd>the new style name</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#setStylePrimaryName(java.lang.String)">setStylePrimaryName(String)</a>
+<hr>
+<a name="setStylePrimaryName(com.google.gwt.user.client.Element, java.lang.String)"></a>
+<h3 class="api">setStylePrimaryName</h3>
+<div class="memberSig">protected static void<b> setStylePrimaryName</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr><a href="java.lang.String.html">String</a> style</nobr>)</div>Sets the element's primary style name and updates all dependent style
+ names.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>the element whose style is to be reset</dd>
+<dt>style</dt>
+<dd>the new primary style name</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#setStyleName(com.google.gwt.user.client.Element, java.lang.String, boolean)">setStyleName(Element, String, boolean)</a>
+<hr>
+<a name="setStylePrimaryName(java.lang.String)"></a>
+<h3 class="api">setStylePrimaryName</h3>
+<div class="memberSig">public void<b> setStylePrimaryName</b>(<nobr><a href="java.lang.String.html">String</a> style</nobr>)</div>Sets the object's primary style name and updates all dependent style names.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>style</dt>
+<dd>the new primary style name</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#addStyleName(java.lang.String)">addStyleName(String)</a>, <a href="com.google.gwt.user.client.ui.UIObject.html#removeStyleName(java.lang.String)">removeStyleName(String)</a>
+<hr>
+<a name="setTitle(java.lang.String)"></a>
+<h3 class="api">setTitle</h3>
+<div class="memberSig">public void<b> setTitle</b>(<nobr><a href="java.lang.String.html">String</a> title</nobr>)</div>Sets the title associated with this object. The title is the 'tool-tip'
+ displayed to users when they hover over the object.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>title</dt>
+<dd>the object's new title</dd>
+</dl>
+<hr>
+<a name="setVisible(com.google.gwt.user.client.Element, boolean)"></a>
+<h3 class="api">setVisible</h3>
+<div class="memberSig">public static void<b> setVisible</b>(<nobr><a href="com.google.gwt.user.client.Element.html">Element</a> elem, </nobr><nobr>boolean visible</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>elem</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+<dt>visible</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="setVisible(boolean)"></a>
+<h3 class="api">setVisible</h3>
+<div class="memberSig">public void<b> setVisible</b>(<nobr>boolean visible</nobr>)</div>Sets whether this object is visible.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>visible</dt>
+<dd>
+<code>true</code> to show the object, <code>false</code>
+          to hide it</dd>
+</dl>
+<hr>
+<a name="setWidth(java.lang.String)"></a>
+<h3 class="api">setWidth</h3>
+<div class="memberSig">public void<b> setWidth</b>(<nobr><a href="java.lang.String.html">String</a> width</nobr>)</div>Sets the object's width. This width does not include decorations such as
+ border, margin, and padding.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>width</dt>
+<dd>the object's new width, in CSS units (e.g. "10px", "1em")</dd>
+</dl>
+<hr>
+<a name="sinkEvents(int)"></a>
+<h3 class="api">sinkEvents</h3>
+<div class="memberSig">public void<b> sinkEvents</b>(<nobr>int eventBitsToAdd</nobr>)</div>Adds a set of events to be sunk by this object. Note that only
+ <a href="com.google.gwt.user.client.ui.Widget.html">widgets</a> may actually receive events, but can receive events
+ from all objects contained within them.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>eventBitsToAdd</dt>
+<dd>a bitfield representing the set of events to be added
+          to this element's event set</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.Event.html">Event</a>
+<hr>
+<a name="toString()"></a>
+<h3 class="api">toString</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> toString</b>()</div>This method is overridden so that any object can be viewed in the debugger
+ as an HTML snippet.<h4 class="api">Return Value</h4>a string representation of the object<hr>
+<a name="unsinkEvents(int)"></a>
+<h3 class="api">unsinkEvents</h3>
+<div class="memberSig">public void<b> unsinkEvents</b>(<nobr>int eventBitsToRemove</nobr>)</div>Removes a set of events from this object's event list.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>eventBitsToRemove</dt>
+<dd>a bitfield representing the set of events to be
+          removed from this element's event set</dd>
+</dl>
+<h4 class="api">See Also</h4>
+<a href="com.google.gwt.user.client.ui.UIObject.html#sinkEvents(int)">sinkEvents</a>, <a href="com.google.gwt.user.client.Event.html">Event</a>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

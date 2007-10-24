@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            RichTextArea</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.user.client.ui.RadioButton.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.user.client.ui.RichTextArea.BasicFormatter.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.user.client.ui.html">com.google.gwt.user.client.ui</a></span> &gt;
+            <span class="selected item">RichTextArea</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Class RichTextArea</h1>
+<div class="classSig">public 
+            class 
+            RichTextArea<br>extends
+                <a xmlns="" href="com.google.gwt.user.client.ui.FocusWidget.html">FocusWidget</a>
+<br>implements 
+                <a href="com.google.gwt.user.client.ui.HasHTML.html">HasHTML</a>, <a href="com.google.gwt.user.client.ui.SourcesMouseEvents.html">SourcesMouseEvents</a>
+</div>A rich text editor that allows complex styling and formatting.
+ 
+ Because some browsers do not support rich text editing, and others support
+ only a limited subset of functionality, there are two formatter interfaces,
+ accessed via <a href="com.google.gwt.user.client.ui.RichTextArea.html#getBasicFormatter()">getBasicFormatter()</a> and <a href="com.google.gwt.user.client.ui.RichTextArea.html#getExtendedFormatter()">getExtendedFormatter()</a>.
+ A browser that does not support rich text editing at all will return
+ <code>null</code> for both of these, while one that supports only the basic
+ functionality will return <code>null</code> for the latter.
+ 
+ <p>
+<img class="gallery" src="RichTextArea.png"></p>
+<h3>CSS Style Rules</h3>
+<ul class="css">
+<li>.gwt-RichTextArea { }</li>
+</ul>
+<h2 class="api">Nested Classes</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.FontSize.html">RichTextArea.FontSize</a></td><td>Font size enumeration. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.Justification.html">RichTextArea.Justification</a></td><td>Justification enumeration. </td>
+</tr>
+</table>
+<h2 class="api">Nested Interfaces</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.BasicFormatter.html">RichTextArea.BasicFormatter</a></td><td>This interface is used to access basic formatting options, when available. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.ExtendedFormatter.html">RichTextArea.ExtendedFormatter</a></td><td>This interface is used to access full formatting options, when available. </td>
+</tr>
+</table>
+<h2 class="api">Constructors</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#RichTextArea()">RichTextArea()</a></td><td>Creates a new, blank <a href="com.google.gwt.user.client.ui.RichTextArea.html">RichTextArea</a> object with no stylesheet. </td>
+</tr>
+</table>
+<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#addMouseListener(com.google.gwt.user.client.ui.MouseListener)">addMouseListener(MouseListener)</a></td><td>Adds a listener interface to receive mouse events. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#getBasicFormatter()">getBasicFormatter()</a></td><td>Gets the basic rich text formatting interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#getExtendedFormatter()">getExtendedFormatter()</a></td><td>Gets the full rich text formatting interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#getHTML()">getHTML()</a></td><td>Gets this object's contents as HTML. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#getText()">getText()</a></td><td>Gets this object's text. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#onAttach()">onAttach()</a></td><td>This method is called when a widget is attached to the browser's document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#onBrowserEvent(com.google.gwt.user.client.Event)">onBrowserEvent(Event)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#onDetach()">onDetach()</a></td><td>This method is called when a widget is detached from the browser's
+ document. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#removeMouseListener(com.google.gwt.user.client.ui.MouseListener)">removeMouseListener(MouseListener)</a></td><td>Removes a previously added listener interface. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#setFocus(boolean)">setFocus(boolean)</a></td><td></td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#setHTML(java.lang.String)">setHTML(String)</a></td><td>Sets this object's contents via HTML. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.user.client.ui.RichTextArea.html#setText(java.lang.String)">setText(String)</a></td><td>Sets this object's text. </td>
+</tr>
+</table>
+<h2 class="api">Constructor Detail</h2>
+<a name="RichTextArea()"></a>
+<h3 class="api">RichTextArea</h3>
+<div class="memberSig">public <b> RichTextArea</b>()</div>Creates a new, blank <a href="com.google.gwt.user.client.ui.RichTextArea.html">RichTextArea</a> object with no stylesheet.<h2 class="api">Method Detail</h2>
+<a name="addMouseListener(com.google.gwt.user.client.ui.MouseListener)"></a>
+<h3 class="api">addMouseListener</h3>
+<div class="memberSig">public void<b> addMouseListener</b>(<nobr><a href="com.google.gwt.user.client.ui.MouseListener.html">MouseListener</a> listener</nobr>)</div>Adds a listener interface to receive mouse events.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to add</dd>
+</dl>
+<hr>
+<a name="getBasicFormatter()"></a>
+<h3 class="api">getBasicFormatter</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.RichTextArea.BasicFormatter.html">RichTextArea.BasicFormatter</a><b> getBasicFormatter</b>()</div>Gets the basic rich text formatting interface.<h4 class="api">Return Value</h4>
+<code>null</code> if basic formatting is not supported<hr>
+<a name="getExtendedFormatter()"></a>
+<h3 class="api">getExtendedFormatter</h3>
+<div class="memberSig">public <a href="com.google.gwt.user.client.ui.RichTextArea.ExtendedFormatter.html">RichTextArea.ExtendedFormatter</a><b> getExtendedFormatter</b>()</div>Gets the full rich text formatting interface.<h4 class="api">Return Value</h4>
+<code>null</code> if full formatting is not supported<hr>
+<a name="getHTML()"></a>
+<h3 class="api">getHTML</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getHTML</b>()</div>Gets this object's contents as HTML.<h4 class="api">Return Value</h4>the object's HTML<hr>
+<a name="getText()"></a>
+<h3 class="api">getText</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getText</b>()</div>Gets this object's text.<h4 class="api">Return Value</h4>the object's text<hr>
+<a name="onAttach()"></a>
+<h3 class="api">onAttach</h3>
+<div class="memberSig">protected void<b> onAttach</b>()</div>This method is called when a widget is attached to the browser's document.
+ To receive notification after a Widget has been added to the document,
+ override the <a href="com.google.gwt.user.client.ui.Widget.html#onLoad()">onLoad</a> method.
+ 
+ <p>
+ Subclasses that override this method must call
+ <code>super.onAttach()</code> to ensure that the Widget has been attached
+ to its underlying Element.
+ </p>
+<hr>
+<a name="onBrowserEvent(com.google.gwt.user.client.Event)"></a>
+<h3 class="api">onBrowserEvent</h3>
+<div class="memberSig">public void<b> onBrowserEvent</b>(<nobr><a href="com.google.gwt.user.client.Event.html">Event</a> event</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>event</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="onDetach()"></a>
+<h3 class="api">onDetach</h3>
+<div class="memberSig">protected void<b> onDetach</b>()</div>This method is called when a widget is detached from the browser's
+ document. To receive notification before a Widget is removed from the
+ document, override the <a href="com.google.gwt.user.client.ui.Widget.html#onUnload()">onUnload</a> method.
+ 
+ <p>
+ Subclasses that override this method must call
+ <code>super.onDetach()</code> to ensure that the Widget has been detached
+ from the underlying Element. Failure to do so will result in application
+ memory leaks due to circular references between DOM Elements and JavaScript
+ objects.
+ </p>
+<hr>
+<a name="removeMouseListener(com.google.gwt.user.client.ui.MouseListener)"></a>
+<h3 class="api">removeMouseListener</h3>
+<div class="memberSig">public void<b> removeMouseListener</b>(<nobr><a href="com.google.gwt.user.client.ui.MouseListener.html">MouseListener</a> listener</nobr>)</div>Removes a previously added listener interface.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>listener</dt>
+<dd>the listener interface to remove</dd>
+</dl>
+<hr>
+<a name="setFocus(boolean)"></a>
+<h3 class="api">setFocus</h3>
+<div class="memberSig">public void<b> setFocus</b>(<nobr>boolean focused</nobr>)</div>
+<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>focused</dt>
+<dd>
+<!--[Missing documentation]-->
+</dd>
+</dl>
+<hr>
+<a name="setHTML(java.lang.String)"></a>
+<h3 class="api">setHTML</h3>
+<div class="memberSig">public void<b> setHTML</b>(<nobr><a href="java.lang.String.html">String</a> html</nobr>)</div>Sets this object's contents via HTML. Use care when setting an object's
+ HTML; it is an easy way to expose script-based security problems. Consider
+ using <a href="com.google.gwt.user.client.ui.HasText.html#setText(java.lang.String)">setText(String)</a> whenever possible.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>html</dt>
+<dd>the object's new HTML</dd>
+</dl>
+<hr>
+<a name="setText(java.lang.String)"></a>
+<h3 class="api">setText</h3>
+<div class="memberSig">public void<b> setText</b>(<nobr><a href="java.lang.String.html">String</a> text</nobr>)</div>Sets this object's text.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>text</dt>
+<dd>the object's new text</dd>
+</dl>
+</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>

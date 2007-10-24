@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+          Google Web Toolkit
+          
+            -
+            ConstantsWithLookup</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="../css/base.css" rel="stylesheet" type="text/css">
+<link href="./doc.css" rel="stylesheet" type="text/css">
+<link href="../css/print.css" rel="stylesheet" media="print" type="text/css">
+</head>
+<body>
+<div id="gaia">&nbsp;</div>
+<div id="header">
+<div id="logo">
+<a href="http://code.google.com/"><img src="http://code.google.com/images/code_sm.png" alt="Google"></a>
+</div>
+<div id="title">Google Web Toolkit</div>
+<div id="breadcrumbs">
+<div id="nextprev">
+<nobr><a href="com.google.gwt.i18n.client.Constants.html">&laquo; prev</a></nobr><nobr><a href="com.google.gwt.i18n.client.Localizable.html">next &raquo;</a></nobr>
+</div>
+<span class="item"><a href="http://code.google.com/">Google Code Home</a></span>
+        &gt;
+        <span class="item"><a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a></span>
+        &gt;
+        
+        <span class="item"><a xmlns="" href="gwt.html">GWT Class Reference</a></span> &gt;
+            <span class="item"><a href="com.google.gwt.i18n.client.html">com.google.gwt.i18n.client</a></span> &gt;
+            <span class="selected item">ConstantsWithLookup</span>
+</div>
+</div>
+<div id="side">
+<div id="menu">
+<h4>
+<a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>
+</h4>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/download.html">Download GWT</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/overview.html">Product Overview</a>
+</li>
+<li>
+<a href="./gettingstarted.html">Getting Started Guide</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/documentation/examples/">Example Projects</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="./com.google.gwt.doc.DeveloperGuide.html">Developer Guide</a>
+</li>
+<li>
+<a class="selected" href="./gwt.html">Class Reference</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/issues/">Issue Tracking</a>
+</li>
+<li>
+<a href="http://groups.google.com/group/Google-Web-Toolkit">Developer Forum</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://googlewebtoolkit.blogspot.com/">GWT Blog</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/faq.html">GWT FAQ</a>
+</li>
+<li>
+<a href="http://code.google.com/webtoolkit/makinggwtbetter.html">Making GWT Better</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href="http://code.google.com/webtoolkit/thirdparty.html">Third Party Tools</a>
+</li>
+</ul>
+</div>
+<div id="search">
+<form id="searchbox_015986126177484454297:pfmwlvdl42y" action="http://www.google.com/cse">
+<input type="hidden" name="cx" value="015986126177484454297:pfmwlvdl42y"><input type="hidden" name="cof" value="FORID:0">
+<div class="header">Search Google Code:</div>
+<input name="q" type="text" size="20"><input type="submit" name="sa" value="Search">
+<br>
+</form>
+<script type="text/javascript" src="http://google.com/coop/cse/brand?form=searchbox_015986126177484454297:pfmwlvdl42y"></script>
+</div>
+</div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="body">
+<h1>Interface ConstantsWithLookup</h1>
+<div class="classSig">public 
+            interface 
+            <b>ConstantsWithLookup</b>
+<br>extends 
+                <a xmlns="" href="com.google.gwt.i18n.client.Constants.html">Constants</a>
+</div>Like <a href="com.google.gwt.i18n.client.Constants.html">Constants</a>, a tag interface that
+ facilitates locale-sensitive, compile-time binding of constant values
+ supplied from properties files with the added ability to look up constants at
+ runtime with a string key.
+ 
+ <p>
+<code>ConstantsWithLookup</code> extends
+ <a href="com.google.gwt.i18n.client.Constants.html">Constants</a> and is identical in behavior,
+ adding only a family of special-purpose lookup methods such as
+ <a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getString(java.lang.String)">ConstantsWithLookup.getString(String)</a>.
+ </p>
+<p>
+ It is generally preferable to extend <code>Constants</code> rather than
+ <code>ConstantsWithLookup</code> because <code>ConstantsWithLookup</code>
+ forces all constants to be retained in the compiled script, preventing the
+ GWT compiler from pruning unused constant accessors.
+ </p>
+<h3>Required Module</h3>
+ Modules that use this interface should inherit
+ <code>com.google.gwt.i18n.I18N</code>.
+ 
+ <pre class="code">&lt;!--                                                                        --&gt;
+&lt;!-- Copyright 2007 Google Inc.                                             --&gt;
+&lt;!-- Licensed under the Apache License, Version 2.0 (the "License"); you    --&gt;
+&lt;!-- may not use this file except in compliance with the License. You may   --&gt;
+&lt;!-- may obtain a copy of the License at                                    --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- http://www.apache.org/licenses/LICENSE-2.0                             --&gt;
+&lt;!--                                                                        --&gt;
+&lt;!-- Unless required by applicable law or agreed to in writing, software    --&gt;
+&lt;!-- distributed under the License is distributed on an "AS IS" BASIS,      --&gt;
+&lt;!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or        --&gt;
+&lt;!-- implied. License for the specific language governing permissions and   --&gt;
+&lt;!-- limitations under the License.                                         --&gt;
+
+&lt;module&gt;
+  &lt;!-- other inherited modules, such as com.google.gwt.user.User --&gt;
+  &lt;inherits name="com.google.gwt.i18n.I18N"/&gt;
+  &lt;!-- additional module settings --&gt;
+&lt;/module&gt;
+</pre>
+<h3>Note</h3>
+ You should not directly implement this interface or interfaces derived from
+ it since an implementation is generated automatically when message interfaces
+ are created using <a href="com.google.gwt.core.client.GWT.html#create(java.lang.Class)">GWT.create(Class)</a>.<h2 class="api">Methods</h2>
+<table cellpadding="1" cellspacing="1" class="members">
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getBoolean(java.lang.String)">getBoolean(String)</a></td><td>Look up <code>boolean</code> by method name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getDouble(java.lang.String)">getDouble(String)</a></td><td>Look up <code>double</code> by method name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getFloat(java.lang.String)">getFloat(String)</a></td><td>Look up <code>float</code> by method name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getInt(java.lang.String)">getInt(String)</a></td><td>Look up <code>int</code> by method name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getMap(java.lang.String)">getMap(String)</a></td><td>Look up <code>Map</code> by method name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getString(java.lang.String)">getString(String)</a></td><td>Look up <code>String</code> by method name. </td>
+</tr>
+<tr>
+<td><a href="com.google.gwt.i18n.client.ConstantsWithLookup.html#getStringArray(java.lang.String)">getStringArray(String)</a></td><td>Look up <code>String[]</code> by method name. </td>
+</tr>
+</table>
+<h2 class="api">See Also</h2>
+<a href="com.google.gwt.i18n.client.Constants.html">Constants</a>
+<h2 class="api">Method Detail</h2>
+<a name="getBoolean(java.lang.String)"></a>
+<h3 class="api">getBoolean</h3>
+<div class="memberSig">public boolean<b> getBoolean</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>boolean</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>boolean returned by method<hr>
+<a name="getDouble(java.lang.String)"></a>
+<h3 class="api">getDouble</h3>
+<div class="memberSig">public double<b> getDouble</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>double</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>double returned by method<hr>
+<a name="getFloat(java.lang.String)"></a>
+<h3 class="api">getFloat</h3>
+<div class="memberSig">public float<b> getFloat</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>float</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>float returned by method<hr>
+<a name="getInt(java.lang.String)"></a>
+<h3 class="api">getInt</h3>
+<div class="memberSig">public int<b> getInt</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>int</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>int returned by method<hr>
+<a name="getMap(java.lang.String)"></a>
+<h3 class="api">getMap</h3>
+<div class="memberSig">public <a href="java.util.Map.html">Map</a><b> getMap</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>Map</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>Map returned by method<hr>
+<a name="getString(java.lang.String)"></a>
+<h3 class="api">getString</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String</a><b> getString</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>String</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>String returned by method<hr>
+<a name="getStringArray(java.lang.String)"></a>
+<h3 class="api">getStringArray</h3>
+<div class="memberSig">public <a href="java.lang.String.html">String[]</a><b> getStringArray</b>(<nobr><a href="java.lang.String.html">String</a> methodName</nobr>)</div>Look up <code>String[]</code> by method name.<h4 class="api">Parameters</h4>
+<dl class="memberDetail">
+<dt>methodName</dt>
+<dd>method name</dd>
+</dl>
+<h4 class="api">Return Value</h4>String[] returned by method</div>
+<div id="footer" xmlns="http://www.w3.org/1999/xhtml">
+          &copy;2007 Google
+          <span class="noprint">
+            -
+            <a href="http://www.google.com/">Google Home</a>
+            -
+            <a href="http://www.google.com/jobs/">We're Hiring</a>
+            -
+            <a href="http://www.google.com/privacy.html">Privacy Policy</a>
+            -
+            <a href="http://www.google.com/terms_of_service.html">Terms of Service</a>
+            -
+            <a href="mailto:code@google.com">Contact Us</a></span>
+<div id="license" style="text-align: center; margin: 1em 0em 1em 0em">
+            Except as otherwise
+            <a href="http://code.google.com/policies.html#restrictions">noted</a>, the content of this  page is licensed under the  <a rel="license" href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a>.
+              <!--
+            <rdf:RDF xmlns="http://web.resource.org/cc/">
+<Work rdf:about="">
+<license rdf:resource="http://creativecommons.org/licenses/by/2.5/"></license>
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.5/">
+<permits rdf:resource="http://web.resource.org/cc/Reproduction"></permits>
+<permits rdf:resource="http://web.resource.org/cc/Distribution"></permits>
+<requires rdf:resource="http://web.resource.org/cc/Notice"></requires>
+<requires rdf:resource="http://web.resource.org/cc/Attribution"></requires>
+<permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"></permits>
+</License>
+</rdf:RDF>
+              -->
+            </div>
+</div>
+<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript" xmlns="http://www.w3.org/1999/xhtml"></script><script type="text/javascript">
+          _uacct="UA-18071-1"; _uanchor=1; urchinTracker();
+        </script>
+</body>
+</html>
