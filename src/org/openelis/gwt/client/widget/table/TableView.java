@@ -3,6 +3,7 @@ package org.openelis.gwt.client.widget.table;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -247,10 +248,24 @@ public class TableView extends Composite implements ScrollListener {
         navPanel.addStyleName(navLinks);
         navPanel.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
         DOM.setAttribute(navPanel.getElement(), "align", "center");
-        if (curIndex > 0) {
-            HTML nav = new HTML("<a class='navIndex' value='-1'>&lt;</a>");
-            nav.addClickListener(controller);
-            navPanel.add(nav);
+
+        HTML prevNav = new HTML("<a class='navIndex' value='-1'>&lt;</a>");
+        prevNav.addClickListener(controller);
+        
+        
+        HTML noprevNav = new HTML("<a class='navIndex' style = 'color:lightgrey;'>&lt;</a>");       
+        
+        HTML nextNav = new HTML("<a class='navIndex' value='+1'>&gt;</a>");
+        nextNav.addClickListener(controller);               
+        
+        HTML nonextNav = new HTML("<a class='navIndex' style = 'color:lightgrey;' >&gt;</a>");
+                       
+                        
+        if (curIndex > 0) {            
+            navPanel.add(prevNav);                                   
+        }
+        else{          
+            navPanel.add(noprevNav);
         }
         if(showIndex){
             for (int i = 1; i <= pages; i++) {
@@ -269,11 +284,16 @@ public class TableView extends Composite implements ScrollListener {
                 navPanel.add(nav);
             }
         }
-        if (curIndex < pages - 1) {
-            HTML nav = new HTML("<a class='navIndex' value='+1'>&gt;</a>");
-            nav.addClickListener(controller);
-            navPanel.add(nav);
+       // if (curIndex < pages - 1) {            
+        if(controller.model.rowsPerPage <= controller.model.numRows()){   
+            navPanel.add(nextNav);    
+            
         }
+        else{
+            
+            navPanel.add(nonextNav);
+        }
+        
         vp.add(navPanel);
     }
 
