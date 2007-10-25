@@ -9,7 +9,6 @@
 }
 
 .Table td {
-   background:white;
    height:25px;
    color: #616a76;
    padding:2;
@@ -35,6 +34,7 @@
     font-size: 8px;
     background:#dde0e3;
     text-align:center;
+    padding:2;
 }
 
 .Selected .TableCell{

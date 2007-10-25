@@ -21,7 +21,7 @@ public class FormRPC implements IForm, Serializable {
     /**
      * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.AbstractField>
      */
-    private HashMap fields;
+    private HashMap fields = new HashMap();
     public int operation;
     public int status;
     public String error;

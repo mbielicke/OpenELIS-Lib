@@ -93,6 +93,10 @@ public class FormTable extends Composite {
                 if(node.getAttributes().getNamedItem("autoAdd").getNodeValue().equals("true"))
                     controller.setAutoAdd(true);
             }
+            if(node.getAttributes().getNamedItem("showRows") != null){
+                if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
+                    controller.setShowRows(true);
+            }
             if (widthsNode != null) {
                 String[] widths = widthsNode.getFirstChild()
                                             .getNodeValue()
@@ -303,7 +307,7 @@ public class FormTable extends Composite {
      * @param rows
      */
     public void init(int rows) {
-        controller.view.initTable();
+        controller.view.initTable(controller);
         controller.setView(controller.view);
         if (rows < 0)
             controller.getModel();

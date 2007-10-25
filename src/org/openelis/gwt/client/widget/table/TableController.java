@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -80,6 +81,8 @@ public class TableController implements
     private int start = 0;
     private int end = 0;
     private boolean autoAdd;
+    public boolean showRows;
+    
     /**
      * This Method will set the url for the TableService.
      * 
@@ -240,6 +243,10 @@ public class TableController implements
     public void setAutoAdd(boolean auto){
         this.autoAdd = auto;
     }
+    
+    public void setShowRows(boolean showRows){
+        this.showRows = showRows;
+    }
     /**
      * This method will add a new row to the model and the table view.
      * 
@@ -252,8 +259,18 @@ public class TableController implements
             view.table.addTableListener(this);
         }else{
             view.table.resizeRows(model.numRows());
+            if(showRows){
+                view.rows.resizeRows(model.numRows());
+                Label rowNum = new Label(String.valueOf(model.numRows()));
+                view.rows.setWidget(model.numRows()-1,0,rowNum);
+                view.rows.getCellFormatter().setStyleName(model.numRows() -1, 0, "RowNum");
+            }
         }
         int rowIndex = model.numRows() - 1;
+        view.table.getRowFormatter().addStyleName(rowIndex, view.rowStyle);
+        if(rowIndex % 2 == 1){
+            view.table.getRowFormatter().addStyleName(rowIndex, "AltTableRow");
+        }
         if (rowIndex > -1) {
             loadRow(rowIndex);
         }
@@ -270,8 +287,19 @@ public class TableController implements
             view.table.addTableListener(this);
         }else{
             view.table.resizeRows(model.numRows());
+            if(showRows){
+                view.rows.resizeRows(model.numRows());
+                Label rowNum = new Label(String.valueOf(model.numRows()));
+                view.rows.setWidget(model.numRows()-1,0,rowNum);
+                view.rows.getCellFormatter().setStyleName(model.numRows() -1, 0, "RowNum");
+            }
         }
+       
         int rowIndex = model.numRows() - 1;
+        view.table.getRowFormatter().addStyleName(rowIndex, view.rowStyle);
+        if(rowIndex % 2 == 1){
+            view.table.getRowFormatter().addStyleName(rowIndex, "AltTableRow");
+        }
         if (rowIndex > -1) {
             loadRow(rowIndex);
         }
@@ -296,6 +324,16 @@ public class TableController implements
                 view.table.addTableListener(this);
             }else{
                 view.table.resizeRows(model.numRows());
+                if(showRows){
+                    view.rows.resizeRows(model.numRows());
+                    Label rowNum = new Label(String.valueOf(model.numRows()));
+                    view.rows.setWidget(model.numRows()-1,0,rowNum);
+                    view.rows.getCellFormatter().setStyleName(model.numRows() -1, 0, "RowNum");
+                }
+            }
+            view.table.getRowFormatter().addStyleName(model.numRows() -1, view.rowStyle);
+            if((model.numRows() - 1) % 2 == 1){
+                view.table.getRowFormatter().addStyleName(model.numRows() -1 , "AltTableRow");
             }
             start = 0;
             end = 0;
@@ -316,6 +354,16 @@ public class TableController implements
                 view.table.addTableListener(this);
             }else{
                 view.table.resizeRows(model.numRows());
+                if(showRows){
+                    view.rows.resizeRows(model.numRows());
+                    Label rowNum = new Label(String.valueOf(model.numRows()));
+                    view.rows.setWidget(model.numRows()-1,0,rowNum);
+                    view.rows.getCellFormatter().setStyleName(model.numRows() -1, 0, "RowNum");
+                }
+            }
+            view.table.getRowFormatter().addStyleName(model.numRows() -1, view.rowStyle);
+            if((model.numRows() - 1) % 2 == 1){
+                view.table.getRowFormatter().addStyleName(model.numRows() -1 , "AltTableRow");
             }
             start = 0;
             end = 0;
@@ -344,15 +392,8 @@ public class TableController implements
             }
             view.table.getCellFormatter().setWidth(index, i, curColWidth[i] + "px");
         }
-        view.table.getRowFormatter().addStyleName(index, view.rowStyle);
-        //Label rowNum = new Label(String.valueOf(index+1));
-        //view.rows.setWidget(index,0,rowNum);
-        //view.rows.getFlexCellFormatter().setStyleName(index, 0, "RowNum");
-        if(index % 2 == 1){
-            view.table.getRowFormatter().addStyleName(index, "AltTableRow");
-        }
-        if (!model.getRow(index).show())
-            view.table.getRowFormatter().addStyleName(index, "hide");
+        //if (!model.getRow(index).show())
+        //    view.table.getRowFormatter().addStyleName(index, "hide");
     }
 
     /**
@@ -697,7 +738,8 @@ public class TableController implements
         }
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                scrollLoad(0);
+                if(model.numRows() > 0)
+                    scrollLoad(0);
                 selected = -1;
                 selectedCell = -1;
                 sizeTable();
@@ -802,6 +844,11 @@ public class TableController implements
                     		}
                     	});
                     }
+                    if(showRows){
+                        if(view.cellView.getOffsetWidth() < view.table.getOffsetWidth()){
+                            view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
+                        }
+                    }
                 }
             });
     }
@@ -817,6 +864,11 @@ public class TableController implements
                                 view.headerView.setWidth((width-17)+"px");
                             }
                         });
+                    }
+                    if(showRows){
+                        if(view.cellView.getOffsetWidth() < view.table.getOffsetWidth()){
+                            view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
+                        }
                     }
                 }
             });
@@ -1255,7 +1307,8 @@ public class TableController implements
                     if (curColWidth[i] > 0) {
                         view.table.getCellFormatter()
                                   .setWidth(j, i, curColWidth[i] + "px");
-                        view.table.getWidget(j, i).setWidth((curColWidth[i] -4) + "px");
+                        if(view.table.getWidget(j,i) != null)
+                            view.table.getWidget(j, i).setWidth((curColWidth[i] -4) + "px");
                        
                     }
                 }

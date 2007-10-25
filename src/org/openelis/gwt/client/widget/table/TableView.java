@@ -1,11 +1,9 @@
 package org.openelis.gwt.client.widget.table;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -17,13 +15,9 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseWheelListener;
-import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
-import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,32 +30,17 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class TableView extends Composite implements ScrollListener {
-
-    private class Delay extends Timer {
-        public int pos;
-
-        public Delay(int pos, int time) {
-            this.pos = pos;
-            this.schedule(time);
-        }
-
-        public void run() {
-            if (cellView.getScrollPosition() == pos) {
-                controller.scrollLoad(pos);
-            }
-        }
-    };
     
     public ScrollPanel cellView = new ScrollPanel();
     public AbsolutePanel headerView = new AbsolutePanel();
-    private AbsolutePanel rowsView = new AbsolutePanel();
+    public AbsolutePanel rowsView = new AbsolutePanel();
     private AbsolutePanel statView = new AbsolutePanel();
     private FlexTable ft = new FlexTable();
     private final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public Grid table = new Grid();
     public FlexTable header = new FlexTable();
-    public FlexTable rows = new FlexTable();
+    public Grid rows = new Grid();
     private int left = 0;
     private int top = 0;
     private String[] headers;
@@ -84,7 +63,8 @@ public class TableView extends Composite implements ScrollListener {
         initWidget(vp);
     }
     
-    public void initTable() {
+    public void initTable(TableController controller) {
+        this.controller = controller;
         if(headers != null){
             header.setCellSpacing(0);
             titleLabel.setText(title);
@@ -161,30 +141,25 @@ public class TableView extends Composite implements ScrollListener {
         rowsView.add(rows);
         DOM.setStyleAttribute(rowsView.getElement(), "overflow", "hidden");
         cellView.setWidget(table);
-        //cellView.setWidgetPosition(table, 0, 0);
-        //DOM.setStyleAttribute(cellView.getElement(), "overflow", "hidden");
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
-        //vScroll.setWidget(vsc);
-        //hScroll.setWidget(hsc);
         cellView.addScrollListener(this);
-        //vScroll.addScrollListener(this);
-        //hScroll.addScrollListener(this);
         vp.add(titlePanel);
-        //ft.setWidget(0,1,staticCols);
-        ft.setWidget(0,0,headerView);
-        //ft.setWidget(1,0,rowsView);
-        //ft.setWidget(1,1,statView);
-        ft.setWidget(1,0,cellView);
-        //ft.setWidget(2,0,hScroll);
-        //ft.setWidget(1,1,vScroll);
+        if(controller.showRows) {
+            ft.setWidget(0,1,headerView);
+            ft.setWidget(1,0,rowsView);
+            ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
+            ft.setWidget(1,1,cellView);
+        }else{
+            ft.setWidget(0,0,headerView);
+            ft.setWidget(1,0,cellView);
+        }
         vp.add(ft);
-        //cellView.addMouseWheelListener(this);
     }
     
     
     public void setHeight(String height) {
         cellView.setHeight(height);
-        //rowsView.setHeight(height);
+        rowsView.setHeight(height);
         headerView.setHeight("18px");
     }
 
@@ -192,8 +167,8 @@ public class TableView extends Composite implements ScrollListener {
         this.width = width;
         cellView.setWidth(width);
         headerView.setWidth(width);
-        //rows.setWidth("20px");
-        //rowsView.setWidth("18px");
+        rows.setWidth("25px");
+        rowsView.setWidth("25px");
     }
 
     public void setTableListener(TableListener listener) {
@@ -207,14 +182,32 @@ public class TableView extends Composite implements ScrollListener {
             ((FocusWidget)widget).setFocus(true);
     }
 
-    public void reset(int rows, int cols) {
-        if (rows == 0)
+    public void reset(int row, int col) {
+        if (row == 0){
             table = new Grid();
-        else
-            table = new Grid(rows,cols);
+        }else{
+            table = new Grid(row,col);
+        }
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
+        for(int i = 0; i < row; i++){
+            table.getRowFormatter().addStyleName(i, rowStyle);
+            if(i % 2 == 1){
+                table.getRowFormatter().addStyleName(i, "AltTableRow");
+            }
+        }
+        if(controller.showRows && row > 0){
+            rows = new Grid(row,1);
+            for(int i = 0; i < row; i++){
+                Label rowNum = new Label(String.valueOf(i+1));
+                rows.setWidget(i,0,rowNum);
+                rows.getCellFormatter().setStyleName(i, 0, "RowNum");
+            }
+            rows.setCellSpacing(1);
+            rowsView.add(rows);
+            DOM.setStyleAttribute(rowsView.getElement(), "overflow", "hidden");
+        }
     }
     
     public void setTable(){
@@ -297,10 +290,18 @@ public class TableView extends Composite implements ScrollListener {
         vp.add(navPanel);
     }
 
-    public void onScroll(Widget widget, int scrollLeft, int scrollTop) {
+    public void onScroll(Widget widget, int scrollLeft, final int scrollTop) {
         if(top != scrollTop){
             //new Delay(scrollTop, 25);
-            controller.scrollLoad(scrollTop);
+            if(controller.showRows){
+                rowsView.setWidgetPosition(rows,0,-scrollTop);
+                DeferredCommand.addCommand(new Command() {
+                   public void execute() {
+                       controller.scrollLoad(scrollTop);
+                   }
+                });
+            }else
+                controller.scrollLoad(scrollTop);
             top = scrollTop;
         }
         if(left != scrollLeft){
