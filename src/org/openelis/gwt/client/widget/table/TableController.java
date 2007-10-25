@@ -392,6 +392,10 @@ public class TableController implements
             }
             view.table.getCellFormatter().setWidth(index, i, curColWidth[i] + "px");
         }
+        view.table.getRowFormatter().addStyleName(index, view.rowStyle);
+        if(index % 2 == 1){
+            view.table.getRowFormatter().addStyleName(index, "AltTableRow");
+        }
         //if (!model.getRow(index).show())
         //    view.table.getRowFormatter().addStyleName(index, "hide");
     }
@@ -693,7 +697,7 @@ public class TableController implements
             view.table.setWidget(row, col, simp);
             return;
         }
-        ((Widget)display).addStyleName(view.widgetStyle);
+        //((Widget)display).addStyleName(view.widgetStyle);
         DOM.setStyleAttribute(((Widget)display).getElement(), "overflowX", "hidden");
         ((Widget)display).setWidth((curColWidth[col] -4)+ "px");
         view.table.setWidget(row, col, (Widget)display);
@@ -738,8 +742,9 @@ public class TableController implements
         }
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                if(model.numRows() > 0)
+                if(model.numRows() > 0){
                     scrollLoad(0);
+                }
                 selected = -1;
                 selectedCell = -1;
                 sizeTable();
@@ -751,14 +756,15 @@ public class TableController implements
     
     public void scrollLoad(int scrollPos){
         try{
+              
         int newStart = 0;
         int newEnd = 0;
         int rowsPer = (view.cellView.getOffsetHeight()/(view.table.getOffsetHeight()/model.numRows()));
-        newStart = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) - rowsPer * 2;
+        newStart = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) - rowsPer;
         if(newStart < 0){
             newStart = 0;
         }
-        newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer * 2;
+        newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer ;
         if(newEnd > model.numRows()){
             newEnd = model.numRows();
         }

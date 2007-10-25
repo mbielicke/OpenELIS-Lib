@@ -3,6 +3,7 @@ package org.openelis.gwt.client.widget.table;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -30,6 +31,21 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class TableView extends Composite implements ScrollListener {
+    
+    private class Delay extends Timer {
+        public int pos;
+
+        public Delay(int pos, int time) {
+            this.pos = pos;
+            this.schedule(time);
+        }
+
+        public void run() {
+            if (cellView.getScrollPosition() == pos) {
+                controller.scrollLoad(pos);
+            }
+        }
+    };
     
     public ScrollPanel cellView = new ScrollPanel();
     public AbsolutePanel headerView = new AbsolutePanel();
@@ -191,12 +207,6 @@ public class TableView extends Composite implements ScrollListener {
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
-        for(int i = 0; i < row; i++){
-            table.getRowFormatter().addStyleName(i, rowStyle);
-            if(i % 2 == 1){
-                table.getRowFormatter().addStyleName(i, "AltTableRow");
-            }
-        }
         if(controller.showRows && row > 0){
             rows = new Grid(row,1);
             for(int i = 0; i < row; i++){
@@ -292,16 +302,21 @@ public class TableView extends Composite implements ScrollListener {
 
     public void onScroll(Widget widget, int scrollLeft, final int scrollTop) {
         if(top != scrollTop){
-            //new Delay(scrollTop, 25);
+            new Delay(scrollTop, 250);
             if(controller.showRows){
                 rowsView.setWidgetPosition(rows,0,-scrollTop);
+                /*
                 DeferredCommand.addCommand(new Command() {
                    public void execute() {
                        controller.scrollLoad(scrollTop);
                    }
                 });
-            }else
-                controller.scrollLoad(scrollTop);
+                
+            }else{
+               controller.scrollLoad(scrollTop);
+               */
+            }
+            
             top = scrollTop;
         }
         if(left != scrollLeft){
