@@ -3,6 +3,7 @@ package org.openelis.persistence;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,10 +20,17 @@ public class EJBFactory {
             Properties props = (Properties)SessionManager.getSession().getAttribute("jndiProps");
             InitialContext ctx = null;
             if (props == null){
-                File propFile = new File("/usr/pub/http/var/jndi/jndi.properties");
-                InputStream is = new FileInputStream(propFile);
+                File propFile = null;
+                InputStream is = null;
                 props = new Properties();
-                props.load(is);
+                try{
+                    propFile = new File("/usr/pub/http/var/jndi/jndi.properties");
+                    is = new FileInputStream(propFile);
+                    props.load(is);
+                }catch(Exception e){
+                    props.setProperty("java.naming.factory.url.pkgs","org.jboss.naming:org.jnp.interfaces");
+                    props.setProperty("java.naming.provider.url","nabu.uhl.uiowa.edu");
+                }
                 props.setProperty(Context.INITIAL_CONTEXT_FACTORY,
                 "org.jboss.security.jndi.LoginInitialContextFactory");
                 props.setProperty(Context.SECURITY_PROTOCOL, "other");
@@ -36,8 +44,14 @@ public class EJBFactory {
                 httpclient.executeMethod(post);
                 String response = post.getResponseBodyAsString();
                 String[] usrPass = response.split(" ");
+                String pass = "";
+                for(int i = 1; i < usrPass.length; i++){
+                    if(i > 1)
+                        pass += " ";
+                    pass += usrPass[i].trim();
+                }
                 props.setProperty(InitialContext.SECURITY_CREDENTIALS,
-                                  usrPass[1].trim());
+                                  pass);
                 props.setProperty(Context.SECURITY_PRINCIPAL, usrPass[0].trim());
                 ctx = new InitialContext(props);
                 SessionManager.getSession().setAttribute("jndiProps", props);
