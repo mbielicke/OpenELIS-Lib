@@ -51,7 +51,7 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
                 } else if(DOM.eventGetType(event) == Event.ONKEYUP){
                     if(fieldCase.equals("upper"))
                         setText(getText().toUpperCase());
-                    else
+                    else if(fieldCase.equals("lower"))
                         setText(getText().toLowerCase());   
                 }
                 super.onBrowserEvent(event);
@@ -104,7 +104,7 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
     public void onChange(Widget sender) {
         if(fieldCase.equals("upper"))
             textbox.setText(textbox.getText().toUpperCase());
-        else
+        else 
             textbox.setText(textbox.getText().toLowerCase());       
     }
     

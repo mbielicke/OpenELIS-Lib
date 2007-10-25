@@ -46,16 +46,16 @@ public class ScreenTablePanel extends ScreenWidget {
         panel = new FlexTable();
         panel.setStyleName("ScreenTablePanel");
         initWidget(panel);
-        String tableId = node.getAttributes().getNamedItem("id").getNodeValue();
+        String tableId = node.getAttributes().getNamedItem("key").getNodeValue();
         if (node.getAttributes().getNamedItem("spacing") != null)
             panel.setCellSpacing(Integer.parseInt(node.getAttributes()
                                                       .getNamedItem("spacing")
                                                       .getNodeValue()));
-        NodeList rows = ((Element)node).getElementsByTagName("row");
         if (node.getAttributes().getNamedItem("padding") != null)
             panel.setCellSpacing(Integer.parseInt(node.getAttributes()
                                                       .getNamedItem("padding")
                                                       .getNodeValue()));
+        NodeList rows = ((Element)node).getElementsByTagName("row");
         for (int k = 0; k < rows.getLength(); k++) {
             NodeList widgets = rows.item(k).getChildNodes();
             int w = -1;
@@ -148,7 +148,6 @@ public class ScreenTablePanel extends ScreenWidget {
             }
         }
         setDefaults(node, screen);
-        screen.widgets.put(tableId, this);
     }
 
     public ScreenWidget getInstance(Node node, Screen screen) {

@@ -1,5 +1,6 @@
 package org.openelis.gwt.client.screen;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -44,6 +45,8 @@ public class ScreenAbsolute extends ScreenWidget {
         super(node);
         panel = new AbsolutePanel();
         panel.setStyleName("ScreenAbsolute");
+        if(node.getAttributes().getNamedItem("overflow") != null)
+            DOM.setStyleAttribute(panel.getElement(),"overflow",node.getAttributes().getNamedItem("overflow").getNodeValue());
         initWidget(panel);
         NodeList widgets = node.getChildNodes();
         for (int k = 0; k < widgets.getLength(); k++) {

@@ -107,6 +107,7 @@ public class ScreenDock extends ScreenWidget {
                         panel.setCellVerticalAlignment(wid,
                                                        HasAlignment.ALIGN_BOTTOM);
                 }
+               
             }
         }
         setDefaults(node, screen);

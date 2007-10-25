@@ -2,6 +2,7 @@ package org.openelis.gwt.client.screen;
 
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 /**
@@ -45,7 +46,8 @@ public class ScreenDisclosure extends ScreenWidget {
         dp = new DisclosurePanel();
         dp.setStyleName("ScreenDisclosure");
         initWidget(dp);
-        NodeList widgets = node.getChildNodes();
+        Element header = (Element) ((Element)node).getElementsByTagName("header").item(0);
+        NodeList widgets = header.getChildNodes();
         for (int k = 0; k < widgets.getLength(); k++) {
             if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
                 Node input = null;
@@ -60,10 +62,26 @@ public class ScreenDisclosure extends ScreenWidget {
                 } else
                     input = widgets.item(k);
                 Widget wid = Screen.getWidgetMap().getWidget(input, screen);
-                if (k == 0)
-                    dp.setHeader(wid);
-                if (k == 1)
-                    dp.setContent(wid);
+                dp.setHeader(wid);
+            }
+        }
+        Element content = (Element) ((Element)node).getElementsByTagName("content").item(0);
+        widgets = content.getChildNodes();
+        for (int k = 0; k < widgets.getLength(); k++) {
+            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                Node input = null;
+                if (widgets.item(k).getNodeName().equals("widget")) {
+                    NodeList inputList = widgets.item(k).getChildNodes();
+                    for (int m = 0; m < inputList.getLength(); m++) {
+                        if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
+                            input = inputList.item(m);
+                            m = 100;
+                        }
+                    }
+                } else
+                    input = widgets.item(k);
+                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                dp.setContent(wid);
             }
         }
         setDefaults(node, screen);
