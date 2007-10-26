@@ -28,7 +28,7 @@ public class WindowBrowser extends Composite{
     
     public AbsolutePanel browser = new AbsolutePanel();
     public HashMap windows = new HashMap();
-    public int index ;
+    public int index;
     public int limit ;
     
     public static native void setIndex(Element elem, int index) /*-{
@@ -43,6 +43,7 @@ public class WindowBrowser extends Composite{
     public WindowBrowser(boolean size, int limit) {
         this.limit = limit;
         initWidget(browser);
+        //setIndex(getElement(),index);
         DOM.setStyleAttribute(browser.getElement(),
                               "overflow",
                               "auto");
@@ -57,7 +58,7 @@ public class WindowBrowser extends Composite{
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     setBrowserHeight();
-                    index = getIndex(browser.getElement());
+                    //index = getIndex(browser.getElement());
                 }
             });
         }
@@ -74,7 +75,7 @@ public class WindowBrowser extends Composite{
         index++;
         ScreenWindow window = new ScreenWindow(this, text, category);
         window.setContent(screen);
-        setIndex(window.getElement(),index);
+        //setIndex(window.getElement(),index);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(text,window);
         DeferredCommand.addCommand(new Command() {
@@ -87,9 +88,15 @@ public class WindowBrowser extends Composite{
     public boolean selectScreen(String text) {
         if (windows.containsKey(text)) {
             if(index != ((ScreenWindow)windows.get(text)).zIndex){
+                ScreenWindow wid = (ScreenWindow)windows.get(text);
                 index++;
-                setIndex(((Widget)windows.get(text)).getElement(),index);
+                //setIndex(((Widget)windows.get(text)).getElement(),index);
                 ((ScreenWindow)windows.get(text)).zIndex = index;
+                int top = browser.getWidgetTop(wid);
+                int left = browser.getWidgetLeft(wid);
+                wid.setKeep(true);
+                browser.add(wid, left, top);
+                wid.setKeep(false);
             }
             return true;
         }
