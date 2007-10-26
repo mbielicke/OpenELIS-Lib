@@ -32,6 +32,7 @@ public class WidgetMap {
                     PANEL_VSPLIT = "panel-vsplit", // ScreenSplit
                     PANEL_STACK = "panel-stack", // ScreenStack
                     PANEL_TAB = "panel-tab", // ScreenTab
+                    PANEL_TITLED = "panel-titled", //ScrennTitledPanel
                     APP_MESSAGE = "appMessage", //ScreenAppMessage
                     AUTO = "auto", // ScreenAuto
                     BUTTON = "button", // ScreenButton
