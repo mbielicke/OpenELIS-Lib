@@ -46,7 +46,12 @@ public class ScreenConstant extends ScreenWidget {
         else
             label.setWordWrap(false);
         initWidget(label);
+        if(node.getAttributes().getNamedItem("style") != null){
+        	label.setStyleName(node.getAttributes().getNamedItem("style").getNodeValue());
+        }
+        
         label.setStyleName("ScreenLabel");
+        
         setDefaults(node, screen);
     }
 

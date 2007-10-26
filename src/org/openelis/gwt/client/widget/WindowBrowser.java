@@ -64,7 +64,7 @@ public class WindowBrowser extends Composite{
         }
     }
     
-    public void addScreen(final Screen screen, final String text, String category) {
+    public void addScreen(final Screen screen, final String text, String category, String loadingText) {
         if(windows.size() == limit){
             Window.alert("Please close at least one window before opening another.");
             return;
@@ -73,7 +73,7 @@ public class WindowBrowser extends Composite{
             return;
         }
         index++;
-        ScreenWindow window = new ScreenWindow(this, text, category);
+        ScreenWindow window = new ScreenWindow(this, text, category, loadingText);
         window.setContent(screen);
         //setIndex(window.getElement(),index);
         browser.add(window,(windows.size()*25),(windows.size()*25));
@@ -103,7 +103,7 @@ public class WindowBrowser extends Composite{
         return false;
     }
     
-    private void setBrowserHeight() {
+    public void setBrowserHeight() {
         if (browser.isVisible()) {
             browser.setHeight((Window.getClientHeight() - browser
                                                                  .getAbsoluteTop() - 10) + "px");

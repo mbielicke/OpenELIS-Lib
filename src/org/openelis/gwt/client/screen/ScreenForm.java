@@ -1,11 +1,12 @@
 package org.openelis.gwt.client.screen;
 
-import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.Label;
-
 import org.openelis.gwt.client.widget.ButtonPanel;
 import org.openelis.gwt.client.widget.FormInt;
 import org.openelis.gwt.common.IForm;
+
+import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.Label;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
  * the ButtonPanel widget and default logic for standard forms that accept
@@ -14,7 +15,7 @@ import org.openelis.gwt.common.IForm;
  *
  */
 public class ScreenForm extends Screen implements FormInt {
-
+	
 	/**
 	 * Reference to the ButtonPanel that is defined on this
 	 * Screen.  This needs to be set by the Extending class 
@@ -31,7 +32,14 @@ public class ScreenForm extends Screen implements FormInt {
     
     public ScreenWindow window;
     
-    public ScreenForm() {
+    //this is used to internationalize the status bar messages
+    //private ConstantsWithLookup constants = null;
+
+	public void setConstants(ConstantsWithLookup constants) {
+		this.constants = constants;
+	}
+
+	public ScreenForm() {
         super();
     }
     
@@ -59,15 +67,31 @@ public class ScreenForm extends Screen implements FormInt {
                 enable(false);
                 bpanel.setState(FormInt.DISPLAY);
                 //  bpanel.enable("u",false);
-                if(method.equals("commit-update"))
-                    message.setText("Updating...Complete");
-                if(method.equals("commit-add"))
-                    message.setText("Adding...Complete");
+                if(method.equals("commit-update")) {
+                	if(constants != null)
+                		message.setText(constants.getString("updatingComplete"));
+                	else
+                		message.setText("Updating...Complete");
+                }
+                if(method.equals("commit-add")) {
+                	if(constants != null)
+                		message.setText(constants.getString("addingComplete"));
+                	else
+                		message.setText("Adding...Complete");
+                }
             }else{
-                if(method.equals("commit-update"))
-                    message.setText("Update Failed. Make corrections and try again or Abort.");
-                if(method.equals("commit-add"))
-                    message.setText("Adding Failed. Make corrections and try again or Abort");
+                if(method.equals("commit-update")) {
+                	if(constants != null)
+                		message.setText(constants.getString("updateFailed"));
+                	else
+                		message.setText("Update Failed. Make corrections and try again or Abort.");
+                }
+                if(method.equals("commit-add")) {
+                	if(constants != null)
+                		message.setText(constants.getString("addingFailed"));
+                	else
+                		message.setText("Adding Failed. Make corrections and try again or Abort");
+                }
             }
         }
         if (method.equals("fetch")) {
@@ -78,7 +102,11 @@ public class ScreenForm extends Screen implements FormInt {
         if ((method.equals("update") || method.equals("add")) && success) {
             enable(true);
             if(method.equals("update")){
-                message.setText("Update fields then, press Commit");
+            	if(constants != null)
+            		message.setText(constants.getString("updateFieldsPressCommit"));
+            	else
+            		message.setText("Update fields then, press Commit");
+            	
                 bpanel.setState(FormInt.UPDATE);
             }
         }
@@ -97,7 +125,11 @@ public class ScreenForm extends Screen implements FormInt {
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
             doReset();
-            message.setText("Querying...Complete");
+            if(constants != null)
+            	message.setText(constants.getString("queryingComplete"));
+            else
+            	message.setText("Querying...Complete");
+            
             bpanel.enable("u",false);
         }
     }
@@ -110,7 +142,11 @@ public class ScreenForm extends Screen implements FormInt {
         doReset();
         enable(true);
         bpanel.setState(FormInt.QUERY);
-        message.setText("Enter fields to query by then press Commit");
+        
+        if(constants != null)
+        	message.setText(constants.getString("enterFieldsToQuery"));
+        else
+        	message.setText("Enter fields to query by then press Commit");
     }
 
     /**
@@ -142,7 +178,11 @@ public class ScreenForm extends Screen implements FormInt {
         doReset();
         enable(true);
         bpanel.setState(FormInt.ADD);
-        message.setText("Enter information in the fields, then press Commit");
+        
+        if(constants != null)
+        	message.setText(constants.getString("enterInformationPressCommit"));
+        else
+        	message.setText("Enter information in the fields, then press Commit");
     }
 
     /**
@@ -174,29 +214,46 @@ public class ScreenForm extends Screen implements FormInt {
             super.doSubmit();
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-                message.setText("Updating...");
+            	if(constants != null)
+            		message.setText(constants.getString("updating"));
+            	else
+            		message.setText("Updating...");
+            	
                 clearErrors();
                 callService("commit-update");
             } else {
                 drawErrors();
-                message.setText("Please correct the errors indicated, then press Commit");
+                if(constants != null)
+                	message.setText(constants.getString("correctErrors"));
+                else
+                	message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.ADD) {
             super.doSubmit();
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-                message.setText("Adding...");
+            	if(constants != null)
+            		message.setText(constants.getString("adding"));
+            	else
+            		message.setText("Adding...");
                 clearErrors();
                 callService("commit-add");
             } else {
                 drawErrors();
-                message.setText("Please correct the errors indicated, then press Commit");
+                if(constants != null)
+                	message.setText(constants.getString("correctErrors"));
+                else
+                	message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.QUERY) {
             super.doSubmit();
-            message.setText("Querying....");
+            if(constants != null)
+            	message.setText(constants.getString("querying"));
+            else
+            	message.setText("Querying...");
+            
             callService("query");
         }
         
@@ -210,7 +267,11 @@ public class ScreenForm extends Screen implements FormInt {
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.CANCEL;
             clearErrors();
-            message.setText("Update aborted");
+            if(constants != null)
+            	message.setText(constants.getString("updateAborted"));
+            else
+            	message.setText("Update aborted");
+            
             callService("fetch");
         }
         if (state == FormInt.ADD) {
@@ -218,13 +279,21 @@ public class ScreenForm extends Screen implements FormInt {
             clearErrors();
             load();
             enable(false);
-            message.setText("Add aborted");
+            
+            if(constants != null)
+            	message.setText(constants.getString("addAborted"));
+            else
+            	message.setText("Add aborted");
         }
         if (state == FormInt.QUERY) {
             doReset();
             ((DeckPanel)getWidget("formDeck")).showWidget(0);
             enable(false);
-            message.setText("Query aborted");
+            
+            if(constants != null)
+            	message.setText(constants.getString("queryAborted"));
+            else
+            	message.setText("Query aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
         bpanel.enable("u",false);
@@ -252,7 +321,10 @@ public class ScreenForm extends Screen implements FormInt {
         if(bpanel.state == FormInt.ADD ||
            bpanel.state == FormInt.QUERY ||
            bpanel.state == FormInt.UPDATE){
-            message.setText("You must Commit or Abort changes first");
+        	if(constants != null)
+        		message.setText(constants.getString("mustCommitOrAbort"));
+        	else 
+        		message.setText("You must Commit or Abort changes first");
             return true;
         }
         return false;
@@ -264,5 +336,4 @@ public class ScreenForm extends Screen implements FormInt {
         window = null;
         super.onDetach();
     }
-
 }

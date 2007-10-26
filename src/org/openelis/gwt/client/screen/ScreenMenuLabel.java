@@ -39,8 +39,14 @@ public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
     public ScreenMenuLabel(Node node, Screen screen) {
         super(node);
         label = new MenuLabel();
-        if(node.getAttributes().getNamedItem("text") != null)
+        
+        if(node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")){
+        	if (node.getAttributes().getNamedItem("text") != null){
+                label.setText(screen.constants.getString(node.getAttributes().getNamedItem("text").getNodeValue()));
+        	}
+        }else if (node.getAttributes().getNamedItem("text") != null){
             label.setText(node.getAttributes().getNamedItem("text").getNodeValue());
+        }
         if(node.getAttributes().getNamedItem("image") !=  null)
             label.setImage(node.getAttributes().getNamedItem("image").getNodeValue());
         initWidget(label);

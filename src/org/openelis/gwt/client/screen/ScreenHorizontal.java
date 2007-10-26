@@ -29,6 +29,12 @@ public class ScreenHorizontal extends ScreenWidget {
 	 */
     public ScreenHorizontal() {
     }
+    
+    public ScreenHorizontal(Screen screen, String key){
+    	panel = new HorizontalPanel();
+    	initWidget(panel);
+    	screen.widgets.put(key, this);
+    }
     /**
      * Constructor called from getInstance to return a specific instance of this class
      * to be displayed on the screen.  It uses the XML Node to create it's widget.

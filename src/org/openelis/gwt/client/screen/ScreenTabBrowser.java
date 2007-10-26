@@ -52,9 +52,4 @@ public class ScreenTabBrowser extends ScreenWidget {
         // TODO Auto-generated method stub
         return new ScreenTabBrowser(node, screen);
     }
-    
-    public void destroy() {
-        tb = null;
-        super.destroy();
-    }
 }

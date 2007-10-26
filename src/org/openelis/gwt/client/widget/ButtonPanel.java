@@ -30,39 +30,39 @@ public class ButtonPanel extends Composite implements ClickListener {
     /**
      * Label used to display Query button. 
      */
-    protected ScreenLabel query = new ScreenLabel("Query",null);
+    public ScreenLabel query = new ScreenLabel("Query",null);
     /**
      * Label used to display Next button. 
      */
-    protected ScreenLabel next = new ScreenLabel("Next",null);
+    public ScreenLabel next = new ScreenLabel("Next",null);
     /**
      * Label used to display Previous button. 
      */
-    protected ScreenLabel prev = new ScreenLabel("Previous",null);
+    public ScreenLabel prev = new ScreenLabel("Previous",null);
     /**
      * Label used to display Add button. 
      */
-    protected ScreenLabel add = new ScreenLabel("Add",null);
+    public ScreenLabel add = new ScreenLabel("Add",null);
     /**
      * Label used to display Update button. 
      */
-    protected ScreenLabel up = new ScreenLabel("Update",null);
+    public ScreenLabel up = new ScreenLabel("Update",null);
     /**
      * Label used to display Delete button. 
      */
-    protected ScreenLabel delete = new ScreenLabel("Delete",null);
+    public ScreenLabel delete = new ScreenLabel("Delete",null);
     /**
      * Label used to display Commit button. 
      */
-    protected ScreenLabel comm = new ScreenLabel("Commit",null);
+    public ScreenLabel comm = new ScreenLabel("Commit",null);
     /**
      * Label used to display Abort button. 
      */
-    protected ScreenLabel abort = new ScreenLabel("Abort",null);
+    public ScreenLabel abort = new ScreenLabel("Abort",null);
     /**
      * Label used to display Reload button. 
      */
-    protected ScreenLabel reload = new ScreenLabel("Reload",null);
+    public ScreenLabel reload = new ScreenLabel("Reload",null);
     /**
      * The Form this widget controls
      */

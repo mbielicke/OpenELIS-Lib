@@ -151,7 +151,12 @@ public class AToZPanel extends Composite implements ClickListener {
 		middleBar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		middleBar.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
-		leftTable = new FormTable(node);
+		if (screen.constants != null) {
+			leftTable = new FormTable(node, screen.constants);
+        } else{
+        	leftTable = new FormTable(node);
+        }
+
 		leftTable.controller.model.paged = true;
 		leftTable.controller.model.rowsPerPage = 20;
 		leftTable.controller.model.totalPages = leftTable.controller.model.shown / leftTable.controller.model.rowsPerPage;
@@ -173,12 +178,13 @@ public class AToZPanel extends Composite implements ClickListener {
 		tablePanel.add(leftTable);
 				
 		//build the check box
-		checkBox.setText("Show Inactive");
-		tablePanel.add(checkBox);
+		//FIXME not sure if the checkbox should be inside this widget
+		//checkBox.setText("Show Inactive");
+		//tablePanel.add(checkBox);
 		
 		//make the hideable panel hide if visable="false"
-		if (node.getAttributes().getNamedItem("visable") != null && 
-				node.getAttributes().getNamedItem("visable").getNodeValue() == "false") {
+		if (node.getAttributes().getNamedItem("visible") != null && 
+				node.getAttributes().getNamedItem("visible").getNodeValue() == "false") {
 		//build the arrow button
 		arrowButton.setHTML("<img src=\"Images/arrow-right-unselected.png\" onmouseover=\"this.src='Images/arrow-right-selected.png';\" " +
 				" onmouseout=\"this.src='Images/arrow-right-unselected.png';\" style=\"vertical-align:middle;\">");

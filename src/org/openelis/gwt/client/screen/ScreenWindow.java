@@ -128,11 +128,16 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private Vector dropMap;
     private Label message = new Label("Loading...");
     
-    public ScreenWindow(WindowBrowser browser, String name, String cat) {      
+    public ScreenWindow(WindowBrowser browser, String name, String cat, String loadingText) {      
         initWidget(outer);
         this.browser = browser;
         this.name = name;
         zIndex = browser.index;
+        
+        //a way to internationalize the loading message
+        if(loadingText != null)
+        	message.setText(loadingText);
+        
         HorizontalPanel hp = new HorizontalPanel();
         hp.setWidth("100%");
         hp.addStyleName("Caption");

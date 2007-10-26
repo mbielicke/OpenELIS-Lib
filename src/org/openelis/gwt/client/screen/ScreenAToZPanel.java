@@ -29,7 +29,7 @@ public class ScreenAToZPanel extends ScreenWidget{
 	/**
 	 * Default Tag Name for XML Definition and WidgetMap
 	 */
-	public static String TAG_NAME = "buttonPanel";
+	public static String TAG_NAME = "aToZ";
 	/**
 	 * Widget wrapped by this class
 	 */

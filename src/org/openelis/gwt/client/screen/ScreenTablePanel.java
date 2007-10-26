@@ -46,6 +46,11 @@ public class ScreenTablePanel extends ScreenWidget {
         panel = new FlexTable();
         panel.setStyleName("ScreenTablePanel");
         initWidget(panel);
+        
+        if (node.getAttributes().getNamedItem("visible") != null && node.getAttributes().getNamedItem("visible").getNodeValue().equals("false")){
+            panel.setVisible(false);
+        }
+        
         String tableId = node.getAttributes().getNamedItem("key").getNodeValue();
         if (node.getAttributes().getNamedItem("spacing") != null)
             panel.setCellSpacing(Integer.parseInt(node.getAttributes()
@@ -57,6 +62,7 @@ public class ScreenTablePanel extends ScreenWidget {
                                                       .getNodeValue()));
         NodeList rows = ((Element)node).getElementsByTagName("row");
         for (int k = 0; k < rows.getLength(); k++) {
+        	
             NodeList widgets = rows.item(k).getChildNodes();
             int w = -1;
             for (int l = 0; l < widgets.getLength(); l++) {
@@ -126,6 +132,11 @@ public class ScreenTablePanel extends ScreenWidget {
                     }
                 }
             }
+            
+            if (rows.item(k).getAttributes().getNamedItem("style") != null) {
+            	panel.getRowFormatter().addStyleName(k, rows.item(k).getAttributes().getNamedItem("style").getNodeValue());
+            }
+            
             if (rows.item(k).getAttributes().getNamedItem("type") != null) {
                 panel.setText(k, 0, " ");
                 panel.getFlexCellFormatter().addStyleName(k, 0, "Prompt");
@@ -158,6 +169,19 @@ public class ScreenTablePanel extends ScreenWidget {
     public void destroy() {
         panel = null;
         super.destroy();
+    }
+    
+    public void onMouseEnter(int rowNumber) {
+    	panel.getRowFormatter().removeStyleName(rowNumber, "topMenuPanel");
+    	panel.getRowFormatter().addStyleName(rowNumber, "topMenuPanelHover");
+    	
+    	//
+    	
+    }
+    
+    public void onMouseLeave(int rowNumber) {
+    	panel.getRowFormatter().removeStyleName(rowNumber, "topMenuPanelHover");
+    	panel.getRowFormatter().addStyleName(rowNumber, "topMenuPanel");   
     }
 
 }

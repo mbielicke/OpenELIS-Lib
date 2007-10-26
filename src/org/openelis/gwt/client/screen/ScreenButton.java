@@ -62,16 +62,25 @@ public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
 		if (node.getAttributes().getNamedItem("constant") != null)
 			cons = true;
 		if (node.getAttributes().getNamedItem("text") != null) {
-			if (cons)
+			if (cons) {
 				button.setText(screen.constants.getString(node.getAttributes()
 						.getNamedItem("text").getNodeValue()));
-			else
+			} else {
 				button.setText(node.getAttributes().getNamedItem("text")
 						.getNodeValue());
+			}
 		}
-		if (node.getAttributes().getNamedItem("html") != null)
-			button.setHTML(node.getAttributes().getNamedItem("html")
-					.getNodeValue());
+		if (node.getAttributes().getNamedItem("html") != null) {
+			if (cons) {
+				button.setHTML(node.getAttributes().getNamedItem("html").getNodeValue() + 
+						screen.constants.getString(node.getAttributes().getNamedItem("text").getNodeValue()));
+			} else {
+				button.setHTML(node.getAttributes().getNamedItem("html")
+						.getNodeValue());
+			}
+		}
+		//	button.setHTML(node.getAttributes().getNamedItem("html")
+		//			.getNodeValue());
 		initWidget(button);
 		setDefaults(node, screen);
 	}

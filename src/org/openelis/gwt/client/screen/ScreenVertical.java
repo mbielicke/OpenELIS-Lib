@@ -43,6 +43,13 @@ public class ScreenVertical extends ScreenWidget {
      * @param node
      * @param screen
      */
+    
+    public ScreenVertical(Screen screen, String key) {
+    	panel = new VerticalPanel();
+    	initWidget(panel);
+    	screen.widgets.put(key, this);
+    	
+    }
     public ScreenVertical(Node node, Screen screen) {
         super(node);
         panel = new VerticalPanel();
@@ -51,6 +58,7 @@ public class ScreenVertical extends ScreenWidget {
                                                   .getNamedItem("spacing")
                                                   .getNodeValue()));
         }
+        
         NodeList widgets = node.getChildNodes();
         for (int k = 0; k < widgets.getLength(); k++) {
             if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {

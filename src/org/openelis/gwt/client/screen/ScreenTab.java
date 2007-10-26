@@ -66,10 +66,20 @@ public class ScreenTab extends ScreenWidget {
                     Widget wid = Screen.getWidgetMap().getWidget(input, screen);
                     ScrollPanel scroll = new ScrollPanel();
                     scroll.add(wid);
-                    panel.add(scroll, tabs.item(k)
+                    
+                    //tabs can not have a constant or hard coded text
+                    if(tabs.item(k)
+                            .getAttributes()
+                            .getNamedItem("constant") != null && tabs.item(k)
+                            .getAttributes()
+                            .getNamedItem("constant").getNodeValue().equals("true")){
+                    	panel.add(scroll, screen.constants.getString(tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()));
+                    }else{
+                    	panel.add(scroll, tabs.item(k)
                                              .getAttributes()
                                              .getNamedItem("text")
                                              .getNodeValue());
+                   }
                 }
             }
         }

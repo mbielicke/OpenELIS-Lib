@@ -53,8 +53,14 @@ public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
                 }
             }
         };
-        if (node.getFirstChild() != null)
-            check.setText(node.getFirstChild().getNodeValue());
+        if(node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")){
+        	if (node.getFirstChild() != null){
+                check.setText(screen.constants.getString(node.getFirstChild().getNodeValue()));
+        	}
+        }else if (node.getFirstChild() != null){
+        	 check.setText(node.getFirstChild().getNodeValue());
+        }
+           
         if (node.getAttributes().getNamedItem("shortcut") != null)
             check.setAccessKey(node.getAttributes()
                                    .getNamedItem("shortcut")

@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PopupListener;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -56,7 +58,8 @@ public class Screen extends Composite implements
                                      DragListener,
                                      DropListener,
                                      TreeListener,
-                                     MouseListener {
+                                     MouseListener,
+                                     PopupListener{
 	/**
 	 * All drawn widgets will be held in this panel.
 	 */
@@ -711,4 +714,9 @@ public class Screen extends Composite implements
         }
         super.onDetach();
     }
+
+	public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
+		// TODO Auto-generated method stub
+		
+	}
 }
