@@ -127,7 +127,7 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
     }
 
     public void onLostFocus(Widget sender) {
-        // TODO Auto-generated method stub
+       // TODO Auto-generated method stub
     }
     
     public void setFocus(boolean focus){
