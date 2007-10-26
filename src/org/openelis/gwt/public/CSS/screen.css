@@ -77,6 +77,19 @@ a.navIndex:hover {
     border:1px solid #76808e;
 }
 
+.LeftMenuPanePanel {
+   background: #FAFEFE;
+   border-left: 1px solid #AFDEF1;
+   border-right: 1px solid #AFDEF1;
+
+   border-top: 1px solid #AFDEF1;
+   border-bottom: 1px solid #AFDEF1;
+}
+
+.LeftMenuArrowImage {
+	vertical-align:middle;
+}
+
 .Caption{
     background-image: url("../Images/topnavunselected_obsidian.gif");
     background-repeat: repeat-x;
@@ -121,7 +134,6 @@ a.navIndex:hover {
     cursor:pointer;
     color:#276cff;
     padding:4px;
-    border-top:1px solid #d8d8d8;
 }
 
 .ListSubItem{
@@ -131,11 +143,12 @@ a.navIndex:hover {
 }
 
 .ListHeader {
-    height:18;
-    background-image:url("../Images/listheaderbg.jpg");
+    height:16;
+    background-color:#dde0e3;
+    border-top:1px solid #c7cbd1;
+    border-bottom:1px solid #c7cbd1;
     color:#373c43;
     cursor:default;
-    padding-top:4px;
     padding-left:6px;
 }
 
@@ -146,6 +159,90 @@ a.navIndex:hover {
 .Hover .ListSubItem{
     color:#000000;
 }
+
+/*******TOP MENU BAR CSS***********/
+.topMenuBar { 
+    background-color:#dde0e3;
+    border-top:1px solid #c7cbd1;
+    border-bottom:1px solid #c7cbd1;
+    color:#373c43;
+    cursor:default;
+    padding-left:6px; 
+background-image: url("../Images/topnavunselected_obsidian.gif");
+}
+
+.topMenuBarItem {
+  font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size:11px;
+  padding-left:8px;
+  padding-right:8px;
+}
+
+.Hover .topMenuBarItem {
+  font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size:11px;
+ /* color:#FFFFFF;*/
+background-image:url("../Images/menubuttonhover.gif");
+ /* background-color:#fb8c3c;*/
+
+
+
+/*  background-color:#333333;*/
+}
+
+.topMenuBarItemSelected {
+  font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size:11px;
+  padding-left:8px;
+  padding-right:8px;
+  background-image:url("../Images/menubuttonhover.gif");
+/*  color:#000000; */
+/*  background-color:#fb8c3c;*/
+  /*background-color:#FFFFCC;*/
+}
+
+.topMenuPanel { 
+    cursor:pointer;
+    color:#276CFF;
+    background-color:#faf7fd;
+    border:1px solid #898e92;
+}
+
+.topMenuPanelHover{
+    cursor:pointer;
+    color:#276CFF;
+    background-color:#ffe584;
+}
+
+.topMenuPanelTitle{
+    font-size:12px;
+    cursor:pointer;
+    color:#276cff;
+    font-weight:bold;
+}
+
+.topMenuPanelIcon{
+   padding-left:3px;
+   padding-right:3px;
+   text-align:center;
+   border:none;
+}
+
+.topMenuPanel .topMenuPanelIconPanel {
+   background-color:#dde0e3;
+   border-right:1px solid #b8c0c8; 
+}
+
+.topMenuPanelHover .topMenuPanelIconPanel {
+   background-color:#ffe584;
+   border-right:1px solid #ffe584;
+}
+
+.topMenuPanelItemMiddle{
+   padding-right:2px;
+   /*padding-left:3px;*/
+}
+/*******END TOP MENU BAR CSS***********/
 
 .ScreenTable {
 }
@@ -173,19 +270,34 @@ a.navIndex:hover {
     text-align:left;
 }
 
-
-
-.gwt-TabPanel {
-	background:#f1ecdd;
-}
+/*******TAB PANEL CSS***********/
 .gwt-TabBar .gwt-TabBarItem {
-	border:1px solid lightgrey;
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 12px; 
+    border-top:3px solid #fff;
+    padding:3px;
+    cursor:pointer;
+    margin-left:5px;
+    border-top: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
 }
+
 .gwt-TabBar .gwt-TabBarItem-selected {
-	border-top:1px solid lightgrey;
-	border-left:1px solid lightgrey;	
-	border-right:1px solid lightgrey;
+  border-top: 1px solid #CCCCCC;
+  border-left: 1px solid #CCCCCC;
+  border-right: 1px solid #CCCCCC;
+    cursor:default;
+    background:#eed990;
 }
+
+.gwt-TabPanelBottom{
+    border:1px solid #CCCCCC;
+}
+.gwt-TabBar .gwt-TabBarRest {
+  padding-right: 3px;
+}
+/*******END TAB PANEL CSS***********/
 
 .ScreenAbsolute{
 
@@ -230,19 +342,12 @@ a.navIndex:hover {
 }
 
 .ScreenTab{
-  	background:#f1ecdd;
-}
-
-.ScreenTab .gwt-TabBarItem {
-	border:1px solid lightgrey;
-}
-.ScreenTab .gwt-TabBarItem-selected {
-	border-top:1px solid lightgrey;
-	border-left:1px solid lightgrey;	
-	border-right:1px solid lightgrey;
+  	/*background:#f1ecdd;*/
 }
 
 .ScreenTablePanel{
+border:collapse;
+
 
 }
 
@@ -384,10 +489,10 @@ a.navIndex:hover {
 }
 
 .ScreenHTML img{
-    background-image:url("../Images/listheadergrad_obsidian.gif");
-    border:solid 1px #c5cad0;
+    /*background-image:url("../Images/listheadergrad_obsidian.gif");
+    border:solid 1px #c5cad0;*/
     cursor:pointer;
-    margin-right:2px;
+/*    margin-right:2px;*/
 }
 
 .ScreenImage {
@@ -501,4 +606,150 @@ filter: alpha(opacity=50);
     text-align:center;
     padding:8px;
 }
+
+/*the following is from the tt.css */
+
+.CalendarButton {
+	padding:2px;
+}
+
+.Form {	
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    background:#ffffff;
+    width:100%;
+    border-collapse:collapse;
+border:1px dashed #babdb6;
+    margin-left:6px;
+}
+
+.FormBorderless {	
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    background:#ffffff;
+    width:100%;
+    border-collapse:collapse;
+    margin-left:6px;
+}
+
+.Form select,.FormBorderless select{
+    border:1px solid lightgrey;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+}
+.FormTitle{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    color:white;
+    font-size:11px;
+    line-height:15px;
+    background:#ad7fa8;
+    text-align:center;
+}
+.Form .Prompt,.FormBorderless .Prompt  {
+    /*background:#eeeeec; */
+    color:#333333;
+    vertical-align:top;
+    text-align:right;
+    padding:2px;
+    padding-right:4px;
+    height:16px;
+}
+
+.FieldSet {
+	border:1px dashed #fb8c3c;
+padding: 2px;
+margin 2px;
+}
+
+.FieldSet Legend {
+	background-color:#FFFFFF;
+}
+
+
+.Panels{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    background:#ffffff;
+    vertical-align:text-bottom;
+}
+.AppMessage{
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size: 14px; 
+	color: #333333; 
+	font-weight: bold;
+	background:url(../Images/goldbarno.jpg);
+}
+.invisible{
+	visibility:hidden;
+}
+.NavLinks {
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size: 14px; 
+	color: #003366; 
+	font-weight: bold;
+	cursor:pointer;
+}	
+.focused {
+	background:#fefefe;
+}
+.locked {
+	-moz-user-select:none;
+	user-select:none;
+}
+.button-grid {
+    text-align:center;
+    width:100%;
+}
+
+.ButtonBar {
+}
+
+.ScreenTree {
+    background:#e6eaf6;
+    width:100%;
+}
+.ScreenTree .gwt-TreeItem{
+    cursor:pointer;
+    font-family:Verdana;
+}
+.TabBrowser {
+}
+.TabBrowser .gwt-TabBar{
+    border:none;
+    padding-bottom:0px;
+}
+.TabBrowser .gwt-TabBar .gwt-TabBarItem {
+    width:175px;
+    cursor:pointer;	
+    margin-right:5;
+    border-bottom:0px solid white;
+}
+.TabBrowser .gwt-TabBar .gwt-TabBarItem-selected {
+    border:1px solid #73d216;
+    border-bottom:0px solid white;
+    background-image:url(../Images/hashlines.jpg);
+}
+.TabBrowser .gwt-TabPanelBottom {
+    padding-top:5;
+    padding-left:5;
+    border:1px solid #73d216;
+    background:white;
+}
+
+.TabBrowser .gwt-TabBar .gwt-TabBarFirst{
+    width:0px;
+}
+
+.bar {
+    cursor:ew-resize;
+    width:2px;
+}
+
 
