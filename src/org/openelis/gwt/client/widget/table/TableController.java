@@ -394,10 +394,10 @@ public class TableController implements
         }
         view.table.getRowFormatter().addStyleName(index, view.rowStyle);
         if(index % 2 == 1){
-            view.table.getRowFormatter().addStyleName(index, "AltTableRow");
+            DOM.setStyleAttribute(view.table.getRowFormatter().getElement(index), "background", "#f8f8f9");
         }
-        //if (!model.getRow(index).show())
-        //    view.table.getRowFormatter().addStyleName(index, "hide");
+        if (!model.getRow(index).show())
+            view.table.getRowFormatter().addStyleName(index, "hide");
     }
 
     /**

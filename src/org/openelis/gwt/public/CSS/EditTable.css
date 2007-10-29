@@ -12,6 +12,9 @@
    height:25px;
    color: #616a76;
    padding:2;
+}
+
+.Table tr {
    background:white;
 }
 
@@ -27,7 +30,6 @@
     overflow:hidden;
     cursor:pointer;
     color: #616a76;
-    background:;
 }
 .RowNum {
     height:25px;
