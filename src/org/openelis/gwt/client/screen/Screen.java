@@ -33,6 +33,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
+import org.openelis.gwt.client.services.AppServiceIntAsync;
 import org.openelis.gwt.client.services.ScreenServiceInt;
 import org.openelis.gwt.client.services.ScreenServiceIntAsync;
 import org.openelis.gwt.client.widget.WidgetMap;
@@ -390,41 +391,50 @@ public class Screen extends Composite implements
      * @param name
      */
     public void getXML(String name) {
-        String url = "";
-        if(name.indexOf(".xml") > -1)
-            url = "Forms/"+name;
-        else
-            url = "Forms?name="+name;
-        HTTPRequest.asyncGet(url, new ResponseTextHandler() {
-            public void onCompletion(String response) {
-                xml = XMLParser.parse(response);
-                draw();
-                try {
-                    NodeList rpcList = xml.getDocumentElement()
-                                          .getElementsByTagName("rpc");
-                    Element rpcEl = (Element)rpcList.item(0);
-                    NodeList fieldList = rpcEl.getChildNodes();
-                    HashMap map = new HashMap();
-                    for (int i = 0; i < fieldList.getLength(); i++) {
-                        if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                            AbstractField field = Screen.getWidgetMap()
-                                                        .getField(fieldList.item(i));
-                            map.put((String)field.getKey(), field);
-                        }
-                    }
-                    rpc.setFieldMap(map);
-                } catch (Exception e) {
-                    Window.alert("FormUtil: " + e.getMessage());
+        if(name.indexOf(".xml") > -1){
+            HTTPRequest.asyncGet("Forms/"+name, new ResponseTextHandler() {
+                public void onCompletion(String response) {
+                    xml = XMLParser.parse(response);
+                    drawScreen();
                 }
-                load();
-                if (xml.getDocumentElement().getAttribute("serviceUrl") != null) {
-                    String url = xml.getDocumentElement()
-                                    .getAttribute("serviceUrl");
-                    initService(url);
+            });
+        }else{
+            ((AppServiceIntAsync)WIDGET_MAP.get("OpenELISService")).getScreen(name, new AsyncCallback() {
+               public void onSuccess(Object result){
+                   xml = XMLParser.parse((String)result);
+                   drawScreen();
+               }
+               public void onFailure(Throwable caught){
+                   Window.alert(caught.getMessage());
+               }
+            });
+        }
+           
+    }           
+                
+    private void drawScreen() {
+         draw();
+         try {
+             NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
+             Element rpcEl = (Element)rpcList.item(0);
+             NodeList fieldList = rpcEl.getChildNodes();
+             HashMap map = new HashMap();
+             for (int i = 0; i < fieldList.getLength(); i++) {
+                if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                   AbstractField field = Screen.getWidgetMap().getField(fieldList.item(i));
+                   map.put((String)field.getKey(), field);
                 }
-                afterSubmit("draw", true);
-            }
-        });
+             }
+             rpc.setFieldMap(map);
+         } catch (Exception e) {
+             Window.alert("FormUtil: " + e.getMessage());
+         }
+         load();
+         if (xml.getDocumentElement().getAttribute("serviceUrl") != null) {
+             String url = xml.getDocumentElement().getAttribute("serviceUrl");
+             initService(url);
+         }
+        afterSubmit("draw", true);
     }
 
     /**

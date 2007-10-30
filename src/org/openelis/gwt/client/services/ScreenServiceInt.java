@@ -19,4 +19,5 @@ public interface ScreenServiceInt extends RemoteService {
     public FormRPC action(FormRPC rpc) throws RPCException;
     
     public AbstractField query(FormRPC rpc) throws RPCException;
+    
 }
