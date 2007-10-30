@@ -390,7 +390,7 @@ public class Screen extends Composite implements
      * @param name
      */
     public void getXML(String name) {
-        HTTPRequest.asyncGet("Forms/" + name, new ResponseTextHandler() {
+        HTTPRequest.asyncGet("Forms?name=" + name, new ResponseTextHandler() {
             public void onCompletion(String response) {
                 xml = XMLParser.parse(response);
                 draw();
