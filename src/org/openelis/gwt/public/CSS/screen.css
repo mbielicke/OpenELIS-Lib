@@ -613,15 +613,22 @@ filter: alpha(opacity=50);
 	padding:2px;
 }
 
-.Form {	
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
-    background:#ffffff;
-    width:100%;
-    border-collapse:collapse;
-border:1px dashed #babdb6;
-    margin-left:6px;
+.Form {
+	background:#FFFFFF none repeat scroll 0%;
+	border-collapse:collapse;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:normal;
+	width:100%;
+}
+
+.Form .Prompt {
+	background:#F8F8F9 none repeat scroll 0%;
+	color:#616A76;
+	height:16px;
+	padding:2px 4px 2px 2px;
+	text-align:right;
+	vertical-align:top;
 }
 
 .FormBorderless {	
@@ -641,16 +648,16 @@ border:1px dashed #babdb6;
     font-weight: normal;
     font-size:11px;
 }
-.FormTitle{
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    font-style: italic;
-    color:white;
-    font-size:11px;
-    line-height:15px;
-    background:#ad7fa8;
-    text-align:center;
+.FormTitle {
+	background:white none repeat scroll 0%;
+	border-bottom:1px solid #FB8C3C;
+	color:#FB8C3C;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	text-align:left;
 }
+
 .Form .Prompt,.FormBorderless .Prompt  {
     /*background:#eeeeec; */
     color:#333333;
