@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenWindow;
 
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class WindowBrowser extends Composite{
         }
     }
     
-    public void addScreen(final Screen screen, final String text, String category, String loadingText) {
+    public void addScreen(final ScreenBase screen, final String text, String category, String loadingText) {
         if(windows.size() == limit){
             Window.alert("Please close at least one window before opening another.");
             return;
@@ -78,11 +79,14 @@ public class WindowBrowser extends Composite{
         //setIndex(window.getElement(),index);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(text,window);
+        
+        if(screen instanceof Screen){
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                screen.getXML(screen.xmlUrl);
+                ((Screen)screen).getXML(((Screen)screen).xmlUrl);
             }
         });
+        }
     }
     
     public boolean selectScreen(String text) {
