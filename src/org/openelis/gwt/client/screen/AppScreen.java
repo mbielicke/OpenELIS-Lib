@@ -33,6 +33,7 @@ public class AppScreen extends ScreenBase {
     public AppScreen(AppScreenServiceIntAsync service){
         this();
         this.service = service;
+        getXML();
     }
 
     public void getXML() {
