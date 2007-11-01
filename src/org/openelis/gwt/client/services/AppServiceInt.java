@@ -6,5 +6,5 @@ import org.openelis.gwt.common.RPCException;
 
 public interface AppServiceInt extends RemoteService {
     
-    public String getScreen(String name) throws RPCException;
+    public void logout();
 }
