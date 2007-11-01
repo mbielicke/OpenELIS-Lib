@@ -22,7 +22,7 @@ public class ScreenMenuPopupPanel extends ScreenWidget {
     public ScreenMenuPopupPanel() {
     }
     
-    public ScreenMenuPopupPanel(boolean autoHide,String key, Screen screen) {
+    public ScreenMenuPopupPanel(boolean autoHide,String key, ScreenBase screen) {
     	this.screen = screen;
     	setWidget(popupPanel);
     	popupPanel = new PopupPanel(autoHide);
@@ -31,7 +31,7 @@ public class ScreenMenuPopupPanel extends ScreenWidget {
     	
     }
     
-    public ScreenMenuPopupPanel(Node node, Screen screen) {
+    public ScreenMenuPopupPanel(Node node, ScreenBase screen) {
     	super(node);
     	
     	//autohide
@@ -92,7 +92,7 @@ public class ScreenMenuPopupPanel extends ScreenWidget {
         setDefaults(node, screen);
     }
     
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenMenuPopupPanel(node, screen);
     }

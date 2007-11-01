@@ -41,7 +41,7 @@ public class ScreenTablePanel extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenTablePanel(Node node, Screen screen) {
+    public ScreenTablePanel(Node node, ScreenBase screen) {
         super(node);
         panel = new FlexTable();
         panel.setStyleName("ScreenTablePanel");
@@ -161,7 +161,7 @@ public class ScreenTablePanel extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTablePanel(node, screen);
     }

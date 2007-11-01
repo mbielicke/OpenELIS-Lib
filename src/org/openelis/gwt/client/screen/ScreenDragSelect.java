@@ -41,7 +41,7 @@ public class ScreenDragSelect extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenDragSelect(Node node, final Screen screen) {
+    public ScreenDragSelect(Node node, final ScreenBase screen) {
         super(node);
         dragselect = new DragSelectWidget() {
             public void onBrowserEvent(Event event) {
@@ -64,7 +64,7 @@ public class ScreenDragSelect extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenDragSelect(node, screen);
     }

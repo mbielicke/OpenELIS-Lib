@@ -38,7 +38,7 @@ public class ScreenCalendar extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenCalendar(Node node, final Screen screen) {
+    public ScreenCalendar(Node node, final ScreenBase screen) {
         super(node);
         byte begin = Byte.parseByte(node.getAttributes()
                                         .getNamedItem("begin")
@@ -74,7 +74,7 @@ public class ScreenCalendar extends ScreenWidget {
         
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenCalendar(node, screen);
     }

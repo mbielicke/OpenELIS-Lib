@@ -34,7 +34,7 @@ public class ScreenToggleButton extends ScreenWidget {
      * @param node
      * @param screen
      */
-	public ScreenToggleButton(Node node, final Screen screen) {
+	public ScreenToggleButton(Node node, final ScreenBase screen) {
 		super(node);
 		button = new ToggleButton() {
 			public void onBrowserEvent(Event event) {
@@ -49,15 +49,8 @@ public class ScreenToggleButton extends ScreenWidget {
 		};
 		button.setStyleName("ScreenToggleButton");
 		button.addClickListener(screen);
-		boolean cons = false;
-		if (node.getAttributes().getNamedItem("constant") != null)
-			cons = true;
-		if (node.getAttributes().getNamedItem("text") != null) {
-			if (cons)
-				button.setText(screen.constants.getString(node.getAttributes()
-						.getNamedItem("text").getNodeValue()));
-			else
-				button.setText(node.getAttributes().getNamedItem("text")
+		if(node.getAttributes().getNamedItem("text") != null){
+		    button.setText(node.getAttributes().getNamedItem("text")
 						.getNodeValue());
 		}
 		if (node.getAttributes().getNamedItem("html") != null)
@@ -67,7 +60,7 @@ public class ScreenToggleButton extends ScreenWidget {
 		setDefaults(node, screen);
 	}
 
-	public ScreenWidget getInstance(Node node, Screen screen) {
+	public ScreenWidget getInstance(Node node, ScreenBase screen) {
 		return new ScreenToggleButton(node, screen);
 	}
 

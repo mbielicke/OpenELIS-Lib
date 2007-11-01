@@ -1,6 +1,7 @@
 package org.openelis.gwt.client.widget;
 
 import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -52,7 +53,7 @@ public class AToZPanel extends Composite implements ClickListener {
 	//private HorizontalPanel imagePanel = new HorizontalPanel();
 	protected HTML arrowButton = new HTML();
 	
-	public AToZPanel(Node node, final Screen screen) {
+	public AToZPanel(Node node, final ScreenBase screen) {
 		//build the letter buttons
 		aButton.setHTML("<a class='navIndex'>A</a>");
 		aButton.addClickListener(this);
@@ -151,11 +152,7 @@ public class AToZPanel extends Composite implements ClickListener {
 		middleBar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		middleBar.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
-		if (screen.constants != null) {
-			leftTable = new FormTable(node, screen.constants);
-        } else{
-        	leftTable = new FormTable(node);
-        }
+		leftTable = new FormTable(node);
 
 		leftTable.controller.model.paged = true;
 		leftTable.controller.model.rowsPerPage = 20;

@@ -45,7 +45,7 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
      * @param node
      * @param screen
      */	
-    public ScreenOption(Node node, final Screen screen) {
+    public ScreenOption(Node node, final ScreenBase screen) {
         super(node);
         optionlist = new OptionList() {
             public void onBrowserEvent(Event event) {
@@ -82,7 +82,7 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenOption(node, screen);
     }

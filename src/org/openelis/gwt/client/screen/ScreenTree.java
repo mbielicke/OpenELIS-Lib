@@ -43,7 +43,7 @@ public class ScreenTree extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenTree(Node node, Screen screen) {
+    public ScreenTree(Node node, ScreenBase screen) {
         super(node);
         this.screen = screen;
         int height = -1;
@@ -71,7 +71,7 @@ public class ScreenTree extends ScreenWidget {
 
     }
 
-    private TreeItem createTreeItem(Node node, Screen screen) {
+    private TreeItem createTreeItem(Node node, ScreenBase screen) {
         TreeItem item = new TreeItem(Screen.getWidgetMap().getWidget(node, screen));
         if (node.getAttributes().getNamedItem("key") != null) {
             screen.widgets.put(node.getAttributes()
@@ -92,7 +92,7 @@ public class ScreenTree extends ScreenWidget {
         return item;
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTree(node, screen);
     }

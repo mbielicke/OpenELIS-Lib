@@ -44,7 +44,7 @@ public class ScreenMenuPanel extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenMenuPanel(Node node, Screen screen){
+    public ScreenMenuPanel(Node node, ScreenBase screen){
         super(node);
         this.screen = screen;
         if(node.getAttributes().getNamedItem("vertical") != null)
@@ -57,7 +57,7 @@ public class ScreenMenuPanel extends ScreenWidget {
         setDefaults(node, screen);
     }
     
-    public ScreenWidget getInstance(Node node, Screen screen){
+    public ScreenWidget getInstance(Node node, ScreenBase screen){
         return new ScreenMenuPanel(node,screen);
     }
     

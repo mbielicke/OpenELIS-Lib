@@ -1,10 +1,16 @@
 package org.openelis.gwt.client.screen;
 
+import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import org.openelis.gwt.client.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.client.widget.ButtonPanel;
 import org.openelis.gwt.client.widget.FormInt;
+import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
@@ -13,7 +19,7 @@ import org.openelis.gwt.common.IForm;
  * @author tschmidt
  *
  */
-public class ScreenForm extends Screen implements FormInt {
+public class AppScreenForm extends AppScreen implements FormInt {
 	
 	/**
 	 * Reference to the ButtonPanel that is defined on this
@@ -30,104 +36,43 @@ public class ScreenForm extends Screen implements FormInt {
     public Label message;
     
     public ScreenWindow window;
-    
+    public ConstantsWithLookup constants = (ConstantsWithLookup)Screen.getWidgetMap().get("AppConstants");
+    public AbstractField key;
+    public AppScreenFormServiceIntAsync service;
     //this is used to internationalize the status bar messages
     //private ConstantsWithLookup constants = null;
 
-
-	public ScreenForm() {
-        super();
+	public AppScreenForm(AppScreenFormServiceIntAsync service) {
+        super(service);
+        this.service = service;
     }
     
-    public ScreenForm(String xml){
-        super(xml);
+    public void afterDraw(boolean sucess) {
+        bpanel.setForm(this);
+        bpanel.setState(FormInt.DISPLAY);
+        enable(false);
+        bpanel.enable("u",false);
     }
     
-    /**
-     * This method will do the default behavior for afterSubmit service calls for
-     * a ScreenForm.  If the extending class needs to alter this method make sure to call
-     * super.afterSubmit(method,success) from there.
-     */
-    public void afterSubmit(String method, boolean success) {
-        if (method.equals("draw")) {
-            bpanel.setForm(this);
-            bpanel.setState(FormInt.DISPLAY);
-            enable(false);
-            bpanel.enable("u",false);
-        }
-        if (method.equals("commit") ||
-            method.equals("commit-add") ||
-            method.equals("commit-update")) {
-            if(success){
-                //  doReset();
-                enable(false);
-                bpanel.setState(FormInt.DISPLAY);
-                //  bpanel.enable("u",false);
-                if(method.equals("commit-update")) {
-                	if(constants != null)
-                		message.setText(constants.getString("updatingComplete"));
-                	else
-                		message.setText("Updating...Complete");
-                }
-                if(method.equals("commit-add")) {
-                	if(constants != null)
-                		message.setText(constants.getString("addingComplete"));
-                	else
-                		message.setText("Adding...Complete");
-                }
-            }else{
-                if(method.equals("commit-update")) {
-                	if(constants != null)
-                		message.setText(constants.getString("updateFailed"));
-                	else
-                		message.setText("Update Failed. Make corrections and try again or Abort.");
-                }
-                if(method.equals("commit-add")) {
-                	if(constants != null)
-                		message.setText(constants.getString("addingFailed"));
-                	else
-                		message.setText("Adding Failed. Make corrections and try again or Abort");
-                }
-            }
-        }
-        if (method.equals("fetch")) {
-            enable(false);
-            bpanel.setState(FormInt.DISPLAY);
-            bpanel.enable("u",true);
-        }
-        if ((method.equals("update") || method.equals("add")) && success) {
-            enable(true);
-            if(method.equals("update")){
-            	if(constants != null)
-            		message.setText(constants.getString("updateFieldsPressCommit"));
-            	else
-            		message.setText("Update fields then, press Commit");
-            	
-                bpanel.setState(FormInt.UPDATE);
-            }
-        }
-        if (method.equals("update") && !success){
-            bpanel.setState(FormInt.DISPLAY);
-        }
+    public void fetch(AbstractField key){
+        this.key = key;
+        service.fetch(key, new AsyncCallback(){
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               load();
+               afterFetch(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterFetch(false);
+           }
+        });
     }
     
-    /**
-     * This method provides default behavior for afterQuery method for a form.
-     * If the extending class needs to add behavior to this method be sure to 
-     * call super.afterQuery(result,success) from the extending method.
-     */
-    public void afterQuery(Object result, boolean success){
-        if(success){
-            enable(false);
-            bpanel.setState(FormInt.DISPLAY);
-            doReset();
-            if(constants != null)
-            	message.setText(constants.getString("queryingComplete"));
-            else
-            	message.setText("Querying...Complete");
-            
-            bpanel.enable("u",false);
-        }
+    public void afterFetch(boolean success){
+        enable(false);
+        bpanel.setState(FormInt.DISPLAY);
+        bpanel.enable("u",true);
     }
     
     /**
@@ -138,7 +83,6 @@ public class ScreenForm extends Screen implements FormInt {
         doReset();
         enable(true);
         bpanel.setState(FormInt.QUERY);
-        
         if(constants != null)
         	message.setText(constants.getString("enterFieldsToQuery"));
         else
@@ -174,7 +118,6 @@ public class ScreenForm extends Screen implements FormInt {
         doReset();
         enable(true);
         bpanel.setState(FormInt.ADD);
-        
         if(constants != null)
         	message.setText(constants.getString("enterInformationPressCommit"));
         else
@@ -186,9 +129,29 @@ public class ScreenForm extends Screen implements FormInt {
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void up(int state) {
-        rpc.operation = IForm.DISPLAY_UPDATE;
-        callService("update");        
-        
+        service.fetchForUpdate(key, new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               load();
+               afterUpdate(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterUpdate(false);
+           }
+        });
+    }
+    
+    public void afterUpdate(boolean success){
+        if(success){
+            enable(true);
+            if(constants != null)
+                message.setText(constants.getString("updateFieldsPressCommit"));
+            else
+                message.setText("Update fields then, press Commit");            
+            bpanel.setState(FormInt.UPDATE);
+        }else
+            bpanel.setState(FormInt.DISPLAY);
     }
 
     /** 
@@ -197,7 +160,21 @@ public class ScreenForm extends Screen implements FormInt {
      * the ButtonPanel widget.
      */
     public void delete(int state) {
-        // TODO Auto-generated method stub
+        service.delete(key, new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               load();
+               afterDelete(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterDelete(false);
+           }
+        });
+        
+    }
+    
+    public void afterDelete(boolean success){
         
     }
 
@@ -216,7 +193,7 @@ public class ScreenForm extends Screen implements FormInt {
             		message.setText("Updating...");
             	
                 clearErrors();
-                callService("commit-update");
+                commitUpdate();
             } else {
                 drawErrors();
                 if(constants != null)
@@ -234,7 +211,7 @@ public class ScreenForm extends Screen implements FormInt {
             	else
             		message.setText("Adding...");
                 clearErrors();
-                callService("commit-add");
+                commitAdd();
             } else {
                 drawErrors();
                 if(constants != null)
@@ -249,12 +226,96 @@ public class ScreenForm extends Screen implements FormInt {
             	message.setText(constants.getString("querying"));
             else
             	message.setText("Querying...");
-            
-            callService("query");
+            commitQuery();
         }
         
     }
-
+    
+    public void commitUpdate() {
+        service.commitUpdate(rpc, new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               load();
+               afterCommitUpdate(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterCommitUpdate(false);
+           }
+        });
+    }
+    
+    public void afterCommitUpdate(boolean success) {
+        if(success){
+            enable(false);
+            bpanel.setState(FormInt.DISPLAY);
+            if(constants != null)
+                message.setText(constants.getString("updatingComplete"));
+            else
+                message.setText("Updating...Complete");
+        }else{
+            if(constants != null)
+                message.setText(constants.getString("updateFailed"));
+            else
+                message.setText("Update Failed. Make corrections and try again or Abort.");
+        }
+    }
+    
+    public void commitAdd() {
+        service.commitAdd(rpc, new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               load();
+               afterCommitAdd(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterCommitAdd(false);
+           }
+        });
+    }
+    
+    public void afterCommitAdd(boolean success) {
+        if(success){
+            enable(false);
+            bpanel.setState(FormInt.DISPLAY);
+            if(constants != null)
+                message.setText(constants.getString("addingComplete"));
+            else
+                message.setText("Adding...Complete");
+        }else{
+            if(constants != null)
+                message.setText(constants.getString("addingFailed"));
+            else
+                message.setText("Adding Failed. Make corrections and try again or Abort");
+        }
+    }
+    
+    public void commitQuery() {
+        service.commitQuery(rpc, new AsyncCallback() {
+           public void onSuccess(Object result){
+               afterCommitQuery(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterCommitQuery(false);
+           }
+        });
+    }
+    
+    public void afterCommitQuery(boolean success) {
+        if(success){
+            enable(false);
+            bpanel.setState(FormInt.DISPLAY);
+            doReset();
+            if(constants != null)
+                message.setText(constants.getString("queryingComplete"));
+            else
+                message.setText("Querying...Complete");
+            
+            bpanel.enable("u",false);
+        }
+    }
     /**
      * This method provides the default behavior for a form when the Abort button 
      * on a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
@@ -268,14 +329,21 @@ public class ScreenForm extends Screen implements FormInt {
             else
             	message.setText("Update aborted");
             
-            callService("fetch");
+            service.abort(key, new AsyncCallback() {
+               public void onSuccess(Object result){
+                   rpc = (FormRPC)result;
+                   load();
+               }
+               public void onFailure(Throwable caught){
+                   Window.alert(caught.getMessage());
+               }
+            });
         }
         if (state == FormInt.ADD) {
             doReset();
             clearErrors();
             load();
             enable(false);
-            
             if(constants != null)
             	message.setText(constants.getString("addAborted"));
             else
@@ -285,11 +353,11 @@ public class ScreenForm extends Screen implements FormInt {
             doReset();
             ((DeckPanel)getWidget("formDeck")).showWidget(0);
             enable(false);
-            
             if(constants != null)
             	message.setText(constants.getString("queryAborted"));
             else
             	message.setText("Query aborted");
+            fetch(key);
         }
         bpanel.setState(FormInt.DISPLAY);
         bpanel.enable("u",false);
@@ -300,9 +368,7 @@ public class ScreenForm extends Screen implements FormInt {
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void reload(int state) {
-        rpc.operation = IForm.DISPLAY;
-        callService("fetch");
-        
+        fetch(key);
     }
 
     /**

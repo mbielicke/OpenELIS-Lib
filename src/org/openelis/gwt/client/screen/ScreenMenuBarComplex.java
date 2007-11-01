@@ -30,7 +30,7 @@ public class ScreenMenuBarComplex extends ScreenWidget {
 		
 	}
 	
-	public ScreenMenuBarComplex(Node node, Screen screen) {
+	public ScreenMenuBarComplex(Node node, ScreenBase screen) {
 		super(node);
 		this.screen = screen;
 		String key = "menuBarKey";
@@ -57,7 +57,7 @@ public class ScreenMenuBarComplex extends ScreenWidget {
 		setDefaults(node, screen);
 	}
 
-	public ScreenWidget getInstance(Node node, Screen screen){
+	public ScreenWidget getInstance(Node node, ScreenBase screen){
 		return new ScreenMenuBarComplex(node,screen);
 	}
 	

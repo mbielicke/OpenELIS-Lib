@@ -17,6 +17,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.AbstractField;
 
+import java.util.HashMap;
 import java.util.Vector;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
@@ -59,7 +60,7 @@ public class ScreenWidget extends SimplePanel implements
     /** 
      * Reference back to the Screen this widget is displayed in
      */
-    protected Screen screen;
+    protected ScreenBase screen;
     public String hoverStyle = "Hover";
    
     public ScreenWidget() {
@@ -86,7 +87,7 @@ public class ScreenWidget extends SimplePanel implements
      * @param screen
      * @return ScreenWidget
      */
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return this;
     }
     
@@ -170,7 +171,7 @@ public class ScreenWidget extends SimplePanel implements
      * @param node
      * @param screen
      */
-    public void setDefaults(Node node, Screen screen) {
+    public void setDefaults(Node node, ScreenBase screen) {
         this.screen = screen;
         if(node.getAttributes().getNamedItem("key") != null)
         	screen.widgets.put(node.getAttributes().getNamedItem("key").getNodeValue(), this);
@@ -358,7 +359,7 @@ public class ScreenWidget extends SimplePanel implements
      * Getter for the Screen that contains this Widget
      * @return
      */
-    public Screen getScreen(){
+    public ScreenBase getScreen(){
         return screen;
     }
     
@@ -366,7 +367,7 @@ public class ScreenWidget extends SimplePanel implements
      * Setter for the Screen that contains this widget.
      * @param screen
      */
-    public void setScreen(Screen screen){
+    public void setScreen(ScreenBase screen){
         this.screen = screen; 
     }
     

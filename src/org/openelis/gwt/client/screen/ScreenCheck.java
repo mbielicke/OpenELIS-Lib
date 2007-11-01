@@ -40,7 +40,7 @@ public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
      * @param node
      * @param screen
      */
-    public ScreenCheck(Node node, final Screen screen) {
+    public ScreenCheck(Node node, final ScreenBase screen) {
         super(node);
         check = new CheckBox() {
             public void onBrowserEvent(Event event) {
@@ -53,11 +53,8 @@ public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
                 }
             }
         };
-        if(node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")){
-        	if (node.getFirstChild() != null){
-                check.setText(screen.constants.getString(node.getFirstChild().getNodeValue()));
-        	}
-        }else if (node.getFirstChild() != null){
+
+        if (node.getFirstChild() != null){
         	 check.setText(node.getFirstChild().getNodeValue());
         }
            
@@ -78,7 +75,7 @@ public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenCheck(node, screen);
     }

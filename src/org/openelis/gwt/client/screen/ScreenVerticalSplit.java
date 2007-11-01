@@ -46,7 +46,7 @@ public class ScreenVerticalSplit extends ScreenWidget{
      * @param node
      * @param screen
      */	
-    public ScreenVerticalSplit(Node node, Screen screen) {
+    public ScreenVerticalSplit(Node node, ScreenBase screen) {
         super(node);
         vp = new VerticalSplitPanel();
         vp.setStyleName("ScreenSplit");
@@ -102,7 +102,7 @@ public class ScreenVerticalSplit extends ScreenWidget{
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenHorizontalSplit(node, screen);
     }
 

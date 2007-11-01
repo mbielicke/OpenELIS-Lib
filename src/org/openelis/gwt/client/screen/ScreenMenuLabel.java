@@ -36,15 +36,10 @@ public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
      * @param node
      * @param screen
      */	
-    public ScreenMenuLabel(Node node, Screen screen) {
+    public ScreenMenuLabel(Node node, ScreenBase screen) {
         super(node);
         label = new MenuLabel();
-        
-        if(node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")){
-        	if (node.getAttributes().getNamedItem("text") != null){
-                label.setText(screen.constants.getString(node.getAttributes().getNamedItem("text").getNodeValue()));
-        	}
-        }else if (node.getAttributes().getNamedItem("text") != null){
+        if (node.getAttributes().getNamedItem("text") != null){
             label.setText(node.getAttributes().getNamedItem("text").getNodeValue());
         }
         if(node.getAttributes().getNamedItem("image") !=  null)
@@ -64,7 +59,7 @@ public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenMenuLabel(node, screen);
     }
 

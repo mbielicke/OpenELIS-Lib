@@ -31,7 +31,7 @@ public class ScreenError extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenError(Node node, Screen screen) {
+    public ScreenError(Node node, ScreenBase screen) {
         super(node);
         panel = new VerticalPanel();
         panel.setVisible(false);
@@ -47,7 +47,7 @@ public class ScreenError extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenError(node, screen);
     }

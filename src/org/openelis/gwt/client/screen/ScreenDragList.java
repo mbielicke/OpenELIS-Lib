@@ -41,7 +41,7 @@ public class ScreenDragList extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenDragList(Node node, final Screen screen){
+    public ScreenDragList(Node node, final ScreenBase screen){
         super(node);
         list = new DragList() {
             public void onBrowserEvent(Event event) {
@@ -62,7 +62,7 @@ public class ScreenDragList extends ScreenWidget {
         }
     }
     
-    public ScreenWidget getInstance(Node node, Screen screen){
+    public ScreenWidget getInstance(Node node, ScreenBase screen){
         return new ScreenDragList(node,screen);
     }
     /**

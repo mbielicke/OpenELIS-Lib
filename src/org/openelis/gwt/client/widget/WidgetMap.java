@@ -3,6 +3,7 @@ package org.openelis.gwt.client.widget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenWidget;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
 import org.openelis.gwt.client.widget.table.TableManager;
@@ -102,7 +103,7 @@ public class WidgetMap {
      * @param screen
      * @return
      */
-    public Widget getWidget(Node node, Screen screen) {
+    public Widget getWidget(Node node, ScreenBase screen) {
         String widName = node.getNodeName();
         if (widName.equals("panel"))
             widName += "-" + node.getAttributes()
@@ -111,7 +112,7 @@ public class WidgetMap {
         return (Widget)((ScreenWidget)widgets.get(widName)).getInstance(node,
                                                                         screen);
     }
-
+    
     /**
      * Returns a TableCellWidget from the passed in node's tag name.
      * @param node

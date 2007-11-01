@@ -30,7 +30,7 @@ public class ScreenHorizontal extends ScreenWidget {
     public ScreenHorizontal() {
     }
     
-    public ScreenHorizontal(Screen screen, String key){
+    public ScreenHorizontal(ScreenBase screen, String key){
     	panel = new HorizontalPanel();
     	initWidget(panel);
     	screen.widgets.put(key, this);
@@ -48,7 +48,7 @@ public class ScreenHorizontal extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenHorizontal(Node node, Screen screen) {
+    public ScreenHorizontal(Node node, ScreenBase screen) {
         super(node);
         panel = new HorizontalPanel();
         if (node.getAttributes().getNamedItem("spacing") != null)
@@ -117,7 +117,7 @@ public class ScreenHorizontal extends ScreenWidget {
         */
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenHorizontal(node, screen);
     }
     

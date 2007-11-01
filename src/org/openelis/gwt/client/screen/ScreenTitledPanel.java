@@ -26,7 +26,7 @@ public class ScreenTitledPanel extends ScreenWidget{
     public ScreenTitledPanel() {
     }
     
-    public ScreenTitledPanel(Node node, Screen screen) {
+    public ScreenTitledPanel(Node node, ScreenBase screen) {
         super(node);
         titledPanel = new TitledPanel();
         
@@ -74,7 +74,7 @@ public class ScreenTitledPanel extends ScreenWidget{
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTitledPanel(node, screen);
     }

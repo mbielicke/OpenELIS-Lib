@@ -1,6 +1,5 @@
 package org.openelis.gwt.client.screen;
 
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.client.widget.ButtonPanel;
@@ -45,7 +44,7 @@ public class ScreenButtonPanel extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenButtonPanel(Node node, Screen screen) {
+    public ScreenButtonPanel(Node node, ScreenBase screen) {
         super(node);
         bPanel = null;
         if (node.getAttributes().getNamedItem("buttons") != null)
@@ -54,24 +53,12 @@ public class ScreenButtonPanel extends ScreenWidget {
                                          .getNodeValue());
         else
             bPanel = new ButtonPanel("all");
-        
-        if(screen.constants != null){
-        	((Label)bPanel.abort.getWidget()).setText(screen.constants.getString("abort"));
-        	((Label)bPanel.add.getWidget()).setText(screen.constants.getString("add"));
-        	((Label)bPanel.comm.getWidget()).setText(screen.constants.getString("commit"));
-        	((Label)bPanel.delete.getWidget()).setText(screen.constants.getString("delete"));
-        	((Label)bPanel.next.getWidget()).setText(screen.constants.getString("next"));
-        	((Label)bPanel.prev.getWidget()).setText(screen.constants.getString("previous"));
-        	((Label)bPanel.query.getWidget()).setText(screen.constants.getString("query"));
-        	((Label)bPanel.reload.getWidget()).setText(screen.constants.getString("reload"));
-        	((Label)bPanel.up.getWidget()).setText(screen.constants.getString("update"));
-        }
         initWidget(bPanel);
         bPanel.setStyleName("ScreenButtonPanel");
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenButtonPanel(node, screen);
     }

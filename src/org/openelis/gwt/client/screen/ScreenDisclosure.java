@@ -41,7 +41,7 @@ public class ScreenDisclosure extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenDisclosure(Node node, Screen screen) {
+    public ScreenDisclosure(Node node, ScreenBase screen) {
         super(node);
         dp = new DisclosurePanel();
         dp.setStyleName("ScreenDisclosure");
@@ -87,7 +87,7 @@ public class ScreenDisclosure extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenDisclosure(node, screen);
     }

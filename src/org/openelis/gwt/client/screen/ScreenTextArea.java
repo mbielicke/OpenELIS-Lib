@@ -37,7 +37,7 @@ public class ScreenTextArea extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenTextArea(Node node, final Screen screen) {
+    public ScreenTextArea(Node node, final ScreenBase screen) {
         super(node);
         textarea = new TextArea() {
             public void onBrowserEvent(Event event) {
@@ -67,7 +67,7 @@ public class ScreenTextArea extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTextArea(node, screen);
     }

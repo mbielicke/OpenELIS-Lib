@@ -36,13 +36,13 @@ public class ScreenAppMessage extends ScreenWidget {
 	 * @param node
 	 * @param screen
 	 */
-	public ScreenAppMessage(Node node, Screen screen) {
+	public ScreenAppMessage(Node node, ScreenBase screen) {
 		msg = new AppMessage();
 		initWidget(msg);
 		setDefaults(node, screen);
 	}
 
-	public ScreenWidget getInstance(Node node, Screen screen) {
+	public ScreenWidget getInstance(Node node, ScreenBase screen) {
 		return new ScreenAppMessage(node, screen);
 	}
     

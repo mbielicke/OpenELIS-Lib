@@ -37,7 +37,7 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
      * @param node
      * @param screen
      */
-    public ScreenHTML(Node node, Screen screen) {
+    public ScreenHTML(Node node, ScreenBase screen) {
         super(node);
         html = new HTML(node.getFirstChild().getNodeValue());
         if (node.getAttributes().getNamedItem("onclick") != null) {
@@ -52,7 +52,7 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenHTML(node, screen);
     }

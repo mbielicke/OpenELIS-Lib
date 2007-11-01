@@ -43,7 +43,7 @@ public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
      * @param node
      * @param screen
      */
-	public ScreenButton(Node node, final Screen screen) {
+	public ScreenButton(Node node, final ScreenBase screen) {
 		super(node);
 		button = new Button() {
 			public void onBrowserEvent(Event event) {
@@ -58,34 +58,18 @@ public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
 		};
 		button.setStyleName("ScreenButton");
 		addClickListener(screen);
-		boolean cons = false;
-		if (node.getAttributes().getNamedItem("constant") != null)
-			cons = true;
-		if (node.getAttributes().getNamedItem("text") != null) {
-			if (cons) {
-				button.setText(screen.constants.getString(node.getAttributes()
-						.getNamedItem("text").getNodeValue()));
-			} else {
-				button.setText(node.getAttributes().getNamedItem("text")
-						.getNodeValue());
-			}
-		}
+        if(node.getAttributes().getNamedItem("text") != null) {
+            button.setText(node.getAttributes().getNamedItem("text").getNodeValue());
+        }
 		if (node.getAttributes().getNamedItem("html") != null) {
-			if (cons) {
-				button.setHTML(node.getAttributes().getNamedItem("html").getNodeValue() + 
-						screen.constants.getString(node.getAttributes().getNamedItem("text").getNodeValue()));
-			} else {
 				button.setHTML(node.getAttributes().getNamedItem("html")
 						.getNodeValue());
-			}
 		}
-		//	button.setHTML(node.getAttributes().getNamedItem("html")
-		//			.getNodeValue());
 		initWidget(button);
 		setDefaults(node, screen);
 	}
 
-	public ScreenWidget getInstance(Node node, Screen screen) {
+	public ScreenWidget getInstance(Node node, ScreenBase screen) {
 		// TODO Auto-generated method stub
 		return new ScreenButton(node, screen);
 	}

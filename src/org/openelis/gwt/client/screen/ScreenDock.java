@@ -39,7 +39,7 @@ public class ScreenDock extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenDock(Node node, Screen screen) {
+    public ScreenDock(Node node, ScreenBase screen) {
         super(node);
         panel = new DockPanel();
         panel.addStyleName("ScreenDock");
@@ -113,7 +113,7 @@ public class ScreenDock extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenDock(node, screen);
     }
     

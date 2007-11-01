@@ -38,7 +38,7 @@ public class ScreenMaskedBox extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenMaskedBox(Node node, final Screen screen) {
+    public ScreenMaskedBox(Node node, final ScreenBase screen) {
         super(node);
         maskbox = new MaskedTextBox() {
             public void onBrowserEvent(Event event) {
@@ -70,7 +70,7 @@ public class ScreenMaskedBox extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenMaskedBox(node, screen);
     }

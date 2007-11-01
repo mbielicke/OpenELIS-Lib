@@ -37,7 +37,7 @@ public class ScreenDeck extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenDeck(Node node, Screen screen) {
+    public ScreenDeck(Node node, ScreenBase screen) {
         super(node);
         panel = new DeckPanel();
         panel.setStyleName("ScreenDeck");
@@ -67,7 +67,7 @@ public class ScreenDeck extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenDeck(node, screen);
     }

@@ -29,7 +29,7 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
     public ScreenLabel() {
     }
     
-    public ScreenLabel(Screen screen, String key){
+    public ScreenLabel(ScreenBase screen, String key){
     	label = new Label();
     	initWidget(label);
     	screen.widgets.put(key, this);
@@ -51,17 +51,12 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
      * @param node
      * @param screen
      */
-    public ScreenLabel(Node node, Screen screen) {
+    public ScreenLabel(Node node, ScreenBase screen) {
         super(node);
         label = new Label();
-        if(node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")){
-        	if (node.getAttributes().getNamedItem("text") != null){
-                label.setText(screen.constants.getString(node.getAttributes().getNamedItem("text").getNodeValue()));
-        	}
-        }else if (node.getAttributes().getNamedItem("text") != null){
+        if (node.getAttributes().getNamedItem("text") != null){
             label.setText(node.getAttributes().getNamedItem("text").getNodeValue());
-        }
-        
+        } 
         if (node.getAttributes().getNamedItem("wordwrap") != null)
             label.setWordWrap(Boolean.valueOf(node.getAttributes()
                                                   .getNamedItem("wordwrap")
@@ -81,7 +76,7 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenLabel(node, screen);
     }

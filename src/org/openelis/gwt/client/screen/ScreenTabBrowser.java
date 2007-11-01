@@ -32,7 +32,7 @@ public class ScreenTabBrowser extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenTabBrowser(Node node, Screen screen) {
+    public ScreenTabBrowser(Node node, ScreenBase screen) {
         super(node);
         int tabLimit = Integer.parseInt(node.getAttributes()
                                             .getNamedItem("tabLimit")
@@ -48,7 +48,7 @@ public class ScreenTabBrowser extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTabBrowser(node, screen);
     }

@@ -35,19 +35,15 @@ public class ScreenTable extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenTable(Node node, Screen screen) {
+    public ScreenTable(Node node, ScreenBase screen) {
         super(node);
-        if (screen.constants != null) {
-            table = new FormTable(node, screen.constants);
-        } else{
-            table = new FormTable(node);
-        }
+        table = new FormTable(node);
         initWidget(table);
         table.setStyleName("ScreenTable");
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTable(node, screen);
     }

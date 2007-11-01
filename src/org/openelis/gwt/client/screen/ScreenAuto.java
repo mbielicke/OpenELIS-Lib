@@ -39,7 +39,7 @@ public class ScreenAuto extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenAuto(Node node, final Screen screen) {
+    public ScreenAuto(Node node, final ScreenBase screen) {
         super(node);
         String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
         String url = node.getAttributes()
@@ -66,7 +66,7 @@ public class ScreenAuto extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenAuto(node, screen);
     }

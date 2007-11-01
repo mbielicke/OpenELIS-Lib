@@ -42,7 +42,7 @@ public class ScreenStack extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenStack(Node node, Screen screen) {
+    public ScreenStack(Node node, ScreenBase screen) {
         super(node);
         stack = new StackPanel();
         stack.setStyleName("ScreenStack");
@@ -76,7 +76,7 @@ public class ScreenStack extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenStack(node, screen);
     }

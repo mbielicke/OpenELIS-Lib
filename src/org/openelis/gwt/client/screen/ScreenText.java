@@ -33,7 +33,7 @@ public class ScreenText extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenText(Node node, Screen screen) {
+    public ScreenText(Node node, ScreenBase screen) {
         super(node);
         if (node.hasChildNodes())
             text = new Label(node.getFirstChild().getNodeValue());
@@ -58,7 +58,7 @@ public class ScreenText extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenText(node, screen);
     }

@@ -46,7 +46,7 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
      * @param node
      * @param screen
      */
-    public ScreenImage(Node node, final Screen screen) {
+    public ScreenImage(Node node, final ScreenBase screen) {
         super(node);
         image = new Image() {
             public void onBrowserEvent(Event event) {
@@ -72,7 +72,7 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenImage(node, screen);
     }
 

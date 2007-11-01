@@ -38,7 +38,7 @@ public class ScreenAToZPanel extends ScreenWidget{
     public ScreenAToZPanel() {
     }
 
-    public ScreenAToZPanel(Node node, Screen screen) {
+    public ScreenAToZPanel(Node node, ScreenBase screen) {
         super(node);
         test = null;
         //if (node.getAttributes().getNamedItem("buttons") != null)
@@ -50,7 +50,7 @@ public class ScreenAToZPanel extends ScreenWidget{
         setDefaults(node, screen);
     }
     
-    public void setDefaults(Node node, Screen screen) {
+    public void setDefaults(Node node, ScreenBase screen) {
         this.screen = screen;
         
         if(node.getAttributes().getNamedItem("key") != null)
@@ -61,7 +61,7 @@ public class ScreenAToZPanel extends ScreenWidget{
         
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenAToZPanel(node, screen);
     }

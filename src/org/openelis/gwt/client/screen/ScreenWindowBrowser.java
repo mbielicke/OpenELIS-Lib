@@ -35,7 +35,7 @@ public class ScreenWindowBrowser extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenWindowBrowser(Node node, Screen screen){
+    public ScreenWindowBrowser(Node node, ScreenBase screen){
         super(node);
         int limit = 10;
         if(node.getAttributes().getNamedItem("winLimit") != null){
@@ -50,7 +50,7 @@ public class ScreenWindowBrowser extends ScreenWidget {
         setDefaults(node,screen);
     }
     
-    public ScreenWidget getInstance(Node node, Screen screen){
+    public ScreenWidget getInstance(Node node, ScreenBase screen){
         return new ScreenWindowBrowser(node,screen);
     }
     

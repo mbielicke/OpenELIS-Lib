@@ -41,7 +41,7 @@ public class ScreenAbsolute extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenAbsolute(Node node, Screen screen) {
+    public ScreenAbsolute(Node node, ScreenBase screen) {
         super(node);
         panel = new AbsolutePanel();
         panel.setStyleName("ScreenAbsolute");
@@ -85,7 +85,7 @@ public class ScreenAbsolute extends ScreenWidget {
      * Method called to return a specific instance of this widget defined in the 
      * XML node.
      */
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenAbsolute(node, screen);
     }
     

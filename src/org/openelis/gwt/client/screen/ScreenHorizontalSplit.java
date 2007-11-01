@@ -45,7 +45,7 @@ public class ScreenHorizontalSplit extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenHorizontalSplit(Node node, Screen screen) {
+    public ScreenHorizontalSplit(Node node, ScreenBase screen) {
         super(node);
         hp = new HorizontalSplitPanel();
         hp.setStyleName("ScreenSplit");
@@ -102,7 +102,7 @@ public class ScreenHorizontalSplit extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenHorizontalSplit(node, screen);
     }
  

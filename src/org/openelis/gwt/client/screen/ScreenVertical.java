@@ -44,13 +44,13 @@ public class ScreenVertical extends ScreenWidget {
      * @param screen
      */
     
-    public ScreenVertical(Screen screen, String key) {
+    public ScreenVertical(ScreenBase screen, String key) {
     	panel = new VerticalPanel();
     	initWidget(panel);
     	screen.widgets.put(key, this);
     	
     }
-    public ScreenVertical(Node node, Screen screen) {
+    public ScreenVertical(Node node, ScreenBase screen) {
         super(node);
         panel = new VerticalPanel();
         if (node.getAttributes().getNamedItem("spacing") != null){
@@ -121,7 +121,7 @@ public class ScreenVertical extends ScreenWidget {
         */
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenVertical(node, screen);
     }
     

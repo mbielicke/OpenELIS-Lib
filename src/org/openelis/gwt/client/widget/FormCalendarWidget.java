@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.common.DatetimeRPC;
 import java.util.Date;
 /**
@@ -42,7 +43,7 @@ public class FormCalendarWidget extends Composite implements
     protected HorizontalPanel hp = new HorizontalPanel();
     protected byte begin;
     protected byte end;
-    private Screen screen;
+    private ScreenBase screen;
     protected Widget comp;
     protected boolean week;
     protected Date weekDate;
@@ -164,7 +165,7 @@ public class FormCalendarWidget extends Composite implements
         });
     }
 
-    public void setForm(Screen screen) {
+    public void setForm(ScreenBase screen) {
         this.screen = screen;
     }
 

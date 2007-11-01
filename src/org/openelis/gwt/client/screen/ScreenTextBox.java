@@ -39,7 +39,7 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
      * @param node
      * @param screen
      */	
-    public ScreenTextBox(Node node, final Screen screen) {
+    public ScreenTextBox(Node node, final ScreenBase screen) {
         super(node);
         textbox = new TextBox() {
             public void onBrowserEvent(Event event) {
@@ -86,7 +86,7 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTextBox(node, screen);
     }

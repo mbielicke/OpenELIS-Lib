@@ -42,7 +42,7 @@ public class ScreenTab extends ScreenWidget {
      * @param node
      * @param screen
      */	
-    public ScreenTab(Node node, Screen screen) {
+    public ScreenTab(Node node, ScreenBase screen) {
         super(node);
         panel = new TabPanel();
         panel.setStyleName("ScreenTab");
@@ -68,18 +68,9 @@ public class ScreenTab extends ScreenWidget {
                     scroll.add(wid);
                     
                     //tabs can not have a constant or hard coded text
-                    if(tabs.item(k)
-                            .getAttributes()
-                            .getNamedItem("constant") != null && tabs.item(k)
-                            .getAttributes()
-                            .getNamedItem("constant").getNodeValue().equals("true")){
-                    	panel.add(scroll, screen.constants.getString(tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()));
-                    }else{
-                    	panel.add(scroll, tabs.item(k)
-                                             .getAttributes()
+                    panel.add(scroll, tabs.item(k).getAttributes()
                                              .getNamedItem("text")
                                              .getNodeValue());
-                   }
                 }
             }
         }
@@ -88,7 +79,7 @@ public class ScreenTab extends ScreenWidget {
         setDefaults(node, screen);
     }
 
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
         return new ScreenTab(node, screen);
     }
