@@ -28,6 +28,10 @@ public class AppServlet extends RemoteServiceServlet {
         return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
     }
 
+    /*
+     * This method was overridden to ensure that the SessionManager is updated with the current thread and Session.
+     * @see com.google.gwt.user.server.rpc.RemoteServiceServlet#onBeforeRequestDeserialized(java.lang.String)
+     */
     protected void onBeforeRequestDeserialized(String serializedRequest) {
         // TODO Auto-generated method stub
         super.onBeforeRequestDeserialized(serializedRequest);
