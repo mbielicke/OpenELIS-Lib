@@ -21,7 +21,7 @@ public class ScreenPagedTree extends ScreenWidget {
     public ScreenPagedTree() {
     }
    
-    public ScreenPagedTree(Node node, Screen screen) {
+    public ScreenPagedTree(Node node, ScreenBase screen) {
         super(node);
         this.screen = screen;
         
@@ -32,6 +32,7 @@ public class ScreenPagedTree extends ScreenWidget {
         
         
         setDefaults(node, screen);
+        //screen.widgets.put(node.getAttributes().getNamedItem("key").getNodeValue(),this );
     }
     
     /**
@@ -39,7 +40,7 @@ public class ScreenPagedTree extends ScreenWidget {
      * @param node
      */
     public void createTree(Node node) {
-     try {
+     
                      
         if (node.getAttributes().getNamedItem("title") != null) {
             controller.view.setTitle(node.getAttributes()
@@ -47,9 +48,14 @@ public class ScreenPagedTree extends ScreenWidget {
                                      .getNodeValue());        
         
          }
-     }catch (Exception e) {
-         Window.alert(e.getMessage());
-     }
+        if (node.getAttributes().getNamedItem("itemsPerPage") != null) {
+            String ipp  = node.getAttributes().getNamedItem("itemsPerPage").getNodeValue();
+            Integer itemsPerPageVal = new Integer(ipp);
+            controller.model.itemsPerPage =  itemsPerPageVal.intValue();
+         }else{
+             controller.model.itemsPerPage = 20;
+         }
+     
     }
     
         
@@ -65,7 +71,7 @@ public class ScreenPagedTree extends ScreenWidget {
         controller.view.setWidth(width);
     }
     
-    public ScreenWidget getInstance(Node node, Screen screen) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
 
         return new ScreenPagedTree(node, screen);
     }
