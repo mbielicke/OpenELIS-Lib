@@ -46,6 +46,16 @@ public class AppServlet extends RemoteServiceServlet {
         }
     }
     
+    @Override
+    protected void onAfterResponseSerialized(String serializedResponse) {
+        // TODO Auto-generated method stub
+        super.onAfterResponseSerialized(serializedResponse);
+        getThreadLocalResponse().setHeader("pragma", "no-cache");
+        getThreadLocalResponse().setHeader("Cache-Control","no-cache");
+        getThreadLocalResponse().setHeader("Cache-Control","no-store");
+        getThreadLocalResponse().setDateHeader("Expires", 0 );
+    }
+    
 
 
 }

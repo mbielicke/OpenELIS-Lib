@@ -1,15 +1,9 @@
 package org.openelis.gwt.client.screen;
 
-import java.util.Vector;
-
-import org.openelis.gwt.client.widget.FormInt;
-import org.openelis.gwt.client.widget.WindowBrowser;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
@@ -19,17 +13,20 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.client.widget.FormInt;
+import org.openelis.gwt.client.widget.WindowBrowser;
+
+import java.util.Vector;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -325,7 +322,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
     
     public void setKeep(boolean keep){
-        ((Screen)content).keep = keep;
+        ((ScreenBase)content).keep = keep;
     }
 
 }

@@ -3,7 +3,6 @@ package org.openelis.persistence;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;

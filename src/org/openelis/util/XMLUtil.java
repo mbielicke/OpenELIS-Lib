@@ -134,7 +134,7 @@ public class XMLUtil {
                                    DefaultHandler handler) throws IOException,
                                                           SAXException,
                                                           ParserConfigurationException {
-        try {
+        
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             StreamSource ss = new StreamSource(schemaURI);
             Schema schema = sf.newSchema(ss);
@@ -143,8 +143,6 @@ public class XMLUtil {
             spf.setNamespaceAware(true);
             javax.xml.parsers.SAXParser saxParser = spf.newSAXParser();
             saxParser.parse(new ByteArrayInputStream(xml.getBytes()), handler);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+
     }
 }
