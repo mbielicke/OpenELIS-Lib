@@ -35,6 +35,7 @@ public class TreeController implements  ClickListener, Serializable {
     private TreeServiceIntAsync treeService = (TreeServiceIntAsync)GWT.create(TreeServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)treeService;
     private TreeListener treeListener = null; 
+    
     public TreeController() {
         view = new TreeView();
         view.tree.setStyleName("ScreenTree");
