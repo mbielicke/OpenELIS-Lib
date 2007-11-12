@@ -100,6 +100,7 @@ public class CachingManager {
             // fillMethods();
         } catch (CacheException cacheE) {
             log.warn("Unable to initialize cache manager: " + cacheE.getMessage());
+            System.out.println(cacheE.getMessage());
             // } catch (SQLException sqlE) {
             // log.warn("Unable to prefil method and test cache: " +
             // sqlE.getMessage());
@@ -113,7 +114,11 @@ public class CachingManager {
      * @see javax.servlet.Servlet#destroy()
      */
     public static void destroy() {
-        log.debug("CachingManager: " + cacheManager + " shutdown.");
-        cacheManager.shutdown();
+        try{
+            System.out.println("CachingManager: " + cacheManager + " shutdown.");
+            cacheManager.shutdown();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }

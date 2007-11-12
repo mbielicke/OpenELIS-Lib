@@ -49,10 +49,20 @@ public class ServiceUtils {
     
     public static String getXML(String url) throws RPCException {
         try{
+            Document doc = XMLUtil.createNew("doc");
+            return getXML(url,doc);
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new RPCException(e.getMessage());
+        }
+
+    }
+    
+    public static String getXML(String url, Document doc) throws RPCException {
+        try {
             String loc = "en";
             if(SessionManager.getSession().getAttribute("locale") != null)
                 loc = (String)SessionManager.getSession().getAttribute("locale");
-            Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element locale = doc.createElement("locale");
             locale.appendChild(doc.createTextNode(loc));
@@ -60,10 +70,10 @@ public class ServiceUtils {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             XMLUtil.transformXML(doc, new File(url), new StreamResult(bytes));
             return bytes.toString();
-         }catch(Exception e){
+        }catch(Exception e){
             e.printStackTrace();
-            return null;
-         }
+            throw new RPCException(e.getMessage());
+        }
     }
 
 }
