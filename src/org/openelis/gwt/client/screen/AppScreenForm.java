@@ -38,13 +38,17 @@ public class AppScreenForm extends AppScreen implements FormInt {
     public ScreenWindow window;
     public ConstantsWithLookup constants = (ConstantsWithLookup)Screen.getWidgetMap().get("AppConstants");
     public AbstractField key;
-    public AppScreenFormServiceIntAsync service;
+    public static AppScreenFormServiceIntAsync formService;
     //this is used to internationalize the status bar messages
     //private ConstantsWithLookup constants = null;
 
 	public AppScreenForm(AppScreenFormServiceIntAsync service) {
-        super(service);
-        this.service = service;
+        super(formService);
+        this.formService = service;
+    }
+	
+	public AppScreenForm() {
+        super();
     }
     
     public void afterDraw(boolean sucess) {
@@ -56,7 +60,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     
     public void fetch(AbstractField key){
         this.key = key;
-        service.fetch(key, new AsyncCallback(){
+        formService.fetch(rpc,key, new AsyncCallback(){
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                load();
@@ -129,7 +133,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void up(int state) {
-        service.fetchForUpdate(key, new AsyncCallback() {
+        formService.fetchForUpdate(rpc, key, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                load();
@@ -160,7 +164,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * the ButtonPanel widget.
      */
     public void delete(int state) {
-        service.delete(key, new AsyncCallback() {
+        formService.delete(key, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                load();
@@ -232,7 +236,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     }
     
     public void commitUpdate() {
-        service.commitUpdate(rpc, new AsyncCallback() {
+        formService.commitUpdate(rpc, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                load();
@@ -262,7 +266,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     }
     
     public void commitAdd() {
-        service.commitAdd(rpc, new AsyncCallback() {
+        formService.commitAdd(rpc, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                load();
@@ -292,7 +296,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     }
     
     public void commitQuery() {
-        service.commitQuery(rpc, new AsyncCallback() {
+        formService.commitQuery(rpc, new AsyncCallback() {
            public void onSuccess(Object result){
                afterCommitQuery(true);
            }
@@ -329,7 +333,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
             else
             	message.setText("Update aborted");
             
-            service.abort(key, new AsyncCallback() {
+            formService.abort(key, new AsyncCallback() {
                public void onSuccess(Object result){
                    rpc = (FormRPC)result;
                    load();
