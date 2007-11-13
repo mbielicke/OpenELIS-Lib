@@ -2,9 +2,7 @@ package org.openelis.gwt.client.widget.pagedtree;
 
 import java.io.Serializable;
 
-
-
-import org.openelis.gwt.client.screen.ScreenLabel;
+import org.openelis.gwt.client.widget.MenuLabel;
 import org.openelis.gwt.common.RPCException;
 
 
@@ -113,6 +111,7 @@ public class TreeController implements  ClickListener, Serializable {
             }
         }
 
+        
         public void onFailure(Throwable caught) {
             Window.alert("Failed Tree :" + caught.toString());
         }
@@ -127,12 +126,32 @@ public class TreeController implements  ClickListener, Serializable {
 
     private void loadItem(int index) {
         TreeItem loadedItem =null;
-        ScreenLabel treeItemlabel  = new ScreenLabel(model.getItem(index).getText(),model.getItem(index).getUserObject());
+        //ScreenMenuLabel treeItemlabel  = new  ScreenMenuLabel();        
+       // MenuLabel label = (MenuLabel)treeItemlabel.getWidget();
+        MenuLabel label = new MenuLabel();        
+        label.setText(model.getItem(index).getText());
+        if(model.getItem(index).getStyleName()!=null){
+         label.setStylePrimaryName(model.getItem(index).getStyleName());
+        }else{ 
+         label.setStylePrimaryName("ScreenLabel");
+        }
         
-           loadedItem = new TreeItem(treeItemlabel);
+        
+        if(model.getItem(index).getImage()!=null){
+            label.setImage(model.getItem(index).getImage());
+        }else{ 
+           label.setImage("Images/templates.png");
+        }
+       // label.setStylePrimaryName("ScreenLabel");
+        loadedItem = new TreeItem(label);
+        //loadedItem = new TreeItem();
+        
+            //loadedItem.setStyleName(model.getItem(index).getStyleName()) ;
+          
+        
        //}                    
         // = new TreeItem();
-       // loadedItem.setText(model.getItem(index).getText());
+        //loadedItem.setText(model.getItem(index).getText());
         loadedItem.setUserObject(model.getItem(index).getUserObject());        
         view.tree.addItem(loadedItem);         
    }

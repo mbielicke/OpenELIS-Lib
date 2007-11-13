@@ -1,8 +1,9 @@
 package org.openelis.gwt.client.widget.pagedtree;
 
-
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -11,6 +12,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeImages;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -27,7 +29,28 @@ public class TreeView extends Composite {
     public AbsolutePanel headerView = new AbsolutePanel();   
     public String width;
     public String navLinks = "NavLinks";
-    public Tree tree = new Tree();
+    
+    interface MyTreeImages extends TreeImages {
+        
+        /**
+         * @gwt.resource dorado_tree_open.gif
+         */
+        AbstractImagePrototype treeOpen();
+        
+        /** 
+         * @gwt.resource dorado_tree_closed.gif
+         */
+        AbstractImagePrototype treeClosed();
+        
+        /** 
+         * @gwt.resource report.png
+         */
+        AbstractImagePrototype treeLeaf();
+      }
+    
+    TreeImages images = (TreeImages)GWT.create(MyTreeImages.class);
+    
+    public Tree tree = new Tree(images);
     
     private final Label titleLabel = new Label();
     private final HorizontalPanel titlePanel = new HorizontalPanel();
@@ -66,7 +89,7 @@ public class TreeView extends Composite {
     }
     
     public void reset(){
-        tree = new Tree();
+        tree = new Tree(images);
         vScroll.setWidget(tree);
         
         tree.addStyleName("ScreenTree");

@@ -12,6 +12,8 @@ public class TreeModelItem implements Serializable {
     private String text;    
     private String userObject;
     private boolean hasDummyChild;
+    private String styleName;
+    private String image;
     
     public TreeModelItem(){
         
@@ -38,6 +40,22 @@ public class TreeModelItem implements Serializable {
     }
     public void setUserObject(String userObject) {
         this.userObject = userObject;
+    }
+
+    public String getStyleName() {
+        return styleName;
+    }
+
+    public void setStyleName(String styleName) {
+        this.styleName = styleName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
     
 
