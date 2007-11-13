@@ -1,11 +1,12 @@
 package org.openelis.gwt.client.widget;
 
-import org.openelis.gwt.client.screen.Screen;
 import org.openelis.gwt.client.screen.ScreenBase;
+import org.openelis.gwt.client.screen.ScreenVertical;
+import org.openelis.gwt.common.FormRPC;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -14,10 +15,13 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
 public class AToZPanel extends Composite implements ClickListener {
-	protected HTML aButton = new HTML();
+	/*protected HTML aButton = new HTML();
 	protected HTML bButton = new HTML();
 	protected HTML cButton = new HTML();
 	protected HTML dButton = new HTML();
@@ -42,20 +46,25 @@ public class AToZPanel extends Composite implements ClickListener {
 	protected HTML wButton = new HTML();
 	protected HTML xButton = new HTML();
 	protected HTML yButton = new HTML();
-	protected HTML zButton = new HTML();
+	protected HTML zButton = new HTML(); */
 	private HorizontalPanel mainHP = new HorizontalPanel();
-	private VerticalPanel alphabetButtonVP = new VerticalPanel();
+	private ScreenVertical alphabetButtonVP = new ScreenVertical();
 	private VerticalPanel tablePanel = new VerticalPanel();
 	private HorizontalPanel hideablePanel = new HorizontalPanel();
 	public FormTable leftTable = null;
-	private CheckBox checkBox = new CheckBox();
+	//private CheckBox checkBox = new CheckBox();
 	private VerticalPanel middleBar = new VerticalPanel();
 	//private HorizontalPanel imagePanel = new HorizontalPanel();
 	protected HTML arrowButton = new HTML();
 	
+	 protected Document xml;
+	 public FormRPC rpc;
+	 private WidgetMap WIDGET_MAP;
+	 ScreenBase screen;
+	
 	public AToZPanel(Node node, final ScreenBase screen) {
 		//build the letter buttons
-		aButton.setHTML("<a class='navIndex'>A</a>");
+		/*aButton.setHTML("<a class='navIndex'>A</a>");
 		aButton.addClickListener(this);
 		bButton.setHTML("<a class='navIndex'>B</a>");
 		bButton.addClickListener(this);
@@ -106,10 +115,10 @@ public class AToZPanel extends Composite implements ClickListener {
 		yButton.setHTML("<a class='navIndex'>Y</a>");
 		yButton.addClickListener(this);
 		zButton.setHTML("<a class='navIndex'>Z</a>");
-		zButton.addClickListener(this);
+		zButton.addClickListener(this); */
 		
 		//put buttons in panel
-		alphabetButtonVP.add(aButton);
+		/*alphabetButtonVP.add(aButton);
 		alphabetButtonVP.add(bButton);
 		alphabetButtonVP.add(cButton);
 		alphabetButtonVP.add(dButton);
@@ -134,7 +143,17 @@ public class AToZPanel extends Composite implements ClickListener {
 		alphabetButtonVP.add(wButton);
 		alphabetButtonVP.add(xButton);
 		alphabetButtonVP.add(yButton);
-		alphabetButtonVP.add(zButton);
+		alphabetButtonVP.add(zButton); */
+		
+		this.WIDGET_MAP = screen.getWidgetMap();
+		this.screen = screen;
+		
+		//need to get the buttonPanel node
+		Node buttonPanelNode = ((Element)node).getElementsByTagName("buttonPanel").item(0);
+		//this will get the xml and build the A to Z buttons
+		if(buttonPanelNode != null && buttonPanelNode.hasChildNodes()){
+			alphabetButtonVP = (ScreenVertical) WIDGET_MAP.getWidget(buttonPanelNode.getFirstChild(), screen);
+		}
 		
 		DeferredCommand.addCommand(new Command() {
             public void execute() {
@@ -205,8 +224,8 @@ public class AToZPanel extends Composite implements ClickListener {
 		middleBar.setStyleName("LeftMenuPanePanel");
 		middleBar.add(arrowButton);
 		
-		mainHP.setSpacing(5);
-		alphabetButtonVP.setSpacing(1);
+		mainHP.setSpacing(0);
+		//alphabetButtonVP.setSpacing(1);
 		tablePanel.setSpacing(1);
 		
 		mainHP.add(hideablePanel);
@@ -217,7 +236,7 @@ public class AToZPanel extends Composite implements ClickListener {
 	}
 
 	public void onClick(Widget sender) {
-		if(sender == aButton){
+		/*if(sender == aButton){
 			
 		}else if(sender == bButton){
 			
@@ -267,9 +286,9 @@ public class AToZPanel extends Composite implements ClickListener {
 			
 		}else if(sender == yButton){
 			
-		}else if(sender == zButton){
+		}else if(sender == zButton){*/
 			
-		}else if(sender == arrowButton){
+		if(sender == arrowButton){
 			if(hideablePanel.isVisible()){
         		hideablePanel.setVisible(false);
         		// HTML html = new HTML("<img src=\"Images/close_left_panel.png\">");
@@ -279,6 +298,7 @@ public class AToZPanel extends Composite implements ClickListener {
         	}else{
         		hideablePanel.setVisible(true);
         		arrowButton.setHTML("<img src=\"Images/arrow-left-unselected.png\" onmouseover=\"this.src='Images/arrow-left-selected.png';\" onmouseout=\"this.src='Images/arrow-left-unselected.png';\">");
+        		leftTable.controller.reset();
         	}	
 		}
 	}
@@ -298,4 +318,55 @@ public class AToZPanel extends Composite implements ClickListener {
                                                         });
                                                         */
 	}
+	
+	//public String getXML() throws RPCException {
+  //      return ServiceUtils.getXML(Constants.APP_ROOT+"/Forms/AtoZButtons.xsl");
+	//}
+	
+	/* public void getXML(String name) {
+	        HTTPRequest.asyncGet("Forms/" + name, new ResponseTextHandler() {
+	            public void onCompletion(String response) {
+	                xml = XMLParser.parse(response);
+	                draw();
+	               
+	            //TODO maybe need this...    load();
+	               
+	            //TODO maybe need this...    afterSubmit("draw", true);
+	            }
+	        });
+	    } */
+	 
+	    /**
+	     * This method will put together the screen from the xml definition.
+	     * It will call the afterSubmit method when done with a method of "draw"
+	     * 
+	     */
+	    protected void draw() {
+	        try {
+	            Node display = xml.getElementsByTagName("display").item(0);
+	            
+	            NodeList widgets = display.getChildNodes();
+	            for (int i = 0; i < widgets.getLength(); i++) {
+	                if (widgets.item(i).getNodeType() == Node.ELEMENT_NODE) {
+	                	Node input = null;
+	                	if (widgets.item(i).getNodeName().equals("widget")) {
+	                        NodeList inputList = widgets.item(i).getChildNodes();
+	                        for (int m = 0; m < inputList.getLength(); m++) {
+	                            if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
+	                                input = inputList.item(m);
+	                                m = 100;
+	                            }
+	                        }
+	                    } else
+	                        input = widgets.item(i);
+	                	
+	                    Widget wid = WIDGET_MAP.getWidget(input, screen);
+	                    alphabetButtonVP.add(wid);
+	                }
+	            }
+	          //  panel.setStyleName("Screen"); 
+	        } catch (Exception e) {
+	            Window.alert("draw " + e.getMessage());
+	        }
+	    }
 }
