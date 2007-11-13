@@ -64,7 +64,7 @@ public class ScreenStack extends ScreenWidget {
                         }
                     } else
                         input = widgets.item(l);
-                    Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                    Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                     stack.add(wid, stacks.item(k)
                                          .getAttributes()
                                          .getNamedItem("text")

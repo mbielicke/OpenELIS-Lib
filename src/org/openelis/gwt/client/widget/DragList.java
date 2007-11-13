@@ -1,8 +1,7 @@
 package org.openelis.gwt.client.widget;
 
 import java.util.Iterator;
-
-import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenDragList;
 import org.openelis.gwt.client.screen.ScreenLabel;
 import org.openelis.gwt.client.screen.ScreenWidget;
@@ -59,7 +58,7 @@ public class DragList extends Composite {
      */
     public void addDropItem(String text, Object value){
         ScreenLabel label = new ScreenLabel(text,value);
-        label.addMouseListener((MouseListener)Screen.getWidgetMap().get("ProxyListener"));
+        label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
         label.sinkEvents(Event.MOUSEEVENTS);
         label.setDropTargets(((ScreenDragList)getParent()).getDropTargets());
         label.setScreen(((ScreenDragList)getParent()).getScreen());
@@ -119,9 +118,9 @@ public class DragList extends Composite {
         Iterator it = vp.iterator();
         while(it.hasNext()){
             ScreenWidget wid = (ScreenWidget)it.next();
-            wid.removeMouseListener((MouseListener)Screen.getWidgetMap().get("ProxyListener"));
+            wid.removeMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
             if(enabled){
-                wid.addMouseListener((MouseListener)Screen.getWidgetMap().get("ProxyListener"));
+                wid.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
             }
         }
     }

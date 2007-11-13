@@ -203,7 +203,7 @@ public class ScreenWidget extends SimplePanel implements
             if (listener.equals("this"))
                 addDropListener(screen);
             else {
-                addDropListener((DropListener)Screen.getWidgetMap()
+                addDropListener((DropListener)ScreenBase.getWidgetMap()
                                                     .get(listener));
             }
         }
@@ -214,7 +214,7 @@ public class ScreenWidget extends SimplePanel implements
             if (listener.equals("this"))
                 addDragListener(screen);
             else {
-                addDragListener((DragListener)Screen.getWidgetMap()
+                addDragListener((DragListener)ScreenBase.getWidgetMap()
                                                     .get(listener));
             }
         }
@@ -225,7 +225,7 @@ public class ScreenWidget extends SimplePanel implements
             if (listener.equals("this"))
                 addMouseListener(screen);
             else {
-                addMouseListener((MouseListener)Screen.getWidgetMap()
+                addMouseListener((MouseListener)ScreenBase.getWidgetMap()
                                                       .get(listener));
             }
         }
@@ -239,7 +239,7 @@ public class ScreenWidget extends SimplePanel implements
         }
         if (node.getAttributes().getNamedItem("hover") != null){
             hoverStyle = node.getAttributes().getNamedItem("hover").getNodeValue();
-            addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+            addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         }
     }
 

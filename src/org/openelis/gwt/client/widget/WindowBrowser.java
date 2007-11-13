@@ -8,14 +8,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.client.screen.Screen;
 import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenWindow;
 
 import java.util.HashMap;
 
-import org.openelis.gwt.client.screen.Screen;
 /**
  * WindowBrowser will display Screen widgets in draggable Windows
  * in a certain portion of the screen.  It uses the ScreenWindow

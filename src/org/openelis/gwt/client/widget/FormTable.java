@@ -2,7 +2,7 @@ package org.openelis.gwt.client.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
 import org.openelis.gwt.client.widget.table.TableController;
 import org.openelis.gwt.client.widget.table.TableManager;
@@ -62,7 +62,7 @@ public class FormTable extends Composite {
                 String appClass = node.getAttributes()
                                       .getNamedItem("manager")
                                       .getNodeValue();
-                TableManager manager = (TableManager)Screen.getWidgetMap()
+                TableManager manager = (TableManager)ScreenBase.getWidgetMap()
                                                            .getTableManager(appClass);
                setManager(manager);
             }
@@ -213,7 +213,7 @@ public class FormTable extends Composite {
         ArrayList list = new ArrayList();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                list.add(Screen.getWidgetMap().getCellWidget(editors.item(i)));
+                list.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
             }
         }
         TableCellWidget[] cells = new TableCellWidget[list.size()];
@@ -233,7 +233,7 @@ public class FormTable extends Composite {
         ArrayList list = new ArrayList();
         for (int i = 0; i < fieldList.getLength(); i++) {
             if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                list.add(Screen.getWidgetMap().getField(fieldList.item(i)));
+                list.add(ScreenBase.getWidgetMap().getField(fieldList.item(i)));
             }
         }
         AbstractField[] fields = new AbstractField[list.size()];

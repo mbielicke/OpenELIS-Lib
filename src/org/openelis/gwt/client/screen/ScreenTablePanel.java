@@ -81,7 +81,7 @@ public class ScreenTablePanel extends ScreenWidget {
                         input = widgets.item(l);
                     Widget wid = null;
                     if (input != null)
-                        wid = Screen.getWidgetMap().getWidget(input, screen);
+                        wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                     else
                         wid = new Label("");
                     panel.setWidget(k, w, wid);

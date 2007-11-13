@@ -61,7 +61,7 @@ public class ScreenDisclosure extends ScreenWidget {
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                 dp.setHeader(wid);
             }
         }
@@ -80,7 +80,7 @@ public class ScreenDisclosure extends ScreenWidget {
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                 dp.setContent(wid);
             }
         }

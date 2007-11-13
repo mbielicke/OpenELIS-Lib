@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 import java.util.ArrayList;
 /**
  * TabBrowser is a widget that will display screens separated into tabs
@@ -52,7 +52,7 @@ public class TabBrowser extends Composite {
         }
     }
 
-    public void addScreen(Screen screen, final String text, String category) {
+    public void addScreen(ScreenBase screen, final String text, String category) {
         if (!browser.isVisible()) {
             browser.setVisible(true);
         }

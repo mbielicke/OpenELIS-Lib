@@ -1,6 +1,6 @@
 package org.openelis.gwt.client.widget;
 
-import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenLabel;
 
 import com.google.gwt.user.client.Event;
@@ -91,32 +91,32 @@ public class ButtonPanel extends Composite implements ClickListener {
     public ButtonPanel(String buttons) {
         query.setStyleName("ScreenPanelButton");
         query.sinkEvents(Event.MOUSEEVENTS);
-        query.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        query.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         next.setStyleName("ScreenPanelButton");
         next.sinkEvents(Event.MOUSEEVENTS);
-        next.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        next.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         prev.setStyleName("ScreenPanelButton");
         prev.sinkEvents(Event.MOUSEEVENTS);
-        prev.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        prev.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         add.setStyleName("ScreenPanelButton");
         add.sinkEvents(Event.MOUSEEVENTS);
-        add.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        add.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         up.setStyleName("ScreenPanelButton");
         up.sinkEvents(Event.MOUSEEVENTS);
-        up.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        up.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         delete.setStyleName("ScreenPanelButton");
         delete.sinkEvents(Event.MOUSEEVENTS);
-        delete.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        delete.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         comm.setStyleName("ScreenPanelButton");
         comm.sinkEvents(Event.MOUSEEVENTS);
-        comm.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        comm.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         abort.setStyleName("ScreenPanelButton");
         abort.sinkEvents(Event.MOUSEEVENTS);
-        abort.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        abort.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         reload.setStyleName("ScreenPanelButton");
         reload.sinkEvents(Event.MOUSEEVENTS);
 
-        reload.addMouseListener((MouseListener)Screen.getWidgetMap().get("HoverListener"));
+        reload.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         if (buttons.equals("all") || buttons.indexOf("q") > -1) {
             hp.add(query);
         }

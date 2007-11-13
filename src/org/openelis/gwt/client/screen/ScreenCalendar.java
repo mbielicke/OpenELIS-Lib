@@ -66,7 +66,7 @@ public class ScreenCalendar extends ScreenWidget {
         	if (listener.equals("this"))
                 cal.addChangeListener(screen);
         	else          
-        	    cal.addChangeListener((ChangeListener)Screen.getWidgetMap().get(listener));
+        	    cal.addChangeListener((ChangeListener)ScreenBase.getWidgetMap().get(listener));
         }
         cal.setStyleName("ScreenCalendar");
         initWidget(cal);

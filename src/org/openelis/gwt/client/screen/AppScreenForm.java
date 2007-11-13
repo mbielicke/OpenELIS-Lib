@@ -36,7 +36,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     public Label message;
     
     public ScreenWindow window;
-    public ConstantsWithLookup constants = (ConstantsWithLookup)Screen.getWidgetMap().get("AppConstants");
+    public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
     public AbstractField key;
     public static AppScreenFormServiceIntAsync formService;
     //this is used to internationalize the status bar messages

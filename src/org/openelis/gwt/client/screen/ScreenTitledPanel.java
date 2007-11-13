@@ -45,7 +45,7 @@ public class ScreenTitledPanel extends ScreenWidget{
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                 titledPanel.setTitle(wid);
             }
         }
@@ -65,7 +65,7 @@ public class ScreenTitledPanel extends ScreenWidget{
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                 titledPanel.setWidget(wid);
             }
         }

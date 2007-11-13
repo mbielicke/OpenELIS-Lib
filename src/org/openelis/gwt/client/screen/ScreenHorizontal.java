@@ -69,7 +69,7 @@ public class ScreenHorizontal extends ScreenWidget {
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                 addWidget(widgets.item(k), wid);
             }
         }

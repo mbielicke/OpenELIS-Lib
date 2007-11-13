@@ -59,7 +59,7 @@ public class ScreenMenuBar extends ScreenWidget {
 			if(node.getAttributes().getNamedItem("autoOpen").getNodeValue().equals("true"))
 				menuBar.setAutoOpen(true);
 		}
-		mcs = (MenuCommands)Screen.getWidgetMap().get(node.getAttributes().getNamedItem("commands").getNodeValue());
+		mcs = (MenuCommands)ScreenBase.getWidgetMap().get(node.getAttributes().getNamedItem("commands").getNodeValue());
 		createMenu(node,menuBar);
 		initWidget(menuBar);
 		setDefaults(node, screen);

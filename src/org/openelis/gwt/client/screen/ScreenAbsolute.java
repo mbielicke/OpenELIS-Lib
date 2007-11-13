@@ -62,7 +62,7 @@ public class ScreenAbsolute extends ScreenWidget {
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                 int x = -1;
                 if (widgets.item(k).getAttributes().getNamedItem("x") != null)
                     x = Integer.parseInt(widgets.item(k)

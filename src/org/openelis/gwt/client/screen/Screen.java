@@ -163,7 +163,7 @@ public class Screen extends ScreenBase {
              HashMap map = new HashMap();
              for (int i = 0; i < fieldList.getLength(); i++) {
                 if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                   AbstractField field = Screen.getWidgetMap().getField(fieldList.item(i));
+                   AbstractField field = ScreenBase.getWidgetMap().getField(fieldList.item(i));
                    map.put((String)field.getKey(), field);
                 }
              }

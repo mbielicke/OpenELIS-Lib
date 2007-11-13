@@ -51,10 +51,12 @@ public class ScreenAToZPanel extends ScreenWidget{
     }
     
     public void setDefaults(Node node, ScreenBase screen) {
-        this.screen = screen;
+        /*this.screen = screen;
         
         if(node.getAttributes().getNamedItem("key") != null)
         	screen.widgets.put(node.getAttributes().getNamedItem("key").getNodeValue(), this);
+        */
+        super.setDefaults(node, screen);
         
         getWidget().setWidth("100%");
         getWidget().setHeight("100%");

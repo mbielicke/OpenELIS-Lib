@@ -95,7 +95,7 @@ public class ScreenDragList extends ScreenWidget {
         for(int i = 0; i < items.getLength(); i++){
             if(items.item(i).getNodeType() == Node.ELEMENT_NODE){
                 ScreenLabel label = new ScreenLabel(items.item(i),screen);
-                label.addMouseListener((MouseListener)Screen.getWidgetMap().get("ProxyListener"));
+                label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
                 label.sinkEvents(Event.MOUSEEVENTS);
                 label.setDropTargets(getDropTargets());
                 list.addItem(label);

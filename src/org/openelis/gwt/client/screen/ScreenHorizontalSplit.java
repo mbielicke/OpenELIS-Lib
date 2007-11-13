@@ -66,7 +66,7 @@ public class ScreenHorizontalSplit extends ScreenWidget {
                         }
                     } else
                         input = widgets.item(l);
-                    Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                    Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                     if (k == 0) {
                             hp.setLeftWidget(wid);
                     }

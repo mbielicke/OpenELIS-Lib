@@ -58,7 +58,7 @@ public class ScreenDeck extends ScreenWidget {
                         }
                     } else
                         input = widgets.item(l);
-                    Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                    Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                     panel.add(wid);
                 }
             }

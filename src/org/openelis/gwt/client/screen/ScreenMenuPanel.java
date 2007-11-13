@@ -69,7 +69,7 @@ public class ScreenMenuPanel extends ScreenWidget {
         NodeList items = node.getChildNodes();
         for (int i = 0; i < items.getLength(); i++) {
             if (items.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                Widget wid = Screen.getWidgetMap().getWidget(items.item(i), screen);
+                Widget wid = ScreenBase.getWidgetMap().getWidget(items.item(i), screen);
                 panel.add(wid);
             }
         }

@@ -4,7 +4,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.xml.client.Node;
-import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 /**
  * OptionList extends a GWT ListBox for adding functionality for 
  * adding and selecting items.
@@ -13,7 +13,7 @@ import org.openelis.gwt.client.screen.Screen;
  */
 public class OptionList extends ListBox {
 
-    private Screen screen;
+    private ScreenBase screen;
 
     /**
      * Creates an empty list box.
@@ -23,7 +23,7 @@ public class OptionList extends ListBox {
         setStyleName(".gwt-ListBox");
     }
 
-    public OptionList(Node node, Screen screen) {
+    public OptionList(Node node, ScreenBase screen) {
         this.screen = screen;
         screen.widgets.put(node.getAttributes()
                               .getNamedItem("key")

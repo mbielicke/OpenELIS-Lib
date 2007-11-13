@@ -63,7 +63,7 @@ public class ScreenTab extends ScreenWidget {
                         }
                     } else
                         input = widgets.item(l);
-                    Widget wid = Screen.getWidgetMap().getWidget(input, screen);
+                    Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                     ScrollPanel scroll = new ScrollPanel();
                     scroll.add(wid);
                     

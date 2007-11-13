@@ -7,7 +7,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
-import org.openelis.gwt.client.screen.Screen;
+import org.openelis.gwt.client.screen.ScreenBase;
 
 public class FormUtil {
     public static void create(FormRPC form, String xml) {
@@ -19,7 +19,7 @@ public class FormUtil {
             NodeList fieldList = rpc.getChildNodes();
             for (int i = 0; i < fieldList.getLength(); i++) {
                 if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    AbstractField field = Screen.getWidgetMap()
+                    AbstractField field = ScreenBase.getWidgetMap()
                                                 .getField(fieldList.item(i));
                     form.getFieldMap().put((String)field.getKey(), field);
                 }
