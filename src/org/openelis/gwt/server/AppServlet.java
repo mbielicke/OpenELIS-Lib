@@ -46,7 +46,7 @@ public class AppServlet extends RemoteServiceServlet {
         }
     }
     
-    @Override
+
     protected void onAfterResponseSerialized(String serializedResponse) {
         // TODO Auto-generated method stub
         super.onAfterResponseSerialized(serializedResponse);
