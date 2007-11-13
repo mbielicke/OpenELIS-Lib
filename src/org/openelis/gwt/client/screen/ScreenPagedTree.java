@@ -3,13 +3,13 @@ package org.openelis.gwt.client.screen;
 import org.openelis.gwt.client.widget.pagedtree.TreeController;
 import org.openelis.gwt.common.AbstractField;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
 
 public class ScreenPagedTree extends ScreenWidget {
    public TreeController controller = new TreeController();
+   private int itemsPerPage = 0;
     /**
      * Default XML Tag Name used in XML Definition
      */
@@ -52,8 +52,10 @@ public class ScreenPagedTree extends ScreenWidget {
             String ipp  = node.getAttributes().getNamedItem("itemsPerPage").getNodeValue();
             Integer itemsPerPageVal = new Integer(ipp);
             controller.model.itemsPerPage =  itemsPerPageVal.intValue();
+            itemsPerPage =  itemsPerPageVal.intValue();
          }else{
              controller.model.itemsPerPage = 20;
+             itemsPerPage = 20;
          }
      
     }
@@ -94,6 +96,14 @@ public class ScreenPagedTree extends ScreenWidget {
     public void destroy() {
        // tree = null;
         super.destroy();
+    }
+
+    public int getItemsPerPage() {
+        return itemsPerPage;
+    }
+
+    public void setItemsPerPage(int itemsPerPage) {
+        this.itemsPerPage = itemsPerPage;
     }
     
     
