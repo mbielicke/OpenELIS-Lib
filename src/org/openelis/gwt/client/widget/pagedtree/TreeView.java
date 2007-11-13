@@ -45,7 +45,7 @@ public class TreeView extends Composite {
         /** 
          * @gwt.resource report.png
          */
-        AbstractImagePrototype treeLeaf();
+      //  AbstractImagePrototype treeLeaf();
       }
     
     TreeImages images = (TreeImages)GWT.create(MyTreeImages.class);
