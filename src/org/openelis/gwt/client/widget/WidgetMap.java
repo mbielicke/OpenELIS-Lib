@@ -2,7 +2,6 @@ package org.openelis.gwt.client.widget;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
-import org.openelis.gwt.client.screen.Screen;
 import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenWidget;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
