@@ -175,6 +175,9 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         if(content instanceof ScreenForm){
             ((ScreenForm)content).message =  message;
             ((ScreenForm)content).window = this;
+        }else if(content instanceof AppScreenForm){
+        	((AppScreenForm)content).message =  message;
+            ((AppScreenForm)content).window = this;
         }
     }
     
