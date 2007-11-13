@@ -83,9 +83,12 @@ public class TableView extends Composite implements ScrollListener {
         this.controller = controller;
         if(headers != null){
             header.setCellSpacing(0);
-            titleLabel.setText(title);
-            titlePanel.add(titleLabel);
-            titlePanel.addStyleName("TitlePanel");
+            
+            if(title != null && !title.equals("")){
+            	titleLabel.setText(title);
+            	titlePanel.add(titleLabel);
+            	titlePanel.addStyleName("TitlePanel");
+            }
             int j = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
