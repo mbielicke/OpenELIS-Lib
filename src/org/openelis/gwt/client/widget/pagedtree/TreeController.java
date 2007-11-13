@@ -139,8 +139,6 @@ public class TreeController implements  ClickListener, Serializable {
         
         if(model.getItem(index).getImage()!=null){
             label.setImage(model.getItem(index).getImage());
-        }else{ 
-           label.setImage("Images/templates.png");
         }
        // label.setStylePrimaryName("ScreenLabel");
         loadedItem = new TreeItem(label);
