@@ -13,9 +13,9 @@ public interface AppScreenFormServiceIntAsync extends AppScreenServiceIntAsync {
     
     public void commitQuery(FormRPC rpc, AsyncCallback callback);
     
-    public void fetch(AbstractField key, AsyncCallback callback);
+    public void fetch(FormRPC rpc, AbstractField key, AsyncCallback callback);
     
-    public void fetchForUpdate(AbstractField key, AsyncCallback callback);
+    public void fetchForUpdate(FormRPC rpc, AbstractField key, AsyncCallback callback);
     
     public void delete(AbstractField key, AsyncCallback callback);
     
