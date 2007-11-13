@@ -2,6 +2,7 @@ package org.openelis.gwt.client.widget.pagedtree;
 
 import java.io.Serializable;
 
+import org.openelis.gwt.client.screen.ScreenLabel;
 import org.openelis.gwt.client.widget.MenuLabel;
 import org.openelis.gwt.common.RPCException;
 
@@ -128,28 +129,28 @@ public class TreeController implements  ClickListener, Serializable {
         TreeItem loadedItem =null;
         //ScreenMenuLabel treeItemlabel  = new  ScreenMenuLabel();        
        // MenuLabel label = (MenuLabel)treeItemlabel.getWidget();
-        MenuLabel label = new MenuLabel();        
-        label.setText(model.getItem(index).getText());
-        if(model.getItem(index).getStyleName()!=null){
-         label.setStylePrimaryName(model.getItem(index).getStyleName());
-        }else{ 
-         label.setStylePrimaryName("ScreenLabel");
-        }
+       
+       
         
         
         if(model.getItem(index).getImage()!=null){
+            MenuLabel label = new MenuLabel();        
+            label.setText(model.getItem(index).getText());
+            if(model.getItem(index).getStyleName()!=null){
+             label.setStylePrimaryName(model.getItem(index).getStyleName());
+            }else{ 
+             label.setStylePrimaryName("ScreenLabel");
+            }
             label.setImage(model.getItem(index).getImage());
+            loadedItem = new TreeItem(label);
+        } 
+        else{
+           ScreenLabel screenLabel = new ScreenLabel(model.getItem(index).getText(),model.getItem(index).getUserObject());
+           if(model.getItem(index).getStyleName()!=null){
+               screenLabel.setStylePrimaryName(model.getItem(index).getStyleName());
+              }
+           loadedItem = new TreeItem(screenLabel);
         }
-       // label.setStylePrimaryName("ScreenLabel");
-        loadedItem = new TreeItem(label);
-        //loadedItem = new TreeItem();
-        
-            //loadedItem.setStyleName(model.getItem(index).getStyleName()) ;
-          
-        
-       //}                    
-        // = new TreeItem();
-        //loadedItem.setText(model.getItem(index).getText());
         loadedItem.setUserObject(model.getItem(index).getUserObject());        
         view.tree.addItem(loadedItem);         
    }
