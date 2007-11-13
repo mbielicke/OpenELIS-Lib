@@ -78,6 +78,7 @@ public class WidgetMap {
                     RPC_OPTION = "rpc-option", // OptionField
                     RPC_STRING = "rpc-string", // StringField
                     RPC_TABLE = "rpc-table", // TableField
+                    RPC_PAGED_TREE = "rpc-tree", // PagedTreeField
                     RPC_QUERY_CHECK = "rpc-queryCheck", // QueryCheckField
                     RPC_QUERY_DATE = "rpc-queryDate", // QueryDateField
                     RPC_QUERY_NUMBER = "rpc-queryNumber", // QueryNumberField
