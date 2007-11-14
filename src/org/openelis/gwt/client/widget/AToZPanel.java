@@ -145,7 +145,7 @@ public class AToZPanel extends Composite implements ClickListener {
 		alphabetButtonVP.add(yButton);
 		alphabetButtonVP.add(zButton); */
 		
-		this.WIDGET_MAP = screen.getWidgetMap();
+		this.WIDGET_MAP = ScreenBase.getWidgetMap();
 		this.screen = screen;
 		
 		//need to get the buttonPanel node
