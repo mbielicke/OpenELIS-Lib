@@ -61,10 +61,12 @@ public class TreeView extends Composite {
     }
     
     public void initTree(){                  
-        titleLabel.setText(title);
-        titlePanel.add(titleLabel);
-        titlePanel.addStyleName("TitlePanel");
-        vp.add(titlePanel);        
+    	if(title != null && !title.equals("")){
+    		titleLabel.setText(title);
+    		titlePanel.add(titleLabel);
+    		titlePanel.addStyleName("TitlePanel");
+    		vp.add(titlePanel);
+    	}
         vScroll.setWidget(tree);
         vp.add(vScroll);
         vp.add(navPanel);
