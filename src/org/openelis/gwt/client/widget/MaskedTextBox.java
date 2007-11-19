@@ -31,11 +31,14 @@ public class MaskedTextBox extends TextBox implements
     private boolean asTyped;
     private ScreenMaskedBox screenWid;
 
+    public boolean noMask;
+    
     public MaskedTextBox() {
         super();
         addKeyboardListener(this);
         addFocusListener(this);
     }
+    
 
     /**
      * if typed param is true then the formatting of the text 
@@ -75,7 +78,7 @@ public class MaskedTextBox extends TextBox implements
      * Call this method to format the text.
      */
     public void format() {
-        if (getText().equals(""))
+        if (getText().equals("") || noMask)
             return;
         char[] chars = getText().toCharArray();
         String text = "";
@@ -97,6 +100,7 @@ public class MaskedTextBox extends TextBox implements
 
     
     public String applyMask(String text, boolean end) {
+        
         String retText = text;
         String input = String.valueOf(text.charAt(text.length() - 1));
         String maskChar = String.valueOf(mask.charAt(text.length() - 1));
@@ -184,7 +188,7 @@ public class MaskedTextBox extends TextBox implements
 
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
         // TODO Auto-generated method stub
-        if (keyCode == KeyboardListener.KEY_BACKSPACE || keyCode == KeyboardListener.KEY_SHIFT) {
+        if (keyCode == KeyboardListener.KEY_BACKSPACE || keyCode == KeyboardListener.KEY_SHIFT || noMask) {
             return;
         }
         String text = getText();

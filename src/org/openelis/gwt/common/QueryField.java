@@ -47,6 +47,10 @@ public class QueryField extends AbstractField {
         // TODO Auto-generated method stub
         String value = (String)val;
         this.value = value;
+        parse();
+    }
+    
+    public void parse() {
         comparator = new ArrayList();
         parameter = new ArrayList();
         logical = new ArrayList();

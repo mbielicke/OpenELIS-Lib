@@ -2,6 +2,7 @@ package org.openelis.gwt.client.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.DropListener;
@@ -13,7 +14,9 @@ import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.AbstractField;
 
@@ -372,6 +375,7 @@ public class ScreenWidget extends SimplePanel implements
     }
     
     public void destroy() {
+      
         dropListeners = null;
         dragListeners = null;
         mouseListeners = null;
@@ -379,6 +383,36 @@ public class ScreenWidget extends SimplePanel implements
         dropTargets = null;
         screen = null;
         clear();
+    }
+    
+    public static Widget loadWidget(Node node, ScreenBase screen){
+        Node input = null;
+        if (node.getNodeName().equals("widget")) {
+            NodeList inputList = node.getChildNodes();
+            for (int m = 0; m < inputList.getLength(); m++) {
+                if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
+                    input = inputList.item(m);
+                    m = 100;
+                }
+            }
+        } else
+            input = node;
+        Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+        if(node.getNodeName().equals("widget")){
+            NodeList queryList = ((Element)node).getElementsByTagName("query");
+            if(queryList.getLength() > 0){
+                NodeList inputList = queryList.item(0).getChildNodes();
+                for (int m = 0; m < inputList.getLength(); m++) {
+                    if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
+                        input = inputList.item(m);
+                        m = 100;
+                    }
+                }
+                Widget query = ScreenBase.getWidgetMap().getWidget(input, screen);
+                ((ScreenInputWidget)wid).setQueryWidget((ScreenWidget)query);
+            }
+        }
+        return wid;
     }
     
 }

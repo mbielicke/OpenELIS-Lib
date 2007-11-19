@@ -13,7 +13,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenMaskedBox extends ScreenWidget {
+public class ScreenMaskedBox extends ScreenInputWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
@@ -22,8 +22,8 @@ public class ScreenMaskedBox extends ScreenWidget {
 	 * Widget wrapped by this class
 	 */
     private MaskedTextBox maskbox;
-    private boolean enabled;
     private String next;
+    
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -76,12 +76,18 @@ public class ScreenMaskedBox extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        maskbox.setText(field.toString());
+        if(queryMode)
+            queryWidget.load(field);
+        else
+            maskbox.setText(field.toString());
 
     }
 
     public void submit(AbstractField field) {
-        field.setValue(maskbox.getText());
+        if(queryMode)
+            queryWidget.submit(field);
+        else
+            field.setValue(maskbox.getText());
 
     }
     
@@ -97,6 +103,14 @@ public class ScreenMaskedBox extends ScreenWidget {
         maskbox = null;
         next = null;
         super.destroy();
+    }
+    
+    public void setForm(boolean mode) {
+        if(queryWidget == null){
+            maskbox.noMask = mode;
+        }else{
+            super.setForm(mode);
+        }
     }
     
 }

@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -58,18 +59,7 @@ public class ScreenHorizontal extends ScreenWidget {
         NodeList widgets = node.getChildNodes();
         for (int k = 0; k < widgets.getLength(); k++) {
             if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                Node input = null;
-                if (widgets.item(k).getNodeName().equals("widget")) {
-                    NodeList inputList = widgets.item(k).getChildNodes();
-                    for (int m = 0; m < inputList.getLength(); m++) {
-                        if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-                            input = inputList.item(m);
-                            m = 100;
-                        }
-                    }
-                } else
-                    input = widgets.item(k);
-                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenWidget.loadWidget(widgets.item(k), screen);
                 addWidget(widgets.item(k), wid);
             }
         }

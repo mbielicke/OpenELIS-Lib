@@ -13,7 +13,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenPassword extends ScreenWidget {
+public class ScreenPassword extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -65,20 +65,31 @@ public class ScreenPassword extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        textbox.setText(field.toString());
-
+        if(queryMode)
+            queryWidget.load(field);
+        else
+            textbox.setText(field.toString());
     }
 
     public void submit(AbstractField field) {
-        field.setValue(textbox.getText());
+        if(queryMode)
+            queryWidget.submit(field);
+        else
+            field.setValue(textbox.getText());
     }
     
     public void enable(boolean enabled){
-        textbox.setReadOnly(!enabled);
+        if(queryMode)
+            queryWidget.enable(enabled);
+        else
+            textbox.setReadOnly(!enabled);
     }
     
     public void setFocus(boolean focus){
-        textbox.setFocus(focus);
+        if(queryMode)
+            queryWidget.setFocus(focus);
+        else
+            textbox.setFocus(focus);
     }
     
     public void destroy(){

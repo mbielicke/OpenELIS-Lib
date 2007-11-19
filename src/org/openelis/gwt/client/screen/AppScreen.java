@@ -9,6 +9,7 @@ import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.client.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.FormRPC;
 
 import java.util.HashMap;
 /**
@@ -23,6 +24,8 @@ import java.util.HashMap;
 public class AppScreen extends ScreenBase {
 
     public AppScreenServiceIntAsync service;
+    public HashMap forms = new HashMap();
+    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
      */
@@ -58,20 +61,30 @@ public class AppScreen extends ScreenBase {
          draw();
          try {
              NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
-             Element rpcEl = (Element)rpcList.item(0);
-             NodeList fieldList = rpcEl.getChildNodes();
-             HashMap map = new HashMap();
-             for (int i = 0; i < fieldList.getLength(); i++) {
-                if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                   AbstractField field = AppScreen.getWidgetMap().getField(fieldList.item(i));
-                   map.put((String)field.getKey(), field);
-                }
+             for(int i = 0; i < rpcList.getLength(); i++){
+                 Element rpcEl = (Element)rpcList.item(i);
+                 NodeList fieldList = rpcEl.getChildNodes();
+                 HashMap map = new HashMap();
+                 for (int j = 0; j < fieldList.getLength(); j++) {
+                     if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                         AbstractField field = AppScreen.getWidgetMap().getField(fieldList.item(j));
+                         map.put((String)field.getKey(), field);
+                     }
+                 }
+                 FormRPC form = new FormRPC();
+                 form.setFieldMap(map);
+                 forms.put(rpcEl.getAttributes().getNamedItem("key").getNodeValue(), form);
              }
-             rpc.setFieldMap(map);
          } catch (Exception e) {
              Window.alert("FormUtil: " + e.getMessage());
          }
-         load();
+         load((FormRPC)forms.get("display"));
+         //load((FormRPC)forms.get("query"));
+    }
+    
+    protected void load(FormRPC rpc){
+        this.rpc = rpc;
+        load();
     }
 
 }

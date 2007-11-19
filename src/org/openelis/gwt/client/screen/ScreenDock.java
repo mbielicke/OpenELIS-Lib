@@ -51,18 +51,7 @@ public class ScreenDock extends ScreenWidget {
         NodeList widgets = node.getChildNodes();
         for (int k = 0; k < widgets.getLength(); k++) {
             if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                Node input = null;
-                if (widgets.item(k).getNodeName().equals("widget")) {
-                    NodeList inputList = widgets.item(k).getChildNodes();
-                    for (int m = 0; m < inputList.getLength(); m++) {
-                        if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-                            input = inputList.item(m);
-                            m = 100;
-                        }
-                    }
-                } else
-                    input = widgets.item(k);
-                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenWidget.loadWidget(widgets.item(k),screen);
                 String dir = widgets.item(k)
                                     .getAttributes()
                                     .getNamedItem("dir")

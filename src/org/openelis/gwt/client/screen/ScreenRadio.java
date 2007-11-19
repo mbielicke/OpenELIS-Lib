@@ -14,7 +14,7 @@ import org.openelis.gwt.common.CheckField;
  * @author tschmidt
  *
  */
-public class ScreenRadio extends ScreenWidget {
+public class ScreenRadio extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -70,19 +70,31 @@ public class ScreenRadio extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        radio.setChecked(((CheckField)field).isChecked());
+        if(queryMode)
+            queryWidget.load(field);
+        else
+            radio.setChecked(((CheckField)field).isChecked());
     }
 
     public void submit(AbstractField field) {
-        field.setValue(new Boolean(radio.isChecked()));
+        if(queryMode)
+            queryWidget.submit(field);
+        else
+            field.setValue(new Boolean(radio.isChecked()));
     }
     
     public void enable(boolean enabled){
-        radio.setEnabled(enabled);
+        if(queryMode)
+            queryWidget.enable(enabled);
+        else
+            radio.setEnabled(enabled);
     }
     
     public void setFocus(boolean focus){
-        radio.setFocus(focus);
+        if(queryMode)
+            queryWidget.setFocus(focus);
+        else
+            radio.setFocus(focus);
     }
     
     public void destroy() {

@@ -13,7 +13,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenAuto extends ScreenWidget {
+public class ScreenAuto extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -72,25 +72,39 @@ public class ScreenAuto extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        auto.setValue((Integer)field.getValue());
+        if(queryMode)
+            queryWidget.load(field);
+        else
+            auto.setValue((Integer)field.getValue());
     }
 
     public void submit(AbstractField field) {
-        if (((String)field.getKey()).endsWith("Id"))
-            field.setValue(auto.value);
-        if ((((String)field.getKey()).endsWith("Text"))) {
-            field.setValue(auto.getText());
+        if(queryMode){
+            queryWidget.submit(field);
+        }else{
+            if (((String)field.getKey()).endsWith("Id"))
+                field.setValue(auto.value);
+            if ((((String)field.getKey()).endsWith("Text"))) {
+                field.setValue(auto.getText());
+            }
         }
     }
 
     public void setFocus(boolean focused) {
         // TODO Auto-generated method stub
-        auto.setFocus(focused);
+        if(queryMode)
+            queryWidget.setFocus(focused);
+        else
+            auto.setFocus(focused);
     }
 
     public void enabled(boolean enabled){
-        auto.setReadOnly(!enabled);
+        if(queryMode)
+            queryWidget.enable(enabled);
+        else
+            auto.setReadOnly(!enabled);     
     }
+    
     public void destroy() {
         auto = null;
         super.destroy();

@@ -52,18 +52,7 @@ public class ScreenTab extends ScreenWidget {
             NodeList widgets = tabs.item(k).getChildNodes();
             for (int l = 0; l < widgets.getLength(); l++) {
                 if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-                    Node input = null;
-                    if (widgets.item(l).getNodeName().equals("widget")) {
-                        NodeList inputList = widgets.item(l).getChildNodes();
-                        for (int m = 0; m < inputList.getLength(); m++) {
-                            if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-                                input = inputList.item(m);
-                                m = 100;
-                            }
-                        }
-                    } else
-                        input = widgets.item(l);
-                    Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+                    Widget wid = ScreenWidget.loadWidget(widgets.item(l), screen);
                     ScrollPanel scroll = new ScrollPanel();
                     scroll.add(wid);
                     

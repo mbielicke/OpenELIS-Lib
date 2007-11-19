@@ -16,7 +16,7 @@ import org.openelis.gwt.common.CheckField;
  * @author tschmidt
  *
  */
-public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
+public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents{
 	private DelegatingClickListenerCollection clickListeners;
 	/**
 	 * Default Tag Name for XML Definition and WidgetMap
@@ -81,19 +81,32 @@ public class ScreenCheck extends ScreenWidget implements SourcesClickEvents{
     }
 
     public void load(AbstractField field) {
-        check.setChecked(((CheckField)field).isChecked());
+        if(queryMode)
+            queryWidget.load(field);
+        else
+            check.setChecked(((CheckField)field).isChecked());
     }
 
     public void submit(AbstractField field) {
-        field.setValue(new Boolean(check.isChecked()));
+        if(queryMode)
+            queryWidget.submit(field);
+        else
+            field.setValue(new Boolean(check.isChecked()));
     }
     
     public void enable(boolean enabled){
-        check.setEnabled(enabled);
+        if(queryMode)
+            queryWidget.enable(true);
+        else
+            check.setEnabled(enabled);
     }
     
     public void setFocus(boolean focus){
-        check.setFocus(focus);
+        if(queryMode)
+            queryWidget.setFocus(focus);
+        else
+            check.setFocus(focus);
+            
     }
 	public void addClickListener(ClickListener listener) {
 		if(clickListeners == null){

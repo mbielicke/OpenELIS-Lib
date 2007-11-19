@@ -14,7 +14,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenTextArea extends ScreenWidget {
+public class ScreenTextArea extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name in XML Definition
 	 */
@@ -73,21 +73,32 @@ public class ScreenTextArea extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        textarea.setText(field.toString());
+        if(queryMode)
+            queryWidget.load(field);
+        else
+            textarea.setText(field.toString());
 
     }
 
     public void submit(AbstractField field) {
-        field.setValue(textarea.getText());
-
+        if(queryMode)
+            queryWidget.submit(field);
+        else
+            field.setValue(textarea.getText());
     }
     
     public void enable(boolean enabled){
-        textarea.setReadOnly(!enabled);
+        if(queryMode)
+            queryWidget.enable(enabled);
+        else
+            textarea.setReadOnly(!enabled);
     }
     
     public void setFocus(boolean focus){
-        textarea.setFocus(focus);
+        if(queryMode)
+            queryWidget.setFocus(focus);
+        else
+            textarea.setFocus(focus);
     }
     
     public void destroy() {

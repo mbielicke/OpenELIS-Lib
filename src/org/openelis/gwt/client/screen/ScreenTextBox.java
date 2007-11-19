@@ -14,7 +14,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenTextBox extends ScreenWidget implements ChangeListener{
+public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
 	/**
 	 * Default XML Tag Name used in XML Definition
 	 */
@@ -24,6 +24,7 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
 	 */
     private TextBox textbox;
     private String fieldCase;
+    private int length;
   
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
@@ -92,12 +93,17 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
     }
 
     public void load(AbstractField field) {
-        textbox.setText(field.toString().trim());
-
+        if(!queryMode)
+            textbox.setText(field.toString().trim());
+        else
+            queryWidget.load(field);
     }
 
     public void submit(AbstractField field) {
-        field.setValue(textbox.getText());
+        if(!queryMode)
+            field.setValue(textbox.getText());
+        else
+            queryWidget.submit(field);
 
     }
 
@@ -119,6 +125,16 @@ public class ScreenTextBox extends ScreenWidget implements ChangeListener{
     public void destroy() {
         textbox = null;
         super.destroy();
+    }
+    
+    public void setForm(boolean mode) {
+        if(queryWidget == null){
+            if(mode)
+                textbox.setMaxLength(255);
+            else
+                textbox.setMaxLength(length);
+        }else
+            super.setForm(mode);
     }
     
 }

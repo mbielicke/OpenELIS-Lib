@@ -20,7 +20,7 @@ import java.util.List;
  * @author tschmidt
  *
  */
-public class ScreenOption extends ScreenWidget implements FocusListener {
+public class ScreenOption extends ScreenInputWidget implements FocusListener {
 	/**
 	 * Default XML Tag Name for xml Definition and WidgetMap
 	 */
@@ -29,7 +29,8 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
 	 * Widget wrapped by this class
 	 */
     private OptionList optionlist;
-    
+    private boolean multi;
+    private int size;
     private boolean enabled;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
@@ -68,9 +69,10 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
         }
         if (node.getAttributes().getNamedItem("multi") != null) {
         	if(node.getAttributes().getNamedItem("multi").getNodeValue().equals("true")){
+                multi = true;
         		optionlist.setMultipleSelect(true);
         		if (node.getAttributes().getNamedItem("size") != null) {
-        			int size = Integer.parseInt(node.getAttributes()
+        			size = Integer.parseInt(node.getAttributes()
                                                 	.getNamedItem("size")
                                                 	.getNodeValue());
         			optionlist.setVisibleItemCount(size);
@@ -88,30 +90,38 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
     }
 
     public void load(AbstractField field) {
-        optionlist.clear();
-        OptionField optField = (OptionField)field;
-        List optMap = optField.getOptions();
-        Iterator optIt = optMap.iterator();
-        while (optIt.hasNext()) {
-            OptionItem item = (OptionItem)optIt.next();
-            optionlist.addItem(item.akey.toString(), item.display);
-            if (item.selected || item.akey.equals(optField.getValue())) {
-                optionlist.setItemSelected(optionlist.getItemCount() - 1, true);
+        if(queryMode){
+            queryWidget.load(field);
+        }else{
+            optionlist.clear();
+            OptionField optField = (OptionField)field;
+            List optMap = optField.getOptions();
+            Iterator optIt = optMap.iterator();
+            while (optIt.hasNext()) {
+                OptionItem item = (OptionItem)optIt.next();
+                optionlist.addItem(item.akey.toString(), item.display);
+                if (item.selected || item.akey.equals(optField.getValue())) {
+                    optionlist.setItemSelected(optionlist.getItemCount() - 1, true);
+                }
             }
         }
 
     }
 
     public void submit(AbstractField field) {
-        OptionField oField = (OptionField)field;
-        if (optionlist.isMultipleSelect()) {
-            for (int i = 0; i < optionlist.getItemCount(); i++) {
-                if (optionlist.isItemSelected(i))
-                    oField.addValue(optionlist.getValue(i));
-            }
-        } else {
-            if (optionlist.getValue() != null) {
-                field.setValue(optionlist.getValue());
+        if(queryMode){
+            queryWidget.submit(field);
+        }else{
+            OptionField oField = (OptionField)field;
+            if (optionlist.isMultipleSelect()) {
+                for (int i = 0; i < optionlist.getItemCount(); i++) {
+                    if (optionlist.isItemSelected(i))
+                        oField.addValue(optionlist.getValue(i));
+                }
+            } else {
+                if (optionlist.getValue() != null) {
+                    field.setValue(optionlist.getValue());
+                }
             }
         }
     }
@@ -131,7 +141,10 @@ public class ScreenOption extends ScreenWidget implements FocusListener {
     }
     
     public void setFocus(boolean focus){
-        optionlist.setFocus(focus);
+        if(queryMode)
+            queryWidget.setFocus(focus);
+        else
+            optionlist.setFocus(focus);
     }
     
     public void destroy() {

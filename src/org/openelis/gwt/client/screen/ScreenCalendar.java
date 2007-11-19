@@ -14,7 +14,7 @@ import java.util.Date;
  * @author tschmidt
  *
  */
-public class ScreenCalendar extends ScreenWidget {
+public class ScreenCalendar extends ScreenInputWidget {
 	
 	/**
 	 * Default Tag Name for XML Definition and WidgetMap
@@ -80,36 +80,47 @@ public class ScreenCalendar extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        if (field instanceof DateField) {
-            if (field.getValue() != null)
-                cal.setDate((DatetimeRPC)field.getValue());
-            else
-                cal.setText("");
+        if(queryMode)
+            queryWidget.load(field);
+        else{
+            if (field instanceof DateField) {
+                if (field.getValue() != null)
+                    cal.setDate((DatetimeRPC)field.getValue());
+                else
+                    cal.setText("");
+            }
         }
     }
 
     public void submit(AbstractField field) {
-        field.setValue(null);
-        Date date = null;
-        String entered = cal.getText();
-        if (field instanceof DateField) {
-            if (entered != null && !entered.equals("")) {
-                try {
-                    date = new Date(entered.replaceAll("-", "/"));
-                } catch (Exception e) {
-                    field.addError("Not a Valid Date");
+        if(queryMode)
+            queryWidget.submit(field);
+        else{
+            field.setValue(null);
+            Date date = null;
+            String entered = cal.getText();
+            if (field instanceof DateField) {
+                if (entered != null && !entered.equals("")) {
+                    try {
+                        date = new Date(entered.replaceAll("-", "/"));
+                    } catch (Exception e) {
+                        field.addError("Not a Valid Date");
+                    }
                 }
-            }
-            if (date != null) {
-                field.setValue(DatetimeRPC.getInstance(((DateField)field).getBegin(),
-                                                       ((DateField)field).getEnd(),
-                                                       date));
+                if (date != null) {
+                    field.setValue(DatetimeRPC.getInstance(((DateField)field).getBegin(),
+                                                           ((DateField)field).getEnd(),
+                                                           date));
+                }
             }
         }
     }
     
     public void enable(boolean enabled){
-        cal.setEnabled(enabled);
+        if(queryMode)
+            queryWidget.enable(enabled);
+        else
+            cal.setEnabled(enabled);
     }
     
     public void destroy() {

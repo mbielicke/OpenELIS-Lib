@@ -3,7 +3,6 @@ package org.openelis.gwt.client.screen;
 import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import org.openelis.gwt.client.services.AppScreenFormServiceIntAsync;
@@ -12,6 +11,8 @@ import org.openelis.gwt.client.widget.FormInt;
 import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
+
+import java.util.Iterator;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
  * the ButtonPanel widget and default logic for standard forms that accept
@@ -33,7 +34,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * field will be set by that class.  If not, then the Extending class
      * must set this field after the Screen is drawn.
      */
-    public Label message;
+    public Label message = new Label();
     
     public ScreenWindow window;
     public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
@@ -44,7 +45,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
 
 	public AppScreenForm(AppScreenFormServiceIntAsync service) {
         super(formService);
-        this.formService = service;
+        formService = service;
     }
 	
 	public AppScreenForm() {
@@ -54,7 +55,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     public void afterDraw(boolean sucess) {
         bpanel.setForm(this);
         bpanel.setState(FormInt.DISPLAY);
-        enable(false);
+        enable(true);
         bpanel.enable("u",false);
     }
     
@@ -63,6 +64,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
         formService.fetch(rpc,key, new AsyncCallback(){
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
+               forms.put("display", rpc);
                load();
                afterFetch(true);
            }
@@ -84,13 +86,16 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * a the ButtonPanel is clicked.  It is called from the ButtonPanel Widget.
      */
     public void query(int state) {
-        doReset();
-        enable(true);
+        //doReset();      
         bpanel.setState(FormInt.QUERY);
         if(constants != null)
         	message.setText(constants.getString("enterFieldsToQuery"));
         else
         	message.setText("Enter fields to query by then press Commit");
+        setForm(true);
+        load((FormRPC)forms.get("query"));
+        enable(true);
+        
     }
 
     /**
@@ -136,6 +141,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
         formService.fetchForUpdate(rpc, key, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
+               forms.put("display", rpc);
                load();
                afterUpdate(true);
            }
@@ -167,6 +173,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
         formService.delete(key, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
+               forms.put("display", rpc);
                load();
                afterDelete(true);
            }
@@ -239,6 +246,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
         formService.commitUpdate(rpc, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
+               forms.put("display", rpc);
                load();
                afterCommitUpdate(true);
            }
@@ -269,6 +277,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
         formService.commitAdd(rpc, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
+               forms.put("display",rpc);
                load();
                afterCommitAdd(true);
            }
@@ -318,6 +327,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
                 message.setText("Querying...Complete");
             
             bpanel.enable("u",false);
+            setForm(false);
         }
     }
     /**
@@ -355,13 +365,14 @@ public class AppScreenForm extends AppScreen implements FormInt {
         }
         if (state == FormInt.QUERY) {
             doReset();
-            ((DeckPanel)getWidget("formDeck")).showWidget(0);
+            setForm(false);
+            load((FormRPC)forms.get("display"));
             enable(false);
             if(constants != null)
             	message.setText(constants.getString("queryAborted"));
             else
             	message.setText("Query aborted");
-            fetch(key);
+            //fetch(key);
         }
         bpanel.setState(FormInt.DISPLAY);
         bpanel.enable("u",false);
@@ -401,5 +412,16 @@ public class AppScreenForm extends AppScreen implements FormInt {
         message = null;      
         window = null;
         super.onDetach();
+    }
+    
+    public void setForm(boolean mode){
+        Iterator widIt = widgets.values().iterator();
+        while(widIt.hasNext()){
+            ScreenWidget wid = (ScreenWidget)widIt.next();
+            if(wid instanceof ScreenInputWidget){
+                ((ScreenInputWidget)wid).setForm(mode);
+            }
+        }
+        
     }
 }

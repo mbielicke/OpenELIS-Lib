@@ -68,7 +68,7 @@ public class ScreenTablePanel extends ScreenWidget {
             for (int l = 0; l < widgets.getLength(); l++) {
                 if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
                     w++;
-                    Node input = null;
+                    /*Node input = null;
                     if (widgets.item(l).getNodeName().equals("widget")) {
                         NodeList inputList = widgets.item(l).getChildNodes();
                         for (int m = 0; m < inputList.getLength(); m++) {
@@ -84,6 +84,23 @@ public class ScreenTablePanel extends ScreenWidget {
                         wid = ScreenBase.getWidgetMap().getWidget(input, screen);
                     else
                         wid = new Label("");
+                    if(widgets.item(l).getNodeName().equals("widget")){
+                        NodeList queryList = ((Element)widgets.item(l)).getElementsByTagName("query");
+                        if(queryList.getLength() > 0){
+                            NodeList inputList = queryList.item(0).getChildNodes();
+                            for (int m = 0; m < inputList.getLength(); m++) {
+                                if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
+                                    input = inputList.item(m);
+                                    m = 100;
+                                }
+                            }
+                            Widget query = ScreenBase.getWidgetMap().getWidget(input, screen);
+                            //screen.widgets.remove(input.getAttributes().getNamedItem("key").getNodeValue());
+                            ((ScreenInputWidget)wid).setQueryWidget((ScreenWidget)query);
+                        }
+                    }
+                    */
+                    Widget wid = ScreenWidget.loadWidget(widgets.item(l), screen);
                     panel.setWidget(k, w, wid);
                     if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
                         panel.getFlexCellFormatter()
