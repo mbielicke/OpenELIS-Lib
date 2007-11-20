@@ -119,9 +119,7 @@ public class TableOption extends OptionList implements TableCellWidget, EventPre
                 to.addItem(items.item(j)
                                 .getAttributes()
                                 .getNamedItem("value")
-                                .getNodeValue(), items.item(j)
-                                                      .getFirstChild()
-                                                      .getNodeValue());
+                                .getNodeValue(), (items.item(j).getFirstChild() == null ? " " : items.item(j).getFirstChild().getNodeValue()));
             }
         }
         return to;

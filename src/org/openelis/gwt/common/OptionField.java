@@ -198,8 +198,7 @@ public class OptionField extends AbstractField implements Serializable {
             Node item = items.item(i);
             option.addOption(item.getAttributes()
                                  .getNamedItem("value")
-                                 .getNodeValue(), item.getFirstChild()
-                                                      .getNodeValue());
+                                 .getNodeValue(), (item.getFirstChild() == null ? " " : item.getFirstChild().getNodeValue()));
         }
         return option;
     }
