@@ -16,8 +16,8 @@ public interface AppScreenFormServiceInt extends AppScreenServiceInt {
     
     public FormRPC fetchForUpdate(FormRPC rpc, AbstractField key) throws RPCException;
     
-    public FormRPC delete(AbstractField key) throws RPCException;
+    public FormRPC delete(FormRPC rpc, AbstractField key) throws RPCException;
     
-    public FormRPC abort(AbstractField key) throws RPCException;
+    public FormRPC abort(FormRPC rpc, AbstractField key) throws RPCException;
 
 }

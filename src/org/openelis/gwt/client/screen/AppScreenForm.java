@@ -170,7 +170,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * the ButtonPanel widget.
      */
     public void delete(int state) {
-        formService.delete(key, new AsyncCallback() {
+        formService.delete(rpc, key, new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                forms.put("display", rpc);
@@ -343,7 +343,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
             else
             	message.setText("Update aborted");
             
-            formService.abort(key, new AsyncCallback() {
+            formService.abort(rpc, key, new AsyncCallback() {
                public void onSuccess(Object result){
                    rpc = (FormRPC)result;
                    load();
