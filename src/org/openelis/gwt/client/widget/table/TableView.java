@@ -1,8 +1,6 @@
 package org.openelis.gwt.client.widget.table;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -47,6 +45,7 @@ public class TableView extends Composite implements ScrollListener {
         }
     };
     
+    public boolean loaded;
     public ScrollPanel cellView = new ScrollPanel();
     public AbsolutePanel headerView = new AbsolutePanel();
     public AbsolutePanel rowsView = new AbsolutePanel();
@@ -73,6 +72,7 @@ public class TableView extends Composite implements ScrollListener {
     protected HorizontalPanel navPanel = new HorizontalPanel();
     private VerticalPanel vp = new VerticalPanel();
     public String width;
+    public String height;
     public TableController controller = null;
     
     public TableView() {
@@ -93,6 +93,7 @@ public class TableView extends Composite implements ScrollListener {
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
                     FocusPanel bar = new FocusPanel();
+                    bar.addMouseListener(controller);
                     HorizontalPanel hpBar = new HorizontalPanel();
                     AbsolutePanel ap1 = new AbsolutePanel();
                     ap1.addStyleName("HeaderBarPad");
@@ -121,7 +122,8 @@ public class TableView extends Composite implements ScrollListener {
                 img.setWidth("10px");
                 DOM.setStyleAttribute(hLabels[i].getElement(),"overflowX","hidden");
                 img.addStyleName("HeaderIMG");
-                img.addStyleName("hide");
+                if (!controller.sortable[i] && !controller.filterable[i])
+                    img.addStyleName("hide");
                 hp.add(hLabels[i]);
                 hLabels[i].setWordWrap(false);
                 hp.add(img);
@@ -136,6 +138,7 @@ public class TableView extends Composite implements ScrollListener {
                                                            j,
                                                            headerCellStyle);
                 j++;
+               
             }
             FocusPanel bar = new FocusPanel();
             HorizontalPanel hpBar = new HorizontalPanel();
@@ -153,7 +156,7 @@ public class TableView extends Composite implements ScrollListener {
             header.getFlexCellFormatter().addStyleName(0, j, headerCellStyle);
             header.getFlexCellFormatter().setWidth(0, j, "3px");
             header.setStyleName(headerStyle);
-            
+            header.addTableListener(controller);
         }
         //DOM.setStyleAttribute(statView.getElement(), "overflow", "hidden");
         headerView.add(header);
@@ -173,6 +176,9 @@ public class TableView extends Composite implements ScrollListener {
             ft.setWidget(1,0,cellView);
         }
         vp.add(ft);
+        table.setCellSpacing(1);
+        table.addStyleName(tableStyle);
+        cellView.setWidget(table);
     }
     
     
@@ -180,6 +186,7 @@ public class TableView extends Composite implements ScrollListener {
         cellView.setHeight(height);
         rowsView.setHeight(height);
         headerView.setHeight("18px");
+        this.height = height;
     }
 
     public void setWidth(String width) {
@@ -202,16 +209,9 @@ public class TableView extends Composite implements ScrollListener {
     }
 
     public void reset(int row, int col) {
-        if (row == 0){
-            table = new Grid();
-        }else{
-            table = new Grid(row,col);
-        }
-        table.setCellSpacing(1);
-        table.addStyleName(tableStyle);
-        cellView.setWidget(table);
+        table.resize(row,col);
         if(controller.showRows && row > 0){
-            rows = new Grid(row,1);
+            rows.resize(row,1);
             for(int i = 0; i < row; i++){
                 Label rowNum = new Label(String.valueOf(i+1));
                 rows.setWidget(i,0,rowNum);
@@ -305,27 +305,26 @@ public class TableView extends Composite implements ScrollListener {
 
     public void onScroll(Widget widget, int scrollLeft, final int scrollTop) {
         if(top != scrollTop){
-            new Delay(scrollTop, 250);
+            new Delay(scrollTop, 150);
             if(controller.showRows){
                 rowsView.setWidgetPosition(rows,0,-scrollTop);
-                /*
-                DeferredCommand.addCommand(new Command() {
-                   public void execute() {
-                       controller.scrollLoad(scrollTop);
-                   }
-                });
-                
-            }else{
-               controller.scrollLoad(scrollTop);
-               */
             }
-            
             top = scrollTop;
         }
         if(left != scrollLeft){
            headerView.setWidgetPosition(header, -scrollLeft, 0);
            left = scrollLeft;
         }
+    }
+    
+    
+    protected void onLoad() {
+        // TODO Auto-generated method stub
+        if(!loaded){
+            controller.load();
+            loaded = true;
+        }
+        super.onLoad();
     }
 
 }

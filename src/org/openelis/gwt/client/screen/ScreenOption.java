@@ -80,6 +80,7 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
             }
         }
         initWidget(optionlist);
+        displayWidget = optionlist;
         optionlist.setStyleName("ScreenOption");
         setDefaults(node, screen);
     }

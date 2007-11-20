@@ -55,6 +55,7 @@ public class ScreenPassword extends ScreenInputWidget {
                                      .getNodeValue()
                                      .charAt(0));
         initWidget(textbox);
+        displayWidget = textbox;
         textbox.setStyleName("ScreenPassword");
         setDefaults(node, screen);
     }

@@ -60,6 +60,7 @@ public class ScreenRadio extends ScreenInputWidget {
                                    .getNodeValue()
                                    .charAt(0));
         initWidget(radio);
+        displayWidget = radio;
         radio.setStyleName("ScreenRadio");
         setDefaults(node, screen);
     }

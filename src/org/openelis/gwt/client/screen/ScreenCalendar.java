@@ -70,6 +70,7 @@ public class ScreenCalendar extends ScreenInputWidget {
         }
         cal.setStyleName("ScreenCalendar");
         initWidget(cal);
+        displayWidget = cal;
         setDefaults(node, screen);
         
     }

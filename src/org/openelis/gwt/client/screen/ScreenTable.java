@@ -13,7 +13,7 @@ import org.openelis.gwt.common.TableModel;
  * @author tschmidt
  *
  */
-public class ScreenTable extends ScreenWidget {
+public class ScreenTable extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -39,6 +39,7 @@ public class ScreenTable extends ScreenWidget {
         super(node);
         table = new FormTable(node);
         initWidget(table);
+        displayWidget = table;
         table.setStyleName("ScreenTable");
         setDefaults(node, screen);
     }
@@ -49,19 +50,24 @@ public class ScreenTable extends ScreenWidget {
     }
 
     public void load(AbstractField field) {
-        // TODO Auto-generated method stub
-        if (field.getValue() != null)
-            table.controller.setModel((TableModel)field.getValue());
+        if(queryMode)
+          queryWidget.load(field);
         else{
-            table.controller.model.reset();
-            table.controller.reset();
-            field.setValue(table.controller.model);
+            if (field.getValue() != null)
+                table.controller.setModel((TableModel)field.getValue());
+            else{
+                table.controller.model.reset();
+                table.controller.reset();
+                field.setValue(table.controller.model);
+            }
         }
     }
 
     public void submit(AbstractField field) {
-        // TODO Auto-generated method stub
-        field.setValue(table.controller.model);
+        if(queryMode)
+            queryWidget.submit(field);
+        else
+            field.setValue(table.controller.model);       
     }
 
     public Widget getWidget() {
@@ -72,5 +78,6 @@ public class ScreenTable extends ScreenWidget {
         table = null;
         super.destroy();
     }
+    
 
 }

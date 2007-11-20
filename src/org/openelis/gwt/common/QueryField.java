@@ -45,12 +45,11 @@ public class QueryField extends AbstractField {
 
     public void setValue(Object val) {
         // TODO Auto-generated method stub
-        String value = (String)val;
-        this.value = value;
-        parse();
+        this.value = (String)val;
+        parse((String)val);
     }
     
-    public void parse() {
+    public void parse(String value) {
         comparator = new ArrayList();
         parameter = new ArrayList();
         logical = new ArrayList();

@@ -83,6 +83,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
         }
             
         initWidget(textbox);
+        displayWidget = textbox;
         textbox.setStyleName("ScreenTextBox");
         setDefaults(node, screen);
     }

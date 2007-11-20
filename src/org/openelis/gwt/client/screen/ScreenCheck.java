@@ -71,6 +71,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         		addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listener));
         }
         initWidget(check);
+        displayWidget = check;
         check.setStyleName("ScreenCheck");
         setDefaults(node, screen);
     }

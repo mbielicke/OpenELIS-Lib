@@ -5,7 +5,7 @@ import com.google.gwt.xml.client.Node;
 
 public class ScreenInputWidget extends ScreenWidget {
     
-    protected ScreenWidget queryWidget;
+    protected ScreenInputWidget queryWidget;
     protected Widget displayWidget;
     protected boolean queryMode;
     
@@ -17,7 +17,7 @@ public class ScreenInputWidget extends ScreenWidget {
         super(node);
     }
     
-    public void setQueryWidget(ScreenWidget qWid){
+    public void setQueryWidget(ScreenInputWidget qWid){
         queryWidget = qWid;
     }
     
@@ -25,17 +25,12 @@ public class ScreenInputWidget extends ScreenWidget {
         this.queryMode = mode;
         if(queryMode){
             if(queryWidget != null){
-                if(displayWidget == null)
-                    displayWidget = getWidget();
-                initWidget(queryWidget.getWidget());
+                initWidget(queryWidget.displayWidget);
             }else{
                 queryMode = false;
             }
         }else{
-            if(queryWidget != null)
-                queryWidget.initWidget(getWidget());
-            if(displayWidget != null)
-                initWidget(displayWidget);
+           initWidget(displayWidget);
         }
     }
     

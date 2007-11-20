@@ -6,7 +6,8 @@ public class QueryStringField extends QueryField {
 
     public Object getInstance(Node field) {
         QueryStringField string = new QueryStringField();
-        string.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
+        if(field.getAttributes().getNamedItem("key") != null)
+            string.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
         return string;
     }
 }

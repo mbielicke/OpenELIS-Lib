@@ -63,6 +63,7 @@ public class ScreenTextArea extends ScreenInputWidget {
             textarea.sinkEvents(Event.KEYEVENTS);
         }
         initWidget(textarea);
+        displayWidget = textarea;
         textarea.setStyleName("ScreenTextArea");
         setDefaults(node, screen);
     }

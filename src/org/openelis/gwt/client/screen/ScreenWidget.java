@@ -2,7 +2,6 @@ package org.openelis.gwt.client.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.DropListener;
@@ -20,7 +19,6 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.AbstractField;
 
-import java.util.HashMap;
 import java.util.Vector;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
@@ -409,7 +407,7 @@ public class ScreenWidget extends SimplePanel implements
                     }
                 }
                 Widget query = ScreenBase.getWidgetMap().getWidget(input, screen);
-                ((ScreenInputWidget)wid).setQueryWidget((ScreenWidget)query);
+                ((ScreenInputWidget)wid).setQueryWidget((ScreenInputWidget)query);
             }
         }
         return wid;

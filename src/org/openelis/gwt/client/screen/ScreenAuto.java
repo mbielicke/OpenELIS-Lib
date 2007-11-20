@@ -63,6 +63,7 @@ public class ScreenAuto extends ScreenInputWidget {
                                   .charAt(0));
         auto.setStyleName("ScreenAuto");
         initWidget(auto);
+        displayWidget = auto;
         setDefaults(node, screen);
     }
 

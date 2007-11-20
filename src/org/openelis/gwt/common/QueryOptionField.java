@@ -23,7 +23,8 @@ public class QueryOptionField extends OptionField {
 
     public Object getInstance(Node field) {
         QueryOptionField option = new QueryOptionField();
-        option.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
+        if(field.getAttributes().getNamedItem("key") != null)
+            option.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
         option.setType(field.getAttributes()
                             .getNamedItem("type")
                             .getNodeValue());

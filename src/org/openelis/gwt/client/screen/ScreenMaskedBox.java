@@ -66,6 +66,7 @@ public class ScreenMaskedBox extends ScreenInputWidget {
         }
         maskbox.setMask(mask);
         initWidget(maskbox);
+        displayWidget = maskbox;
         maskbox.setStyleName("ScreenMaskedBox");
         setDefaults(node, screen);
     }

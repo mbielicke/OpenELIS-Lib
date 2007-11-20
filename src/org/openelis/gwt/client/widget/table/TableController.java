@@ -65,8 +65,8 @@ public class TableController implements
     private int[] curColWidth;
     private String[] staticTitles;
     private String[] dynamicTitles;
-    private boolean[] sortable;
-    private boolean[] filterable;
+    public boolean[] sortable;
+    public boolean[] filterable;
     private ArrayList statFilters = new ArrayList();
     private ArrayList filters = new ArrayList();
     private TableCallback callback = new TableCallback();
@@ -714,7 +714,7 @@ public class TableController implements
         start = 0;
         end = 0;
         view.controller = this;
-        if(model.autoAdd || autoAdd){
+        if(model.numRows() == 0 && model.autoAdd || autoAdd){
             model.addRow(null);
         }
         if(model.numRows() > 0){
@@ -722,36 +722,21 @@ public class TableController implements
         }else{
             view.reset(0,0);
         }
-        view.table.addTableListener(this);
-            
-        if (view.header != null) {
-            view.header.removeTableListener(this);
-            view.header.addTableListener(this);
+        if(view.isAttached())
+            load();
+        else
+            view.loaded = false;
+    }
+    
+    public void load() {
+        if(model.numRows() > 0){
+            scrollLoad(0);
         }
-        for (int i = 0; i < view.header.getCellCount(0); i++) {
-            if (i % 2 == 0) {
-                ((Image)((HorizontalPanel)((SimplePanel)view.header.getWidget(0, i)).getWidget()).getWidget(1)).removeStyleName("hide");
-                if (!sortable[i / 2] && !filterable[i / 2]) {
-                    ((Image)((HorizontalPanel)((SimplePanel)view.header.getWidget(0, i)).getWidget()).getWidget(1)).addStyleName("hide");
-                }
-            } else {
-                FocusPanel img = (FocusPanel)view.header.getWidget(0, i);
-                img.removeMouseListener(this);
-                img.addMouseListener(this);
-            }
-        }
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                if(model.numRows() > 0){
-                    scrollLoad(0);
-                }
-                selected = -1;
-                selectedCell = -1;
-                sizeTable();
-                if (model.paged)
-                    view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
-            }
-        });
+        selected = -1;
+        selectedCell = -1;
+        sizeTable();
+        if (model.paged)
+            view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
     }
     
     public void scrollLoad(int scrollPos){
@@ -761,10 +746,10 @@ public class TableController implements
         int newEnd = 0;
         int rowsPer = (view.cellView.getOffsetHeight()/(view.table.getOffsetHeight()/model.numRows()));
         newStart = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) - rowsPer;
+        newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer ;
         if(newStart < 0){
             newStart = 0;
         }
-        newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer ;
         if(newEnd > model.numRows()){
             newEnd = model.numRows();
         }
@@ -798,27 +783,22 @@ public class TableController implements
         }catch(Exception e){
             Window.alert("scrollLoad "+e.getMessage());
         }
-        //view.setShown("("+ (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) +":"+start+":"+end);
     }
     
     private void clearRows(final int start, final int stop){
-        //DeferredCommand.addCommand(new Command() {
-         //   public void execute(){
-                if(selected >= start && selected <= stop)
-                    unselect(selected);
-                for(int i = start; i < stop; i++){
-                    for(int j = 0; j < model.getRow(i).numColumns(); j++)
-                        view.table.clearCell(i,j);
-                }
-         // }
-       // });
-    }
+        if(selected >= start && selected <= stop)
+           unselect(selected);
+        for(int i = start; i < stop; i++){
+           for(int j = 0; j < model.getRow(i).numColumns(); j++)
+              view.table.clearCell(i,j);
+        }
+     }
 
     /**
      * This method will size the table and the columns on the screen.
      * 
      */
-    private void sizeTable() {
+    public void sizeTable() {
             if (model.numRows() == 0){
                 int width = 0;
                 for(int i = 0; i < curColWidth.length; i++){
