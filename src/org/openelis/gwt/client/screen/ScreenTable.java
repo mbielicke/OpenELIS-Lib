@@ -50,9 +50,10 @@ public class ScreenTable extends ScreenInputWidget {
     }
 
     public void load(AbstractField field) {
-        if(queryMode)
-          queryWidget.load(field);
-        else{
+        if(!queryMode){
+          //queryWidget.load(field);
+        //else{
+            
             if (field.getValue() != null)
                 table.controller.setModel((TableModel)field.getValue());
             else{
@@ -77,6 +78,11 @@ public class ScreenTable extends ScreenInputWidget {
     public void destroy(){
         table = null;
         super.destroy();
+    }
+    
+    public void setQueryWidget(ScreenInputWidget qWid){
+        queryWidget = qWid;
+        
     }
     
 
