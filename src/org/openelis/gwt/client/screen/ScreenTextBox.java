@@ -24,7 +24,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
 	 */
     private TextBox textbox;
     private String fieldCase;
-    private int length;
+    private int length = 255;
   
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
@@ -78,7 +78,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
             }
         }
         if (node.getAttributes().getNamedItem("max") != null) {
-            int length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
+            length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
             textbox.setMaxLength(length);
         }
             

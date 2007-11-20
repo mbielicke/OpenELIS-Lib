@@ -364,7 +364,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
             	message.setText("Add aborted");
         }
         if (state == FormInt.QUERY) {
-            doReset();
+            //doReset();
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
