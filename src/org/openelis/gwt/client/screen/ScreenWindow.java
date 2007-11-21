@@ -183,7 +183,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     
     private void checkZ() {
         if(browser.index != zIndex){
-            browser.index++;
+           browser.index++;
            zIndex = browser.index;
            setKeep(true);
            int top = browser.browser.getWidgetTop(this);

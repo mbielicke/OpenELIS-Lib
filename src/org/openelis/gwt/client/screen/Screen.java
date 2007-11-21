@@ -34,7 +34,6 @@ public class Screen extends ScreenBase {
     public ConstantsWithLookup constants;
     private ScreenServiceIntAsync screenService = (ScreenServiceIntAsync)GWT.create(ScreenServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)screenService;
-    public boolean keep;
     /**
      * This field contains all widgets available to this application
      */

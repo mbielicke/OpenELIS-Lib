@@ -533,6 +533,8 @@ public class TableController implements
     public void select(int row, int col) {
         try{
         if (manager == null || (manager != null && manager.canSelect(row, this))){
+            if(selected > -1)
+                view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
                 if(view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
@@ -547,16 +549,16 @@ public class TableController implements
                 if (selectedCell > -1) {
                     saveValue(row, selectedCell);
                     if(model.autoAdd || autoAdd){
-                        if(manager != null && manager.doAutoAdd(row,col,this))
+                        if(manager != null && manager.doAutoAdd(row,selectedCell,this))
                             addRow();
                         else if(manager == null && row == model.numRows() -1)
                             addRow();
                     }
                     setCellDisplay(row, selectedCell);
                 }
-                if (manager == null || (manager != null && manager.canEdit(row,
+                if (col > -1 && (manager == null || (manager != null && manager.canEdit(row,
                                                                            col,
-                                                                           this)))
+                                                                           this))))
                     setCellEditor(row, col);
                 else
                     selectedCell = -1;
@@ -574,7 +576,9 @@ public class TableController implements
      * This method can be overridden to handle on change events
      */
     public void onChange(Widget sender) {
-        // TODO Auto-generated method stub
+        int sel = selected;
+        unselect(sel);
+        select(sel,-1);
     }
 
     /**
@@ -595,9 +599,11 @@ public class TableController implements
         if (cell instanceof TableOption && ((TableOption)cell).loadFromModel) {
             wid = ((TableOption)cell).getEditor((OptionField)model.getFieldAt(row,
                                                                               col));
+            ((TableOption)wid).addChangeListener(this);
         } else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
             wid = ((TableOption)cell).getEditor((OptionField)model.hidden.get(((TableOption)cell).loadFromHidden));
             ((TableOption)wid).setValue(model.getFieldAt(row, col).getValue());
+            ((TableOption)wid).addChangeListener(this);
         } else {
             cell.setValue(model.getFieldAt(row, col).getValue());
             wid = cell.getEditor();
@@ -714,13 +720,15 @@ public class TableController implements
         start = 0;
         end = 0;
         view.controller = this;
-        if(model.numRows() == 0 && model.autoAdd || autoAdd){
+        if(model.autoAdd || autoAdd){
             model.addRow(null);
         }
         if(model.numRows() > 0){
             view.reset(model.numRows(),model.getRow(0).numColumns());
+            view.table.clear();
         }else{
             view.reset(0,0);
+            view.table.clear();
         }
         if(view.isAttached())
             load();

@@ -373,7 +373,6 @@ public class ScreenWidget extends SimplePanel implements
     }
     
     public void destroy() {
-      
         dropListeners = null;
         dragListeners = null;
         mouseListeners = null;

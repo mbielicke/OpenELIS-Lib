@@ -47,7 +47,7 @@ public class TableModel implements Serializable {
     }
 
     public AbstractField getFieldAt(int row, int col) {
-        return (AbstractField)((TableRow)rows.get(row)).getColumn(col);
+        return ((TableRow)rows.get(row)).getColumn(col);
     }
 
     public void insertRow(int index, TableRow row) {

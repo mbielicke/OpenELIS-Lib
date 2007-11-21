@@ -408,9 +408,11 @@ public class AppScreenForm extends AppScreen implements FormInt {
     }
     
     public void onDetach() {
-        bpanel = null;
-        message = null;      
-        window = null;
+        if(!keep){
+            bpanel = null;
+            message = null;      
+            window = null;
+        }
         super.onDetach();
     }
     
