@@ -10,7 +10,7 @@ public interface AppScreenFormServiceInt extends AppScreenServiceInt {
     
     public FormRPC commitAdd(FormRPC rpc) throws RPCException;
     
-    public FormRPC commitQuery(FormRPC rpc) throws RPCException;
+    public AbstractField commitQuery(FormRPC rpc) throws RPCException;
     
     public FormRPC fetch(FormRPC rpc, AbstractField key) throws RPCException;
     
