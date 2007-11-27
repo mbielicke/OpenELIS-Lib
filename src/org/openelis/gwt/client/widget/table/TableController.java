@@ -63,8 +63,6 @@ public class TableController implements
     private TableCellWidget[] editors;
     private int[] colwidth;
     private int[] curColWidth;
-    private String[] staticTitles;
-    private String[] dynamicTitles;
     public boolean[] sortable;
     public boolean[] filterable;
     private ArrayList statFilters = new ArrayList();
@@ -161,26 +159,6 @@ public class TableController implements
      */
     public void setEditors(TableCellWidget[] editors) {
         this.editors = editors;
-    }
-
-    /**
-     * This method will set the definition that will be used for setting static
-     * titles for fields in a table.
-     * 
-     * @param titles
-     */
-    public void setStaticTitles(String[] titles) {
-        this.staticTitles = titles;
-    }
-
-    /**
-     * This method will set the definition that will be used for setting dynamic
-     * titles for fields in a table.
-     * 
-     * @param titles
-     */
-    public void setDynamicTitles(String[] titles) {
-        this.dynamicTitles = titles;
     }
 
     /**
@@ -645,50 +623,15 @@ public class TableController implements
         TableCellWidget cell = editors[col];
         if (!(cell instanceof TableOption) || !(((TableOption)cell).loadFromModel || ((TableOption)cell).loadFromHidden != null))
             cell.setValue(model.getFieldAt(row, col).getValue());
-                
         Object display;
-        if (staticTitles != null && staticTitles[col] != null) {
-            if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
-                display = ((TableOption)cell).getDisplay(staticTitles[col],
-                                                         (OptionField)model.getFieldAt(row,
-                                                                                       col));
-            else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
-                OptionField field = (OptionField)model.hidden.get(((TableOption)cell).loadFromHidden);
-                field.setValue(model.getFieldAt(row, col).getValue());
-                display = ((TableOption)cell).getDisplay(staticTitles[col],
-                                                         field);
-            } else
-                display = cell.getDisplay(staticTitles[col]);
-        } else if (dynamicTitles != null && dynamicTitles[col] != null) {
-            if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
-                display = ((TableOption)cell).getDisplay((String)model.getRow(row)
-                                                                      .getHidden(dynamicTitles[col])
-                                                                      .getValue(),
-                                                         (OptionField)model.getFieldAt(row,
-                                                                                       col));
-            else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
-                OptionField field = (OptionField)model.hidden.get(((TableOption)cell).loadFromHidden);
-                field.setValue(model.getFieldAt(row, col).getValue());
-                display = ((TableOption)cell).getDisplay((String)model.getRow(row)
-                                                                      .getHidden(dynamicTitles[col])
-                                                                      .getValue(),
-                                                         field);
-            } else
-                display = cell.getDisplay((String)model.getRow(row)
-                                                       .getHidden(dynamicTitles[col])
-                                                       .getValue());
-        } else {
-            if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
-                display = ((TableOption)cell).getDisplay(null,
-                                                         (OptionField)model.getFieldAt(row,
-                                                                                       col));
-            else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
-                OptionField field = (OptionField)model.hidden.get(((TableOption)cell).loadFromHidden);
-                field.setValue(model.getFieldAt(row, col).getValue());
-                display = ((TableOption)cell).getDisplay(null, field);
-            } else
-                display = cell.getDisplay(null);
-        }
+        if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
+            display = ((TableOption)cell).getDisplay(null,(OptionField)model.getFieldAt(row,col));
+        else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
+            OptionField field = (OptionField)model.hidden.get(((TableOption)cell).loadFromHidden);
+            field.setValue(model.getFieldAt(row, col).getValue());
+            display = ((TableOption)cell).getDisplay(null, field);
+        } else
+            display = cell.getDisplay();
         if (display instanceof CheckBox){
             if(manager == null || manager.canEdit(row,col,this)){
                 ((CheckBox)display).addClickListener(this);

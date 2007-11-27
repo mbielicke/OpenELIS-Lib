@@ -10,4 +10,10 @@ public class QueryCheckField extends CheckField {
         return check;
     }
 
+    public Object getInstance() {
+        QueryCheckField obj = new QueryCheckField();
+        obj.setRequired(required);
+        obj.setValue(value);
+        return obj;
+    }
 }

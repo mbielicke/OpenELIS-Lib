@@ -34,12 +34,10 @@ public class TableMaskedTextBox extends MaskedTextBox implements TableCellWidget
         return new TableMaskedTextBox();
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         Label tl = new Label();
         tl.setText(getText());
         tl.setWordWrap(false);
-        if (title != null)
-            tl.setTitle(title);
         return tl;
     }
 

@@ -80,10 +80,6 @@ public class FormTable extends Composite {
                                             .item(0);
             Node alignNode = ((Element)node).getElementsByTagName("colAligns")
                                             .item(0);
-            Node statNode = ((Element)node).getElementsByTagName("staticTitles")
-                                           .item(0);
-            Node dynNode = ((Element)node).getElementsByTagName("dynamicTitles")
-                                          .item(0);
             Node statFilter = ((Element)node).getElementsByTagName("statFilters")
                                              .item(0);
             
@@ -149,14 +145,6 @@ public class FormTable extends Composite {
             }
             if (alignNode != null)
                 setColAlign(alignNode);
-            if (statNode != null)
-                controller.setStaticTitles(statNode.getFirstChild()
-                                                   .getNodeValue()
-                                                   .split(","));
-            if (dynNode != null)
-                controller.setDynamicTitles(dynNode.getFirstChild()
-                                                   .getNodeValue()
-                                                   .split(","));
             if (statFilter != null)
                 setStatFilter(statFilter);
             setEditors(editorsNode);

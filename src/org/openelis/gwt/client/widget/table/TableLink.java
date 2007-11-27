@@ -30,12 +30,9 @@ public class TableLink extends HTML implements TableCellWidget {
         addStyleName("encounters");
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         HTML hl = new HTML(getHTML());
         hl.setWordWrap(false);
-        if (title != null)
-            ;
-        hl.setTitle(title);
         return hl;
     }
 

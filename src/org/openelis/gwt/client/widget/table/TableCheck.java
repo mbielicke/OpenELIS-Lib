@@ -50,11 +50,9 @@ public class TableCheck extends CheckBox implements TableCellWidget {
     /**
      * Returns a widget for displaying the value in a table.
      */
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         TableCheck cb = new TableCheck();
         cb.setChecked(isChecked());
-        if (title != null)
-            cb.setTitle(title);
         return cb;
     }
 

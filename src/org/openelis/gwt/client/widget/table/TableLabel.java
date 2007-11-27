@@ -38,13 +38,11 @@ public class TableLabel extends Label implements TableCellWidget {
         return new TableLabel();
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         Label tl = new Label();
         tl.setText(getText());
         tl.setWordWrap(false);
         DOM.setStyleAttribute(tl.getElement(), "overflow", "hidden");
-        if (title != null)
-            tl.setTitle(title);
         return tl;
     }
 

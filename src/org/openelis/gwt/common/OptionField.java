@@ -24,9 +24,9 @@ public class OptionField extends AbstractField implements Serializable {
     /**
      * @gwt.typeArgs <org.openelis.gwt.common.OptionItem>
      */
-    private ArrayList options = new ArrayList();
-    private boolean multi;
-    private String value;
+    protected ArrayList options = new ArrayList();
+    protected boolean multi;
+    protected String value;
 
     public boolean isValid() {
         if (required) {

@@ -10,7 +10,7 @@ public interface TableCellWidget {
 
     public void setValue(Object val);
 
-    public Object getDisplay(String title);
+    public Object getDisplay();
 
     public Widget getEditor();
 

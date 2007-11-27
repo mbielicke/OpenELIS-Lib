@@ -33,13 +33,11 @@ public class TableCalendar extends FormCalendarWidget implements TableCellWidget
             setText("");
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         // TODO Auto-generated method stub
         Label tl = new Label();
         tl.setText(getText());
         tl.setWordWrap(false);
-        if (title != null)
-            tl.setTitle(title);
         return tl;
     }
 

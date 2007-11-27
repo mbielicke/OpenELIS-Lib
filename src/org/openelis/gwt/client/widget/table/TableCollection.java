@@ -35,15 +35,13 @@ public class TableCollection extends VerticalPanel implements TableCellWidget {
         return new TableCollection();
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         if (vals.size() == 0)
             return "";
         VerticalPanel vp = new VerticalPanel();
         for (int i = 0; i < vals.size(); i++) {
             vp.add(new HTML((String)vals.get(i)));
         }
-        if (title != null)
-            vp.setTitle(title);
         return vp;
     }
 

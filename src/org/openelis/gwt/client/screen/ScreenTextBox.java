@@ -49,11 +49,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
                         screen.doTab(event, this);
                         return;
                     }
-                } else if(DOM.eventGetType(event) == Event.ONKEYUP){
-                    if(fieldCase.equals("upper"))
-                        setText(getText().toUpperCase());
-                    else if(fieldCase.equals("lower"))
-                        setText(getText().toLowerCase());   
                 }
                 super.onBrowserEvent(event);
             }
@@ -73,8 +68,11 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case")
                                             .getNodeValue();
-            if (!fieldCase.equals("mixed")){
-                textbox.addChangeListener(this);
+            if (fieldCase.equals("upper")){
+                textbox.addStyleName("Upper");
+            }
+            if (fieldCase.equals("lower")){
+                textbox.addStyleName("Lower");
             }
         }
         if (node.getAttributes().getNamedItem("max") != null) {
@@ -108,11 +106,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
 
     }
 
-    public void onChange(Widget sender) {
-        if(fieldCase.equals("upper"))
-            textbox.setText(textbox.getText().toUpperCase());
-        else 
-            textbox.setText(textbox.getText().toLowerCase());       
+    public void onChange(Widget sender) {    
     }
     
     public void enable(boolean enabled){

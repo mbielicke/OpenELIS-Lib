@@ -161,3 +161,9 @@ background:#e6eaf6;
 .disabled{
 	background:grey;
 }
+.Upper {
+  text-transform:uppercase;
+}
+.Lower {
+  text-transform:lowercase;
+}

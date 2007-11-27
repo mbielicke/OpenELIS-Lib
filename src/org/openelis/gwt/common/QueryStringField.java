@@ -10,4 +10,9 @@ public class QueryStringField extends QueryField {
             string.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
         return string;
     }
+    
+    public Object getInstance() {
+        return new QueryStringField();
+       
+    }
 }

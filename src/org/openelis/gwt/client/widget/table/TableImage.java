@@ -35,11 +35,9 @@ public class TableImage extends Image implements TableCellWidget {
         return new TableImage();
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         TableImage ti = new TableImage();
         ti.setUrl(getUrl());
-        if (title != null)
-            ti.setTitle(title);
         return ti;
     }
 

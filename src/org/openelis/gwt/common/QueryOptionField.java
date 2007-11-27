@@ -41,4 +41,16 @@ public class QueryOptionField extends OptionField {
         }
         return option;
     }
+    
+    public Object getInstance() {
+        QueryOptionField obj = new QueryOptionField();
+        obj.setRequired(required);
+        obj.setMulti(multi);
+        for (int i = 0; i < options.size(); i++) {
+            OptionItem item = (OptionItem)options.get(i);
+            obj.addOption(item.akey, item.display);
+        }
+        obj.setValue(value);
+        return obj;
+    }
 }

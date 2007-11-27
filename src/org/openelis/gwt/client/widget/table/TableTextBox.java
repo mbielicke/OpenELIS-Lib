@@ -22,22 +22,10 @@ public class TableTextBox extends TextBox implements TableCellWidget{
 
     public Object getValue() {
         String val = getText();
-        if(val != null){
-            if(fieldCase.equals("lower"))
-                return val.toLowerCase();
-            if(fieldCase.equals("upper"))
-                return val.toUpperCase();
-        }
         return val;
     }
 
     public void setValue(Object val) {
-        if(val != null) {
-            if(fieldCase.equals("lower"))
-                val = ((String)val).toLowerCase();
-            if(fieldCase.equals("upper"))
-                val = ((String)val).toUpperCase();
-        }
         setText((String)val);
     }
 
@@ -47,18 +35,10 @@ public class TableTextBox extends TextBox implements TableCellWidget{
         return textbox;
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         Label tl = new Label();
-        if(getText() != null){
-            if(fieldCase.equals("lower"))
-                setText(getText().toLowerCase());
-            if(fieldCase.equals("upper"))
-                setText(getText().toUpperCase());
-        }
         tl.setText(getText());
         tl.setWordWrap(false);
-        if (title != null)
-            tl.setTitle(title);
         return tl;
     }
 

@@ -54,6 +54,7 @@ public class OptionList extends ListBox {
      */
     public void addItem(String value, String item) {
         insertItem(value, item, getItemCount());
+        
     }
 
     /**

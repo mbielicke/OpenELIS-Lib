@@ -1,6 +1,8 @@
 package org.openelis.gwt.client.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+
+import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.TableModel;
@@ -26,4 +28,7 @@ public interface TableServiceInt extends RemoteService {
     public TableModel getModel(TableModel model) throws RPCException;
 
     public TableModel saveModel(TableModel model) throws RPCException;
+    
+    public String getTip(AbstractField key) throws RPCException;
+    
 }

@@ -92,7 +92,7 @@ public class QueryDateField extends QueryField {
     }
 
     public Object getInstance() {
-        DateField obj = new DateField();
+        QueryDateField obj = new QueryDateField();
         obj.setBegin(begin);
         obj.setEnd(end);
         obj.setMax(max);
