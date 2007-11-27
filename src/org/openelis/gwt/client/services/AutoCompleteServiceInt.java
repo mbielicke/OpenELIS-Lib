@@ -1,5 +1,7 @@
 package org.openelis.gwt.client.services;
 
+import org.openelis.gwt.common.AutoCompleteRPC;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
@@ -13,8 +15,8 @@ import com.google.gwt.user.client.rpc.RemoteService;
  */
 public interface AutoCompleteServiceInt extends RemoteService {
 
-    public void getMatches(String cat, String match);
+    public AutoCompleteRPC getMatches(String cat, String match);
 
-    public void getDisplay(String cat, Integer value);
+    public AutoCompleteRPC getDisplay(String cat, Integer value);
 
 }
