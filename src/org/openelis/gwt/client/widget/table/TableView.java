@@ -326,5 +326,11 @@ public class TableView extends Composite implements ScrollListener {
         }
         super.onLoad();
     }
-
+    
+    protected void onAttach() {
+      if(!loaded){
+          controller.load();
+          loaded = true;
+      }
+    }
 }
