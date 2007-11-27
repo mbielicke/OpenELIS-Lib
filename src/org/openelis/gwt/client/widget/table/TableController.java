@@ -625,11 +625,11 @@ public class TableController implements
             cell.setValue(model.getFieldAt(row, col).getValue());
         Object display;
         if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
-            display = ((TableOption)cell).getDisplay(null,(OptionField)model.getFieldAt(row,col));
+            display = ((TableOption)cell).getDisplay((OptionField)model.getFieldAt(row,col));
         else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
             OptionField field = (OptionField)model.hidden.get(((TableOption)cell).loadFromHidden);
             field.setValue(model.getFieldAt(row, col).getValue());
-            display = ((TableOption)cell).getDisplay(null, field);
+            display = ((TableOption)cell).getDisplay(field);
         } else
             display = cell.getDisplay();
         if (display instanceof CheckBox){

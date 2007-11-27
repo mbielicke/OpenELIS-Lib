@@ -78,21 +78,19 @@ public class TableOption extends OptionList implements TableCellWidget, EventPre
         return ret;
     }
 
-    public Object getDisplay(String title) {
+    public Object getDisplay() {
         Label tl = new Label();
         tl.setText(getItemText(getSelectedIndex()));
         tl.setWordWrap(false);
-        if (title != null)
-            tl.setTitle(title);
+        
         return tl;
     }
 
-    public Object getDisplay(String title, OptionField field) {
+    public Object getDisplay(OptionField field) {
         Label tl = new Label();
         tl.setText(field.getDisplay());
         tl.setWordWrap(false);
-        if (title != null)
-            tl.setTitle(title);
+        
         return tl;
     }
 
