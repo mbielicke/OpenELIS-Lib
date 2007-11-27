@@ -53,7 +53,7 @@ public class ScreenForm extends Screen implements FormInt {
             bpanel.setForm(this);
             bpanel.setState(FormInt.DISPLAY);
             enable(false);
-            bpanel.enable("u",false);
+            bpanel.enable("ud",false);
         }
         if (method.equals("commit") ||
             method.equals("commit-add") ||
@@ -93,7 +93,7 @@ public class ScreenForm extends Screen implements FormInt {
         if (method.equals("fetch")) {
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
-            bpanel.enable("u",true);
+            bpanel.enable("ud",true);
         }
         if ((method.equals("update") || method.equals("add")) && success) {
             enable(true);
@@ -126,7 +126,7 @@ public class ScreenForm extends Screen implements FormInt {
             else
             	message.setText("Querying...Complete");
             
-            bpanel.enable("u",false);
+            bpanel.enable("ud",false);
         }
     }
     
@@ -292,7 +292,7 @@ public class ScreenForm extends Screen implements FormInt {
             	message.setText("Query aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
-        bpanel.enable("u",false);
+        bpanel.enable("ud",false);
     }
 
     /** 

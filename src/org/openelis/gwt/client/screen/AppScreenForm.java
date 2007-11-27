@@ -78,7 +78,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     public void afterFetch(boolean success){
         enable(false);
         bpanel.setState(FormInt.DISPLAY);
-        bpanel.enable("u",true);
+        bpanel.enable("ud",true);
     }
     
     /**
@@ -326,7 +326,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
             else
                 message.setText("Querying...Complete");
             
-            bpanel.enable("u",false);
+            bpanel.enable("ud",false);
             setForm(false);
         }
     }
@@ -375,7 +375,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
             //fetch(key);
         }
         bpanel.setState(FormInt.DISPLAY);
-        bpanel.enable("u",false);
+        bpanel.enable("ud",false);
     }
 
     /** 
