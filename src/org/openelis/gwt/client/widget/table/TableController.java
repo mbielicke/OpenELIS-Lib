@@ -578,13 +578,16 @@ public class TableController implements
             wid = ((TableOption)cell).getEditor((OptionField)model.getFieldAt(row,
                                                                               col));
             ((TableOption)wid).addChangeListener(this);
+            wid.setTitle(model.getFieldAt(row,col).getTip());
         } else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
             wid = ((TableOption)cell).getEditor((OptionField)model.hidden.get(((TableOption)cell).loadFromHidden));
             ((TableOption)wid).setValue(model.getFieldAt(row, col).getValue());
             ((TableOption)wid).addChangeListener(this);
+            wid.setTitle(((OptionField)model.hidden.get(((TableOption)cell).loadFromHidden)).getTip());
         } else {
             cell.setValue(model.getFieldAt(row, col).getValue());
             wid = cell.getEditor();
+            wid.setTitle(model.getFieldAt(row,col).getTip());
         }
         wid.addStyleName(view.widgetStyle);
         wid.addStyleName("Enabled");
@@ -624,14 +627,18 @@ public class TableController implements
         if (!(cell instanceof TableOption) || !(((TableOption)cell).loadFromModel || ((TableOption)cell).loadFromHidden != null))
             cell.setValue(model.getFieldAt(row, col).getValue());
         Object display;
-        if (cell instanceof TableOption && ((TableOption)cell).loadFromModel)
+        if (cell instanceof TableOption && ((TableOption)cell).loadFromModel){
             display = ((TableOption)cell).getDisplay((OptionField)model.getFieldAt(row,col));
-        else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
+            ((Widget)display).setTitle(((OptionField)model.getFieldAt(row,col)).getTip());
+        }else if (cell instanceof TableOption && ((TableOption)cell).loadFromHidden != null) {
             OptionField field = (OptionField)model.hidden.get(((TableOption)cell).loadFromHidden);
             field.setValue(model.getFieldAt(row, col).getValue());
             display = ((TableOption)cell).getDisplay(field);
-        } else
+            ((Widget)display).setTitle(field.getTip());
+        } else{
             display = cell.getDisplay();
+            ((Widget)display).setTitle(model.getFieldAt(row, col).getTip());
+        }
         if (display instanceof CheckBox){
             if(manager == null || manager.canEdit(row,col,this)){
                 ((CheckBox)display).addClickListener(this);
@@ -835,6 +842,7 @@ public class TableController implements
             ((TableMaskedTextBox)wid).format();
 
         model.getFieldAt(row, col).setValue(wid.getValue());
+        
         if (manager != null) {
             manager.finishedEditing(row, col, this);
         }

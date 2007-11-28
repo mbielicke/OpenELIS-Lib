@@ -59,21 +59,23 @@ public class OptionField extends AbstractField implements Serializable {
     public void setValue(Object val) {
         if (val != null) {
             if (val instanceof String) {
-                if (multi) {
-                    OptionItem temp = new OptionItem();
-                    temp.akey = (String)val;
+                OptionItem temp = new OptionItem();
+                temp.akey = (String)val;
+                if(multi){
                     ((OptionItem)options.get(options.indexOf(temp))).selected = true;
                 } else {
                     value = (String)val;
+                    setTip(((OptionItem)options.get(options.indexOf(temp))).tip);
                 }
             }
             if (val instanceof Integer) {
+                OptionItem temp = new OptionItem();
+                temp.akey = ((Integer)val).toString();
                 if (multi) {
-                    OptionItem temp = new OptionItem();
-                    temp.akey = ((Integer)val).toString();
                     ((OptionItem)options.get(options.indexOf(temp))).selected = true;
                 } else {
                     value = val.toString();
+                    setTip(((OptionItem)options.get(options.indexOf(temp))).tip);
                 }
             }
             if (val instanceof OptionItem) {
@@ -81,6 +83,7 @@ public class OptionField extends AbstractField implements Serializable {
                     ((OptionItem)options.get(options.indexOf(val))).selected = true;
                 } else {
                     value = ((OptionItem)val).akey;
+                    setTip(((OptionItem)val).tip);
                 }
             }
         } else {
@@ -131,7 +134,19 @@ public class OptionField extends AbstractField implements Serializable {
         OptionItem newItem = new OptionItem();
         newItem.akey = (String)key;
         newItem.display = (String)display;
-        options.add(newItem);
+        addOption(newItem);
+    }
+    
+    public void addOption(Object key, Object display, String tip) {
+        OptionItem newItem = new OptionItem();
+        newItem.akey = (String)key;
+        newItem.display = (String)display;
+        newItem.tip = tip;
+        addOption(newItem);
+    }
+    
+    public void addOption(OptionItem item){
+        options.add(item);
     }
 
     public void setMulti(boolean multi) {

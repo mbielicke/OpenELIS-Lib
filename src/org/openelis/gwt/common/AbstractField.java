@@ -12,6 +12,7 @@ public class AbstractField implements IField, Serializable {
     protected Vector errors = new Vector();
     protected boolean required;
     protected String key;
+    protected String tip;
 
     public void setRequired(boolean required) {
         this.required = required;
@@ -86,5 +87,13 @@ public class AbstractField implements IField, Serializable {
     public Object getInstance() {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    public String getTip() {
+        return tip;
+    }
+    
+    public void setTip(String tip) {
+        this.tip = tip;
     }
 }

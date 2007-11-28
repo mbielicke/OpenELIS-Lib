@@ -242,6 +242,9 @@ public class ScreenWidget extends SimplePanel implements
             hoverStyle = node.getAttributes().getNamedItem("hover").getNodeValue();
             addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         }
+        if (node.getAttributes().getNamedItem("tip") != null){
+            setTitle(node.getAttributes().getNamedItem("tip").getNodeValue());
+        }
     }
 
     /**  

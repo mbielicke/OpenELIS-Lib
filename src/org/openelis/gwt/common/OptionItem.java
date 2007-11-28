@@ -6,6 +6,7 @@ public class OptionItem implements Serializable {
     public String display;
     public String akey;
     public boolean selected;
+    public String tip;
 
     public boolean equals(Object obj) {
         if (obj instanceof Integer) {
