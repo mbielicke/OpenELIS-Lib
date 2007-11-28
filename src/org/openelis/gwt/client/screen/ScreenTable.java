@@ -85,5 +85,9 @@ public class ScreenTable extends ScreenInputWidget {
         
     }
     
+    public ScreenInputWidget getQueryWidget(){
+    	return queryWidget;
+    }
+    
 
 }
