@@ -99,9 +99,14 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
     }
 
     public void submit(AbstractField field) {
-        if(!queryMode)
-            field.setValue(textbox.getText());
-        else
+        if(!queryMode){
+            String text = textbox.getText();
+            if(fieldCase.equals("upper"))
+                text = text.toUpperCase();
+            else if(fieldCase.equals("lower"))
+                text = text.toLowerCase();
+            field.setValue(text);
+        }else
             queryWidget.submit(field);
 
     }
