@@ -663,7 +663,7 @@ public class TableController implements
         start = 0;
         end = 0;
         if(selected > -1)
-            unselect(selected);
+            view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
         selected = -1;
         selectedCell = -1;
         view.controller = this;
