@@ -48,6 +48,7 @@ public class AutoCompleteTextBox extends TextBox implements
     };
     protected boolean popupAdded = false;
     protected boolean visible = false;
+    protected String popupWidth = "";
     protected String fieldCase = "mixed";
     /**
      * RPC class for returning data from the server.
@@ -203,21 +204,22 @@ public class AutoCompleteTextBox extends TextBox implements
             }
             // if there is only one match and it is what is in the
             // text field anyways there is no need to show autocompletion
-            if (rpc.display.length == 1 && rpc.display[0].compareTo(rpc.match) == 0) {
+            if (rpc.display.length == 1 && (rpc.display[0].compareTo(rpc.match) == 0 || rpc.textboxValue[0].compareTo(rpc.match) == 0)) {
                 choicesPopup.hide();
             } else {
                 choices.setSelectedIndex(0);
                 choices.setVisibleItemCount(rpc.display.length + 1);
-                if (!popupAdded) {
-                    RootPanel.get().add(choicesPopup);
-                    popupAdded = true;
-                }
-                choicesPopup.show();
                 visible = true;
+                
                 choicesPopup.setPopupPosition(this.getAbsoluteLeft(),
                                               this.getAbsoluteTop() + this.getOffsetHeight());
-                // choicesPopup.setWidth(this.getOffsetWidth() + "px");
-                choices.setWidth((this.getOffsetWidth() + 10) + "px");
+
+                if("".equals(popupWidth)){
+                	choices.setWidth((this.getOffsetWidth() + 10) + "px");
+                }else{
+                	choices.setWidth(popupWidth);
+                }
+                choicesPopup.show();
             }
         } else {
             visible = false;
@@ -237,8 +239,13 @@ public class AutoCompleteTextBox extends TextBox implements
      */
     protected void complete() {
         if (choices.getItemCount() > 0) {
-            this.setText(choices.getItemText(choices.getSelectedIndex()));
-            this.value = rpc.id[choices.getSelectedIndex()];
+        	if(rpc.textboxValue != null){
+        		this.setText(rpc.textboxValue[choices.getSelectedIndex()]);
+        		this.value = rpc.id[choices.getSelectedIndex()];
+        	}else{
+        		this.setText(choices.getItemText(choices.getSelectedIndex()));
+                this.value = rpc.id[choices.getSelectedIndex()];
+        	}
         }
         choices.clear();
         choicesPopup.hide();
@@ -314,4 +321,12 @@ public class AutoCompleteTextBox extends TextBox implements
         this.value = null;
         setText("");
     }
+
+	public String getPopupWidth() {
+		return popupWidth;
+	}
+
+	public void setPopupWidth(String popupWidth) {
+		this.popupWidth = popupWidth;
+	}
 }
