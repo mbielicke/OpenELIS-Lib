@@ -243,7 +243,8 @@ public class ButtonPanel extends Composite implements ClickListener {
         }
         if(state == FormInt.DISPLAY){
             enable("quadr",true);
-            enable("cbnp",false);
+            enable("cb",false);
+            //ttb 11/28/07 took out np so that we can control it from the screen instead
         }
         if(state == FormInt.BROWSE){
             enable("quadnpr",true);
