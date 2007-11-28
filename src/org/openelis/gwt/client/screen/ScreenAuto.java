@@ -18,7 +18,7 @@ public class ScreenAuto extends ScreenInputWidget {
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
 	public static String TAG_NAME = "auto";
-
+    public String fieldCase = "mixed";
 	/**
 	 * Widget wrapped by this class.
 	 */
@@ -62,6 +62,14 @@ public class ScreenAuto extends ScreenInputWidget {
                                   .getNodeValue()
                                   .charAt(0));
         auto.setStyleName("ScreenAuto");
+        if (node.getAttributes().getNamedItem("case") != null){
+            fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
+            if(fieldCase.equals("upper"))
+                auto.addStyleName("Upper");
+            else if(fieldCase.equals("lower"))
+                auto.addStyleName("Lower");
+            auto.setCase(fieldCase);
+        }
         initWidget(auto);
         displayWidget = auto;
         setDefaults(node, screen);
@@ -86,7 +94,12 @@ public class ScreenAuto extends ScreenInputWidget {
             if (((String)field.getKey()).endsWith("Id"))
                 field.setValue(auto.value);
             if ((((String)field.getKey()).endsWith("Text"))) {
-                field.setValue(auto.getText());
+                String text = auto.getText();
+                if(fieldCase.equals("upper"))
+                    text = text.toUpperCase();
+                else if (fieldCase.equals("lower"))
+                    text = text.toLowerCase();
+                field.setValue(text);
             }
         }
     }

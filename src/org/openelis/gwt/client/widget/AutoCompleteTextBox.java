@@ -48,6 +48,7 @@ public class AutoCompleteTextBox extends TextBox implements
     };
     protected boolean popupAdded = false;
     protected boolean visible = false;
+    protected String fieldCase = "mixed";
     /**
      * RPC class for returning data from the server.
      */
@@ -79,6 +80,10 @@ public class AutoCompleteTextBox extends TextBox implements
         base += url;
         target.setServiceEntryPoint(base);
     }
+    
+    public void setCase(String fieldCase){
+        this.fieldCase = fieldCase;
+    }
 
     /**
      * This inner class is used to add a delay to the before calling the 
@@ -99,6 +104,10 @@ public class AutoCompleteTextBox extends TextBox implements
 
         public void run() {
             if (getText().equals(text)) {
+                if(fieldCase.equals("upper"))
+                    text = text.toUpperCase();
+                else if(fieldCase.equals("lower"))
+                    text = text.toLowerCase();
                 callForMatches(text);
             }
         }

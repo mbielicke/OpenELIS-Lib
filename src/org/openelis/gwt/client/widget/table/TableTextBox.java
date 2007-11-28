@@ -22,6 +22,10 @@ public class TableTextBox extends TextBox implements TableCellWidget{
 
     public Object getValue() {
         String val = getText();
+        if(fieldCase.equals("upper"))
+            val = val.toUpperCase();
+        else if(fieldCase.equals("lower"))
+            val = val.toLowerCase();
         return val;
     }
 
@@ -39,10 +43,18 @@ public class TableTextBox extends TextBox implements TableCellWidget{
         Label tl = new Label();
         tl.setText(getText());
         tl.setWordWrap(false);
+        if(fieldCase.equals("upper"))
+            tl.addStyleName("Upper");
+        else if(fieldCase.equals("lower"))
+            tl.addStyleName("Lower");
         return tl;
     }
 
     public Widget getEditor() {
+        if(fieldCase.equals("upper"))
+            addStyleName("Upper");
+        else if(fieldCase.equals("lower"))
+            addStyleName("Lower");
         return this;
     }
 
