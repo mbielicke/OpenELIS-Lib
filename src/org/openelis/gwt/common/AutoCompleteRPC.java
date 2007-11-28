@@ -6,6 +6,7 @@ public class AutoCompleteRPC implements Serializable {
     public String category;
     public String match;
     public String[] display;
+    public String[] textboxValue;
     public Integer[] id;
     public Integer value;
     public String dict_value;
