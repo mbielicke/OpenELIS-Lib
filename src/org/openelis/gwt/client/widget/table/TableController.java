@@ -662,6 +662,10 @@ public class TableController implements
     public void reset() {
         start = 0;
         end = 0;
+        if(selected > -1)
+            unselect(selected);
+        selected = -1;
+        selectedCell = -1;
         view.controller = this;
         if(model.autoAdd || autoAdd){
             model.addRow(null);
@@ -683,8 +687,6 @@ public class TableController implements
         if(model.numRows() > 0){
             scrollLoad(0);
         }
-        selected = -1;
-        selectedCell = -1;
         sizeTable();
         if (model.paged)
             view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
@@ -1165,6 +1167,7 @@ public class TableController implements
                 reset();
                 if(setRow > -1)
                     select(setRow,0);
+                setRow = -1;
             }
         }
 
