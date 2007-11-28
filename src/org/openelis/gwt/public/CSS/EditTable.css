@@ -111,6 +111,7 @@
     font-size: 10px;
     color:#333333;
     cursor:pointer;
+    width:15px;
 }
 a.navindex:hover{
     color:#333333;

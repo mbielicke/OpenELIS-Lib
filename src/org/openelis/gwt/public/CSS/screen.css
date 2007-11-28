@@ -34,7 +34,7 @@ a.navIndex:hover {
     padding-bottom:5px;
     color: #616a76;
     text-align:center;
-    width:100px;
+    width:75px;
 }
 
 .ScreenButtonPanel .Hover .ScreenLabel{
@@ -181,13 +181,9 @@ background-image: url("../Images/topnavunselected_obsidian.gif");
 .Hover .topMenuBarItem {
   font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
   font-size:11px;
- /* color:#FFFFFF;*/
+
 background-image:url("../Images/menubuttonhover.gif");
- /* background-color:#fb8c3c;*/
 
-
-
-/*  background-color:#333333;*/
 }
 
 .topMenuBarItemSelected {
@@ -196,9 +192,6 @@ background-image:url("../Images/menubuttonhover.gif");
   padding-left:8px;
   padding-right:8px;
   background-image:url("../Images/menubuttonhover.gif");
-/*  color:#000000; */
-/*  background-color:#fb8c3c;*/
-  /*background-color:#FFFFCC;*/
 }
 
 .topMenuPanel { 
@@ -214,11 +207,34 @@ background-image:url("../Images/menubuttonhover.gif");
     background-color:#ffe584;
 }
 
+.topMenuPanelHover .disabled,.topMenuPanel .disabled{
+    cursor:default;
+    color:#616a76;
+    background-color:#faf7fd;
+}
+
+.topMenuPanelHover .topMenuPanelIconPanelDisabled, .topMenuPanel .topMenuPanelIconPanelDisabled {
+   cursor:default;
+   background-color:#dde0e3;
+   border-right:1px solid #b8c0c8;
+}
+
 .topMenuPanelTitle{
     font-size:12px;
     cursor:pointer;
     color:#276cff;
     font-weight:bold;
+}
+
+.topMenuPanelTitle .disabled{
+    cursor:default;
+    font-size:12px;
+    color:#616a76;
+    font-weight:bold;
+}
+
+.topMenuPanelDesc {
+   color:#616a76;
 }
 
 .topMenuPanelIcon{
@@ -552,10 +568,6 @@ border:collapse;
     cursor:default;
 }
 
-.ScreenTree{
-
-}
-
 .ScreenWindowBrowser{
 }
 
@@ -657,9 +669,8 @@ filter: alpha(opacity=50);
 	font-weight:bold;
 	text-align:left;
 }
-
 .Form .Prompt,.FormBorderless .Prompt  {
-    /*background:#eeeeec; */
+    /*background:#eeeeec;  */
     color:#333333;
     vertical-align:top;
     text-align:right;
@@ -719,7 +730,7 @@ margin 2px;
 }
 
 .ScreenTree {
-    background:#e6eaf6;
+  /*  background:#e6eaf6; */
     width:100%;
 }
 .ScreenTree .gwt-TreeItem{
@@ -758,5 +769,10 @@ margin 2px;
     cursor:ew-resize;
     width:2px;
 }
-
+.Upper {
+  text-transform:uppercase;
+}
+.Lower {
+  text-transform:lowercase;
+}
 
