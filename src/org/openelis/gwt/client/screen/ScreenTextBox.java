@@ -65,6 +65,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
                                      .getNamedItem("shortcut")
                                      .getNodeValue()
                                      .charAt(0));
+        textbox.setStyleName("ScreenTextBox");
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case")
                                             .getNodeValue();
@@ -82,7 +83,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
             
         initWidget(textbox);
         displayWidget = textbox;
-        textbox.setStyleName("ScreenTextBox");
         setDefaults(node, screen);
     }
 
