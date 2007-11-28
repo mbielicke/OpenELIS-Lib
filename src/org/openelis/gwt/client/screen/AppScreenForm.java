@@ -55,7 +55,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
     public void afterDraw(boolean sucess) {
         bpanel.setForm(this);
         bpanel.setState(FormInt.DISPLAY);
-        enable(true);
+        enable(false);
         bpanel.enable("u",false);
     }
     
@@ -307,17 +307,19 @@ public class AppScreenForm extends AppScreen implements FormInt {
     public void commitQuery() {
         formService.commitQuery(rpc, new AsyncCallback() {
            public void onSuccess(Object result){
-               afterCommitQuery(true);
+               afterCommitQuery((AbstractField)result, true);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
-               afterCommitQuery(false);
+               afterCommitQuery(null, false);
            }
         });
     }
     
-    public void afterCommitQuery(boolean success) {
+    public void afterCommitQuery(Object field, boolean success) {
         if(success){
+        	setForm(false);
+            load((FormRPC)forms.get("display"));
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
             doReset();
@@ -327,7 +329,6 @@ public class AppScreenForm extends AppScreen implements FormInt {
                 message.setText("Querying...Complete");
             
             bpanel.enable("ud",false);
-            setForm(false);
         }
     }
     /**
@@ -352,6 +353,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
                    Window.alert(caught.getMessage());
                }
             });
+            enable(false);
         }
         if (state == FormInt.ADD) {
             doReset();
@@ -364,7 +366,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
             	message.setText("Add aborted");
         }
         if (state == FormInt.QUERY) {
-            //doReset();
+            doReset();
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
