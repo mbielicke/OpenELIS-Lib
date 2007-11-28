@@ -61,6 +61,12 @@ public class ScreenAuto extends ScreenInputWidget {
                                   .getNamedItem("shortcut")
                                   .getNodeValue()
                                   .charAt(0));
+        
+        if (node.getAttributes().getNamedItem("popupWidth") != null)
+        	auto.setPopupWidth(node.getAttributes()
+                                  .getNamedItem("popupWidth")
+                                  .getNodeValue());
+        	
         auto.setStyleName("ScreenAuto");
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
@@ -112,7 +118,7 @@ public class ScreenAuto extends ScreenInputWidget {
             auto.setFocus(focused);
     }
 
-    public void enabled(boolean enabled){
+    public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
         else
