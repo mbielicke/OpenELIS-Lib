@@ -149,11 +149,13 @@ public class ScreenBase extends Composite implements
             Iterator inputKeys = widgets.keySet().iterator();
             while (inputKeys.hasNext()) {
                 String key = (String)inputKeys.next();
+                ScreenWidget inputField = (ScreenWidget)widgets.get(key);
+                if(inputField instanceof ScreenAuto)
+                    key += "Id";
                 if (!rpc.getFieldMap().containsKey(key))
                     continue;
                 AbstractField rpcField = rpc.getField(key);
-                ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-                inputField.load(rpcField);
+                inputField.load(rpcField);   
             }
         } catch (Exception e) {
             Window.alert("Load " + e.getMessage());
@@ -230,12 +232,19 @@ public class ScreenBase extends Composite implements
             Iterator inputKeys = widgets.keySet().iterator();
             while (inputKeys.hasNext()) {
                 key = (String)inputKeys.next();
-                if (!rpc.getFieldMap().containsKey(key)) {
-                    continue;
-                }
-                AbstractField rpcField = (AbstractField)rpc.getField(key);
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-                inputField.submit(rpcField);
+                if(inputField instanceof ScreenAuto){
+                    AbstractField rpcField = (AbstractField)rpc.getField(key+"Id");
+                    inputField.submit(rpcField);
+                    rpcField = (AbstractField)rpc.getField(key+"Text");
+                    inputField.submit(rpcField);
+                }else{
+                    if (!rpc.getFieldMap().containsKey(key)) {
+                        continue;
+                    }
+                    AbstractField rpcField = (AbstractField)rpc.getField(key);
+                    inputField.submit(rpcField);
+                }
             }
         } catch (Exception e) {
             Window.alert(key + e.getMessage());
