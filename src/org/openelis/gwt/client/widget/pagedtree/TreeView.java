@@ -23,8 +23,7 @@ public class TreeView extends Composite {
     private String shown = "";
     protected HorizontalPanel navPanel = new HorizontalPanel(); 
     private VerticalPanel vp = new VerticalPanel();
-    public ScrollPanel vScroll = new ScrollPanel();
-    public ScrollPanel hScroll = new ScrollPanel();
+    public ScrollPanel vScroll = new ScrollPanel();    
     
     public AbsolutePanel headerView = new AbsolutePanel();   
     public String width;
