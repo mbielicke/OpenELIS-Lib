@@ -840,8 +840,13 @@ public class TableController implements
             return;
         if (wid instanceof TableMaskedTextBox)
             ((TableMaskedTextBox)wid).format();
-
-        model.getFieldAt(row, col).setValue(wid.getValue());
+        if (wid instanceof TableOption && ((TableOption)wid).isMultipleSelect()){
+            for (int i = 0; i < ((TableOption)wid).getItemCount(); i++) {
+                if (((TableOption)wid).isItemSelected(i))
+                    ((OptionField)model.getFieldAt(row,col)).addValue(((TableOption)wid).getValue(i));
+            }
+        }else
+            model.getFieldAt(row, col).setValue(wid.getValue());
         
         if (manager != null) {
             manager.finishedEditing(row, col, this);
