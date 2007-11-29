@@ -68,6 +68,8 @@ public class TableOption extends OptionList implements TableCellWidget, EventPre
 
     public Widget getEditor(OptionField field) {
         TableOption ret = new TableOption();
+        ret.setMultipleSelect(isMultipleSelect());
+        ret.setVisibleItemCount(getVisibleItemCount());
         Iterator fieldIt = field.getOptions().iterator();
         while (fieldIt.hasNext()) {
             OptionItem item = (OptionItem)fieldIt.next();
@@ -123,6 +125,9 @@ public class TableOption extends OptionList implements TableCellWidget, EventPre
         if (node.getAttributes().getNamedItem("multi") != null){
             if(node.getAttributes().getNamedItem("multi").getNodeValue().equals("true"))
                 to.setMultipleSelect(true);
+        }
+        if (node.getAttributes().getNamedItem("size") != null){
+            to.setVisibleItemCount(Integer.parseInt(node.getAttributes().getNamedItem("size").getNodeValue()));
         }
         return to;
     }
