@@ -64,6 +64,10 @@ public class ButtonPanel extends Composite implements ClickListener {
      */
     public ScreenLabel reload = new ScreenLabel("Reload",null);
     /**
+     * Label used to display Select button.
+     */
+    public ScreenLabel select = new ScreenLabel("Select",null);
+    /**
      * The Form this widget controls
      */
     protected FormInt form;
@@ -72,6 +76,7 @@ public class ButtonPanel extends Composite implements ClickListener {
      */
     public int state = FormInt.DISPLAY;
 
+    private ScreenLabel pressed;
     /**
      * Constuctor for creating ButtonPanel
      * @param buttons
@@ -86,6 +91,7 @@ public class ButtonPanel extends Composite implements ClickListener {
      *   c - Commit
      *   r - Reload
      *   a - Add
+     *   s = Select
      * </pre>
      */
     public ButtonPanel(String buttons) {
@@ -115,64 +121,76 @@ public class ButtonPanel extends Composite implements ClickListener {
         abort.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         reload.setStyleName("ScreenPanelButton");
         reload.sinkEvents(Event.MOUSEEVENTS);
-
         reload.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
-        if (buttons.equals("all") || buttons.indexOf("q") > -1) {
-            hp.add(query);
-        }
-        if (buttons.equals("all") || buttons.indexOf("n") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+        select.setStyleName("ScreenPanelButton");
+        select.sinkEvents(Event.MOUSEEVENTS);
+        select.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
+        int numbuttons = 1;
+        if(!buttons.equals("all"))
+            numbuttons = buttons.length();
+        for(int i = 0; i < numbuttons; i++){
+            if (buttons.equals("all") || buttons.charAt(i) == 'q') {
+                hp.add(query);
             }
-            hp.add(next);
-        }
-        if (buttons.equals("all") || buttons.indexOf("p") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'n') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(next);
             }
-            hp.add(prev);
-        }
-        if (buttons.equals("all") || buttons.indexOf("a") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'p') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(prev);
             }
-            hp.add(add);
-        }
-        if (buttons.equals("all") || buttons.indexOf("u") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'a') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(add);
             }
-            hp.add(up);
-        }
-        if (buttons.equals("all") || buttons.indexOf("d") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'u') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(up);
             }
-            hp.add(delete);
-        }
-        if (buttons.equals("all") || buttons.indexOf("c") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'd') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(delete);
             }
-            hp.add(comm);
-        }
-        if (buttons.equals("all") || buttons.indexOf("b") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'c') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(comm);
             }
-            hp.add(abort);
-        }
-        if (buttons.equals("all") || buttons.indexOf("r") > -1) {
-            if(hp.getWidgetCount() > 0){
-                addSeparator();
+            if (buttons.equals("all") || buttons.charAt(i) == 'b') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }   
+                hp.add(abort);
             }
-            hp.add(reload);
+            if (buttons.equals("all") || buttons.charAt(i) == 'r') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(reload);
+            }
+            if (buttons.equals("all") || buttons.charAt(i) == 's') {
+                if(hp.getWidgetCount() > 0){
+                    addSeparator();
+                }
+                hp.add(select);
+            }
         }
         initWidget(hp);
         enable("all",true);
-        enable("npdcbr", false);
+        enable("npdcbrs", false);
     }
-    
     /**
      * Method used to add a blank td between buttons for styling
      */
@@ -196,31 +214,68 @@ public class ButtonPanel extends Composite implements ClickListener {
      */
     public void onClick(Widget sender) {
         if (sender == query) {
-           form.query(state);
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = query;
+            pressed.addStyleName("Pressed");
+            form.query(state);
         }
         if (sender == next) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
             form.next(state);
         }
         if (sender == prev) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
             form.prev(state);
         }
         if (sender == add) {
+            if(pressed != null) {
+                pressed.removeStyleName("Pressed");
+            }
+            pressed = add;
+            pressed.addStyleName("Pressed");
             form.add(state);
         }
         if (sender == up) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = up;
+            pressed.addStyleName("Pressed");
             form.up(state);
         }
         if (sender == delete) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
             form.delete(state);
         }
         if (sender == comm) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
             form.commit(state);
         }
         if (sender == abort) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
             form.abort(state);
         }
         if (sender == reload) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
             form.reload(state);
+        }
+        if (sender == select) {
+            if(pressed != null)
+                pressed.removeStyleName("Pressed");
+            pressed = null;
+            form.select(state);
         }
     }
     
@@ -238,16 +293,16 @@ public class ButtonPanel extends Composite implements ClickListener {
      */
     public void setState(int state) {
         if(state == FormInt.ADD || state == FormInt.QUERY || state == FormInt.UPDATE){
-            enable("quanpdr",false);
+            enable("quanpdrs",false);
             enable("cb",true);
         }
         if(state == FormInt.DISPLAY){
-            enable("quadr",true);
+            enable("quadrs",true);
             enable("cb",false);
             //ttb 11/28/07 took out np so that we can control it from the screen instead
         }
         if(state == FormInt.BROWSE){
-            enable("quadnpr",true);
+            enable("quadnprs",true);
             enable("cb",false);
         }
         this.state = state;
@@ -286,6 +341,9 @@ public class ButtonPanel extends Composite implements ClickListener {
             enable(abort,enabled);
         }
         if (buttons.equals("all") || buttons.indexOf("r") > -1) {
+            enable(reload,enabled);
+        }
+        if (buttons.equals("all") || buttons.indexOf("s") > -1) {
             enable(reload,enabled);
         }
     }
@@ -331,6 +389,9 @@ public class ButtonPanel extends Composite implements ClickListener {
             removeButton(abort);
         }
         if (buttons.indexOf("r") > -1) {
+            removeButton(reload);
+        }
+        if (buttons.indexOf("s") > -1) {
             removeButton(reload);
         }
     }
