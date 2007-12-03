@@ -23,7 +23,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
 	 * Widget wrapped by this class
 	 */
     private TextBox textbox;
-    private String fieldCase;
+    private String fieldCase = "mixed";
     private int length = 255;
   
 	/**
