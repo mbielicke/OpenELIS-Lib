@@ -16,4 +16,10 @@ public interface TableManager {
     public boolean doAutoAdd(int row, int col, TableController controller);
     
     public void rowAdded(int row, TableController controller);
+    
+    public void getPage(int page);
+    
+    public void getNextPage();
+    
+    public void getPreviousPage();
 }

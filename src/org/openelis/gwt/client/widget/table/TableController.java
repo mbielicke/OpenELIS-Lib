@@ -522,29 +522,48 @@ public class TableController implements
         }
         else
             return;
-        //if (row == selected) {
-            if (selectedCell != col) {
-                if (selectedCell > -1) {
-                    saveValue(row, selectedCell);
-                    if(model.autoAdd || autoAdd){
-                        if(manager != null && manager.doAutoAdd(row,selectedCell,this))
-                            addRow();
-                        else if(manager == null && row == model.numRows() -1)
-                            addRow();
-                    }
-                    setCellDisplay(row, selectedCell);
+        if (selectedCell != col) {
+            if (selectedCell > -1) {
+                saveValue(row, selectedCell);
+                if(model.autoAdd || autoAdd){
+                    if(manager != null && manager.doAutoAdd(row,selectedCell,this))
+                        addRow();
+                    else if(manager == null && row == model.numRows() -1)
+                        addRow();
                 }
-                if (col > -1 && (manager == null || (manager != null && manager.canEdit(row,
-                                                                           col,
-                                                                           this))))
-                    setCellEditor(row, col);
-                else
-                    selectedCell = -1;
+                setCellDisplay(row, selectedCell);
             }
-        //}
+            if (col > -1 && (manager == null || (manager != null && manager.canEdit(row, col, this))))
+                setCellEditor(row, col);
+            else
+                selectedCell = -1;
+        }
         selected = row;
         if (manager != null && col > -1)
             manager.action(row, col, this);
+        }catch(Exception e){
+            Window.alert("select "+e.getMessage());
+        }
+    }
+   
+    /**
+     * Method added to handle selection from Model callbacks.
+     * @param row
+     */
+    public void select(int row) {
+        try{
+            if(selected > -1){
+                unselect(selected);
+                view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
+            }    
+            view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
+            for(int i = 0; i < view.table.getCellCount(row); i++){
+                if(view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
+                    view.table.getWidget(row,i).addStyleName("disabled");
+                }
+            }
+            selectedCell = -1;
+            selected = row;
         }catch(Exception e){
             Window.alert("select "+e.getMessage());
         }
@@ -554,9 +573,11 @@ public class TableController implements
      * This method can be overridden to handle on change events
      */
     public void onChange(Widget sender) {
-        int sel = selected;
-        unselect(sel);
-        select(sel,-1);
+        if(sender instanceof TableOption){
+            int sel = selected;
+            unselect(sel);
+            select(sel,-1);
+        }   
     }
 
     /**
@@ -606,7 +627,12 @@ public class TableController implements
             view.table.setWidget(row, col, wid);
         }
         if (wid instanceof FocusWidget) {
-            ((FocusWidget)wid).setFocus(true);
+            final FocusWidget widFoc = (FocusWidget)wid;
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    widFoc.setFocus(true);
+                }
+            });
         }
         selectedCell = col;
         }catch(Exception e){
@@ -701,12 +727,18 @@ public class TableController implements
     
     public void scrollLoad(int scrollPos){
         try{
-              
+        if(start == 0 && end == model.numRows()){
+            return;
+        }      
         int newStart = 0;
         int newEnd = 0;
         int rowsPer = (view.cellView.getOffsetHeight()/(view.table.getOffsetHeight()/model.numRows()));
         newStart = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) - rowsPer;
-        newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer ;
+        if(model.numRows() < 100){
+            newEnd = model.numRows();
+        }else{
+            newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer ;
+        }
         if(newStart < 0){
             newStart = 0;
         }
@@ -717,8 +749,8 @@ public class TableController implements
             for(int i = newStart; i < newEnd; i++){
                 loadRow(i);
             }
-            clearRows(start,end);
-        }else{
+           clearRows(start,end);
+        }else if(start != newStart || end != newEnd){
             if(start < newStart){
                 clearRows(start,newStart);
             }
@@ -740,18 +772,23 @@ public class TableController implements
         }
         start = newStart;
         end = newEnd;
+
         }catch(Exception e){
             Window.alert("scrollLoad "+e.getMessage());
         }
     }
     
     private void clearRows(final int start, final int stop){
-        if(selected >= start && selected <= stop)
-           unselect(selected);
-        for(int i = start; i < stop; i++){
-           for(int j = 0; j < model.getRow(i).numColumns(); j++)
-              view.table.clearCell(i,j);
-        }
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {  
+                if(selected >= start && selected <= stop)
+                    unselect(selected);
+                for(int i = start; i < stop; i++){
+                    for(int j = 0; j < model.getRow(i).numColumns(); j++)
+                        view.table.clearCell(i,j);
+                }
+            }
+        });
      }
 
     /**
@@ -918,11 +955,11 @@ public class TableController implements
         }
         if (KeyboardListener.KEY_RIGHT == code && model.paged) {
             if (model.pageIndex != model.totalPages - 1)
-                getPage(++model.pageIndex, -1);
+                manager.getNextPage();
         }
         if (KeyboardListener.KEY_LEFT == code && model.paged) {
             if (model.pageIndex != 0)
-                getPage(--model.pageIndex, -1);
+                manager.getPreviousPage();
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
             if (selectedCell + 1 >= model.getRow(selected).numColumns()) {
@@ -960,6 +997,7 @@ public class TableController implements
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                         onCellClicked(view.table, fRow, fCol);
+                        ((FocusWidget)view.table.getWidget(selected, selectedCell)).setFocus(true);
                     }
                 });
             } else {
@@ -970,6 +1008,7 @@ public class TableController implements
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                         onCellClicked(view.table, selected, fCol);
+                        ((FocusWidget)view.table.getWidget(selected, selectedCell)).setFocus(true);
                     }
                 });
             }
@@ -988,6 +1027,11 @@ public class TableController implements
         if (view.table.isAttached()) {
             if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                 return onKeyPress(event);
+            }
+            if (DOM.eventGetType(event) == Event.ONCLICK){
+                if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetFromElement(event))){
+                    DOM.removeEventPreview(this);
+                }
             }
         }
         return true;
@@ -1089,19 +1133,6 @@ public class TableController implements
     }
 
     /**
-     * This method will call back to the server to retrieve the selected page.
-     * 
-     * @param page
-     * @param selected
-     */
-    public void getPage(int page, int selected) {
-        try {
-            tableService.getPage(page, selected, callback);
-        } catch (RPCException e) {
-        }
-    }
-
-    /**
      * This method will call back to the server to sort a paged model.
      * 
      * @param col
@@ -1160,11 +1191,11 @@ public class TableController implements
         int end = htmlString.indexOf("\"", start);
         String page = htmlString.substring(start, end);
         if (page.equals("-1"))
-            getPage(--model.pageIndex, -1);
+            manager.getNextPage();
         else if (page.equals("+1"))
-            getPage(++model.pageIndex, -1);
+            manager.getPreviousPage();
         else
-            getPage(Integer.parseInt(page), -1);
+            manager.getPage(Integer.parseInt(page));
     }
 
     /**

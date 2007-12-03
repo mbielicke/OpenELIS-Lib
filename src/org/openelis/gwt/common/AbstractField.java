@@ -2,10 +2,17 @@ package org.openelis.gwt.common;
 
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.data.DataField;
+import org.openelis.gwt.common.data.DataObject;
+
 import java.io.Serializable;
 import java.util.Vector;
 
-public class AbstractField implements IField, Serializable {
+public class AbstractField implements DataField, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     /**
      * @gwt.typeArgs <java.lang.String>
      */
@@ -13,6 +20,7 @@ public class AbstractField implements IField, Serializable {
     protected boolean required;
     protected String key;
     protected String tip;
+    protected DataObject object;
 
     public void setRequired(boolean required) {
         this.required = required;
@@ -75,13 +83,12 @@ public class AbstractField implements IField, Serializable {
     }
 
     public void setValue(Object val) {
-        // TODO Auto-generated method stub
+       object.setValue(val);
         
     }
 
     public Object getValue() {
-        // TODO Auto-generated method stub
-        return null;
+        return object.getValue();
     }
 
     public Object getInstance() {
@@ -95,5 +102,13 @@ public class AbstractField implements IField, Serializable {
     
     public void setTip(String tip) {
         this.tip = tip;
+    }
+    
+    public void setDataObject(DataObject object){
+        this.object = object;
+    }
+    
+    public DataObject getDataObject() {
+        return object;
     }
 }

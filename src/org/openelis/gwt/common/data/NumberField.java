@@ -4,10 +4,11 @@
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.AbstractField;
 
 import java.io.Serializable;
 
@@ -19,22 +20,27 @@ import java.io.Serializable;
  * Preferences - Java - Code Style - Code Templates
  */
 public class NumberField extends AbstractField implements Serializable {
-    private String type;
-    private Double value;
+
+    private static final long serialVersionUID = 1L;
     private Double max;
     private Double min;
     private boolean invalid;
-
+    private NumberObject number = (NumberObject)object;
+    
+    public NumberField() {
+        object = new NumberObject();
+    }
+    
     public boolean isValid() {
         if (invalid)
             return false;
         if (required) {
-            if (value == null) {
+            if (number.value == null) {
                 addError("Field is required");
                 return false;
             }
         }
-        if (value != null && !isInRange()) {
+        if (number.value != null && !isInRange()) {
             return false;
         }
         return true;
@@ -42,64 +48,29 @@ public class NumberField extends AbstractField implements Serializable {
 
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        if (value == null)
+        if (object.getValue() == null)
             return true;
-        if (max != null && value.doubleValue() > max.doubleValue()) {
+        if (max != null && number.value.doubleValue() > max.doubleValue()) {
             addError("Field exceeded maximum length");
             return false;
         }
-        if (min != null && value.doubleValue() < min.doubleValue()) {
+        if (min != null && number.value.doubleValue() < min.doubleValue()) {
             addError("Field is below minimum length");
             return false;
         }
         return true;
     }
 
-    public void setValue(Object val) {
-        // TODO Auto-generated method stub
-        try {
-            if (val != null) {
-                if (val instanceof String && !((String)val).equals(""))
-                    this.value = Double.valueOf((String)val);
-                if (val instanceof Double)
-                    this.value = (Double)val;
-                if (val instanceof Integer)
-                    this.value = new Double(((Integer)val).doubleValue());
-            } else {
-                this.value = null;
-            }
-            invalid = false;
-        } catch (Exception e) {
-            invalid = true;
-            addError("Invalid number format");
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.uiowa.uhl.inmsp.interfaces.IField#getValue()
-     */
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        if (value == null)
-            return null;
-        if (type.equals("integer")) {
-            return new Integer(value.intValue());
-        }
-        return value;
-    }
-
     public String toString() {
-        if (value == null)
+        if (number.value == null)
             return "";
-        if (type.equals("integer"))
-            return "" + value.intValue();
-        return value.toString();
+        if (number.type.equals("integer"))
+            return "" + number.value.intValue();
+        return number.value.toString();
     }
 
     public void setType(String type) {
-        this.type = type;
+        number.type = type;
     }
 
     public void setMin(Object min) {
@@ -114,12 +85,12 @@ public class NumberField extends AbstractField implements Serializable {
         NumberField obj = new NumberField();
         obj.setMax(max);
         obj.setMin(min);
-        obj.setType(type);
         obj.setRequired(required);
-        obj.setValue(value);
+        obj.setDataObject(object);
         return obj;
     }
 
+    
     public Object getInstance(Node field) {
         NumberField number = new NumberField();
         if (field.getAttributes().getNamedItem("key") != null)
@@ -127,7 +98,7 @@ public class NumberField extends AbstractField implements Serializable {
                                .getNamedItem("key")
                                .getNodeValue());
         if (field.getAttributes().getNamedItem("type") != null)
-            number.setType(field.getAttributes()
+            number.number.setType(field.getAttributes()
                                 .getNamedItem("type")
                                 .getNodeValue());
         if (field.getAttributes().getNamedItem("required") != null)
@@ -144,4 +115,5 @@ public class NumberField extends AbstractField implements Serializable {
                                           .getNodeValue()));
         return number;
     }
+    
 }

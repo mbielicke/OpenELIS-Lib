@@ -3,21 +3,23 @@ package org.openelis.gwt.client.services;
 import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 
 public interface AppScreenFormServiceInt extends AppScreenServiceInt {
     
-    public FormRPC commitUpdate(FormRPC rpc) throws RPCException;
+    public FormRPC commitUpdate(FormRPC rpcSend, FormRPC rpcReturn) throws RPCException;
     
-    public FormRPC commitAdd(FormRPC rpc) throws RPCException;
+    public FormRPC commitAdd(FormRPC rpcSend, FormRPC rpcReturn) throws RPCException;
     
-    public AbstractField commitQuery(FormRPC rpc) throws RPCException;
+    public DataModel commitQuery(FormRPC rpcSend, DataModel model) throws RPCException;
     
-    public FormRPC fetch(FormRPC rpc, AbstractField key) throws RPCException;
+    public FormRPC fetch(DataSet key, FormRPC rpcReturn) throws RPCException;
     
-    public FormRPC fetchForUpdate(FormRPC rpc, AbstractField key) throws RPCException;
+    public FormRPC fetchForUpdate(DataSet key, FormRPC rpcReturn) throws RPCException;
     
-    public FormRPC delete(FormRPC rpc, AbstractField key) throws RPCException;
+    public FormRPC delete(DataSet key, FormRPC rpcReturn) throws RPCException;
     
-    public FormRPC abort(FormRPC rpc, AbstractField key) throws RPCException;
+    public FormRPC abort(DataSet key, FormRPC rpcReturn) throws RPCException;
 
 }

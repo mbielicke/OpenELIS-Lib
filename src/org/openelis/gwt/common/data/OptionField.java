@@ -4,12 +4,14 @@
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.OptionItem;
 
 
 import java.io.Serializable;

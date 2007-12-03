@@ -1,5 +1,6 @@
 package org.openelis.gwt.common;
 
+
 import java.util.ArrayList;
 
 public class QueryField extends AbstractField {

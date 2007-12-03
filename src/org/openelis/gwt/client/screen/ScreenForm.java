@@ -334,4 +334,9 @@ public class ScreenForm extends Screen implements FormInt {
         }
         super.onDetach();
     }
+
+    public void select(int state) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -4,20 +4,22 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 
 public interface AppScreenFormServiceIntAsync extends AppScreenServiceIntAsync {
 
-    public void commitUpdate(FormRPC rpc, AsyncCallback callback);
+    public void commitUpdate(FormRPC rpcSend, FormRPC rpcReturn, AsyncCallback callback);
     
-    public void commitAdd(FormRPC rpc, AsyncCallback callback);
+    public void commitAdd(FormRPC rpcSend, FormRPC rpcReturn, AsyncCallback callback);
     
-    public void commitQuery(FormRPC rpc, AsyncCallback callback);
+    public void commitQuery(FormRPC rpcSend, DataModel model, AsyncCallback callback);
     
-    public void fetch(FormRPC rpc, AbstractField key, AsyncCallback callback);
+    public void fetch(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
     
-    public void fetchForUpdate(FormRPC rpc, AbstractField key, AsyncCallback callback);
+    public void fetchForUpdate(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
     
-    public void delete(FormRPC rpx, AbstractField key, AsyncCallback callback);
+    public void delete(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
     
-    public void abort(FormRPC rpc, AbstractField key, AsyncCallback callback);
+    public void abort(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
 }

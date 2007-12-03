@@ -6,6 +6,7 @@
  */
 package org.openelis.gwt.common;
 
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ public class FormRPC implements IForm, Serializable {
     public Integer userId;
     public String userName;
     public String fullName;
+    public String key;
 
     public FormRPC() {
     }

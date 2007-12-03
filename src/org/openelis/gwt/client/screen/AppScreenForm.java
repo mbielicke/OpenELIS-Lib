@@ -3,14 +3,16 @@ package org.openelis.gwt.client.screen;
 import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
-
+import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.client.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.client.widget.ButtonPanel;
 import org.openelis.gwt.client.widget.FormInt;
-import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataModelWidget;
 
 import java.util.Iterator;
 /**
@@ -20,13 +22,13 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class AppScreenForm extends AppScreen implements FormInt {
-	
-	/**
-	 * Reference to the ButtonPanel that is defined on this
-	 * Screen.  This needs to be set by the Extending class 
-	 * after the screen is drawn.
-	 */
+public class AppScreenForm extends AppScreen implements FormInt, ChangeListener {
+    
+    /**
+     * Reference to the ButtonPanel that is defined on this
+     * Screen.  This needs to be set by the Extending class 
+     * after the screen is drawn.
+     */
     public ButtonPanel bpanel = null;
     /**
      * Reference to the Label that will display the Form Messages to
@@ -36,20 +38,22 @@ public class AppScreenForm extends AppScreen implements FormInt {
      */
     public Label message = new Label();
     
+    private DataModelWidget modelWidget = new DataModelWidget();
+    
     public ScreenWindow window;
     public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
-    public AbstractField key;
     public static AppScreenFormServiceIntAsync formService;
     //this is used to internationalize the status bar messages
     //private ConstantsWithLookup constants = null;
 
-	public AppScreenForm(AppScreenFormServiceIntAsync service) {
+    public AppScreenForm(AppScreenFormServiceIntAsync service) {
         super(formService);
         formService = service;
     }
-	
-	public AppScreenForm() {
+    
+    public AppScreenForm() {
         super();
+        modelWidget.addChangeListener(this);
     }
     
     public void afterDraw(boolean sucess) {
@@ -59,12 +63,11 @@ public class AppScreenForm extends AppScreen implements FormInt {
         bpanel.enable("u",false);
     }
     
-    public void fetch(AbstractField key){
-        this.key = key;
-        formService.fetch(rpc,key, new AsyncCallback(){
+    public void fetch(){
+        formService.fetch(modelWidget.getSelected(), (FormRPC)forms.get("display"), new AsyncCallback(){
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
-               forms.put("display", rpc);
+               forms.put(rpc.key, rpc);
                load();
                afterFetch(true);
            }
@@ -89,9 +92,9 @@ public class AppScreenForm extends AppScreen implements FormInt {
         //doReset();      
         bpanel.setState(FormInt.QUERY);
         if(constants != null)
-        	message.setText(constants.getString("enterFieldsToQuery"));
+            message.setText(constants.getString("enterFieldsToQuery"));
         else
-        	message.setText("Enter fields to query by then press Commit");
+            message.setText("Enter fields to query by then press Commit");
         setForm(true);
         load((FormRPC)forms.get("query"));
         enable(true);
@@ -105,6 +108,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
      */
     public void next(int state) {
         // TODO Auto-generated method stub
+        modelWidget.next();
         
     }
     
@@ -115,7 +119,7 @@ public class AppScreenForm extends AppScreen implements FormInt {
      */
     public void prev(int state) {
         // TODO Auto-generated method stub
-        
+        modelWidget.previous();
     }
 
     /** 
@@ -128,9 +132,9 @@ public class AppScreenForm extends AppScreen implements FormInt {
         enable(true);
         bpanel.setState(FormInt.ADD);
         if(constants != null)
-        	message.setText(constants.getString("enterInformationPressCommit"));
+            message.setText(constants.getString("enterInformationPressCommit"));
         else
-        	message.setText("Enter information in the fields, then press Commit");
+            message.setText("Enter information in the fields, then press Commit");
     }
 
     /**
@@ -138,10 +142,10 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void up(int state) {
-        formService.fetchForUpdate(rpc, key, new AsyncCallback() {
+        formService.fetchForUpdate(modelWidget.getSelected(), (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
-               forms.put("display", rpc);
+               forms.put(rpc.key, rpc);
                load();
                afterUpdate(true);
            }
@@ -170,10 +174,10 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * the ButtonPanel widget.
      */
     public void delete(int state) {
-        formService.delete(rpc, key, new AsyncCallback() {
+        formService.delete(modelWidget.getSelected(), (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
-               forms.put("display", rpc);
+               forms.put(rpc.key, rpc);
                load();
                afterDelete(true);
            }
@@ -198,55 +202,55 @@ public class AppScreenForm extends AppScreen implements FormInt {
             super.doSubmit();
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-            	if(constants != null)
-            		message.setText(constants.getString("updating"));
-            	else
-            		message.setText("Updating...");
-            	
+                if(constants != null)
+                    message.setText(constants.getString("updating"));
+                else
+                    message.setText("Updating...");
+                
                 clearErrors();
                 commitUpdate();
             } else {
                 drawErrors();
                 if(constants != null)
-                	message.setText(constants.getString("correctErrors"));
+                    message.setText(constants.getString("correctErrors"));
                 else
-                	message.setText("Please correct the errors indicated, then press Commit");
+                    message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.ADD) {
             super.doSubmit();
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-            	if(constants != null)
-            		message.setText(constants.getString("adding"));
-            	else
-            		message.setText("Adding...");
+                if(constants != null)
+                    message.setText(constants.getString("adding"));
+                else
+                    message.setText("Adding...");
                 clearErrors();
                 commitAdd();
             } else {
                 drawErrors();
                 if(constants != null)
-                	message.setText(constants.getString("correctErrors"));
+                    message.setText(constants.getString("correctErrors"));
                 else
-                	message.setText("Please correct the errors indicated, then press Commit");
+                    message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.QUERY) {
             super.doSubmit();
             if(constants != null)
-            	message.setText(constants.getString("querying"));
+                message.setText(constants.getString("querying"));
             else
-            	message.setText("Querying...");
-            commitQuery();
+                message.setText("Querying...");
+            commitQuery(rpc);
         }
         
     }
     
     public void commitUpdate() {
-        formService.commitUpdate(rpc, new AsyncCallback() {
+        formService.commitUpdate(rpc, (FormRPC)forms.get("display"),new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
-               forms.put("display", rpc);
+               forms.put(rpc.key, rpc);
                load();
                afterCommitUpdate(true);
            }
@@ -274,10 +278,10 @@ public class AppScreenForm extends AppScreen implements FormInt {
     }
     
     public void commitAdd() {
-        formService.commitAdd(rpc, new AsyncCallback() {
+        formService.commitAdd(rpc, (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
-               forms.put("display",rpc);
+               forms.put(rpc.key,rpc);
                load();
                afterCommitAdd(true);
            }
@@ -304,21 +308,22 @@ public class AppScreenForm extends AppScreen implements FormInt {
         }
     }
     
-    public void commitQuery() {
-        formService.commitQuery(rpc, new AsyncCallback() {
+    public void commitQuery(FormRPC rpcQuery) {
+        formService.commitQuery(rpcQuery, modelWidget.getModel(), new AsyncCallback() {
            public void onSuccess(Object result){
-               afterCommitQuery((AbstractField)result, true);
+               modelWidget.setModel((DataModel)result);
+               afterCommitQuery(true);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
-               afterCommitQuery(null, false);
+               afterCommitQuery(false);
            }
         });
     }
     
-    public void afterCommitQuery(Object field, boolean success) {
+    public void afterCommitQuery(boolean success) {
         if(success){
-        	setForm(false);
+            setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
@@ -340,13 +345,14 @@ public class AppScreenForm extends AppScreen implements FormInt {
             rpc.operation = IForm.CANCEL;
             clearErrors();
             if(constants != null)
-            	message.setText(constants.getString("updateAborted"));
+                message.setText(constants.getString("updateAborted"));
             else
-            	message.setText("Update aborted");
+                message.setText("Update aborted");
             
-            formService.abort(rpc, key, new AsyncCallback() {
+            formService.abort(modelWidget.getModel().getSelected(),(FormRPC)forms.get("display"), new AsyncCallback() {
                public void onSuccess(Object result){
                    rpc = (FormRPC)result;
+                   forms.put(rpc.key, rpc);
                    load();
                }
                public void onFailure(Throwable caught){
@@ -361,9 +367,9 @@ public class AppScreenForm extends AppScreen implements FormInt {
             load();
             enable(false);
             if(constants != null)
-            	message.setText(constants.getString("addAborted"));
+                message.setText(constants.getString("addAborted"));
             else
-            	message.setText("Add aborted");
+                message.setText("Add aborted");
         }
         if (state == FormInt.QUERY) {
             doReset();
@@ -371,9 +377,9 @@ public class AppScreenForm extends AppScreen implements FormInt {
             load((FormRPC)forms.get("display"));
             enable(false);
             if(constants != null)
-            	message.setText(constants.getString("queryAborted"));
+                message.setText(constants.getString("queryAborted"));
             else
-            	message.setText("Query aborted");
+                message.setText("Query aborted");
             //fetch(key);
         }
         bpanel.setState(FormInt.DISPLAY);
@@ -385,9 +391,13 @@ public class AppScreenForm extends AppScreen implements FormInt {
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void reload(int state) {
-        fetch(key);
+        fetch();
     }
-
+    
+    public void select(int state) {
+        // TODO Auto-generated method stub
+        
+    }
     /**
      * This method is called when the ScreenForm is displayed as part of a ScreenWindow widget.  
      * It will return true if the button panel is one of the three update modes and false when 
@@ -400,10 +410,10 @@ public class AppScreenForm extends AppScreen implements FormInt {
         if(bpanel.state == FormInt.ADD ||
            bpanel.state == FormInt.QUERY ||
            bpanel.state == FormInt.UPDATE){
-        	if(constants != null)
-        		message.setText(constants.getString("mustCommitOrAbort"));
-        	else 
-        		message.setText("You must Commit or Abort changes first");
+            if(constants != null)
+                message.setText(constants.getString("mustCommitOrAbort"));
+            else 
+                message.setText("You must Commit or Abort changes first");
             return true;
         }
         return false;
@@ -428,4 +438,17 @@ public class AppScreenForm extends AppScreen implements FormInt {
         }
         
     }
+
+    public void onChange(Widget sender) {
+        if(sender == modelWidget){
+            if(modelWidget.event == DataModelWidget.SELECTION)
+                fetch();
+            if(modelWidget.event == DataModelWidget.GETPAGE)
+                commitQuery(null);
+            if(modelWidget.event == DataModelWidget.REFRESH)
+                modelWidget.select(0);
+        }
+    }
+
+
 }

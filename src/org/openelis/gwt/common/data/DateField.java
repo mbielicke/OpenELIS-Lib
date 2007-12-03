@@ -4,10 +4,12 @@
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.DatetimeRPC;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,23 +21,23 @@ import java.util.Date;
  * Preferences - Java - Code Style - Code Templates
  */
 public class DateField extends AbstractField implements Serializable {
-    private byte begin;
-    private byte end;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.DatetimeRPC>
-     */
-    private DatetimeRPC value = null;
+
+    protected DateObject date = (DateObject)object;
     private Integer max;
     private Integer min;
 
+    public DateField(){
+        object = new DateObject();
+    }
+    
     public boolean isValid() {
         if (required) {
-            if (value == null) {
+            if (date.value == null) {
                 addError("Field is required");
                 return false;
             }
         }
-        if (value != null && !isInRange()) {
+        if (date.value != null && !isInRange()) {
             return false;
         }
         return true;
@@ -58,12 +60,12 @@ public class DateField extends AbstractField implements Serializable {
      */
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        if (min != null && value.before(DatetimeRPC.getInstance()
+        if (min != null && date.value.before(DatetimeRPC.getInstance()
                                                    .add(-min.intValue()))) {
             addError("Date is too far in the past");
             return false;
         }
-        if (max != null && value.after(DatetimeRPC.getInstance()
+        if (max != null && date.value.after(DatetimeRPC.getInstance()
                                                   .add(max.intValue()))) {
             addError("Date is too far in the future");
             return false;
@@ -71,33 +73,19 @@ public class DateField extends AbstractField implements Serializable {
         return true;
     }
 
-    public void setValue(Object val) {
-        if (val == null || val == "") {
-            value = null;
-        } else if (val instanceof DatetimeRPC) {
-            value = (DatetimeRPC)val;
-        } else {
-            value = DatetimeRPC.getInstance(begin, end, val);
-        }
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
     public String toString() {
-        if (value == null) {
+        if (date.value == null) {
             return "";
         }
-        return value.toString();
+        return date.value.toString();
     }
 
     public void setBegin(byte begin) {
-        this.begin = begin;
+        date.begin = begin;
     }
 
     public void setEnd(byte end) {
-        this.end = end;
+        date.end = end;
     }
 
     public void setMin(Object min) {
@@ -109,20 +97,18 @@ public class DateField extends AbstractField implements Serializable {
     }
 
     public byte getBegin() {
-        return this.begin;
+        return date.begin;
     }
 
     public byte getEnd() {
-        return this.end;
+        return date.end;
     }
 
     public Object getInstance() {
         DateField obj = new DateField();
-        obj.setBegin(begin);
-        obj.setEnd(end);
         obj.setMax(max);
         obj.setMin(min);
-        obj.setValue(value);
+        obj.setDataObject(date);
         return obj;
     }
 

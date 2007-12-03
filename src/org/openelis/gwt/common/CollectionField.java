@@ -1,11 +1,12 @@
 package org.openelis.gwt.common;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CollectionField extends AbstractField implements Serializable {
     /**
-     * @gwt.typeArgs <java.lang.String>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.DataSet>
      */
     private ArrayList coll = new ArrayList();
 

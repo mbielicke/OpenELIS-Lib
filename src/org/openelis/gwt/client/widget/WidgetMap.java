@@ -7,6 +7,7 @@ import org.openelis.gwt.client.screen.ScreenWidget;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
 import org.openelis.gwt.client.widget.table.TableManager;
 import org.openelis.gwt.common.AbstractField;
+
 import java.util.HashMap;
 
 /**

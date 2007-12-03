@@ -2,6 +2,7 @@ package org.openelis.gwt.common;
 
 import com.google.gwt.xml.client.Node;
 
+
 public class TableField extends AbstractField {
 
     /**

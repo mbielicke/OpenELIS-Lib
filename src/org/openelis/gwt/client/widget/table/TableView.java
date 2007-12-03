@@ -305,7 +305,7 @@ public class TableView extends Composite implements ScrollListener {
 
     public void onScroll(Widget widget, int scrollLeft, final int scrollTop) {
         if(top != scrollTop){
-            new Delay(scrollTop, 150);
+            new Delay(scrollTop, 15);
             if(controller.showRows){
                 rowsView.setWidgetPosition(rows,0,-scrollTop);
             }
@@ -317,7 +317,6 @@ public class TableView extends Composite implements ScrollListener {
         }
     }
     
-    
     protected void onAttach() {
         // TODO Auto-generated method stub
         if(!loaded){
@@ -326,6 +325,8 @@ public class TableView extends Composite implements ScrollListener {
         }
         super.onAttach();
     }
+    
+    
    
     
     

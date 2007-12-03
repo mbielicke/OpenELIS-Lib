@@ -4,10 +4,11 @@
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.AbstractField;
 
 import java.io.Serializable;
 
@@ -18,50 +19,48 @@ import java.io.Serializable;
  * Preferences - Java - Code Style - Code Templates
  */
 public class StringField extends AbstractField implements Serializable {
-    private String value;
+    
+    protected StringObject string = (StringObject)object;
     private Integer min;
     private Integer max;
+    
+    public StringField() {
+        object = new StringObject();
+    }
 
     public boolean isValid() {
         if (required) {
-            if (value == null || value.length() == 0) {
+            if (string.value == null || string.value.length() == 0) {
                 addError("Field is required");
                 return false;
             }
         }
-        if (value != null && !isInRange()) {
+        if (string.value != null && !isInRange()) {
             return false;
         }
         return true;
     }
 
     public boolean isInRange() {
-        if (value == null)
+        if (string.value == null)
             return true;
-        if (max != null && ((String)value).length() > ((Integer)max).intValue()) {
+        if (max != null && (string.value).length() > ((Integer)max).intValue()) {
             addError("Field exceeded maximum length");
             return false;
         }
-        if (min != null && ((String)value).length() < ((Integer)min).intValue()
-            && ((String)value).length() > 0) {
+        if (min != null && (string.value).length() < ((Integer)min).intValue()
+            && (string.value).length() > 0) {
             addError("Field is below minimum length");
             return false;
         }
         return true;
     }
 
-    public void setValue(Object val) {
-        value = (String)val;
-    }
-
-    public Object getValue() {
-        return value;
-    }
 
     public String toString() {
-        if (value == null)
+        if (string.value == null)
             return "";
-        return (String)value;
+        return string.value;
     }
 
     public void setMin(Object min) {
@@ -77,7 +76,7 @@ public class StringField extends AbstractField implements Serializable {
         obj.setMax(max);
         obj.setMin(min);
         obj.setRequired(required);
-        obj.setValue(value);
+        obj.setDataObject(string);
         return obj;
     }
 

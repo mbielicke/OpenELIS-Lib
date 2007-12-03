@@ -4,10 +4,11 @@
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.AbstractField;
 
 import java.io.Serializable;
 
@@ -19,11 +20,15 @@ import java.io.Serializable;
  * Preferences - Java - Code Style - Code Templates
  */
 public class CheckField extends AbstractField implements Serializable {
-    protected Boolean value;
+    protected BooleanObject bool = (BooleanObject)object;
 
+    public CheckField() {
+        object = new BooleanObject();
+    }
+    
     public boolean isValid() {
         if (required) {
-            if (value == null) {
+            if (bool.value  == null) {
                 addError("Field is required");
                 return false;
             }
@@ -39,47 +44,26 @@ public class CheckField extends AbstractField implements Serializable {
         return true;
     }
 
-    public void setValue(Object val) {
-        // TODO Auto-generated method stub
-        if (val != null) {
-            if (val instanceof String) {
-                if (val.equals("Y"))
-                    value = new Boolean(true);
-                else if (val.equals("N"))
-                    value = new Boolean(false);
-                else
-                    value = new Boolean((String)val);
-            } else
-                value = (Boolean)val;
-        } else {
-            value = null;
-        }
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
     public String toString() {
-        if (value == null) {
+        if (bool.value == null) {
             return "";
         }
-        if (((Boolean)value).booleanValue())
+        if (((Boolean)bool.value).booleanValue())
             return "Y";
         else
             return "N";
     }
 
     public boolean isChecked() {
-        if (value == null)
+        if (bool.value == null)
             return false;
-        return value.booleanValue();
+        return bool.value.booleanValue();
     }
 
     public Object getInstance() {
         CheckField obj = new CheckField();
         obj.setRequired(required);
-        obj.setValue(value);
+        obj.setValue(bool.value);
         return obj;
     }
 

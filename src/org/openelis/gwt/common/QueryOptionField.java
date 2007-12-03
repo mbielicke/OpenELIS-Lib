@@ -4,6 +4,7 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+
 public class QueryOptionField extends OptionField {
 
     private String type;
