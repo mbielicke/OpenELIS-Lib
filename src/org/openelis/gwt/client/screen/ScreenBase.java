@@ -150,8 +150,10 @@ public class ScreenBase extends Composite implements
             while (inputKeys.hasNext()) {
                 String key = (String)inputKeys.next();
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-                if(inputField instanceof ScreenAuto)
-                    key += "Id";
+                if(inputField instanceof ScreenAuto){
+                 if(!((ScreenInputWidget)inputField).queryMode)
+                	key += "Id";
+                }
                 if (!rpc.getFieldMap().containsKey(key))
                     continue;
                 AbstractField rpcField = rpc.getField(key);
@@ -233,7 +235,7 @@ public class ScreenBase extends Composite implements
             while (inputKeys.hasNext()) {
                 key = (String)inputKeys.next();
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-                if(inputField instanceof ScreenAuto){
+                if(inputField instanceof ScreenAuto && !((ScreenInputWidget)inputField).queryMode){
                     AbstractField rpcField = (AbstractField)rpc.getField(key+"Id");
                     inputField.submit(rpcField);
                     rpcField = (AbstractField)rpc.getField(key+"Text");
