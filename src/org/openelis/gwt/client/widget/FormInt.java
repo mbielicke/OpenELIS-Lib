@@ -32,5 +32,7 @@ public interface FormInt {
     
     public void reload(int state);
     
+    public void select(int state);
+    
     public boolean hasChanges();
 }
