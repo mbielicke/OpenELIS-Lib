@@ -209,8 +209,8 @@ public class MaskedTextBox extends TextBox implements
     }
 
     public void onLostFocus(Widget sender) {
-        // TODO Auto-generated method stub
-        format();
+        if(!isReadOnly())
+        	format();
     }
     
     public void complete(){
