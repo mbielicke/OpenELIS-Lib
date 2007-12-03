@@ -4,7 +4,6 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-
 public class QueryOptionField extends OptionField {
 
     private String type;
@@ -47,6 +46,7 @@ public class QueryOptionField extends OptionField {
         QueryOptionField obj = new QueryOptionField();
         obj.setRequired(required);
         obj.setMulti(multi);
+        obj.setType(type);
         for (int i = 0; i < options.size(); i++) {
             OptionItem item = (OptionItem)options.get(i);
             obj.addOption(item.akey, item.display);
