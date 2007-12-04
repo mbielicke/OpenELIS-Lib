@@ -80,6 +80,8 @@ public class TableController implements
     private int end = 0;
     private boolean autoAdd;
     public boolean showRows;
+    public int offCell = -1;
+    public int offTable = -1;
     
     /**
      * This Method will set the url for the TableService.
@@ -701,6 +703,7 @@ public class TableController implements
     public void reset() {
         start = 0;
         end = 0;
+        view.cellView.setScrollPosition(0);
         if(selected > -1)
             view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
         selected = -1;
@@ -723,6 +726,10 @@ public class TableController implements
     }
     
     public void load() {
+        if(offCell < 0){
+            offCell = view.cellView.getOffsetHeight();
+            offTable = view.table.getOffsetHeight();
+        }
         if(model.numRows() > 0){
             scrollLoad(0);
         }
@@ -738,12 +745,12 @@ public class TableController implements
         }      
         int newStart = 0;
         int newEnd = 0;
-        int rowsPer = (view.cellView.getOffsetHeight()/(view.table.getOffsetHeight()/model.numRows()));
-        newStart = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) - rowsPer;
+        int rowsPer = offCell/(offTable/model.numRows());
+        newStart = scrollPos/(offTable/model.numRows()) - rowsPer;
         if(model.numRows() < 100){
             newEnd = model.numRows();
         }else{
-            newEnd = (scrollPos)/(view.table.getOffsetHeight()/model.numRows()) + rowsPer  + rowsPer ;
+            newEnd = (scrollPos)/(offTable/model.numRows()) + rowsPer  + rowsPer ;
         }
         if(newStart < 0){
             newStart = 0;
