@@ -1,5 +1,7 @@
 package org.openelis.gwt.client.widget.table;
 
+import org.openelis.gwt.common.data.DataModel;
+
 public interface TableManager {
     public boolean canSelect(int row, TableController controller);
 
@@ -22,4 +24,6 @@ public interface TableManager {
     public void getNextPage();
     
     public void getPreviousPage();
+    
+    public void setModel(TableController controller, DataModel model);
 }

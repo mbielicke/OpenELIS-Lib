@@ -38,7 +38,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      */
     public Label message = new Label();
     
-    private DataModelWidget modelWidget = new DataModelWidget();
+    public DataModelWidget modelWidget = new DataModelWidget();
     
     public ScreenWindow window;
     public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
@@ -323,7 +323,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     
     public void afterCommitQuery(boolean success) {
         if(success){
-            setForm(false);
+        	doReset();
+        	setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
@@ -344,12 +345,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.CANCEL;
             clearErrors();
-            if(constants != null)
-                message.setText(constants.getString("updateAborted"));
-            else
-                message.setText("Update aborted");
-            
-            formService.abort(modelWidget.getModel().getSelected(),(FormRPC)forms.get("display"), new AsyncCallback() {
+            load();
+           /* formService.abort(rpc, key, new AsyncCallback() {
                public void onSuccess(Object result){
                    rpc = (FormRPC)result;
                    forms.put(rpc.key, rpc);
@@ -358,8 +355,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                public void onFailure(Throwable caught){
                    Window.alert(caught.getMessage());
                }
-            });
+            });*/
             enable(false);
+            if(constants != null)
+            	message.setText(constants.getString("updateAborted"));
+            else
+            	message.setText("Update aborted");
         }
         if (state == FormInt.ADD) {
             doReset();
@@ -449,6 +450,4 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 modelWidget.select(0);
         }
     }
-
-
 }

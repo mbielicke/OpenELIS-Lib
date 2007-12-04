@@ -35,6 +35,7 @@ import org.openelis.gwt.common.OptionField;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.TableModel;
 import org.openelis.gwt.common.TableRow;
+import org.openelis.gwt.common.data.DataModelWidget;
 
 import java.util.ArrayList;
 
@@ -497,6 +498,7 @@ public class TableController implements
             setCellDisplay(row, i);
         }
         selectedCell = -1;
+        selected = -1;
         }catch(Exception e){
             Window.alert("unselect "+e.getMessage());
         }
@@ -580,6 +582,15 @@ public class TableController implements
             unselect(sel);
             select(sel,-1);
         }   
+        if(sender instanceof DataModelWidget){
+        	DataModelWidget modelWidget = (DataModelWidget)sender;
+        	if(modelWidget.event == DataModelWidget.SELECTION){
+        		select(modelWidget.getSelectedIndex());
+        	}
+        	if(modelWidget.event == DataModelWidget.REFRESH){
+        		manager.setModel(this,modelWidget.getModel());
+        	}
+        }
     }
 
     /**
