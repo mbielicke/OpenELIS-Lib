@@ -627,10 +627,16 @@ public class TableController implements
             view.table.setWidget(row, col, wid);
         }
         if (wid instanceof FocusWidget) {
-            final FocusWidget widFoc = (FocusWidget)wid;
+            ((FocusWidget)wid).setFocus(true);
+            /*
+             * Even though we set focus above we need to do it again in a 
+             * deferred command for that POS browser IE.
+             */
+            final int rowF = row;
+            final int colF = col;
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
-                    widFoc.setFocus(true);
+                   ((FocusWidget)view.table.getWidget(rowF, colF)).setFocus(true);
                 }
             });
         }
@@ -679,7 +685,7 @@ public class TableController implements
             view.table.setWidget(row, col, simp);
             return;
         }
-        //((Widget)display).addStyleName(view.widgetStyle);
+        // overflowx added for POS IE other browsers ignore
         DOM.setStyleAttribute(((Widget)display).getElement(), "overflowX", "hidden");
         ((Widget)display).setWidth((curColWidth[col] -4)+ "px");
         view.table.setWidget(row, col, (Widget)display);
