@@ -9,7 +9,10 @@ public class NumberObject implements DataObject, Serializable {
     
     public Object getValue() {
         if(type.equals("integer"))
-            return new Integer(value.intValue());
+        	if(value == null)
+        		return null;
+        	else
+        		return new Integer(value.intValue());
         return value;
     }
 

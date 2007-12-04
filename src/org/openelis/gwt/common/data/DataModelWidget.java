@@ -16,9 +16,9 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     
     private ChangeListenerCollection changeListeners;
     
-    private DataModel model;
+    private DataModel model = new DataModel();
     
-    public int event;
+    public int event = -1;
     
     public void addChangeListener(ChangeListener listener) {
         if (changeListeners == null)

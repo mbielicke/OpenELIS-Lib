@@ -31,7 +31,7 @@ public class DataModel implements Serializable {
     }
     
     public void select(int selection) throws IndexOutOfBoundsException {
-        if(selection > selected)
+        if(selection > entries.size())
             throw new IndexOutOfBoundsException();
         selected = selection;
     }

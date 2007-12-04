@@ -557,8 +557,8 @@ public class TableController implements
     public void select(int row) {
         try{
             if(selected > -1){
-                unselect(selected);
-                view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
+            	view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
+            	unselect(selected);                
             }    
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
@@ -714,6 +714,8 @@ public class TableController implements
     public void reset() {
         start = 0;
         end = 0;
+        offCell = -1;
+        offTable = -1;
         view.cellView.setScrollPosition(0);
         if(selected > -1)
             view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);

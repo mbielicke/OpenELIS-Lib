@@ -1,6 +1,8 @@
 package org.openelis.gwt.client.screen;
 
 import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -447,7 +449,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             if(modelWidget.event == DataModelWidget.GETPAGE)
                 commitQuery(null);
             if(modelWidget.event == DataModelWidget.REFRESH)
-                modelWidget.select(0);
+            DeferredCommand.addCommand(new Command(){
+            	public void execute(){
+            		modelWidget.select(0);
+            	}	
+            });
+         
         }
     }
 }
