@@ -20,7 +20,6 @@ import java.io.Serializable;
  * Preferences - Java - Code Style - Code Templates
  */
 public class CheckField extends AbstractField implements Serializable {
-    protected BooleanObject bool = (BooleanObject)object;
 
     public CheckField() {
         object = new BooleanObject();
@@ -28,7 +27,7 @@ public class CheckField extends AbstractField implements Serializable {
     
     public boolean isValid() {
         if (required) {
-            if (bool.value  == null) {
+            if (((BooleanObject)object).value  == null) {
                 addError("Field is required");
                 return false;
             }
@@ -45,25 +44,25 @@ public class CheckField extends AbstractField implements Serializable {
     }
 
     public String toString() {
-        if (bool.value == null) {
+        if (((BooleanObject)object).value == null) {
             return "";
         }
-        if (((Boolean)bool.value).booleanValue())
+        if (((Boolean)((BooleanObject)object).value).booleanValue())
             return "Y";
         else
             return "N";
     }
 
     public boolean isChecked() {
-        if (bool.value == null)
+        if (((BooleanObject)object).value == null)
             return false;
-        return bool.value.booleanValue();
+        return ((BooleanObject)object).value.booleanValue();
     }
 
     public Object getInstance() {
         CheckField obj = new CheckField();
         obj.setRequired(required);
-        obj.setValue(bool.value);
+        obj.setValue(((BooleanObject)object).value);
         return obj;
     }
 

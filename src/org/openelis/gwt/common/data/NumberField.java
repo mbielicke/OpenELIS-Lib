@@ -25,7 +25,6 @@ public class NumberField extends AbstractField implements Serializable {
     private Double max;
     private Double min;
     private boolean invalid;
-    private NumberObject number = (NumberObject)object;
     
     public NumberField() {
         object = new NumberObject();
@@ -35,12 +34,12 @@ public class NumberField extends AbstractField implements Serializable {
         if (invalid)
             return false;
         if (required) {
-            if (number.value == null) {
+            if (((NumberObject)object).value == null) {
                 addError("Field is required");
                 return false;
             }
         }
-        if (number.value != null && !isInRange()) {
+        if (((NumberObject)object).value != null && !isInRange()) {
             return false;
         }
         return true;
@@ -50,11 +49,11 @@ public class NumberField extends AbstractField implements Serializable {
         // TODO Auto-generated method stub
         if (object.getValue() == null)
             return true;
-        if (max != null && number.value.doubleValue() > max.doubleValue()) {
+        if (max != null && ((NumberObject)object).value.doubleValue() > max.doubleValue()) {
             addError("Field exceeded maximum length");
             return false;
         }
-        if (min != null && number.value.doubleValue() < min.doubleValue()) {
+        if (min != null && ((NumberObject)object).value.doubleValue() < min.doubleValue()) {
             addError("Field is below minimum length");
             return false;
         }
@@ -62,15 +61,15 @@ public class NumberField extends AbstractField implements Serializable {
     }
 
     public String toString() {
-        if (number.value == null)
+        if (((NumberObject)object).value == null)
             return "";
-        if (number.type.equals("integer"))
-            return "" + number.value.intValue();
-        return number.value.toString();
+        if (((NumberObject)object).type.equals("integer"))
+            return "" + ((NumberObject)object).value.intValue();
+        return ((NumberObject)object).value.toString();
     }
 
     public void setType(String type) {
-        number.type = type;
+        ((NumberObject)object).type = type;
     }
 
     public void setMin(Object min) {
@@ -98,7 +97,7 @@ public class NumberField extends AbstractField implements Serializable {
                                .getNamedItem("key")
                                .getNodeValue());
         if (field.getAttributes().getNamedItem("type") != null)
-            number.number.setType(field.getAttributes()
+            ((NumberObject)number.object).setType(field.getAttributes()
                                 .getNamedItem("type")
                                 .getNodeValue());
         if (field.getAttributes().getNamedItem("required") != null)

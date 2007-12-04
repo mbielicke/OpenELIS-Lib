@@ -7,11 +7,14 @@ public class StringObject implements DataObject, Serializable {
     protected String value;
     
     public Object getValue() {
+        if(value == null)
+            return "";
         return value;
     }
 
-    public void setValue(Object value) {
-        this.value = (String)value;
+    public void setValue(Object val) {
+        if(val != null)
+            value = (String)val;
     }
 
 }

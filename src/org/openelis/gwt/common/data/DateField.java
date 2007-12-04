@@ -21,8 +21,7 @@ import java.util.Date;
  * Preferences - Java - Code Style - Code Templates
  */
 public class DateField extends AbstractField implements Serializable {
-
-    protected DateObject date = (DateObject)object;
+    
     private Integer max;
     private Integer min;
 
@@ -32,12 +31,12 @@ public class DateField extends AbstractField implements Serializable {
     
     public boolean isValid() {
         if (required) {
-            if (date.value == null) {
+            if (((DateObject)object).value == null) {
                 addError("Field is required");
                 return false;
             }
         }
-        if (date.value != null && !isInRange()) {
+        if (((DateObject)object).value != null && !isInRange()) {
             return false;
         }
         return true;
@@ -60,12 +59,12 @@ public class DateField extends AbstractField implements Serializable {
      */
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        if (min != null && date.value.before(DatetimeRPC.getInstance()
+        if (min != null && ((DateObject)object).value.before(DatetimeRPC.getInstance()
                                                    .add(-min.intValue()))) {
             addError("Date is too far in the past");
             return false;
         }
-        if (max != null && date.value.after(DatetimeRPC.getInstance()
+        if (max != null && ((DateObject)object).value.after(DatetimeRPC.getInstance()
                                                   .add(max.intValue()))) {
             addError("Date is too far in the future");
             return false;
@@ -74,18 +73,18 @@ public class DateField extends AbstractField implements Serializable {
     }
 
     public String toString() {
-        if (date.value == null) {
+        if (((DateObject)object).value == null) {
             return "";
         }
-        return date.value.toString();
+        return ((DateObject)object).value.toString();
     }
 
     public void setBegin(byte begin) {
-        date.begin = begin;
+        ((DateObject)object).begin = begin;
     }
 
     public void setEnd(byte end) {
-        date.end = end;
+        ((DateObject)object).end = end;
     }
 
     public void setMin(Object min) {
@@ -97,18 +96,18 @@ public class DateField extends AbstractField implements Serializable {
     }
 
     public byte getBegin() {
-        return date.begin;
+        return ((DateObject)object).begin;
     }
 
     public byte getEnd() {
-        return date.end;
+        return ((DateObject)object).end;
     }
 
     public Object getInstance() {
         DateField obj = new DateField();
         obj.setMax(max);
         obj.setMin(min);
-        obj.setDataObject(date);
+        obj.setDataObject(object);
         return obj;
     }
 

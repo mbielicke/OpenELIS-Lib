@@ -20,7 +20,6 @@ import java.io.Serializable;
  */
 public class StringField extends AbstractField implements Serializable {
     
-    protected StringObject string = (StringObject)object;
     private Integer min;
     private Integer max;
     
@@ -30,26 +29,26 @@ public class StringField extends AbstractField implements Serializable {
 
     public boolean isValid() {
         if (required) {
-            if (string.value == null || string.value.length() == 0) {
+            if (((StringObject)object).value == null || ((StringObject)object).value.length() == 0) {
                 addError("Field is required");
                 return false;
             }
         }
-        if (string.value != null && !isInRange()) {
+        if (((StringObject)object).value != null && !isInRange()) {
             return false;
         }
         return true;
     }
 
     public boolean isInRange() {
-        if (string.value == null)
+        if (((StringObject)object).value == null)
             return true;
-        if (max != null && (string.value).length() > ((Integer)max).intValue()) {
+        if (max != null && (((StringObject)object).value).length() > ((Integer)max).intValue()) {
             addError("Field exceeded maximum length");
             return false;
         }
-        if (min != null && (string.value).length() < ((Integer)min).intValue()
-            && (string.value).length() > 0) {
+        if (min != null && (((StringObject)object).value).length() < ((Integer)min).intValue() &&
+            ((StringObject)object).value.length() > 0) {
             addError("Field is below minimum length");
             return false;
         }
@@ -58,9 +57,9 @@ public class StringField extends AbstractField implements Serializable {
 
 
     public String toString() {
-        if (string.value == null)
+        if (((StringObject)object).value == null)
             return "";
-        return string.value;
+        return ((StringObject)object).value;
     }
 
     public void setMin(Object min) {
@@ -76,7 +75,7 @@ public class StringField extends AbstractField implements Serializable {
         obj.setMax(max);
         obj.setMin(min);
         obj.setRequired(required);
-        obj.setDataObject(string);
+        obj.setDataObject(object);
         return obj;
     }
 
