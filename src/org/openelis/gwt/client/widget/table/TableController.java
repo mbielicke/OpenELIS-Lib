@@ -422,13 +422,6 @@ public class TableController implements
         if(selected == row && selectedCell == col)
             return;
         if (sender == view.table) {
-            if (manager != null && manager.canSelect(row, this)) {
-                if (selected > -1)
-                    unselect(selected);
-            }
-            if (manager == null && selected > -1 && row != selected) {
-                unselect(selected);
-            }
             select(row, col);
         }
         if (sender == view.header) {
@@ -516,7 +509,7 @@ public class TableController implements
         try{
         if (manager == null || (manager != null && manager.canSelect(row, this))){
             if(selected > -1)
-                view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
+                unselect(selected);
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
                 if(view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
