@@ -15,6 +15,7 @@ import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.common.data.DataSet;
 
 import java.util.Iterator;
 /**
@@ -41,7 +42,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public Label message = new Label();
     
     public DataModelWidget modelWidget = new DataModelWidget();
-    
+    private DataSet key;
     public ScreenWindow window;
     public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
     public static AppScreenFormServiceIntAsync formService;
@@ -66,7 +67,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     }
     
     public void fetch(){
-        formService.fetch(modelWidget.getSelected(), (FormRPC)forms.get("display"), new AsyncCallback(){
+        formService.fetch(key, (FormRPC)forms.get("display"), new AsyncCallback(){
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                forms.put(rpc.key, rpc);
@@ -81,9 +82,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     }
     
     public void afterFetch(boolean success){
-        enable(false);
-        bpanel.setState(FormInt.DISPLAY);
-        bpanel.enable("ud",true);
+       enable(false);
+       bpanel.setState(FormInt.DISPLAY);
+       bpanel.enable("ud",true);
+       if(!success)
+            key = null;
     }
     
     /**
@@ -310,11 +313,13 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         }
     }
     
-    public void commitQuery(FormRPC rpcQuery) {
+    public void commitQuery(final FormRPC rpcQuery) {
         formService.commitQuery(rpcQuery, modelWidget.getModel(), new AsyncCallback() {
            public void onSuccess(Object result){
                modelWidget.setModel((DataModel)result);
                afterCommitQuery(true);
+               if(rpcQuery != null)
+                   modelWidget.select(0);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
@@ -444,17 +449,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
 
     public void onChange(Widget sender) {
         if(sender == modelWidget){
-            if(modelWidget.event == DataModelWidget.SELECTION)
+            if(modelWidget.event == DataModelWidget.SELECTION){
+                key = modelWidget.getSelected();
                 fetch();
+            }
             if(modelWidget.event == DataModelWidget.GETPAGE)
                 commitQuery(null);
-            if(modelWidget.event == DataModelWidget.REFRESH)
-            DeferredCommand.addCommand(new Command(){
-            	public void execute(){
-            		modelWidget.select(0);
-            	}	
-            });
-         
         }
     }
 }
