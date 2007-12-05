@@ -73,7 +73,8 @@ public class AppScreen extends ScreenBase {
                  }
                  FormRPC form = new FormRPC();
                  form.setFieldMap(map);
-                 forms.put(rpcEl.getAttributes().getNamedItem("key").getNodeValue(), form);
+                 form.key = rpcEl.getAttributes().getNamedItem("key").getNodeValue();
+                 forms.put(form.key, form);
              }
          } catch (Exception e) {
              Window.alert("FormUtil: " + e.getMessage());

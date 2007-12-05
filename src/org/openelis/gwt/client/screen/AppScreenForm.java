@@ -313,13 +313,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         }
     }
     
-    public void commitQuery(final FormRPC rpcQuery) {
+    public void commitQuery(FormRPC rpcQuery) {
         formService.commitQuery(rpcQuery, modelWidget.getModel(), new AsyncCallback() {
            public void onSuccess(Object result){
                modelWidget.setModel((DataModel)result);
                afterCommitQuery(true);
-               if(rpcQuery != null)
-                   modelWidget.select(0);
+               modelWidget.select(0);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
@@ -328,20 +327,25 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         });
     }
     
+    public void getPage() {
+        formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
+            public void onSuccess(Object result){
+                modelWidget.setModel((DataModel)result);
+            }
+            public void onFailure(Throwable caught){
+                Window.alert(caught.getMessage());
+            }
+         });
+    }
+    
     public void afterCommitQuery(boolean success) {
         if(success){
-        	doReset();
-        	setForm(false);
-            load((FormRPC)forms.get("display"));
-            enable(false);
             bpanel.setState(FormInt.DISPLAY);
-            doReset();
             if(constants != null)
                 message.setText(constants.getString("queryingComplete"));
             else
                 message.setText("Querying...Complete");
             
-            bpanel.enable("ud",false);
         }
     }
     /**
@@ -454,7 +458,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 fetch();
             }
             if(modelWidget.event == DataModelWidget.GETPAGE)
-                commitQuery(null);
+                getPage();
         }
     }
 }
