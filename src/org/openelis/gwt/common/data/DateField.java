@@ -107,7 +107,7 @@ public class DateField extends AbstractField implements Serializable {
         DateField obj = new DateField();
         obj.setMax(max);
         obj.setMin(min);
-        obj.setDataObject(object);
+        obj.setValue(getValue());
         return obj;
     }
 
