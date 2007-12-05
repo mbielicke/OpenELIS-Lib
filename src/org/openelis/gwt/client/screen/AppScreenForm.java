@@ -99,7 +99,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         setForm(true);
         rpc = (FormRPC)forms.get("query");
         doReset();
-        load();
         enable(true);
         
     }
