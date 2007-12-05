@@ -344,7 +344,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             enable(reload,enabled);
         }
         if (buttons.equals("all") || buttons.indexOf("s") > -1) {
-            enable(reload,enabled);
+            enable(select,enabled);
         }
     }
     
@@ -392,7 +392,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             removeButton(reload);
         }
         if (buttons.indexOf("s") > -1) {
-            removeButton(reload);
+            removeButton(select);
         }
     }
     
