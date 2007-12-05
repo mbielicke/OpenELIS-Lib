@@ -52,5 +52,10 @@ public class DataModel implements Serializable {
         this.page = page;
     }
     
+    public void clear() {
+        entries = new ArrayList();
+        selected = -1;
+    }
+    
 
 }
