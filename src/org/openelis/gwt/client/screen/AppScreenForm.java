@@ -1,8 +1,6 @@
 package org.openelis.gwt.client.screen;
 
 import com.google.gwt.i18n.client.ConstantsWithLookup;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
