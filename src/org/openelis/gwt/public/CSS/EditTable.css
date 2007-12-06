@@ -6,12 +6,11 @@
 
 .TableWidget{
 
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size:6;
 }
 
 .Table td {
-   height:25px;
-   color: #616a76;
-   padding:2;
 }
 
 .Table tr {
@@ -25,8 +24,7 @@
     background:#f8f8f9;
 }
 .TableCell {
-    padding:2;
-    height:25px;
+    height:16px;
     overflow:hidden;
     cursor:pointer;
     color: #616a76;
@@ -151,4 +149,5 @@ a.index:hover{
    background:#ac0000;
    text-decoration:none;
 }
+
 
