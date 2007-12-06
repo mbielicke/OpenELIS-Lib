@@ -625,17 +625,17 @@ public class TableController implements
         wid.addStyleName(view.widgetStyle);
         wid.addStyleName("Enabled");
         if (wid instanceof TableCalendar) {
-            wid.setWidth((curColWidth[col] - 18) + "px");
+            wid.setWidth((curColWidth[col] - 14) + "px");
             ((TableCalendar)wid).setEnabled(true);
         }
         if(wid instanceof TableCheck){
             SimplePanel simp = new SimplePanel();
             simp.setWidget(wid);
-            simp.setWidth((curColWidth[col] -4)+ "px");
+            simp.setWidth((curColWidth[col])+ "px");
             DOM.setElementProperty(simp.getElement(),"align","center");
             view.table.setWidget(row, col, simp);
         }else{
-            wid.setWidth((curColWidth[col] -4)+ "px");
+            wid.setWidth((curColWidth[col])+ "px");
             view.table.setWidget(row, col, wid);
         }
         if (wid instanceof FocusWidget) {
@@ -692,14 +692,14 @@ public class TableController implements
             }
             SimplePanel simp = new SimplePanel();
             simp.setWidget((Widget)display);
-            simp.setWidth((curColWidth[col] -4)+ "px");
+            simp.setWidth((curColWidth[col])+ "px");
             DOM.setElementProperty(simp.getElement(),"align","center");
             view.table.setWidget(row, col, simp);
             return;
         }
         // overflowx added for POS IE other browsers ignore
         DOM.setStyleAttribute(((Widget)display).getElement(), "overflowX", "hidden");
-        ((Widget)display).setWidth((curColWidth[col] -4)+ "px");
+        ((Widget)display).setWidth((curColWidth[col])+ "px");
         view.table.setWidget(row, col, (Widget)display);
         }catch(Exception e){
             Window.alert("setCell Display "+e.getMessage());
@@ -835,10 +835,10 @@ public class TableController implements
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0){
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-2)+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-10)+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-6)+"px");
                         }else{
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i])+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-6)+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-2)+"px");
                         }
                             
                     }
@@ -1296,14 +1296,14 @@ public class TableController implements
             curColWidth[(tableCol)+1] = colB;
             if( resizeColumn == 0 ){
                 view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol])+"px");
-                view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-6)+"px");
+                view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-2)+"px");
                 view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
-                view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
+                view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-6)+"px");
             }else{
                 view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol] -2)+"px");
-                view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-10)+"px");
+                view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-6)+"px");
                 view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -2)+"px");
-                view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-10)+"px");
+                view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-6)+"px");
             }                    
         }
     }
@@ -1321,7 +1321,7 @@ public class TableController implements
                         view.table.getCellFormatter()
                                   .setWidth(j, i, curColWidth[i] + "px");
                         if(view.table.getWidget(j,i) != null)
-                            view.table.getWidget(j, i).setWidth((curColWidth[i] -4) + "px");
+                            view.table.getWidget(j, i).setWidth((curColWidth[i]) + "px");
                        
                     }
                 }
