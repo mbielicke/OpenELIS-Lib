@@ -67,8 +67,11 @@ public class ScreenTable extends ScreenInputWidget {
     public void submit(AbstractField field) {
         if(queryMode)
             queryWidget.submit(field);
-        else
-            field.setValue(table.controller.model);       
+        else{
+            if(table.controller.getAutoAdd())
+                table.controller.model.deleteRow(table.controller.model.numRows()-1);
+            field.setValue(table.controller.model);
+        }
     }
 
     public Widget getWidget() {

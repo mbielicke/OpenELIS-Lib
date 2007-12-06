@@ -179,6 +179,7 @@ public class TableView extends Composite implements ScrollListener {
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
+        ft.setCellSpacing(0);
     }
     
     

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
@@ -102,7 +103,7 @@ public class TableController implements
     public TableController() {
         view = new TableView();
         model = new TableModel();
-        DOM.addEventPreview(this);
+        //DOM.addEventPreview(this);
     }
 
     /**
@@ -117,6 +118,7 @@ public class TableController implements
                            TableManager manager) {
         this.model = model;
         this.view = view;
+        this.view.table.setVisible(false);
         if (manager != null) {
             this.manager = manager;
         }
@@ -223,6 +225,10 @@ public class TableController implements
 
     public void setAutoAdd(boolean auto){
         this.autoAdd = auto;
+    }
+    
+    public boolean getAutoAdd() {
+        return autoAdd;
     }
     
     public void setShowRows(boolean showRows){
@@ -481,7 +487,7 @@ public class TableController implements
         for (int i = 0; i < view.table.getCellCount(row); i++) {
             if (selectedCell == i) {
                 saveValue(row, i);
-                if(model.autoAdd || autoAdd){
+                if(autoAdd){
                     if(manager != null && manager.doAutoAdd(row,i,this))
                         addRow();
                     else if(manager == null && row == model.numRows() -1)
@@ -522,7 +528,7 @@ public class TableController implements
         if (selectedCell != col) {
             if (selectedCell > -1) {
                 saveValue(row, selectedCell);
-                if(model.autoAdd || autoAdd){
+                if(autoAdd){
                     if(manager != null && manager.doAutoAdd(row,selectedCell,this))
                         addRow();
                     else if(manager == null && row == model.numRows() -1)
@@ -573,7 +579,7 @@ public class TableController implements
         if(sender instanceof TableOption){
             int sel = selected;
             unselect(sel);
-            select(sel,-1);
+            select(sel);
         }   
         if(sender instanceof DataModelWidget){
         	DataModelWidget modelWidget = (DataModelWidget)sender;
@@ -715,7 +721,7 @@ public class TableController implements
         selected = -1;
         selectedCell = -1;
         view.controller = this;
-        if(model.autoAdd || autoAdd){
+        if(autoAdd){
             model.addRow(null);
         }
         if(model.numRows() > 0){
@@ -732,11 +738,12 @@ public class TableController implements
     }
     
     public void load() {
-        if(offCell < 0){
-            offCell = view.cellView.getOffsetHeight();
-            offTable = view.table.getOffsetHeight();
-        }
         if(model.numRows() > 0){
+            view.table.setVisible(true);
+            if(offCell <= 0)
+                offCell = view.cellView.getOffsetHeight();
+            if(offTable <= 0)
+                offTable = view.table.getOffsetHeight();
             scrollLoad(0);
         }
         sizeTable();
@@ -821,7 +828,7 @@ public class TableController implements
                     width += curColWidth[i];
                 }
                 view.table.setWidth(width+"px");
-                view.table.setHeight("17px");
+                view.table.setHeight("0px");
             }
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
@@ -851,6 +858,8 @@ public class TableController implements
                             view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
                         }
                     }
+                    if(model.numRows() == 0)
+                        view.table.setVisible(false);
                 }
             });
     }
@@ -1048,8 +1057,9 @@ public class TableController implements
                 return onKeyPress(event);
             }
             if (DOM.eventGetType(event) == Event.ONCLICK){
-                if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetFromElement(event))){
+                if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
                     DOM.removeEventPreview(this);
+                    unselect(-1);
                 }
             }
         }
@@ -1329,4 +1339,5 @@ public class TableController implements
         if(changeListeners != null)
             changeListeners.remove(listener);
     }
+    
 }
