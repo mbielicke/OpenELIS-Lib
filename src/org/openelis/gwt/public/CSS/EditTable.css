@@ -24,7 +24,7 @@
     background:#f8f8f9;
 }
 .TableCell {
-    height:16px;
+    height:18px;
     overflow:hidden;
     cursor:pointer;
     color: #616a76;
@@ -47,7 +47,7 @@
     width:100%;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 10px;
-    border:1px solid #f6be00;
+    border:0px;
 }
 .Selected .gwt-CheckBox{
     padding-top:6;
@@ -76,10 +76,9 @@
     cursor:e-resize;
 }
 .HeaderCell{
-    padding:2;
     overflow:hidden;
     cursor:pointer;
-    height:17;
+    height:17px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 10px;
     background:#dde0e3;
