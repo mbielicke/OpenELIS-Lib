@@ -67,7 +67,9 @@ public class OptionField extends AbstractField implements Serializable {
                     ((OptionItem)options.get(options.indexOf(temp))).selected = true;
                 } else {
                     value = (String)val;
-                    setTip(((OptionItem)options.get(options.indexOf(temp))).tip);
+                    int index = options.indexOf(temp);
+                    if(index > -1)
+                        setTip(((OptionItem)options.get(index)).tip);
                 }
             }
             if (val instanceof Integer) {
@@ -77,7 +79,9 @@ public class OptionField extends AbstractField implements Serializable {
                     ((OptionItem)options.get(options.indexOf(temp))).selected = true;
                 } else {
                     value = val.toString();
-                    setTip(((OptionItem)options.get(options.indexOf(temp))).tip);
+                    int index = options.indexOf(temp);
+                    if(index > -1)
+                        setTip(((OptionItem)options.get(index)).tip);
                 }
             }
             if (val instanceof OptionItem) {
