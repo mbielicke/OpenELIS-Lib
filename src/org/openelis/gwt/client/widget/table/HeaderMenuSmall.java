@@ -22,7 +22,7 @@ import org.openelis.gwt.common.Filter;
  * @author tschmidt
  * 
  */
-public class HeaderMenu extends PopupPanel implements
+public class HeaderMenuSmall extends PopupPanel implements
                                           PopupListener,
                                           MouseListener,
                                           TableListener {
@@ -34,7 +34,7 @@ public class HeaderMenu extends PopupPanel implements
     public boolean sortDirection;
     private String widget;
     private boolean doFilter;
-    private TableController controller;
+    private TableControllerSmall controller;
 
     /**
      * Constructor called from TableController.
@@ -44,10 +44,10 @@ public class HeaderMenu extends PopupPanel implements
      * @param filter
      * @param controller
      */
-    public HeaderMenu(int col,
+    public HeaderMenuSmall(int col,
                       boolean sort,
                       Filter[] filter,
-                      TableController controller) {
+                      TableControllerSmall controller) {
         super(true);
         addPopupListener(this);
         this.col = col;
