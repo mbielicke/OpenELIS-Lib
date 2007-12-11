@@ -4,8 +4,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.screen.ScreenWidget;
-import org.openelis.gwt.client.widget.table.TableCellWidget;
-import org.openelis.gwt.client.widget.table.TableManager;
+import org.openelis.gwt.client.widget.table.small.TableCellWidget;
+import org.openelis.gwt.client.widget.table.small.TableManager;
 import org.openelis.gwt.common.AbstractField;
 
 import java.util.HashMap;

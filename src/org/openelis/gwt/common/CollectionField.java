@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class CollectionField extends AbstractField implements Serializable {
     /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataSet>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject>
      */
     private ArrayList coll = new ArrayList();
 

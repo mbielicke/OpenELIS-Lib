@@ -7,11 +7,9 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-import org.openelis.gwt.client.widget.table.TableCellWidget;
-import org.openelis.gwt.client.widget.table.TableManager;
-import org.openelis.gwt.client.widget.table.TableManagerSmall;
-import org.openelis.gwt.client.widget.table.TableWidget;
-import org.openelis.gwt.client.widget.table.TableWidgetSmall;
+import org.openelis.gwt.client.widget.table.small.TableCellWidget;
+import org.openelis.gwt.client.widget.table.small.TableManager;
+import org.openelis.gwt.client.widget.table.small.TableWidget;
 import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.TableModel;
@@ -34,7 +32,7 @@ public class ScreenTableWidgetSmall extends ScreenInputWidget {
         /**
          * Widget wrapped by this class
          */
-        private TableWidgetSmall table;
+        private TableWidget table;
         /**
          * Default no-arg constructor used to create reference in the WidgetMap class
          */
@@ -50,13 +48,13 @@ public class ScreenTableWidgetSmall extends ScreenInputWidget {
          */ 
         public ScreenTableWidgetSmall(Node node, ScreenBase screen) {
             super(node);
-            table = new TableWidgetSmall();
+            table = new TableWidget();
             try {
                 if (node.getAttributes().getNamedItem("manager") != null) {
                     String appClass = node.getAttributes()
                                           .getNamedItem("manager")
                                           .getNodeValue();
-                    TableManagerSmall manager = (TableManagerSmall)ScreenBase.getWidgetMap()
+                    TableManager manager = (TableManager)ScreenBase.getWidgetMap()
                                                                .getTableManager(appClass);
                     table.setManager(manager);
                 }

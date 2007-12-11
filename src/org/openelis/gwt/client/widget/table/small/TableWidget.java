@@ -1,20 +1,22 @@
-package org.openelis.gwt.client.widget.table;
+package org.openelis.gwt.client.widget.table.small;
 
 import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.user.client.ui.Composite;
 
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
+
+import org.openelis.gwt.client.widget.table.small.TableCellWidget;
 import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.TableRow;
 
 import java.util.ArrayList;
 
-public class TableWidgetSmall extends Composite {
+public class TableWidget extends Composite {
 
-    public TableControllerSmall controller = new TableControllerSmall();
+    public TableController controller = new TableController();
     public ConstantsWithLookup constants = null;
     
-    public TableWidgetSmall() {
+    public TableWidget() {
         initWidget(controller.view);
     }
     /**
@@ -40,7 +42,7 @@ public class TableWidgetSmall extends Composite {
      * 
      * @param manager
      */
-    public void setManager(TableManagerSmall manager) {
+    public void setManager(TableManager manager) {
         controller.setManager(manager);
     }
 

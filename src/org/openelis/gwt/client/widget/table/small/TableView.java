@@ -1,8 +1,10 @@
-package org.openelis.gwt.client.widget.table;
+package org.openelis.gwt.client.widget.table.small;
+
+import org.openelis.gwt.common.OptionField;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -28,22 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableViewSmall extends Composite implements ScrollListener {
-    
-    private class Delay extends Timer {
-        public int pos;
-
-        public Delay(int pos, int time) {
-            this.pos = pos;
-            this.schedule(time);
-        }
-
-        public void run() {
-            if (scrollBar.getScrollPosition() == pos) {
-                controller.scrollLoad(pos);
-            }
-        }
-    };
+public class TableView extends Composite implements ScrollListener {
     
     public boolean loaded;
     public ScrollPanel cellView = new ScrollPanel();
@@ -62,25 +49,25 @@ public class TableViewSmall extends Composite implements ScrollListener {
     private String[] headers;
     public Label[] hLabels;
     private String title = "";
-    public String widgetStyle = "TableWidget";
-    public String cellStyle = "TableCell";
-    public String rowStyle = "TableRow";
-    public String headerStyle = "Header";
-    public String headerCellStyle = "HeaderCell";
-    public String tableStyle = "Table";
-    public String selectedStyle = "Selected";
-    public String navLinks = "NavLinks";
+    public static String widgetStyle = "TableWidget";
+    public static String cellStyle = "TableCell";
+    public static String rowStyle = "TableRow";
+    public static String headerStyle = "Header";
+    public static String headerCellStyle = "HeaderCell";
+    public static String tableStyle = "Table";
+    public static String selectedStyle = "Selected";
+    public static String navLinks = "NavLinks";
     protected HorizontalPanel navPanel = new HorizontalPanel();
     private VerticalPanel vp = new VerticalPanel();
     public String width;
     public String height;
-    public TableControllerSmall controller = null;
+    public TableController controller = null;
     
-    public TableViewSmall() {
+    public TableView() {
         initWidget(vp);
     }
     
-    public void initTable(TableControllerSmall controller) {
+    public void initTable(TableController controller) {
         this.controller = controller;
         if(headers != null){
             header.setCellSpacing(0);
@@ -212,7 +199,7 @@ public class TableViewSmall extends Composite implements ScrollListener {
 
     public void setTableListener(TableListener listener) {
         table.addTableListener(listener);
-        controller = (TableControllerSmall)listener;
+        controller = (TableController)listener;
     }
 
     public void setCell(Widget widget, int row, int col) {
@@ -237,6 +224,15 @@ public class TableViewSmall extends Composite implements ScrollListener {
             if(i % 2 == 1){
                 DOM.setStyleAttribute(table.getRowFormatter().getElement(i), "background", "#f8f8f9");
             }
+            TableCellWidget tcell = controller.editors[j].getNewInstance();
+            if(tcell instanceof TableOption){
+            	if(((TableOption)tcell).loadFromHidden != null){
+            		((TableOption)tcell).fromHidden = (OptionField)controller.model.hidden.get(((TableOption)tcell).loadFromHidden);
+            	}
+            }
+
+            ((SimplePanel)tcell).setWidth((controller.curColWidth[j])+ "px");
+            table.setWidget(i,j,(Widget)tcell);
         }
         }
         if(controller.showRows && row > 0){
@@ -332,19 +328,22 @@ public class TableViewSmall extends Composite implements ScrollListener {
         vp.add(navPanel);
     }
 
-    public void onScroll(Widget widget, int scrollLeft, final int scrollTop) {
-        if(top != scrollTop){
-            //new Delay(scrollTop, 250);
-            controller.scrollLoad(scrollTop);
-            if(controller.showRows){
-                rowsView.setWidgetPosition(rows,0,-scrollTop);
-            }
-            top = scrollTop;
-        }
-        if(left != scrollLeft){
-           headerView.setWidgetPosition(header, -scrollLeft, 0);
-           left = scrollLeft;
-        }
+    public void onScroll(Widget sender, int scrollLeft, final int scrollTop) {
+    	if(sender == scrollBar ) {
+    		if(top != scrollTop){
+    			controller.scrollLoad(scrollTop);
+    			if(controller.showRows){
+    				rowsView.setWidgetPosition(rows,0,-scrollTop);
+    			}
+    			top = scrollTop;
+    		}
+    	}
+    	if(sender == cellView){
+    		if(left != scrollLeft){
+    			headerView.setWidgetPosition(header, -scrollLeft, 0);
+    			left = scrollLeft;
+    		}
+    	}
     }
     
     protected void onAttach() {

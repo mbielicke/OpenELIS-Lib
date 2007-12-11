@@ -1,4 +1,4 @@
-package org.openelis.gwt.client.widget.table;
+package org.openelis.gwt.client.widget.table.small;
 
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -22,7 +22,7 @@ import org.openelis.gwt.common.Filter;
  * @author tschmidt
  * 
  */
-public class HeaderMenuSmall extends PopupPanel implements
+public class HeaderMenu extends PopupPanel implements
                                           PopupListener,
                                           MouseListener,
                                           TableListener {
@@ -34,7 +34,7 @@ public class HeaderMenuSmall extends PopupPanel implements
     public boolean sortDirection;
     private String widget;
     private boolean doFilter;
-    private TableControllerSmall controller;
+    private TableController controller;
 
     /**
      * Constructor called from TableController.
@@ -44,10 +44,10 @@ public class HeaderMenuSmall extends PopupPanel implements
      * @param filter
      * @param controller
      */
-    public HeaderMenuSmall(int col,
+    public HeaderMenu(int col,
                       boolean sort,
                       Filter[] filter,
-                      TableControllerSmall controller) {
+                      TableController controller) {
         super(true);
         addPopupListener(this);
         this.col = col;
