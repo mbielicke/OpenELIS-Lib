@@ -343,6 +343,9 @@ public class TableController implements
         	TableCellWidget tCell = (TableCellWidget)view.table.getWidget(index, i);
         	tCell.setField(model.getFieldAt(start+index, i));
         	setCellDisplay(index,i);
+            if(showRows){
+                ((Label)view.rows.getWidget(index,0)).setText(String.valueOf(start+index+1));
+            }
         }
     }
 
@@ -683,9 +686,14 @@ public class TableController implements
             }
             view.table.getFlexCellFormatter().setWidth(i, j, curColWidth[j] + "px");
             view.table.getRowFormatter().addStyleName(i, TableView.rowStyle);
+            if(showRows){
+                Label rowNum = new Label(String.valueOf(i+1));
+                view.rows.setWidget(i,0,rowNum);
+                view.rows.getFlexCellFormatter().setStyleName(i, 0, "RowNum");
+            }
         }
-        
     }
+    
     public void scrollLoad(int scrollPos){
         try{
         	if(selected > -1)
