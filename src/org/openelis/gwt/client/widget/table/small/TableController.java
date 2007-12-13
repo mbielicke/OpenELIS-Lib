@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -1172,18 +1173,26 @@ public class TableController implements
      */
     public void onMouseDown(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
-        if (sender instanceof FocusPanel) {
+        if(sender instanceof FocusPanel){
             resizing = true;
             startx = x;
             for (int i = 0; i < view.header.getCellCount(0); i++) {
                 if (sender == view.header.getWidget(0, i)) {
                     resizeColumn = i - 1;
                     tableCol = resizeColumn / 2;
-                    i = view.header.getCellCount(0);
+                    //i = view.header.getCellCount(0);
                 }
             }
-            DOM.setCapture(sender.getElement());
-            ((FocusPanel)sender).setFocus(false);
+            FocusPanel bar = new FocusPanel();
+            bar.addMouseListener(this);
+            bar.setHeight((view.cellView.getOffsetHeight()+17)+"px");
+            bar.setWidth("1px");
+            DOM.setStyleAttribute(bar.getElement(), "background", "red");
+            DOM.setStyleAttribute(bar.getElement(), "position", "absolute");
+            DOM.setStyleAttribute(bar.getElement(),"left",sender.getAbsoluteLeft()+"px");
+            DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
+            RootPanel.get().add(bar);   
+            DOM.setCapture(bar.getElement());
         }
     }
 
@@ -1205,29 +1214,15 @@ public class TableController implements
      * Catches mouses Events for resizing columns.
      */
     public void onMouseMove(Widget sender, int x, int y) {
-        if (resizing) {
+        if(resizing) {
+           // Window.alert("on mouse move");
             int colA = curColWidth[tableCol] + (x - startx);
             int colB = curColWidth[(tableCol)+1] - (x - startx);
             if(colA <= 16 || colB <= 16) 
                 return;
             curColWidth[tableCol] = colA;
             curColWidth[(tableCol)+1] = colB;
-            if( resizeColumn == 0 ) {
-                view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol]-1)+"px");
-                //view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-1)+"px");
-                view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -4)+"px");
-                //view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-4)+"px");
-            }else if(resizeColumn/2 == curColWidth.length -2){
-                view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol]-4)+"px");
-                //view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-4)+"px");
-                view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -1)+"px");
-                //view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-1)+"px");
-            }else {
-                view.header.getFlexCellFormatter().setWidth(0, resizeColumn,(curColWidth[tableCol] -4)+"px");
-                //view.header.getWidget(0,resizeColumn).setWidth((curColWidth[tableCol]-4)+"px");
-                view.header.getFlexCellFormatter().setWidth(0, resizeColumn+2,(curColWidth[(tableCol)+1] -4)+"px");
-                //view.header.getWidget(0,resizeColumn+2).setWidth((curColWidth[(tableCol)+1]-4)+"px");
-            }                    
+            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x-startx))+"px");
         }
     }
 
@@ -1237,18 +1232,30 @@ public class TableController implements
     public void onMouseUp(Widget sender, int x, int y) {
         if (resizing) {
             DOM.releaseCapture(sender.getElement());
+            RootPanel.get().remove(sender);
             resizing = false;
-            for (int j = 0; j < maxRows; j++) {
-                for (int i = 0; i < curColWidth.length; i++) {
-                    if (curColWidth[i] > 0) {
-                        view.table.getFlexCellFormatter()
-                                  .setWidth(j, i, curColWidth[i] +  "px");
-                        if(view.table.getWidget(j,i) != null)
-                            view.table.getWidget(j, i).setWidth((curColWidth[i]) + "px");
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    for(int i = 0; i < curColWidth.length; i++){
+                        if( i > 0 && i < curColWidth.length - 1){
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
+                        }else{
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
+                        }   
+                    }
+                    for (int j = 0; j < maxRows; j++) {
+                        for (int i = 0; i < curColWidth.length; i++) {
+                            if (curColWidth[i] > 0) {
+                                view.table.getFlexCellFormatter()
+                                .setWidth(j, i, curColWidth[i] +  "px");
+                                if(view.table.getWidget(j,i) != null)
+                                    view.table.getWidget(j, i).setWidth((curColWidth[i]) + "px");
                        
+                            }
+                        }
                     }
                 }
-            }
+            });
         }
     }
 
