@@ -3,6 +3,8 @@ package org.openelis.gwt.client.widget.table.small;
 import org.openelis.gwt.common.OptionField;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -16,9 +18,13 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,10 +36,41 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableView extends Composite implements ScrollListener {
+public class TableView extends Composite implements ScrollListener, MouseWheelListener {
     
     public boolean loaded;
-    public ScrollPanel cellView = new ScrollPanel();
+    public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
+
+        public CellView() {
+            sinkEvents(Event.ONMOUSEWHEEL);
+        }
+        
+        public void onBrowserEvent(Event event) {
+            // TODO Auto-generated method stub
+            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
+                listeners.fireMouseWheelEvent(this, event);
+            }
+            super.onBrowserEvent(event);
+        }
+        
+        private MouseWheelListenerCollection listeners;
+        
+        public void addMouseWheelListener(MouseWheelListener listener) {
+            if(listeners == null){
+                listeners = new MouseWheelListenerCollection();
+            }
+            listeners.add(listener);
+        }
+
+        public void removeMouseWheelListener(MouseWheelListener listener) {
+            if(listeners != null){
+                listeners.remove(listener);
+            }
+            
+        }
+        
+    }
+    public CellView cellView = new CellView();
     public ScrollPanel scrollBar = new ScrollPanel();
     public AbsolutePanel headerView = new AbsolutePanel();
     public AbsolutePanel rowsView = new AbsolutePanel();
@@ -41,7 +78,7 @@ public class TableView extends Composite implements ScrollListener {
     private FlexTable ft = new FlexTable();
     private final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
-    public Grid table = new Grid();
+    public FlexTable table = new FlexTable();
     public FlexTable header = new FlexTable();
     public Grid rows = new Grid();
     private int left = 0;
@@ -161,23 +198,25 @@ public class TableView extends Composite implements ScrollListener {
             ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
             ft.setWidget(1,1,cellView);
             ft.setWidget(1, 2, scrollBar);
+            ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
         }else{
             ft.setWidget(0,0,headerView);
             ft.setWidget(1,0,cellView);
             ft.setWidget(1,1,scrollBar);
+            ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
         }
         vp.add(ft);
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
         ft.setCellSpacing(0);
-        scrollBar.setWidth("15px");
+        scrollBar.setWidth("18px");
         scrollBar.addScrollListener(this);
         AbsolutePanel ap = new AbsolutePanel();
-        ap.setWidth("15px");
-        ap.setHeight("15px");
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
+        DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
+        cellView.addMouseWheelListener(this);
     }
     
     
@@ -208,33 +247,12 @@ public class TableView extends Composite implements ScrollListener {
             ((FocusWidget)widget).setFocus(true);
     }
 
-    public void reset(int row, int col) {
-        table.resize(row,col);
-        for(int i = 0; i < row; i++){
-            for(int j= 0; j < col; j++){
-                table.getCellFormatter().addStyleName(i,
-                                                      j,
-                                                      cellStyle);
-            if (controller.colAlign != null && controller.colAlign[j] != null) {
-                table.getCellFormatter()
-                          .setHorizontalAlignment(i, j, controller.colAlign[j]);
-            }
-            table.getCellFormatter().setWidth(i, j, controller.curColWidth[j] + "px");
-            table.getRowFormatter().addStyleName(i, rowStyle);
-            if(i % 2 == 1){
-                DOM.setStyleAttribute(table.getRowFormatter().getElement(i), "background", "#f8f8f9");
-            }
-            TableCellWidget tcell = controller.editors[j].getNewInstance();
-            if(tcell instanceof TableOption){
-            	if(((TableOption)tcell).loadFromHidden != null){
-            		((TableOption)tcell).fromHidden = (OptionField)controller.model.hidden.get(((TableOption)tcell).loadFromHidden);
-            	}
-            }
-
-            ((SimplePanel)tcell).setWidth((controller.curColWidth[j])+ "px");
-            table.setWidget(i,j,(Widget)tcell);
-        }
-        }
+    public void reset() {
+        table = new FlexTable();
+        table.setCellSpacing(1);
+        table.addStyleName(tableStyle);
+        table.addTableListener(controller);
+       /*
         if(controller.showRows && row > 0){
             rows.resize(row,1);
             for(int i = 0; i < row; i++){
@@ -246,6 +264,7 @@ public class TableView extends Composite implements ScrollListener {
             rowsView.add(rows);
             DOM.setStyleAttribute(rowsView.getElement(), "overflow", "hidden");
         }
+        */
     }
     
     public void setTable(){
@@ -356,7 +375,21 @@ public class TableView extends Composite implements ScrollListener {
     }
     
     public void setScrollHeight(int height) {
-        scrollBar.getWidget().setHeight(height+"px");
+        try {
+            scrollBar.getWidget().setHeight(height+"px");
+        }catch(Exception e){
+            Window.alert("set scroll height"+e.getMessage());
+        }
+    }
+
+    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
+        int pos = scrollBar.getScrollPosition();
+        int delta = velocity.getDeltaY();
+        if(delta < 0 && delta > -18)
+            delta = -18;
+        if(delta > 0 && delta < 18)
+            delta = 18;
+        scrollBar.setScrollPosition(pos + delta);
     }
     
 }

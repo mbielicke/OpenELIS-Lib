@@ -2,7 +2,9 @@ package org.openelis.gwt.client.widget.table.small;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,9 +37,8 @@ public class TableOption extends SimplePanel implements TableCellWidget {
     private int visible = 1;
     public OptionField fromHidden;
 
-
-
     public TableOption() {
+        sinkEvents(Event.KEYEVENTS);
     }
 
     public TableCellWidget getNewInstance() {
@@ -60,14 +61,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
                                     .getNamedItem("fromHidden")
                                     .getNodeValue();
         } else {
-        	to.editor = new OptionList(){
-        	    public void onBrowser(Event event) {
-        	        if (DOM.eventGetType(event) == Event.ONKEYDOWN || DOM.eventGetType(event) == Event.ONKEYUP) {
-        	            DOM.eventCancelBubble(event, true);
-        	            DOM.eventPreventDefault(event);
-        	        }
-        	    }
-        	};
+        	to.editor = new OptionList();
             NodeList items = ((Element)node).getElementsByTagName("item");
             for (int j = 0; j < items.getLength(); j++) {
                 to.editor.addItem(items.item(j)
@@ -112,14 +106,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 
 	public void setEditor() {
 		if(editor == null){
-			editor = new OptionList() {
-			    public void onBrowser(Event event) {
-			        if (DOM.eventGetType(event) == Event.ONKEYDOWN || DOM.eventGetType(event) == Event.ONKEYUP) {
-			            DOM.eventCancelBubble(event, true);
-			            DOM.eventPreventDefault(event);
-			        }
-			    }
-			};
+			editor = new OptionList();
 			editor.setMultipleSelect(multi);
 			editor.setVisibleItemCount(visible);
 			if(loadFromHidden != null){
@@ -155,4 +142,8 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 	public void setField(AbstractField field) {
 		this.field = field;
 	}
+    
+    public void setListener(ChangeListener listener){
+        editor.addChangeListener(listener);
+    }
 }
