@@ -718,14 +718,14 @@ public class TableController implements
      * 
      */
     public void sizeTable() {
-            if (model.numRows() == 0){
+            //if (model.numRows() == 0){
                 int width = 0;
                 for(int i = 0; i < curColWidth.length; i++){
                     width += curColWidth[i];
                 }
                 view.table.setWidth(width+"px");
-                view.table.setHeight("0px");
-            }
+                view.header.setWidth(width+"px");
+            //}
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                 	view.header.setWidth(view.table.getOffsetWidth()+"px");
