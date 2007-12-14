@@ -30,6 +30,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 	private OptionList editor;
 	private Label display;
 	private AbstractField field;
+    private ChangeListener listener;
 	
     public boolean loadFromModel;
     public String loadFromHidden = null;
@@ -49,6 +50,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
         to.loadFromHidden = loadFromHidden;
         to.loadFromModel = loadFromModel;
         to.editor = editor;
+        to.listener = listener;
         return to;
     }
 
@@ -62,6 +64,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
                                     .getNodeValue();
         } else {
         	to.editor = new OptionList();
+            to.editor.addChangeListener(listener);
             NodeList items = ((Element)node).getElementsByTagName("item");
             for (int j = 0; j < items.getLength(); j++) {
                 to.editor.addItem(items.item(j)
@@ -92,21 +95,26 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 		}
 		if(field instanceof OptionField){
 			display.setText(((OptionField)field).getDisplay());
+            
 		}else{
 			if(loadFromHidden != null){
 				fromHidden.setValue(field.getValue());
 				display.setText(fromHidden.getDisplay());
+                setTitle(field.getTip());
 			}else{
 				editor.setValue(field.getValue());
 				display.setText(editor.getItemText(editor.getSelectedIndex()));
+                setTitle(field.getTip());
 			}
 		}
 		setWidget(display);
+        setTitle(field.getTip());
 	}
 
 	public void setEditor() {
 		if(editor == null){
 			editor = new OptionList();
+            editor.addChangeListener(listener);
 			editor.setMultipleSelect(multi);
 			editor.setVisibleItemCount(visible);
 			if(loadFromHidden != null){
@@ -126,6 +134,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 	        }
 		}
 		editor.setValue(field.getValue());
+        setTitle(field.getTip());
 		setWidget(editor);
 	}
 
@@ -137,6 +146,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
             }
         }else
             field.setValue(editor.getValue());
+        setTitle(field.getTip());
 	}
 
 	public void setField(AbstractField field) {
@@ -144,6 +154,6 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 	}
     
     public void setListener(ChangeListener listener){
-        editor.addChangeListener(listener);
+       this.listener = listener;
     }
 }

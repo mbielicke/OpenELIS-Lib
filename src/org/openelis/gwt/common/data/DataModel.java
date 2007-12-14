@@ -13,6 +13,7 @@ public class DataModel implements Serializable {
     
     private int selected = -1;
     private int page = -1;
+    private boolean selectLast;
     
     public int size() {
         return entries.size();
@@ -56,6 +57,15 @@ public class DataModel implements Serializable {
         entries = new ArrayList();
         selected = -1;
     }
+    
+    public void selecttLast(boolean last){
+        this.selectLast = last;    
+    }
+    
+    public boolean isSelectLast(){
+        return selectLast;
+    }
+    
     
 
 }
