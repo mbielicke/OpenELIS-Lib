@@ -265,13 +265,12 @@ public class TableController implements
                 public void execute() {
                     int sel = selected;
                     int selCell = selectedCell;
-                    view.setScrollHeight((model.numRows()*18)+maxRows+1);
                     view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+18);
                     select(sel,selCell);
                 }
             });
-
         }
+        view.setScrollHeight((model.numRows()*18)+maxRows+1);
         if(manager != null){
             manager.rowAdded(model.numRows()-1,this);
         }
@@ -283,9 +282,9 @@ public class TableController implements
             createRow(model.numRows()-1);
             loadRow(model.numRows()-1);
         }else{
-            view.setScrollHeight((model.numRows()*18)+maxRows+1);
             view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+18);
         }
+        view.setScrollHeight((model.numRows()*18)+maxRows+1);
         if(manager != null){
             manager.rowAdded(model.numRows()-1,this);
         }
@@ -312,6 +311,7 @@ public class TableController implements
             if(manager != null){
                 manager.rowAdded(index,this);
             }
+            view.setScrollHeight((model.numRows()*18)+maxRows+1);
         }
     }
 
@@ -330,6 +330,7 @@ public class TableController implements
             if(manager != null){
                 manager.rowAdded(index,this);
             }
+            view.setScrollHeight((model.numRows()*18)+maxRows+1);
         }
     }
 
@@ -369,6 +370,7 @@ public class TableController implements
             }else
                 scrollLoad(view.scrollBar.getScrollPosition());
         }
+        view.setScrollHeight((model.numRows()*18)+maxRows+1);
 
     }
 

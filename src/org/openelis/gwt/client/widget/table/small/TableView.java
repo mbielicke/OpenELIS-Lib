@@ -196,9 +196,11 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         scrollBar.addScrollListener(this);
         AbsolutePanel ap = new AbsolutePanel();
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
+        DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
         cellView.addMouseWheelListener(this);
+         
     }
     
     
@@ -347,6 +349,10 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public void setScrollHeight(int height) {
         try {
             scrollBar.getWidget().setHeight(height+"px");
+            if(height > cellView.getOffsetHeight())
+                DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
+            else 
+                DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
         }catch(Exception e){
             Window.alert("set scroll height"+e.getMessage());
         }

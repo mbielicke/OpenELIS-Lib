@@ -95,20 +95,19 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 		}
 		if(field instanceof OptionField){
 			display.setText(((OptionField)field).getDisplay());
-            
+            display.setText(field.getTip());
 		}else{
 			if(loadFromHidden != null){
 				fromHidden.setValue(field.getValue());
 				display.setText(fromHidden.getDisplay());
-                setTitle(field.getTip());
+                display.setTitle(fromHidden.getTip());
 			}else{
 				editor.setValue(field.getValue());
 				display.setText(editor.getItemText(editor.getSelectedIndex()));
-                setTitle(field.getTip());
+                display.setTitle(field.getTip());
 			}
 		}
 		setWidget(display);
-        setTitle(field.getTip());
 	}
 
 	public void setEditor() {
@@ -146,7 +145,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
             }
         }else
             field.setValue(editor.getValue());
-        setTitle(field.getTip());
+        display.setTitle(field.getTip());
 	}
 
 	public void setField(AbstractField field) {
