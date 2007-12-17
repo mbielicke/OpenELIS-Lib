@@ -78,12 +78,24 @@ a.navIndex:hover {
 }
 
 .LeftMenuPanePanel {
-   background: #FAFEFE;
-   border-left: 1px solid #AFDEF1;
-   border-right: 1px solid #AFDEF1;
+   vertical-align:center;   
+}
 
-   border-top: 1px solid #AFDEF1;
-   border-bottom: 1px solid #AFDEF1;
+.LeftMenuPanePanel .Hover{
+    background-color:#ffe584;
+}
+
+.LeftMenuPanePanelDiv{
+    margin-top:200;
+    padding-top:35;
+    border-right: 1px solid #fb8d3d;
+    width:8px;
+    height:45;
+    cursor:pointer;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:8px;
+    font-weight:bold;
+   vertical-align:center;   
 }
 
 .LeftMenuArrowImage {
@@ -288,33 +300,76 @@ background-image:url("../Images/menubuttonhover.gif");
 
 /*******TAB PANEL CSS***********/
 .gwt-TabBar .gwt-TabBarItem {
-    font-family: Arial, Helvetica, sans-serif; 
-    font-size: 12px; 
-    border-top:3px solid #fff;
-    padding:3px;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 10px; 
     cursor:pointer;
-    margin-left:5px;
-    border-top: 1px solid #CCCCCC;
-    border-left: 1px solid #CCCCCC;
-    border-right: 1px solid #CCCCCC;
+    padding:2;
+    margin-right:14;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
-  border-top: 1px solid #CCCCCC;
-  border-left: 1px solid #CCCCCC;
-  border-right: 1px solid #CCCCCC;
     cursor:default;
-    background:#eed990;
+    padding-right:16;
+    margin:0;
+    background:#f8f8f9 url('../Images/selectedtabrightside.gif') no-repeat scroll right;
 }
 
 .gwt-TabPanelBottom{
-    border:1px solid #CCCCCC;
+    background:#f8f8f9 url('../Images/tabpanelbottom.gif') no-repeat scroll bottom right;
+    padding-right:15;
+    padding-bottom:15;
+    margin:0;
 }
 .gwt-TabBar .gwt-TabBarRest {
   padding-right: 3px;
 }
 /*******END TAB PANEL CSS***********/
 
+/*******autodropdown css***********/
+.AutoDropdownButton{
+width:16px;
+height:19px;
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.AutoDropdown .Hover{
+cursor:pointer;
+border-bottom: 1px solid  #7eadd9;
+background: url(../Images/trigger.gif) -16px 0px no-repeat;
+}
+.AutoDropdown .Selected{
+border-bottom: 1px solid  #7eadd9;
+background: url(../Images/trigger.gif) -64px 0px no-repeat;
+}
+.AutoDropdown .Pressed{
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/trigger.gif) -48px 0px no-repeat;
+}
+.AutoCompletePopup{
+background:#FFFFFF;
+border: 1px solid #7eadd9;
+}
+.AutoDropdown .TextboxSelected{
+    border:1px solid #7eadd9;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+.AutoDropdown .TextboxUnselected{
+    border:1px solid lightgrey;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+/*******end autodropdown css********/
 .ScreenAbsolute{
 
 }
@@ -373,7 +428,6 @@ border:collapse;
 
 .ScreenAuto {
     border:1px solid lightgrey;
-    background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -517,8 +571,7 @@ border:collapse;
 }
 
 .ScreenMaskedBox{
-    border:1px solid lightgrey;
-    background:#ffffff;
+    /*border:1px solid lightgrey;*/
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -549,9 +602,16 @@ border:collapse;
 
 }
 
-.ScreenTextArea{
+.Focus{
+    border:1px solid #7eadd9;
+}
+
+.NoFocus{
     border:1px solid lightgrey;
-    background:#ffffff;
+}
+
+.ScreenTextArea{
+   /* border:1px solid lightgrey;*/
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -559,9 +619,9 @@ border:collapse;
 }
 
 .ScreenTextBox{
-    border:1px solid lightgrey;
-    background:#ffffff;
+    /*border:1px solid lightgrey;*/
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+
     font-weight: normal;
     font-size:11px;
     height:20px;
@@ -626,7 +686,6 @@ filter: alpha(opacity=50);
 }
 
 .Form {
-	background:#FFFFFF none repeat scroll 0%;
 	border-collapse:collapse;
 	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
 	font-size:11px;
@@ -647,7 +706,6 @@ filter: alpha(opacity=50);
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    background:#ffffff;
     width:100%;
     border-collapse:collapse;
     margin-left:6px;
@@ -655,7 +713,6 @@ filter: alpha(opacity=50);
 
 .Form select,.FormBorderless select{
     border:1px solid lightgrey;
-    background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -694,7 +751,6 @@ margin 2px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    background:#ffffff;
     vertical-align:text-bottom;
 }
 .AppMessage{
@@ -774,5 +830,8 @@ margin 2px;
 }
 .Lower {
   text-transform:lowercase;
+}
+.Busy{
+cursor:wait;
 }
 
