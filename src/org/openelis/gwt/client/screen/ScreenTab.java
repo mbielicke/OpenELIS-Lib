@@ -55,7 +55,7 @@ public class ScreenTab extends ScreenWidget {
                     Widget wid = ScreenWidget.loadWidget(widgets.item(l), screen);
                     ScrollPanel scroll = new ScrollPanel();
                     scroll.add(wid);
-                    
+                    scroll.setWidth("100%");
                     //tabs can not have a constant or hard coded text
                     panel.add(scroll, tabs.item(k).getAttributes()
                                              .getNamedItem("text")

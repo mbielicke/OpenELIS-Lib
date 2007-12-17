@@ -3,6 +3,7 @@ package org.openelis.gwt.client.screen;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -14,7 +15,8 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
+public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
+																FocusListener{
 	/**
 	 * Default XML Tag Name used in XML Definition
 	 */
@@ -80,7 +82,8 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
             length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
             textbox.setMaxLength(length);
         }
-            
+        textbox.addStyleName("NoFocus");
+        textbox.addFocusListener(this);
         initWidget(textbox);
         displayWidget = textbox;
         setDefaults(node, screen);
@@ -137,4 +140,20 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener{
             super.setForm(mode);
     }
     
+	public void onFocus(Widget sender) {
+		if(!textbox.isReadOnly()){
+			if(sender == textbox){
+				textbox.removeStyleName("NoFocus");
+				textbox.addStyleName("Focus");
+			}
+		}		
+	}
+	public void onLostFocus(Widget sender) {
+		if(!textbox.isReadOnly()){
+			if(sender == textbox){
+				textbox.removeStyleName("Focus");
+				textbox.addStyleName("NoFocus");
+			}
+		}
+	}    
 }

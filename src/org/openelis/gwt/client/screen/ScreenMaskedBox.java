@@ -2,7 +2,9 @@ package org.openelis.gwt.client.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.client.widget.MaskedTextBox;
@@ -13,7 +15,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenMaskedBox extends ScreenInputWidget {
+public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
@@ -65,9 +67,11 @@ public class ScreenMaskedBox extends ScreenInputWidget {
             next = node.getAttributes().getNamedItem("next").getNodeValue();
         }
         maskbox.setMask(mask);
+        maskbox.addFocusListener(this);
         initWidget(maskbox);
         displayWidget = maskbox;
         maskbox.setStyleName("ScreenMaskedBox");
+        maskbox.addStyleName("NoFocus");
         setDefaults(node, screen);
     }
 
@@ -113,5 +117,21 @@ public class ScreenMaskedBox extends ScreenInputWidget {
             super.setForm(mode);
         }
     }
-    
+   
+    public void onFocus(Widget sender) {
+		if(!maskbox.isReadOnly()){
+			if(sender == maskbox){
+				maskbox.removeStyleName("NoFocus");
+				maskbox.addStyleName("Focus");
+			}
+		}		
+	}
+	public void onLostFocus(Widget sender) {
+		if(!maskbox.isReadOnly()){
+			if(sender == maskbox){
+				maskbox.removeStyleName("Focus");
+				maskbox.addStyleName("NoFocus");
+			}
+		}
+	}
 }

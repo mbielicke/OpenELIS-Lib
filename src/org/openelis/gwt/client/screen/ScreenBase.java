@@ -152,7 +152,11 @@ public class ScreenBase extends Composite implements
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
                 if(inputField instanceof ScreenAuto){
                  if(!((ScreenInputWidget)inputField).queryMode)
-                	key += "Id";
+                	 if (rpc.getFieldMap().containsKey(key)){
+                		AbstractField rpcField = rpc.getField(key);
+                     	inputField.load(rpcField); 
+                     	key += "Id";
+                	 }                	
                 }
                 if (!rpc.getFieldMap().containsKey(key))
                     continue;
@@ -237,8 +241,6 @@ public class ScreenBase extends Composite implements
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
                 if(inputField instanceof ScreenAuto && !((ScreenInputWidget)inputField).queryMode){
                     AbstractField rpcField = (AbstractField)rpc.getField(key+"Id");
-                    inputField.submit(rpcField);
-                    rpcField = (AbstractField)rpc.getField(key+"Text");
                     inputField.submit(rpcField);
                 }else{
                     if (!rpc.getFieldMap().containsKey(key)) {

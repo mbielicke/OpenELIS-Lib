@@ -85,6 +85,13 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
        bpanel.enable("ud",true);
        if(!success)
             key = null;
+       
+       //if it is the first page with the first selected. dont enable the previous button
+       if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0)
+    	   bpanel.enable("n", true);
+       else
+    	   bpanel.enable("np", true);
+       
     }
     
     /**
@@ -326,6 +333,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
             public void onSuccess(Object result){
                 modelWidget.setModel((DataModel)result);
+                if(modelWidget.getModel().isSelectLast())
+                	modelWidget.select(modelWidget.getModel().size()-1);
+                else
+                	modelWidget.select(0);
+                		
             }
             public void onFailure(Throwable caught){
                 Window.alert(caught.getMessage());

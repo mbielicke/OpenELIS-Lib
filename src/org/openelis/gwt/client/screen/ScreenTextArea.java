@@ -2,8 +2,10 @@ package org.openelis.gwt.client.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.AbstractField;
@@ -14,7 +16,7 @@ import org.openelis.gwt.common.AbstractField;
  * @author tschmidt
  *
  */
-public class ScreenTextArea extends ScreenInputWidget {
+public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
 	/**
 	 * Default XML Tag Name in XML Definition
 	 */
@@ -62,9 +64,12 @@ public class ScreenTextArea extends ScreenInputWidget {
                                        .split(","));
             textarea.sinkEvents(Event.KEYEVENTS);
         }
+        
+        textarea.addFocusListener(this);
         initWidget(textarea);
         displayWidget = textarea;
         textarea.setStyleName("ScreenTextArea");
+        textarea.addStyleName("NoFocus");
         setDefaults(node, screen);
     }
 
@@ -107,4 +112,20 @@ public class ScreenTextArea extends ScreenInputWidget {
         super.destroy();
     }
 
+    public void onFocus(Widget sender) {
+		if(!textarea.isReadOnly()){
+			if(sender == textarea){
+				textarea.removeStyleName("NoFocus");
+				textarea.addStyleName("Focus");
+			}
+		}		
+	}
+	public void onLostFocus(Widget sender) {
+		if(!textarea.isReadOnly()){
+			if(sender == textarea){
+				textarea.removeStyleName("Focus");
+				textarea.addStyleName("NoFocus");
+			}
+		}
+	}    
 }

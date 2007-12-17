@@ -5,7 +5,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.client.widget.FormCalendarWidget;
 import org.openelis.gwt.common.AbstractField;
-import org.openelis.gwt.common.DateField;
+import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.DatetimeRPC;
 
 import java.util.Date;

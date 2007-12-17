@@ -1,7 +1,9 @@
 package org.openelis.gwt.client.screen;
 
 import org.openelis.gwt.client.widget.pagedtree.TreeController;
+import org.openelis.gwt.client.widget.pagedtree.TreeModel;
 import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.TableModel;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
@@ -78,10 +80,14 @@ public class ScreenPagedTree extends ScreenWidget {
         return new ScreenPagedTree(node, screen);
     }
 
-    public void load(AbstractField field) {
-
-        Document doc = XMLParser.parse((String)field.getValue());
-        createTree(doc.getDocumentElement());
+    public void load(AbstractField field) {            
+              if (field.getValue() != null)
+                  controller.setModel((TreeModel)field.getValue());
+              else{
+                  controller.model.reset();
+                  controller.reset();
+                  field.setValue(controller.model);
+              }
     }
 
     /**

@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.AbstractField;
-import org.openelis.gwt.common.CheckField;
+import org.openelis.gwt.common.data.CheckField;
 
 /**
  * ScreenRadio wraps a GWT RadioButton widget for Display on a Screen.
