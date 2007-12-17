@@ -1,5 +1,8 @@
 package org.openelis.gwt.client.services;
 
+import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.DataModel;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -10,7 +13,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface AutoCompleteServiceIntAsync {
 
-    public void getMatches(String cat, String match, AsyncCallback callback);
+    public void getMatches(String cat, DataModel model, String match, AsyncCallback callback);
 
-    public void getDisplay(String cat, Integer value, AsyncCallback callback);
+    public void getDisplay(String cat, DataModel model, AbstractField value, AsyncCallback callback);
+    
+    public void getInitialModel(DataModel model, String cat, AsyncCallback callback);
 }
