@@ -12,7 +12,7 @@ public class DataModel implements Serializable {
     private ArrayList entries = new ArrayList();
     
     private int selected = -1;
-    private int page = -1;
+    private int page = 0;
     private boolean selectLast;
     
     public int size() {

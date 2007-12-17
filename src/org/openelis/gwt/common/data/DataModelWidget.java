@@ -33,7 +33,8 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     
     private void fireChange(int event) {
         this.event = event;
-        changeListeners.fireChange(this);
+        if(changeListeners != null)
+        	changeListeners.fireChange(this);
     }
     
     public void setModel(DataModel model){
@@ -51,6 +52,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
             fireChange(SELECTION);
         }catch(IndexOutOfBoundsException e){
             model.setPage(model.getPage()+1);
+            model.selecttLast(false);
             fireChange(GETPAGE);
         }
     }
@@ -61,6 +63,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
             fireChange(SELECTION);
         }catch(IndexOutOfBoundsException e){
             model.setPage(model.getPage()-1);
+            model.selecttLast(true);
             fireChange(GETPAGE);
         }
     }
@@ -92,7 +95,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
         return model.getPage();
     }
     
-    public void setPage(int page) {
+    public void setPage(int page) {    	
         model.setPage(page);
         fireChange(GETPAGE);
     }

@@ -15,6 +15,8 @@ public class StringObject implements DataObject, Serializable {
     public void setValue(Object val) {
         if(val != null)
             value = (String)val;
+        else
+        	value = "";
     }
 
 }
