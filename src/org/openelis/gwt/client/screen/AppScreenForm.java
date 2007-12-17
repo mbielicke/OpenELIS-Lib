@@ -347,7 +347,13 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     
     public void afterCommitQuery(boolean success) {
         if(success){
+        	///
+        	doReset();
+        	setForm(false);
+            load((FormRPC)forms.get("display"));
+            enable(false);
             bpanel.setState(FormInt.DISPLAY);
+
             if(constants != null)
                 message.setText(constants.getString("queryingComplete"));
             else
