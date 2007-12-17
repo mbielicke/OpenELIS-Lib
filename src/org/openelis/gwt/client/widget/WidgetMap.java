@@ -84,7 +84,8 @@ public class WidgetMap {
                     RPC_QUERY_NUMBER = "rpc-queryNumber", // QueryNumberField
                     RPC_QUERY_OPTION = "rpc-queryOption", // QueryOptionField
                     RPC_QUERY_STRING = "rpc-queryString", // QueryStringField
-    				LEFT_MENU_PANEL = "aToZ"; //ScreenLeftMenuPanel
+    				LEFT_MENU_PANEL = "aToZ", //ScreenLeftMenuPanel
+    				AUTO_DROPDOWN = "autoDropdown"; //ScreenAutoDropdown
 
     private HashMap widgets = new HashMap();
 

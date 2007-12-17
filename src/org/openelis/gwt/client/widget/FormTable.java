@@ -84,12 +84,14 @@ public class FormTable extends Composite {
                                              .item(0);
             
             //if constants = true we want to get the title from the properties file
-            if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
-            	controller.view.setTitle(constants.getString(node.getAttributes().getNamedItem("title").getNodeValue()));
-            }else{
-            	controller.view.setTitle(node.getAttributes()
-                        .getNamedItem("title")
-                        .getNodeValue());
+            if(!"".equals(node.getAttributes().getNamedItem("title").getNodeValue())){
+	            if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
+	            	controller.view.setTitle(constants.getString(node.getAttributes().getNamedItem("title").getNodeValue()));
+	            }else{
+	            	controller.view.setTitle(node.getAttributes()
+	                        .getNamedItem("title")
+	                        .getNodeValue());
+	            }
             }
             if(node.getAttributes().getNamedItem("autoAdd") != null){
                 if(node.getAttributes().getNamedItem("autoAdd").getNodeValue().equals("true"))

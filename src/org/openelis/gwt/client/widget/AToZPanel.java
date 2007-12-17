@@ -173,15 +173,7 @@ public class AToZPanel extends Composite implements ClickListener {
 		
 		leftTable = new FormTable(node);
 
-		leftTable.controller.model.paged = true;
-		leftTable.controller.model.rowsPerPage = 20;
-		leftTable.controller.model.totalPages = leftTable.controller.model.shown / leftTable.controller.model.rowsPerPage;
-		leftTable.controller.model.pageIndex = 0;
-		leftTable.controller.model.shown = leftTable.controller.model.shown;
-		leftTable.controller.model.totalRows = leftTable.controller.model.numRows();
-		leftTable.controller.model.showIndex = false;
 		leftTable.setStyleName("ScreenTable");
-        
         
 		//set the height of table
 		if (node.getAttributes().getNamedItem("height") != null) {
@@ -193,10 +185,7 @@ public class AToZPanel extends Composite implements ClickListener {
 		}
 		tablePanel.add(leftTable);
 				
-		//build the check box
-		//FIXME not sure if the checkbox should be inside this widget
-		//checkBox.setText("Show Inactive");
-		//tablePanel.add(checkBox);
+
 		
 		//make the hideable panel hide if visable="false"
 		if (node.getAttributes().getNamedItem("visible") != null && 
