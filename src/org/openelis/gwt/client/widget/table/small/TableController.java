@@ -695,6 +695,9 @@ public class TableController implements
                 view.rows.getFlexCellFormatter().setStyleName(i, 0, "RowNum");
             }
         }
+        
+        if (!model.getRow(i).show())
+            view.table.getRowFormatter().addStyleName(i, "hide");
     }
     
     public void scrollLoad(int scrollPos){
@@ -730,6 +733,7 @@ public class TableController implements
             //}
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
+                if(view.header != null){
                 	view.header.setWidth(view.table.getOffsetWidth()+"px");
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0 && i < curColWidth.length - 1){
@@ -737,6 +741,7 @@ public class TableController implements
                         }else{
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
                         }
+                    }
                     }
                     if(view.table.getOffsetWidth() > view.cellView.getOffsetWidth()){
                     	view.setHeight((maxRows*18+maxRows+18)+"px");
@@ -855,11 +860,11 @@ public class TableController implements
         }
         if (KeyboardListener.KEY_RIGHT == code && model.paged) {
             if (model.pageIndex != model.totalPages - 1)
-                manager.getNextPage();
+                manager.getNextPage(this);
         }
         if (KeyboardListener.KEY_LEFT == code && model.paged) {
             if (model.pageIndex != 0)
-                manager.getPreviousPage();
+                manager.getPreviousPage(this);
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
             if (selectedCell + 1 >= model.getRow(start+selected).numColumns()) {
@@ -979,7 +984,7 @@ public class TableController implements
             if (DOM.eventGetType(event) == Event.ONCLICK){
                 if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
                     DOM.removeEventPreview(this);
-                    unselect(-1);
+                  //  unselect(-1);
                 }
             }
         }
@@ -1140,10 +1145,10 @@ public class TableController implements
         int start = htmlString.indexOf("value=\"") + 7;
         int end = htmlString.indexOf("\"", start);
         String page = htmlString.substring(start, end);
-        if (page.equals("-1"))
-            manager.getNextPage();
-        else if (page.equals("+1"))
-            manager.getPreviousPage();
+        if (page.equals("+1"))
+            manager.getNextPage(this);
+        else if (page.equals("-1"))
+            manager.getPreviousPage(this);
         else
             manager.getPage(Integer.parseInt(page));
     }

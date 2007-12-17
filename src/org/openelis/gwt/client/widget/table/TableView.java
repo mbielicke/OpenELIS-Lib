@@ -54,7 +54,7 @@ public class TableView extends Composite implements ScrollListener {
     private final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public Grid table = new Grid();
-    public FlexTable header = new FlexTable();
+    public FlexTable header;
     public Grid rows = new Grid();
     private int left = 0;
     private int top = 0;
@@ -82,6 +82,7 @@ public class TableView extends Composite implements ScrollListener {
     public void initTable(TableController controller) {
         this.controller = controller;
         if(headers != null){
+        	header = new FlexTable();
             header.setCellSpacing(0);
             
             if(title != null && !title.equals("")){
@@ -157,25 +158,34 @@ public class TableView extends Composite implements ScrollListener {
             header.getFlexCellFormatter().setWidth(0, j, "3px");
             header.setStyleName(headerStyle);
             header.addTableListener(controller);
+            headerView.add(header);
         }
         //DOM.setStyleAttribute(statView.getElement(), "overflow", "hidden");
-        headerView.add(header);
+        
         rowsView.add(rows);
         DOM.setStyleAttribute(rowsView.getElement(), "overflow", "hidden");
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollListener(this);
-        vp.add(titlePanel);
+        if(title != null && !title.equals("")){
+        	vp.add(titlePanel);
+        }
         if(controller.showRows) {
-            ft.setWidget(0,1,headerView);
+        	if(headers != null){
+        		ft.setWidget(0,1,headerView);
+        	}
             ft.setWidget(1,0,rowsView);
             ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
             ft.setWidget(1,1,cellView);
         }else{
+        	if(headers != null){
             ft.setWidget(0,0,headerView);
+        	}
             ft.setWidget(1,0,cellView);
         }
         vp.add(ft);
+        ft.setCellPadding(0);
+        ft.setCellSpacing(0);
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);

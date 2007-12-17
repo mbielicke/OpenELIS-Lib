@@ -757,7 +757,6 @@ public class TableController implements
         int newStart = 0;
         int newEnd = 0;
         int rowsPer = offCell/(offTable/model.numRows());
-        Window.alert(rowsPer +" : " + offTable +" : "+(offTable/model.numRows()));
         newStart = scrollPos/(offTable/model.numRows()) - rowsPer*2;
         if(model.numRows() < 100){
             newEnd = model.numRows();
@@ -770,7 +769,6 @@ public class TableController implements
         if(newEnd > model.numRows()){
             newEnd = model.numRows();
         }
-        Window.alert(scrollPos+" : "+newStart+" : "+newEnd);
         if(newEnd < start || newStart > end){
             for(int i = newStart; i < newEnd; i++){
                 loadRow(i);
@@ -832,6 +830,7 @@ public class TableController implements
             }
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
+                	if(view.header != null){
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0){
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-2)+"px");
@@ -842,11 +841,13 @@ public class TableController implements
                         }
                             
                     }
+                	}
                     if(view.width.equals("auto") && view.table.getOffsetWidth() > 0){
                         view.cellView.setWidth((view.table.getOffsetWidth()+17)+"px");
                         view.headerView.setWidth(view.table.getOffsetWidth()+"px");
                     }else if(view.cellView.getOffsetHeight()-17 < view.table.getOffsetHeight() && view.table.getOffsetHeight() > 0){
                     	final int width = view.headerView.getOffsetWidth();
+                    	if(view.header != null)
                     	DeferredCommand.addCommand(new Command() {
                     		public void execute() {
                     			view.headerView.setWidth((width-17)+"px");
@@ -983,11 +984,11 @@ public class TableController implements
         }
         if (KeyboardListener.KEY_RIGHT == code && model.paged) {
             if (model.pageIndex != model.totalPages - 1)
-                manager.getNextPage();
+                manager.getNextPage(this);
         }
         if (KeyboardListener.KEY_LEFT == code && model.paged) {
             if (model.pageIndex != 0)
-                manager.getPreviousPage();
+                manager.getPreviousPage(this);
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
             if (selectedCell + 1 >= model.getRow(selected).numColumns()) {
@@ -1219,10 +1220,10 @@ public class TableController implements
         int start = htmlString.indexOf("value=\"") + 7;
         int end = htmlString.indexOf("\"", start);
         String page = htmlString.substring(start, end);
-        if (page.equals("-1"))
-            manager.getNextPage();
-        else if (page.equals("+1"))
-            manager.getPreviousPage();
+        if (page.equals("+1"))
+            manager.getNextPage(this);
+        else if (page.equals("-1"))
+            manager.getPreviousPage(this);
         else
             manager.getPage(Integer.parseInt(page));
     }

@@ -1,5 +1,6 @@
 package org.openelis.gwt.client.widget.table.small;
 
+import org.openelis.gwt.client.widget.table.small.TableController;
 import org.openelis.gwt.common.data.DataModel;
 
 public interface TableManager {
@@ -21,9 +22,9 @@ public interface TableManager {
     
     public void getPage(int page);
     
-    public void getNextPage();
+    public void getNextPage(TableController controller);
     
-    public void getPreviousPage();
+    public void getPreviousPage(TableController controller);
     
     public void setModel(TableController controller, DataModel model);
 }

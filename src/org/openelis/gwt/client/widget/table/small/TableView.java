@@ -1,17 +1,13 @@
 package org.openelis.gwt.client.widget.table.small;
 
-import org.openelis.gwt.common.OptionField;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -173,21 +169,26 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollListener(this);
-        vp.add(titlePanel);
+        if(title != null && !title.equals(""))
+        	vp.add(titlePanel);
         if(controller.showRows) {
-            ft.setWidget(0,1,headerView);
+        	if(headers != null)
+        		ft.setWidget(0,1,headerView);
             ft.setWidget(1,0,rows);
             ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
             ft.setWidget(1,1,cellView);
             ft.setWidget(1, 2, scrollBar);
             ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
         }else{
-            ft.setWidget(0,0,headerView);
+        	if(headers != null)
+        		ft.setWidget(0,0,headerView);
             ft.setWidget(1,0,cellView);
             ft.setWidget(1,1,scrollBar);
             ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
         }
         vp.add(ft);
+        ft.setCellPadding(0);
+        ft.setCellSpacing(0);
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
