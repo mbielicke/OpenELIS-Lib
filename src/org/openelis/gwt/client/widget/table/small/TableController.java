@@ -74,13 +74,13 @@ public class TableController implements
     public boolean[] filterable;
     private ArrayList statFilters = new ArrayList();
     private ArrayList filters = new ArrayList();
-    private TableCallback callback = new TableCallback();
+    public TableCallback callback = new TableCallback();
     public HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
     private boolean resizing;
     private int startx;
     private int resizeColumn = -1;
     private int tableCol = -1;
-    private TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
+    public TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)tableService;
     private ChangeListenerCollection changeListeners;
     private int start = 0;
