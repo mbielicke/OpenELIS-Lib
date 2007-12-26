@@ -135,7 +135,7 @@ public class TableWidget extends Composite {
                 row.getColumn(0).setValue(String.valueOf(m));
                 controller.model.addRow(row);
             }
-            controller.reset();
         }
+        controller.reset();
     }
 }

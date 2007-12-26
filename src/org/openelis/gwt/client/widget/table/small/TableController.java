@@ -641,8 +641,6 @@ public class TableController implements
                     createRow(i);
                 }
             }
-        }else{
-            view.reset();
         }
         if(view.isAttached())
             load();
@@ -723,18 +721,22 @@ public class TableController implements
      * 
      */
     public void sizeTable() {
-            //if (model.numRows() == 0){
-                int width = 0;
-                for(int i = 0; i < curColWidth.length; i++){
-                    width += curColWidth[i];
-                }
-                view.table.setWidth(width+"px");
-                view.header.setWidth(width+"px");
-            //}
+            
+            int width = 0;
+            for(int i = 0; i < curColWidth.length; i++){
+                width += curColWidth[i];
+            }
+            view.table.setWidth(width+"px");
+            view.header.setWidth(width+"px");
+            final int fWidth = width;   
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
+                    
                 if(view.header != null){
-                	view.header.setWidth(view.table.getOffsetWidth()+"px");
+                    if(model.numRows() > 0)
+                        view.header.setWidth(view.table.getOffsetWidth()+"px");
+                    else
+                        view.header.setWidth(fWidth+"px");
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0 && i < curColWidth.length - 1){
                             view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
@@ -753,10 +755,11 @@ public class TableController implements
                             view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
                         }
                     }
-                    if(model.numRows() == 0)
-                        view.table.setVisible(false);
+                    //if(model.numRows() == 0)
+                    //    view.table.setVisible(false);
                 }
             });
+            //}
     }
 
     /**
