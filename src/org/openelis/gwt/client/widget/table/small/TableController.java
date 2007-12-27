@@ -86,6 +86,7 @@ public class TableController implements
     private int start = 0;
     private boolean autoAdd;
     public boolean showRows;
+    public boolean modelSet;
     public int maxRows;
     public int cellHeight = 18;
     public int cellSpacing = 1;
@@ -140,6 +141,11 @@ public class TableController implements
     public void setModel(TableModel model) {
         this.model = model;
         reset();
+    }
+    
+    public void loadModel(TableModel model){
+        this.model = model;
+        load();
     }
 
     /**
@@ -640,21 +646,38 @@ public class TableController implements
                     createRow(i);
                 }
             }
-        }
+        }        
         view.cellView.setWidget(view.table);
         load();
         sizeTable();
+        modelSet = true;
     }
     
     public void load() {
-        if(model.numRows() > 0){
-            if(model.numRows() > maxRows)
-                view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
-            else
-                view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing);
-            view.scrollBar.setScrollPosition(0);
-            scrollLoad(0);
+        start = 0;
+        selected = -1;
+        selectedCell = -1;
+        int tRows = maxRows;
+        if(model.numRows() < maxRows)
+            tRows = model.numRows();
+        if(view.table.getRowCount() > tRows){
+            int count = view.table.getRowCount();
+            for(int i = count -1; i > tRows -1; i--){
+                view.table.removeRow(i);
+            }
+        }else if(view.table.getRowCount() < tRows){
+            int count = view.table.getRowCount();
+            for(int i = count; i < tRows; i++){
+                createRow(i);
+            }
         }
+        if(model.numRows() > maxRows)
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+        else
+            view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing);
+        view.scrollBar.setScrollPosition(0);
+        if(model.numRows() > 0)
+            scrollLoad(0);
         if (model.paged)
             view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
     }
@@ -720,7 +743,7 @@ public class TableController implements
         }
         view.table.setWidth(width+"px");
         if(view.header != null){
-            view.header.setWidth(width+"px");  
+            view.header.setWidth((width+curColWidth.length*2)+"px");  
             for(int i = 0; i < curColWidth.length; i++){
                 if( i > 0 && i < curColWidth.length - 1){
                     view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
@@ -736,6 +759,8 @@ public class TableController implements
         int viewWidth = -1;
         if(!view.width.equals("auto"))
             viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));
+        else if(!GWT.isScript())
+            view.cellView.setWidth(view.table.getOffsetWidth()+"px");
         if(viewWidth > -1 && view.table.getOffsetWidth() > viewWidth){
         	view.setHeight((maxRows*cellHeight+maxRows+18+"px"));
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
@@ -1138,8 +1163,10 @@ public class TableController implements
     private class TableCallback implements AsyncCallback {
         public void onSuccess(Object result) {
             if (result != null) {
-                model = (TableModel)result;
-                reset();
+                if(modelSet)
+                    loadModel((TableModel)result);
+                else
+                    setModel((TableModel)result);
                 if(setRow > -1)
                     select(setRow,0);
                 setRow = -1;

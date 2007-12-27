@@ -98,6 +98,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     
     public TableView() {
         initWidget(vp);
+        vp.setWidth("100%");
     }
     
     public void initTable(TableController controller) {
