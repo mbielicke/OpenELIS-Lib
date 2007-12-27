@@ -117,6 +117,10 @@ public class TableWidget extends Composite {
         controller.initService(url);
     }
     
+    public void setCellHeight(int height){
+        controller.setCellHeight(height);
+    }
+    
     /**
      * This method sets the model in the screen. rows = -1 means a serviceUrl
      * has been provided and the getModel method will be called to populate the

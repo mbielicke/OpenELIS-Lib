@@ -84,6 +84,7 @@ public class TableController implements
     public boolean showRows;
     public int offCell = -1;
     public int offTable = -1;
+
     
     /**
      * This Method will set the url for the TableService.

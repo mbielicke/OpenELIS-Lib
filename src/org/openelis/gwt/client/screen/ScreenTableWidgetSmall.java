@@ -74,6 +74,9 @@ public class ScreenTableWidgetSmall extends ScreenInputWidget {
                                                 .item(0);
                 Node statFilter = ((Element)node).getElementsByTagName("statFilters")
                                                  .item(0);
+                if(node.getAttributes().getNamedItem("cellHeight") != null){
+                    table.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
+                }
                 table.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
                 //if constants = true we want to get the title from the properties file
                 if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
@@ -91,6 +94,8 @@ public class ScreenTableWidgetSmall extends ScreenInputWidget {
                     if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
                         table.setShowRows(true);
                 }
+
+                table.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
                 if (widthsNode != null) {
                     String[] widths = widthsNode.getFirstChild()
                                                 .getNodeValue()

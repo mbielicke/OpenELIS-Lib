@@ -1,0 +1,280 @@
+package org.openelis.gwt.client.widget;
+
+import java.util.Iterator;
+import org.openelis.gwt.client.screen.ScreenBase;
+import org.openelis.gwt.client.screen.ScreenLabel;
+import org.openelis.gwt.client.screen.ScreenScrollList;
+import org.openelis.gwt.client.screen.ScreenWidget;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.StringObject;
+
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
+import com.google.gwt.user.client.ui.ScrollListener;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
+import com.google.gwt.xml.client.XMLParser;
+
+/**
+ * DragList is a widget that displays widgets in a vertical list
+ * that can be dragged to other widgets on a screen.
+ * 
+ * @author tschmidt
+ *
+ */
+public class ScrollList extends Composite implements ScrollListener, MouseWheelListener{
+    
+    public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
+
+        public CellView() {
+            sinkEvents(Event.ONMOUSEWHEEL);
+        }
+        
+        public void onBrowserEvent(Event event) {
+            // TODO Auto-generated method stub
+            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
+                listeners.fireMouseWheelEvent(this, event);
+            }
+            super.onBrowserEvent(event);
+        }
+        
+        private MouseWheelListenerCollection listeners;
+        
+        public void addMouseWheelListener(MouseWheelListener listener) {
+            if(listeners == null){
+                listeners = new MouseWheelListenerCollection();
+            }
+            listeners.add(listener);
+        }
+
+        public void removeMouseWheelListener(MouseWheelListener listener) {
+            if(listeners != null){
+                listeners.remove(listener);
+            }
+            
+        }
+        
+    }
+    public CellView cellView = new CellView();
+    private VerticalPanel vp = new VerticalPanel();
+    private HorizontalPanel hp = new HorizontalPanel();
+    private ScrollPanel scrollBar = new ScrollPanel();
+    private ProxyListener listener = new ProxyListener();
+    private DataModel dm = new DataModel();
+    private int maxRows;
+    private int start = 0;
+    private int top = 0;
+    private int cellHeight = 15;
+    
+    public ScrollList() {
+        initWidget(hp);
+        cellView.setWidget(vp);
+        hp.add(cellView);
+        hp.add(scrollBar);
+        cellView.addScrollListener(this);
+        //vp.setStyleName("DragContainer");
+        cellView.addMouseWheelListener(this);
+        scrollBar.setWidth("18px");
+        scrollBar.addScrollListener(this);
+        AbsolutePanel ap = new AbsolutePanel();
+        DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
+        DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
+        DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
+        scrollBar.setWidget(ap);
+    }
+    
+    public void setDataModel(DataModel dm) {
+        this.dm = dm;
+        if(dm.size() > 0){
+            setScrollHeight((dm.size()*cellHeight)+1);
+            vp = new VerticalPanel();
+            int num = maxRows;
+            if(dm.size() < maxRows)
+                num = dm.size();
+            for(int i = 0; i < num; i++){
+                createRow();
+            }
+            scrollLoad(0);
+        }
+    }
+    
+    public void scrollLoad(int scrollPos){
+        try{
+            int rowsPer = maxRows;
+            if(maxRows > dm.size())
+                rowsPer = dm.size();
+            start = (scrollPos)/(cellHeight);
+            if(start+rowsPer > dm.size())
+                start = start - ((start+rowsPer) - dm.size());
+            for(int i = 0; i < rowsPer; i++){
+                loadRow(i);
+            }
+        }catch(Exception e){
+            Window.alert("scrollLoad "+e.getMessage());
+        }
+    }
+    
+    private void loadRow(int index){
+        ScreenLabel label = (ScreenLabel)vp.getWidget(index);
+        label.label.setText(dm.get(start+index).getObject(0).getValue().toString());
+        label.setUserObject(dm.get(start+index).getObject(1).getValue());
+    }
+    
+    private void createRow(){
+        ScreenLabel label = new ScreenLabel("",null);
+        vp.add(label);
+        if(vp.getWidgetCount() % 2 == 1){
+            label.addStyleName("AltTableRow");
+        }else{
+            label.addStyleName("TableRow");
+        }
+        label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+        label.sinkEvents(Event.MOUSEEVENTS);
+        label.setDropTargets(((ScreenScrollList)getParent()).getDropTargets());
+        label.setScreen(((ScreenScrollList)getParent()).getScreen());
+        vp.setCellWidth(label,cellView.getOffsetWidth()+"px");
+        label.setHeight(cellHeight+"px");
+    }
+   
+    /**
+     * Method used to add a widget to the list
+     * @param wid
+     */
+    public void addItem(Widget wid){
+        vp.add(wid);
+
+    }
+    
+    /**
+     * Handles the dropping of widget on to this widget
+     * @param text
+     * @param value
+     */
+    public void addDropItem(String text, DataObject value){
+        DataSet ds = new DataSet();
+        StringObject so = new StringObject();
+        so.setValue(text);
+        ds.addObject(so);
+        ds.addObject(value);
+        dm.add(ds);
+        if(vp.getWidgetCount() < maxRows){
+            createRow();
+            loadRow(dm.size()-1);
+        }
+        setScrollHeight((dm.size()*cellHeight)+1);
+    }
+    
+    /**
+     * This method takes an xml string that set the list of widgets
+     * If using as part of ScreenDragList use its load(String xml) instead.
+     * @param xml
+     */
+    public void setList(String xml){
+        Document doc = XMLParser.parse(xml);
+        Element root = doc.getDocumentElement();
+        NodeList items = root.getElementsByTagName("item");
+        for(int i = 0; i < items.getLength(); i++){
+            if(items.item(i).getNodeType() == Node.ELEMENT_NODE){
+                String text = items.item(i).getAttributes().getNamedItem("text").getNodeValue();
+                String value = "";
+                if(items.item(i).getAttributes().getNamedItem("value") != null)
+                    value = items.item(i).getAttributes().getNamedItem("value").getNodeValue();
+                StringObject so = new StringObject();
+                so.setValue(value);
+                addDropItem(text,so);
+            }
+        }
+    }
+    
+    public void setMaxRows(int rows){
+        this.maxRows = rows;
+        cellView.setHeight((rows*cellHeight+1)+"px");
+        scrollBar.setHeight((rows*cellHeight+1)+"px");
+        
+    }
+    
+    public void setCellHeight(int height){
+        this.cellHeight = height;
+    }
+    
+    public void setScrollHeight(int height) {
+        try {
+            scrollBar.getWidget().setHeight(height+"px");
+            if(height > cellView.getOffsetHeight())
+                DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
+            else 
+                DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
+        }catch(Exception e){
+            Window.alert("set scroll height"+e.getMessage());
+        }
+    }
+    
+    public void setWidth(String width){
+        cellView.setWidth(width); 
+    }
+    
+    public void clear(){
+        vp.clear();
+        dm = new DataModel();
+    }
+    
+    public Iterator getIterator(){
+        return vp.iterator();
+    }
+    
+    public void removeItem(ScreenWidget wid){
+        vp.remove(wid);
+        
+    }
+    
+    /**
+     * Sets the list to be draggable or not
+     * @param enabled
+     */
+    public void enable(boolean enabled){
+        Iterator it = vp.iterator();
+        while(it.hasNext()){
+            ScreenWidget wid = (ScreenWidget)it.next();
+            wid.removeMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+            if(enabled){
+                wid.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+            }
+        }
+    }
+    
+    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
+        int pos = scrollBar.getScrollPosition();
+        int delta = velocity.getDeltaY();
+        if(delta < 0 && delta > -cellHeight)
+            delta = -cellHeight;
+        if(delta > 0 && delta < cellHeight)
+            delta = cellHeight;
+        scrollBar.setScrollPosition(pos + delta);
+    }
+    
+    public void onScroll(Widget sender, int scrollLeft, int scrollTop) {
+        if(sender == scrollBar ) {
+            if(top != scrollTop){
+                scrollLoad(scrollTop);
+                top = scrollTop;
+            }
+        }
+    }
+    
+}
