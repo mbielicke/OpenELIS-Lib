@@ -9,7 +9,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 
 /**
  * ScreenMenuPanel will create either a vertical or horizontal list of widgets

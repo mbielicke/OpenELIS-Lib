@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 /**
  * ScreenTextBox wraps a GWT TextBox to be displayed on a Screen.
  * @author tschmidt

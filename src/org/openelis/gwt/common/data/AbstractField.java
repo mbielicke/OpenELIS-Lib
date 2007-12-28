@@ -1,9 +1,7 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.DataField;
-import org.openelis.gwt.common.data.DataObject;
 
 import java.io.Serializable;
 import java.util.Vector;

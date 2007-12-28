@@ -2,7 +2,7 @@ package org.openelis.gwt.common;
 
 public class QueryNotFoundException extends RPCException {
 
-	private static final long serialVersionUID = -7562477330849839330L;
+	private static final long serialVersionUID = 1L;
 	private String msg;
     public String appMsg;
 

@@ -8,7 +8,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
 
 import java.io.Serializable;
 
@@ -20,6 +19,8 @@ import java.io.Serializable;
  * Preferences - Java - Code Style - Code Templates
  */
 public class CheckField extends AbstractField implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public CheckField() {
         object = new BooleanObject();

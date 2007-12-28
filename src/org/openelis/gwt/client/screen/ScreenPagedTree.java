@@ -2,8 +2,8 @@ package org.openelis.gwt.client.screen;
 
 import org.openelis.gwt.client.widget.pagedtree.TreeController;
 import org.openelis.gwt.client.widget.pagedtree.TreeModel;
-import org.openelis.gwt.common.AbstractField;
-import org.openelis.gwt.common.TableModel;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.TableModel;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;

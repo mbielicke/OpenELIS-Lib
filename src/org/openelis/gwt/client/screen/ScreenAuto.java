@@ -12,11 +12,11 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.client.widget.AutoCompleteTextBox;
-import org.openelis.gwt.client.widget.table.small.TableCellWidget;
-import org.openelis.gwt.common.AbstractField;
-import org.openelis.gwt.common.OptionField;
-import org.openelis.gwt.common.OptionItem;
+import org.openelis.gwt.client.widget.table.TableCellWidget;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.NumberField;
+import org.openelis.gwt.common.data.OptionField;
+import org.openelis.gwt.common.data.OptionItem;
 import org.openelis.gwt.common.data.StringField;
 
 /**

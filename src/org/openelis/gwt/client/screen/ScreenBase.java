@@ -26,8 +26,8 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.client.widget.WidgetMap;
-import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.data.AbstractField;
 
 import java.util.HashMap;
 import java.util.Iterator;

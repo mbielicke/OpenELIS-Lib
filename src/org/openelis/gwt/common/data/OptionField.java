@@ -4,11 +4,12 @@
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
 
 
 
@@ -23,8 +24,10 @@ import java.util.Vector;
  * Preferences - Java - Code Style - Code Templates
  */
 public class OptionField extends AbstractField implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
-     * @gwt.typeArgs <org.openelis.gwt.common.OptionItem>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.OptionItem>
      */
     protected ArrayList options = new ArrayList();
     protected boolean multi;

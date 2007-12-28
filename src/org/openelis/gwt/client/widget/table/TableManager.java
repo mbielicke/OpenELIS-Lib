@@ -1,5 +1,6 @@
 package org.openelis.gwt.client.widget.table;
 
+import org.openelis.gwt.client.widget.table.TableController;
 import org.openelis.gwt.common.data.DataModel;
 
 public interface TableManager {

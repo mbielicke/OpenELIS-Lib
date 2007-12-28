@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.client.widget.MaskedTextBox;
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 
 /**
  * ScreenMaskedBox wraps a MaskedTextBox widget for display on a Screen.

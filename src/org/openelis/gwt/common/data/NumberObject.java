@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class NumberObject implements DataObject, Serializable {
 
+    private static final long serialVersionUID = 1L;
     protected Double value;
     protected String type;
     

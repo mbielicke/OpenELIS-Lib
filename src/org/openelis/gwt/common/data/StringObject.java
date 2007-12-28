@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class StringObject implements DataObject, Serializable {
 
+    private static final long serialVersionUID = 1L;
     protected String value;
     
     public Object getValue() {

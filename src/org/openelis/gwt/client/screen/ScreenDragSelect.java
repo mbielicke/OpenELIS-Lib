@@ -7,9 +7,9 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.client.widget.DragSelectWidget;
 import org.openelis.gwt.client.widget.DragWidget;
-import org.openelis.gwt.common.AbstractField;
-import org.openelis.gwt.common.OptionField;
-import org.openelis.gwt.common.OptionItem;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.OptionField;
+import org.openelis.gwt.common.data.OptionItem;
 
 import java.util.Iterator;
 import java.util.List;

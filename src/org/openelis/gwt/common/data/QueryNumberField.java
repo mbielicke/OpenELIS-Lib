@@ -1,4 +1,4 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 public class QueryNumberField extends QueryField {
 
+    private static final long serialVersionUID = 1L;
     private String type;
     private Double max;
     private Double min;

@@ -1,5 +1,7 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
+
+import org.openelis.gwt.common.Filter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,8 +10,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class TableModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
-     * @gwt.typeArgs <org.openelis.gwt.common.TableRow>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.TableRow>
      */
     private ArrayList rows = new ArrayList();
     public boolean paged;
@@ -25,7 +29,7 @@ public class TableModel implements Serializable {
     private AbstractField[] fields;
     
     /**
-     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.AbstractField>
+     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.data.AbstractField>
      */
     public HashMap hidden = new HashMap();
 

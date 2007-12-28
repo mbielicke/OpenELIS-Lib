@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class BooleanObject implements DataObject, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public Boolean value;
     
     public void setValue(Object val) {

@@ -9,7 +9,7 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.client.widget.MenuCommands;
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 
 /**
  * ScreenMenuBar wraps a GWT MenuBar to be displayed on a Screen.  

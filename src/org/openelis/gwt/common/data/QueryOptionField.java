@@ -1,11 +1,13 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+
 public class QueryOptionField extends OptionField {
 
+    private static final long serialVersionUID = 1L;
     private String type;
 
     public QueryOptionField() {

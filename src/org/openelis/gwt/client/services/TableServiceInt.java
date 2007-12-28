@@ -2,10 +2,10 @@ package org.openelis.gwt.client.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
-import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.TableModel;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.TableModel;
 
 /**
  * TableServiceInt is a GWT RemoteService interface that provides 

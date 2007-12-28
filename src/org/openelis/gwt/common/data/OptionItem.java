@@ -1,8 +1,10 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import java.io.Serializable;
 
 public class OptionItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     public String display;
     public String akey;
     public boolean selected;

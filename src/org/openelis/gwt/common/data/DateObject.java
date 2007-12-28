@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class DateObject implements DataObject, Serializable {
     
+
+    private static final long serialVersionUID = 1L;
     protected byte begin;
     protected byte end;
     /**

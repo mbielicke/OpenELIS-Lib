@@ -7,6 +7,11 @@
 package org.openelis.gwt.common;
 
 
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DateField;
+import org.openelis.gwt.common.data.OptionField;
+import org.openelis.gwt.common.data.StringField;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,8 +24,10 @@ import java.util.Vector;
  * Preferences - Java - Code Style - Code Templates
  */
 public class FormRPC implements IForm, Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
-     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.AbstractField>
+     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.data.AbstractField>
      */
     private HashMap fields = new HashMap();
     public int operation;

@@ -9,6 +9,8 @@ import java.util.Date;
  * functionality.
  */
 public class DatetimeRPC implements java.io.Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * Field numbers indicating start and end codes for datetime field.
      */

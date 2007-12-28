@@ -10,9 +10,9 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
 import org.openelis.gwt.client.widget.table.TableManager;
 import org.openelis.gwt.client.widget.table.TableWidget;
-import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.TableModel;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.TableModel;
 
 import java.util.ArrayList;
 
@@ -74,7 +74,10 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                                 .item(0);
                 Node statFilter = ((Element)node).getElementsByTagName("statFilters")
                                                  .item(0);
-                
+                if(node.getAttributes().getNamedItem("cellHeight") != null){
+                    table.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
+                }
+                table.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
                 //if constants = true we want to get the title from the properties file
                 if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
                     table.setTableTitle(table.constants.getString(node.getAttributes().getNamedItem("title").getNodeValue()));
@@ -91,6 +94,8 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
                         table.setShowRows(true);
                 }
+
+                table.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
                 if (widthsNode != null) {
                     String[] widths = widthsNode.getFirstChild()
                                                 .getNodeValue()

@@ -8,6 +8,7 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.client.screen.ScreenBase;
+import org.openelis.gwt.common.data.AbstractField;
 
 public class FormUtil {
     public static void create(FormRPC form, String xml) {

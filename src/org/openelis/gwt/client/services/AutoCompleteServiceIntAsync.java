@@ -1,6 +1,6 @@
 package org.openelis.gwt.client.services;
 
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;

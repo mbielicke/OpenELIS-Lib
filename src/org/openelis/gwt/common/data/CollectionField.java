@@ -1,10 +1,12 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CollectionField extends AbstractField implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject>
      */

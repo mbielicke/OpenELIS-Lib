@@ -1,4 +1,4 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 
 import java.io.Serializable;
@@ -6,13 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TableRow implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
-     * @gwt.typeArgs <org.openelis.gwt.common.AbstractField>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.AbstractField>
      */
     private ArrayList columns = new ArrayList();
     /**
      * 
-     * @gwt.typeArgs <org.openelis.gwt.common.AbstractField>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.AbstractField>
      */
     private HashMap hidden = new HashMap();
     private boolean show = true;

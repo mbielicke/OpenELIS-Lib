@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 
 /**
  * ScreenPassword wraps a GWT Password widget for Display on a Screen.

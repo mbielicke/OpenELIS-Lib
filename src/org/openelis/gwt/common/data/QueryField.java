@@ -1,10 +1,11 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 
 import java.util.ArrayList;
 
 public class QueryField extends AbstractField {
 
+    private static final long serialVersionUID = 1L;
     /**
      * @gwt.typeArgs <java.lang.String>
      */

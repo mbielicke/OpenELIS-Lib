@@ -1,6 +1,8 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.DatetimeRPC;
 
 
 import java.util.Date;
@@ -8,6 +10,8 @@ import java.util.Iterator;
 
 public class QueryDateField extends QueryField {
 
+
+    private static final long serialVersionUID = 1L;
     private byte begin;
     private byte end;
     private Integer max;

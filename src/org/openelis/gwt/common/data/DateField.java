@@ -8,7 +8,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.DatetimeRPC;
 
 import java.io.Serializable;
@@ -22,6 +21,7 @@ import java.util.Date;
  */
 public class DateField extends AbstractField implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private Integer max;
     private Integer min;
 

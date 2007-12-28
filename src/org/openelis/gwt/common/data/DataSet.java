@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class DataSet implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     /**
      * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject>
      */

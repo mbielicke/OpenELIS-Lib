@@ -1,15 +1,15 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.DataModel;
 
-public class ModelField extends AbstractField {
+public class TableField extends AbstractField {
 
+    private static final long serialVersionUID = 1L;
     /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataModel>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.TableModel>
      */
-    private DataModel value;
+    private TableModel value;
 
     public boolean isValid() {
         // TODO Auto-generated method stub
@@ -26,7 +26,7 @@ public class ModelField extends AbstractField {
         if(val == null)
             value = null;
         else
-            value = (DataModel)val;
+            value = (TableModel)val;
     }
 
     public Object getValue() {

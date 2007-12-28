@@ -1,8 +1,10 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-public class QueryCheckField extends org.openelis.gwt.common.data.CheckField {
+public class QueryCheckField extends CheckField {
+
+    private static final long serialVersionUID = 1L;
 
     public Object getInstance(Node field) {
         QueryCheckField check = new QueryCheckField();

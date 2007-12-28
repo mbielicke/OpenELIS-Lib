@@ -11,7 +11,7 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.client.widget.DragList;
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 /**
  * ScreenDragList wraps a DragList Widget to be displayed on a Screen
  * @author tschmidt

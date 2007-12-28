@@ -2,12 +2,11 @@ package org.openelis.gwt.client.widget;
 
 import org.openelis.gwt.client.services.AutoCompleteServiceInt;
 import org.openelis.gwt.client.services.AutoCompleteServiceIntAsync;
-import org.openelis.gwt.client.widget.table.small.TableCellWidget;
-import org.openelis.gwt.client.widget.table.small.TableController;
-import org.openelis.gwt.client.widget.table.small.TableManager;
-import org.openelis.gwt.client.widget.table.small.TableWidget;
-import org.openelis.gwt.common.AbstractField;
-import org.openelis.gwt.common.TableRow;
+import org.openelis.gwt.client.widget.table.TableCellWidget;
+import org.openelis.gwt.client.widget.table.TableController;
+import org.openelis.gwt.client.widget.table.TableManager;
+import org.openelis.gwt.client.widget.table.TableWidget;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
@@ -15,6 +14,7 @@ import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.common.data.TableRow;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;

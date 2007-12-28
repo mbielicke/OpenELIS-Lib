@@ -5,13 +5,13 @@ import java.util.Iterator;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
-import org.openelis.gwt.common.OptionItem;
-import org.openelis.gwt.common.QueryCheckField;
-import org.openelis.gwt.common.QueryDateField;
-import org.openelis.gwt.common.QueryField;
-import org.openelis.gwt.common.QueryNumberField;
-import org.openelis.gwt.common.QueryOptionField;
-import org.openelis.gwt.common.QueryStringField;
+import org.openelis.gwt.common.data.OptionItem;
+import org.openelis.gwt.common.data.QueryCheckField;
+import org.openelis.gwt.common.data.QueryDateField;
+import org.openelis.gwt.common.data.QueryField;
+import org.openelis.gwt.common.data.QueryNumberField;
+import org.openelis.gwt.common.data.QueryOptionField;
+import org.openelis.gwt.common.data.QueryStringField;
 
 public class QueryBuilder {
 

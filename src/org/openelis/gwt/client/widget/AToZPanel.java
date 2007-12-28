@@ -1,7 +1,10 @@
 package org.openelis.gwt.client.widget;
 
 import org.openelis.gwt.client.screen.ScreenBase;
+import org.openelis.gwt.client.screen.ScreenTableWidget;
 import org.openelis.gwt.client.screen.ScreenVertical;
+import org.openelis.gwt.client.screen.ScreenWidget;
+import org.openelis.gwt.client.widget.table.TableWidget;
 import org.openelis.gwt.common.FormRPC;
 
 import com.google.gwt.user.client.Command;
@@ -51,7 +54,7 @@ public class AToZPanel extends Composite implements ClickListener {
 	private ScreenVertical alphabetButtonVP = new ScreenVertical();
 	private VerticalPanel tablePanel = new VerticalPanel();
 	private HorizontalPanel hideablePanel = new HorizontalPanel();
-	public FormTable leftTable = null;
+	public TableWidget leftTable = null;
 	//private CheckBox checkBox = new CheckBox();
 	private VerticalPanel middleBar = new VerticalPanel();
 	//private HorizontalPanel imagePanel = new HorizontalPanel();
@@ -171,7 +174,7 @@ public class AToZPanel extends Composite implements ClickListener {
 		middleBar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		middleBar.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
-		leftTable = new FormTable(node);
+	    leftTable = (TableWidget)((ScreenWidget)ScreenBase.getWidgetMap().getWidget(node, screen)).getWidget();
 
 		leftTable.setStyleName("ScreenTable");
         

@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 /**
  * ScreenLabel wraps a GWT Label for display on a Screen.
  * @author tschmidt

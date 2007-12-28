@@ -8,7 +8,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
 
 import java.io.Serializable;
 
@@ -20,6 +19,7 @@ import java.io.Serializable;
  */
 public class StringField extends AbstractField implements Serializable {
     
+    private static final long serialVersionUID = 1L;
     private Integer min;
     private Integer max;
     

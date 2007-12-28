@@ -8,7 +8,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
 
 import java.io.Serializable;
 

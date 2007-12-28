@@ -2,9 +2,9 @@ package org.openelis.gwt.client.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
-import org.openelis.gwt.common.AbstractField;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.data.AbstractField;
 
 /**
  * ScreenServiceInt is a GWT RemoteService interface for the Screen

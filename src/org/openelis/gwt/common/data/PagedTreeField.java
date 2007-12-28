@@ -1,4 +1,4 @@
-package org.openelis.gwt.common;
+package org.openelis.gwt.common.data;
 
 import org.openelis.gwt.client.widget.pagedtree.TreeModel;
 
@@ -6,12 +6,10 @@ import com.google.gwt.xml.client.Node;
 
 public class PagedTreeField extends AbstractField {
 
-	    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 9140569545794526570L;
+
+	private static final long serialVersionUID = 1L;
 		/**
-	     * @gwt.typeArgs <org.openelis.gwt.common.TableModel>
+	     * @gwt.typeArgs <org.openelis.gwt.common.data.TableModel>
 	     */
 	    private TreeModel value;
 	    

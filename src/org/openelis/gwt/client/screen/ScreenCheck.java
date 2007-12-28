@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.AbstractField;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.CheckField;
 /**
  * ScreenCheck wraps a GWT CheckBox to be displayed on a Screen.

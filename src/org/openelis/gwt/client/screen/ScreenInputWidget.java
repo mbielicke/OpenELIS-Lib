@@ -1,6 +1,6 @@
 package org.openelis.gwt.client.screen;
 
-import org.openelis.gwt.client.widget.table.small.TableWidget;
+import org.openelis.gwt.client.widget.table.TableWidget;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -27,8 +27,8 @@ public class ScreenInputWidget extends ScreenWidget {
         this.queryMode = mode;
         if(queryMode){
             if(queryWidget != null){
-            	if(queryWidget instanceof ScreenTableWidgetSmall){
-            		((TableWidget)((ScreenTableWidgetSmall)queryWidget).getWidget()).controller.reset();
+            	if(queryWidget instanceof ScreenTableWidget){
+            		((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).controller.reset();
             	}
                 initWidget(queryWidget.displayWidget);
             }else{
