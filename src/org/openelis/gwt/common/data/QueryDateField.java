@@ -17,7 +17,7 @@ public class QueryDateField extends QueryField {
     private Integer max;
     private Integer min;
 
-    public boolean isValid() {
+    public void validate() {
         Iterator paramIt = parameter.iterator();
         while (paramIt.hasNext()) {
             String param = (String)paramIt.next();
@@ -25,13 +25,13 @@ public class QueryDateField extends QueryField {
                 Date date = new Date(param.replaceAll("-", "/"));
             } catch (Exception e) {
                 addError("Not a Valid Date");
-                return false;
+                valid = false;
+                return;
             }
         }
         if (value != null && !isInRange()) {
-            return false;
+            valid = false;
         }
-        return true;
     }
 
     /*

@@ -29,19 +29,21 @@ public class NumberField extends AbstractField implements Serializable {
         object = new NumberObject();
     }
     
-    public boolean isValid() {
-        if (invalid)
-            return false;
+    public void validate() {
+        if (invalid){
+            valid = false;
+            return;
+        }
         if (required) {
             if (((NumberObject)object).value == null) {
                 addError("Field is required");
-                return false;
+                valid = false;
+                return;
             }
         }
         if (((NumberObject)object).value != null && !isInRange()) {
-            return false;
+            valid = false;
         }
-        return true;
     }
 
     public boolean isInRange() {

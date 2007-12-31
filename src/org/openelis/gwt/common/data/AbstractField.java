@@ -19,6 +19,7 @@ public class AbstractField implements DataField, Serializable {
     protected String key;
     protected String tip;
     protected DataObject object;
+    protected boolean valid = true;
 
     public void setRequired(boolean required) {
         this.required = required;
@@ -72,9 +73,13 @@ public class AbstractField implements DataField, Serializable {
 
     public boolean isValid() {
         // TODO Auto-generated method stub
-        return false;
+        return valid;
     }
 
+    public void validate() {
+        
+    }
+    
     public boolean isInRange() {
         // TODO Auto-generated method stub
         return false;

@@ -63,6 +63,7 @@ public class ScreenWidget extends SimplePanel implements
      */
     protected ScreenBase screen;
     public String hoverStyle = "Hover";
+    public String key;
    
     public ScreenWidget() {
     }
@@ -174,8 +175,10 @@ public class ScreenWidget extends SimplePanel implements
      */
     public void setDefaults(Node node, ScreenBase screen) {
         this.screen = screen;
-        if(node.getAttributes().getNamedItem("key") != null)
-        	screen.widgets.put(node.getAttributes().getNamedItem("key").getNodeValue(), this);
+        if(node.getAttributes().getNamedItem("key") != null){
+            key = node.getAttributes().getNamedItem("key").getNodeValue();
+        	screen.widgets.put(key, this);
+        }
         if (node.getAttributes().getNamedItem("style") != null)
             getWidget().addStyleName(node.getAttributes()
                                          .getNamedItem("style")

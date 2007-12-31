@@ -13,9 +13,8 @@ public class PagedTreeField extends AbstractField {
 	     */
 	    private TreeModel value;
 	    
-	    public boolean isValid() {
-	        // TODO Auto-generated method stub
-	        return true;
+	    public void validate() {
+	        // TODO Auto-generated method stu
 	    }
 
 	    public boolean isInRange() {

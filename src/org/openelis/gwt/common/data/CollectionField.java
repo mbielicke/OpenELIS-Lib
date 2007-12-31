@@ -12,9 +12,8 @@ public class CollectionField extends AbstractField implements Serializable {
      */
     private ArrayList coll = new ArrayList();
 
-    public boolean isValid() {
+    public void validate() {
         // TODO Auto-generated method stub
-        return true;
     }
 
     public boolean isInRange() {

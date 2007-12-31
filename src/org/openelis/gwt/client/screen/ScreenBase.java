@@ -61,7 +61,6 @@ public class ScreenBase extends Composite implements
      */
     public HashMap widgets = new HashMap();
     protected Document xml;
-    public HashMap errors = new HashMap();
     protected HashMap tabOrder = new HashMap();
     protected HashMap tabBack = new HashMap();
     public boolean keep;
@@ -174,44 +173,13 @@ public class ScreenBase extends Composite implements
      */
     protected void drawErrors() {
         clearErrors();
-        Iterator rpcKeys = rpc.getFieldMap().keySet().iterator();
-        while (rpcKeys.hasNext()) {
-            String key = (String)rpcKeys.next();
-            AbstractField field = rpc.getField(key);
-            setError(new Object[] {field.getErrors()}, key);
-        }
-    }
-
-    /**
-     * This method puts validation errors into a vertical panel to be displayed on the
-     * screen for widgets of type error.
-     * 
-     * @param fields
-     * @param key
-     */
-    protected void setError(Object[] fields, String key) {
-        VerticalPanel errPanel = new VerticalPanel();
-        errPanel.setStyleName("ScreenError");
-        for (int i = 0; i < fields.length; i++) {
-            String[] errors = (String[])fields[i];
-            for (int j = 0; j < errors.length; j++) {
-                String error = (String)errors[j];
-                errPanel.add(new HTML(error));
-            }
-        }
-        if (errPanel.getWidgetCount() > 0) {
-            Object errLoc = errors.get(key);
-            if (errLoc instanceof Panel) {
-                VerticalPanel vp = (VerticalPanel)errLoc;
-                vp.add(errPanel);
-                vp.setVisible(true);
-            } else {
-                com.google.gwt.user.client.Element el = (com.google.gwt.user.client.Element)errLoc;
-                String tableId = DOM.getAttribute(el, "table");
-                FlexTable table = (FlexTable)getWidget(tableId);
-                int row = DOM.getIntAttribute(el, "row");
-                table.setWidget(row, 1, errPanel);
-                table.getRowFormatter().setVisible(row, true);
+        Iterator wids = widgets.values().iterator();
+        while (wids.hasNext()) {
+            Object wid = wids.next();
+            if(wid instanceof ScreenInputWidget){
+                AbstractField field = rpc.getField(((ScreenInputWidget)wid).key);
+                if(field != null && !field.isValid())
+                    ((ScreenInputWidget)wid).drawError();
             }
         }
     }
@@ -306,20 +274,11 @@ public class ScreenBase extends Composite implements
      * 
      */
     protected void clearErrors() {
-        Iterator errorIt = errors.keySet().iterator();
-        while (errorIt.hasNext()) {
-            Object errLoc = errors.get((String)errorIt.next());
-            if (errLoc instanceof Panel) {
-                ((Panel)errLoc).clear();
-                ((Panel)errLoc).setVisible(false);
-            } else {
-                com.google.gwt.user.client.Element el = (com.google.gwt.user.client.Element)errLoc;
-                String tableId = DOM.getAttribute(el, "table");
-                FlexTable table = (FlexTable)getWidget(tableId);
-                int row = DOM.getIntAttribute(el, "row");
-                if (table.isCellPresent(row, 1))
-                    table.clearCell(row, 1);
-                table.getRowFormatter().setVisible(row, false);
+        Iterator it = widgets.values().iterator();
+        while (it.hasNext()){
+            Object wid = it.next();
+            if(wid instanceof ScreenInputWidget){
+                ((ScreenInputWidget)wid).clearError();
             }
         }
     }
@@ -566,8 +525,6 @@ public class ScreenBase extends Composite implements
             widgets.clear();
             widgets = null;
             xml = null;
-            errors.clear();
-            errors = null;
             tabOrder.clear();
             tabOrder = null;
             tabBack.clear();

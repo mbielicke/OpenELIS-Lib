@@ -35,9 +35,8 @@ public class QueryField extends AbstractField {
         operators.add("|");
     }
 
-    public boolean isValid() {
+    public void validate() {
         // TODO Auto-generated method stub
-        return true;
     }
 
     public boolean isInRange() {

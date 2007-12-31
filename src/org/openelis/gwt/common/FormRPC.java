@@ -118,9 +118,11 @@ public class FormRPC implements IForm, Serializable {
         Iterator keyIt = fields.keySet().iterator();
         while (keyIt.hasNext()) {
             String fieldKey = (String)keyIt.next();
-            if (fieldKey.endsWith("Q"))
-                continue;
+            //if (fieldKey.endsWith("Q"))
+            //    continue;
             AbstractField field = (AbstractField)fields.get(fieldKey);
+            field.clearErrors();
+            field.validate();
             if (!field.isValid()) {
                 status = INVALID_FORM;
             }

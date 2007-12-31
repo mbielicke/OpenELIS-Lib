@@ -33,27 +33,30 @@ public class OptionField extends AbstractField implements Serializable {
     protected boolean multi;
     protected String value;
 
-    public boolean isValid() {
+    public void validate() {
         if (required) {
             if (!multi) {
                 if (value == null) {
                     addError("Field is required");
-                    return false;
+                    valid = false;
+                    return;
                 } else if (((String)value).equals("") || ((String)value).equals("0")) {
                     addError("Field is Required");
-                    return false;
+                    valid = false;
+                    return;
                 }
             } else {
                 for (int i = 0; i < options.size(); i++) {
                     OptionItem item = (OptionItem)options.get(i);
-                    if (item.selected)
-                        return true;
+                    if (item.selected) {
+                        valid = true;
+                        return;
+                    }
                 }
                 addError("Selection is required");
-                return false;
+                valid = false;
             }
         }
-        return true;
     }
 
     public boolean isInRange() {

@@ -26,17 +26,17 @@ public class CheckField extends AbstractField implements Serializable {
         object = new BooleanObject();
     }
     
-    public boolean isValid() {
+    public void validate() {
         if (required) {
             if (((BooleanObject)object).value  == null) {
                 addError("Field is required");
-                return false;
+                valid =  false;
+                return;
             }
         }
         if (!isInRange()) {
-            return false;
+            valid = false;
         }
-        return true;
     }
 
     public boolean isInRange() {

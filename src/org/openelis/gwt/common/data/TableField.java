@@ -11,9 +11,8 @@ public class TableField extends AbstractField {
      */
     private TableModel value;
 
-    public boolean isValid() {
+    public void validate() {
         // TODO Auto-generated method stub
-        return true;
     }
 
     public boolean isInRange() {

@@ -835,3 +835,19 @@ margin 2px;
 cursor:wait;
 }
 
+.ErrorPanel {
+  width:16px;
+  height:16px;
+  background-image:url(../Images/exclamation.png);
+}
+
+.ErrorPopup {
+  padding:5px;
+  border:2px solid red;
+  background:white;
+  font-family: Arial, Helvetica, sans-serif; 
+  font-size: 14px; 
+  color: #003366;  
+  font-weight: bold;
+}
+

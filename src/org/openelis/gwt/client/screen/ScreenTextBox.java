@@ -146,7 +146,8 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
 				textbox.removeStyleName("NoFocus");
 				textbox.addStyleName("Focus");
 			}
-		}		
+		}	
+        super.onFocus(sender);
 	}
 	public void onLostFocus(Widget sender) {
 		if(!textbox.isReadOnly()){
@@ -155,5 +156,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
 				textbox.addStyleName("NoFocus");
 			}
 		}
+        super.onLostFocus(sender);
 	}    
 }

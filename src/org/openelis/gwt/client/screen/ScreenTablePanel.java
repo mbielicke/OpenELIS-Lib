@@ -68,38 +68,6 @@ public class ScreenTablePanel extends ScreenWidget {
             for (int l = 0; l < widgets.getLength(); l++) {
                 if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
                     w++;
-                    /*Node input = null;
-                    if (widgets.item(l).getNodeName().equals("widget")) {
-                        NodeList inputList = widgets.item(l).getChildNodes();
-                        for (int m = 0; m < inputList.getLength(); m++) {
-                            if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-                                input = inputList.item(m);
-                                m = 100;
-                            }
-                        }
-                    } else
-                        input = widgets.item(l);
-                    Widget wid = null;
-                    if (input != null)
-                        wid = ScreenBase.getWidgetMap().getWidget(input, screen);
-                    else
-                        wid = new Label("");
-                    if(widgets.item(l).getNodeName().equals("widget")){
-                        NodeList queryList = ((Element)widgets.item(l)).getElementsByTagName("query");
-                        if(queryList.getLength() > 0){
-                            NodeList inputList = queryList.item(0).getChildNodes();
-                            for (int m = 0; m < inputList.getLength(); m++) {
-                                if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-                                    input = inputList.item(m);
-                                    m = 100;
-                                }
-                            }
-                            Widget query = ScreenBase.getWidgetMap().getWidget(input, screen);
-                            //screen.widgets.remove(input.getAttributes().getNamedItem("key").getNodeValue());
-                            ((ScreenInputWidget)wid).setQueryWidget((ScreenWidget)query);
-                        }
-                    }
-                    */
                     Widget wid = ScreenWidget.loadWidget(widgets.item(l), screen);
                     panel.setWidget(k, w, wid);
                     if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
@@ -153,26 +121,12 @@ public class ScreenTablePanel extends ScreenWidget {
             if (rows.item(k).getAttributes().getNamedItem("style") != null) {
             	panel.getRowFormatter().addStyleName(k, rows.item(k).getAttributes().getNamedItem("style").getNodeValue());
             }
-            
-            if (rows.item(k).getAttributes().getNamedItem("type") != null) {
-                panel.setText(k, 0, " ");
-                panel.getFlexCellFormatter().addStyleName(k, 0, "Prompt");
-                panel.getRowFormatter().setVisible(k, false);
-                com.google.gwt.user.client.Element el = panel.getRowFormatter()
-                                                             .getElement(k);
-                DOM.setIntAttribute(el, "row", k);
-                DOM.setAttribute(el, "table", tableId);
-                screen.errors.put(rows.item(k)
+            if (rows.item(k).getAttributes().getNamedItem("id") != null){
+                screen.widgets.put(rows.item(k)
                                       .getAttributes()
                                       .getNamedItem("id")
-                                      .getNodeValue(), el);
-            } else {
-                if (rows.item(k).getAttributes().getNamedItem("id") != null)
-                    screen.widgets.put(rows.item(k)
-                                          .getAttributes()
-                                          .getNamedItem("id")
-                                          .getNodeValue(),
-                                      panel.getRowFormatter().getElement(k));
+                                      .getNodeValue(),
+                                  panel.getRowFormatter().getElement(k));
             }
         }
         setDefaults(node, screen);

@@ -11,7 +11,7 @@ public class QueryNumberField extends QueryField {
     private Double max;
     private Double min;
 
-    public boolean isValid() {
+    public void validate() {
         Iterator paramIt = parameter.iterator();
         while (paramIt.hasNext()) {
             String param = (String)paramIt.next();
@@ -20,18 +20,19 @@ public class QueryNumberField extends QueryField {
                     Integer.parseInt(param);
                 } catch (Exception e) {
                     addError("Param is not a number");
-                    return false;
+                    valid = false;
+                    return;
                 }
             } else {
                 try {
                     Double.parseDouble(param);
                 } catch (Exception e) {
                     addError("Param is not a number");
-                    return false;
+                    valid = false;
+                    return;
                 }
             }
         }
-        return true;
     }
 
     public boolean isInRange() {

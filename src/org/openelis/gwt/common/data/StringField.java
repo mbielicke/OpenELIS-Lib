@@ -27,17 +27,17 @@ public class StringField extends AbstractField implements Serializable {
         object = new StringObject();
     }
 
-    public boolean isValid() {
+    public void validate() {
         if (required) {
             if (((StringObject)object).value == null || ((StringObject)object).value.length() == 0) {
                 addError("Field is required");
-                return false;
+                valid = false;
+                return;
             }
         }
         if (((StringObject)object).value != null && !isInRange()) {
-            return false;
+            valid =  false;
         }
-        return true;
     }
 
     public boolean isInRange() {

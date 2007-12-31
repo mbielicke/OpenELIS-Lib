@@ -40,7 +40,7 @@ public class ScreenError extends ScreenWidget {
                            .getNodeValue()
                            .split(",");
         for (int k = 0; k < ids.length; k++) {
-            screen.errors.put(ids[k], panel);
+            //screen.errors.put(ids[k], panel);
         }
         initWidget(panel);
         panel.setStyleName("ScreenError");

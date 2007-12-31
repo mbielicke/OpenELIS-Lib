@@ -11,9 +11,8 @@ public class ModelField extends AbstractField {
      */
     private DataModel value;
 
-    public boolean isValid() {
+    public void validate() {
         // TODO Auto-generated method stub
-        return true;
     }
 
     public boolean isInRange() {
