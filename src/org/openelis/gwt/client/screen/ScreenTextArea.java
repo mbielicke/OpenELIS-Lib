@@ -118,7 +118,8 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
 				textarea.removeStyleName("NoFocus");
 				textarea.addStyleName("Focus");
 			}
-		}		
+		}
+        super.onFocus(sender);
 	}
 	public void onLostFocus(Widget sender) {
 		if(!textarea.isReadOnly()){
@@ -127,5 +128,6 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
 				textarea.addStyleName("NoFocus");
 			}
 		}
+        super.onLostFocus(sender);
 	}    
 }

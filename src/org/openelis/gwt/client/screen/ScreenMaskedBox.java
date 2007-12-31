@@ -124,7 +124,8 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
 				maskbox.removeStyleName("NoFocus");
 				maskbox.addStyleName("Focus");
 			}
-		}		
+		}
+        super.onFocus(sender);
 	}
 	public void onLostFocus(Widget sender) {
 		if(!maskbox.isReadOnly()){
@@ -133,5 +134,6 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
 				maskbox.addStyleName("NoFocus");
 			}
 		}
+        super.onLostFocus(sender);
 	}
 }

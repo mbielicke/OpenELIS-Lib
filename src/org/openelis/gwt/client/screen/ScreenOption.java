@@ -134,11 +134,12 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
     public void onFocus(Widget sender) {
         if(!enabled)
             optionlist.setFocus(false);
-        
+        super.onFocus(sender);
     }
 
     public void onLostFocus(Widget sender) {
        // TODO Auto-generated method stub
+        super.onLostFocus(sender);
     }
     
     public void setFocus(boolean focus){
