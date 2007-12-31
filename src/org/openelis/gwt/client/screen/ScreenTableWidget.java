@@ -255,12 +255,6 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     if(field.getValue() != null){
                         if (field.getValue() != null)
                             ((ScreenTableWidget)queryWidget).table.controller.setModel((TableModel)field.getValue());
-                        else{
-                            ((ScreenTableWidget)queryWidget).table.controller.model.reset();
-                            ((ScreenTableWidget)queryWidget).table.controller.model.addRow(null);
-                            ((ScreenTableWidget)queryWidget).table.controller.reset();
-                            field.setValue(((ScreenTableWidget)queryWidget).table.controller.model);
-                        }
                     }
                 }else{
                     queryWidget.load(field);

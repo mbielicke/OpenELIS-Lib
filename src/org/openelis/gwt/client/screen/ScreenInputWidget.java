@@ -41,7 +41,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(queryMode){
             if(queryWidget != null){
             	if(queryWidget instanceof ScreenTableWidget){
-            		((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).controller.reset();
+                    ((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).controller.model.reset();
+                    ((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).controller.model.addRow(null);
+                    ((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).controller.reset();
             	}
                 initWidget(queryWidget.displayWidget);
             }else{
