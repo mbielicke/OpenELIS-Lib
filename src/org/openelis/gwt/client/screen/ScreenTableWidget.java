@@ -243,9 +243,6 @@ public class ScreenTableWidget extends ScreenInputWidget {
 
         public void load(AbstractField field) {
             if(!queryMode){
-              //queryWidget.load(field);
-            //else{
-                
                 if (field.getValue() != null)
                     table.controller.setModel((TableModel)field.getValue());
                 else{
@@ -253,6 +250,8 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     table.controller.reset();
                     field.setValue(table.controller.model);
                 }
+            }else{
+                queryWidget.load(field);
             }
         }
 
