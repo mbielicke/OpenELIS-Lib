@@ -21,6 +21,7 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
     private TextBox editor;
     private Label display;
     private AbstractField field;
+    private boolean enabled;
     
     public TableTextBox() {
     	
@@ -36,6 +37,7 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
     public TableCellWidget getNewInstance() {
         TableTextBox  textbox = new TableTextBox();
         textbox.fieldCase = fieldCase;
+        textbox.enabled = enabled;
         return textbox;
     }
 
@@ -53,6 +55,8 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
     }
 
     public void setEditor() {
+        if(!enabled)
+            return;
     	if(editor == null){
     		editor = new TextBox();
     		if(fieldCase.equals("upper"))
@@ -83,5 +87,10 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
 	public void setField(AbstractField field) {
 		this.field = field;
 	}
+
+    public void enable(boolean enabled) {
+       this.enabled = enabled;
+        
+    }
 
 }

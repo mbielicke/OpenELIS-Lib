@@ -9,8 +9,6 @@ import org.openelis.gwt.client.widget.FormCalendarWidget;
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 
-import java.util.Date;
-
 public class TableCalendar extends SimplePanel implements TableCellWidget {
 
 	private FormCalendarWidget editor;
@@ -19,7 +17,8 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
 	private byte begin = 0;
 	private byte end = 2;
 	private boolean week = false;
-	
+	private boolean enabled;
+    
     public TableCalendar() {
     	
     }
@@ -46,6 +45,8 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
     }
 
     public void setEditor() {
+        if(!enabled)
+            return;
     	if(editor == null){
     		editor = new FormCalendarWidget(begin,end,week);
     	}
@@ -83,6 +84,7 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
 		cal.begin = begin;
 		cal.end = end;
 		cal.week = week;
+        cal.enabled = enabled;
 		return cal;
 	}
 
@@ -93,4 +95,8 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
 	public void setField(AbstractField field) {
 		this.field = field;
 	}
+
+    public void enable(boolean enabled) {
+       this.enabled = enabled;
+    }
 }

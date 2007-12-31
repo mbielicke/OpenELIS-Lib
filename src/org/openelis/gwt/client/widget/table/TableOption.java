@@ -37,6 +37,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
     private boolean multi;
     private int visible = 1;
     public OptionField fromHidden;
+    private boolean enabled;
 
     public TableOption() {
         sinkEvents(Event.KEYEVENTS);
@@ -51,6 +52,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
         to.loadFromModel = loadFromModel;
         to.editor = editor;
         to.listener = listener;
+        to.enabled = enabled;
         return to;
     }
 
@@ -111,6 +113,8 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 	}
 
 	public void setEditor() {
+        if(!enabled)
+            return;
 		if(editor == null){
 			editor = new OptionList();
             editor.addChangeListener(listener);
@@ -154,5 +158,10 @@ public class TableOption extends SimplePanel implements TableCellWidget {
     
     public void setListener(ChangeListener listener){
        this.listener = listener;
+    }
+
+    public void enable(boolean enabled) {
+      this.enabled = enabled;
+        
     }
 }

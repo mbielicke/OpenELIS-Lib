@@ -57,4 +57,9 @@ public class TableImage extends SimplePanel implements TableCellWidget {
 		this.field = field;
 		
 	}
+
+    public void enable(boolean enabled) {
+        // TODO Auto-generated method stub
+        
+    }
 }

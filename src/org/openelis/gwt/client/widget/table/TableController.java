@@ -44,6 +44,7 @@ import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.common.data.TableRow;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This class is the main controller for the Table widget. It hooks the model to
@@ -1274,6 +1275,16 @@ public class TableController implements
     public void removeChangeListener(ChangeListener listener) {
         if(changeListeners != null)
             changeListeners.remove(listener);
+    }
+    
+    public void enabled(boolean enabled){
+        for(int i = 0; i < editors.length; i++){
+            editors[i].enable(enabled);
+        }
+        Iterator widIt = view.table.iterator();
+        while(widIt.hasNext()){
+            ((TableCellWidget)widIt.next()).enable(enabled);
+        }
     }
     
 }

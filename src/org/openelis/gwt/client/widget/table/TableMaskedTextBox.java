@@ -21,6 +21,7 @@ public class TableMaskedTextBox extends SimplePanel implements TableCellWidget {
 	private Label display;
 	private AbstractField field;
 	private String mask;
+    private boolean enabled;
 	
     public TableMaskedTextBox() {
     }
@@ -33,7 +34,10 @@ public class TableMaskedTextBox extends SimplePanel implements TableCellWidget {
     }
 
     public TableCellWidget getNewInstance() {
-        return new TableMaskedTextBox();
+        TableMaskedTextBox tb = new TableMaskedTextBox();
+        tb.mask = mask;
+        tb.enabled = enabled;
+        return tb;
     }
 
     public Widget getInstance(Node node) {
@@ -53,6 +57,8 @@ public class TableMaskedTextBox extends SimplePanel implements TableCellWidget {
 	}
 
 	public void setEditor() {
+        if(!enabled)
+            return;
 		if(editor == null){
 			editor = new MaskedTextBox();
 			editor.setMask(mask);
@@ -62,10 +68,15 @@ public class TableMaskedTextBox extends SimplePanel implements TableCellWidget {
 	}
 
 	public void saveValue() {
+        editor.format();
 		field.setValue(editor.getText());
 	}
 
 	public void setField(AbstractField field) {
 		this.field = field;
 	}
+
+    public void enable(boolean enabled) {
+       this.enabled = enabled;
+    }
 }

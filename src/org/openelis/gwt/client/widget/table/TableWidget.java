@@ -143,4 +143,8 @@ public class TableWidget extends Composite {
         }
         
     }
+    
+    public void enable(boolean enabled){
+        controller.enabled(enabled);
+    }
 }

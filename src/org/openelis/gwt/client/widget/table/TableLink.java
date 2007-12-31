@@ -18,6 +18,7 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     
     private HTML editor;
     private AbstractField field;
+    private boolean enabled;
     
     public TableLink() {
         editor = new HTML();
@@ -34,8 +35,9 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     }
 
     public TableCellWidget getNewInstance() {
-        // TODO Auto-generated method stub
-        return null;
+        TableLink tl = new TableLink();
+        tl.enabled = enabled;
+        return tl;
     }
 
     public void saveValue() {
@@ -55,6 +57,11 @@ public class TableLink extends SimplePanel implements TableCellWidget {
 
     public void setField(AbstractField field) {
         this.field = field;
+        
+    }
+
+    public void enable(boolean enabled) {
+      this.enabled = enabled;
         
     }
 }

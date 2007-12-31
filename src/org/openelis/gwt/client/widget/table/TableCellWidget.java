@@ -21,4 +21,6 @@ public interface TableCellWidget {
     public void setField(AbstractField field);
     
     public Widget getWidget();
+    
+    public void enable(boolean enabled);
 }

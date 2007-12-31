@@ -283,5 +283,9 @@ public class ScreenTableWidget extends ScreenInputWidget {
         public ScreenInputWidget getQueryWidget(){
             return queryWidget;
         }
+        
+        public void enable(boolean enabled){
+            table.enable(enabled);
+        }
 
 }

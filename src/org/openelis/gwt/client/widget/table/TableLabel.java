@@ -66,4 +66,9 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 		this.field = field;
 		
 	}
+
+    public void enable(boolean enabled) {
+        // TODO Auto-generated method stub
+        
+    }
 }

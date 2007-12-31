@@ -117,4 +117,11 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
         DOM.setStyleAttribute(sender.getElement(), "background", "none");
         
     }
+    
+    public void enable(boolean enabled){
+        panel.removeClickListener(this);
+        if(enabled){
+            panel.addClickListener(this);
+        }
+    }
 }

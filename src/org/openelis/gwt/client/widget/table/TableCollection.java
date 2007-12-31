@@ -62,4 +62,9 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
 	public void setField(AbstractField field) {
 		this.field = field;
 	}
+
+    public void enable(boolean enabled) {
+        // TODO Auto-generated method stub
+        
+    }
 }
