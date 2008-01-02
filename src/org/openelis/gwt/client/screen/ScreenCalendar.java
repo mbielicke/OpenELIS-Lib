@@ -128,5 +128,9 @@ public class ScreenCalendar extends ScreenInputWidget {
         cal = null;
         super.destroy();
     }
+    
+    public void setFocus(boolean focus){
+        cal.setFocus(focus);
+    }
 
 }
