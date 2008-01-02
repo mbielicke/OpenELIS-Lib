@@ -1,8 +1,6 @@
 package org.openelis.gwt.client.widget.pagedtree;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -15,7 +13,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeImages;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.google.gwt.core.client.GWT;
 
 public class TreeView extends Composite {
     
@@ -25,9 +23,10 @@ public class TreeView extends Composite {
     private VerticalPanel vp = new VerticalPanel();
     public ScrollPanel vScroll = new ScrollPanel();    
     
-    public AbsolutePanel headerView = new AbsolutePanel();   
+    private VerticalPanel vtreePanel = new VerticalPanel();
     public String width;
-    public String navLinks = "NavLinks";
+    public String height;
+    private String navLinks = "NavLinks";
     
     interface MyTreeImages extends TreeImages {
         
@@ -44,11 +43,12 @@ public class TreeView extends Composite {
         /** 
          * @gwt.resource report.png
          */
-      //  AbstractImagePrototype treeLeaf();
+      // AbstractImagePrototype treeLeaf();
       }
     
     TreeImages images = (TreeImages)GWT.create(MyTreeImages.class);
     
+    //public Tree tree = new Tree();
     public Tree tree = new Tree(images);
     
     private final Label titleLabel = new Label();
@@ -59,29 +59,37 @@ public class TreeView extends Composite {
         initTree();
     }
     
-    public void initTree(){                  
-    	if(title != null && !title.equals("")){
+    public void initTree(){ 
+        
+    	if(title != null ){
+           if(!title.equals("")){
     		titleLabel.setText(title);
     		titlePanel.add(titleLabel);
     		titlePanel.addStyleName("TitlePanel");
     		vp.add(titlePanel);
-    	}
-        vScroll.setWidget(tree);
-        vp.add(vScroll);
+           }
+        }   
+        //vScroll.setWidget(tree);
+        //vp.add(vScroll);
+        vtreePanel.add(tree);
+        vp.add(vtreePanel);
         vp.add(navPanel);
     }
     
         
     public void setHeight(String height) {     
-        vScroll.setHeight(height);
-        tree.setHeight(height);
-        
+        //vScroll.setHeight(height); 
+        this.height = height; 
+        vtreePanel.setHeight(height);
+        tree.setHeight(height);        
        
     }
     
     public void setWidth(String width) {
         
-        vScroll.setWidth(width);
+        //vScroll.setWidth(width);
+        this.width = width; 
+        vtreePanel.setWidth(width);
         tree.setWidth(width);               
     }
     
@@ -90,15 +98,31 @@ public class TreeView extends Composite {
     }
     
     public void reset(){
+        vtreePanel.clear();
         tree = new Tree(images);
-        vScroll.setWidget(tree);
+        //tree = new Tree();
+       // vScroll.setWidget(tree);
         
+        vtreePanel.add(tree);
         tree.addStyleName("ScreenTree");
     }
     
     public void setTitle(String title) {
         this.title = title;
-        titleLabel.setText(title);
+        //titleLabel.setText(title);
+        if(title != null ){
+            if(!title.trim().equals("")){
+             if(!(vp.getWidget(0).equals(titlePanel))){                 
+               titleLabel.setText(title);
+               titlePanel.add(titleLabel);
+               titlePanel.addStyleName("TitlePanel");
+               vp.clear();
+               vp.add(titlePanel);
+               vp.add(vtreePanel);
+               vp.add(navPanel);
+             }
+            }
+         }  
     }
 
     public void setShown(String shown) {

@@ -14,6 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,6 +35,7 @@ public class TreeController implements  ClickListener, Serializable {
     private TreeServiceIntAsync treeService = (TreeServiceIntAsync)GWT.create(TreeServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)treeService;
     private TreeListener treeListener = null; 
+    private ScrollPanel vScroll = new ScrollPanel();
     
     public TreeController() {
         view = new TreeView();
@@ -212,4 +214,17 @@ public class TreeController implements  ClickListener, Serializable {
         return treeListener;
     }
         
+    public Widget getScrollableView(){
+        vScroll.setWidget(view);        
+        vScroll.setHeight(view.height);        
+        vScroll.setWidth("100%");
+        return vScroll;
+    }
+    
+    public Widget getScrollableView(String width, String height){
+        vScroll.setWidget(view);           
+        vScroll.setHeight(height);        
+        vScroll.setWidth(width);
+        return vScroll;
+    }
 }
