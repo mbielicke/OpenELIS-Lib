@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import org.openelis.gwt.client.screen.Screen;
 import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.common.DatetimeRPC;
 import java.util.Date;
