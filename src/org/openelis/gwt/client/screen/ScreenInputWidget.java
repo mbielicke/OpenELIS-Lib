@@ -147,5 +147,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         
     }
     
+    public Widget getWidget() {
+        return hp.getWidget(0);
+    }
+    
 
 }
