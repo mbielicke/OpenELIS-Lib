@@ -87,6 +87,7 @@ public class NumberField extends AbstractField implements Serializable {
         obj.setMin(min);
         obj.setRequired(required);
         obj.setValue(getValue());
+        obj.setType(((NumberObject)object).type);
         return obj;
     }
 
