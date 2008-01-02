@@ -1195,7 +1195,7 @@ public class TableController implements
             }
             FocusPanel bar = new FocusPanel();
             bar.addMouseListener(this);
-            bar.setHeight((view.cellView.getOffsetHeight()+17)+"px");
+            bar.setHeight((view.table.getOffsetHeight()+17)+"px");
             bar.setWidth("1px");
             DOM.setStyleAttribute(bar.getElement(), "background", "red");
             DOM.setStyleAttribute(bar.getElement(), "position", "absolute");
@@ -1254,7 +1254,7 @@ public class TableController implements
                             view.header.getWidget(0,i*2).setWidth((curColWidth[i]-1)+"px");
                         }   
                     }
-                    for (int j = 0; j < maxRows; j++) {
+                    for (int j = 0; j < view.table.getRowCount(); j++) {
                         for (int i = 0; i < curColWidth.length; i++) {
                             view.table.getFlexCellFormatter().setWidth(j, i, curColWidth[i] +  "px");
                             ((SimplePanel)view.table.getWidget(j, i)).setWidth((curColWidth[i]) + "px");
