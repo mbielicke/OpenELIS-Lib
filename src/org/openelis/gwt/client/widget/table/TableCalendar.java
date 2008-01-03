@@ -89,6 +89,8 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
 	}
 
 	public void saveValue() {
+        if(!enabled)
+            return;
         field.setValue(editor.getValue());
 	}
 

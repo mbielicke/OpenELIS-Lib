@@ -94,7 +94,10 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
                         table.setShowRows(true);
                 }
-
+                if(node.getAttributes().getNamedItem("enable") != null){
+                    if(node.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
+                        table.setEnable(true);
+                }
                 table.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
                 if (widthsNode != null) {
                     String[] widths = widthsNode.getFirstChild()

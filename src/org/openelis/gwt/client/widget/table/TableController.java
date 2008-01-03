@@ -91,6 +91,7 @@ public class TableController implements
     public int maxRows;
     public int cellHeight = 18;
     public int cellSpacing = 1;
+    public boolean enabled;
     
     /**
      * This Method will set the url for the TableService.
@@ -453,17 +454,19 @@ public class TableController implements
         else
             row = selected;
         view.table.getRowFormatter().removeStyleName(row, view.selectedStyle);
-        for (int i = 0; i < view.table.getCellCount(row); i++) {
-            if (selectedCell == i) {
-                saveValue(row, i);
-                if(autoAdd){
-                    if(manager != null && manager.doAutoAdd(start+row,i,this))
-                        addRow();
-                    else if(manager == null && start+row == model.numRows() -1)
-                        addRow();
-                }       
+        if(enabled){
+            for (int i = 0; i < view.table.getCellCount(row); i++) {
+                if (selectedCell == i) {
+                    saveValue(row, i);
+                    if(autoAdd){
+                        if(manager != null && manager.doAutoAdd(start+row,i,this))
+                            addRow();
+                        else if(manager == null && start+row == model.numRows() -1)
+                            addRow();
+                    }       
+                }
+                setCellDisplay(row, i);
             }
-            setCellDisplay(row, i);
         }
         selectedCell = -1;
         selected = -1;
@@ -494,21 +497,23 @@ public class TableController implements
         }
         else
             return;
-        if (selectedCell != col) {
-            if (selectedCell > -1) {
-                saveValue(row, selectedCell);
-                if(autoAdd){
-                    if(manager != null && manager.doAutoAdd(start+row,selectedCell,this))
-                        addRow();
-                    else if(manager == null && start+row == model.numRows() -1)
-                        addRow();
+        if(enabled){
+            if (selectedCell != col) {
+                if (selectedCell > -1) {
+                    saveValue(row, selectedCell);
+                    if(autoAdd){
+                        if(manager != null && manager.doAutoAdd(start+row,selectedCell,this))
+                            addRow();
+                        else if(manager == null && start+row == model.numRows() -1)
+                            addRow();
+                    }
+                    setCellDisplay(row, selectedCell);
                 }
-                setCellDisplay(row, selectedCell);
+                if (col > -1 && (manager == null || (manager != null && manager.canEdit(start+row, col, this))))
+                    setCellEditor(row, col);
+                else
+                    selectedCell = -1;
             }
-            if (col > -1 && (manager == null || (manager != null && manager.canEdit(start+row, col, this))))
-                setCellEditor(row, col);
-            else
-                selectedCell = -1;
         }
         selected = row;
         if (manager != null && col > -1)
@@ -652,6 +657,8 @@ public class TableController implements
         load();
         sizeTable();
         modelSet = true;
+        if(enabled)
+            enabled(true);
     }
     
     public void load() {
@@ -738,6 +745,8 @@ public class TableController implements
      * 
      */
     public void sizeTable() {
+        DeferredCommand.addCommand(new Command() {
+           public void execute() { 
         int width = 0;
         for(int i = 0; i < curColWidth.length; i++){
             width += curColWidth[i];
@@ -771,6 +780,8 @@ public class TableController implements
                 view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
             }
         }
+           }
+        });
     }
 
     /**
@@ -1278,6 +1289,7 @@ public class TableController implements
     }
     
     public void enabled(boolean enabled){
+        this.enabled = enabled;
         for(int i = 0; i < editors.length; i++){
             editors[i].enable(enabled);
         }

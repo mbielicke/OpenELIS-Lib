@@ -59,8 +59,18 @@ a.navIndex:hover {
 }
 
 .CloseButton {
+    background-image:url("../Images/close.png");
+    width:8px;
+    height:8px;
     padding:2px;
 }
+.MinimizeButton {
+    background-image:url("../Images/bullet_red.png");
+    width:16px;
+    height:16px;
+    padding:2px;
+}
+
 .Hover .CloseButton {
     padding:1px;
     border:1px solid #6f9dd9;
@@ -673,7 +683,7 @@ filter: alpha(opacity=50);
     text-decoration:none;
 }
 .StatusBar .ScreenWindowLabel {
-    background:white;
+    background:lightgrey;
     color:#fb8c3c;
     text-align:center;
     padding:8px;

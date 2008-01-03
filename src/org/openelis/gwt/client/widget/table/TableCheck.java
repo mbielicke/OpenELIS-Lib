@@ -30,9 +30,9 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
         panel = new FocusPanel();
 		editor = new Image();
         panel.setWidget(editor);
-        panel.addClickListener(this);
-        panel.addKeyboardListener(this);
-        panel.addFocusListener(this);
+        //panel.addClickListener(this);
+        //panel.addKeyboardListener(this);
+        //panel.addFocusListener(this);
 		setWidget(panel);
         DOM.setElementProperty(getElement(), "align", "center");
 	}
@@ -120,8 +120,12 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
     
     public void enable(boolean enabled){
         panel.removeClickListener(this);
+        panel.removeFocusListener(this);
+        panel.removeKeyboardListener(this);
         if(enabled){
             panel.addClickListener(this);
+            panel.addFocusListener(this);
+            panel.addKeyboardListener(this);
         }
     }
 }

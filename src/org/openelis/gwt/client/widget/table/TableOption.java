@@ -97,7 +97,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 		}
 		if(field instanceof OptionField){
 			display.setText(((OptionField)field).getDisplay());
-            display.setText(field.getTip());
+            display.setTitle(field.getTip());
 		}else{
 			if(loadFromHidden != null){
 				fromHidden.setValue(field.getValue());
@@ -142,6 +142,8 @@ public class TableOption extends SimplePanel implements TableCellWidget {
 	}
 
 	public void saveValue() {
+        if(!enabled)
+            return;
         if (editor.isMultipleSelect()){
             for (int i = 0; i < editor.getItemCount(); i++) {
                 if (editor.isItemSelected(i))
