@@ -136,7 +136,6 @@ public class TableWidget extends Composite {
         else {
             for (int m = 0; m < rows; m++) {
                 TableRow row = controller.model.createRow();
-                row.getColumn(0).setValue(String.valueOf(m));
                 controller.model.addRow(row);
             }
             controller.reset();
