@@ -2,6 +2,11 @@
     cursor:default;
 }
 
+html, body {
+   margin:0pt;
+   padding:0pt;
+}
+
 .navIndex{
 }
 
@@ -12,80 +17,98 @@ a.navIndex:hover {
 }
 
 .gwt-HTML-separator{
-    width:1px;
-#    width:2px;
-    height:16px;
-    margin-top:3px;
-    background:#bbc0c7;
-    border-bottom:1px solid #f8f8f9;
-    border-right:1px solid #f8f8f9;
+    width:8px;
+}
+
+.navIndex{
+    margin:1 1 0 0;
+}
+
+.ScreenLeftPanel{
+    Padding:8 0 8 8;
 }
 
 .ScreenButtonPanel{
-    border-top:1px solid white;
-    border-bottom:1px solid #f0f1f2;
-    background:url("../Images/listheadergrad_obsidian.gif");
+    Padding:8 8 0 0;
 }
 
-.ScreenPanelButton .ScreenLabel {
-    padding-top:3px;
-    padding-left:1px;
-    padding-right:1px;
-    padding-bottom:5px;
-    color: #616a76;
-    text-align:center;
-    width:75px;
-}
-
-.ScreenButtonPanel .Hover .ScreenLabel{
-    padding-top:2px;
-    padding-left:0px;
-    padding-right:0px;
-    padding-bottom:4px;
-    background-image:url("../Images/menubuttonhover.gif");
-    border:1px solid #6f9dd9;
+.ScreenPanelButton .ScreenLabel, .ScreenPanelButton .ScreenHTML {
     cursor:pointer;
-    color:#333;
+    background:url("../Images/btn-sprite.gif") repeat-x 0 -42px;
+    padding:4px;
 }
 
-.ScreenButtonPanel .disabled .ScreenLabel{
-    padding-top:3px;
-    padding-left:1px;
-    padding-right:1px;
-    background:transparent;
-    border:none;
+.ScreenButtonPanel .Hover .ScreenLabel, .ScreenButtonPanel .Hover .ScreenHTML{
+    background:url("../Images/btn-sprite.gif") repeat-x 0 -105px;
+    cursor:pointer;
+}
+
+.ScreenButtonPanel .disabled .ScreenLabel, .ScreenButtonPanel .disabled .ScreenHTML{
     cursor:default;
-    color:#f8f8f9;
+    color:grey;
 }
 
-.CloseButton {
-    background-image:url("../Images/close.png");
-    width:8px;
-    height:8px;
-    padding:2px;
-}
-.MinimizeButton {
-    background-image:url("../Images/bullet_red.png");
-    width:16px;
-    height:16px;
-    padding:2px;
+.ScreenButtonPanel .Pressed .ScreenLabel, .ScreenButtonPanel .Pressed .ScreenHTML{
+    background:url("../Images/btn-sprite.gif") repeat-x 0 -126px;
 }
 
+.ButtonRightSide{
+    background:url("../Images/btn-sprite.gif") no-repeat 0 -21px;
+    width:3px;
+    height:21px;
+}
+
+.ButtonLeftSide{
+    background:url("../Images/btn-sprite.gif") no-repeat 0 0;
+    width:3px;
+    height:21px;
+}
+
+
+.Hover .ButtonRightSide{
+    background:url("../Images/btn-sprite.gif") no-repeat 0 -84px;
+    width:3px;
+    height:21px;
+}
+
+.Hover .ButtonLeftSide{
+    background:url("../Images/btn-sprite.gif") no-repeat 0 -63px;
+    width:3px;
+    height:21px;
+}
+
+.CloseButtonBox {
+    width:20px;
+    height:20px;
+}
 .Hover .CloseButton {
-    padding:1px;
-    border:1px solid #6f9dd9;
-    background-image:url("../Images/menubuttonhover.gif");
+    background-image:url("../Images/closehover.png");
     cursor:pointer;
 }
 
 .AppBackground {
-    background:#535353;
+    background:#3D71B8 url(../Images/desktop.jpg) no-repeat scroll left top;
+    /*background:#535353;*/
 }
 
 .WindowPanel {
     background:white;
-    border:1px solid #76808e;
+    border:8px solid #c4d3e5;
+    border-top:4px solid #c4d3e5;
+    border-bottom:4px solid #c4d3e5;
 }
+.Caption{
+    background:#c4d3e5;
+    height:26;
+    cursor:move;
+}
+.StatusBar {
+    background: #c4d3e5;
+    height:26;
+    padding-top:4px;
+    cursor:move;
+}
+
 
 .LeftMenuPanePanel {
    vertical-align:center;   
@@ -110,21 +133,6 @@ a.navIndex:hover {
 
 .LeftMenuArrowImage {
 	vertical-align:middle;
-}
-
-.Caption{
-    background-image: url("../Images/topnavunselected_obsidian.gif");
-    background-repeat: repeat-x;
-    background-color: #dde0e3;
-    height:19;
-    cursor:move;
-}
-.StatusBar {
-    background-image: url("../Images/topnavunselected_obsidian.gif");
-    background-repeat: repeat-x;
-    background-color: #dde0e3;
-    height:19;
-    cursor:move;
 }
 
 .ScreenMenuLabel{
@@ -184,36 +192,32 @@ a.navIndex:hover {
 
 /*******TOP MENU BAR CSS***********/
 .topMenuBar { 
-    background-color:#dde0e3;
-    border-top:1px solid #c7cbd1;
-    border-bottom:1px solid #c7cbd1;
-    color:#373c43;
-    cursor:default;
-    padding-left:6px; 
-background-image: url("../Images/topnavunselected_obsidian.gif");
+   background:#c4d3e5 url(../Images/white-top-bottom.gif) repeat-x scroll 0pt -1px;
+   border:1px solid #99BBE8;
+   padding:2 0 2 0;
 }
 
 .topMenuBarItem {
-  font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size:11px;
-  padding-left:8px;
-  padding-right:8px;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    color:#333;
+    padding:3 4 3 4;
 }
 
 .Hover .topMenuBarItem {
-  font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size:11px;
-
-background-image:url("../Images/menubuttonhover.gif");
-
+    cursor:pointer;
+    padding:2 3 2 3;
+    background: #ebf3fd url(../Images/item-over.gif) repeat-x left bottom;
+    border:1px solid #aaccf6;
+    color: #233d6d;
 }
 
 .topMenuBarItemSelected {
-  font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size:11px;
-  padding-left:8px;
-  padding-right:8px;
-  background-image:url("../Images/menubuttonhover.gif");
+    cursor:default;
+    padding:2 3 2 3;
+    background: #ebf3fd url(../Images/item-over.gif) repeat-x left bottom;
+    border:1px solid #aaccf6;
+    color: #233d6d;
 }
 
 .topMenuPanel { 
@@ -283,11 +287,11 @@ background-image:url("../Images/menubuttonhover.gif");
 /*******END TOP MENU BAR CSS***********/
 
 .ScreenTable {
+background:white;
 }
 
 .TitlePanel{
-    padding-top:2px;
-    padding-left:5px;
+    width:100%;
     background:white;
     border-bottom:1px solid #fb8c3c;
 }
@@ -309,25 +313,30 @@ background-image:url("../Images/menubuttonhover.gif");
 }
 
 /*******TAB PANEL CSS***********/
+.ScreenTab{
+padding:0 8 8 0;
+}
+
 .gwt-TabBar .gwt-TabBarItem {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 10px; 
     cursor:pointer;
     padding:2;
+    padding-left:2px;
     margin-right:14;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
     cursor:default;
+    padding-left:2px;
     padding-right:16;
     margin:0;
     background:#f8f8f9 url('../Images/selectedtabrightside.gif') no-repeat scroll right;
 }
 
 .gwt-TabPanelBottom{
-    background:#f8f8f9 url('../Images/tabpanelbottom.gif') no-repeat scroll bottom right;
-    padding-right:15;
-    padding-bottom:15;
+    background:#f8f8f9;
+    padding:8;
     margin:0;
 }
 .gwt-TabBar .gwt-TabBarRest {
@@ -336,6 +345,11 @@ background-image:url("../Images/menubuttonhover.gif");
 /*******END TAB PANEL CSS***********/
 
 /*******autodropdown css***********/
+
+.AutoDropdown{
+height:19px;
+}
+
 .AutoDropdownButton{
 width:16px;
 height:19px;
@@ -639,6 +653,7 @@ border:collapse;
 }
 
 .ScreenWindowBrowser{
+
 }
 
 .WindowDragPanel {
@@ -647,8 +662,7 @@ border:collapse;
 	opacity:.5;
 filter: alpha(opacity=50);
 }
-.ScreenWindowBrowser {
-}
+
 .Inactive {
     cursor:default;
     color:#d8d8d8;
@@ -683,10 +697,8 @@ filter: alpha(opacity=50);
     text-decoration:none;
 }
 .StatusBar .ScreenWindowLabel {
-    background:lightgrey;
     color:#fb8c3c;
     text-align:center;
-    padding:8px;
 }
 
 /*the following is from the tt.css */
@@ -860,4 +872,5 @@ cursor:wait;
   color: #003366;  
   font-weight: bold;
 }
+
 
