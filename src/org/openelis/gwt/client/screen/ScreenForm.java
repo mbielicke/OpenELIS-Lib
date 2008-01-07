@@ -3,6 +3,7 @@ package org.openelis.gwt.client.screen;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import org.openelis.gwt.client.widget.AppButton;
 import org.openelis.gwt.client.widget.ButtonPanel;
 import org.openelis.gwt.client.widget.FormInt;
 import org.openelis.gwt.common.IForm;
@@ -53,7 +54,8 @@ public class ScreenForm extends Screen implements FormInt {
             bpanel.setForm(this);
             bpanel.setState(FormInt.DISPLAY);
             enable(false);
-            bpanel.enable("ud",false);
+            bpanel.setButtonState("update",AppButton.DISABLED);
+            bpanel.setButtonState("delete", AppButton.DISABLED);
         }
         if (method.equals("commit") ||
             method.equals("commit-add") ||
@@ -93,7 +95,8 @@ public class ScreenForm extends Screen implements FormInt {
         if (method.equals("fetch")) {
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
-            bpanel.enable("ud",true);
+            bpanel.setButtonState("update",AppButton.UNPRESSED);
+            bpanel.setButtonState("delete", AppButton.UNPRESSED);
         }
         if ((method.equals("update") || method.equals("add")) && success) {
             enable(true);
@@ -126,7 +129,8 @@ public class ScreenForm extends Screen implements FormInt {
             else
             	message.setText("Querying...Complete");
             
-            bpanel.enable("ud",false);
+            bpanel.setButtonState("update",AppButton.DISABLED);
+            bpanel.setButtonState("delete", AppButton.DISABLED);
         }
     }
     
@@ -292,7 +296,8 @@ public class ScreenForm extends Screen implements FormInt {
             	message.setText("Query aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
-        bpanel.enable("ud",false);
+        bpanel.setButtonState("update",AppButton.DISABLED);
+        bpanel.setButtonState("delete", AppButton.DISABLED);
     }
 
     /** 
@@ -336,6 +341,11 @@ public class ScreenForm extends Screen implements FormInt {
     }
 
     public void select(int state) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void option(String action, int state) {
         // TODO Auto-generated method stub
         
     }

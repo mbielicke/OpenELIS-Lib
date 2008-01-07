@@ -35,4 +35,6 @@ public interface FormInt {
     public void select(int state);
     
     public boolean hasChanges();
+    
+    public void option(String action, int state);
 }

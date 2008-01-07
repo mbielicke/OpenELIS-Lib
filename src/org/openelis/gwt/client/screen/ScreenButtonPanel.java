@@ -1,7 +1,10 @@
 package org.openelis.gwt.client.screen;
 
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
+import org.openelis.gwt.client.widget.AppButton;
 import org.openelis.gwt.client.widget.ButtonPanel;
 
 /**
@@ -46,13 +49,33 @@ public class ScreenButtonPanel extends ScreenWidget {
      */
     public ScreenButtonPanel(Node node, ScreenBase screen) {
         super(node);
-        bPanel = null;
-        if (node.getAttributes().getNamedItem("buttons") != null)
-            bPanel = new ButtonPanel(node.getAttributes()
-                                         .getNamedItem("buttons")
-                                         .getNodeValue());
-        else
-            bPanel = new ButtonPanel("all");
+        bPanel = new ButtonPanel();
+        NodeList buttons = node.getChildNodes();
+        for (int k = 0; k < buttons.getLength(); k++) {
+            if(buttons.item(k).getNodeType() == Node.ELEMENT_NODE){
+                if(buttons.item(k).getNodeName().equals("appButton")){
+                    NodeList widgets = buttons.item(k).getChildNodes();
+                    for (int l = 0; l < widgets.getLength(); l++) {
+                        if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {                       
+                            Widget wid = ScreenWidget.loadWidget(widgets.item(l), screen);
+                            AppButton butt = new AppButton();
+                            butt.setWidget(wid);
+                            butt.action = buttons.item(k).getAttributes().getNamedItem("action").getNodeValue();
+                            if(buttons.item(k).getAttributes().getNamedItem("toggle") != null){
+                                if(buttons.item(k).getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
+                                    butt.toggle = true;
+                            }
+                            bPanel.addButton(butt);
+                        
+                         }
+                    }
+                }else{
+                   Node nd = buttons.item(k);
+                   Widget wid = ScreenWidget.loadWidget(buttons.item(k), screen);
+                   bPanel.addWidget(wid);
+                }
+            }
+        }
         initWidget(bPanel);
         bPanel.setStyleName("ScreenButtonPanel");
         setDefaults(node, screen);

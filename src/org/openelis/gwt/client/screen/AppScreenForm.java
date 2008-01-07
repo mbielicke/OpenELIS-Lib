@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.client.services.AppScreenFormServiceIntAsync;
+import org.openelis.gwt.client.widget.AppButton;
 import org.openelis.gwt.client.widget.ButtonPanel;
 import org.openelis.gwt.client.widget.FormInt;
 import org.openelis.gwt.common.FormRPC;
@@ -61,7 +62,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         bpanel.setForm(this);
         bpanel.setState(FormInt.DISPLAY);
         enable(false);
-        bpanel.enable("u",false);
+        bpanel.setButtonState("update",AppButton.DISABLED);
     }
     
     public void fetch(){
@@ -82,15 +83,18 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void afterFetch(boolean success){
        enable(false);
        bpanel.setState(FormInt.DISPLAY);
-       bpanel.enable("ud",true);
+       bpanel.setButtonState("update",AppButton.UNPRESSED);
+       bpanel.setButtonState("delete", AppButton.UNPRESSED);
        if(!success)
             key = null;
        
        //if it is the first page with the first selected. dont enable the previous button
        if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0)
-    	   bpanel.enable("n", true);
-       else
-    	   bpanel.enable("np", true);
+    	   bpanel.setButtonState("next", AppButton.UNPRESSED);
+       else{
+    	   bpanel.setButtonState("next", AppButton.UNPRESSED);
+           bpanel.setButtonState("previous",AppButton.UNPRESSED);
+       }
        
     }
     
@@ -404,7 +408,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 message.setText("Query aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
-        bpanel.enable("ud",false);
+        bpanel.setButtonState("update",AppButton.DISABLED);
+        bpanel.setButtonState("delete", AppButton.DISABLED);
     }
 
     /** 
@@ -469,5 +474,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             if(modelWidget.event == DataModelWidget.GETPAGE)
                 getPage();
         }
+    }
+
+    public void option(String action, int state) {
+        // TODO Auto-generated method stub
+        
     }
 }
