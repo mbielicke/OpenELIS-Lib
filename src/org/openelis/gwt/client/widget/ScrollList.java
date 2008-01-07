@@ -120,7 +120,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         this.dm = dm;
         if(dm.size() > 0){
             setScrollHeight((dm.size()*cellHeight)+1);
-            vp = new VerticalPanel();
+            vp.clear();
             int num = maxRows;
             if(dm.size() < maxRows)
                 num = dm.size();
