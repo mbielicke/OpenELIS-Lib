@@ -177,7 +177,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             label.setDropTargets(((ScreenScrollList)getParent()).getDropTargets());
             label.setScreen(((ScreenScrollList)getParent()).getScreen());
         }
-        vp.setCellWidth(label,cellView.getOffsetWidth()+"px");
+        //vp.setCellWidth(label,cellView.getOffsetWidth()+"px");
         label.setHeight(cellHeight+"px");
         label.addClickListener(this);
     }
