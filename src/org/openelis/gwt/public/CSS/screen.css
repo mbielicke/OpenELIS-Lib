@@ -77,10 +77,17 @@ a.navIndex:hover {
     height:21px;
 }
 
-.CloseButtonBox {
+.CloseButton {
+    background-image:url("../Images/close.png");
     width:20px;
     height:20px;
 }
+.MinimizeButton {
+   background-image:url("../Images/go-down.png");
+   width:20px;
+   height:20px;
+}
+      
 .Hover .CloseButton {
     background-image:url("../Images/closehover.png");
     cursor:pointer;
@@ -135,6 +142,12 @@ a.navIndex:hover {
 	vertical-align:middle;
 }
 
+.StatusImage {
+    background-image:url("../Images/exclamation.png");
+    height:16px;
+    width:16px;
+}
+    
 .ScreenMenuLabel{
     font-family:Verdana;
     font-size:12px;
@@ -696,9 +709,13 @@ filter: alpha(opacity=50);
 .StatusBar a.header{
     text-decoration:none;
 }
+.StatusBar {
+}
+
 .StatusBar .ScreenWindowLabel {
+    
     color:#fb8c3c;
-    text-align:center;
+    text-align:left;
 }
 
 /*the following is from the tt.css */
@@ -873,4 +890,13 @@ cursor:wait;
   font-weight: bold;
 }
 
+.MessagePopup {
+  padding:5px;
+  border:2px solid red;
+  background:white;
+  font-family: Arial, Helvetica, sans-serif; 
+  font-size: 14px; 
+  color: #003366;  
+  font-weight: bold;
+}
 
