@@ -53,27 +53,8 @@ public class ScreenButtonPanel extends ScreenWidget {
         NodeList buttons = node.getChildNodes();
         for (int k = 0; k < buttons.getLength(); k++) {
             if(buttons.item(k).getNodeType() == Node.ELEMENT_NODE){
-                if(buttons.item(k).getNodeName().equals("appButton")){
-                    NodeList widgets = buttons.item(k).getChildNodes();
-                    for (int l = 0; l < widgets.getLength(); l++) {
-                        if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {                       
-                            Widget wid = ScreenWidget.loadWidget(widgets.item(l), screen);
-                            AppButton butt = new AppButton();
-                            butt.setWidget(wid);
-                            butt.action = buttons.item(k).getAttributes().getNamedItem("action").getNodeValue();
-                            if(buttons.item(k).getAttributes().getNamedItem("toggle") != null){
-                                if(buttons.item(k).getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
-                                    butt.toggle = true;
-                            }
-                            bPanel.addButton(butt);
-                        
-                         }
-                    }
-                }else{
-                   Node nd = buttons.item(k);
-                   Widget wid = ScreenWidget.loadWidget(buttons.item(k), screen);
-                   bPanel.addWidget(wid);
-                }
+               Widget wid = ScreenWidget.loadWidget(buttons.item(k), screen);
+               bPanel.addWidget(wid);
             }
         }
         initWidget(bPanel);

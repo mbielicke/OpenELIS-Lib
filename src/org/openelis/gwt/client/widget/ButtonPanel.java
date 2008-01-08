@@ -6,6 +6,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.client.screen.ScreenAppButton;
+
 public class ButtonPanel extends Composite implements ClickListener {
 
 	/**
@@ -32,6 +34,10 @@ public class ButtonPanel extends Composite implements ClickListener {
     
     public void addWidget(Widget wid){
         hp.add(wid);
+        if(wid instanceof ScreenAppButton){
+            buttons.put(((AppButton)((ScreenAppButton)wid).getWidget()).action,wid);
+            ((ScreenAppButton)wid).addClickListener(this);
+        }
     }
     
     /**
@@ -46,7 +52,7 @@ public class ButtonPanel extends Composite implements ClickListener {
      * Handler for button clicks
      */
     public void onClick(Widget senderWid) {
-        AppButton sender = (AppButton)senderWid;
+        AppButton sender = (AppButton)((ScreenAppButton)senderWid).getWidget();
         if (sender.action.equals("query")) {
             form.query(state);
         }
@@ -146,7 +152,7 @@ public class ButtonPanel extends Composite implements ClickListener {
     
     public void setButtonState(String action, int state) {
         if(buttons.containsKey(action)){
-            ((AppButton)buttons.get(action)).changeState(state);
+            ((AppButton)((ScreenAppButton)buttons.get(action)).getWidget()).changeState(state);
         }
     }
     
