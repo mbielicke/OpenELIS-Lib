@@ -318,8 +318,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                 messagePanel.setStyleName("MessagePopup");
             }
             pop.setWidget(messagePanel);
-            pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
-            /*final int left = sender.getAbsoluteLeft()+16;
+            //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
+            final int left = sender.getAbsoluteLeft()+16;
             final int top = sender.getAbsoluteTop();
             pop.setPopupPositionAndShow(new PopupPanel.PositionCallback(){
 
@@ -329,8 +329,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                 }
                
             });
-            */
-            pop.show();
+            
+            //pop.show();
             
         }
     }
