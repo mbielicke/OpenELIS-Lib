@@ -4,6 +4,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
@@ -90,7 +91,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         }
     }
     private Caption cap = new Caption();
-    protected VerticalPanel messagePanel = new VerticalPanel();
+    protected VerticalPanel messagePanel;
     protected PopupPanel pop;
     private VerticalPanel outer = new VerticalPanel() {
        public void onBrowserEvent(Event event) {
@@ -279,29 +280,30 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
 
     public void onMouseDown(Widget sender, final int x, final int y) {
-        if(browser.index != zIndex){
-            checkZ();
-            return;
-        }
-        final FocusPanel proxy = new FocusPanel();
-        AbsolutePanel ap = new AbsolutePanel();
-        proxy.setWidget(ap);
-        ap.setWidth(outer.getOffsetWidth()+"px");
-        ap.setHeight(outer.getOffsetHeight()+"px");
-        ap.addStyleName("WindowDragPanel");
-        proxy.addDragListener(this);
-        browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
-        //WindowBrowser.setIndex(proxy.getElement(),browser.index);
-        dropMap = MouseDragGestureRecognizer.getDropMap();
-        MouseDragGestureRecognizer.setDropMap(new Vector());
-        browser.addStyleName("locked");
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                MouseDragGestureRecognizer.getGestureMouse(proxy)
-                                          .onMouseDown(proxy, x, y);
+        if(sender == cap){
+            if(browser.index != zIndex){
+                checkZ();
+                return;
             }
-        });
-        
+            final FocusPanel proxy = new FocusPanel();
+            AbsolutePanel ap = new AbsolutePanel();
+            proxy.setWidget(ap);
+            ap.setWidth(outer.getOffsetWidth()+"px");
+            ap.setHeight(outer.getOffsetHeight()+"px");
+            ap.addStyleName("WindowDragPanel");
+            proxy.addDragListener(this);
+            browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
+        //  WindowBrowser.setIndex(proxy.getElement(),browser.index);
+            dropMap = MouseDragGestureRecognizer.getDropMap();
+            MouseDragGestureRecognizer.setDropMap(new Vector());
+            browser.addStyleName("locked");
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    MouseDragGestureRecognizer.getGestureMouse(proxy)
+                                              .onMouseDown(proxy, x, y);
+                }
+            });
+        }   
     }
 
     public void onMouseEnter(Widget sender) {
@@ -310,18 +312,26 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                 pop = new PopupPanel();
                 pop.setStyleName("MessagePopup");
             }
+            if(messagePanel == null){
+                messagePanel = new VerticalPanel();
+                messagePanel.add(new Label("Testing Mouse Over"));
+                messagePanel.setStyleName("MessagePopup");
+            }
             pop.setWidget(messagePanel);
-            //pop.setPopupPositionAndShow(callback)PopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
-            final int left = sender.getAbsoluteLeft()+16;
+            pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
+            /*final int left = sender.getAbsoluteLeft()+16;
             final int top = sender.getAbsoluteTop();
             pop.setPopupPositionAndShow(new PopupPanel.PositionCallback(){
 
                 public void setPosition(int offsetWidth, int offsetHeight) {
                     pop.setPopupPosition(left, top-offsetHeight);
+                    pop.show();
                 }
                
             });
+            */
             pop.show();
+            
         }
     }
 
