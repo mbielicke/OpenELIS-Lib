@@ -64,7 +64,13 @@ public class ScreenScrollList extends ScreenWidget {
             list.drag = true;
         if(node.getAttributes().getNamedItem("drop") != null)
             list.drop = true;
+        if(node.getAttributes().getNamedItem("multi") != null){
+            if(node.getAttributes().getNamedItem("multi").getNodeValue().equals("true")){
+                list.multi = true;
+            }
+        }
         initWidget(list);        
+        
         list.setStyleName("ScreenDragList");
         setDefaults(node, screen);
         if(node.hasChildNodes()){

@@ -85,18 +85,18 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     public CellView cellView = new CellView();
     private VerticalPanel vp = new VerticalPanel();
     private HorizontalPanel hp = new HorizontalPanel();
-    private ScrollPanel scrollBar = new ScrollPanel();
-    private ProxyListener listener = new ProxyListener();
+    public ScrollPanel scrollBar = new ScrollPanel();
     private DataModel dm = new DataModel();
+    private Vector selected = new Vector();
     private int maxRows;
     private int start = 0;
     private int top = 0;
     private int cellHeight = 15;
-    private Vector selected = new Vector();
     private int active = -1;
     public boolean drag;
     public boolean drop;
     private boolean ctrl;
+    public boolean multi;
     
     public ScrollList() {
         initWidget(hp);
@@ -121,6 +121,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         if(dm.size() > 0){
             setScrollHeight((dm.size()*cellHeight)+1);
             vp.clear();
+            selected.clear();
             int num = maxRows;
             if(dm.size() < maxRows)
                 num = dm.size();
@@ -128,6 +129,11 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                 createRow();
             }
             scrollLoad(0);
+            for(int i = 0; i < dm.size(); i++){
+                if(((Boolean)dm.get(i).getObject(2).getValue()).booleanValue()){
+                    selected.add(new Integer(i));
+                }
+            }
         }
     }
     
@@ -177,7 +183,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             label.setDropTargets(((ScreenScrollList)getParent()).getDropTargets());
             label.setScreen(((ScreenScrollList)getParent()).getScreen());
         }
-        //vp.setCellWidth(label,cellView.getOffsetWidth()+"px");
+        vp.setCellWidth(label,cellView.getOffsetWidth()+"px");
         label.setHeight(cellHeight+"px");
         label.addClickListener(this);
     }
@@ -381,11 +387,12 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                     DOM.removeEventPreview(this);
                     return true;
                 }
-                if(ctrl && !DOM.eventGetCtrlKey(event)){
+                if(multi && ctrl && !DOM.eventGetCtrlKey(event)){
                     unselectAll();
                     scrollLoad(scrollBar.getScrollPosition());
                 }
-                ctrl = DOM.eventGetCtrlKey(event);
+                if(multi)
+                    ctrl = DOM.eventGetCtrlKey(event);
             }
         }
         return true;
@@ -398,11 +405,13 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                 if(!ctrl){
                     ((ScreenWidget)vp.getWidget(active)).getWidget().removeStyleName("Highlighted");
                     dm.get(start+active).getObject(2).setValue(new Boolean(false));
+                    selected.remove(new Integer(start+active));
                 }   
             }
             active = clicked;
             ((ScreenWidget)vp.getWidget(active)).getWidget().addStyleName("Highlighted");
             dm.get(start+active).getObject(2).setValue(new Boolean(true));
+            selected.add(start+active);
             changeListeners.fireChange(this);
         }
     }
@@ -411,6 +420,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         for(int i = 0; i < dm.size(); i++){
             dm.get(i).getObject(2).setValue(new Boolean(false));
         }
+        selected.clear();
     }
 
     public void addChangeListener(ChangeListener listener) {
