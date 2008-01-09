@@ -60,7 +60,7 @@ public class ScreenScrollList extends ScreenWidget {
         if(node.getAttributes().getNamedItem("cellHeight") != null){
             list.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
         }
-        if(node.getAttributes().getNamedItem("drag") != null)
+        if(node.getAttributes().getNamedItem("targets") != null)
             list.drag = true;
         if(node.getAttributes().getNamedItem("drop") != null)
             list.drop = true;
