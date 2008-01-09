@@ -25,6 +25,7 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
 	private Image editor;
     private FocusPanel panel;
 	private AbstractField field;
+    private boolean enabled;
 	
 	public TableCheck() {
         panel = new FocusPanel();
@@ -50,7 +51,9 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
      * @return
      */
     public TableCellWidget getNewInstance() {
-        return new TableCheck();
+        TableCheck ch = new TableCheck();
+        ch.enable(enabled);
+        return ch;
     }
 
     public Widget getInstance(Node node) {
