@@ -336,7 +336,7 @@ HasFocus{
     	
 		textBox.setText(textValue);
 		
-		if(multiSelect)
+		if(multiSelect && selectionLength>-1)
 			textBox.setSelectionRange(0, selectionLength);
 		
         complete();
@@ -458,7 +458,7 @@ HasFocus{
     private void getDisplay(NumberField value){
         DataModel model = scrollList.getDataModel();
     	for (int i = 0; i < model.size(); i++) {
-    		if(((NumberObject)model.get(i).getObject(1)).getValue() == value.getValue()){
+    		if(((NumberObject)model.get(i).getObject(1)).getValue().equals(value.getValue())){
     			textBox.setText((String)((StringObject)model.get(i).getObject(0)).getValue());
     			break;
     		}			
@@ -531,6 +531,29 @@ HasFocus{
 			
 				if(currentActive == -1)
 					currentActive = scrollList.getActive();
+				
+				//if this is true then we need to find these values manually
+				if(currentActive == -1 && currentStart == 0 && value != null && !"".equals(value) && value != new Integer(-1)){
+					if(type.equals("string")){
+						for(int i=0; i<scrollList.getDataModel().size(); i++){
+							if(((String)((StringObject)scrollList.getDataModel().get(i).getObject(1)).getValue()).equals(value)){
+								currentStart = i;
+								currentActive = 0;
+								scrollList.setActive(0);
+								break;
+							}
+						}
+					}else if(type.equals("integer")){
+						for(int j=0; j<scrollList.getDataModel().size(); j++){
+							if(((Integer)((NumberObject)scrollList.getDataModel().get(j).getObject(1)).getValue()).equals(value)){
+								currentStart = j;
+								currentActive = 0;
+								scrollList.setActive(0);
+								break;
+							}
+						}
+					}
+				}
 				
 				clickedArrow = true;
 				//FIXME we need to fill the model if it is null
@@ -632,11 +655,11 @@ HasFocus{
 		
 		if(type.equals("integer")){
 			for (int i = 0; i < multiSelected.size(); i++) {
-				returnList.add(((NumberObject)scrollList.getDataModel().get(((Integer)multiSelected.get(i)).intValue()).getObject(1)).getValue());
+				returnList.add((Integer)((NumberObject)scrollList.getDataModel().get(((Integer)multiSelected.get(i)).intValue()).getObject(1)).getValue());
 			}
 		}else if(type.equals("string")){
 			for (int i = 0; i < multiSelected.size(); i++) {
-				returnList.add(((StringObject)scrollList.getDataModel().get(((Integer)multiSelected.get(i)).intValue()).getObject(1)).getValue());
+				returnList.add((String)((StringObject)scrollList.getDataModel().get(((Integer)multiSelected.get(i)).intValue()).getObject(1)).getValue());
 			}			
 		}
 			
@@ -668,6 +691,12 @@ HasFocus{
 	public void clear(){
 		scrollList.getDataModel().clear();
 	}
+	
+	public void clearData(){
+		textBox.setText("");
+		scrollList.unselectAll();
+	}
+	
 	public void addItem(String key, String display){
 		DataSet data = new DataSet();
 		
