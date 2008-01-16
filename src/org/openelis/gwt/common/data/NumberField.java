@@ -43,7 +43,9 @@ public class NumberField extends AbstractField implements Serializable {
         }
         if (((NumberObject)object).value != null && !isInRange()) {
             valid = false;
+            return;
         }
+        valid = true;
     }
 
     public boolean isInRange() {

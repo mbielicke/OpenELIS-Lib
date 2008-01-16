@@ -39,8 +39,8 @@ public class ModelField extends AbstractField {
     }
 
     public Object getInstance(Node field) {
-        TableField table = new TableField();
-        table.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        return table;
+        ModelField model = new ModelField();
+        model.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
+        return model;
     }
 }

@@ -37,7 +37,9 @@ public class StringField extends AbstractField implements Serializable {
         }
         if (((StringObject)object).value != null && !isInRange()) {
             valid =  false;
+            return;
         }
+        valid = true;
     }
 
     public boolean isInRange() {
