@@ -4,44 +4,41 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
-
-import org.openelis.gwt.client.widget.AutoCompleteTextBox;
+import org.openelis.gwt.client.widget.AutoCompleteDropdown;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.OptionItem;
 import org.openelis.gwt.common.data.StringField;
 
-/**
- * ScreenAuto wraps an AutoComplete widget to be displayed on a Screen
- * @author tschmidt
- *
- */
-public class ScreenAuto extends ScreenInputWidget {
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
+
+public class ScreenAutoDropdown extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
-	public static String TAG_NAME = "auto";
+	public static String TAG_NAME = "autoDropdown";
     public String fieldCase = "mixed";
     public boolean loadFromModel = false;
 	/**
 	 * Widget wrapped by this class.
 	 */
-    private AutoCompleteTextBox auto;
+    private AutoCompleteDropdown auto;
 
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
-    public ScreenAuto() {
+    public ScreenAutoDropdown() {
     }
-
+    
     /**
      * Constructor called from getInstance to return a specific instance of this class
      * to be displayed on the screen.  It uses the XML Node to create it's widget
@@ -51,24 +48,23 @@ public class ScreenAuto extends ScreenInputWidget {
      * @param node
      * @param screen
      */
-    public ScreenAuto(Node node, final ScreenBase screen) {
+    public ScreenAutoDropdown(Node node, final ScreenBase screen) {
         super(node);
         String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
         String url = node.getAttributes()
                          .getNamedItem("serviceUrl")
                          .getNodeValue();
         
-        boolean dropDown = false;
         boolean fromModel = false;
+        boolean multiSelect = false;
         String textBoxDefault = null;
         String width = null;
         
-        
-        if (node.getAttributes().getNamedItem("dropdown") != null)
-        	dropDown = true;
-        
         if (node.getAttributes().getNamedItem("fromModel") != null)
         	fromModel = true;
+        
+        if (node.getAttributes().getNamedItem("multiSelect") != null)
+        	multiSelect = true;
         
         if (node.getAttributes().getNamedItem("text") != null)
         	textBoxDefault = node.getAttributes()
@@ -84,12 +80,8 @@ public class ScreenAuto extends ScreenInputWidget {
         Node headersNode = ((Element)node).getElementsByTagName("autoHeaders").item(0);
         Node editorsNode = ((Element)node).getElementsByTagName("autoEditors").item(0);
         Node fieldsNode = ((Element)node).getElementsByTagName("autoFields").item(0);
-        //Node filtersNode = ((Element)node).getElementsByTagName("filters").item(0);
-        //Node sortsNode = ((Element)node).getElementsByTagName("sorts").item(0);
-        //Node alignNode = ((Element)node).getElementsByTagName("colAligns").item(0);
-        //Node statFilter = ((Element)node).getElementsByTagName("statFilters").item(0);
 
-        auto = new AutoCompleteTextBox(cat, url, dropDown, textBoxDefault, width) {
+        auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width) {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
@@ -114,24 +106,11 @@ public class ScreenAuto extends ScreenInputWidget {
         if(fieldsNode != null) {
         	auto.setFields(getFields(fieldsNode));
         }
-        if (node.getAttributes().getNamedItem("popupHeight") != null){
-            auto.setPopupHeight(node.getAttributes().getNamedItem("popupHeight").getNodeValue());
-        }
-        
+                
         if (node.getAttributes().getNamedItem("type") != null){
             auto.setType(node.getAttributes().getNamedItem("type").getNodeValue());
         }
-            
-    /*    if (node.getAttributes().getNamedItem("shortcut") != null)
-            auto.setAccessKey(node.getAttributes()
-                                  .getNamedItem("shortcut")
-                                  .getNodeValue()
-                                  .charAt(0));*/
-        /*OptionField option = (OptionField)screen.rpc.getField("state");
-        if(fromModel){
-        	
-        }*/
-        //auto.setStyleName("ScreenAuto");
+
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
             if(fieldCase.equals("upper"))
@@ -140,6 +119,7 @@ public class ScreenAuto extends ScreenInputWidget {
                 auto.textBox.addStyleName("Lower");
             auto.setCase(fieldCase);
         }
+               
         initWidget(auto);
         displayWidget = auto;
         setDefaults(node, screen);
@@ -147,7 +127,7 @@ public class ScreenAuto extends ScreenInputWidget {
 
     public ScreenWidget getInstance(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
-        return new ScreenAuto(node, screen);
+        return new ScreenAutoDropdown(node, screen);
     }
 
     public void load(AbstractField field) {
@@ -158,9 +138,9 @@ public class ScreenAuto extends ScreenInputWidget {
 	    		auto.setValue((String)((StringField)field).getValue());
 	    	}else if(field instanceof NumberField){
 	    		auto.setValue((Integer)((NumberField)field).getValue());
-	    	}else if(queryMode)
-	            queryWidget.load(field);
-	    	else{
+	    	}else if(field instanceof CollectionField){
+	    		//do nothing for now...
+    		}else{
 	            auto.clear();
 	            OptionField optField = (OptionField)field;
 	            List optMap = optField.getOptions();
@@ -180,15 +160,17 @@ public class ScreenAuto extends ScreenInputWidget {
         if(queryMode){
             queryWidget.submit(field);
         }else{
-            if (((String)field.getKey()).endsWith("Id"))
-                field.setValue(auto.value);
-            if ((((String)field.getKey()).endsWith("Text"))) {
+            if (((String)field.getKey()).endsWith("Id")){
+            		field.setValue(auto.value);
+            }else if ((((String)field.getKey()).endsWith("Text"))) {
                 String text = auto.textBox.getText();
                 if(fieldCase.equals("upper"))
                     text = text.toUpperCase();
                 else if (fieldCase.equals("lower"))
                     text = text.toLowerCase();
                 field.setValue(text);
+            }else{
+            	field.setValue(auto.getSelectedList());
             }
         }
     }
