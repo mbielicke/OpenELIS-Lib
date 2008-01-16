@@ -93,7 +93,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     	   bpanel.setButtonState("next", AppButton.UNPRESSED);
        else{
     	   bpanel.setButtonState("next", AppButton.UNPRESSED);
-           bpanel.setButtonState("previous",AppButton.UNPRESSED);
+           bpanel.setButtonState("prev",AppButton.UNPRESSED);
        }
        
     }
@@ -373,7 +373,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.CANCEL;
             clearErrors();
-           /* formService.abort(rpc, key, new AsyncCallback() {
+            formService.abort(key, (FormRPC)forms.get("display"), new AsyncCallback() {
                public void onSuccess(Object result){
                    rpc = (FormRPC)result;
                    forms.put(rpc.key, rpc);
@@ -382,7 +382,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                public void onFailure(Throwable caught){
                    Window.alert(caught.getMessage());
                }
-            });*/
+            });
             enable(false);
             if(constants != null)
             	message.setText(constants.getString("updateAborted"));
