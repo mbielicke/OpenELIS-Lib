@@ -238,14 +238,17 @@ public class QueryBuilder {
 		Iterator paramsIt = list.iterator();
 		int i = 0;
 		while (paramsIt.hasNext()) {
-			OptionItem param = (OptionItem)paramsIt.next();
-			if (field.getType().equals("string"))
-				query.setParameter(paramName + i, param.akey);
-			else if (field.getType().equals("integer"))
+			if (field.getType().equals("string")){
+				String param = (String)paramsIt.next(); 
+				query.setParameter(paramName + i, param.trim());
+			}else if (field.getType().equals("integer")){
+				Integer param = (Integer)paramsIt.next();
 				query.setParameter(paramName + i,
-									new Integer(param.akey.trim()));
-			else if (field.getType().equals("double"))
-				query.setParameter(paramName + i, new Double(param.akey.trim()));
+									new Integer(param));
+			}
+			//else if (field.getType().equals("double")){
+			//	query.setParameter(paramName + i, new Double(param.akey.trim()));
+			//}
 			i++;
 		}	
     }
