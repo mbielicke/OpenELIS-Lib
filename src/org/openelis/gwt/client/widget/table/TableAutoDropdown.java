@@ -285,7 +285,7 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 
 		//display text
         StringObject display = new StringObject();
-		display.setValue((item.getFirstChild() == null ? " " : item.getFirstChild().getNodeValue()));
+		display.setValue((item.getFirstChild() == null ? "" : item.getFirstChild().getNodeValue()));
 		set.addObject(display);
 
         //id
