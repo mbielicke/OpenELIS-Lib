@@ -7,11 +7,16 @@ import java.util.List;
 import org.openelis.gwt.client.widget.AutoCompleteDropdown;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberField;
+import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.OptionItem;
 import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.common.data.StringObject;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -32,6 +37,8 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
 	 * Widget wrapped by this class.
 	 */
     private AutoCompleteDropdown auto;
+    
+    private String type = "";
 
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
@@ -80,6 +87,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
         Node headersNode = ((Element)node).getElementsByTagName("autoHeaders").item(0);
         Node editorsNode = ((Element)node).getElementsByTagName("autoEditors").item(0);
         Node fieldsNode = ((Element)node).getElementsByTagName("autoFields").item(0);
+        Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
         auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width) {
             public void onBrowserEvent(Event event) {
@@ -94,22 +102,25 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
             }
         };
         
-        if(widthsNode != null) {
+        if(widthsNode != null) 
         	auto.setWidths(getWidths(widthsNode));
-        }
-        if(headersNode != null) {
+        
+        if(headersNode != null) 
         	auto.setHeaders(getHeaders(headersNode));
-        }
-        if(editorsNode != null) {
+        
+        if(editorsNode != null) 
         	auto.setEditors(getEditors(editorsNode));
-        }
-        if(fieldsNode != null) {
+        
+        if(fieldsNode != null) 
         	auto.setFields(getFields(fieldsNode));
-        }
-                
+        
         if (node.getAttributes().getNamedItem("type") != null){
-            auto.setType(node.getAttributes().getNamedItem("type").getNodeValue());
-        }
+        	type = node.getAttributes().getNamedItem("type").getNodeValue();
+            auto.setType(type);
+        } 
+        
+        if(!fromModel && optionsNode != null)
+        	auto.setModel(getDropDownOptions(optionsNode));      
 
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
@@ -139,7 +150,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
 	    	}else if(field instanceof NumberField){
 	    		auto.setValue((Integer)((NumberField)field).getValue());
 	    	}else if(field instanceof CollectionField){
-	    		//do nothing for now...
+	    		auto.clearData();
     		}else{
 	            auto.clear();
 	            OptionField optField = (OptionField)field;
@@ -241,4 +252,39 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
                 .getNodeValue()
                 .split(",");
     }
+    
+    private DataModel getDropDownOptions(Node itemsNode){
+		DataModel dataModel = new DataModel();		
+		
+    	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
+    	for (int i = 0; i < items.getLength(); i++) {
+    	DataSet set = new DataSet();
+        Node item = items.item(i);
+
+		//display text
+        StringObject display = new StringObject();
+		display.setValue((item.getFirstChild() == null ? "" : item.getFirstChild().getNodeValue()));
+		set.addObject(display);
+
+        //id
+        if(type.equals("integer")){
+        	NumberObject id = new NumberObject();
+        	id.setType("integer");
+        	id.setValue(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
+        	set.addObject(id);
+        }else if(type.equals("string")){
+        	StringObject id = new StringObject();
+        	id.setValue(item.getAttributes().getNamedItem("value").getNodeValue());
+        	set.addObject(id);
+        }
+        
+        //selected flag
+		BooleanObject selected = new BooleanObject();
+		selected.setValue(new Boolean(false));
+		set.addObject(selected);
+		
+		dataModel.add(set);
+    	}
+        return dataModel;
+	}
 }
