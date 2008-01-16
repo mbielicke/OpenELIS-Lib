@@ -20,6 +20,6 @@ public interface AutoCompleteServiceInt extends RemoteService {
 
     public DataModel getDisplay(String cat, DataModel model, AbstractField value);
     
-    public DataModel getInitialModel(DataModel model, String cat);
+    public DataModel getInitialModel(String cat);
 
 }
