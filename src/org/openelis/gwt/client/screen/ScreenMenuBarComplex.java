@@ -2,6 +2,7 @@ package org.openelis.gwt.client.screen;
 
 import org.openelis.gwt.common.data.AbstractField;
 
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -96,15 +97,20 @@ public class ScreenMenuBarComplex extends ScreenWidget {
             		
             		//add the label to the top horizontal panel
             		ScreenLabel horizontalMenuItem = new ScreenLabel(screen,items.item(i).getAttributes().getNamedItem("text").getNodeValue());
+            		FocusPanel spacer = new FocusPanel();
+            		spacer.setStyleName("TopMenuSpacer");
             		horizontalMenuItem.addClickListener(screen);
             		((Label)horizontalMenuItem.getWidget()).setText(items.item(i).getAttributes().getNamedItem("text").getNodeValue());
+            		if(((HorizontalPanel)horizontalMenu.getWidget()).getWidgetCount() > 0)
+            			((HorizontalPanel)horizontalMenu.getWidget()).add(spacer);
+            		
             		((HorizontalPanel)horizontalMenu.getWidget()).add(horizontalMenuItem);
             
             	}else{
             		//add the label to the top horizontal panel
             		ScreenLabel horizontalMenuItem = new ScreenLabel(screen,items.item(i).getAttributes().getNamedItem("text").getNodeValue());
             		horizontalMenuItem.addClickListener(screen);
-            		((Label)horizontalMenuItem.getWidget()).setText(items.item(i).getAttributes().getNamedItem("text").getNodeValue());
+            		((Label)horizontalMenuItem.getWidget()).setText(items.item(i).getAttributes().getNamedItem("text").getNodeValue());          		
             		((HorizontalPanel)horizontalMenu.getWidget()).add(horizontalMenuItem);
             	}
             }

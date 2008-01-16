@@ -4,6 +4,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.xml.client.Node;
 /**
@@ -22,11 +23,19 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
 	/**
 	 * Widget wrapped by this class
 	 */
-    private HTML html;
+    public HTML html;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
     public ScreenHTML() {
+    }
+    
+    public ScreenHTML(String htmlText, Object value) {
+        html = new HTML(htmlText);
+        setUserObject(value);
+        initWidget(html);
+        html.setStyleName("ScreenHTML");
+        
     }
     /**
      * Constructor called from getInstance to return a specific instance of this class
