@@ -1,10 +1,12 @@
 package org.openelis.util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
+import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.OptionItem;
 import org.openelis.gwt.common.data.QueryCheckField;
 import org.openelis.gwt.common.data.QueryDateField;
@@ -67,6 +69,7 @@ public class QueryBuilder {
         return sb.toString();
     }
 
+    //TODO get rid of soon
     public static String getQuery(QueryOptionField field, String fieldName) {
         if (field.getSelections().size() == 0)
             return "";
@@ -74,6 +77,22 @@ public class QueryBuilder {
         StringBuffer sb = new StringBuffer();
         sb.append(" and (" + fieldName + " in (");
         for (int i = 0; i < field.getSelections().size(); i++) {
+            if (i > 0)
+                sb.append(",");
+            sb.append(":" + paramName + i);
+        }
+        sb.append(")) ");
+        return sb.toString();
+    }
+    
+    public static String getQuery(CollectionField field, String fieldName) {
+        ArrayList list = (ArrayList) field.getValue();
+        if (list.size() == 0)
+            return "";
+        String paramName = getParamName(fieldName);
+        StringBuffer sb = new StringBuffer();
+        sb.append(" and (" + fieldName + " in (");
+        for (int i = 0; i < list.size(); i++) {
             if (i > 0)
                 sb.append(",");
             sb.append(":" + paramName + i);
@@ -191,6 +210,7 @@ public class QueryBuilder {
         }
     }
 
+    //TODO get rid of soon
     public static void setParameters(QueryOptionField field,
                                      String fieldName,
                                      Query query) {
@@ -208,6 +228,26 @@ public class QueryBuilder {
                 query.setParameter(paramName + i, new Double(param.akey.trim()));
             i++;
         }
+    }
+    
+    public static void setParameters(CollectionField field,
+            						 String fieldName,
+            						 Query query) {
+    	ArrayList list = (ArrayList) field.getValue();
+		String paramName = getParamName(fieldName);
+		Iterator paramsIt = list.iterator();
+		int i = 0;
+		while (paramsIt.hasNext()) {
+			OptionItem param = (OptionItem)paramsIt.next();
+			if (field.getType().equals("string"))
+				query.setParameter(paramName + i, param.akey);
+			else if (field.getType().equals("integer"))
+				query.setParameter(paramName + i,
+									new Integer(param.akey.trim()));
+			else if (field.getType().equals("double"))
+				query.setParameter(paramName + i, new Double(param.akey.trim()));
+			i++;
+		}	
     }
     
     public static void setParameters(QueryCheckField field,
