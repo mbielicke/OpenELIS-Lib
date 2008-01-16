@@ -78,6 +78,7 @@ public class WidgetMap {
                     RPC_OPTION = "rpc-option", // OptionField
                     RPC_STRING = "rpc-string", // StringField
                     RPC_TABLE = "rpc-table", // TableField
+                    RPC_MODEL = "rpc-model", // ModelField
                     RPC_PAGED_TREE = "rpc-tree", // PagedTreeField
                     RPC_QUERY_CHECK = "rpc-queryCheck", // QueryCheckField
                     RPC_QUERY_DATE = "rpc-queryDate", // QueryDateField
@@ -86,7 +87,9 @@ public class WidgetMap {
                     RPC_QUERY_STRING = "rpc-queryString", // QueryStringField
     				LEFT_MENU_PANEL = "aToZ", //ScreenLeftMenuPanel
     				AUTO_DROPDOWN = "autoDropdown", //ScreenAutoDropdown
-                    APP_BUTTON = "appButton"; //ScreenAppButton
+    				TABLE_AUTO = "table-auto", // TableAutoTextbox
+    				TABLE_AUTO_DROPDOWN = "table-autoDropdown", // TableAutoDropdown
+   				    APP_BUTTON = "appButton"; //ScreenAppButton
 
     private HashMap widgets = new HashMap();
 

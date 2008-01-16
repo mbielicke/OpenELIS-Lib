@@ -103,6 +103,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         cellView.setWidget(vp);
         hp.add(cellView);
         hp.add(scrollBar);
+        
         cellView.addScrollListener(this);
         //vp.setStyleName("DragContainer");
         cellView.addMouseWheelListener(this);
@@ -111,14 +112,15 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         AbsolutePanel ap = new AbsolutePanel();
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
         DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
-        DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
+        DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");        
+        DOM.setStyleAttribute(cellView.getElement(),"overflowX","hidden");
         scrollBar.setWidget(ap);
-        DOM.addEventPreview(this);
+        //DOM.addEventPreview(this);
     }
     
     public void setDataModel(DataModel dm) {
         this.dm = dm;
-        if(dm.size() > 0){
+        if(dm != null && dm.size() > 0){
             setScrollHeight((dm.size()*cellHeight)+1);
             vp.clear();
             selected.clear();
@@ -161,15 +163,16 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         ScreenLabel label = (ScreenLabel)vp.getWidget(index);
         label.label.setText(dm.get(start+index).getObject(0).getValue().toString());
         label.setUserObject(dm.get(start+index).getObject(1).getValue());
-        label.getWidget().removeStyleName("Highlighted");
+        label.removeStyleName("Highlighted");
         if(((Boolean)dm.get(start+index).getObject(2).getValue()).booleanValue()){
-            label.getWidget().addStyleName("Highlighted");
+            label.addStyleName("Highlighted");
         }
     }
     
     private void createRow(){
-        ScreenLabel label = new ScreenLabel("",null);
+        ScreenLabel label = new ScreenLabel("   ",null);
         vp.add(label);
+        label.label.setWordWrap(false);
         if(vp.getWidgetCount() % 2 == 1){
             label.addStyleName("AltTableRow");
         }else{
@@ -335,10 +338,10 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                     }
                     scrollBar.setScrollPosition(scrollBar.getScrollPosition()+cellHeight);
                 }else{
-                    ((ScreenWidget)vp.getWidget(active)).getWidget().removeStyleName("Highlighted");
+                    ((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
                     dm.get(start+active).getObject(2).setValue(new Boolean(false));
                     active++;
-                    ((ScreenWidget)vp.getWidget(active)).getWidget().addStyleName("Highlighted");
+                    ((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
                     dm.get(start+active).getObject(2).setValue(new Boolean(true));
                 }
             }
@@ -354,10 +357,10 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                 }
                 scrollBar.setScrollPosition(scrollBar.getScrollPosition()-cellHeight);
             }else if (active > 0){
-                ((ScreenWidget)vp.getWidget(active)).getWidget().removeStyleName("Highlighted");
+                ((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
                 dm.get(start+active).getObject(2).setValue(new Boolean(false));
                 active--;
-                ((ScreenWidget)vp.getWidget(active)).getWidget().addStyleName("Highlighted");
+                ((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
                 dm.get(start+active).getObject(2).setValue(new Boolean(true));
             }
             DOM.eventCancelBubble(event, true);
@@ -400,23 +403,31 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
 
     public void onClick(Widget sender) {
         int clicked = vp.getWidgetIndex(sender);
-        if(clicked != active){
+        //if(clicked != active){
             if(active > -1){
                 if(!ctrl){
-                    ((ScreenWidget)vp.getWidget(active)).getWidget().removeStyleName("Highlighted");
-                    dm.get(start+active).getObject(2).setValue(new Boolean(false));
-                    selected.remove(new Integer(start+active));
+                	if(!multi){
+                		((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
+                    	dm.get(start+active).getObject(2).setValue(new Boolean(false));
+                    	selected.remove(new Integer(start+active));
+                	}
                 }   
             }
-            active = clicked;
-            ((ScreenWidget)vp.getWidget(active)).getWidget().addStyleName("Highlighted");
-            dm.get(start+active).getObject(2).setValue(new Boolean(true));
-            selected.add(new Integer(start+active));
+            if(multi && ((ScreenWidget)vp.getWidget(clicked)).getStyleName().indexOf("Highlighted") != -1){
+            	((ScreenWidget)vp.getWidget(clicked)).removeStyleName("Highlighted");
+            	dm.get(start+clicked).getObject(2).setValue(new Boolean(false));
+            	selected.remove(new Integer(start+clicked));
+            }else{
+            	active = clicked;
+            	((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
+            	dm.get(start+clicked).getObject(2).setValue(new Boolean(true));
+            	selected.add(new Integer(start+clicked));
+            }
             changeListeners.fireChange(this);
-        }
+      //  }
     }
     
-    private void unselectAll() {
+    public void unselectAll() {
         for(int i = 0; i < dm.size(); i++){
             dm.get(i).getObject(2).setValue(new Boolean(false));
         }
@@ -436,6 +447,34 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             changeListeners.remove(listener);
         }
     }
+
+	public int getActive() {
+		return active;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public int getCellHeight() {
+		return cellHeight;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+
+	public int getMaxRows() {
+		return maxRows;
+	}
+
+	public Vector getSelected() {
+		return selected;
+	}
+
+	public void setMulti(boolean multi) {
+		this.multi = multi;
+	}
     
     
 }

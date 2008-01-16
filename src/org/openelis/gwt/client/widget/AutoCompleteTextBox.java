@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -50,28 +51,19 @@ public class AutoCompleteTextBox extends Composite implements
                                                 MouseListener,
                                                 PopupListener,
                                                 FocusListener,
-                                                TableManager{
+                                                TableManager, HasFocus{
 	
-	//-------
 	private HorizontalPanel mainHP = new HorizontalPanel();
 	public TextBox textBox = new TextBox();
 	private FocusPanel focusPanel = new FocusPanel();
-	//-------
+
     /**
      * Widget used to display the suggestions and register
      * click events.
      */
-    /*protected ListBox choices = new ListBox() {
-        public void onBrowserEvent(Event event) {
-            if (Event.ONCLICK == DOM.eventGetType(event)) {
-                complete();
-            }
-        }
-    };*/
+
 	TableWidget tableWidget;
 	final PopupPanel choicesPopup = new PopupPanel(true);
-	//protected VerticalPanel popupPanel = new VerticalPanel();
-    protected boolean dropdown = false;
     protected String textBoxDefault = "";
     protected boolean popupAdded = false;
     protected boolean visible = false;
@@ -81,6 +73,7 @@ public class AutoCompleteTextBox extends Composite implements
     protected int currentCursorPos = 0;
     protected String type = "integer";
     protected Integer startPos = new Integer(0);
+    protected boolean selectByEnter = false;
     
     //table values
     AbstractField[] fields;
@@ -88,6 +81,8 @@ public class AutoCompleteTextBox extends Composite implements
     String[] headers;
     int[] widths;
     
+    public AutoCompleteTextBox(){
+    }
     /**
      * RPC class for returning data from the server.
      */
@@ -151,39 +146,6 @@ public class AutoCompleteTextBox extends Composite implements
             }
         }
     };
-
-
-    /**
-     * Contstructor for AutoCompleteTextBox
-     * @param cat
-     * Category is used to know which values to match the entered text to.
-     * @param serviceUrl
-     * This is the url to the RemoteServiceServlet that handles calls for 
-     * this widget
-     */
-    /*public AutoCompleteTextBox(String cat, String serviceUrl) {        
-        initService(serviceUrl);
-        this.cat = cat;
-        if(textBoxDefault != null)
-    		textBox.setText(textBoxDefault);
-        
-        if(width != null)
-        		textBox.setWidth(width);	
-
-    	initWidget(mainHP);
-    	mainHP.add(textBox);
-    	//textBox.setWidth("100px");
-    	textBox.addFocusListener(this);
-    	focusPanel.addMouseListener(this);
-    	focusPanel.addClickListener(this);
-    	textBox.addKeyboardListener(this);
-    	textBox.addStyleName("TextboxUnselected");
-    	mainHP.add(focusPanel);
-    	mainHP.setSpacing(0);
-    	focusPanel.addStyleName("AutoDropdownButton");
-    	mainHP.addStyleName("AutoDropdown");
-       // choicesPopup.addStyleName("AutoCompleteChoices");
-    }*/
     
     /**
      * Contstructor for AutoCompleteTextBox
@@ -196,7 +158,6 @@ public class AutoCompleteTextBox extends Composite implements
     public AutoCompleteTextBox(String cat, String serviceUrl, boolean dropDown, String textBoxDefault, String width) {        
         initService(serviceUrl);
         this.cat = cat;
-        this.dropdown = dropDown;
         this.textBoxDefault = textBoxDefault;
         this.width = width;
         if(textBoxDefault != null)
@@ -212,13 +173,6 @@ public class AutoCompleteTextBox extends Composite implements
     	textBox.addStyleName("TextboxUnselected");    	
     	mainHP.setSpacing(0);    	
     	mainHP.addStyleName("AutoDropdown");
-    	
-    	if(dropdown){
-    		focusPanel.addMouseListener(this);
-        	focusPanel.addClickListener(this);
-        	mainHP.add(focusPanel);
-        	focusPanel.addStyleName("AutoDropdownButton");
-    	}
     }
 
     /**
@@ -254,16 +208,19 @@ public class AutoCompleteTextBox extends Composite implements
 	            return;
 	        }
 	        if (arg1 == KEY_UP) {
+
 	            int selectedIndex = tableWidget.controller.selected;
 	            selectedIndex--;
+	            selectByEnter = false;
 	            if (selectedIndex < 0) {
-	            	selectedIndex = -1;
-	                //selectedIndex = tableWidget.controller.model.numRows()-1;
-	            	tableWidget.controller.unselect(0);
+	            	selectedIndex = 0;
+
+	            	/*tableWidget.controller.unselect(-1);
 	            	//clear the text box
 	            	String currentText = textBox.getText();
 	            	if(!currentText.equals(""))
 	            		textBox.setText(currentText.substring(0, currentCursorPos));
+					*/
 	            	return;
 	            }
 	            tableWidget.controller.select(selectedIndex);
@@ -273,9 +230,10 @@ public class AutoCompleteTextBox extends Composite implements
 		        textBox.setSelectionRange(currentCursorPos, firstRowDisplayText.length() - currentCursorPos);
 	            return;
 	        }
-	        if (arg1 == KEY_ENTER || arg1 == KEY_TAB) {
-	        	System.out.println("key enter or tab");
+	        if (arg1 == KEY_ENTER) {
 	            if (visible) {
+	            	System.out.println("select true");
+	            	selectByEnter = true;
 	            	choicesPopup.hide();
 	            	//textBox.setSelectionRange(0,0);
 	                complete();
@@ -284,10 +242,13 @@ public class AutoCompleteTextBox extends Composite implements
 	        }
 	        if (arg1 == KEY_ESCAPE) {
 	            //choices.clear();
+	        	selectByEnter = false;
 	            choicesPopup.hide();
 	            visible = false;
 	            return;
 	        }
+	        System.out.println("select false");
+	        selectByEnter = false;
 	        String text = textBox.getText();
 	        value = null;
 	        if (text.length() > 0 && !text.endsWith("*")) {
@@ -313,7 +274,8 @@ public class AutoCompleteTextBox extends Composite implements
 			choicesPopup.addStyleName("AutoCompletePopup");
 	        choicesPopup.addPopupListener(this);
 			choicesPopup.setPopupPosition(this.getAbsoluteLeft(),
-                    this.getAbsoluteTop() + this.getOffsetHeight());
+                    this.getAbsoluteTop() + this.getOffsetHeight()-1);
+			//choicesPopup.setWidth("1px");
 
 			
 			choicesPopup.show();
@@ -322,7 +284,13 @@ public class AutoCompleteTextBox extends Composite implements
 			tableWidget.setManager(this);
 			tableWidget.setHeight(popupHeight);
 			tableWidget.addStyleName("Dropdown");
-			tableWidget.setMaxRows(10);
+			
+			//FIXME currently the hardcoded max rows is 10...might need to change this
+			if(modelWidget.getModel().size()<10)
+				tableWidget.setMaxRows(modelWidget.getModel().size());
+			else
+				tableWidget.setMaxRows(10);
+			
 			//if(popupPanel.getWidgetCount() == 0)
 			//	popupPanel.add(tableWidget);
 			
@@ -379,9 +347,11 @@ public class AutoCompleteTextBox extends Composite implements
 	        row.addHidden("selected", selected);
 	        tableWidget.controller.model.addRow(row);
 	        }
-	        tableWidget.init(0);
+	        
+	        
 	        //choicesPopup.setWidth(tableWidget.controller.view.table.getOffsetWidth()+"px");
 	        choicesPopup.setWidget(tableWidget);
+	        tableWidget.init(0);
 	        
 	        //we need to select the text in the textbox
 	        //textBox.selectAll();
@@ -427,7 +397,13 @@ public class AutoCompleteTextBox extends Composite implements
      * Set the selection that the user made.
      */
     protected void complete() {
-    	if (tableWidget.controller.model.numRows() > 0) {
+    	if(tableWidget == null || textBox.getText().length() == 0){
+    		if(textBox.getText().equals("")){
+    			textBox.setText("");
+    			this.value = null;
+    		}
+    		//else do nothing
+    	}else if (tableWidget.controller.model.numRows() > 0) {
     		String displayText = ((StringField)tableWidget.controller.model.getRow(tableWidget.controller.selected).
     								getHidden("displayText")).toString();
     		String firstRowDisplayText = ((StringField)tableWidget.controller.model.getRow(tableWidget.controller.selected).getHidden("displayText")).toString();
@@ -446,10 +422,9 @@ public class AutoCompleteTextBox extends Composite implements
         }
     	visible = false;
         choicesPopup.hide();
-        textBox.selectAll();
         if (callback != null)
             callback.fireChange(this);
-        
+        textBox.selectAll();
         tableWidget = null;
     }
 
@@ -474,8 +449,7 @@ public class AutoCompleteTextBox extends Composite implements
         		StringField stringField = new StringField();
         		stringField.setValue(val);
         		DataModel model = null;
-        		if(dropdown)
-        			model = modelWidget.getModel();
+       
                 autoService.getDisplay(cat, model, stringField, displayCallback);
         	}else
                 textBox.setText("");
@@ -487,8 +461,7 @@ public class AutoCompleteTextBox extends Composite implements
                 numberField.setType("integer");
                 numberField.setValue(val);
                 DataModel model = null;
-        		if(dropdown)
-        			model = modelWidget.getModel();
+        		
         		autoService.getDisplay(cat, model, numberField, displayCallback);
         	}else
                 textBox.setText("");
@@ -523,13 +496,15 @@ public class AutoCompleteTextBox extends Composite implements
         public void onSuccess(Object result) {
         	DataModel model = (DataModel)result;
         	
-        	if(model.size() == 0){
+        	if(model.size() == 0 && !textBox.getText().equals("")){
         		//set textbox text back to what it was before
         		textBox.setText(textBox.getText().substring(0,currentCursorPos));
         		
         	} else if(model.get(0).size() > 1) {
         		modelWidget.setModel((DataModel)result);
         		startPos = new Integer(0);
+        	}else if(textBox.getText().equals("")){
+        		//do nothing
         	} else
         		startPos = (Integer)((NumberObject)model.get(0).getObject(0)).getValue();
             showMatches(startPos.intValue());
@@ -538,6 +513,14 @@ public class AutoCompleteTextBox extends Composite implements
         public void onFailure(Throwable caught) {
             Window.alert(caught.getMessage());
         }
+    }
+    
+    public void setModel(DataModel model){
+    	modelWidget.setModel(model);
+    }
+    
+    public DataModel getModel(){
+    	return modelWidget.getModel();
     }
 
     /**
@@ -624,11 +607,14 @@ public class AutoCompleteTextBox extends Composite implements
 	}
 
 	public void onFocus(Widget sender) {
+		System.out.println("in focus");
 		if(!textBox.isReadOnly()){
 			if(sender == textBox){
+				System.out.println("TEXT BOX");
 //				we need to set the unselected style name to the textbox
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
+				textBox.setFocus(true);
 				// textBox.setText("");
 				focusPanel.addStyleName("Selected");
 			}
@@ -646,13 +632,18 @@ public class AutoCompleteTextBox extends Composite implements
 				//else
 				//	textBox.setText("");
 				focusPanel.removeStyleName("Selected");
-				complete();
+				//if(choicesPopup.isAttached() && choicesPopup.isVisible() && selectByEnter)
+					complete();
+					textBox.setFocus(false);
+					focusPanel.setFocus(false);
+			//	else{
+				//	textBox.setText("");
+				//	value = null;
+				//	choicesPopup.hide();
+				//}
+				
 			}
 		}
-	}
-
-	public void setDropdown(boolean dropdown) {
-		this.dropdown = dropdown;
 	}
 
 	public void setText(String text) {
@@ -718,8 +709,10 @@ public class AutoCompleteTextBox extends Composite implements
 
 	public boolean action(int row, int col, TableController controller) {
 		String value = (String)((StringObject)modelWidget.getModel().get(row).getObject(modelWidget.getModel().get(row).size()-1)).getValue();
+		String textValue = (String)((StringObject)modelWidget.getModel().get(row).getObject(modelWidget.getModel().get(row).size()-2)).getValue();
 		setItemSelected(row, (value.equals("Y")));
 		tableWidget.controller.selected = row;
+		textBox.setText(textValue);
 		complete();
 		return false;
 	}
@@ -746,4 +739,44 @@ public class AutoCompleteTextBox extends Composite implements
 	public void setModel(TableController controller, DataModel model) {}
 	public void getNextPage() {}
 	public void getPreviousPage() {}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setFocus(boolean focused) {
+		textBox.setFocus(focused);
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addFocusListener(FocusListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeFocusListener(FocusListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addKeyboardListener(KeyboardListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeKeyboardListener(KeyboardListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
 }
