@@ -540,8 +540,57 @@ border:collapse;
 .Add-disabled {
     cursor:default;
 }
+/***********************************************/
 
-.ScreenCalendar {
+
+.Calendar{
+height:19px;
+}
+
+.CalendarButton{
+width:14px;
+height:19px;
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
+}
+.ScreenCalendar .Hover{
+cursor:pointer;
+border-bottom: 1px solid  #7eadd9;
+background: url(../Images/date-trigger.gif) -14px 0px no-repeat;
+}
+.ScreenCalendar .Selected{
+border-bottom: 1px solid  #7eadd9;
+background: url(../Images/date-trigger.gif) -56px 0px no-repeat;
+}
+.ScreenCalendar .Pressed{
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
+}
+
+.ScreenCalendar .TextboxSelected{
+    border:1px solid #7eadd9;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+.ScreenCalendar .TextboxUnselected{
+    border:1px solid lightgrey;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+
+
+
+/*.ScreenCalendar {
 
 }
 
@@ -559,8 +608,8 @@ border:collapse;
     margin:2px;
     cursor:pointer;
     background:white;	
-}
-
+}*/
+/***************************************************/
 .ScreenCheck {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
@@ -720,9 +769,9 @@ filter: alpha(opacity=50);
 
 /*the following is from the tt.css */
 
-.CalendarButton {
+/*.CalendarButton {
 	padding:2px;
-}
+}*/
 
 .Form {
 	border-collapse:collapse;
