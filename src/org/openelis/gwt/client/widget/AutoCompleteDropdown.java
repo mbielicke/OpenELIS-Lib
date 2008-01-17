@@ -210,7 +210,20 @@ HasFocus{
 	        }
 	        String text = textBox.getText();
 	        value = null;
-	        if (text.length() > 0 && !text.endsWith("*")) {
+	        if(multiSelect){
+	        	if(text.length() == 0){
+	        		multiSelected.clear();
+	        		scrollList.unselectAll();
+	        		choicesPopup.hide();
+		            visible = false;
+	        	}else{
+	        		if(text.length() < textBoxDefault.length()){
+	        			textBox.setText(textBoxDefault);
+	        			choicesPopup.hide();
+			            visible = false;
+	        		}
+	        	}
+	        }else if (text.length() > 0 && !text.endsWith("*")) {
 	            new Delay(text, 350);
 	            currentStart = -1;
 	            currentActive = -1;
@@ -334,6 +347,7 @@ HasFocus{
     	DOM.removeEventPreview(scrollList);
     	
 		textBox.setText(textValue);
+		textBoxDefault = textValue;
 		
 		if(multiSelect && selectionLength>-1)
 			textBox.setSelectionRange(0, selectionLength);
@@ -416,32 +430,32 @@ HasFocus{
      * @param value
      */
     public void setValue(Object value) {
-        if(type.equals("string")){
-        	String val = (String)value;
-        	this.value = value;
-        	if (value != null && !val.equals("")){
-        		StringField stringField = new StringField();
-        		stringField.setValue(val);
-        		DataModel model = null;
+    	if(value instanceof ArrayList){
+    		this.value = value;
+    	}else{
+	        if(type.equals("string")){
+	        	String val = (String)value;
+	        	this.value = value;
+	        	if (value != null && !val.equals("")){
+	        		StringField stringField = new StringField();
+	        		stringField.setValue(val);
+	     
+	                getDisplay(stringField);
+	        	}else
+	                textBox.setText("");
+	        }else if(type.equals("integer")){
+	        	Integer val = (Integer)value;
+	        	this.value = value;
+	        	if (value != null && val.intValue() > 0){
+	                NumberField numberField = new NumberField();
+	                numberField.setType("integer");
+	                numberField.setValue(val);
 
-       			model = scrollList.getDataModel();
-                getDisplay(stringField);
-        	}else
-                textBox.setText("");
-        }else if(type.equals("integer")){
-        	Integer val = (Integer)value;
-        	this.value = value;
-        	if (value != null && val.intValue() > 0){
-                NumberField numberField = new NumberField();
-                numberField.setType("integer");
-                numberField.setValue(val);
-                DataModel model = null;
-
-       			model = scrollList.getDataModel();
-        		getDisplay(numberField);
-        	}else
-                textBox.setText("");
-        }
+	        		getDisplay(numberField);
+	        	}else
+	                textBox.setText("");
+	        }
+    	}
     }
     
     private void getDisplay(StringField value){

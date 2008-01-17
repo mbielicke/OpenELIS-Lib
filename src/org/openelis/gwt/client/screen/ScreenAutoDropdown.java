@@ -170,6 +170,8 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
     public void submit(AbstractField field) {
         if(queryMode){
             queryWidget.submit(field);
+        }else if(field instanceof CollectionField){
+        	field.setValue(auto.getSelectedList());
         }else{
             if (((String)field.getKey()).endsWith("Id")){
             		field.setValue(auto.value);
