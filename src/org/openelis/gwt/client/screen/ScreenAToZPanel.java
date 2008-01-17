@@ -72,9 +72,6 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 		if (node.getAttributes().getNamedItem("visible") != null && 
 				node.getAttributes().getNamedItem("visible").getNodeValue() == "false") {
 			hideablePanel.setVisible(false);
-			div.setHTML(">");
-		}else{
-			div.setHTML("<");
 		}
 		
 		//add arrow button to middle panel
@@ -116,15 +113,10 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 
 	public void onClick(Widget sender) {
 		if(sender == div){
-			if(hideablePanel.isVisible()){
+			if(hideablePanel.isVisible())
         		hideablePanel.setVisible(false);
-        		div.setHTML(">");
-        		//arrowButton.setHTML("<img src=\"Images/arrow-right-unselected.png\" onmouseover=\"this.src='Images/arrow-right-selected.png';\" onmouseout=\"this.src='Images/arrow-right-unselected.png';\">");
-        	}else{
-        		hideablePanel.setVisible(true);
-        		div.setHTML("<");
-        		//arrowButton.setHTML("<img src=\"Images/arrow-left-unselected.png\" onmouseover=\"this.src='Images/arrow-left-selected.png';\" onmouseout=\"this.src='Images/arrow-left-unselected.png';\">");
-        	}	
+        	else
+        		hideablePanel.setVisible(true);	
 		}		
 	}
 
