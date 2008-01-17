@@ -7,6 +7,7 @@ import org.openelis.gwt.client.widget.AutoCompleteDropdown;
 import org.openelis.gwt.client.widget.AutoCompleteTextBox;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.BooleanObject;
+import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberField;
@@ -157,13 +158,18 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 	}
 
 	public void saveValue() {
-		if(type != null && type.equals("string")){
-			((StringField)field).setValue(editor.value);
+		if(field instanceof CollectionField){
+			((CollectionField)field).setValue(editor.getSelectedList());
 			textValue.setValue(editor.textBox.getText());
-		}else if(type != null && type.equals("integer")){
-			((NumberField)field).setValue(editor.value);
-			textValue.setValue(editor.textBox.getText());
-		}	
+		}else{
+			if(type != null && type.equals("string")){
+				((StringField)field).setValue(editor.value);
+				textValue.setValue(editor.textBox.getText());
+			}else if(type != null && type.equals("integer")){
+				((NumberField)field).setValue(editor.value);
+				textValue.setValue(editor.textBox.getText());
+			}		
+		}
 	}
 
 	//the editor is shared so we need to set the textvalue
@@ -196,8 +202,9 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 	public void setField(AbstractField field) {
 		this.field = field;
 		
-		//we need to also set the display value because we cant guarantee its the same
-		this.textValue.setValue(getTextValueFromId(field));
+		if(!(field instanceof CollectionField))
+			//we need to also set the display value because we cant guarantee its the same
+			this.textValue.setValue(getTextValueFromId(field));
 	}
 	
 	private String getTextValueFromId(AbstractField field){
