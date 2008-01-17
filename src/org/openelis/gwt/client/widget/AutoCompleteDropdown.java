@@ -208,7 +208,6 @@ HasFocus{
 	            visible = false;
 	            return;
 	        }
-	        System.out.println("select false");
 	        String text = textBox.getText();
 	        value = null;
 	        if (text.length() > 0 && !text.endsWith("*")) {
@@ -615,12 +614,46 @@ HasFocus{
 	public void onFocus(Widget sender) {
 		if(!textBox.isReadOnly()){
 			if(sender == textBox){
-//				we need to set the unselected style name to the textbox
+//				we need to set the selected style name to the textbox
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
 				textBox.setFocus(true);
 				// textBox.setText("");
-				focusPanel.addStyleName("Selected");
+				focusPanel.addStyleName("Selected");				
+				
+				if(currentStart == -1)
+					currentStart = scrollList.getStart();
+			
+				if(currentActive == -1)
+					currentActive = scrollList.getActive();
+				
+				//if this is true then we need to find these values manually
+				if(currentActive == -1 && currentStart == 0 && value != null && !"".equals(value) && value != new Integer(-1)){
+					if(type.equals("string")){
+						for(int i=0; i<scrollList.getDataModel().size(); i++){
+							if(((String)((StringObject)scrollList.getDataModel().get(i).getObject(1)).getValue()).equals(value)){
+								currentStart = i;
+								currentActive = 0;
+								scrollList.setActive(0);
+								break;
+							}
+						}
+					}else if(type.equals("integer")){
+						for(int j=0; j<scrollList.getDataModel().size(); j++){
+							if(((Integer)((NumberObject)scrollList.getDataModel().get(j).getObject(1)).getValue()).equals(value)){
+								currentStart = j;
+								currentActive = 0;
+								scrollList.setActive(0);
+								break;
+							}
+						}
+					}
+				}
+				
+				clickedArrow = true;
+				
+				//we need to open the popup like a normal dropdown
+				showMatches(0);
 			}
 		}
 	}
