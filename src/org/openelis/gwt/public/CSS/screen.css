@@ -7,21 +7,12 @@ html, body {
    padding:0pt;
 }
 
-.navIndex{
-}
-
 .ScreenLoad{
   cursor:wait;
-}
-a.navIndex:hover {
 }
 
 .gwt-HTML-separator{
     width:8px;
-}
-
-.navIndex{
-    margin:1 1 0 0;
 }
 
 .ScreenLeftPanel{
@@ -78,12 +69,12 @@ a.navIndex:hover {
 }
 
 .CloseButton {
-    background-image:url("../Images/close.png");
+    background:url("../Images/close.png");
     width:20px;
     height:20px;
 }
 .MinimizeButton {
-   background-image:url("../Images/go-down.png");
+   background:url("../Images/minimize.gif") no-repeat;
    width:20px;
    height:20px;
 }
@@ -99,43 +90,46 @@ a.navIndex:hover {
 }
 
 .WindowPanel {
-    background:white;
-    border:8px solid #c4d3e5;
-    border-top:4px solid #c4d3e5;
-    border-bottom:4px solid #c4d3e5;
+    background: #c4d3e5;
 }
 .Caption{
-    background:#c4d3e5;
-    height:26;
+    background:url("../Images/windowheader.gif") repeat-x;
+    height:29;
     cursor:move;
 }
 .StatusBar {
-    background: #c4d3e5;
-    height:26;
-    padding-top:4px;
-    cursor:move;
+    background:url("../Images/windowfooter.gif") repeat-x;
+    height:28;
 }
 
-
-.LeftMenuPanePanel {
-   vertical-align:center;   
+.LeftMenuPanePanelClosed {
+    height:100%;
+    background:white;
+    border-left: 1px solid #98c0f4;
 }
 
-.LeftMenuPanePanel .Hover{
-    background-color:#ffe584;
+.LeftMenuPanePanelOpen {
+    height:100%;
+    background:white;
+    border-right: 1px solid #98c0f4;
 }
 
 .LeftMenuPanePanelDiv{
-    margin-top:200;
-    padding-top:35;
-    border-right: 1px solid #fb8d3d;
-    width:8px;
-    height:45;
+    margin-top:140;
+    padding-top:60;
+    width:6px;
+    height:116;
     cursor:pointer;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:8px;
-    font-weight:bold;
-   vertical-align:center;   
+}
+
+.LeftMenuPanePanelClosed .LeftMenuPanePanelDiv{
+    margin-right:1;
+    background:url("../Images/openleftbar.gif") no-repeat;
+}
+
+.LeftMenuPanePanelOpen .LeftMenuPanePanelDiv{
+    margin-left:1;
+    background:url("../Images/closeleftbar.gif") no-repeat;
 }
 
 .LeftMenuArrowImage {
@@ -305,8 +299,8 @@ background:white;
 
 .TitlePanel{
     width:100%;
-    background:white;
-    border-bottom:1px solid #fb8c3c;
+    height:18px;
+    background:url("../Images/headersprite.gif") repeat-x;
 }
 
 .ScreenWindowLabel .MenuText{
@@ -321,7 +315,6 @@ background:white;
     font-weight: normal;
     font-size:11px;
     font-weight:bold;
-    color:#fb8c3c;
     text-align:left;
 }
 
@@ -540,57 +533,8 @@ border:collapse;
 .Add-disabled {
     cursor:default;
 }
-/***********************************************/
 
-
-.Calendar{
-height:19px;
-}
-
-.CalendarButton{
-width:14px;
-height:19px;
-border-bottom: 1px solid #d8d8d8;
-background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
-}
-.ScreenCalendar .Hover{
-cursor:pointer;
-border-bottom: 1px solid  #7eadd9;
-background: url(../Images/date-trigger.gif) -14px 0px no-repeat;
-}
-.ScreenCalendar .Selected{
-border-bottom: 1px solid  #7eadd9;
-background: url(../Images/date-trigger.gif) -56px 0px no-repeat;
-}
-.ScreenCalendar .Pressed{
-border-bottom: 1px solid #d8d8d8;
-background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
-}
-
-.ScreenCalendar .TextboxSelected{
-    border:1px solid #7eadd9;
-    color:#000000;
-    background:#ffffff;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
-    height:20px;
-    cursor:default;
-}
-.ScreenCalendar .TextboxUnselected{
-    border:1px solid lightgrey;
-    color:#000000;
-    background:#ffffff;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
-    height:20px;
-    cursor:default;
-}
-
-
-
-/*.ScreenCalendar {
+.ScreenCalendar {
 
 }
 
@@ -608,8 +552,8 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     margin:2px;
     cursor:pointer;
     background:white;	
-}*/
-/***************************************************/
+}
+
 .ScreenCheck {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
@@ -769,9 +713,9 @@ filter: alpha(opacity=50);
 
 /*the following is from the tt.css */
 
-/*.CalendarButton {
+.CalendarButton {
 	padding:2px;
-}*/
+}
 
 .Form {
 	border-collapse:collapse;
