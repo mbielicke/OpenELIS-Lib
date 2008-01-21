@@ -1,6 +1,7 @@
 package org.openelis.gwt.client.widget;
 
 import java.util.HashMap;
+
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -36,7 +37,7 @@ public class ButtonPanel extends Composite implements ClickListener {
         hp.add(wid);
         if(wid instanceof ScreenAppButton){
             buttons.put(((AppButton)((ScreenAppButton)wid).getWidget()).action,wid);
-            ((ScreenAppButton)wid).addClickListener(this);
+            ((AppButton)((ScreenAppButton)wid).getWidget()).addClickListener(this);
         }
     }
     

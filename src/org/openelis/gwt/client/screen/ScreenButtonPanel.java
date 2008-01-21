@@ -4,7 +4,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import org.openelis.gwt.client.widget.AppButton;
 import org.openelis.gwt.client.widget.ButtonPanel;
 
 /**

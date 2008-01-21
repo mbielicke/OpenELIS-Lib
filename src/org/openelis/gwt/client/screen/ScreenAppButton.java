@@ -1,18 +1,13 @@
 package org.openelis.gwt.client.screen;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.client.widget.AppButton;
 
-public class ScreenAppButton extends ScreenWidget implements SourcesClickEvents{
+public class ScreenAppButton extends ScreenWidget {
     
-    private DelegatingClickListenerCollection clickListeners;
-
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
@@ -60,19 +55,7 @@ public class ScreenAppButton extends ScreenWidget implements SourcesClickEvents{
         return new ScreenAppButton(node,screen);
     }
 
-    public void addClickListener(ClickListener listener) {
-        if(clickListeners == null)
-            clickListeners = new DelegatingClickListenerCollection(this,button);
-        clickListeners.add(listener);
-    }
-
-    public void removeClickListener(ClickListener listener) {
-        if(clickListeners != null)
-            clickListeners.remove(listener);
-    }
-    
     public void destroy() {
-        clickListeners = null;
         button = null;
         super.destroy();
     }
