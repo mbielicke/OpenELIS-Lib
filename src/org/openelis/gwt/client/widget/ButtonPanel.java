@@ -53,7 +53,7 @@ public class ButtonPanel extends Composite implements ClickListener {
      * Handler for button clicks
      */
     public void onClick(Widget senderWid) {
-        AppButton sender = (AppButton)((ScreenAppButton)senderWid).getWidget();
+        AppButton sender = (AppButton)senderWid;
         if (sender.action.equals("query")) {
             form.query(state);
         }
