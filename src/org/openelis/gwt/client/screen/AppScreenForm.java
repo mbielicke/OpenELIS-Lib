@@ -408,8 +408,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 message.setText("Query aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
-        bpanel.setButtonState("update",AppButton.DISABLED);
-        bpanel.setButtonState("delete", AppButton.DISABLED);
+        //bpanel.setButtonState("update",AppButton.DISABLED);
+        //bpanel.setButtonState("delete", AppButton.DISABLED);
     }
 
     /** 
