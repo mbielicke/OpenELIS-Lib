@@ -1154,15 +1154,21 @@ public class TableController implements
      */
     public void onClick(Widget sender) {
         HTML nav = (HTML)sender;
+        String styleNames = nav.getStyleName();
         String htmlString = nav.getHTML();
+        String page = "";
+        
         int start = htmlString.indexOf("value=\"") + 7;
         int end = htmlString.indexOf("\"", start);
-        String page = htmlString.substring(start, end);
-        if (page.equals("+1"))
+        
+        if(start > 6)
+        	page = htmlString.substring(start, end);
+        
+        if (styleNames.indexOf("nextNavIndex")>-1)
             manager.getNextPage(this);
-        else if (page.equals("-1"))
+        else if (styleNames.indexOf("prevNavIndex")>-1)
             manager.getPreviousPage(this);
-        else
+        else if(!"".equals(page))
             manager.getPage(Integer.parseInt(page));
     }
 

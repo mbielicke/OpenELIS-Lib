@@ -41,6 +41,7 @@ public class CollectionField extends AbstractField implements Serializable {
     public Object getInstance() {
         CollectionField obj = new CollectionField();
         obj.setRequired(required);
+        obj.setType(type);
         obj.setValue(coll);
         return obj;
     }

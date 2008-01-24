@@ -1,10 +1,14 @@
 package org.openelis.gwt.client.screen;
 
+import java.util.Vector;
+
+import org.openelis.gwt.client.widget.FormInt;
+import org.openelis.gwt.client.widget.WindowBrowser;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
@@ -14,6 +18,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -22,11 +27,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.client.widget.FormInt;
-import org.openelis.gwt.client.widget.WindowBrowser;
-
-import java.util.Vector;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -110,6 +111,12 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private FocusPanel close = new FocusPanel();
     private FocusPanel collapse = new FocusPanel();
     private FocusPanel statusImg = new FocusPanel();
+    private FocusPanel trCorner = new FocusPanel();
+    private FocusPanel tlCorner = new FocusPanel();
+    private FocusPanel brCorner = new FocusPanel();
+    private FocusPanel blCorner = new FocusPanel();
+    private FocusPanel leftSide = new FocusPanel();
+    private FocusPanel rightSide = new FocusPanel();
     private VerticalPanel body = new VerticalPanel();
     /**
      * Reference back to the WindowBrowser that this ScreenWindow is 
@@ -138,9 +145,22 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         if(loadingText != null)
         	message.setText(loadingText);
         
+        tlCorner.addStyleName("WindowTL");
+        trCorner.addStyleName("WindowTR");
+        blCorner.addStyleName("WindowBL");
+        brCorner.addStyleName("WindowBR");
+        leftSide.addStyleName("WindowLeft");
+        rightSide.addStyleName("WindowRight");
+        
         HorizontalPanel hp = new HorizontalPanel();
+        hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        HorizontalPanel titleButtonsContainer = new HorizontalPanel();
+        titleButtonsContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        
         hp.setWidth("100%");
-        hp.addStyleName("Caption");
+        titleButtonsContainer.addStyleName("Caption");
+        titleButtonsContainer.setWidth("100%");
+        
         cap.addMouseListener(this);
         Label winLabel = new Label(name);
         winLabel.setStyleName("ScreenWindowLabel");
@@ -150,25 +170,55 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         close.setStyleName("CloseButton");
         collapse.addClickListener(this);
         collapse.setStyleName("MinimizeButton");
-        hp.add(cap);
+        hp.add(tlCorner);
+        titleButtonsContainer.add(cap);
+        hp.add(titleButtonsContainer);        
+        hp.setCellWidth(titleButtonsContainer, "100%");
         HorizontalPanel hp2 = new HorizontalPanel();
+        hp2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         hp2.add(collapse);
         hp2.add(close);
-        hp.add(hp2);
+        titleButtonsContainer.add(hp2);
+        hp.add(trCorner);
         hp.setCellWidth(hp2,"32px");
         hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
         statusImg.addStyleName("StatusImage");
         statusImg.addMouseListener(this);
+        status.setStyleName("StatusBar");
+        status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        
+        //status.add(blCorner);
         status.add(statusImg);
         status.add(message);
-        status.setStyleName("StatusBar");
+       // status.add(brCorner);
+        
         status.setWidth("100%");
+        status.setCellWidth(message, "100%");
         status.setCellHeight(statusImg, "16px");
         status.setCellWidth(statusImg, "16px");
         message.setStyleName("ScreenWindowLabel");
         outer.add(hp);
-        body.add(status);
-        outer.add(body);
+        HorizontalPanel middleRow = new HorizontalPanel();
+        HorizontalPanel bottomRow = new HorizontalPanel();
+        bottomRow.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        
+        bottomRow.setWidth("100%");
+        bottomRow.setSpacing(0);
+        
+        middleRow.add(leftSide);
+        middleRow.add(body);
+        middleRow.add(rightSide);
+        
+        bottomRow.add(blCorner);
+        bottomRow.add(status);
+        bottomRow.add(brCorner);
+        
+        bottomRow.setCellWidth(status, "100%");
+        
+        body.addStyleName("WindowBody");
+        
+        outer.add(middleRow);
+        outer.add(bottomRow);
         outer.addStyleName("WindowPanel");
         outer.sinkEvents(Event.ONCLICK);
         outer.setWidth("auto");

@@ -275,17 +275,24 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         navPanel.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
         DOM.setAttribute(navPanel.getElement(), "align", "center");
 
-        HTML prevNav = new HTML("<a class='navIndex' value='-1'>&lt;</a>");
+        //HTML prevNav = new HTML("<a class='navIndex' value='-1'>&lt;</a>");
+        HTML prevNav = new HTML("<");
+        prevNav.addStyleName("prevNavIndex");
         prevNav.addClickListener(controller);
         
         
-        HTML noprevNav = new HTML("<a class='navIndex' style = 'color:lightgrey;'>&lt;</a>");       
+        //HTML noprevNav = new HTML("<a class='navIndex' style = 'color:lightgrey;'>&lt;</a>");       
+        HTML noprevNav = new HTML("<");
+        noprevNav.addStyleName("prevNavIndexDisabled");
         
-        HTML nextNav = new HTML("<a class='navIndex' value='+1'>&gt;</a>");
+        //HTML nextNav = new HTML("<a class='navIndex' value='+1'>&gt;</a>");
+        HTML nextNav = new HTML(">");
+        nextNav.addStyleName("nextNavIndex");
         nextNav.addClickListener(controller);               
         
-        HTML nonextNav = new HTML("<a class='navIndex' style = 'color:lightgrey;' >&gt;</a>");
-                       
+        //HTML nonextNav = new HTML("<a class='navIndex' style = 'color:lightgrey;' >&gt;</a>");
+        HTML nonextNav = new HTML(">");
+        nonextNav.addStyleName("nextNavIndexDisabled");                       
                         
         if (curIndex > 0) {            
             navPanel.add(prevNav);                                   

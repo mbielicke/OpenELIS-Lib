@@ -34,12 +34,12 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
         super(node);
 //      need to get the buttonPanel node
 		final ScreenBase finalScreen = screen;
-		DeferredCommand.addCommand(new Command() {
+		/*DeferredCommand.addCommand(new Command() {
             public void execute() {
             	middleBar.setHeight(String.valueOf(finalScreen.getOffsetHeight()-8)+"px");
             	//div.setHeight(String.valueOf(finalScreen.getOffsetHeight()-12)+"px");
             }
-        });
+        });*/
 		
 		//need to set the alignment before adding any widgets or it wont work
 		//middleBar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -72,6 +72,9 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 		if (node.getAttributes().getNamedItem("visible") != null && 
 				node.getAttributes().getNamedItem("visible").getNodeValue() == "false") {
 			hideablePanel.setVisible(false);
+			middleBar.setStyleName("LeftMenuPanePanelClosed");
+		}else{
+			middleBar.setStyleName("LeftMenuPanePanelOpen");
 		}
 		
 		//add arrow button to middle panel
@@ -83,7 +86,6 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 	        }
 	    }
 			
-		middleBar.setStyleName("LeftMenuPanePanel");
 		middleBar.add(div);
 		
 		//mainHP.setSpacing(0);
@@ -113,10 +115,16 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 
 	public void onClick(Widget sender) {
 		if(sender == div){
-			if(hideablePanel.isVisible())
+			if(hideablePanel.isVisible()){
         		hideablePanel.setVisible(false);
-        	else
-        		hideablePanel.setVisible(true);	
+        		middleBar.removeStyleName("LeftMenuPanePanelOpen");
+        		middleBar.addStyleName("LeftMenuPanePanelClosed");
+			}
+        	else{
+        		hideablePanel.setVisible(true);
+        		middleBar.removeStyleName("LeftMenuPanePanelClosed");
+        		middleBar.addStyleName("LeftMenuPanePanelOpen");
+        	}
 		}		
 	}
 

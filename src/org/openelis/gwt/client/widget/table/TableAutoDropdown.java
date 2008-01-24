@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.widget.AutoCompleteDropdown;
-import org.openelis.gwt.client.widget.AutoCompleteTextBox;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;

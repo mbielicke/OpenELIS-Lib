@@ -235,21 +235,15 @@ public class QueryBuilder {
             						 Query query) {
     	ArrayList list = (ArrayList) field.getValue();
 		String paramName = getParamName(fieldName);
-		Iterator paramsIt = list.iterator();
-		int i = 0;
-		while (paramsIt.hasNext()) {
+		for(int i = 0;i<list.size();i++){
 			if (field.getType().equals("string")){
-				String param = (String)paramsIt.next(); 
+				String param = (String)list.get(i); 
 				query.setParameter(paramName + i, param.trim());
 			}else if (field.getType().equals("integer")){
-				Integer param = (Integer)paramsIt.next();
+				Integer param = (Integer)list.get(i);
 				query.setParameter(paramName + i,
 									new Integer(param));
 			}
-			//else if (field.getType().equals("double")){
-			//	query.setParameter(paramName + i, new Double(param.akey.trim()));
-			//}
-			i++;
 		}	
     }
     
