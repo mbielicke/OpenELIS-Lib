@@ -136,6 +136,18 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("abort",AppButton.UNPRESSED);
             setButtonState("add",AppButton.DISABLED);
         }
+        if(state == FormInt.DELETE){
+            setButtonState("query",AppButton.DISABLED);
+            setButtonState("update",AppButton.DISABLED);
+            setButtonState("delete",AppButton.PRESSED);
+            setButtonState("previous",AppButton.DISABLED);
+            setButtonState("next",AppButton.DISABLED);
+            setButtonState("reload",AppButton.DISABLED);
+            setButtonState("select",AppButton.DISABLED);
+            setButtonState("commit",AppButton.UNPRESSED);
+            setButtonState("abort",AppButton.UNPRESSED);
+            setButtonState("add",AppButton.DISABLED);
+        }
         if(state == FormInt.DISPLAY){
             setButtonState("query",AppButton.UNPRESSED);
             setButtonState("update",AppButton.UNPRESSED);

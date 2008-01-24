@@ -13,6 +13,7 @@ public interface FormInt {
     public static final int ADD = 2;
     public static final int QUERY = 3;
     public static final int BROWSE = 4;
+    public static final int DELETE = 5;
 
     public void query(int state);
 

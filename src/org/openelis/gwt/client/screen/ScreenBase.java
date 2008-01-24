@@ -237,6 +237,34 @@ public class ScreenBase extends Composite implements
                 ((ScreenWidget)wid).enable(enabled);
         }
     }
+    
+    /**
+     * This method will enable or disable all input widgets on the screen depending on
+     * the value of the parameter enabled
+     * 
+     * @param enabled
+     */
+    protected void strikeThru(boolean enabled) {
+    	String key = "";
+    	Iterator inputKeys = widgets.keySet().iterator();
+        while (inputKeys.hasNext()) {
+            key = (String)inputKeys.next();
+            ScreenWidget inputField = (ScreenWidget)widgets.get(key);
+            
+            //if((inputField instanceof ScreenAuto || inputField instanceof ScreenAutoDropdown) && !((ScreenInputWidget)inputField).queryMode){
+           //     key+="id";
+           // }
+          
+            if (!rpc.getFieldMap().containsKey(key) && !rpc.getFieldMap().containsKey(key+"Id")) {
+            	continue;
+            }
+            
+            if(enabled)
+            	((ScreenWidget)widgets.get(key)).addStyleName("strike");
+            else
+            	((ScreenWidget)widgets.get(key)).removeStyleName("strike");
+      }
+   }
 
     /**
      * Implementation of the onFocus method from FocusListener. Any widget that adds
