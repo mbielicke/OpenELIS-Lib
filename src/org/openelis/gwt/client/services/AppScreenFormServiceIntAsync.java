@@ -19,7 +19,7 @@ public interface AppScreenFormServiceIntAsync extends AppScreenServiceIntAsync {
     
     public void fetchForUpdate(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
     
-    public void delete(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
+    public void commitDelete(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
     
     public void abort(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
 }

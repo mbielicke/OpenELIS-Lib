@@ -12,6 +12,7 @@ import org.openelis.gwt.client.widget.ButtonPanel;
 import org.openelis.gwt.client.widget.FormInt;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
+import org.openelis.gwt.common.LastPageException;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
@@ -188,23 +189,45 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * the ButtonPanel widget.
      */
     public void delete(int state) {
-        formService.delete(key, (FormRPC)forms.get("display"), new AsyncCallback() {
-           public void onSuccess(Object result){
-               rpc = (FormRPC)result;
-               forms.put(rpc.key, rpc);
-               load();
-               afterDelete(true);
-           }
-           public void onFailure(Throwable caught){
-               Window.alert(caught.getMessage());
-               afterDelete(false);
-           }
-        });
-        
+    	//strikethru all the input widgets
+    	strikeThru(true);
+    	
+    	//set the state to delete
+    	bpanel.setState(FormInt.DELETE);
+    	
+    	//set the message to delete
+    	if(constants != null)
+            message.setText(constants.getString("deleteMessage"));
+        else
+        	message.setText("Pressing commit will delete the current record from the database");           
     }
     
-    public void afterDelete(boolean success){
-        
+    public void commitDelete(){
+    	formService.commitDelete(key, (FormRPC)forms.get("display"), new AsyncCallback() {
+            public void onSuccess(Object result){
+                rpc = (FormRPC)result;
+                forms.put(rpc.key, rpc);
+                load();
+                afterCommitDelete(true);
+            }
+            public void onFailure(Throwable caught){
+                Window.alert(caught.getMessage());
+                afterCommitDelete(false);
+            }
+         });
+    }
+    
+    public void afterCommitDelete(boolean success){
+    	if(success){
+    		getPage(false);
+    		strikeThru(false);
+    		bpanel.setState(FormInt.DISPLAY);
+    		
+    		if(constants != null)
+                message.setText(constants.getString("deleteComplete"));
+            else
+            	message.setText("Delete...Complete");           
+        }
     }
 
     /**
@@ -253,6 +276,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             else
                 message.setText("Querying...");
             commitQuery(rpc);
+        }
+        if(state == FormInt.DELETE){
+        	 if(constants != null)
+                 message.setText(constants.getString("deleting"));
+             else
+            	 message.setText("Deleting...");
+           
+        	 commitDelete();
         }
         
     }
@@ -333,18 +364,31 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         });
     }
     
-    public void getPage() {
+    public void getPage(final boolean selectItem) {
         formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
             public void onSuccess(Object result){
                 modelWidget.setModel((DataModel)result);
-                if(modelWidget.getModel().isSelectLast())
-                	modelWidget.select(modelWidget.getModel().size()-1);
+                if(selectItem){
+	                if(modelWidget.getModel().isSelectLast())
+	                	modelWidget.select(modelWidget.getModel().size()-1);
+	                else
+	                	modelWidget.select(0);
+                }        
+                
+                if(constants != null)
+                    message.setText(constants.getString("queryingComplete"));
                 else
-                	modelWidget.select(0);
-                		
+                    message.setText("Querying...Complete");
             }
+            
             public void onFailure(Throwable caught){
-                Window.alert(caught.getMessage());
+                
+                if(caught instanceof LastPageException){
+             	   modelWidget.getModel().setPage(modelWidget.getPage()-1);
+
+                   message.setText(caught.getMessage());
+                }else
+                	Window.alert(caught.getMessage());
             }
          });
     }
@@ -406,6 +450,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 message.setText(constants.getString("queryAborted"));
             else
                 message.setText("Query aborted");
+        }
+        if(state == FormInt.DELETE){
+        	strikeThru(false);
+        	
+        	if(constants != null)
+                message.setText(constants.getString("deleteAborted"));
+            else
+        	message.setText("Delete aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
         //bpanel.setButtonState("update",AppButton.DISABLED);
@@ -472,7 +524,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 fetch();
             }
             if(modelWidget.event == DataModelWidget.GETPAGE)
-                getPage();
+                getPage(true);
         }
     }
 
