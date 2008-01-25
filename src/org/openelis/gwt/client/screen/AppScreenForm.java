@@ -44,12 +44,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     private DataSet key;
     public ScreenWindow window;
     public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
-    public static AppScreenFormServiceIntAsync formService;
+    public AppScreenFormServiceIntAsync formService;
     //this is used to internationalize the status bar messages
     //private ConstantsWithLookup constants = null;
 
     public AppScreenForm(AppScreenFormServiceIntAsync service) {
-        super(formService);
+        super(service);
         formService = service;
     }
     
