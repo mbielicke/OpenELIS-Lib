@@ -1,9 +1,7 @@
 package org.openelis.gwt.client.screen;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -50,8 +48,6 @@ public class ScreenTablePanel extends ScreenWidget {
         if (node.getAttributes().getNamedItem("visible") != null && node.getAttributes().getNamedItem("visible").getNodeValue().equals("false")){
             panel.setVisible(false);
         }
-        
-        String tableId = node.getAttributes().getNamedItem("key").getNodeValue();
         if (node.getAttributes().getNamedItem("spacing") != null)
             panel.setCellSpacing(Integer.parseInt(node.getAttributes()
                                                       .getNamedItem("spacing")
