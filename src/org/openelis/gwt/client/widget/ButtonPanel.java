@@ -104,7 +104,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("query",AppButton.DISABLED);
             setButtonState("update",AppButton.DISABLED);
             setButtonState("delete",AppButton.DISABLED);
-            setButtonState("previous",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
             setButtonState("next",AppButton.DISABLED);
             setButtonState("reload",AppButton.DISABLED);
             setButtonState("select",AppButton.DISABLED);
@@ -116,7 +116,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("query",AppButton.PRESSED);
             setButtonState("update",AppButton.DISABLED);
             setButtonState("delete",AppButton.DISABLED);
-            setButtonState("previous",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
             setButtonState("next",AppButton.DISABLED);
             setButtonState("reload",AppButton.DISABLED);
             setButtonState("select",AppButton.DISABLED);
@@ -128,7 +128,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("query",AppButton.DISABLED);
             setButtonState("update",AppButton.PRESSED);
             setButtonState("delete",AppButton.DISABLED);
-            setButtonState("previous",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
             setButtonState("next",AppButton.DISABLED);
             setButtonState("reload",AppButton.DISABLED);
             setButtonState("select",AppButton.DISABLED);
@@ -140,7 +140,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("query",AppButton.DISABLED);
             setButtonState("update",AppButton.DISABLED);
             setButtonState("delete",AppButton.PRESSED);
-            setButtonState("previous",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
             setButtonState("next",AppButton.DISABLED);
             setButtonState("reload",AppButton.DISABLED);
             setButtonState("select",AppButton.DISABLED);
@@ -152,7 +152,7 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("query",AppButton.UNPRESSED);
             setButtonState("update",AppButton.UNPRESSED);
             setButtonState("delete",AppButton.UNPRESSED);
-            setButtonState("previous",AppButton.UNPRESSED);
+            setButtonState("prev",AppButton.UNPRESSED);
             setButtonState("next",AppButton.UNPRESSED);
             setButtonState("reload",AppButton.UNPRESSED);
             setButtonState("select",AppButton.UNPRESSED);
