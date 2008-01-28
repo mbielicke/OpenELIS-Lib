@@ -663,7 +663,7 @@ public class TableController implements
     
     public void load() {
         start = 0;
-        selected = -1;
+        unselect(-1);
         selectedCell = -1;
         int tRows = maxRows;
         if(model.numRows() < maxRows)
