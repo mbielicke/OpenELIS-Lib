@@ -72,7 +72,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public AbsolutePanel rowsView = new AbsolutePanel();
     private AbsolutePanel statView = new AbsolutePanel();
     private FlexTable ft = new FlexTable();
-    private final HorizontalPanel titlePanel = new HorizontalPanel();
+    public final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
     public FlexTable header = new FlexTable();
@@ -169,9 +169,13 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollListener(this);
-        if(title != null && !title.equals(""))
+        if(title != null && !title.equals("")){
+           // HorizontalPanel hp = new HorizontalPanel();
+            //hp.add(titlePanel);
+            //hp.add(new HTML("<td width="))
         	vp.add(titlePanel);
-        if(controller.showRows) {
+            
+        }if(controller.showRows) {
         	if(headers != null)
         		ft.setWidget(0,1,headerView);
             ft.setWidget(1,0,rows);
@@ -216,6 +220,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public void setWidth(String width) {
         this.width = width.trim();
         cellView.setWidth(width);
+        titlePanel.setWidth(width);
         headerView.setWidth(width);
         rows.setWidth("25px");
     }

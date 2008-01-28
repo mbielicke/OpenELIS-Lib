@@ -769,8 +769,10 @@ public class TableController implements
         int viewWidth = -1;
         if(!view.width.equals("auto"))
             viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));
-        else if(!GWT.isScript())
+        else if(!GWT.isScript()){
             view.cellView.setWidth(view.table.getOffsetWidth()+"px");
+            view.titlePanel.setWidth(view.table.getOffsetWidth()+"px");
+        }
         if(viewWidth > -1 && view.table.getOffsetWidth() > viewWidth){
         	view.setHeight((maxRows*cellHeight+maxRows+18+"px"));
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
@@ -780,6 +782,7 @@ public class TableController implements
                 view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
             }
         }
+        view.titlePanel.setWidth(view.cellView.getOffsetWidth()+"px");
            }
         });
     }
