@@ -90,9 +90,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             key = null;
        
        //if it is the first page with the first selected. dont enable the previous button
-       if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0)
+       if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0) {
     	   bpanel.setButtonState("next", AppButton.UNPRESSED);
-       else{
+    	   bpanel.setButtonState("prev",AppButton.DISABLED);
+       }else{
     	   bpanel.setButtonState("next", AppButton.UNPRESSED);
            bpanel.setButtonState("prev",AppButton.UNPRESSED);
        }
@@ -385,8 +386,15 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 
                 if(caught instanceof LastPageException){
              	   modelWidget.getModel().setPage(modelWidget.getPage()-1);
-
-                   message.setText(caught.getMessage());
+             	   if(modelWidget.getSelectedIndex() == modelWidget.getModel().size()){
+             		   modelWidget.getModel().select(modelWidget.getSelectedIndex()-1);
+             		   
+             		  if(constants != null)
+                          message.setText(constants.getString("endingQueryException"));
+                      else
+                          message.setText("You are at the end of your query results");             		   
+             	   }else
+             		   message.setText(caught.getMessage());
                 }else
                 	Window.alert(caught.getMessage());
             }
