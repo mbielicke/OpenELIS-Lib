@@ -1,10 +1,9 @@
 package org.openelis.gwt.client.widget;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
+import org.openelis.gwt.client.screen.ScreenBase;
 import org.openelis.gwt.client.services.AutoCompleteServiceInt;
 import org.openelis.gwt.client.services.AutoCompleteServiceIntAsync;
 import org.openelis.gwt.client.widget.table.TableCellWidget;
@@ -20,6 +19,7 @@ import org.openelis.gwt.common.data.StringObject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -48,7 +48,17 @@ PopupListener,
 FocusListener,
 HasFocus{ 
 	private HorizontalPanel mainHP = new HorizontalPanel();
-	public TextBox textBox = new TextBox();
+	public TextBox textBox = new TextBox() {
+        public void onBrowserEvent(Event event) {
+            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
+                    screen.doTab(event, comp);
+            } else {
+                super.onBrowserEvent(event);
+            }
+        }
+    };
+    
 	private FocusPanel focusPanel = new FocusPanel();
 
 	
@@ -68,6 +78,8 @@ HasFocus{
     protected boolean popupAdded = false;
     protected boolean visible = false;
     protected String popupHeight = "";
+    private ScreenBase screen;
+    protected Widget comp;
     protected String width = "";
     protected String fieldCase = "mixed";
     protected int currentCursorPos = 0;
@@ -175,6 +187,8 @@ HasFocus{
        	mainHP.add(focusPanel);
        	focusPanel.addStyleName("AutoDropdownButton");
        	
+       	comp = this;
+       	
        	scrollList = new ScrollList();
        	scrollList.setMulti(multiSelect);
        	
@@ -203,6 +217,9 @@ HasFocus{
     	if(!textBox.isReadOnly() && choicesPopup.isVisible()){
     		if(arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_ENTER)
     			return;
+    		//if(arg1 == KEY_TAB){
+    		//	screen.doTab(event, comp);
+    		//}
 	        if (arg1 == KEY_ESCAPE) {
 	            choicesPopup.hide();
 	            visible = false;
@@ -680,19 +697,10 @@ HasFocus{
 				textBox.removeStyleName("TextboxSelected");
 				if(textBoxDefault != null)
 					textBox.setText(textBoxDefault);
-				//else
-				//	textBox.setText("");
-				focusPanel.removeStyleName("Selected");
-				//if(choicesPopup.isAttached() && choicesPopup.isVisible() && selectByEnter)
-					complete();
-					textBox.setFocus(false);
-					focusPanel.setFocus(false);
-			//	else{
-				//	textBox.setText("");
-				//	value = null;
-				//	choicesPopup.hide();
-				//}
 				
+				focusPanel.removeStyleName("Selected");
+				
+				complete();
 			}
 		}
 	}
@@ -775,6 +783,10 @@ HasFocus{
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	 public void setForm(ScreenBase screen) {
+	        this.screen = screen;
+	    }
 
 	public int getTabIndex() {
 		// TODO Auto-generated method stub

@@ -18,10 +18,6 @@ import org.openelis.gwt.common.data.OptionItem;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -89,7 +85,8 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
         Node fieldsNode = ((Element)node).getElementsByTagName("autoFields").item(0);
         Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
-        auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width) {
+        auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width);
+        /*{
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
@@ -100,7 +97,8 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
                     super.onBrowserEvent(event);
                 }
             }
-        };
+        };*/
+        auto.setForm(screen);
         
         if(widthsNode != null) 
         	auto.setWidths(getWidths(widthsNode));
