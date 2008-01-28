@@ -118,6 +118,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private FocusPanel leftSide = new FocusPanel();
     private FocusPanel rightSide = new FocusPanel();
     private VerticalPanel body = new VerticalPanel();
+    private HorizontalPanel middleRow = new HorizontalPanel();
+    private HorizontalPanel bottomRow = new HorizontalPanel();
     /**
      * Reference back to the WindowBrowser that this ScreenWindow is 
      * displayed in.
@@ -198,8 +200,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         status.setCellWidth(statusImg, "16px");
         message.setStyleName("ScreenWindowLabel");
         outer.add(hp);
-        HorizontalPanel middleRow = new HorizontalPanel();
-        HorizontalPanel bottomRow = new HorizontalPanel();
+        
         bottomRow.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         
         bottomRow.setWidth("100%");
@@ -266,7 +267,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         }
         if(sender == collapse){
             outer.setWidth(outer.getOffsetWidth()+"px");
-            body.setVisible(!body.isVisible());
+            middleRow.setVisible(!middleRow.isVisible());
+            bottomRow.setVisible(!bottomRow.isVisible());
         }
         
     }
