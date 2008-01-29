@@ -31,6 +31,7 @@ public class AbstractField implements DataField, Serializable {
 
     public void addError(String err) {
         errors.add(err);
+        valid = false;
     }
 
     public String[] getErrors() {
