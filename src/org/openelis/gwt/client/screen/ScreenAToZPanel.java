@@ -17,6 +17,7 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 	private HorizontalPanel hideablePanel = new HorizontalPanel();
 	private VerticalPanel middleBar = new VerticalPanel();
 	public HTML div = new HTML();
+    private Widget panelContent;
 
 	
 	/**
@@ -71,7 +72,7 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 		//make the hideable panel hide if visable="false"		
 		if (node.getAttributes().getNamedItem("visible") != null && 
 				node.getAttributes().getNamedItem("visible").getNodeValue() == "false") {
-			hideablePanel.setVisible(false);
+            hideablePanel.setVisible(false);
 			middleBar.setStyleName("LeftMenuPanePanelClosed");
 		}else{
 			middleBar.setStyleName("LeftMenuPanePanelOpen");
@@ -81,8 +82,8 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 		NodeList widgets = node.getChildNodes();
 	    for (int k = 0; k < widgets.getLength(); k++) {
 	    	if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-	    		Widget wid = ScreenWidget.loadWidget(widgets.item(k), screen);
-	            hideablePanel.add(wid);
+	    		panelContent = ScreenWidget.loadWidget(widgets.item(k), screen);
+	            hideablePanel.add(panelContent);
 	        }
 	    }
 			
@@ -116,12 +117,13 @@ public class ScreenAToZPanel extends ScreenWidget implements ClickListener, Mous
 	public void onClick(Widget sender) {
 		if(sender == div){
 			if(hideablePanel.isVisible()){
-        		hideablePanel.setVisible(false);
+                hideablePanel.setVisible(false);
         		middleBar.removeStyleName("LeftMenuPanePanelOpen");
         		middleBar.addStyleName("LeftMenuPanePanelClosed");
 			}
         	else{
         		hideablePanel.setVisible(true);
+                hideablePanel.add(panelContent);
         		middleBar.removeStyleName("LeftMenuPanePanelClosed");
         		middleBar.addStyleName("LeftMenuPanePanelOpen");
         	}

@@ -290,7 +290,11 @@ public class AToZPanel extends Composite implements ClickListener {
         	}else{
         		hideablePanel.setVisible(true);
         		arrowButton.setHTML("<img src=\"Images/arrow-left-unselected.png\" onmouseover=\"this.src='Images/arrow-left-selected.png';\" onmouseout=\"this.src='Images/arrow-left-unselected.png';\">");
-        		leftTable.controller.reset();
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {    
+                  		leftTable.controller.sizeTable();
+                    }
+                });
         	}	
 		}
 	}

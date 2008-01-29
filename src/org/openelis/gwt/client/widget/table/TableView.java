@@ -1,6 +1,8 @@
 package org.openelis.gwt.client.widget.table;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -370,6 +372,17 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         if(delta > 0 && delta < 18)
             delta = controller.cellHeight;
         scrollBar.setScrollPosition(pos + delta);
+    }
+    
+    protected void onAttach() {
+        DeferredCommand.addCommand(new Command() {
+           public void execute() {
+               if(controller != null){
+                   controller.sizeTable();
+               }
+           }
+        });
+        super.onAttach();
     }
     
 }
