@@ -17,5 +17,5 @@ public interface AutoCompleteServiceIntAsync {
 
     public void getDisplay(String cat, DataModel model, AbstractField value, AsyncCallback callback);
     
-    public void getInitialModel(String cat, AsyncCallback callback);
+   // public void getInitialModel(String cat, AsyncCallback callback);
 }

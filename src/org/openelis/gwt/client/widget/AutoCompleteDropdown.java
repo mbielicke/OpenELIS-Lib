@@ -190,12 +190,7 @@ HasFocus{
        	comp = this;
        	
        	scrollList = new ScrollList();
-       	scrollList.setMulti(multiSelect);
-       	
-       	//we need to load the model if it is coming from the database here
-       	if(fromModel)
-       		autoService.getInitialModel(cat, getModelCallback);
-       	
+       	scrollList.setMulti(multiSelect);       	
     }
 
     /**
@@ -266,7 +261,9 @@ HasFocus{
 			//choicesPopup.setWidth("1px");
 			
 			choicesPopup.show();
-			
+//			we need to load the model if it is coming from the database here
+		       //	if(fromModel)
+		      // 		autoService.getInitialModel(cat, getModelCallback);
 			scrollList.addChangeListener(this);
 
 			scrollList.addStyleName("Dropdown");
@@ -830,5 +827,9 @@ HasFocus{
 
 	public void setFromModel(boolean fromModel) {
 		this.fromModel = fromModel;
+	}
+
+	public boolean isFromModel() {
+		return fromModel;
 	}
 }

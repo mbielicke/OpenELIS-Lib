@@ -149,7 +149,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
 	    		auto.setValue((Integer)((NumberField)field).getValue());
 	    	}else if(field instanceof CollectionField){
 	    		auto.clearData();
-    		}else{
+	    	}else{
 	            auto.clear();
 	            OptionField optField = (OptionField)field;
 	            List optMap = optField.getOptions();
@@ -198,7 +198,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
         if(queryMode)
             queryWidget.enable(enabled);
         else
-            auto.textBox.setReadOnly(!enabled);     
+            auto.textBox.setReadOnly(!enabled);
     }
     
     public void destroy() {
@@ -287,4 +287,8 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
     	}
         return dataModel;
 	}
+    
+    public ScreenAutoDropdown getQueryWidget(){
+    	return (ScreenAutoDropdown)queryWidget;
+    }
 }

@@ -320,5 +320,9 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void setModel(DataModel model){
+		editor.setModel(model);
+	}
 }
 
