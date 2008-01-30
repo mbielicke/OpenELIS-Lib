@@ -13,6 +13,7 @@ import org.openelis.gwt.client.widget.FormInt;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.common.LastPageException;
+import org.openelis.gwt.common.RPCDeleteException;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
@@ -212,7 +213,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 afterCommitDelete(true);
             }
             public void onFailure(Throwable caught){
-                Window.alert(caught.getMessage());
+            	if(caught instanceof RPCDeleteException)
+            		message.setText(caught.getMessage());
+                else
+            		Window.alert(caught.getMessage());
                 afterCommitDelete(false);
             }
          });
