@@ -28,7 +28,7 @@ public class EJBFactory {
                     props.load(is);
                 }catch(Exception e){
                     props.setProperty("java.naming.factory.url.pkgs","org.jboss.naming:org.jnp.interfaces");
-                    props.setProperty("java.naming.provider.url","nabu.uhl.uiowa.edu");
+                    props.setProperty("java.naming.provider.url","localhost");
                 }
                 props.setProperty(Context.INITIAL_CONTEXT_FACTORY,
                 "org.jboss.security.jndi.LoginInitialContextFactory");

@@ -17,6 +17,7 @@ public class TestGWTWidgets extends GWTTestCase {
         String nodeString = "<textbox key=\"test\" width=\"100px\"/>";    
         ScreenBase screen = new ScreenBase();
         assertNotNull(new ScreenText((Node)XMLParser.parse(nodeString).getDocumentElement(),screen));
+        
     }
 
 }

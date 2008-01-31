@@ -44,6 +44,7 @@ public class AppScreen extends ScreenBase {
            public void onSuccess(Object result){
                drawScreen((String)result);
                afterDraw(true);
+               System.out.println("got xml");
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
