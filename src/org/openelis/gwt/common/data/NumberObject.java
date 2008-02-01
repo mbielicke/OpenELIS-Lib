@@ -36,4 +36,11 @@ public class NumberObject implements DataObject, Serializable {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public Object getInstance() {
+        NumberObject clone = new NumberObject();
+        clone.type = type;
+        clone.value = new Double(value);
+        return clone;
+    }
 }

@@ -15,9 +15,15 @@ public class StringObject implements DataObject, Serializable {
 
     public void setValue(Object val) {
         if(val != null)
-            value = (String)val;
+            value = new String((String)val);
         else
         	value = "";
+    }
+    
+    public Object getInstance() {
+        StringObject clone = new StringObject();
+        clone.setValue(value);
+        return clone;
     }
 
 }

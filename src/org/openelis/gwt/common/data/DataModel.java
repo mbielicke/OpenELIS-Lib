@@ -68,6 +68,17 @@ public class DataModel implements Serializable {
         return selectLast;
     }
     
+    public Object getInstance() {
+        DataModel clone = new DataModel();
+        clone.page = page;
+        clone.selected = selected;
+        clone.selectLast = selectLast;
+        for(int i = 0; i < size(); i++){
+            clone.add((DataSet)get(i).getInstance());
+        }
+        return clone;
+    }
+    
     
 
 }

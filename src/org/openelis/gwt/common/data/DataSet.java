@@ -30,5 +30,13 @@ public class DataSet implements Serializable {
     public int size() {
         return objects.size();
     }
+    
+    public Object getInstance() {
+        DataSet clone = new DataSet();
+        for(int i=0; i < size(); i++){
+            clone.addObject((DataObject)getObject(i).getInstance());
+        }
+        return clone;
+    }
 
 }

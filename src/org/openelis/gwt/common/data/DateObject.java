@@ -51,5 +51,13 @@ public class DateObject implements DataObject, Serializable {
     public byte getEnd() {
         return this.end;
     }
+    
+    public Object getInstance() {
+        DateObject clone = new DateObject();
+        clone.begin = begin;
+        clone.end = end;
+        clone.setValue(value);
+        return clone;
+    }
 
 }

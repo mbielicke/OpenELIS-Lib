@@ -38,4 +38,10 @@ public class BooleanObject implements DataObject, Serializable {
         else
             return "N";
     }
+    
+    public Object getInstance() {
+        BooleanObject clone = new BooleanObject();
+        clone.setValue(value);
+        return clone;
+    }
 }
