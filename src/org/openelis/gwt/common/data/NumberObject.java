@@ -40,7 +40,7 @@ public class NumberObject implements DataObject, Serializable {
     public Object getInstance() {
         NumberObject clone = new NumberObject();
         clone.type = type;
-        clone.value = new Double(value);
+        clone.value = new Double(value.doubleValue());
         return clone;
     }
 }
