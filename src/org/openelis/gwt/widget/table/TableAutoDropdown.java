@@ -2,6 +2,8 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
@@ -12,8 +14,6 @@ import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -28,7 +28,7 @@ import com.google.gwt.xml.client.NodeList;
 
 public class TableAutoDropdown extends SimplePanel implements TableCellWidget, EventPreview {
 
-	private AutoCompleteDropdown editor;
+	public AutoCompleteDropdown editor;
 	private Label display;
 	//this should be the id of the selected element
 	private AbstractField field;

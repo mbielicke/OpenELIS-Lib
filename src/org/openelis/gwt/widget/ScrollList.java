@@ -3,15 +3,15 @@ package org.openelis.gwt.widget;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenLabel;
+import org.openelis.gwt.screen.ScreenScrollList;
+import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenScrollList;
-import org.openelis.gwt.screen.ScreenWidget;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -468,6 +468,10 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
 
 	public void setActive(int active) {
 		this.active = active;
+	}
+	
+	public void setStart(int start) {
+		this.start = start;
 	}
 
 	public int getMaxRows() {

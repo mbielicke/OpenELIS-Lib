@@ -148,7 +148,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
 	    	}else if(field instanceof NumberField){
 	    		auto.setValue((Integer)((NumberField)field).getValue());
 	    	}else if(field instanceof CollectionField){
-	    		auto.clearData();
+	    		auto.reset();
 	    	}else{
 	            auto.clear();
 	            OptionField optField = (OptionField)field;

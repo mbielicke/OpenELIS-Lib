@@ -210,7 +210,7 @@ HasFocus{
      */
     public void onKeyUp(Widget arg0, char arg1, int arg2) {
     	if(!textBox.isReadOnly() && choicesPopup.isVisible()){
-    		if(arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_ENTER)
+    		if(arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_ENTER || arg1 == KEY_TAB)
     			return;
     		//if(arg1 == KEY_TAB){
     		//	screen.doTab(event, comp);
@@ -220,6 +220,7 @@ HasFocus{
 	            visible = false;
 	            return;
 	        }
+	        
 	        String text = textBox.getText();
 	        value = null;
 	        if(multiSelect){
@@ -286,41 +287,42 @@ HasFocus{
 	        if(clickedArrow && scrollList.getActive() > -1 && currentStart > -1 && currentActive > -1)
 	        	startPos = currentStart + currentActive;
 	        
-	       // Window.alert(currentStart+" + "+currentActive);
+	        //Window.alert(String.valueOf(startPos));
 	        
 	        if(!multiSelect)
-	        scrollList.getDataModel().get(startPos).getObject(2).setValue(new Boolean(true));
+	        	scrollList.getDataModel().get(startPos).getObject(2).setValue(new Boolean(true));
 	        
+	        //Window.alert("after");
 	       //FIXME this could be hosing the selection...look into this
 	        
 	        //then the active might not be the first one...
-	        if(startPos > scrollList.getDataModel().size()-scrollList.getMaxRows() && !multiSelect){
-	        	scrollList.setActive(scrollList.getMaxRows() - ((scrollList.getDataModel().size()-1) - startPos) - 1);
-	        }else
+	       if(startPos > scrollList.getDataModel().size()-scrollList.getMaxRows() && !multiSelect){
+	    	   scrollList.setActive(scrollList.getMaxRows() - ((scrollList.getDataModel().size()-1) - startPos) - 1);
+	       }else
 	        	scrollList.setActive(0);
 	       
 
 	        scrollList.setDataModel(scrollList.getDataModel());
 	        
-	        if(!multiSelect){
-	        	scrollList.scrollBar.setScrollPosition(startPos*scrollList.getCellHeight());
-	        	scrollList.scrollLoad(scrollList.scrollBar.getScrollPosition());
-	        }else
+	       if(!multiSelect){
+	    	   scrollList.scrollBar.setScrollPosition(startPos*scrollList.getCellHeight());
+	    	   scrollList.scrollLoad(scrollList.scrollBar.getScrollPosition());
+	       }else
 	        	scrollList.scrollLoad(0);
 
 	        //we need to set the selected style name to the textbox
 	        textBox.removeStyleName("TextboxUnselected");
 	        textBox.addStyleName("TextboxSelected");
 	        
-	        if(!multiSelect){
+	       if(!multiSelect){
 	        	//we need to put the text of the first item in the textbox and do a selection
-	            currentCursorPos = textBox.getText().length();
-	            String firstRowDisplayText = (String)((StringObject)scrollList.getDataModel().get(startPos).getObject(0)).getValue();
-	            if(firstRowDisplayText.indexOf(textBox.getText().toUpperCase()) == 0){	   
-	            	textBox.setText(firstRowDisplayText);
-	            	textBox.setSelectionRange(currentCursorPos, firstRowDisplayText.length() - currentCursorPos);
-	            }
-	        }
+	    	   currentCursorPos = textBox.getText().length();
+	    	   String firstRowDisplayText = (String)((StringObject)scrollList.getDataModel().get(startPos).getObject(0)).getValue();
+	    	   if(firstRowDisplayText.indexOf(textBox.getText().toUpperCase()) == 0){	   
+	    		   textBox.setText(firstRowDisplayText);
+	    		   textBox.setSelectionRange(currentCursorPos, firstRowDisplayText.length() - currentCursorPos);
+	    	   }
+	       }
            
 	        //FIXME not sure if this is necessary...
          //   scrollList.getDataModel().select(0);
@@ -345,7 +347,6 @@ HasFocus{
     		index = scrollList.getStart() + scrollList.getActive();
     		textValue = (String)((StringObject)scrollList.getDataModel().get(index).getObject(0)).getValue();
     	}else{
-    		//FIXME we will need to iterate through the model and get the selected indexes
     		selected = scrollList.getSelected();  //vector if indexes
     		
     		for (int i = 0; i < selected.size(); i++) {
@@ -365,7 +366,7 @@ HasFocus{
 		
 		if(multiSelect && selectionLength>-1)
 			textBox.setSelectionRange(0, selectionLength);
-		
+		textBox.setFocus(true);
         complete();
     }
     
@@ -538,8 +539,12 @@ HasFocus{
      * This method will wipe the textbox and set the selection value to null
      */
     public void reset() {
-        this.value = null;
-        textBox.setText("");
+		textBox.setText("");
+		scrollList.unselectAll();
+		scrollList.setStart(0);
+		scrollList.setActive(0);
+		currentStart = -1;
+		currentActive = -1;
     }
 
 	public String getPopupHeight() {
@@ -632,11 +637,11 @@ HasFocus{
 	}
 
 	public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-		focusPanel.removeStyleName("Selected");
+	//	focusPanel.removeStyleName("Selected");
 		
         //we need to set the unselected style name to the textbox
-        textBox.addStyleName("TextboxUnselected");
-        textBox.removeStyleName("TextboxSelected");	
+       // textBox.addStyleName("TextboxUnselected");
+       // textBox.removeStyleName("TextboxSelected");	
 	}
 
 	public void onFocus(Widget sender) {
@@ -646,9 +651,9 @@ HasFocus{
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
 				textBox.setFocus(true);
-				// textBox.setText("");
+				//delete  textBox.setText("");
 				focusPanel.addStyleName("Selected");				
-				
+
 				if(currentStart == -1)
 					currentStart = scrollList.getStart();
 			
@@ -678,10 +683,10 @@ HasFocus{
 					}
 				}
 				
-				clickedArrow = true;
+				//clickedArrow = true;
 				
 				//we need to open the popup like a normal dropdown
-				showMatches(0);
+				//showMatches(0);
 			}
 		}
 	}
@@ -700,6 +705,10 @@ HasFocus{
 				complete();
 			}
 		}
+	}
+	
+	private void onTextBoxTab(){
+		
 	}
 	
 	public ArrayList getSelectedList(){
@@ -742,11 +751,6 @@ HasFocus{
 	}
 	public void clear(){
 		scrollList.getDataModel().clear();
-	}
-	
-	public void clearData(){
-		textBox.setText("");
-		scrollList.unselectAll();
 	}
 	
 	public void addItem(String key, String display){
