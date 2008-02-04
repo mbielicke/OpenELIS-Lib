@@ -1,6 +1,6 @@
 <module>
 	<source path="common"/>
-	<source path="client/services"/>
+	<source path="services"/>
     <public path="public"/>
     <stylesheet src="CSS/EditTable.css"/>
     <stylesheet src="CSS/calendar.css"/>    

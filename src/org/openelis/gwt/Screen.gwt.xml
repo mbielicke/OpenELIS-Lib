@@ -1,4 +1,4 @@
 <module>
-  <source path="client/screen"/>
+  <source path="screen"/>
   <stylesheet src="CSS/screen.css"/>
 </module>

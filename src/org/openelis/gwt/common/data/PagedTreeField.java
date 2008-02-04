@@ -1,6 +1,6 @@
 package org.openelis.gwt.common.data;
 
-import org.openelis.gwt.client.widget.pagedtree.TreeModel;
+import org.openelis.gwt.widget.pagedtree.TreeModel;
 
 import com.google.gwt.xml.client.Node;
 
