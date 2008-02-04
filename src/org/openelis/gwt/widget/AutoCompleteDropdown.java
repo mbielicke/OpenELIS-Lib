@@ -384,6 +384,10 @@ HasFocus{
      * Set the selection that the user made.
      */
     protected void complete() {
+    	//if the textbox is filled out with nothing selected dont do anything because the user is just tabbing through
+    	if(!"".equals(textBox.getText()) && scrollList.getSelected().size() == 0)
+    		return;
+    	
     	if(scrollList == null || textBox.getText().length() == 0){
     		if(textBox.getText().equals("")){
     			textBox.setText("");

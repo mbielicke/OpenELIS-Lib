@@ -247,7 +247,9 @@ public class AutoCompleteTextBox extends Composite implements
 	            visible = false;
 	            return;
 	        }
-	        System.out.println("select false");
+	        if(arg1 == KEY_TAB)
+	        	return;
+	     
 	        selectByEnter = false;
 	        String text = textBox.getText();
 	        value = null;
@@ -607,16 +609,16 @@ public class AutoCompleteTextBox extends Composite implements
 	}
 
 	public void onFocus(Widget sender) {
-		System.out.println("in focus");
+		//System.out.println("in focus");
 		if(!textBox.isReadOnly()){
 			if(sender == textBox){
-				System.out.println("TEXT BOX");
+		//		System.out.println("TEXT BOX");
 //				we need to set the unselected style name to the textbox
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
-				textBox.setFocus(true);
+		//		textBox.setFocus(true);
 				// textBox.setText("");
-				focusPanel.addStyleName("Selected");
+		//		focusPanel.addStyleName("Selected");
 			}
 		}
 	}
