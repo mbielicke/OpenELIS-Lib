@@ -266,7 +266,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             close();
         }
         if(sender == collapse){
-            outer.setWidth(outer.getOffsetWidth()+"px");
+            if(middleRow.isVisible())
+                outer.setWidth(outer.getOffsetWidth()+"px");
+            else
+                outer.setWidth("");
             middleRow.setVisible(!middleRow.isVisible());
             bottomRow.setVisible(!bottomRow.isVisible());
         }
