@@ -122,6 +122,7 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
     }
     
     public void enable(boolean enabled){
+        this.enabled = enabled;
         panel.removeClickListener(this);
         panel.removeFocusListener(this);
         panel.removeKeyboardListener(this);
