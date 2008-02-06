@@ -214,12 +214,14 @@ public class QueryBuilder {
     public static void setParameters(QueryOptionField field,
                                      String fieldName,
                                      Query query) {
+        try {
+            System.out.println("In Query SetParam");
         String paramName = getParamName(fieldName);
         Iterator paramsIt = field.getSelections().iterator();
         int i = 0;
         while (paramsIt.hasNext()) {
             OptionItem param = (OptionItem)paramsIt.next();
-            if (field.getType().equals("string"))
+            if (field.getType().equals("string") || field.getType().equals("alpha"))
                 query.setParameter(paramName + i, param.akey);
             else if (field.getType().equals("integer"))
                 query.setParameter(paramName + i,
@@ -227,6 +229,10 @@ public class QueryBuilder {
             else if (field.getType().equals("double"))
                 query.setParameter(paramName + i, new Double(param.akey.trim()));
             i++;
+        }
+        }catch(Exception e){
+            System.out.println("field: "+fieldName);
+            e.printStackTrace();
         }
     }
     

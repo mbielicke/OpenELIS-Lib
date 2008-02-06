@@ -69,14 +69,14 @@ public class FormCalendarWidget extends Composite implements
         this.week = week;
         textbox.addKeyboardListener(this);
         textbox.addFocusListener(this);    	
-    	textbox.addStyleName("TextboxUnselected");   
+    	textbox.setStyleName("TextboxUnselected");   
     	
     	mainHp.setSpacing(0);    	
     	mainHp.addStyleName("Calendar");
     	
     	calendarImage.addMouseListener(this);
     	calendarImage.addClickListener(this);
-    	calendarImage.addStyleName("CalendarButton");
+    	calendarImage.setStyleName("CalendarButton");
     	
         mainHp.add(textbox);
         mainHp.add(calendarImage);
@@ -198,6 +198,8 @@ public class FormCalendarWidget extends Composite implements
     public void clear() {}
 
     public Object getValue() {
+        if(getText().equals(""))
+            return null;
         Date date = new Date(getText().replaceAll("-", "/"));
         return DatetimeRPC.getInstance(begin, end, date);
     }

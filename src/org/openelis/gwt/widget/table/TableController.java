@@ -698,7 +698,10 @@ public class TableController implements
                     ((TableOption)tcell).fromHidden = (OptionField)model.hidden.get(((TableOption)tcell).loadFromHidden);
                 }
             }
-            ((SimplePanel)tcell).setWidth((curColWidth[j])+ "px");
+            if(tcell instanceof TableCalendar)
+                ((SimplePanel)tcell).setWidth((curColWidth[j]-15)+ "px");
+            else
+                ((SimplePanel)tcell).setWidth((curColWidth[j])+ "px");
             view.table.setWidget(i,j,(Widget)tcell);
             view.table.getFlexCellFormatter().addStyleName(i,
                                                   j,

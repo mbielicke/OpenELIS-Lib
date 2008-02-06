@@ -20,6 +20,7 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
 	private boolean enabled;
     
     public TableCalendar() {
+        setStyleName("TableCalendar");
     	
     }
 
@@ -28,6 +29,8 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
     	this.end = end;
     	this.week = week;
         editor = new FormCalendarWidget(begin,end,week);
+        editor.setWidth("100%");
+        setStyleName("TableCalendar");
     }
 
     public void setDisplay() {
@@ -49,6 +52,7 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
             return;
     	if(editor == null){
     		editor = new FormCalendarWidget(begin,end,week);
+            editor.setWidth("100%");
     	}
     	DatetimeRPC val = (DatetimeRPC)field.getValue();
         if (val != null)
@@ -91,7 +95,8 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
 	public void saveValue() {
         if(!enabled)
             return;
-        field.setValue(editor.getValue());
+        if(editor.getValue() != null)
+            field.setValue(editor.getValue());
 	}
 
 	public void setField(AbstractField field) {
