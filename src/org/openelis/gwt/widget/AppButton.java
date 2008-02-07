@@ -38,6 +38,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
         left.addStyleName("ButtonLeftSide");
         right.addStyleName("ButtonRightSide");
         content.addStyleName("ButtonContent");
+        panel.addMouseListener(this);
     }
     
     public void addClickListener(ClickListener listener) {
