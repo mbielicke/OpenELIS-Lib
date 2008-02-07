@@ -60,12 +60,6 @@ HasFocus{
     };
     
 	private FocusPanel focusPanel = new FocusPanel();
-
-	
-    /**
-     * Callback class for handling returning matches
-     */
-    private GetInitialModel getModelCallback = new GetInitialModel();
     
     /**
      * Widget used to display the suggestions and register
@@ -184,6 +178,7 @@ HasFocus{
     	
    		focusPanel.addMouseListener(this);
        	focusPanel.addClickListener(this);
+       
        	mainHP.add(focusPanel);
        	focusPanel.addStyleName("AutoDropdownButton");
        	
@@ -212,9 +207,7 @@ HasFocus{
     	if(!textBox.isReadOnly() && choicesPopup.isVisible()){
     		if(arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_ENTER || arg1 == KEY_TAB)
     			return;
-    		//if(arg1 == KEY_TAB){
-    		//	screen.doTab(event, comp);
-    		//}
+
 	        if (arg1 == KEY_ESCAPE) {
 	            choicesPopup.hide();
 	            visible = false;
@@ -259,12 +252,9 @@ HasFocus{
 	        choicesPopup.addPopupListener(this);
 			choicesPopup.setPopupPosition(this.getAbsoluteLeft(),
                     this.getAbsoluteTop() + this.getOffsetHeight()-1);
-			//choicesPopup.setWidth("1px");
 			
 			choicesPopup.show();
-//			we need to load the model if it is coming from the database here
-		       //	if(fromModel)
-		      // 		autoService.getInitialModel(cat, getModelCallback);
+
 			scrollList.addChangeListener(this);
 
 			scrollList.addStyleName("Dropdown");
@@ -287,13 +277,8 @@ HasFocus{
 	        if(clickedArrow && scrollList.getActive() > -1 && currentStart > -1 && currentActive > -1)
 	        	startPos = currentStart + currentActive;
 	        
-	        //Window.alert(String.valueOf(startPos));
-	        
 	        if(!multiSelect)
 	        	scrollList.getDataModel().get(startPos).getObject(2).setValue(new Boolean(true));
-	        
-	        //Window.alert("after");
-	       //FIXME this could be hosing the selection...look into this
 	        
 	        //then the active might not be the first one...
 	       if(startPos > scrollList.getDataModel().size()-scrollList.getMaxRows() && !multiSelect){
@@ -324,50 +309,52 @@ HasFocus{
 	    	   }
 	       }
            
-	        //FIXME not sure if this is necessary...
-         //   scrollList.getDataModel().select(0);
-            visible = true;         
+           visible = true;         
             
         } else {
             visible = false;
             choicesPopup.hide();
         }
-        clickedArrow = false;
     }
 
     /**
      * A mouseclick in the list of items
      */
     public void onChange(Widget arg0) {
-    	int index = -1;
-    	Vector selected = new Vector();
-    	String textValue = "";
-    	int selectionLength = -1;
-    	if(!multiSelect){
-    		index = scrollList.getStart() + scrollList.getActive();
-    		textValue = (String)((StringObject)scrollList.getDataModel().get(index).getObject(0)).getValue();
+    	if(scrollList.getActive() > -1){
+	    	int index = -1;
+	    	Vector selected = new Vector();
+	    	String textValue = "";
+	    	int selectionLength = -1;
+	    	if(!multiSelect){
+	    		index = scrollList.getStart() + scrollList.getActive();
+	    		textValue = (String)((StringObject)scrollList.getDataModel().get(index).getObject(0)).getValue();
+	    	}else{
+	    		selected = scrollList.getSelected();  //vector if indexes
+	    		
+	    		for (int i = 0; i < selected.size(); i++) {
+	    			if(i+1 == selected.size())
+	    				selectionLength = ((String)((StringObject)scrollList.getDataModel().get(((Integer)selected.get(i)).intValue()).getObject(0)).getValue()).length();
+	    			
+	        		textValue = (String)((StringObject)scrollList.getDataModel().get(((Integer)selected.get(i)).intValue()).getObject(0)).getValue()+(!"".equals(textValue)?"|":"")+textValue;
+	    		}
+	    		
+	    		multiSelected = selected;
+	    	}
+	    	
+	    	DOM.removeEventPreview(scrollList);
+	    	
+			textBox.setText(textValue);
+			textBoxDefault = textValue;
+			
+			if(multiSelect && selectionLength>-1)
+				textBox.setSelectionRange(0, selectionLength);
+
+	        complete();
+	        clickedArrow = false;
     	}else{
-    		selected = scrollList.getSelected();  //vector if indexes
-    		
-    		for (int i = 0; i < selected.size(); i++) {
-    			if(i+1 == selected.size())
-    				selectionLength = ((String)((StringObject)scrollList.getDataModel().get(((Integer)selected.get(i)).intValue()).getObject(0)).getValue()).length();
-    			
-        		textValue = (String)((StringObject)scrollList.getDataModel().get(((Integer)selected.get(i)).intValue()).getObject(0)).getValue()+(!"".equals(textValue)?"|":"")+textValue;
-    		}
-    		
-    		multiSelected = selected;
+    		choicesPopup.hide();
     	}
-    	
-    	DOM.removeEventPreview(scrollList);
-    	
-		textBox.setText(textValue);
-		textBoxDefault = textValue;
-		
-		if(multiSelect && selectionLength>-1)
-			textBox.setSelectionRange(0, selectionLength);
-		textBox.setFocus(true);
-        complete();
     }
     
     private class GetInitialModel implements AsyncCallback {
@@ -458,10 +445,10 @@ HasFocus{
 	        	if (value != null && !val.equals("")){
 	        		StringField stringField = new StringField();
 	        		stringField.setValue(val);
-	     
+	        		reset();
 	                getDisplay(stringField);
 	        	}else
-	                textBox.setText("");
+	               reset();
 	        }else if(type.equals("integer")){
 	        	Integer val = (Integer)value;
 	        	this.value = value;
@@ -469,10 +456,10 @@ HasFocus{
 	                NumberField numberField = new NumberField();
 	                numberField.setType("integer");
 	                numberField.setValue(val);
-
+	                reset();
 	        		getDisplay(numberField);
 	        	}else
-	                textBox.setText("");
+	        		reset();
 	        }
     	}
     }
@@ -508,8 +495,7 @@ HasFocus{
 			tempStartPos = i;
 			this.startPos = i;
 		}
-    
-		//FIXME not sure what this is for...taking it out for now...
+
 		if(tempStartPos == -1 && !textBox.getText().equals("")){
     		//set textbox text back to what it was before
     		textBox.setText(textBox.getText().substring(0,currentCursorPos));	
@@ -543,10 +529,11 @@ HasFocus{
      * This method will wipe the textbox and set the selection value to null
      */
     public void reset() {
+    	textBoxDefault = null;
 		textBox.setText("");
 		scrollList.unselectAll();
 		scrollList.setStart(0);
-		scrollList.setActive(0);
+		scrollList.setActive(-1);
 		currentStart = -1;
 		currentActive = -1;
     }
@@ -592,13 +579,8 @@ HasFocus{
 				}
 				
 				clickedArrow = true;
-				//FIXME we need to fill the model if it is null
-				if(scrollList.getDataModel().size() == 0)
-					System.out.println("model null");
 				
-				showMatches(0);
-			}else{
-				//do nothing for now    popupShowing = true;
+				showMatches(0);				
 			}
 		}		
 	}
@@ -627,10 +609,7 @@ HasFocus{
 		}
 	}
 
-	public void onMouseMove(Widget sender, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onMouseMove(Widget sender, int x, int y) {}
 
 	public void onMouseUp(Widget sender, int x, int y) {
 		if(!textBox.isReadOnly()){
@@ -641,11 +620,15 @@ HasFocus{
 	}
 
 	public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-	//	focusPanel.removeStyleName("Selected");
+		if(clickedArrow){
+		focusPanel.removeStyleName("Selected");
 		
         //we need to set the unselected style name to the textbox
-       // textBox.addStyleName("TextboxUnselected");
-       // textBox.removeStyleName("TextboxSelected");	
+        textBox.addStyleName("TextboxUnselected");
+        textBox.removeStyleName("TextboxSelected");
+        clickedArrow = false;
+		}
+		visible = false;
 	}
 
 	public void onFocus(Widget sender) {
@@ -686,11 +669,6 @@ HasFocus{
 						}
 					}
 				}
-				
-				//clickedArrow = true;
-				
-				//we need to open the popup like a normal dropdown
-				//showMatches(0);
 			}
 		}
 	}
@@ -707,7 +685,8 @@ HasFocus{
 				focusPanel.removeStyleName("Selected");
 				
 				complete();
-			}
+			}else
+				Window.alert(sender.toString());
 		}
 	}
 	
@@ -804,8 +783,11 @@ HasFocus{
 	}
 
 	public void setFocus(boolean focused) {
+		if(focused){
+			focusPanel.setFocus(true);
+			focusPanel.setFocus(false);
+		}
 		textBox.setFocus(focused);
-		
 	}
 
 	public void setTabIndex(int index) {
@@ -839,5 +821,13 @@ HasFocus{
 
 	public boolean isFromModel() {
 		return fromModel;
+	}
+	
+	public boolean isPopUpVisible(){
+		return visible;
+	}
+	
+	public void closePopup(){
+		choicesPopup.hide();
 	}
 }

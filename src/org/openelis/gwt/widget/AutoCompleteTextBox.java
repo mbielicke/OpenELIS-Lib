@@ -90,7 +90,7 @@ public class AutoCompleteTextBox extends Composite implements
     /**
      * Category for which suggestions we are trying to match
      */
-    private String cat;
+    public String cat;
     /**
      * Callback class for handling returning matches
      */
@@ -451,10 +451,10 @@ public class AutoCompleteTextBox extends Composite implements
         		StringField stringField = new StringField();
         		stringField.setValue(val);
         		DataModel model = null;
-       
+        		reset();
                 autoService.getDisplay(cat, model, stringField, displayCallback);
         	}else
-                textBox.setText("");
+        		reset();
         }else if(type.equals("integer")){
         	Integer val = (Integer)value;
         	this.value = value;
@@ -463,10 +463,10 @@ public class AutoCompleteTextBox extends Composite implements
                 numberField.setType("integer");
                 numberField.setValue(val);
                 DataModel model = null;
-        		
+                reset();
         		autoService.getDisplay(cat, model, numberField, displayCallback);
         	}else
-                textBox.setText("");
+        		reset();
         }
     }
 
@@ -537,8 +537,9 @@ public class AutoCompleteTextBox extends Composite implements
      * This method will wipe the textbox and set the selection value to null
      */
     public void reset() {
-        this.value = null;
+       // this.value = null;
         textBox.setText("");
+    	textBoxDefault = null;
     }
 
 	public String getPopupHeight() {

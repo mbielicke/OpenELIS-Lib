@@ -2,8 +2,6 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
@@ -14,6 +12,8 @@ import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -30,6 +30,7 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 
 	public AutoCompleteDropdown editor;
 	private Label display;
+	
 	//this should be the id of the selected element
 	private AbstractField field;
 	private StringField textValue = new StringField();
@@ -111,10 +112,6 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
         Node headersNode = ((Element)node).getElementsByTagName("autoHeaders").item(0);
         Node editorsNode = ((Element)node).getElementsByTagName("autoEditors").item(0);
         Node fieldsNode = ((Element)node).getElementsByTagName("autoFields").item(0);
-        //Node filtersNode = ((Element)node).getElementsByTagName("filters").item(0);
-        //Node sortsNode = ((Element)node).getElementsByTagName("sorts").item(0);
-        //Node alignNode = ((Element)node).getElementsByTagName("colAligns").item(0);
-        //Node statFilter = ((Element)node).getElementsByTagName("statFilters").item(0);
         Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
         auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width);
@@ -169,6 +166,7 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 				textValue.setValue(editor.textBox.getText());
 			}		
 		}
+		editor.closePopup();
 	}
 
 	//the editor is shared so we need to set the textvalue
@@ -178,24 +176,18 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 			display.setWordWrap(false);
 		}
 		
-		//if(editor.textBox.getText() != null && !"".equals(editor.textBox.getText()))
-		//	display.setText(editor.textBox.getText());
-		//else
-			display.setText((String)textValue.getValue());
+		display.setText((String)textValue.getValue());
 
 		setWidget(display);		
 	}
 
 	public void setEditor() {
-		if(editor == null){
+		if(editor == null)
 			editor = new AutoCompleteDropdown();
-		}
-		//FIXME need to add some params to this dropdown
-		editor.setValue(field.getValue());
-		editor.textBox.setText(display.getText());
-
-		setWidget(editor);	
 		
+		editor.setValue(field.getValue());
+
+		setWidget(editor);			
 	}
 
 	public void setField(AbstractField field) {
@@ -212,13 +204,9 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 		if(field.getValue() != null){
 			for (int i = 0; i < model.size(); i++) {
 				DataSet set = model.get(i);
-				//if(set.getObject(0) instanceof NumberObject){
 					if(set.getObject(1).getValue().equals(field.getValue())){
 						textValue = (String)((StringObject)set.getObject(0)).getValue();
-					}
-				//}else if(set.getObject(0) instanceof StringObject){
-					
-				//}			
+					}	
 			}
 		}
 		return textValue;
@@ -316,10 +304,7 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
         return dataModel;
 	}
 
-	public void enable(boolean enabled) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void enable(boolean enabled) {}
 	
 	public void setModel(DataModel model){
 		editor.setModel(model);

@@ -389,6 +389,10 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             if (DOM.eventGetType(event) == Event.ONCLICK){
                 if(!DOM.isOrHasChild(vp.getElement(), DOM.eventGetTarget(event))){
                     DOM.removeEventPreview(this);
+                    
+                    if(changeListeners != null)
+                    	changeListeners.fireChange(this);
+                    
                     return true;
                 }
                 if(multi && ctrl && !DOM.eventGetCtrlKey(event)){

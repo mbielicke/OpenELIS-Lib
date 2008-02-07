@@ -2,20 +2,27 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.NumberObject;
+import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.services.AutoCompleteServiceInt;
+import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
 import org.openelis.gwt.widget.AutoCompleteTextBox;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -40,9 +47,22 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
     private String fieldCase = "mixed";
     private boolean fromModel = false;
     private String type = "";
+    private String url="";
     
-    public OptionField fromHidden;
-    
+    private AutoCompleteServiceIntAsync autoService = (AutoCompleteServiceIntAsync)GWT.create(AutoCompleteServiceInt.class);
+    private ServiceDefTarget target = (ServiceDefTarget)autoService;
+
+    /**
+     * This Method will set the url for the AutoCompleteService.
+     * 
+     * @param url
+     */
+    public void initService(String url) {
+        String base = GWT.getModuleBaseURL();
+        base += url;
+        target.setServiceEntryPoint(base);
+    }
+        
     public TableAuto(){
     	sinkEvents(Event.KEYEVENTS);
     }
@@ -50,33 +70,36 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
     public TableCellWidget getNewInstance() {
     	TableAuto ta = new TableAuto();
         ta.multi = multi;
-        ta.fromHidden = fromHidden;
         ta.visible = visible;
         ta.loadFromHidden = loadFromHidden;
         ta.loadFromModel = loadFromModel;
         ta.editor = editor;
         ta.listener = listener;
         ta.type = type;
+        ta.url = url;
+        ta.initService(url);
         return ta;
     }
     
     public TableAuto getNewTableAuto() {
     	TableAuto ta = new TableAuto();
         ta.multi = multi;
-        ta.fromHidden = fromHidden;
         ta.visible = visible;
         ta.loadFromHidden = loadFromHidden;
         ta.loadFromModel = loadFromModel;
         ta.editor = editor;
         ta.listener = listener;
         ta.type = type;
+        ta.url = url;
+        ta.initService(url);
+        
         return ta;
     }
     
 	public Widget getInstance(Node node) {
 		AutoCompleteTextBox auto = new AutoCompleteTextBox();
 		String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
-        String url = node.getAttributes()
+        url = node.getAttributes()
                          .getNamedItem("serviceUrl")
                          .getNodeValue();
         
@@ -113,6 +136,8 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
         Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
         auto = new AutoCompleteTextBox(cat, url, dropDown, textBoxDefault, width);
+        
+        initService(url);
         
         if(widthsNode != null) {
         	auto.setWidths(getWidths(widthsNode));
@@ -171,7 +196,19 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 		//if(editor.textBox.getText() != null && !"".equals(editor.textBox.getText()))
 		//	display.setText(editor.textBox.getText());
 		//else
-			display.setText((String)textValue.getValue());
+		//need to get the display
+		autoService.getDisplay(editor.cat, editor.getModel(), field, new AsyncCallback() {
+	           public void onSuccess(Object result){
+	               DataModel model = (DataModel)result;
+	               display.setText((String)((StringObject)model.get(0).getObject(1)).getValue());
+	           }
+	           public void onFailure(Throwable caught){
+	               Window.alert(caught.getMessage());
+	           }
+	        });
+		
+		//display.setText((String)editor.textBox.getText());
+		//	display.setText((String)textValue.getValue());
 
 		setWidget(display);		
 	}
@@ -180,9 +217,8 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 		if(editor == null){
 			editor = new AutoCompleteTextBox();
 		}
-		//FIXME need to add some params to this dropdown
+
 		editor.setValue(field.getValue());
-		editor.textBox.setText(display.getText());
 
 		setWidget(editor);	
 		
@@ -191,11 +227,13 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 	public void setField(AbstractField field) {
 		this.field = field;
 		
+		//setEditor();
+		
 		//we need to also set the display value because we cant guarantee its the same
-		this.textValue.setValue(getTextValueFromId(field));
+		//this.textValue.setValue(getTextValueFromId(field));
 	}
 	
-	private String getTextValueFromId(AbstractField field){
+	/*private String getTextValueFromId(AbstractField field){
 		DataModel model = editor.getModel();
 		String textValue = "";
 		if(field.getValue() != null){
@@ -211,7 +249,7 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 			}
 		}
 		return textValue;
-	}
+	}*/
 	
 	public int[] getWidths(Node node){
    	 String[] widths = node.getFirstChild()
