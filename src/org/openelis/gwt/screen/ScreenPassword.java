@@ -82,8 +82,13 @@ public class ScreenPassword extends ScreenInputWidget {
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
-        else
+        else{
             textbox.setReadOnly(!enabled);
+            if(enabled)
+                textbox.addFocusListener(this);
+            else
+                textbox.removeFocusListener(this);
+        }
     }
     
     public void setFocus(boolean focus){

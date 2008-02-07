@@ -149,6 +149,10 @@ public class FormCalendarWidget extends Composite implements
         textbox.addFocusListener(listener);
     }
 
+    public void removeFocusListener(FocusListener listener){
+        textbox.removeFocusListener(listener);
+    }
+    
     public void addKeyboardListener(KeyboardListener listener) {
         textbox.addKeyboardListener(listener);
     }
@@ -172,10 +176,12 @@ public class FormCalendarWidget extends Composite implements
 
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
         final CalendarWidget calendar = new CalendarWidget(week);
+        calendar.window.setVisible(false);
         calendar.window.setPopupPosition(sender.getAbsoluteLeft(),
                                          sender.getAbsoluteTop());
         calendar.setCurrentTime();
         calendar.window.show();
+        calendar.window.setVisible(true);
         final Widget change = this;
         calendar.addChangeListener(new ChangeListener() {
             public void onChange(Widget sender) {

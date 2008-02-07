@@ -87,8 +87,13 @@ public class ScreenRadio extends ScreenInputWidget {
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
-        else
+        else{
             radio.setEnabled(enabled);
+            if(enabled)
+                radio.addFocusListener(this);
+            else
+                radio.removeFocusListener(this);
+        }
     }
     
     public void setFocus(boolean focus){

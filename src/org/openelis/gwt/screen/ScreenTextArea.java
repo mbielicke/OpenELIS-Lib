@@ -65,7 +65,6 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
             textarea.sinkEvents(Event.KEYEVENTS);
         }
         
-        textarea.addFocusListener(this);
         initWidget(textarea);
         displayWidget = textarea;
         textarea.setStyleName("ScreenTextArea");
@@ -96,8 +95,13 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
-        else
+        else{
             textarea.setReadOnly(!enabled);
+            if(enabled)
+                textarea.addFocusListener(this);
+            else
+                textarea.removeFocusListener(this);
+        }
     }
     
     public void setFocus(boolean focus){

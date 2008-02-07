@@ -120,8 +120,13 @@ public class ScreenCalendar extends ScreenInputWidget {
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
-        else
+        else{
             cal.setEnabled(enabled);
+            if(enabled)
+                cal.addFocusListener(this);
+            else
+                cal.removeFocusListener(this);
+        }
     }
     
     public void destroy() {

@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -62,10 +63,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             errorImg.addMouseListener(this);
             hp.add(errorImg);
         }
-        if(widget instanceof HasFocus){
+        /*if(widget instanceof HasFocus){
             ((HasFocus)widget).removeFocusListener(this);
             ((HasFocus)widget).addFocusListener(this);
-        }
+        }*/
         if(hp.getWidgetCount() > 1){
             hp.remove(0);
         }

@@ -197,8 +197,13 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
-        else
+        else{
             auto.textBox.setReadOnly(!enabled);
+            if(enabled)
+                auto.addFocusListener(this);
+            else
+                auto.removeFocusListener(this);
+        }
     }
     
     public void destroy() {

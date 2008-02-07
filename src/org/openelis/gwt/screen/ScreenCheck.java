@@ -98,8 +98,13 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(true);
-        else
+        else{
             check.setEnabled(enabled);
+            if(enabled)
+                check.addFocusListener(this);
+            else
+                check.removeFocusListener(this);
+        }
     }
     
     public void setFocus(boolean focus){

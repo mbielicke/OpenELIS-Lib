@@ -83,7 +83,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             textbox.setMaxLength(length);
         }
         textbox.addStyleName("NoFocus");
-        textbox.addFocusListener(this);
         initWidget(textbox);
         displayWidget = textbox;
         setDefaults(node, screen);
@@ -119,6 +118,10 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     
     public void enable(boolean enabled){
         textbox.setReadOnly(!enabled);
+        if(enabled){
+            textbox.addFocusListener(this);
+        }else
+            textbox.removeFocusListener(this);
     }
     
     public void setFocus(boolean focus){

@@ -67,7 +67,6 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
             next = node.getAttributes().getNamedItem("next").getNodeValue();
         }
         maskbox.setMask(mask);
-        maskbox.addFocusListener(this);
         initWidget(maskbox);
         displayWidget = maskbox;
         maskbox.setStyleName("ScreenMaskedBox");
@@ -98,6 +97,10 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     
     public void enable(boolean enabled){
         maskbox.setReadOnly(!enabled);
+        if(enabled)
+            maskbox.addFocusListener(this);
+        else
+            maskbox.removeFocusListener(this);
     }
     
     public void setFocus(boolean focus){

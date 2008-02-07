@@ -59,7 +59,6 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
                 }
             }
         };
-        optionlist.addFocusListener(this);
         if (node.getAttributes().getNamedItem("onChange") != null){
         	String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
         	if (listener.equals("this"))
@@ -129,6 +128,10 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
     
     public void enable(boolean enabled){
         this.enabled = enabled;
+        if(enabled)
+            optionlist.addFocusListener(this);
+        else
+            optionlist.removeFocusListener(this);
     }
 
     public void onFocus(Widget sender) {
