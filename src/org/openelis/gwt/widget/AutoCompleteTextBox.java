@@ -469,6 +469,33 @@ public class AutoCompleteTextBox extends Composite implements
         		reset();
         }
     }
+    
+    public void setTableValue(Object value, String textBoxValue){
+    	if(type.equals("string")){
+        	String val = (String)value;
+        	this.value = value;
+        	if (value != null && !val.equals("")){
+        		StringField stringField = new StringField();
+        		stringField.setValue(val);
+        		DataModel model = null;
+        		reset();
+                textBox.setText(textBoxValue);
+        	}else
+        		reset();
+        }else if(type.equals("integer")){
+        	Integer val = (Integer)value;
+        	this.value = value;
+        	if (value != null && val.intValue() > 0){
+                NumberField numberField = new NumberField();
+                numberField.setType("integer");
+                numberField.setValue(val);
+                DataModel model = null;
+                reset();
+                textBox.setText(textBoxValue);
+        	}else
+        		reset();
+        }
+    }
 
     /**
      * GetDisplay Calls the RemoteServlet to get the display for the set value

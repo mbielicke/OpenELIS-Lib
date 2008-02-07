@@ -218,7 +218,7 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 			editor = new AutoCompleteTextBox();
 		}
 
-		editor.setValue(field.getValue());
+		editor.setTableValue(field.getValue(),display.getText());
 
 		setWidget(editor);	
 		
