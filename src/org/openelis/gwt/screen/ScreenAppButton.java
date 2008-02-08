@@ -54,6 +54,13 @@ public class ScreenAppButton extends ScreenWidget {
     public ScreenWidget getInstance(Node node, ScreenBase screen){
         return new ScreenAppButton(node,screen);
     }
+    
+    public void enable(boolean enabled){
+        if(enabled)
+            button.changeState(AppButton.UNPRESSED);
+        else
+            button.changeState(AppButton.DISABLED);
+    }
 
     public void destroy() {
         button = null;

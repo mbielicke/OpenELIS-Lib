@@ -60,7 +60,9 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 }
                 Node widthsNode = ((Element)node).getElementsByTagName("widths")
                                                  .item(0);
-                Node headersNode = ((Element)node).getElementsByTagName("headers")
+                Node headersNode = null;
+                if(((Element)node).getElementsByTagName("headers").getLength() > 0)
+                    headersNode = ((Element)node).getElementsByTagName("headers")
                                                   .item(0);
                 Node editorsNode = ((Element)node).getElementsByTagName("editors")
                                                   .item(0);
@@ -109,6 +111,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     }
                     table.setColWidths(width);
                 }
+                if(headersNode != null){
                 if (headersNode.getAttributes().getNamedItem("constants") != null) {
                     String[] headerNames = headersNode.getFirstChild()
                                                       .getNodeValue()
@@ -122,6 +125,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     table.setHeaders(headersNode.getFirstChild()
                                                .getNodeValue()
                                                .split(","));
+                }
                 }
                 if (filtersNode != null) {
                     String[] filters = filtersNode.getFirstChild()

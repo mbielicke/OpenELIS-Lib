@@ -104,14 +104,15 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     
     public void initTable(TableController controller) {
         this.controller = controller;
+        if(title != null && !title.equals("")){
+            titleLabel.setText(title);
+            titlePanel.add(titleLabel);
+            titlePanel.addStyleName("TitlePanel");
+        }
         if(headers != null){
             header.setCellSpacing(0);
             
-            if(title != null && !title.equals("")){
-            	titleLabel.setText(title);
-            	titlePanel.add(titleLabel);
-            	titlePanel.addStyleName("TitlePanel");
-            }
+
             int j = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
