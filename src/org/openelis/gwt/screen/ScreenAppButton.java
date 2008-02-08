@@ -47,6 +47,9 @@ public class ScreenAppButton extends ScreenWidget {
                 button.setWidget(wid);
             }
         }
+        if (node.getAttributes().getNamedItem("onclick") != null){
+            button.addClickListener(screen);
+        }
         initWidget(button);
         setDefaults(node, screen);
     }
@@ -56,7 +59,7 @@ public class ScreenAppButton extends ScreenWidget {
     }
     
     public void enable(boolean enabled){
-        if(enabled)
+        if(enabled || alwaysEnabled)
             button.changeState(AppButton.UNPRESSED);
         else
             button.changeState(AppButton.DISABLED);
