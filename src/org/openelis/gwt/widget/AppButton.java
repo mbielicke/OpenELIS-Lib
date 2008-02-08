@@ -38,6 +38,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
         left.addStyleName("ButtonLeftSide");
         right.addStyleName("ButtonRightSide");
         content.addStyleName("ButtonContent");
+        panel.addMouseListener(this);
     }
     
     public void addClickListener(ClickListener listener) {
@@ -57,16 +58,12 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
         if(state == UNPRESSED){
             panel.removeStyleName("disabled");
             panel.removeStyleName("Pressed");
-            panel.removeMouseListener(this);
-            panel.addMouseListener(this);
             removeClickListener(listener);
             addClickListener(listener);
         }
         if(state == PRESSED){
             panel.removeStyleName("disabled");
             panel.addStyleName("Pressed");
-            panel.removeMouseListener(this);
-            panel.addMouseListener(this);
             removeClickListener(listener);
             addClickListener(listener);
         }
@@ -74,7 +71,6 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
             panel.removeStyleName("Pressed");
             panel.addStyleName("disabled");
             removeClickListener(listener);
-            panel.removeMouseListener(this);
         }
     }
 
@@ -89,7 +85,8 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     }
 
     public void onMouseEnter(Widget sender) {
-       panel.addStyleName("Hover");
+        if(state != AppButton.DISABLED)
+            panel.addStyleName("Hover");
         
     }
 
