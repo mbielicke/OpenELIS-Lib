@@ -64,6 +64,7 @@ public class ScreenWidget extends SimplePanel implements
     protected ScreenBase screen;
     public String hoverStyle = "Hover";
     public String key;
+    public boolean alwaysEnabled;
    
     public ScreenWidget() {
     }
@@ -247,6 +248,10 @@ public class ScreenWidget extends SimplePanel implements
         }
         if (node.getAttributes().getNamedItem("tip") != null){
             setTitle(node.getAttributes().getNamedItem("tip").getNodeValue());
+        }
+        if (node.getAttributes().getNamedItem("alwaysEnabled") != null){
+            if (node.getAttributes().getNamedItem("alwaysEnabled").getNodeValue().equals("true"))
+                alwaysEnabled = true;
         }
     }
 
