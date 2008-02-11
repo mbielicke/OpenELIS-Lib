@@ -1187,8 +1187,11 @@ public class TableController implements
     private class TableCallback implements AsyncCallback {
         public void onSuccess(Object result) {
             if (result != null) {
-                if(modelSet)
+                if(modelSet){
+                    if (autoAdd)
+                        ((TableModel)result).addRow(null);
                     loadModel((TableModel)result);
+                }
                 else
                     setModel((TableModel)result);
                 if(setRow > -1)

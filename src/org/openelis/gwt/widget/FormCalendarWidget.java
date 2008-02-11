@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenCalendar;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
@@ -191,6 +192,8 @@ public class FormCalendarWidget extends Composite implements
                 setDate(DatetimeRPC.getInstance(begin, end, newDate));
                 calendar.window.close();
                 changeListeners.fireChange(change);
+                setFocus(true);
+                setFocus(false);
             }
         });
     }
