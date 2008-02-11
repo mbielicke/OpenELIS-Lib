@@ -1,11 +1,10 @@
 package org.openelis.gwt.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import org.openelis.gwt.common.FormRPC;
-import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface AppScreenFormServiceIntAsync extends AppScreenServiceIntAsync {
 
