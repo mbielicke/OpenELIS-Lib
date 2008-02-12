@@ -488,7 +488,7 @@ HasFocus{
     	DataModel model = scrollList.getDataModel();
     	int tempStartPos = -1;
 		int i=0;
-		while(i<model.size() && ((String)model.get(i).getObject(0).getValue()).indexOf(match) != 0){
+		while(i<model.size() && ((String)model.get(i).getObject(0).getValue()).toUpperCase().indexOf(match.toUpperCase()) != 0){
 			i++;
 		}
 		if(i < model.size()){
@@ -498,7 +498,8 @@ HasFocus{
 
 		if(tempStartPos == -1 && !textBox.getText().equals("")){
     		//set textbox text back to what it was before
-    		textBox.setText(textBox.getText().substring(0,currentCursorPos));	
+    		textBox.setText(textBox.getText().substring(0,currentCursorPos));
+    		this.startPos = 0;
     	}
 		
         showMatches(this.startPos);
