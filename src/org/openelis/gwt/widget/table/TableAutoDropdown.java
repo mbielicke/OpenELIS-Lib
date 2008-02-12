@@ -26,13 +26,12 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class TableAutoDropdown extends SimplePanel implements TableCellWidget, EventPreview {
+public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
 
 	public AutoCompleteDropdown editor;
 	private Label display;
 	
 	//this should be the id of the selected element
-	private AbstractField field;
 	private StringField textValue = new StringField();
     private ChangeListener listener;
 	
@@ -167,6 +166,7 @@ public class TableAutoDropdown extends SimplePanel implements TableCellWidget, E
 			}		
 		}
 		editor.closePopup();
+        super.saveValue();
 	}
 
 	//the editor is shared so we need to set the textvalue

@@ -53,11 +53,11 @@ public class NumberField extends AbstractField implements Serializable {
         if (object.getValue() == null)
             return true;
         if (max != null && ((NumberObject)object).value.doubleValue() > max.doubleValue()) {
-            addError("Field exceeded maximum length");
+            addError("Field exceeded maximum value");
             return false;
         }
         if (min != null && ((NumberObject)object).value.doubleValue() < min.doubleValue()) {
-            addError("Field is below minimum length");
+            addError("Field is below minimum value");
             return false;
         }
         return true;

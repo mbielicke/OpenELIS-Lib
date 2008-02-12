@@ -15,11 +15,10 @@ import org.openelis.gwt.widget.MaskedTextBox;
  * @author tschmidt
  * 
  */
-public class TableMaskedTextBox extends SimplePanel implements TableCellWidget {
+public class TableMaskedTextBox extends TableCellInputWidget {
 	
 	private MaskedTextBox editor;
 	private Label display;
-	private AbstractField field;
 	private String mask;
     private boolean enabled;
 	
@@ -70,6 +69,7 @@ public class TableMaskedTextBox extends SimplePanel implements TableCellWidget {
 	public void saveValue() {
         editor.format();
 		field.setValue(editor.getText());
+        super.saveValue();
 	}
 
 	public void setField(AbstractField field) {

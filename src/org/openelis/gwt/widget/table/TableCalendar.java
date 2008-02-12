@@ -9,11 +9,10 @@ import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
-public class TableCalendar extends SimplePanel implements TableCellWidget {
+public class TableCalendar extends TableCellInputWidget {
 
 	private FormCalendarWidget editor;
 	private Label display;
-	private AbstractField field;
 	private byte begin = 0;
 	private byte end = 2;
 	private boolean week = false;
@@ -97,6 +96,7 @@ public class TableCalendar extends SimplePanel implements TableCellWidget {
             return;
         if(editor.getValue() != null)
             field.setValue(editor.getValue());
+        super.saveValue();
 	}
 
 	public void setField(AbstractField field) {

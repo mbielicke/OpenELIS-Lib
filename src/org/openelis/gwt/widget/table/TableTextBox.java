@@ -3,7 +3,6 @@ package org.openelis.gwt.widget.table;
 import org.openelis.gwt.common.data.AbstractField;
 
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -15,13 +14,12 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  * 
  */
-public class TableTextBox extends SimplePanel implements TableCellWidget{
+public class TableTextBox extends TableCellInputWidget {
     
     public String fieldCase = "";
     private int length = -1;
     private TextBox editor;
     private Label display;
-    private AbstractField field;
     private boolean enabled;
     
     public TableTextBox() {
@@ -52,7 +50,10 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
             else if(fieldCase.equals("lower"))
                 display.addStyleName("Lower");
     	}
-        display.setText((String)field.getValue());
+        if(field.getValue() != null)
+            display.setText(field.getValue().toString());
+        else
+            display.setText("");
         setWidget(display);
     }
 
@@ -69,7 +70,10 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
     		if(length > -1)
     			editor.setMaxLength(length);    	
     	}
-    	editor.setText((String)field.getValue());
+        if(field.getValue() != null)
+            editor.setText(field.getValue().toString());
+        else
+            editor.setText("");
         setWidget(editor);
     }
 
@@ -91,6 +95,7 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
         else if(fieldCase.equals("lower"))
             val = val.toLowerCase();
 		field.setValue(val);
+        super.saveValue();
 	}
 
 	public void setField(AbstractField field) {

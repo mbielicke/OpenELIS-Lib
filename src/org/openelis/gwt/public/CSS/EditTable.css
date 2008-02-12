@@ -203,3 +203,8 @@ a.index:hover{
     background:blue;
 }*/
 
+.CellError {
+   background:red;
+   height:85%;
+}
+

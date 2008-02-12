@@ -620,7 +620,7 @@ public class TableController implements
         try{
         	TableCellWidget cell = (TableCellWidget)view.table.getWidget(row, col);
         	cell.setDisplay();
-            DOM.setStyleAttribute(((SimplePanel)cell).getWidget().getElement(), "overflowX", "hidden");
+            DOM.setStyleAttribute(cell.getWidget().getElement(), "overflowX", "hidden");
         }catch(Exception e){
             Window.alert("setCell Display "+e.getMessage());
         }

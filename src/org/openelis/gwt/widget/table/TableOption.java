@@ -25,11 +25,10 @@ import java.util.Iterator;
  * @author tschmidt
  * 
  */
-public class TableOption extends SimplePanel implements TableCellWidget {
+public class TableOption extends TableCellInputWidget {
 	
 	private OptionList editor;
 	private Label display;
-	private AbstractField field;
     private ChangeListener listener;
 	
     public boolean loadFromModel;
@@ -152,6 +151,7 @@ public class TableOption extends SimplePanel implements TableCellWidget {
         }else
             field.setValue(editor.getValue());
         display.setTitle(field.getTip());
+        super.saveValue();
 	}
 
 	public void setField(AbstractField field) {

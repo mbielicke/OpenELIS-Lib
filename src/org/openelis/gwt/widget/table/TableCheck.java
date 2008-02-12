@@ -20,11 +20,10 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  * 
  */
-public class TableCheck extends SimplePanel implements TableCellWidget, ClickListener, KeyboardListener, FocusListener {
+public class TableCheck extends TableCellInputWidget implements ClickListener, KeyboardListener, FocusListener {
 
 	private Image editor;
     private FocusPanel panel;
-	private AbstractField field;
     private boolean enabled;
 	
 	public TableCheck() {
@@ -75,7 +74,7 @@ public class TableCheck extends SimplePanel implements TableCellWidget, ClickLis
 
 	public void saveValue() {
 		//field.setValue(new Boolean(editor.isChecked()));
-		
+		super.saveValue();
 	}
 
 	public void setField(AbstractField field) {
