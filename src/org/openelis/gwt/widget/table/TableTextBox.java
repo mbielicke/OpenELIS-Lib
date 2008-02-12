@@ -18,6 +18,7 @@ import com.google.gwt.xml.client.Node;
 public class TableTextBox extends SimplePanel implements TableCellWidget{
     
     public String fieldCase = "";
+    private int length = -1;
     private TextBox editor;
     private Label display;
     private AbstractField field;
@@ -38,6 +39,7 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
         TableTextBox  textbox = new TableTextBox();
         textbox.fieldCase = fieldCase;
         textbox.enabled = enabled;
+        textbox.length = length;
         return textbox;
     }
 
@@ -63,6 +65,9 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
     			editor.addStyleName("Upper");
     		else if(fieldCase.equals("lower"))
     			editor.addStyleName("Lower");
+    		
+    		if(length > -1)
+    			editor.setMaxLength(length);    	
     	}
     	editor.setText((String)field.getValue());
         setWidget(editor);
@@ -72,6 +77,10 @@ public class TableTextBox extends SimplePanel implements TableCellWidget{
         TableTextBox textbox  = new TableTextBox();
         if(node.getAttributes().getNamedItem("case") != null)
             textbox.fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
+        
+        if (node.getAttributes().getNamedItem("max") != null) 
+        	textbox.length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
+        
         return textbox;
     }
 
