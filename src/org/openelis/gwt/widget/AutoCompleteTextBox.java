@@ -528,7 +528,8 @@ public class AutoCompleteTextBox extends Composite implements
         	if(model.size() == 0 && !textBox.getText().equals("")){
         		//set textbox text back to what it was before
         		textBox.setText(textBox.getText().substring(0,currentCursorPos));
-        		
+        		modelWidget.setModel((DataModel)result);
+        		startPos = new Integer(0);
         	} else if(model.get(0).size() > 1) {
         		modelWidget.setModel((DataModel)result);
         		startPos = new Integer(0);
