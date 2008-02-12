@@ -28,5 +28,4 @@ public interface TableManager {
     
     public void setModel(TableController controller, DataModel model);
     
-    public void validateRow(int row, TableController controller);
 }

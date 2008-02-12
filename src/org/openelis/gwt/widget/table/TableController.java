@@ -487,10 +487,7 @@ public class TableController implements
         try{
         if (manager == null || (manager != null && manager.canSelect(start+row, this))){
             if(selected > -1) {
-                int lastSelected = selected;
                 unselect(selected);
-                if(manager != null) 
-                    manager.validateRow(lastSelected+start,this);
             }
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
