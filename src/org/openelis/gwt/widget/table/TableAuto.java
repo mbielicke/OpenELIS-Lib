@@ -31,12 +31,11 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class TableAuto extends SimplePanel implements TableCellWidget, EventPreview {
+public class TableAuto extends TableCellInputWidget implements EventPreview {
 
 	private AutoCompleteTextBox editor;
 	private Label display;
 	//this should be the id of the selected element
-	private AbstractField field;
 	private StringField textValue = new StringField();
     private ChangeListener listener;
 	
@@ -184,6 +183,7 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 			((NumberField)field).setValue(editor.value);
 			textValue.setValue(editor.textBox.getText());
 		}	
+        super.saveValue();
 	}
 
 	//the editor is shared so we need to set the textvalue
@@ -210,7 +210,8 @@ public class TableAuto extends SimplePanel implements TableCellWidget, EventPrev
 		//display.setText((String)editor.textBox.getText());
 		//	display.setText((String)textValue.getValue());
 
-		setWidget(display);		
+		setWidget(display);	
+        super.setDisplay();
 	}
 
 	public void setEditor() {

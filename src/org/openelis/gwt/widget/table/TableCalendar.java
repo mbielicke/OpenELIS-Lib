@@ -44,6 +44,7 @@ public class TableCalendar extends TableCellInputWidget {
         else
             display.setText("");
         setWidget(display);
+        super.setDisplay();
     }
 
     public void setEditor() {

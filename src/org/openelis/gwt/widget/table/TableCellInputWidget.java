@@ -42,26 +42,42 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     }
 
     public void saveValue() {
+        validate();
+    }
+    
+    public void validate() {
         field.clearErrors();
         field.validate();
         if(!field.isValid()){
-            addStyleName("CellError");
-            String[] errors = field.getErrors();
-            errorPanel.clear();
-            for (int i = 0; i < errors.length; i++) {
-                String error = errors[i];
-                errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
-            }
-            addMouseListener(this);
+            drawErrors();
         }else{
-            errorPanel.clear();
-            removeStyleName("CellError");
-            removeMouseListener(this);
+            clearErrors();
         }
+    }
+    
+    public void drawErrors() {
+        addStyleName("CellError");
+        String[] errors = field.getErrors();
+        errorPanel.clear();
+        for (int i = 0; i < errors.length; i++) {
+            String error = errors[i];
+            errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
+        }
+        removeMouseListener(this);
+        addMouseListener(this);
+    }
+    
+    public void clearErrors() {
+        errorPanel.clear();
+        removeStyleName("CellError");
+        removeMouseListener(this);
     }
 
     public void setDisplay() {
-        // TODO Auto-generated method stub
+        if(!field.isValid())
+            drawErrors();
+        else
+            clearErrors();
 
     }
 

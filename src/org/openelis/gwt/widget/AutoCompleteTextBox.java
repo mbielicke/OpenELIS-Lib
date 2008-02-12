@@ -810,4 +810,9 @@ public class AutoCompleteTextBox extends Composite implements
 		// TODO Auto-generated method stub
 		
 	}
+
+    public void validateRow(int row, TableController controller) {
+        // TODO Auto-generated method stub
+        
+    }
 }

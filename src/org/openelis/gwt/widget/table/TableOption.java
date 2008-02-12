@@ -109,6 +109,7 @@ public class TableOption extends TableCellInputWidget {
 			}
 		}
 		setWidget(display);
+        super.setDisplay();
 	}
 
 	public void setEditor() {

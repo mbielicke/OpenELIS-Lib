@@ -177,8 +177,8 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 		}
 		
 		display.setText((String)textValue.getValue());
-
 		setWidget(display);		
+        super.setDisplay();
 	}
 
 	public void setEditor() {

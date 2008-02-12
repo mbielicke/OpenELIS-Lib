@@ -55,6 +55,7 @@ public class TableTextBox extends TableCellInputWidget {
         else
             display.setText("");
         setWidget(display);
+        super.setDisplay();
     }
 
     public void setEditor() {

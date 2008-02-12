@@ -61,7 +61,7 @@ public class TableCheck extends TableCellInputWidget implements ClickListener, K
     }
 
 	public void setDisplay() {
-		//setEditor();
+		super.setDisplay();
 	}
 
 	public void setEditor() {

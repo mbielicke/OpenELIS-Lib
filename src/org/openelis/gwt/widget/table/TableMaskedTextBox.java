@@ -53,6 +53,7 @@ public class TableMaskedTextBox extends TableCellInputWidget {
 		}
 		display.setText((String)field.getValue());
 		setWidget(display);
+        super.setDisplay();
 	}
 
 	public void setEditor() {
