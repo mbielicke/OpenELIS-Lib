@@ -59,7 +59,22 @@ HasFocus{
         }
     };
     
-	private FocusPanel focusPanel = new FocusPanel();
+	private FocusPanel focusPanel = new FocusPanel() {
+        public void onBrowserEvent(Event event) {
+            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
+                	onLostFocus(textBox);
+                
+                	if(multiSelect){
+                		visible = false;
+                		choicesPopup.hide();
+                	}
+                    screen.doTab(event, comp);
+            } else {
+                super.onBrowserEvent(event);
+            }
+        }
+    };
     
     /**
      * Widget used to display the suggestions and register
@@ -351,7 +366,7 @@ HasFocus{
 				textBox.setSelectionRange(0, selectionLength);
 
 	        complete();
-	        clickedArrow = false;
+	        //clickedArrow = false;
     	}else{
     		choicesPopup.hide();
     	}
@@ -397,16 +412,12 @@ HasFocus{
     		textBox.setText(displayText);
             
     		if(type.equals("string")){
-    			if(multiSelect){
-    				
-    			}else{
+    			if(!multiSelect){
     				String id = (String)((DataObject)scrollList.getDataModel().get(index).getObject(1)).getValue();
     				this.value = id;
     			}
     		}else if(type.equals("integer")){
-    			if(multiSelect){
-    				
-    			}else{
+    			if(!multiSelect){
     				Integer id = (Integer)((DataObject)scrollList.getDataModel().get(index).getObject(1)).getValue();
         			this.value = id;
     			}
@@ -686,8 +697,7 @@ HasFocus{
 				focusPanel.removeStyleName("Selected");
 				
 				complete();
-			}else
-				Window.alert(sender.toString());
+			}
 		}
 	}
 	
