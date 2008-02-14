@@ -110,10 +110,10 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("select",AppButton.DISABLED);
             setButtonState("commit",AppButton.UNPRESSED);
             setButtonState("abort",AppButton.UNPRESSED);
-            setButtonState("add",AppButton.PRESSED);
+            setButtonState("add",AppButton.LOCK_PRESSED);
         }
         if(state == FormInt.QUERY){
-            setButtonState("query",AppButton.PRESSED);
+            setButtonState("query",AppButton.LOCK_PRESSED);
             setButtonState("update",AppButton.DISABLED);
             setButtonState("delete",AppButton.DISABLED);
             setButtonState("prev",AppButton.DISABLED);
@@ -126,7 +126,7 @@ public class ButtonPanel extends Composite implements ClickListener {
         } 
         if(state == FormInt.UPDATE){
             setButtonState("query",AppButton.DISABLED);
-            setButtonState("update",AppButton.PRESSED);
+            setButtonState("update",AppButton.LOCK_PRESSED);
             setButtonState("delete",AppButton.DISABLED);
             setButtonState("prev",AppButton.DISABLED);
             setButtonState("next",AppButton.DISABLED);
