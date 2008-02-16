@@ -199,7 +199,7 @@ public class TableModel implements Serializable {
     
     public void reset() {
         rows = new ArrayList();
-        hidden = new HashMap();
+        //hidden = new HashMap();
         totalRows = 0;
         shown = 0;
     }

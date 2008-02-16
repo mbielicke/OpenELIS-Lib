@@ -65,7 +65,6 @@ public class TableOption extends TableCellInputWidget {
                                     .getNodeValue();
         } else {
         	to.editor = new OptionList();
-            to.editor.addChangeListener(listener);
             NodeList items = ((Element)node).getElementsByTagName("item");
             for (int j = 0; j < items.getLength(); j++) {
                 to.editor.addItem(items.item(j)
@@ -136,6 +135,8 @@ public class TableOption extends TableCellInputWidget {
 	            editor.addItem(item.akey, item.display);
 	        }
 		}
+        editor.removeChangeListener(listener);
+        editor.addChangeListener(listener);
 		editor.setValue(field.getValue());
         setTitle(field.getTip());
 		setWidget(editor);

@@ -84,7 +84,7 @@ public class TableController implements
     public TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)tableService;
     private ChangeListenerCollection changeListeners;
-    private int start = 0;
+    public int start = 0;
     private boolean autoAdd;
     public boolean showRows;
     public boolean modelSet;
@@ -147,6 +147,8 @@ public class TableController implements
     
     public void loadModel(TableModel model){
         this.model = model;
+        if (autoAdd)
+            model.addRow(null);
         load();
     }
 
@@ -181,7 +183,11 @@ public class TableController implements
             if(editors[i] instanceof TableOption){
                 ((TableOption)editors[i]).setListener(this);
             }
+            if(editors[i] instanceof TableMultiple){
+                ((TableMultiple)editors[i]).initCells(this);
+            }
         }
+        
     }
 
     /**
@@ -353,6 +359,9 @@ public class TableController implements
     private void loadRow(int index) {
         for (int i = 0; i < model.getRow(0).numColumns(); i++) {
         	TableCellWidget tCell = (TableCellWidget)view.table.getWidget(index, i);
+            if(tCell instanceof TableMultiple && manager != null){
+                manager.setMultiple(start+index,i,this);
+            }
         	tCell.setField(model.getFieldAt(start+index, i));
         	setCellDisplay(index,i);
             if(showRows){
@@ -551,6 +560,7 @@ public class TableController implements
      * This method can be overridden to handle on change events
      */
     public void onChange(Widget sender) {
+        try{
         if(sender instanceof OptionList){
             int sel = selected;
             unselect(sel);
@@ -564,6 +574,9 @@ public class TableController implements
         	if(modelWidget.event == DataModelWidget.REFRESH){
         		manager.setModel(this,modelWidget.getModel());
         	}
+        }
+        }catch(Exception e){
+            Window.alert("on change: "+e.getMessage());
         }
     }
 
@@ -633,14 +646,16 @@ public class TableController implements
      */
     public void reset() {
         start = 0;
+        
         view.cellView.setScrollPosition(0);
         if(selected > -1)
             view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
         selected = -1;
         selectedCell = -1;
         view.controller = this;
-        if(autoAdd){
+        if(autoAdd || model.autoAdd){
             model.addRow(null);
+            autoAdd = true;
         }
         view.reset();
         if(model.numRows() > 0){
@@ -694,6 +709,9 @@ public class TableController implements
     public void createRow(int i) {
         for(int j= 0; j < model.getRow(i).numColumns(); j++){
             TableCellWidget tcell = editors[j].getNewInstance();
+            if(tcell instanceof TableMultiple){
+                ((TableMultiple)tcell).initCells(model);
+            }
             if(tcell instanceof TableOption){
                 if(((TableOption)tcell).loadFromHidden != null){
                     ((TableOption)tcell).fromHidden = (OptionField)model.hidden.get(((TableOption)tcell).loadFromHidden);
@@ -1189,8 +1207,6 @@ public class TableController implements
         public void onSuccess(Object result) {
             if (result != null) {
                 if(modelSet){
-                    if (autoAdd)
-                        ((TableModel)result).addRow(null);
                     loadModel((TableModel)result);
                 }
                 else

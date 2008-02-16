@@ -28,4 +28,6 @@ public interface TableManager {
     
     public void setModel(TableController controller, DataModel model);
     
+    public void setMultiple(int row, int col, TableController controller);
+    
 }

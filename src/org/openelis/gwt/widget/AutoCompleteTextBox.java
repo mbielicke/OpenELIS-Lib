@@ -815,4 +815,9 @@ public class AutoCompleteTextBox extends Composite implements
         // TODO Auto-generated method stub
         
     }
+
+    public void setMultiple(int row, int col, TableController controller) {
+        // TODO Auto-generated method stub
+        
+    }
 }
