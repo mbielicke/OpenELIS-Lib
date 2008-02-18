@@ -375,15 +375,4 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         scrollBar.setScrollPosition(pos + delta);
     }
     
-    protected void onAttach() {
-        DeferredCommand.addCommand(new Command() {
-           public void execute() {
-               if(controller != null){
-                   controller.sizeTable();
-               }
-           }
-        });
-        super.onAttach();
-    }
-    
 }

@@ -62,4 +62,9 @@ public class TableImage extends SimplePanel implements TableCellWidget {
         // TODO Auto-generated method stub
         
     }
+
+    public void setCellWidth(int width) {
+        // TODO Auto-generated method stub
+        
+    }
 }

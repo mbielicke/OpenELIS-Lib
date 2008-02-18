@@ -64,4 +64,9 @@ public class TableLink extends SimplePanel implements TableCellWidget {
       this.enabled = enabled;
         
     }
+
+    public void setCellWidth(int width) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -101,4 +101,11 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         }
     }
 
+    public void setCellWidth(int width) {
+        for(int i = 0; i < cells.size(); i++){
+            ((TableCellWidget)cells.get(i)).setCellWidth(width);
+        }
+        
+    }
+
 }

@@ -21,6 +21,7 @@ public class TableTextBox extends TableCellInputWidget {
     private TextBox editor;
     private Label display;
     private boolean enabled;
+    private int width;
     
     public TableTextBox() {
     	
@@ -49,6 +50,7 @@ public class TableTextBox extends TableCellInputWidget {
                 display.addStyleName("Upper");
             else if(fieldCase.equals("lower"))
                 display.addStyleName("Lower");
+            display.setWidth(width+"px");
     	}
         if(field.getValue() != null)
             display.setText(field.getValue().toString());
@@ -69,7 +71,8 @@ public class TableTextBox extends TableCellInputWidget {
     			editor.addStyleName("Lower");
     		
     		if(length > -1)
-    			editor.setMaxLength(length);    	
+    			editor.setMaxLength(length);
+            editor.setWidth(width+"px");
     	}
         if(field.getValue() != null)
             editor.setText(field.getValue().toString());
@@ -106,6 +109,14 @@ public class TableTextBox extends TableCellInputWidget {
     public void enable(boolean enabled) {
        this.enabled = enabled;
         
+    }
+    
+    public void setWidth(int width){
+        this.width = width;
+        if(editor != null)
+            editor.setWidth(width+"px");
+        if(display != null)
+            display.setWidth(width+"px");
     }
 
 }

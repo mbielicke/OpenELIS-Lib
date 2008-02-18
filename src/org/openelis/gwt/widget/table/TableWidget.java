@@ -150,4 +150,10 @@ public class TableWidget extends Composite {
     public void setEnable(boolean enabled){
         controller.enabled = true;
     }
+    
+    
+    public boolean isVisible() {
+        // TODO Auto-generated method stub
+        return super.isVisible();
+    }
 }

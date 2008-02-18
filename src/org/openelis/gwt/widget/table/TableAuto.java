@@ -47,6 +47,7 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
     private boolean fromModel = false;
     private String type = "";
     private String url="";
+    private int width;
     
     private AutoCompleteServiceIntAsync autoService = (AutoCompleteServiceIntAsync)GWT.create(AutoCompleteServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)autoService;
@@ -191,6 +192,7 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
 		if(display == null){
 			display = new Label();
 			display.setWordWrap(false);
+            display.setWidth(width+"px");
 		}
 		
 		//if(editor.textBox.getText() != null && !"".equals(editor.textBox.getText()))
@@ -217,6 +219,7 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
 	public void setEditor() {
 		if(editor == null){
 			editor = new AutoCompleteTextBox();
+            editor.setWidth(width+"px");
 		}
 
 		editor.setTableValue(field.getValue(),display.getText());
@@ -349,6 +352,15 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
 
 	public void enable(boolean enabled) {
 		// TODO Auto-generated method stub
-		
 	}
+    
+    public void setCellWidth(int width){
+        this.width = width;
+        if(editor != null){
+            editor.setWidth(width+"px");
+        }
+        if(display != null){
+            display.setWidth(width+"px");
+        }
+    }
 }

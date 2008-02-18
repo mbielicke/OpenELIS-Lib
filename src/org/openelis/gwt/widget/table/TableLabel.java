@@ -18,6 +18,7 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 	
 	private Label editor;
 	private AbstractField field;
+    private int width;
 	
     public TableLabel() {
 
@@ -46,6 +47,7 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 		if(editor == null){
 			editor = new Label();
 			editor.setWordWrap(false);
+            editor.setWidth(width+"px");
 		}
 		Object val = field.getValue();
         if (val instanceof Integer)
@@ -68,7 +70,15 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 	}
 
     public void enable(boolean enabled) {
-        // TODO Auto-generated method stub
-        
+        // TODO Auto-generated method stub   
     }
+
+    public void setCellWidth(int width) {
+        this.width = width;
+        if(editor != null){
+            editor.setWidth(width+"px");
+        }
+    }
+    
+    
 }

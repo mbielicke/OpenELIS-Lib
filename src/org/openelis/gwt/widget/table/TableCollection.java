@@ -67,4 +67,9 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
         // TODO Auto-generated method stub
         
     }
+
+    public void setCellWidth(int width) {
+        // TODO Auto-generated method stub
+        
+    }
 }

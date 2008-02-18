@@ -709,6 +709,7 @@ public class TableController implements
     public void createRow(int i) {
         for(int j= 0; j < model.getRow(i).numColumns(); j++){
             TableCellWidget tcell = editors[j].getNewInstance();
+            tcell.setCellWidth(curColWidth[j]);
             if(tcell instanceof TableMultiple){
                 ((TableMultiple)tcell).initCells(model);
             }
@@ -768,14 +769,16 @@ public class TableController implements
      */
     public void sizeTable() {
         DeferredCommand.addCommand(new Command() {
-           public void execute() { 
+        public void execute() {
+        
         int width = 0;
         for(int i = 0; i < curColWidth.length; i++){
             width += curColWidth[i];
         }
+        int displayWidth = width + (curColWidth.length*4) - (curColWidth.length -1);
         view.table.setWidth(width+"px");
         if(view.header != null){
-            view.header.setWidth((width+curColWidth.length*2)+"px");  
+            view.header.setWidth(displayWidth+"px");  
             for(int i = 0; i < curColWidth.length; i++){
                 if( i > 0 && i < curColWidth.length - 1){
                     view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
@@ -784,28 +787,31 @@ public class TableController implements
                 }
             }
         }           
-        if(model.numRows() > 0)
-            view.header.setWidth(view.table.getOffsetWidth()+"px");
-        else
-            view.header.setWidth(width+"px");
+      
+        //if(model.numRows() > 0)
+        //    view.header.setWidth(view.table.getOffsetWidth()+"px");
+        //else
+            view.header.setWidth(displayWidth+"px");
         int viewWidth = -1;
         if(!view.width.equals("auto"))
             viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));
-        else if(!GWT.isScript()){
-            view.cellView.setWidth(view.table.getOffsetWidth()+"px");
-            view.titlePanel.setWidth(view.table.getOffsetWidth()+"px");
-        }
-        if(viewWidth > -1 && view.table.getOffsetWidth() > viewWidth){
+        else
+            viewWidth = displayWidth;
+        //else if(!GWT.isScript()){
+        //    view.cellView.setWidth(view.table.getOffsetWidth()+"px");
+        //    view.titlePanel.setWidth(view.table.getOffsetWidth()+"px");
+        //}
+        if(model.numRows() > maxRows){
         	view.setHeight((maxRows*cellHeight+maxRows+18+"px"));
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
         }
         if(showRows){
-            if(viewWidth > -1 && viewWidth < view.table.getOffsetWidth()){
+            if(model.numRows() > maxRows){
                 view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
             }
         }
-        view.titlePanel.setWidth(view.cellView.getOffsetWidth()+"px");
-           }
+        view.titlePanel.setWidth(viewWidth+"px");
+        }
         });
     }
 
@@ -1300,8 +1306,9 @@ public class TableController implements
                     for (int j = 0; j < view.table.getRowCount(); j++) {
                         for (int i = 0; i < curColWidth.length; i++) {
                             view.table.getFlexCellFormatter().setWidth(j, i, curColWidth[i] +  "px");
+                            ((TableCellWidget)view.table.getWidget(j,i)).setCellWidth(curColWidth[i]);
                             ((SimplePanel)view.table.getWidget(j, i)).setWidth((curColWidth[i]) + "px");
-                            ((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
+                            //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
                         }
                     }
                 }

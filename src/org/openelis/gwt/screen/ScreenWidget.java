@@ -180,10 +180,13 @@ public class ScreenWidget extends SimplePanel implements
             key = node.getAttributes().getNamedItem("key").getNodeValue();
         	screen.widgets.put(key, this);
         }
-        if (node.getAttributes().getNamedItem("style") != null)
-            getWidget().addStyleName(node.getAttributes()
-                                         .getNamedItem("style")
-                                         .getNodeValue());
+        if (node.getAttributes().getNamedItem("style") != null){
+            String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
+            getWidget().setStyleName(styles[0]);
+            for(int i = 1; i < styles.length; i++){
+                getWidget().addStyleName(styles[i]);
+            }
+        }
         if (node.getAttributes().getNamedItem("width") != null)
             getWidget().setWidth(node.getAttributes()
                                      .getNamedItem("width")

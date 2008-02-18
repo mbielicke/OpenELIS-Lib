@@ -42,6 +42,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     private String fieldCase = "mixed";
     private boolean fromModel = false;
     private String type = "";
+    private int width;
     
     public OptionField fromHidden;
     
@@ -174,6 +175,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 		if(display == null){
 			display = new Label();
 			display.setWordWrap(false);
+            display.setWidth(width+"px");
 		}
 		
 		display.setText((String)textValue.getValue());
@@ -182,9 +184,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
 
 	public void setEditor() {
-		if(editor == null)
+		if(editor == null){
 			editor = new AutoCompleteDropdown();
-		
+            editor.setWidth(width+"px");
+        }
 		editor.setValue(field.getValue());
 
 		setWidget(editor);			
@@ -309,5 +312,14 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	public void setModel(DataModel model){
 		editor.setModel(model);
 	}
+    
+    public void setCellWidth(int width){
+        this.width = width;
+        if(editor != null){
+            editor.setWidth(width+"px");
+        }
+        if(display != null)
+            display.setWidth(width+"px");
+    }
 }
 

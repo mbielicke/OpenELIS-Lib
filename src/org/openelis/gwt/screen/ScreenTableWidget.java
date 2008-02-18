@@ -118,13 +118,18 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                                       .split(",");
                     String[] headerVals = new String[headerNames.length];
                     for (int i = 0; i < headerVals.length; i++) {
-                        headerVals[i] = table.constants.getString(headerNames[i]);
+                        headerVals[i] = table.constants.getString(headerNames[i]).trim();
                     }
                     table.setHeaders(headerVals);
                 } else {
-                    table.setHeaders(headersNode.getFirstChild()
-                                               .getNodeValue()
-                                               .split(","));
+                    String[] headerNames = headersNode.getFirstChild()
+                    .getNodeValue()
+                    .split(",");
+                    for(int i=0; i<headerNames.length;i++){
+                        headerNames[i] = headerNames[i].trim();
+                    }
+                    table.setHeaders(headerNames);
+                    
                 }
                 }
                 if (filtersNode != null) {

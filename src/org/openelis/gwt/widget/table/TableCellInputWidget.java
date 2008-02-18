@@ -151,5 +151,9 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
         }
         super.onBrowserEvent(event);
     }
+    
+    public void setCellWidth(int width) {
+        
+    }
 
 }

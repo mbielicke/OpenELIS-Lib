@@ -17,6 +17,7 @@ public class TableCalendar extends TableCellInputWidget {
 	private byte end = 2;
 	private boolean week = false;
 	private boolean enabled;
+    private int width;
     
     public TableCalendar() {
         setStyleName("TableCalendar");
@@ -37,6 +38,7 @@ public class TableCalendar extends TableCellInputWidget {
     	if(display == null){
     		display = new Label();
     		display.setWordWrap(false);
+            display.setWidth(width+"px");
     	}
     	DatetimeRPC val = (DatetimeRPC)field.getValue();
         if (val != null)
@@ -52,7 +54,7 @@ public class TableCalendar extends TableCellInputWidget {
             return;
     	if(editor == null){
     		editor = new FormCalendarWidget(begin,end,week);
-            editor.setWidth("100%");
+            editor.setWidth(width+"px");
     	}
     	DatetimeRPC val = (DatetimeRPC)field.getValue();
         if (val != null)
@@ -106,5 +108,13 @@ public class TableCalendar extends TableCellInputWidget {
 
     public void enable(boolean enabled) {
        this.enabled = enabled;
+    }
+    
+    public void setCellWidth(int width){
+        this.width = width;
+        if(editor != null)
+            editor.setWidth(width+"px");
+        if(display != null)
+            display.setWidth(width+"px");
     }
 }

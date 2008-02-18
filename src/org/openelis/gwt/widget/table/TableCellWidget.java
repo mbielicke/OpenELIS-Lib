@@ -23,4 +23,6 @@ public interface TableCellWidget {
     public Widget getWidget();
     
     public void enable(boolean enabled);
+    
+    public void setCellWidth(int width);
 }

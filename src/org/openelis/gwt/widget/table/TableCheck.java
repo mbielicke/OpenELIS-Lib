@@ -25,6 +25,7 @@ public class TableCheck extends TableCellInputWidget implements ClickListener, K
 	private Image editor;
     private FocusPanel panel;
     private boolean enabled;
+    private int width;
 	
 	public TableCheck() {
         panel = new FocusPanel();
@@ -130,5 +131,10 @@ public class TableCheck extends TableCellInputWidget implements ClickListener, K
             panel.addFocusListener(this);
             panel.addKeyboardListener(this);
         }
+    }
+    
+    public void setCellWidth(int width){
+        this.width = width;
+        panel.setWidth(width+"px");
     }
 }

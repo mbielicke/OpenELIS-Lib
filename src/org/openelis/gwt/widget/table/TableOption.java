@@ -37,6 +37,7 @@ public class TableOption extends TableCellInputWidget {
     private int visible = 1;
     public OptionField fromHidden;
     private boolean enabled;
+    private int width;
 
     public TableOption() {
         sinkEvents(Event.KEYEVENTS);
@@ -65,6 +66,7 @@ public class TableOption extends TableCellInputWidget {
                                     .getNodeValue();
         } else {
         	to.editor = new OptionList();
+            to.editor.setWidth(width+"px");
             NodeList items = ((Element)node).getElementsByTagName("item");
             for (int j = 0; j < items.getLength(); j++) {
                 to.editor.addItem(items.item(j)
@@ -92,6 +94,7 @@ public class TableOption extends TableCellInputWidget {
 		if(display == null){
 			display = new Label();
 			display.setWordWrap(false);
+            display.setWidth(width+"px");
 		}
 		if(field instanceof OptionField){
 			display.setText(((OptionField)field).getDisplay());
@@ -116,6 +119,7 @@ public class TableOption extends TableCellInputWidget {
             return;
 		if(editor == null){
 			editor = new OptionList();
+            editor.setWidth(width+"px");
             editor.addChangeListener(listener);
 			editor.setMultipleSelect(multi);
 			editor.setVisibleItemCount(visible);
@@ -166,6 +170,13 @@ public class TableOption extends TableCellInputWidget {
 
     public void enable(boolean enabled) {
       this.enabled = enabled;
-        
+    }
+    
+    public void setCellWidth(int width){
+        this.width = width;
+        if(editor != null)
+            editor.setWidth(width+"px");
+        if(display != null)
+            display.setWidth(width+"px");
     }
 }
