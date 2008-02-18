@@ -9,6 +9,7 @@ import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.common.data.TableRow;
+import org.openelis.gwt.screen.ScreenAuto;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
 import org.openelis.gwt.widget.table.TableCellWidget;
@@ -435,6 +436,13 @@ public class AutoCompleteTextBox extends Composite implements
      * @param text
      */
     protected void callForMatches(final String text) {
+    	if(getParent() instanceof HorizontalPanel){
+    		FocusPanel icon = (FocusPanel)((HorizontalPanel)getParent()).getWidget(1);
+    		icon.removeStyleName("ErrorPanel");
+    		icon.addStyleName("BusyPanel");
+    		icon.setVisible(true);
+    	}
+    	
         autoService.getMatches(cat, modelWidget.getModel(), text, matchCallback);
     }
 
@@ -523,6 +531,13 @@ public class AutoCompleteTextBox extends Composite implements
      */
     private class GetMatches implements AsyncCallback {
         public void onSuccess(Object result) {
+        	if(getParent() instanceof HorizontalPanel){
+        		FocusPanel icon = (FocusPanel)((HorizontalPanel)getParent()).getWidget(1);
+        		icon.removeStyleName("BusyPanel");
+        		icon.addStyleName("ErrorPanel");
+        		icon.setVisible(false);
+        	}
+        	
         	DataModel model = (DataModel)result;
         	
         	if(model.size() == 0 && !textBox.getText().equals("")){

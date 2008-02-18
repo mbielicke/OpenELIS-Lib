@@ -105,6 +105,18 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             errorImg.setVisible(true);
         }
     }
+    
+    public void drawBusyIcon(){
+    	errorImg.removeStyleName("ErrorPanel");
+    	errorImg.addStyleName("BusyPanel");
+    	errorImg.setVisible(true);
+    }
+    
+    public void clearBusyIcon(){
+    	errorImg.removeStyleName("BusyPanel");
+    	errorImg.addStyleName("ErrorPanel");
+    	errorImg.setVisible(false);
+    }
 
     public void onMouseDown(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
