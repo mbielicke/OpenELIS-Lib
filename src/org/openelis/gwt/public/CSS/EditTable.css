@@ -60,39 +60,38 @@
     background:#dde0e3;
 }
 .Header{
-     border-collapse:collapse;
+    height:18px;
+    background:url("../Images/headersprite.gif") repeat-x;
+    border-collapse:collapse;
+    border-bottom:1px solid #8db2e3;
+    overflow:hidden;
 }
 .HeaderBar{
-    width:1px;
+    width:3px;
     height:17px;
-    background:#d8d8d8;
+    background:url('../Images/buttondivider.gif') no-repeat center center;
     cursor:e-resize;
 }
 .HeaderBarPad{
-    width:1px;
-    height:17px;
-    background:#dde0e3;
     cursor:e-resize;
 }
 .HeaderCell{
     overflow:hidden;
     cursor:pointer;
-    height:17px;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    background:#dde0e3;
+    height:18px;
+    vertical-align:middle;
 }
 .HeaderIMG {
-	position:relative;
-	top:3;
+    overflow:hidden;
+    margin:2;
+    width:13;
+    height:13;
 }
 .HeaderLabel {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    color:#333;
-#    color:#9199a4;
     overflow:hidden;
-    cursor:default;
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
 }
 .hide{
 	display:none;
@@ -104,7 +103,7 @@ border:1px solid #e9f3f5;
 padding:1;
 }
 
-.WindowBody .ScreenPanel{
+.WindowBody .ScreenDeck{
 background:white;
 }
 .AtoZ{
@@ -151,27 +150,21 @@ a.index:hover{
 }
 
 .prevNavIndex{
-color:#333333;
-width:15px;
-height:15px;
-background-color:yellow;
-border solid 1px red;
+width:16px;
+height:16px;
+background:url('../Images/previous.gif');
 }
 
 .prevNavIndexDisabled{
-color:#333333;
-width:15px;
-height:15px;
-background-color:#CCCCCC;
-border solid 1px red;
+width:16px;
+height:16px;
+background:none;
 }
 
 .nextNavIndex{
-color:#333333;
-width:15px;
-height:15px;
-background-color:yellow;
-border solid 1px red;
+width:16px;
+height:16px;
+background:url('../Images/next.gif');
 }	
 
 a.index:hover{
@@ -202,9 +195,4 @@ a.index:hover{
     color:#FFFFFF;
     background:blue;
 }*/
-
-.CellError {
-   background:red;
-   height:85%;
-}
 
