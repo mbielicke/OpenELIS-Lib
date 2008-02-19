@@ -56,15 +56,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void initWidget(Widget widget){
         if(hp == null){
             hp = new HorizontalPanel();
-           // errorImg.setVisible(false);
-            errorImg.addStyleName("ErrorPanelHidden");
+            errorImg.setStyleName("ErrorPanelHidden");
             errorImg.addMouseListener(this);
             hp.add(errorImg);
         }
-        /*if(widget instanceof HasFocus){
-            ((HasFocus)widget).removeFocusListener(this);
-            ((HasFocus)widget).addFocusListener(this);
-        }*/
         if(hp.getWidgetCount() > 1){
             hp.remove(0);
         }
@@ -83,15 +78,12 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(!screen.rpc.getField(key).isValid())
             drawError();
         else{
-            errorImg.addStyleName("ErrorPanelHidden");
-            errorImg.removeStyleName("ErrorPanel");
+            errorImg.setStyleName("ErrorPanelHidden");
         }
     }
     
     public void clearError() {
-    	errorImg.removeStyleName("ErrorPanel");
-    	errorImg.addStyleName("ErrorPanelHidden");
-        //errorImg.setVisible(false);
+    	errorImg.setStyleName("ErrorPanelHidden");
         errorPanel.clear();
     }
     
@@ -103,27 +95,18 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
         }
         if(errors.length == 0){
-            //errorImg.setVisible(false);
-            errorImg.removeStyleName("ErrorPanel");
-            errorImg.addStyleName("ErrorPanelHidden");
+            errorImg.setStyleName("ErrorPanelHidden");
         }else{
-            //errorImg.setVisible(true);
-        	errorImg.removeStyleName("ErrorPanelHidden");
-            errorImg.addStyleName("ErrorPanel");
+            errorImg.setStyleName("ErrorPanel");
         }
     }
     
     public void drawBusyIcon(){
-    	errorImg.removeStyleName("ErrorPanel");
-    	errorImg.addStyleName("BusyPanel");
-    	//errorImg.setVisible(true);
+    	errorImg.setStyleName("BusyPanel");
     }
     
     public void clearBusyIcon(){
-    	errorImg.removeStyleName("BusyPanel");
-    	errorImg.addStyleName("ErrorPanelHidden");
-    	//errorImg.addStyleName("ErrorPanel");
-    	//errorImg.setVisible(false);
+    	errorImg.setStyleName("ErrorPanelHidden");
     }
 
     public void onMouseDown(Widget sender, int x, int y) {
@@ -133,7 +116,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseEnter(Widget sender) {
         // TODO Auto-generated method stub
-        if(errorImg.getStyleName().indexOf("ErrorPanel") > -1){
+        if(errorImg.getStyleName().equals("ErrorPanel")){
             if(pop == null){
                 pop = new PopupPanel();
                 pop.setStyleName("ErrorPopup");
@@ -147,7 +130,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseLeave(Widget sender) {
         // TODO Auto-generated method stub
-        if(errorImg.getStyleName().indexOf("ErrorPanel") > -1){
+        if(errorImg.getStyleName().equals("ErrorPanel")){
             if(pop != null){
                 pop.hide();
             }
