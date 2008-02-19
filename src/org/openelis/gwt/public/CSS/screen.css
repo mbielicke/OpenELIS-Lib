@@ -1194,6 +1194,11 @@ cursor:wait;
   background-image:url(../Images/exclamation.png);
 }
 
+.ErrorPanelHidden {
+  width:16px;
+  height:16px;
+}
+
 .ErrorPopup {
   padding:5px;
   border:2px solid red;
