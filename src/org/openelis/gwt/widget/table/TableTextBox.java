@@ -111,7 +111,7 @@ public class TableTextBox extends TableCellInputWidget {
         
     }
     
-    public void setWidth(int width){
+    public void setCellWidth(int width){
         this.width = width;
         if(editor != null)
             editor.setWidth(width+"px");
