@@ -172,6 +172,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollListener(this);
+        AbsolutePanel tspacer = new AbsolutePanel();
+        tspacer.setStyleName("TableSpacer");
         if(title != null && !title.equals("")){
            // HorizontalPanel hp = new HorizontalPanel();
             //hp.add(titlePanel);
@@ -184,14 +186,18 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             ft.setWidget(1,0,rows);
             ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
             ft.setWidget(1,1,cellView);
-            ft.setWidget(1, 2, scrollBar);
-            ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
+            ft.setWidget(0, 2, scrollBar);
+            ft.getFlexCellFormatter().setRowSpan(0, 2, 2);
+            ft.getFlexCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_LEFT);
+            ft.getFlexCellFormatter().setVerticalAlignment(0,2,HasAlignment.ALIGN_TOP);
         }else{
         	if(headers != null)
         		ft.setWidget(0,0,headerView);
             ft.setWidget(1,0,cellView);
-            ft.setWidget(1,1,scrollBar);
-            ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
+            ft.setWidget(0,1,scrollBar);
+            ft.getFlexCellFormatter().setRowSpan(0, 1, 2);
+            ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
+            ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_TOP);
         }
         vp.add(ft);
         ft.setCellPadding(0);

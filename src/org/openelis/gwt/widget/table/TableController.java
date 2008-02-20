@@ -813,7 +813,7 @@ public class TableController implements
                 view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
             }
         }
-        view.titlePanel.setWidth(viewWidth+"px");
+        view.titlePanel.setWidth("100%");
         }
         });
     }
