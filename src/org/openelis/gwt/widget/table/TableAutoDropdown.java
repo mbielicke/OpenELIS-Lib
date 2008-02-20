@@ -20,7 +20,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -175,7 +174,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 		if(display == null){
 			display = new Label();
 			display.setWordWrap(false);
-            display.setWidth(width+"px");
+//            display.setWidth(width+"px");
 		}
 		
 		display.setText((String)textValue.getValue());
@@ -186,7 +185,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	public void setEditor() {
 		if(editor == null){
 			editor = new AutoCompleteDropdown();
-            editor.setWidth(width+"px");
+         //   editor.setWidth(width+"px");
         }
 		editor.setValue(field.getValue());
 
@@ -314,12 +313,12 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
     
     public void setCellWidth(int width){
-        this.width = width;
+    /*    this.width = width;
         if(editor != null){
             editor.setWidth(width+"px");
         }
         if(display != null)
-            display.setWidth(width+"px");
+            display.setWidth(width+"px");*/
     }
 }
 

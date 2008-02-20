@@ -18,11 +18,13 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
+import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-public class ScreenAutoDropdown extends ScreenInputWidget {
+public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListener {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -193,7 +195,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
         else
             auto.textBox.setFocus(focused);
     }
-
+    
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
@@ -295,5 +297,10 @@ public class ScreenAutoDropdown extends ScreenInputWidget {
     
     public ScreenAutoDropdown getQueryWidget(){
     	return (ScreenAutoDropdown)queryWidget;
+    }
+    
+    public void onLostFocus(Widget sender) {
+    	auto.onLostFocus(sender);
+    	super.onLostFocus(sender);
     }
 }

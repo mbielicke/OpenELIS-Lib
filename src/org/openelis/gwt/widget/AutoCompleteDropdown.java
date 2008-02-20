@@ -212,7 +212,6 @@ public class AutoCompleteDropdown extends Composite implements
 
 		initWidget(mainHP);
 		mainHP.add(textBox);
-		textBox.addFocusListener(this);
 		textBox.addKeyboardListener(this);
 		textBox.addStyleName("TextboxUnselected");
 		mainHP.setSpacing(0);
@@ -762,7 +761,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 //				 if this is true then we need to find these values manually
 				if (currentActive == -1 && currentStart == 0 && value != null
-						&& !"".equals(value) && value != new Integer(-1)) {
+						&& !"".equals(value) && value != new Integer(-1) && !multiSelect) {
 					if (type.equals("string")) {
 						int index = getIndexByKey((String)value);
 						//for (int i = 0; i < scrollList.getDataModel().size(); i++) {
@@ -930,12 +929,11 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	public void addFocusListener(FocusListener listener) {
-		// TODO Auto-generated method stub
-
+		textBox.addFocusListener(listener);
 	}
 
 	public void removeFocusListener(FocusListener listener) {
-		// TODO Auto-generated method stub
+		textBox.removeFocusListener(listener);
 
 	}
 

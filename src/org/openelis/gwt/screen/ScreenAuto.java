@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -24,7 +26,7 @@ import org.openelis.gwt.widget.table.TableCellWidget;
  * @author tschmidt
  *
  */
-public class ScreenAuto extends ScreenInputWidget {
+public class ScreenAuto extends ScreenInputWidget implements FocusListener{
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -204,8 +206,13 @@ public class ScreenAuto extends ScreenInputWidget {
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
-        else
-            auto.textBox.setReadOnly(!enabled);     
+        else{
+        	auto.textBox.setReadOnly(!enabled);
+	        if(enabled)
+	            auto.addFocusListener(this);
+	        else
+	            auto.removeFocusListener(this);
+        }     
     }
     
     public void destroy() {
@@ -258,5 +265,10 @@ public class ScreenAuto extends ScreenInputWidget {
     	return node.getFirstChild()
                 .getNodeValue()
                 .split(",");
+    }
+    
+    public void onLostFocus(Widget sender) {
+    	auto.onLostFocus(sender);
+    	super.onLostFocus(sender);
     }
 }

@@ -807,12 +807,12 @@ public class AutoCompleteTextBox extends Composite implements
 	}
 
 	public void addFocusListener(FocusListener listener) {
-		// TODO Auto-generated method stub
+		textBox.addFocusListener(listener);
 		
 	}
 
 	public void removeFocusListener(FocusListener listener) {
-		// TODO Auto-generated method stub
+		textBox.removeFocusListener(listener);
 		
 	}
 

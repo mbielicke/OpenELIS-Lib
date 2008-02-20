@@ -1,5 +1,7 @@
 package org.openelis.gwt.screen;
 
+import org.openelis.gwt.widget.AutoCompleteDropdown;
+import org.openelis.gwt.widget.AutoCompleteTextBox;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.table.TableWidget;
 
@@ -72,10 +74,14 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
 
     public void onLostFocus(Widget sender) {
-        submit(screen.rpc.getField(key));
-        screen.rpc.getField(key).clearErrors();
-        screen.rpc.getField(key).validate();
-        if(!screen.rpc.getField(key).isValid())
+    	String tempKey = key;
+    	if(!queryMode && (displayWidget instanceof AutoCompleteDropdown || displayWidget instanceof AutoCompleteTextBox))
+    		tempKey+="Id";
+    		
+        submit(screen.rpc.getField(tempKey));
+        screen.rpc.getField(tempKey).clearErrors();
+        screen.rpc.getField(tempKey).validate();
+        if(!screen.rpc.getField(tempKey).isValid())
             drawError();
         else{
             errorImg.setStyleName("ErrorPanelHidden");
@@ -88,7 +94,12 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public void drawError() {
-        String[] errors = screen.rpc.getField(key).getErrors();
+    	String[] errors;
+        if(!queryMode && (displayWidget instanceof AutoCompleteDropdown || displayWidget instanceof AutoCompleteTextBox))
+        	errors = screen.rpc.getField(key+"Id").getErrors();
+        else
+        	errors = screen.rpc.getField(key).getErrors();
+        
         errorPanel.clear();
         for (int i = 0; i < errors.length; i++) {
             String error = errors[i];
