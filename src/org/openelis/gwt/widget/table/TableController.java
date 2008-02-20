@@ -696,9 +696,9 @@ public class TableController implements
             }
         }
         if(model.numRows() > maxRows)
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
         else
-            view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing);
+            view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
         view.scrollBar.setScrollPosition(0);
         if(model.numRows() > 0)
             scrollLoad(0);
@@ -806,8 +806,10 @@ public class TableController implements
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
         }
         */
-        //view.setHeight(maxRows*cellHeight+maxRows+18+"px");
-        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+        if(model.numRows() > maxRows)
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+        else
+            view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
         if(showRows){
             if(model.numRows() > maxRows){
                 view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
