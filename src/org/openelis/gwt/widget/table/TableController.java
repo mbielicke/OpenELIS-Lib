@@ -257,7 +257,7 @@ public class TableController implements
     
     public void setMaxRows(int rows){
         maxRows = rows;
-        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing)+"px");
+        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing+18)+"px");
     }
     
     public void setCellHeight(int height){
@@ -286,7 +286,7 @@ public class TableController implements
                 }
             });
         }
-        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
         if(manager != null){
             manager.rowAdded(model.numRows()-1,this);
         }
@@ -801,10 +801,13 @@ public class TableController implements
         //    view.cellView.setWidth(view.table.getOffsetWidth()+"px");
         //    view.titlePanel.setWidth(view.table.getOffsetWidth()+"px");
         //}
-        if(model.numRows() > maxRows){
+        /*if(model.numRows() > maxRows){
         	view.setHeight((maxRows*cellHeight+maxRows+18+"px"));
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
         }
+        */
+        //view.setHeight(maxRows*cellHeight+maxRows+18+"px");
+        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
         if(showRows){
             if(model.numRows() > maxRows){
                 view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
