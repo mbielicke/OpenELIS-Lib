@@ -81,13 +81,16 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 }
                 table.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
                 //if constants = true we want to get the title from the properties file
-                if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
-                    table.setTableTitle(table.constants.getString(node.getAttributes().getNamedItem("title").getNodeValue()));
-                }else{
-                    table.setTableTitle(node.getAttributes()
-                            .getNamedItem("title")
-                            .getNodeValue());
-                }
+                if(node.getAttributes().getNamedItem("title") != null){
+                    if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
+                        table.setTableTitle(table.constants.getString(node.getAttributes().getNamedItem("title").getNodeValue()));
+                    }else{
+                        table.setTableTitle(node.getAttributes()
+                                            .getNamedItem("title")
+                                            .getNodeValue());
+                    }
+                }else
+                    table.setTableTitle("");
                 if(node.getAttributes().getNamedItem("autoAdd") != null){
                     if(node.getAttributes().getNamedItem("autoAdd").getNodeValue().equals("true"))
                         table.setAutoAdd(true);
