@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class AutoCompleteDropdown extends Composite implements
 		KeyboardListener, ChangeListener, ClickListener, MouseListener,
 		PopupListener, FocusListener, HasFocus {
-	private HorizontalPanel mainHP = new HorizontalPanel();
+	public HorizontalPanel mainHP = new HorizontalPanel();
 
 	public TextBox textBox = new TextBox() {
 		public void onBrowserEvent(Event event) {
@@ -56,7 +56,7 @@ public class AutoCompleteDropdown extends Composite implements
 		}
 	};
 
-	private FocusPanel focusPanel = new FocusPanel() {
+	public FocusPanel focusPanel = new FocusPanel() {
 		public void onBrowserEvent(Event event) {
 			if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
 				if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
@@ -656,7 +656,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 				// if this is true then we need to find these values manually
 				if (currentActive == -1 && currentStart == 0 && value != null
-						&& !"".equals(value) && value != new Integer(-1)) {
+						&& !"".equals(value) && value != new Integer(-1) && !multiSelect) {
 					if (type.equals("string")) {
 						int index = getIndexByKey((String)value);
 						//for (int i = 0; i < scrollList.getDataModel().size(); i++) {

@@ -54,7 +54,7 @@ public class AutoCompleteTextBox extends Composite implements
                                                 FocusListener,
                                                 TableManager, HasFocus{
 	
-	private HorizontalPanel mainHP = new HorizontalPanel();
+	public HorizontalPanel mainHP = new HorizontalPanel();
 	public TextBox textBox = new TextBox();
 	private FocusPanel focusPanel = new FocusPanel();
 

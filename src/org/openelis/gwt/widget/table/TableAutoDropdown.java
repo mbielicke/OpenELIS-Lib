@@ -114,6 +114,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
         auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width);
+        auto.mainHP.removeStyleName("AutoDropdown");
+        auto.mainHP.addStyleName("TableAutoDropdown");
+        auto.focusPanel.removeStyleName("AutoDropdownButton");
+        auto.focusPanel.addStyleName("TableAutoDropdownButton");
         
         if(widthsNode != null) {
         	auto.setWidths(getWidths(widthsNode));

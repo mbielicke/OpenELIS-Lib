@@ -136,7 +136,9 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
         Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
         auto = new AutoCompleteTextBox(cat, url, dropDown, textBoxDefault, width);
-        
+        auto.mainHP.removeStyleName("AutoDropdown");
+        auto.textBox.addStyleName("TableWidget");
+        auto.textBox.addStyleName("Enabled");
         initService(url);
         
         if(widthsNode != null) {
@@ -220,10 +222,11 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
 		if(editor == null){
 			editor = new AutoCompleteTextBox();
             editor.setWidth(width+"px");
+            editor.mainHP.removeStyleName("AutoDropdown");
+          //  editor.mainHP.addStyleName("TableAutoDropdown");
 		}
 
 		editor.setTableValue(field.getValue(),display.getText());
-
 		setWidget(editor);	
 		
 	}
