@@ -897,7 +897,49 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     cursor:default;
 }
 
+.TableCalendar .Calendar{
+}
 
+.TableCalendar .CalendarButton{
+width:14px;
+height:18px;
+background: url(../Images/date-trigger.gif) 0px -2px no-repeat;
+}
+.TableCalendar .CalendarButton .Hover{
+cursor:pointer;
+width:14px;
+height:18px;
+background: url(../Images/date-trigger.gif) -14px -2px no-repeat;
+}
+.TableCalendar .CalendarButton .Selected{
+width:14px;
+height:18px;
+background: url(../Images/date-trigger.gif) -56px -2px no-repeat;
+}
+.TableCalendar .CalendarButton .Pressed{
+width:14px;
+height:18px;
+background: url(../Images/date-trigger.gif) -28px -2px no-repeat;
+}
+
+.TableCalendar .TextboxSelected{
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    cursor:default;
+    border:none;
+}
+.TableCalendar .TextboxUnselected{
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    cursor:default;
+    border:none;
+}
 
 /*.ScreenCalendar {
 
@@ -980,6 +1022,9 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
 }
 
 .ScreenOption{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
 
 }
 

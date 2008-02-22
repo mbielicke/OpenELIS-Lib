@@ -218,12 +218,12 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     }
     
     
-    public void setHeight(String height) {
-        cellView.setHeight(height);
-        rowsView.setHeight(height);
-        scrollBar.setHeight(height);
+    public void setHeight(int height) {
+        cellView.setHeight(height+"px");
+        rowsView.setHeight(height+"px");
+        scrollBar.setHeight(height+17+"px");
         headerView.setHeight("18px");
-        this.height = height;
+        this.height = height+"px";
     }
 
     public void setWidth(String width) {
@@ -362,7 +362,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public void setScrollHeight(int height) {
         try {
             scrollBar.getWidget().setHeight(height+"px");
-            if(height > cellView.getOffsetHeight())
+            if(height > (cellView.getOffsetHeight()+18))
                 DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
             else 
                 DOM.setStyleAttribute(scrollBar.getElement(),"display","none");

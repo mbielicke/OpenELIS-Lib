@@ -29,7 +29,6 @@ public class TableCalendar extends TableCellInputWidget {
     	this.end = end;
     	this.week = week;
         editor = new FormCalendarWidget(begin,end,week);
-        editor.setWidth("100%");
         setStyleName("TableCalendar");
     }
 
@@ -54,7 +53,7 @@ public class TableCalendar extends TableCellInputWidget {
             return;
     	if(editor == null){
     		editor = new FormCalendarWidget(begin,end,week);
-            editor.setWidth(width+"px");
+            editor.setWidth((width-15)+"px");
     	}
     	DatetimeRPC val = (DatetimeRPC)field.getValue();
         if (val != null)
@@ -113,7 +112,7 @@ public class TableCalendar extends TableCellInputWidget {
     public void setCellWidth(int width){
         this.width = width;
         if(editor != null)
-            editor.setWidth(width+"px");
+            editor.setWidth((width-15)+"px");
         if(display != null)
             display.setWidth(width+"px");
     }

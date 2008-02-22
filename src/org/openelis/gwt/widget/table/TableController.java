@@ -257,7 +257,7 @@ public class TableController implements
     
     public void setMaxRows(int rows){
         maxRows = rows;
-        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing+18)+"px");
+        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing));
     }
     
     public void setCellHeight(int height){
@@ -718,10 +718,7 @@ public class TableController implements
                     ((TableOption)tcell).fromHidden = (OptionField)model.hidden.get(((TableOption)tcell).loadFromHidden);
                 }
             }
-            if(tcell instanceof TableCalendar)
-                ((SimplePanel)tcell).setWidth((curColWidth[j]-15)+ "px");
-            else
-                ((SimplePanel)tcell).setWidth((curColWidth[j])+ "px");
+            ((SimplePanel)tcell).setWidth((curColWidth[j])+ "px");
             view.table.setWidget(i,j,(Widget)tcell);
             view.table.getFlexCellFormatter().addStyleName(i,
                                                   j,
@@ -793,9 +790,10 @@ public class TableController implements
         //else
             view.header.setWidth(displayWidth+"px");
         int viewWidth = -1;
-        if(!view.width.equals("auto"))
+        if(!view.width.equals("auto")){
             viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));
-        else
+            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+cellSpacing+18)+"px"); 
+        }else
             viewWidth = displayWidth;
         //else if(!GWT.isScript()){
         //    view.cellView.setWidth(view.table.getOffsetWidth()+"px");
@@ -806,9 +804,11 @@ public class TableController implements
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
         }
         */
-        if(model.numRows() > maxRows)
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
-        else
+        if(!view.width.equals("auto"))
+        if(model.numRows() > maxRows){
+            
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);  
+        }else
             view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
         if(showRows){
             if(model.numRows() > maxRows){

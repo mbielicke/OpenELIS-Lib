@@ -137,11 +137,11 @@ public class FormCalendarWidget extends Composite implements
 
     public void setEnabled(boolean enabled) {
         //textbox.setEnabled(enabled);
-        calendar.removeClickListener(this);
+        calendarImage.removeClickListener(this);
         if (enabled == false)
-            calendar.removeClickListener(this);
+            calendarImage.removeClickListener(this);
         else
-            calendar.addClickListener(this);
+            calendarImage.addClickListener(this);
         textbox.setReadOnly(!enabled);
     }
 

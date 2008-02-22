@@ -2,6 +2,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -16,7 +17,7 @@ import org.openelis.gwt.widget.OptionList;
 import java.util.Iterator;
 import java.util.List;
 /**
- * ScreenOption wraps the OptionList for display on a Screen.
+ *  ScreenOption wraps the OptionList for display on a Screen.
  * @author tschmidt
  *
  */
@@ -54,6 +55,12 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
                         screen.doTab(event, this);
                     }
+                }else if(DOM.eventGetType(event) == Event.ONMOUSEDOWN) {
+                    if(!enabled){
+                        DOM.eventCancelBubble(event,true);
+                        DOM.eventPreventDefault(event);
+                        setFocus(false);
+                    }
                 } else {
                     super.onBrowserEvent(event);
                 }
@@ -82,6 +89,7 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
         displayWidget = optionlist;
         optionlist.setStyleName("ScreenOption");
         setDefaults(node, screen);
+        optionlist.sinkEvents(Event.ONMOUSEDOWN);
     }
 
     public ScreenWidget getInstance(Node node, ScreenBase screen) {
@@ -128,10 +136,7 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
     
     public void enable(boolean enabled){
         this.enabled = enabled;
-        if(enabled)
-            optionlist.addFocusListener(this);
-        else
-            optionlist.removeFocusListener(this);
+        optionlist.setEnabled(enabled);
     }
 
     public void onFocus(Widget sender) {
