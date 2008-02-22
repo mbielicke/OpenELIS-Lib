@@ -9,7 +9,7 @@ import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.common.data.TableRow;
-import org.openelis.gwt.screen.ScreenAuto;
+import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
 import org.openelis.gwt.widget.table.TableCellWidget;
@@ -18,6 +18,8 @@ import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableWidget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -55,7 +57,17 @@ public class AutoCompleteTextBox extends Composite implements
                                                 TableManager, HasFocus{
 	
 	public HorizontalPanel mainHP = new HorizontalPanel();
-	public TextBox textBox = new TextBox();
+	public TextBox textBox = new TextBox() {
+		public void onBrowserEvent(Event event) {
+			if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+				if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB){
+					screen.doTab(event, comp);}
+			} else {
+				super.onBrowserEvent(event);
+			}
+		}
+	};
+	
 	private FocusPanel focusPanel = new FocusPanel();
 
     /**
@@ -75,6 +87,8 @@ public class AutoCompleteTextBox extends Composite implements
     protected String type = "integer";
     protected Integer startPos = new Integer(0);
     protected boolean selectByEnter = false;
+    private ScreenBase screen;
+    protected Widget comp;
     
     //table values
     AbstractField[] fields;
@@ -173,6 +187,9 @@ public class AutoCompleteTextBox extends Composite implements
     	textBox.addKeyboardListener(this);
     	textBox.addStyleName("TextboxUnselected");    	
     	mainHP.setSpacing(0);    	
+    	
+    	comp = this;
+    	
     	mainHP.addStyleName("AutoDropdown");
     }
 
@@ -680,8 +697,8 @@ public class AutoCompleteTextBox extends Composite implements
 				focusPanel.removeStyleName("Selected");
 				//if(choicesPopup.isAttached() && choicesPopup.isVisible() && selectByEnter)
 					complete();
-					textBox.setFocus(false);
-					focusPanel.setFocus(false);
+					//textBox.setFocus(false);
+					//focusPanel.setFocus(false);
 			//	else{
 				//	textBox.setText("");
 				//	value = null;
@@ -835,4 +852,8 @@ public class AutoCompleteTextBox extends Composite implements
         // TODO Auto-generated method stub
         
     }
+    
+    public void setForm(ScreenBase screen) {
+		this.screen = screen;
+	}
 }

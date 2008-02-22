@@ -91,18 +91,9 @@ public class ScreenAuto extends ScreenInputWidget implements FocusListener{
         //Node alignNode = ((Element)node).getElementsByTagName("colAligns").item(0);
         //Node statFilter = ((Element)node).getElementsByTagName("statFilters").item(0);
 
-        auto = new AutoCompleteTextBox(cat, url, dropDown, textBoxDefault, width) {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
-                        return;
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
+        auto = new AutoCompleteTextBox(cat, url, dropDown, textBoxDefault, width);
+        
+        auto.setForm(screen);
         
         if(widthsNode != null) {
         	auto.setWidths(getWidths(widthsNode));
