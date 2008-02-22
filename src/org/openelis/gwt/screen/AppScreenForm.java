@@ -224,14 +224,13 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     
     public void afterCommitDelete(boolean success){
     	if(success){
-    		getPage(false);
-    		strikeThru(false);
-    		bpanel.setState(FormInt.DISPLAY);
-    		
     		if(constants != null)
-                message.setText(constants.getString("deleteComplete"));
+    			getPage(false,constants.getString("deleteComplete"));
             else
-            	message.setText("Delete...Complete");           
+            	getPage(false,"Delete...Complete");        
+
+    		strikeThru(false);
+    		bpanel.setState(FormInt.DISPLAY);   
         }
     }
 
@@ -369,7 +368,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         });
     }
     
-    public void getPage(final boolean selectItem) {
+    public void getPage(final boolean selectItem, final String messageText) {
         formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
             public void onSuccess(Object result){
                 modelWidget.setModel((DataModel)result);
@@ -380,10 +379,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
 	                	modelWidget.select(0);
                 }        
                 
-                if(constants != null)
-                    message.setText(constants.getString("queryingComplete"));
-                else
-                    message.setText("Querying...Complete");
+                if(messageText == null){
+	                if(constants != null)
+	                    message.setText(constants.getString("queryingComplete"));
+	                else
+	                    message.setText("Querying...Complete");
+                }else{
+                	message.setText(messageText);
+                }
             }
             
             public void onFailure(Throwable caught){
@@ -536,7 +539,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 fetch();
             }
             if(modelWidget.event == DataModelWidget.GETPAGE)
-                getPage(true);
+                getPage(true, null);
         }
     }
 
