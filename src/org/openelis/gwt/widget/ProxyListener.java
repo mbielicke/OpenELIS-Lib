@@ -5,12 +5,15 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import java.util.Vector;
 
+import org.openelis.gwt.screen.ScreenHorizontal;
 import org.openelis.gwt.screen.ScreenWidget;
 /**
  * ProxyListener is a DragListener for dragging widgets around a 
@@ -26,7 +29,12 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
     
     public void onMouseDown(Widget sender, final int x, final int y) {
 
-        final ScreenWidget proxy = ((ScreenWidget)sender).getInstance();
+        final ScreenHorizontal proxy = new ScreenHorizontal(((ScreenWidget)sender).getScreen(),"proxy");
+        AbsolutePanel dragIndicator = new AbsolutePanel();
+        dragIndicator.setStyleName("DragStatus");
+        dragIndicator.addStyleName("NoDrop");
+        ((HorizontalPanel)proxy.getWidget()).add(dragIndicator);
+        ((HorizontalPanel)proxy.getWidget()).add(((ScreenWidget)sender).getInstance());
         proxy.setStyleName(sender.getStyleName());
         proxy.setUserObject(sender);
         proxy.addDragListener(this);
@@ -57,12 +65,13 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
     }
 
     public void onDragEnter(Widget sender, Widget target) {
-        // TODO Auto-generated method stub
-
+        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).removeStyleName("NoDrop");
+        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).addStyleName("Drop");
     }
 
     public void onDragExit(Widget sender, Widget target) {
-        // TODO Auto-generated method stub
+        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).removeStyleName("Drop");
+        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).addStyleName("NoDrop");
 
     }
 

@@ -1304,5 +1304,15 @@ cursor:wait;
 
 .strike { text-decoration: line-through; }
 
+.DragStatus .NoDrop {
+    background:red;
+    width:10px;
+    height:10px;
+}
 
+.DragStatus .Drop {
+    background:green;
+    width:10px;
+    height:10px;
+}
 
