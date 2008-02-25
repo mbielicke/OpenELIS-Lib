@@ -1,6 +1,6 @@
 package org.openelis.gwt.screen;
 
-import com.google.gwt.i18n.client.ConstantsWithLookup;
+//import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -45,7 +45,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public DataModelWidget modelWidget = new DataModelWidget();
     private DataSet key;
     public ScreenWindow window;
-    public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
+    //public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
     public AppScreenFormServiceIntAsync formService;
     //this is used to internationalize the status bar messages
     //private ConstantsWithLookup constants = null;
@@ -107,9 +107,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      */
     public void query(int state) {
         bpanel.setState(FormInt.QUERY);
-        if(constants != null)
-            message.setText(constants.getString("enterFieldsToQuery"));
-        else
+       // if(constants != null)
+        //    message.setText(constants.getString("enterFieldsToQuery"));
+        //else
             message.setText("Enter fields to query by then press Commit");
         setForm(true);
         rpc = (FormRPC)forms.get("query");
@@ -148,9 +148,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         doReset();
         enable(true);
         bpanel.setState(FormInt.ADD);
-        if(constants != null)
-            message.setText(constants.getString("enterInformationPressCommit"));
-        else
+        //if(constants != null)
+        //    message.setText(constants.getString("enterInformationPressCommit"));
+        //else
             message.setText("Enter information in the fields, then press Commit");
     }
 
@@ -176,9 +176,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void afterUpdate(boolean success){
         if(success){
             enable(true);
-            if(constants != null)
-                message.setText(constants.getString("updateFieldsPressCommit"));
-            else
+           // if(constants != null)
+           //     message.setText(constants.getString("updateFieldsPressCommit"));
+           // else
                 message.setText("Update fields then, press Commit");            
             bpanel.setState(FormInt.UPDATE);
         }else
@@ -198,9 +198,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     	bpanel.setState(FormInt.DELETE);
     	
     	//set the message to delete
-    	if(constants != null)
-            message.setText(constants.getString("deleteMessage"));
-        else
+    	//if(constants != null)
+        //    message.setText(constants.getString("deleteMessage"));
+       // else
         	message.setText("Pressing commit will delete the current record from the database");           
     }
     
@@ -224,9 +224,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     
     public void afterCommitDelete(boolean success){
     	if(success){
-    		if(constants != null)
-    			getPage(false,constants.getString("deleteComplete"));
-            else
+    	//	if(constants != null)
+    	//		getPage(false,constants.getString("deleteComplete"));
+        //    else
             	getPage(false,"Delete...Complete");        
 
     		strikeThru(false);
@@ -243,48 +243,48 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-                if(constants != null)
-                    message.setText(constants.getString("updating"));
-                else
+          //      if(constants != null)
+          //          message.setText(constants.getString("updating"));
+          //      else
                     message.setText("Updating...");
                 clearErrors();
                 commitUpdate();
             } else {
                 drawErrors();
-                if(constants != null)
-                    message.setText(constants.getString("correctErrors"));
-                else
+          //      if(constants != null)
+          //          message.setText(constants.getString("correctErrors"));
+          //      else
                     message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.ADD) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-                if(constants != null)
-                    message.setText(constants.getString("adding"));
-                else
+          //      if(constants != null)
+          //          message.setText(constants.getString("adding"));
+          //      else
                     message.setText("Adding...");
                 clearErrors();
                 commitAdd();
             } else {
                 drawErrors();
-                if(constants != null)
-                    message.setText(constants.getString("correctErrors"));
-                else
+         //       if(constants != null)
+         //           message.setText(constants.getString("correctErrors"));
+         //       else
                     message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.QUERY) {            
-            if(constants != null)
-                message.setText(constants.getString("querying"));
-            else
+         //   if(constants != null)
+         //       message.setText(constants.getString("querying"));
+         //   else
                 message.setText("Querying...");
             commitQuery(rpc);
         }
         if(state == FormInt.DELETE){
-        	 if(constants != null)
-                 message.setText(constants.getString("deleting"));
-             else
+        //	 if(constants != null)
+        //         message.setText(constants.getString("deleting"));
+        //     else
             	 message.setText("Deleting...");
            
         	 commitDelete();
@@ -311,14 +311,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if(success){
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
-            if(constants != null)
-                message.setText(constants.getString("updatingComplete"));
-            else
+       //     if(constants != null)
+       //         message.setText(constants.getString("updatingComplete"));
+       //     else
                 message.setText("Updating...Complete");
         }else{
-            if(constants != null)
-                message.setText(constants.getString("updateFailed"));
-            else
+      //      if(constants != null)
+      //          message.setText(constants.getString("updateFailed"));
+      //      else
                 message.setText("Update Failed. Make corrections and try again or Abort.");
         }
     }
@@ -342,14 +342,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if(success){
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
-            if(constants != null)
-                message.setText(constants.getString("addingComplete"));
-            else
+      //      if(constants != null)
+      //          message.setText(constants.getString("addingComplete"));
+      //      else
                 message.setText("Adding...Complete");
         }else{
-            if(constants != null)
-                message.setText(constants.getString("addingFailed"));
-            else
+      //      if(constants != null)
+      //          message.setText(constants.getString("addingFailed"));
+      //      else
                 message.setText("Adding Failed. Make corrections and try again or Abort");
         }
     }
@@ -380,9 +380,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 }        
                 
                 if(messageText == null){
-	                if(constants != null)
-	                    message.setText(constants.getString("queryingComplete"));
-	                else
+	    //            if(constants != null)
+	    //                message.setText(constants.getString("queryingComplete"));
+	    //            else
 	                    message.setText("Querying...Complete");
                 }else{
                 	message.setText(messageText);
@@ -396,9 +396,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
              	   if(modelWidget.getSelectedIndex() == modelWidget.getModel().size()){
              		   modelWidget.getModel().select(modelWidget.getSelectedIndex()-1);
              		   
-             		  if(constants != null)
-                          message.setText(constants.getString("endingQueryException"));
-                      else
+        //     		  if(constants != null)
+        //                  message.setText(constants.getString("endingQueryException"));
+        //              else
                           message.setText("You are at the end of your query results");             		   
              	   }else
              		   message.setText(caught.getMessage());
@@ -417,9 +417,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             enable(false);
             bpanel.setState(FormInt.DISPLAY);
 
-            if(constants != null)
-                message.setText(constants.getString("queryingComplete"));
-            else
+      //      if(constants != null)
+      //          message.setText(constants.getString("queryingComplete"));
+      //      else
                 message.setText("Querying...Complete");
             
         }
@@ -443,35 +443,35 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                }
             });
             enable(false);
-            if(constants != null)
-            	message.setText(constants.getString("updateAborted"));
-            else
+     //       if(constants != null)
+     //       	message.setText(constants.getString("updateAborted"));
+     //       else
             	message.setText("Update aborted");
         }
         if (state == FormInt.ADD) {
             doReset();
             clearErrors();
             enable(false);
-            if(constants != null)
-                message.setText(constants.getString("addAborted"));
-            else
+     //       if(constants != null)
+     //           message.setText(constants.getString("addAborted"));
+     //       else
                 message.setText("Add aborted");
         }
         if (state == FormInt.QUERY) {
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
-            if(constants != null)
-                message.setText(constants.getString("queryAborted"));
-            else
+    //        if(constants != null)
+    //            message.setText(constants.getString("queryAborted"));
+    //        else
                 message.setText("Query aborted");
         }
         if(state == FormInt.DELETE){
         	strikeThru(false);
         	
-        	if(constants != null)
-                message.setText(constants.getString("deleteAborted"));
-            else
+   //     	if(constants != null)
+   //             message.setText(constants.getString("deleteAborted"));
+   //         else
         	message.setText("Delete aborted");
         }
         bpanel.setState(FormInt.DISPLAY);
@@ -503,9 +503,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if(bpanel.state == FormInt.ADD ||
            bpanel.state == FormInt.QUERY ||
            bpanel.state == FormInt.UPDATE){
-            if(constants != null)
-                message.setText(constants.getString("mustCommitOrAbort"));
-            else 
+   //         if(constants != null)
+   //             message.setText(constants.getString("mustCommitOrAbort"));
+   //         else 
                 message.setText("You must Commit or Abort changes first");
             return true;
         }

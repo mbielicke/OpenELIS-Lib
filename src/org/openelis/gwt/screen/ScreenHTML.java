@@ -50,11 +50,13 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
         super(node);
         html = new HTML(node.getFirstChild().getNodeValue());
         if (node.getAttributes().getNamedItem("onclick") != null) {
-        	String listener = node.getAttributes().getNamedItem("onclick").getNodeValue();
-        	if(listener.equals("this"))
-        		addClickListener(screen);
-        	else
-        		addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listener));
+        	String[] listeners = node.getAttributes().getNamedItem("onclick").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this"))
+                    addClickListener(screen);
+                else
+                    addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
+            }
         }
         initWidget(html);
         html.setStyleName("ScreenHTML");

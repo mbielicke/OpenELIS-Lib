@@ -65,7 +65,7 @@ public class ScreenBase extends Composite implements
     /**
      * This field contains all widgets available to this application
      */
-    private static WidgetMap WIDGET_MAP;
+    private static WidgetMap WIDGET_MAP = new WidgetMap();
 
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 

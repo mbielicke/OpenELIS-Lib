@@ -65,11 +65,13 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
         else
             label.setWordWrap(false);
         if(node.getAttributes().getNamedItem("onClick") != null){
-            String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
-            if(listener.equals("this"))
-                addClickListener(screen);
-            else
-                addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listener));
+            String[] listeners = node.getAttributes().getNamedItem("onClick").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this"))
+                    addClickListener(screen);
+                else
+                    addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
+            }
         }
         initWidget(label);
         label.setStyleName("ScreenLabel");
