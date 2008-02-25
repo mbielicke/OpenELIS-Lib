@@ -50,11 +50,13 @@ public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
             setUserObject(node.getAttributes().getNamedItem("value").getNodeValue());
         }
         if(node.getAttributes().getNamedItem("onClick") != null){
-            String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
-            if(listener.equals("this"))
-                addClickListener(screen);
-            else
-                addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listener));
+            String[] listeners = node.getAttributes().getNamedItem("onClick").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this"))
+                    addClickListener(screen);
+                else
+                    addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
+            }
         }
         setDefaults(node, screen);
     }
