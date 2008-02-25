@@ -50,6 +50,18 @@ public class ScreenPagedTree extends ScreenWidget {
                                      .getNodeValue());        
         
          }
+        if (node.getAttributes().getNamedItem("width") != null) {
+            controller.view.setWidth(node.getAttributes()
+                                     .getNamedItem("width")
+                                     .getNodeValue());        
+        
+         }
+        if (node.getAttributes().getNamedItem("height") != null) {
+            controller.view.setWidth(node.getAttributes()
+                                     .getNamedItem("height")
+                                     .getNodeValue());        
+        
+         }
         if (node.getAttributes().getNamedItem("itemsPerPage") != null) {
             String ipp  = node.getAttributes().getNamedItem("itemsPerPage").getNodeValue();
             Integer itemsPerPageVal = new Integer(ipp);
