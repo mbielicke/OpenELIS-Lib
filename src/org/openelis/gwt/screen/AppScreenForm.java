@@ -43,7 +43,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public Label message = new Label();
     
     public DataModelWidget modelWidget = new DataModelWidget();
-    private DataSet key;
+    protected DataSet key;
     public ScreenWindow window;
     //public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
     public AppScreenFormServiceIntAsync formService;
