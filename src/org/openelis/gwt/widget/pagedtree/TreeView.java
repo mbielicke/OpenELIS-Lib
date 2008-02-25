@@ -23,7 +23,7 @@ public class TreeView extends Composite {
     private VerticalPanel vp = new VerticalPanel();
     public ScrollPanel vScroll = new ScrollPanel();    
     
-    private VerticalPanel vtreePanel = new VerticalPanel();
+    //private VerticalPanel vtreePanel = new VerticalPanel();
     public String width;
     public String height;
     private String navLinks = "NavLinks";
@@ -69,27 +69,27 @@ public class TreeView extends Composite {
     		vp.add(titlePanel);
            }
         }   
-        //vScroll.setWidget(tree);
-        //vp.add(vScroll);
-        vtreePanel.add(tree);
-        vp.add(vtreePanel);
+        vScroll.setWidget(tree);
+        vp.add(vScroll);
+        //vtreePanel.add(tree);
+        //vp.add(vtreePanel);
         vp.add(navPanel);
     }
     
         
     public void setHeight(String height) {     
-        //vScroll.setHeight(height); 
+        vScroll.setHeight(height); 
         this.height = height; 
-        vtreePanel.setHeight(height);
+        //vtreePanel.setHeight(height);
         tree.setHeight(height);        
        
     }
     
     public void setWidth(String width) {
         
-        //vScroll.setWidth(width);
+        vScroll.setWidth(width);
         this.width = width; 
-        vtreePanel.setWidth(width);
+        //vtreePanel.setWidth(width);
         tree.setWidth(width);               
     }
     
@@ -98,12 +98,12 @@ public class TreeView extends Composite {
     }
     
     public void reset(){
-        vtreePanel.clear();
+        //vtreePanel.clear();
         tree = new Tree(images);
         //tree = new Tree();
-       // vScroll.setWidget(tree);
+        vScroll.setWidget(tree);
         
-        vtreePanel.add(tree);
+        //vtreePanel.add(tree);
         tree.addStyleName("ScreenTree");
     }
     
@@ -118,7 +118,8 @@ public class TreeView extends Composite {
                titlePanel.addStyleName("TitlePanel");
                vp.clear();
                vp.add(titlePanel);
-               vp.add(vtreePanel);
+               //vp.add(vtreePanel);
+               vp.add(vScroll);
                vp.add(navPanel);
              }
             }

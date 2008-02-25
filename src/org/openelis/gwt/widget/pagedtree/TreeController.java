@@ -220,11 +220,5 @@ public class TreeController implements  ClickListener, Serializable {
         vScroll.setWidth("100%");
         return vScroll;
     }
-    
-    public Widget getScrollableView(String width, String height){
-        vScroll.setWidget(view);           
-        vScroll.setHeight(height);        
-        vScroll.setWidth(width);
-        return vScroll;
-    }
+        
 }
