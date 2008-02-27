@@ -535,7 +535,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void onChange(Widget sender) {
         if(sender == modelWidget){
             if(modelWidget.event == DataModelWidget.SELECTION){
-                key = modelWidget.getSelected();
+                key = (DataSet)((DataSet)modelWidget.getSelected()).getInstance();
                 fetch();
             }
             if(modelWidget.event == DataModelWidget.GETPAGE)
