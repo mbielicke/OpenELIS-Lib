@@ -3,6 +3,7 @@ package org.openelis.gwt.widget.table;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
@@ -201,15 +202,22 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
 		//	display.setText(editor.textBox.getText());
 		//else
 		//need to get the display
-		autoService.getDisplay(editor.cat, editor.getModel(), field, new AsyncCallback() {
-	           public void onSuccess(Object result){
-	               DataModel model = (DataModel)result;
-	               display.setText((String)((StringObject)model.get(0).getObject(1)).getValue());
-	           }
-	           public void onFailure(Throwable caught){
-	               Window.alert(caught.getMessage());
-	           }
-	        });
+		try {
+			autoService.getDisplay(editor.cat, editor.getModel(), field, new AsyncCallback() {
+			       public void onSuccess(Object result){
+			           DataModel model = (DataModel)result;
+			           if(model.size()>0)
+			        	   display.setText((String)((StringObject)model.get(0).getObject(1)).getValue());
+			           else
+			        	   display.setText("");
+			       }
+			       public void onFailure(Throwable caught){
+			           Window.alert(caught.getMessage());
+			       }
+			    });
+		} catch (RPCException e) {
+			Window.alert("tableAuto-getDisplay: "+e.getMessage());
+		}
 		
 		//display.setText((String)editor.textBox.getText());
 		//	display.setText((String)textValue.getValue());

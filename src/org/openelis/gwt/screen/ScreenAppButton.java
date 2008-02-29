@@ -50,8 +50,12 @@ public class ScreenAppButton extends ScreenWidget {
         if (node.getAttributes().getNamedItem("onclick") != null){
             button.addClickListener(screen);
         }
+        
         initWidget(button);
         setDefaults(node, screen);
+        
+        if (node.getAttributes().getNamedItem("style") != null)
+        	button.setStyleName(node.getAttributes().getNamedItem("style").getNodeValue());
     }
     
     public ScreenWidget getInstance(Node node, ScreenBase screen){

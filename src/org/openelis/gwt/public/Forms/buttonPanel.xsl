@@ -37,7 +37,7 @@ version="1.0">
 <xsl:param name="buttonsParam"/>
 <!--code goes here-->
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'q'">
-	<appButton action="query" toggle="true">	
+	<appButton action="query" toggle="true" style="ButtonPanelButton">	
 		<panel xsi:type="Panel" layout="horizontal">
 		<panel xsi:type="Absolute" layout="absolute" style="QueryButtonImage"/>
 	     	<widget>
@@ -47,7 +47,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'p'">
-	<appButton action="prev" toggle="true">
+	<appButton action="prev" toggle="true" style="ButtonPanelButton">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="PreviousButtonImage"/>
 	        <widget>
@@ -57,7 +57,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'n'">
-	<appButton action="next" toggle="true">
+	<appButton action="next" toggle="true" style="ButtonPanelButton">
 		 <panel xsi:type="Panel" layout="horizontal">
 	  		<panel xsi:type="Absolute" layout="absolute" style="NextButtonImage"/>
 	     	<widget>
@@ -67,7 +67,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'a'">
-	<appButton action="add" toggle="true">
+	<appButton action="add" toggle="true" style="ButtonPanelButton">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="AddButtonImage"/>
 	        <widget>
@@ -77,7 +77,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'u'">
-	<appButton action="update" toggle="true">
+	<appButton action="update" toggle="true" style="ButtonPanelButton">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="UpdateButtonImage"/>
 	        <widget>
@@ -87,7 +87,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'd'">
-	<appButton action="delete" toggle="true">
+	<appButton action="delete" toggle="true" style="ButtonPanelButton">
 		<panel xsi:type="Panel" layout="horizontal">
 	     	<panel xsi:type="Absolute" layout="absolute" style="DeleteButtonImage"/>
 	        <widget>
@@ -97,7 +97,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'c'">
-	<appButton action="commit">
+	<appButton action="commit" style="ButtonPanelButton">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
 	        <widget>
@@ -107,7 +107,7 @@ version="1.0">
 	</appButton>
 </xsl:if>
 <xsl:if test="substring(string($buttonsParam),$iteration,1) = 'b'">
-	<appButton action="abort">
+	<appButton action="abort" style="ButtonPanelButton">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="AbortButtonImage"/>
 	    	<widget>

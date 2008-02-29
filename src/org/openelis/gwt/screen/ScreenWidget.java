@@ -8,6 +8,7 @@ import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.dnd.DropListenerCollection;
 import com.google.gwt.user.client.dnd.SourcesDragEvents;
 import com.google.gwt.user.client.dnd.SourcesDropEvents;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -226,17 +227,17 @@ public class ScreenWidget extends SimplePanel implements
                                                     .get(listener));
             }
         }
-        if (node.getAttributes().getNamedItem("mouse") != null) {
-            String listener = node.getAttributes()
-                                  .getNamedItem("mouse")
-                                  .getNodeValue();
-            if (listener.equals("this"))
-                addMouseListener(screen);
-            else {
-                addMouseListener((MouseListener)ScreenBase.getWidgetMap()
-                                                      .get(listener));
+        
+        if(node.getAttributes().getNamedItem("mouse") != null){
+            String[] listeners = node.getAttributes().getNamedItem("mouse").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this"))
+                	addMouseListener(screen);
+                else
+                	addMouseListener((MouseListener)ScreenBase.getWidgetMap().get(listeners[i]));
             }
         }
+        
         if (node.getAttributes().getNamedItem("targets") != null) {
             String targets[] = node.getAttributes()
                                   .getNamedItem("targets")

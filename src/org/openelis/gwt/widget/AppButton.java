@@ -23,6 +23,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     public String action;
     public boolean toggle;
     private FocusPanel panel = new FocusPanel();
+    private FocusPanel classPanel = new FocusPanel();
     private ClickListener listener;
     private HorizontalPanel hp = new HorizontalPanel();
     private AbsolutePanel right = new AbsolutePanel();
@@ -33,9 +34,10 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
         hp.add(left);
         hp.add(content);
         hp.add(right);
-        panel.add(hp);
+        classPanel.add(hp);
+        panel.add(classPanel);
         initWidget(panel);
-        panel.addStyleName("ScreenPanelButton");
+        //panel.addStyleName("ScreenPanelButton");
         left.addStyleName("ButtonLeftSide");
         right.addStyleName("ButtonRightSide");
         content.addStyleName("ButtonContent");
@@ -111,11 +113,9 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
             else
                 changeState(UNPRESSED);
         }
-            
-        
     }
    
-    
-    
-
+    public void setStyleName(String styleName){
+	  classPanel.setStyleName(styleName);
+    }
 }

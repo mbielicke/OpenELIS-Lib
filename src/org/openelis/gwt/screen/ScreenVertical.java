@@ -6,8 +6,10 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+import com.google.gwt.xml.client.XMLParser;
 
 /**
  * ScreenVertical wraps a GWT VerticalPanel to display widgets on a 
@@ -109,7 +111,31 @@ public class ScreenVertical extends ScreenWidget {
         }
         */
     }
+    
+    /**
+     * createPanel creates the vertical panel from an XML node 
+     * @param node
+     */
+    public void createPanel(Node node){
+        NodeList widgets = node.getChildNodes();
+        for (int k = 0; k < widgets.getLength(); k++) {
+            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                Widget wid = ScreenWidget.loadWidget(widgets.item(k), screen);
+                addWidget(widgets.item(k), wid);
+            }
+        }
+    }
 
+    /**
+     * This method loads the Widget from a String
+     * @param xml
+     */
+    public void load(String xml) {
+        Document doc = XMLParser.parse(xml);
+        panel.clear();
+        createPanel(doc.getDocumentElement());
+    }
+    
     public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenVertical(node, screen);
     }
