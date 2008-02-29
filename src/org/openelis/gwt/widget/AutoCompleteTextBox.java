@@ -459,8 +459,11 @@ public class AutoCompleteTextBox extends Composite implements
     		icon.addStyleName("BusyPanel");
     		icon.setVisible(true);
     	}
-    	
-        autoService.getMatches(cat, modelWidget.getModel(), text, matchCallback);
+    	try {
+    	    autoService.getMatches(cat, modelWidget.getModel(), text, matchCallback);
+        }catch(Exception e){
+            Window.alert(e.getMessage());
+        }
     }
 
     /**
@@ -477,7 +480,11 @@ public class AutoCompleteTextBox extends Composite implements
         		stringField.setValue(val);
         		DataModel model = null;
         		reset();
+                try {
                 autoService.getDisplay(cat, model, stringField, displayCallback);
+            }catch(Exception e){
+                Window.alert(e.getMessage());
+            }
         	}else
         		reset();
         }else if(type.equals("integer")){
@@ -489,7 +496,11 @@ public class AutoCompleteTextBox extends Composite implements
                 numberField.setValue(val);
                 DataModel model = null;
                 reset();
+                try {
         		autoService.getDisplay(cat, model, numberField, displayCallback);
+            }catch(Exception e){
+                Window.alert(e.getMessage());
+            }
         	}else
         		reset();
         }
