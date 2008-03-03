@@ -1,0 +1,42 @@
+.menuDiv {
+    background:#fcfcf9;
+    position:absolute;
+    overflow:auto;
+    width:auto;
+}
+.menuDiv div{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    color:#333333;
+    font-size:11px;
+    line-height:15px;
+    width:93%;
+    padding:1px;
+    padding-left:5px;
+    padding-right:5px;
+
+}
+.inactive div{
+     color:lightgrey;
+}
+
+.head{
+    cursor:pointer;
+}
+.colHeader{
+    cursor:pointer;
+}
+.otherMenu {
+	border:1px solid black;
+	background:url(/images/goldbarno.jpg);
+	position:absolute;
+    cursor:default;
+    overflow:auto;
+}
+
+.otherMenu td{
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size: 12px; 
+	color:#39659c; 
+	font-weight: bold;
+}
