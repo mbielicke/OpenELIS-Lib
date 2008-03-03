@@ -876,9 +876,9 @@ padding-bottom:0;
 }
 
 .WindowDragPanel {
-    background:blue;
-    border:1px dashed black;
-    opacity:5;
+    background:#bac8d9;
+    border:1px dashed gray;
+    opacity:0.5;
     filter: alpha(opacity=50);
 }
 
@@ -925,8 +925,6 @@ border:none;
 .Form {
     font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
     font-size:11px;
-    border:1px solid #99bbe8;
-    border-width:0 0 0 1px;
 }
 .FormTitle{
     color:#486095;
