@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -139,6 +138,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     
     public ScreenWindow(WindowBrowser browser, String name, String cat, String loadingText) {      
         initWidget(outer);
+        setVisible(false);
         this.browser = browser;
         this.name = name;
         zIndex = browser.index;
@@ -184,8 +184,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         hp.add(trCorner);
         hp.setCellWidth(hp2,"32px");
         hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
-        statusImg.addStyleName("StatusImage");
-        statusImg.addMouseListener(this);
         status.setStyleName("StatusBar");
         status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         
@@ -239,7 +237,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         }else if(content instanceof AppScreenForm){
         	((AppScreenForm)content).message =  message;
             ((AppScreenForm)content).window = this;
+        }else if(content instanceof Screen) {
+            ((Screen)content).window = this;
         }
+        //setVisible(true);
     }
     
     private void checkZ() {
@@ -363,14 +364,12 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
 
     public void onMouseEnter(Widget sender) {
         if(sender == statusImg){
+            if(messagePanel == null){
+                return;
+            }
             if(pop == null){
                 pop = new PopupPanel();
                 pop.setStyleName("MessagePopup");
-            }
-            if(messagePanel == null){
-                messagePanel = new VerticalPanel();
-                messagePanel.add(new Label("Testing Mouse Over"));
-                messagePanel.setStyleName("MessagePopup");
             }
             pop.setWidget(messagePanel);
             //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
@@ -422,12 +421,20 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         ((ScreenBase)content).keep = keep;
     }
     
-    public void setMessagePopup(String[] messages) {
+    public void setMessagePopup(String[] messages, String style) {
+        statusImg.setStyleName(style);
+        statusImg.removeMouseListener(this);
+        statusImg.addMouseListener(this);
         messagePanel = new VerticalPanel();
         for(int i = 0; i < messages.length; i++){
             Label msg = new Label(messages[i]);
             messagePanel.add(msg);
         }
+    }
+    
+    public void clearMessagePopup(String style) {
+        statusImg.setStyleName(style);
+        statusImg.removeMouseListener(this);
     }
 
 }

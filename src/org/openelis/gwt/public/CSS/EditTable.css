@@ -64,7 +64,7 @@ height:18px;
 }
 .Header{
     height:18px;
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("/openelis/Images/headersprite.gif") repeat-x;
     border-collapse:collapse;
     border-bottom:1px solid #8db2e3;
     overflow:hidden;
@@ -72,7 +72,7 @@ height:18px;
 .HeaderBar{
     width:3px;
     height:17px;
-    background:url('../Images/buttondivider.gif') no-repeat center center;
+    background:url('/openelis/Images/buttondivider.gif') no-repeat center center;
     cursor:e-resize;
 }
 .HeaderBarPad{
@@ -138,11 +138,11 @@ background:white;
 }
 a.navindex:hover{
     color:#333333;
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("/openelis/Images/headersprite.gif") repeat-x;
     text-decoration:none;
 }
 .current .navIndex {
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("/openelis/Images/headersprite.gif") repeat-x;
 }	
 .current a.navIndex:hover{
 }
@@ -155,7 +155,7 @@ a.index:hover{
 .prevNavIndex{
 width:16px;
 height:16px;
-background:url('../Images/previous.gif');
+background:url('/openelis/Images/previous.gif');
 }
 
 .prevNavIndexDisabled{
@@ -167,7 +167,7 @@ background:none;
 .nextNavIndex{
 width:16px;
 height:16px;
-background:url('../Images/next.gif');
+background:url('/openelis/Images/next.gif');
 }	
 
 a.index:hover{

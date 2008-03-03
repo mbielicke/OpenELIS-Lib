@@ -5,6 +5,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
@@ -65,6 +66,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         bpanel.setState(FormInt.DISPLAY);
         enable(false);
         bpanel.setButtonState("update",AppButton.DISABLED);
+        if(window != null){
+            window.setVisible(true);
+            RootPanel.get("main").removeStyleName("ScreenLoad");
+        }
     }
     
     public void fetch(){

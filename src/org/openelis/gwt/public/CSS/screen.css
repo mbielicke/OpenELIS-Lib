@@ -23,7 +23,7 @@ html, body {
     height:30px;
     width:100%;
     margin-bottom:8px;
-    background:black url(../Images/topmenubg.gif) repeat-x;
+    background:black url(/timetracker/Images/topmenubg.gif) repeat-x;
 }
 
 .topMenuBarItem {
@@ -44,7 +44,7 @@ html, body {
 .topMenuContainer{
     border:1px solid #333;
     border-top:0;
-    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    background:#f0f0f0 url('/timetracker/Images/menu.gif') repeat-y;
     padding:4px;
 }
 
@@ -74,7 +74,7 @@ padding:1px;
 .Hover .TopMenuRowContainer{
     cursor:pointer;
     padding:0;
-    background:url('../Images/white-top-bottom.gif') repeat-x 0px -1px;
+    background:url('/timetracker/Images/white-top-bottom.gif') repeat-x 0px -1px;
     border:1px solid #8db2e3;
 }
 .analyteIcon, .methodIcon, .methodPanelIcon, .qaEventsIcon, .resultsIcon, .testManagementIcon, .testTrailerIcon, .worksheetsIcon, .projectIcon, .releaseIcon, .sampleLookupIcon{
@@ -83,40 +83,40 @@ padding:1px;
     padding:4px;
 }
 .analyteIcon{
-    background:url('../Images/addbuttonimage.gif') no-repeat center;
+    background:url('/timetracker/Images/addbuttonimage.gif') no-repeat center;
 }
 .methodIcon{
-    background:url('../Images/addbuttonimage.gif') no-repeat center;
+    background:url('/timetracker/Images/addbuttonimage.gif') no-repeat center;
 }
 .methodPanelIcon{
-    background:url("../Images/removerow.gif") no-repeat center;
+    background:url("/timetracker/Images/removerow.gif") no-repeat center;
 }
 .qaEventsIcon{
-    background:url("../Images/querybuttonimage.gif") no-repeat center;
+    background:url("/timetracker/Images/querybuttonimage.gif") no-repeat center;
 }
 .resultsIcon{
-    background:url("../Images/updatebuttonimage.gif") no-repeat center;
+    background:url("/timetracker/Images/updatebuttonimage.gif") no-repeat center;
 }
 .diabled .resultsIcon{
-    background:url("../Images/updatebuttonimage.gif") no-repeat center;
+    background:url("/timetracker/Images/updatebuttonimage.gif") no-repeat center;
 }
 .testManagementIcon{
-    background:url("../Images/addbuttonimage.gif") no-repeat center;
+    background:url("/timetracker/Images/addbuttonimage.gif") no-repeat center;
 }
 .testTrailerIcon{
-    background:url("../Images/commitbuttonimage.gif") no-repeat center;
+    background:url("/timetracker/Images/commitbuttonimage.gif") no-repeat center;
 }
 .worksheetsIcon{
-    background:url("../Images/abortbuttonimage.gif") no-repeat center;
+    background:url("/timetracker/Images/abortbuttonimage.gif") no-repeat center;
 }
 .projectIcon{
-    background:url('../Images/addbuttonimage.gif') no-repeat center;
+    background:url('/timetracker/Images/addbuttonimage.gif') no-repeat center;
 }
 .releaseIcon{
-    background:url("../Images/removerow.gif") no-repeat center;
+    background:url("/timetracker/Images/removerow.gif") no-repeat center;
 }
 .sampleLookupIcon{
-    background:url('../Images/addbuttonimage.gif') no-repeat center;
+    background:url('/timetracker/Images/addbuttonimage.gif') no-repeat center;
 }
 /*******END TOP MENU BAR***********/
 
@@ -134,22 +134,22 @@ padding:1px;
     margin:2px 0 0 0 ;
     width:2px;
     height:21px;
-    background:url("../Images/screenbuttonrs.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonrs.gif") no-repeat;
     cursor:default;
 }
 .disabled .ButtonRightSide{
-    background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonrsdisabled.gif") no-repeat;
 }
 
 .ButtonLeftSide{
     margin:2px 0 0 4px;
     width:2px;    
     height:21px;
-    background:url("../Images/screenbuttonls.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonls.gif") no-repeat;
     cursor:default;
 }
 .disabled .ButtonLeftSide{
-    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonlsdisabled.gif") no-repeat;
 }
 
 .ButtonContent{
@@ -157,14 +157,14 @@ padding:1px;
     padding: 2px 4px 0 4px;
     height:21px;
     cursor:default;
-    background:url("../Images/screenbuttonbg.gif") repeat-x;
+    background:url("/timetracker/Images/screenbuttonbg.gif") repeat-x;
 }
 .Hover .ButtonContent, .Pressed .ButtonContent {
-    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    background:url("/timetracker/Images/screenbuttonhover.gif") repeat-x;
     cursor:pointer;
 }
 .disabled .ButtonContent{
-    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+    background:url("/timetracker/Images/screenbuttonbgdisabled.gif") repeat-x;
 }
 
 .disabled .ScreenLabel{
@@ -176,10 +176,10 @@ color:gray;
     height:20px;
 }
 .RemoveRowButtonImage{
-    background:url("../Images/removerowbuttonimage.gif") no-repeat;
+    background:url("/timetracker/Images/removerowbuttonimage.gif") no-repeat;
 }
 .disabled .RemoveRowButtonImage{
-    background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
+    background:url("/timetracker/Images/removerowbuttonimagedisabled.gif") no-repeat;
 }
 /*******End General Button Class***********/
 
@@ -187,21 +187,21 @@ color:gray;
 /*******Button Panel***********/
 .ButtonPanelContainer{
     height:26px;
-    background:url("../Images/buttonbarbg.gif") repeat-x;
+    background:url("/timetracker/Images/buttonbarbg.gif") repeat-x;
 }
 
 .ButtonDivider{
     width:2px;
     height:13px;
     margin:6px 2px 0 2px;
-    background:url("../Images/buttondivider.gif") no-repeat;
+    background:url("/timetracker/Images/buttondivider.gif") no-repeat;
 }
 
 .ButtonPanelButton .ButtonContent {
     background:none;
 }
 .Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
-    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    background:url("/timetracker/Images/screenbuttonhover.gif") repeat-x;
     cursor:pointer;
 }
 .disabled .ButtonPanelButton .ButtonContent{
@@ -213,7 +213,7 @@ color:gray;
 }
 .disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
     cursor:default;
-    color:#798da7;
+    color:#bac8d9;
     background:none;
 }
 
@@ -222,7 +222,7 @@ color:gray;
      background:none;
 }
 .Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{
-    background:url("../Images/screenbuttonrs.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonrs.gif") no-repeat;
 }
 .Disabled .ButtonPanelButton .ButtonRightSide{
     background:none;
@@ -232,7 +232,7 @@ color:gray;
     background:none;
 }
 .Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
-    background:url("../Images/screenbuttonls.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonls.gif") no-repeat;
 }
 .Disabled .ButtonPanelButton .ButtonLeftSide{
     background:none;
@@ -241,35 +241,35 @@ color:gray;
 .StandardNoteButtonImage, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .UpdateButtonImage, .DeleteButtonImage, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
-    background:url("../Images/note.gif") no-repeat;
+    background:url("/timetracker/Images/note.gif") no-repeat;
 }
 .Disabled .StandardNoteButtonImage, .Disabled .RemoveRowButtonImage, .Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, .Disabled .CommitButtonImage, .Disabled .AbortButtonImage{
     background:none;
     cursor:default;
 }
-.QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
-.disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
+.QueryButtonImage{background:url("/timetracker/Images/querybuttonimage.gif") no-repeat;}
+.disabled .QueryButtonImage{background:url("/timetracker/Images/querybuttonimagedisabled.gif") no-repeat;}
 
-.PreviousButtonImage{background:url("../Images/previousbuttonimage.gif") no-repeat;}
-.disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
+.PreviousButtonImage{background:url("/timetracker/Images/previousbuttonimage.gif") no-repeat;}
+.disabled .PreviousButtonImage{background:url("/timetracker/Images/previousbuttonimagedisabled.gif") no-repeat;}
 
-.NextButtonImage{background:url("../Images/nextbuttonimage.gif") no-repeat;}
-.disabled .NextButtonImage{background:url("../Images/nextbuttonimagedisabled.gif") no-repeat;}
+.NextButtonImage{background:url("/timetracker/Images/nextbuttonimage.gif") no-repeat;}
+.disabled .NextButtonImage{background:url("/timetracker/Images/nextbuttonimagedisabled.gif") no-repeat;}
 
-.AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
-.disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+.AddButtonImage{background:url("/timetracker/Images/addbuttonimage.gif") no-repeat;}
+.disabled .AddButtonImage{background:url("/timetracker/Images/addbuttonimagedisabled.gif") no-repeat;}
 
-.UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
-.disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
+.UpdateButtonImage{background:url("/timetracker/Images/updatebuttonimage.gif") no-repeat;}
+.disabled .UpdateButtonImage{background:url("/timetracker/Images/updatebuttonimagedisabled.gif") no-repeat;}
 
-.DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
-.disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
+.DeleteButtonImage{background:url("/timetracker/Images/deletebuttonimage.gif") no-repeat;}
+.disabled .DeleteButtonImage{background:url("/timetracker/Images/deletebuttonimagedisabled.gif") no-repeat;}
 
-.CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
-.disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
+.CommitButtonImage{background:url("/timetracker/Images/commitbuttonimage.gif") no-repeat;}
+.disabled .CommitButtonImage{background:url("/timetracker/Images/commitbuttonimagedisabled.gif") no-repeat;}
 
-.AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
-.disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
+.AbortButtonImage{background:url("/timetracker/Images/abortbuttonimage.gif") no-repeat;}
+.disabled .AbortButtonImage{background:url("/timetracker/Images/abortbuttonimagedisabled.gif") no-repeat;}
 /********* end button panel **********/
 
 
@@ -285,7 +285,7 @@ color:gray;
 }
 .Hover .smallButton .ButtonContent, .Pressed .smallButton .ButtonContent  /*, .Current .smallButton .ButtonContent*/ {
     cursor:pointer;
-    background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
+    background:url("/timetracker/Images/screenbuttonbgsmall.gif") repeat-x;
 }
 .Pressed .smallButton .ButtonContent{cursor:default;}
 
@@ -305,13 +305,13 @@ color:gray;
 }
 .Hover .smallButton .ButtonRightSide, .Pressed .smallButton .ButtonRightSide/*, .Current .smallButton .ButtonRightSide*/{
     cursor:pointer;
-    background:url("../Images/screenbuttonrssmall.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonrssmall.gif") no-repeat;
 }
 .Pressed .smallButton .ButtonRightSide, .Current .smallButton .ButtonRightSide{cursor:default;}
 
 .Hover .smallButton .ButtonLeftSide, .Pressed .smallButton .ButtonLeftSide /*, .Current .smallButton .ButtonLeftSide*/{
     cursor:pointer;
-    background:url("../Images/screenbuttonlssmall.gif") no-repeat;
+    background:url("/timetracker/Images/screenbuttonlssmall.gif") no-repeat;
 }
 .Pressed .smallButton .ButtonLeftSide,  .Current .smallButton .ButtonLeftSide{cursor:default;}
 .disabled .smallButton .ButtonContent {    background:none;
@@ -325,7 +325,7 @@ cursor:default;}
 }
 
 .CloseButton {
-    background:url("../Images/close.png");
+    background:url("/timetracker/Images/close.png");
     width:20px;
     height:20px;
     cursor:pointer;
@@ -333,61 +333,61 @@ cursor:default;}
 
 .MinimizeButton {
    padding-top:5px;
-   background:url("../Images/minimize.gif") no-repeat;
+   background:url("/timetracker/Images/minimize.gif") no-repeat;
    width:20px;
    height:20px;
    cursor:pointer;
 }
 
 .AppBackground {
-    background:#3D71B8 url(../Images/desktop.jpg) no-repeat scroll left top;
+    background:#3D71B8 url(/timetracker/Images/desktop.jpg) no-repeat scroll left top;
 }
 
 .WindowTR {
     width:7px;
     height:29px;
-    background: transparent url("../Images/windowtr.gif");
+    background: transparent url("/timetracker/Images/windowtr.gif");
 }
 .WindowTL {
     width:7px;
     height:29px;
-    background: url("../Images/windowtl.gif");
+    background: url("/timetracker/Images/windowtl.gif");
 }
 .WindowBR {
     width:7px;
     height:28px;
-    background: url("../Images/windowbr.gif");
+    background: url("/timetracker/Images/windowbr.gif");
 }
 .WindowBL {
     width:7px;
     height:28px;
-    background: url("../Images/windowbl.gif");
+    background: url("/timetracker/Images/windowbl.gif");
 }
 .WindowLeft {
     width:7px;
     height:100%;
-    background: url("../Images/windowleft.gif");
+    background: url("/timetracker/Images/windowleft.gif");
 }
 .WindowRight {
     width:7px;
     height:100%;
-    background: url("../Images/windowright.gif") repeat-y;
+    background: url("/timetracker/Images/windowright.gif") repeat-y;
 }
 
 .Caption{
-    background:url("../Images/windowheader.gif") repeat-x;
+    background:url("/timetracker/Images/windowheader.gif") repeat-x;
     height:29px;
     cursor:move;
 }
 .StatusBar {
-    background:url("../Images/windowfooter.gif") repeat-x;
+    background:url("/timetracker/Images/windowfooter.gif") repeat-x;
     height:28px;
 }
 
 .LeftMenuPanePanelClosed {
     height:100%;
     width:5px;
-    background:white url("../Images/buttonbarbg.gif") repeat-x;
+    background:white url("/timetracker/Images/buttonbarbg.gif") repeat-x;
 }
 
 .LeftMenuPanePanelOpen {
@@ -403,15 +403,15 @@ cursor:default;}
 }
 .LeftMenuPanePanelClosed .LeftMenuPanePanelDiv{
     margin-right:1px;
-    background:url("../Images/openleftbar.gif") no-repeat center;
+    background:url("/timetracker/Images/openleftbar.gif") no-repeat center;
 }
 .LeftMenuPanePanelOpen .LeftMenuPanePanelDiv{
     margin-left:1px;
-    background:url("../Images/closeleftbar.gif") no-repeat center;
+    background:url("/timetracker/Images/closeleftbar.gif") no-repeat center;
 }
 
 .StatusImage {
-    background-image:url("../Images/exclamation.png");
+    background-image:url("/timetracker/Images/exclamation.png");
     height:16px;
     width:16px;
 }
@@ -466,7 +466,7 @@ cursor:default;}
     font-size:11px;
     padding:0 8px 0 4px;
     height:18px;
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("/timetracker/Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
 }
 
@@ -483,7 +483,7 @@ cursor:default;}
     padding:0 8px 0 4px;
     width:100%;
     height:18px;
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("/timetracker/Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
 }
 
@@ -511,20 +511,20 @@ cursor:default;}
     width:16px;
     height:19px;
     border-bottom: 1px solid #d8d8d8;
-    background: url(../Images/trigger.gif) 0px 0px no-repeat;
+    background: url(/timetracker/Images/trigger.gif) 0px 0px no-repeat;
 }
 .AutoDropdown .Hover{
     cursor:pointer;
     border-bottom: 1px solid  #7eadd9;
-    background: url(../Images/trigger.gif) -16px 0px no-repeat;
+    background: url(/timetracker/Images/trigger.gif) -16px 0px no-repeat;
 }
 .AutoDropdown .Selected{
     border-bottom: 1px solid  #7eadd9;
-    background: url(../Images/trigger.gif) -64px 0px no-repeat;
+    background: url(/timetracker/Images/trigger.gif) -64px 0px no-repeat;
 }
 .AutoDropdown .Pressed{
     border-bottom: 1px solid #d8d8d8;
-    background: url(../Images/trigger.gif) -48px 0px no-repeat;
+    background: url(/timetracker/Images/trigger.gif) -48px 0px no-repeat;
 }
 .AutoCompletePopup{
     background:#FFFFFF;
@@ -568,17 +568,17 @@ cursor:default;}
 width:16px;
 height:15px;
 border-bottom: 1px solid #d8d8d8;
-background: url(../Images/trigger.gif) 0px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) 0px 0px no-repeat;
 }
 .TableAutoDropdown .Hover{
 cursor:pointer;
-background: url(../Images/trigger.gif) -16px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) -16px 0px no-repeat;
 }
 .TableAutoDropdown .Selected{
-background: url(../Images/trigger.gif) -64px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) -64px 0px no-repeat;
 }
 .TableAutoDropdown .Pressed{
-background: url(../Images/trigger.gif) -48px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) -48px 0px no-repeat;
 }
 /*******TAB PANEL CSS***********/
 .ScreenTab{
@@ -590,7 +590,7 @@ background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
 
 .gwt-TabBarFirst{
-    background:url('../Images/tabfirst.gif') no-repeat;
+    background:url('/timetracker/Images/tabfirst.gif') no-repeat;
 }   
 
 .gwt-TabBar .gwt-TabBarItem {
@@ -600,12 +600,12 @@ background: url(../Images/trigger.gif) -48px 0px no-repeat;
     padding:0 8px 0 4px;
     height:19px;
     cursor:pointer;
-    background:url('../Images/tab.gif') no-repeat right;
+    background:url('/timetracker/Images/tab.gif') no-repeat right;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
     cursor:default;
-    background:url('../Images/selectedtab.gif') no-repeat right;
+    background:url('/timetracker/Images/selectedtab.gif') no-repeat right;
 }
 
 .gwt-TabPanelBottom{
@@ -627,20 +627,20 @@ height:19px;
 width:16px;
 height:19px;
 border-bottom: 1px solid #d8d8d8;
-background: url(../Images/trigger.gif) 0px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) 0px 0px no-repeat;
 }
 .AutoDropdown .Hover{
 cursor:pointer;
 border-bottom: 1px solid  #7eadd9;
-background: url(../Images/trigger.gif) -16px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) -16px 0px no-repeat;
 }
 .AutoDropdown .Selected{
 border-bottom: 1px solid  #7eadd9;
-background: url(../Images/trigger.gif) -64px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) -64px 0px no-repeat;
 }
 .AutoDropdown .Pressed{
 border-bottom: 1px solid #d8d8d8;
-background: url(../Images/trigger.gif) -48px 0px no-repeat;
+background: url(/timetracker/Images/trigger.gif) -48px 0px no-repeat;
 }
 .AutoCompletePopup{
 background:#FFFFFF;
@@ -708,20 +708,20 @@ height:19px;
 width:14px;
 height:19px;
 border-bottom: 1px solid #d8d8d8;
-background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
+background: url(/timetracker/Images/date-trigger.gif) 0px 0px no-repeat;
 }
 .ScreenCalendar .Hover{
 cursor:pointer;
 border-bottom: 1px solid  #7eadd9;
-background: url(../Images/date-trigger.gif) -14px 0px no-repeat;
+background: url(/timetracker/Images/date-trigger.gif) -14px 0px no-repeat;
 }
 .ScreenCalendar .Selected{
 border-bottom: 1px solid  #7eadd9;
-background: url(../Images/date-trigger.gif) -56px 0px no-repeat;
+background: url(/timetracker/Images/date-trigger.gif) -56px 0px no-repeat;
 }
 .ScreenCalendar .Pressed{
 border-bottom: 1px solid #d8d8d8;
-background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
+background: url(/timetracker/Images/date-trigger.gif) -28px 0px no-repeat;
 }
 
 .ScreenCalendar .TextboxSelected{
@@ -791,10 +791,10 @@ padding-bottom:0;
     border-right:0;
 }
 .Drop{
-    background:url('../Images/commitbuttonimage.gif') no-repeat center;
+    background:url('/timetracker/Images/commitbuttonimage.gif') no-repeat center;
 }
 .NoDrop{
-    background:url('../Images/stop.gif') no-repeat center;
+    background:url('/timetracker/Images/stop.gif') no-repeat center;
 }
 
 .ScreenDragList .Hover{
@@ -813,7 +813,7 @@ padding-bottom:0;
 }
 
 .ScreenHTML img{
-    /*background-image:url("../Images/listheadergrad_obsidian.gif");
+    /*background-image:url("/timetracker/Images/listheadergrad_obsidian.gif");
     border:solid 1px #c5cad0;*/
     cursor:pointer;
 /*    margin-right:2px;*/
@@ -934,7 +934,7 @@ border:none;
     font-size:11px;
     padding:0 8px 0 4px;
     height:18px;
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("/timetracker/Images/headersprite.gif") repeat-x;
     border:1px solid #99bbe8;
     border-bottom:0;
     margin-right:8px;
@@ -968,7 +968,7 @@ border:none;
 	font-size: 14px; 
 	color: #333333; 
 	font-weight: bold;
-	background:url(../Images/goldbarno.jpg);
+	background:url(/timetracker/Images/goldbarno.jpg);
 }
 .invisible{
 	visibility:hidden;
@@ -1017,7 +1017,7 @@ border:none;
 .TabBrowser .gwt-TabBar .gwt-TabBarItem-selected {
     border:1px solid #73d216;
     border-bottom:0px solid white;
-    background-image:url(../Images/hashlines.jpg);
+    background-image:url(/timetracker/Images/hashlines.jpg);
 }
 .TabBrowser .gwt-TabPanelBottom {
     padding-top:5px;
@@ -1047,7 +1047,7 @@ cursor:wait;
 .ErrorPanel {
   width:16px;
   height:16px;
-  background-image:url(../Images/exclamation.png);
+  background-image:url(/timetracker/Images/exclamation.png);
 }
 
 .ErrorPanelHidden {

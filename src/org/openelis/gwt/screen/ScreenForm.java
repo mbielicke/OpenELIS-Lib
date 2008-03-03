@@ -2,6 +2,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 
 import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.widget.AppButton;
@@ -56,6 +57,10 @@ public class ScreenForm extends Screen implements FormInt {
             enable(false);
             bpanel.setButtonState("update",AppButton.DISABLED);
             bpanel.setButtonState("delete", AppButton.DISABLED);
+            if(window != null){
+                window.setVisible(true);
+                RootPanel.get().removeStyleName("ScreenLoad");
+            }
         }
         if (method.equals("commit") ||
             method.equals("commit-add") ||

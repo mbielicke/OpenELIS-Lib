@@ -767,7 +767,6 @@ public class TableController implements
     public void sizeTable() {
         DeferredCommand.addCommand(new Command() {
         public void execute() {
-        
         int width = 0;
         for(int i = 0; i < curColWidth.length; i++){
             width += curColWidth[i];
@@ -1225,6 +1224,10 @@ public class TableController implements
                 if(setRow > -1)
                     select(setRow,0);
                 setRow = -1;
+            }else{
+                if(!modelSet){
+                    reset();
+                }
             }
         }
 

@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ResponseTextHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -34,6 +35,8 @@ public class Screen extends ScreenBase {
     public ConstantsWithLookup constants;
     private ScreenServiceIntAsync screenService = (ScreenServiceIntAsync)GWT.create(ScreenServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)screenService;
+    public ScreenWindow window;
+    
     /**
      * This field contains all widgets available to this application
      */
@@ -110,7 +113,12 @@ public class Screen extends ScreenBase {
      * @param success
      */
     public void afterSubmit(String method, boolean success) {
-
+        if(method.equals("draw")){
+            if(window != null){
+                window.setVisible(true);
+                RootPanel.get().removeStyleName("ScreenLoad");
+            }
+        }
     }
 
     /**

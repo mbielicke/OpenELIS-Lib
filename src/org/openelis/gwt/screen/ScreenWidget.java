@@ -105,6 +105,7 @@ public class ScreenWidget extends SimplePanel implements
         proxy.sinkEvents(Event.MOUSEEVENTS);
         DOM.setInnerHTML(proxy.getElement(),
                          DOM.getInnerHTML(getWidget().getElement()));
+        proxy.setStyleName(getStyleName());
         return proxy;
     }
     

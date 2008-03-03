@@ -94,6 +94,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     private int top = 0;
     private int cellHeight = 15;
     private int active = -1;
+    private int cellspacing = 1;
     public boolean drag;
     public boolean drop;
     private boolean ctrl;
@@ -101,6 +102,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     
     public ScrollList() {
         initWidget(hp);
+        vp.setSpacing(1);
         cellView.setWidget(vp);
         hp.add(cellView);
         hp.add(scrollBar);
@@ -122,7 +124,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     public void setDataModel(DataModel dm) {
         this.dm = dm;
         if(dm != null && dm.size() > 0){
-            setScrollHeight((dm.size()*cellHeight)+1);
+            setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
             vp.clear();
             selected.clear();
             int num = maxRows;
@@ -174,6 +176,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         ScreenLabel label = new ScreenLabel("   ",null);
         vp.add(label);
         label.label.setWordWrap(false);
+        label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
         if(vp.getWidgetCount() % 2 == 1){
             label.addStyleName("AltTableRow");
         }else{
@@ -220,7 +223,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             createRow();
             loadRow(dm.size()-1);
         }
-        setScrollHeight((dm.size()*cellHeight)+1);
+        setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
     }
     
     /**
@@ -247,8 +250,8 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     
     public void setMaxRows(int rows){
         this.maxRows = rows;
-        cellView.setHeight((rows*cellHeight+1)+"px");
-        scrollBar.setHeight((rows*cellHeight+1)+"px");
+        cellView.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing)+"px");
+        scrollBar.setHeight((rows*cellHeight+1)+(rows*cellspacing)+"px");
         
     }
     
@@ -282,6 +285,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     }
     
     public void removeItem(ScreenWidget wid){
+        dm.delete(vp.getWidgetIndex(wid));
         vp.remove(wid);
         
     }
@@ -491,6 +495,31 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
 	public void setMulti(boolean multi) {
 		this.multi = multi;
 	}
+
+    public void onMouseDown(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onMouseEnter(Widget sender) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onMouseLeave(Widget sender) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onMouseMove(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onMouseUp(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
     
     
 }
