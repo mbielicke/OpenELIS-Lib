@@ -19,12 +19,15 @@
 }
 
 .TableRow{
+    height:18px;
     background:white;
 }
 .AltTableRow{
+    height:16px;
     background:#f8f8f9;
 }
-.TableCell {   
+.TableCell {  
+height:18px;
     overflow:hidden;
     cursor:pointer;
     color: black;
