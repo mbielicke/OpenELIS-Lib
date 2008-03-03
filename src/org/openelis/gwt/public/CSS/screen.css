@@ -1,317 +1,328 @@
-.disabled{
-    cursor:default;
+html, body {
+   margin:0pt;
+   padding:0pt;
+   height:100%;
 }
+
 .Disabled{
     cursor:default;
 }
 
-html, body {
-   margin:0pt;
-   padding:0pt;
-}
-
-.ScreenLoad{
-  cursor:wait;
-}
-
-.gwt-HTML-separator{
-    width:8px;
-}
 
 .ScreenLeftPanel{
-padding:2px;
-background:white;
+    padding:2px;
+    background:white;
 }
 .ScreenRightPanel{
-padding:2px;
-background:white;
+    padding:2px;
+    background:white;
 }
+
+/*******TOP MENU BAR CSS***********/
+.topMenuBar { 
+    height:30px;
+    width:100%;
+    margin-bottom:8px;
+    background:black url(../Images/topmenubg.gif) repeat-x;
+}
+
+.topMenuBarItem {
+    margin:3px 0 0 8px;
+    padding:4px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    color:white;
+}
+.Hover .topMenuBarItem, .Selected .topMenuBarItem{
+    color:black;
+    cursor:pointer;
+    padding:3px;
+    border:1px solid #333;
+    background:#f0f0f0;
+}
+
+.topMenuContainer{
+    border:1px solid #333;
+    border-top:0;
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+}
+
+.topMenuItemMiddle{
+    height:2em;
+    padding:2px;
+}
+.topMenuItemTitle{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+}
+.topMenuItemDesc{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:9px;
+    color:gray;
+}
+
+.topMenuIcon{
+    width:32px;
+    height:2em;
+    padding:2px;
+}
+.TopMenuRowContainer{
+width:100%;
+padding:1px;
+}
+.Hover .TopMenuRowContainer{
+    cursor:pointer;
+    padding:0;
+    background:url('../Images/white-top-bottom.gif') repeat-x 0px -1px;
+    border:1px solid #8db2e3;
+}
+.analyteIcon, .methodIcon, .methodPanelIcon, .qaEventsIcon, .resultsIcon, .testManagementIcon, .testTrailerIcon, .worksheetsIcon, .projectIcon, .releaseIcon, .sampleLookupIcon{
+    width:16px;
+    height:16px;
+    padding:4px;
+}
+.analyteIcon{
+    background:url('../Images/addbuttonimage.gif') no-repeat center;
+}
+.methodIcon{
+    background:url('../Images/addbuttonimage.gif') no-repeat center;
+}
+.methodPanelIcon{
+    background:url("../Images/removerow.gif") no-repeat center;
+}
+.qaEventsIcon{
+    background:url("../Images/querybuttonimage.gif") no-repeat center;
+}
+.resultsIcon{
+    background:url("../Images/updatebuttonimage.gif") no-repeat center;
+}
+.diabled .resultsIcon{
+    background:url("../Images/updatebuttonimage.gif") no-repeat center;
+}
+.testManagementIcon{
+    background:url("../Images/addbuttonimage.gif") no-repeat center;
+}
+.testTrailerIcon{
+    background:url("../Images/commitbuttonimage.gif") no-repeat center;
+}
+.worksheetsIcon{
+    background:url("../Images/abortbuttonimage.gif") no-repeat center;
+}
+.projectIcon{
+    background:url('../Images/addbuttonimage.gif') no-repeat center;
+}
+.releaseIcon{
+    background:url("../Images/removerow.gif") no-repeat center;
+}
+.sampleLookupIcon{
+    background:url('../Images/addbuttonimage.gif') no-repeat center;
+}
+/*******END TOP MENU BAR***********/
 
 .WhiteContentPanel{
-background:white;
+    background:white;
 }
 
+
+/*******General Button Class***********/
+.Button{
+    padding:2px;
+}
+
+.ButtonRightSide{
+    margin:2px 0 0 0 ;
+    width:2px;
+    height:21px;
+    background:url("../Images/screenbuttonrs.gif") no-repeat;
+    cursor:default;
+}
+.disabled .ButtonRightSide{
+    background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
+}
+
+.ButtonLeftSide{
+    margin:2px 0 0 4px;
+    width:2px;    
+    height:21px;
+    background:url("../Images/screenbuttonls.gif") no-repeat;
+    cursor:default;
+}
+.disabled .ButtonLeftSide{
+    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
+}
+
+.ButtonContent{
+    margin:2px 0 0 0;
+    padding: 2px 4px 0 4px;
+    height:21px;
+    cursor:default;
+    background:url("../Images/screenbuttonbg.gif") repeat-x;
+}
+.Hover .ButtonContent, .Pressed .ButtonContent {
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:pointer;
+}
+.disabled .ButtonContent{
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+}
+
+.disabled .ScreenLabel{
+color:gray;
+}
+
+.RemoveRowButtonImage{
+    width:20px;
+    height:20px;
+}
+.RemoveRowButtonImage{
+    background:url("../Images/removerowbuttonimage.gif") no-repeat;
+}
+.disabled .RemoveRowButtonImage{
+    background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
+}
+/*******End General Button Class***********/
+
+
+/*******Button Panel***********/
 .ButtonPanelContainer{
-    background:url("../Images/buttonbarbg.gif") repeat-x;
-}
-
-.ScreenButtonPanel{
-    height:26;
+    height:26px;
     background:url("../Images/buttonbarbg.gif") repeat-x;
 }
 
 .ButtonDivider{
-    width:2;
-    height:13;
-    margin:6 2 0 2;
+    width:2px;
+    height:13px;
+    margin:6px 2px 0 2px;
     background:url("../Images/buttondivider.gif") no-repeat;
 }
 
-.ButtonContent {
-    margin:2 0 0 0;
-    padding: 2 4 0 4;
-    height:21;
-    cursor:default;
-}
-
-.Hover .ButtonContent {
-    background:url("../Images/screenbuttonbg.gif") repeat-x;
-    cursor:pointer;
-}
-
-.Pressed .ButtonContent {
-    background:url("../Images/screenbuttonbg.gif") repeat-x;
-    cursor:pointer;
-}
-
-.disabled .ButtonContent{
+.ButtonPanelButton .ButtonContent {
     background:none;
 }
-
-.ButtonContent .ScreenLabel{
-    margin:1 0 0 0;
+.Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:pointer;
+}
+.disabled .ButtonPanelButton .ButtonContent{
+    background:none;
+}
+.ButtonPanelButton .ButtonContent .ScreenLabel{
     color:black;
     background:none;
 }
-
-.disabled .ButtonContent .ScreenLabel{
+.disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
     cursor:default;
-    color:gray;
+    color:#798da7;
     background:none;
 }
 
-.ButtonRightSide{
-    margin:2 0 0 0;
-    width:2px;
-    height:21px;
-    cursor:default;
+.ButtonPanelButton .ButtonRightSide{
+     width:2px;
+     background:none;
 }
-
-.ButtonLeftSide{
-    margin:2 0 0 0;
-    width:2px;
-    height:21px;
-    cursor:default;
-}
-
-.Hover .ButtonRightSide{
-    margin:2 0 0 0;
-    width:2px;
-    height:21px;
+.Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{
     background:url("../Images/screenbuttonrs.gif") no-repeat;
 }
-
-.Hover .ButtonLeftSide{
-    margin:2 0 0 0;
-    width:2px;
-    height:21px;
-    background:url("../Images/screenbuttonls.gif") no-repeat;
-}
-
-.Pressed .ButtonRightSide{
-    margin:2 0 0 0;
-    width:2px;
-    height:21px;
-    background:url("../Images/screenbuttonrs.gif") no-repeat;
-}
-
-.Pressed .ButtonLeftSide{
-    margin:2 0 0 0;
-    width:2px;
-    height:21px;
-    background:url("../Images/screenbuttonls.gif") no-repeat;
-}
-
-.Disabled .ButtonRightSide{
+.Disabled .ButtonPanelButton .ButtonRightSide{
     background:none;
     cursor:default;
 }
-
-.Disabled .ButtonLeftSide{
+.ButtonPanelButton .ButtonLeftSide{
+    background:none;
+}
+.Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
+    background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+.Disabled .ButtonPanelButton .ButtonLeftSide{
     background:none;
     cursor:default;
 }
+.StandardNoteButtonImage, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .UpdateButtonImage, .DeleteButtonImage, .CommitButtonImage, .AbortButtonImage{
+    width:20px;
+    height:20px;
+    background:url("../Images/note.gif") no-repeat;
+}
+.Disabled .StandardNoteButtonImage, .Disabled .RemoveRowButtonImage, .Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, .Disabled .CommitButtonImage, .Disabled .AbortButtonImage{
+    background:none;
+    cursor:default;
+}
+.QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
+.disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
 
-.AtoZ .ButtonContent {
+.PreviousButtonImage{background:url("../Images/previousbuttonimage.gif") no-repeat;}
+.disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
+
+.NextButtonImage{background:url("../Images/nextbuttonimage.gif") no-repeat;}
+.disabled .NextButtonImage{background:url("../Images/nextbuttonimagedisabled.gif") no-repeat;}
+
+.AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
+.disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+
+.UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
+.disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
+
+.DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
+.disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
+
+.CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
+.disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
+
+.AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
+.disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
+/********* end button panel **********/
+
+
+/************ AtoZ button ***************/
+.smallButton .ButtonContent{
     margin:0 0 0 0;
     padding:0 0 0 0;
     width:1em;
-    height:16;
+    height:16px;
     text-align:center;
     cursor:default;
+    background:none;
 }
-
-.AtoZ .ButtonRightSide{
-    margin:0 0 0 0;
-    width:2px;
-    height:16px;
-    cursor:default;
-}
-
-
-.AtoZ .ButtonLeftSide{
-    margin:0 0 0 0;
-    width:2px;
-    height:16px;
-    cursor:default;
-}
-
-.AtoZ .Hover .ButtonContent, .AtoZ .Pressed .ButtonContent {
-    margin:0 0 0 0;
-    padding:0 0 0 0;
-    width:1em;
-    height:16;
+.Hover .smallButton .ButtonContent, .Pressed .smallButton .ButtonContent  /*, .Current .smallButton .ButtonContent*/ {
     cursor:pointer;
-    text-align:center;
     background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
 }
+.Pressed .smallButton .ButtonContent{cursor:default;}
 
-.AtoZ .Pressed .ButtonContent {
-    margin:0 0 0 0;
-    padding:0 0 0 0;
-    width:1em;
-    height:16;
-    cursor:default;
-    text-align:center;
-    background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
-}
-
-.AtoZ .Hover .ButtonRightSide, .AtoZ .Pressed .ButtonRightSide{
+.smallButton .ButtonRightSide{
     margin:0 0 0 0;
     width:2px;
     height:16px;
+    cursor:default;
+    background:none;
+}
+.smallButton .ButtonLeftSide{
+    margin:0 0 0 0;
+    width:2px;
+    height:16px;
+    cursor:default;
+    background:none;
+}
+.Hover .smallButton .ButtonRightSide, .Pressed .smallButton .ButtonRightSide/*, .Current .smallButton .ButtonRightSide*/{
     cursor:pointer;
     background:url("../Images/screenbuttonrssmall.gif") no-repeat;
 }
+.Pressed .smallButton .ButtonRightSide, .Current .smallButton .ButtonRightSide{cursor:default;}
 
-
-.AtoZ .Hover .ButtonLeftSide, .AtoZ .Pressed .ButtonLeftSide{
-    margin:0 0 0 0;
-    width:2px;
-    height:16px;
+.Hover .smallButton .ButtonLeftSide, .Pressed .smallButton .ButtonLeftSide /*, .Current .smallButton .ButtonLeftSide*/{
     cursor:pointer;
     background:url("../Images/screenbuttonlssmall.gif") no-repeat;
 }
+.Pressed .smallButton .ButtonLeftSide,  .Current .smallButton .ButtonLeftSide{cursor:default;}
+.disabled .smallButton .ButtonContent {    background:none;
+cursor:default;}
 
-.StandardNoteButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/note.gif") no-repeat;
-}
-.Disabled .StandardNoteButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
+/************ end AtoZ button ***************/
 
-.RemoveRowButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/removerow.gif") no-repeat;
+/************ Window border ***************/
+.WindowPanel td table td{
+    height:100%;
 }
-.Disabled .RemoveRowButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.QueryButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/querybuttonimage.gif") no-repeat;
-}
-.Disabled .QueryButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.PreviousButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/previousbuttonimage.gif") no-repeat;
-}
-.Disabled .PreviousButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.NextButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/nextbuttonimage.gif") no-repeat;
-}
-.Disabled .NextButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-.AddButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/addbuttonimage.gif") no-repeat;
-}
-.Disabled .AddButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.UpdateButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/updatebuttonimage.gif") no-repeat;
-}
-.Disabled .UpdateButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.DeleteButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/deletebuttonimage.gif") no-repeat;
-}
-.Disabled .DeleteButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.CommitButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/commitbuttonimage.gif") no-repeat;
-}
-.Disabled .CommitButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
-.AbortButtonImage{
-    width:20;
-    height:20;
-    background:url("../Images/abortbuttonimage.gif") no-repeat;
-}
-.Disabled .AbortButtonImage{
-    width:20;
-    height:20;
-    background:none;
-    cursor:default;
-}
-
 
 .CloseButton {
     background:url("../Images/close.png");
@@ -319,45 +330,37 @@ background:white;
     height:20px;
     cursor:pointer;
 }
+
 .MinimizeButton {
-   padding-top:5;
+   padding-top:5px;
    background:url("../Images/minimize.gif") no-repeat;
    width:20px;
    height:20px;
    cursor:pointer;
 }
-      
-.CloseButton .Hover{
-    background-image:url("../Images/closehover.png");
-    cursor:pointer;
-}
 
 .AppBackground {
     background:#3D71B8 url(../Images/desktop.jpg) no-repeat scroll left top;
-    /*background:#535353;*/
-}
-
-.WindowPanel {
 }
 
 .WindowTR {
-    width:7;
-    height:29;
+    width:7px;
+    height:29px;
     background: transparent url("../Images/windowtr.gif");
 }
 .WindowTL {
-    width:7;
-    height:29;
+    width:7px;
+    height:29px;
     background: url("../Images/windowtl.gif");
 }
 .WindowBR {
     width:7px;
-    height:28;
+    height:28px;
     background: url("../Images/windowbr.gif");
 }
 .WindowBL {
     width:7px;
-    height:28;
+    height:28px;
     background: url("../Images/windowbl.gif");
 }
 .WindowLeft {
@@ -368,17 +371,17 @@ background:white;
 .WindowRight {
     width:7px;
     height:100%;
-    background: url("../Images/windowright.gif");
+    background: url("../Images/windowright.gif") repeat-y;
 }
 
 .Caption{
     background:url("../Images/windowheader.gif") repeat-x;
-    height:29;
+    height:29px;
     cursor:move;
 }
 .StatusBar {
     background:url("../Images/windowfooter.gif") repeat-x;
-    height:28;
+    height:28px;
 }
 
 .LeftMenuPanePanelClosed {
@@ -395,23 +398,16 @@ background:white;
 
 .LeftMenuPanePanelDiv{
     width:6px;
-
     height:100%;
     cursor:pointer;
 }
-
 .LeftMenuPanePanelClosed .LeftMenuPanePanelDiv{
-    margin-right:1;
+    margin-right:1px;
     background:url("../Images/openleftbar.gif") no-repeat center;
 }
-
 .LeftMenuPanePanelOpen .LeftMenuPanePanelDiv{
-    margin-left:1;
+    margin-left:1px;
     background:url("../Images/closeleftbar.gif") no-repeat center;
-}
-
-.LeftMenuArrowImage {
-	vertical-align:middle;
 }
 
 .StatusImage {
@@ -435,9 +431,9 @@ background:white;
 }
 
 .ScreenMenuList {
-    background:#f8f8f9;
-    width:85%;
-    halign:center;
+    border:1px solid #99bbe8;
+    margin:0 8px 8px 8px;
+    background:white;
 }
 
 .ScreenMenuLabel {
@@ -451,138 +447,48 @@ background:white;
     color:#276cff;
     padding:4px;
 }
+.Hover .ListItem{
+    color:#000000;
+}
 
 .ListSubItem{
     cursor:pointer;
     color:#276cff;
     padding:4px;
 }
-
-.ListHeader {
-    height:16;
-    background-color:#dde0e3;
-    border-top:1px solid #c7cbd1;
-    border-bottom:1px solid #c7cbd1;
-    color:#373c43;
-    cursor:default;
-    padding-left:6px;
-}
-
-.Hover .ListItem{
-    color:#000000;
-}
-
 .Hover .ListSubItem{
     color:#000000;
 }
 
-/*******TOP MENU BAR CSS***********/
-.topMenuBar { 
-   background:#c4d3e5 url(../Images/white-top-bottom.gif) repeat-x scroll 0pt -1px;
-   border:1px solid #99BBE8;
-   padding:2 0 2 0;
-}
-
-.topMenuBarItem {
+.ListHeader {
+    color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    color:#333;
-    padding:3 4 3 4;
+    padding:0 8px 0 4px;
+    height:18px;
+    background:url("../Images/headersprite.gif") repeat-x;
+    border-bottom:1px solid #99bbe8;
 }
-
-.Hover .topMenuBarItem {
-    cursor:pointer;
-    padding:2 3 2 3;
-    background: #ebf3fd url(../Images/item-over.gif) repeat-x left bottom;
-    border:1px solid #aaccf6;
-    color: #233d6d;
-}
-
-.topMenuBarItemSelected {
-    cursor:default;
-    padding:2 3 2 3;
-    background: #ebf3fd url(../Images/item-over.gif) repeat-x left bottom;
-    border:1px solid #aaccf6;
-    color: #233d6d;
-}
-
-.topMenuPanel { 
-    cursor:pointer;
-    color:#276CFF;
-    background-color:#faf7fd;
-    border:1px solid #898e92;
-}
-
-.topMenuPanelHover{
-    cursor:pointer;
-    color:#276CFF;
-    background-color:#ffe584;
-}
-
-.topMenuPanelHover .disabled,.topMenuPanel .disabled{
-    cursor:default;
-    color:#616a76;
-    background-color:#faf7fd;
-}
-
-.topMenuPanelHover .topMenuPanelIconPanelDisabled, .topMenuPanel .topMenuPanelIconPanelDisabled {
-   cursor:default;
-   background-color:#dde0e3;
-   border-right:1px solid #b8c0c8;
-}
-
-.topMenuPanelTitle{
-    font-size:12px;
-    cursor:pointer;
-    color:#276cff;
-    font-weight:bold;
-}
-
-.topMenuPanelTitle .disabled{
-    cursor:default;
-    font-size:12px;
-    color:#616a76;
-    font-weight:bold;
-}
-
-.topMenuPanelDesc {
-   color:#616a76;
-}
-
-.topMenuPanelIcon{
-   padding-left:3px;
-   padding-right:3px;
-   text-align:center;
-   border:none;
-}
-
-.topMenuPanel .topMenuPanelIconPanel {
-   background-color:#dde0e3;
-   border-right:1px solid #b8c0c8; 
-}
-
-.topMenuPanelHover .topMenuPanelIconPanel {
-   background-color:#ffe584;
-   border-right:1px solid #ffe584;
-}
-
-.topMenuPanelItemMiddle{
-   padding-right:2px;
-   /*padding-left:3px;*/
-}
-/*******END TOP MENU BAR CSS***********/
 
 .ScreenTable {
     border:1px solid #8db2e3;
     background:white;
-    margin:6;
+    margin:8px;
 }
 
 .TitlePanel{
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    padding:0 8px 0 4px;
     width:100%;
     height:18px;
     background:url("../Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
+}
+
+.ScreenLeftTable{
+    border:1px solid #99bbe8;
 }
 
 .ScreenWindowLabel .MenuText{
@@ -596,54 +502,14 @@ background:white;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    margin:1 0 0 4;
+    margin:1px 0 0 4px;
 }
-
-/*******TAB PANEL CSS***********/
-.ScreenTab{
-    padding:8;
-}
-
-.gwt-TabBar {
-    height:19;
-}
-
-.gwt-TabBarFirst{
-    background:url('../Images/tabfirst.gif') no-repeat;
-}   
-
-.gwt-TabBar .gwt-TabBarItem {
-    color:#486095;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:11px;
-    padding:0 8 0 4;
-    height:19;
-    cursor:pointer;
-    background:url('../Images/tab.gif') no-repeat right;
-}
-
-.gwt-TabBar .gwt-TabBarItem-selected {
-    cursor:default;
-    background:url('../Images/selectedtab.gif') no-repeat right;
-}
-
-.gwt-TabPanelBottom{
-    background:#eee;
-    border:1px solid #8db2e3;
-}
-.gwt-TabBar .gwt-TabBarRest {
-    background:white;
-}
-/*******END TAB PANEL CSS***********/
-
-/*******autodropdown css***********/
-
 .AutoDropdown{
-height:19px;
+    height:19px;
 }
 .AutoDropdownButton{
     width:16px;
-    height:19px; 
+    height:19px;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
@@ -675,7 +541,7 @@ height:19px;
     cursor:default;
 }
 .AutoDropdown .TextboxUnselected{
-    border:1px solid lightgrey;
+    border:1px solid gray;
     color:#000000;
     background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -714,28 +580,93 @@ background: url(../Images/trigger.gif) -64px 0px no-repeat;
 .TableAutoDropdown .Pressed{
 background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
+/*******TAB PANEL CSS***********/
+.ScreenTab{
+    padding:8px;
+}
 
+.gwt-TabBar {
+    height:19px;
+}
+
+.gwt-TabBarFirst{
+    background:url('../Images/tabfirst.gif') no-repeat;
+}   
+
+.gwt-TabBar .gwt-TabBarItem {
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    padding:0 8px 0 4px;
+    height:19px;
+    cursor:pointer;
+    background:url('../Images/tab.gif') no-repeat right;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+    cursor:default;
+    background:url('../Images/selectedtab.gif') no-repeat right;
+}
+
+.gwt-TabPanelBottom{
+    background:#eee;
+    border:1px solid #8db2e3;
+}
+.gwt-TabBar .gwt-TabBarRest {
+    background:white;
+}
+/*******END TAB PANEL CSS***********/
+
+/*******autodropdown css***********/
+
+.AutoDropdown{
+height:19px;
+}
+
+.AutoDropdownButton{
+width:16px;
+height:19px;
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.AutoDropdown .Hover{
+cursor:pointer;
+border-bottom: 1px solid  #7eadd9;
+background: url(../Images/trigger.gif) -16px 0px no-repeat;
+}
+.AutoDropdown .Selected{
+border-bottom: 1px solid  #7eadd9;
+background: url(../Images/trigger.gif) -64px 0px no-repeat;
+}
+.AutoDropdown .Pressed{
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/trigger.gif) -48px 0px no-repeat;
+}
+.AutoCompletePopup{
+background:#FFFFFF;
+border: 1px solid #7eadd9;
+}
+.AutoDropdown .TextboxSelected{
+    border:1px solid #7eadd9;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
+.AutoDropdown .TextboxUnselected{
+    border:1px solid gray;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+}
 /*******end autodropdown css********/
-.ScreenAbsolute{
-
-}
-
-.ScreenDeck{
-
-}
-
-.ScreenDisclosure{
-
-}
-
-.ScreenDock{
-
-}
-
-.ScreenHPVP{
-
-}
-
 .ScreenSplit {
     background:#383838;
 }
@@ -750,30 +681,12 @@ background: url(../Images/trigger.gif) -48px 0px no-repeat;
 .ScreenSplit .vsplitter{
     width:100%;
     background:#f0f1f6;
-    cursor:ns-resize;
+    cursor:s-resize;
     height:3px;
 }
 
-.ScreenStack{
-
-}
-
-.ScreenTab{
-  	/*background:#f1ecdd;*/
-}
-
-.ScreenTablePanel{
-border:collapse;
-
-
-}
-
-.Screen{
-
-}
-
 .ScreenAuto {
-    border:1px solid lightgrey;
+    border:1px solid gray;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -782,76 +695,11 @@ border:collapse;
 
 .AutoCompleteChoices select {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weght:normal;
     font-size:11px;
     background:#ffffee;
 }
 
-.Commit {
-}
-
-.Commit-disabled{
-    cursor:default;
-}
-
-.Previous {
-}
-
-.Previous-disabled {
-    cursor:default;
-}
-
-.Next {
-}
-
-.Next-disabled {
-    cursor:default;
-}
-
-.Delete {
-}
-
-.Delete-disabled {
-    cursor:default;
-}
-
-.Abort {
-}
-
-.Abort-disabled {
-    cursor:default;
-}
-
-.Reload {
-}
-
-.Reload-disabled {
-    cursor:default;
-}
-
-.Query {
-}
-
-.Query-disabled {
-    cursor:default;
-}
-
-.Update {
-}
-
-.Update-disabled {
-    cursor:default;
-}
-
-.Add {
-}
-
-.Add-disabled {
-    cursor:default;
-}
-/***********************************************/
-
-
+/***************** Calendar *******************/
 .Calendar{
 height:19px;
 }
@@ -887,7 +735,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     cursor:default;
 }
 .ScreenCalendar .TextboxUnselected{
-    border:1px solid lightgrey;
+    border:1px solid gray;
     color:#000000;
     background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -896,71 +744,8 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     height:20px;
     cursor:default;
 }
+/************************ End Calendar ***************************/
 
-.TableCalendar .Calendar{
-}
-
-.TableCalendar .CalendarButton{
-width:14px;
-height:18px;
-background: url(../Images/date-trigger.gif) 0px -2px no-repeat;
-}
-.TableCalendar .CalendarButton .Hover{
-cursor:pointer;
-width:14px;
-height:18px;
-background: url(../Images/date-trigger.gif) -14px -2px no-repeat;
-}
-.TableCalendar .CalendarButton .Selected{
-width:14px;
-height:18px;
-background: url(../Images/date-trigger.gif) -56px -2px no-repeat;
-}
-.TableCalendar .CalendarButton .Pressed{
-width:14px;
-height:18px;
-background: url(../Images/date-trigger.gif) -28px -2px no-repeat;
-}
-
-.TableCalendar .TextboxSelected{
-    color:#000000;
-    background:#ffffff;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:10px;
-    cursor:default;
-    border:none;
-}
-.TableCalendar .TextboxUnselected{
-    color:#000000;
-    background:#ffffff;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:10px;
-    cursor:default;
-    border:none;
-}
-
-/*.ScreenCalendar {
-
-}
-
-.ScreenCalendar-box {
-    border:1px solid lightgrey;
-    background:#ffffff;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
-    height:20px;
-    cursor:default;
-}
-
-.ScreenCalendar-button {
-    margin:2px;
-    cursor:pointer;
-    background:white;	
-}*/
-/***************************************************/
 .ScreenCheck {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
@@ -974,19 +759,51 @@ background: url(../Images/date-trigger.gif) -28px -2px no-repeat;
 .locked{
     -moz-user-select:none;
 }
-
-.DragContainer{
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size:8pt;
-    border:2px solid #d8d8d8;
+.WeekPicker{
+padding:8px;
+padding-bottom:0;
 }
+/************** Drag & Drop ************/
 
-.DragItem{
-    cursor:ew-resize;
+.DragSelector{
+   border:1px solid #99bbe8;
+    margin-right:8px;
+}
+.ScreenDragList {
+    -moz-user-select:none;
+}
+.ScreenDragList td table{
+    background:#d8d8d8;
+}
+.AltTableRow .AltTableRow, .TableRow .TableRow{
+    padding:1px;
+    height:18px;
+    cursor:move;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weght:normal;
-    font-size:11px;
+    font-size:10px;
+    border:1px solid #99bbe8;
+    border-left:0;
 }
+.Dragstatus{
+    width:20px;
+    height:20px;
+    border:1px solid #99bbe8;
+    border-right:0;
+}
+.Drop{
+    background:url('../Images/commitbuttonimage.gif') no-repeat center;
+}
+.NoDrop{
+    background:url('../Images/stop.gif') no-repeat center;
+}
+
+.ScreenDragList .Hover{
+    background:#d9e8fb;
+    cursor:move;
+}
+
+/************** end drag & drop ************/
+
 
 .ScreenError {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -1016,15 +833,7 @@ background: url(../Images/date-trigger.gif) -28px -2px no-repeat;
     cursor:default;
 }
 
-.MenuImage{
-##    width:24;
-##    height:24;
-}
-
 .ScreenOption{
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
 
 }
 
@@ -1047,11 +856,10 @@ background: url(../Images/date-trigger.gif) -28px -2px no-repeat;
 }
 
 .NoFocus{
-    border:1px solid lightgrey;
+    border:1px solid gray;
 }
 
 .ScreenTextArea{
-   /* border:1px solid lightgrey;*/
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -1059,42 +867,35 @@ background: url(../Images/date-trigger.gif) -28px -2px no-repeat;
 }
 
 .ScreenTextBox{
-    /*border:1px solid lightgrey;*/
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-
     font-weight: normal;
     font-size:11px;
     height:20px;
+    border:1px solid #d8d8d8;
     cursor:default;
 }
 
-.ScreenWindowBrowser{
-
-}
-
 .WindowDragPanel {
-	background:lightblue;
-	border:1px dashed black;
-	opacity:.5;
-filter: alpha(opacity=50);
+    background:blue;
+    border:1px dashed black;
+    opacity:5;
+    filter: alpha(opacity=50);
 }
 
 .Inactive {
     cursor:default;
     color:#d8d8d8;
 }
-.selected{
-	background:#e6eaf6;
-}
+
 
 .ScreenStack {
     width:100%;
     background:#e6eaf6;
 }
-.ScreenDragList {
-	-moz-user-select:none;
-    background:#e6eaf6;
+.gwt-button{
+border:none;
 }
+
 .gwt-StackPanelItem {
     font-family:Verdana;
     font-size:12px;
@@ -1112,9 +913,6 @@ filter: alpha(opacity=50);
 .StatusBar a.header{
     text-decoration:none;
 }
-.StatusBar {
-}
-
 .StatusBar .ScreenWindowLabel {
     color:#486095;
     font-family:Arial,Helvetica,sans-serif;
@@ -1123,51 +921,35 @@ filter: alpha(opacity=50);
     text-align:left;
 }
 
-/*the following is from the tt.css */
-
-/*.CalendarButton {
-	padding:2px;
-}*/
-
+/********   End Input  Form ***********/
 .Form {
-	border-collapse:collapse;
-	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-	font-size:11px;
-	font-weight:normal;
-	width:100%;
+    font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
+    border:1px solid #99bbe8;
+    border-width:0 0 0 1px;
 }
-
+.FormTitle{
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    padding:0 8px 0 4px;
+    height:18px;
+    background:url("../Images/headersprite.gif") repeat-x;
+    border:1px solid #99bbe8;
+    border-bottom:0;
+    margin-right:8px;
+}
 .Prompt {
 	color:#b5b8c8;
 	padding:2px 4px 2px 2px;
 	text-align:right;
 	vertical-align:top;
 }
-
-.FormBorderless {	
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
-    width:100%;
-    border-collapse:collapse;
-    margin-left:6px;
-}
-
-
-.FormTitle {
-	background:white none repeat scroll 0%;
-	border-bottom:1px solid #FB8C3C;
-	color:#FB8C3C;
-	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-	font-size:11px;
-	font-weight:bold;
-	text-align:left;
-}
-
+/********   End Input  Form ***********/
 .FieldSet {
-	border:1px dashed #fb8c3c;
-padding: 2px;
-margin 2px;
+    border:1px dashed #fb8c3c;
+    padding: 2px;
+    margin:2px;
 }
 
 .FieldSet Legend {
@@ -1214,7 +996,6 @@ margin 2px;
 }
 
 .ScreenTree {
-  /*  background:#e6eaf6; */
     width:100%;
 }
 .ScreenTree .gwt-TreeItem{
@@ -1230,7 +1011,7 @@ margin 2px;
 .TabBrowser .gwt-TabBar .gwt-TabBarItem {
     width:175px;
     cursor:pointer;	
-    margin-right:5;
+    margin-right:5px;
     border-bottom:0px solid white;
 }
 .TabBrowser .gwt-TabBar .gwt-TabBarItem-selected {
@@ -1239,8 +1020,8 @@ margin 2px;
     background-image:url(../Images/hashlines.jpg);
 }
 .TabBrowser .gwt-TabPanelBottom {
-    padding-top:5;
-    padding-left:5;
+    padding-top:5px;
+    padding-left:5px;
     border:1px solid #73d216;
     background:white;
 }
@@ -1304,15 +1085,8 @@ cursor:wait;
 
 .strike { text-decoration: line-through; }
 
-.DragStatus .NoDrop {
-    background:red;
-    width:10px;
-    height:10px;
+.ScreenLoad{
+  cursor:wait;
 }
 
-.DragStatus .Drop {
-    background:green;
-    width:10px;
-    height:10px;
-}
 
