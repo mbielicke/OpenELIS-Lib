@@ -23,6 +23,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     protected FocusPanel errorImg = new FocusPanel();
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
+    protected boolean showError = true;
     
     public ScreenInputWidget() {
 
@@ -30,6 +31,11 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public ScreenInputWidget(Node node){
         super(node);
+        if(node.getAttributes().getNamedItem("showError") != null){
+            if(node.getAttributes().getNamedItem("showError").getNodeValue().equals("false"))
+                showError = false;
+        }
+            
     }
     
     public void setQueryWidget(ScreenInputWidget qWid){
@@ -58,9 +64,11 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void initWidget(Widget widget){
         if(hp == null){
             hp = new HorizontalPanel();
-            errorImg.setStyleName("ErrorPanelHidden");
-            errorImg.addMouseListener(this);
-            hp.add(errorImg);
+            if(showError){
+                errorImg.setStyleName("ErrorPanelHidden");
+                errorImg.addMouseListener(this);
+                hp.add(errorImg);
+            }
         }
         if(hp.getWidgetCount() > 1){
             hp.remove(0);
@@ -74,6 +82,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
 
     public void onLostFocus(Widget sender) {
+        if(!showError)
+            return;
     	String tempKey = key;
     	if(!queryMode && (displayWidget instanceof AutoCompleteDropdown || displayWidget instanceof AutoCompleteTextBox))
     		tempKey+="Id";
@@ -89,11 +99,15 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public void clearError() {
+        if(!showError)
+            return;
     	errorImg.setStyleName("ErrorPanelHidden");
         errorPanel.clear();
     }
     
     public void drawError() {
+        if(!showError)
+            return;
     	String[] errors;
         if(!queryMode && (displayWidget instanceof AutoCompleteDropdown || displayWidget instanceof AutoCompleteTextBox))
         	errors = screen.rpc.getField(key+"Id").getErrors();
@@ -113,7 +127,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public void drawBusyIcon(){
-    	errorImg.setStyleName("BusyPanel");
+        errorImg.setStyleName("BusyPanel");
     }
     
     public void clearBusyIcon(){
