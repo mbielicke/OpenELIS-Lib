@@ -20,7 +20,4 @@ public interface AppScreenFormServiceInt extends AppScreenServiceInt {
     public FormRPC commitDelete(DataSet key, FormRPC rpcReturn) throws RPCException;
     
     public FormRPC abort(DataSet key, FormRPC rpcReturn) throws RPCException;
-    
-    public DataModel getInitialModel(String cat) throws RPCException;
-
 }
