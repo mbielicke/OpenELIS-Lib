@@ -11,6 +11,7 @@ import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.ModelField;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class AppScreen extends ScreenBase {
                drawScreen((String)data[0].getValue());
                initData = new DataModel[data.length-1];
                for(int i = 1; i < data.length; i++) {
-                   initData[i-1] = (DataModel)data[i];
+                   initData[i-1] = (DataModel)((ModelField)data[i]).getValue();
                }
                afterDraw(true);
            }
