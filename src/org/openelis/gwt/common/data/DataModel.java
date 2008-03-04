@@ -4,7 +4,7 @@ package org.openelis.gwt.common.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DataModel implements Serializable {
+public class DataModel implements DataObject, Serializable {
     
     private static final long serialVersionUID = 1L;
 
@@ -77,6 +77,16 @@ public class DataModel implements Serializable {
             clone.add((DataSet)get(i).getInstance());
         }
         return clone;
+    }
+
+    public Object getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setValue(Object object) {
+        // TODO Auto-generated method stub
+        
     }
     
     
