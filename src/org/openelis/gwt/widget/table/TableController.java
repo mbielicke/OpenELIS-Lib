@@ -803,19 +803,20 @@ public class TableController implements
             view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
         }
         */
-        if(!view.width.equals("auto"))
-        if(model.numRows() > maxRows){
-            
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);  
-        }else
-            view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
-        if(showRows){
-            if(model.numRows() > maxRows){
-                view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
+        //if(!view.width.equals("auto")){
+        /*    if(model.numRows() > maxRows){
+                view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);  
+            }else
+                view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
+         */
+            if(showRows){
+                if(model.numRows() > maxRows){
+                    view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
+                }
             }
-        }
-        view.titlePanel.setWidth("100%");
-        }
+            view.titlePanel.setWidth("100%");
+            }
+        //}
         });
     }
 
