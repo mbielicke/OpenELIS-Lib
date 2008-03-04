@@ -27,7 +27,7 @@ public class AppScreen extends ScreenBase {
 
     public AppScreenServiceIntAsync service;
     public HashMap forms = new HashMap();
-    public DataModel initData;
+    public DataModel[] initData;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -60,7 +60,10 @@ public class AppScreen extends ScreenBase {
            public void onSuccess(Object result){
                DataObject[] data = (DataObject[])result;
                drawScreen((String)data[0].getValue());
-               initData = (DataModel)data[1];
+               initData = new DataModel[data.length-1];
+               for(int i = 1; i < data.length; i++) {
+                   initData[i-1] = (DataModel)data[i];
+               }
                afterDraw(true);
            }
            public void onFailure(Throwable caught){
