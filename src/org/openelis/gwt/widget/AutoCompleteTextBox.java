@@ -1,5 +1,6 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
@@ -185,7 +186,7 @@ public class AutoCompleteTextBox extends Composite implements
     	mainHP.add(textBox);
     	textBox.addFocusListener(this);    	
     	textBox.addKeyboardListener(this);
-    	textBox.addStyleName("TextboxUnselected");    	
+    	textBox.addStyleName("ScreenTextbox");    	
     	mainHP.setSpacing(0);    	
     	
     	comp = this;
@@ -377,8 +378,8 @@ public class AutoCompleteTextBox extends Composite implements
 	        //textBox.selectAll();
 	        
 	        //we need to set the selected style name to the textbox
-	        textBox.removeStyleName("TextboxUnselected");
-	        textBox.addStyleName("TextboxSelected");
+	        //textBox.removeStyleName("TextboxUnselected");
+	        //textBox.addStyleName("TextboxSelected");
 	        
 	        //we need to put the text of the first item in the textbox and do a selection
 	        currentCursorPos = textBox.getText().length();
@@ -459,11 +460,13 @@ public class AutoCompleteTextBox extends Composite implements
     		icon.addStyleName("BusyPanel");
     		icon.setVisible(true);
     	}
-    	try {
-    	    autoService.getMatches(cat, modelWidget.getModel(), text, matchCallback);
-        }catch(Exception e){
-            Window.alert(e.getMessage());
-        }
+    	
+        try {
+			autoService.getMatches(cat, modelWidget.getModel(), text, matchCallback);
+		} catch (RPCException e) {
+			// TODO Auto-generated catch block
+			Window.alert(e.getMessage());
+		}
     }
 
     /**
@@ -481,10 +484,10 @@ public class AutoCompleteTextBox extends Composite implements
         		DataModel model = null;
         		reset();
                 try {
-                autoService.getDisplay(cat, model, stringField, displayCallback);
-            }catch(Exception e){
-                Window.alert(e.getMessage());
-            }
+					autoService.getDisplay(cat, model, stringField, displayCallback);
+				} catch (RPCException e) {
+					Window.alert(e.getMessage());
+				}
         	}else
         		reset();
         }else if(type.equals("integer")){
@@ -496,11 +499,12 @@ public class AutoCompleteTextBox extends Composite implements
                 numberField.setValue(val);
                 DataModel model = null;
                 reset();
-                try {
-        		autoService.getDisplay(cat, model, numberField, displayCallback);
-            }catch(Exception e){
-                Window.alert(e.getMessage());
-            }
+        		try {
+					autoService.getDisplay(cat, model, numberField, displayCallback);
+				} catch (RPCException e) {
+					Window.alert(e.getMessage());
+					
+				}
         	}else
         		reset();
         }
@@ -676,8 +680,8 @@ public class AutoCompleteTextBox extends Composite implements
 		focusPanel.removeStyleName("Selected");
 		
         //we need to set the unselected style name to the textbox
-        textBox.addStyleName("TextboxUnselected");
-        textBox.removeStyleName("TextboxSelected");	
+       // textBox.addStyleName("TextboxUnselected");
+       // textBox.removeStyleName("TextboxSelected");
 	}
 
 	public void onFocus(Widget sender) {
@@ -686,8 +690,8 @@ public class AutoCompleteTextBox extends Composite implements
 			if(sender == textBox){
 		//		System.out.println("TEXT BOX");
 //				we need to set the unselected style name to the textbox
-				textBox.addStyleName("TextboxSelected");
-				textBox.removeStyleName("TextboxUnselected");
+			//	textBox.addStyleName("TextboxSelected");
+			//	textBox.removeStyleName("TextboxUnselected");
 		//		textBox.setFocus(true);
 				// textBox.setText("");
 		//		focusPanel.addStyleName("Selected");
@@ -699,8 +703,8 @@ public class AutoCompleteTextBox extends Composite implements
 		if(!textBox.isReadOnly()){
 			if(sender == textBox){
 				//we need to set the unselected style name to the textbox
-				textBox.addStyleName("TextboxUnselected");
-				textBox.removeStyleName("TextboxSelected");
+				//textBox.addStyleName("TextboxUnselected");
+				//textBox.removeStyleName("TextboxSelected");
 				if(textBoxDefault != null)
 					textBox.setText(textBoxDefault);
 				//else

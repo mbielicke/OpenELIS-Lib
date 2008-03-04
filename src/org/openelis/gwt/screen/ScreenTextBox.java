@@ -82,7 +82,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
             textbox.setMaxLength(length);
         }
-        textbox.addStyleName("NoFocus");
         initWidget(textbox);
         displayWidget = textbox;
         setDefaults(node, screen);
@@ -146,8 +145,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
 	public void onFocus(Widget sender) {
 		if(!textbox.isReadOnly()){
 			if(sender == textbox){
-				textbox.removeStyleName("NoFocus");
-				textbox.addStyleName("Focus");
+				super.hp.addStyleName("Focus");
 			}
 		}	
         super.onFocus(sender);
@@ -155,8 +153,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
 	public void onLostFocus(Widget sender) {
 		if(!textbox.isReadOnly()){
 			if(sender == textbox){
-				textbox.removeStyleName("Focus");
-				textbox.addStyleName("NoFocus");
+				super.hp.removeStyleName("Focus");
 			}
 		}
         super.onLostFocus(sender);

@@ -259,7 +259,14 @@ public class ScreenAuto extends ScreenInputWidget implements FocusListener{
     }
     
     public void onLostFocus(Widget sender) {
+    	super.hp.removeStyleName("Focus");
     	auto.onLostFocus(sender);
     	super.onLostFocus(sender);
+    }
+    
+    public void onFocus(Widget sender) {
+    	super.hp.addStyleName("Focus");
+    	auto.onFocus(sender);
+    	super.onFocus(sender);
     }
 }

@@ -63,10 +63,12 @@ public class ScreenAppButton extends ScreenWidget {
     }
     
     public void enable(boolean enabled){
-        if(enabled || alwaysEnabled)
-            button.changeState(AppButton.UNPRESSED);
-        else
-            button.changeState(AppButton.DISABLED);
+    	if(!alwaysEnabled){
+	        if(enabled)
+	            button.changeState(AppButton.UNPRESSED);
+	        else
+	            button.changeState(AppButton.DISABLED);
+    	}
     }
 
     public void destroy() {
