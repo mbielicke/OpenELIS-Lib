@@ -9,9 +9,11 @@ import com.google.gwt.user.client.dnd.DropListenerCollection;
 import com.google.gwt.user.client.dnd.SourcesDragEvents;
 import com.google.gwt.user.client.dnd.SourcesDropEvents;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -44,11 +46,13 @@ import java.util.Vector;
 public class ScreenWidget extends SimplePanel implements
                                              SourcesDropEvents,
                                              SourcesMouseEvents,
-                                             SourcesDragEvents {
+                                             SourcesDragEvents,
+                                             SourcesClickEvents {
 
     private DropListenerCollection dropListeners;
     private DragListenerCollection dragListeners;
     private MouseListenerCollection mouseListeners;
+    private ClickListenerCollection clickListeners;
     /** 
      * userObject can be used to attach specific application
      * data to a screen widget.
@@ -83,6 +87,8 @@ public class ScreenWidget extends SimplePanel implements
             node.getAttributes().getNamedItem("hover") != null) {
             sinkEvents(Event.MOUSEEVENTS);
         }
+        if (node.getAttributes().getNamedItem("onPanelClick") != null)
+            sinkEvents(Event.ONCLICK);
     }
     /**
      * This stub should be overridden by the extending class.  It will be called
@@ -258,6 +264,15 @@ public class ScreenWidget extends SimplePanel implements
             if (node.getAttributes().getNamedItem("alwaysEnabled").getNodeValue().equals("true"))
                 alwaysEnabled = true;
         }
+        if (node.getAttributes().getNamedItem("onPanelClick") != null){
+            String[] listeners = node.getAttributes().getNamedItem("onPanelClick").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this"))
+                    addClickListener(screen);
+                else
+                    addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
+            }
+        }
     }
 
     /**  
@@ -271,6 +286,12 @@ public class ScreenWidget extends SimplePanel implements
         mouseListeners.add(listener);
     }
 
+    public void addClickListener(ClickListener listener) {
+        if (clickListeners == null) {
+            clickListeners = new ClickListenerCollection();
+        }
+        clickListeners.add(listener);
+    }
     /** 
      * This method will add DragListeners to this widget to be fired if any Drag events 
      * are detected on this widget.
@@ -296,6 +317,10 @@ public class ScreenWidget extends SimplePanel implements
                 if (mouseListeners != null) {
                     mouseListeners.fireMouseEvent(this, event);
                 }
+            case Event.ONCLICK:
+                if (clickListeners != null) {
+                    clickListeners.fireClick(this);
+                }
         }
     }
 
@@ -305,6 +330,12 @@ public class ScreenWidget extends SimplePanel implements
     public void removeMouseListener(MouseListener listener) {
         if (mouseListeners != null) {
             mouseListeners.remove(listener);
+        }
+    }
+    
+    public void removeClickListener(ClickListener listener) {
+        if (clickListeners != null) {
+            clickListeners.remove(listener);
         }
     }
 
