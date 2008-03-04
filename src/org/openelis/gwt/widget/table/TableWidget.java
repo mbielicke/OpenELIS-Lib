@@ -138,6 +138,7 @@ public class TableWidget extends Composite {
                 TableRow row = controller.model.createRow();
                 controller.model.addRow(row);
             }
+            controller.reset();
         }
         controller.sizeTable();
     }
