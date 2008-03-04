@@ -5,5 +5,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface AppScreenServiceIntAsync {
     
     public void getXML(AsyncCallback callback);
+    
+    public void getXMLData(AsyncCallback callback);
 
 }

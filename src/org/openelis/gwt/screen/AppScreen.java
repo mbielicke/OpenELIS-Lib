@@ -9,6 +9,8 @@ import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class AppScreen extends ScreenBase {
 
     public AppScreenServiceIntAsync service;
     public HashMap forms = new HashMap();
+    public DataModel initData;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -44,7 +47,21 @@ public class AppScreen extends ScreenBase {
            public void onSuccess(Object result){
                drawScreen((String)result);
                afterDraw(true);
-               System.out.println("got xml");
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterDraw(false);
+           }
+        });
+    }
+    
+    public void getXMLData() {
+        service.getXMLData(new AsyncCallback() {
+           public void onSuccess(Object result){
+               DataObject[] data = (DataObject[])result;
+               drawScreen((String)data[0].getValue());
+               initData = (DataModel)data[1];
+               afterDraw(true);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());

@@ -68,7 +68,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         bpanel.setButtonState("update",AppButton.DISABLED);
         if(window != null){
             window.setVisible(true);
-            RootPanel.get("main").removeStyleName("ScreenLoad");
+            RootPanel.get().removeStyleName("ScreenLoad");
         }
     }
     
