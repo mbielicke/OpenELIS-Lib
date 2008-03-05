@@ -317,10 +317,12 @@ public class ScreenWidget extends SimplePanel implements
                 if (mouseListeners != null) {
                     mouseListeners.fireMouseEvent(this, event);
                 }
+                break;
             case Event.ONCLICK:
                 if (clickListeners != null) {
                     clickListeners.fireClick(this);
                 }
+                break;
         }
     }
 
