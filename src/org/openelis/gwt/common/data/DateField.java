@@ -40,6 +40,7 @@ public class DateField extends AbstractField implements Serializable {
         if (((DateObject)object).value != null && !isInRange()) {
             valid = false;
         }
+        valid = true;
     }
 
     /*
