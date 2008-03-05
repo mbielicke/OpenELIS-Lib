@@ -19,6 +19,7 @@ public class NumberObject implements DataObject, Serializable {
     }
 
     public void setValue(Object object) {
+        invalid = false;
         try {
             if (object != null) {
                 if (object instanceof String && !((String)object).equals(""))
