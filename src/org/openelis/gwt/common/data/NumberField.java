@@ -23,15 +23,16 @@ public class NumberField extends AbstractField implements Serializable {
     private static final long serialVersionUID = 1L;
     private Double max;
     private Double min;
-    private boolean invalid;
+
     
     public NumberField() {
         object = new NumberObject();
     }
     
     public void validate() {
-        if (invalid){
+        if (((NumberObject)object).invalid){
             valid = false;
+            addError("Field must be numeric");
             return;
         }
         if (required) {

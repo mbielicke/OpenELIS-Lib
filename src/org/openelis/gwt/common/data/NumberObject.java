@@ -7,6 +7,7 @@ public class NumberObject implements DataObject, Serializable {
     private static final long serialVersionUID = 1L;
     protected Double value;
     protected String type;
+    protected boolean invalid;
     
     public Object getValue() {
         if(type.equals("integer"))
@@ -30,6 +31,7 @@ public class NumberObject implements DataObject, Serializable {
                 this.value = null;
             }
         } catch (Exception e) {
+            invalid = true;
         }
     }
     
