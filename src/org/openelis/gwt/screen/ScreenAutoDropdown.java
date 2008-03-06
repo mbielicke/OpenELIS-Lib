@@ -301,6 +301,12 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
     
     public void onLostFocus(Widget sender) {
     	auto.onLostFocus(sender);
-    	super.onLostFocus(sender);
+    	if(key != null)
+    		super.onLostFocus(sender);
     }
+    
+   public void onFocus(Widget sender) {
+	   auto.onFocus(sender);
+	   super.onFocus(sender);
+   }
 }
