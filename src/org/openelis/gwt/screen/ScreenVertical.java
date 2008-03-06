@@ -76,10 +76,16 @@ public class ScreenVertical extends ScreenWidget {
         	initWidget(ap);
             if(node.getAttributes().getNamedItem("overflow") != null)
                 DOM.setStyleAttribute(ap.getElement(),"overflow",node.getAttributes().getNamedItem("overflow").getNodeValue());
-            if(node.getAttributes().getNamedItem("overflowX") != null)
+            if(node.getAttributes().getNamedItem("overflowX") != null){
+//            	if we want to seperate out the overflows we have to remove the overflow tag
+            	DOM.setStyleAttribute(ap.getElement(),"overflow","");
                 DOM.setStyleAttribute(ap.getElement(),"overflow-x",node.getAttributes().getNamedItem("overflowX").getNodeValue());
-            if(node.getAttributes().getNamedItem("overflowY") != null)
+            }
+            if(node.getAttributes().getNamedItem("overflowY") != null){
+            	//if we want to seperate out the overflows we have to remove the overflow tag
+            	DOM.setStyleAttribute(ap.getElement(),"overflow","");
                 DOM.setStyleAttribute(ap.getElement(),"overflow-y",node.getAttributes().getNamedItem("overflowY").getNodeValue());
+            }
         }else
         	initWidget(panel);
         panel.setStyleName("ScreenPanel");
