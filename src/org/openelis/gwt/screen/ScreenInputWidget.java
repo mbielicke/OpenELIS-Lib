@@ -70,7 +70,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 hp.add(errorImg);
             }
         }
-        if(hp.getWidgetCount() > 1){
+        if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
             hp.remove(0);
         }
         hp.insert(widget,0);
