@@ -147,6 +147,10 @@ public class ScreenVertical extends ScreenWidget {
         return new ScreenVertical(node, screen);
     }
     
+    public void clear(){
+    	panel.clear();
+    }
+    
     public void destroy() {
         panel = null;
     }
