@@ -242,10 +242,6 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 } else {
                     table.init(0);
                 }
-                
-                if (node.getAttributes().getNamedItem("showError") != null && 
-        				node.getAttributes().getNamedItem("showError").getNodeValue() == "false")
-                    showError = false;
                     
             } catch (Exception e) {
                 Window.alert("create Table from node" +e.getMessage());
