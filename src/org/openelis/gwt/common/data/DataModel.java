@@ -15,7 +15,7 @@ public class DataModel implements DataObject, Serializable {
     private ArrayList entries = new ArrayList();
     
     /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject, org.openelis.gwt.common.DataSet>
+     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject, org.openelis.gwt.common.data.DataSet>
      */
     private HashMap keyMap = new HashMap(); 
     
