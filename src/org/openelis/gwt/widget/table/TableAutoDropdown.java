@@ -162,10 +162,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			textValue.setValue(editor.textBox.getText());
 		}else{
 			if(type != null && type.equals("string")){
-				((StringField)field).setValue(editor.value);
+			//	((StringField)field).setValue(editor.value);
 				textValue.setValue(editor.textBox.getText());
 			}else if(type != null && type.equals("integer")){
-				((NumberField)field).setValue(editor.value);
+				//((NumberField)field).setValue(editor.value);
 				textValue.setValue(editor.textBox.getText());
 			}		
 		}
