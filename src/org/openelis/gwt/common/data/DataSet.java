@@ -11,6 +11,8 @@ public class DataSet implements Serializable {
      */
     private ArrayList objects = new ArrayList();
     
+    private DataObject key;
+    
     public void addObject(DataObject object) {
         objects.add(object);
     }
@@ -31,11 +33,20 @@ public class DataSet implements Serializable {
         return objects.size();
     }
     
+    public void setKey(DataObject key){
+        this.key = key;
+    }
+    
+    public DataObject getKey() {
+        return key;
+    }
+    
     public Object getInstance() {
         DataSet clone = new DataSet();
         for(int i=0; i < size(); i++){
             clone.addObject((DataObject)getObject(i).getInstance());
         }
+        clone.key = key;
         return clone;
     }
 

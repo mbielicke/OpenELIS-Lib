@@ -3,6 +3,7 @@ package org.openelis.gwt.common.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataModel implements DataObject, Serializable {
     
@@ -12,6 +13,11 @@ public class DataModel implements DataObject, Serializable {
      * @gwt.typeArgs <org.openelis.gwt.common.data.DataSet>
      */
     private ArrayList entries = new ArrayList();
+    
+    /**
+     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject, org.openelis.gwt.common.DataSet>
+     */
+    private HashMap keyMap = new HashMap(); 
     
     private int selected = -1;
     private int page = 0;
@@ -23,20 +29,47 @@ public class DataModel implements DataObject, Serializable {
     
     public void add(DataSet set) {
         entries.add(set);
+        if(set.getKey() != null){
+            keyMap.put(set.getKey(), set);
+        }
     }
 
     public void delete(int index) {
         entries.remove(index);
+    }
+    
+    public void delete(DataObject key){
+        entries.remove(keyMap.get(key));
+        keyMap.remove(key);
+    }
+    
+    public void delete(DataSet set){
+        if(set.getKey() != null){
+            keyMap.remove(set.getKey());
+        }
+        entries.remove(set);
     }
 
     public DataSet get(int index) {
         return (DataSet)entries.get(index);
     }
     
+    public DataSet get(DataObject key){
+        return (DataSet)keyMap.get(key);
+    }
+    
     public void select(int selection) throws IndexOutOfBoundsException {
         if(selection > entries.size())
             throw new IndexOutOfBoundsException();
         selected = selection;
+    }
+    
+    public void select(DataObject key) {
+        selected = entries.indexOf(keyMap.get(key));
+    }
+    
+    public void select(DataSet set){
+        selected = entries.indexOf(set);
     }
     
     public int getSelectedIndex() {
@@ -57,6 +90,7 @@ public class DataModel implements DataObject, Serializable {
     
     public void clear() {
         entries = new ArrayList();
+        keyMap = new HashMap();
         selected = -1;
     }
     
