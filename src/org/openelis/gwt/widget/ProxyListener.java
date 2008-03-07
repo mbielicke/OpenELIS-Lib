@@ -6,6 +6,7 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -29,20 +30,22 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
     
     public void onMouseDown(Widget sender, final int x, final int y) {
 
-        final ScreenHorizontal proxy = new ScreenHorizontal(((ScreenWidget)sender).getScreen(),"proxy");
+        final ScreenWidget proxy = ((ScreenWidget)sender).getInstance();
         AbsolutePanel dragIndicator = new AbsolutePanel();
         dragIndicator.setStyleName("DragStatus");
         dragIndicator.addStyleName("NoDrop");
-        ((HorizontalPanel)proxy.getWidget()).add(dragIndicator);
-        ((HorizontalPanel)proxy.getWidget()).add(((ScreenWidget)sender).getInstance());
-        proxy.setStyleName(sender.getStyleName());
+        HorizontalPanel hp = new HorizontalPanel();
+        hp.add(dragIndicator);
+        hp.add(proxy);
+        hp.setStyleName(sender.getStyleName());
         proxy.setUserObject(sender);
         proxy.addDragListener(this);
-        RootPanel.get().add(proxy);
+        RootPanel.get().add(hp);
         MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
+        mouse.setDrag(hp);
         dropMap = MouseDragGestureRecognizer.getDropMap();
         MouseDragGestureRecognizer.setDropMap(((ScreenWidget)sender).getDropMap());
-        MouseDragGestureRecognizer.setWidgetPosition(proxy,
+        MouseDragGestureRecognizer.setWidgetPosition(hp,
                                                      sender.getAbsoluteLeft(),
                                                      sender.getAbsoluteTop());
         DeferredCommand.addCommand(new Command() {
@@ -60,18 +63,18 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
 
     public void onDragEnd(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
-        DOM.removeChild(sender.getParent().getElement(), sender.getElement());
+        DOM.removeChild(RootPanel.get().getElement(), sender.getParent().getElement());
         //MouseDragGestureRecognizer.setDropMap(dropMap);
     }
 
     public void onDragEnter(Widget sender, Widget target) {
-        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).removeStyleName("NoDrop");
-        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).addStyleName("Drop");
+        ((HorizontalPanel)sender.getParent()).getWidget(0).removeStyleName("NoDrop");
+        ((HorizontalPanel)sender.getParent()).getWidget(0).addStyleName("Drop");
     }
 
     public void onDragExit(Widget sender, Widget target) {
-        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).removeStyleName("Drop");
-        ((HorizontalPanel)((ScreenHorizontal)sender).getWidget()).getWidget(0).addStyleName("NoDrop");
+        ((HorizontalPanel)sender.getParent()).getWidget(0).removeStyleName("Drop");
+        ((HorizontalPanel)sender.getParent()).getWidget(0).addStyleName("NoDrop");
 
     }
 

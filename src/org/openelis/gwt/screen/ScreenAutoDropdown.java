@@ -1,28 +1,22 @@
 package org.openelis.gwt.screen;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.common.data.OptionField;
-import org.openelis.gwt.common.data.OptionItem;
-import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
+import java.util.ArrayList;
 
 public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListener {
 	/**
@@ -145,46 +139,15 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
     	if(queryMode){
     		queryWidget.load(field);
     	}else{
-	    	if(field instanceof StringField){
-	    		auto.setValue((String)((StringField)field).getValue());
-	    	}else if(field instanceof NumberField){
-	    		auto.setValue((Integer)((NumberField)field).getValue());
-	    	}else if(field instanceof CollectionField){
-	    		auto.reset();
-	    	}else{
-	            auto.clear();
-	            OptionField optField = (OptionField)field;
-	            List optMap = optField.getOptions();
-	            Iterator optIt = optMap.iterator();
-	            while (optIt.hasNext()) {
-	                OptionItem item = (OptionItem)optIt.next();
-	                auto.addItem(item.akey.toString(), item.display);
-	                if (item.selected || item.akey.equals(optField.getValue())) {
-	                    auto.setItemSelected(auto.getItemCount() - 1, true);
-	                }
-	            }
-	        }
-    	}
+            auto.setSelected((ArrayList)field.getValue());
+        }
     }
 
     public void submit(AbstractField field) {
         if(queryMode){
             queryWidget.submit(field);
         }else if(field instanceof CollectionField){
-        	field.setValue(auto.getSelectedList());
-        }else{
-            if (((String)field.getKey()).endsWith("Id")){
-            		field.setValue(auto.value);
-            }else if ((((String)field.getKey()).endsWith("Text"))) {
-                String text = auto.textBox.getText();
-                if(fieldCase.equals("upper"))
-                    text = text.toUpperCase();
-                else if (fieldCase.equals("lower"))
-                    text = text.toLowerCase();
-                field.setValue(text);
-            }else{
-            	field.setValue(auto.getSelectedList());
-            }
+        	field.setValue(auto.getSelected());
         }
     }
 

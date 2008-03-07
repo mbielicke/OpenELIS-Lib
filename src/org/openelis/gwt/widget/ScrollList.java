@@ -1,13 +1,11 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
-
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenScrollList;
 import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
@@ -88,7 +86,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     private HorizontalPanel hp = new HorizontalPanel();
     public ScrollPanel scrollBar = new ScrollPanel();
     private DataModel dm = new DataModel();
-    private Vector selected = new Vector();
+    private ArrayList selected = new ArrayList();
     private int maxRows;
     private int start = 0;
     private int top = 0;
@@ -126,7 +124,6 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         if(dm != null && dm.size() > 0){
             setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
             vp.clear();
-            selected.clear();
             int num = maxRows;
             if(dm.size() < maxRows)
                 num = dm.size();
@@ -134,11 +131,21 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                 createRow();
             }
             scrollLoad(0);
-            for(int i = 0; i < dm.size(); i++){
-                if(((Boolean)dm.get(i).getObject(2).getValue()).booleanValue()){
-                    selected.add(new Integer(i));
-                }
-            }
+        }
+    }
+        
+    public void setSelected(ArrayList selections){
+        selected.clear();
+        for (int i = 0; i < selections.size(); i++){
+            selected.add((DataSet)selections.get(i));
+        }
+    }
+    
+    public void setSelected(int index){
+        if(selected.contains(dm.get(index))){
+            selected.remove(dm.get(index));
+        }else{
+            selected.add(dm.get(index));
         }
     }
     
@@ -167,7 +174,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         label.label.setText(dm.get(start+index).getObject(0).getValue().toString());
         label.setUserObject(dm.get(start+index).getObject(1).getValue());
         label.removeStyleName("Highlighted");
-        if(((Boolean)dm.get(start+index).getObject(2).getValue()).booleanValue()){
+        if(selected.contains(dm.get(start+index))){
             label.addStyleName("Highlighted");
         }
     }
@@ -215,9 +222,6 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         so.setValue(text);
         ds.addObject(so);
         ds.addObject(value);
-        BooleanObject bo = new BooleanObject();
-        bo.setValue(new Boolean(false));
-        ds.addObject(bo);
         dm.add(ds);
         if(vp.getWidgetCount() < maxRows){
             createRow();
@@ -334,20 +338,20 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             if(active < 0){
                 active = 0;
                 ((ScreenWidget)vp.getWidget(0)).getWidget().addStyleName("Highlighted");
-                dm.get(start+active).getObject(2).setValue(new Boolean(true));
+                selected.add(dm.get(start+active));
             }else{
                 if(active == maxRows -1){
                     if(start+active+1 < dm.size()){
-                        dm.get(start+active).getObject(2).setValue(new Boolean(false));
-                        dm.get(start+active+1).getObject(2).setValue(new Boolean(true));
+                        selected.remove(dm.get(start+active));
+                        selected.add(dm.get(start+active+1));
                     }
                     scrollBar.setScrollPosition(scrollBar.getScrollPosition()+cellHeight);
                 }else{
                     ((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
-                    dm.get(start+active).getObject(2).setValue(new Boolean(false));
+                    selected.remove(dm.get(start+active));
                     active++;
                     ((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
-                    dm.get(start+active).getObject(2).setValue(new Boolean(true));
+                    selected.add(dm.get(start+active));
                 }
             }
             DOM.eventCancelBubble(event, true);
@@ -357,16 +361,16 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         if (KeyboardListener.KEY_UP == code) {
             if(active == 0){
                 if(start+active-1 > -1){
-                    dm.get(start+active).getObject(2).setValue(new Boolean(false));
-                    dm.get(start+active-1).getObject(2).setValue(new Boolean(true));
+                    selected.remove(dm.get(start+active));
+                    selected.add(dm.get(start+active-1));
                 }
                 scrollBar.setScrollPosition(scrollBar.getScrollPosition()-cellHeight);
             }else if (active > 0){
                 ((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
-                dm.get(start+active).getObject(2).setValue(new Boolean(false));
+                selected.remove(dm.get(start+active));
                 active--;
                 ((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
-                dm.get(start+active).getObject(2).setValue(new Boolean(true));
+                selected.add(dm.get(start+active));
             }
             DOM.eventCancelBubble(event, true);
             DOM.eventPreventDefault(event);
@@ -374,7 +378,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         }
         if (KeyboardListener.KEY_ENTER == code) {
             if(active > -1){
-                dm.get(start+active).getObject(2).setValue(new Boolean(true));
+                selected.add(dm.get(start+active));
                 changeListeners.fireChange(this);
             }
         }       
@@ -419,35 +423,27 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                 if(!ctrl){
                 	if(!multi){
                 		((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
-                    	dm.get(start+active).getObject(2).setValue(new Boolean(false));
-                    	selected.remove(new Integer(start+active));
+                    	selected.remove(dm.get(start+active));
                 	}
                 }   
             }
             if(multi && ((ScreenWidget)vp.getWidget(clicked)).getStyleName().indexOf("Highlighted") != -1){
             	((ScreenWidget)vp.getWidget(clicked)).removeStyleName("Highlighted");
-            	dm.get(start+clicked).getObject(2).setValue(new Boolean(false));
-            	selected.remove(new Integer(start+clicked));
+            	selected.remove(dm.get(start+clicked));
             }else{
             	active = clicked;
             	((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
-            	dm.get(start+clicked).getObject(2).setValue(new Boolean(true));
-            	selected.add(new Integer(start+clicked));
+            	selected.add(dm.get(start+clicked));
             }
             changeListeners.fireChange(this);
       //  }
     }
     
     public void unselectAll() {
-        for(int i = 0; i < dm.size(); i++){
-            dm.get(i).getObject(2).setValue(new Boolean(false));
-        }
-        
+        selected.clear();
         for(int i=0; i<vp.getWidgetCount(); i++){
         	((ScreenWidget)vp.getWidget(0)).removeStyleName("Highlighted");
-        }
-        
-        selected.clear();
+        }        
     }
 
     public void addChangeListener(ChangeListener listener) {
@@ -488,7 +484,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
 		return maxRows;
 	}
 
-	public Vector getSelected() {
+	public ArrayList getSelected() {
 		return selected;
 	}
 

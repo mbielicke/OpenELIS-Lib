@@ -62,6 +62,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     }
     
     public void afterDraw(boolean sucess) {
+        super.afterDraw(sucess);
         bpanel.setForm(this);
         bpanel.setState(FormInt.DISPLAY);
         enable(false);

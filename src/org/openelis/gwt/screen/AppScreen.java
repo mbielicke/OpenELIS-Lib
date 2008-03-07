@@ -74,7 +74,7 @@ public class AppScreen extends ScreenBase {
     }
     
     public void afterDraw(boolean sucess) {
-
+        load((FormRPC)forms.get("display"));
     }
     
     public void drawScreen(String xmlDef) {
@@ -100,7 +100,7 @@ public class AppScreen extends ScreenBase {
          } catch (Exception e) {
              Window.alert("FormUtil: " + e.getMessage());
          }
-         load((FormRPC)forms.get("display"));
+        
          //load((FormRPC)forms.get("query"));
     }
     

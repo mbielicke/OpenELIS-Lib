@@ -158,7 +158,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 
 	public void saveValue() {
 		if(field instanceof CollectionField){
-			((CollectionField)field).setValue(editor.getSelectedList());
+			((CollectionField)field).setValue(editor.getSelected());
 			textValue.setValue(editor.textBox.getText());
 		}else{
 			if(type != null && type.equals("string")){
@@ -191,7 +191,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			editor = new AutoCompleteDropdown();
          //   editor.setWidth(width+"px");
         }
-		editor.setValue(field.getValue());
+		editor.setSelected((ArrayList)field.getValue());
 
 		setWidget(editor);			
 	}
