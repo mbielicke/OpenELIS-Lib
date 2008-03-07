@@ -140,15 +140,9 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             if(selections.get(i) instanceof DataSet){
                 selected.add(selections.get(i));
             }else{
-                for(int j = 0; j < dm.size(); j++){
-                    if(dm.get(j).getObject(1).equals(selections.get(i))){
-                        selected.add(dm.get(j));
-                        j = dm.size();
-                    }
-                }
+                selected.add(dm.get((DataObject)selections.get(i)));
             }
         }
-        this.selected = selections;
     }
     
     public void setSelected(int index){
@@ -182,7 +176,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     private void loadRow(int index){
         ScreenLabel label = (ScreenLabel)vp.getWidget(index);
         label.label.setText(dm.get(start+index).getObject(0).getValue().toString());
-        label.setUserObject(dm.get(start+index).getObject(1).getValue());
+        label.setUserObject(dm.get(start+index).getKey().getValue());
         label.removeStyleName("Highlighted");
         if(selected.contains(dm.get(start+index))){
             label.addStyleName("Highlighted");
@@ -231,7 +225,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         StringObject so = new StringObject();
         so.setValue(text);
         ds.addObject(so);
-        ds.addObject(value);
+        ds.setKey(value);
         dm.add(ds);
         if(vp.getWidgetCount() < maxRows){
             createRow();
