@@ -546,8 +546,8 @@ public class AutoCompleteDropdown extends Composite implements
 
 	public void setModel(DataModel model) {
 		scrollList.setDataModel(model);
-
-		// we also want to fill the hashmap
+    // not needed for new dataModel
+	/*	// we also want to fill the hashmap
 		for (int i = 0; i < model.size(); i++) {
 			if(type.equals("string")){
 				idHashMap.put((String)model.get(i).getObject(1).getValue(), (String)model.get(i).getObject(0).getValue()+"@@"+String.valueOf(i));
@@ -555,6 +555,7 @@ public class AutoCompleteDropdown extends Composite implements
 				idHashMap.put(String.valueOf((Integer)model.get(i).getObject(1).getValue()), (String)model.get(i).getObject(0).getValue()+"@@"+String.valueOf(i));
 			}
 		}
+    */
 	}
 
 	public void setMultiSelect(boolean multiSelect) {
@@ -855,7 +856,7 @@ public class AutoCompleteDropdown extends Composite implements
 			return (mid+1);
 		}
 	}
-	
+/*	
 	private String getDisplayByKey(String key){
 		String returnString = (String) idHashMap.get(key);
 		if(returnString != null){
@@ -874,7 +875,7 @@ public class AutoCompleteDropdown extends Composite implements
 		}
 		return -1;
 	}
-	
+*/	
 	private String getTextBoxDisplay(){
 		//int selectionLength = -1;
 		String textValue = "";
@@ -897,8 +898,9 @@ public class AutoCompleteDropdown extends Composite implements
 
 		// if this is true then we need to find these values manually
 		if (currentActive == -1 && currentStart == 0 && selected.size() > 0 && !multiSelect) {
+        /*    
 			if (type.equals("string")) {
-				int index = getIndexByKey((String)((StringObject)((DataSet)selected.get(0)).getObject(1)).getValue());
+				int index = (getIndexByKey((String)((StringObject)((DataSet)selected.get(0)).getObject(1)).getValue());
 				//for (int i = 0; i < scrollList.getDataModel().size(); i++) {
 				//	if (((String) ((StringObject) scrollList
 				//			.getDataModel().get(i).getObject(1))
@@ -927,6 +929,14 @@ public class AutoCompleteDropdown extends Composite implements
 				//}
 			//}
 			}
+         */
+          int index = scrollList.getDataModel().indexOf((DataSet)scrollList.getSelected().get(0));
+          if(index > -1){
+                currentStart = index;
+                currentActive = 0;
+                scrollList.setActive(0);
+           }
+          
 		}
 
 	}

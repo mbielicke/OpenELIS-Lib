@@ -80,6 +80,14 @@ public class DataModel implements DataObject, Serializable {
         return get(selected);
     }
     
+    public int indexOf(DataObject key){
+        return entries.indexOf(keyMap.get(key));
+    }
+    
+    public int indexOf(DataSet set){
+        return entries.indexOf(set);
+    }
+    
     public int getPage(){
         return page;
     }
