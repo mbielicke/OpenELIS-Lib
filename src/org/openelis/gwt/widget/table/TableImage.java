@@ -34,6 +34,10 @@ public class TableImage extends SimplePanel implements TableCellWidget {
         // TODO Auto-generated method stub
         return new TableImage();
     }
+    
+    public TableImage(Node node){
+        this();
+    }
 
 	public void setDisplay() {
 		setEditor();

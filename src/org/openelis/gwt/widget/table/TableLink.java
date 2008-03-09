@@ -29,6 +29,10 @@ public class TableLink extends SimplePanel implements TableCellWidget {
         // TODO Auto-generated method stub
     }
 
+    public TableLink(Node node){
+        this();
+    }
+    
     public Widget getInstance(Node node) {
         // TODO Auto-generated method stub
         return new TableLink();

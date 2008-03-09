@@ -75,7 +75,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         return ta;
     }
     
-	public Widget getInstance(Node node) {
+	public TableAutoDropdown(Node node) {
 		AutoCompleteDropdown auto = new AutoCompleteDropdown();
 		String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
         String url = node.getAttributes()
@@ -153,7 +153,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         if(!fromModel && optionsNode != null)
         	editor.setModel(getDropDownOptions(optionsNode));
         	
-        return getNewTableAuto();
 	}
 
 	public void saveValue() {

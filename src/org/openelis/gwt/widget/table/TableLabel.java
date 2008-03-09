@@ -37,6 +37,10 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
         // TODO Auto-generated method stub
         return new TableLabel();
     }
+    
+    public TableLabel(Node node){
+        this();
+    }
 
 	public void setDisplay() {
 		setEditor();

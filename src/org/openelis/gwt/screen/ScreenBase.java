@@ -93,6 +93,7 @@ public class ScreenBase extends Composite implements
         return WIDGET_MAP;
     }
 
+
     /**
      * This method will return the widget being wrapped by the ScreenWidget
      * wth given name parameter

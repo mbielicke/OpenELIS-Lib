@@ -56,6 +56,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                           .getNodeValue();
                     TableManager manager = (TableManager)ScreenBase.getWidgetMap()
                                                                .getTableManager(appClass);
+                    
                     table.setManager(manager);
                 }
                 Node widthsNode = ((Element)node).getElementsByTagName("widths")
@@ -208,6 +209,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 ArrayList list = new ArrayList();
                 for (int i = 0; i < editors.getLength(); i++) {
                     if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        
                         list.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
                     }
                 }

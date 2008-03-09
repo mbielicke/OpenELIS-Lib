@@ -56,20 +56,19 @@ public class TableOption extends TableCellInputWidget {
         return to;
     }
 
-    public Widget getInstance(Node node) {
-        TableOption to = new TableOption();
+    public TableOption (Node node) {
         if (node.getAttributes().getNamedItem("fromModel") != null) {
-            to.loadFromModel = true;
+            loadFromModel = true;
         } else if (node.getAttributes().getNamedItem("fromHidden") != null) {
-            to.loadFromHidden = node.getAttributes()
+            loadFromHidden = node.getAttributes()
                                     .getNamedItem("fromHidden")
                                     .getNodeValue();
         } else {
-        	to.editor = new OptionList();
-            to.editor.setWidth(width+"px");
+        	editor = new OptionList();
+            editor.setWidth(width+"px");
             NodeList items = ((Element)node).getElementsByTagName("item");
             for (int j = 0; j < items.getLength(); j++) {
-                to.editor.addItem(items.item(j)
+                editor.addItem(items.item(j)
                                 .getAttributes()
                                 .getNamedItem("value")
                                 .getNodeValue(), (items.item(j).getFirstChild() == null ? " " : items.item(j).getFirstChild().getNodeValue()));
@@ -78,16 +77,15 @@ public class TableOption extends TableCellInputWidget {
         if (node.getAttributes().getNamedItem("multi") != null){
             if(node.getAttributes().getNamedItem("multi").getNodeValue().equals("true")){
             	multi = true;
-            	if(to.editor != null)
-            		to.editor.setMultipleSelect(true);
+            	if(editor != null)
+            		editor.setMultipleSelect(true);
             }
         }
         if (node.getAttributes().getNamedItem("size") != null){
         	visible = Integer.parseInt(node.getAttributes().getNamedItem("size").getNodeValue());
-        	if(to.editor != null)
-        		to.editor.setVisibleItemCount(visible);
+        	if(editor != null)
+        		editor.setVisibleItemCount(visible);
         }
-        return to;
     }
 
 	public void setDisplay() {

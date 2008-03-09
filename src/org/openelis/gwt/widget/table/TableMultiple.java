@@ -35,15 +35,13 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         
     }
 
-    public Widget getInstance(Node node) {
-        TableMultiple mult = new TableMultiple();
+    public TableMultiple(Node node) {
         NodeList editors = node.getChildNodes();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                mult.cells.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
+                cells.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
             }
         }
-        return mult;
     }
 
     public TableCellWidget getNewInstance() {
@@ -106,6 +104,11 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
             ((TableCellWidget)cells.get(i)).setCellWidth(width);
         }
         
+    }
+
+    public Widget getInstance(Node node) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

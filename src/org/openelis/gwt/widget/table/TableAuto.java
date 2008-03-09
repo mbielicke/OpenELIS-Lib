@@ -97,7 +97,8 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
         return ta;
     }
     
-	public Widget getInstance(Node node) {
+	public TableAuto(Node node) {
+        this();
 		AutoCompleteTextBox auto = new AutoCompleteTextBox();
 		String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
         url = node.getAttributes()
@@ -175,8 +176,6 @@ public class TableAuto extends TableCellInputWidget implements EventPreview {
         textValue.setValue("");
         if(optionsNode != null)
         	editor.setModel(getDropDownOptions(optionsNode));
-        	
-        return getNewTableAuto();
 	}
 
 	public void saveValue() {
