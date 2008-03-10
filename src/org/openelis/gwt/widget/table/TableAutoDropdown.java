@@ -6,6 +6,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.NumberObject;
@@ -201,7 +202,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 		
 		if(!(field instanceof CollectionField))
 			//we need to also set the display value because we cant guarantee its the same
-			this.textValue.setValue(getTextValueFromId(field));
+			this.textValue.setValue(editor.getModel().get((DataObject)((ArrayList)field.getValue()).get(0)).getObject(0));
 	}
 	
 	private String getTextValueFromId(AbstractField field){
