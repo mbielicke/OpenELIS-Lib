@@ -31,5 +31,9 @@ public class StringObject implements DataObject, Serializable {
             return false;
         return ((StringObject)obj).value.equals(value);
     }
+    
+    public int hashCode() {
+        return value.hashCode();
+    }    
 
 }

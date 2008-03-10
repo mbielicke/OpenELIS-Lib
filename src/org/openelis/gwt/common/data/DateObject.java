@@ -65,5 +65,9 @@ public class DateObject implements DataObject, Serializable {
             return false;
         return ((DateObject)obj).value.equals(value);
     }
+    
+    public int hashCode() {
+        return value.hashCode();
+    }
 
 }

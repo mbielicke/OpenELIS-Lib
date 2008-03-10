@@ -52,4 +52,9 @@ public class NumberObject implements DataObject, Serializable {
            return false;
        return ((NumberObject)obj).value.equals(value);
     }
+    
+    public int hashCode() {
+        // TODO Auto-generated method stub
+        return value.hashCode();
+    }
 }

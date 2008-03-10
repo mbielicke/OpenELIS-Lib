@@ -50,4 +50,8 @@ public class BooleanObject implements DataObject, Serializable {
             return false;
         return ((BooleanObject)obj).value.equals(value);
     }
+    
+    public int hashCode() {
+        return value.hashCode();
+    }
 }
