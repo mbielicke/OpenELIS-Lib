@@ -46,4 +46,10 @@ public class NumberObject implements DataObject, Serializable {
         clone.value = new Double(value.doubleValue());
         return clone;
     }
+    
+    public boolean equals(Object obj) {
+       if(!(obj instanceof NumberObject))
+           return false;
+       return ((NumberObject)obj).value.equals(value);
+    }
 }

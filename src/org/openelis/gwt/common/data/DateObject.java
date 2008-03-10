@@ -59,5 +59,11 @@ public class DateObject implements DataObject, Serializable {
         clone.setValue(value);
         return clone;
     }
+    
+    public boolean equals(Object obj) {
+        if(!(obj instanceof DateObject))
+            return false;
+        return ((DateObject)obj).value.equals(value);
+    }
 
 }

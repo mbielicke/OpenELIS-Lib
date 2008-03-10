@@ -25,5 +25,11 @@ public class StringObject implements DataObject, Serializable {
         clone.setValue(value);
         return clone;
     }
+    
+    public boolean equals(Object obj) {
+        if(!(obj instanceof StringObject))
+            return false;
+        return ((StringObject)obj).value.equals(value);
+    }
 
 }

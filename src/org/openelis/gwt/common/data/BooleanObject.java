@@ -44,4 +44,10 @@ public class BooleanObject implements DataObject, Serializable {
         clone.setValue(value);
         return clone;
     }
+    
+    public boolean equals(Object obj) {
+        if(!(obj instanceof BooleanObject))
+            return false;
+        return ((BooleanObject)obj).value.equals(value);
+    }
 }
