@@ -49,5 +49,24 @@ public class DataSet implements Serializable {
         clone.key = key;
         return clone;
     }
+    
+    public boolean equals(Object obj) {
+        // TODO Auto-generated method stub
+        DataSet comp = (DataSet)obj;
+        if(!(obj instanceof DataSet))
+            return false;
+        if(comp.key != null){
+            if(comp.key.equals(key))
+                return true;
+            return false;
+        }
+        if(comp.size() != size())
+            return false;
+        for(int i=0; i < size(); i++){
+            if(!comp.getObject(i).equals(getObject(i)))
+                return false;
+        }
+        return true;
+        }
 
 }
