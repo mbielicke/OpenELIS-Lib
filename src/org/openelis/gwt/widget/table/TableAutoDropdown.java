@@ -200,9 +200,17 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	public void setField(AbstractField field) {
 		this.field = field;
 		
-		if(!(field instanceof CollectionField))
-			//we need to also set the display value because we cant guarantee its the same
-			this.textValue.setValue(editor.getModel().get((DataObject)((ArrayList)field.getValue()).get(0)).getObject(0));
+		//if(!(field instanceof CollectionField))
+		if(((ArrayList)field.getValue()).size() > 0){
+			if(((ArrayList)field.getValue()).get(0) instanceof DataSet){
+				DataSet set = (DataSet) ((ArrayList)field.getValue()).get(0);
+				this.textValue.setValue((String)((DataObject)((DataSet)editor.getModel().get(set.getObject(0))).getObject(0)).getValue());
+				
+			}else{
+				this.textValue.setValue((String)editor.getModel().get((DataObject)((ArrayList)field.getValue()).get(0)).getObject(0).getValue());	
+			}
+		}
+			
 	}
 	
 	private String getTextValueFromId(AbstractField field){

@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
@@ -879,12 +880,19 @@ public class AutoCompleteDropdown extends Composite implements
 	private String getTextBoxDisplay(){
 		//int selectionLength = -1;
 		String textValue = "";
-		Iterator selectIt = selected.iterator();
-		while (selectIt.hasNext()) {
-                DataSet select = (DataSet)selectIt.next();
-		       // selectionLength = ((String) ((StringObject) select.getObject(0)).getValue()).length();
-				textValue = (String) ((StringObject) select.getObject(0)).getValue()
-						+ (!"".equals(textValue) ? "|" : "") + textValue;
+		for(int i=0;i<selected.size();i++){
+			if(selected.get(i) instanceof DataSet){
+				 DataSet select = (DataSet)selected.get(i);
+				 textValue = (String) ((StringObject) select.getObject(0)).getValue()
+				 				+ (!"".equals(textValue) ? "|" : "") + textValue;
+			}else{
+				NumberObject select = (NumberObject)selected.get(i);
+				
+				String tempTextValue = (String)((DataObject)((DataSet)scrollList.getDataModel().get(select)).getObject(0)).getValue();
+				
+				textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
+			}
+               
 		}	
 		return textValue;
 	}
