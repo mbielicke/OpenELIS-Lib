@@ -382,7 +382,6 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         }
         if (KeyboardListener.KEY_ENTER == code) {
             if(active > -1){
-                selected.add(dm.get(start+active));
                 changeListeners.fireChange(this);
             }
         }       
