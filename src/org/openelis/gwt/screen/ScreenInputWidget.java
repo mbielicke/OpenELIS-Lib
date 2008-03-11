@@ -109,7 +109,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(!showError)
             return;
     	String[] errors;
-        if(!queryMode && (displayWidget instanceof AutoCompleteDropdown || displayWidget instanceof AutoCompleteTextBox))
+        if(!queryMode && (displayWidget instanceof AutoCompleteTextBox))
         	errors = screen.rpc.getField(key+"Id").getErrors();
         else
         	errors = screen.rpc.getField(key).getErrors();

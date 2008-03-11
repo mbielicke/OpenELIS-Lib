@@ -177,7 +177,7 @@ public class ScreenBase extends Composite implements
             Object wid = wids.next();
             if(wid instanceof ScreenInputWidget){
             	String key = ((ScreenInputWidget)wid).key;
-            	if(wid instanceof ScreenAutoDropdown || wid instanceof ScreenAuto)
+            	if(wid instanceof ScreenAuto)
             		key+="Id";
                 AbstractField field = rpc.getField(key);
                 if(field != null && !field.isValid())

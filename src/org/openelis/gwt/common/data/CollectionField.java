@@ -16,7 +16,14 @@ public class CollectionField extends AbstractField implements Serializable {
     private String type = "";
 
     public void validate() {
-        // TODO Auto-generated method stub
+    	if (required) {
+            if (coll.size() == 0) {
+                addError("Field is required");
+                valid = false;
+                return;
+            }
+        }
+        valid = true;
     }
 
     public boolean isInRange() {
