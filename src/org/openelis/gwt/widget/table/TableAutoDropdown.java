@@ -42,7 +42,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     private String fieldCase = "mixed";
     private boolean fromModel = false;
     private String type = "";
-    private int width;
     
     public OptionField fromHidden;
     
@@ -83,15 +82,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
                          .getNamedItem("serviceUrl")
                          .getNodeValue();
         
-        boolean dropDown = false;
         boolean multiSelect = false;
         String textBoxDefault = null;
         String width = null;
-        
-        
-        if (node.getAttributes().getNamedItem("dropdown") != null)
-        	dropDown = true;
-        
+                
         if (node.getAttributes().getNamedItem("fromModel") != null)
         	fromModel = true;
         

@@ -75,7 +75,6 @@ public class AutoCompleteDropdown extends Composite implements
 
 	HashMap idHashMap = new HashMap();
 
-	// TableWidget tableWidget;
 	final PopupPanel choicesPopup = new PopupPanel(true);
 
 	protected String textBoxDefault = "";
@@ -111,6 +110,8 @@ public class AutoCompleteDropdown extends Composite implements
 	protected boolean fromModel = false;
 
 	protected ArrayList selected = new ArrayList();
+	
+	protected int numberOfRows = 10;
 
 	// table values
 	AbstractField[] fields;
@@ -128,8 +129,6 @@ public class AutoCompleteDropdown extends Composite implements
 	 * Category for which suggestions we are trying to match
 	 */
 	private String cat;
-
-	//public Object value;
 
 	private ChangeListenerCollection callback;
 
@@ -252,7 +251,6 @@ public class AutoCompleteDropdown extends Composite implements
 			}
 
 			String text = textBox.getText();
-			//value = null;
 			if (multiSelect) {
 				if (text.length() == 0) {
 					selected.clear();
@@ -297,13 +295,11 @@ public class AutoCompleteDropdown extends Composite implements
 
 			scrollList.addStyleName("Dropdown");
 
-			// FIXME currently the hardcoded max rows is 10...might need to
-			// change this
-			if (scrollList.getDataModel().size() < 10) {
+			if (scrollList.getDataModel().size() < numberOfRows) {
 				scrollList.setMaxRows(scrollList.getDataModel().size());
 				scrollList.setWidth(textBox.getOffsetWidth() + 14 + "px");
 			} else {
-				scrollList.setMaxRows(10);
+				scrollList.setMaxRows(numberOfRows);
 				scrollList.setWidth(textBox.getOffsetWidth() - 4 + "px");
 			}
 
@@ -384,22 +380,11 @@ public class AutoCompleteDropdown extends Composite implements
 				textBox.setSelectionRange(0, selectionLength);
 
 			complete();
-			// clickedArrow = false;
 		} else {
 			choicesPopup.hide();
 		}
 	}
 
-/*	private class GetInitialModel implements AsyncCallback {
-		public void onSuccess(Object result) {
-			scrollList.setDataModel((DataModel) result);
-		}
-
-		public void onFailure(Throwable caught) {
-			Window.alert(caught.getMessage());
-		}
-	}
-*/
 	/**
 	 * Set the selection that the user made.
 	 */
@@ -450,85 +435,11 @@ public class AutoCompleteDropdown extends Composite implements
 		getMatches(text);
 	}
 
-	/**
-	 * Sets the value for the widget and calls the server to retrieve the
-	 * display value
-	 * 
-	 * @param value
-	 
-	public void setValue(Object value) {
-		if (value instanceof ArrayList) {
-			this.value = value;
-		} else {
-			if (type.equals("string")) {
-				String val = (String) value;
-				this.value = value;
-				if (value != null && !val.equals("")) {
-					StringField stringField = new StringField();
-					stringField.setValue(val);
-					reset();
-					getDisplay(stringField);
-				} else
-					reset();
-			} else if (type.equals("integer")) {
-				Integer val = (Integer) value;
-				this.value = value;
-				if (value != null && val.intValue() > 0) {
-					NumberField numberField = new NumberField();
-					numberField.setType("integer");
-					numberField.setValue(val);
-					reset();
-					getDisplay(numberField);
-				} else
-					reset();
-			}
-		}
-	}
-
-	private void getDisplay(AbstractField value) {
-		DataModel model = scrollList.getDataModel();
-		String display = null;
-		
-		if(type.equals("string"))
-			display = getDisplayByKey((String)value.getValue());
-		else if(type.equals("integer"))
-			display = getDisplayByKey(String.valueOf((Integer)value.getValue()));
-		
-		if(display != null)
-			textBox.setText(display.trim());
-		/*
-		
-		for (int i = 0; i < model.size(); i++) {
-			if (((StringObject) model.get(i).getObject(1)).getValue().equals(
-					value.getValue())) {
-				textBox.setText(((String) ((StringObject) model.get(i)
-						.getObject(0)).getValue()).trim());
-				break;
-			}
-		}
-	}
-*/
-	/*private void getDisplay(NumberField value) {
-		DataModel model = scrollList.getDataModel();
-		for (int i = 0; i < model.size(); i++) {
-			if (((NumberObject) model.get(i).getObject(1)).getValue().equals(
-					value.getValue())) {
-				textBox.setText(((String) ((StringObject) model.get(i)
-						.getObject(0)).getValue()).trim());
-				break;
-			}
-		}
-	}*/
-
 	private void getMatches(String match) {
 		DataModel model = scrollList.getDataModel();
 		int tempStartPos = -1;
 		int index = -1;
-		/*while (i < model.size()
-				&& ((String) model.get(i).getObject(0).getValue())
-						.toUpperCase().indexOf(match.toUpperCase()) != 0) {
-			i++;
-		}*/
+
 		index = getIndexByTextValue(match);
 
 		if (index > -1 && index < model.size()) {
@@ -547,16 +458,6 @@ public class AutoCompleteDropdown extends Composite implements
 
 	public void setModel(DataModel model) {
 		scrollList.setDataModel(model);
-    // not needed for new dataModel
-	/*	// we also want to fill the hashmap
-		for (int i = 0; i < model.size(); i++) {
-			if(type.equals("string")){
-				idHashMap.put((String)model.get(i).getObject(1).getValue(), (String)model.get(i).getObject(0).getValue()+"@@"+String.valueOf(i));
-			}else if(type.equals("integer")){
-				idHashMap.put(String.valueOf((Integer)model.get(i).getObject(1).getValue()), (String)model.get(i).getObject(0).getValue()+"@@"+String.valueOf(i));
-			}
-		}
-    */
 	}
 
 	public void setMultiSelect(boolean multiSelect) {
@@ -572,6 +473,12 @@ public class AutoCompleteDropdown extends Composite implements
         	textValue = getTextBoxDisplay();
 			textBox.setText(textValue.trim());
 			textBoxDefault = textValue;
+			
+			//need to set the scroll list values back to default
+			scrollList.setActive(-1);
+			scrollList.setStart(0);
+			currentActive= -1;
+			currentStart = -1;
     	}
     }
     
@@ -676,14 +583,11 @@ public class AutoCompleteDropdown extends Composite implements
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
 				textBox.setFocus(true);
-				// delete textBox.setText("");
+
 				focusPanel.addStyleName("Selected");
 
 				setCurrentValues();
-						//		break;
-						//	}
-						//}
-					//}
+					
 			}
 		}
 	}
@@ -827,6 +731,10 @@ public class AutoCompleteDropdown extends Composite implements
 	public void closePopup() {
 		choicesPopup.hide();
 	}
+	
+	public void setRows(int rows){
+		numberOfRows = rows;
+	}
 
 	private int getIndexByTextValue(String textValue) {
 		DataModel model = scrollList.getDataModel();
@@ -857,28 +765,8 @@ public class AutoCompleteDropdown extends Composite implements
 			return (mid+1);
 		}
 	}
-/*	
-	private String getDisplayByKey(String key){
-		String returnString = (String) idHashMap.get(key);
-		if(returnString != null){
-			
-			return returnString.substring(0,returnString.indexOf("@@"));
-		}
-		return "";
-	}
-	
-	private int getIndexByKey(String key){
-		String returnString = (String) idHashMap.get(key);
-		if(returnString != null){
-			String indexString = returnString.substring(returnString.indexOf("@@")+2);
-			
-			return Integer.valueOf(indexString).intValue();
-		}
-		return -1;
-	}
-*/	
+
 	private String getTextBoxDisplay(){
-		//int selectionLength = -1;
 		String textValue = "";
 		for(int i=0;i<selected.size();i++){
 			if(selected.get(i) instanceof DataSet){
@@ -906,38 +794,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 		// if this is true then we need to find these values manually
 		if (currentActive == -1 && currentStart == 0 && selected.size() > 0 && !multiSelect) {
-        /*    
-			if (type.equals("string")) {
-				int index = (getIndexByKey((String)((StringObject)((DataSet)selected.get(0)).getObject(1)).getValue());
-				//for (int i = 0; i < scrollList.getDataModel().size(); i++) {
-				//	if (((String) ((StringObject) scrollList
-				//			.getDataModel().get(i).getObject(1))
-				//			.getValue()).equals(value)) {
-				if(index > -1){
-					currentStart = index;
-					currentActive = 0;
-					scrollList.setActive(0);
-				}
-				//		break;
-				//	}
-			//	}
-			} else if (type.equals("integer")) {
-				int index = getIndexByKey(String.valueOf((Integer)((NumberObject)((DataSet)selected.get(0)).getObject(1)).getValue()));
-				//for (int j = 0; j < scrollList.getDataModel().size(); j++) {
-				//	if (((Integer) ((NumberObject) scrollList
-				//			.getDataModel().get(j).getObject(1))
-				//			.getValue()).equals(value)) {
-				if(index > -1){
-					currentStart = index;
-					currentActive = 0;
-					scrollList.setActive(0);
-				}
-				//		break;
-				//	}
-				//}
-			//}
-			}
-         */
+       
           int index = scrollList.getDataModel().indexOf((DataSet)scrollList.getSelected().get(0));
           if(index > -1){
                 currentStart = index;

@@ -82,18 +82,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
 
         auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width);
-        /*{
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
-                        return;
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };*/
+
         auto.setForm(screen);
         
         if(widthsNode != null) 
@@ -125,6 +114,9 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
             auto.setCase(fieldCase);
         }
                
+        if (node.getAttributes().getNamedItem("rows") != null)
+        	auto.setRows(Integer.parseInt(node.getAttributes().getNamedItem("rows").getNodeValue()));
+      
         initWidget(auto);
         displayWidget = auto;
         setDefaults(node, screen);
@@ -241,18 +233,13 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         	NumberObject id = new NumberObject();
         	id.setType("integer");
         	id.setValue(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
-        	set.addObject(id);
+        	set.setKey(id);
         }else if(type.equals("string")){
         	StringObject id = new StringObject();
         	id.setValue(item.getAttributes().getNamedItem("value").getNodeValue());
-        	set.addObject(id);
+        	set.setKey(id);
         }
         
-        //selected flag
-		BooleanObject selected = new BooleanObject();
-		selected.setValue(new Boolean(false));
-		set.addObject(selected);
-		
 		dataModel.add(set);
     	}
         return dataModel;
