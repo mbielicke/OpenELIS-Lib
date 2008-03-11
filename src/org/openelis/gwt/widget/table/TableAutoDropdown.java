@@ -3,12 +3,10 @@ package org.openelis.gwt.widget.table;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
@@ -278,8 +276,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
 	
 	private DataModel getDropDownOptions(Node itemsNode){
-		DataModel dataModel = new DataModel();
-		
+		DataModel dataModel = new DataModel();		
 		
     	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
     	for (int i = 0; i < items.getLength(); i++) {
@@ -296,18 +293,13 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         	NumberObject id = new NumberObject();
         	id.setType("integer");
         	id.setValue(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
-        	set.addObject(id);
+        	set.setKey(id);
         }else if(type.equals("string")){
         	StringObject id = new StringObject();
         	id.setValue(item.getAttributes().getNamedItem("value").getNodeValue());
-        	set.addObject(id);
+        	set.setKey(id);
         }
         
-        //selected flag
-		BooleanObject selected = new BooleanObject();
-		selected.setValue(new Boolean(false));
-		set.addObject(selected);
-		
 		dataModel.add(set);
     	}
         return dataModel;
