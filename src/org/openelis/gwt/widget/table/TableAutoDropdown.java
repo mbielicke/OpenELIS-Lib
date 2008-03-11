@@ -83,11 +83,11 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         boolean multiSelect = false;
         String textBoxDefault = null;
         String width = null;
-                
-        if (node.getAttributes().getNamedItem("fromModel") != null)
+
+        if (node.getAttributes().getNamedItem("fromModel") != null && node.getAttributes().getNamedItem("fromModel").getNodeValue().equals("true"))
         	fromModel = true;
         
-        if (node.getAttributes().getNamedItem("multiSelect") != null)
+        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
         	multiSelect = true;
         
         if (node.getAttributes().getNamedItem("text") != null)
