@@ -135,7 +135,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     }
         
     public void setSelected(ArrayList selections){
-        selected.clear();
+    	selected = new ArrayList();
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
                 selected.add(selections.get(i));
@@ -443,7 +443,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     }
     
     public void unselectAll() {
-        selected.clear();
+    	selected = new ArrayList();
         for(int i=0; i<vp.getWidgetCount(); i++){
         	((ScreenWidget)vp.getWidget(0)).removeStyleName("Highlighted");
         }        

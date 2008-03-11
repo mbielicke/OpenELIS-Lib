@@ -108,8 +108,6 @@ public class AutoCompleteDropdown extends Composite implements
 	protected boolean multiSelect = false;
 
 	protected boolean fromModel = false;
-
-	protected ArrayList selected = new ArrayList();
 	
 	protected int numberOfRows = 10;
 
@@ -253,7 +251,7 @@ public class AutoCompleteDropdown extends Composite implements
 			String text = textBox.getText();
 			if (multiSelect) {
 				if (text.length() == 0) {
-					selected.clear();
+					scrollList.setSelected(new ArrayList());
 					scrollList.unselectAll();
 					choicesPopup.hide();
 					visible = false;
@@ -366,7 +364,6 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	public void onChange(Widget arg0) {
 		if (scrollList.getActive() > -1) {
-			selected = scrollList.getSelected();
 			int selectionLength = -1;
 			String textValue = "";
 			textValue = getTextBoxDisplay();
@@ -403,10 +400,8 @@ public class AutoCompleteDropdown extends Composite implements
 			// else do nothing
 		} else if (scrollList.getDataModel().size() > 0) {
 			// get the index of the selected
-            selected = scrollList.getSelected();
             String textValue = "";
             int selectionLength = -1;
-            Iterator selectIt = selected.iterator();
             
             textValue = getTextBoxDisplay();
 
@@ -466,7 +461,6 @@ public class AutoCompleteDropdown extends Composite implements
 
     public void setSelected(ArrayList selections){
     	if(selections != null){
-    		this.selected = selections;
         	scrollList.setSelected(selections);
         	
         	String textValue = "";
@@ -613,7 +607,7 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	public ArrayList getSelected() {
-		return selected;
+		return scrollList.getSelected();
 	}
 
 	public void setText(String text) {
@@ -768,6 +762,8 @@ public class AutoCompleteDropdown extends Composite implements
 
 	private String getTextBoxDisplay(){
 		String textValue = "";
+		ArrayList selected = scrollList.getSelected();
+		
 		for(int i=0;i<selected.size();i++){
 			if(selected.get(i) instanceof DataSet){
 				 DataSet select = (DataSet)selected.get(i);
@@ -793,7 +789,7 @@ public class AutoCompleteDropdown extends Composite implements
 			currentActive = scrollList.getActive();
 
 		// if this is true then we need to find these values manually
-		if (currentActive == -1 && currentStart == 0 && selected.size() > 0 && !multiSelect) {
+		if (currentActive == -1 && currentStart == 0 && scrollList.getSelected().size() > 0 && !multiSelect) {
        
           int index = scrollList.getDataModel().indexOf((DataSet)scrollList.getSelected().get(0));
           if(index > -1){
