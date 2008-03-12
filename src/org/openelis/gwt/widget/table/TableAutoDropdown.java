@@ -196,7 +196,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 		if(((ArrayList)field.getValue()).size() > 0){
 			if(((ArrayList)field.getValue()).get(0) instanceof DataSet){
 				DataSet set = (DataSet) ((ArrayList)field.getValue()).get(0);
-				this.textValue.setValue((String)((DataObject)((DataSet)editor.getModel().get(set.getObject(0))).getObject(0)).getValue());
+				this.textValue.setValue((String)((StringObject)set.getObject(0)).getValue());
 				
 			}else{
 				this.textValue.setValue((String)editor.getModel().get((DataObject)((ArrayList)field.getValue()).get(0)).getObject(0).getValue());	
