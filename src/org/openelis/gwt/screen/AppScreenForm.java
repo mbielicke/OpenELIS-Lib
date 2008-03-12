@@ -420,7 +420,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         	setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
-            bpanel.setState(FormInt.DISPLAY);
+            if(modelWidget.getSelectedIndex() > -1)
+            	bpanel.setState(FormInt.DISPLAY);
+            else
+            	bpanel.setState(FormInt.DEFAULT);
 
       //      if(constants != null)
       //          message.setText(constants.getString("queryingComplete"));
