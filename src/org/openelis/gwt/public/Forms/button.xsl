@@ -5,38 +5,20 @@ xmlns:resource="xalan://org.openelis.server.constants.UTFResource"
 xmlns:locale="xalan://java.util.Locale" 
 extension-element-prefixes="resource" 
 version="1.0">
+
 <xalan:component prefix="resource">
-    <xalan:script lang="javaclass" src="xalan://org.openelis.server.constants.UTFResource"/>
-  </xalan:component>
+	<xalan:script lang="javaclass" src="xalan://org.openelis.server.constants.UTFResource"/>
+</xalan:component>
   
-   <xalan:component prefix="locale">
-    <xalan:script lang="javaclass" src="xalan://java.util.Locale"/>
-  </xalan:component>
+<xalan:component prefix="locale">
+	<xalan:script lang="javaclass" src="xalan://java.util.Locale"/>
+</xalan:component>
   
-   <xsl:variable name="language"><xsl:value-of select="locale"/></xsl:variable>
-    <xsl:variable name="constants" select="resource:getBundle('org.openelis.modules.main.server.constants.OpenELISConstants',locale:new(string($language)))"/>
+<xsl:variable name="language"><xsl:value-of select="locale"/></xsl:variable>
+<xsl:variable name="constants" select="resource:getBundle('org.openelis.modules.main.server.constants.OpenELISConstants',locale:new(string($language)))"/>
     
-	<xsl:template name="buttonPanelTemplate">
-<xsl:param name="buttonsParam" />
-
-<panel xsi:type="Absolute" layout="absolute" spacing="0" style="ButtonPanelContainer">
-	<widget>
-    	<buttonPanel key="buttons">
-			<xsl:call-template name="loop">
-				<xsl:with-param name="count"><xsl:value-of select="string-length($buttonsParam)"/></xsl:with-param>
-				<xsl:with-param name="buttonsParam"><xsl:value-of select="string($buttonsParam)"/></xsl:with-param>
-			</xsl:call-template>
-  		</buttonPanel>
- 	</widget>
-</panel>
-</xsl:template>
-
-<xsl:template name="loop">
-<xsl:param name="count"/>
-<xsl:param name="iteration">1</xsl:param>
-<xsl:param name="buttonsParam"/>
-<!--code goes here-->
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'q'">
+<!-- query button template -->
+<xsl:template name="queryButton">
 	<appButton action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query">	
 		<panel xsi:type="Panel" layout="horizontal">
 		<panel xsi:type="Absolute" layout="absolute" style="QueryButtonImage"/>
@@ -45,8 +27,10 @@ version="1.0">
 			</widget>
 		</panel>
 	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'p'">
+</xsl:template>
+
+<!-- previous button template -->
+<xsl:template name="previousButton">
 	<appButton action="prev" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="PreviousButtonImage"/>
@@ -54,9 +38,11 @@ version="1.0">
 	           	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
 	        </widget>
 	 	</panel>
-	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'n'">
+	</appButton>	
+</xsl:template>
+
+<!-- next button template -->
+<xsl:template name="nextButton">
 	<appButton action="next" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="">
 		 <panel xsi:type="Panel" layout="horizontal">
 	  		<panel xsi:type="Absolute" layout="absolute" style="NextButtonImage"/>
@@ -65,18 +51,10 @@ version="1.0">
 	     	</widget>
 	 	</panel>
 	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'a'">
-	<appButton action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="AddButtonImage"/>
-	        <widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
-	        </widget>
-	 	</panel>
-	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'u'">
+</xsl:template>
+
+<!-- update button template -->
+<xsl:template name="updateButton">
 	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="UpdateButtonImage"/>
@@ -85,8 +63,22 @@ version="1.0">
 	       	</widget>
 	 	</panel>
 	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'd'">
+</xsl:template>
+
+<!-- add button template -->
+<xsl:template name="addButton">
+	<appButton action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add">
+		<panel xsi:type="Panel" layout="horizontal">
+	    	<panel xsi:type="Absolute" layout="absolute" style="AddButtonImage"/>
+	        <widget>
+	        	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
+	        </widget>
+	 	</panel>
+	</appButton>
+</xsl:template>
+
+<!-- delete button template -->
+<xsl:template name="deleteButton">
 	<appButton action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete">
 		<panel xsi:type="Panel" layout="horizontal">
 	     	<panel xsi:type="Absolute" layout="absolute" style="DeleteButtonImage"/>
@@ -95,9 +87,11 @@ version="1.0">
 	      	</widget>
 	 	</panel>
 	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'c'">
-	<appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="">
+</xsl:template>
+
+<!-- commit button template -->
+<xsl:template name="commitButton">
+<appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
 	        <widget>
@@ -105,8 +99,10 @@ version="1.0">
 	      	</widget>
 	  	</panel>
 	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = 'b'">
+</xsl:template>
+
+<!-- abort button template -->
+<xsl:template name="abortButton">
 	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="AbortButtonImage"/>
@@ -115,18 +111,22 @@ version="1.0">
 	      	</widget>
 	  	</panel>
 	</appButton>
-</xsl:if>
-<xsl:if test="substring(string($buttonsParam),$iteration,1) = '|'">
-	<panel xsi:type="Absolute" layout="absolute" style="ButtonDivider"/>
-</xsl:if>
-<!--end code-->
-<xsl:if test="$iteration &lt; $count">
-<xsl:call-template name="loop">
-<xsl:with-param name="count" select="$count"/>
-<xsl:with-param name="iteration" select="$iteration +1"/>
-<xsl:with-param name="buttonsParam"><xsl:value-of select="string($buttonsParam)"/></xsl:with-param>
-</xsl:call-template>
-</xsl:if>
+</xsl:template>
 
+<!-- buttonpanel divider template -->
+<xsl:template name="buttonPanelDivider">
+	<panel xsi:type="Absolute" layout="absolute" style="ButtonDivider"/>
+</xsl:template>
+
+<!-- A to Z buttons template -->
+<xsl:template name="aToZButton">
+<xsl:param name="buttonsParam" />
+ <widget>
+	<appButton key="{string($buttonsParam)}" action="query:{string($buttonsParam)}" toggle="true" alwaysEnabled="true" style="smallButton" onclick="this">
+    	<widget>
+        	<text><xsl:value-of select="string($buttonsParam)"/></text>
+     	</widget>
+ 	</appButton>
+</widget>
 </xsl:template>
 </xsl:stylesheet>
