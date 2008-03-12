@@ -113,6 +113,30 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
+<!-- popup commit button template -->
+<xsl:template name="popupCommitButton">
+<appButton action="commit" style="Button" enabledStates="default" lockedStates="">
+		<panel xsi:type="Panel" layout="horizontal">
+	    	<panel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
+	        <widget>
+	        	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
+	      	</widget>
+	  	</panel>
+	</appButton>
+</xsl:template>
+
+<!-- popup abort button template -->
+<xsl:template name="popupAbortButton">
+	<appButton action="abort" style="Button" enabledStates="default" lockedStates="">
+		<panel xsi:type="Panel" layout="horizontal">
+	    	<panel xsi:type="Absolute" layout="absolute" style="AbortButtonImage"/>
+	    	<widget>
+	        	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
+	      	</widget>
+	  	</panel>
+	</appButton>
+</xsl:template>
+
 <!-- buttonpanel divider template -->
 <xsl:template name="buttonPanelDivider">
 	<panel xsi:type="Absolute" layout="absolute" style="ButtonDivider"/>
