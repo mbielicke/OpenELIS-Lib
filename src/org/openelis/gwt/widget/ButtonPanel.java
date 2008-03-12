@@ -1,13 +1,13 @@
 package org.openelis.gwt.widget;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+
+import org.openelis.gwt.screen.ScreenAppButton;
 
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.screen.ScreenAppButton;
 
 public class ButtonPanel extends Composite implements ClickListener {
 
@@ -16,7 +16,7 @@ public class ButtonPanel extends Composite implements ClickListener {
 	 */
     private HorizontalPanel hp = new HorizontalPanel();
 
-    private HashMap buttons = new HashMap();
+    private ArrayList buttons = new ArrayList();
     
     protected FormInt form;
 
@@ -29,14 +29,14 @@ public class ButtonPanel extends Composite implements ClickListener {
     
     public void addButton(AppButton button){
         hp.add(button);
-        buttons.put(button.action,button);
+        buttons.add(button);
         button.addClickListener(this);
     }
     
     public void addWidget(Widget wid){
         hp.add(wid);
         if(wid instanceof ScreenAppButton){
-            buttons.put(((AppButton)((ScreenAppButton)wid).getWidget()).action,wid);
+            buttons.add((AppButton)((ScreenAppButton)wid).getWidget());
             ((AppButton)((ScreenAppButton)wid).getWidget()).addClickListener(this);
         }
     }
@@ -53,6 +53,7 @@ public class ButtonPanel extends Composite implements ClickListener {
      * Handler for button clicks
      */
     public void onClick(Widget senderWid) {
+    	
         AppButton sender = (AppButton)senderWid;
         if (sender.action.equals("query")) {
             form.query(state);
@@ -100,7 +101,17 @@ public class ButtonPanel extends Composite implements ClickListener {
      * @param state
      */
     public void setState(int state) {
-        if(state == FormInt.ADD){
+    	for(int i=0;i<buttons.size();i++){
+    		if((state & ((AppButton)buttons.get(i)).getMaskedEnabledState()) != 0)
+    			setButtonState((AppButton) buttons.get(i), AppButton.UNPRESSED);
+    		else if((state & ((AppButton)buttons.get(i)).getMaskedLockedState()) != 0)
+    			setButtonState((AppButton) buttons.get(i), AppButton.LOCK_PRESSED);
+    		else
+    			setButtonState((AppButton) buttons.get(i), AppButton.DISABLED);
+    		
+    		
+    	}
+        /*if(state == FormInt.ADD){
             setButtonState("query",AppButton.DISABLED);
             setButtonState("update",AppButton.DISABLED);
             setButtonState("delete",AppButton.DISABLED);
@@ -159,21 +170,24 @@ public class ButtonPanel extends Composite implements ClickListener {
             setButtonState("commit",AppButton.DISABLED);
             setButtonState("abort",AppButton.DISABLED);
             setButtonState("add",AppButton.UNPRESSED);
-        }
+        }*/
         this.state = state;
     }
     
-    public void setButtonState(String action, int state) {
-        if(buttons.containsKey(action)){
-            ((AppButton)((ScreenAppButton)buttons.get(action)).getWidget()).changeState(state);
-        }
+    public void setButtonState(AppButton button, int state) {
+        button.changeState(state);
+    }
+    
+    public void setButtonState(String buttonAction, int state){
+    	//do nothing for now
     }
     
     public void removeButton(String action){
-        if(buttons.containsKey(action)){
+    /*    if(buttons.containsKey(action)){
             hp.remove((Widget)buttons.get(action));
             buttons.remove(action);
-        }
+        }*/
+    	//do nothing for now
     }
 
 }

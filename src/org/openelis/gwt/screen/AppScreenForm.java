@@ -64,9 +64,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void afterDraw(boolean sucess) {
         super.afterDraw(sucess);
         bpanel.setForm(this);
-        bpanel.setState(FormInt.DISPLAY);
+        bpanel.setState(FormInt.DEFAULT);
         enable(false);
-        bpanel.setButtonState("update",AppButton.DISABLED);
+       // bpanel.setButtonState("update",AppButton.DISABLED);
         if(window != null){
             window.setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
@@ -89,22 +89,21 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     }
     
     public void afterFetch(boolean success){
-       enable(false);
+       //enable(false);
        bpanel.setState(FormInt.DISPLAY);
-       bpanel.setButtonState("update",AppButton.UNPRESSED);
-       bpanel.setButtonState("delete", AppButton.UNPRESSED);
+       //bpanel.setButtonState("update",AppButton.UNPRESSED);
+       //bpanel.setButtonState("delete", AppButton.UNPRESSED);
        if(!success)
             key = null;
        
        //if it is the first page with the first selected. dont enable the previous button
-       if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0) {
+       /*if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0) {
     	   bpanel.setButtonState("next", AppButton.UNPRESSED);
     	   bpanel.setButtonState("prev",AppButton.DISABLED);
        }else{
     	   bpanel.setButtonState("next", AppButton.UNPRESSED);
            bpanel.setButtonState("prev",AppButton.UNPRESSED);
-       }
-       
+       }*/       
     }
     
     /**
@@ -236,7 +235,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             	getPage(false,"Delete...Complete");        
 
     		strikeThru(false);
-    		bpanel.setState(FormInt.DISPLAY);   
+    		bpanel.setState(FormInt.DEFAULT);   
         }
     }
 
@@ -449,6 +448,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                }
             });
             enable(false);
+            bpanel.setState(FormInt.DISPLAY);
      //       if(constants != null)
      //       	message.setText(constants.getString("updateAborted"));
      //       else
@@ -462,6 +462,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      //           message.setText(constants.getString("addAborted"));
      //       else
                 message.setText("Add aborted");
+                bpanel.setState(FormInt.DEFAULT);
         }
         if (state == FormInt.QUERY) {
             setForm(false);
@@ -471,6 +472,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     //            message.setText(constants.getString("queryAborted"));
     //        else
                 message.setText("Query aborted");
+                //FIXME we need to see if there is any data selected
+                if(modelWidget.getSelectedIndex() > -1)
+                	bpanel.setState(FormInt.DISPLAY);
+                else
+                	bpanel.setState(FormInt.DEFAULT);
         }
         if(state == FormInt.DELETE){
         	strikeThru(false);
@@ -479,8 +485,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
    //             message.setText(constants.getString("deleteAborted"));
    //         else
         	message.setText("Delete aborted");
+        	bpanel.setState(FormInt.DISPLAY);
         }
-        bpanel.setState(FormInt.DISPLAY);
+        //bpanel.setState(FormInt.DISPLAY);
         //bpanel.setButtonState("update",AppButton.DISABLED);
         //bpanel.setButtonState("delete", AppButton.DISABLED);
     }

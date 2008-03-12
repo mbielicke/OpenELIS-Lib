@@ -5,6 +5,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.FormInt;
 
 public class ScreenAppButton extends ScreenWidget {
     
@@ -49,6 +50,52 @@ public class ScreenAppButton extends ScreenWidget {
         }
         if (node.getAttributes().getNamedItem("onclick") != null){
             button.addClickListener(screen);
+        }
+        
+        if(node.getAttributes().getNamedItem("enabledStates") != null){
+        	int enabledStatesInt = 0;
+        	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
+        	 for(int i = 0; i < enabledStates.length; i++){
+        		 if("default".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.DEFAULT;
+        		 }else if("display".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.DISPLAY;
+        		 }else if("update".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.UPDATE;
+        		 }else if("add".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.ADD;
+        		 }else if("query".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.QUERY;
+        		 }else if("browse".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.BROWSE;
+        		 }else if("delete".equals(enabledStates[i])){
+        			 enabledStatesInt = enabledStatesInt + FormInt.DELETE;
+        		 }
+        	 }
+        	 button.setMaskedEnabledState(enabledStatesInt);
+        }
+        
+        if(node.getAttributes().getNamedItem("lockedStates") != null){
+        	int lockedStatesInt = 0;
+        	 String[] lockedStates = node.getAttributes().getNamedItem("lockedStates").getNodeValue().split(",");
+        	 for(int i = 0; i < lockedStates.length; i++){
+        		 if("default".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.DEFAULT;
+        		 }else if("display".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.DISPLAY;
+        		 }else if("update".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.UPDATE;
+        		 }else if("add".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.ADD;
+        		 }else if("query".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.QUERY;
+        		 }else if("browse".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.BROWSE;
+        		 }else if("delete".equals(lockedStates[i])){
+        			 lockedStatesInt = lockedStatesInt + FormInt.DELETE;
+        		 }
+        	 }
+        	 button.setMaskedLockedState(lockedStatesInt);
         }
         
         initWidget(button);
