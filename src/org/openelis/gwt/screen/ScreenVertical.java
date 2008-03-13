@@ -160,5 +160,9 @@ public class ScreenVertical extends ScreenWidget {
     public void destroy() {
         panel = null;
     }
+    
+    public VerticalPanel getPanel(){
+    	return panel;
+    }
 
 }
