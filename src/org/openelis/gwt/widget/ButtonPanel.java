@@ -102,75 +102,15 @@ public class ButtonPanel extends Composite implements ClickListener {
      */
     public void setState(int state) {
     	for(int i=0;i<buttons.size();i++){
-    		if((state & ((AppButton)buttons.get(i)).getMaskedEnabledState()) != 0)
-    			setButtonState((AppButton) buttons.get(i), AppButton.UNPRESSED);
-    		else if((state & ((AppButton)buttons.get(i)).getMaskedLockedState()) != 0)
-    			setButtonState((AppButton) buttons.get(i), AppButton.LOCK_PRESSED);
+    		AppButton button = (AppButton)buttons.get(i);
+    		if((state & button.getMaskedEnabledState()) != 0 && button.isEnabled())
+    			setButtonState(button, AppButton.UNPRESSED);
+    		else if((state & button.getMaskedLockedState()) != 0 && button.isEnabled())
+    			setButtonState(button, AppButton.LOCK_PRESSED);
     		else
-    			setButtonState((AppButton) buttons.get(i), AppButton.DISABLED);
-    		
-    		
+    			setButtonState(button, AppButton.DISABLED);
     	}
-        /*if(state == FormInt.ADD){
-            setButtonState("query",AppButton.DISABLED);
-            setButtonState("update",AppButton.DISABLED);
-            setButtonState("delete",AppButton.DISABLED);
-            setButtonState("prev",AppButton.DISABLED);
-            setButtonState("next",AppButton.DISABLED);
-            setButtonState("reload",AppButton.DISABLED);
-            setButtonState("select",AppButton.DISABLED);
-            setButtonState("commit",AppButton.UNPRESSED);
-            setButtonState("abort",AppButton.UNPRESSED);
-            setButtonState("add",AppButton.LOCK_PRESSED);
-        }
-        if(state == FormInt.QUERY){
-            setButtonState("query",AppButton.LOCK_PRESSED);
-            setButtonState("update",AppButton.DISABLED);
-            setButtonState("delete",AppButton.DISABLED);
-            setButtonState("prev",AppButton.DISABLED);
-            setButtonState("next",AppButton.DISABLED);
-            setButtonState("reload",AppButton.DISABLED);
-            setButtonState("select",AppButton.DISABLED);
-            setButtonState("commit",AppButton.UNPRESSED);
-            setButtonState("abort",AppButton.UNPRESSED);
-            setButtonState("add",AppButton.DISABLED);
-        } 
-        if(state == FormInt.UPDATE){
-            setButtonState("query",AppButton.DISABLED);
-            setButtonState("update",AppButton.LOCK_PRESSED);
-            setButtonState("delete",AppButton.DISABLED);
-            setButtonState("prev",AppButton.DISABLED);
-            setButtonState("next",AppButton.DISABLED);
-            setButtonState("reload",AppButton.DISABLED);
-            setButtonState("select",AppButton.DISABLED);
-            setButtonState("commit",AppButton.UNPRESSED);
-            setButtonState("abort",AppButton.UNPRESSED);
-            setButtonState("add",AppButton.DISABLED);
-        }
-        if(state == FormInt.DELETE){
-            setButtonState("query",AppButton.DISABLED);
-            setButtonState("update",AppButton.DISABLED);
-            setButtonState("delete",AppButton.PRESSED);
-            setButtonState("prev",AppButton.DISABLED);
-            setButtonState("next",AppButton.DISABLED);
-            setButtonState("reload",AppButton.DISABLED);
-            setButtonState("select",AppButton.DISABLED);
-            setButtonState("commit",AppButton.UNPRESSED);
-            setButtonState("abort",AppButton.UNPRESSED);
-            setButtonState("add",AppButton.DISABLED);
-        }
-        if(state == FormInt.DISPLAY){
-            setButtonState("query",AppButton.UNPRESSED);
-            setButtonState("update",AppButton.UNPRESSED);
-            setButtonState("delete",AppButton.UNPRESSED);
-            setButtonState("prev",AppButton.UNPRESSED);
-            setButtonState("next",AppButton.UNPRESSED);
-            setButtonState("reload",AppButton.UNPRESSED);
-            setButtonState("select",AppButton.UNPRESSED);
-            setButtonState("commit",AppButton.DISABLED);
-            setButtonState("abort",AppButton.DISABLED);
-            setButtonState("add",AppButton.UNPRESSED);
-        }*/
+    	
         this.state = state;
     }
     
@@ -179,15 +119,41 @@ public class ButtonPanel extends Composite implements ClickListener {
     }
     
     public void setButtonState(String buttonAction, int state){
-    	//do nothing for now
+    	if(buttonAction != null){
+	    	for(int i=0;i<buttons.size();i++){
+	    		if(buttonAction.equals(((AppButton)buttons.get(i)).action)){
+	    			((AppButton)buttons.get(i)).changeState(state);
+	    			break;
+	    		}
+	    	}	
+    	}
     }
     
     public void removeButton(String action){
-    /*    if(buttons.containsKey(action)){
-            hp.remove((Widget)buttons.get(action));
-            buttons.remove(action);
-        }*/
-    	//do nothing for now
+    	if(action != null){
+	    	for(int i=0;i<buttons.size();i++){
+	    		if(action.equals(((AppButton)buttons.get(i)).action)){
+	    			hp.remove((Widget)((AppButton)buttons.get(i)).getParent());
+	    			buttons.remove(i);
+	    		}
+	    	}
+    	}
     }
-
+    
+    public void enableButton(String action, boolean enabled){
+    	if(action != null){
+	    	for(int i=0;i<buttons.size();i++){
+	    		if(action.equals(((AppButton)buttons.get(i)).action)){
+	    			AppButton button = (AppButton)buttons.get(i);
+	    			if(enabled)
+	    	            button.changeState(AppButton.UNPRESSED);
+	    	        else
+	    	            button.changeState(AppButton.DISABLED);
+	    			
+	    			button.setEnabled(enabled);
+	    			break;
+	    		}
+	    	}
+    	}    	
+    }
 }

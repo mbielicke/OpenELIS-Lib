@@ -1,5 +1,7 @@
 package org.openelis.gwt.screen;
 
+import java.util.HashMap;
+
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -17,7 +19,18 @@ public class ScreenAppButton extends ScreenWidget {
      * Widget wrapped by this class
      */
     private AppButton button;
+    private static HashMap statesHash;
     
+    static {
+    	statesHash = new HashMap();
+    	statesHash.put("default", new Integer(FormInt.DEFAULT));
+    	statesHash.put("display", new Integer(FormInt.DISPLAY));
+    	statesHash.put("update", new Integer(FormInt.UPDATE));
+    	statesHash.put("add", new Integer(FormInt.ADD));
+    	statesHash.put("query", new Integer(FormInt.QUERY));
+    	statesHash.put("browse", new Integer(FormInt.BROWSE));
+    	statesHash.put("delete", new Integer(FormInt.DELETE));
+    }
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
@@ -52,11 +65,13 @@ public class ScreenAppButton extends ScreenWidget {
             button.addClickListener(screen);
         }
         
-        if(node.getAttributes().getNamedItem("enabledStates") != null){
+    
+        if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
         	int enabledStatesInt = 0;
         	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
-        	 for(int i = 0; i < enabledStates.length; i++){
-        		 if("default".equals(enabledStates[i])){
+        	 for(int i = 0; i < enabledStates.length; i++)
+        		 enabledStatesInt = enabledStatesInt + ((Integer)statesHash.get(enabledStates[i])).intValue();
+        		/* if("default".equals(enabledStates[i])){
         			 enabledStatesInt = enabledStatesInt + FormInt.DEFAULT;
         		 }else if("display".equals(enabledStates[i])){
         			 enabledStatesInt = enabledStatesInt + FormInt.DISPLAY;
@@ -70,16 +85,18 @@ public class ScreenAppButton extends ScreenWidget {
         			 enabledStatesInt = enabledStatesInt + FormInt.BROWSE;
         		 }else if("delete".equals(enabledStates[i])){
         			 enabledStatesInt = enabledStatesInt + FormInt.DELETE;
-        		 }
-        	 }
+        		 }else
+        			 throw new Exception("");
+        	 }*/
         	 button.setMaskedEnabledState(enabledStatesInt);
         }
         
-        if(node.getAttributes().getNamedItem("lockedStates") != null){
+        if(node.getAttributes().getNamedItem("lockedStates") != null && !"".equals(node.getAttributes().getNamedItem("lockedStates").getNodeValue())){
         	int lockedStatesInt = 0;
         	 String[] lockedStates = node.getAttributes().getNamedItem("lockedStates").getNodeValue().split(",");
-        	 for(int i = 0; i < lockedStates.length; i++){
-        		 if("default".equals(lockedStates[i])){
+        	 for(int i = 0; i < lockedStates.length; i++)
+        		 lockedStatesInt = lockedStatesInt + ((Integer)statesHash.get(lockedStates[i])).intValue();
+        		/* if("default".equals(lockedStates[i])){
         			 lockedStatesInt = lockedStatesInt + FormInt.DEFAULT;
         		 }else if("display".equals(lockedStates[i])){
         			 lockedStatesInt = lockedStatesInt + FormInt.DISPLAY;
@@ -94,7 +111,7 @@ public class ScreenAppButton extends ScreenWidget {
         		 }else if("delete".equals(lockedStates[i])){
         			 lockedStatesInt = lockedStatesInt + FormInt.DELETE;
         		 }
-        	 }
+        	 }*/
         	 button.setMaskedLockedState(lockedStatesInt);
         }
         

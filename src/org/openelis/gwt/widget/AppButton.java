@@ -24,6 +24,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     public boolean toggle;
     public int maskedEnabledState = 0;
     public int maskedLockedState = 0;
+    private boolean enabled = true;
     
     private FocusPanel panel = new FocusPanel();
     private FocusPanel classPanel = new FocusPanel();
@@ -136,5 +137,13 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
 
 	public int getMaskedLockedState() {
 		return maskedLockedState;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }
