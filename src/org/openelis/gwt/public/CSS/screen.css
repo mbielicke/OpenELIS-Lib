@@ -8,7 +8,6 @@ html, body {
     cursor:default;
 }
 
-
 .ScreenLeftPanel{
     padding:2px;
     background:white;
@@ -67,32 +66,25 @@ html, body {
     padding:2px;
 }
 .TopMenuRowContainer{
-/*width:100%;*/
-width:200px;
-padding:1px;
+    width:140px;
+    padding:1px;
 }
 .FavMenuRowContainer{
-/*width:100%;*/
-width:150px;
-padding:1px;
+    width:140px;
+    padding:1px;
 }
 .Hover .TopMenuRowContainer, .Hover .FavMenuRowContainer{
     cursor:pointer;
-    padding:0;
     background:url('../Images/white-top-bottom.gif') repeat-x 0px -1px;
     border:1px solid #8db2e3;
+    padding:0;
 }
 .FavoritesTitlePanel{
+    background:#99bbe8 url("../Images/headersprite.gif") repeat-x;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    padding:0 8px 0 4px;
-    /*height:18px;*/
-    background:url("../Images/headersprite.gif") repeat-x;
-    border-bottom:1px solid #99bbe8;
-    border-left:1px solid #333;
-    border-right:1px solid #333;
-    border-top:1px solid #333;
+    border:1px solid #99bbe8;
 }
 .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .orderIcon, .inventoryIcon, .instrumentIcon, .testIcon, .methodIcon,
@@ -149,7 +141,7 @@ padding:1px;
 .panelIcon{
 }
 .projectIcon{
-    background:url('/openelis/Images/addbuttonimage.gif') no-repeat center;
+    background:url('../Images/addbuttonimage.gif') no-repeat center;
 }
 .QAEventIcon{
 }
@@ -186,7 +178,7 @@ padding:1px;
 .referenceIcon{
 }
 .arrowIcon{
-   background:url('/openelis/Images/nextbuttonimage.gif') no-repeat center;
+   background:url('../Images/nextbuttonimage.gif') no-repeat center;
 }
 /*******END TOP MENU BAR***********/
 
@@ -251,6 +243,17 @@ color:gray;
 .disabled .RemoveRowButtonImage{
     background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
 }
+
+.FindButtonImage{
+    width:20px;
+    height:20px;
+}
+.FindButtonImage{
+    background:url("../Images/page_find.gif") no-repeat;
+}
+.disabled .FindButtonImage{
+    background:url("../Images/page_findDisabled.gif") no-repeat;
+}
 /*******End General Button Class***********/
 
 
@@ -283,7 +286,7 @@ color:gray;
 }
 .disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
     cursor:default;
-    color:#bac8d9;
+    color:#c6c2be;
     background:none;
 }
 
@@ -344,7 +347,7 @@ color:gray;
 
 
 /************ AtoZ button ***************/
-.smallButton .ButtonContent{
+.smallButton .ButtonContent, .FavHeaderButton .ButtonContent{
     margin:0 0 0 0;
     padding:0 0 0 0;
     width:1em;
@@ -353,33 +356,41 @@ color:gray;
     cursor:default;
     background:none;
 }
-.Hover .smallButton .ButtonContent, .Pressed .smallButton .ButtonContent  /*, .Current .smallButton .ButtonContent*/ {
+.FavHeaderButton .ButtonContent{
+    width:100%;
+    height:16px;
+}
+
+.Hover .smallButton .ButtonContent, .Pressed .smallButton .ButtonContent, .Hover .FavHeaderButton .ButtonContent {
     cursor:pointer;
     background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
 }
 .Pressed .smallButton .ButtonContent{cursor:default;}
 
-.smallButton .ButtonRightSide{
+.smallButton .ButtonRightSide, .FavHeaderButton .ButtonRightSide{
     margin:0 0 0 0;
     width:2px;
     height:16px;
     cursor:default;
     background:none;
 }
-.smallButton .ButtonLeftSide{
+.smallButton .ButtonLeftSide, .FavHeaderButton .ButtonLeftSide{
     margin:0 0 0 0;
     width:2px;
     height:16px;
     cursor:default;
     background:none;
 }
-.Hover .smallButton .ButtonRightSide, .Pressed .smallButton .ButtonRightSide/*, .Current .smallButton .ButtonRightSide*/{
+.Hover .smallButton .ButtonRightSide, .Pressed .smallButton .ButtonRightSide, .Hover .FavHeaderButton .ButtonRightSide{
     cursor:pointer;
     background:url("../Images/screenbuttonrssmall.gif") no-repeat;
 }
-.Pressed .smallButton .ButtonRightSide, .Current .smallButton .ButtonRightSide{cursor:default;}
+.Pressed .smallButton .ButtonRightSide, .Current .smallButton .ButtonRightSide{
+    cursor:default;
+}
 
-.Hover .smallButton .ButtonLeftSide, .Pressed .smallButton .ButtonLeftSide /*, .Current .smallButton .ButtonLeftSide*/{
+.Hover .smallButton .ButtonLeftSide, .Pressed .smallButton .ButtonLeftSide,
+.Hover .FavHeaderButton .ButtonLeftSide{
     cursor:pointer;
     background:url("../Images/screenbuttonlssmall.gif") no-repeat;
 }
@@ -758,7 +769,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     cursor:default;
 }
 .ScreenCalendar .TextboxUnselected{
-    border:1px solid gray;
+    border:1px solid #d8d8d8;
     color:#000000;
     background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -1019,6 +1030,9 @@ border:none;
 .ScreenTree .gwt-TreeItem{
     cursor:pointer;
     font-family:Verdana;
+}
+.ScreenTree .gwt-TreeItem-selected{
+    background:#ffe290;
 }
 .TabBrowser {
 }
