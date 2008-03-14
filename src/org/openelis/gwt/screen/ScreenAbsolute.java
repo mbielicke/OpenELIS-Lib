@@ -64,6 +64,8 @@ public class ScreenAbsolute extends ScreenWidget {
                                                 .getAttributes()
                                                 .getNamedItem("y")
                                                 .getNodeValue());
+                if(node.getAttributes().getNamedItem("align") != null)
+                    DOM.setElementProperty(panel.getElement(),"align",node.getAttributes().getNamedItem("align").getNodeValue());
                 panel.add(wid, x, y);
             }
         }

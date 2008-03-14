@@ -124,6 +124,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
      * displayed in.
      */
     private WindowBrowser browser;
+    private PopupPanel popupPanel;
     private String name;
     /**
      * Current z-index of the window.
@@ -136,12 +137,17 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private Vector dropMap;
     private Label message = new Label("Loading...");
     
-    public ScreenWindow(WindowBrowser browser, String name, String cat, String loadingText) {      
+    public ScreenWindow(Object container, String name, String cat, String loadingText) {      
         initWidget(outer);
         setVisible(false);
-        this.browser = browser;
+        if(container instanceof PopupPanel)
+        	this.popupPanel = (PopupPanel)container;
+        else
+        	this.browser = (WindowBrowser) container;
+        
         this.name = name;
-        zIndex = browser.index;
+        if(browser != null)
+        	zIndex = browser.index;
         
         //a way to internationalize the loading message
         if(loadingText != null)
@@ -244,7 +250,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
     
     private void checkZ() {
-        if(browser.index != zIndex){
+        if(browser != null && browser.index != zIndex){
            browser.index++;
            zIndex = browser.index;
            setKeep(true);
@@ -257,7 +263,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     
     public void onClick(Widget sender) {
         if(sender == fp){
-            if(browser.index != zIndex){
+            if(browser != null && browser.index != zIndex){
                 browser.index++;
                // WindowBrowser.setIndex(getElement(), browser.index);
                zIndex = browser.index;
@@ -284,8 +290,13 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             }
         }
         removeFromParent();
-        browser.browser.remove(this);
-        browser.windows.remove(name);
+        if(browser != null){
+        	browser.browser.remove(this);
+        	browser.windows.remove(name);
+        }
+        if(popupPanel != null){
+        	popupPanel.hide();
+        }
         destroy();
         
     }
