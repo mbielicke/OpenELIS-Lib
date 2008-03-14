@@ -27,7 +27,6 @@ public class ScreenMenuPopupPanel extends ScreenWidget {
     	setWidget(popupPanel);
     	popupPanel = new PopupPanel(autoHide);
     	initWidget(popupPanel);
-    	screen.widgets.put(key, this);
     	
     }
     

@@ -1122,4 +1122,19 @@ font-size:12px;
 font-weight:bold;
 }
 
+.MenuUp {
+   height:5px;
+   width:100%;
+   background:green;
+}
+ 
+.MenuDown {
+   height:5px;
+   width:100%;
+   background:green;
+}
+
+.MenuDisabled {
+   background:red;
+}
 
