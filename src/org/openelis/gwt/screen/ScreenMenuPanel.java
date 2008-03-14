@@ -70,6 +70,7 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
             up.addMouseListener(this);
             up.setStyleName("MenuUp");
             up.addStyleName("MenuDisabled");
+            up.setVisible(false);
             vp.add(up);
             ap = new AbsolutePanel();
             DOM.setStyleAttribute(ap.getElement(),"overflow","hidden");
@@ -77,6 +78,7 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
             vp.add(ap);
             down.addMouseListener(this);
             down.setStyleName("MenuDown");
+            down.setVisible(false);
             vp.add(down);
             initWidget(vp);
         }else{
@@ -169,7 +171,7 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
                         down.addStyleName("MenuDisabled");
                         cancel();
                     }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-5);
+                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
                         up.removeStyleName("MenuDisabled");
                     }
                 }
@@ -178,13 +180,13 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
                         up.addStyleName("MenuDisabled");
                         cancel();
                     }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+5);
+                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
                         down.removeStyleName("MenuDisabled");
                     }
                 }
             }
         };
-        timer.scheduleRepeating(100);
+        timer.scheduleRepeating(50);
     }
     
     public void onMouseLeave(Widget sender) {

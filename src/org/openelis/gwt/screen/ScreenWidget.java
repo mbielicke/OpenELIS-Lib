@@ -49,10 +49,10 @@ public class ScreenWidget extends SimplePanel implements
                                              SourcesDragEvents,
                                              SourcesClickEvents {
 
-    private DropListenerCollection dropListeners;
-    private DragListenerCollection dragListeners;
-    private MouseListenerCollection mouseListeners;
-    private ClickListenerCollection clickListeners;
+    protected DropListenerCollection dropListeners;
+    protected DragListenerCollection dragListeners;
+    protected MouseListenerCollection mouseListeners;
+    protected ClickListenerCollection clickListeners;
     /** 
      * userObject can be used to attach specific application
      * data to a screen widget.

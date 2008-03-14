@@ -99,6 +99,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
         }
         if(menuBar.getParent() instanceof PopupPanel)
             ((PopupPanel)menuBar.getParent()).hide();
+        mouseListeners.fireMouseLeave(sender);
     }
 
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
