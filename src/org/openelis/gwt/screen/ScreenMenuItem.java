@@ -4,7 +4,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupListener;
@@ -98,16 +97,17 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
                 createPopup();
             return;
         }
-        if(getParent().getParent().getParent().getParent().getParent().getParent() instanceof PopupPanel)
-            ((PopupPanel)getParent().getParent().getParent().getParent().getParent().getParent()).hide();
+        if(menuBar.getParent() instanceof PopupPanel)
+            ((PopupPanel)menuBar.getParent()).hide();
     }
 
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
         if(cursorOn)
             popClosed = true;
         if(DOM.getElementProperty(sender.getElement(), "closeAll").equals("true")){
-                if(getParent().getParent().getParent().getParent().getParent().getParent() instanceof PopupPanel)
-                    ((PopupPanel)getParent().getParent().getParent().getParent().getParent().getParent()).hide();
+                if(menuBar.getParent() instanceof PopupPanel)
+                    ((PopupPanel)menuBar.getParent()).hide();
+                
         }
         menuBar.activeItem = null;
         menuBar.active = false;
