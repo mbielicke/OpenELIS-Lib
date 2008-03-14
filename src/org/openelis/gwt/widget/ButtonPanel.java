@@ -1,13 +1,13 @@
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
-
-import org.openelis.gwt.screen.ScreenAppButton;
+import java.util.HashMap;
 
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.screen.ScreenAppButton;
 
 public class ButtonPanel extends Composite implements ClickListener {
 
@@ -16,7 +16,7 @@ public class ButtonPanel extends Composite implements ClickListener {
 	 */
     private HorizontalPanel hp = new HorizontalPanel();
 
-    private ArrayList buttons = new ArrayList();
+    private HashMap buttons = new HashMap();
     
     protected FormInt form;
 
@@ -29,14 +29,14 @@ public class ButtonPanel extends Composite implements ClickListener {
     
     public void addButton(AppButton button){
         hp.add(button);
-        buttons.add(button);
+        buttons.put(button.action,button);
         button.addClickListener(this);
     }
     
     public void addWidget(Widget wid){
         hp.add(wid);
         if(wid instanceof ScreenAppButton){
-            buttons.add((AppButton)((ScreenAppButton)wid).getWidget());
+            buttons.put(((AppButton)((ScreenAppButton)wid).getWidget()).action,wid);
             ((AppButton)((ScreenAppButton)wid).getWidget()).addClickListener(this);
         }
     }
@@ -53,7 +53,6 @@ public class ButtonPanel extends Composite implements ClickListener {
      * Handler for button clicks
      */
     public void onClick(Widget senderWid) {
-    	
         AppButton sender = (AppButton)senderWid;
         if (sender.action.equals("query")) {
             form.query(state);
@@ -101,59 +100,80 @@ public class ButtonPanel extends Composite implements ClickListener {
      * @param state
      */
     public void setState(int state) {
-    	for(int i=0;i<buttons.size();i++){
-    		AppButton button = (AppButton)buttons.get(i);
-    		if((state & button.getMaskedEnabledState()) != 0 && button.isEnabled())
-    			setButtonState(button, AppButton.UNPRESSED);
-    		else if((state & button.getMaskedLockedState()) != 0 && button.isEnabled())
-    			setButtonState(button, AppButton.LOCK_PRESSED);
-    		else
-    			setButtonState(button, AppButton.DISABLED);
-    	}
-    	
+        if(state == FormInt.ADD){
+            setButtonState("query",AppButton.DISABLED);
+            setButtonState("update",AppButton.DISABLED);
+            setButtonState("delete",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
+            setButtonState("next",AppButton.DISABLED);
+            setButtonState("reload",AppButton.DISABLED);
+            setButtonState("select",AppButton.DISABLED);
+            setButtonState("commit",AppButton.UNPRESSED);
+            setButtonState("abort",AppButton.UNPRESSED);
+            setButtonState("add",AppButton.LOCK_PRESSED);
+        }
+        if(state == FormInt.QUERY){
+            setButtonState("query",AppButton.LOCK_PRESSED);
+            setButtonState("update",AppButton.DISABLED);
+            setButtonState("delete",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
+            setButtonState("next",AppButton.DISABLED);
+            setButtonState("reload",AppButton.DISABLED);
+            setButtonState("select",AppButton.DISABLED);
+            setButtonState("commit",AppButton.UNPRESSED);
+            setButtonState("abort",AppButton.UNPRESSED);
+            setButtonState("add",AppButton.DISABLED);
+        } 
+        if(state == FormInt.UPDATE){
+            setButtonState("query",AppButton.DISABLED);
+            setButtonState("update",AppButton.LOCK_PRESSED);
+            setButtonState("delete",AppButton.DISABLED);
+            setButtonState("prev",AppButton.DISABLED);
+            setButtonState("next",AppButton.DISABLED);
+            setButtonState("reload",AppButton.DISABLED);
+            setButtonState("select",AppButton.DISABLED);
+            setButtonState("commit",AppButton.UNPRESSED);
+            setButtonState("abort",AppButton.UNPRESSED);
+            setButtonState("add",AppButton.DISABLED);
+        }
+        if(state == FormInt.DELETE){
+            setButtonState("query",AppButton.DISABLED);
+            setButtonState("update",AppButton.DISABLED);
+            setButtonState("delete",AppButton.PRESSED);
+            setButtonState("prev",AppButton.DISABLED);
+            setButtonState("next",AppButton.DISABLED);
+            setButtonState("reload",AppButton.DISABLED);
+            setButtonState("select",AppButton.DISABLED);
+            setButtonState("commit",AppButton.UNPRESSED);
+            setButtonState("abort",AppButton.UNPRESSED);
+            setButtonState("add",AppButton.DISABLED);
+        }
+        if(state == FormInt.DISPLAY){
+            setButtonState("query",AppButton.UNPRESSED);
+            setButtonState("update",AppButton.UNPRESSED);
+            setButtonState("delete",AppButton.UNPRESSED);
+            setButtonState("prev",AppButton.UNPRESSED);
+            setButtonState("next",AppButton.UNPRESSED);
+            setButtonState("reload",AppButton.UNPRESSED);
+            setButtonState("select",AppButton.UNPRESSED);
+            setButtonState("commit",AppButton.DISABLED);
+            setButtonState("abort",AppButton.DISABLED);
+            setButtonState("add",AppButton.UNPRESSED);
+        }
         this.state = state;
     }
     
-    public void setButtonState(AppButton button, int state) {
-        button.changeState(state);
-    }
-    
-    public void setButtonState(String buttonAction, int state){
-    	if(buttonAction != null){
-	    	for(int i=0;i<buttons.size();i++){
-	    		if(buttonAction.equals(((AppButton)buttons.get(i)).action)){
-	    			((AppButton)buttons.get(i)).changeState(state);
-	    			break;
-	    		}
-	    	}	
-    	}
+    public void setButtonState(String action, int state) {
+        if(buttons.containsKey(action)){
+            ((AppButton)((ScreenAppButton)buttons.get(action)).getWidget()).changeState(state);
+        }
     }
     
     public void removeButton(String action){
-    	if(action != null){
-	    	for(int i=0;i<buttons.size();i++){
-	    		if(action.equals(((AppButton)buttons.get(i)).action)){
-	    			hp.remove((Widget)((AppButton)buttons.get(i)).getParent());
-	    			buttons.remove(i);
-	    		}
-	    	}
-    	}
+        if(buttons.containsKey(action)){
+            hp.remove((Widget)buttons.get(action));
+            buttons.remove(action);
+        }
     }
-    
-    public void enableButton(String action, boolean enabled){
-    	if(action != null){
-	    	for(int i=0;i<buttons.size();i++){
-	    		if(action.equals(((AppButton)buttons.get(i)).action)){
-	    			AppButton button = (AppButton)buttons.get(i);
-	    			if(enabled)
-	    	            button.changeState(AppButton.UNPRESSED);
-	    	        else
-	    	            button.changeState(AppButton.DISABLED);
-	    			
-	    			button.setEnabled(enabled);
-	    			break;
-	    		}
-	    	}
-    	}    	
-    }
+
 }
