@@ -31,9 +31,9 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
         return new TableCollection();
     }
 
-    public Widget getInstance(Node node) {
+    public TableCollection(Node node) {
         // TODO Auto-generated method stub
-        return new TableCollection();
+        this();
     }
 
 	public void setDisplay() {
@@ -71,5 +71,10 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
     public void setCellWidth(int width) {
         // TODO Auto-generated method stub
         
+    }
+
+    public Widget getInstance(Node node) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

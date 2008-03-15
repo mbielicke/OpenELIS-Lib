@@ -3,6 +3,7 @@ package org.openelis.gwt.widget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.widget.table.TableCellWidget;
@@ -99,7 +100,7 @@ public class WidgetMap {
      * @return
      */
     public Object get(String key) {
-        return widgets.get(key);
+        return ClassFactory.forName(key);
     }
 
     /**
@@ -115,8 +116,7 @@ public class WidgetMap {
             widName += "-" + node.getAttributes()
                                  .getNamedItem("layout")
                                  .getNodeValue();
-        return (Widget)((ScreenWidget)widgets.get(widName)).getInstance(node,
-                                                                        screen);
+        return (ScreenWidget)ClassFactory.forName(widName,new Object[] {node,screen});
     }
     
     /**
@@ -126,7 +126,7 @@ public class WidgetMap {
      */
     public TableCellWidget getCellWidget(Node node) {
         String widName = "table-" + node.getNodeName();
-        return (TableCellWidget)((TableCellWidget)widgets.get(widName)).getInstance(node);
+        return (TableCellWidget)ClassFactory.forName(widName,new Object[] {node});
     }
 
     /** 
@@ -136,7 +136,7 @@ public class WidgetMap {
      */
     public AbstractField getField(Node node) {
         String fName = "rpc-" + node.getNodeName();
-        return (AbstractField)((AbstractField)widgets.get(fName)).getInstance(node);
+        return (AbstractField)ClassFactory.forName(fName,new Object[] {node});
     }
 
     /**
@@ -145,7 +145,7 @@ public class WidgetMap {
      * @return
      */
     public TableManager getTableManager(String name) {
-        return (TableManager)widgets.get(name);
+        return (TableManager)ClassFactory.forName(name);
     }
 
     /**

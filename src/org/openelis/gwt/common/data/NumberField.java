@@ -29,6 +29,30 @@ public class NumberField extends AbstractField implements Serializable {
         object = new NumberObject();
     }
     
+    public NumberField(Node node){
+        this();
+        if (node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes()
+                               .getNamedItem("key")
+                               .getNodeValue());
+        if (node.getAttributes().getNamedItem("type") != null)
+            ((NumberObject)object).setType(node.getAttributes()
+                                .getNamedItem("type")
+                                .getNodeValue());
+        if (node.getAttributes().getNamedItem("required") != null)
+            setRequired(new Boolean(node.getAttributes()
+                                                .getNamedItem("required")
+                                                .getNodeValue()).booleanValue());
+        if (node.getAttributes().getNamedItem("max") != null)
+            setMax(new Double(node.getAttributes()
+                                          .getNamedItem("max")
+                                          .getNodeValue()));
+        if (node.getAttributes().getNamedItem("min") != null)
+            setMin(new Double(node.getAttributes()
+                                          .getNamedItem("min")
+                                          .getNodeValue()));
+    }
+    
     public void validate() {
         if (((NumberObject)object).invalid){
             valid = false;
@@ -95,29 +119,8 @@ public class NumberField extends AbstractField implements Serializable {
     }
 
     
-    public Object getInstance(Node field) {
-        NumberField number = new NumberField();
-        if (field.getAttributes().getNamedItem("key") != null)
-            number.setKey(field.getAttributes()
-                               .getNamedItem("key")
-                               .getNodeValue());
-        if (field.getAttributes().getNamedItem("type") != null)
-            ((NumberObject)number.object).setType(field.getAttributes()
-                                .getNamedItem("type")
-                                .getNodeValue());
-        if (field.getAttributes().getNamedItem("required") != null)
-            number.setRequired(new Boolean(field.getAttributes()
-                                                .getNamedItem("required")
-                                                .getNodeValue()).booleanValue());
-        if (field.getAttributes().getNamedItem("max") != null)
-            number.setMax(new Double(field.getAttributes()
-                                          .getNamedItem("max")
-                                          .getNodeValue()));
-        if (field.getAttributes().getNamedItem("min") != null)
-            number.setMin(new Double(field.getAttributes()
-                                          .getNamedItem("min")
-                                          .getNodeValue()));
-        return number;
+    public Object getInstance(Node node) {
+        return new NumberField(node);
     }
     
 }

@@ -26,6 +26,21 @@ public class CheckField extends AbstractField implements Serializable {
         object = new BooleanObject();
     }
     
+    public CheckField(Node node){
+        this();
+        if (node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes()
+                             .getNamedItem("key")
+                             .getNodeValue());
+        if (node.getAttributes().getNamedItem("required") != null)
+            setRequired(new Boolean(node.getAttributes()
+                                              .getNamedItem("required")
+                                              .getNodeValue()).booleanValue());
+        if (node.hasChildNodes()) {
+            setValue(new Boolean(node.getFirstChild().getNodeValue()));
+        }
+    }
+    
     public void validate() {
         if (required) {
             if (((BooleanObject)object).value  == null) {
@@ -68,18 +83,6 @@ public class CheckField extends AbstractField implements Serializable {
     }
 
     public Object getInstance(Node node) {
-        CheckField check = new CheckField();
-        if (node.getAttributes().getNamedItem("key") != null)
-            check.setKey(node.getAttributes()
-                             .getNamedItem("key")
-                             .getNodeValue());
-        if (node.getAttributes().getNamedItem("required") != null)
-            check.setRequired(new Boolean(node.getAttributes()
-                                              .getNamedItem("required")
-                                              .getNodeValue()).booleanValue());
-        if (node.hasChildNodes()) {
-            check.setValue(new Boolean(node.getFirstChild().getNodeValue()));
-        }
-        return check;
+        return new CheckField(node);
     }
 }

@@ -5,11 +5,17 @@ import com.google.gwt.xml.client.Node;
 public class QueryCheckField extends CheckField {
 
     private static final long serialVersionUID = 1L;
+    
+    public QueryCheckField() {
+        
+    }
+    
+    public QueryCheckField(Node node){
+        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+    }
 
-    public Object getInstance(Node field) {
-        QueryCheckField check = new QueryCheckField();
-        check.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        return check;
+    public Object getInstance(Node node) {
+        return new QueryCheckField(node);
     }
 
     public Object getInstance() {

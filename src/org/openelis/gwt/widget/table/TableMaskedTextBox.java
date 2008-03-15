@@ -40,11 +40,9 @@ public class TableMaskedTextBox extends TableCellInputWidget {
         return tb;
     }
 
-    public Widget getInstance(Node node) {
+    public TableMaskedTextBox(Node node) {
         // TODO Auto-generated method stub
-        TableMaskedTextBox mtb = new TableMaskedTextBox();
-        mtb.mask = (node.getAttributes().getNamedItem("mask").getNodeValue());
-        return mtb;
+        mask = (node.getAttributes().getNamedItem("mask").getNodeValue());
     }
 
 	public void setDisplay() {

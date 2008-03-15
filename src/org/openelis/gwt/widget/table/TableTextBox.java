@@ -81,15 +81,12 @@ public class TableTextBox extends TableCellInputWidget {
         setWidget(editor);
     }
 
-    public Widget getInstance(Node node) {
-        TableTextBox textbox  = new TableTextBox();
+    public TableTextBox(Node node) {
         if(node.getAttributes().getNamedItem("case") != null)
-            textbox.fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
+            fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
         
         if (node.getAttributes().getNamedItem("max") != null) 
-        	textbox.length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
-        
-        return textbox;
+        	length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
     }
 
 	public void saveValue() {

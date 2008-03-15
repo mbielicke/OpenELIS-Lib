@@ -16,6 +16,28 @@ public class QueryDateField extends QueryField {
     private byte end;
     private Integer max;
     private Integer min;
+    
+    public QueryDateField() {
+        
+    }
+    
+    public QueryDateField(Node node){
+        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+        setBegin(Byte.parseByte(node.getAttributes()
+                                          .getNamedItem("begin")
+                                          .getNodeValue()));
+        setEnd(Byte.parseByte(node.getAttributes()
+                                        .getNamedItem("end")
+                                        .getNodeValue()));
+        if (node.getAttributes().getNamedItem("max") != null)
+            setMax(new Integer(node.getAttributes()
+                                         .getNamedItem("max")
+                                         .getNodeValue()));
+        if (node.getAttributes().getNamedItem("min") != null)
+            setMin(new Integer(node.getAttributes()
+                                         .getNamedItem("min")
+                                         .getNodeValue()));
+    }
 
     public void validate() {
         Iterator paramIt = parameter.iterator();
@@ -106,23 +128,7 @@ public class QueryDateField extends QueryField {
         return obj;
     }
 
-    public Object getInstance(Node field) {
-        QueryDateField date = new QueryDateField();
-        date.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        date.setBegin(Byte.parseByte(field.getAttributes()
-                                          .getNamedItem("begin")
-                                          .getNodeValue()));
-        date.setEnd(Byte.parseByte(field.getAttributes()
-                                        .getNamedItem("end")
-                                        .getNodeValue()));
-        if (field.getAttributes().getNamedItem("max") != null)
-            date.setMax(new Integer(field.getAttributes()
-                                         .getNamedItem("max")
-                                         .getNodeValue()));
-        if (field.getAttributes().getNamedItem("min") != null)
-            date.setMin(new Integer(field.getAttributes()
-                                         .getNamedItem("min")
-                                         .getNodeValue()));
-        return date;
+    public Object getInstance(Node node) {
+        return new QueryDateField(node);
     }
 }

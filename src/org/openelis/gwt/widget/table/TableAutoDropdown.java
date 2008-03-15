@@ -7,6 +7,7 @@ import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
@@ -40,6 +41,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     private String fieldCase = "mixed";
     private boolean fromModel = false;
     private String type = "";
+    private int width;
     
     public OptionField fromHidden;
     
@@ -73,21 +75,26 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         return ta;
     }
     
-	public Widget getInstance(Node node) {
+	public TableAutoDropdown(Node node) {
 		AutoCompleteDropdown auto = new AutoCompleteDropdown();
 		String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
         String url = node.getAttributes()
                          .getNamedItem("serviceUrl")
                          .getNodeValue();
         
+        boolean dropDown = false;
         boolean multiSelect = false;
         String textBoxDefault = null;
         String width = null;
-
-        if (node.getAttributes().getNamedItem("fromModel") != null && node.getAttributes().getNamedItem("fromModel").getNodeValue().equals("true"))
+        
+        
+        if (node.getAttributes().getNamedItem("dropdown") != null)
+        	dropDown = true;
+        
+        if (node.getAttributes().getNamedItem("fromModel") != null)
         	fromModel = true;
         
-        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
+        if (node.getAttributes().getNamedItem("multiSelect") != null)
         	multiSelect = true;
         
         if (node.getAttributes().getNamedItem("text") != null)
@@ -146,7 +153,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         if(!fromModel && optionsNode != null)
         	editor.setModel(getDropDownOptions(optionsNode));
         	
-        return getNewTableAuto();
 	}
 
 	public void saveValue() {
@@ -276,7 +282,8 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
 	
 	private DataModel getDropDownOptions(Node itemsNode){
-		DataModel dataModel = new DataModel();		
+		DataModel dataModel = new DataModel();
+		
 		
     	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
     	for (int i = 0; i < items.getLength(); i++) {

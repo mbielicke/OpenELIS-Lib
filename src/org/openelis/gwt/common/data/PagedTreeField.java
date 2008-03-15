@@ -12,6 +12,14 @@ public class PagedTreeField extends AbstractField {
 	     * @gwt.typeArgs <org.openelis.gwt.common.data.TableModel>
 	     */
 	    private TreeModel value;
+        
+        public PagedTreeField() {
+            
+        }
+        
+        public PagedTreeField(Node node){
+            setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+        }
 	    
 	    public void validate() {
 	        // TODO Auto-generated method stu
@@ -40,10 +48,8 @@ public class PagedTreeField extends AbstractField {
 	        return null;
 	    }
 
-	    public Object getInstance(Node field) {
-	        PagedTreeField pagedTree = new PagedTreeField();
-	        pagedTree.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-	        return pagedTree;
+	    public Object getInstance(Node node) {
+	        return new PagedTreeField(node);
 	    }
 	    
 

@@ -8,6 +8,7 @@ html, body {
     cursor:default;
 }
 
+
 .ScreenLeftPanel{
     padding:2px;
     background:white;
@@ -75,9 +76,9 @@ html, body {
 }
 .Hover .TopMenuRowContainer, .Hover .FavMenuRowContainer{
     cursor:pointer;
+    padding:0;
     background:url('../Images/white-top-bottom.gif') repeat-x 0px -1px;
     border:1px solid #8db2e3;
-    padding:0;
 }
 .FavoritesTitlePanel{
     background:#99bbe8 url("../Images/headersprite.gif") repeat-x;
@@ -1136,4 +1137,19 @@ font-size:12px;
 font-weight:bold;
 }
 
+.MenuUp {
+   height:5px;
+   width:100%;
+   background:green;
+}
+ 
+.MenuDown {
+   height:5px;
+   width:100%;
+   background:green;
+}
+
+.MenuDisabled {
+   background:red;
+}
 

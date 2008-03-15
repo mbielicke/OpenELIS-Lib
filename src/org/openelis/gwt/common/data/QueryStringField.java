@@ -7,11 +7,17 @@ public class QueryStringField extends QueryField {
 
     private static final long serialVersionUID = 1L;
 
-    public Object getInstance(Node field) {
-        QueryStringField string = new QueryStringField();
-        if(field.getAttributes().getNamedItem("key") != null)
-            string.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        return string;
+    public QueryStringField() {
+        
+    }
+    
+    public QueryStringField(Node node){
+        if(node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+    }
+    
+    public Object getInstance(Node node) {
+        return new QueryStringField(node);
     }
     
     public Object getInstance() {

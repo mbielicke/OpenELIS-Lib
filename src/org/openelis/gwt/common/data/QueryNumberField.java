@@ -10,6 +10,25 @@ public class QueryNumberField extends QueryField {
     private String type;
     private Double max;
     private Double min;
+    
+    public QueryNumberField() {
+        
+    }
+    
+    public QueryNumberField(Node node){
+        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+        setType(node.getAttributes()
+                            .getNamedItem("type")
+                            .getNodeValue());
+        if (node.getAttributes().getNamedItem("max") != null)
+            setMax(new Double(node.getAttributes()
+                                          .getNamedItem("max")
+                                          .getNodeValue()));
+        if (node.getAttributes().getNamedItem("min") != null)
+            setMin(new Double(node.getAttributes()
+                                          .getNamedItem("min")
+                                          .getNodeValue()));
+    }
 
     public void validate() {
         Iterator paramIt = parameter.iterator();
@@ -81,20 +100,7 @@ public class QueryNumberField extends QueryField {
         return obj;
     }
 
-    public Object getInstance(Node field) {
-        QueryNumberField number = new QueryNumberField();
-        number.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        number.setType(field.getAttributes()
-                            .getNamedItem("type")
-                            .getNodeValue());
-        if (field.getAttributes().getNamedItem("max") != null)
-            number.setMax(new Double(field.getAttributes()
-                                          .getNamedItem("max")
-                                          .getNodeValue()));
-        if (field.getAttributes().getNamedItem("min") != null)
-            number.setMin(new Double(field.getAttributes()
-                                          .getNamedItem("min")
-                                          .getNodeValue()));
-        return number;
+    public Object getInstance(Node node) {
+        return new QueryNumberField(node);
     }
 }

@@ -229,6 +229,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         outer.setWidth("auto");
     }
     
+    public ScreenWindow(WindowBrowser brws,String name){
+        this(brws,name,"ScreenWindow","Loading...");
+    }
+    
     /**
      * Sets the Content of the Window to be displayed. If content is a 
      * ScreenForm, the message widget is linked to the form.

@@ -27,6 +27,28 @@ public class StringField extends AbstractField implements Serializable {
         object = new StringObject();
     }
 
+    public StringField(Node node){
+        this();
+        if (node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes()
+                               .getNamedItem("key")
+                               .getNodeValue());
+        if (node.getAttributes().getNamedItem("max") != null)
+            setMax(new Integer(node.getAttributes()
+                                           .getNamedItem("max")
+                                           .getNodeValue()));
+        if (node.getAttributes().getNamedItem("min") != null)
+            setMin(new Integer(node.getAttributes()
+                                           .getNamedItem("min")
+                                           .getNodeValue()));
+        if (node.getAttributes().getNamedItem("required") != null)
+            setRequired(new Boolean(node.getAttributes()
+                                                .getNamedItem("required")
+                                                .getNodeValue()).booleanValue());
+        if (node.hasChildNodes()) {
+            setValue(node.getFirstChild().getNodeValue());
+        }
+    }
     public void validate() {
         if (required) {
             if (((StringObject)object).value == null || ((StringObject)object).value.length() == 0) {
@@ -81,27 +103,7 @@ public class StringField extends AbstractField implements Serializable {
         return obj;
     }
 
-    public Object getInstance(Node field) {
-        StringField string = new StringField();
-        if (field.getAttributes().getNamedItem("key") != null)
-            string.setKey(field.getAttributes()
-                               .getNamedItem("key")
-                               .getNodeValue());
-        if (field.getAttributes().getNamedItem("max") != null)
-            string.setMax(new Integer(field.getAttributes()
-                                           .getNamedItem("max")
-                                           .getNodeValue()));
-        if (field.getAttributes().getNamedItem("min") != null)
-            string.setMin(new Integer(field.getAttributes()
-                                           .getNamedItem("min")
-                                           .getNodeValue()));
-        if (field.getAttributes().getNamedItem("required") != null)
-            string.setRequired(new Boolean(field.getAttributes()
-                                                .getNamedItem("required")
-                                                .getNodeValue()).booleanValue());
-        if (field.hasChildNodes()) {
-            string.setValue(field.getFirstChild().getNodeValue());
-        }
-        return string;
+    public Object getInstance(Node node) {
+        return new StringField(node);
     }
 }

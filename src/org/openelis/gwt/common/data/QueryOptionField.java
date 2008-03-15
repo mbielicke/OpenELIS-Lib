@@ -14,6 +14,27 @@ public class QueryOptionField extends OptionField {
         super();
         setMulti(true);
     }
+    
+    public QueryOptionField(Node node){
+        this();
+        if(node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+        setType(node.getAttributes()
+                            .getNamedItem("type")
+                            .getNodeValue());
+        setMulti(new Boolean(node.getAttributes()
+                                         .getNamedItem("multi")
+                                         .getNodeValue()).booleanValue());
+        NodeList items = ((Element)node).getElementsByTagName("item");
+        for (int i = 0; i < items.getLength(); i++) {
+            Node item = items.item(i);
+            addOption(item.getAttributes()
+                                 .getNamedItem("value")
+                                 .getNodeValue(), (item.getFirstChild() == null ? " " : item.getFirstChild()
+                                                      .getNodeValue()));
+        }
+        
+    }
 
     public void setType(String type) {
         this.type = type;
@@ -23,25 +44,8 @@ public class QueryOptionField extends OptionField {
         return type;
     }
 
-    public Object getInstance(Node field) {
-        QueryOptionField option = new QueryOptionField();
-        if(field.getAttributes().getNamedItem("key") != null)
-            option.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        option.setType(field.getAttributes()
-                            .getNamedItem("type")
-                            .getNodeValue());
-        option.setMulti(new Boolean(field.getAttributes()
-                                         .getNamedItem("multi")
-                                         .getNodeValue()).booleanValue());
-        NodeList items = ((Element)field).getElementsByTagName("item");
-        for (int i = 0; i < items.getLength(); i++) {
-            Node item = items.item(i);
-            option.addOption(item.getAttributes()
-                                 .getNamedItem("value")
-                                 .getNodeValue(), (item.getFirstChild() == null ? " " : item.getFirstChild()
-                                                      .getNodeValue()));
-        }
-        return option;
+    public Object getInstance(Node node) {
+        return new QueryOptionField();
     }
     
     public Object getInstance() {

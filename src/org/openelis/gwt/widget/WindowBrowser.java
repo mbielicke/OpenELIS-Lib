@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
@@ -92,6 +93,28 @@ public class WindowBrowser extends Composite{
                         }
                     });
                 }
+            }
+        });
+    }
+    
+    public void addScreen(final AppScreen screen) {
+        if(windows.size() == limit){
+            Window.alert("Please close at least one window before opening another.");
+            return;
+        }
+        if (windows.containsKey(screen.name)) {
+            return;
+        }
+        RootPanel.get().addStyleName("ScreenLoad");
+        final WindowBrowser brws = this;
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                index++;
+                ScreenWindow window = new ScreenWindow(brws, screen.name);
+                window.setContent(screen);
+                //  setIndex(window.getElement(),index);
+                browser.add(window,(windows.size()*25),(windows.size()*25));
+                windows.put(screen.name,window);
             }
         });
     }

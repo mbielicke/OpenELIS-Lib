@@ -32,6 +32,32 @@ public class OptionField extends AbstractField implements Serializable {
     protected ArrayList options = new ArrayList();
     protected boolean multi;
     protected String value;
+    
+    public OptionField() {
+        
+    }
+    
+    public OptionField(Node node){
+        if (node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes()
+                               .getNamedItem("key")
+                               .getNodeValue());
+        if (node.getAttributes().getNamedItem("required") != null)
+            setRequired(new Boolean(node.getAttributes()
+                                                .getNamedItem("required")
+                                                .getNodeValue()).booleanValue());
+        if (node.getAttributes().getNamedItem("multi") != null)
+            setMulti(new Boolean(node.getAttributes()
+                                             .getNamedItem("multi")
+                                             .getNodeValue()).booleanValue());
+        NodeList items = ((Element)node).getElementsByTagName("item");
+        for (int i = 0; i < items.getLength(); i++) {
+            Node item = items.item(i);
+            addOption(item.getAttributes()
+                                 .getNamedItem("value")
+                                 .getNodeValue(), (item.getFirstChild() == null ? " " : item.getFirstChild().getNodeValue()));
+        }
+    }
 
     public void validate() {
         if (required) {
@@ -206,27 +232,7 @@ public class OptionField extends AbstractField implements Serializable {
         return obj;
     }
 
-    public Object getInstance(Node field) {
-        OptionField option = new OptionField();
-        if (field.getAttributes().getNamedItem("key") != null)
-            option.setKey(field.getAttributes()
-                               .getNamedItem("key")
-                               .getNodeValue());
-        if (field.getAttributes().getNamedItem("required") != null)
-            option.setRequired(new Boolean(field.getAttributes()
-                                                .getNamedItem("required")
-                                                .getNodeValue()).booleanValue());
-        if (field.getAttributes().getNamedItem("multi") != null)
-            option.setMulti(new Boolean(field.getAttributes()
-                                             .getNamedItem("multi")
-                                             .getNodeValue()).booleanValue());
-        NodeList items = ((Element)field).getElementsByTagName("item");
-        for (int i = 0; i < items.getLength(); i++) {
-            Node item = items.item(i);
-            option.addOption(item.getAttributes()
-                                 .getNamedItem("value")
-                                 .getNodeValue(), (item.getFirstChild() == null ? " " : item.getFirstChild().getNodeValue()));
-        }
-        return option;
+    public Object getInstance(Node node) {
+        return new OptionField(node);
     }
 }

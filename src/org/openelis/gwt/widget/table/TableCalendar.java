@@ -63,24 +63,20 @@ public class TableCalendar extends TableCellInputWidget {
         setWidget(editor);
     }
 
-    public Widget getInstance(Node node) {
+    public TableCalendar(Node node) {
         // TODO Auto-generated method stub
-        byte begin = Byte.parseByte(node.getAttributes()
+        begin = Byte.parseByte(node.getAttributes()
                                         .getNamedItem("begin")
                                         .getNodeValue());
-        byte end = Byte.parseByte(node.getAttributes()
+        end = Byte.parseByte(node.getAttributes()
                                       .getNamedItem("end")
                                       .getNodeValue());
         if (node.getAttributes().getNamedItem("week") != null)
-        	
-            return new TableCalendar(begin,
-                                     end,
-                                     Boolean.valueOf(node.getAttributes()
-                                                         .getNamedItem("week")
-                                                         .getNodeValue())
-                                            .booleanValue());
+           week = Boolean.valueOf(node.getAttributes().getNamedItem("week").getNodeValue()).booleanValue();
         else
-            return new TableCalendar(begin, end, false);
+           week = false;
+        editor = new FormCalendarWidget(begin,end,week);
+        setStyleName("TableCalendar");
     }
 
 	public TableCellWidget getNewInstance() {

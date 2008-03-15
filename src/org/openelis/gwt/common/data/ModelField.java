@@ -10,6 +10,14 @@ public class ModelField extends AbstractField {
      * @gwt.typeArgs <org.openelis.gwt.common.data.DataModel>
      */
     private DataModel value;
+    
+    public ModelField() {
+        
+    }
+    
+    public ModelField(Node node){
+        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+    }
 
     public void validate() {
         // TODO Auto-generated method stub
@@ -38,9 +46,7 @@ public class ModelField extends AbstractField {
         return null;
     }
 
-    public Object getInstance(Node field) {
-        ModelField model = new ModelField();
-        model.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        return model;
+    public Object getInstance(Node node) {
+       return new ModelField(node);
     }
 }

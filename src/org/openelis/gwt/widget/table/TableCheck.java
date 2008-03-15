@@ -56,9 +56,9 @@ public class TableCheck extends TableCellInputWidget implements ClickListener, K
         return ch;
     }
 
-    public Widget getInstance(Node node) {
+    public TableCheck(Node node) {
         // TODO Auto-generated method stub
-        return new TableCheck();
+        this();
     }
 
 	public void setDisplay() {

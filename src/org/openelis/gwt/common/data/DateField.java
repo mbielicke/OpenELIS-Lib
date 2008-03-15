@@ -29,6 +29,45 @@ public class DateField extends AbstractField implements Serializable {
         object = new DateObject();
     }
     
+    public DateField(Node node) {
+        this();
+        if (node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes()
+                             .getNamedItem("key")
+                             .getNodeValue());
+        if (node.getAttributes().getNamedItem("required") != null)
+            setRequired(new Boolean(node.getAttributes()
+                                              .getNamedItem("required")
+                                              .getNodeValue()).booleanValue());
+        if (node.getAttributes().getNamedItem("begin") != null)
+            setBegin(Byte.parseByte(node.getAttributes()
+                                              .getNamedItem("begin")
+                                              .getNodeValue()));
+        if (node.getAttributes().getNamedItem("end") != null)
+            setEnd(Byte.parseByte(node.getAttributes()
+                                            .getNamedItem("end")
+                                            .getNodeValue()));
+        if (node.getAttributes().getNamedItem("max") != null)
+            setMax(new Integer(node.getAttributes()
+                                         .getNamedItem("max")
+                                         .getNodeValue()));
+        if (node.getAttributes().getNamedItem("min") != null)
+            setMin(new Integer(node.getAttributes()
+                                         .getNamedItem("min")
+                                         .getNodeValue()));
+        if (node.hasChildNodes()) {
+            String def = node.getFirstChild().getNodeValue();
+            Date dat = null;
+            if (def.equals("current"))
+                dat = new Date();
+            else
+                dat = new Date(def);
+            setValue(DatetimeRPC.getInstance(getBegin(),
+                                                  getEnd(),
+                                                  dat));
+        }
+        
+    }
     public void validate() {
         if (required) {
             if (((DateObject)object).value == null) {
@@ -112,43 +151,7 @@ public class DateField extends AbstractField implements Serializable {
         return obj;
     }
 
-    public Object getInstance(Node field) {
-        DateField date = new DateField();
-        if (field.getAttributes().getNamedItem("key") != null)
-            date.setKey(field.getAttributes()
-                             .getNamedItem("key")
-                             .getNodeValue());
-        if (field.getAttributes().getNamedItem("required") != null)
-            date.setRequired(new Boolean(field.getAttributes()
-                                              .getNamedItem("required")
-                                              .getNodeValue()).booleanValue());
-        if (field.getAttributes().getNamedItem("begin") != null)
-            date.setBegin(Byte.parseByte(field.getAttributes()
-                                              .getNamedItem("begin")
-                                              .getNodeValue()));
-        if (field.getAttributes().getNamedItem("end") != null)
-            date.setEnd(Byte.parseByte(field.getAttributes()
-                                            .getNamedItem("end")
-                                            .getNodeValue()));
-        if (field.getAttributes().getNamedItem("max") != null)
-            date.setMax(new Integer(field.getAttributes()
-                                         .getNamedItem("max")
-                                         .getNodeValue()));
-        if (field.getAttributes().getNamedItem("min") != null)
-            date.setMin(new Integer(field.getAttributes()
-                                         .getNamedItem("min")
-                                         .getNodeValue()));
-        if (field.hasChildNodes()) {
-            String def = field.getFirstChild().getNodeValue();
-            Date dat = null;
-            if (def.equals("current"))
-                dat = new Date();
-            else
-                dat = new Date(def);
-            date.setValue(DatetimeRPC.getInstance(date.getBegin(),
-                                                  date.getEnd(),
-                                                  dat));
-        }
-        return date;
+    public Object getInstance(Node node) {
+        return new DateField(node);
     }
 }

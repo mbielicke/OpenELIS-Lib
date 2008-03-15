@@ -10,6 +10,14 @@ public class TableField extends AbstractField {
      * @gwt.typeArgs <org.openelis.gwt.common.data.TableModel>
      */
     private TableModel value;
+    
+    public TableField() {
+        
+    }
+    
+    public TableField(Node node){
+        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+    }
 
     public void validate() {
         // TODO Auto-generated method stub
@@ -38,9 +46,7 @@ public class TableField extends AbstractField {
         return null;
     }
 
-    public Object getInstance(Node field) {
-        TableField table = new TableField();
-        table.setKey(field.getAttributes().getNamedItem("key").getNodeValue());
-        return table;
+    public Object getInstance(Node node) {
+        return new TableField(node);
     }
 }

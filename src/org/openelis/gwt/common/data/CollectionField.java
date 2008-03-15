@@ -15,6 +15,25 @@ public class CollectionField extends AbstractField implements Serializable {
     private ArrayList coll = new ArrayList();
     private String type = "";
 
+    public CollectionField() {
+        
+    }
+    
+    public CollectionField(Node node){
+        if (node.getAttributes().getNamedItem("key") != null)
+            setKey(node.getAttributes()
+                               .getNamedItem("key")
+                               .getNodeValue());
+        if (node.getAttributes().getNamedItem("type") != null)
+            setType(node.getAttributes()
+                               .getNamedItem("type")
+                               .getNodeValue());
+        if (node.getAttributes().getNamedItem("required") != null)
+            setRequired(new Boolean(node.getAttributes()
+                                                .getNamedItem("required")
+                                                .getNodeValue()).booleanValue());
+    }
+    
     public void validate() {
     	if (required) {
             if (coll.size() == 0) {
@@ -53,21 +72,8 @@ public class CollectionField extends AbstractField implements Serializable {
         return obj;
     }
     
-    public Object getInstance(Node field) {
-    CollectionField collection = new CollectionField();
-    if (field.getAttributes().getNamedItem("key") != null)
-    	collection.setKey(field.getAttributes()
-                           .getNamedItem("key")
-                           .getNodeValue());
-    if (field.getAttributes().getNamedItem("type") != null)
-    	collection.setType(field.getAttributes()
-                           .getNamedItem("type")
-                           .getNodeValue());
-    if (field.getAttributes().getNamedItem("required") != null)
-    	collection.setRequired(new Boolean(field.getAttributes()
-                                            .getNamedItem("required")
-                                            .getNodeValue()).booleanValue());
-    return collection;
+    public Object getInstance(Node node) {
+        return new CollectionField(node);
     }
 
 	public String getType() {
