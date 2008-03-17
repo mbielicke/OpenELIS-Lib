@@ -1,7 +1,9 @@
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -9,6 +11,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CheckBox extends Composite implements ClickListener{
+    
+    DelegatingKeyboardListenerCollection keyListeners;
     
     public static final String UNCHECKED = "N",
                             CHECKED = "Y",
@@ -26,7 +30,13 @@ public class CheckBox extends Composite implements ClickListener{
     private int type = TWO_STATE;
     
     private HorizontalPanel hp = new HorizontalPanel();
-    public FocusPanel panel = new FocusPanel();
+    private final CheckBox check = this;
+    
+    public FocusPanel panel = new FocusPanel() {
+        public void onBrowserEvent(Event event) {
+            check.onBrowserEvent(event);
+        }
+    };
     
     public CheckBox() {
         initWidget(hp);
@@ -113,8 +123,10 @@ public class CheckBox extends Composite implements ClickListener{
         if(enabled){
             panel.removeClickListener(this);
             panel.addClickListener(this);
+            panel.sinkEvents(Event.KEYEVENTS);
         }else{
             panel.removeClickListener(this);
+            panel.unsinkEvents(Event.KEYEVENTS);
         }
     }
     
@@ -129,7 +141,6 @@ public class CheckBox extends Composite implements ClickListener{
     public void setFocus(boolean focus){
         panel.setFocus(focus);
     }
-    
     
 
 }

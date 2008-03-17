@@ -1,16 +1,12 @@
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.AbstractField;
-
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.CheckBox;
 
 
 /**
@@ -20,21 +16,15 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  * 
  */
-public class TableCheck extends TableCellInputWidget implements ClickListener, KeyboardListener, FocusListener {
+public class TableCheck extends TableCellInputWidget implements FocusListener {
 
-	private Image editor;
-    private FocusPanel panel;
+	private CheckBox editor;
     private boolean enabled;
+    private int type = CheckBox.TWO_STATE;
     private int width;
-	
+   
 	public TableCheck() {
-        panel = new FocusPanel();
-		editor = new Image();
-        panel.setWidget(editor);
-        //panel.addClickListener(this);
-        //panel.addKeyboardListener(this);
-        //panel.addFocusListener(this);
-		setWidget(panel);
+		editor = new CheckBox();
         DOM.setElementProperty(getElement(), "align", "center");
 	}
     /**
@@ -42,7 +32,7 @@ public class TableCheck extends TableCellInputWidget implements ClickListener, K
      */
     public void clear() {
     	if(editor != null)
-    		editor.setUrl("Images/unapply.png");
+    		editor.setState(CheckBox.UNKNOWN);
     }
 
     /**
@@ -53,88 +43,45 @@ public class TableCheck extends TableCellInputWidget implements ClickListener, K
     public TableCellWidget getNewInstance() {
         TableCheck ch = new TableCheck();
         ch.enable(enabled);
+        ch.type = type;
+        ch.editor.setType(type);
         return ch;
     }
 
     public TableCheck(Node node) {
-        // TODO Auto-generated method stub
         this();
+        if(node.getAttributes().getNamedItem("threeState") != null){
+            type = CheckBox.THREE_STATE;
+            editor.setType(CheckBox.THREE_STATE);
+        }
     }
 
-	public void setDisplay() {
-		super.setDisplay();
-	}
-
-	public void setEditor() {
-        /*if(field.getValue() != null)
-        	editor.setChecked(((Boolean)field.getValue()).booleanValue());
-        else
-        	editor.setChecked(false);
-        */
-	}
-
 	public void saveValue() {
-		//field.setValue(new Boolean(editor.isChecked()));
+		field.setValue(editor.getState());
 		super.saveValue();
 	}
 
 	public void setField(AbstractField field) {
 		this.field = field;
-		if(field.getValue() != null){
-               if(((Boolean)field.getValue()).booleanValue())
-                   editor.setUrl("Images/apply.png");
-               else
-                   editor.setUrl("Images/unapply.png");
-        }else{
-            editor.setUrl("Images/unapply.png");
-            field.setValue(new Boolean(false));
-        }
+		editor.setState((String)field.getValue());
 	}
-    public void onClick(Widget sender) {
-       field.setValue(new Boolean(!((Boolean)field.getValue()).booleanValue()));
-       if(((Boolean)field.getValue()).booleanValue())
-           editor.setUrl("Images/apply.png");
-       else
-           editor.setUrl("Images/unapply.png");
-    }
     
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-        
-    }
-    
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-        if(keyCode == KeyboardListener.KEY_ENTER){
-            onClick(this);
-        }
-    }
     public void onFocus(Widget sender) {
         DOM.setStyleAttribute(sender.getElement(), "background", "white");
         
     }
     public void onLostFocus(Widget sender) {
         DOM.setStyleAttribute(sender.getElement(), "background", "none");
-        
     }
     
     public void enable(boolean enabled){
         this.enabled = enabled;
-        panel.removeClickListener(this);
-        panel.removeFocusListener(this);
-        panel.removeKeyboardListener(this);
-        if(enabled){
-            panel.addClickListener(this);
-            panel.addFocusListener(this);
-            panel.addKeyboardListener(this);
-        }
+        editor.enable(enabled);
     }
     
     public void setCellWidth(int width){
         this.width = width;
-        panel.setWidth(width+"px");
+        if(editor != null)
+            editor.setWidth(width+"px");
     }
 }

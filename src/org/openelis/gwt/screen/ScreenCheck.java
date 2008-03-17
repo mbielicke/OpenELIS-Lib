@@ -44,17 +44,21 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
      */
     public ScreenCheck(Node node, final ScreenBase screen) {
         super(node);
-        check = new CheckBox() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+        check = new CheckBox(){
+                public void onBrowserEvent(Event event){
+                    if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                        if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
+                            screen.doTab(event, this);
+                        }
+                        if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_ENTER) {
+                            check.onClick(check);
+                        }
+                    } else {
+                        super.onBrowserEvent(event);
                     }
-                } else {
-                    super.onBrowserEvent(event);
                 }
-            }
         };
+
         if(node.getAttributes().getNamedItem("threeState") != null){
             check.setType(CheckBox.THREE_STATE);
             defaultType = CheckBox.THREE_STATE;
