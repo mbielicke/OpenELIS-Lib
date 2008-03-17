@@ -1,13 +1,18 @@
 package org.openelis.gwt.widget.table;
 
-import java.util.ArrayList;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.NumberField;
+import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
@@ -15,15 +20,7 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
+import java.util.ArrayList;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
 
@@ -156,18 +153,8 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
 
 	public void saveValue() {
-		if(field instanceof CollectionField){
-			((CollectionField)field).setValue(editor.getSelected());
-			textValue.setValue(editor.textBox.getText());
-		}else{
-			if(type != null && type.equals("string")){
-			//	((StringField)field).setValue(editor.value);
-				textValue.setValue(editor.textBox.getText());
-			}else if(type != null && type.equals("integer")){
-				//((NumberField)field).setValue(editor.value);
-				textValue.setValue(editor.textBox.getText());
-			}		
-		}
+        field.setValue(editor.getSelected());
+		textValue.setValue(editor.textBox.getText());
 		editor.closePopup();
         super.saveValue();
 	}
@@ -177,10 +164,9 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 		if(display == null){
 			display = new Label();
 			display.setWordWrap(false);
-//            display.setWidth(width+"px");
 		}
-		
-		display.setText((String)textValue.getValue());
+		if(editor.getSelected().size() > 0)
+		    display.setText((String)((DataSet)editor.getSelected().get(0)).getObject(0).getValue());
 		setWidget(display);		
         super.setDisplay();
 	}
@@ -190,7 +176,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			editor = new AutoCompleteDropdown();
          //   editor.setWidth(width+"px");
         }
-		editor.setSelected((ArrayList)field.getValue());
+		editor.setSelected(((DropDownField)field).getSelections());
 
 		setWidget(editor);			
 	}
@@ -198,17 +184,8 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	public void setField(AbstractField field) {
 		this.field = field;
 		
-		//if(!(field instanceof CollectionField))
-		if(((ArrayList)field.getValue()).size() > 0){
-			if(((ArrayList)field.getValue()).get(0) instanceof DataSet){
-				DataSet set = (DataSet) ((ArrayList)field.getValue()).get(0);
-				this.textValue.setValue((String)((StringObject)set.getObject(0)).getValue());
-				
-			}else{
-				this.textValue.setValue((String)editor.getModel().get((DataObject)((ArrayList)field.getValue()).get(0)).getObject(0).getValue());	
-			}
-		}
-			
+		if(((DropDownField)field).getSelections().size() > 0)
+            editor.setSelected(((DropDownField)field).getSelections());
 	}
 	
 	private String getTextValueFromId(AbstractField field){

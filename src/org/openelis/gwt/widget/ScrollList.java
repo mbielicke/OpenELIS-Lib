@@ -138,7 +138,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     	selected = new ArrayList();
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
-                selected.add(selections.get(i));
+                selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
             }else{
                 selected.add(dm.get((DataObject)selections.get(i)));
             }

@@ -63,7 +63,7 @@ public class AbstractField implements DataField, Serializable {
     public void addOption(Object key, Object val) {
         // TODO Auto-generated method stub
     }
-
+    
     public void clearErrors() {
         errors = new Vector();
     }

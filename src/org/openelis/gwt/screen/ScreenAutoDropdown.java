@@ -11,6 +11,7 @@ import org.openelis.gwt.common.data.BooleanObject;
 import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
@@ -131,14 +132,14 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
     	if(queryMode){
     		queryWidget.load(field);
     	}else{
-            auto.setSelected((ArrayList)field.getValue());
+            auto.setSelected(((DropDownField)field).getSelections());
         }
     }
 
     public void submit(AbstractField field) {
         if(queryMode){
             queryWidget.submit(field);
-        }else if(field instanceof CollectionField){
+        }else {
         	field.setValue(auto.getSelected());
         }
     }

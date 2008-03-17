@@ -2,7 +2,6 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
@@ -600,10 +599,6 @@ public class AutoCompleteDropdown extends Composite implements
 				complete();
 			}
 		}
-	}
-
-	private void onTextBoxTab() {
-
 	}
 
 	public ArrayList getSelected() {
