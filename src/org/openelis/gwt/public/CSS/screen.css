@@ -1153,3 +1153,21 @@ font-weight:bold;
    background:red;
 }
 
+.Checked {
+  height:18px;
+  width:18px;
+  background-image:url("../Images/apply.png");
+}
+
+.Unchecked {
+  height:18px;
+  width:18px;
+  background-image:url("../Images/unapply.png");
+}
+
+.Unknown {
+  height:18px;
+  width:18px;
+  background:grey;
+}
+

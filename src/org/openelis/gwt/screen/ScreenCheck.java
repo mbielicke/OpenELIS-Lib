@@ -2,15 +2,16 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.CheckField;
+import org.openelis.gwt.widget.CheckBox;
 /**
  * ScreenCheck wraps a GWT CheckBox to be displayed on a Screen.
  * @author tschmidt
@@ -26,6 +27,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
 	 * Widget wrapped by this class
 	 */
     private CheckBox check;
+    private int defaultType = CheckBox.TWO_STATE;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -53,16 +55,22 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
                 }
             }
         };
-
+        if(node.getAttributes().getNamedItem("threeState") != null){
+            check.setType(CheckBox.THREE_STATE);
+            defaultType = CheckBox.THREE_STATE;
+        }
         if (node.getFirstChild() != null){
         	 check.setText(node.getFirstChild().getNodeValue());
         }
-           
-        if (node.getAttributes().getNamedItem("shortcut") != null)
-            check.setAccessKey(node.getAttributes()
-                                   .getNamedItem("shortcut")
-                                   .getNodeValue()
-                                   .charAt(0));
+        if (node.getChildNodes().getLength() > 0){
+            NodeList widgets = node.getChildNodes();
+            for (int k = 0; k < widgets.getLength(); k++) {
+                if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                    Widget wid = ScreenWidget.loadWidget(widgets.item(k), screen);
+                    check.setWidget(wid);
+                }
+            }
+        }
         if (node.getAttributes().getNamedItem("onClick") != null){
         	String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
         	if(listener.equals("this"))
@@ -85,21 +93,21 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         if(queryMode)
             queryWidget.load(field);
         else
-            check.setChecked(((CheckField)field).isChecked());
+            check.setState((String)field.getValue());
     }
 
     public void submit(AbstractField field) {
         if(queryMode)
             queryWidget.submit(field);
         else
-            field.setValue(new Boolean(check.isChecked()));
+            field.setValue(check.getState());
     }
     
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(true);
         else{
-            check.setEnabled(enabled);
+            check.enable(enabled);
             if(enabled)
                 check.addFocusListener(this);
             else
@@ -116,7 +124,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     }
 	public void addClickListener(ClickListener listener) {
 		if(clickListeners == null){
-			clickListeners = new DelegatingClickListenerCollection(this,check);
+			clickListeners = new DelegatingClickListenerCollection(this,check.panel);
 		}
 		clickListeners.add(listener);
 	}
@@ -131,6 +139,16 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         clickListeners = null;
         check = null;
         super.destroy();
+    }
+    
+    public void setForm(boolean mode) {
+        if(queryWidget == null){
+            if(mode)
+                check.setType(CheckBox.THREE_STATE);
+            else
+                check.setType(defaultType);
+        }else
+            super.setForm(mode);
     }
 
 }
