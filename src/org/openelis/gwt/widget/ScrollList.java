@@ -434,6 +434,8 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
             	((ScreenWidget)vp.getWidget(clicked)).removeStyleName("Highlighted");
             	selected.remove(dm.get(start+clicked));
             }else{
+                if(!multi)
+                    selected.clear();
             	active = clicked;
             	((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
             	selected.add(dm.get(start+clicked));
