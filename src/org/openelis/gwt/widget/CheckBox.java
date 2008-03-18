@@ -1,12 +1,15 @@
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,7 +37,11 @@ public class CheckBox extends Composite implements ClickListener{
     
     public FocusPanel panel = new FocusPanel() {
         public void onBrowserEvent(Event event) {
+            if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_ENTER) {
+                check.onClick(check);
+            }
             check.onBrowserEvent(event);
+            super.onBrowserEvent(event);
         }
     };
     

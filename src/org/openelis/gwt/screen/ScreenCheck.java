@@ -50,9 +50,6 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
                         if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
                             screen.doTab(event, this);
                         }
-                        if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_ENTER) {
-                            check.onClick(check);
-                        }
                     } else {
                         super.onBrowserEvent(event);
                     }

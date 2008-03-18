@@ -2,6 +2,7 @@ package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
@@ -20,11 +21,17 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
 
 	private CheckBox editor;
     private boolean enabled;
+    private FocusPanel panel;
     private int type = CheckBox.TWO_STATE;
     private int width;
    
 	public TableCheck() {
 		editor = new CheckBox();
+        editor.enable(enabled);
+        panel = new FocusPanel();
+        panel.add(editor);
+        setWidget(panel);
+        panel.addFocusListener(this);
         DOM.setElementProperty(getElement(), "align", "center");
 	}
     /**
@@ -54,6 +61,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
             type = CheckBox.THREE_STATE;
             editor.setType(CheckBox.THREE_STATE);
         }
+        
     }
 
 	public void saveValue() {
@@ -81,7 +89,6 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
     
     public void setCellWidth(int width){
         this.width = width;
-        if(editor != null)
-            editor.setWidth(width+"px");
+        panel.setWidth(width+"px");
     }
 }
