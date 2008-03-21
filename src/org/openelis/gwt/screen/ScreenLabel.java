@@ -73,6 +73,8 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
                     addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
             }
         }
+        if (node.hasChildNodes())
+            label.setText((node.getFirstChild().getNodeValue()));
         initWidget(label);
         label.setStyleName("ScreenLabel");
         setDefaults(node, screen);

@@ -1,6 +1,7 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -8,11 +9,15 @@ import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenText;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.gwt.services.CalendarServiceIntAsync;
+
+import java.util.Arrays;
 /**
  * Calendar Widget will display a calendar and text boxes with the current time in
  * a popup panel.  A user can then select a date and time that will be returned back
@@ -28,6 +33,18 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
     
     protected ChangeListenerCollection changeListeners;
     
+    protected NumberField year;
+    protected NumberField month;
+    protected AppButton prevMonth;
+    protected AppButton nextMonth;
+    protected AppButton monthSelect;
+    protected AppButton ok;
+    protected AppButton cancel;
+    protected AppButton prevDecade;
+    protected AppButton nextDecade;
+    protected ScreenLabel[] months = new ScreenLabel[12];
+    protected ScreenLabel[] years = new ScreenLabel[10];
+    
     public CalendarWidget() {
         String base = GWT.getModuleBaseURL();
         base += "CalendarServlet";        
@@ -36,13 +53,31 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
         getXML();
     }
     
+    public void afterDraw(boolean success) {
+        super.afterDraw(success);
+        year = (NumberField)rpc.getField("year");
+        month = (NumberField)rpc.getField("month");
+        prevMonth = (AppButton)getWidget("prevMonth");
+        nextMonth = (AppButton)getWidget("nextMonth");
+        monthSelect = (AppButton)getWidget("monthSelect");
+        prevDecade = (AppButton)getWidget("prevDecade");
+        nextDecade = (AppButton)getWidget("nextDecade");
+        ok = (AppButton)getWidget("ok");
+        cancel = (AppButton)getWidget("cancel");
+        for(int i = 0; i < 12; i++) {
+            months[i] = (ScreenLabel)widgets.get("month:"+i+"Text"); 
+        }
+        for(int i = 0; i < 10; i++) {
+            years[i] = (ScreenLabel)widgets.get("year:"+i+"Text");
+         }
+    }
+    
     public void onClick(Widget sender){
-        if(sender == getWidget("prevMonth")){
-            int month = ((Integer)rpc.getFieldValue("month")).intValue() - 1;
-            int year = ((Integer)rpc.getFieldValue("year")).intValue();
-            if(month < 0) {
-                month = 11;
-                year -= 1;
+        if(sender == prevMonth){
+            month.setValue(new Integer(((Integer)month.getValue()).intValue() - 1));
+            if(((Integer)month.getValue()).intValue() < 0) {
+                month.setValue(new Integer(11));
+                year.setValue(new Integer(((Integer)year.getValue()).intValue() - 1));
             }
             screenService.getMonth(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
                 public void onSuccess(Object result) {
@@ -54,12 +89,11 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
             });
             return;
         }
-        if(sender == getWidget("nextMonth")){
-            int month = ((Integer)rpc.getFieldValue("month")).intValue() + 1;
-            int year = ((Integer)rpc.getFieldValue("year")).intValue();
-            if(month > 11) {
-                month = 0;
-                year += 1;
+        if(sender == nextMonth){
+            month.setValue(new Integer(((Integer)month.getValue()).intValue() + 1));
+            if(((Integer)month.getValue()).intValue() > 11) {
+                month.setValue(new Integer(0));
+                year.setValue(new Integer(((Integer)year.getValue()).intValue() + 1));
             }
             screenService.getMonth(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
                 public void onSuccess(Object result) {
@@ -71,9 +105,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
             });
             return;
         }
-        if(sender == getWidget("monthSelect")){
-            int month = ((Integer)rpc.getFieldValue("month")).intValue();
-            int year = ((Integer)rpc.getFieldValue("year")).intValue();
+        if(sender == monthSelect){
             screenService.getMonthSelect(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
@@ -84,11 +116,9 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
             });
             return;
         }
-        if(sender == getWidget("ok") || 
-           sender == getWidget("cancel")){
-            int month = ((Integer)rpc.getFieldValue("month")).intValue();
-            int year = ((Integer)rpc.getFieldValue("year")).intValue();
-            screenService.getMonth(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
+        if(sender == ok || 
+           sender == cancel){
+            screenService.getMonth(month.getValue().toString(), year.getValue().toString(), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                 }
@@ -98,40 +128,36 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
             });
             return;
         }
-        if(sender == getWidget("prevDecade")){
-            ((Widget) getWidget("year"+":"+ ((Integer)rpc.getFieldValue("year")).intValue()%10)).removeStyleName("Current");
-            int year = ((Integer)rpc.getFieldValue("year")).intValue()/10*10;
-            year += -10;
+        if(sender == prevDecade){
+            years[((Integer)year.getValue()).intValue()%10].label.removeStyleName("Current");
+            year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10 -10));
             for(int i = 0; i < 10; i++) 
-                ((ScreenText)widgets.get("year:"+i+"Text")).text.setText(String.valueOf(year+i));
-            rpc.setFieldValue("year",new Integer(year));
-            ((Widget) getWidget("year:0")).addStyleName("Current");
+                years[i].label.setText(String.valueOf(((Integer)year.getValue()).intValue()+i));
+            years[0].label.addStyleName("Current");
             return;
         }
-        if(sender == getWidget("nextDecade")){
-            ((Widget) getWidget("year"+":"+ ((Integer)rpc.getFieldValue("year")).intValue()%10)).removeStyleName("Current");
-            int year = ((Integer)rpc.getFieldValue("year")).intValue()/10*10;
-            year += 10;
+        if(sender == nextDecade){
+            years[((Integer)year.getValue()).intValue()%10].label.removeStyleName("Current");
+            year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10 +10));
             for(int i = 0; i < 10; i++) 
-                ((ScreenText)widgets.get("year:"+i+"Text")).text.setText(String.valueOf(year+i));
-            rpc.setFieldValue("year",new Integer(year));
-            ((Widget) getWidget("year:0")).addStyleName("Current");
+                years[i].label.setText(String.valueOf(((Integer)year.getValue()).intValue()+i));
+            years[0].label.addStyleName("Current");
             return;
         }
-        if(((ScreenWidget)sender).getWidget().getStyleName().indexOf("MYCell") > -1){
+        if(Arrays.asList(months).contains(sender)){
             String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
-            if(value[0].equals("month")){
-                ((Widget) getWidget("month"+":"+ rpc.getFieldValue("month")) ).removeStyleName("Current");
-                rpc.setFieldValue("month",value[1]);
-                ((Widget) getWidget("month"+":"+ rpc.getFieldValue("month")) ).addStyleName("Current");
-            }else{
-                ((Widget) getWidget("year"+":"+ ((Integer)rpc.getFieldValue("year")).intValue()%10)).removeStyleName("Current");
-                rpc.setFieldValue("year", new Integer(((Integer)rpc.getFieldValue("year")).intValue()+Integer.parseInt(value[1])));
-                ((Widget) getWidget("year"+":"+ ((Integer)rpc.getFieldValue("year")).intValue()%10)).addStyleName("Current");
-            }
+            months[((Integer)month.getValue()).intValue()].label.removeStyleName("Current");
+            month.setValue(value[1]);
+            ((ScreenLabel)sender).label.addStyleName("Current");
             return;
         }
-
+        if(Arrays.asList(years).contains(sender)){
+            String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
+            years[((Integer)year.getValue()).intValue()%10].label.removeStyleName("Current");
+            year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10+Integer.parseInt(value[1])));
+            ((ScreenLabel)sender).label.addStyleName("Current");
+            return;
+        }
         changeListeners.fireChange(sender);
     }
 

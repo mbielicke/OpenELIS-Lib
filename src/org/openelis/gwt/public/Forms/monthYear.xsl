@@ -182,20 +182,17 @@
   <xsl:template name="MYCell">
    <xsl:param name="text"/>
    <xsl:param name="type"/>
-            <panel key="{$type}:{$text}" layout="absolute" hover="Hover" onPanelClick="this" value="{$type},{$text}">
+            <panel key="{$type}:{$text}" layout="absolute" hover="Hover" style="MYCell">
+              <widget>
+                <label key="{$type}:{$text}Text" onClick="this" value="{$type},{$text}">
                   <xsl:choose>
                     <xsl:when test="$type = 'month' and string($month) = string($text)">
-                      <xsl:attribute name="style">MYCell Current</xsl:attribute>
+                      <xsl:attribute name="style">Current</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$type = 'year' and $yearCell = $text">
-                      <xsl:attribute name="style">MYCell Current</xsl:attribute>
+                      <xsl:attribute name="style">Current</xsl:attribute>
                     </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:attribute name="style">MYCell</xsl:attribute>
-                    </xsl:otherwise>
                   </xsl:choose>
-              <widget>
-                <text key="{$type}:{$text}Text">
                   <xsl:choose>
                     <xsl:when test="$type = 'month'">
 	                  <xsl:value-of select="calUtils:getMonthAbrv(string($text))"/>
@@ -204,7 +201,7 @@
 	                  <xsl:value-of select="number($text)+number($year)"/>
 	                </xsl:otherwise>
 	              </xsl:choose>
-                </text>
+                </label>
               </widget>
            </panel>
   </xsl:template>

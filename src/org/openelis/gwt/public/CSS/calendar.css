@@ -79,6 +79,10 @@
 }
 
 .MyCell {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
 }
 
 .MonthBar {

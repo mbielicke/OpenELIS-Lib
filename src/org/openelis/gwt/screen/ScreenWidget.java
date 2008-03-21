@@ -461,5 +461,8 @@ public class ScreenWidget extends SimplePanel implements
         return wid;
     }
     
+    public boolean equals(Object obj) {
+        return getWidget().equals(obj);
+    }
     
 }
