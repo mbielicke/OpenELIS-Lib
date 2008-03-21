@@ -18,7 +18,7 @@ public class ScreenText extends ScreenWidget {
 	/**
 	 * Widget wrapped by this class
 	 */
-    private Label text;
+    public Label text;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */

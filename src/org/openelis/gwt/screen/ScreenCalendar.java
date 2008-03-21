@@ -3,9 +3,9 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
-import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
 import java.util.Date;
@@ -15,18 +15,18 @@ import java.util.Date;
  *
  */
 public class ScreenCalendar extends ScreenInputWidget {
-	
-	/**
-	 * Default Tag Name for XML Definition and WidgetMap
-	 */
-	public static String TAG_NAME = "calendar";
-	/**
-	 * Widget wrapped by this class
-	 */
+    
+    /**
+     * Default Tag Name for XML Definition and WidgetMap
+     */
+    public static String TAG_NAME = "calendar";
+    /**
+     * Widget wrapped by this class
+     */
     private FormCalendarWidget cal;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenCalendar() {
     }
     /**
@@ -62,11 +62,11 @@ public class ScreenCalendar extends ScreenInputWidget {
                                    .getNodeValue()
                                    .charAt(0));
         if (node.getAttributes().getNamedItem("onChange") != null){
-        	String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
-        	if (listener.equals("this"))
+            String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
+            if (listener.equals("this"))
                 cal.addChangeListener(screen);
-        	else          
-        	    cal.addChangeListener((ChangeListener)ScreenBase.getWidgetMap().get(listener));
+            else          
+                cal.addChangeListener((ChangeListener)ScreenBase.getWidgetMap().get(listener));
         }
         cal.setStyleName("ScreenCalendar");
         initWidget(cal);

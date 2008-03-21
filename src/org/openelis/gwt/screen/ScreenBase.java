@@ -100,7 +100,9 @@ public class ScreenBase extends Composite implements
      * @return
      */
     public Widget getWidget(String name) {
-        return ((ScreenWidget)widgets.get(name)).getWidget();
+        if(widgets.get(name) != null)
+            return ((ScreenWidget)widgets.get(name)).getWidget();
+        return null;
     }
 
     /**
@@ -134,6 +136,7 @@ public class ScreenBase extends Composite implements
             Window.alert("draw " + e.getMessage());
         }
     }
+    
 
     /**
      * This method will load the form with data provided by the callService

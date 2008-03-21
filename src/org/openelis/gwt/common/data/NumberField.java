@@ -51,6 +51,9 @@ public class NumberField extends AbstractField implements Serializable {
             setMin(new Double(node.getAttributes()
                                           .getNamedItem("min")
                                           .getNodeValue()));
+        if (node.hasChildNodes()) {
+            setValue(node.getFirstChild().getNodeValue());
+        }
     }
     
     public void validate() {

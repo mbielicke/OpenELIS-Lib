@@ -73,3 +73,83 @@
 
 .CalendarWidget .day .gwt-HTML {
 } 
+
+
+.DateCell {
+}
+
+.MyCell {
+}
+
+.MonthBar {
+   width:100%;
+   background:blue;
+}
+
+.DateText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+}
+
+.MYText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+}
+
+.WhiteText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+    color:white;
+}
+
+.DayText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    font-weight:bold;
+    text-align:center;
+}
+
+.DayBar {
+    background:lightblue;
+}
+
+.Calendar {
+   background:white;
+   border:1px solid lightblue;
+}
+
+.DateCell .Hover {
+  background:lightblue;
+}
+
+.MYCell .Hover {
+  background:lightblue;
+}
+
+.DateCell .Current {
+  background:blue;
+
+}
+
+.MYCell .Current {
+  background:blue;
+
+}
+
+.DateCell .Current .DateText {
+  border:1px solid red;
+}
+
+.MYCell .Current .MYText {
+  border:1px solid red;
+}
+ 
+.OffMonth {
+   color:gray;
+}

@@ -2,6 +2,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -76,6 +77,16 @@ public class AppScreen extends ScreenBase {
     
     public void afterDraw(boolean sucess) {
         load((FormRPC)forms.get("display"));
+    }
+    
+    public void redrawScreen(String xmlDef){
+        panel.clear();
+        tabOrder = new HashMap();
+        tabBack = new HashMap();
+        widgets = new HashMap();
+        forms = new HashMap();
+        drawScreen(xmlDef);
+        afterDraw(true);
     }
     
     public void drawScreen(String xmlDef) {
