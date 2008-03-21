@@ -111,6 +111,27 @@ public class ScreenTablePanel extends ScreenWidget {
                                                          w,
                                                          HasAlignment.ALIGN_CENTER);
                     }
+                    if (widgets.item(l).getAttributes().getNamedItem("valign") != null) {
+                        String align = widgets.item(l)
+                                              .getAttributes()
+                                              .getNamedItem("valign")
+                                              .getNodeValue();
+                        if (align.equals("top"))
+                            panel.getFlexCellFormatter()
+                                 .setVerticalAlignment(k,
+                                                         w,
+                                                         HasAlignment.ALIGN_TOP);
+                        if (align.equals("bottom"))
+                            panel.getFlexCellFormatter()
+                                 .setVerticalAlignment(k,
+                                                         w,
+                                                         HasAlignment.ALIGN_BOTTOM);
+                        if (align.equals("middle"))
+                            panel.getFlexCellFormatter()
+                                 .setVerticalAlignment(k,
+                                                         w,
+                                                         HasAlignment.ALIGN_MIDDLE);
+                    }
                 }
             }
             
