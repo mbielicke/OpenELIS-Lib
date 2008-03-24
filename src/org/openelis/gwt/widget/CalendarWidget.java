@@ -1,7 +1,6 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -12,7 +11,6 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenText;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.gwt.services.CalendarServiceIntAsync;
