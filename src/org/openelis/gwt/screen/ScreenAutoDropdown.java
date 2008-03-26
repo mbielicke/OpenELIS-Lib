@@ -7,14 +7,13 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.BooleanObject;
-import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
+import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
 	public static String TAG_NAME = "autoDropdown";
     public String fieldCase = "mixed";
     public boolean loadFromModel = false;
+    private boolean multiSelect; 
 	/**
 	 * Widget wrapped by this class.
 	 */
@@ -50,19 +50,20 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
      */
     public ScreenAutoDropdown(Node node, final ScreenBase screen) {
         super(node);
-        String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
-        String url = node.getAttributes()
-                         .getNamedItem("serviceUrl")
+        String cat = null;
+        if(node.getAttributes().getNamedItem("cat") != null)
+            cat = node.getAttributes().getNamedItem("cat").getNodeValue();
+        String url = null;
+        if(node.getAttributes().getNamedItem("serviceUrl") != null)
+            url = node.getAttributes()
+            .getNamedItem("serviceUrl")
                          .getNodeValue();
         
-        boolean fromModel = false;
-        boolean multiSelect = false;
+        multiSelect = false;
         String textBoxDefault = null;
         String width = null;
-        
-        if (node.getAttributes().getNamedItem("fromModel") != null && node.getAttributes().getNamedItem("fromModel").getNodeValue().equals("true"))
-        	fromModel = true;
-        
+        String popWidth = "auto";
+                
         if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
         	multiSelect = true;
         
@@ -76,36 +77,24 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
                                   .getNamedItem("width")
                                   .getNodeValue();
         
-        Node widthsNode = ((Element)node).getElementsByTagName("autoWidths").item(0);
-        Node headersNode = ((Element)node).getElementsByTagName("autoHeaders").item(0);
-        Node editorsNode = ((Element)node).getElementsByTagName("autoEditors").item(0);
-        Node fieldsNode = ((Element)node).getElementsByTagName("autoFields").item(0);
-        Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
+        if (node.getAttributes().getNamedItem("popWidth") != null)
+            popWidth = node.getAttributes()
+                                  .getNamedItem("popWidth")
+                                  .getNodeValue();
+        
+        Node widthsNode = ((Element)node).getElementsByTagName("widths").item(0);
+        Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
 
-        auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width);
+        auto = new AutoCompleteDropdown(cat, url, multiSelect, textBoxDefault, width, popWidth);
 
         auto.setForm(screen);
-        
-        if(widthsNode != null) 
-        	auto.setWidths(getWidths(widthsNode));
         
         if(headersNode != null) 
         	auto.setHeaders(getHeaders(headersNode));
         
-        if(editorsNode != null) 
-        	auto.setEditors(getEditors(editorsNode));
+        if(widthsNode != null) 
+            auto.setWidths(getWidths(widthsNode));
         
-        if(fieldsNode != null) 
-        	auto.setFields(getFields(fieldsNode));
-        
-        if (node.getAttributes().getNamedItem("type") != null){
-        	type = node.getAttributes().getNamedItem("type").getNodeValue();
-            auto.setType(type);
-        } 
-        
-        if(!fromModel && optionsNode != null)
-        	auto.setModel(getDropDownOptions(optionsNode));      
-
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
             if(fieldCase.equals("upper"))
@@ -259,5 +248,15 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
    public void onFocus(Widget sender) {
 	   auto.onFocus(sender);
 	   super.onFocus(sender);
+   }
+   
+   public void setForm(boolean mode) {
+       if(queryWidget == null){
+           if(mode)
+               auto.setMultiSelect(true);
+           else
+               auto.setMultiSelect(multiSelect);
+       }else
+           super.setForm(mode);
    }
 }

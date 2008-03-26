@@ -3,6 +3,7 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
@@ -18,6 +19,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
@@ -186,10 +189,14 @@ public class AutoCompleteDropdown extends Composite implements
 	 *            This is the url to the RemoteServiceServlet that handles calls
 	 *            for this widget
 	 */
-	public AutoCompleteDropdown(String cat, String serviceUrl,
-			boolean fromModel, boolean multi, String textBoxDefault,
-			String width) {
-		initService(serviceUrl);
+	public AutoCompleteDropdown(String cat, 
+                                String serviceUrl,
+                                boolean multi, 
+                                String textBoxDefault,
+                                String width,
+                                String popWidth) {
+        if(serviceUrl != null)
+            initService(serviceUrl);
 		this.cat = cat;
 		this.textBoxDefault = textBoxDefault;
 		this.width = width;
@@ -218,6 +225,10 @@ public class AutoCompleteDropdown extends Composite implements
 
 		scrollList = new ScrollList();
 		scrollList.setMulti(multiSelect);
+        scrollList.addChangeListener(this);
+        scrollList.addStyleName("Dropdown");
+        scrollList.setWidth(popWidth);
+        scrollList.setMaxRows(numberOfRows);
 	}
 
 	/**
@@ -285,13 +296,11 @@ public class AutoCompleteDropdown extends Composite implements
 			choicesPopup.setPopupPosition(this.getAbsoluteLeft(), this
 					.getAbsoluteTop()
 					+ this.getOffsetHeight() - 1);
-
+            choicesPopup.setWidget(scrollList);
 			choicesPopup.show();
+            scrollList.sizeTable();
 
-			scrollList.addChangeListener(this);
-
-			scrollList.addStyleName("Dropdown");
-
+            /*
 			if (scrollList.getDataModel().size() < numberOfRows) {
 				scrollList.setMaxRows(scrollList.getDataModel().size());
 				scrollList.setWidth(textBox.getOffsetWidth() + 14 + "px");
@@ -299,8 +308,9 @@ public class AutoCompleteDropdown extends Composite implements
 				scrollList.setMaxRows(numberOfRows);
 				scrollList.setWidth(textBox.getOffsetWidth() - 4 + "px");
 			}
+            */
 
-			choicesPopup.setWidget(scrollList);
+			
 			DOM.addEventPreview(scrollList);
 
 			if (!multiSelect)
@@ -326,9 +336,9 @@ public class AutoCompleteDropdown extends Composite implements
 			scrollList.setDataModel(scrollList.getDataModel());
 
 			if (!multiSelect) {
-				scrollList.scrollBar.setScrollPosition(startPos
+				scrollList.view.scrollBar.setScrollPosition(startPos
 						* scrollList.getCellHeight());
-				scrollList.scrollLoad(scrollList.scrollBar.getScrollPosition());
+				scrollList.scrollLoad(scrollList.view.scrollBar.getScrollPosition());
 			} else
 				scrollList.scrollLoad(0);
 
@@ -426,15 +436,36 @@ public class AutoCompleteDropdown extends Composite implements
 	 * @param text
 	 */
 	protected void callForMatches(final String text) {
-		getMatches(text);
+        if(cat != null){
+            try {
+                autoService.getMatches(cat, scrollList.getDataModel(), text, new AsyncCallback() {
+                    public void onSuccess(Object result){
+                        scrollList.setDataModel((DataModel)result);
+                        setCurrentValues();
+                        clickedArrow = true;
+                        showMatches(0);
+                    }
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+                });
+            } catch (RPCException e) {
+                // TODO Auto-generated catch block
+                Window.alert(e.getMessage());
+            }
+        }else{
+            getMatches(text);
+        }
 	}
 
 	private void getMatches(String match) {
 		DataModel model = scrollList.getDataModel();
 		int tempStartPos = -1;
-		int index = -1;
-
-		index = getIndexByTextValue(match);
+		int index = 0;
+ 
+        if(cat == null)
+            index = getIndexByTextValue(match);
+        
 
 		if (index > -1 && index < model.size()) {
 			tempStartPos = index;
@@ -596,7 +627,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 				focusPanel.removeStyleName("Selected");
 
-				complete();
+				//complete();
 			}
 		}
 	}
@@ -623,10 +654,12 @@ public class AutoCompleteDropdown extends Composite implements
 
 	public void setHeaders(String[] headers) {
 		this.headers = headers;
+        scrollList.setHeaders(headers);
 	}
 
 	public void setWidths(int[] widths) {
 		this.widths = widths;
+        scrollList.setCellWidths(widths);
 	}
 
 	public void clear() {

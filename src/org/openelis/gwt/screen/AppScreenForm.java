@@ -440,14 +440,17 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.CANCEL;
             clearErrors();
+            doReset();
             formService.abort(key, (FormRPC)forms.get("display"), new AsyncCallback() {
                public void onSuccess(Object result){
                    rpc = (FormRPC)result;
                    forms.put(rpc.key, rpc);
                    load();
+                   afterAbort(true);
                }
                public void onFailure(Throwable caught){
                    Window.alert(caught.getMessage());
+                   afterAbort(false);
                }
             });
             enable(false);
@@ -495,6 +498,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
         //bpanel.setButtonState("delete", AppButton.DISABLED);
     }
 
+    public void afterAbort(boolean success) {
+        
+    }
     /** 
      * This method provides the default logic for a form when the Reload button
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.

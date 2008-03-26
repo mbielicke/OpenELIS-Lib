@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class TableWidget extends Composite {
 
-    public TableController controller = new TableController();
+    public EditTable controller = new EditTable();
     public ConstantsWithLookup constants = null;
     
     public TableWidget() {

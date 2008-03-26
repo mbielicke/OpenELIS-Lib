@@ -1,10 +1,5 @@
 package org.openelis.gwt.screen;
 
-import org.openelis.gwt.widget.AutoCompleteDropdown;
-import org.openelis.gwt.widget.AutoCompleteTextBox;
-import org.openelis.gwt.widget.MenuLabel;
-import org.openelis.gwt.widget.table.TableWidget;
-
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -13,6 +8,10 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.widget.AutoCompleteTextBox;
+import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.table.TableWidget;
 
 public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
     
@@ -144,9 +143,12 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(errorImg.getStyleName().equals("ErrorPanel")){
             if(pop == null){
                 pop = new PopupPanel();
-                pop.setStyleName("ErrorPopup");
+                //pop.setStyleName("ErrorPopup");
             }
-            pop.setWidget(errorPanel);
+            ScreenWindow win = new ScreenWindow(pop,"Error","","");
+            win.setContent(errorPanel);
+            win.setVisible(true);
+            pop.setWidget(win);
             pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
             pop.show();
         }

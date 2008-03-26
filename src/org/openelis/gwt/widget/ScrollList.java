@@ -1,16 +1,5 @@
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenScrollList;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.StringObject;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
@@ -18,10 +7,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
@@ -30,6 +20,8 @@ import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
@@ -37,6 +29,20 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
+
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenLabel;
+import org.openelis.gwt.screen.ScreenScrollList;
+import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.widget.table.TableController;
+import org.openelis.gwt.widget.table.TableView;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -46,51 +52,16 @@ import com.google.gwt.xml.client.XMLParser;
  * @author tschmidt
  *
  */
-public class ScrollList extends Composite implements ScrollListener, MouseWheelListener, ClickListener, EventPreview, SourcesChangeEvents{
-    
-    public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
-
-        public CellView() {
-            sinkEvents(Event.ONMOUSEWHEEL);
-        }
-        
-        public void onBrowserEvent(Event event) {
-            // TODO Auto-generated method stub
-            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
-                listeners.fireMouseWheelEvent(this, event);
-            }
-            super.onBrowserEvent(event);
-        }
-        
-        private MouseWheelListenerCollection listeners;
-        
-        public void addMouseWheelListener(MouseWheelListener listener) {
-            if(listeners == null){
-                listeners = new MouseWheelListenerCollection();
-            }
-            listeners.add(listener);
-        }
-
-        public void removeMouseWheelListener(MouseWheelListener listener) {
-            if(listeners != null){
-                listeners.remove(listener);
-            }
-            
-        }
-        
-    }
+public class ScrollList extends TableController implements SourcesChangeEvents {
     
     private ChangeListenerCollection changeListeners;
-    public CellView cellView = new CellView();
-    private VerticalPanel vp = new VerticalPanel();
-    private HorizontalPanel hp = new HorizontalPanel();
-    public ScrollPanel scrollBar = new ScrollPanel();
     private DataModel dm = new DataModel();
     private ArrayList selected = new ArrayList();
     private int maxRows;
     private int start = 0;
     private int top = 0;
-    private int cellHeight = 15;
+    private int cellHeight = 18;
+    private int[] cellWidths;
     private int active = -1;
     private int cellspacing = 1;
     public boolean drag;
@@ -99,43 +70,26 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     public boolean multi;
     
     public ScrollList() {
-        initWidget(hp);
-        vp.setSpacing(1);
-        cellView.setWidget(vp);
-        hp.add(cellView);
-        hp.add(scrollBar);
-        
-        cellView.addScrollListener(this);
-        //vp.setStyleName("DragContainer");
-        cellView.addMouseWheelListener(this);
-        scrollBar.setWidth("18px");
-        scrollBar.addScrollListener(this);
-        AbsolutePanel ap = new AbsolutePanel();
-        DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
-        DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
-        DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");        
-        DOM.setStyleAttribute(cellView.getElement(),"overflowX","hidden");
-        scrollBar.setWidget(ap);
-        //DOM.addEventPreview(this);
+        view = new TableView();
+        view.setTableListener(this);
+        initWidget(view);
     }
     
     public void setDataModel(DataModel dm) {
         this.dm = dm;
         if(dm != null && dm.size() > 0){
-            setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
-            vp.clear();
             int num = maxRows;
             if(dm.size() < maxRows)
                 num = dm.size();
             for(int i = 0; i < num; i++){
-                createRow();
+                createRow(i);
             }
-            scrollLoad(0);
+            view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
         }
     }
         
     public void setSelected(ArrayList selections){
-    	selected = new ArrayList();
+        selected = new ArrayList();
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
                 selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
@@ -174,36 +128,51 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     }
     
     private void loadRow(int index){
-        ScreenLabel label = (ScreenLabel)vp.getWidget(index);
-        label.label.setText(dm.get(start+index).getObject(0).getValue().toString());
-        label.setUserObject(dm.get(start+index).getKey().getValue());
-        label.removeStyleName("Highlighted");
+        for(int i = 0; i < cellWidths.length; i++){
+            ScreenLabel label = (ScreenLabel)view.table.getWidget(index,i);
+            label.label.setText(dm.get(start+index).getObject(i).getValue().toString());
+            label.setUserObject(dm.get(start+index).getKey().getValue());
+        }
+        view.table.getRowFormatter().removeStyleName(index, TableView.selectedStyle);
         if(selected.contains(dm.get(start+index))){
-            label.addStyleName("Highlighted");
+            view.table.getRowFormatter().addStyleName(index, TableView.selectedStyle);
         }
     }
     
-    private void createRow(){
-        ScreenLabel label = new ScreenLabel("   ",null);
-        vp.add(label);
-        label.label.setWordWrap(false);
-        label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
-        if(vp.getWidgetCount() % 2 == 1){
-            label.addStyleName("AltTableRow");
-        }else{
-            label.addStyleName("TableRow");
+    private void createRow(int index){
+        for(int i = 0; i < cellWidths.length; i++){
+            ScreenLabel label = new ScreenLabel("   ",null);
+            view.table.setWidget(index, i, label);
+            label.label.setWordWrap(false);
+            DOM.setStyleAttribute(label.getElement(), "overflowX", "hidden");
+            label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
+            if(drag){
+                label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+                label.sinkEvents(Event.MOUSEEVENTS);
+            }
+            if(drop){
+                label.setDropTargets(((ScreenScrollList)getParent()).getDropTargets());
+                label.setScreen(((ScreenScrollList)getParent()).getScreen());
+            }
+            label.setWidth(cellWidths[i]+"px");
+            view.table.getFlexCellFormatter().setWidth(index, i, curColWidth[i] + "px");
+            view.table.getFlexCellFormatter().setHeight(index, i, cellHeight+"px");
+            view.table.getFlexCellFormatter().addStyleName(index,
+                                                           i,
+                                                           TableView.cellStyle);
         }
-        if(drag){
-            label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
-            label.sinkEvents(Event.MOUSEEVENTS);
+        view.table.getRowFormatter().addStyleName(index, TableView.rowStyle);
+        if(index % 2 == 1){
+            DOM.setStyleAttribute(view.table.getRowFormatter().getElement(index), "background", "#f8f8f9");
         }
-        if(drop){
-            label.setDropTargets(((ScreenScrollList)getParent()).getDropTargets());
-            label.setScreen(((ScreenScrollList)getParent()).getScreen());
+        if(showRows){
+            Label rowNum = new Label(String.valueOf(index+1));
+            view.rows.setWidget(index,0,rowNum);
+            view.rows.getFlexCellFormatter().setStyleName(index, 0, "RowNum");
+            view.rows.getFlexCellFormatter().setHeight(index,0,cellHeight+"px");
         }
-        vp.setCellWidth(label,cellView.getOffsetWidth()+"px");
-        label.setHeight(cellHeight+"px");
-        label.addClickListener(this);
+        
+        //vp.setCellWidth(hp,cellView.getOffsetWidth()+"px");
     }
    
     /**
@@ -211,7 +180,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
      * @param wid
      */
     public void addItem(Widget wid){
-        vp.add(wid);
+        view.table.add(wid);
 
     }
     
@@ -227,11 +196,11 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         ds.addObject(so);
         ds.setKey(value);
         dm.add(ds);
-        if(vp.getWidgetCount() < maxRows){
-            createRow();
+        if(view.table.getRowCount() < maxRows){
+            createRow(dm.size() -1);
             loadRow(dm.size()-1);
         }
-        setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
+        view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
     }
     
     /**
@@ -258,43 +227,47 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     
     public void setMaxRows(int rows){
         this.maxRows = rows;
-        cellView.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing)+"px");
-        scrollBar.setHeight((rows*cellHeight+1)+(rows*cellspacing)+"px");
-        
+        view.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing));
+        //view.cellView.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing+cellHeight+1)+"px");
+        //view.scrollBar.setHeight((rows*cellHeight+1)+(rows*cellspacing)+cellHeight+1+"px");
     }
     
     public void setCellHeight(int height){
         this.cellHeight = height;
     }
     
-    public void setScrollHeight(int height) {
-        try {
-            scrollBar.getWidget().setHeight(height+"px");
-            if(height > cellView.getOffsetHeight())
-                DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
-            else 
-                DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
-        }catch(Exception e){
-            Window.alert("set scroll height"+e.getMessage());
-        }
+    public void setWidth(String width){
+        view.setWidth(width);
     }
     
-    public void setWidth(String width){
-        cellView.setWidth(width); 
+    public void setCellWidths(int[] widths){
+        cellWidths = widths;
+        setColWidths(widths);
+        view.initTable(this);
+    }
+    
+    public void setHeaders(String[] headers){
+        view.setHeaders(headers);
     }
     
     public void clear(){
-        vp.clear();
+        view.table.clear();
         dm = new DataModel();
     }
     
     public Iterator getIterator(){
-        return vp.iterator();
+        return view.table.iterator();
     }
     
     public void removeItem(ScreenWidget wid){
-        dm.delete(vp.getWidgetIndex(wid));
-        vp.remove(wid);
+        for(int i = 0; i < view.table.getRowCount(); i++){
+            if(DOM.isOrHasChild(view.table.getRowFormatter().getElement(i),wid.getElement())){
+                dm.delete(start+i);
+                view.table.removeRow(i);
+                break;
+            }
+        }
+
         
     }
     
@@ -305,31 +278,12 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     public void enable(boolean enabled){
         if(!drag)
             return;
-        Iterator it = vp.iterator();
+        Iterator it = view.table.iterator();
         while(it.hasNext()){
             ScreenWidget wid = (ScreenWidget)it.next();
             wid.removeMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
             if(enabled){
                 wid.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
-            }
-        }
-    }
-    
-    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
-        int pos = scrollBar.getScrollPosition();
-        int delta = velocity.getDeltaY();
-        if(delta < 0 && delta > -cellHeight)
-            delta = -cellHeight;
-        if(delta > 0 && delta < cellHeight)
-            delta = cellHeight;
-        scrollBar.setScrollPosition(pos + delta);
-    }
-    
-    public void onScroll(Widget sender, int scrollLeft, int scrollTop) {
-        if(sender == scrollBar ) {
-            if(top != scrollTop){
-                scrollLoad(scrollTop);
-                top = scrollTop;
             }
         }
     }
@@ -341,7 +295,7 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         if (KeyboardListener.KEY_DOWN == code) {
             if(active < 0){
                 active = 0;
-                ((ScreenWidget)vp.getWidget(0)).getWidget().addStyleName("Highlighted");
+                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
                 selected.add(dm.get(start+active));
             }else{
                 if(active == maxRows -1){
@@ -349,12 +303,13 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                         selected.remove(dm.get(start+active));
                         selected.add(dm.get(start+active+1));
                     }
-                    scrollBar.setScrollPosition(scrollBar.getScrollPosition()+cellHeight);
+                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
+                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
                 }else{
-                    ((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
+                    view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
                     selected.remove(dm.get(start+active));
                     active++;
-                    ((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
+                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
                     selected.add(dm.get(start+active));
                 }
             }
@@ -368,12 +323,13 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
                     selected.remove(dm.get(start+active));
                     selected.add(dm.get(start+active-1));
                 }
-                scrollBar.setScrollPosition(scrollBar.getScrollPosition()-cellHeight);
+                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
+                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
             }else if (active > 0){
-                ((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
+                view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
                 selected.remove(dm.get(start+active));
                 active--;
-                ((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
+                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
                 selected.add(dm.get(start+active));
             }
             DOM.eventCancelBubble(event, true);
@@ -393,24 +349,23 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
      */
     public boolean onEventPreview(Event event) {
         // TODO Auto-generated method stub
-        if (vp.isAttached()) {
+        if (view.isAttached()) {
             if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                 return onKeyPress(event);
             }
             if (DOM.eventGetType(event) == Event.ONCLICK){
-                if(!DOM.isOrHasChild(vp.getElement(), DOM.eventGetTarget(event))){
+                if(!DOM.isOrHasChild(view.table.getElement(), DOM.eventGetTarget(event))){
                     DOM.removeEventPreview(this);
-                    
                     if(changeListeners != null){
-                    	setActive(-1);
-                    	changeListeners.fireChange(this);
+                        setActive(-1);
+                        changeListeners.fireChange(this);
                     }
                     
                     return true;
                 }
                 if(multi && ctrl && !DOM.eventGetCtrlKey(event)){
                     unselectAll();
-                    scrollLoad(scrollBar.getScrollPosition());
+                    scrollLoad(view.scrollBar.getScrollPosition());
                 }
                 if(multi)
                     ctrl = DOM.eventGetCtrlKey(event);
@@ -418,36 +373,11 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         }
         return true;
     }
-
-    public void onClick(Widget sender) {
-        int clicked = vp.getWidgetIndex(sender);
-        //if(clicked != active){
-            if(active > -1){
-                if(!ctrl){
-                	if(!multi){
-                		((ScreenWidget)vp.getWidget(active)).removeStyleName("Highlighted");
-                    	selected.remove(dm.get(start+active));
-                	}
-                }   
-            }
-            if(multi && ((ScreenWidget)vp.getWidget(clicked)).getStyleName().indexOf("Highlighted") != -1){
-            	((ScreenWidget)vp.getWidget(clicked)).removeStyleName("Highlighted");
-            	selected.remove(dm.get(start+clicked));
-            }else{
-                if(!multi)
-                    selected.clear();
-            	active = clicked;
-            	((ScreenWidget)vp.getWidget(active)).addStyleName("Highlighted");
-            	selected.add(dm.get(start+clicked));
-            }
-            changeListeners.fireChange(this);
-      //  }
-    }
     
     public void unselectAll() {
-    	selected = new ArrayList();
-        for(int i=0; i<vp.getWidgetCount(); i++){
-        	((ScreenWidget)vp.getWidget(0)).removeStyleName("Highlighted");
+        selected = new ArrayList();
+        for(int i=0; i < view.table.getRowCount(); i++){
+            view.table.getRowFormatter().removeStyleName(i,TableView.selectedStyle);
         }        
     }
 
@@ -465,37 +395,37 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
         }
     }
 
-	public int getActive() {
-		return active;
-	}
+    public int getActive() {
+        return active;
+    }
 
-	public int getStart() {
-		return start;
-	}
+    public int getStart() {
+        return start;
+    }
 
-	public int getCellHeight() {
-		return cellHeight;
-	}
+    public int getCellHeight() {
+        return cellHeight;
+    }
 
-	public void setActive(int active) {
-		this.active = active;
-	}
-	
-	public void setStart(int start) {
-		this.start = start;
-	}
+    public void setActive(int active) {
+        this.active = active;
+    }
+    
+    public void setStart(int start) {
+        this.start = start;
+    }
 
-	public int getMaxRows() {
-		return maxRows;
-	}
+    public int getMaxRows() {
+        return maxRows;
+    }
 
-	public ArrayList getSelected() {
-		return selected;
-	}
+    public ArrayList getSelected() {
+        return selected;
+    }
 
-	public void setMulti(boolean multi) {
-		this.multi = multi;
-	}
+    public void setMulti(boolean multi) {
+        this.multi = multi;
+    }
 
     public void onMouseDown(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
@@ -520,6 +450,29 @@ public class ScrollList extends Composite implements ScrollListener, MouseWheelL
     public void onMouseUp(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
         
+    }
+
+    public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
+        int clicked = row;
+            if(active > -1){
+                if(!ctrl){
+                    if(!multi){
+                        view.table.getRowFormatter().removeStyleName(active,TableView.selectedStyle);
+                        selected.remove(dm.get(start+active));
+                    }
+                }   
+            }
+            if(multi && selectedRow == clicked){
+                view.table.getRowFormatter().removeStyleName(clicked, TableView.selectedStyle);
+                selected.remove(dm.get(start+clicked));
+            }else{
+                if(!multi)
+                    selected.clear();
+                active = clicked;
+                view.table.getRowFormatter().addStyleName(active,TableView.selectedStyle);
+                selected.add(dm.get(start+clicked));
+            }
+            changeListeners.fireChange(this);
     }
     
     

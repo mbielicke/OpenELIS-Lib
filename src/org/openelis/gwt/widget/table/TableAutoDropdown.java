@@ -7,20 +7,16 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
-
-import java.util.ArrayList;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
 
@@ -73,21 +69,22 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     }
     
 	public TableAutoDropdown(Node node) {
-		AutoCompleteDropdown auto = new AutoCompleteDropdown();
-		String cat = node.getAttributes().getNamedItem("cat").getNodeValue();
-        String url = node.getAttributes()
-                         .getNamedItem("serviceUrl")
+		AutoCompleteDropdown auto;
+        
+        String cat = null;
+        if(node.getAttributes().getNamedItem("cat") != null)
+            cat = node.getAttributes().getNamedItem("cat").getNodeValue();
+        String url = null;
+        if(node.getAttributes().getNamedItem("serviceUrl") != null)
+            url = node.getAttributes()
+            .getNamedItem("serviceUrl")
                          .getNodeValue();
         
-        boolean dropDown = false;
         boolean multiSelect = false;
         String textBoxDefault = null;
         String width = null;
-        
-        
-        if (node.getAttributes().getNamedItem("dropdown") != null)
-        	dropDown = true;
-        
+        String popWidth = "auto";
+                
         if (node.getAttributes().getNamedItem("fromModel") != null)
         	fromModel = true;
         
@@ -104,13 +101,13 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
                                   .getNamedItem("width")
                                   .getNodeValue();
         
-        Node widthsNode = ((Element)node).getElementsByTagName("autoWidths").item(0);
-        Node headersNode = ((Element)node).getElementsByTagName("autoHeaders").item(0);
-        Node editorsNode = ((Element)node).getElementsByTagName("autoEditors").item(0);
-        Node fieldsNode = ((Element)node).getElementsByTagName("autoFields").item(0);
-        Node optionsNode = ((Element)node).getElementsByTagName("autoItems").item(0);
+        if(node.getAttributes().getNamedItem("popWidth") != null){
+            popWidth = node.getAttributes().getNamedItem("popWidth").getNodeValue();
+        }
+        Node widthsNode = ((Element)node).getElementsByTagName("widths").item(0);
+        Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
 
-        auto = new AutoCompleteDropdown(cat, url, fromModel, multiSelect, textBoxDefault, width);
+        auto = new AutoCompleteDropdown(cat, url, multiSelect, textBoxDefault, width,popWidth);
         auto.mainHP.removeStyleName("AutoDropdown");
         auto.mainHP.addStyleName("TableAutoDropdown");
         auto.focusPanel.removeStyleName("AutoDropdownButton");
@@ -122,21 +119,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         if(headersNode != null) {
         	auto.setHeaders(getHeaders(headersNode));
         }
-        if(editorsNode != null) {
-        	auto.setEditors(getEditors(editorsNode));
-        }
-        if(fieldsNode != null) {
-        	auto.setFields(getFields(fieldsNode));
-        }
-        if (node.getAttributes().getNamedItem("popupHeight") != null){
-            auto.setPopupHeight(node.getAttributes().getNamedItem("popupHeight").getNodeValue());
-        }
         
-        if (node.getAttributes().getNamedItem("type") != null){
-        	type = node.getAttributes().getNamedItem("type").getNodeValue();
-            auto.setType(type);
-        }
-            
         if (node.getAttributes().getNamedItem("case") != null){
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
             if(fieldCase.equals("upper"))
@@ -147,14 +130,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         }
         editor = auto;
         textValue.setValue("");
-        if(!fromModel && optionsNode != null)
-        	editor.setModel(getDropDownOptions(optionsNode));
-        	
 	}
 
 	public void saveValue() {
         field.setValue(editor.getSelected());
-		textValue.setValue(editor.textBox.getText());
 		editor.closePopup();
         super.saveValue();
 	}
@@ -165,8 +144,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			display = new Label();
 			display.setWordWrap(false);
 		}
-		if(editor.getSelected().size() > 0)
-		    display.setText((String)((DataSet)editor.getSelected().get(0)).getObject(0).getValue());
+		if(((DropDownField)field).getSelections().size() > 0)
+            display.setText((String)((DataSet)editor.getModel().get(((DataSet)((DropDownField)field).getSelections().get(0)).getKey())).getObject(0).getValue());
+        else
+            display.setText("");
 		setWidget(display);		
         super.setDisplay();
 	}
@@ -183,24 +164,9 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 
 	public void setField(AbstractField field) {
 		this.field = field;
-		
 		if(((DropDownField)field).getSelections().size() > 0)
             editor.setSelected(((DropDownField)field).getSelections());
-	}
-	
-	private String getTextValueFromId(AbstractField field){
-		DataModel model = editor.getModel();
-		String textValue = "";
-		if(field.getValue() != null){
-			for (int i = 0; i < model.size(); i++) {
-				DataSet set = model.get(i);
-					if(set.getObject(1).getValue().equals(field.getValue())){
-						textValue = (String)((StringObject)set.getObject(0)).getValue();
-					}	
-			}
-		}
-		return textValue;
-	}
+    }
 	
 	public int[] getWidths(Node node){
    	 String[] widths = node.getFirstChild()
@@ -212,37 +178,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
    	}
    	return width;
    }
-   
-   public AbstractField[] getFields(Node node) {
-       NodeList fieldList = node.getChildNodes();
-       ArrayList list = new ArrayList();
-       for (int i = 0; i < fieldList.getLength(); i++) {
-           if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-               list.add(ScreenBase.getWidgetMap().getField(fieldList.item(i)));
-           }
-       }
-       AbstractField[] fields = new AbstractField[list.size()];
-       for (int i = 0; i < list.size(); i++) {
-           fields[i] = (AbstractField)list.get(i);
-       }
-       return fields;
-   }
-   
-   public TableCellWidget[] getEditors(Node node) {
-       NodeList editors = node.getChildNodes();
-       ArrayList list = new ArrayList();
-       for (int i = 0; i < editors.getLength(); i++) {
-           if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-               list.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
-           }
-       }
-       TableCellWidget[] cells = new TableCellWidget[list.size()];
-       for (int i = 0; i < list.size(); i++) {
-           cells[i] = (TableCellWidget)list.get(i);
-       }
-       return cells;
-   }
-   
+      
    public String[] getHeaders(Node node){
    	return node.getFirstChild()
                .getNodeValue()
@@ -258,37 +194,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	    return true;
 	}
 	
-	private DataModel getDropDownOptions(Node itemsNode){
-		DataModel dataModel = new DataModel();
-		
-		
-    	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
-    	for (int i = 0; i < items.getLength(); i++) {
-    	DataSet set = new DataSet();
-        Node item = items.item(i);
-
-		//display text
-        StringObject display = new StringObject();
-		display.setValue((item.getFirstChild() == null ? "" : item.getFirstChild().getNodeValue()));
-		set.addObject(display);
-
-        //id
-        if(type.equals("integer")){
-        	NumberObject id = new NumberObject();
-        	id.setType("integer");
-        	id.setValue(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
-        	set.setKey(id);
-        }else if(type.equals("string")){
-        	StringObject id = new StringObject();
-        	id.setValue(item.getAttributes().getNamedItem("value").getNodeValue());
-        	set.setKey(id);
-        }
-        
-		dataModel.add(set);
-    	}
-        return dataModel;
-	}
-
 	public void enable(boolean enabled) {}
 	
 	public void setModel(DataModel model){
@@ -296,12 +201,12 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
     
     public void setCellWidth(int width){
-    /*    this.width = width;
+        this.width = width;
         if(editor != null){
             editor.setWidth(width+"px");
         }
         if(display != null)
-            display.setWidth(width+"px");*/
+            display.setWidth(width+"px");
     }
 }
 

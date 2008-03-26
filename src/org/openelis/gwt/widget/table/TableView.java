@@ -1,8 +1,6 @@
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -81,7 +79,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public FlexTable rows = new FlexTable();
     private int left = 0;
     private int top = 0;
-    private String[] headers;
+    public String[] headers;
     public Label[] hLabels;
     private String title = "";
     public static String widgetStyle = "TableWidget";
@@ -111,8 +109,6 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }
         if(headers != null){
             header.setCellSpacing(0);
-            
-
             int j = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
@@ -146,7 +142,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
                 img.setWidth("10px");
                 DOM.setStyleAttribute(hLabels[i].getElement(),"overflowX","hidden");
                 img.addStyleName("HeaderIMG");
-                if (!controller.sortable[i] && !controller.filterable[i])
+                if ((controller.sortable == null || !controller.sortable[i]) && 
+                    (controller.filterable == null || !controller.filterable[i]))
                     img.addStyleName("hide");
                 hp.add(hLabels[i]);
                 hLabels[i].setWordWrap(false);
@@ -179,8 +176,10 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             //hp.add(titlePanel);
             //hp.add(new HTML("<td width="))
         	vp.add(titlePanel);
+        }else{    
             
-        }if(controller.showRows) {
+        }
+        if(controller.showRows) {
         	if(headers != null)
         		ft.setWidget(0,1,headerView);
             ft.setWidget(1,0,rows);
@@ -191,13 +190,19 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             ft.getFlexCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_LEFT);
             ft.getFlexCellFormatter().setVerticalAlignment(0,2,HasAlignment.ALIGN_TOP);
         }else{
-        	if(headers != null)
+        	if(headers != null){
         		ft.setWidget(0,0,headerView);
-            ft.setWidget(1,0,cellView);
-            ft.setWidget(0,1,scrollBar);
-            ft.getFlexCellFormatter().setRowSpan(0, 1, 2);
-            ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
-            ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_TOP);
+                 ft.setWidget(0,1,scrollBar);
+                ft.setWidget(1,0,cellView);
+                ft.getFlexCellFormatter().setRowSpan(0, 1, 2);
+                ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
+                //ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_TOP);
+            }else{
+                ft.setWidget(0,0,cellView);
+                ft.setWidget(0, 1, scrollBar);
+                ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
+                ft.getFlexCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
+            }
         }
         vp.add(ft);
         ft.setCellPadding(0);
@@ -214,14 +219,16 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
         cellView.addMouseWheelListener(this);
-         
     }
     
     
     public void setHeight(int height) {
-        cellView.setHeight(height+"px");
+        if(!width.equals("auto"))
+            cellView.setHeight(height+18+"px");
+        else
+            cellView.setHeight(height+"px");
         rowsView.setHeight(height+"px");
-        scrollBar.setHeight(height+17+"px");
+        scrollBar.setHeight(height+"px");
         headerView.setHeight("18px");
         this.height = height+"px";
     }
@@ -255,6 +262,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             ft.setWidget(1,0,rows);
             rows.setCellSpacing(1);
         }
+        cellView.setWidget(table);
     }
     
     public void setTable(){
