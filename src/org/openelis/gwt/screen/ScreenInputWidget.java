@@ -145,7 +145,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
             }
-            ScreenWindow win = new ScreenWindow(pop,"Error","","");
+            ScreenWindow win = new ScreenWindow(pop,"","","",false);
             win.setContent(errorPanel);
             win.setVisible(true);
             pop.setWidget(win);

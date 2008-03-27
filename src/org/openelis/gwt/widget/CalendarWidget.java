@@ -1,6 +1,7 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -40,6 +41,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
     protected AppButton cancel;
     protected AppButton prevDecade;
     protected AppButton nextDecade;
+    protected AppButton today;
     protected ScreenLabel[] months = new ScreenLabel[12];
     protected ScreenLabel[] years = new ScreenLabel[10];
     

@@ -27,22 +27,16 @@
     <panel layout="vertical" width="100%">
       <panel layout="horizontal" style="MonthBar">
         <appButton action="prevMonth" key="prevMonth" onclick="this">
-          <widget>
-            <text style="WhiteText">&lt;</text>
-          </widget>
+          <panel layout="absolute" style="PreviousMonth"/>
         </appButton>
         <widget>
-          <text style="WhiteText"><xsl:value-of select="$monthDisplay"/></text>
+          <text style="MonthDisplay"><xsl:value-of select="$monthDisplay"/></text>
         </widget>
         <appButton action="monthSelect" key="monthSelect" onclick="this">
-          <widget>
-            <text style="WhiteText">+</text>
-          </widget>
+		  <panel layout="absolute" style="MonthSelect"/>
         </appButton>
         <appButton action="nextMonth" key="nextMonth" onclick="this">
-          <widget>
-            <text style="WhiteText">&gt;</text>
-          </widget>
+		  <panel layout="absolute" style="NextMonth"/>
         </appButton>
       </panel>
       <panel layout="vertical" width="100%">
@@ -223,6 +217,13 @@
 		    </xsl:call-template>
          </row>
       </panel>
+   </panel>
+   <panel layout="absolute" style="TodayBar" width="100%" halign="center">
+     <appButton action="today" key="today">
+       <widget>
+         <text value="{calUtils:getCurrentDateString()}" onPanelClick="this">Today</text>
+       </widget>
+     </appButton>
    </panel>
    </panel>
    </display>

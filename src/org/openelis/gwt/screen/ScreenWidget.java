@@ -2,6 +2,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.DropListener;
@@ -21,6 +22,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.AppButton;
 
 import java.util.Vector;
 /**
@@ -208,10 +210,16 @@ public class ScreenWidget extends SimplePanel implements
                                            .getNamedItem("tab")
                                            .getNodeValue()
                                            .split(","));
-        if (node.getAttributes().getNamedItem("value") != null)
+        if (node.getAttributes().getNamedItem("value") != null){
             setUserObject(node.getAttributes()
                               .getNamedItem("value")
                               .getNodeValue());
+            if(getWidget() instanceof AppButton){
+                Window.alert(node.getAttributes()
+                             .getNamedItem("value")
+                             .getNodeValue());
+            }
+        }
         if (node.getAttributes().getNamedItem("drop") != null) {
             String listener = node.getAttributes()
                                   .getNamedItem("drop")

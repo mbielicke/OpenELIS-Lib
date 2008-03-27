@@ -487,6 +487,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 	public void setMultiSelect(boolean multiSelect) {
 		this.multiSelect = multiSelect;
+        scrollList.setMulti(multiSelect);
 	}
 
     public void setSelected(ArrayList selections){

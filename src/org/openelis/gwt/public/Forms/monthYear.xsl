@@ -151,7 +151,7 @@
 	      </row>		                         
 	    </panel>
 	    </panel>
-	    <panel layout="absolute" style="MonthBar" halign="center">
+	    <panel layout="absolute" style="SelectBar" halign="center">
 	    <panel layout="horizontal" >
 	      <widget>
 	        <appButton action="ok" key="ok" onclick="this">

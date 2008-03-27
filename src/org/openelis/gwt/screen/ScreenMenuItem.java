@@ -76,6 +76,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     public void onMouseLeave(Widget sender) {
         menuBar.itemLeave(this);
         cursorOn = false;
+        
     }
 
     public void onMouseMove(Widget sender, int x, int y) {
@@ -95,6 +96,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
                 popClosed = false;
             else
                 createPopup();
+            mouseListeners.fireMouseEnter(sender);
             return;
         }
         if(menuBar.getParent() instanceof PopupPanel)
@@ -112,7 +114,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
         }
         menuBar.activeItem = null;
         menuBar.active = false;
-        
+        removeStyleName("Selected");
     }
     
     public void createPopup(){
@@ -142,6 +144,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
                 ((ScreenMenuPanel)pop.getWidget()).setSize(pop.getPopupTop());
             }
         });
+        addStyleName("Selected");
     }
     
     public void closePopup() {

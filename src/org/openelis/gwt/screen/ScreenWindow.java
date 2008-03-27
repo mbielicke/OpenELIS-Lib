@@ -137,7 +137,11 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private Vector dropMap;
     private Label message = new Label("Loading...");
     
-    public ScreenWindow(Object container, String name, String cat, String loadingText) {      
+    public ScreenWindow(Object container, String name, String cat, String loadingText){
+        this(container,name,cat,loadingText,true);
+    }
+    
+    public ScreenWindow(Object container, String name, String cat, String loadingText, boolean showClose) {      
         initWidget(outer);
         setVisible(false);
         if(container instanceof PopupPanel)
@@ -182,14 +186,16 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         titleButtonsContainer.add(cap);
         hp.add(titleButtonsContainer);        
         hp.setCellWidth(titleButtonsContainer, "100%");
-        HorizontalPanel hp2 = new HorizontalPanel();
-        hp2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        hp2.add(collapse);
-        hp2.add(close);
-        titleButtonsContainer.add(hp2);
+        if(showClose){
+            HorizontalPanel hp2 = new HorizontalPanel();
+            hp2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            hp2.add(collapse);
+            hp2.add(close);
+            titleButtonsContainer.add(hp2);
+            hp.setCellWidth(hp2,"32px");
+            hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
+        }
         hp.add(trCorner);
-        hp.setCellWidth(hp2,"32px");
-        hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
         status.setStyleName("StatusBar");
         status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         

@@ -104,6 +104,12 @@ public class CalendarUtils {
         
     }
     
+    public static String getCurrentDateString(){
+        String today = getDateString(Calendar.getInstance());
+        System.out.println(today);
+        return today;
+    }
+    
     
 
 }
