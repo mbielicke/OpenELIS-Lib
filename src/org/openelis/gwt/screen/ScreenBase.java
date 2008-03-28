@@ -148,7 +148,6 @@ public class ScreenBase extends Composite implements
             Iterator inputKeys = widgets.keySet().iterator();
             while (inputKeys.hasNext()) {
                 String key = (String)inputKeys.next();
-                System.out.println(key);
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
                /* if(inputField instanceof ScreenAuto){
                  if(!((ScreenInputWidget)inputField).queryMode){
