@@ -40,6 +40,10 @@ public class NumberObject implements DataObject, Serializable {
         this.type = type;
     }
     
+    public String getType(){
+    	return type;
+    }
+    
     public Object getInstance() {
         NumberObject clone = new NumberObject();
         clone.type = type;

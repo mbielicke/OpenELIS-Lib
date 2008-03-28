@@ -148,8 +148,9 @@ public class ScreenBase extends Composite implements
             Iterator inputKeys = widgets.keySet().iterator();
             while (inputKeys.hasNext()) {
                 String key = (String)inputKeys.next();
+                System.out.println(key);
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-                if(inputField instanceof ScreenAuto){
+               /* if(inputField instanceof ScreenAuto){
                  if(!((ScreenInputWidget)inputField).queryMode){
                 	 if (rpc.getFieldMap().containsKey(key)){
                 		AbstractField rpcField = rpc.getField(key);
@@ -158,11 +159,12 @@ public class ScreenBase extends Composite implements
                 	 }
                 	 key += "Id";
                  }
-                }
+                }*/
                 if (!rpc.getFieldMap().containsKey(key))
                     continue;
                 AbstractField rpcField = rpc.getField(key);
                 inputField.load(rpcField);   
+                
             }
         } catch (Exception e) {
             Window.alert("Load " + e.getMessage());
@@ -213,17 +215,17 @@ public class ScreenBase extends Composite implements
                 key = (String)inputKeys.next();
                 ScreenWidget inputField = (ScreenWidget)widgets.get(key);
                 
-                if(inputField instanceof ScreenAuto && !((ScreenInputWidget)inputField).queryMode){
+               /* if(inputField instanceof ScreenAuto && !((ScreenInputWidget)inputField).queryMode){
                     AbstractField rpcField = (AbstractField)rpc.getField(key+"Id");
                     inputField.submit(rpcField);
-                }else{
+                }else{*/
                     if (!rpc.getFieldMap().containsKey(key)) {
                         continue;
                     }
                     AbstractField rpcField = (AbstractField)rpc.getField(key);
                     inputField.submit(rpcField);
                 }
-            }
+            //}
         } catch (Exception e) {
             Window.alert(key + e.getMessage());
         }
