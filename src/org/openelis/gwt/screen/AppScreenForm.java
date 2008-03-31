@@ -374,6 +374,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     }
     
     public void getPage(final boolean selectItem, final String messageText) {
+    	if(modelWidget.getPage() < 0){
+    		message.setText("You have reached the first page of your query results");
+    		modelWidget.getModel().setPage(0);
+    		modelWidget.getModel().select(modelWidget.getSelectedIndex()+1);
+    	}else{
         formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
             public void onSuccess(Object result){
                 modelWidget.setModel((DataModel)result);
@@ -411,6 +416,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                 	Window.alert(caught.getMessage());
             }
          });
+    	}
     }
     
     public void afterCommitQuery(boolean success) {
