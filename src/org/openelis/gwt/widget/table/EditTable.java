@@ -1045,6 +1045,7 @@ public class EditTable extends TableController implements
             if (DOM.eventGetType(event) == Event.ONCLICK){
                 if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
                    DOM.removeEventPreview(this);
+                   unselect(-1);
                 }
             }
         }
