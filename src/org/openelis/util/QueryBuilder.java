@@ -555,7 +555,7 @@ public class QueryBuilder {
         		if(j>0)
         			query.append(" and (").append(whereOperands.get(j)).append(") ");
         		else
-        			query.append(whereOperands.get(j)).append(' ');
+        			query.append("(").append(whereOperands.get(j)).append(") ");
         }
         
         //order by
