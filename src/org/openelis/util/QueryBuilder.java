@@ -535,14 +535,13 @@ public class QueryBuilder {
     		Meta addTableMeta = fromTables.get(tableName); 
     		
     		if(addTableMeta.includeInFrom()){
-	    		if(fromTablesCount>0)
-	    			query.append(", ");
 	    		
-	    		//if the table is flagged as a collection we need to use the IN keyword and jboss will handle ther join for us
-	    		if(addTableMeta.isCollection())
-	    			query.append("IN( ").append(addTableMeta.getEntity()).append(" ) ").append(addTableMeta.getTable());
+    			//we use left join on all the tables so we dont care about null values.
+    			//This will also let us use a collection in the query without the IN keyword
+    			if(fromTablesCount>0)
+	    			query.append(" LEFT JOIN ").append(addTableMeta.getEntity()).append(' ').append(addTableMeta.getTable());
 	    		else
-	    			query.append(addTableMeta.getEntity()).append(' ').append(addTableMeta.getTable());
+	    			query.append(' ').append(addTableMeta.getEntity()).append(' ').append(addTableMeta.getTable());
 	    		
 	    		fromTablesCount++;
     		}
