@@ -4,7 +4,7 @@
     font-weight: normal;
     padding:0px;
     background-color:white;
-    layer-background-color:white;
+    border:1px solid #718bb7;
 }
 
 .CalendarWidget .navbar {
@@ -13,9 +13,7 @@
 }
 
 .CalendarWidget .navbar .gwt-Button {
-    padding-left: 1px;
-    padding-right: 1px;
-    margin-bottom:3px;
+
 
 }
 
@@ -60,7 +58,7 @@
 }
 
 .CalendarWidget .calinactive{
-	border:1px solid lightgrey;
+	border:1px solid grey;
 }
 
 .CalendarWidget .today .gwt-HTML {
@@ -86,10 +84,81 @@
 }
 
 .MonthBar {
-   width:100%;
-   background:blue;
+    width:100%;
+    height:25px;
+    background:url('/openelis/Images/monthbar.gif') repeat-x;
+}
+.Current{
+
+}
+/*******Calendar Button Class***********/
+.MonthBar .Button{
+    width:20px;
+ }
+
+.MonthBar .ButtonRightSide{
+    padding:0;
+    margin:0;
+    background:none;
+}
+.MonthBar .disabled .ButtonRightSide{
 }
 
+.MonthBar .ButtonLeftSide{
+    padding:0;
+    margin:0;
+    background:none; 
+}
+.MonthBar .disabled .ButtonLeftSide{
+}
+
+.MonthBar .ButtonContent{
+    padding:4px 4px 0 4px;
+    margin:0;
+    background:none;
+}
+.MonthBar .Hover .ButtonContent, .Pressed .ButtonContent {
+/*    background:url("/openelis/Images/previousmonth.gif") no-repeat;
+*/    cursor:pointer;
+    background:none;
+}
+.MonthBar .disabled .ButtonContent{
+    background:url("/openelis/Images/screenbuttonbgdisabled.gif") repeat-x;
+}
+
+.MonthBar .disabled .ScreenLabel{
+color:gray;
+}
+
+.PreviousMonth, .MonthSelect, .NextMonth{
+    width:16px;
+    height:16px;
+}
+.PreviousMonth{
+    background:url("/openelis/Images/previousmonth.gif") no-repeat;
+}
+.MonthSelect{
+    background:url("/openelis/Images/monthselect.gif") no-repeat;
+}
+.NextMonth{
+    background:url("/openelis/Images/nextmonth.gif") no-repeat;
+}
+.Hover .PreviousMonth{
+    background:url("/openelis/Images/previousmonthhover.gif") no-repeat;
+}
+.Hover .MonthSelect{
+    background:url("/openelis/Images/monthselecthover.gif") no-repeat;
+}
+.Hover .NextMonth{
+    background:url("/openelis/Images/nextmonthhover.gif") no-repeat;
+}
+ 
+/*******End Calendar Button Class***********/
+.TodayBar{
+    height:27px;
+    padding-top:3px;
+    background:url("/openelis/Images/todaybar.gif") repeat-x;
+}
 .DateText {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
@@ -104,46 +173,54 @@
     height:16px;
 }
 
-.WhiteText {
+.MonthDisplay {
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
     text-align:center;
-    height:16px;
+    padding:5px 0 0 0;
     color:white;
+    width:80px;
 }
-
+.SelectBar{
+    height:27px;
+    padding-top:3px;
+    background:url("/openelis/Images/todaybar.gif") repeat-x;
+}
 .DayText {
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
     font-size:10px;
-    font-weight:bold;
     text-align:center;
+    color:#233D6D;
 }
 
 .DayBar {
-    background:lightblue;
+   height:18px;
+   background:url('/openelis/Images/daybar.gif') repeat-x;
 }
 
 .Calendar {
    background:white;
-   border:1px solid lightblue;
 }
-
+.DateCell, .MYCell{
+}
 .DateCell .Hover {
-  background:lightblue;
+    background:#ddecfe;
+    cursor:pointer;
 }
 
 .MYCell .Hover {
-  background:lightblue;
+    background:#ddecfe;
+    cursor:pointer;
 }
 
 .DateCell .Current {
-  background:blue;
-
+   border:1px solid #8b0000;
+   background:#c7d8ed url('/openelis/Images/datecell.gif') repeat-x;
 }
 
 .MYCell .Current {
-  background:blue;
-
+   background:#c7d8ed url('/openelis/Images/datecell.gif') repeat-x;
+   border:1px solid #8db2e3;
 }
 
 .DateCell .Current .DateText {

@@ -24,7 +24,7 @@
 
   <screen id="Organization" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
-    <panel layout="vertical" width="100%">
+    <panel layout="vertical" width="100%" style="CalendarWidget">
       <panel layout="horizontal" style="MonthBar">
         <appButton action="prevMonth" key="prevMonth" onclick="this">
           <panel layout="absolute" style="PreviousMonth"/>

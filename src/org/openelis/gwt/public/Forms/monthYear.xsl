@@ -22,7 +22,7 @@
 
   <screen id="Organization" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
-	  <panel layout="vertical" width="100%">
+	  <panel layout="vertical" width="100%" style="CalendarWidget">
 	    <panel layout="horizontal" style="Calendar" width="100%">
 	      <panel layout="table" spacing="0" padding="0" width="100%">
 	        <row>
@@ -156,14 +156,14 @@
 	      <widget>
 	        <appButton action="ok" key="ok" onclick="this">
 	          <widget>
-	            <text style="WhiteText">OK</text>
+	            <text>OK</text>
 	          </widget>
 	        </appButton>
 	      </widget>
 	      <widget>
             <appButton action="cancel" key="cancel" onclick="this" align="left">
 	          <widget >
-	            <text style="WhiteText">CANCEL</text>
+	            <text>CANCEL</text>
 	          </widget>
             </appButton>
           </widget>
