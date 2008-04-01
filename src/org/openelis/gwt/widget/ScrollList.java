@@ -92,7 +92,13 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         selected = new ArrayList();
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
-                selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
+                if(dm.indexOf(((DataSet)selections.get(i)).getKey()) > -1)
+                    selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
+                else{
+                    dm.add((DataSet)selections.get(i));
+                    selected.add((DataSet)selections.get(i));
+                }
+                    
             }else{
                 selected.add(dm.get((DataObject)selections.get(i)));
             }
