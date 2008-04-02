@@ -95,6 +95,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public String width;
     public String height;
     public TableController controller = null;
+    public HTML prevNav;
+    public HTML nextNav;
     
     public TableView() {
         initWidget(vp);
@@ -298,7 +300,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         DOM.setAttribute(navPanel.getElement(), "align", "center");
 
         //HTML prevNav = new HTML("<a class='navIndex' value='-1'>&lt;</a>");
-        HTML prevNav = new HTML("");
+        prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
         prevNav.addClickListener(controller);
         
@@ -308,7 +310,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         noprevNav.addStyleName("prevNavIndexDisabled");
         
         //HTML nextNav = new HTML("<a class='navIndex' value='+1'>&gt;</a>");
-        HTML nextNav = new HTML("");
+        nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
         nextNav.addClickListener(controller);               
         
@@ -316,12 +318,12 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         HTML nonextNav = new HTML("");
         nonextNav.addStyleName("nextNavIndexDisabled");                       
                         
-        if (curIndex > 0) {            
+        //if (curIndex > 0) {            
             navPanel.add(prevNav);                                   
-        }
-        else{          
-            navPanel.add(noprevNav);
-        }
+        //}
+        //else{          
+        //    navPanel.add(noprevNav);
+       // }
         if(showIndex){
             for (int i = 1; i <= pages; i++) {
                 final int index = i - 1;
@@ -340,14 +342,14 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             }
         }
        // if (curIndex < pages - 1) {            
-        if(controller.model.rowsPerPage <= controller.model.numRows()){   
+        //if(controller.model.rowsPerPage <= controller.model.numRows()){   
             navPanel.add(nextNav);    
             
-        }
-        else{
+        //}
+        //else{
             
             navPanel.add(nonextNav);
-        }
+        //}
         
         vp.add(navPanel);
     }

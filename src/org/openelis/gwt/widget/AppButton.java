@@ -18,6 +18,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
                             PRESSED = 1,
                             DISABLED = 2,
                             LOCK_PRESSED = 3;
+                            
     
     public int state;
     public String action;
@@ -25,6 +26,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     public int maskedEnabledState = 0;
     public int maskedLockedState = 0;
     private boolean enabled = true;
+    private boolean locked = false;
     
     private FocusPanel panel = new FocusPanel();
     private FocusPanel classPanel = new FocusPanel();
@@ -83,6 +85,16 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
             removeClickListener(listener);
         }
     }
+    
+    public void lock(){
+        removeClickListener(listener);
+        locked = true;
+    }
+    
+    public void unlock(){
+        addClickListener(listener);
+        locked = false;
+    }
 
     public void removeClickListener(ClickListener listener) {
         if(listeners != null)
@@ -95,7 +107,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     }
 
     public void onMouseEnter(Widget sender) {
-        if(state != DISABLED && state != LOCK_PRESSED)
+        if(state != DISABLED && state != LOCK_PRESSED && !locked)
             panel.addStyleName("Hover");
         
     }
@@ -111,7 +123,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     }
 
     public void onMouseUp(Widget sender, int x, int y) {
-        if(toggle && state != DISABLED && state != LOCK_PRESSED){
+        if(toggle && state != DISABLED && state != LOCK_PRESSED &&  !locked){
             if(state == UNPRESSED)
                 changeState(PRESSED);
             else

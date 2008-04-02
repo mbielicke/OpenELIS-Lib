@@ -404,7 +404,7 @@ public abstract class TableController extends Composite implements
      */
     public void onMouseDown(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
-        if(sender instanceof FocusPanel){
+        if(DOM.isOrHasChild(view.header.getElement(), sender.getElement())){
             resizing = true;
             startx = x;
             for (int i = 0; i < view.header.getCellCount(0); i++) {
@@ -444,14 +444,16 @@ public abstract class TableController extends Composite implements
      * Catches mouses Events for resizing columns.
      */
     public void onMouseMove(Widget sender, int x, int y) {
-        if(resizing) {
-            int colA = curColWidth[tableCol] + (x - startx);
-            int colB = curColWidth[(tableCol)+1] - (x - startx);
-            if(colA <= 16 || colB <= 16) 
-                return;
-            curColWidth[tableCol] = colA;
-            curColWidth[(tableCol)+1] = colB;
-            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x-startx))+"px");
+        if(DOM.isOrHasChild(view.header.getElement(), sender.getElement())){
+            if(resizing) {
+                int colA = curColWidth[tableCol] + (x - startx);
+                int colB = curColWidth[(tableCol)+1] - (x - startx);
+                if(colA <= 16 || colB <= 16) 
+                    return;
+                curColWidth[tableCol] = colA;
+                curColWidth[(tableCol)+1] = colB;
+                DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x-startx))+"px");
+            }
         }
     }
 
@@ -459,31 +461,33 @@ public abstract class TableController extends Composite implements
      * Catches mouses Events for resizing columns.
      */
     public void onMouseUp(Widget sender, int x, int y) {
-        if (resizing) {
-            DOM.releaseCapture(sender.getElement());
-            RootPanel.get().remove(sender);
-            resizing = false;
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    for(int i = 0; i < curColWidth.length; i++){
-                        if( i > 0 && i < curColWidth.length - 1){
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-4)+"px");
-                        }else{
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-1)+"px");
-                        }   
-                    }
-                    for (int j = 0; j < view.table.getRowCount(); j++) {
-                        for (int i = 0; i < curColWidth.length; i++) {
-                            view.table.getFlexCellFormatter().setWidth(j, i, curColWidth[i] +  "px");
-                            ((TableCellWidget)view.table.getWidget(j,i)).setCellWidth(curColWidth[i]);
-                            ((SimplePanel)view.table.getWidget(j, i)).setWidth((curColWidth[i]) + "px");
-                            //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
+        if(DOM.isOrHasChild(view.header.getElement(), sender.getElement())){
+            if (resizing) {
+                DOM.releaseCapture(sender.getElement());
+                RootPanel.get().remove(sender);
+                resizing = false;
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        for(int i = 0; i < curColWidth.length; i++){
+                            if( i > 0 && i < curColWidth.length - 1){
+                                view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
+                                view.header.getWidget(0,i*2).setWidth((curColWidth[i]-4)+"px");
+                            }else{
+                                view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
+                                view.header.getWidget(0,i*2).setWidth((curColWidth[i]-1)+"px");
+                            }   
+                        }
+                        for (int j = 0; j < view.table.getRowCount(); j++) {
+                            for (int i = 0; i < curColWidth.length; i++) {
+                                view.table.getFlexCellFormatter().setWidth(j, i, curColWidth[i] +  "px");
+                                ((TableCellWidget)view.table.getWidget(j,i)).setCellWidth(curColWidth[i]);
+                                ((SimplePanel)view.table.getWidget(j, i)).setWidth((curColWidth[i]) + "px");
+                                //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
     

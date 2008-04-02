@@ -122,7 +122,7 @@ public class ScreenBase extends Composite implements
      * 
      */
     protected void draw() {
-        try {
+        //try {
             Node display = xml.getElementsByTagName("display").item(0);
             NodeList widgets = display.getChildNodes();
             for (int i = 0; i < widgets.getLength(); i++) {
@@ -132,9 +132,9 @@ public class ScreenBase extends Composite implements
                 }
             }
             panel.setStyleName("Screen"); 
-        } catch (Exception e) {
-            Window.alert("draw " + e.getMessage());
-        }
+        //} catch (Exception e) {
+        //    Window.alert("draw " + e.getMessage());
+        //}
     }
     
 

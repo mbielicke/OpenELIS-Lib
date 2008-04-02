@@ -52,7 +52,7 @@ public class ScreenForm extends Screen implements FormInt {
      */
     public void afterSubmit(String method, boolean success) {
         if (method.equals("draw")) {
-            bpanel.setForm(this);
+            //bpanel.setForm(this);
             bpanel.setState(FormInt.DISPLAY);
             enable(false);
             bpanel.setButtonState("update",AppButton.DISABLED);
@@ -324,9 +324,9 @@ public class ScreenForm extends Screen implements FormInt {
         // TODO Auto-generated method stub
         if(bpanel == null)
             return false;
-        if(bpanel.state == FormInt.ADD ||
-           bpanel.state == FormInt.QUERY ||
-           bpanel.state == FormInt.UPDATE){
+        if(bpanel.getState() == FormInt.ADD ||
+           bpanel.getState() == FormInt.QUERY ||
+           bpanel.getState() == FormInt.UPDATE){
         	if(constants != null)
         		message.setText(constants.getString("mustCommitOrAbort"));
         	else 
@@ -351,6 +351,56 @@ public class ScreenForm extends Screen implements FormInt {
     }
 
     public void option(String action, int state) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void abort() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void add() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void commit() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void delete() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void next() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void prev() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void query() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void reload() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void select() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void up() {
         // TODO Auto-generated method stub
         
     }

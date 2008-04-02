@@ -4,9 +4,12 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
+
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.common.LastPageException;
@@ -15,7 +18,6 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
-import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
 
@@ -27,7 +29,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class AppScreenForm extends AppScreen implements FormInt, ChangeListener {
+public class AppScreenForm extends AppScreen implements FormInt, ChangeListener, SourcesChangeEvents {
     
     /**
      * Reference to the ButtonPanel that is defined on this
@@ -46,10 +48,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public DataModelWidget modelWidget = new DataModelWidget();
     protected DataSet key;
     public ScreenWindow window;
-    //public ConstantsWithLookup constants = (ConstantsWithLookup)ScreenBase.getWidgetMap().get("AppConstants");
     public AppScreenFormServiceIntAsync formService;
-    //this is used to internationalize the status bar messages
-    //private ConstantsWithLookup constants = null;
+    public int state = FormInt.DEFAULT;
+    protected ChangeListenerCollection changeListeners;
 
     public AppScreenForm(AppScreenFormServiceIntAsync service) {
         super(service);
@@ -63,10 +64,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     
     public void afterDraw(boolean sucess) {
         super.afterDraw(sucess);
-        bpanel.setForm(this);
-        bpanel.setState(FormInt.DEFAULT);
+        bpanel.addChangeListener(this);
+        addChangeListener(bpanel);
+        changeState(FormInt.DEFAULT);
         enable(false);
-       // bpanel.setButtonState("update",AppButton.DISABLED);
         if(window != null){
             window.setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
@@ -89,37 +90,23 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     }
     
     public void afterFetch(boolean success){
-       //enable(false);
-       bpanel.setState(FormInt.DISPLAY);
-       //bpanel.setButtonState("update",AppButton.UNPRESSED);
-       //bpanel.setButtonState("delete", AppButton.UNPRESSED);
+       changeState(FormInt.DISPLAY);
        if(!success)
             key = null;
-       
-       //if it is the first page with the first selected. dont enable the previous button
-       /*if(modelWidget.getModel().getPage() == 0 && modelWidget.getModel().getSelectedIndex() == 0) {
-    	   bpanel.setButtonState("next", AppButton.UNPRESSED);
-    	   bpanel.setButtonState("prev",AppButton.DISABLED);
-       }else{
-    	   bpanel.setButtonState("next", AppButton.UNPRESSED);
-           bpanel.setButtonState("prev",AppButton.UNPRESSED);
-       }*/       
     }
     
     /**
      * This method provides the default behavior for when the Query button from 
      * a the ButtonPanel is clicked.  It is called from the ButtonPanel Widget.
      */
-    public void query(int state) {
-        bpanel.setState(FormInt.QUERY);
-       // if(constants != null)
-        //    message.setText(constants.getString("enterFieldsToQuery"));
-        //else
-            message.setText("Enter fields to query by then press Commit");
+    public void query() {
+        state = FormInt.QUERY;
+        message.setText("Enter fields to query by then press Commit");
         setForm(true);
         rpc = (FormRPC)forms.get("query");
         doReset();
         enable(true);
+        changeState(FormInt.QUERY);
         
     }
 
@@ -128,7 +115,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * Next button on a ButtonPanel is clicked.  It is called from the ButtonPanel
      * Widget.
      */
-    public void next(int state) {
+    public void next() {
         // TODO Auto-generated method stub
         modelWidget.next();
         
@@ -139,7 +126,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * Previous button on a ButtonPanel is clicked.  It is called from the ButtonPanel
      * Widget.
      */
-    public void prev(int state) {
+    public void prev() {
         // TODO Auto-generated method stub
         modelWidget.previous();
     }
@@ -149,21 +136,18 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * ButtonPanel is clicked.  It is called from the ButtonPanel Widget.  If overridden 
      * in the extending class be sure to call super.add(state).
      */
-    public void add(int state) {
+    public void add() {
         doReset();
         enable(true);
-        bpanel.setState(FormInt.ADD);
-        //if(constants != null)
-        //    message.setText(constants.getString("enterInformationPressCommit"));
-        //else
-            message.setText("Enter information in the fields, then press Commit");
+        changeState(FormInt.ADD);
+        message.setText("Enter information in the fields, then press Commit");
     }
 
     /**
      * This method provides the default behavior for when the Update button of a
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public void up(int state) {
+    public void up() {
         formService.fetchForUpdate(key, (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
@@ -181,13 +165,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void afterUpdate(boolean success){
         if(success){
             enable(true);
-           // if(constants != null)
-           //     message.setText(constants.getString("updateFieldsPressCommit"));
-           // else
-                message.setText("Update fields then, press Commit");            
-            bpanel.setState(FormInt.UPDATE);
+            message.setText("Update fields then, press Commit");
+            changeState(FormInt.UPDATE);
         }else
-            bpanel.setState(FormInt.DISPLAY);
+            changeState(FormInt.DISPLAY);
     }
 
     /** 
@@ -195,18 +176,16 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * for when the Delete button on a ButtonPanel is clicked.  It is called from 
      * the ButtonPanel widget.
      */
-    public void delete(int state) {
+    public void delete() {
     	//strikethru all the input widgets
     	strikeThru(true);
     	
     	//set the state to delete
-    	bpanel.setState(FormInt.DELETE);
+        changeState(FormInt.DELETE);
+
     	
-    	//set the message to delete
-    	//if(constants != null)
-        //    message.setText(constants.getString("deleteMessage"));
-       // else
-        	message.setText("Pressing commit will delete the current record from the database");           
+        //set the message to delete
+        message.setText("Pressing commit will delete the current record from the database");           
     }
     
     public void commitDelete(){
@@ -229,13 +208,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     
     public void afterCommitDelete(boolean success){
     	if(success){
-    	//	if(constants != null)
-    	//		getPage(false,constants.getString("deleteComplete"));
-        //    else
-            	getPage(false,"Delete...Complete");        
-
+            getPage(false,"Delete...Complete");        
     		strikeThru(false);
-    		bpanel.setState(FormInt.DEFAULT);   
+            changeState(FormInt.DEFAULT);
         }
     }
 
@@ -243,56 +218,37 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * This method provides the default behavior for a form when the Commit button
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public void commit(int state) {
+    public void commit() {
         super.doSubmit();
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-          //      if(constants != null)
-          //          message.setText(constants.getString("updating"));
-          //      else
-                    message.setText("Updating...");
+                message.setText("Updating...");
                 clearErrors();
                 commitUpdate();
             } else {
                 drawErrors();
-          //      if(constants != null)
-          //          message.setText(constants.getString("correctErrors"));
-          //      else
-                    message.setText("Please correct the errors indicated, then press Commit");
+                message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.ADD) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-          //      if(constants != null)
-          //          message.setText(constants.getString("adding"));
-          //      else
-                    message.setText("Adding...");
+                message.setText("Adding...");
                 clearErrors();
                 commitAdd();
             } else {
                 drawErrors();
-         //       if(constants != null)
-         //           message.setText(constants.getString("correctErrors"));
-         //       else
-                    message.setText("Please correct the errors indicated, then press Commit");
+                message.setText("Please correct the errors indicated, then press Commit");
             }
         }
         if (state == FormInt.QUERY) {            
-         //   if(constants != null)
-         //       message.setText(constants.getString("querying"));
-         //   else
-                message.setText("Querying...");
+            message.setText("Querying...");
             commitQuery(rpc);
         }
         if(state == FormInt.DELETE){
-        //	 if(constants != null)
-        //         message.setText(constants.getString("deleting"));
-        //     else
-            	 message.setText("Deleting...");
-           
-        	 commitDelete();
+            message.setText("Deleting...");
+            commitDelete();
         }
         
     }
@@ -315,16 +271,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void afterCommitUpdate(boolean success) {
         if(success){
             enable(false);
-            bpanel.setState(FormInt.DISPLAY);
-       //     if(constants != null)
-       //         message.setText(constants.getString("updatingComplete"));
-       //     else
-                message.setText("Updating...Complete");
+            changeState(FormInt.DISPLAY);
+            message.setText("Updating...Complete");
         }else{
-      //      if(constants != null)
-      //          message.setText(constants.getString("updateFailed"));
-      //      else
-                message.setText("Update Failed. Make corrections and try again or Abort.");
+            message.setText("Update Failed. Make corrections and try again or Abort.");
         }
     }
     
@@ -346,16 +296,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     public void afterCommitAdd(boolean success) {
         if(success){
             enable(false);
-            bpanel.setState(FormInt.DISPLAY);
-      //      if(constants != null)
-      //          message.setText(constants.getString("addingComplete"));
-      //      else
-                message.setText("Adding...Complete");
+            changeState(FormInt.DISPLAY);
+            message.setText("Adding...Complete");
         }else{
-      //      if(constants != null)
-      //          message.setText(constants.getString("addingFailed"));
-      //      else
-                message.setText("Adding Failed. Make corrections and try again or Abort");
+            message.setText("Adding Failed. Make corrections and try again or Abort");
         }
     }
     
@@ -379,44 +323,36 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
     		modelWidget.getModel().setPage(0);
     		modelWidget.getModel().select(modelWidget.getSelectedIndex()+1);
     	}else{
-        formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
-            public void onSuccess(Object result){
-                modelWidget.setModel((DataModel)result);
-                if(selectItem){
-	                if(modelWidget.getModel().isSelectLast())
-	                	modelWidget.select(modelWidget.getModel().size()-1);
-	                else
-	                	modelWidget.select(0);
-                }        
-                
-                if(messageText == null){
-	    //            if(constants != null)
-	    //                message.setText(constants.getString("queryingComplete"));
-	    //            else
-	                    message.setText("Querying...Complete");
-                }else{
-                	message.setText(messageText);
-                }
-            }
-            
-            public void onFailure(Throwable caught){
-                
-                if(caught instanceof LastPageException){
-             	   modelWidget.getModel().setPage(modelWidget.getPage()-1);
-             	   if(modelWidget.getSelectedIndex() == modelWidget.getModel().size()){
-             		   modelWidget.getModel().select(modelWidget.getSelectedIndex()-1);
-             		   
-        //     		  if(constants != null)
-        //                  message.setText(constants.getString("endingQueryException"));
-        //              else
-                          message.setText("You are at the end of your query results");             		   
-             	   }else
-             		   message.setText(caught.getMessage());
-                }else
-                	Window.alert(caught.getMessage());
-            }
-         });
-    	}
+    	    formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
+    	        public void onSuccess(Object result){
+    	            modelWidget.setModel((DataModel)result);
+    	            if(selectItem){
+    	                if(modelWidget.getModel().isSelectLast())
+    	                    modelWidget.select(modelWidget.getModel().size()-1);
+    	                else
+    	                    modelWidget.select(0);
+    	            }                       
+    	            if(messageText == null){
+    	                message.setText("Querying...Complete");
+    	            }else{
+    	                message.setText(messageText);
+    	            }
+    	        }
+                        
+    	        public void onFailure(Throwable caught){
+    	            
+    	            if(caught instanceof LastPageException){
+    	                modelWidget.getModel().setPage(modelWidget.getPage()-1);
+    	                if(modelWidget.getSelectedIndex() == modelWidget.getModel().size()){
+    	                    modelWidget.getModel().select(modelWidget.getSelectedIndex()-1);
+    	                    message.setText("You are at the end of your query results");             		   
+    	                }else
+    	                    message.setText(caught.getMessage());
+    	            }else
+    	                Window.alert(caught.getMessage());
+    	        }
+    	        });
+        }
     }
     
     public void afterCommitQuery(boolean success) {
@@ -427,22 +363,17 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             load((FormRPC)forms.get("display"));
             enable(false);
             if(modelWidget.getSelectedIndex() > -1)
-            	bpanel.setState(FormInt.DISPLAY);
+            	changeState(FormInt.DISPLAY);
             else
-            	bpanel.setState(FormInt.DEFAULT);
-
-      //      if(constants != null)
-      //          message.setText(constants.getString("queryingComplete"));
-      //      else
-                message.setText("Querying...Complete");
-            
+            	changeState(FormInt.DEFAULT);
+            message.setText("Querying...Complete");
         }
     }
     /**
      * This method provides the default behavior for a form when the Abort button 
      * on a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public void abort(int state) {
+    public void abort() {
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.CANCEL;
             clearErrors();
@@ -460,48 +391,32 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
                }
             });
             enable(false);
-            bpanel.setState(FormInt.DISPLAY);
-     //       if(constants != null)
-     //       	message.setText(constants.getString("updateAborted"));
-     //       else
-            	message.setText("Update aborted");
+            changeState(FormInt.DISPLAY);
+            message.setText("Update aborted");
         }
         if (state == FormInt.ADD) {
             doReset();
             clearErrors();
             enable(false);
-     //       if(constants != null)
-     //           message.setText(constants.getString("addAborted"));
-     //       else
-                message.setText("Add aborted");
-                bpanel.setState(FormInt.DEFAULT);
+            message.setText("Add aborted");
+            changeState(FormInt.DEFAULT);
         }
         if (state == FormInt.QUERY) {
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
-    //        if(constants != null)
-    //            message.setText(constants.getString("queryAborted"));
-    //        else
-                message.setText("Query aborted");
-                //FIXME we need to see if there is any data selected
-                if(modelWidget.getSelectedIndex() > -1)
-                	bpanel.setState(FormInt.DISPLAY);
-                else
-                	bpanel.setState(FormInt.DEFAULT);
+            message.setText("Query aborted");
+            //FIXME we need to see if there is any data selected
+            if(modelWidget.getSelectedIndex() > -1)
+              	changeState(FormInt.DISPLAY);
+            else
+              	changeState(FormInt.DEFAULT);
         }
         if(state == FormInt.DELETE){
         	strikeThru(false);
-        	
-   //     	if(constants != null)
-   //             message.setText(constants.getString("deleteAborted"));
-   //         else
         	message.setText("Delete aborted");
-        	bpanel.setState(FormInt.DISPLAY);
+        	changeState(FormInt.DISPLAY);
         }
-        //bpanel.setState(FormInt.DISPLAY);
-        //bpanel.setButtonState("update",AppButton.DISABLED);
-        //bpanel.setButtonState("delete", AppButton.DISABLED);
     }
 
     public void afterAbort(boolean success) {
@@ -511,11 +426,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      * This method provides the default logic for a form when the Reload button
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public void reload(int state) {
+    public void reload() {
         fetch();
     }
     
-    public void select(int state) {
+    public void select() {
         // TODO Auto-generated method stub
         
     }
@@ -526,14 +441,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
      */
     public boolean hasChanges() {
         // TODO Auto-generated method stub
-        if(bpanel == null)
-            return false;
-        if(bpanel.state == FormInt.ADD ||
-           bpanel.state == FormInt.QUERY ||
-           bpanel.state == FormInt.UPDATE){
-   //         if(constants != null)
-   //             message.setText(constants.getString("mustCommitOrAbort"));
-   //         else 
+        if(state == FormInt.ADD ||
+           state == FormInt.QUERY ||
+           state == FormInt.UPDATE){
                 message.setText("You must Commit or Abort changes first");
             return true;
         }
@@ -569,10 +479,55 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener 
             if(modelWidget.event == DataModelWidget.GETPAGE)
                 getPage(true, null);
         }
+        if(sender == bpanel){
+            if (bpanel.buttonClicked.action.equals("query")) {
+                query();
+            }
+            else if (bpanel.buttonClicked.action.equals("next")) {
+                next();
+            }
+            else if (bpanel.buttonClicked.action.equals("prev")) {
+                prev();
+            }
+            else if (bpanel.buttonClicked.action.equals("add")) {
+                add();
+            }
+            else if (bpanel.buttonClicked.action.equals("update")) {
+                up();
+            }
+            else if (bpanel.buttonClicked.action.equals("delete")) {
+                delete();
+            }
+            else if (bpanel.buttonClicked.action.equals("commit")) {
+                commit();
+            }
+            else if (bpanel.buttonClicked.action.equals("abort")) {
+                abort();
+            }
+            else if (bpanel.buttonClicked.action.equals("reload")) {
+                reload();
+            }
+            else if (bpanel.buttonClicked.action.equals("select")) {
+                select();
+            }
+        }
     }
 
-    public void option(String action, int state) {
-        // TODO Auto-generated method stub
-        
+    public void addChangeListener(ChangeListener listener) {
+        if(changeListeners == null){
+            changeListeners = new ChangeListenerCollection();
+        }
+        changeListeners.add(listener);
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        if(changeListeners != null){
+            changeListeners.remove(listener);
+        }       
+    }
+    
+    public void changeState(int state){
+        this.state = state;
+        changeListeners.fireChange(this);
     }
 }

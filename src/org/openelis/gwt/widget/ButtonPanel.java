@@ -1,26 +1,37 @@
 package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ScreenAppButton;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ButtonPanel extends Composite implements ClickListener {
+public class ButtonPanel extends Composite implements ClickListener, SourcesChangeEvents, ChangeListener {
 
+    public static final int ENABLED = 0,
+                            LOCKED = 1;
 	/**
 	 * Panel used to display buttons
 	 */
-    private HorizontalPanel hp = new HorizontalPanel();
+    public HorizontalPanel hp = new HorizontalPanel();
 
     private ArrayList buttons = new ArrayList();
     
-    protected FormInt form;
-
-    public int state = FormInt.DISPLAY;
+    private ChangeListenerCollection changeListeners;
+    
+    private int state = ENABLED;
+    
+    public AppButton buttonClicked;
 
     public ButtonPanel() {
         initWidget(hp);
@@ -41,51 +52,30 @@ public class ButtonPanel extends Composite implements ClickListener {
         }
     }
     
-    /**
-     * This method sets the Form that this ButtonPanel controls
-     * @param form
-     */
-    public void setForm(FormInt form) {
-        this.form = form;
+    public void findButtons(HasWidgets hw) {
+        Iterator widsIt = hw.iterator();
+        while(widsIt.hasNext()){
+            Widget wids = (Widget)widsIt.next();
+            if(wids instanceof ScreenAppButton){
+                buttons.add((AppButton)((ScreenAppButton)wids).getWidget());
+                ((AppButton)((ScreenAppButton)wids).getWidget()).addClickListener(this);
+            }else if(wids instanceof HasWidgets) {
+                findButtons((HasWidgets)wids);
+            }
+        }
     }
 
     /**
      * Handler for button clicks
      */
-    public void onClick(Widget senderWid) {
-    	
-        AppButton sender = (AppButton)senderWid;
-        if (sender.action.equals("query")) {
-            form.query(state);
+    public void onClick(Widget sender) {
+        if(state == ENABLED){
+            buttonClicked = (AppButton)sender;
+            changeListeners.fireChange(this);
+        }else{
+            ((AppButton)sender).changeState(AppButton.UNPRESSED);
         }
-        else if (sender.action.equals("next")) {
-            form.next(state);
-        }
-        else if (sender.action.equals("prev")) {
-            form.prev(state);
-        }
-        else if (sender.action.equals("add")) {
-            form.add(state);
-        }
-        else if (sender.action.equals("update")) {
-            form.up(state);
-        }
-        else if (sender.action.equals("delete")) {
-            form.delete(state);
-        }
-        else if (sender.action.equals("commit")) {
-            form.commit(state);
-        }
-        else if (sender.action.equals("abort")) {
-            form.abort(state);
-        }
-        else if (sender.action.equals("reload")) {
-            form.reload(state);
-        }
-        else if (sender.action.equals("select")) {
-            form.select(state);
-        }else
-            form.option(sender.action,state);
+        
     }
     
     /**
@@ -96,6 +86,20 @@ public class ButtonPanel extends Composite implements ClickListener {
         return state;
     }
     
+    public void setPanelState(int state){
+        if(this.state == state)
+            return;
+        this.state = state;
+        if(state == LOCKED){
+            for(int i = 0; i < buttons.size(); i++){
+                ((AppButton)buttons.get(i)).lock();
+            }
+        }else{
+            for(int i = 0; i < buttons.size(); i++){
+                ((AppButton)buttons.get(i)).unlock();
+            }
+        }
+    }
     /**
      * Sets the ButtonPanel to the state passed in.
      * @param state
@@ -110,8 +114,6 @@ public class ButtonPanel extends Composite implements ClickListener {
     		else
     			setButtonState(button, AppButton.DISABLED);
     	}
-    	
-        this.state = state;
     }
     
     public void setButtonState(AppButton button, int state) {
@@ -155,5 +157,26 @@ public class ButtonPanel extends Composite implements ClickListener {
 	    		}
 	    	}
     	}    	
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+       if(changeListeners == null){
+           changeListeners = new ChangeListenerCollection();
+       }
+       changeListeners.add(listener);
+        
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        if(changeListeners != null) {
+            changeListeners.remove(listener);
+        }
+        
+    }
+
+    public void onChange(Widget sender) {
+        if(sender instanceof AppScreenForm){
+            setState(((AppScreenForm)sender).state);
+        }
     }
 }

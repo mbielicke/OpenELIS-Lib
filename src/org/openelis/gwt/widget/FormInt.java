@@ -16,27 +16,26 @@ public interface FormInt {
     public static final int BROWSE = 32;
     public static final int DELETE = 64;
 
-    public void query(int state);
+    public void query();
 
-    public void next(int state);
+    public void next();
 
-    public void prev(int state);
+    public void prev();
 
-    public void add(int state);
+    public void add();
 
-    public void up(int state);
+    public void up();
 
-    public void delete(int state);
+    public void delete();
 
-    public void commit(int state);
+    public void commit();
 
-    public void abort(int state);
+    public void abort();
     
-    public void reload(int state);
+    public void reload();
     
-    public void select(int state);
+    public void select();
     
     public boolean hasChanges();
     
-    public void option(String action, int state);
 }

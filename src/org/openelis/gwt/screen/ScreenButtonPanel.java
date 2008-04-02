@@ -1,5 +1,6 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -56,6 +57,7 @@ public class ScreenButtonPanel extends ScreenWidget {
                bPanel.addWidget(wid);
             }
         }
+        bPanel.findButtons(bPanel.hp);
         initWidget(bPanel);
         bPanel.setStyleName("ScreenButtonPanel");
         setDefaults(node, screen);
