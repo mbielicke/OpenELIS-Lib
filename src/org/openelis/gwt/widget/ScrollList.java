@@ -77,6 +77,8 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     
     public void setDataModel(DataModel dm) {
         this.dm = dm;
+        view.reset();
+        start = 0;
         if(dm != null && dm.size() > 0){
             int num = maxRows;
             if(dm.size() < maxRows)
@@ -84,6 +86,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
             for(int i = 0; i < num; i++){
                 createRow(i);
             }
+            view.setHeight((num*cellHeight+(num*cellspacing)+cellspacing));
             view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
         }
     }
@@ -118,19 +121,25 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
     
     public void scrollLoad(int scrollPos){
-        try{
+       // try{
             int rowsPer = maxRows;
             if(maxRows > dm.size())
                 rowsPer = dm.size();
             start = (scrollPos)/(cellHeight);
             if(start+rowsPer > dm.size())
                 start = start - ((start+rowsPer) - dm.size());
+            if(view.table.getRowCount() < rowsPer){
+                for(int i = view.table.getRowCount(); i < rowsPer; i++){
+                    createRow(i);
+                }
+                view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
+            }
             for(int i = 0; i < rowsPer; i++){
                 loadRow(i);
             }
-        }catch(Exception e){
-            Window.alert("scrollLoad "+e.getMessage());
-        }
+       /// }catch(Exception e){
+        //    Window.alert("scrollLoad "+e.getMessage());
+      //  }
     }
     
     private void loadRow(int index){
@@ -233,7 +242,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     
     public void setMaxRows(int rows){
         this.maxRows = rows;
-        view.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing));
+        
         //view.cellView.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing+cellHeight+1)+"px");
         //view.scrollBar.setHeight((rows*cellHeight+1)+(rows*cellspacing)+cellHeight+1+"px");
     }

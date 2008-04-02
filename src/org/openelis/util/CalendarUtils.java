@@ -71,29 +71,29 @@ public class CalendarUtils {
     public static String getMonthAbrv(String month){
         switch(Integer.parseInt(month)){
             case Calendar.JANUARY:
-                return "JAN";
+                return "Jan";
             case Calendar.FEBRUARY:
-                return "FEB";
+                return "Feb";
             case Calendar.MARCH: 
-                return "MAR";
+                return "Mar";
             case Calendar.APRIL:
-                return "APR";
+                return "Apr";
             case Calendar.MAY:
-                return "MAY";
+                return "May";
             case Calendar.JUNE:
-                return "JUN";
+                return "Jun";
             case Calendar.JULY:
-                return "JUL";
+                return "Jul";
             case Calendar.AUGUST:
-                return "AUG";
+                return "Aug";
             case Calendar.SEPTEMBER:
-                return "SEP";
+                return "Sep";
             case Calendar.OCTOBER:
-                return "OCT";
+                return "Oct";
             case Calendar.NOVEMBER:
-                return "NOV";
+                return "Nov";
             case Calendar.DECEMBER:
-                return "DEC";
+                return "Dec";
         }
         return null;
     }

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -11,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.ScreenAbsolute;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.services.CalendarServiceInt;
@@ -39,8 +41,8 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
     protected AppButton monthSelect;
     protected AppButton ok;
     protected AppButton cancel;
-    protected AppButton prevDecade;
-    protected AppButton nextDecade;
+    protected ScreenAbsolute prevDecade;
+    protected ScreenAbsolute nextDecade;
     protected AppButton today;
     protected ScreenLabel[] months = new ScreenLabel[12];
     protected ScreenLabel[] years = new ScreenLabel[10];
@@ -60,8 +62,8 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
         prevMonth = (AppButton)getWidget("prevMonth");
         nextMonth = (AppButton)getWidget("nextMonth");
         monthSelect = (AppButton)getWidget("monthSelect");
-        prevDecade = (AppButton)getWidget("prevDecade");
-        nextDecade = (AppButton)getWidget("nextDecade");
+        prevDecade = (ScreenAbsolute)widgets.get("prevDecade");
+        nextDecade = (ScreenAbsolute)widgets.get("nextDecade");
         ok = (AppButton)getWidget("ok");
         cancel = (AppButton)getWidget("cancel");
         for(int i = 0; i < 12; i++) {

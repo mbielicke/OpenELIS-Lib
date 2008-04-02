@@ -88,16 +88,8 @@
 	    </panel>
 	    <panel layout="table" spacing="0" padding="0" width="100%">
 	      <row>
-	        <appButton action="prevDecade" key="prevDecade" onclick="this">
-		      <widget>
-	            <text>&lt;</text>
-	          </widget>
-	        </appButton>
-	        <appButton action="nextDecade" key="nextDecade" onclick="this">
-		      <widget>
-	            <text>&gt;</text>
-	          </widget>
-	        </appButton>
+	        <panel layout="absolute" key="prevDecade" onPanelClick="this" style="prevNavIndex"/>
+	        <panel layout="absolute" key="nextDecade" onPanelClick="this" style="nextNavIndex"/>
 	      </row>	      
 	      <row>
 		    <xsl:call-template name="MYCell">
@@ -184,7 +176,7 @@
    <xsl:param name="type"/>
             <panel key="{$type}:{$text}" layout="absolute" hover="Hover" style="MYCell">
               <widget>
-                <label key="{$type}:{$text}Text" onClick="this" value="{$type},{$text}">
+                <label key="{$type}:{$text}Text" onClick="this" wordwrap="true" value="{$type},{$text}">
                   <xsl:choose>
                     <xsl:when test="$type = 'month' and string($month) = string($text)">
                       <xsl:attribute name="style">Current</xsl:attribute>
