@@ -84,9 +84,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(!showError)
             return;
     	String tempKey = key;
-    	if(!queryMode && (displayWidget instanceof AutoCompleteTextBox))
-    		tempKey+="Id";
-    		
+    	
         submit(screen.rpc.getField(tempKey));
         screen.rpc.getField(tempKey).clearErrors();
         screen.rpc.getField(tempKey).validate();
@@ -108,10 +106,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(!showError)
             return;
     	String[] errors;
-        if(!queryMode && (displayWidget instanceof AutoCompleteTextBox))
-        	errors = screen.rpc.getField(key+"Id").getErrors();
-        else
-        	errors = screen.rpc.getField(key).getErrors();
+        errors = screen.rpc.getField(key).getErrors();
         
         errorPanel.clear();
         for (int i = 0; i < errors.length; i++) {

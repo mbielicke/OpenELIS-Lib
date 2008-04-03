@@ -106,4 +106,15 @@ public class DropDownField extends AbstractField {
     public Object getInstance(Node node){
         return new DropDownField(node);
     }
+    
+    public void validate() {
+    	if (required) {
+            if (selections.size() == 0) {
+                addError("Field is required");
+                valid = false;
+                return;
+            }
+        }
+        valid = true;
+    }
 }
