@@ -288,17 +288,19 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	public void showMatches(int startPos) {
 		if (scrollList.getDataModel().size() > 0) {
-			focusPanel.addStyleName("Selected");
+            //if(!choicesPopup.isVisible()){
+                focusPanel.addStyleName("Selected");
 
-			choicesPopup.clear();
-			choicesPopup.addStyleName("AutoCompletePopup");
-			choicesPopup.addPopupListener(this);
-			choicesPopup.setPopupPosition(this.getAbsoluteLeft(), this
-					.getAbsoluteTop()
-					+ this.getOffsetHeight() - 1);
-            choicesPopup.setWidget(scrollList);
-			choicesPopup.show();
-            scrollList.sizeTable();
+                choicesPopup.clear();
+                choicesPopup.addStyleName("AutoCompletePopup");
+                choicesPopup.addPopupListener(this);
+                choicesPopup.setPopupPosition(this.getAbsoluteLeft(), this
+                                              .getAbsoluteTop()
+                                              + this.getOffsetHeight() - 1);
+                choicesPopup.setWidget(scrollList);
+                choicesPopup.show();
+                scrollList.sizeTable();
+            //}
 
             /*
 			if (scrollList.getDataModel().size() < numberOfRows) {
@@ -317,7 +319,7 @@ public class AutoCompleteDropdown extends Composite implements
 				scrollList.unselectAll();
 
 			if (clickedArrow && scrollList.getActive() > -1
-					&& currentStart > -1 && currentActive > -1)
+					&& currentStart > -1 && currentActive > -1 && cat == null)
 				startPos = currentStart + currentActive;
 
 			if (!multiSelect)
@@ -333,9 +335,11 @@ public class AutoCompleteDropdown extends Composite implements
 			} else
 				scrollList.setActive(0);
 
-			scrollList.setDataModel(scrollList.getDataModel());
+            if(cat != null)
+                scrollList.setActive(0);
+			//scrollList.setDataModel(scrollList.getDataModel());
 
-			if (!multiSelect) {
+			if (!multiSelect && cat == null) {
 				scrollList.view.scrollBar.setScrollPosition(startPos
 						* scrollList.getCellHeight());
 				scrollList.scrollLoad(scrollList.view.scrollBar.getScrollPosition());
@@ -441,7 +445,7 @@ public class AutoCompleteDropdown extends Composite implements
                 autoService.getMatches(cat, scrollList.getDataModel(), text, new AsyncCallback() {
                     public void onSuccess(Object result){
                         scrollList.setDataModel((DataModel)result);
-                        setCurrentValues();
+                        currentActive = 0;
                         clickedArrow = true;
                         showMatches(0);
                     }

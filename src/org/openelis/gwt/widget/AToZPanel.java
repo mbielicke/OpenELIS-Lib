@@ -138,6 +138,14 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
             start = (scrollPos)/(cellHeight);
             if(start+rowsPer > dm.size())
                 start = start - ((start+rowsPer) - dm.size());
+            if(view.table.getRowCount() < rowsPer){
+                for(int i = view.table.getRowCount(); i < rowsPer; i++){
+                    createRow(i);
+                }
+            }else if(view.table.getRowCount() > rowsPer){
+                for(int i = view.table.getRowCount() -1; i >= rowsPer; i--)
+                    view.table.removeRow(i);
+            }
             for(int i = 0; i < rowsPer; i++){
                 loadRow(i);
             }
@@ -191,17 +199,9 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
             if(((DataModelWidget)sender).event == DataModelWidget.REFRESH) {
                 modelWidget = (DataModelWidget)sender;
                 dm = ((DataModelWidget)sender).getModel();
-                if(dm != null && dm.size() > 0){
-                    int num = maxRows;
-                    if(dm.size() < maxRows)
-                        num = dm.size();
-                    for(int i = 0; i < num; i++){
-                        createRow(i);
-                    }
-                    view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
-                    view.setNavPanel(0, 0, false);
-                    scrollLoad(0);
-                }
+                view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
+                view.setNavPanel(0, 0, false);
+                scrollLoad(0);
             }
             if(((DataModelWidget)sender).event == DataModelWidget.SELECTION){
                 if(selectedRow > -1){

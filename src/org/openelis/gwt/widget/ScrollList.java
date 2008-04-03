@@ -77,18 +77,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     
     public void setDataModel(DataModel dm) {
         this.dm = dm;
-        view.reset();
         start = 0;
-        if(dm != null && dm.size() > 0){
-            int num = maxRows;
-            if(dm.size() < maxRows)
-                num = dm.size();
-            for(int i = 0; i < num; i++){
-                createRow(i);
-            }
-            view.setHeight((num*cellHeight+(num*cellspacing)+cellspacing));
-            view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
-        }
     }
         
     public void setSelected(ArrayList selections){
@@ -121,7 +110,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
     
     public void scrollLoad(int scrollPos){
-       // try{
+        try{
             int rowsPer = maxRows;
             if(maxRows > dm.size())
                 rowsPer = dm.size();
@@ -133,13 +122,19 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                     createRow(i);
                 }
                 view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
+                view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
+            }else if(view.table.getRowCount() > rowsPer){
+                for(int i = view.table.getRowCount() -1; i >= rowsPer; i--)
+                    view.table.removeRow(i);
+                view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
+                view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
             }
             for(int i = 0; i < rowsPer; i++){
                 loadRow(i);
             }
-       /// }catch(Exception e){
-        //    Window.alert("scrollLoad "+e.getMessage());
-      //  }
+        }catch(Exception e){
+            Window.alert("scrollLoad "+e.getMessage());
+        }
     }
     
     private void loadRow(int index){

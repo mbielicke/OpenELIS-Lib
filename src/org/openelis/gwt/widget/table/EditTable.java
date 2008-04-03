@@ -69,8 +69,8 @@ public class EditTable extends TableController implements
     public int selectedCell = -1;
     public int setRow = -1;
     public TableCellWidget[] editors;
-    public int[] colwidth;
-    public int[] curColWidth;
+    //public int[] colwidth;
+    //public int[] curColWidth;
     public boolean[] sortable;
     public boolean[] filterable;
     private ArrayList statFilters = new ArrayList();
@@ -764,7 +764,7 @@ public class EditTable extends TableController implements
      * This method will size the table and the columns on the screen.
      * 
      */
-    public void sizeTable() {
+   /* public void sizeTable() {
         DeferredCommand.addCommand(new Command() {
         public void execute() {
         int width = 0;
@@ -808,7 +808,7 @@ public class EditTable extends TableController implements
                 view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);  
             }else
                 view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
-         */
+         
             if(showRows){
                 if(model.numRows() > maxRows){
                     view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
@@ -819,7 +819,7 @@ public class EditTable extends TableController implements
         //}
         });
     }
-
+*/
     /**
      * This method will pull the value from the cell editor and put it in the
      * model.
