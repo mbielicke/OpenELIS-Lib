@@ -39,7 +39,10 @@ public class ScreenAToZPanel extends ScreenWidget {
             width[i] = Integer.parseInt(widths[i]);
         }
         azPanel.setColWidths(width);
-        
+        if(node.getAttributes().getNamedItem("headers") != null){
+            String[] headers = node.getAttributes().getNamedItem("headers").getNodeValue().split(",");
+            azPanel.view.setHeaders(headers);
+        }
         Node bpanel = ((Element)node).getElementsByTagName("buttonPanel").item(0);
         azPanel.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
         azPanel.view.initTable(azPanel);
