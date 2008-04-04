@@ -50,7 +50,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
         public ScreenQueryTableWidget(Node node, ScreenBase screen) {
             super(node);
             table = new QueryTable();
-            try {
+           // try {
                 Node widthsNode = ((Element)node).getElementsByTagName("widths")
                                                  .item(0);
                 Node headersNode = null;
@@ -66,8 +66,8 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 if(node.getAttributes().getNamedItem("cellHeight") != null){
                     table.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
                 }
-                table.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
-                table.setMaxRows(1);
+                table.view.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
+                table.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
                 if(node.getAttributes().getNamedItem("title") != null){
                         table.setTitle(node.getAttributes()
                                             .getNamedItem("title")
@@ -78,7 +78,6 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                     if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
                         table.setShowRows(true);
                 }
-                table.enabled(true);
                 if (widthsNode != null) {
                     String[] widths = widthsNode.getFirstChild()
                                                 .getNodeValue()
@@ -132,10 +131,11 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 table.setFields(afields);
                 table.view.initTable(table);
                 table.reset();
+                table.enabled(true);
                     
-            } catch (Exception e) {
-                Window.alert("create Table from node" +e.getMessage());
-            }
+            //} catch (Exception e) {
+            //    Window.alert("create Table from node" +e.getMessage());
+           // }
             initWidget(table);
             displayWidget = table;
             table.setStyleName("ScreenTable");

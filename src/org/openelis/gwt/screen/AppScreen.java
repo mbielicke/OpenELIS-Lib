@@ -91,7 +91,7 @@ public class AppScreen extends ScreenBase {
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
          
-         try {
+         //try {
              NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
              for(int i = 0; i < rpcList.getLength(); i++){
                  Element rpcEl = (Element)rpcList.item(i);
@@ -107,11 +107,11 @@ public class AppScreen extends ScreenBase {
                  form.setFieldMap(map);
                  form.key = rpcEl.getAttributes().getNamedItem("key").getNodeValue();
                  forms.put(form.key, form);
-                 draw();
              }
-         } catch (Exception e) {
-             Window.alert("FormUtil: " + e.getMessage());
-         }
+             draw();
+         //} catch (Exception e) {
+           //  Window.alert("FormUtil: " + e.getMessage());
+         //}
         
          //load((FormRPC)forms.get("query"));
     }

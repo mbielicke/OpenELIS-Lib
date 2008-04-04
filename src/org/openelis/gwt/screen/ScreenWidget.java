@@ -470,6 +470,8 @@ public class ScreenWidget extends SimplePanel implements
     }
     
     public boolean equals(Object obj) {
+        if(getWidget() == null)
+            return false;
         return getWidget().equals(obj);
     }
     

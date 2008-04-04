@@ -178,6 +178,7 @@
   <xsl:template name="MYCell">
    <xsl:param name="text"/>
    <xsl:param name="type"/>
+          <widget>
             <panel key="{$type}:{$text}" layout="absolute" hover="Hover" style="MYCell">
               <widget>
                 <label key="{$type}:{$text}Text" onClick="this" wordwrap="true" value="{$type},{$text}">
@@ -200,6 +201,7 @@
                 </label>
               </widget>
            </panel>
+         </widget>
   </xsl:template>
   
 </xsl:stylesheet>

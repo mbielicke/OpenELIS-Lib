@@ -55,10 +55,14 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
         }
         item = new MenuItem(wid);
         popupNode = ((Element)node).getElementsByTagName("menuPanel").item(0);
-        addClickListener(this);
-        sinkEvents(Event.ONCLICK);
-        addMouseListener(this);
-        sinkEvents(Event.MOUSEEVENTS);
+        if(node.getAttributes().getNamedItem("enabled") != null){
+            if(node.getAttributes().getNamedItem("enabled").getNodeValue().equals("true"))
+                enable(true);
+            else
+                enable(false);
+        }else
+            enable(true);
+
         initWidget(item);
         setDefaults(node,screen);
     }
@@ -151,6 +155,24 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
         if(pop != null){
             DOM.setElementProperty(pop.getElement(),"closeAll", "false");
             pop.hide();
+        }
+    }
+    
+    public void enable(boolean enabled){
+        if(enabled){
+            removeClickListener(this);
+            addClickListener(this);
+            sinkEvents(Event.ONCLICK);
+            removeMouseListener(this);
+            addMouseListener(this);
+            sinkEvents(Event.MOUSEEVENTS);
+            removeStyleName("disabled");
+        }else{
+            removeClickListener(this);
+            removeMouseListener(this);
+            unsinkEvents(Event.ONCLICK);
+            unsinkEvents(Event.MOUSEEVENTS);
+            addStyleName("disabled");
         }
     }
 

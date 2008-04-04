@@ -49,7 +49,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
         public ScreenTableWidget(Node node, ScreenBase screen) {
             super(node);
             table = new TableWidget();
-            try {
+           // try {
                 if (node.getAttributes().getNamedItem("manager") != null) {
                     String appClass = node.getAttributes()
                                           .getNamedItem("manager")
@@ -245,9 +245,9 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     table.init(0);
                 }
                     
-            } catch (Exception e) {
-                Window.alert("create Table from node" +e.getMessage());
-            }
+            //} catch (Exception e) {
+            //    Window.alert("create Table from node" +e.getMessage());
+           // }
             initWidget(table);
             displayWidget = table;
             table.setStyleName("ScreenTable");

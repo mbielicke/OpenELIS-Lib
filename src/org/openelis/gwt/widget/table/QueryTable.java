@@ -48,6 +48,7 @@ public class QueryTable extends TableController {
      */
     public QueryTable() {
         view = new TableView();
+        initWidget(view);
     }
 
     /**
