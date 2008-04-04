@@ -162,9 +162,6 @@ public class QueryTable extends TableController {
      */
     public void select(int row, int col) {
         try{
-            if(selected > -1) {
-                unselect(selected);
-            }
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
             for(int i = 0; i < view.table.getCellCount(row); i++){
                 if(view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
@@ -287,6 +284,7 @@ public class QueryTable extends TableController {
         view.controller = this;
         view.reset();
         createRow();
+        loadRow();
         view.cellView.setWidget(view.table);
         sizeTable();
         if(enabled)
