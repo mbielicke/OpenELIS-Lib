@@ -2,7 +2,6 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -91,7 +90,7 @@ public class AppScreen extends ScreenBase {
     
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
-         draw();
+         
          try {
              NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
              for(int i = 0; i < rpcList.getLength(); i++){
@@ -108,6 +107,7 @@ public class AppScreen extends ScreenBase {
                  form.setFieldMap(map);
                  form.key = rpcEl.getAttributes().getNamedItem("key").getNodeValue();
                  forms.put(form.key, form);
+                 draw();
              }
          } catch (Exception e) {
              Window.alert("FormUtil: " + e.getMessage());

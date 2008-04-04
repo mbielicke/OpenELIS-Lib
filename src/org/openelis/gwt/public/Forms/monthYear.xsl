@@ -88,8 +88,12 @@
 	    </panel>
 	    <panel layout="table" spacing="0" padding="0" width="100%">
 	      <row>
-	        <panel layout="absolute" key="prevDecade" onPanelClick="this" style="prevNavIndex"/>
-	        <panel layout="absolute" key="nextDecade" onPanelClick="this" style="nextNavIndex"/>
+	        <widget>
+    	        <panel layout="absolute" key="prevDecade" onPanelClick="this" style="prevNavIndex"/>
+    	    </widget>
+    	    <widget>
+		        <panel layout="absolute" key="nextDecade" onPanelClick="this" style="nextNavIndex"/>
+		    </widget>
 	      </row>	      
 	      <row>
 		    <xsl:call-template name="MYCell">
