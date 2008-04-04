@@ -126,7 +126,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 fields = fieldsNode.getFirstChild().getNodeValue().split(",");
                 AbstractField[] afields = new AbstractField[fields.length];
                 for(int i = 0; i < fields.length; i++){
-                    afields[i] = ((FormRPC)((AppScreenForm)screen).forms.get("query")).getField(fields[i]);
+                    afields[i] = ((FormRPC)((AppScreenForm)screen).forms.get("query")).getField(fields[i].trim());
                 }
                 table.setFields(afields);
                 table.view.initTable(table);
