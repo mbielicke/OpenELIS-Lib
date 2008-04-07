@@ -155,7 +155,7 @@ a.index:hover{
 .prevNavIndex{
 width:16px;
 height:16px;
-background:url('../Images/previous.gif');
+background:url('../Images/previous.gif') no-repeat center center;
 }
 
 .prevNavIndexDisabled{
@@ -167,7 +167,7 @@ background:none;
 .nextNavIndex{
 width:16px;
 height:16px;
-background:url('../Images/next.gif');
+background:url('../Images/next.gif') no-repeat center center;
 }	
 
 a.index:hover{
