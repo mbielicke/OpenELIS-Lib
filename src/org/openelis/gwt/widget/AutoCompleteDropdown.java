@@ -315,16 +315,19 @@ public class AutoCompleteDropdown extends Composite implements
 			
 			DOM.addEventPreview(scrollList);
 
-			if (!multiSelect)
+			/* 
+			 if (!multiSelect)
 				scrollList.unselectAll();
-
+            */
+			
+            /*
 			if (clickedArrow && scrollList.getActive() > -1
 					&& currentStart > -1 && currentActive > -1 && cat == null)
 				startPos = currentStart + currentActive;
 
 			if (!multiSelect)
 				scrollList.setSelected(startPos);
-
+            */
 			/* then the active might not be the first one...
 			if (startPos > 0 &&  scrollList.getDataModel().size()
 					< scrollList.getMaxRows()
@@ -341,9 +344,12 @@ public class AutoCompleteDropdown extends Composite implements
 			//scrollList.setDataModel(scrollList.getDataModel());
 
 			if (!multiSelect && cat == null) {
-				scrollList.view.scrollBar.setScrollPosition(startPos
-						* scrollList.getCellHeight());
-				scrollList.scrollLoad(scrollList.view.scrollBar.getScrollPosition());
+                if(scrollList.getSelected().size() > 0)
+                    startPos = scrollList.getDataModel().indexOf((DataSet)scrollList.getSelected().get(0));
+                else startPos = 0;
+                    scrollList.view.scrollBar.setScrollPosition(startPos
+                                                                * scrollList.getCellHeight());
+                    scrollList.scrollLoad(scrollList.view.scrollBar.getScrollPosition());
 			} else
 				scrollList.scrollLoad(0);
 
@@ -553,7 +559,7 @@ public class AutoCompleteDropdown extends Composite implements
 		if (!textBox.isReadOnly()) {
 			if (sender == focusPanel) {
 				
-				setCurrentValues();
+				//setCurrentValues();
 				
 				clickedArrow = true;
 
