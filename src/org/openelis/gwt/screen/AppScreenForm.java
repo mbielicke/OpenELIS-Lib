@@ -471,6 +471,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
 
     public void onChange(Widget sender) {
+    	//clear the message, the action method can set it to something else
+    	if(message != null)
+    		message.setText("");
+    	
         if(sender == modelWidget){
             if(modelWidget.event == DataModelWidget.SELECTION){
                 key = (DataSet)((DataSet)modelWidget.getSelected()).getInstance();
