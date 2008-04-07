@@ -332,7 +332,7 @@ public abstract class TableController extends Composite implements
                     view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
             }
             
-            view.titlePanel.setWidth("100%");
+            view.titlePanel.setWidth(displayWidth+"px");
             }
         //}
         });

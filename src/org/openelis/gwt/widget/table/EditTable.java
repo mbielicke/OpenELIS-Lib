@@ -286,7 +286,8 @@ public class EditTable extends TableController implements
                 }
             });
         }
-        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+        if(model.numRows() > maxRows)
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
         if(manager != null){
             manager.rowAdded(model.numRows()-1,this);
         }
@@ -300,7 +301,8 @@ public class EditTable extends TableController implements
         }else{
             view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
         }
-        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+        if(model.numRows() > maxRows)
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
         if(manager != null){
             manager.rowAdded(model.numRows()-1,this);
         }
@@ -346,7 +348,8 @@ public class EditTable extends TableController implements
             if(manager != null){
                 manager.rowAdded(index,this);
             }
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+            if(model.numRows() > maxRows)
+                view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
         }
     }
 
@@ -389,7 +392,8 @@ public class EditTable extends TableController implements
             }else
                 scrollLoad(view.scrollBar.getScrollPosition());
         }
-        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+        if(model.numRows() > maxRows)
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
 
     }
 
@@ -697,8 +701,8 @@ public class EditTable extends TableController implements
         }
         if(model.numRows() > maxRows)
             view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
-        else
-            view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
+        //else
+        //    view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
         view.scrollBar.setScrollPosition(0);
         if(model.numRows() > 0)
             scrollLoad(0);
