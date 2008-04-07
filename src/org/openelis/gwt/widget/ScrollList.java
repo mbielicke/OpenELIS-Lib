@@ -147,6 +147,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         view.table.getRowFormatter().removeStyleName(index, TableView.selectedStyle);
         if(selected.contains(dm.get(start+index))){
             view.table.getRowFormatter().addStyleName(index, TableView.selectedStyle);
+            active = index;
         }
     }
     
@@ -390,6 +391,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         for(int i=0; i < view.table.getRowCount(); i++){
             view.table.getRowFormatter().removeStyleName(i,TableView.selectedStyle);
         }        
+        active = -1;
     }
 
     public void addChangeListener(ChangeListener listener) {

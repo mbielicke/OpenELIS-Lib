@@ -325,15 +325,16 @@ public class AutoCompleteDropdown extends Composite implements
 			if (!multiSelect)
 				scrollList.setSelected(startPos);
 
-			// then the active might not be the first one...
-			if (startPos > scrollList.getDataModel().size()
-					- scrollList.getMaxRows()
+			/* then the active might not be the first one...
+			if (startPos > 0 &&  scrollList.getDataModel().size()
+					< scrollList.getMaxRows()
 					&& !multiSelect) {
 				scrollList.setActive(scrollList.getMaxRows()
 						- ((scrollList.getDataModel().size() - 1) - startPos)
 						- 1);
 			} else
 				scrollList.setActive(0);
+           */
 
             if(cat != null)
                 scrollList.setActive(0);
