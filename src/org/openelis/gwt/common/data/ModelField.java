@@ -10,6 +10,7 @@ public class ModelField extends AbstractField {
      * @gwt.typeArgs <org.openelis.gwt.common.data.DataModel>
      */
     private DataModel value;
+    public static final String TAG_NAME = "rpc-model";
     
     public ModelField() {
         

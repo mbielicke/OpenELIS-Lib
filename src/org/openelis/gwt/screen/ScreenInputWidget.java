@@ -9,7 +9,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.widget.AutoCompleteTextBox;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.table.TableWidget;
 

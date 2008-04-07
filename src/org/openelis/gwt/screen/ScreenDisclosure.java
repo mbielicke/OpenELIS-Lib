@@ -69,7 +69,7 @@ public class ScreenDisclosure extends ScreenWidget {
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.createWidget(input, screen);
                 dp.setContent(wid);
             }
         }

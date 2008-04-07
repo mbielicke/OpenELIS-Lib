@@ -34,7 +34,7 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
     public ScreenImage(String url) {
         image = new Image(url);
         initWidget(image);
-        addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
+        addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
         
         sinkEvents(Event.MOUSEEVENTS);
     }
@@ -66,15 +66,8 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
         	if(listener.equals("this"))
         		addClickListener(screen);
         	else
-        		addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listener));
+        		addClickListener((ClickListener)ClassFactory.forName(listener));
         }
-        initWidget(image);
-        image.setStyleName("ScreenImage");
-        setDefaults(node, screen);
-    }
-
-    public ScreenWidget getInstance(Node node, ScreenBase screen) {
-        return new ScreenImage(node, screen);
     }
 
     public void addClickListener(ClickListener listener) {

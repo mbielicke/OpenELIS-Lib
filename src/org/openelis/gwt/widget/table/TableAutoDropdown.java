@@ -10,12 +10,10 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
-import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
@@ -32,9 +30,9 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     private boolean multi;
     private int visible = 1;
     private String fieldCase = "mixed";
-    private boolean fromModel = false;
     private String type = "";
     private int width;
+    public static final String TAG_NAME = "table-autoDropdown";
     
     public OptionField fromHidden;
     
@@ -84,9 +82,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         String textBoxDefault = null;
         String width = null;
         String popWidth = "auto";
-                
-        if (node.getAttributes().getNamedItem("fromModel") != null)
-        	fromModel = true;
         
         if (node.getAttributes().getNamedItem("multiSelect") != null)
         	multiSelect = true;

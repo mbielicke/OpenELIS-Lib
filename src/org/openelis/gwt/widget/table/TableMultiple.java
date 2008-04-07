@@ -17,6 +17,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     ArrayList cells = new ArrayList();
     public int active;
     AbstractField field;
+    public static final String TAG_NAME = "table-multiple";
     
     public TableMultiple() {
         
@@ -39,7 +40,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         NodeList editors = node.getChildNodes();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                cells.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
+                cells.add(ScreenBase.createCellWidget(editors.item(i)));
             }
         }
     }

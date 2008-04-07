@@ -10,6 +10,7 @@ public class QueryNumberField extends QueryField {
     private String type;
     private Double max;
     private Double min;
+    public static final String TAG_NAME = "rpc-queryNumber";
     
     public QueryNumberField() {
         

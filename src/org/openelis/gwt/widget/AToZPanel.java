@@ -1,17 +1,5 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataModelWidget;
-import org.openelis.gwt.screen.AppScreenForm;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenButtonPanel;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenVertical;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.table.TableController;
-import org.openelis.gwt.widget.table.TableView;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -21,15 +9,25 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.screen.AppScreenForm;
+import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenButtonPanel;
+import org.openelis.gwt.screen.ScreenLabel;
+import org.openelis.gwt.screen.ScreenVertical;
+import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.widget.table.TableCheck;
+import org.openelis.gwt.widget.table.TableController;
+import org.openelis.gwt.widget.table.TableView;
 
 public class AToZPanel extends TableController implements ClickListener, ChangeListener {
 	private HorizontalPanel mainHP = new HorizontalPanel();
@@ -46,51 +44,23 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
 	
 	
 	public AToZPanel() { 
-		//DeferredCommand.addCommand(new Command() {
-        //    public void execute() {
-        //    	middleBar.setHeight(String.valueOf(getParent().getOffsetHeight()-20)+"px");
-        //    }
-       // });
-		//tablePanel.setHeight("100%");		
-		//tablePanel.setWidth("150px");
 		mainHP.setHeight("100%");
-		
-		//need to set the alignment before adding any widgets or it wont work
-		//middleBar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		//middleBar.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         middleBar.setHeight("100%");
         view = new TableView();
         view.setTableListener(this);
 		tablePanel.add(view);
-		
-		//make the hideable panel hide if visable="false"
-		//if (node.getAttributes().getNamedItem("visible") != null && 
-		//		node.getAttributes().getNamedItem("visible").getNodeValue() == "false") {
-		//build the arrow button
         hideablePanel.setVisible(false);
         middleBar.setStyleName("LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickListener(this);
         arrow.addMouseListener(this);
         middleBar.add(arrow);
-		
-		//add arrow button to middle panel
 		hideablePanel.add(alphabetButtonVP);
 		hideablePanel.add(tablePanel);
-		
-		//imagePanel.add(arrowButton);
-		
-		//middleBar.setStyleName("LeftMenuPanePanel");
-		//middleBar.add(arrowButton);
-		
 		mainHP.setSpacing(0);
-		//alphabetButtonVP.setSpacing(1);
 		tablePanel.setSpacing(1);
-		
 		mainHP.add(hideablePanel);
 		mainHP.add(middleBar);
-		//mainHP.setCellVerticalAlignment(arrowButton,HasVerticalAlignment.ALIGN_MIDDLE);
-		
 		initWidget(mainHP);		
 	}
     
@@ -169,7 +139,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
             view.table.setWidget(index, i, label);
             label.label.setWordWrap(false);
             DOM.setStyleAttribute(label.getElement(), "overflowX", "hidden");
-            label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
+            label.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
             label.setWidth(curColWidth[i]+"px");
             view.table.getFlexCellFormatter().setWidth(index, i, curColWidth[i] + "px");
             view.table.getFlexCellFormatter().setHeight(index, i, cellHeight+"px");
@@ -188,11 +158,6 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
             view.rows.getFlexCellFormatter().setHeight(index,0,cellHeight+"px");
         }
     }
-
-    public boolean onEventPreview(Event event) {
-        // TODO Auto-generated method stub
-        return true;
-    }
     
     public void onChange(Widget sender) {
         if(sender instanceof DataModelWidget){
@@ -202,6 +167,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
                 view.setNavPanel(0, 0, false);
                 scrollLoad(0);
+                DOM.addEventPreview(this);
             }
             if(((DataModelWidget)sender).event == DataModelWidget.SELECTION){
                 if(selectedRow > -1){
@@ -264,11 +230,66 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
         if(selectedRow == row || locked){
             return;
         }
+        DOM.removeEventPreview(this);
+        DOM.addEventPreview(this);
         if(selectedRow > -1){
             view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
         }
         selectedRow = row;
         view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
         modelWidget.select(start+row);
+    }
+    
+    public boolean onKeyPress(Event event){
+        int code = DOM.eventGetKeyCode(event);
+        boolean shift = DOM.eventGetShiftKey(event);
+        if (KeyboardListener.KEY_DOWN == code) {
+            if (selectedRow >= 0 && selectedRow < view.table.getRowCount() - 1) {
+                if(selectedRow < view.table.getRowCount() -1){
+                    final int row = selectedRow + 1;
+                    final int col = selectedCell;
+                    DeferredCommand.addCommand(new Command() {
+                        public void execute() {
+                            onCellClicked(view.table, row, col);
+                        }
+                    });
+                }else{
+                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
+                    final int col = selectedCell;
+                    DeferredCommand.addCommand(new Command() {
+                        public void execute() {
+                            onCellClicked(view.table, maxRows-1, col);
+                        }
+                    });
+                }
+            }
+            DOM.eventCancelBubble(event, true);
+            DOM.eventPreventDefault(event);
+            return false;
+        }
+        if (KeyboardListener.KEY_UP == code) {
+            if (selectedRow >= 0 && selectedRow != 0) {
+                final int row = selectedRow - 1;
+                final int col = selectedCell;
+                //unselect(selected);
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        onCellClicked(view.table, row, col);
+                    }
+                });
+            }else{
+                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
+                final int col = selectedCell;
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        onCellClicked(view.table, 0, col);
+                    }
+                });
+            }
+            DOM.eventCancelBubble(event, true);
+            DOM.eventPreventDefault(event);
+            return false;
+        }
+        return true;
     }
 }

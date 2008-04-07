@@ -3,6 +3,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -490,6 +491,28 @@ public abstract class TableController extends Composite implements
         }
     }
     
+    /**
+     * EventPreview for catching Keyboard events for the table.
+     */
+    public boolean onEventPreview(Event event) {
+        // TODO Auto-generated method stub
+        if (view.table.isAttached()) {
+            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                return onKeyPress(event);
+            }
+            if (DOM.eventGetType(event) == Event.ONCLICK){
+                if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
+                   DOM.removeEventPreview(this);
+                   unselect(-1);
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean onKeyPress(Event event) {
+        return true;
+    }
     public void onChange(Widget sender){
         
     }

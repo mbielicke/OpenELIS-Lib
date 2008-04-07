@@ -16,6 +16,7 @@ public class QueryDateField extends QueryField {
     private byte end;
     private Integer max;
     private Integer min;
+    public static final String TAG_NAME = "rpc-queryDate";
     
     public QueryDateField() {
         

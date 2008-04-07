@@ -24,7 +24,7 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.WidgetMap;
+import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,34 +63,11 @@ public class ScreenBase extends Composite implements
     public boolean keep;
    
     /**
-     * This field contains all widgets available to this application
-     */
-    private static WidgetMap WIDGET_MAP = new WidgetMap();
-
-    /**
      * No arg constructor will initiate a blank panel and new FormRPC 
      */
     public ScreenBase() {
         initWidget(panel);
         rpc = new FormRPC();
-    }
-
-    /**
-     * This method will set the static WidgetMap used to access the 
-     * available widgets for this class that will be defined in the 
-     * xml
-     * @param wids
-     */
-    public static void setWidgetMap(WidgetMap wids) {
-        WIDGET_MAP = wids;
-    }
-
-    /**
-     * Returns the static Map of widgets that are used by the application
-     * @return
-     */
-    public static WidgetMap getWidgetMap() {
-        return WIDGET_MAP;
     }
 
     /**
@@ -127,7 +104,7 @@ public class ScreenBase extends Composite implements
             NodeList widgets = display.getChildNodes();
             for (int i = 0; i < widgets.getLength(); i++) {
                 if (widgets.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    Widget wid = WIDGET_MAP.getWidget(widgets.item(i), this);
+                    Widget wid = createWidget(widgets.item(i), this);
                     panel.add(wid);
                 }
             }
@@ -181,14 +158,49 @@ public class ScreenBase extends Composite implements
             Object wid = wids.next();
             if(wid instanceof ScreenInputWidget){
             	String key = ((ScreenInputWidget)wid).key;
-            	if(wid instanceof ScreenAuto)
-            		key+="Id";
                 AbstractField field = rpc.getField(key);
                 if(field != null && !field.isValid())
                     ((ScreenInputWidget)wid).drawError();
             }
         }
     }
+    
+    /**
+     * Returns a new Widget created by calling getInstance(node, screen) for the widget 
+     * who's tag in the passed node maps. 
+     * @param node
+     * @param screen
+     * @return
+     */
+    public static Widget createWidget(Node node, ScreenBase screen) {
+        String widName = node.getNodeName();
+        if (widName.equals("panel"))
+            widName += "-" + node.getAttributes()
+                                 .getNamedItem("layout")
+                                 .getNodeValue();
+        return (ScreenWidget)ClassFactory.forName(widName,new Object[] {node,screen});
+    }
+    
+    /**
+     * Returns a TableCellWidget from the passed in node's tag name.
+     * @param node
+     * @return
+     */
+    public static TableCellWidget createCellWidget(Node node) {
+        String widName = "table-" + node.getNodeName();
+        return (TableCellWidget)ClassFactory.forName(widName,new Object[] {node});
+    }
+
+    /** 
+     * Returns the AbstractField from the passed in node's tag name.
+     * @param node
+     * @return
+     */
+    public static AbstractField createField(Node node) {
+        String fName = "rpc-" + node.getNodeName();
+        return (AbstractField)ClassFactory.forName(fName,new Object[] {node});
+    }
+    
 
     /**
      * This method can be overridden by an extending class to provide more

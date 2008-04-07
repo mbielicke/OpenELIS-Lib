@@ -72,7 +72,7 @@ public class ScreenTree extends ScreenWidget {
     }
 
     private TreeItem createTreeItem(Node node, ScreenBase screen) {
-        TreeItem item = new TreeItem(ScreenBase.getWidgetMap().getWidget(node, screen));
+        TreeItem item = new TreeItem(ScreenBase.createWidget(node, screen));
         if (node.getAttributes().getNamedItem("key") != null) {
             screen.widgets.put(node.getAttributes()
                                   .getNamedItem("key")

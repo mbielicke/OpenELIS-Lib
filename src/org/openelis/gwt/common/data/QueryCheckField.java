@@ -6,6 +6,8 @@ public class QueryCheckField extends CheckField {
 
     private static final long serialVersionUID = 1L;
     
+    public static final String TAG_NAME = "rpc-queryCheck";
+    
     public QueryCheckField() {
         
     }

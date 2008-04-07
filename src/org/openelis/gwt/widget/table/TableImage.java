@@ -18,6 +18,7 @@ public class TableImage extends SimplePanel implements TableCellWidget {
   
     private Image editor;
     private AbstractField field;
+    public static final String TAG_NAME = "table-image";
     
     public TableImage() {
     }

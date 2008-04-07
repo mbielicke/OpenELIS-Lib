@@ -174,7 +174,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         ArrayList list = new ArrayList();
         for (int i = 0; i < fieldList.getLength(); i++) {
             if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                list.add(ScreenBase.getWidgetMap().getField(fieldList.item(i)));
+                list.add(ScreenBase.createField(fieldList.item(i)));
             }
         }
         AbstractField[] fields = new AbstractField[list.size()];
@@ -189,7 +189,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         ArrayList list = new ArrayList();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                list.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
+                list.add(ScreenBase.createCellWidget(editors.item(i)));
             }
         }
         TableCellWidget[] cells = new TableCellWidget[list.size()];

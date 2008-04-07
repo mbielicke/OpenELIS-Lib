@@ -50,8 +50,7 @@ public class ScreenText extends ScreenWidget {
             String mouse = node.getAttributes()
                                .getNamedItem("mouse")
                                .getNodeValue();
-            text.addMouseListener((MouseListener)ScreenBase.getWidgetMap()
-                                                       .get(mouse));
+            text.addMouseListener((MouseListener)ClassFactory.forName(mouse));
         }
         initWidget(text);
         text.setStyleName("ScreenLabel");

@@ -1,6 +1,5 @@
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
@@ -27,7 +26,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
         /**
          * Default XML Tag Name for XML definition and WidgetMap
          */
-        public static String TAG_NAME = "qtable";
+        public static String TAG_NAME = "queryTable";
         /**
          * Widget wrapped by this class
          */
@@ -115,7 +114,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 ArrayList list = new ArrayList();
                 for (int i = 0; i < editors.getLength(); i++) {
                     if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        list.add(ScreenBase.getWidgetMap().getCellWidget(editors.item(i)));
+                        list.add(ScreenBase.createCellWidget(editors.item(i)));
                     }
                 }
                 TableCellWidget[] cells = new TableCellWidget[list.size()];

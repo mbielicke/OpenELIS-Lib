@@ -24,6 +24,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
     private FocusPanel panel;
     private int type = CheckBox.TWO_STATE;
     private int width;
+    public static final String TAG_NAME = "table-check";
    
 	public TableCheck() {
 		editor = new CheckBox();

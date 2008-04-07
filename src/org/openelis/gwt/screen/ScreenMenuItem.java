@@ -25,6 +25,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     private boolean cursorOn;
     private ScreenMenuItem parent;
     public ScreenMenuPanel child;
+    public static final String TAG_NAME = "menuItem";
     
     public ScreenMenuItem() {
         super();
@@ -50,7 +51,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
                 if(listeners[i].equals("this"))
                     addClickListener(screen);
                 else
-                    addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
+                    addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
             }
         }
         item = new MenuItem(wid);

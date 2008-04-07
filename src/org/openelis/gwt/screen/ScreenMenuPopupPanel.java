@@ -71,7 +71,7 @@ public class ScreenMenuPopupPanel extends ScreenWidget {
                     }
                 } else
                     input = widgets.item(k);
-                Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+                Widget wid = ScreenBase.createWidget(input, screen);
                 popupPanel.setWidget(wid);
             }
         }

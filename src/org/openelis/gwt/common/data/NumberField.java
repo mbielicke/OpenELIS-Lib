@@ -23,6 +23,8 @@ public class NumberField extends AbstractField implements Serializable {
     private static final long serialVersionUID = 1L;
     private Double max;
     private Double min;
+    
+    public static final String TAG_NAME = "rpc-number";
 
     
     public NumberField() {

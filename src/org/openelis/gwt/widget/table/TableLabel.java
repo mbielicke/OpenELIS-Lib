@@ -19,6 +19,8 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 	private Label editor;
 	private AbstractField field;
     private int width;
+    public static final String TAG_NAME = "table-label";
+
 	
     public TableLabel() {
 

@@ -19,6 +19,7 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     private HTML editor;
     private AbstractField field;
     private boolean enabled;
+    public static final String TAG_NAME = "table-link";
     
     public TableLink() {
         editor = new HTML();

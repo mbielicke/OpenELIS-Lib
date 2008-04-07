@@ -13,6 +13,8 @@ public class DropDownField extends AbstractField {
      */
     private ArrayList selections = new ArrayList();
     
+    public static final String TAG_NAME = "rpc-dropdown";
+    
     public DropDownField() {
         
     }

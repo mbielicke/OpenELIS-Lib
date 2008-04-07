@@ -227,8 +227,7 @@ public class ScreenWidget extends SimplePanel implements
             if (listener.equals("this"))
                 addDropListener(screen);
             else {
-                addDropListener((DropListener)ScreenBase.getWidgetMap()
-                                                    .get(listener));
+                addDropListener((DropListener)ClassFactory.forName(listener));
             }
         }
         if (node.getAttributes().getNamedItem("drag") != null) {
@@ -238,8 +237,7 @@ public class ScreenWidget extends SimplePanel implements
             if (listener.equals("this"))
                 addDragListener(screen);
             else {
-                addDragListener((DragListener)ScreenBase.getWidgetMap()
-                                                    .get(listener));
+                addDragListener((DragListener)ClassFactory.forName(listener));
             }
         }
         
@@ -249,7 +247,7 @@ public class ScreenWidget extends SimplePanel implements
                 if(listeners[i].equals("this"))
                 	addMouseListener(screen);
                 else
-                	addMouseListener((MouseListener)ScreenBase.getWidgetMap().get(listeners[i]));
+                	addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
             }
         }
         
@@ -263,7 +261,7 @@ public class ScreenWidget extends SimplePanel implements
         }
         if (node.getAttributes().getNamedItem("hover") != null){
             hoverStyle = node.getAttributes().getNamedItem("hover").getNodeValue();
-            addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
+            addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
         }
         if (node.getAttributes().getNamedItem("tip") != null){
             setTitle(node.getAttributes().getNamedItem("tip").getNodeValue());
@@ -278,7 +276,7 @@ public class ScreenWidget extends SimplePanel implements
                 if(listeners[i].equals("this"))
                     addClickListener(screen);
                 else
-                    addClickListener((ClickListener)ScreenBase.getWidgetMap().get(listeners[i]));
+                    addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
             }
         }
     }
@@ -451,7 +449,7 @@ public class ScreenWidget extends SimplePanel implements
             }
         } else
             input = node;
-        Widget wid = ScreenBase.getWidgetMap().getWidget(input, screen);
+        Widget wid = ScreenBase.createWidget(input, screen);
         if(node.getNodeName().equals("widget")){
             NodeList queryList = ((Element)node).getElementsByTagName("query");
             if(queryList.getLength() > 0){
@@ -462,7 +460,7 @@ public class ScreenWidget extends SimplePanel implements
                         m = 100;
                     }
                 }
-                Widget query = ScreenBase.getWidgetMap().getWidget(input, screen);
+                Widget query = ScreenBase.createWidget(input, screen);
                 ((ScreenInputWidget)wid).setQueryWidget((ScreenInputWidget)query);
             }
         }

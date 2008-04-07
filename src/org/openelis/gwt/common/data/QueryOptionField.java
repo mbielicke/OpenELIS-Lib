@@ -9,6 +9,8 @@ public class QueryOptionField extends OptionField {
 
     private static final long serialVersionUID = 1L;
     private String type;
+    
+    public static final String TAG_NAME = "rpc-queryOption";
 
     public QueryOptionField() {
         super();

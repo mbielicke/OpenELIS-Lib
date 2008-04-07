@@ -6,6 +6,8 @@ public class QueryStringField extends QueryField {
 
 
     private static final long serialVersionUID = 1L;
+    
+    public static final String TAG_NAME = "rpc-queryString";
 
     public QueryStringField() {
         

@@ -10,6 +10,7 @@ public class TableField extends AbstractField {
      * @gwt.typeArgs <org.openelis.gwt.common.data.TableModel>
      */
     private TableModel value;
+    public static final String TAG_NAME = "rpc-table";
     
     public TableField() {
         

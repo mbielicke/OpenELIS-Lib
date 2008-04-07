@@ -1,8 +1,6 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
@@ -18,6 +16,7 @@ public class TableCalendar extends TableCellInputWidget {
 	private boolean week = false;
 	private boolean enabled;
     private int width;
+    public static final String TAG_NAME = "table-calendar";
     
     public TableCalendar() {
         setStyleName("TableCalendar");

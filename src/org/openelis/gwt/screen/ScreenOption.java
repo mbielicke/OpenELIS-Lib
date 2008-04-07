@@ -71,7 +71,7 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
         	if (listener.equals("this"))
         		optionlist.addChangeListener(screen);
         	else
-        		optionlist.addChangeListener((ChangeListener)ScreenBase.getWidgetMap().get(listener));
+        		optionlist.addChangeListener((ChangeListener)ClassFactory.forName(listener));
         }
         if (node.getAttributes().getNamedItem("multi") != null) {
         	if(node.getAttributes().getNamedItem("multi").getNodeValue().equals("true")){

@@ -99,7 +99,7 @@ public class AppScreen extends ScreenBase {
                  HashMap map = new HashMap();
                  for (int j = 0; j < fieldList.getLength(); j++) {
                      if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                         AbstractField field = AppScreen.getWidgetMap().getField(fieldList.item(j));
+                         AbstractField field = ScreenBase.createField(fieldList.item(j));
                          map.put((String)field.getKey(), field);
                      }
                  }

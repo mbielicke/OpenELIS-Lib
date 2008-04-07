@@ -34,6 +34,7 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenScrollList;
@@ -155,9 +156,9 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
             view.table.setWidget(index, i, label);
             label.label.setWordWrap(false);
             DOM.setStyleAttribute(label.getElement(), "overflowX", "hidden");
-            label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("HoverListener"));
+            label.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
             if(drag){
-                label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+                label.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
                 label.sinkEvents(Event.MOUSEEVENTS);
             }
             if(drop){
@@ -291,14 +292,14 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         Iterator it = view.table.iterator();
         while(it.hasNext()){
             ScreenWidget wid = (ScreenWidget)it.next();
-            wid.removeMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+            wid.removeMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
             if(enabled){
-                wid.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+                wid.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
             }
         }
     }
     
-    private boolean onKeyPress(Event event){
+    public boolean onKeyPress(Event event){
         int code = DOM.eventGetKeyCode(event);
         boolean shift = DOM.eventGetShiftKey(event);
         boolean ctrl = DOM.eventGetCtrlKey(event);

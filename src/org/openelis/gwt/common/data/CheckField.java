@@ -21,6 +21,8 @@ import java.io.Serializable;
 public class CheckField extends AbstractField implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final String TAG_NAME = "rpc-check";
 
     public CheckField() {
         object = new BooleanObject();

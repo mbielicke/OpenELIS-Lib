@@ -14,6 +14,7 @@ public class CollectionField extends AbstractField implements Serializable {
      */
     private ArrayList coll = new ArrayList();
     private String type = "";
+    public static final String TAG_NAME = "rpc-collection";
 
     public CollectionField() {
         

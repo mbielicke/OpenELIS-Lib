@@ -22,6 +22,7 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
     
 	private VerticalPanel editor;
 	private AbstractField field;
+    public static final String TAG_NAME = "table-collection";
 
     public TableCollection() {
     }

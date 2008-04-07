@@ -22,6 +22,7 @@ public class StringField extends AbstractField implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer min;
     private Integer max;
+    public static final String TAG_NAME = "rpc-string";
     
     public StringField() {
         object = new StringObject();

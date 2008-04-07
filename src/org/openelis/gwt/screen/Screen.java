@@ -17,7 +17,6 @@ import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.services.ScreenServiceInt;
 import org.openelis.gwt.services.ScreenServiceIntAsync;
-import org.openelis.gwt.widget.WidgetMap;
 
 import java.util.HashMap;
 /**
@@ -36,11 +35,6 @@ public class Screen extends ScreenBase {
     private ScreenServiceIntAsync screenService = (ScreenServiceIntAsync)GWT.create(ScreenServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)screenService;
     public ScreenWindow window;
-    
-    /**
-     * This field contains all widgets available to this application
-     */
-    private static WidgetMap WIDGET_MAP;
 
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -170,7 +164,7 @@ public class Screen extends ScreenBase {
              HashMap map = new HashMap();
              for (int i = 0; i < fieldList.getLength(); i++) {
                 if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                   AbstractField field = ScreenBase.getWidgetMap().getField(fieldList.item(i));
+                   AbstractField field = ScreenBase.createField(fieldList.item(i));
                    map.put((String)field.getKey(), field);
                 }
              }

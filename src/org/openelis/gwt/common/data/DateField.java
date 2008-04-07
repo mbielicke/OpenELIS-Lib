@@ -24,6 +24,7 @@ public class DateField extends AbstractField implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer max;
     private Integer min;
+    public static final String TAG_NAME = "rpc-date";
 
     public DateField(){
         object = new DateObject();

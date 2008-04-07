@@ -20,8 +20,7 @@ public class FormUtil {
             NodeList fieldList = rpc.getChildNodes();
             for (int i = 0; i < fieldList.getLength(); i++) {
                 if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    AbstractField field = ScreenBase.getWidgetMap()
-                                                .getField(fieldList.item(i));
+                    AbstractField field = ScreenBase.createField(fieldList.item(i));
                     form.getFieldMap().put((String)field.getKey(), field);
                 }
             }

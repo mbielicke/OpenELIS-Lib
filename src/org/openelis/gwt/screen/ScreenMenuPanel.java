@@ -28,7 +28,7 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
 	/**
 	 * Default XML Tag Name in XML Definition
 	 */
-	public static String TAG_NAME = "menu";
+	public static String TAG_NAME = "menuPanel";
 	/**
 	 * Widget wrapped by this class
 	 */

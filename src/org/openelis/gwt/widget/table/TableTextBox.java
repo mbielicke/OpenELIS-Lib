@@ -1,11 +1,10 @@
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.AbstractField;
-
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.data.AbstractField;
 
 
 /**
@@ -22,6 +21,7 @@ public class TableTextBox extends TableCellInputWidget {
     private Label display;
     private boolean enabled;
     private int width;
+    public static final String TAG_NAME = "table-textbox";
     
     public TableTextBox() {
     	

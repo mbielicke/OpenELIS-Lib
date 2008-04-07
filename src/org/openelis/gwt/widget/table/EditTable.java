@@ -1033,24 +1033,7 @@ public class EditTable extends TableController implements
         return true;
     }
 
-    /**
-     * EventPreview for catching Keyboard events for the table.
-     */
-    public boolean onEventPreview(Event event) {
-        // TODO Auto-generated method stub
-        if (view.table.isAttached()) {
-            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                return onKeyPress(event);
-            }
-            if (DOM.eventGetType(event) == Event.ONCLICK){
-                if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
-                   DOM.removeEventPreview(this);
-                   unselect(-1);
-                }
-            }
-        }
-        return true;
-    }
+
 
     /**
      * Method for calling the Sort method in the model for the column selected.

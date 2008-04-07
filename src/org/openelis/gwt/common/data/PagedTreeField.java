@@ -13,6 +13,8 @@ public class PagedTreeField extends AbstractField {
 	     */
 	    private TreeModel value;
         
+        public static final String TAG_NAME = "rpc-tree";
+        
         public PagedTreeField() {
             
         }

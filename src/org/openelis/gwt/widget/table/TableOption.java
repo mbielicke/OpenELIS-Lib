@@ -1,13 +1,8 @@
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -38,6 +33,8 @@ public class TableOption extends TableCellInputWidget {
     public OptionField fromHidden;
     private boolean enabled;
     private int width;
+    public static final String TAG_NAME = "table-option";
+
 
     public TableOption() {
         sinkEvents(Event.KEYEVENTS);

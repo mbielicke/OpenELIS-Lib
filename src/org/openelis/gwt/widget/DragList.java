@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.Iterator;
 
+import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenDragList;
 import org.openelis.gwt.screen.ScreenLabel;
@@ -59,7 +60,7 @@ public class DragList extends Composite {
      */
     public void addDropItem(String text, Object value){
         ScreenLabel label = new ScreenLabel(text,value);
-        label.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+        label.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
         label.sinkEvents(Event.MOUSEEVENTS);
         label.setDropTargets(((ScreenDragList)getParent()).getDropTargets());
         label.setScreen(((ScreenDragList)getParent()).getScreen());
@@ -119,9 +120,9 @@ public class DragList extends Composite {
         Iterator it = vp.iterator();
         while(it.hasNext()){
             ScreenWidget wid = (ScreenWidget)it.next();
-            wid.removeMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+            wid.removeMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
             if(enabled){
-                wid.addMouseListener((MouseListener)ScreenBase.getWidgetMap().get("ProxyListener"));
+                wid.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
             }
         }
     }
