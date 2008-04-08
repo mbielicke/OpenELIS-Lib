@@ -100,6 +100,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      * a the ButtonPanel is clicked.  It is called from the ButtonPanel Widget.
      */
     public void query() {
+        doReset();
         state = FormInt.QUERY;
         message.setText("Enter fields to query by then press Commit");
         setForm(true);

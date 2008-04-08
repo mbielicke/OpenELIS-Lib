@@ -41,6 +41,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean locked;
+    protected boolean refreshedByLetter;
 	
 	
 	public AToZPanel() { 
@@ -168,6 +169,14 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 view.setNavPanel(0, 0, false);
                 scrollLoad(0);
                 DOM.addEventPreview(this);
+                if(!refreshedByLetter){
+                    if(selectedButton != null){
+                        selectedButton.changeState(AppButton.UNPRESSED);
+                    }
+                }else{
+                    refreshedByLetter = false;
+                }
+                
             }
             if(((DataModelWidget)sender).event == DataModelWidget.SELECTION){
                 if(selectedRow > -1){
@@ -187,6 +196,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                     case FormInt.UPDATE:
                         bpanel.setPanelState(ButtonPanel.LOCKED);
                         locked = true;
+                        unselect(selectedRow);
                         break;
                     case FormInt.DEFAULT:
                     case FormInt.DISPLAY:
@@ -203,6 +213,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 selectedButton.changeState(AppButton.UNPRESSED);
             }
             selectedButton = bpanel.buttonClicked;
+            refreshedByLetter = true;
         }   
     }
     
