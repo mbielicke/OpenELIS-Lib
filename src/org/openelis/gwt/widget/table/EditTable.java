@@ -89,8 +89,6 @@ public class EditTable extends TableController implements
     public boolean showRows;
     public boolean modelSet;
     public int maxRows;
-    public int cellHeight = 18;
-    public int cellSpacing = 1;
     public boolean enabled;
     
     /**
@@ -255,15 +253,11 @@ public class EditTable extends TableController implements
         return autoAdd;
     }
     
-    public void setMaxRows(int rows){
+/*    public void setMaxRows(int rows){
         maxRows = rows;
         view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing));
     }
-    
-    public void setCellHeight(int height){
-        cellHeight = height;
-    }
-    
+*/    
     public void setShowRows(boolean showRows){
         this.showRows = showRows;
     }

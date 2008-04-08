@@ -37,8 +37,6 @@ public class QueryTable extends TableController {
     //public int[] colwidth;
     //public int[] curColWidth;
     public int maxRows = 1;
-    public int cellHeight = 18;
-    public int cellSpacing = 1;
     public boolean enabled = true;
     public AbstractField[] fields;
 
@@ -82,10 +80,6 @@ public class QueryTable extends TableController {
         this.fields = fields;
     }
     
-    public void setCellHeight(int height){
-        cellHeight = height;
-    }
-
     /**
      * This method loads the row form the model specified by the passed index
      * into the table view.
