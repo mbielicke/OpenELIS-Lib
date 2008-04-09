@@ -200,6 +200,9 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         
         //status.add(blCorner);
+        //statusImg.setStyleName("spinnerIcon");
+        statusImg.setWidth("16px");
+        statusImg.setHeight("16px");
         status.add(statusImg);
         status.add(message);
        // status.add(brCorner);
@@ -456,6 +459,11 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     public void clearMessagePopup(String style) {
         statusImg.setStyleName(style);
         statusImg.removeMouseListener(this);
+    }
+    
+    public void setStatus(String text, String style){
+        message.setText(text);
+        statusImg.setStyleName(style);
     }
 
 }

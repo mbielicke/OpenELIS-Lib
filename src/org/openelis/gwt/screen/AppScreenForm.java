@@ -102,7 +102,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public void query() {
         doReset();
         state = FormInt.QUERY;
-        message.setText("Enter fields to query by then press Commit");
+        window.setStatus("Enter fields to query by then press Commit","");
         setForm(true);
         rpc = (FormRPC)forms.get("query");
         doReset();
@@ -141,7 +141,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         doReset();
         enable(true);
         changeState(FormInt.ADD);
-        message.setText("Enter information in the fields, then press Commit");
+        window.setStatus("Enter information in the fields, then press Commit","");
     }
 
     /**
@@ -149,6 +149,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void up() {
+        window.setStatus("Locking record for Update...","spinnerIcon");
         formService.fetchForUpdate(key, (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
@@ -166,9 +167,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public void afterUpdate(boolean success){
         if(success){
             enable(true);
-            message.setText("Update fields then, press Commit");
+            window.setStatus("Update fields then, press Commit","");
             changeState(FormInt.UPDATE);
         }else
+            window.setStatus("", "");
             changeState(FormInt.DISPLAY);
     }
 
@@ -186,10 +188,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
 
     	
         //set the message to delete
-        message.setText("Pressing commit will delete the current record from the database");           
+        window.setStatus("Pressing commit will delete the current record from the database","");           
     }
     
     public void commitDelete(){
+        window.setStatus("Deleting...","spinnerIcon");
     	formService.commitDelete(key, (FormRPC)forms.get("display"), new AsyncCallback() {
             public void onSuccess(Object result){
                 rpc = (FormRPC)result;
@@ -199,7 +202,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             }
             public void onFailure(Throwable caught){
             	if(caught instanceof RPCDeleteException)
-            		message.setText(caught.getMessage());
+            		window.setStatus(caught.getMessage(),"ErrorPanel");
                 else
             		Window.alert(caught.getMessage());
                 afterCommitDelete(false);
@@ -224,31 +227,29 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         if (state == FormInt.UPDATE) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-                message.setText("Updating...");
+                window.setStatus("Updating..","spinnerIcon");
                 clearErrors();
                 commitUpdate();
             } else {
                 drawErrors();
-                message.setText("Please correct the errors indicated, then press Commit");
+                window.setStatus("Please correct the errors indicated, then press Commit","ErrorPanel");
             }
         }
         if (state == FormInt.ADD) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
-                message.setText("Adding...");
+                window.setStatus("Adding...","spinnerIcon");
                 clearErrors();
                 commitAdd();
             } else {
                 drawErrors();
-                message.setText("Please correct the errors indicated, then press Commit");
+                window.setStatus("Please correct the errors indicated, then press Commit","ErrorPanel");
             }
         }
         if (state == FormInt.QUERY) {            
-            message.setText("Querying...");
             commitQuery(rpc);
         }
         if(state == FormInt.DELETE){
-            message.setText("Deleting...");
             commitDelete();
         }
         
@@ -273,9 +274,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         if(success){
             enable(false);
             changeState(FormInt.DISPLAY);
-            message.setText("Updating...Complete");
+            window.setStatus("Updating...Complete","");
         }else{
-            message.setText("Update Failed. Make corrections and try again or Abort.");
+            window.setStatus("Update Failed. Make corrections and try again or Abort.","ErrorPanel");
         }
     }
     
@@ -298,13 +299,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         if(success){
             enable(false);
             changeState(FormInt.DISPLAY);
-            message.setText("Adding...Complete");
+            window.setStatus("Adding...Complete","");
         }else{
-            message.setText("Adding Failed. Make corrections and try again or Abort");
+            window.setStatus("Adding Failed. Make corrections and try again or Abort","ErrorPanel");
         }
     }
     
     public void commitQuery(FormRPC rpcQuery) {
+        window.setStatus("Querying...","spinnerIcon");
         formService.commitQuery(rpcQuery, modelWidget.getModel(), new AsyncCallback() {
            public void onSuccess(Object result){
                modelWidget.setModel((DataModel)result);
@@ -320,10 +322,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     
     public void getPage(final boolean selectItem, final String messageText) {
     	if(modelWidget.getPage() < 0){
-    		message.setText("You have reached the first page of your query results");
+    		window.setStatus("You have reached the first page of your query results","");
     		modelWidget.getModel().setPage(0);
     		modelWidget.getModel().select(modelWidget.getSelectedIndex()+1);
     	}else{
+            window.setStatus("Querying...","spinnerIcon");
     	    formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
     	        public void onSuccess(Object result){
     	            modelWidget.setModel((DataModel)result);
@@ -334,7 +337,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	                    modelWidget.select(0);
     	            }                       
     	            if(messageText == null){
-    	                message.setText("Querying...Complete");
+    	                window.setStatus("Querying...Complete","");
     	            }else{
     	                message.setText(messageText);
     	            }
@@ -346,9 +349,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	                modelWidget.getModel().setPage(modelWidget.getPage()-1);
     	                if(modelWidget.getSelectedIndex() == modelWidget.getModel().size()){
     	                    modelWidget.getModel().select(modelWidget.getSelectedIndex()-1);
-    	                    message.setText("You are at the end of your query results");             		   
+    	                    window.setStatus("You are at the end of your query results","ErrorPanel");             		   
     	                }else
-    	                    message.setText(caught.getMessage());
+    	                    window.setStatus(caught.getMessage(),"ErrorPanel");
     	            }else
     	                Window.alert(caught.getMessage());
     	        }
@@ -367,7 +370,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             	changeState(FormInt.DISPLAY);
             else
             	changeState(FormInt.DEFAULT);
-            message.setText("Querying...Complete");
+            window.setStatus("Querying...Complete","");
         }
     }
     /**
@@ -393,20 +396,20 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             });
             enable(false);
             changeState(FormInt.DISPLAY);
-            message.setText("Update aborted");
+            window.setStatus("Update aborted","");
         }
         if (state == FormInt.ADD) {
             doReset();
             clearErrors();
             enable(false);
-            message.setText("Add aborted");
+            window.setStatus("Add aborted","");
             changeState(FormInt.DEFAULT);
         }
         if (state == FormInt.QUERY) {
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
-            message.setText("Query aborted");
+            window.setStatus("Query aborted","");
             //FIXME we need to see if there is any data selected
             if(modelWidget.getSelectedIndex() > -1)
               	changeState(FormInt.DISPLAY);
@@ -415,7 +418,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         }
         if(state == FormInt.DELETE){
         	strikeThru(false);
-        	message.setText("Delete aborted");
+        	window.setStatus("Delete aborted","");
         	changeState(FormInt.DISPLAY);
         }
     }
@@ -445,7 +448,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         if(state == FormInt.ADD ||
            state == FormInt.QUERY ||
            state == FormInt.UPDATE){
-                message.setText("You must Commit or Abort changes first");
+                window.setStatus("You must Commit or Abort changes first","ErrorPanel");
             return true;
         }
         return false;
@@ -474,7 +477,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public void onChange(Widget sender) {
     	//clear the message, the action method can set it to something else
     	if(message != null)
-    		message.setText("");
+    		window.setStatus("","");
     	
         if(sender == modelWidget){
             if(modelWidget.event == DataModelWidget.SELECTION){

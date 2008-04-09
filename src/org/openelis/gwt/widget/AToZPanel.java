@@ -25,7 +25,6 @@ import org.openelis.gwt.screen.ScreenButtonPanel;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenVertical;
 import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.table.TableCheck;
 import org.openelis.gwt.widget.table.TableController;
 import org.openelis.gwt.widget.table.TableView;
 
@@ -94,10 +93,12 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
         if(sender == view.nextNav){
             modelWidget.getModel().selecttLast(false);
             modelWidget.setPage(modelWidget.getPage()+1);
+            refreshedByLetter = true;
         }
         if(sender == view.prevNav){
             modelWidget.getModel().selecttLast(false);
             modelWidget.setPage(modelWidget.getPage()-1);
+            refreshedByLetter = true;
         }
     }
 
