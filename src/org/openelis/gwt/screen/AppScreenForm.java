@@ -169,9 +169,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             enable(true);
             window.setStatus("Update fields then, press Commit","");
             changeState(FormInt.UPDATE);
-        }else
+        }else{
             window.setStatus("", "");
             changeState(FormInt.DISPLAY);
+        }
     }
 
     /** 

@@ -36,7 +36,6 @@ public class QueryTable extends TableController {
     public TableCellWidget[] editors;
     //public int[] colwidth;
     //public int[] curColWidth;
-    public int maxRows = 1;
     public boolean enabled = true;
     public AbstractField[] fields;
 

@@ -88,7 +88,6 @@ public class EditTable extends TableController implements
     private boolean autoAdd;
     public boolean showRows;
     public boolean modelSet;
-    public int maxRows;
     public boolean enabled;
     
     /**
@@ -491,7 +490,6 @@ public class EditTable extends TableController implements
      * @param col
      */
     public void select(int row, int col) {
-        try{
         if (manager == null || (manager != null && manager.canSelect(start+row, this))){
             if(selected > -1) {
                 unselect(selected);
@@ -526,9 +524,6 @@ public class EditTable extends TableController implements
         selected = row;
         if (manager != null && col > -1)
             manager.action(start+row, col, this);
-        }catch(Exception e){
-            Window.alert("select "+e.getMessage());
-        }
     }
    
     /**
