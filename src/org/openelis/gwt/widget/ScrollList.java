@@ -422,6 +422,11 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
 
     public void setActive(int active) {
         this.active = active;
+        if(active > -1 && view.table.getRowCount() > 0){
+            view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+            selected.add(dm.get(start+active));
+        }
+        
     }
     
     public void setStart(int start) {

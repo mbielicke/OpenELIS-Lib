@@ -288,7 +288,6 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	public void showMatches(int startPos) {
 		if (scrollList.getDataModel().size() > 0) {
-            //if(!choicesPopup.isVisible()){
                 focusPanel.addStyleName("Selected");
 
                 choicesPopup.clear();
@@ -300,48 +299,9 @@ public class AutoCompleteDropdown extends Composite implements
                 choicesPopup.setWidget(scrollList);
                 choicesPopup.show();
                 scrollList.sizeTable();
-            //}
-
-            /*
-			if (scrollList.getDataModel().size() < numberOfRows) {
-				scrollList.setMaxRows(scrollList.getDataModel().size());
-				scrollList.setWidth(textBox.getOffsetWidth() + 14 + "px");
-			} else {
-				scrollList.setMaxRows(numberOfRows);
-				scrollList.setWidth(textBox.getOffsetWidth() - 4 + "px");
-			}
-            */
 
 			
 			DOM.addEventPreview(scrollList);
-
-			/* 
-			 if (!multiSelect)
-				scrollList.unselectAll();
-            */
-			
-            /*
-			if (clickedArrow && scrollList.getActive() > -1
-					&& currentStart > -1 && currentActive > -1 && cat == null)
-				startPos = currentStart + currentActive;
-
-			if (!multiSelect)
-				scrollList.setSelected(startPos);
-            */
-			/* then the active might not be the first one...
-			if (startPos > 0 &&  scrollList.getDataModel().size()
-					< scrollList.getMaxRows()
-					&& !multiSelect) {
-				scrollList.setActive(scrollList.getMaxRows()
-						- ((scrollList.getDataModel().size() - 1) - startPos)
-						- 1);
-			} else
-				scrollList.setActive(0);
-           */
-
-            if(cat != null)
-                scrollList.setActive(0);
-			//scrollList.setDataModel(scrollList.getDataModel());
 
 			if (!multiSelect && cat == null) {
                 if(scrollList.getSelected().size() > 0)
@@ -370,7 +330,8 @@ public class AutoCompleteDropdown extends Composite implements
 							firstRowDisplayText.length() - currentCursorPos);
 				}
 			}
-
+            if(cat != null || scrollList.getSelected().size() == 0)
+                scrollList.setActive(0);
 			visible = true;
 
 		} else {
