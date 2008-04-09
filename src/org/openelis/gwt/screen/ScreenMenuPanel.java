@@ -1,11 +1,16 @@
 package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
+import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
@@ -24,7 +29,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
-public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
+public class ScreenMenuPanel extends ScreenWidget implements MouseListener, MouseWheelListener{
 	/**
 	 * Default XML Tag Name in XML Definition
 	 */
@@ -33,7 +38,37 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
 	 * Widget wrapped by this class
 	 */
     public MenuPanel panel;
-    private VerticalPanel vp;
+    private class MenuVP extends VerticalPanel implements SourcesMouseWheelEvents {
+
+        private MouseWheelListenerCollection listeners;
+        
+        public MenuVP() {
+            sinkEvents(Event.ONMOUSEWHEEL);
+        }
+        
+        public void onBrowserEvent(Event event) {
+            // TODO Auto-generated method stub
+            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
+                listeners.fireMouseWheelEvent(this, event);
+            }
+            super.onBrowserEvent(event);
+        }
+        
+        public void addMouseWheelListener(MouseWheelListener listener) {
+            if(listeners == null){
+                listeners = new MouseWheelListenerCollection();
+            }
+            listeners.add(listener);
+        }
+
+        public void removeMouseWheelListener(MouseWheelListener listener) {
+            if(listeners != null){
+                listeners.remove(listener);
+            }
+        }
+        
+    }
+    private MenuVP vp;
     public AbsolutePanel ap;
     public ScreenMenuItem activeItem;
     public boolean active;
@@ -66,7 +101,8 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
         panel = new MenuPanel(node.getAttributes().getNamedItem("layout").getNodeValue());
         createPanel(node);
         if(layout.equals("vertical")){
-            vp = new VerticalPanel();
+            vp = new MenuVP();
+            vp.addMouseWheelListener(this);
             up.addMouseListener(this);
             up.setStyleName("MenuUp");
             up.addStyleName("MenuDisabled");
@@ -216,6 +252,25 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener{
             up.setVisible(false);
             down.setVisible(false);
         }
+    }
+    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
+        if(velocity.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1){
+            if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
+                down.addStyleName("MenuDisabled");
+            }else{
+                ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
+                up.removeStyleName("MenuDisabled");
+            }
+        }
+        if(velocity.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1){
+            if(ap.getWidgetTop(panel) >= 0){
+                up.addStyleName("MenuDisabled");
+            }else{
+                ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
+                down.removeStyleName("MenuDisabled");
+            }
+        }
+        
     }
 
 }
