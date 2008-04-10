@@ -144,9 +144,10 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     
     public void setForm(boolean mode) {
         if(queryWidget == null){
-            if(mode)
+            if(mode){
                 check.setType(CheckBox.THREE_STATE);
-            else
+                check.setState(CheckBox.UNKNOWN);
+            }else
                 check.setType(defaultType);
         }else
             super.setForm(mode);
