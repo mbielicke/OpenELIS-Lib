@@ -108,8 +108,10 @@ public class CheckBox extends Composite implements ClickListener{
             panel.setStyleName(UNCHECKED_STYLE);
         else if(state == UNKNOWN && type == THREE_STATE)
             panel.setStyleName(UNKNOWN_STYLE);
-        else
+        else{
             panel.setStyleName(UNCHECKED_STYLE);
+            this.state = UNCHECKED;
+        }
     }
 
     public void onClick(Widget sender) {
