@@ -25,7 +25,7 @@ public class CheckField extends AbstractField implements Serializable {
     public static final String TAG_NAME = "rpc-check";
 
     public CheckField() {
-        object = new BooleanObject();
+        object = new StringObject();
     }
     
     public CheckField(Node node){
@@ -39,13 +39,13 @@ public class CheckField extends AbstractField implements Serializable {
                                               .getNamedItem("required")
                                               .getNodeValue()).booleanValue());
         if (node.hasChildNodes()) {
-            setValue(new Boolean(node.getFirstChild().getNodeValue()));
+            setValue(node.getFirstChild().getNodeValue());
         }
     }
     
     public void validate() {
         if (required) {
-            if (((BooleanObject)object).value  == null) {
+            if (object.getValue()  == null) {
                 addError("Field is required");
                 valid =  false;
                 return;
@@ -62,19 +62,11 @@ public class CheckField extends AbstractField implements Serializable {
     }
 
     public String toString() {
-        if (((BooleanObject)object).value == null) {
-            return "";
-        }
-        if (((Boolean)((BooleanObject)object).value).booleanValue())
-            return "Y";
-        else
-            return "N";
+       return (String)object.getValue();
     }
 
     public boolean isChecked() {
-        if (((BooleanObject)object).value == null)
-            return false;
-        return ((BooleanObject)object).value.booleanValue();
+        return (object.getValue() != null && "Y".equals((String)object.getValue()));
     }
 
     public Object getInstance() {
@@ -86,5 +78,13 @@ public class CheckField extends AbstractField implements Serializable {
 
     public Object getInstance(Node node) {
         return new CheckField(node);
+    }
+    
+    public Object getValue() {
+    	String returnValue = (String)object.getValue();
+    	if("".equals(returnValue))
+    		return null;
+    	else
+    		return returnValue;
     }
 }
