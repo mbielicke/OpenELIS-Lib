@@ -372,6 +372,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             else
             	changeState(FormInt.DEFAULT);
             window.setStatus("Querying...Complete","");
+        }else{
+            window.setStatus("Querying Failed. Make corrections and try again or Abort","ErrorPanel");
         }
     }
     /**
