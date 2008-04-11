@@ -140,8 +140,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			display.setWordWrap(false);
 		}
 		if(((DropDownField)field).getSelections().size() > 0)
-            //display.setText((String)((DataSet)editor.getModel().get(((DataSet)((DropDownField)field).getSelections().get(0)).getKey())).getObject(0).getValue());
-            display.setText((String)((DataSet)((DropDownField)field).getSelections().get(0)).getObject(0).getValue());
+			if(editor.cat == null)
+				display.setText((String)((DataSet)editor.getModel().get(((DataSet)((DropDownField)field).getSelections().get(0)).getKey())).getObject(0).getValue());
+			else
+				display.setText((String)((DataSet)((DropDownField)field).getSelections().get(0)).getObject(0).getValue());
         else
             display.setText("");
 		setWidget(display);		
