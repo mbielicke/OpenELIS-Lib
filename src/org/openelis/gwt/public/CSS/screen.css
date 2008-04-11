@@ -3,7 +3,7 @@ html, body {
    padding:0pt;
    height:100%;
 }
-
+ 
 .Disabled{
     cursor:default;
 }
@@ -17,7 +17,12 @@ html, body {
     padding:2px;
     background:white;
 }
-
+.errorPopupLabel{
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:12px;
+    background:white/*#bac8d9*/;
+    padding:2px;
+}
 /*******TOP MENU BAR CSS***********/
 .topMenuBar { 
     height:30px;
@@ -438,11 +443,13 @@ cursor:default;}
 .WindowLeft {
     width:7px;
     height:100%;
+    overflow:hidden;
     background: url("/openelis/Images/windowleft.gif");
 }
 .WindowRight {
     width:7px;
     height:100%;
+    overflow:hidden;
     background: url("/openelis/Images/windowright.gif") repeat-y;
 }
 
@@ -545,7 +552,7 @@ cursor:default;}
 .ScreenTable {
     border:1px solid #8db2e3;
     background:white;
-    margin:8px;
+    margin:8px 8px 0 8px;
 }
 
 .TitlePanel{
@@ -1150,21 +1157,22 @@ font-weight:bold;
 }
 
 .Checked {
-  height:18px;
-  width:18px;
+  height:13px;
+  width:13px;
   background:url("/openelis/Images/apply.png") left center no-repeat;
 }
 
 .Unchecked {
-  height:18px;
-  width:18px;
+  height:13px;
+  width:13px;
   background:url("/openelis/Images/unapply.png") left center no-repeat;
 }
 
 .Unknown {
-  height:18px;
-  width:18px;
+  height:13px;
+  width:13px;
   background:url("/openelis/Images/unknow.png") left center no-repeat;
 }
+
 
 
