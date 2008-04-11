@@ -128,7 +128,7 @@ public class AutoCompleteDropdown extends Composite implements
 	/**
 	 * Category for which suggestions we are trying to match
 	 */
-	private String cat;
+	public String cat;
 
 	private ChangeListenerCollection callback;
 
@@ -324,7 +324,7 @@ public class AutoCompleteDropdown extends Composite implements
 				String firstRowDisplayText = ((String)((StringObject) scrollList
 						.getDataModel().get(startPos).getObject(0)).getValue()).trim();
 				if (firstRowDisplayText
-						.indexOf(textBox.getText().toUpperCase()) == 0) {
+						.indexOf(textBox.getText()) == 0) {
 					textBox.setText(firstRowDisplayText.trim());
 					textBox.setSelectionRange(currentCursorPos,
 							firstRowDisplayText.length() - currentCursorPos);
