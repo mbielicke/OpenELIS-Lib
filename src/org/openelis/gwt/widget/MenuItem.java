@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class MenuItem extends Composite {
     
+    
     public MenuItem(Widget wid) {
         initWidget(wid);
     }
@@ -21,6 +22,7 @@ public class MenuItem extends Composite {
         VerticalPanel textPanel = new VerticalPanel();
         Label label = new Label(labelText);
         label.setStyleName("topMenuItemTitle");
+        label.addStyleName("locked");
         Label description = new Label(descriptionText);
         description.setStyleName("topMenuItemDesc");
         table.setWidget(0,0,iconPanel);

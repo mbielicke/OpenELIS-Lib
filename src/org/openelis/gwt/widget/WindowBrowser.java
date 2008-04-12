@@ -139,10 +139,8 @@ public class WindowBrowser extends Composite{
     
     public void setBrowserHeight() {
         if (browser.isVisible()) {
-            browser.setHeight((Window.getClientHeight() - browser
-                                                                 .getAbsoluteTop()) + "px");
-            browser.setWidth((Window.getClientWidth() - browser
-                                                               .getAbsoluteLeft()) + "px");
+            browser.setHeight((Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
+            browser.setWidth((Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
         }
     }
 
