@@ -26,6 +26,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     private ScreenMenuItem parent;
     public ScreenMenuPanel child;
     public static final String TAG_NAME = "menuItem";
+    public String label;
     
     public ScreenMenuItem() {
         super();
@@ -44,6 +45,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
             wid = MenuItem.createDefault(node.getAttributes().getNamedItem("icon").getNodeValue(), 
                                          node.getAttributes().getNamedItem("label").getNodeValue(), 
                                          node.getAttributes().getNamedItem("description").getNodeValue());
+            label = node.getAttributes().getNamedItem("label").getNodeValue();
         }
         if (node.getAttributes().getNamedItem("onClick") != null){
             String[] listeners = node.getAttributes().getNamedItem("onClick").getNodeValue().split(",");
@@ -175,6 +177,13 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
             unsinkEvents(Event.MOUSEEVENTS);
             addStyleName("disabled");
         }
+    }
+    
+    public ScreenWidget getInstance() {
+        ScreenLabel labelProxy = new ScreenLabel(label,null);
+        labelProxy.sinkEvents(Event.MOUSEEVENTS);
+        return labelProxy;
+        
     }
 
 }

@@ -1,6 +1,10 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -67,6 +71,21 @@ public class ScreenVertical extends ScreenWidget {
                 Widget wid = ScreenWidget.loadWidget(widgets.item(k), screen);
                 addWidget(widgets.item(k), wid);
             }
+        }
+        if(node.getAttributes().getNamedItem("sizeToWindow") != null){
+            Window.addWindowResizeListener(new WindowResizeListener() {
+
+                public void onWindowResized(int width, int height) {
+                    setBrowserHeight();
+                }
+                
+            });
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    setBrowserHeight();
+                    //index = getIndex(browser.getElement());
+                }
+            });
         }
         if(node.getAttributes().getNamedItem("overflow") != null ||
            node.getAttributes().getNamedItem("overflowX") != null || 
@@ -163,6 +182,16 @@ public class ScreenVertical extends ScreenWidget {
     
     public VerticalPanel getPanel(){
     	return panel;
+    }
+    
+    public void setBrowserHeight() {
+        if (panel.isVisible()) {
+            panel.setHeight((Window.getClientHeight() - panel
+                                                                 .getAbsoluteTop()) + "px");
+            panel.setWidth((Window.getClientWidth() - panel
+                                                               .getAbsoluteLeft()) + "px");
+            
+        }
     }
 
 }
