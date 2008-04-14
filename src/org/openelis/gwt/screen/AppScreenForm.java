@@ -299,7 +299,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public void afterCommitAdd(boolean success) {
         if(success){
             enable(false);
-            changeState(FormInt.DISPLAY);
+            changeState(FormInt.DEFAULT);
             window.setStatus("Adding...Complete","");
         }else{
             window.setStatus("Adding Failed. Make corrections and try again or Abort","ErrorPanel");
