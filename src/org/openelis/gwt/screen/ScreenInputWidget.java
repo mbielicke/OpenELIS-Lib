@@ -110,7 +110,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         errorPanel.clear();
         for (int i = 0; i < errors.length; i++) {
             String error = errors[i];
-            errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
+            MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
+            errorLabel.setStyleName("errorPopupLabel");
+            //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
+            errorPanel.add(errorLabel);
         }
         if(errors.length == 0){
             errorImg.setStyleName("ErrorPanelHidden");
