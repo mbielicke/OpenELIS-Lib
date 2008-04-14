@@ -20,7 +20,7 @@ html, body {
 .errorPopupLabel{
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
-    background:white/*#bac8d9*/;
+    background:#e5f5f9;
     padding:2px;
 }
 /*******TOP MENU BAR CSS***********/
@@ -210,6 +210,7 @@ color:gray;
     height:21px;
     cursor:default;
     background:url("/openelis/Images/screenbuttonbg.gif") repeat-x;
+       -moz-user-select: none;
 }
 .Hover .ButtonContent, .Pressed .ButtonContent {
     background:url("/openelis/Images/screenbuttonhover.gif") repeat-x;
@@ -268,6 +269,7 @@ color:gray;
 
 .ButtonPanelButton .ButtonContent {
     background:none;
+    
 }
 .Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
     background:url("/openelis/Images/screenbuttonhover.gif") repeat-x;
@@ -452,7 +454,6 @@ cursor:default;}
     overflow:hidden;
     background: url("/openelis/Images/windowright.gif") repeat-y;
 }
-
 .Caption{
     background:url("/openelis/Images/windowheader.gif") repeat-x;
     height:29px;
@@ -462,6 +463,54 @@ cursor:default;}
     background:url("/openelis/Images/windowfooter.gif") repeat-x;
     height:28px;
 }
+
+/*PopUP panel*/
+.ErrorWindow .WindowBody{
+background:none;
+padding:0px;
+border:0px;
+}
+
+.ErrorWindow .WindowTR {
+    width:2px;
+    height:2px;
+    background: transparent url("/openelis/Images/popuptr.gif") no-repeat;
+}
+
+.ErrorWindow .WindowRight {
+    width:2px;
+    height:100%;
+    background:url("/openelis/Images/popupright.gif") repeat-y;
+}
+.ErrorWindow .WindowBR {
+    background:url("/openelis/Images/popupbr.gif") no-repeat;
+    width:2px;
+    height:2px;
+}
+.ErrorWindow .StatusBar {
+    background:url("/openelis/Images/popupbottom.gif") repeat-x bottom;
+    height:2px;
+}
+.ErrorWindow .WindowBL {
+    width:2px;
+    height:2px;
+    background:url("/openelis/Images/popupbl.gif") no-repeat top;
+}
+.ErrorWindow .WindowLeft {
+    width:2px;
+    height:100%;
+    background: url("/openelis/Images/popupleft.gif") repeat-y;
+}
+.ErrorWindow .WindowTL {
+    width:2px;
+    height:2px;
+    background: url("/openelis/Images/popuptl.gif") no-repeat;
+}
+.ErrorWindow .Caption{
+    background:url("/openelis/Images/popuptop.gif") repeat-x;
+    height:2px;
+}
+/*ErrorWindow end*/
 
 .LeftMenuPanePanelClosed {
     height:100%;
@@ -507,6 +556,7 @@ cursor:default;}
     font-weight:bold;    
     padding-left:6px;
     padding-top:2px;
+       -moz-user-select: none;
 }
 
 .ScreenMenuList {
@@ -564,6 +614,7 @@ cursor:default;}
     height:18px;
     background:url("/openelis/Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
+       -moz-user-select: none;
 }
 
 .ScreenLeftTable{
@@ -604,11 +655,13 @@ cursor:default;}
     height:19px;
     cursor:pointer;
     background:url('/openelis/Images/tab.gif') no-repeat right;
+       -moz-user-select: none;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
     cursor:default;
     background:url('/openelis/Images/selectedtab.gif') no-repeat right;
+       -moz-user-select: none;
 }
 
 .gwt-TabPanelBottom{
@@ -967,6 +1020,7 @@ border:none;
     margin-right:8px;
 }
 .Prompt {
+   -moz-user-select: none;
 	color:gray;
 	padding:2px 4px 2px 2px;
 	text-align:right;
@@ -1173,6 +1227,8 @@ font-weight:bold;
   width:13px;
   background:url("/openelis/Images/unknow.png") left center no-repeat;
 }
+
+
 
 
 

@@ -95,6 +95,7 @@ height:18px;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
+       -moz-user-select: none;
 }
 .hide{
 	display:none;
@@ -198,4 +199,5 @@ a.index:hover{
     color:#FFFFFF;
     background:blue;
 }*/
+
 
