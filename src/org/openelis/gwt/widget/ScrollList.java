@@ -86,14 +86,29 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
                 if(dm.indexOf(((DataSet)selections.get(i)).getKey()) > -1)
-                    selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
+                	if(multi)
+                		selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
+                	else{
+                		selected.clear();
+                		selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
+                	}
                 else{
                     dm.add((DataSet)selections.get(i));
-                    selected.add((DataSet)selections.get(i));
+                    if(multi)
+                    	selected.add((DataSet)selections.get(i));
+                    else{
+                    	selected.clear();
+                    	selected.add((DataSet)selections.get(i));
+                    }
                 }
                     
             }else{
-                selected.add(dm.get((DataObject)selections.get(i)));
+            	if(multi)
+            		selected.add(dm.get((DataObject)selections.get(i)));
+            	else{
+            		selected.clear();
+            		selected.add(dm.get((DataObject)selections.get(i)));
+            	}
             }
         }
     }
@@ -424,7 +439,15 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         this.active = active;
         if(active > -1 && view.table.getRowCount() > 0){
             view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-            selected.add(dm.get(start+active));
+            //this will make sure it isnt already in the array
+            if(multi){
+            	selected.remove(dm.get(start+active));
+                selected.add(dm.get(start+active));	
+            }else{
+            	selected.clear();
+            	selected.add(dm.get(start+active));
+            }
+            
         }
         
     }

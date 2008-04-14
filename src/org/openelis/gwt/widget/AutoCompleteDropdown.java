@@ -303,14 +303,35 @@ public class AutoCompleteDropdown extends Composite implements
 			
 			DOM.addEventPreview(scrollList);
 
-			if (!multiSelect && cat == null) {
-                if(scrollList.getSelected().size() > 0)
+			if (!multiSelect) {
+				//if the user clicked the arrow and there is already a row selected, we need to scroll to that row
+				if(clickedArrow && scrollList.getSelected().size() > 0)
                     startPos = scrollList.getDataModel().indexOf((DataSet)scrollList.getSelected().get(0));
-                else startPos = 0;
-                    scrollList.view.scrollBar.setScrollPosition(startPos
-                                                                * scrollList.getCellHeight());
-                    scrollList.scrollLoad(scrollList.view.scrollBar.getScrollPosition());
-			} else
+				//if they didnt click the arrow we can assume they typed something.  First we need to unselect all rows so we can recalculate the values
+				else if(!clickedArrow)
+						scrollList.unselectAll();
+					//if the row selected is at the bottom we need to calculate the scrolling differently
+					if(((scrollList.getDataModel().size()+1)  > scrollList.getMaxRows()) && startPos > ((scrollList.getDataModel().size()+1) - scrollList.getMaxRows())){
+						int newStartPos = (scrollList.getDataModel().size() - scrollList.getMaxRows());
+						scrollList.scrollLoad(newStartPos * scrollList.getCellHeight());
+	                    scrollList.view.scrollBar.setScrollPosition((newStartPos+1) * scrollList.getCellHeight());
+					}else{						
+						scrollList.scrollLoad(startPos * scrollList.getCellHeight());
+						scrollList.view.scrollBar.setScrollPosition(startPos * scrollList.getCellHeight());
+                    }
+                    
+//					if the row selected is at the bottom we need to calculate the selecting differently
+                    if(cat == null && (scrollList.getDataModel().size() > scrollList.getMaxRows()) && startPos > (scrollList.getDataModel().size() - scrollList.getMaxRows()) 
+                    		&& (startPos < scrollList.getDataModel().size())){
+                    	scrollList.unselectAll();
+                    	scrollList.setActive(scrollList.getMaxRows() - (scrollList.getDataModel().size() % startPos));
+                    }else if(cat == null && startPos > (scrollList.getDataModel().size() - scrollList.getMaxRows()) 
+                    		&& (startPos < scrollList.getDataModel().size())){
+                    	scrollList.unselectAll();
+                    	scrollList.setActive(startPos);
+                    }
+                   
+			}else
 				scrollList.scrollLoad(0);
 
 			// we need to set the selected style name to the textbox
@@ -323,21 +344,25 @@ public class AutoCompleteDropdown extends Composite implements
 				currentCursorPos = textBox.getText().length();
 				String firstRowDisplayText = ((String)((StringObject) scrollList
 						.getDataModel().get(startPos).getObject(0)).getValue()).trim();
-				if (firstRowDisplayText
-						.indexOf(textBox.getText()) == 0) {
+				if (firstRowDisplayText.toUpperCase()
+						.indexOf(textBox.getText().toUpperCase()) == 0) {
 					textBox.setText(firstRowDisplayText.trim());
 					textBox.setSelectionRange(currentCursorPos,
 							firstRowDisplayText.length() - currentCursorPos);
 				}
 			}
-            if(cat != null || scrollList.getSelected().size() == 0)
-                scrollList.setActive(0);
-			visible = true;
+			
+        if(scrollList.getSelected().size() == 0)
+        	scrollList.setActive(0);
+			
+        visible = true;
 
 		} else {
 			visible = false;
 			choicesPopup.hide();
 		}
+		//reset the clicked arrow flag
+		clickedArrow = false;
 	}
 
 	/**
@@ -376,6 +401,7 @@ public class AutoCompleteDropdown extends Composite implements
 		if (scrollList == null || textBox.getText().length() == 0) {
 			if (textBox.getText().equals("")) {
 				textBox.setText("");
+				scrollList.unselectAll();
 			//	this.value = null;
 			}
 			// else do nothing
@@ -392,6 +418,8 @@ public class AutoCompleteDropdown extends Composite implements
 			textBoxDefault = textValue;
 
 		}
+		textBox.setFocus(true);
+		
 		currentStart = -1;
 		currentActive = -1;
 		if (!multiSelect) {
@@ -414,7 +442,7 @@ public class AutoCompleteDropdown extends Composite implements
                     public void onSuccess(Object result){
                         scrollList.setDataModel((DataModel)result);
                         currentActive = 0;
-                        clickedArrow = true;
+                     //   clickedArrow = true;
                         showMatches(0);
                     }
                     public void onFailure(Throwable caught) {
@@ -598,12 +626,15 @@ public class AutoCompleteDropdown extends Composite implements
 				// we need to set the unselected style name to the textbox
 				textBox.addStyleName("TextboxUnselected");
 				textBox.removeStyleName("TextboxSelected");
-				if (textBoxDefault != null)
-					textBox.setText(textBoxDefault);
+				//if (textBoxDefault != null)
+				//	textBox.setText(textBoxDefault);
 
 				focusPanel.removeStyleName("Selected");
 
-				//complete();
+				//this will hide the popup if it visible
+				//it will do nothing if it isnt showing
+				//choicesPopup.hide();
+				complete();
 			}
 		}
 	}
