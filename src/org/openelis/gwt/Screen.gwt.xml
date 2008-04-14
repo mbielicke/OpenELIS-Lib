@@ -1,5 +1,5 @@
 <module>
   <source path="screen"/>
   <stylesheet src="CSS/screen.css"/>
-  <servlet path="/CalendarServlet" class="org.openelis.gwt.server.CalendarSerlvet"/>
+  <servlet path="/CalendarServlet" class="org.openelis.gwt.server.CalendarServlet"/>
 </module>
