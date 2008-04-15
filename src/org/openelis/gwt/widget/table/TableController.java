@@ -141,6 +141,13 @@ public abstract class TableController extends Composite implements
     public void setShowRows(boolean showRows){
         this.showRows = showRows;
     }
+    
+    public void setShowScroll(boolean showScrolls){
+        if(showScrolls){
+            view.scrollBar.setAlwaysShowScrollBars(true);
+            DOM.setStyleAttribute(view.scrollBar.getElement(), "display", "block");
+        }
+    }
 
     /**
      * This method handles all click events on the body of the table and the

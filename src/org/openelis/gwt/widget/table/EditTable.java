@@ -688,7 +688,7 @@ public class EditTable extends TableController implements
                 createRow(i);
             }
         }
-        if(model.numRows() > maxRows)
+        //if(model.numRows() > maxRows)
             view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
         //else
         //    view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
