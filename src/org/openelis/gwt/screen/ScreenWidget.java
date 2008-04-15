@@ -279,6 +279,10 @@ public class ScreenWidget extends SimplePanel implements
                     addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
             }
         }
+        if (node.getAttributes().getNamedItem("visible") != null){
+        	if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
+        		getWidget().setVisible(false);
+        }
     }
 
     /**  

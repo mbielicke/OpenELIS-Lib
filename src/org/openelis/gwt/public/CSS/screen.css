@@ -269,7 +269,6 @@ color:gray;
 
 .ButtonPanelButton .ButtonContent {
     background:none;
-    
 }
 .Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
     background:url("/openelis/Images/screenbuttonhover.gif") repeat-x;
@@ -454,6 +453,7 @@ cursor:default;}
     overflow:hidden;
     background: url("/openelis/Images/windowright.gif") repeat-y;
 }
+
 .Caption{
     background:url("/openelis/Images/windowheader.gif") repeat-x;
     height:29px;
@@ -1228,7 +1228,15 @@ font-weight:bold;
   background:url("/openelis/Images/unknow.png") left center no-repeat;
 }
 
+.EditSettings {
+	width:13px;
+	height:13px;
+	background:url("/openelis/Images/apply.png") left center no-repeat;
+	text-align:right;
+}
 
-
-
+.FavoritesHeader {
+    background:lightblue;
+    width:100%;	
+}
 
