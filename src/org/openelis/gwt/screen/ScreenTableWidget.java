@@ -1,6 +1,7 @@
 package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
@@ -243,7 +244,10 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 } else {
                     table.init(0);
                 }
-                    
+                if(node.getAttributes().getNamedItem("showScroll") != null){
+                    if(node.getAttributes().getNamedItem("showScroll").getNodeValue().equals("true"))
+                        table.controller.setShowScroll(true);
+                }
             //} catch (Exception e) {
             //    Window.alert("create Table from node" +e.getMessage());
            // }
