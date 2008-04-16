@@ -198,19 +198,12 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         hp.add(trCorner);
         status.setStyleName("StatusBar");
         status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        
-        //status.add(blCorner);
-        //statusImg.setStyleName("spinnerIcon");
-        statusImg.setWidth("16px");
-        statusImg.setHeight("16px");
+
         status.add(statusImg);
         status.add(message);
-       // status.add(brCorner);
         
         status.setWidth("100%");
         status.setCellWidth(message, "100%");
-        status.setCellHeight(statusImg, "16px");
-        status.setCellWidth(statusImg, "16px");
         message.setStyleName("ScreenWindowLabel");
         outer.add(hp);
         
@@ -259,7 +252,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         }else if(content instanceof Screen) {
             ((Screen)content).window = this;
         }
-        //setVisible(true);
     }
     
     private void checkZ() {
@@ -278,7 +270,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         if(sender == fp){
             if(browser != null && browser.index != zIndex){
                 browser.index++;
-               // WindowBrowser.setIndex(getElement(), browser.index);
+
                zIndex = browser.index;
             }
         }
@@ -315,12 +307,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
     
     public void onDragDropEnd(Widget sender, Widget target) {
-        // TODO Auto-generated method stub
         
     }
 
     public void onDragEnd(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
         int X = browser.browser.getWidgetLeft(sender);
         int Y = browser.browser.getWidgetTop(sender);
         if(X < 0)
