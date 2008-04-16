@@ -154,6 +154,8 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
     }
     
     public void destroy() {
+    	auto.clear();
+    	auto.scrollList = null;
         auto = null;
         super.destroy();
     }
