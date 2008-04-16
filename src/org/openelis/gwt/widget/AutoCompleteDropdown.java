@@ -73,7 +73,7 @@ public class AutoCompleteDropdown extends Composite implements
 	/**
 	 * Widget used to display the suggestions and register click events.
 	 */
-	ScrollList scrollList;
+	public ScrollList scrollList;
 
 	HashMap idHashMap = new HashMap();
 
@@ -361,8 +361,6 @@ public class AutoCompleteDropdown extends Composite implements
 			visible = false;
 			choicesPopup.hide();
 		}
-		//reset the clicked arrow flag
-		clickedArrow = false;
 	}
 
 	/**
@@ -428,6 +426,7 @@ public class AutoCompleteDropdown extends Composite implements
 		}
 		if (callback != null)
 			callback.fireChange(this);
+		clickedArrow = false;
 	}
 
 	/**
@@ -442,7 +441,7 @@ public class AutoCompleteDropdown extends Composite implements
                     public void onSuccess(Object result){
                         scrollList.setDataModel((DataModel)result);
                         currentActive = 0;
-                     //   clickedArrow = true;
+
                         showMatches(0);
                     }
                     public void onFailure(Throwable caught) {
@@ -450,7 +449,6 @@ public class AutoCompleteDropdown extends Composite implements
                     }
                 });
             } catch (RPCException e) {
-                // TODO Auto-generated catch block
                 Window.alert(e.getMessage());
             }
         }else{
@@ -477,7 +475,7 @@ public class AutoCompleteDropdown extends Composite implements
 			textBox.setText(textBox.getText().substring(0, currentCursorPos));
 			this.startPos = 0;
 		}
-
+		clickedArrow = false;
 		showMatches(this.startPos);
 	}
 
@@ -547,9 +545,7 @@ public class AutoCompleteDropdown extends Composite implements
 	public void onClick(Widget sender) {
 		if (!textBox.isReadOnly()) {
 			if (sender == focusPanel) {
-				
-				//setCurrentValues();
-				
+								
 				clickedArrow = true;
 
 				showMatches(0);
@@ -626,14 +622,9 @@ public class AutoCompleteDropdown extends Composite implements
 				// we need to set the unselected style name to the textbox
 				textBox.addStyleName("TextboxUnselected");
 				textBox.removeStyleName("TextboxSelected");
-				//if (textBoxDefault != null)
-				//	textBox.setText(textBoxDefault);
 
 				focusPanel.removeStyleName("Selected");
 
-				//this will hide the popup if it visible
-				//it will do nothing if it isnt showing
-				//choicesPopup.hide();
 				complete();
 			}
 		}
@@ -670,7 +661,7 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	public void clear() {
-		scrollList.getDataModel().clear();
+		scrollList.clear();
 	}
 
 	public void addItem(String key, String display) {
@@ -704,13 +695,10 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	public int getTabIndex() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public void setAccessKey(char key) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setFocus(boolean focused) {
@@ -722,8 +710,6 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	public void setTabIndex(int index) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void addFocusListener(FocusListener listener) {
@@ -736,13 +722,9 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	public void addKeyboardListener(KeyboardListener listener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void removeKeyboardListener(KeyboardListener listener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setFromModel(boolean fromModel) {
