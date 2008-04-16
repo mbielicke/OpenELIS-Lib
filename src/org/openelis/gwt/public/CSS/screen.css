@@ -130,7 +130,7 @@ color:gray;
 .instrumentIcon {background:transparent url(/openelis/Images/instrumentbuttonimage.gif) no-repeat scroll center;}
 .testIcon {background:transparent url(/openelis/Images/testbuttonimage.gif) no-repeat scroll center;}
 .methodIcon {background:transparent url(/openelis/Images/methodbuttonimage.gif) no-repeat scroll center;}
-.spinnerIcon {background:transparent url(/openelis/Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+.spinnerIcon {width:16px; height:16px;background:transparent url(/openelis/Images/OSXspinnerGIF.gif) no-repeat scroll center;}
 .panelIcon{
 }
 .QAEventIcon{

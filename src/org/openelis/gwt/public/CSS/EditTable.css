@@ -158,11 +158,9 @@ width:16px;
 height:16px;
 background:url('../Images/previous.gif') no-repeat center center;
 }
-
-.prevNavIndexDisabled{
-width:16px;
-height:16px;
-background:none;
+.disabled .prevNavIndex{
+background:url('../Images/previousdisabled.gif') no-repeat center center;
+cursor:default;
 }
 
 .nextNavIndex{
@@ -170,6 +168,10 @@ width:16px;
 height:16px;
 background:url('../Images/next.gif') no-repeat center center;
 }	
+.disabled .nextNavIndex{
+background:url('../Images/nextdisabled.gif') no-repeat center center;
+cursor:default;
+}
 
 a.index:hover{
    color:white;
