@@ -503,7 +503,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                     }
                 }   
             }
-            if(multi && selectedRow == clicked){
+            if(multi && selected.contains(dm.get(start+clicked))){
                 view.table.getRowFormatter().removeStyleName(clicked, TableView.selectedStyle);
                 selected.remove(dm.get(start+clicked));
             }else{
