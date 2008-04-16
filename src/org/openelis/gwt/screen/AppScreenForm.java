@@ -462,6 +462,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             bpanel = null;
             message = null;      
             window = null;
+            modelWidget = null;            
         }
         super.onDetach();
     }
