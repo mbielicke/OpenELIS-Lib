@@ -23,7 +23,13 @@ public class MenuItem extends Composite {
         Label label = new Label(labelText);
         label.setStyleName("topMenuItemTitle");
         label.addStyleName("locked");
-        Label description = new Label(descriptionText);
+        
+        Label description;
+        if("EXCEPTION".equals(descriptionText))
+        	description = new Label();
+        else
+        	description = new Label(descriptionText);
+        
         description.setStyleName("topMenuItemDesc");
         table.setWidget(0,0,iconPanel);
         textPanel.add(label);
