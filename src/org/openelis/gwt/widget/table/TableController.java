@@ -61,6 +61,7 @@ public abstract class TableController extends Composite implements
     public int maxRows;
     public int cellHeight = 18;
     public int cellSpacing = 1;
+    public boolean showScrolls;
 
     /**
      * This method will set the view for this table.
@@ -143,6 +144,7 @@ public abstract class TableController extends Composite implements
     }
     
     public void setShowScroll(boolean showScrolls){
+        this.showScrolls = showScrolls;
         if(showScrolls){
             view.scrollBar.setAlwaysShowScrollBars(true);
             DOM.setStyleAttribute(view.scrollBar.getElement(), "display", "block");
@@ -298,7 +300,7 @@ public abstract class TableController extends Composite implements
             width += curColWidth[i];
         }
         int displayWidth = width + (curColWidth.length*4) - (curColWidth.length -1);
-        view.table.setWidth(width+"px");
+        //view.table.setWidth(width+"px");
         if(view.headers != null){
             view.header.setWidth(displayWidth+"px");  
             for(int i = 0; i < curColWidth.length; i++){
@@ -314,6 +316,7 @@ public abstract class TableController extends Composite implements
         //    view.header.setWidth(view.table.getOffsetWidth()+"px");
         //else
             view.header.setWidth(displayWidth+"px");
+            view.cellView.setScrollWidth(displayWidth+"px");
        /* int viewWidth = -1;
         if(!view.width.equals("auto")){
             viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));

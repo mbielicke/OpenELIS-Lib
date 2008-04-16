@@ -37,7 +37,10 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public boolean loaded;
     public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
 
+        private AbsolutePanel ap = new AbsolutePanel();
+        
         public CellView() {
+            super.setWidget(ap);
             sinkEvents(Event.ONMOUSEWHEEL);
         }
         
@@ -61,8 +64,20 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         public void removeMouseWheelListener(MouseWheelListener listener) {
             if(listeners != null){
                 listeners.remove(listener);
-            }
-            
+            }    
+        }
+        
+        public void setScrollWidth(String width){
+            ap.setWidth(width);
+        }
+        
+        public void setWidget(Widget wid){
+            ap.add(wid);
+        }
+        
+        public void setHeight(String height) {
+            super.setHeight(height);
+            ap.setHeight(height);
         }
         
     }
@@ -361,11 +376,12 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public void setScrollHeight(int height) {
         try {
             scrollBar.getWidget().setHeight(height+"px");
-            
-            if(height > (cellView.getOffsetHeight()+18+controller.cellSpacing))
-                DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
-            else 
-                DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
+            if(!controller.showScrolls){
+                if(height > (cellView.getOffsetHeight()+18+controller.cellSpacing))
+                    DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
+                else 
+                    DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
+            }
         }catch(Exception e){
             Window.alert("set scroll height"+e.getMessage());
         }
