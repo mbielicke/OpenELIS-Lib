@@ -298,32 +298,28 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         navPanel.addStyleName(navLinks);
         navPanel.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
         DOM.setAttribute(navPanel.getElement(), "align", "center");
+        FocusPanel leftButtonPanel = new FocusPanel();
+        FocusPanel rightButtonPanel = new FocusPanel();
 
-        //HTML prevNav = new HTML("<a class='navIndex' value='-1'>&lt;</a>");
         prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
         prevNav.addClickListener(controller);
         
-        
-        //HTML noprevNav = new HTML("<a class='navIndex' style = 'color:lightgrey;'>&lt;</a>");       
-        HTML noprevNav = new HTML("");
-        noprevNav.addStyleName("prevNavIndexDisabled");
-        
-        //HTML nextNav = new HTML("<a class='navIndex' value='+1'>&gt;</a>");
         nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickListener(controller);               
+        nextNav.addClickListener(controller);
         
-        //HTML nonextNav = new HTML("<a class='navIndex' style = 'color:lightgrey;' >&gt;</a>");
-        HTML nonextNav = new HTML("");
-        nonextNav.addStyleName("nextNavIndexDisabled");                       
+        leftButtonPanel.add(prevNav);
+        rightButtonPanel.add(nextNav);
+        navPanel.add(leftButtonPanel);
+        navPanel.add(rightButtonPanel);                       
                         
-        //if (curIndex > 0) {            
-            navPanel.add(prevNav);                                   
-        //}
-        //else{          
-        //    navPanel.add(noprevNav);
-       // }
+        if (curIndex > 0) {            
+            leftButtonPanel.removeStyleName("disabled");
+        }
+        else{          
+        	leftButtonPanel.setStyleName("disabled");
+        }
         if(showIndex){
             for (int i = 1; i <= pages; i++) {
                 final int index = i - 1;
@@ -341,15 +337,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
                 navPanel.add(nav);
             }
         }
-       // if (curIndex < pages - 1) {            
-        //if(controller.model.rowsPerPage <= controller.model.numRows()){   
-            navPanel.add(nextNav);    
-            
-        //}
-        //else{
-            
-            navPanel.add(nonextNav);
-        //}
+
+        navPanel.add(nextNav);    
         
         vp.add(navPanel);
     }

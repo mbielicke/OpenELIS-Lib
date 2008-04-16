@@ -1176,11 +1176,21 @@ public class EditTable extends TableController implements
         if(start > 6)
         	page = htmlString.substring(start, end);
         
-        if (styleNames.indexOf("nextNavIndex")>-1)
+        if (styleNames.indexOf("nextNavIndex")>-1){
             manager.getNextPage(this);
-        else if (styleNames.indexOf("prevNavIndex")>-1)
+            if(model.pageIndex > 0){
+            	nav.getParent().removeStyleName("disabled");
+            }else{
+            	nav.getParent().setStyleName("disabled");
+            }
+        }else if (styleNames.indexOf("prevNavIndex")>-1){
             manager.getPreviousPage(this);
-        else if(!"".equals(page))
+            if(model.pageIndex > 0){
+            	nav.getParent().removeStyleName("disabled");
+            }else{
+            	nav.getParent().setStyleName("disabled");
+            }
+        }else if(!"".equals(page))
             manager.getPage(Integer.parseInt(page));
     }
 
