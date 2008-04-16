@@ -539,6 +539,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     
     public void changeState(int state){
         this.state = state;
-        changeListeners.fireChange(this);
+        if(changeListeners != null)
+            changeListeners.fireChange(this);
     }
 }
