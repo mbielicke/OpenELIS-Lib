@@ -1,22 +1,5 @@
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.screen.AppScreenForm;
@@ -28,12 +11,28 @@ import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.widget.table.TableController;
 import org.openelis.gwt.widget.table.TableView;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 public class AToZPanel extends TableController implements ClickListener, ChangeListener {
 	private HorizontalPanel mainHP = new HorizontalPanel();
 	private ScreenVertical alphabetButtonVP = new ScreenVertical();
 	private VerticalPanel tablePanel = new VerticalPanel();
 	private HorizontalPanel hideablePanel = new HorizontalPanel();
-	private AbsolutePanel middleBar = new AbsolutePanel();
+	private FocusPanel middleBar = new FocusPanel();
     private FocusPanel arrow = new FocusPanel();
     protected DataModel dm;
     protected DataModelWidget modelWidget;
@@ -167,7 +166,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 modelWidget = (DataModelWidget)sender;
                 dm = ((DataModelWidget)sender).getModel();
                 view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
-                view.setNavPanel(0, 0, false);
+                view.setNavPanel(dm.getPage(), dm.getPage()+1, false);
                 scrollLoad(0);
                 DOM.addEventPreview(this);
                 if(!refreshedByLetter){
@@ -192,12 +191,19 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
             if(bpanel != null){
                 switch(((AppScreenForm)sender).state) {
                     case FormInt.ADD:
+                    	bpanel.setPanelState(ButtonPanel.LOCKED);
+                        locked = true;
+                        unselect(selectedRow);
+                        break;
                     case FormInt.DELETE:
                     case FormInt.QUERY:
+                    	bpanel.setPanelState(ButtonPanel.LOCKED);
+                        locked = true;
+                        unselect(selectedRow);
+                        break;
                     case FormInt.UPDATE:
                         bpanel.setPanelState(ButtonPanel.LOCKED);
                         locked = true;
-                        unselect(selectedRow);
                         break;
                     case FormInt.DEFAULT:
                     case FormInt.DISPLAY:
