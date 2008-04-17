@@ -35,5 +35,9 @@ public class ConstantMap implements DataObject, Serializable{
     public String getConstant(String key){
         return (String)map.get(key);
     }
+    
+    public HashMap getMap(){
+        return map;
+    }
 
 }

@@ -61,7 +61,7 @@ public class AppScreen extends ScreenBase {
            public void onSuccess(Object result){
                DataObject[] data = (DataObject[])result;
                drawScreen((String)data[0].getValue());
-               initData = new DataModel[data.length-1];
+               initData = new DataObject[data.length-1];
                for(int i = 1; i < data.length; i++) {
                    initData[i-1] = data[i];
                }
