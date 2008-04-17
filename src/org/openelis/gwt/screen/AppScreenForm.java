@@ -10,10 +10,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.FieldErrorException;
+import org.openelis.gwt.common.FieldErrorListException;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.common.LastPageException;
 import org.openelis.gwt.common.RPCDeleteException;
+import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
@@ -264,7 +267,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                rpc = (FormRPC)result;
                forms.put(rpc.key, rpc);
                load();
-               afterCommitUpdate(true);
+               if (rpc.status == IForm.INVALID_FORM) {
+            	   drawErrors();
+            	   afterCommitUpdate(false);
+               } else {
+            	   afterCommitUpdate(true);
+               }
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
@@ -279,6 +287,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             changeState(FormInt.DISPLAY);
             window.setStatus(consts.get("updatingComplete"),"");
         }else{
+        	if(rpc.getErrors().size() > 0){
+    			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+    		}
             window.setStatus(consts.get("updateFailed"),"ErrorPanel");
         }
     }
@@ -289,11 +300,16 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                rpc = (FormRPC)result;
                forms.put(rpc.key,rpc);
                load();
-               afterCommitAdd(true);
+               if (rpc.status == IForm.INVALID_FORM) {
+            	   drawErrors();
+                   afterCommitAdd(false);
+               } else {
+                   afterCommitAdd(true);
+               }
            }
            public void onFailure(Throwable caught){
-               Window.alert(caught.getMessage());
-               afterCommitAdd(false);
+            	   Window.alert(caught.getMessage());
+            	   afterCommitAdd(false);
            }
         });
     }
@@ -304,7 +320,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             changeState(FormInt.DEFAULT);
             window.setStatus(consts.get("addingComplete"),"");
         }else{
-            window.setStatus(consts.get("addingFailed"),"ErrorPanel");
+        		if(rpc.getErrors().size() > 0){
+        			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+        		}
+        		window.setStatus(consts.get("addingFailed"),"ErrorPanel");
         }
     }
     
