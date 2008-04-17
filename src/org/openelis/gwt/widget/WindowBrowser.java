@@ -76,25 +76,18 @@ public class WindowBrowser extends Composite{
         }
         RootPanel.get().addStyleName("ScreenLoad");
         final WindowBrowser brws = this;
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-        
-                index++;
-                ScreenWindow window = new ScreenWindow(brws, text, category, loadingText);
-                window.setContent(screen);
-                //  setIndex(window.getElement(),index);
-                browser.add(window,(windows.size()*25),(windows.size()*25));
-                windows.put(text,window);
-        
-                if(screen instanceof Screen){
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
-                            ((Screen)screen).getXML(((Screen)screen).xmlUrl);
-                        }
-                    });
-                }
-            }
-        });
+        index++;
+        ScreenWindow window = new ScreenWindow(brws, text, category, loadingText);
+        window.setContent(screen);
+        browser.add(window,(windows.size()*25),(windows.size()*25));
+        windows.put(text,window);
+        if(screen instanceof Screen){
+             DeferredCommand.addCommand(new Command() {
+                 public void execute() {
+                     ((Screen)screen).getXML(((Screen)screen).xmlUrl);
+                 }
+             });
+        }
     }
     
     public void addScreen(final AppScreen screen) {
@@ -107,16 +100,11 @@ public class WindowBrowser extends Composite{
         }
         RootPanel.get().addStyleName("ScreenLoad");
         final WindowBrowser brws = this;
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                index++;
-                ScreenWindow window = new ScreenWindow(brws, screen.name);
-                window.setContent(screen);
-                //  setIndex(window.getElement(),index);
-                browser.add(window,(windows.size()*25),(windows.size()*25));
-                windows.put(screen.name,window);
-            }
-        });
+        index++;
+        ScreenWindow window = new ScreenWindow(brws, screen.name);
+        window.setContent(screen);
+        browser.add(window,(windows.size()*25),(windows.size()*25));
+        windows.put(screen.name,window);
     }
     
     public boolean selectScreen(String text) {
