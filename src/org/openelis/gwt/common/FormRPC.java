@@ -13,6 +13,7 @@ import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -32,7 +33,7 @@ public class FormRPC implements IForm, Serializable {
     private HashMap fields = new HashMap();
     public int operation;
     public int status;
-    public String error;
+    public ArrayList error = new ArrayList();
     public String action;
     public Integer userId;
     public String userName;
@@ -71,8 +72,8 @@ public class FormRPC implements IForm, Serializable {
         field.setValue(value);
     }
 
-    public void setError(String err) {
-        error = err;
+    public void addError(String err) {
+    	error.add(err);
     }
 
     public void setFieldError(String key, String err) {
@@ -102,7 +103,7 @@ public class FormRPC implements IForm, Serializable {
      * 
      * @see edu.uiowa.uhl.inmsp.interfaces.IForm#getError()
      */
-    public String getError() {
+    public ArrayList getErrors() {
         // TODO Auto-generated method stub
         return error;
     }
@@ -135,7 +136,7 @@ public class FormRPC implements IForm, Serializable {
 
     public void reset() {
         status = IForm.VALID_FORM;
-        error = "";
+        error = new ArrayList();
         Iterator keyIt = fields.keySet().iterator();
         while (keyIt.hasNext()) {
             String fieldKey = (String)keyIt.next();
