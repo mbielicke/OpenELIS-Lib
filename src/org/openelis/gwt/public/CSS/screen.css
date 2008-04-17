@@ -28,7 +28,7 @@ html, body {
     height:30px;
     width:100%;
     margin-bottom:8px;
-    background:black url(/openelis/Images/topmenubg.gif) repeat-x;
+    background:black url(../Images/topmenubg.gif) repeat-x;
 }
 
 .topMenuBarItem {
@@ -49,7 +49,7 @@ html, body {
 .topMenuContainer{
     border:1px solid #333;
     border-top:0;
-    background:#f0f0f0 url('/openelis/Images/menu.gif') repeat-y;
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
     padding:4px;
 }
 
@@ -87,50 +87,51 @@ color:gray;
 .Hover .TopMenuRowContainer, .Hover .FavMenuRowContainer{
     cursor:pointer;
     padding:0;
-    background:url('/openelis/Images/white-top-bottom.gif') repeat-x 0px -1px;
+    background:url('../Images/white-top-bottom.gif') repeat-x 0px -1px;
     border:1px solid #8db2e3;
 }
 .FavoritesTitlePanel{
-    background:#99bbe8 url("/openelis/Images/headersprite.gif") repeat-x;
+    background:#99bbe8 url("../Images/headersprite.gif") repeat-x;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
     border:1px solid #99bbe8;
 }
-.preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
+.EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .orderIcon, .inventoryIcon, .instrumentIcon, .testIcon, .methodIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
 .systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon{
     width:16px;
     height:16px;
 }
-.preferenceIcon{background:url('/openelis/Images/preferencebuttonimage.gif') no-repeat center;}
-.favoritesMenuIcon{background:url('/openelis/Images/favoritesbuttonimage.gif') no-repeat center;}
-.logoutIcon{background:url('/openelis/Images/logoutbuttonimage.gif') no-repeat center;}
-.cutIcon{background:url('/openelis/Images/cutbuttonimage.gif') no-repeat center;}
-.copyIcon{background:url('/openelis/Images/copybuttonimage.gif') no-repeat center;}
-.pasteIcon{background:url('/openelis/Images/pastebuttonimage.gif') no-repeat center;}
-.fullLoginIcon{background:url('/openelis/Images/fullloginbuttonimage.gif') no-repeat center;}
-.quickEntryIcon{background:url('/openelis/Images/quickentrybuttonimage.gif') no-repeat center;}
-.secondEntryIcon{background:url('/openelis/Images/secondentrybuttonimage.gif') no-repeat center;}
-.trackingIcon{background:url('/openelis/Images/trackingbuttonimage.gif') no-repeat center;}
-.projectIcon{background:url('/openelis/Images/addbuttonimage.gif') no-repeat center;}
-.providerIcon{background:url('/openelis/Images/providerbuttonimage.gif') no-repeat center;}
-.organizationIcon{background:url('/openelis/Images/organizationbuttonimage.gif') no-repeat center;}
-.worksheetCreationIcon{background:url('/openelis/Images/worksheetcreationbuttonimage.gif') no-repeat center;}
-.worksheetCompletionIcon{background:url('/openelis/Images/worksheetcompletionbuttonimage.gif') no-repeat center;}
-.addOrCancelIcon{background:url('/openelis/Images/addorcancelIconbuttonimage.gif') no-repeat center;}
-.reviewAndReleaseIcon{background:url('/openelis/Images/reviewandreleasebuttonimage.gif') no-repeat center;}
-.toDoIcon{background:url('/openelis/Images/todobuttonimage.gif') no-repeat center;}
-.labelForIcon{background:url('/openelis/Images/labelforbuttonimage.gif') no-repeat center;}
-.storageIcon{background:url('/openelis/Images/storagebuttonimage.gif') no-repeat center;}
-.QCIcon{background:url('/openelis/Images/qcbuttonimage.gif') no-repeat center;}
-.orderIcon{background:url('/openelis/Images/orderbuttonimage.gif') no-repeat center;}
-.inventoryIcon {background:transparent url(/openelis/Images/inventorybuttonimage.gif) no-repeat scroll center;}
-.instrumentIcon {background:transparent url(/openelis/Images/instrumentbuttonimage.gif) no-repeat scroll center;}
-.testIcon {background:transparent url(/openelis/Images/testbuttonimage.gif) no-repeat scroll center;}
-.methodIcon {background:transparent url(/openelis/Images/methodbuttonimage.gif) no-repeat scroll center;}
-.spinnerIcon {width:16px; height:16px;background:transparent url(/openelis/Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+.preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
+.EditSettings{background:url('../Images/cog.gif') no-repeat center;}
+.favoritesMenuIcon{background:url('../Images/favoritesbuttonimage.gif') no-repeat center;}
+.logoutIcon{background:url('../Images/logoutbuttonimage.gif') no-repeat center;}
+.cutIcon{background:url('../Images/cutbuttonimage.gif') no-repeat center;}
+.copyIcon{background:url('../Images/copybuttonimage.gif') no-repeat center;}
+.pasteIcon{background:url('../Images/pastebuttonimage.gif') no-repeat center;}
+.fullLoginIcon{background:url('../Images/fullloginbuttonimage.gif') no-repeat center;}
+.quickEntryIcon{background:url('../Images/quickentrybuttonimage.gif') no-repeat center;}
+.secondEntryIcon{background:url('../Images/secondentrybuttonimage.gif') no-repeat center;}
+.trackingIcon{background:url('../Images/trackingbuttonimage.gif') no-repeat center;}
+.projectIcon{background:url('../Images/addbuttonimage.gif') no-repeat center;}
+.providerIcon{background:url('../Images/providerbuttonimage.gif') no-repeat center;}
+.organizationIcon{background:url('../Images/organizationbuttonimage.gif') no-repeat center;}
+.worksheetCreationIcon{background:url('../Images/worksheetcreationbuttonimage.gif') no-repeat center;}
+.worksheetCompletionIcon{background:url('../Images/worksheetcompletionbuttonimage.gif') no-repeat center;}
+.addOrCancelIcon{background:url('../Images/addorcancelIconbuttonimage.gif') no-repeat center;}
+.reviewAndReleaseIcon{background:url('../Images/reviewandreleasebuttonimage.gif') no-repeat center;}
+.toDoIcon{background:url('../Images/todobuttonimage.gif') no-repeat center;}
+.labelForIcon{background:url('../Images/labelforbuttonimage.gif') no-repeat center;}
+.storageIcon{background:url('../Images/storagebuttonimage.gif') no-repeat center;}
+.QCIcon{background:url('../Images/qcbuttonimage.gif') no-repeat center;}
+.orderIcon{background:url('../Images/orderbuttonimage.gif') no-repeat center;}
+.inventoryIcon {background:transparent url(../Images/inventorybuttonimage.gif) no-repeat scroll center;}
+.instrumentIcon {background:transparent url(../Images/instrumentbuttonimage.gif) no-repeat scroll center;}
+.testIcon {background:transparent url(../Images/testbuttonimage.gif) no-repeat scroll center;}
+.methodIcon {background:transparent url(../Images/methodbuttonimage.gif) no-repeat scroll center;}
+.spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
 .panelIcon{
 }
 .QAEventIcon{
@@ -168,7 +169,7 @@ color:gray;
 .referenceIcon{
 }
 .arrowIcon{
-   background:url('/openelis/Images/nextbuttonimage.gif') no-repeat center;
+   background:url('../Images/nextbuttonimage.gif') no-repeat center;
 }
 /*******END TOP MENU BAR***********/
 
@@ -186,22 +187,22 @@ color:gray;
     margin:2px 0 0 0 ;
     width:2px;
     height:21px;
-    background:url("/openelis/Images/screenbuttonrs.gif") no-repeat;
+    background:url("../Images/screenbuttonrs.gif") no-repeat;
     cursor:default;
 }
 .disabled .ButtonRightSide{
-    background:url("/openelis/Images/screenbuttonrsdisabled.gif") no-repeat;
+    background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
 }
 
 .ButtonLeftSide{
     margin:2px 0 0 4px;
     width:2px;    
     height:21px;
-    background:url("/openelis/Images/screenbuttonls.gif") no-repeat;
+    background:url("../Images/screenbuttonls.gif") no-repeat;
     cursor:default;
 }
 .disabled .ButtonLeftSide{
-    background:url("/openelis/Images/screenbuttonlsdisabled.gif") no-repeat;
+    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
 }
 
 .ButtonContent{
@@ -209,15 +210,15 @@ color:gray;
     padding: 2px 4px 0 4px;
     height:21px;
     cursor:default;
-    background:url("/openelis/Images/screenbuttonbg.gif") repeat-x;
+    background:url("../Images/screenbuttonbg.gif") repeat-x;
        -moz-user-select: none;
 }
 .Hover .ButtonContent, .Pressed .ButtonContent {
-    background:url("/openelis/Images/screenbuttonhover.gif") repeat-x;
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
     cursor:pointer;
 }
 .disabled .ButtonContent{
-    background:url("/openelis/Images/screenbuttonbgdisabled.gif") repeat-x;
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
 }
 
 .disabled .ScreenLabel{
@@ -229,16 +230,16 @@ color:gray;
     height:20px;
 }
 .RemoveRowButtonImage{
-    background:url("/openelis/Images/removerowbuttonimage.gif") no-repeat;
+    background:url("../Images/removerowbuttonimage.gif") no-repeat;
 }
 .disabled .RemoveRowButtonImage{
-    background:url("/openelis/Images/removerowbuttonimagedisabled.gif") no-repeat;
+    background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
 }
 .StandardNoteButtonImage{
-    background:url("/openelis/Images/note.gif") no-repeat;
+    background:url("../Images/note.gif") no-repeat;
 }
 .disabled .StandardNoteButtonImage{
-    background:url("/openelis/Images/standardnotebuttonimagedisabled.gif") no-repeat;
+    background:url("../Images/standardnotebuttonimagedisabled.gif") no-repeat;
 }
 
 .FindButtonImage{
@@ -246,10 +247,10 @@ color:gray;
     height:20px;
 }
 .FindButtonImage{
-    background:url("/openelis/Images/page_find.gif") no-repeat;
+    background:url("../Images/page_find.gif") no-repeat;
 }
 .disabled .FindButtonImage{
-    background:url("/openelis/Images/page_findDisabled.gif") no-repeat;
+    background:url("../Images/page_findDisabled.gif") no-repeat;
 }
 /*******End General Button Class***********/
 
@@ -257,21 +258,21 @@ color:gray;
 /*******Button Panel***********/
 .ButtonPanelContainer{
     height:26px;
-    background:url("/openelis/Images/buttonbarbg.gif") repeat-x;
+    background:url("../Images/buttonbarbg.gif") repeat-x;
 }
 
 .ButtonDivider{
     width:2px;
     height:13px;
     margin:6px 2px 0 2px;
-    background:url("/openelis/Images/buttondivider.gif") no-repeat;
+    background:url("../Images/buttondivider.gif") no-repeat;
 }
 
 .ButtonPanelButton .ButtonContent {
     background:none;
 }
 .Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
-    background:url("/openelis/Images/screenbuttonhover.gif") repeat-x;
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
     cursor:pointer;
 }
 .disabled .ButtonPanelButton .ButtonContent{
@@ -292,7 +293,7 @@ color:gray;
      background:none;
 }
 .Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{
-    background:url("/openelis/Images/screenbuttonrs.gif") no-repeat;
+    background:url("../Images/screenbuttonrs.gif") no-repeat;
 }
 .Disabled .ButtonPanelButton .ButtonRightSide{
     background:none;
@@ -302,7 +303,7 @@ color:gray;
     background:none;
 }
 .Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
-    background:url("/openelis/Images/screenbuttonls.gif") no-repeat;
+    background:url("../Images/screenbuttonls.gif") no-repeat;
 }
 .Disabled .ButtonPanelButton .ButtonLeftSide{
     background:none;
@@ -311,35 +312,35 @@ color:gray;
 .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .UpdateButtonImage, .DeleteButtonImage, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
-    background:url("/openelis/Images/note.gif") no-repeat;
+    background:url("../Images/note.gif") no-repeat;
 }
 .Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, .Disabled .CommitButtonImage, .Disabled .AbortButtonImage{
     background:none;
     cursor:default;
 }
-.QueryButtonImage{background:url("/openelis/Images/querybuttonimage.gif") no-repeat;}
-.disabled .QueryButtonImage{background:url("/openelis/Images/querybuttonimagedisabled.gif") no-repeat;}
+.QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
+.disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
 
-.PreviousButtonImage{background:url("/openelis/Images/previousbuttonimage.gif") no-repeat;}
-.disabled .PreviousButtonImage{background:url("/openelis/Images/previousbuttonimagedisabled.gif") no-repeat;}
+.PreviousButtonImage{background:url("../Images/previousbuttonimage.gif") no-repeat;}
+.disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
 
-.NextButtonImage{background:url("/openelis/Images/nextbuttonimage.gif") no-repeat;}
-.disabled .NextButtonImage{background:url("/openelis/Images/nextbuttonimagedisabled.gif") no-repeat;}
+.NextButtonImage{background:url("../Images/nextbuttonimage.gif") no-repeat;}
+.disabled .NextButtonImage{background:url("../Images/nextbuttonimagedisabled.gif") no-repeat;}
 
-.AddButtonImage{background:url("/openelis/Images/addbuttonimage.gif") no-repeat;}
-.disabled .AddButtonImage{background:url("/openelis/Images/addbuttonimagedisabled.gif") no-repeat;}
+.AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
+.disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
 
-.UpdateButtonImage{background:url("/openelis/Images/updatebuttonimage.gif") no-repeat;}
-.disabled .UpdateButtonImage{background:url("/openelis/Images/updatebuttonimagedisabled.gif") no-repeat;}
+.UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
+.disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
 
-.DeleteButtonImage{background:url("/openelis/Images/deletebuttonimage.gif") no-repeat;}
-.disabled .DeleteButtonImage{background:url("/openelis/Images/deletebuttonimagedisabled.gif") no-repeat;}
+.DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
+.disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
 
-.CommitButtonImage{background:url("/openelis/Images/commitbuttonimage.gif") no-repeat;}
-.disabled .CommitButtonImage{background:url("/openelis/Images/commitbuttonimagedisabled.gif") no-repeat;}
+.CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
+.disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
 
-.AbortButtonImage{background:url("/openelis/Images/abortbuttonimage.gif") no-repeat;}
-.disabled .AbortButtonImage{background:url("/openelis/Images/abortbuttonimagedisabled.gif") no-repeat;}
+.AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
+.disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
 /********* end button panel **********/
 
 
@@ -360,7 +361,7 @@ color:gray;
 
 .Hover .smallButton .ButtonContent, .Pressed .smallButton .ButtonContent, .Hover .FavHeaderButton .ButtonContent {
     cursor:pointer;
-    background:url("/openelis/Images/screenbuttonbgsmall.gif") repeat-x;
+    background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
 }
 .Pressed .smallButton .ButtonContent{cursor:default;}
 
@@ -380,7 +381,7 @@ color:gray;
 }
 .Hover .smallButton .ButtonRightSide, .Pressed .smallButton .ButtonRightSide, .Hover .FavHeaderButton .ButtonRightSide{
     cursor:pointer;
-    background:url("/openelis/Images/screenbuttonrssmall.gif") no-repeat;
+    background:url("../Images/screenbuttonrssmall.gif") no-repeat;
 }
 .Pressed .smallButton .ButtonRightSide, .Current .smallButton .ButtonRightSide{
     cursor:default;
@@ -389,7 +390,7 @@ color:gray;
 .Hover .smallButton .ButtonLeftSide, .Pressed .smallButton .ButtonLeftSide,
 .Hover .FavHeaderButton .ButtonLeftSide{
     cursor:pointer;
-    background:url("/openelis/Images/screenbuttonlssmall.gif") no-repeat;
+    background:url("../Images/screenbuttonlssmall.gif") no-repeat;
 }
 .Pressed .smallButton .ButtonLeftSide,  .Current .smallButton .ButtonLeftSide{cursor:default;}
 .disabled .smallButton .ButtonContent {    background:none;
@@ -403,7 +404,7 @@ cursor:default;}
 }
 
 .CloseButton {
-    background:url("/openelis/Images/close.png");
+    background:url("../Images/close.png");
     width:20px;
     height:20px;
     cursor:pointer;
@@ -411,56 +412,56 @@ cursor:default;}
 
 .MinimizeButton {
    padding-top:5px;
-   background:url("/openelis/Images/minimize.gif") no-repeat;
+   background:url("../Images/minimize.gif") no-repeat;
    width:20px;
    height:20px;
    cursor:pointer;
 }
 
 .AppBackground {
-    background:#3D71B8 url(/openelis/Images/desktop.jpg) no-repeat scroll left top;
+    background:#3D71B8 url(../Images/desktop.jpg) no-repeat scroll left top;
 }
 
 .WindowTR {
     width:7px;
     height:29px;
-    background: transparent url("/openelis/Images/windowtr.gif");
+    background: transparent url("../Images/windowtr.gif");
 }
 .WindowTL {
     width:7px;
     height:29px;
-    background: url("/openelis/Images/windowtl.gif");
+    background: url("../Images/windowtl.gif");
 }
 .WindowBR {
     width:7px;
     height:28px;
-    background: url("/openelis/Images/windowbr.gif");
+    background: url("../Images/windowbr.gif");
 }
 .WindowBL {
     width:7px;
     height:28px;
-    background: url("/openelis/Images/windowbl.gif");
+    background: url("../Images/windowbl.gif");
 }
 .WindowLeft {
     width:7px;
     height:100%;
     overflow:hidden;
-    background: url("/openelis/Images/windowleft.gif");
+    background: url("../Images/windowleft.gif");
 }
 .WindowRight {
     width:7px;
     height:100%;
     overflow:hidden;
-    background: url("/openelis/Images/windowright.gif") repeat-y;
+    background: url("../Images/windowright.gif") repeat-y;
 }
 
 .Caption{
-    background:url("/openelis/Images/windowheader.gif") repeat-x;
+    background:url("../Images/windowheader.gif") repeat-x;
     height:29px;
     cursor:move;
 }
 .StatusBar {
-    background:url("/openelis/Images/windowfooter.gif") repeat-x;
+    background:url("../Images/windowfooter.gif") repeat-x;
     height:28px;
 }
 
@@ -474,40 +475,40 @@ border:0px;
 .ErrorWindow .WindowTR {
     width:2px;
     height:2px;
-    background: transparent url("/openelis/Images/popuptr.gif") no-repeat;
+    background: transparent url("../Images/popuptr.gif") no-repeat;
 }
 
 .ErrorWindow .WindowRight {
     width:2px;
     height:100%;
-    background:url("/openelis/Images/popupright.gif") repeat-y;
+    background:url("../Images/popupright.gif") repeat-y;
 }
 .ErrorWindow .WindowBR {
-    background:url("/openelis/Images/popupbr.gif") no-repeat;
+    background:url("../Images/popupbr.gif") no-repeat;
     width:2px;
     height:2px;
 }
 .ErrorWindow .StatusBar {
-    background:url("/openelis/Images/popupbottom.gif") repeat-x bottom;
+    background:url("../Images/popupbottom.gif") repeat-x bottom;
     height:2px;
 }
 .ErrorWindow .WindowBL {
     width:2px;
     height:2px;
-    background:url("/openelis/Images/popupbl.gif") no-repeat top;
+    background:url("../Images/popupbl.gif") no-repeat top;
 }
 .ErrorWindow .WindowLeft {
     width:2px;
     height:100%;
-    background: url("/openelis/Images/popupleft.gif") repeat-y;
+    background: url("../Images/popupleft.gif") repeat-y;
 }
 .ErrorWindow .WindowTL {
     width:2px;
     height:2px;
-    background: url("/openelis/Images/popuptl.gif") no-repeat;
+    background: url("../Images/popuptl.gif") no-repeat;
 }
 .ErrorWindow .Caption{
-    background:url("/openelis/Images/popuptop.gif") repeat-x;
+    background:url("../Images/popuptop.gif") repeat-x;
     height:2px;
 }
 /*ErrorWindow end*/
@@ -515,7 +516,7 @@ border:0px;
 .LeftMenuPanePanelClosed {
     height:100%;
     width:5px;
-    background:white url("/openelis/Images/buttonbarbg.gif") repeat-x;
+    background:white url("../Images/buttonbarbg.gif") repeat-x;
 }
 
 .LeftMenuPanePanelOpen {
@@ -531,15 +532,15 @@ border:0px;
 }
 .LeftMenuPanePanelClosed .LeftMenuPanePanelDiv{
     margin-right:1px;
-    background:url("/openelis/Images/openleftbar.gif") no-repeat center;
+    background:url("../Images/openleftbar.gif") no-repeat center;
 }
 .LeftMenuPanePanelOpen .LeftMenuPanePanelDiv{
     margin-left:1px;
-    background:url("/openelis/Images/closeleftbar.gif") no-repeat center;
+    background:url("../Images/closeleftbar.gif") no-repeat center;
 }
 
 .StatusImage {
-    background-image:url("/openelis/Images/exclamation.png");
+    background-image:url("../Images/exclamation.png");
     height:16px;
     width:16px;
 }
@@ -595,7 +596,7 @@ border:0px;
     font-size:11px;
     padding:0 8px 0 4px;
     height:18px;
-    background:url("/openelis/Images/headersprite.gif") repeat-x;
+    background:url("../Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
 }
 
@@ -612,7 +613,7 @@ border:0px;
     padding:0 8px 0 4px;
     width:100%;
     height:18px;
-    background:url("/openelis/Images/headersprite.gif") repeat-x;
+    background:url("../Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
        -moz-user-select: none;
 }
@@ -644,7 +645,7 @@ border:0px;
 }
 
 .gwt-TabBarFirst{
-    background:url('/openelis/Images/tabfirst.gif') no-repeat;
+    background:url('../Images/tabfirst.gif') no-repeat;
 }   
 
 .gwt-TabBar .gwt-TabBarItem {
@@ -654,13 +655,13 @@ border:0px;
     padding:0 8px 0 4px;
     height:19px;
     cursor:pointer;
-    background:url('/openelis/Images/tab.gif') no-repeat right;
+    background:url('../Images/tab.gif') no-repeat right;
        -moz-user-select: none;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
     cursor:default;
-    background:url('/openelis/Images/selectedtab.gif') no-repeat right;
+    background:url('../Images/selectedtab.gif') no-repeat right;
        -moz-user-select: none;
 }
 
@@ -682,20 +683,20 @@ border:0px;
     width:16px;
     height:19px;
     border-bottom: 1px solid #d8d8d8;
-    background: url(/openelis/Images/trigger.gif) 0px 0px no-repeat;
+    background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
 .AutoDropdown .Hover{
     cursor:pointer;
     border-bottom: 1px solid  #7eadd9;
-    background: url(/openelis/Images/trigger.gif) -16px 0px no-repeat;
+    background: url(../Images/trigger.gif) -16px 0px no-repeat;
 }
 .AutoDropdown .Selected{
     border-bottom: 1px solid  #7eadd9;
-    background: url(/openelis/Images/trigger.gif) -64px 0px no-repeat;
+    background: url(../Images/trigger.gif) -64px 0px no-repeat;
 }
 .AutoDropdown .Pressed{
     border-bottom: 1px solid #d8d8d8;
-    background: url(/openelis/Images/trigger.gif) -48px 0px no-repeat;
+    background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
 .AutoCompletePopup{
     background:#FFFFFF;
@@ -739,17 +740,17 @@ border:0px;
 width:16px;
 height:15px;
 border-bottom: 1px solid #d8d8d8;
-background: url(/openelis/Images/trigger.gif) 0px 0px no-repeat;
+background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
 .TableAutoDropdown .Hover{
 cursor:pointer;
-background: url(/openelis/Images/trigger.gif) -16px 0px no-repeat;
+background: url(../Images/trigger.gif) -16px 0px no-repeat;
 }
 .TableAutoDropdown .Selected{
-background: url(/openelis/Images/trigger.gif) -64px 0px no-repeat;
+background: url(../Images/trigger.gif) -64px 0px no-repeat;
 }
 .TableAutoDropdown .Pressed{
-background: url(/openelis/Images/trigger.gif) -48px 0px no-repeat;
+background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
 /*******end autodropdown css********/
 .ScreenSplit {
@@ -793,20 +794,20 @@ height:19px;
 width:14px;
 height:19px;
 border-bottom: 1px solid #d8d8d8;
-background: url(/openelis/Images/date-trigger.gif) 0px 0px no-repeat;
+background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
 }
 .ScreenCalendar .Hover{
 cursor:pointer;
 border-bottom: 1px solid  #7eadd9;
-background: url(/openelis/Images/date-trigger.gif) -14px 0px no-repeat;
+background: url(../Images/date-trigger.gif) -14px 0px no-repeat;
 }
 .ScreenCalendar .Selected{
 border-bottom: 1px solid  #7eadd9;
-background: url(/openelis/Images/date-trigger.gif) -56px 0px no-repeat;
+background: url(../Images/date-trigger.gif) -56px 0px no-repeat;
 }
 .ScreenCalendar .Pressed{
 border-bottom: 1px solid #d8d8d8;
-background: url(/openelis/Images/date-trigger.gif) -28px 0px no-repeat;
+background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
 }
 
 .ScreenCalendar .TextboxSelected{
@@ -876,10 +877,10 @@ padding-bottom:0;
     border-right:0;
 }
 .Drop{
-    background:url('/openelis/Images/commitbuttonimage.gif') no-repeat center;
+    background:url('../Images/commitbuttonimage.gif') no-repeat center;
 }
 .NoDrop{
-    background:url('/openelis/Images/stop.gif') no-repeat center;
+    background:url('../Images/stop.gif') no-repeat center;
 }
 
 .ScreenDragList .Hover{
@@ -898,7 +899,7 @@ padding-bottom:0;
 }
 
 .ScreenHTML img{
-    /*background-image:url("/openelis/Images/listheadergrad_obsidian.gif");
+    /*background-image:url("../Images/listheadergrad_obsidian.gif");
     border:solid 1px #c5cad0;*/
     cursor:pointer;
 /*    margin-right:2px;*/
@@ -1014,7 +1015,7 @@ border:none;
     font-size:11px;
     padding:0 8px 0 4px;
     height:18px;
-    background:url("/openelis/Images/headersprite.gif") repeat-x;
+    background:url("../Images/headersprite.gif") repeat-x;
     border:1px solid #99bbe8;
     border-bottom:0;
     margin-right:8px;
@@ -1049,7 +1050,7 @@ border:none;
 	font-size: 14px; 
 	color: #333333; 
 	font-weight: bold;
-	background:url(/openelis/Images/goldbarno.jpg);
+	background:url(../Images/goldbarno.jpg);
 }
 .invisible{
 	visibility:hidden;
@@ -1101,7 +1102,7 @@ border:none;
 .TabBrowser .gwt-TabBar .gwt-TabBarItem-selected {
     border:1px solid #73d216;
     border-bottom:0px solid white;
-    background-image:url(/openelis/Images/hashlines.jpg);
+    background-image:url(../Images/hashlines.jpg);
 }
 .TabBrowser .gwt-TabPanelBottom {
     padding-top:5px;
@@ -1131,7 +1132,7 @@ cursor:wait;
 .ErrorPanel {
   width:16px;
   height:16px;
-  background-image:url(/openelis/Images/exclamation.png);
+  background-image:url(../Images/exclamation.png);
 }
 
 .ErrorPanelHidden {
@@ -1192,7 +1193,7 @@ font-weight:bold;
    height:8px;
    width:100%;
    border:1px solid gray;
-   background:#d8d8d8 url('/openelis/Images/menuup.gif') center center no-repeat;
+   background:#d8d8d8 url('../Images/menuup.gif') center center no-repeat;
    cursor:pointer;
 }
  
@@ -1200,7 +1201,7 @@ font-weight:bold;
    height:8px;
    width:100%;
    border:1px solid gray;
-   background:#d8d8d8 url('/openelis/Images/menudown.gif') center center no-repeat;
+   background:#d8d8d8 url('../Images/menudown.gif') center center no-repeat;
    cursor:pointer;
 }
 
@@ -1213,27 +1214,21 @@ font-weight:bold;
 .Checked {
   height:13px;
   width:13px;
-  background:url("/openelis/Images/apply.png") left center no-repeat;
+  background:url("../Images/apply.png") left center no-repeat;
 }
 
 .Unchecked {
   height:13px;
   width:13px;
-  background:url("/openelis/Images/unapply.png") left center no-repeat;
+  background:url("../Images/unapply.png") left center no-repeat;
 }
 
 .Unknown {
   height:13px;
   width:13px;
-  background:url("/openelis/Images/unknow.png") left center no-repeat;
+  background:url("../Images/unknow.png") left center no-repeat;
 }
 
-.EditSettings {
-	width:13px;
-	height:13px;
-	background:url("/openelis/Images/apply.png") left center no-repeat;
-	text-align:right;
-}
 
 .FavoritesHeader {
     background:lightblue;
