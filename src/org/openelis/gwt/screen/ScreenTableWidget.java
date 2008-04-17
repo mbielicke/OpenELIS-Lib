@@ -287,10 +287,6 @@ public class ScreenTableWidget extends ScreenInputWidget {
             if(queryMode)
                 queryWidget.submit(field);
             else{
-                if(table.controller.getAutoAdd()){
-                    if(table.controller.model.numRows() > 0)
-                        table.controller.model.deleteRow(table.controller.model.numRows()-1);
-                }
                 field.setValue(table.controller.model);
             }
         }

@@ -90,7 +90,7 @@ public class TableWidget extends Composite {
     }
     
     public void setAutoAdd(boolean autoAdd){
-        controller.setAutoAdd(autoAdd);
+        //controller.setAutoAdd(autoAdd);
     }
     
     public void setShowRows(boolean showRows) {

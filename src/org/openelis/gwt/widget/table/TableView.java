@@ -72,6 +72,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }
         
         public void setWidget(Widget wid){
+            ap.clear();
             ap.add(wid);
         }
         

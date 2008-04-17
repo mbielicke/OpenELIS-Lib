@@ -89,6 +89,7 @@ public class EditTable extends TableController implements
     public boolean showRows;
     public boolean modelSet;
     public boolean enabled;
+    public TableRow autoAddRow;
     
     /**
      * This Method will set the url for the TableService.
@@ -144,9 +145,7 @@ public class EditTable extends TableController implements
     
     public void loadModel(TableModel model){
         this.model = model;
-        if (autoAdd)
-            model.addRow(null);
-        load();
+        reset();
     }
 
     /**
@@ -246,6 +245,7 @@ public class EditTable extends TableController implements
 
     public void setAutoAdd(boolean auto){
         this.autoAdd = auto;
+        //scrollLoad(0);
     }
     
     public boolean getAutoAdd() {
@@ -268,7 +268,7 @@ public class EditTable extends TableController implements
         model.addRow(null);
         if(view.table.getRowCount() < maxRows){
             createRow(model.numRows()-1);
-            loadRow(model.numRows()-1);
+            loadRow(model.numRows()-1,model.getRow(model.numRows()-1));
         }else{
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
@@ -290,7 +290,7 @@ public class EditTable extends TableController implements
         model.addRow(row);
         if(view.table.getRowCount() < maxRows){
             createRow(model.numRows()-1);
-            loadRow(model.numRows()-1);
+            loadRow(model.numRows()-1,model.getRow(model.numRows()-1));
         }else{
             view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
         }
@@ -315,7 +315,7 @@ public class EditTable extends TableController implements
             if(view.table.getRowCount() != maxRows){
                 createRow(model.numRows() -1);
                 for(int j = index; j < model.numRows(); j++){
-                    loadRow(j);
+                    loadRow(j,model.getRow(j));
                 }
             }else
                 view.scrollBar.setScrollPosition(index*cellHeight);
@@ -334,7 +334,7 @@ public class EditTable extends TableController implements
             if(view.table.getRowCount() != maxRows){
                 createRow(model.numRows() -1);
                 for(int j = index; j < model.numRows(); j++){
-                    loadRow(j);
+                    loadRow(j,model.getRow(j));
                 }
             }else
                 view.scrollBar.setScrollPosition(index*cellHeight);
@@ -352,13 +352,13 @@ public class EditTable extends TableController implements
      * 
      * @param index
      */
-    private void loadRow(int index) {
-        for (int i = 0; i < model.getRow(0).numColumns(); i++) {
+    private void loadRow(int index, TableRow row) {
+        for (int i = 0; i < row.numColumns(); i++) {
         	TableCellWidget tCell = (TableCellWidget)view.table.getWidget(index, i);
             if(tCell instanceof TableMultiple && manager != null){
                 manager.setMultiple(start+index,i,this);
             }
-        	tCell.setField(model.getFieldAt(start+index, i));
+        	tCell.setField(row.getColumn(i));
         	setCellDisplay(index,i);
             if(showRows){
                 ((Label)view.rows.getWidget(index,0)).setText(String.valueOf(start+index+1));
@@ -463,13 +463,17 @@ public class EditTable extends TableController implements
         if(enabled){
             for (int i = 0; i < view.table.getCellCount(row); i++) {
                 if (selectedCell == i) {
-                    saveValue(row, i);
-                    if(autoAdd){
-                        if(manager != null && manager.doAutoAdd(start+row,i,this))
-                            addRow();
-                        else if(manager == null && start+row == model.numRows() -1)
-                            addRow();
-                    }       
+                    saveValue(row, i,selectedCell);
+                    /*if(autoAdd && start+row == model.numRows()){
+                        if(manager == null || (manager != null && manager.doAutoAdd(start+row,i,this))){
+                            model.addRow(autoAddRow);
+                            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+                            view.scrollBar.setScrollPosition(cellHeight*model.numRows());
+                            scrollLoad(view.scrollBar.getScrollPosition());
+                            break;
+                        }
+                    } 
+                    */      
                 }
                 setCellDisplay(row, i);
             }
@@ -490,8 +494,10 @@ public class EditTable extends TableController implements
      * @param col
      */
     public void select(int row, int col) {
+        final int fsRow = selected;
+        final int fsCol = selectedCell;
         if (manager == null || (manager != null && manager.canSelect(start+row, this))){
-            if(selected > -1) {
+            if(selected != row) {
                 unselect(selected);
             }
             view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
@@ -506,20 +512,33 @@ public class EditTable extends TableController implements
         if(enabled){
             if (selectedCell != col) {
                 if (selectedCell > -1) {
-                    saveValue(row, selectedCell);
-                    if(autoAdd){
-                        if(manager != null && manager.doAutoAdd(start+row,selectedCell,this))
-                            addRow();
-                        else if(manager == null && start+row == model.numRows() -1)
-                            addRow();
-                    }
+                    saveValue(row, selectedCell,col);      
                     setCellDisplay(row, selectedCell);
                 }
-                if (col > -1 && (manager == null || (manager != null && manager.canEdit(start+row, col, this))))
-                    setCellEditor(row, col);
-                else
-                    selectedCell = -1;
             }
+            if(autoAdd && start+fsRow == model.numRows()){
+                if(manager == null || (manager != null && manager.doAutoAdd(start+fsRow,fsCol,this))){
+                     model.addRow(autoAddRow);
+                     view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+                     view.scrollBar.setScrollPosition(cellHeight*model.numRows());
+                     scrollLoad(view.scrollBar.getScrollPosition());
+                     final int fRow;
+                     if(model.numRows() >= maxRows)
+                         fRow = row - 1;
+                     else
+                         fRow = row;
+                     final int fCol = col;
+                     DeferredCommand.addCommand(new Command() {
+                         public void execute() {
+                            select(fRow, fCol);
+                         }
+                     });
+                }
+            }
+            if (col > -1 && (manager == null || (manager != null && manager.canEdit(start+row, col, this))))
+                 setCellEditor(row, col);
+            else
+                selectedCell = -1;
         }
         selected = row;
         if (manager != null && col > -1)
@@ -639,19 +658,14 @@ public class EditTable extends TableController implements
      */
     public void reset() {
         start = 0;
-        
         view.cellView.setScrollPosition(0);
         if(selected > -1)
             view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
         selected = -1;
         selectedCell = -1;
         view.controller = this;
-        if(autoAdd || model.autoAdd){
-            model.addRow(null);
-            autoAdd = true;
-        }
         view.reset();
-        if(model.numRows() > 0){
+        /*if(model.numRows() > 0){
             if(model.numRows() > maxRows){
                 for(int i = 0; i < maxRows; i++){
                     createRow(i);
@@ -661,8 +675,9 @@ public class EditTable extends TableController implements
                     createRow(i);
                 }
             }
-        }        
-        view.cellView.setWidget(view.table);
+        } 
+        */       
+        //view.cellView.setWidget(view.table);
         load();
         sizeTable();
         modelSet = true;
@@ -674,6 +689,7 @@ public class EditTable extends TableController implements
         start = 0;
         unselect(-1);
         selectedCell = -1;
+        /*
         int tRows = maxRows;
         if(model.numRows() < maxRows)
             tRows = model.numRows();
@@ -688,19 +704,20 @@ public class EditTable extends TableController implements
                 createRow(i);
             }
         }
+        */
         //if(model.numRows() > maxRows)
             view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
         //else
         //    view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
         view.scrollBar.setScrollPosition(0);
-        if(model.numRows() > 0)
+        //if(model.numRows() > 0)
             scrollLoad(0);
         if (model.paged)
             view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
     }
     
     public void createRow(int i) {
-        for(int j= 0; j < model.getRow(i).numColumns(); j++){
+        for(int j= 0; j < editors.length; j++){
             TableCellWidget tcell = editors[j].getNewInstance();
             tcell.setCellWidth(curColWidth[j]);
             if(tcell instanceof TableMultiple){
@@ -739,14 +756,45 @@ public class EditTable extends TableController implements
         try{
         	if(selected > -1)
         		unselect(-1);
+            int tRows = maxRows;
+            if(model.numRows() < maxRows){
+                tRows = model.numRows();
+                if(autoAdd){
+                    tRows++;
+                }
+            }
+            if(view.table.getRowCount() > tRows){
+                int count = view.table.getRowCount();
+                for(int i = count -1; i > tRows -1; i--){
+                    view.table.removeRow(i);
+                }
+            }else if(view.table.getRowCount() < tRows){
+                int count = view.table.getRowCount();
+                for(int i = count; i < tRows; i++){
+                    createRow(i);
+                }
+            }
+            if(autoAdd && view.table.getRowCount() == 0)
+                createRow(0);
         	int rowsPer = maxRows;
-        	if(maxRows > model.numRows())
+        	if(maxRows > model.numRows()){
         		rowsPer = model.numRows();
+                if(autoAdd)
+                    rowsPer++;
+            }
         	start = (scrollPos)/(cellHeight);
-        	if(start+rowsPer > model.numRows())
+        	if(start+rowsPer > model.numRows()){
         		start = start - ((start+rowsPer) - model.numRows());
+                if(autoAdd)
+                    start++;
+            }
         	for(int i = 0; i < rowsPer; i++){
-        		loadRow(i);
+                if(start+i < model.numRows())
+                    loadRow(i,model.getRow(start+i));
+                else{
+                    autoAddRow = model.createRow();
+                    loadRow(i,autoAddRow);
+                }
         	}
         }catch(Exception e){
             Window.alert("scrollLoad "+e.getMessage());
@@ -820,7 +868,7 @@ public class EditTable extends TableController implements
      * @param row
      * @param col
      */
-    public void saveValue(int row, int col) {
+    public void saveValue(int row, int col,final  int clickedCol) {
         try{
     	TableCellWidget wid = (TableCellWidget)view.table.getWidget(row,col);
     	wid.saveValue();
@@ -896,7 +944,7 @@ public class EditTable extends TableController implements
             if (selected >= 0) {
                 if (selectedCell > -1) {
                     if(!(view.table.getWidget(selected, selectedCell) instanceof TableCheck)){
-                        saveValue(selected, selectedCell);
+                        saveValue(selected, selectedCell, selectedCell);
                         setCellDisplay(selected, selectedCell);
                         if(model.autoAdd || autoAdd){
                             if(manager != null && manager.doAutoAdd(selected,selectedCell,this))
