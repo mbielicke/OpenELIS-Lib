@@ -17,7 +17,7 @@ public class TableRow implements Serializable {
      * @gwt.typeArgs <org.openelis.gwt.common.data.AbstractField>
      */
     private HashMap hidden = new HashMap();
-    private boolean show = true;
+    protected boolean show = true;
 
     public void addColumn(AbstractField field) {
         columns.add(field);
@@ -45,10 +45,6 @@ public class TableRow implements Serializable {
 
     public AbstractField getHidden(String name) {
         return (AbstractField)hidden.get(name);
-    }
-
-    public void setShow(boolean show) {
-        this.show = show;
     }
 
     public boolean show() {

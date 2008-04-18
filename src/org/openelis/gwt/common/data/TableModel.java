@@ -25,6 +25,7 @@ public class TableModel implements Serializable {
     public int shown;
     public boolean showIndex;
     public boolean autoAdd;
+    private int hiddenRows = 0;
 
     private AbstractField[] fields;
     
@@ -119,7 +120,7 @@ public class TableModel implements Serializable {
         }
         for (int i = 0; i < rows.size(); i++) {
             TableRow row = (TableRow)rows.get(i);
-            row.setShow(true);
+            showRow(row);
             for (int j = 0; j < filterSets.size(); j++) {
                 if (filterSets.get(j) == null)
                     continue;
@@ -132,7 +133,7 @@ public class TableModel implements Serializable {
                 if (splitOn.get(j) != null && val != null)
                     val = val.split((String)splitOn.get(j))[0].trim();
                 if (!filterSet.contains(val))
-                    row.setShow(false);
+                    hideRow(row);
             }
         }
     }
@@ -202,5 +203,36 @@ public class TableModel implements Serializable {
         //hidden = new HashMap();
         totalRows = 0;
         shown = 0;
+    }
+    
+    public int shownRows() {
+        return rows.size() - hiddenRows;
+    }
+    
+    public void hideRow(int index) {
+        hideRow((TableRow)rows.get(index));
+    }
+    
+    public void hideRow(TableRow row) {
+        if(row.show){
+            hiddenRows++;
+            if(hiddenRows > rows.size())
+                hiddenRows = rows.size();
+            row.show = false;
+        }
+    }
+    
+    public void showRow(int index) {
+        showRow((TableRow)rows.get(index));
+    }
+    
+    public void showRow(TableRow row){
+        if(!row.show){
+            hiddenRows--;
+            if(hiddenRows < 0){
+                hiddenRows = 0;
+            }
+            row.show = true;       
+        }
     }
 }
