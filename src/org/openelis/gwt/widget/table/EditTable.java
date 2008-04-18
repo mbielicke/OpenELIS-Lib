@@ -62,15 +62,11 @@ public class EditTable extends TableController implements
                             MouseListener,
                             SourcesChangeEvents{
     
-    //public TableModel model;
-    //public TableView view;
     public TableManager manager;
     public int selected = -1;
     public int selectedCell = -1;
     public int setRow = -1;
     public TableCellWidget[] editors;
-    //public int[] colwidth;
-    //public int[] curColWidth;
     public boolean[] sortable;
     public boolean[] filterable;
     private ArrayList statFilters = new ArrayList();
@@ -109,7 +105,6 @@ public class EditTable extends TableController implements
     public EditTable() {
         view = new TableView();
         model = new TableModel();
-        //DOM.addEventPreview(this);
     }
 
     /**
@@ -245,18 +240,12 @@ public class EditTable extends TableController implements
 
     public void setAutoAdd(boolean auto){
         this.autoAdd = auto;
-        //scrollLoad(0);
     }
     
     public boolean getAutoAdd() {
         return autoAdd;
     }
     
-/*    public void setMaxRows(int rows){
-        maxRows = rows;
-        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing));
-    }
-*/    
     public void setShowRows(boolean showRows){
         this.showRows = showRows;
     }
@@ -288,14 +277,9 @@ public class EditTable extends TableController implements
 
     public void addRow(TableRow row) {
         model.addRow(row);
-        if(view.table.getRowCount() < maxRows){
-            createRow(model.numRows()-1);
-            loadRow(model.numRows()-1,model.getRow(model.numRows()-1));
-        }else{
-            view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-        }
-        if(model.numRows() > maxRows)
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
+        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+        view.scrollBar.setScrollPosition(cellHeight*model.numRows());
+        scrollLoad(view.scrollBar.getScrollPosition());
         if(manager != null){
             manager.rowAdded(model.numRows()-1,this);
         }
@@ -312,17 +296,12 @@ public class EditTable extends TableController implements
                                                                      this))) {
           
             model.insertRow(start+index, null);
-            if(view.table.getRowCount() != maxRows){
-                createRow(model.numRows() -1);
-                for(int j = index; j < model.numRows(); j++){
-                    loadRow(j,model.getRow(j));
-                }
-            }else
-                view.scrollBar.setScrollPosition(index*cellHeight);
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+            view.scrollBar.setScrollPosition(cellHeight*model.numRows());
+            scrollLoad(view.scrollBar.getScrollPosition());
             if(manager != null){
                 manager.rowAdded(index,this);
             }
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
         }
     }
 
@@ -331,18 +310,12 @@ public class EditTable extends TableController implements
                                                                      this))) {
       
             model.insertRow(start+index, row);
-            if(view.table.getRowCount() != maxRows){
-                createRow(model.numRows() -1);
-                for(int j = index; j < model.numRows(); j++){
-                    loadRow(j,model.getRow(j));
-                }
-            }else
-                view.scrollBar.setScrollPosition(index*cellHeight);
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+            view.scrollBar.setScrollPosition(cellHeight*model.numRows());
+            scrollLoad(view.scrollBar.getScrollPosition());
             if(manager != null){
                 manager.rowAdded(index,this);
             }
-            if(model.numRows() > maxRows)
-                view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
         }
     }
 
@@ -380,14 +353,10 @@ public class EditTable extends TableController implements
         if (manager == null || (manager != null && manager.canDelete(row, this))) {
     
             model.deleteRow(start+row);
-            if(view.table.getRowCount() != maxRows && model.numRows() < maxRows){
-                view.table.removeRow(row);
-            }else
-                scrollLoad(view.scrollBar.getScrollPosition());
+            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+            view.scrollBar.setScrollPosition(cellHeight*model.numRows());
+            scrollLoad(view.scrollBar.getScrollPosition());
         }
-        if(model.numRows() > maxRows)
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing);
-
     }
 
     /**
@@ -463,17 +432,7 @@ public class EditTable extends TableController implements
         if(enabled){
             for (int i = 0; i < view.table.getCellCount(row); i++) {
                 if (selectedCell == i) {
-                    saveValue(row, i,selectedCell);
-                    /*if(autoAdd && start+row == model.numRows()){
-                        if(manager == null || (manager != null && manager.doAutoAdd(start+row,i,this))){
-                            model.addRow(autoAddRow);
-                            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
-                            view.scrollBar.setScrollPosition(cellHeight*model.numRows());
-                            scrollLoad(view.scrollBar.getScrollPosition());
-                            break;
-                        }
-                    } 
-                    */      
+                    saveValue(row, i);
                 }
                 setCellDisplay(row, i);
             }
@@ -482,6 +441,19 @@ public class EditTable extends TableController implements
         selected = -1;
         }catch(Exception e){
             Window.alert("unselect "+e.getMessage());
+        }
+    }
+    
+    public void switchSelectedRow() {
+        if(selected > -1){
+            if(enabled){
+                for (int i = 0; i < view.table.getCellCount(selected); i++) {
+                    if (selectedCell == i) {
+                        saveValue(selected, i);
+                    }
+                    setCellDisplay(selected, i);
+                }
+            }
         }
     }
 
@@ -512,7 +484,7 @@ public class EditTable extends TableController implements
         if(enabled){
             if (selectedCell != col) {
                 if (selectedCell > -1) {
-                    saveValue(row, selectedCell,col);      
+                    saveValue(row, selectedCell);      
                     setCellDisplay(row, selectedCell);
                 }
             }
@@ -663,21 +635,8 @@ public class EditTable extends TableController implements
             view.table.getRowFormatter().removeStyleName(selected, view.selectedStyle);
         selected = -1;
         selectedCell = -1;
-        view.controller = this;
-        view.reset();
-        /*if(model.numRows() > 0){
-            if(model.numRows() > maxRows){
-                for(int i = 0; i < maxRows; i++){
-                    createRow(i);
-                }
-            }else{
-                for(int i = 0; i < model.numRows(); i++){
-                    createRow(i);
-                }
-            }
-        } 
-        */       
-        //view.cellView.setWidget(view.table);
+        //view.controller = this;
+        //view.reset();
         load();
         sizeTable();
         modelSet = true;
@@ -689,29 +648,9 @@ public class EditTable extends TableController implements
         start = 0;
         unselect(-1);
         selectedCell = -1;
-        /*
-        int tRows = maxRows;
-        if(model.numRows() < maxRows)
-            tRows = model.numRows();
-        if(view.table.getRowCount() > tRows){
-            int count = view.table.getRowCount();
-            for(int i = count -1; i > tRows -1; i--){
-                view.table.removeRow(i);
-            }
-        }else if(view.table.getRowCount() < tRows){
-            int count = view.table.getRowCount();
-            for(int i = count; i < tRows; i++){
-                createRow(i);
-            }
-        }
-        */
-        //if(model.numRows() > maxRows)
-            view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
-        //else
-        //    view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
+        view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
         view.scrollBar.setScrollPosition(0);
-        //if(model.numRows() > 0)
-            scrollLoad(0);
+        scrollLoad(0);
         if (model.paged)
             view.setNavPanel(model.pageIndex, model.totalPages, model.showIndex);
     }
@@ -802,73 +741,13 @@ public class EditTable extends TableController implements
     }
 
     /**
-     * This method will size the table and the columns on the screen.
-     * 
-     */
-   /* public void sizeTable() {
-        DeferredCommand.addCommand(new Command() {
-        public void execute() {
-        int width = 0;
-        for(int i = 0; i < curColWidth.length; i++){
-            width += curColWidth[i];
-        }
-        int displayWidth = width + (curColWidth.length*4) - (curColWidth.length -1);
-        view.table.setWidth(width+"px");
-        if(view.header != null){
-            view.header.setWidth(displayWidth+"px");  
-            for(int i = 0; i < curColWidth.length; i++){
-                if( i > 0 && i < curColWidth.length - 1){
-                    view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
-                }else{
-                    view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
-                }
-            }
-        }           
-      
-        //if(model.numRows() > 0)
-        //    view.header.setWidth(view.table.getOffsetWidth()+"px");
-        //else
-            view.header.setWidth(displayWidth+"px");
-        int viewWidth = -1;
-        if(!view.width.equals("auto")){
-            viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));
-            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+cellSpacing+18)+"px"); 
-        }else
-            viewWidth = displayWidth;
-        //else if(!GWT.isScript()){
-        //    view.cellView.setWidth(view.table.getOffsetWidth()+"px");
-        //    view.titlePanel.setWidth(view.table.getOffsetWidth()+"px");
-        //}
-        /*if(model.numRows() > maxRows){
-        	view.setHeight((maxRows*cellHeight+maxRows+18+"px"));
-            view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
-        }
-        */
-        //if(!view.width.equals("auto")){
-        /*    if(model.numRows() > maxRows){
-                view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);  
-            }else
-                view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
-         
-            if(showRows){
-                if(model.numRows() > maxRows){
-                    view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
-                }
-            }
-            view.titlePanel.setWidth("100%");
-            }
-        //}
-        });
-    }
-*/
-    /**
      * This method will pull the value from the cell editor and put it in the
      * model.
      * 
      * @param row
      * @param col
      */
-    public void saveValue(int row, int col,final  int clickedCol) {
+    public void saveValue(int row, int col) {
         try{
     	TableCellWidget wid = (TableCellWidget)view.table.getWidget(row,col);
     	wid.saveValue();
@@ -944,7 +823,7 @@ public class EditTable extends TableController implements
             if (selected >= 0) {
                 if (selectedCell > -1) {
                     if(!(view.table.getWidget(selected, selectedCell) instanceof TableCheck)){
-                        saveValue(selected, selectedCell, selectedCell);
+                        saveValue(selected, selectedCell);
                         setCellDisplay(selected, selectedCell);
                         if(model.autoAdd || autoAdd){
                             if(manager != null && manager.doAutoAdd(selected,selectedCell,this))

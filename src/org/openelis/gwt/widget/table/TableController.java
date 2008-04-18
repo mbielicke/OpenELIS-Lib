@@ -513,7 +513,7 @@ public abstract class TableController extends Composite implements
             if (DOM.eventGetType(event) == Event.ONCLICK){
                 if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
                    DOM.removeEventPreview(this);
-                   unselect(-1);
+                   switchSelectedRow();
                 }
             }
         }
@@ -523,7 +523,12 @@ public abstract class TableController extends Composite implements
     public boolean onKeyPress(Event event) {
         return true;
     }
+   
     public void onChange(Widget sender){
+        
+    }
+    
+    public void switchSelectedRow(){
         
     }
     
