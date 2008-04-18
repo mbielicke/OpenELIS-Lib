@@ -87,6 +87,7 @@ public class EditTable extends TableController implements
     public boolean enabled;
     public TableRow autoAddRow;
     private TableRow[] rowList;
+    public boolean valid = true;
     
     /**
      * This Method will set the url for the TableService.

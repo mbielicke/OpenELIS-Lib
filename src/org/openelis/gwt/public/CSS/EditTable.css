@@ -202,4 +202,8 @@ a.index:hover{
     background:blue;
 }*/
 
+.CellError {
+    height:16px;
+	border-bottom:1px dashed red;
+}
 

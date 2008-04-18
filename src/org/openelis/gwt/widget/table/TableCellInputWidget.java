@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.MenuLabel;
 
 public class TableCellInputWidget extends SimplePanel implements TableCellWidget, MouseListener, SourcesMouseEvents {
@@ -61,10 +62,18 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
         errorPanel.clear();
         for (int i = 0; i < errors.length; i++) {
             String error = errors[i];
-            errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
+            MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
+            errorLabel.setStyleName("errorPopupLabel");
+            //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
+            errorPanel.add(errorLabel);
         }
-        removeMouseListener(this);
-        addMouseListener(this);
+        if(errors.length == 0){
+            removeMouseListener(this);
+        }else{
+            removeMouseListener(this);
+            addMouseListener(this);
+        }
+
     }
     
     public void clearErrors() {
@@ -100,9 +109,13 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
         if(!field.isValid()){
             if(pop == null){
                 pop = new PopupPanel();
-                pop.setStyleName("ErrorPopup");
+                //pop.setStyleName("ErrorPopup");
             }
-            pop.setWidget(errorPanel);
+            ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            win.setStyleName("ErrorWindow");
+            win.setContent(errorPanel);
+            win.setVisible(true);
+            pop.setWidget(win);
             pop.setPopupPosition(sender.getAbsoluteLeft()+sender.getOffsetWidth(), sender.getAbsoluteTop());
             pop.show();
         }
