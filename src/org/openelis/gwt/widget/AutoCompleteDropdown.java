@@ -391,11 +391,13 @@ public class AutoCompleteDropdown extends Composite implements
 	 * Set the selection that the user made.
 	 */
 	protected void complete() {
-		// if the textbox is filled out with nothing selected dont do anything
-		// because the user is just tabbing through
+		// if the textbox is filled out with nothing selected we need to clear the textbox
+		// the selected list will always have something in it if it is valid text
 		if (!"".equals(textBox.getText())
-				&& scrollList.getSelected().size() == 0)
+				&& scrollList.getSelected().size() == 0){
+			textBox.setText("");
 			return;
+		}
 
 		if (scrollList == null || textBox.getText().length() == 0) {
 			if (textBox.getText().equals("")) {
