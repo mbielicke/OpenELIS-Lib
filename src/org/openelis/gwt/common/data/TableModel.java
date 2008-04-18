@@ -26,6 +26,7 @@ public class TableModel implements Serializable {
     public boolean showIndex;
     public boolean autoAdd;
     private int hiddenRows = 0;
+    private int numRows = 0;
 
     private AbstractField[] fields;
     
@@ -38,10 +39,19 @@ public class TableModel implements Serializable {
         if(row == null)
             row = createRow();
         rows.add(row);
+        numRows = rows.size();
     }
 
     public void deleteRow(int row) {
+        deleteRow((TableRow)rows.get(row));
+    }
+    
+    public void deleteRow(TableRow row){
+        if(!row.show){
+            hiddenRows--;
+        }
         rows.remove(row);
+        numRows = rows.size();
     }
 
     public TableRow getRow(int row) {
@@ -49,7 +59,7 @@ public class TableModel implements Serializable {
     }
 
     public int numRows() {
-        return rows.size();
+        return numRows;
     }
 
     public AbstractField getFieldAt(int row, int col) {
@@ -60,6 +70,7 @@ public class TableModel implements Serializable {
         if(row == null)
             row = createRow();
         rows.add(index, row);
+        numRows = rows.size();
     }
 
     public Filter[] getFilterValues(int col) {
@@ -203,10 +214,12 @@ public class TableModel implements Serializable {
         //hidden = new HashMap();
         totalRows = 0;
         shown = 0;
+        numRows = 0;
+        hiddenRows = 0;
     }
     
     public int shownRows() {
-        return rows.size() - hiddenRows;
+        return numRows - hiddenRows;
     }
     
     public void hideRow(int index) {
@@ -216,8 +229,8 @@ public class TableModel implements Serializable {
     public void hideRow(TableRow row) {
         if(row.show){
             hiddenRows++;
-            if(hiddenRows > rows.size())
-                hiddenRows = rows.size();
+            if(hiddenRows > numRows)
+                hiddenRows = numRows;
             row.show = false;
         }
     }
@@ -234,5 +247,9 @@ public class TableModel implements Serializable {
             }
             row.show = true;       
         }
+    }
+    
+    public int indexOf(TableRow row){
+        return rows.indexOf(row);
     }
 }
