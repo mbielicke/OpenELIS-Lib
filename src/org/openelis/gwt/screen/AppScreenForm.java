@@ -70,6 +70,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         changeState(FormInt.DEFAULT);
         enable(false);
         if(window != null){
+        	window.setName(name);
             window.setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
             window.setStatus(consts.get("loadCompleteMessage"),"");

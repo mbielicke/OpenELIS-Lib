@@ -28,7 +28,7 @@ public class AppScreen extends ScreenBase {
     public AppScreenServiceIntAsync service;
     public HashMap forms = new HashMap();
     public DataObject[] initData;
-    public String name;
+
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 

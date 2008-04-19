@@ -61,6 +61,7 @@ public class ScreenBase extends Composite implements
     protected HashMap tabOrder = new HashMap();
     protected HashMap tabBack = new HashMap();
     public boolean keep;
+    public String name;
    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -100,6 +101,10 @@ public class ScreenBase extends Composite implements
      */
     protected void draw() {
         //try {
+    	    Node screen = xml.getElementsByTagName("screen").item(0);
+    	    if(screen.getAttributes().getNamedItem("name") != null){
+    	    	name = screen.getAttributes().getNamedItem("name").getNodeValue();
+    	    }
             Node display = xml.getElementsByTagName("display").item(0);
             NodeList widgets = display.getChildNodes();
             for (int i = 0; i < widgets.getLength(); i++) {

@@ -136,6 +136,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private Widget content;
     private Vector dropMap;
     private Label message = new Label("Loading...");
+    private Label winLabel = new Label(); 
     
     public ScreenWindow(Object container, String name, String cat, String loadingText){
         this(container,name,cat,loadingText,true);
@@ -174,7 +175,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         titleButtonsContainer.setWidth("100%");
         
         cap.addMouseListener(this);
-        Label winLabel = new Label(name);
+        if(name != null)
+        	winLabel.setText(name);
         winLabel.setStyleName("ScreenWindowLabel");
         cap.add(winLabel);
         cap.setWidth("100%");
@@ -252,6 +254,11 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         }else if(content instanceof Screen) {
             ((Screen)content).window = this;
         }
+    }
+    
+    public void setName(String name) {
+    	this.name = name;
+    	winLabel.setText(name);
     }
     
     private void checkZ() {

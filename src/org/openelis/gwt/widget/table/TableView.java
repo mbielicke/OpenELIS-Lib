@@ -109,7 +109,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     protected HorizontalPanel navPanel = new HorizontalPanel();
     private VerticalPanel vp = new VerticalPanel();
     public String width;
-    public String height;
+    public int height;
     public TableController controller = null;
     public HTML prevNav;
     public HTML nextNav;
@@ -241,14 +241,17 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     
     
     public void setHeight(int height) {
-        if(!width.equals("auto"))
+        if(!width.equals("auto")){
             cellView.setHeight(height+18+"px");
-        else
+            this.height = height+18;
+        }else{
             cellView.setHeight(height+"px");
+            this.height = height;
+        }
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
         headerView.setHeight("18px");
-        this.height = height+"px";
+
     }
 
     public void setWidth(String width) {
@@ -378,7 +381,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         try {
             scrollBar.getWidget().setHeight(height+"px");
             if(!controller.showScrolls){
-                if(height > (cellView.getOffsetHeight()+18+controller.cellSpacing))
+                if(height > (this.height+controller.cellSpacing))
                     DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
                 else 
                     DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
