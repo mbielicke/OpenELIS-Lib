@@ -14,7 +14,7 @@ version="1.0">
 	<xalan:script lang="javaclass" src="xalan://java.util.Locale"/>
 </xalan:component>
   
-<xsl:variable name="language"><xsl:value-of select="locale"/></xsl:variable>
+<xsl:variable name="language"><xsl:value-of select="doc/locale"/></xsl:variable>
 <xsl:variable name="constants" select="resource:getBundle('org.openelis.modules.main.server.constants.OpenELISConstants',locale:new(string($language)))"/>
     
 <!-- query button template -->
