@@ -3,7 +3,6 @@ package org.openelis.gwt.server;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.services.CalendarServiceInt;
-import org.openelis.util.CalendarUtils;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -82,5 +81,10 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
             throw new RPCException(e.getMessage());
         }
     }
+
+	public DataObject[] getXMLData(DataObject[] args) throws RPCException {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
 }

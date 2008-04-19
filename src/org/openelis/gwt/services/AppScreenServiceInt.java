@@ -10,5 +10,7 @@ public interface AppScreenServiceInt extends RemoteService {
     public String getXML() throws RPCException;
     
     public DataObject[] getXMLData() throws RPCException;
+    
+    public DataObject[] getXMLData(DataObject[] args) throws RPCException;
 
 }

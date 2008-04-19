@@ -74,6 +74,24 @@ public class AppScreen extends ScreenBase {
         });
     }
     
+    public void getXMLData(DataObject[] args) {
+        service.getXMLData(args, new AsyncCallback() {
+           public void onSuccess(Object result){
+               DataObject[] data = (DataObject[])result;
+               drawScreen((String)data[0].getValue());
+               initData = new DataObject[data.length-1];
+               for(int i = 1; i < data.length; i++) {
+                   initData[i-1] = data[i];
+               }
+               afterDraw(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterDraw(false);
+           }
+        });
+    }
+    
     public void afterDraw(boolean sucess) {
         load((FormRPC)forms.get("display"));
     }

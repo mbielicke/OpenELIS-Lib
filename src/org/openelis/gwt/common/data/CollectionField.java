@@ -84,4 +84,14 @@ public class CollectionField extends AbstractField implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for(int i = 0; i < coll.size(); i++){
+			if(i > 0)
+				sb.append(",");
+			sb.append(coll.get(i));
+		}
+		return sb.toString();
+	}
 }
