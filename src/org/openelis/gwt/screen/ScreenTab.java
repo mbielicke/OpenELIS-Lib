@@ -1,6 +1,7 @@
 package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -64,7 +65,7 @@ public class ScreenTab extends ScreenWidget {
             }
         }
         panel.selectTab(0);
-        panel.addTabListener(screen);
+        panel.addTabListener((TabListener)screen);
         setDefaults(node, screen);
     }
 

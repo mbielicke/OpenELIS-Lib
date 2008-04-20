@@ -225,7 +225,7 @@ public class ScreenWidget extends SimplePanel implements
                                   .getNamedItem("drop")
                                   .getNodeValue();
             if (listener.equals("this"))
-                addDropListener(screen);
+                addDropListener((DropListener)screen);
             else {
                 addDropListener((DropListener)ClassFactory.forName(listener));
             }
@@ -235,7 +235,7 @@ public class ScreenWidget extends SimplePanel implements
                                   .getNamedItem("drag")
                                   .getNodeValue();
             if (listener.equals("this"))
-                addDragListener(screen);
+                addDragListener((DragListener)screen);
             else {
                 addDragListener((DragListener)ClassFactory.forName(listener));
             }
@@ -245,7 +245,7 @@ public class ScreenWidget extends SimplePanel implements
             String[] listeners = node.getAttributes().getNamedItem("mouse").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                	addMouseListener(screen);
+                	addMouseListener((MouseListener)screen);
                 else
                 	addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
             }
@@ -274,7 +274,7 @@ public class ScreenWidget extends SimplePanel implements
             String[] listeners = node.getAttributes().getNamedItem("onPanelClick").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                    addClickListener(screen);
+                    addClickListener((ClickListener)screen);
                 else
                     addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
             }

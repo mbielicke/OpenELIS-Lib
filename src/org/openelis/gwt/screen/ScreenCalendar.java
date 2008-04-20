@@ -64,7 +64,7 @@ public class ScreenCalendar extends ScreenInputWidget {
         if (node.getAttributes().getNamedItem("onChange") != null){
             String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
             if (listener.equals("this"))
-                cal.addChangeListener(screen);
+                cal.addChangeListener((ChangeListener)screen);
             else          
                 cal.addChangeListener((ChangeListener)ClassFactory.forName(listener));
         }

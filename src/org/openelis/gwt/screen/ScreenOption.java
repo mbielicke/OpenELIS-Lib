@@ -69,7 +69,7 @@ public class ScreenOption extends ScreenInputWidget implements FocusListener {
         if (node.getAttributes().getNamedItem("onChange") != null){
         	String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
         	if (listener.equals("this"))
-        		optionlist.addChangeListener(screen);
+        		optionlist.addChangeListener((ChangeListener)screen);
         	else
         		optionlist.addChangeListener((ChangeListener)ClassFactory.forName(listener));
         }

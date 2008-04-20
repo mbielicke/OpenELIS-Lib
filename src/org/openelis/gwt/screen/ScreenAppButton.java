@@ -2,6 +2,7 @@ package org.openelis.gwt.screen;
 
 import java.util.HashMap;
 
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -62,7 +63,7 @@ public class ScreenAppButton extends ScreenWidget {
             }
         }
         if (node.getAttributes().getNamedItem("onclick") != null){
-            button.addClickListener(screen);
+            button.addClickListener((ClickListener)screen);
         }
         
     

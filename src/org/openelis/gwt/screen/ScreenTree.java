@@ -5,6 +5,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -48,7 +49,7 @@ public class ScreenTree extends ScreenWidget {
         this.screen = screen;
         int height = -1;
         tree = new Tree();
-        tree.addTreeListener(screen);
+        tree.addTreeListener((TreeListener)screen);
         createTree(node);
         initWidget(tree);
         tree.setStyleName("ScreenTree");

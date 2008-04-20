@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.xml.client.Node;
 
@@ -30,7 +31,7 @@ public class OptionList extends ListBox {
                               .getNamedItem("key")
                               .getNodeValue(), this);
         if (node.getAttributes().getNamedItem("onChange") != null)
-            addChangeListener(screen);
+            addChangeListener((ChangeListener)screen);
         if (node.getAttributes().getNamedItem("shortcut") != null)
             setAccessKey(node.getAttributes()
                              .getNamedItem("shortcut")

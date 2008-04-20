@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ScrollableTabBar extends Composite implements ClickListener{
@@ -65,7 +66,7 @@ public class ScrollableTabBar extends Composite implements ClickListener{
   }
   
   public void addTabListener(ScreenBase screen){
-     tabBar.addTabListener(screen);
+     tabBar.addTabListener((TabListener)screen);
   }
   
   public void addTab(String text){           

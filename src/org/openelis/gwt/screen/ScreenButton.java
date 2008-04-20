@@ -57,7 +57,7 @@ public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
 			}
 		};
 		button.setStyleName("ScreenButton");
-		addClickListener(screen);
+		addClickListener((ClickListener)screen);
         if(node.getAttributes().getNamedItem("text") != null) {
             button.setText(node.getAttributes().getNamedItem("text").getNodeValue());
         }

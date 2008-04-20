@@ -2,6 +2,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.xml.client.Node;
@@ -48,7 +49,7 @@ public class ScreenToggleButton extends ScreenWidget {
 			}
 		};
 		button.setStyleName("ScreenToggleButton");
-		button.addClickListener(screen);
+		button.addClickListener((ClickListener)screen);
 		if(node.getAttributes().getNamedItem("text") != null){
 		    button.setText(node.getAttributes().getNamedItem("text")
 						.getNodeValue());

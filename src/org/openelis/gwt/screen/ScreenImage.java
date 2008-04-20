@@ -64,7 +64,7 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
         if (node.getAttributes().getNamedItem("onclick") != null) {
         	String listener = node.getAttributes().getNamedItem("onclick").getNodeValue();
         	if(listener.equals("this"))
-        		addClickListener(screen);
+        		addClickListener((ClickListener)screen);
         	else
         		addClickListener((ClickListener)ClassFactory.forName(listener));
         }
