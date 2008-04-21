@@ -252,4 +252,16 @@ public class TableModel implements Serializable {
     public int indexOf(TableRow row){
         return rows.indexOf(row);
     }
+    
+    public int getColumnIndexByFieldName(String fieldName){
+    	int index = -1;
+    	for(int i=0; i<fields.length;i++){
+    		if(fieldName.equals(fields[i].key)){
+    			index = i;
+    			break;
+    		}
+    	}
+    	
+    	return index;
+    }
 }
