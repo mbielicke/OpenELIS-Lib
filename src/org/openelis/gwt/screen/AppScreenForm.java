@@ -190,7 +190,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	//set the state to delete
         changeState(FormInt.DELETE);
 
-    	
         //set the message to delete
         window.setStatus(consts.get("deleteMessage"),"");           
     }
@@ -202,7 +201,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 rpc = (FormRPC)result;
                 forms.put(rpc.key, rpc);
                 load();
-                afterCommitDelete(true);
+                if (rpc.status == IForm.INVALID_FORM) {
+             	   drawErrors();
+             	  afterCommitDelete(false);
+                } else {
+                	afterCommitDelete(true);
+                }
             }
             public void onFailure(Throwable caught){
             	if(caught instanceof RPCDeleteException)
@@ -219,6 +223,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             getPage(false,consts.get("deleteComplete"));        
     		strikeThru(false);
             changeState(FormInt.DEFAULT);
+        }else{
+    		if(rpc.getErrors().size() > 0){
+    			if(rpc.getErrors().size() > 1){
+    				window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+    				window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+    			}else
+    				window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+    		}    		
         }
     }
 
@@ -286,9 +298,14 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             window.setStatus(consts.get("updatingComplete"),"");
         }else{
         	if(rpc.getErrors().size() > 0){
-    			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
-    		}
-            window.setStatus(consts.get("updateFailed"),"ErrorPanel");
+        		if(rpc.getErrors().size() > 1){
+        			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+            		window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+            	}else
+            		window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+        	}else{
+        		window.setStatus(consts.get("updateFailed"),"ErrorPanel");
+        	}
         }
     }
     
@@ -318,10 +335,15 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             changeState(FormInt.DEFAULT);
             window.setStatus(consts.get("addingComplete"),"");
         }else{
-        		if(rpc.getErrors().size() > 0){
+        	if(rpc.getErrors().size() > 0){
+        		if(rpc.getErrors().size() > 1){
         			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
-        		}
+            		window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+            	}else
+            		window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+        	}else{
         		window.setStatus(consts.get("addingFailed"),"ErrorPanel");
+        	}
         }
     }
     

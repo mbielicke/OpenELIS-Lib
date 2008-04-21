@@ -3,6 +3,7 @@ package org.openelis.gwt.screen;
 import java.util.Vector;
 
 import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
 
 import com.google.gwt.user.client.Command;
@@ -390,9 +391,15 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             }
             if(pop == null){
                 pop = new PopupPanel();
-                pop.setStyleName("MessagePopup");
+                //pop.setStyleName("MessagePopup");
             }
-            pop.setWidget(messagePanel);
+            
+            ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            win.setStyleName("ErrorWindow");
+            win.setContent(messagePanel);
+            win.setVisible(true);
+            
+            pop.setWidget(win);
             //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
             final int left = sender.getAbsoluteLeft()+16;
             final int top = sender.getAbsoluteTop();
@@ -404,9 +411,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                 }
                
             });
-            
-            //pop.show();
-            
+            pop.show();
         }
     }
 
@@ -415,7 +420,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
            if(pop != null){
                pop.hide();
            }
-       }   
+       }
     }
 
     public void onMouseMove(Widget sender, int x, int y) {
@@ -448,8 +453,12 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         statusImg.addMouseListener(this);
         messagePanel = new VerticalPanel();
         for(int i = 0; i < messages.length; i++){
-            Label msg = new Label(messages[i]);
-            messagePanel.add(msg);
+            //Label msg = new Label(messages[i]);
+            MenuLabel errorLabel = new MenuLabel(messages[i],"Images/bullet_red.png");
+            errorLabel.setStyleName("errorPopupLabel");
+            //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
+            messagePanel.add(errorLabel);
+           // messagePanel.add(msg);
         }
     }
     
