@@ -467,7 +467,7 @@ cursor:default;}
 
 /*PopUP panel*/
 .ErrorWindow .WindowBody{
-background:none;
+background:#e5f5f9;;
 padding:0px;
 border:0px;
 }
