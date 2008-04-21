@@ -146,7 +146,7 @@ version="1.0">
 <xsl:template name="aToZButton">
 <xsl:param name="buttonsParam" />
  <widget>
-	<appButton key="{string($buttonsParam)}" action="query:{string($buttonsParam)}" toggle="true" alwaysEnabled="true" style="smallButton" onclick="this">
+	<appButton key="{string($buttonsParam)}" action="query:{string($buttonsParam)}" toggle="true" alwaysEnabled="true" style="smallButton">
     	<widget>
         	<text><xsl:value-of select="string($buttonsParam)"/></text>
      	</widget>
