@@ -84,9 +84,11 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
                 month.setValue(new Integer(11));
                 year.setValue(new Integer(((Integer)year.getValue()).intValue() - 1));
             }
+            final AppScreen scr = this;
             screenService.getMonth(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
+                    DOM.removeEventPreview(scr);
                 }
                 public void onFailure(Throwable caught){
                     
@@ -100,9 +102,11 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
                 month.setValue(new Integer(0));
                 year.setValue(new Integer(((Integer)year.getValue()).intValue() + 1));
             }
+            final AppScreen scr = this;
             screenService.getMonth(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
+                    DOM.removeEventPreview(scr);
                 }
                 public void onFailure(Throwable caught){
                     
@@ -111,9 +115,11 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
             return;
         }
         if(sender == monthSelect){
+            final AppScreen scr = this;
             screenService.getMonthSelect(String.valueOf(month), String.valueOf(year), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
+                    DOM.removeEventPreview(scr);
                 }
                 public void onFailure(Throwable caught){
                     
@@ -123,9 +129,11 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
         }
         if(sender == ok || 
            sender == cancel){
+            final AppScreen scr = this;
             screenService.getMonth(month.getValue().toString(), year.getValue().toString(), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
+                    DOM.removeEventPreview(scr);
                 }
                 public void onFailure(Throwable caught){
                     
@@ -162,9 +170,6 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
             year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10+Integer.parseInt(value[1])));
             ((ScreenLabel)sender).label.addStyleName("Current");
             return;
-        }
-        if(sender == this){
-            
         }
         changeListeners.fireChange(sender);
     }

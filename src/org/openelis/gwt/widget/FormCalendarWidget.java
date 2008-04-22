@@ -179,7 +179,7 @@ public class FormCalendarWidget extends Composite implements
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
         CalendarWidget cal = new CalendarWidget();
         cal.addChangeListener(this);
-        pop = new PopupPanel(true, true);
+        pop = new PopupPanel(true, false);
         pop.setWidth(getOffsetWidth() + "px");
         pop.setWidget(cal);
         pop.setPopupPosition(textbox.getAbsoluteLeft(),
