@@ -134,7 +134,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     /**
      * The Screen or panel that is displayed by this window.
      */
-    private Widget content;
+    public Widget content;
     private Vector dropMap;
     private Label message = new Label("Loading...");
     private Label winLabel = new Label(); 
@@ -271,6 +271,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
            int left = browser.browser.getWidgetLeft(this);
            browser.browser.add((Widget)this,left,top);
            setKeep(false);
+           if(content instanceof AppScreen){
+               DOM.removeEventPreview((AppScreen)content);
+               DOM.addEventPreview((AppScreen)content);
+           }
         }
     }
     

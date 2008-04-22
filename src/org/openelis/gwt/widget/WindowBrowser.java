@@ -16,6 +16,7 @@ import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * WindowBrowser will display Screen widgets in draggable Windows
@@ -87,6 +88,9 @@ public class WindowBrowser extends Composite{
                      ((Screen)screen).getXML(((Screen)screen).xmlUrl);
                  }
              });
+        }
+        if(screen instanceof AppScreen){
+            DOM.addEventPreview((AppScreen)screen);
         }
     }
     
