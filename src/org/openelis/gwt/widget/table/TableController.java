@@ -4,7 +4,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -14,6 +13,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TableModel;
+import org.openelis.gwt.screen.AppScreen;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ import java.util.ArrayList;
  */
 public abstract class TableController extends Composite implements
                             TableListener,
-                            EventPreview,
+                            KeyboardListener,
                             ClickListener,
                             MouseListener,
                             ChangeListener{
@@ -62,6 +63,7 @@ public abstract class TableController extends Composite implements
     public int cellHeight = 18;
     public int cellSpacing = 1;
     public boolean showScrolls;
+    public boolean active;
 
     /**
      * This method will set the view for this table.
@@ -156,12 +158,11 @@ public abstract class TableController extends Composite implements
      * header of the table.
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
-        DOM.removeEventPreview(this);
-        DOM.addEventPreview(this);
         if (resizeColumn > -1) {
             resizeColumn = -1;
             return;
         }
+        active = true;
         if(selectedRow == row && selectedCell == col)
             return;
         if (sender == view.table) {
@@ -397,16 +398,29 @@ public abstract class TableController extends Composite implements
      * This method is catches click events on page index for paged tables.
      */
     public void onClick(Widget sender) {
-        HTML nav = (HTML)sender;
-        String styleNames = nav.getStyleName();
-        String htmlString = nav.getHTML();
-        String page = "";
+        if(view.table.isAttached()){
+            if(sender instanceof AppScreen){
+                if(active && !DOM.isOrHasChild(view.getElement(), ((AppScreen)sender).clickTarget)){
+                    active = false;
+                    switchSelectedRow();
+                }
+                return;
+            }
+            if(sender instanceof HTML){
+                HTML nav = (HTML)sender;
+                String styleNames = nav.getStyleName();
+                String htmlString = nav.getHTML();
+                String page = "";
         
-        int start = htmlString.indexOf("value=\"") + 7;
-        int end = htmlString.indexOf("\"", start);
+                int start = htmlString.indexOf("value=\"") + 7;
+                int end = htmlString.indexOf("\"", start);
         
-        if(start > 6)
-        	page = htmlString.substring(start, end);
+                if(start > 6)
+                    page = htmlString.substring(start, end);
+                return;
+            }
+        }
+ 
     }
 
     /**
@@ -508,19 +522,15 @@ public abstract class TableController extends Composite implements
         // TODO Auto-generated method stub
         if (view.table.isAttached()) {
             if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                return onKeyPress(event);
+                
             }
             if (DOM.eventGetType(event) == Event.ONCLICK){
                 if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
-                   DOM.removeEventPreview(this);
+                  
                    switchSelectedRow();
                 }
             }
         }
-        return true;
-    }
-
-    public boolean onKeyPress(Event event) {
         return true;
     }
    

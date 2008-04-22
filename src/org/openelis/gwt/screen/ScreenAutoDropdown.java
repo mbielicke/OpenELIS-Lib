@@ -13,7 +13,6 @@ import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
-import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.ArrayList;
@@ -107,6 +106,9 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         if (node.getAttributes().getNamedItem("rows") != null)
         	auto.setRows(Integer.parseInt(node.getAttributes().getNamedItem("rows").getNodeValue()));
       
+        auto.scrollList.view.initTable(auto.scrollList);
+        ((AppScreen)screen).addKeyboardListener(auto.scrollList);
+        ((AppScreen)screen).addClickListener(auto.scrollList);
         initWidget(auto);
         displayWidget = auto;
         setDefaults(node, screen);

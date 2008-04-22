@@ -283,6 +283,10 @@ public class ScreenWidget extends SimplePanel implements
         	if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
         		getWidget().setVisible(false);
         }
+        if (node.getAttributes().getNamedItem("shortcut") != null){
+            String key = node.getAttributes().getNamedItem("shortcut").getNodeValue();
+            screen.shortcut.put(key, getWidget());
+        }
     }
 
     /**  

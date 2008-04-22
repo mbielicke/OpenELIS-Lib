@@ -251,6 +251,9 @@ public class ScreenTableWidget extends ScreenInputWidget {
             //} catch (Exception e) {
             //    Window.alert("create Table from node" +e.getMessage());
            // }
+                
+            ((AppScreen)screen).addKeyboardListener(table.controller);
+            ((AppScreen)screen).addClickListener(table.controller);
             initWidget(table);
             displayWidget = table;
             table.setStyleName("ScreenTable");

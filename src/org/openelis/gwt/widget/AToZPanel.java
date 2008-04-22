@@ -1,20 +1,8 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataModelWidget;
-import org.openelis.gwt.screen.AppScreenForm;
-import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenButtonPanel;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenVertical;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.table.TableController;
-import org.openelis.gwt.widget.table.TableView;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -26,6 +14,18 @@ import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.AppScreenForm;
+import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenButtonPanel;
+import org.openelis.gwt.screen.ScreenLabel;
+import org.openelis.gwt.screen.ScreenVertical;
+import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.widget.table.TableController;
+import org.openelis.gwt.widget.table.TableView;
 
 public class AToZPanel extends TableController implements ClickListener, ChangeListener {
 	private HorizontalPanel mainHP = new HorizontalPanel();
@@ -72,32 +72,39 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
     }
 
 	public void onClick(Widget sender) {
-
-		if(sender == arrow){
-			if(hideablePanel.isVisible()){
-        		hideablePanel.setVisible(false);
-                middleBar.setStyleName("LeftMenuPanePanelClosed");
-                arrow.setFocus(false);
-        	}else{
-        		hideablePanel.setVisible(true);
-                middleBar.setStyleName("LeftMenuPanePanelOpen");
-                arrow.setFocus(false);
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {    
-                  		sizeTable();
-                    }
-                });
-        	}	
-		}
-        if(sender == view.nextNav){
-            modelWidget.getModel().selecttLast(false);
-            modelWidget.setPage(modelWidget.getPage()+1);
-            refreshedByLetter = true;
-        }
-        if(sender == view.prevNav){
-            modelWidget.getModel().selecttLast(false);
-            modelWidget.setPage(modelWidget.getPage()-1);
-            refreshedByLetter = true;
+        if(view.table.isAttached()){
+            if(sender instanceof AppScreen){
+                if(active && !DOM.isOrHasChild(view.getElement(), ((AppScreen)sender).clickTarget)){
+                active = false;
+                }
+                return;
+            }
+            if(sender == arrow){
+                if(hideablePanel.isVisible()){
+                    hideablePanel.setVisible(false);
+                    middleBar.setStyleName("LeftMenuPanePanelClosed");
+                    arrow.setFocus(false);
+                }else{
+                    hideablePanel.setVisible(true);
+                    middleBar.setStyleName("LeftMenuPanePanelOpen");
+                    arrow.setFocus(false);
+                    DeferredCommand.addCommand(new Command() {
+                        public void execute() {    
+                            sizeTable();
+                        }
+                    });
+                }	
+            }
+            if(sender == view.nextNav){
+                modelWidget.getModel().selecttLast(false);
+                modelWidget.setPage(modelWidget.getPage()+1);
+                refreshedByLetter = true;
+            }
+            if(sender == view.prevNav){
+                modelWidget.getModel().selecttLast(false);
+                modelWidget.setPage(modelWidget.getPage()-1);
+                refreshedByLetter = true;
+            }
         }
     }
 
@@ -168,7 +175,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
                 view.setNavPanel(dm.getPage(), dm.getPage()+1, false);
                 scrollLoad(0);
-                DOM.addEventPreview(this);
+               // DOM.addEventPreview(this);
                 if(!refreshedByLetter){
                     if(selectedButton != null){
                         selectedButton.changeState(AppButton.UNPRESSED);
@@ -176,7 +183,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 }else{
                     refreshedByLetter = false;
                 }
-                
+                active = true;
             }
             if(((DataModelWidget)sender).event == DataModelWidget.SELECTION){
                 if(selectedRow > -1){
@@ -184,6 +191,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 }
                 selectedRow = modelWidget.getSelectedIndex() - start;
                 view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
+                active = true;
             }
             return;
         }
@@ -245,11 +253,11 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
     }
     
     public void onCellClicked(SourcesTableEvents sender, int row, int col){
+        if(!locked)
+            active = true;
         if(selectedRow == row || locked){
             return;
         }
-        DOM.removeEventPreview(this);
-        DOM.addEventPreview(this);
         if(selectedRow > -1){
             view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
         }
@@ -257,10 +265,11 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
         view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
         modelWidget.select(start+row);
     }
-    
-    public boolean onKeyPress(Event event){
-        int code = DOM.eventGetKeyCode(event);
-        boolean shift = DOM.eventGetShiftKey(event);
+
+    public void onKeyDown(Widget sender, char code, int modifiers) {
+        if(!active)
+            return;
+        boolean shift = modifiers == KeyboardListener.KEY_SHIFT;
         if (KeyboardListener.KEY_DOWN == code) {
             if (selectedRow >= 0 && selectedRow < view.table.getRowCount() - 1) {
                 if(selectedRow < view.table.getRowCount() -1){
@@ -281,9 +290,6 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                     });
                 }
             }
-            DOM.eventCancelBubble(event, true);
-            DOM.eventPreventDefault(event);
-            return false;
         }
         if (KeyboardListener.KEY_UP == code) {
             if (selectedRow >= 0 && selectedRow != 0) {
@@ -304,10 +310,17 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                     }
                 });
             }
-            DOM.eventCancelBubble(event, true);
-            DOM.eventPreventDefault(event);
-            return false;
         }
-        return true;
+        
+    }
+
+    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
     }
 }

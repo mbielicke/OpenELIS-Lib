@@ -19,7 +19,7 @@ version="1.0">
     
 <!-- query button template -->
 <xsl:template name="queryButton">
-	<appButton action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query">	
+	<appButton action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="q">	
 		<panel xsi:type="Panel" layout="horizontal">
 		<panel xsi:type="Absolute" layout="absolute" style="QueryButtonImage"/>
 	     	<widget>
@@ -31,7 +31,7 @@ version="1.0">
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<appButton action="prev" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+	<appButton action="prev" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="PreviousButtonImage"/>
 	        <widget>
@@ -43,7 +43,7 @@ version="1.0">
 
 <!-- next button template -->
 <xsl:template name="nextButton">
-	<appButton action="next" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+	<appButton action="next" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
 		 <panel xsi:type="Panel" layout="horizontal">
 	  		<panel xsi:type="Absolute" layout="absolute" style="NextButtonImage"/>
 	     	<widget>
@@ -55,7 +55,7 @@ version="1.0">
 
 <!-- update button template -->
 <xsl:template name="updateButton">
-	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update">
+	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="UpdateButtonImage"/>
 	        <widget>
@@ -67,7 +67,7 @@ version="1.0">
 
 <!-- add button template -->
 <xsl:template name="addButton">
-	<appButton action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add">
+	<appButton action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add" shortcut="a">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="AddButtonImage"/>
 	        <widget>
@@ -79,7 +79,7 @@ version="1.0">
 
 <!-- delete button template -->
 <xsl:template name="deleteButton">
-	<appButton action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete">
+	<appButton action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete" shortcut="d">
 		<panel xsi:type="Panel" layout="horizontal">
 	     	<panel xsi:type="Absolute" layout="absolute" style="DeleteButtonImage"/>
 	        <widget>
@@ -91,7 +91,7 @@ version="1.0">
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
-<appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="">
+<appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="c">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
 	        <widget>
@@ -103,7 +103,7 @@ version="1.0">
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
-	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="">
+	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="x">
 		<panel xsi:type="Panel" layout="horizontal">
 	    	<panel xsi:type="Absolute" layout="absolute" style="AbortButtonImage"/>
 	    	<widget>

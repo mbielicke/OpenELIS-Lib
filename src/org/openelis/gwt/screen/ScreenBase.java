@@ -1,12 +1,5 @@
 package org.openelis.gwt.screen;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.openelis.gwt.common.FormRPC;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.table.TableCellWidget;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -17,6 +10,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
+import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.table.TableCellWidget;
+
+import java.util.HashMap;
+import java.util.Iterator;
 /**
  * The Screen class is the base class for displaying a screen 
  * drawn on the client machine.  It can also validate input and
@@ -42,6 +42,7 @@ public class ScreenBase extends Composite implements FocusListener{
     protected HashMap tabBack = new HashMap();
     public boolean keep;
     public String name;
+    public HashMap shortcut = new HashMap();
    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 

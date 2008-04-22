@@ -2,27 +2,14 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseWheelListener;
-import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
-import com.google.gwt.user.client.ui.MouseWheelVelocity;
-import com.google.gwt.user.client.ui.ScrollListener;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
@@ -34,8 +21,8 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenScrollList;
 import org.openelis.gwt.screen.ScreenWidget;
@@ -137,17 +124,18 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                 for(int i = view.table.getRowCount(); i < rowsPer; i++){
                     createRow(i);
                 }
-                view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
-                view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
+ //               view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
+ //               view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
             }else if(view.table.getRowCount() > rowsPer){
                 for(int i = view.table.getRowCount() -1; i >= rowsPer; i--)
                     view.table.removeRow(i);
-                view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
-                view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
             }
+            view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
+            view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
             for(int i = 0; i < rowsPer; i++){
                 loadRow(i);
             }
+            super.active = true;
         }catch(Exception e){
             Window.alert("scrollLoad "+e.getMessage());
         }
@@ -254,10 +242,8 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     
     public void setMaxRows(int rows){
         this.maxRows = rows;
-        
-        //view.cellView.setHeight((rows*cellHeight+(rows*cellspacing)+cellspacing+cellHeight+1)+"px");
-        //view.scrollBar.setHeight((rows*cellHeight+1)+(rows*cellspacing)+cellHeight+1+"px");
     }
+    
     
     public void setCellHeight(int height){
         this.cellHeight = height;
@@ -315,90 +301,26 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         }
     }
     
-    public boolean onKeyPress(Event event){
-        int code = DOM.eventGetKeyCode(event);
-        boolean shift = DOM.eventGetShiftKey(event);
-        boolean ctrl = DOM.eventGetCtrlKey(event);
-        if (KeyboardListener.KEY_DOWN == code) {
-            if(active < 0){
-                active = 0;
-                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                selected.add(dm.get(start+active));
-            }else{
-                if(active == maxRows -1){
-                    if(start+active+1 < dm.size()){
-                        selected.remove(dm.get(start+active));
-                        selected.add(dm.get(start+active+1));
-                    }
-                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                }else{
-                    view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
-                    selected.remove(dm.get(start+active));
-                    active++;
-                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                    selected.add(dm.get(start+active));
-                }
-            }
-            DOM.eventCancelBubble(event, true);
-            DOM.eventPreventDefault(event);
-            return false;
-        }
-        if (KeyboardListener.KEY_UP == code) {
-            if(active == 0){
-                if(start+active-1 > -1){
-                    selected.remove(dm.get(start+active));
-                    selected.add(dm.get(start+active-1));
-                }
-                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-            }else if (active > 0){
-                view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
-                selected.remove(dm.get(start+active));
-                active--;
-                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                selected.add(dm.get(start+active));
-            }
-            DOM.eventCancelBubble(event, true);
-            DOM.eventPreventDefault(event);
-            return false;
-        }
-        if (KeyboardListener.KEY_ENTER == code) {
-            if(active > -1){
-                changeListeners.fireChange(this);
-            }
-        }       
-        return true;
-    }
-
-    /**
-     * EventPreview for catching Keyboard events for the table.
-     */
-    public boolean onEventPreview(Event event) {
-        // TODO Auto-generated method stub
-        if (view.isAttached()) {
-            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                return onKeyPress(event);
-            }
-            if (DOM.eventGetType(event) == Event.ONCLICK){
-                if(!DOM.isOrHasChild(view.table.getElement(), DOM.eventGetTarget(event))){
-                    DOM.removeEventPreview(this);
+    
+    public void onClick(Widget sender){
+        if(view.table.isAttached()){
+            if(sender instanceof AppScreen){
+                if(super.active && !DOM.isOrHasChild(view.table.getElement(), ((AppScreen)sender).clickTarget)){
                     if(changeListeners != null){
                         setActive(-1);
-                        changeListeners.fireChange(this);
+                        if(super.active)
+                            changeListeners.fireChange(this);
+                        super.active = false;
                     }
-                    
-                    return true;
+                    return;
                 }
-                if(multi && ctrl && !DOM.eventGetCtrlKey(event)){
-                    unselectAll();
-                    scrollLoad(view.scrollBar.getScrollPosition());
-                }
-                if(multi)
-                    ctrl = DOM.eventGetCtrlKey(event);
+            }
+            
+            if(multi && !ctrl){
+                unselectAll();
+                scrollLoad(view.scrollBar.getScrollPosition());
             }
         }
-        return true;
     }
     
     public void unselectAll() {
@@ -449,6 +371,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
             }
             
         }
+        super.active=true;
         
     }
     
@@ -495,6 +418,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
 
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
         int clicked = row;
+        super.active = true;
             if(active > -1){
                 if(!ctrl){
                     if(!multi){
@@ -514,6 +438,66 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                 selected.add(dm.get(start+clicked));
             }
             changeListeners.fireChange(this);
+    }
+
+    public void onKeyDown(Widget sender, char code, int modifiers) {
+        if(!super.active)
+            return;
+        boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
+        ctrl = modifiers == KeyboardListener.MODIFIER_CTRL;
+        if (KeyboardListener.KEY_DOWN == code) {
+            if(active < 0){
+                active = 0;
+                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+                selected.add(dm.get(start+active));
+            }else{
+                if(active == maxRows -1){
+                    if(start+active+1 < dm.size()){
+                        selected.remove(dm.get(start+active));
+                        selected.add(dm.get(start+active+1));
+                    }
+                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
+                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+                }else{
+                    view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
+                    selected.remove(dm.get(start+active));
+                    active++;
+                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+                    selected.add(dm.get(start+active));
+                }
+            }
+        }
+        if (KeyboardListener.KEY_UP == code) {
+            if(active == 0){
+                if(start+active-1 > -1){
+                    selected.remove(dm.get(start+active));
+                    selected.add(dm.get(start+active-1));
+                }
+                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
+                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+            }else if (active > 0){
+                view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
+                selected.remove(dm.get(start+active));
+                active--;
+                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+                selected.add(dm.get(start+active));
+            }
+        }
+        if (KeyboardListener.KEY_ENTER == code) {
+            if(active > -1){
+                changeListeners.fireChange(this);
+            }
+        }       
+    }
+
+    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
     }
     
     

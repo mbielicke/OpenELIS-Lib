@@ -1,17 +1,28 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.xml.client.Element;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.ClickListenerCollection;
+import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.KeyboardListenerCollection;
+import com.google.gwt.user.client.ui.SourcesClickEvents;
+import com.google.gwt.user.client.ui.SourcesKeyboardEvents;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
+import org.openelis.gwt.widget.AppButton;
 
 import java.util.HashMap;
 /**
@@ -23,12 +34,14 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class AppScreen extends ScreenBase {
+public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
 
     public AppScreenServiceIntAsync service;
     public HashMap forms = new HashMap();
     public DataObject[] initData;
-
+    private KeyboardListenerCollection keyListeners;
+    private ClickListenerCollection clickListeners;
+    public Element clickTarget;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -94,6 +107,7 @@ public class AppScreen extends ScreenBase {
     
     public void afterDraw(boolean sucess) {
         load((FormRPC)forms.get("display"));
+        DOM.addEventPreview(this);
     }
     
     public void redrawScreen(String xmlDef){
@@ -112,7 +126,7 @@ public class AppScreen extends ScreenBase {
          //try {
              NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
              for(int i = 0; i < rpcList.getLength(); i++){
-                 Element rpcEl = (Element)rpcList.item(i);
+                 com.google.gwt.xml.client.Element rpcEl = (com.google.gwt.xml.client.Element)rpcList.item(i);
                  NodeList fieldList = rpcEl.getChildNodes();
                  HashMap map = new HashMap();
                  for (int j = 0; j < fieldList.getLength(); j++) {
@@ -137,6 +151,66 @@ public class AppScreen extends ScreenBase {
     protected void load(FormRPC rpc){
         this.rpc = rpc;
         load();
+    }
+
+    public boolean onEventPreview(Event event) {
+        if(DOM.eventGetType(event) == Event.ONKEYPRESS){
+            if(DOM.eventGetCtrlKey(event)){
+                String key = String.valueOf((char)DOM.eventGetKeyCode(event));
+                if(shortcut.containsKey(key)){
+                    Widget wid = (Widget)shortcut.get(key);
+                    if(wid instanceof AppButton){
+                        ((AppButton)wid).fireClick();
+                    }else if(wid instanceof HasFocus){
+                        ((HasFocus)wid).setFocus(true);
+                    }
+                }
+                DOM.eventPreventDefault(event);
+                return false;
+            }
+        }
+        switch(DOM.eventGetType(event)){
+            case Event.ONKEYDOWN:
+            case Event.ONKEYUP:
+            case Event.ONKEYPRESS:
+                keyListeners.fireKeyboardEvent(this, event);
+                break;
+            case Event.ONCLICK:
+                clickTarget = DOM.eventGetTarget(event);
+                clickListeners.fireClick(this);
+                break;
+        }
+        return true;   
+    }
+
+    public void addKeyboardListener(KeyboardListener listener) {
+        if(keyListeners == null){
+            keyListeners = new KeyboardListenerCollection();
+        }
+        keyListeners.add(listener);
+        
+    }
+
+    public void removeKeyboardListener(KeyboardListener listener) {
+        if(keyListeners != null){
+            keyListeners.remove(listener);
+        }
+        
+    }
+
+    public void addClickListener(ClickListener listener) {
+        if(clickListeners == null){
+            clickListeners = new ClickListenerCollection();
+        }
+        clickListeners.add(listener);
+        
+    }
+
+    public void removeClickListener(ClickListener listener) {
+        if(clickListeners != null){
+            clickListeners.remove(listener);
+        }
+        
     }
 
 }

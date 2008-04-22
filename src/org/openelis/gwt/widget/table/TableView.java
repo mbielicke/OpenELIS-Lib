@@ -1,5 +1,6 @@
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -13,6 +14,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
@@ -32,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableView extends Composite implements ScrollListener, MouseWheelListener {
+public class TableView extends Composite implements ScrollListener, MouseWheelListener, KeyboardListener {
     
     public boolean loaded;
     public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
@@ -107,7 +109,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public static String selectedStyle = "Selected";
     public static String navLinks = "NavLinks";
     protected HorizontalPanel navPanel = new HorizontalPanel();
-    private VerticalPanel vp = new VerticalPanel();
+    private VerticalPanel vp = new VerticalPanel(); 
     public String width;
     public int height;
     public TableController controller = null;
@@ -227,6 +229,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         ft.setCellSpacing(0);
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
+        //table.sinkEvents(Event.KEYEVENTS);
         cellView.setWidget(table);
         ft.setCellSpacing(0);
         scrollBar.setWidth("18px");
@@ -272,7 +275,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         if (widget instanceof FocusWidget)
             ((FocusWidget)widget).setFocus(true);
     }
-
+/*
     public void reset() {
         table = new FlexTable();
         table.setCellSpacing(1);
@@ -285,7 +288,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }
         cellView.setWidget(table);
     }
-    
+  */  
     public void setTable(){
         cellView.clear();
         cellView.setWidget(table);
@@ -399,6 +402,21 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         if(delta > 0 && delta < 18)
             delta = controller.cellHeight;
         scrollBar.setScrollPosition(pos + delta);
+    }
+
+    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
     }
     
 }

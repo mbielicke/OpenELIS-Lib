@@ -158,4 +158,8 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+    
+    public void fireClick() {
+        listeners.fireClick(this);
+    }
 }

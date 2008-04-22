@@ -77,7 +77,14 @@ public class AutoCompleteDropdown extends Composite implements
 
 	HashMap idHashMap = new HashMap();
 
-	final PopupPanel choicesPopup = new PopupPanel(true);
+	final PopupPanel choicesPopup = new PopupPanel(true) {
+     
+	    public boolean onKeyDownPreview(char key, int modifiers) {
+	        // TODO Auto-generated method stub
+            scrollList.onKeyDown(this, key, modifiers);
+	        return super.onKeyDownPreview(key, modifiers);
+	    }   
+    };
 
 	protected String textBoxDefault = "";
 
@@ -299,10 +306,9 @@ public class AutoCompleteDropdown extends Composite implements
                                               + this.getOffsetHeight() - 1);
                 choicesPopup.setWidget(scrollList);
                 choicesPopup.show();
+               
                 scrollList.sizeTable();
 
-			
-			DOM.addEventPreview(scrollList);
 
 			if (!multiSelect) {
 				//if the user clicked the arrow and there is already a row selected, we need to scroll to that row
@@ -373,8 +379,6 @@ public class AutoCompleteDropdown extends Composite implements
 			String textValue = "";
 			textValue = getTextBoxDisplay();
 
-			DOM.removeEventPreview(scrollList);
-
 			textBox.setText(textValue.trim());
 			textBoxDefault = textValue;
 
@@ -412,8 +416,6 @@ public class AutoCompleteDropdown extends Composite implements
             int selectionLength = -1;
             
             textValue = getTextBoxDisplay();
-
-			DOM.removeEventPreview(scrollList);
 
 			textBox.setText(textValue.trim());
 			textBoxDefault = textValue;
@@ -552,6 +554,7 @@ public class AutoCompleteDropdown extends Composite implements
 				clickedArrow = true;
 
 				showMatches(0);
+                ((HasFocus)sender).setFocus(false);
 			}
 		}
 	}

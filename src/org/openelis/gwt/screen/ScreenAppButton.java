@@ -63,7 +63,13 @@ public class ScreenAppButton extends ScreenWidget {
             }
         }
         if (node.getAttributes().getNamedItem("onclick") != null){
-            button.addClickListener((ClickListener)screen);
+            String[] listeners = node.getAttributes().getNamedItem("onclick").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this"))
+                    button.addClickListener((ClickListener)screen);
+                else
+                    button.addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
+            }
         }
         
     
@@ -72,23 +78,6 @@ public class ScreenAppButton extends ScreenWidget {
         	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
         	 for(int i = 0; i < enabledStates.length; i++)
         		 enabledStatesInt = enabledStatesInt + ((Integer)statesHash.get(enabledStates[i])).intValue();
-        		/* if("default".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.DEFAULT;
-        		 }else if("display".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.DISPLAY;
-        		 }else if("update".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.UPDATE;
-        		 }else if("add".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.ADD;
-        		 }else if("query".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.QUERY;
-        		 }else if("browse".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.BROWSE;
-        		 }else if("delete".equals(enabledStates[i])){
-        			 enabledStatesInt = enabledStatesInt + FormInt.DELETE;
-        		 }else
-        			 throw new Exception("");
-        	 }*/
         	 button.setMaskedEnabledState(enabledStatesInt);
         }
         
@@ -97,22 +86,6 @@ public class ScreenAppButton extends ScreenWidget {
         	 String[] lockedStates = node.getAttributes().getNamedItem("lockedStates").getNodeValue().split(",");
         	 for(int i = 0; i < lockedStates.length; i++)
         		 lockedStatesInt = lockedStatesInt + ((Integer)statesHash.get(lockedStates[i])).intValue();
-        		/* if("default".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.DEFAULT;
-        		 }else if("display".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.DISPLAY;
-        		 }else if("update".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.UPDATE;
-        		 }else if("add".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.ADD;
-        		 }else if("query".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.QUERY;
-        		 }else if("browse".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.BROWSE;
-        		 }else if("delete".equals(lockedStates[i])){
-        			 lockedStatesInt = lockedStatesInt + FormInt.DELETE;
-        		 }
-        	 }*/
         	 button.setMaskedLockedState(lockedStatesInt);
         }
         

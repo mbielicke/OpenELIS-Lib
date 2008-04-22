@@ -2,7 +2,6 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.widget.AToZPanel;
 
@@ -47,6 +46,9 @@ public class ScreenAToZPanel extends ScreenWidget {
         azPanel.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
         azPanel.view.initTable(azPanel);
         //azPanel.sizeTable();
+        
+        ((AppScreen)screen).addKeyboardListener(azPanel);
+        ((AppScreen)screen).addClickListener(azPanel);
 		initWidget(azPanel);		
         setDefaults(node, screen);
     }

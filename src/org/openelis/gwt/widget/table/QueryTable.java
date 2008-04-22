@@ -3,7 +3,6 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HasFocus;
@@ -110,8 +109,6 @@ public class QueryTable extends TableController {
         }
         if(selected == row && selectedCell == col)
             return;
-        DOM.removeEventPreview(this);
-        DOM.addEventPreview(this);
         if (sender == view.table) {
             select(row, col);
         }
@@ -275,7 +272,7 @@ public class QueryTable extends TableController {
         selected = -1;
         selectedCell = -1;
         view.controller = this;
-        view.reset();
+        //view.reset();
         createRow();
         loadRow();
         view.cellView.setWidget(view.table);
@@ -333,16 +330,19 @@ public class QueryTable extends TableController {
         }
     }
 
-    /**
-     * This method will handle the keyboard events caught by the onEventPreview
-     * method.
-     * 
-     * @param event
-     * @return
-     */
-    public boolean onKeyPress(Event event) {
-        int code = DOM.eventGetKeyCode(event);
-        boolean shift = DOM.eventGetShiftKey(event);
+   public void enabled(boolean enabled){
+        this.enabled = enabled;
+        for(int i = 0; i < editors.length; i++){
+            editors[i].enable(enabled);
+        }
+        Iterator widIt = view.table.iterator();
+        while(widIt.hasNext()){
+            ((TableCellWidget)widIt.next()).enable(enabled);
+        }
+    }
+
+    public void onKeyDown(Widget sender, char code, int modifiers) {
+        boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
         if (KeyboardListener.KEY_ENTER == code) {
             if (selected >= 0) {
                 if (selectedCell > -1) {
@@ -378,9 +378,6 @@ public class QueryTable extends TableController {
                    }
                 });
             }
-            DOM.eventCancelBubble(event, true);
-            DOM.eventPreventDefault(event);
-            return false;
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && shift) {
             int col;
@@ -392,7 +389,7 @@ public class QueryTable extends TableController {
                 col--;
              if(col < 0){
                 selectedCell = 0;
-                return onKeyPress(event);
+                onKeyDown(sender,code,modifiers);
              }
              final int fCol = col;
              DeferredCommand.addCommand(new Command() {
@@ -400,41 +397,17 @@ public class QueryTable extends TableController {
                     onCellClicked(view.table, selected, fCol);
                 }
              });
-            DOM.eventCancelBubble(event, true);
-            DOM.eventPreventDefault(event);
-            return false;
         }
-        return true;
     }
 
-    /**
-     * EventPreview for catching Keyboard events for the table.
-     */
-    public boolean onEventPreview(Event event) {
+    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
         // TODO Auto-generated method stub
-        if (view.table.isAttached()) {
-            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                return onKeyPress(event);
-            }
-            if (DOM.eventGetType(event) == Event.ONCLICK){
-                if(!DOM.isOrHasChild(view.getElement(), DOM.eventGetTarget(event))){
-                   DOM.removeEventPreview(this);
-                   unselect(-1);
-                }
-            }
-        }
-        return true;
+        
     }
-    
-    public void enabled(boolean enabled){
-        this.enabled = enabled;
-        for(int i = 0; i < editors.length; i++){
-            editors[i].enable(enabled);
-        }
-        Iterator widIt = view.table.iterator();
-        while(widIt.hasNext()){
-            ((TableCellWidget)widIt.next()).enable(enabled);
-        }
+
+    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
     }
     
 }
