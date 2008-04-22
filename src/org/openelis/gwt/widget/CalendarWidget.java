@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,7 +27,7 @@ import java.util.Arrays;
  * @author tschmidt
  *
  */
-public class CalendarWidget  extends AppScreen implements SourcesChangeEvents {
+public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, ClickListener {
     
     protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
     .create(CalendarServiceInt.class);
