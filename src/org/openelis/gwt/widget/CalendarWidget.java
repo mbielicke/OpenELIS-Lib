@@ -1,6 +1,7 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -73,6 +74,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
         for(int i = 0; i < 10; i++) {
             years[i] = (ScreenLabel)widgets.get("year:"+i+"Text");
          }
+         DOM.removeEventPreview(this);
     }
     
     public void onClick(Widget sender){
@@ -160,6 +162,9 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
             year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10+Integer.parseInt(value[1])));
             ((ScreenLabel)sender).label.addStyleName("Current");
             return;
+        }
+        if(sender == this){
+            
         }
         changeListeners.fireChange(sender);
     }
