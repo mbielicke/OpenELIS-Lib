@@ -44,9 +44,11 @@ public class AutoCompleteDropdown extends Composite implements
 
 	public TextBox textBox = new TextBox() {
 		public void onBrowserEvent(Event event) {
-			if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-				if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
-					screen.doTab(event, comp);
+			if (DOM.eventGetType(event) == Event.ONKEYDOWN) {		
+				if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB){
+					if(!insideTable)
+						screen.doTab(event, comp);						
+				}
 			} else {
 				super.onBrowserEvent(event);
 			}
@@ -117,6 +119,8 @@ public class AutoCompleteDropdown extends Composite implements
 	protected boolean multiSelect = false;
 
 	protected boolean fromModel = false;
+	
+	protected boolean insideTable = false;
 	
 	protected int numberOfRows = 10;
 
@@ -394,7 +398,7 @@ public class AutoCompleteDropdown extends Composite implements
 	/**
 	 * Set the selection that the user made.
 	 */
-	protected void complete() {
+	public void complete() {
 		// if the textbox is filled out with nothing selected we need to clear the textbox
 		// the selected list will always have something in it if it is valid text
 		if (!"".equals(textBox.getText())
@@ -823,5 +827,9 @@ public class AutoCompleteDropdown extends Composite implements
           
 		}
 
+	}
+
+	public void setInsideTable(boolean insideTable) {
+		this.insideTable = insideTable;
 	}
 }
