@@ -262,8 +262,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
             }
         }
-        if (state == FormInt.QUERY) {            
-            commitQuery(rpc);
+        if (state == FormInt.QUERY) {  
+       		window.setStatus(consts.get("querying"),"spinnerIcon");
+       		clearErrors();
+       		commitQuery(rpc);
         }
         if(state == FormInt.DELETE){
             commitDelete();
@@ -414,7 +416,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             	changeState(FormInt.DEFAULT);
             window.setStatus(consts.get("queryingComplete"),"");
         }else{
-            window.setStatus(consts.get("queryingFailed"),"ErrorPanel");
+            window.setStatus(consts.get("correctErrors"),"ErrorPanel");
         }
     }
     /**
@@ -450,6 +452,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             changeState(FormInt.DEFAULT);
         }
         if (state == FormInt.QUERY) {
+        	clearErrors();
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
