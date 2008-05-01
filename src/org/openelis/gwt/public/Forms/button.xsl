@@ -113,6 +113,33 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
+<!-- options button template -->
+<xsl:template name="optionsButton">
+	<appButton action="options" style="ButtonPanelButton" enabledStates="default,display" lockedStates="" shortcut="">
+	<menuPanel layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
+		    <menuItem>
+		        <menuDisplay>
+			    	  <appButton action="" style="ButtonPanelButton">
+		<panel xsi:type="Panel" layout="horizontal">
+			<widget>
+	        	<text><xsl:value-of select='resource:getString($constants,"options")'/></text>
+	      	</widget>
+	    	<panel xsi:type="Absolute" layout="absolute" style="OptionsButtonImage"/>
+	  	</panel>
+	</appButton>
+				</menuDisplay>
+				  <menuPanel style="topMenuContainer" layout="vertical" xsi:type="Panel" position="below">
+				    <xsl:call-template name="menuItem">
+				      <xsl:with-param name="label">duplicateRecord</xsl:with-param>
+				      <xsl:with-param name="enabled">true</xsl:with-param>
+				      <xsl:with-param name="value">duplicateRecord</xsl:with-param>
+				    </xsl:call-template>
+				  </menuPanel>
+		    </menuItem>
+	</menuPanel>
+	</appButton>
+</xsl:template>
+
 <!-- popup select button template -->
 <xsl:template name="popupSelectButton">
 <appButton action="commit" style="Button" enabledStates="default" lockedStates="">
@@ -153,4 +180,19 @@ version="1.0">
  	</appButton>
 </widget>
 </xsl:template>
+
+<!-- Menu item template -->
+<xsl:template name="menuItem">
+    <xsl:param name="label"/>
+    <xsl:param name="value"/>
+    <xsl:param name="enabled"/>
+    <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
+  	<menuItem style="TopMenuRowContainer" enabled="{$enabled}"  
+	          hover="Hover"
+	          icon="{$label}Icon"
+	   		  label="{resource:getString($constants,$label)}"
+	          description="{resource:getString($constants,$descrip)}" 
+	          value="{$value}"
+	          onClick="this"/>
+  </xsl:template>
 </xsl:stylesheet>
