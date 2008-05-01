@@ -314,7 +314,8 @@ color:gray;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
 }
-.Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, .Disabled .CommitButtonImage, .Disabled .AbortButtonImage{
+.Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, 
+.Disabled .CommitButtonImage, .Disabled .AbortButtonImage, .Disabled .OptionsButtonImage{
     background:none;
     cursor:default;
 }
@@ -341,6 +342,15 @@ color:gray;
 
 .AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
 .disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
+
+.OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat;margin:4px 0px 4px 4px; width:8px; height:8px;}
+.disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
+
+.duplicateRecordIcon{
+    width:16px;
+    height:16px;
+}
+.duplicateRecordIcon{background:url('../Images/quickentrybuttonimage.gif') no-repeat center;}
 /********* end button panel **********/
 
 
@@ -958,6 +968,16 @@ padding-bottom:0;
     cursor:default;
 }
 
+.ScreenTextboxDisplayOnly{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    background-color:#EEEEEE;
+    border:1px solid #d8d8d8;
+    cursor:default;
+}
+
 .WindowDragPanel {
     background:#bac8d9;
     border:1px dashed gray;
@@ -1004,6 +1024,9 @@ border:none;
     text-align:left;
 }
 
+.VerticalSpacer{
+   height:5px;
+}
 /********   End Input  Form ***********/
 .Form {
     font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
@@ -1027,15 +1050,25 @@ border:none;
 	text-align:right;
 	vertical-align:top;
 }
+
 /********   End Input  Form ***********/
-.FieldSet {
-    border:1px dashed #fb8c3c;
+fieldSet {
+    border:1px solid #99BBE8;
     padding: 2px;
-    margin:2px;
+    margin:5px;
 }
 
-.FieldSet Legend {
+legend {
 	background-color:#FFFFFF;
+}
+
+.LegendTitle {
+   -moz-user-select: none;
+   font-weight: bold;
+   color: #486095;
+   padding:2px 4px 2px 2px;
+   text-align:right;
+   vertical-align:top;
 }
 
 
@@ -1234,4 +1267,3 @@ font-weight:bold;
     background:lightblue;
     width:100%;	
 }
-
