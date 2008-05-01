@@ -10,6 +10,7 @@ import org.openelis.gwt.common.RPCDeleteException;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.services.AppScreenFormServiceInt;
 import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
@@ -52,6 +53,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public int state = FormInt.DEFAULT;
     protected ChangeListenerCollection changeListeners;
     protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
+    private boolean busy = false;
 
     public AppScreenForm(AppScreenFormServiceIntAsync service) {
         super(service);
@@ -78,6 +80,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void fetch(){
+    	if(busy)
+    		return;
+    	busy = true;
+    	
         formService.fetch(key, (FormRPC)forms.get("display"), new AsyncCallback(){
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
@@ -93,9 +99,13 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void afterFetch(boolean success){
-       changeState(FormInt.DISPLAY);
-       if(!success)
-            key = null;
+    	busy = false;
+    	if(success)
+    		changeState(FormInt.DISPLAY);
+    	else{
+    		changeState(FormInt.DEFAULT);
+    		key = null;
+    	}
     }
     
     /**
@@ -195,6 +205,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void commitDelete(){
+    	if(busy)
+    		return;
+    	busy = true;
         window.setStatus(consts.get("deleting"),"spinnerIcon");
     	formService.commitDelete(key, (FormRPC)forms.get("display"), new AsyncCallback() {
             public void onSuccess(Object result){
@@ -219,6 +232,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void afterCommitDelete(boolean success){
+    	busy = false;
     	if(success){
             getPage(false,consts.get("deleteComplete"));        
     		strikeThru(false);
@@ -274,6 +288,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void commitUpdate() {
+    	if(busy)
+    		return;
+    	busy = true;
+    	
         formService.commitUpdate(rpc, (FormRPC)forms.get("display"),new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
@@ -294,6 +312,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void afterCommitUpdate(boolean success) {
+    	busy = false;
         if(success){
             enable(false);
             changeState(FormInt.DISPLAY);
@@ -312,6 +331,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void commitAdd() {
+    	if(busy)
+    		return;
+    	busy = true;
         formService.commitAdd(rpc, (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
@@ -332,6 +354,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void afterCommitAdd(boolean success) {
+    	busy = false;
         if(success){
             enable(false);
             changeState(FormInt.DEFAULT);
@@ -350,6 +373,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void commitQuery(FormRPC rpcQuery) {
+    	if(busy)
+    		return;
+    	busy = true;
+    	
         window.setStatus(consts.get("querying"),"spinnerIcon");
         formService.commitQuery(rpcQuery, modelWidget.getModel(), new AsyncCallback() {
            public void onSuccess(Object result){
@@ -404,8 +431,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void afterCommitQuery(boolean success) {
+    	busy = false;
         if(success){
-        	///
         	doReset();
         	setForm(false);
             load((FormRPC)forms.get("display"));

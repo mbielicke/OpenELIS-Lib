@@ -133,15 +133,18 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
             ScreenMenuPanel mp = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
             pop.setWidget(mp);
         
-            if(popupNode.getAttributes().getNamedItem("position").getNodeValue().equals("below"))
-                pop.setPopupPosition(wid.getAbsoluteLeft()+8, 
-                                     wid.getAbsoluteTop()+wid.getOffsetHeight());
-            else
-                pop.setPopupPosition(getAbsoluteLeft()+getOffsetWidth(),
-                                     getAbsoluteTop());
             pop.addPopupListener(this);
  
         }
+        
+        //to be able to use the widget on a screen we always need to set the position
+        if(popupNode.getAttributes().getNamedItem("position").getNodeValue().equals("below"))
+            pop.setPopupPosition(wid.getAbsoluteLeft()+8, 
+                                 wid.getAbsoluteTop()+wid.getOffsetHeight());
+        else
+            pop.setPopupPosition(getAbsoluteLeft()+getOffsetWidth(),
+                                 getAbsoluteTop());
+        
         pop.show();
         child = ((ScreenMenuPanel)pop.getWidget());
         DOM.setElementProperty(pop.getElement(),"closeAll", "true");

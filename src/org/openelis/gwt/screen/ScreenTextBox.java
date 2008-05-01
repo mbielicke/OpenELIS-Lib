@@ -117,11 +117,15 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
     
     public void enable(boolean enabled){
-        textbox.setReadOnly(!enabled);
-        if(enabled){
-            textbox.addFocusListener(this);
-        }else
-            textbox.removeFocusListener(this);
+    	if(!alwaysEnabled){
+    		if(alwaysDisabled)
+    			enabled = false;
+	        textbox.setReadOnly(!enabled);
+	        if(enabled){
+	            textbox.addFocusListener(this);
+	        }else
+	            textbox.removeFocusListener(this);
+    	}
     }
     
     public void setFocus(boolean focus){
