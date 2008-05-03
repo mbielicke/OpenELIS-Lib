@@ -7,6 +7,14 @@ public class StringObject implements DataObject, Serializable {
     private static final long serialVersionUID = 1L;
     protected String value;
     
+    public StringObject() {
+        
+    }
+    
+    public StringObject(String val){
+        setValue(val);
+    }
+    
     public Object getValue() {
         if(value == null)
             return "";

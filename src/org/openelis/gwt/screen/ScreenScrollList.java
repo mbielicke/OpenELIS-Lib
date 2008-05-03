@@ -69,6 +69,20 @@ public class ScreenScrollList extends ScreenWidget {
                 list.multi = true;
             }
         }
+        Node widthsNode = ((Element)node).getElementsByTagName("widths").item(0);
+        Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
+        
+        if(headersNode != null)
+            list.setHeaders(getHeaders(headersNode));
+        
+        if(widthsNode !=  null)
+            list.setCellWidths(getWidths(widthsNode));
+        
+        if(node.getAttributes().getNamedItem("maxHeight") != null){
+            if(node.getAttributes().getNamedItem("maxHeight").getNodeValue().equals("true"))
+                list.maxHeight = true;
+        }
+        
         initWidget(list);        
         
         list.setStyleName("ScreenDragList");
@@ -131,4 +145,20 @@ public class ScreenScrollList extends ScreenWidget {
         super.destroy();
     }
     
+    public int[] getWidths(Node node){
+     String[] widths = node.getFirstChild()
+        .getNodeValue()
+        .split(",");
+    int[] width = new int[widths.length];
+    for (int i = 0; i < widths.length; i++) {
+        width[i] = Integer.parseInt(widths[i]);
+    }
+    return width;
+   }
+    
+    public String[] getHeaders(Node node){
+        return node.getFirstChild()
+                .getNodeValue()
+                .split(",");
+    } 
 }

@@ -92,7 +92,7 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void load() {
-        try {
+        //try {
             Iterator inputKeys = widgets.keySet().iterator();
             while (inputKeys.hasNext()) {
                 String key = (String)inputKeys.next();
@@ -103,9 +103,9 @@ public class ScreenBase extends Composite implements FocusListener{
                 inputField.load(rpcField);   
                 
             }
-        } catch (Exception e) {
-            Window.alert("Load " + e.getMessage());
-        }
+        //} catch (Exception e) {
+        //    Window.alert("Load " + e.getMessage());
+       // }
     }
 
     /**

@@ -15,6 +15,8 @@ import javax.xml.transform.stream.StreamResult;
 
 public class ServiceUtils {
     
+    public static String props;
+    
     public static boolean hasPermission(String module) {
         try {
             boolean result = true;
@@ -67,6 +69,9 @@ public class ServiceUtils {
             Element locale = doc.createElement("locale");
             locale.appendChild(doc.createTextNode(loc));
             root.appendChild(locale);
+            Element propsEL = doc.createElement("props");
+            propsEL.appendChild(doc.createTextNode(props));
+            root.appendChild(propsEL);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             XMLUtil.transformXML(doc, new File(url), new StreamResult(bytes));
             return bytes.toString();

@@ -126,7 +126,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
      */
     private WindowBrowser browser;
     private PopupPanel popupPanel;
-    private String name;
+    public String name;
     /**
      * Current z-index of the window.
      */

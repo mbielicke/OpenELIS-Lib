@@ -449,7 +449,8 @@ public class EditTable extends TableController implements
             }
             if(autoAdd && fsRow > -1 && rowList[fsRow] == autoAddRow){
                 if(manager == null || (manager != null && manager.doAutoAdd(model.numRows() -1 ,fsCol,this))){
-                     model.addRow(autoAddRow);
+                     autoAddRow = null;
+                     rowList[row] = model.getRow(model.numRows() -1);
                      load(cellHeight*model.shownRows());
                      final int fRow;
                      if(model.shownRows() >= maxRows)
@@ -707,8 +708,11 @@ public class EditTable extends TableController implements
         try{
     	TableCellWidget wid = (TableCellWidget)view.table.getWidget(row,col);
     	wid.saveValue();
+        if(rowList[row] == autoAddRow){
+            model.addRow(autoAddRow);
+        }
         if (manager != null) {
-            manager.finishedEditing(model.indexOf(rowList[row]), col, this);
+               manager.finishedEditing(model.indexOf(rowList[row]), col, this);
         }
         if(changeListeners != null){
             changeListeners.fireChange(view);

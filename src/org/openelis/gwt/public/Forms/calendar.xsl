@@ -22,7 +22,7 @@
 
   <xsl:template match="doc"> 
 
-  <screen id="Organization" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <screen id="Calendar" name="Calendar" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
     <panel layout="vertical" width="100%" style="CalendarWidget">
       <panel layout="horizontal" style="MonthBar">

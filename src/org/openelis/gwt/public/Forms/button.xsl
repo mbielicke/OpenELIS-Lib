@@ -1,13 +1,13 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+ <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xmlns:xalan="http://xml.apache.org/xalan" 
-xmlns:resource="xalan://org.openelis.server.constants.UTFResource" 
+xmlns:resource="xalan://org.openelis.util.UTFResource" 
 xmlns:locale="xalan://java.util.Locale" 
 extension-element-prefixes="resource" 
 version="1.0">
 
 <xalan:component prefix="resource">
-	<xalan:script lang="javaclass" src="xalan://org.openelis.server.constants.UTFResource"/>
+	<xalan:script lang="javaclass" src="xalan://org.openelis.util.UTFResource"/>
 </xalan:component>
   
 <xalan:component prefix="locale">
@@ -15,7 +15,8 @@ version="1.0">
 </xalan:component>
   
 <xsl:variable name="language"><xsl:value-of select="doc/locale"/></xsl:variable>
-<xsl:variable name="constants" select="resource:getBundle('org.openelis.modules.main.server.constants.OpenELISConstants',locale:new(string($language)))"/>
+<xsl:variable name="props"><xsl:value-of select="doc/props"/></xsl:variable>
+<xsl:variable name="constants" select="resource:getBundle(string($props),locale:new(string($language)))"/>
     
 <!-- query button template -->
 <xsl:template name="queryButton">

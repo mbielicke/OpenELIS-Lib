@@ -20,7 +20,7 @@ public class TableMaskedTextBox extends TableCellInputWidget {
 	private String mask;
     private boolean enabled;
     private int width;
-    public static final String TAG_NAME = "table-maskedBox";
+    public static final String TAG_NAME = "table-maskedbox";
 	
     public TableMaskedTextBox() {
     }

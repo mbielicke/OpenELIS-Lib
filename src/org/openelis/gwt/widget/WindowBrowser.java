@@ -1,5 +1,6 @@
 package org.openelis.gwt.widget;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -16,7 +17,6 @@ import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * WindowBrowser will display Screen widgets in draggable Windows
@@ -94,7 +94,7 @@ public class WindowBrowser extends Composite{
         }
     }
     
-    public void addScreen(final AppScreen screen) {
+    public void addScreen(AppScreen screen) {
         if(windows.size() == limit){
             Window.alert("Please close at least one window before opening another.");
             return;
@@ -103,12 +103,11 @@ public class WindowBrowser extends Composite{
             return;
         }
         RootPanel.get().addStyleName("ScreenLoad");
-        final WindowBrowser brws = this;
         index++;
-        ScreenWindow window = new ScreenWindow(brws, screen.name);
+        ScreenWindow window = new ScreenWindow(this, GWT.getTypeName(screen));
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
-        windows.put(screen.name,window);
+        windows.put(window.name,window);
     }
     
     public boolean selectScreen(String text) {

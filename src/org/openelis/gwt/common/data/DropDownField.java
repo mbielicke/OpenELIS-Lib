@@ -12,6 +12,7 @@ public class DropDownField extends AbstractField {
      * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject>
      */
     private ArrayList selections = new ArrayList();
+    private String dflt;
     
     public static final String TAG_NAME = "rpc-dropdown";
     
@@ -28,6 +29,10 @@ public class DropDownField extends AbstractField {
             setRequired(new Boolean(node.getAttributes()
                                                 .getNamedItem("required")
                                                 .getNodeValue()).booleanValue());
+        if (node.getFirstChild() != null) {
+            String dflt = node.getFirstChild().getNodeValue();
+            setValue(dflt);
+        }
     }
     
     public void setValue(Object val) {

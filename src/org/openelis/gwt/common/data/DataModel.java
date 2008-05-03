@@ -33,6 +33,13 @@ public class DataModel implements DataObject, Serializable {
             keyMap.put(set.getKey(), set);
         }
     }
+    
+    public void add(DataObject key, DataObject value){
+        DataSet data = new DataSet();
+        data.setKey(key);
+        data.addObject(value);
+        add(data);
+    }
 
     public void delete(int index) {
         entries.remove(index);

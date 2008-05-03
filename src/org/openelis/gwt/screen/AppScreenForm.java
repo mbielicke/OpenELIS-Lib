@@ -67,7 +67,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     
     public void afterDraw(boolean sucess) {
         super.afterDraw(sucess);
-        bpanel.addChangeListener(this);
+        if(bpanel != null)
+            bpanel.addChangeListener(this);
         addChangeListener(bpanel);
         changeState(FormInt.DEFAULT);
         enable(false);
@@ -80,9 +81,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void fetch(){
-    	if(busy)
+       	if(busy)
     		return;
     	busy = true;
+        window.setStatus(consts.get("loading"), "spinnerIcon");
+
     	
         formService.fetch(key, (FormRPC)forms.get("display"), new AsyncCallback(){
            public void onSuccess(Object result){
@@ -99,7 +102,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
     
     public void afterFetch(boolean success){
+       if(!success)
+            key = null;
     	busy = false;
+    	window.setStatus("", "");
+        changeState(FormInt.DISPLAY);
     	if(success)
     		changeState(FormInt.DISPLAY);
     	else{
@@ -469,7 +476,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             });
             enable(false);
             changeState(FormInt.DISPLAY);
-            window.setStatus(consts.get("updateAborted"),"");
         }
         if (state == FormInt.ADD) {
             doReset();
@@ -498,7 +504,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     }
 
     public void afterAbort(boolean success) {
-        
+        window.setStatus(consts.get("updateAborted"), "");
     }
     /** 
      * This method provides the default logic for a form when the Reload button
