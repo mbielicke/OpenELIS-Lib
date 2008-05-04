@@ -9,6 +9,16 @@ public class NumberObject implements DataObject, Serializable {
     protected String type;
     protected boolean invalid;
     
+    public NumberObject() {
+        
+    }
+    
+    public NumberObject(String type, Object value){
+        setType(type);
+        setValue(value);
+    }
+    
+    
     public Object getValue() {
         if(type.equals("integer"))
         	if(value == null)

@@ -8,6 +8,14 @@ public class BooleanObject implements DataObject, Serializable {
 
     public Boolean value;
     
+    public BooleanObject() {
+        
+    }
+    
+    public BooleanObject(Object value){
+        setValue(value);
+    }
+    
     public void setValue(Object val) {
         // TODO Auto-generated method stub
         if (val != null) {

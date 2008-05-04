@@ -15,6 +15,16 @@ public class DateObject implements DataObject, Serializable {
      */
     protected DatetimeRPC value = null;
     
+    public DateObject() {
+        
+    }
+    
+    public DateObject(byte begin, byte end, Object value) {
+        setBegin(begin);
+        setEnd(end);
+        setValue(value);
+    }
+    
     public void setValue(Object val) {
         if (val == null || val == "") {
             value = null;

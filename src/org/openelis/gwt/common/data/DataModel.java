@@ -40,6 +40,15 @@ public class DataModel implements DataObject, Serializable {
         data.addObject(value);
         add(data);
     }
+    
+    public void add(DataObject key, DataObject[] values){
+        DataSet data = new DataSet();
+        data.setKey(key);
+        for(int i = 0; i < values.length; i++){
+            data.addObject(values[i]);
+        }
+        add(data);
+    }
 
     public void delete(int index) {
         entries.remove(index);
