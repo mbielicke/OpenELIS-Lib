@@ -144,6 +144,13 @@ public class ScreenVertical extends ScreenWidget {
         */
     }
     
+    public void add(Widget w) {
+        if(panel == null)
+            super.add(w);
+        else
+            panel.add(w);
+    }
+    
     /**
      * createPanel creates the vertical panel from an XML node 
      * @param node
