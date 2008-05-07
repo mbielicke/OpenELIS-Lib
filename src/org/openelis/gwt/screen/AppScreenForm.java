@@ -303,7 +303,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                forms.put(rpc.key, rpc);
-               //load();
+               load();
                if (rpc.status == IForm.INVALID_FORM) {
             	   drawErrors();
             	   afterCommitUpdate(false);
@@ -345,7 +345,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                forms.put(rpc.key,rpc);
-               //load();
+               load();
                if (rpc.status == IForm.INVALID_FORM) {
             	   drawErrors();
                    afterCommitAdd(false);
@@ -400,7 +400,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     
     public void getPage(final boolean selectItem, final String messageText) {
     	if(modelWidget.getPage() < 0){
-    		window.setStatus(consts.get("firstPageException"),"");
+    		window.setStatus(consts.get("beginningQueryException"),"ErrorPanel");
     		modelWidget.getModel().setPage(0);
     		modelWidget.getModel().select(modelWidget.getSelectedIndex()+1);
     	}else{
