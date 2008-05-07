@@ -52,7 +52,6 @@ public class DropDownField extends AbstractField {
     }
 
     public Object getValue() {
-        // TODO Auto-generated method stub
         if(selections.size() == 1)
             return ((DataSet)selections.get(0)).getKey().getValue();
         else if(selections.size() > 1)
@@ -61,14 +60,22 @@ public class DropDownField extends AbstractField {
             return null;       
     }
     
+    public Object getTextValue(){
+    	if(selections.size() == 1)
+            return ((DataSet)selections.get(0)).getObject(0).getValue();
+        else if(selections.size() > 1)
+            return selections;
+        else
+            return null;
+    }
+    
     public ArrayList getSelections() {
         return selections;
     }
 
     public void add(Integer key) {
         DataSet set = new DataSet();
-        NumberObject no = new NumberObject();
-        no.setType("integer");
+        NumberObject no = new NumberObject(NumberObject.INTEGER);
         no.setValue(key);
         set.setKey(no);
         add(set);
@@ -76,8 +83,7 @@ public class DropDownField extends AbstractField {
     
     public void add(Double key){
         DataSet set = new DataSet();
-        NumberObject no = new NumberObject();
-        no.setType("double");
+        NumberObject no = new NumberObject(NumberObject.DOUBLE);
         no.setValue(key);
         set.setKey(no);
         add(set);

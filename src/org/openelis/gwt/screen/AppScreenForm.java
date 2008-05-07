@@ -37,7 +37,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      * Screen.  This needs to be set by the Extending class 
      * after the screen is drawn.
      */
-    public ButtonPanel bpanel = null;
+    private ButtonPanel bpanel = null;
     /**
      * Reference to the Label that will display the Form Messages to
      * the User.  If this Screen is set in a ScreenWindow this 
@@ -168,7 +168,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      * This method provides the default behavior for when the Update button of a
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public void up() {
+    public void update() {
         window.setStatus(consts.get("lockForUpdate"),"spinnerIcon");
         formService.fetchForUpdate(key, (FormRPC)forms.get("display"), new AsyncCallback() {
            public void onSuccess(Object result){
@@ -303,7 +303,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                forms.put(rpc.key, rpc);
-               load();
+               //load();
                if (rpc.status == IForm.INVALID_FORM) {
             	   drawErrors();
             	   afterCommitUpdate(false);
@@ -345,7 +345,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
            public void onSuccess(Object result){
                rpc = (FormRPC)result;
                forms.put(rpc.key,rpc);
-               load();
+               //load();
                if (rpc.status == IForm.INVALID_FORM) {
             	   drawErrors();
                    afterCommitAdd(false);
@@ -483,6 +483,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             enable(false);
             window.setStatus(consts.get("addAborted"),"");
             changeState(FormInt.DEFAULT);
+            afterAbort(true);
         }
         if (state == FormInt.QUERY) {
         	clearErrors();
@@ -582,7 +583,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 add();
             }
             else if (bpanel.buttonClicked.action.equals("update")) {
-                up();
+                update();
             }
             else if (bpanel.buttonClicked.action.equals("delete")) {
                 delete();
@@ -620,4 +621,20 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         if(changeListeners != null)
             changeListeners.fireChange(this);
     }
+
+	public ButtonPanel getBpanel() {
+		return bpanel;
+	}
+
+	public void setBpanel(ButtonPanel bpanel) {
+		this.bpanel = bpanel;
+	}
+
+	public boolean isBusy() {
+		return busy;
+	}
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
+	}
 }

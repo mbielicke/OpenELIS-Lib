@@ -31,16 +31,23 @@ public class NumberField extends AbstractField implements Serializable {
         object = new NumberObject();
     }
     
+    public NumberField(int type) {
+        object = new NumberObject();
+        ((NumberObject)object).type = type;
+    }
+    
     public NumberField(Node node){
         this();
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
                                .getNamedItem("key")
                                .getNodeValue());
-        if (node.getAttributes().getNamedItem("type") != null)
-            ((NumberObject)object).setType(node.getAttributes()
-                                .getNamedItem("type")
-                                .getNodeValue());
+        if (node.getAttributes().getNamedItem("type") != null){
+            if("integer".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
+            	((NumberObject)object).setType(NumberObject.INTEGER);
+            else if("double".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
+            	((NumberObject)object).setType(NumberObject.DOUBLE);
+        }
         if (node.getAttributes().getNamedItem("required") != null)
             setRequired(new Boolean(node.getAttributes()
                                                 .getNamedItem("required")
@@ -96,12 +103,12 @@ public class NumberField extends AbstractField implements Serializable {
     public String toString() {
         if (((NumberObject)object).value == null)
             return "";
-        if (((NumberObject)object).type.equals("integer"))
+        if (((NumberObject)object).type == NumberObject.INTEGER)
             return "" + ((NumberObject)object).value.intValue();
         return ((NumberObject)object).value.toString();
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         ((NumberObject)object).type = type;
     }
 

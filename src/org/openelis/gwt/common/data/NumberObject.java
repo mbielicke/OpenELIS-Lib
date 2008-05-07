@@ -4,27 +4,32 @@ import java.io.Serializable;
 
 public class NumberObject implements DataObject, Serializable {
 
+    public static final int   INTEGER          = 1, 
+                              DOUBLE           = 2;
+
     private static final long serialVersionUID = 1L;
-    protected Double value;
-    protected String type;
-    protected boolean invalid;
-    
+    protected Double          value;
+    protected int             type;
+    protected boolean         invalid;
+
     public NumberObject() {
-        
+    }
+
+    public NumberObject(int type) {
+        this.type = type;
     }
     
-    public NumberObject(String type, Object value){
+    public NumberObject(int type, Object value){
         setType(type);
         setValue(value);
     }
-    
-    
+
     public Object getValue() {
-        if(type.equals("integer"))
-        	if(value == null)
-        		return null;
-        	else
-        		return new Integer(value.intValue());
+        if (type == INTEGER)
+            if (value == null)
+                return null;
+            else
+                return new Integer(value.intValue());
         return value;
     }
 
@@ -33,28 +38,28 @@ public class NumberObject implements DataObject, Serializable {
         try {
             if (object != null) {
                 if (object instanceof String && !((String)object).equals(""))
-                    this.value = Double.valueOf((String)object);
-                if (object instanceof Double)
-                    this.value = (Double)object;
-                if (object instanceof Integer)
-                    this.value = new Double(((Integer)object).doubleValue());
+                    value = Double.valueOf((String)object);
+                else if (object instanceof Double)
+                    value = (Double)object;
+                else if (object instanceof Integer)
+                    value = new Double(((Integer)object).doubleValue());
             } else {
-                this.value = null;
+                value = null;
             }
         } catch (Exception e) {
             invalid = true;
         }
     }
-    
-    public void setType(String type) {
+
+    public void setType(int type) {
         this.type = type;
     }
-    
-    public String getType(){
-    	return type;
+
+    public int getType() {
+        return type;
     }
-    
-    public Object getInstance() {
+	
+	public Object getInstance() {
         NumberObject clone = new NumberObject();
         clone.type = type;
         clone.value = new Double(value.doubleValue());
@@ -62,11 +67,11 @@ public class NumberObject implements DataObject, Serializable {
     }
     
     public boolean equals(Object obj) {
-       if(!(obj instanceof NumberObject))
-           return false;
-       return ((NumberObject)obj).value.equals(value);
+        if (!(obj instanceof NumberObject))
+            return false;
+        return ((NumberObject)obj).value.equals(value);
     }
-    
+
     public int hashCode() {
         // TODO Auto-generated method stub
         return value.hashCode();

@@ -24,7 +24,7 @@ public interface FormInt {
 
     public void add();
 
-    public void up();
+    public void update();
 
     public void delete();
 

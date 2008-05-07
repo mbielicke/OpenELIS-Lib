@@ -345,8 +345,7 @@ public class AutoCompleteTextBox extends Composite implements
 	        	hiddenId.setDataObject((StringObject)data.getObject(0));
 	        	row.addHidden("id",hiddenId);
 	        }else if(type.equals("integer")){
-	        	NumberField hiddenId = new NumberField();
-	        	hiddenId.setType("integer");
+	        	NumberField hiddenId = new NumberField(NumberObject.INTEGER);
 	        	hiddenId.setDataObject((NumberObject)data.getObject(0));
 	        	row.addHidden("id",hiddenId);
 	        }
@@ -494,8 +493,7 @@ public class AutoCompleteTextBox extends Composite implements
         	Integer val = (Integer)value;
         	this.value = value;
         	if (value != null && val.intValue() > 0){
-                NumberField numberField = new NumberField();
-                numberField.setType("integer");
+                NumberField numberField = new NumberField(NumberObject.INTEGER);
                 numberField.setValue(val);
                 DataModel model = null;
                 reset();
@@ -526,8 +524,7 @@ public class AutoCompleteTextBox extends Composite implements
         	Integer val = (Integer)value;
         	this.value = value;
         	if (value != null && val.intValue() > 0){
-                NumberField numberField = new NumberField();
-                numberField.setType("integer");
+                NumberField numberField = new NumberField(NumberObject.INTEGER);
                 numberField.setValue(val);
                 DataModel model = null;
                 reset();

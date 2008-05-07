@@ -400,7 +400,7 @@ public class ScreenForm extends Screen implements FormInt {
         
     }
 
-    public void up() {
+    public void update() {
         // TODO Auto-generated method stub
         
     }

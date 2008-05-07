@@ -224,8 +224,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
 
         //id
         if(type.equals("integer")){
-        	NumberObject id = new NumberObject();
-        	id.setType("integer");
+        	NumberObject id = new NumberObject(NumberObject.INTEGER);
         	id.setValue(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
         	set.setKey(id);
         }else if(type.equals("string")){

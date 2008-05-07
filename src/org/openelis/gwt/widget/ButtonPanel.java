@@ -6,7 +6,6 @@ import java.util.Iterator;
 import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ScreenAppButton;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
