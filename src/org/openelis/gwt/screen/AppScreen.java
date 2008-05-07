@@ -177,7 +177,8 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
                 break;
             case Event.ONCLICK:
                 clickTarget = DOM.eventGetTarget(event);
-                clickListeners.fireClick(this);
+                if(clickListeners != null)
+                    clickListeners.fireClick(this);
                 break;
         }
         return true;   
