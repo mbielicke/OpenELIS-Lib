@@ -129,6 +129,8 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 }
                 table.setFields(afields);
                 table.view.initTable(table);
+                table.view.setTableListener(table);
+                
                 table.reset();
                 table.enabled(true);
                     
@@ -175,7 +177,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
         }
         
         public void enable(boolean enabled){
-            
+            table.enabled(enabled);
         }
 
 }
