@@ -116,7 +116,7 @@ version="1.0">
 
 <!-- options button template -->
 <xsl:template name="optionsButton">
-	<appButton action="options" style="ButtonPanelButton" enabledStates="default,display" lockedStates="" shortcut="">
+	<appButton action="options" style="blankButton" enabledStates="default,display" lockedStates="" shortcut="">
 	<menuPanel layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
 		    <menuItem>
 		        <menuDisplay>
@@ -172,11 +172,12 @@ version="1.0">
 
 <!-- A to Z buttons template -->
 <xsl:template name="aToZButton">
-<xsl:param name="buttonsParam" />
+<xsl:param name="keyParam" />
+<xsl:param name="queryParam" />
  <widget>
-	<appButton key="{string($buttonsParam)}" action="query:{string($buttonsParam)}" toggle="true" alwaysEnabled="true" style="smallButton">
+	<appButton key="{string($keyParam)}" action="query:{string($queryParam)}" toggle="true" alwaysEnabled="true" style="smallButton">
     	<widget>
-        	<text><xsl:value-of select="string($buttonsParam)"/></text>
+        	<text><xsl:value-of select="string($keyParam)"/></text>
      	</widget>
  	</appButton>
 </widget>
