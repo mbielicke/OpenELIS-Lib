@@ -48,11 +48,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     
     public DataModelWidget modelWidget = new DataModelWidget();
     protected DataSet key;
-    public ScreenWindow window;
     public AppScreenFormServiceIntAsync formService;
     public int state = FormInt.DEFAULT;
     protected ChangeListenerCollection changeListeners;
-    protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
     private boolean busy = false;
 
     public AppScreenForm(AppScreenFormServiceIntAsync service) {
@@ -67,17 +65,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     
     public void afterDraw(boolean sucess) {
         super.afterDraw(sucess);
-        if(bpanel != null)
+        if(bpanel != null){
             bpanel.addChangeListener(this);
-        addChangeListener(bpanel);
+            addChangeListener(bpanel);
+        }
         changeState(FormInt.DEFAULT);
         enable(false);
-        if(window != null){
-        	window.setName(name);
-            window.setVisible(true);
-            RootPanel.get().removeStyleName("ScreenLoad");
-            window.setStatus(consts.get("loadCompleteMessage"),"");
-        }
     }
     
     public void fetch(){

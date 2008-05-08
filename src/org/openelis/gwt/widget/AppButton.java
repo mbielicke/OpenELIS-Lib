@@ -52,6 +52,8 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     
     public void addClickListener(ClickListener listener) {
         this.listener = listener;
+        if(listeners != null && listeners.contains(listener))
+            return;
         if(listeners == null){
             listeners = new DelegatingClickListenerCollection(this,panel);
         }

@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerCollection;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesKeyboardEvents;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,6 +43,8 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
     public Element clickTarget;
+    public ScreenWindow window;
+    protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -108,6 +111,12 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void afterDraw(boolean sucess) {
         load((FormRPC)forms.get("display"));
         DOM.addEventPreview(this);
+        if(window != null){
+            window.setName(name);
+            window.setVisible(true);
+            RootPanel.get().removeStyleName("ScreenLoad");
+            window.setStatus(consts.get("loadCompleteMessage"),"");
+        }
     }
     
     public void redrawScreen(String xmlDef){
