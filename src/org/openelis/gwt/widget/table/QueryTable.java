@@ -411,8 +411,10 @@ public class QueryTable extends TableController {
     }
     
     public void switchSelectedRow() {
-        saveValue(selected, selectedCell);
-        setCellDisplay(selected, selectedCell);
+        if(selected > -1 && selectedCell > -1){
+            saveValue(selected, selectedCell);
+            setCellDisplay(selected, selectedCell);
+        }
     }
     
 }

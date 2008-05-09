@@ -156,7 +156,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
         }
 
         public void submit(AbstractField field) {
-
+            table.switchSelectedRow();
         }
 
         public Widget getWidget() {

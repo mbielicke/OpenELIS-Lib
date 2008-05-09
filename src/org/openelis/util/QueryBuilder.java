@@ -49,6 +49,7 @@ public class QueryBuilder {
     }
     
     public static String getQueryNoOperand(QueryField field, String fieldName) {
+
     	if (field.getParameter() == null || field.getParameter().size() == 0)
             return "";
         String paramName = getParamName(fieldName);
@@ -197,6 +198,9 @@ public class QueryBuilder {
     }
     
     public static String getQuery(QueryCheckField field, String fieldName) {
+        if(field.getValue() == null)
+            return "";
+        
         StringBuffer sb = new StringBuffer();
  
         sb.append(" and (");
@@ -209,6 +213,9 @@ public class QueryBuilder {
     }   
     
     public static String getQueryNoOperand(QueryCheckField field, String fieldName) {
+        if(field.getValue() == null)
+            return "";
+        
         StringBuffer sb = new StringBuffer();
         String paramName = getParamName(fieldName);
         sb.append(fieldName + " =  :" + paramName);
@@ -371,10 +378,10 @@ public class QueryBuilder {
     		Object o = ((DataSet)list.get(i)).getKey();
     		if(o instanceof NumberObject){
 				NumberObject number = (NumberObject)o;
-				if("integer".equals(number.getType())){
+				if(number.getType() == NumberObject.INTEGER){
 					Integer param = (Integer)number.getValue();
 					query.setParameter(paramName + i, param);	
-				}else if("double".equals(number.getType())){
+				}else if(number.getType() == NumberObject.DOUBLE){
 					Double param = (Double)number.getValue();
 					query.setParameter(paramName + i, param);	
 				}
@@ -388,11 +395,13 @@ public class QueryBuilder {
     public static void setParameters(QueryCheckField field,
                                      String fieldName,
                                      Query query) {
-        String param = "N";
+        
+        if(field.getValue() == null)
+            return;
+        
         String paramName = getParamName(fieldName);
-        if(((Boolean)field.getValue()).booleanValue())
-            param = "Y";
-        query.setParameter(paramName, param);
+       
+        query.setParameter(paramName, (String)field.getValue());
     }
     
     private static String getParamName(String name){
@@ -453,7 +462,9 @@ public class QueryBuilder {
 					else if(o instanceof QueryStringField)
 						whereClause = getQueryNoOperand((QueryStringField)o, key);
 					else if(o instanceof DropDownField)
-						whereClause = getQueryNoOperand((DropDownField)o, key);					
+						whereClause = getQueryNoOperand((DropDownField)o, key);	
+                    else if(o instanceof QueryCheckField)
+                        whereClause = getQueryNoOperand((QueryCheckField)o, key);
             	}
         	
 				if(!"".equals(whereClause)){
@@ -489,13 +500,14 @@ public class QueryBuilder {
         for (int i = 0; i < keys.length; i++) {
         	Object o = fieldsFromRPC.get((String)keys[i]);    
         	if(fieldsFromRPC.containsKey((String)keys[i])){
-				if(o instanceof QueryNumberField) {
+				if(o instanceof QueryNumberField) 
 					setParameters((QueryNumberField)o, (String)keys[i], query);
-				}else if(o instanceof QueryStringField) {	
+				else if(o instanceof QueryStringField) 	
 					setParameters((QueryStringField)o, (String)keys[i], query);
-				}else if(o instanceof DropDownField) {
+				else if(o instanceof DropDownField) 
 					setParameters((DropDownField)o, (String)keys[i], query);
-				}
+                else if(o instanceof QueryCheckField)
+                    setParameters((QueryCheckField)o, (String)keys[i], query);
         	}
         }
     }
