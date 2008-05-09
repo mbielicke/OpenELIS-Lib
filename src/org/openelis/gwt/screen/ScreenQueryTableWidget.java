@@ -151,6 +151,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
         }
 
         public void load(AbstractField field) {
+            table.loadRow();
 
         }
 

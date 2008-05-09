@@ -84,7 +84,7 @@ public class QueryTable extends TableController {
      * 
      * @param index
      */
-    private void loadRow() {
+    public void loadRow() {
         for (int i = 0; i < fields.length; i++) {
         	TableCellWidget tCell = (TableCellWidget)view.table.getWidget(0, i);
             if(tCell instanceof TableMultiple && manager != null){
