@@ -410,4 +410,8 @@ public class QueryTable extends TableController {
         
     }
     
+    public void switchSelectedRow() {
+        select(-1);
+    }
+    
 }
