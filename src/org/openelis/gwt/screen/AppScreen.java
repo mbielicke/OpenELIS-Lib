@@ -21,7 +21,7 @@ import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.widget.AppButton;
 
@@ -39,7 +39,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
 
     public AppScreenServiceIntAsync service;
     public HashMap forms = new HashMap();
-    public DataObject[] initData;
+    public HashMap initData;
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
     public Element clickTarget;
@@ -75,12 +75,8 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void getXMLData() {
         service.getXMLData(new AsyncCallback() {
            public void onSuccess(Object result){
-               DataObject[] data = (DataObject[])result;
-               drawScreen((String)data[0].getValue());
-               initData = new DataObject[data.length-1];
-               for(int i = 1; i < data.length; i++) {
-                   initData[i-1] = data[i];
-               }
+               initData = (HashMap)result;
+               drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
            }
            public void onFailure(Throwable caught){
@@ -90,15 +86,11 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
         });
     }
     
-    public void getXMLData(DataObject[] args) {
+    public void getXMLData(HashMap args) {
         service.getXMLData(args, new AsyncCallback() {
            public void onSuccess(Object result){
-               DataObject[] data = (DataObject[])result;
-               drawScreen((String)data[0].getValue());
-               initData = new DataObject[data.length-1];
-               for(int i = 1; i < data.length; i++) {
-                   initData[i-1] = data[i];
-               }
+               initData = (HashMap)result;
+               drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
            }
            public void onFailure(Throwable caught){

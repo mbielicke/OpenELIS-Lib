@@ -8,6 +8,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 
@@ -39,7 +40,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         }
     }
 
-    public DataObject[] getXMLData() throws RPCException {
+    public HashMap getXMLData() throws RPCException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -82,7 +83,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         }
     }
 
-	public DataObject[] getXMLData(DataObject[] args) throws RPCException {
+	public HashMap getXMLData(HashMap args) throws RPCException {
 		// TODO Auto-generated method stub
 		return null;
 	}
