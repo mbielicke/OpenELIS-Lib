@@ -3,8 +3,8 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -15,6 +15,7 @@ import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {

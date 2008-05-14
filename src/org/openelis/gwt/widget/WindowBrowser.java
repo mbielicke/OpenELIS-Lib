@@ -99,7 +99,8 @@ public class WindowBrowser extends Composite{
             Window.alert("Please close at least one window before opening another.");
             return;
         }
-        if (windows.containsKey(screen.name)) {
+        if (windows.containsKey(GWT.getTypeName(screen))) {
+            selectScreen(GWT.getTypeName(screen));
             return;
         }
         RootPanel.get().addStyleName("ScreenLoad");
@@ -107,7 +108,7 @@ public class WindowBrowser extends Composite{
         ScreenWindow window = new ScreenWindow(this, GWT.getTypeName(screen));
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
-        windows.put(window.name,window);
+        windows.put(GWT.getTypeName(screen),window);
     }
     
     public boolean selectScreen(String text) {

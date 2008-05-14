@@ -6,6 +6,7 @@ import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -309,7 +310,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         removeFromParent();
         if(browser != null){
         	browser.browser.remove(this);
-        	browser.windows.remove(name);
+        	browser.windows.remove(GWT.getTypeName(content));
         }
         if(popupPanel != null){
         	popupPanel.hide();

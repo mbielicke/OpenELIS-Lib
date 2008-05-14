@@ -626,8 +626,12 @@ public class EditTable extends TableController implements
                 createRow(i);
             }
         }
-        if(autoAdd && view.table.getRowCount() == 0)
+        if(autoAdd && view.table.getRowCount() == 0){
             createRow(0);
+            if(manager != null){
+                manager.rowAdded(0, this);
+            }
+        }
         scrollLoad(pos);
 
     }
@@ -692,6 +696,9 @@ public class EditTable extends TableController implements
                 else{
                     autoAddRow = model.createRow();
                     loadRow(i,autoAddRow);
+                    if(manager != null){
+                        manager.rowAdded(i,this);
+                    }
                 }
         	}
 
