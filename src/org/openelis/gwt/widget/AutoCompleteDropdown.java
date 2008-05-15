@@ -34,12 +34,13 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class AutoCompleteDropdown extends Composite implements
 		KeyboardListener, ChangeListener, ClickListener, MouseListener,
-		PopupListener, FocusListener, HasFocus {
+		PopupListener, FocusListener, HasFocus, SourcesChangeEvents {
 	public HorizontalPanel mainHP = new HorizontalPanel();
 
 	public TextBox textBox = new TextBox() {
@@ -141,7 +142,7 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	public String cat;
 
-	private ChangeListenerCollection callback;
+	private ChangeListenerCollection changeListeners;
 
 	private AutoCompleteServiceIntAsync autoService = (AutoCompleteServiceIntAsync) GWT
 			.create(AutoCompleteServiceInt.class);
@@ -433,8 +434,8 @@ public class AutoCompleteDropdown extends Composite implements
 			visible = false;
 			choicesPopup.hide();
 		}
-		if (callback != null)
-			callback.fireChange(this);
+		if (changeListeners != null)
+			changeListeners.fireChange(this);
 		clickedArrow = false;
 	}
 
@@ -519,15 +520,6 @@ public class AutoCompleteDropdown extends Composite implements
     
 	public DataModel getModel() {
 		return scrollList.getDataModel();
-	}
-
-	/**
-	 * I think is deprecated and should be deleted
-	 * 
-	 * @param callback
-	 */
-	public void setCallback(ChangeListenerCollection callback) {
-		this.callback = callback;
 	}
 
 	/**
@@ -832,4 +824,19 @@ public class AutoCompleteDropdown extends Composite implements
 	public void setInsideTable(boolean insideTable) {
 		this.insideTable = insideTable;
 	}
+
+    public void addChangeListener(ChangeListener listener) {
+        if(changeListeners == null){
+            changeListeners = new ChangeListenerCollection();
+        }
+        changeListeners.add(listener);
+        
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        if(changeListeners != null){
+            changeListeners.remove(listener);
+        }
+        
+    }
 }

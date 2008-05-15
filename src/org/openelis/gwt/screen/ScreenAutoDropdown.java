@@ -1,5 +1,6 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -106,6 +107,16 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         if (node.getAttributes().getNamedItem("rows") != null)
         	auto.setRows(Integer.parseInt(node.getAttributes().getNamedItem("rows").getNodeValue()));
       
+        if (node.getAttributes().getNamedItem("onchange") != null){
+            String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this")){
+                    auto.addChangeListener((ChangeListener)screen);
+                }else{
+                    auto.addChangeListener((ChangeListener)ClassFactory.forName(listeners[i]));
+                }
+            }
+        }
         auto.scrollList.view.initTable(auto.scrollList);
         ((AppScreen)screen).addKeyboardListener(auto.scrollList);
         ((AppScreen)screen).addClickListener(auto.scrollList);
