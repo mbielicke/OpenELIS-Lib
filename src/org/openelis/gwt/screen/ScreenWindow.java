@@ -1,12 +1,5 @@
 package org.openelis.gwt.screen;
 
-import java.util.Vector;
-
-import org.openelis.gwt.widget.FormInt;
-import org.openelis.gwt.widget.MenuLabel;
-import org.openelis.gwt.widget.WindowBrowser;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -29,6 +22,12 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.WindowBrowser;
+
+import java.util.Vector;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -127,7 +126,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
      */
     private WindowBrowser browser;
     private PopupPanel popupPanel;
-    public String name;
+    public String key;
     /**
      * Current z-index of the window.
      */
@@ -140,11 +139,11 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private Label message = new Label("Loading...");
     private Label winLabel = new Label(); 
     
-    public ScreenWindow(Object container, String name, String cat, String loadingText){
-        this(container,name,cat,loadingText,true);
+    public ScreenWindow(Object container, String key, String cat, String loadingText){
+        this(container,key,cat,loadingText,true);
     }
     
-    public ScreenWindow(Object container, String name, String cat, String loadingText, boolean showClose) {      
+    public ScreenWindow(Object container, String key, String cat, String loadingText, boolean showClose) {      
         initWidget(outer);
         setVisible(false);
         if(container instanceof PopupPanel)
@@ -152,7 +151,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         else
         	this.browser = (WindowBrowser) container;
         
-        this.name = name;
+        this.key = key;
         if(browser != null)
         	zIndex = browser.index;
         
@@ -177,8 +176,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         titleButtonsContainer.setWidth("100%");
         
         cap.addMouseListener(this);
-        if(name != null)
-        	winLabel.setText(name);
         winLabel.setStyleName("ScreenWindowLabel");
         cap.add(winLabel);
         cap.setWidth("100%");
@@ -235,8 +232,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         outer.setWidth("auto");
     }
     
-    public ScreenWindow(WindowBrowser brws,String name){
-        this(brws,name,"ScreenWindow","Loading...");
+    public ScreenWindow(WindowBrowser brws, String key){
+        this(brws,key,"ScreenWindow","Loading...");
     }
     
     /**
@@ -259,7 +256,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
     
     public void setName(String name) {
-    	this.name = name;
+    	cap.name = name;
     	winLabel.setText(name);
     }
     
@@ -310,7 +307,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         removeFromParent();
         if(browser != null){
         	browser.browser.remove(this);
-        	browser.windows.remove(GWT.getTypeName(content));
+        	browser.windows.remove(key);
         }
         if(popupPanel != null){
         	popupPanel.hide();
@@ -442,7 +439,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         status = null;
         fp = null;
         close = null;
-        name = null;
+        key = null;
         content = null;
         dropMap = null;
         message = null;

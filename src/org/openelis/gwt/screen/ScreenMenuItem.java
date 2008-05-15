@@ -12,6 +12,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
+import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.MenuItem;
 
 public class ScreenMenuItem extends ScreenWidget implements MouseListener, ClickListener, PopupListener {
@@ -27,6 +30,8 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     public ScreenMenuPanel child;
     public static final String TAG_NAME = "menuItem";
     public String label;
+    public String objClass;
+    public DataObject[] args;
     
     public ScreenMenuItem() {
         super();
@@ -54,6 +59,16 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
                     addClickListener((ClickListener)screen);
                 else
                     addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
+            }
+        }
+        if (node.getAttributes().getNamedItem("class") != null){
+            objClass = node.getAttributes().getNamedItem("class").getNodeValue();
+        }
+        if (node.getAttributes().getNamedItem("args") != null){
+            String[] argStrings = node.getAttributes().getNamedItem("args").getNodeValue().split(",");
+            args = new DataObject[argStrings.length];
+            for(int i = 0; i < argStrings.length; i++){
+                args[i] = new StringObject(argStrings[i]);
             }
         }
         item = new MenuItem(wid);
