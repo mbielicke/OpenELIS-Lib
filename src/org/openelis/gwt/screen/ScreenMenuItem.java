@@ -64,7 +64,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
         if (node.getAttributes().getNamedItem("class") != null){
             objClass = node.getAttributes().getNamedItem("class").getNodeValue();
         }
-        if (node.getAttributes().getNamedItem("args") != null){
+        if (node.getAttributes().getNamedItem("args") != null && !"".equals(node.getAttributes().getNamedItem("args").getNodeValue())){
             String[] argStrings = node.getAttributes().getNamedItem("args").getNodeValue().split(",");
             args = new DataObject[argStrings.length];
             for(int i = 0; i < argStrings.length; i++){
