@@ -1051,6 +1051,13 @@ border:none;
 	vertical-align:top;
 }
 
+.CondensedPrompt {
+   -moz-user-select: none;
+	color:gray;
+	text-align:right;
+	vertical-align:top;
+}
+
 /********   End Input  Form ***********/
 fieldSet {
     border:1px solid #99BBE8;
