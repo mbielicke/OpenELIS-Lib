@@ -1180,6 +1180,12 @@ cursor:wait;
   height:16px;
 }
 
+.BusyPanel {
+  width:16px;
+  height:16px;
+  background-image:url(../Images/OSXspinnerGray.gif);
+}
+
 .ErrorPopup {
   padding:5px;
   border:2px solid red;

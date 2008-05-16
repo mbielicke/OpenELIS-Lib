@@ -446,9 +446,11 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	protected void callForMatches(final String text) {
         if(cat != null){
+            ((FocusPanel)((HorizontalPanel)getParent()).getWidget(1)).setStyleName("BusyPanel");
             try {
                 autoService.getMatches(cat, scrollList.getDataModel(), text, new AsyncCallback() {
                     public void onSuccess(Object result){
+                        ((FocusPanel)((HorizontalPanel)getParent()).getWidget(1)).setStyleName("ErrorPanelHidden");
                         scrollList.setDataModel((DataModel)result);
                         currentActive = 0;
 
