@@ -147,9 +147,9 @@ public class ScreenBase extends Composite implements FocusListener{
      * @param node
      * @return
      */
-    public static TableCellWidget createCellWidget(Node node) {
+    public static TableCellWidget createCellWidget(Node node, ScreenBase screen) {
         String widName = "table-" + node.getNodeName();
-        return (TableCellWidget)ClassFactory.forName(widName,new Object[] {node});
+        return (TableCellWidget)ClassFactory.forName(widName,new Object[] {node, screen});
     }
 
     /** 

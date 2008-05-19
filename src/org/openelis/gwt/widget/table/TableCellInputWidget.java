@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.MenuLabel;
 
@@ -21,6 +22,7 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
     private MouseListenerCollection listeners = new MouseListenerCollection(); 
+    protected ScreenBase screen;
     
     public void clear() {
         // TODO Auto-generated method stub

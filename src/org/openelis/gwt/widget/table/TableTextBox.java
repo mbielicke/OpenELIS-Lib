@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ScreenBase;
 
 
 /**
@@ -81,7 +82,8 @@ public class TableTextBox extends TableCellInputWidget {
         setWidget(editor);
     }
 
-    public TableTextBox(Node node) {
+    public TableTextBox(Node node, ScreenBase screen) {
+        this.screen = screen;
         if(node.getAttributes().getNamedItem("case") != null)
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
         

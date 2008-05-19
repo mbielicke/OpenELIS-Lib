@@ -5,6 +5,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
 public class TableCalendar extends TableCellInputWidget {
@@ -62,7 +63,8 @@ public class TableCalendar extends TableCellInputWidget {
         setWidget(editor);
     }
 
-    public TableCalendar(Node node) {
+    public TableCalendar(Node node, ScreenBase screen) {
+        this.screen = screen;
         // TODO Auto-generated method stub
         begin = Byte.parseByte(node.getAttributes()
                                         .getNamedItem("begin")
@@ -85,6 +87,7 @@ public class TableCalendar extends TableCellInputWidget {
 		cal.end = end;
 		cal.week = week;
         cal.enabled = enabled;
+        cal.screen = screen;
 		return cal;
 	}
 

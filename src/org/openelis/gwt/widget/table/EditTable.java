@@ -490,7 +490,7 @@ public class EditTable extends TableController implements
      */
     public void onChange(Widget sender) {
         try{
-        if(sender instanceof OptionList){
+        if(sender instanceof TableAutoDropdown){
             int sel = selected;
             unselect(sel);
             select(sel);

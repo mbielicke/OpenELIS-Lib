@@ -4,6 +4,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.MaskedTextBox;
 
 /**
@@ -36,11 +37,13 @@ public class TableMaskedTextBox extends TableCellInputWidget {
         TableMaskedTextBox tb = new TableMaskedTextBox();
         tb.mask = mask;
         tb.enabled = enabled;
+        tb.screen = screen;
         return tb;
     }
 
-    public TableMaskedTextBox(Node node) {
+    public TableMaskedTextBox(Node node, ScreenBase screen) {
         // TODO Auto-generated method stub
+        this.screen = screen;
         mask = (node.getAttributes().getNamedItem("mask").getNodeValue());
     }
 

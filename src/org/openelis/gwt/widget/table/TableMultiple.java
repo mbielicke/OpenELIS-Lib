@@ -36,11 +36,11 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         
     }
 
-    public TableMultiple(Node node) {
+    public TableMultiple(Node node,ScreenBase screen) {
         NodeList editors = node.getChildNodes();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                cells.add(ScreenBase.createCellWidget(editors.item(i)));
+                cells.add(ScreenBase.createCellWidget(editors.item(i),screen));
             }
         }
     }

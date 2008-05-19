@@ -114,7 +114,7 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 ArrayList list = new ArrayList();
                 for (int i = 0; i < editors.getLength(); i++) {
                     if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        list.add(ScreenBase.createCellWidget(editors.item(i)));
+                        list.add(ScreenBase.createCellWidget(editors.item(i), screen));
                     }
                 }
                 TableCellWidget[] cells = new TableCellWidget[list.size()];

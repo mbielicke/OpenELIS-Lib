@@ -16,6 +16,7 @@ import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
@@ -52,6 +53,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         ta.editor = editor;
         ta.listener = listener;
         ta.type = type;
+        ta.screen = screen;
         return ta;
     }
     
@@ -65,12 +67,13 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         ta.editor = editor;
         ta.listener = listener;
         ta.type = type;
+        ta.screen = screen;
         return ta;
     }
     
-	public TableAutoDropdown(Node node) {
+	public TableAutoDropdown(Node node, ScreenBase screen) {
 		AutoCompleteDropdown auto;
-        
+        this.screen = screen;
         String cat = null;
         if(node.getAttributes().getNamedItem("cat") != null)
             cat = node.getAttributes().getNamedItem("cat").getNodeValue();
@@ -116,6 +119,16 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         }
         if(headersNode != null) {
         	auto.setHeaders(getHeaders(headersNode));
+        }
+        if (node.getAttributes().getNamedItem("onchange") != null){
+            String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this")){
+                    auto.addChangeListener((ChangeListener)screen);
+                }else{
+                    auto.addChangeListener((ChangeListener)ClassFactory.forName(listeners[i]));
+                }
+            }
         }
         
         if (node.getAttributes().getNamedItem("case") != null){
