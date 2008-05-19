@@ -113,6 +113,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
                 check.addFocusListener(this);
             else
                 check.removeFocusListener(this);
+            super.enable(enabled);
         }
     }
     

@@ -4,17 +4,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -22,7 +18,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -38,10 +33,6 @@ import org.openelis.gwt.common.data.TableRow;
 import org.openelis.gwt.services.TableServiceInt;
 import org.openelis.gwt.services.TableServiceIntAsync;
 import org.openelis.gwt.widget.OptionList;
-import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.table.TableCheck;
-import org.openelis.gwt.widget.table.TableLabel;
-import org.openelis.gwt.widget.table.TableOption;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -72,10 +63,6 @@ public class EditTable extends TableController implements
     private ArrayList filters = new ArrayList();
     public TableCallback callback = new TableCallback();
     public HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
-    private boolean resizing;
-    private int startx;
-    private int resizeColumn = -1;
-    private int tableCol = -1;
     public TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
     private ServiceDefTarget target = (ServiceDefTarget)tableService;
     private ChangeListenerCollection changeListeners;
@@ -324,8 +311,8 @@ public class EditTable extends TableController implements
      * header of the table.
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
-        if (resizeColumn > -1) {
-            resizeColumn = -1;
+        if (resizeColumn1 > -1) {
+            resizeColumn1 = -1;
             return;
         }
         active = true;
@@ -931,9 +918,10 @@ public class EditTable extends TableController implements
         }
     }
 
-    /**
+    
+    /*
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseDown(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
         if(sender instanceof FocusPanel){
@@ -960,21 +948,21 @@ public class EditTable extends TableController implements
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseEnter(Widget sender) {
         // TODO Auto-generated method stub
     }
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseLeave(Widget sender) {
 
     }
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseMove(Widget sender, int x, int y) {
         if(resizing) {
             int colA = curColWidth[tableCol] + (x - startx);
@@ -989,7 +977,7 @@ public class EditTable extends TableController implements
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseUp(Widget sender, int x, int y) {
         if (resizing) {
             DOM.releaseCapture(sender.getElement());
@@ -1018,7 +1006,7 @@ public class EditTable extends TableController implements
             });
         }
     }
-
+  */
     public void addChangeListener(ChangeListener listener) {
         if(changeListeners == null)
             changeListeners = new ChangeListenerCollection(); 

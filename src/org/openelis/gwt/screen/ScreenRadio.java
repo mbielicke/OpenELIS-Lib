@@ -93,6 +93,7 @@ public class ScreenRadio extends ScreenInputWidget {
                 radio.addFocusListener(this);
             else
                 radio.removeFocusListener(this);
+            super.enable(enabled);
         }
     }
     

@@ -163,6 +163,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
                 auto.addFocusListener(this);
             else
                 auto.removeFocusListener(this);
+            super.enable(enabled);
         }
     }
     

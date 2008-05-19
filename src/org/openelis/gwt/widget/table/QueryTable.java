@@ -103,8 +103,8 @@ public class QueryTable extends TableController {
      * header of the table.
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
-        if (resizeColumn > -1) {
-            resizeColumn = -1;
+        if (resizeColumn1 > -1) {
+            resizeColumn1 = -1;
             return;
         }
         if(selected == row && selectedCell == col)

@@ -50,13 +50,16 @@ public abstract class TableController extends Composite implements
     public int[] curColWidth;
     public boolean[] sortable;
     public boolean[] filterable;
+    public boolean[] colFixed;
     protected ArrayList statFilters = new ArrayList();
     protected ArrayList filters = new ArrayList();
     public HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
     protected boolean resizing;
     protected int startx;
-    protected int resizeColumn = -1;
-    protected int tableCol = -1;
+    protected int resizeColumn1 = -1;
+    protected int tableCol1 = -1;
+    protected int resizeColumn2 = -1;
+    protected int tableCol2 = -1;
     public int start = 0;
     public boolean showRows;
     public int maxRows;
@@ -84,6 +87,7 @@ public abstract class TableController extends Composite implements
     public void setColWidths(int[] widths) {
         colwidth = widths;
         curColWidth = new int[widths.length];
+        colFixed = new boolean[widths.length];
         for (int i = 0; i < colwidth.length; i++) {
             curColWidth[i] = colwidth[i];
         }
@@ -97,6 +101,10 @@ public abstract class TableController extends Composite implements
      */
     public void setSortable(boolean[] sortable) {
         this.sortable = sortable;
+    }
+    
+    public void setColFixed(boolean[] fixed){
+        this.colFixed = fixed;
     }
 
     /**
@@ -158,8 +166,8 @@ public abstract class TableController extends Composite implements
      * header of the table.
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
-        if (resizeColumn > -1) {
-            resizeColumn = -1;
+        if (resizeColumn1 > -1) {
+            resizeColumn1 = -1;
             return;
         }
         active = true;
@@ -295,57 +303,29 @@ public abstract class TableController extends Composite implements
      */
     public void sizeTable() {
         DeferredCommand.addCommand(new Command() {
-        public void execute() {
-        int width = 0;
-        for(int i = 0; i < curColWidth.length; i++){
-            width += curColWidth[i];
-        }
-        int displayWidth = width + (curColWidth.length*4) - (curColWidth.length -1);
-        //view.table.setWidth(width+"px");
-        if(view.headers != null){
-            view.header.setWidth(displayWidth+"px");  
-            for(int i = 0; i < curColWidth.length; i++){
-                if( i > 0 && i < curColWidth.length - 1){
-                    view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
-                }else{
-                    view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
+            public void execute() {
+                int width = 0;
+                for(int i = 0; i < curColWidth.length; i++){
+                    width += curColWidth[i];
                 }
-            }
-        }           
-      
-        //if(model.numRows() > 0)
-        //    view.header.setWidth(view.table.getOffsetWidth()+"px");
-        //else
-            view.header.setWidth(displayWidth+"px");
-            view.cellView.setScrollWidth(displayWidth+"px");
-       /* int viewWidth = -1;
-        if(!view.width.equals("auto")){
-            viewWidth = Integer.parseInt(view.width.substring(0,view.width.indexOf("px")));
-            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+cellSpacing+18)+"px"); 
-        }else
-            viewWidth = displayWidth;
-        //else if(!GWT.isScript()){
-        //    view.cellView.setWidth(view.table.getOffsetWidth()+"px");
-        //    view.titlePanel.setWidth(view.table.getOffsetWidth()+"px");
-        //}
-        /*if(model.numRows() > maxRows){
-        	view.setHeight((maxRows*cellHeight+maxRows+18+"px"));
-            view.setScrollHeight(model.numRows()*cellHeight+maxRows+18);
-        }
-        */
-        //if(!view.width.equals("auto")){
-        /*    if(model.numRows() > maxRows){
-                view.setScrollHeight((model.numRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);  
-            }else
-                view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellSpacing)+cellSpacing+18);
-         */
-            if(showRows){
+                int displayWidth = width + (curColWidth.length*4) - (curColWidth.length -1);
+                if(view.headers != null){
+                    view.header.setWidth(displayWidth+"px");  
+                    for(int i = 0; i < curColWidth.length; i++){
+                        if( i > 0 && i < curColWidth.length - 1){
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
+                        }else{
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
+                        }
+                    }
+                }           
+                view.header.setWidth(displayWidth+"px");
+                view.cellView.setScrollWidth(displayWidth+"px");
+                if(showRows){
                     view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
+                }
+                view.titlePanel.setWidth(displayWidth+"px");
             }
-            
-            view.titlePanel.setWidth(displayWidth+"px");
-            }
-        //}
         });
     }
 
@@ -433,9 +413,62 @@ public abstract class TableController extends Composite implements
             startx = x;
             for (int i = 0; i < view.header.getCellCount(0); i++) {
                 if (sender == view.header.getWidget(0, i)) {
-                    resizeColumn = i - 1;
-                    tableCol = resizeColumn / 2;
+                    resizeColumn1 = i - 1;
+                    tableCol1 = resizeColumn1 / 2;
+                    if(colFixed[tableCol1] && colFixed[tableCol1+1]){
+                        resizing = false;
+                        resizeColumn1 = -1;
+                        tableCol1 = -1;
+                        tableCol2 = -1;
+                        return;
+                    }  
+                    if(colFixed[tableCol1]){
+                        tableCol1 = -1;
+                        int j = tableCol1 -1; 
+                        while(tableCol1 < 0 && j > -1){
+                            if(!colFixed[tableCol1])
+                                tableCol1 = j;
+                            j--;
+                        }
+                    }
+                    if(tableCol1 < 0){
+                        int j = tableCol1 +1;
+                        while(tableCol1 < 0 && j < colFixed.length){
+                            if(!colFixed[j])
+                                tableCol1 = j;
+                            j++;
+                        }
+                    }
                 }
+            }
+            if(tableCol1 < 0){
+                resizing = false;
+                resizeColumn1 = -1;
+                tableCol1 = -1;
+                tableCol2 = -1;
+                return;
+            }
+            tableCol2 = -1;
+            int i = tableCol1 +1;
+            while(tableCol2 < 0 && i < colFixed.length){
+                if(!colFixed[i])
+                    tableCol2 = i;
+                i++;
+            }
+            if(tableCol2 < 0){
+                i = 0;
+                while(tableCol2 < 0 && i < tableCol1){
+                    if(!colFixed[i])
+                        tableCol2 = i;
+                    i++;
+                }
+            }
+            if(tableCol2 < 0){
+                resizing = false;
+                resizeColumn1 = -1;
+                tableCol1 = -1;
+                tableCol2 = -1;
+                return;
             }
             FocusPanel bar = new FocusPanel();
             bar.addMouseListener(this);
@@ -468,24 +501,21 @@ public abstract class TableController extends Composite implements
      * Catches mouses Events for resizing columns.
      */
     public void onMouseMove(Widget sender, int x, int y) {
-        if(DOM.isOrHasChild(view.header.getElement(), sender.getElement())){
             if(resizing) {
-                int colA = curColWidth[tableCol] + (x - startx);
-                int colB = curColWidth[(tableCol)+1] - (x - startx);
+                int colA = curColWidth[tableCol1] + (x - startx);
+                int colB = curColWidth[tableCol2] - (x - startx);
                 if(colA <= 16 || colB <= 16) 
                     return;
-                curColWidth[tableCol] = colA;
-                curColWidth[(tableCol)+1] = colB;
+                curColWidth[tableCol1] = colA;
+                curColWidth[tableCol2] = colB;
                 DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x-startx))+"px");
             }
-        }
     }
 
     /**
      * Catches mouses Events for resizing columns.
      */
     public void onMouseUp(Widget sender, int x, int y) {
-        if(DOM.isOrHasChild(view.header.getElement(), sender.getElement())){
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
                 RootPanel.get().remove(sender);
@@ -512,7 +542,6 @@ public abstract class TableController extends Composite implements
                     }
                 });
             }
-        }
     }
     
     /**

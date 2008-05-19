@@ -309,7 +309,7 @@ public class ScreenBase extends Composite implements FocusListener{
         if (obj != null) {
             boolean tabbed = false;
             while (!tabbed) {
-                if (((Widget)obj).isVisible()) {
+                if (((Widget)obj).isVisible() && ((ScreenWidget)obj).isEnabled()) {
                     tabbed = true;
                     ((ScreenWidget)obj).setFocus(true);
                 } else {

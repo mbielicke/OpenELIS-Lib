@@ -77,6 +77,8 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                                 .item(0);
                 Node statFilter = ((Element)node).getElementsByTagName("statFilters")
                                                  .item(0);
+                Node colFixed = ((Element)node).getElementsByTagName("fixed").item(0);
+                
                 if(node.getAttributes().getNamedItem("cellHeight") != null){
                     table.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
                 }
@@ -155,6 +157,16 @@ public class ScreenTableWidget extends ScreenInputWidget {
                         sort[i] = Boolean.valueOf(sorts[i]).booleanValue();
                     }
                     table.setSortable(sort);
+                }
+                if (colFixed != null) {
+                    String[] fixeds = colFixed.getFirstChild()
+                                              .getNodeValue()
+                                              .split(",");
+                    boolean[]  fixed = new boolean[fixeds.length];
+                    for (int i = 0; i < fixeds.length; i++) {
+                        fixed[i] = Boolean.valueOf(fixeds[i]).booleanValue();
+                    }
+                    table.setColFixed(fixed);
                 }
                 if (alignNode != null){
                     String[] aligns = alignNode.getFirstChild().getNodeValue().split(",");

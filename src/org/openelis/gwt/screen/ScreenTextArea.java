@@ -100,6 +100,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
                 textarea.addFocusListener(this);
             else
                 textarea.removeFocusListener(this);
+            super.enable(enabled);
         }
     }
     

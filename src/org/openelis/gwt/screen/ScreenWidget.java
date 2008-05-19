@@ -73,6 +73,7 @@ public class ScreenWidget extends SimplePanel implements
     public String key;
     public boolean alwaysEnabled;
     public boolean alwaysDisabled;
+    public boolean enabled;
    
     public ScreenWidget() {
     }
@@ -140,6 +141,11 @@ public class ScreenWidget extends SimplePanel implements
      * @param enabled
      */
     public void enable(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    public boolean isEnabled() {
+        return enabled;
     }
     
     /**

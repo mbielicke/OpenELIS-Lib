@@ -105,6 +105,10 @@ public class TableWidget extends Composite {
         controller.view.setHeaders(headers);
     }
     
+    public void setColFixed(boolean[] fixed){
+        controller.setColFixed(fixed);
+    }
+    
     public void setFilterable(boolean[] filterable){
         controller.setFilterable(filterable);
     }

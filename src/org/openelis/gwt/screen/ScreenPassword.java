@@ -88,6 +88,7 @@ public class ScreenPassword extends ScreenInputWidget {
                 textbox.addFocusListener(this);
             else
                 textbox.removeFocusListener(this);
+            super.enable(enabled);
         }
     }
     

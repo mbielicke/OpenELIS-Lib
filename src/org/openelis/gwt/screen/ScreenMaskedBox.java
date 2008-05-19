@@ -100,6 +100,7 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
             maskbox.addFocusListener(this);
         else
             maskbox.removeFocusListener(this);
+        super.enable(enabled);
     }
     
     public void setFocus(boolean focus){
