@@ -629,7 +629,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 				focusPanel.removeStyleName("Selected");
 
-				complete();
+				//complete();
 			}
 		}
 	}

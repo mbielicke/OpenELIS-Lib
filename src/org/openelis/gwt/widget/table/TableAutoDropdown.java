@@ -144,7 +144,7 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 	}
 
 	public void saveValue() {
-		editor.complete();
+		//editor.complete();
         field.setValue(editor.getSelected());
 		editor.closePopup();
         super.saveValue();
