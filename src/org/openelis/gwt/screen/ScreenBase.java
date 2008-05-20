@@ -314,9 +314,9 @@ public class ScreenBase extends Composite implements FocusListener{
                     ((ScreenWidget)obj).setFocus(true);
                 } else {
                     if (event != null && DOM.eventGetShiftKey(event))
-                        obj = widgets.get((String)tabBack.get(obj));
+                        obj = widgets.get((String)tabBack.get(((ScreenWidget)obj).getWidget()));
                     else
-                        obj = widgets.get((String)tabOrder.get(obj));
+                        obj = widgets.get((String)tabOrder.get(((ScreenWidget)obj).getWidget()));
                 }
             }
             if(event != null){
