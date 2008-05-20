@@ -22,6 +22,10 @@ public class TableField extends AbstractField {
 
     public void validate() {
         valid = true;
+        
+        if(value == null)
+            return;
+        
         for(int i = 0; i < value.numRows(); i++){
             for(int j = 0; j < value.getRow(i).numColumns(); j++){
                 if(!value.getFieldAt(i,j).isValid()){
