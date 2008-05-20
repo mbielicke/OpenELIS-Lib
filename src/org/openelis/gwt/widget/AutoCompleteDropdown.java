@@ -10,6 +10,7 @@ import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
@@ -446,16 +447,23 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	protected void callForMatches(final String text) {
         if(cat != null){
-            ((FocusPanel)((HorizontalPanel)getParent()).getWidget(1)).setStyleName("BusyPanel");
+          
+            if(screen != null)
+                ((AppScreen)screen).window.setStatus("", "spinnerIcon");
+        
             try {
                 autoService.getMatches(cat, scrollList.getDataModel(), text, new AsyncCallback() {
                     public void onSuccess(Object result){
-                        ((FocusPanel)((HorizontalPanel)getParent()).getWidget(1)).setStyleName("ErrorPanelHidden");
+          
                         scrollList.setDataModel((DataModel)result);
                         currentActive = 0;
 
                         showMatches(0);
+                        
+                        if(screen != null)
+                            ((AppScreen)screen).window.setStatus("", "");
                     }
+                    
                     public void onFailure(Throwable caught) {
                         Window.alert(caught.getMessage());
                     }

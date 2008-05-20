@@ -139,6 +139,9 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
                 auto.textBox.addStyleName("Lower");
             auto.setCase(fieldCase);
         }
+        
+        auto.setForm(screen);
+        
         editor = auto;
         textValue.setValue("");
 	}
