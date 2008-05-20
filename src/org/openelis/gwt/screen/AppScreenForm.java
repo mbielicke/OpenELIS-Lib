@@ -274,10 +274,16 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
             }
         }
-        if (state == FormInt.QUERY) {  
-       		window.setStatus(consts.get("querying"),"spinnerIcon");
-       		clearErrors();
-       		commitQuery(rpc);
+        if (state == FormInt.QUERY) { 
+            rpc.operation = IForm.QUERY;
+            if (rpc.validate() & validate()) {
+           		window.setStatus(consts.get("querying"),"spinnerIcon");
+           		clearErrors();
+           		commitQuery(rpc);
+            } else {
+                drawErrors();
+                window.setStatus(consts.get("correctErrors"),"ErrorPanel");
+            }
         }
         if(state == FormInt.DELETE){
             commitDelete();
