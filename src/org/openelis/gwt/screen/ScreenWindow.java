@@ -455,12 +455,9 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         statusImg.addMouseListener(this);
         messagePanel = new VerticalPanel();
         for(int i = 0; i < messages.length; i++){
-            //Label msg = new Label(messages[i]);
             MenuLabel errorLabel = new MenuLabel(messages[i],"Images/bullet_red.png");
             errorLabel.setStyleName("errorPopupLabel");
-            //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
             messagePanel.add(errorLabel);
-           // messagePanel.add(msg);
         }
     }
     
