@@ -67,6 +67,7 @@ public abstract class TableController extends Composite implements
     public int cellSpacing = 1;
     public boolean showScrolls;
     public boolean active;
+    public boolean locked;
 
     /**
      * This method will set the view for this table.
@@ -386,7 +387,7 @@ public abstract class TableController extends Composite implements
                 }
                 return;
             }
-            if(sender instanceof HTML){
+            if(!locked && sender instanceof HTML){
                 HTML nav = (HTML)sender;
                 String styleNames = nav.getStyleName();
                 String htmlString = nav.getHTML();

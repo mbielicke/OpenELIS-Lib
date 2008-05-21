@@ -702,7 +702,7 @@ public class EditTable extends TableController implements
         try{
     	TableCellWidget wid = (TableCellWidget)view.table.getWidget(row,col);
     	wid.saveValue();
-        if(rowList[row] == autoAddRow){
+        if(rowList[row] == autoAddRow && manager.doAutoAdd(row, col, this)){
             model.addRow(autoAddRow);
         }
         if (manager != null) {
@@ -1034,7 +1034,9 @@ public class EditTable extends TableController implements
             return;
         boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
         if (KeyboardListener.KEY_DOWN == code) {
-            if (selected >= 0 && selected < model.shownRows() - 1) {
+            if (selected >= 0 && selected < view.table.getRowCount() -1) {
+                //if(rowList[selected] == autoAddRow)
+                //    return;
                 if(selected < view.table.getRowCount() -1){
                     final int row = selected + 1;
                     final int col = selectedCell;

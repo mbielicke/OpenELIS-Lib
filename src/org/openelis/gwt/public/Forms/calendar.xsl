@@ -17,12 +17,13 @@
   <xsl:variable name="year"><xsl:value-of select="doc/year"/></xsl:variable>
   <xsl:variable name="monthDisplay" select="calUtils:getMonthYear(string($month),string($year))"/>
   <xsl:variable name="calendar" select="calUtils:getCalforMonth(string($month),string($year))"/>
+  <xsl:variable name="selected"><xsl:value-of select="doc/date"/></xsl:variable>
   <xsl:variable name="today" select="cal:getInstance()"/>;
 
 
   <xsl:template match="doc"> 
 
-  <screen id="Calendar" name="Calendar" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <screen id="Calendar" name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
     <panel layout="vertical" width="100%" style="CalendarWidget">
       <panel layout="horizontal" style="MonthBar">
@@ -230,6 +231,7 @@
    <rpc key="display">
      <number key="month" type="integer" required="false"><xsl:value-of select="$month"/></number>
      <number key="year" type="integer" required="false"><xsl:value-of select="$year"/></number>
+     <string key="date" required="false"><xsl:value-of select="$selected"/></string>
    </rpc>
    </screen>
  </xsl:template>
@@ -243,7 +245,7 @@
                     <xsl:when test="$month != cal:get($calendar,calUtils:getField('MONTH'))">
                       <xsl:attribute name="style">DateText,OffMonth</xsl:attribute>
                     </xsl:when>
-                    <xsl:when test="calUtils:isToday($calendar)">
+                    <xsl:when test="calUtils:isSelected($calendar,$selected)">
                       <xsl:attribute name="style">DateText,Current</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>

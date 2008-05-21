@@ -95,12 +95,12 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                     });
                 }	
             }
-            if(sender == view.nextNav){
+            if(!locked && sender == view.nextNav){
                 modelWidget.getModel().selecttLast(false);
                 modelWidget.setPage(modelWidget.getPage()+1);
                 refreshedByLetter = true;
             }
-            if(sender == view.prevNav){
+            if(!locked && sender == view.prevNav){
                 modelWidget.getModel().selecttLast(false);
                 modelWidget.setPage(modelWidget.getPage()-1);
                 refreshedByLetter = true;
@@ -201,6 +201,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                     case FormInt.ADD:
                     	bpanel.setPanelState(ButtonPanel.LOCKED);
                         locked = true;
+                        
                         unselect(selectedRow);
                         break;
                     case FormInt.DELETE:

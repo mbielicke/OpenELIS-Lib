@@ -1,6 +1,7 @@
 package org.openelis.util;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class CalendarUtils {
     
@@ -106,8 +107,13 @@ public class CalendarUtils {
     
     public static String getCurrentDateString(){
         String today = getDateString(Calendar.getInstance());
-        System.out.println(today);
         return today;
+    }
+    
+    public static boolean isSelected(Calendar cal, String date){
+        Calendar dcal = Calendar.getInstance();
+        dcal.setTime(new Date(date));
+        return getDateString(cal).equals(getDateString(dcal));
     }
     
     

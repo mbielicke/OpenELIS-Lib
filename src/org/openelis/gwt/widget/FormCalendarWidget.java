@@ -1,10 +1,8 @@
 package org.openelis.gwt.widget;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -177,10 +175,10 @@ public class FormCalendarWidget extends Composite implements
     }
 
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
-        CalendarWidget cal = new CalendarWidget();
+        CalendarWidget cal = new CalendarWidget(textbox.getText());
         cal.addChangeListener(this);
         pop = new PopupPanel(true, false);
-        pop.setWidth(getOffsetWidth() + "px");
+        pop.setWidth("150px");
         pop.setWidget(cal);
         pop.setPopupPosition(textbox.getAbsoluteLeft(),
                              textbox.getAbsoluteTop() + textbox.getOffsetHeight());

@@ -101,6 +101,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     }
     
     public void afterDraw(boolean sucess) {
+        try {
         load((FormRPC)forms.get("display"));
         DOM.addEventPreview(this);
         if(window != null){
@@ -108,6 +109,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
             window.setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
             window.setStatus(consts.get("loadCompleteMessage"),"");
+        }
+        }catch(Exception e){
+            Window.alert("after draw " +e.getMessage());
         }
     }
     
@@ -124,7 +128,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
          
-        // try {
+         try {
              NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
              for(int i = 0; i < rpcList.getLength(); i++){
                  com.google.gwt.xml.client.Element rpcEl = (com.google.gwt.xml.client.Element)rpcList.item(i);
@@ -142,9 +146,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
                  forms.put(form.key, form);
              }
              draw();
-       // } catch (Exception e) {
-       ///     Window.alert("FormUtil: " + e.getMessage());
-        // }
+        } catch (Exception e) {
+           Window.alert("FormUtil: " + e.getMessage());
+         }
         
          //load((FormRPC)forms.get("query"));
     }

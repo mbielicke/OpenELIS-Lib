@@ -4,7 +4,7 @@ import org.openelis.gwt.common.RPCException;
 
 public interface CalendarServiceInt extends AppScreenServiceInt {
     
-    public String getMonth(String month, String year) throws RPCException;
+    public String getMonth(String month, String year, String date) throws RPCException;
     
     public String getMonthSelect(String month, String year) throws RPCException;
 

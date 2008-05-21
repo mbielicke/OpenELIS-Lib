@@ -430,7 +430,7 @@ public class AutoCompleteDropdown extends Composite implements
 			return;
 		}
 
-		if (scrollList == null || textBox.getText().length() == 0) {
+		if (scrollList == null) {// || textBox.getText().length() == 0) {
 			if (textBox.getText().equals("")) {
 				textBox.setText("");
 				scrollList.unselectAll();
@@ -515,6 +515,13 @@ public class AutoCompleteDropdown extends Composite implements
 			// set textbox text back to what it was before
 			textBox.setText(textBox.getText().substring(0, currentCursorPos));
 			this.startPos = 0;
+            if(cat == null)
+                index = getIndexByTextValue(textBox.getText()); 
+
+            if (index > -1 && index < model.size()) {
+                tempStartPos = index;
+                this.startPos = index;
+            }
 		}
 		clickedArrow = false;
 		showMatches(this.startPos);
