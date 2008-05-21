@@ -122,7 +122,8 @@ public class DropDownField extends AbstractField {
     
     public void validate() {
     	if (required) {
-            if (selections.size() == 0) {
+            //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
+            if (selections.size() == 0 || (selections.size() == 1 && ((StringObject)((DataSet)selections.get(0)).getObject(0)).getValue().equals(""))) {
                 addError("Field is required");
                 valid = false;
                 return;

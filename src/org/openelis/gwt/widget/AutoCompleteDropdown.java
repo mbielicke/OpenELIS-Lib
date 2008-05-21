@@ -14,6 +14,7 @@ import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
+import org.openelis.gwt.widget.table.TableAutoDropdown;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
 import com.google.gwt.core.client.GWT;
@@ -103,6 +104,8 @@ public class AutoCompleteDropdown extends Composite implements
 	protected Widget comp;
 
 	protected String width = "";
+    
+    protected String popWidth = "";
 
 	protected String fieldCase = "mixed";
 
@@ -213,7 +216,7 @@ public class AutoCompleteDropdown extends Composite implements
 		this.cat = cat;
 		this.textBoxDefault = textBoxDefault;
 		this.width = width;
-		this.fromModel = fromModel;
+        this.popWidth = popWidth;
 		this.multiSelect = multi;
 		if (textBoxDefault != null)
 			textBox.setText(textBoxDefault);
@@ -314,11 +317,29 @@ public class AutoCompleteDropdown extends Composite implements
                 choicesPopup.show();
                
                 scrollList.sizeTable();
-
+                
+                //we need to set the popup width if it is a dropdown and the width is auto.
+                //we leave the width auto if it is an auto complete
+                if(cat == null && "auto".equals(popWidth)){
+                    if(scrollList.getDataModel().size() > numberOfRows){  //we need a scrollbar
+                        int textBoxWidth = new Integer((width.substring(0, width.indexOf("px")))).intValue();
+                        if(getParent() instanceof TableAutoDropdown)
+                            scrollList.setCellWidths(new int[] {(textBoxWidth-24)});
+                        else
+                            scrollList.setCellWidths(new int[] {(textBoxWidth-8)});
+                    }else{  //we dont need a scroll bar
+                        int textBoxWidth = new Integer((width.substring(0, width.indexOf("px")))).intValue();
+                        if(getParent() instanceof TableAutoDropdown)
+                            scrollList.setCellWidths(new int[] {(textBoxWidth-6)});
+                        else
+                            scrollList.setCellWidths(new int[] {(textBoxWidth+10)});
+                    }
+                }
 
 			if (!multiSelect) {
 				//if the user clicked the arrow and there is already a row selected, we need to scroll to that row
-				if(clickedArrow && scrollList.getSelected().size() > 0)
+
+                if(clickedArrow && scrollList.getSelected().size() > 0)
                     startPos = scrollList.getDataModel().indexOf((DataSet)scrollList.getSelected().get(0));
 				//if they didnt click the arrow we can assume they typed something.  First we need to unselect all rows so we can recalculate the values
 				else if(!clickedArrow)
