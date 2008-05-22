@@ -54,6 +54,7 @@ public class CheckField extends AbstractField implements Serializable {
         if (!isInRange()) {
             valid = false;
         }
+        valid = true;
     }
 
     public boolean isInRange() {
