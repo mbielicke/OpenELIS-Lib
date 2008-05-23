@@ -128,6 +128,8 @@ public class AutoCompleteDropdown extends Composite implements
 	protected boolean insideTable = false;
 	
 	protected int numberOfRows = 10;
+    
+    protected AutoCompleteParamsInt autoParams = null;
 
 	// table values
 	AbstractField[] fields;
@@ -473,7 +475,11 @@ public class AutoCompleteDropdown extends Composite implements
                 ((AppScreen)screen).window.setStatus("", "spinnerIcon");
         
             try {
-                autoService.getMatches(cat, scrollList.getDataModel(), text, new AsyncCallback() {
+                HashMap params = null;
+                if(autoParams != null){
+                    params = autoParams.getParams(screen.rpc);
+                }
+                autoService.getMatches(cat, scrollList.getDataModel(), text, params, new AsyncCallback() {
                     public void onSuccess(Object result){
           
                         scrollList.setDataModel((DataModel)result);
@@ -876,5 +882,9 @@ public class AutoCompleteDropdown extends Composite implements
             changeListeners.remove(listener);
         }
         
+    }
+    
+    public void setAutoParams(AutoCompleteParamsInt autoParams){
+        this.autoParams = autoParams;
     }
 }

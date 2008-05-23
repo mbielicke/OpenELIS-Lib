@@ -53,6 +53,7 @@ public class CheckField extends AbstractField implements Serializable {
         }
         if (!isInRange()) {
             valid = false;
+            return;
         }
         valid = true;
     }
