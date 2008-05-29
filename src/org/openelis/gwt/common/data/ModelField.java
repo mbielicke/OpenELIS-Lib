@@ -43,8 +43,15 @@ public class ModelField extends AbstractField {
     }
 
     public Object getInstance() {
-        // TODO Auto-generated method stub
-        return null;
+        ModelField obj = new ModelField();
+       
+        obj.setRequired(required);
+        obj.setValue(value.getInstance());
+        obj.setRequired(required);
+        obj.setTip(tip);
+        obj.setKey(key);
+        
+        return obj;
     }
 
     public Object getInstance(Node node) {

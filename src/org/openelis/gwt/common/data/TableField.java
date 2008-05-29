@@ -58,8 +58,13 @@ public class TableField extends AbstractField {
     }
 
     public Object getInstance() {
-        // TODO Auto-generated method stub
-        return null;
+        TableField obj = new TableField();
+        obj.setKey(key);
+        obj.setRequired(required);
+        obj.setTip(tip);
+        obj.setValue(value);
+        
+        return obj;
     }
 
     public Object getInstance(Node node) {
