@@ -2,12 +2,12 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
@@ -47,6 +47,7 @@ public class CheckBox extends Composite implements ClickListener{
     
     public CheckBox() {
         initWidget(hp);
+        hp.setVerticalAlignment(HasAlignment.ALIGN_MIDDLE);
         hp.add(panel);
         panel.setStyleName(UNCHECKED_STYLE);
     }
