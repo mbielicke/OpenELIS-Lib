@@ -16,6 +16,7 @@ import org.openelis.gwt.common.RPCDeleteException;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
@@ -112,14 +113,12 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      */
     public void query() {
         doReset();
-        state = FormInt.QUERY;
         window.setStatus(consts.get("enterFieldsToQuery"),"");
         setForm(true);
         rpc = (FormRPC)forms.get("query");
         doReset();
-        enable(true);
+        enable(true); 
         changeState(FormInt.QUERY);
-        
     }
 
     /**
@@ -488,11 +487,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             load((FormRPC)forms.get("display"));
             enable(false);
             window.setStatus(consts.get("queryAborted"),"");
-            //FIXME we need to see if there is any data selected
-            if(modelWidget.getSelectedIndex() > -1)
-              	changeState(FormInt.DISPLAY);
-            else
-              	changeState(FormInt.DEFAULT);
+            
+            changeState(FormInt.DEFAULT);
         }
         if(state == FormInt.DELETE){
         	strikeThru(false);
