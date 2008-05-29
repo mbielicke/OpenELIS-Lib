@@ -84,6 +84,8 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
             removeClickListener(listener);
         }
         if(state == LOCK_PRESSED){
+            panel.removeStyleName("disabled");
+            panel.addStyleName("Pressed");
             removeClickListener(listener);
         }
     }
