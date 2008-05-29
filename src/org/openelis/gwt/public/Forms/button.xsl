@@ -116,7 +116,7 @@ version="1.0">
 
 <!-- options button template -->
 <xsl:template name="optionsButton">
-	<menuPanel layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
+	<menuPanel key="optionsMenu" layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
 		    <menuItem>
 		        <menuDisplay>
 			    	  <appButton action="" style="ButtonPanelButton">
@@ -130,9 +130,11 @@ version="1.0">
 				</menuDisplay>
 				  <menuPanel style="topMenuContainer" layout="vertical" xsi:type="Panel" position="below">
 				    <xsl:call-template name="menuItem">
+				    <xsl:with-param name="key">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="label">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="enabled">true</xsl:with-param>
-				      <xsl:with-param name="value">duplicateRecord</xsl:with-param>
+				      <xsl:with-param name="class">duplicateRecord</xsl:with-param>
+				      <xsl:with-param name="args"></xsl:with-param>
 				    </xsl:call-template>
 				  </menuPanel>
 		    </menuItem>
@@ -182,17 +184,20 @@ version="1.0">
 </xsl:template>
 
 <!-- Menu item template -->
-<xsl:template name="menuItem">
+ <xsl:template name="menuItem">
+  	<xsl:param name="key"/>
     <xsl:param name="label"/>
-    <xsl:param name="value"/>
+    <xsl:param name="class"/>
+    <xsl:param name="args"/>
     <xsl:param name="enabled"/>
     <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
-  	<menuItem style="TopMenuRowContainer" enabled="{$enabled}"  
+  	<menuItem key="{$key}" style="TopMenuRowContainer" enabled="{$enabled}"  
 	          hover="Hover"
 	          icon="{$label}Icon"
 	   		  label="{resource:getString($constants,$label)}"
 	          description="{resource:getString($constants,$descrip)}" 
-	          value="{$value}"
+	          class="{$class}"
+			  args="{$args}"
 	          onClick="this"/>
   </xsl:template>
 </xsl:stylesheet>
