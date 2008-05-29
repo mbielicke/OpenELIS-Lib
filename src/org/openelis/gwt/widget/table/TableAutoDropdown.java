@@ -17,6 +17,7 @@ import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
+import org.openelis.gwt.widget.AutoCompleteParamsInt;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
 
@@ -107,6 +108,11 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
 
         auto = new AutoCompleteDropdown(cat, url, multiSelect, textBoxDefault, width,popWidth);
+        
+        if(node.getAttributes().getNamedItem("autoParams") != null){
+            auto.setAutoParams((AutoCompleteParamsInt)ClassFactory.forName(node.getAttributes().getNamedItem("autoParams").getNodeValue()));
+        }
+        
         auto.mainHP.removeStyleName("AutoDropdown");
         auto.mainHP.addStyleName("TableAutoDropdown");
         auto.focusPanel.removeStyleName("AutoDropdownButton");
