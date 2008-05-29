@@ -178,4 +178,8 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
             setState(((AppScreenForm)sender).state);
         }
     }
+    
+    public int numberOfButtons(){
+        return buttons.size();
+    }
 }
