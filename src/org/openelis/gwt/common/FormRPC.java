@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -142,5 +143,26 @@ public class FormRPC implements IForm, Serializable {
             AbstractField field = (AbstractField)fields.get(fieldKey);
             field.clearErrors();
         }
+    }
+    
+    public FormRPC clone(){
+        FormRPC clone = new FormRPC();
+        HashMap cloneMap = (HashMap)fields.clone();
+        
+        Object[] keys = (Object[]) ((Set)fields.keySet()).toArray();    
+        for (int i = 0; i < keys.length; i++) {
+            cloneMap.put((String)keys[i], ((AbstractField)fields.get((String)keys[i])).getInstance());
+        }        
+        
+        clone.setFieldMap(cloneMap);
+        clone.operation = operation;
+        clone.status = status;
+        clone.action = action;
+        clone.userId = userId;
+        clone.userName = userName;
+        clone.fullName = fullName;
+        clone.key = key;
+        
+        return clone;
     }
 }
