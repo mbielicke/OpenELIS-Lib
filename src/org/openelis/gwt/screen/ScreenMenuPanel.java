@@ -149,7 +149,6 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener, Mous
      * This method loads the Widget from an AbstractField from the FormRPC
      */
     public void load(AbstractField field) {
-        // TODO Auto-generated method stub
         Document doc = XMLParser.parse((String)field.getValue());
         panel.clear();
         createPanel(doc.getDocumentElement());

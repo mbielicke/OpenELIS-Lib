@@ -28,6 +28,7 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     private boolean cursorOn;
     private ScreenMenuItem parent;
     public ScreenMenuPanel child;
+    public ScreenMenuPanel menuItemsPanel;
     public static final String TAG_NAME = "menuItem";
     public String label;
     public String objClass;
@@ -80,6 +81,9 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
                 enable(false);
         }else
             enable(true);
+        
+        if(popupNode != null)
+            menuItemsPanel = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
 
         initWidget(item);
         setDefaults(node,screen);
@@ -112,7 +116,6 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     }
 
     public void onClick(Widget sender) {
-        //Window.alert("click");
         if(popupNode != null){
             if(popClosed)
                 popClosed = false;
@@ -145,8 +148,9 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
             return;
         if(pop == null) {
             pop = new PopupPanel(true,false);
-            ScreenMenuPanel mp = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
-            pop.setWidget(mp);
+            //ScreenMenuPanel mp = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
+            //use the menuItemsPanel so you can disable certain rows on the fly
+            pop.setWidget(menuItemsPanel);
         
             pop.addPopupListener(this);
  
@@ -181,16 +185,16 @@ public class ScreenMenuItem extends ScreenWidget implements MouseListener, Click
     
     public void enable(boolean enabled){
         if(enabled){
-            removeClickListener(this);
+           // removeClickListener(this);
             addClickListener(this);
             sinkEvents(Event.ONCLICK);
-            removeMouseListener(this);
+            //removeMouseListener(this);
             addMouseListener(this);
             sinkEvents(Event.MOUSEEVENTS);
             removeStyleName("disabled");
         }else{
-            removeClickListener(this);
-            removeMouseListener(this);
+           // removeClickListener(this);
+           // removeMouseListener(this);
             unsinkEvents(Event.ONCLICK);
             unsinkEvents(Event.MOUSEEVENTS);
             addStyleName("disabled");
