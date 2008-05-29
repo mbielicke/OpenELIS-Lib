@@ -3,6 +3,7 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.openelis.gwt.common.FormErrorException;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
@@ -492,7 +493,10 @@ public class AutoCompleteDropdown extends Composite implements
                     }
                     
                     public void onFailure(Throwable caught) {
-                        Window.alert(caught.getMessage());
+                        if(caught instanceof FormErrorException){
+                            ((AppScreen)screen).window.setStatus(caught.getMessage(), "ErrorPanel");
+                        }else
+                            Window.alert(caught.getMessage());
                     }
                 });
             } catch (RPCException e) {
