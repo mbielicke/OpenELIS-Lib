@@ -57,7 +57,11 @@ public class ScreenButtonPanel extends ScreenWidget {
                bPanel.addWidget(wid);
             }
         }
-        bPanel.findButtons(bPanel.hp);
+        
+        //we only want to find buttons if we didnt have any button nodes above
+        if(bPanel.numberOfButtons() == 0)
+            bPanel.findButtons(bPanel.hp);
+        
         initWidget(bPanel);
         bPanel.setStyleName("ScreenButtonPanel");
         setDefaults(node, screen);
