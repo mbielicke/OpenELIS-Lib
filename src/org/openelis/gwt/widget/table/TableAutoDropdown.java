@@ -108,16 +108,20 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
 
         auto = new AutoCompleteDropdown(cat, url, multiSelect, textBoxDefault, width,popWidth);
-        
-        if(node.getAttributes().getNamedItem("autoParams") != null){
-            auto.setAutoParams((AutoCompleteParamsInt)ClassFactory.forName(node.getAttributes().getNamedItem("autoParams").getNodeValue()));
-        }
-        
         auto.mainHP.removeStyleName("AutoDropdown");
         auto.mainHP.addStyleName("TableAutoDropdown");
         auto.focusPanel.removeStyleName("AutoDropdownButton");
         auto.focusPanel.addStyleName("TableAutoDropdownButton");
         auto.setInsideTable(true);
+        
+        if(node.getAttributes().getNamedItem("autoParams") != null){
+            auto.setAutoParams((AutoCompleteParamsInt)ClassFactory.forName(node.getAttributes().getNamedItem("autoParams").getNodeValue()));
+        }
+        
+        if(node.getAttributes().getNamedItem("search") != null){
+            if(node.getAttributes().getNamedItem("search").getNodeValue().equals("linear"))
+                auto.setLinear(true);
+        }
         
         if(widthsNode != null) {
         	auto.setWidths(getWidths(widthsNode));

@@ -131,6 +131,8 @@ public class AutoCompleteDropdown extends Composite implements
 	protected int numberOfRows = 10;
     
     protected AutoCompleteParamsInt autoParams = null;
+    
+    protected boolean linear = false;
 
 	// table values
 	AbstractField[] fields;
@@ -713,6 +715,10 @@ public class AutoCompleteDropdown extends Composite implements
 	public void clear() {
 		scrollList.clear();
 	}
+    
+    public void setLinear(boolean linear){
+        this.linear = linear;
+    }
 
 	public void addItem(String key, String display) {
 		DataSet data = new DataSet();
@@ -803,28 +809,36 @@ public class AutoCompleteDropdown extends Composite implements
 		int high = model.size() - 1;
 		int mid = -1;
 		int length = textValue.length();
+        
+        if(linear){
+            for(int i = 0; i < model.size(); i++){
+                if(((String) model.get(i).getObject(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
+                    return i;
+            }
+            return -1;
+        }else{
+            //we first need to do a binary search to 
+            while (low <= high) {
+                mid = (low + high) / 2;
 
-		//we first need to do a binary search to 
-		while (low <= high) {
-			mid = (low + high) / 2;
-
-			if (((String) model.get(mid).getObject(0).getValue()).substring(0,length).compareTo(textValue) < 0)
-				low = mid + 1;
-			else if (((String) model.get(mid).getObject(0).getValue()).substring(0,length).compareTo(textValue) > 0)
-				high = mid - 1;
-			else
-				break;
-		}
+                if (((String) model.get(mid).getObject(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) < 0)
+                    low = mid + 1;
+                else if (((String) model.get(mid).getObject(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) > 0)
+                    high = mid - 1;
+                else
+                    break;
+            }
 		
-		if(low > high)
-			return -1; // NOT FOUND
-		else{
-			//we need to do a linear search backwards to find the first entry that matches our search
-			while(((String) model.get(mid).getObject(0).getValue()).substring(0,length).compareTo(textValue) == 0)
-				mid--;
+            if(low > high)
+                return -1; // NOT FOUND
+            else{
+                //we need to do a linear search backwards to find the first entry that matches our search
+                while(((String) model.get(mid).getObject(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
+                    mid--;
 			
-			return (mid+1);
-		}
+                return (mid+1);
+            }
+        }
 	}
 
 	private String getTextBoxDisplay(){

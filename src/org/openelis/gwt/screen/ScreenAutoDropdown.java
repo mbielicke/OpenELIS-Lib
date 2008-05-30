@@ -94,6 +94,11 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
             auto.setAutoParams((AutoCompleteParamsInt)ClassFactory.forName(node.getAttributes().getNamedItem("autoParams").getNodeValue()));
         }
         
+        if(node.getAttributes().getNamedItem("search") != null){
+            if(node.getAttributes().getNamedItem("search").getNodeValue().equals("linear"))
+                auto.setLinear(true);
+        }
+        
         if(headersNode != null) 
         	auto.setHeaders(getHeaders(headersNode));
         
