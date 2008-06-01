@@ -27,7 +27,7 @@ public class AppConstants {
             Iterator keyIt = addMap.getMap().keySet().iterator();
             while(keyIt.hasNext()){
                 String key = (String)keyIt.next();
-                map.getMap().put(key, (String)addMap.getConstant(key));
+                map.getMap().put(key, addMap.getConstant(key));
             }
         }
     }

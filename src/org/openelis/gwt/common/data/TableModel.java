@@ -12,10 +12,7 @@ import java.util.HashSet;
 public class TableModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.TableRow>
-     */
-    private ArrayList rows = new ArrayList();
+    private ArrayList<TableRow> rows = new ArrayList<TableRow>();
     public boolean paged;
     public int totalPages;
     public int rowsPerPage;
@@ -29,11 +26,8 @@ public class TableModel implements Serializable {
     private int numRows = 0;
 
     private AbstractField[] fields;
-    
-    /**
-     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.data.AbstractField>
-     */
-    public HashMap hidden = new HashMap();
+
+    public HashMap<String,AbstractField> hidden = new HashMap<String,AbstractField>();
 
     public void addRow(TableRow row) {
         if(row == null)
@@ -43,7 +37,7 @@ public class TableModel implements Serializable {
     }
 
     public void deleteRow(int row) {
-        deleteRow((TableRow)rows.get(row));
+        deleteRow(rows.get(row));
     }
     
     public void deleteRow(TableRow row){
@@ -55,7 +49,7 @@ public class TableModel implements Serializable {
     }
 
     public TableRow getRow(int row) {
-        return (TableRow)rows.get(row);
+        return rows.get(row);
     }
 
     public int numRows() {
@@ -63,7 +57,7 @@ public class TableModel implements Serializable {
     }
 
     public AbstractField getFieldAt(int row, int col) {
-        return ((TableRow)rows.get(row)).getColumn(col);
+        return rows.get(row).getColumn(col);
     }
 
     public void insertRow(int index, TableRow row) {
@@ -130,7 +124,7 @@ public class TableModel implements Serializable {
             filterSets.add(filterSet);
         }
         for (int i = 0; i < rows.size(); i++) {
-            TableRow row = (TableRow)rows.get(i);
+            TableRow row = rows.get(i);
             showRow(row);
             for (int j = 0; j < filterSets.size(); j++) {
                 if (filterSets.get(j) == null)
@@ -158,28 +152,28 @@ public class TableModel implements Serializable {
     }
 
     public int partition(int s, int t, int col) {
-        String x = ((TableRow)rows.get(s)).getColumn(col).getValue().toString();
+        String x = rows.get(s).getColumn(col).getValue().toString();
         int i = s - 1;
         int j = t + 1;
         while (true) {
             if (sortDown) {
-                while (((TableRow)rows.get(--j)).getColumn(col)
+                while (rows.get(--j).getColumn(col)
                                                 .getValue()
                                                 .toString()
                                                 .compareTo(x) > 0)
                     ;
-                while (((TableRow)rows.get(++i)).getColumn(col)
+                while (rows.get(++i).getColumn(col)
                                                 .getValue()
                                                 .toString()
                                                 .compareTo(x) < 0)
                     ;
             } else {
-                while (((TableRow)rows.get(--j)).getColumn(col)
+                while (rows.get(--j).getColumn(col)
                                                 .getValue()
                                                 .toString()
                                                 .compareTo(x) < 0)
                     ;
-                while (((TableRow)rows.get(++i)).getColumn(col)
+                while (rows.get(++i).getColumn(col)
                                                 .getValue()
                                                 .toString()
                                                 .compareTo(x) > 0)
@@ -210,7 +204,7 @@ public class TableModel implements Serializable {
     }
     
     public void reset() {
-        rows = new ArrayList();
+        rows = new ArrayList<TableRow>();
         //hidden = new HashMap();
         totalRows = 0;
         shown = 0;
@@ -223,7 +217,7 @@ public class TableModel implements Serializable {
     }
     
     public void hideRow(int index) {
-        hideRow((TableRow)rows.get(index));
+        hideRow(rows.get(index));
     }
     
     public void hideRow(TableRow row) {
@@ -236,7 +230,7 @@ public class TableModel implements Serializable {
     }
     
     public void showRow(int index) {
-        showRow((TableRow)rows.get(index));
+        showRow(rows.get(index));
     }
     
     public void showRow(TableRow row){

@@ -6,7 +6,6 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.screen.ScreenBase;
 
@@ -79,13 +78,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     }
     
     public void initCells(TableModel model){
-        for(int i = 0; i < cells.size(); i++){
-            if(cells.get(i) instanceof TableOption){
-                if(((TableOption)cells.get(i)).loadFromHidden != null){
-                    ((TableOption)cells.get(i)).fromHidden = (OptionField)model.hidden.get(((TableOption)cells.get(i)).loadFromHidden);
-                }
-            }
-        }
+
     }
     
     public Widget getWidget() {
@@ -93,11 +86,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     }
     
     public void initCells(TableController controller){
-        for(int i = 0; i < cells.size(); i++){
-            if(cells.get(i) instanceof TableOption){
-                ((TableOption)cells.get(i)).setListener(controller);
-            }
-        }
+
     }
 
     public void setCellWidth(int width) {

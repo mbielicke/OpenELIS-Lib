@@ -7,17 +7,15 @@ import java.util.Iterator;
 public class DataMap implements DataObject, Serializable{
     
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.data.DataObject>
-     */
-    private HashMap map = new HashMap();
+
+    private HashMap<String,DataObject> map = new HashMap<String,DataObject>();
 
     public Object getInstance() {
         DataMap dataMap = new DataMap();
         Iterator keyIt = map.keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
-            dataMap.map.put(key, ((DataObject)map.get(key)).getInstance());
+            dataMap.map.put(key, (DataObject)((DataObject)map.get(key)).getInstance());
         }
         return dataMap;
     }

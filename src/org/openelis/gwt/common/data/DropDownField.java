@@ -8,11 +8,7 @@ public class DropDownField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
     
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject>
-     */
-    private ArrayList selections = new ArrayList();
-    private String dflt;
+    private ArrayList<DataSet> selections = new ArrayList<DataSet>();
     
     public static final String TAG_NAME = "rpc-dropdown";
     
@@ -40,7 +36,7 @@ public class DropDownField extends AbstractField {
             selections = (ArrayList)val;
             return;
         }
-        selections = new ArrayList();
+        selections = new ArrayList<DataSet>();
         if(val instanceof Integer)
             add((Integer)val);
         else if(val instanceof Double)
@@ -106,7 +102,7 @@ public class DropDownField extends AbstractField {
     }
     
     public void clear() {
-        selections = new ArrayList();
+        selections = new ArrayList<DataSet>();
     } 
     
     public Object getInstance() {
@@ -123,7 +119,7 @@ public class DropDownField extends AbstractField {
     public void validate() {
     	if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
-            if (selections.size() == 0 || (selections.size() == 1 && ((StringObject)((DataSet)selections.get(0)).getObject(0)).getValue().equals(""))) {
+            if (selections.size() == 0 || (selections.size() == 1 && ((StringObject)selections.get(0).getObject(0)).getValue().equals(""))) {
                 addError("Field is required");
                 valid = false;
                 return;

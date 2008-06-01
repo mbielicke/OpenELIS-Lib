@@ -27,12 +27,10 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.DataModelWidget;
-import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.common.data.TableRow;
 import org.openelis.gwt.services.TableServiceInt;
 import org.openelis.gwt.services.TableServiceIntAsync;
-import org.openelis.gwt.widget.OptionList;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -139,9 +137,6 @@ public class EditTable extends TableController implements
     public void setEditors(TableCellWidget[] editors) {
         this.editors = editors;
         for(int i = 0; i < editors.length; i++){
-            if(editors[i] instanceof TableOption){
-                ((TableOption)editors[i]).setListener(this);
-            }
             if(editors[i] instanceof TableMultiple){
                 ((TableMultiple)editors[i]).initCells(this);
             }
@@ -634,11 +629,6 @@ public class EditTable extends TableController implements
             tcell.setCellWidth(curColWidth[j]);
             if(tcell instanceof TableMultiple){
                 ((TableMultiple)tcell).initCells(model);
-            }
-            if(tcell instanceof TableOption){
-                if(((TableOption)tcell).loadFromHidden != null){
-                    ((TableOption)tcell).fromHidden = (OptionField)model.hidden.get(((TableOption)tcell).loadFromHidden);
-                }
             }
             ((SimplePanel)tcell).setWidth((curColWidth[j])+ "px");
             view.table.setWidget(i,j,(Widget)tcell);

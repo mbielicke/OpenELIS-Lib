@@ -65,9 +65,6 @@ public class QueryTable extends TableController {
     public void setEditors(TableCellWidget[] editors) {
         this.editors = editors;
         for(int i = 0; i < editors.length; i++){
-            if(editors[i] instanceof TableOption){
-                ((TableOption)editors[i]).setListener(this);
-            }
             if(editors[i] instanceof TableMultiple){
                 ((TableMultiple)editors[i]).initCells(this);
             }

@@ -8,8 +8,8 @@
 	<classpathentry exported="true" kind="lib" path="lib/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ehcache-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/ejb3-persistence.jar"/>
-	<classpathentry kind="lib" path="lib/js.jar"/>
-	<classpathentry kind="lib" path="/OpenELIS-Lib-tools/gwt-linux-UHL.1.4/gwt-user.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/js.jar"/>
+	<classpathentry kind="lib" path="/OpenELIS-Lib-tools/gwt-linux-UHL.1.5/gwt-user.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

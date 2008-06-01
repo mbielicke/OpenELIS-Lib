@@ -9,10 +9,7 @@ import com.google.gwt.xml.client.Node;
 public class CollectionField extends AbstractField implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject>
-     */
-    private ArrayList coll = new ArrayList();
+    private ArrayList<DataObject> coll = new ArrayList<DataObject>();
     private String type = "";
     public static final String TAG_NAME = "rpc-collection";
 
@@ -61,8 +58,8 @@ public class CollectionField extends AbstractField implements Serializable {
         return coll;
     }
 
-    public void addItem(Object item) {
-        coll.add((String)item);
+    public void addItem(DataObject item) {
+        coll.add(item);
     }
 
     public Object getInstance() {
@@ -90,7 +87,7 @@ public class CollectionField extends AbstractField implements Serializable {
 		for(int i = 0; i < coll.size(); i++){
 			if(i > 0)
 				sb.append(",");
-			sb.append(coll.get(i));
+			sb.append(((StringObject)coll.get(i)).getValue());
 		}
 		return sb.toString();
 	}

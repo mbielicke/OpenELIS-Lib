@@ -9,15 +9,9 @@ public class DataModel implements DataObject, Serializable {
     
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataSet>
-     */
-    private ArrayList entries = new ArrayList();
+    private ArrayList<DataSet> entries = new ArrayList<DataSet>();
     
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataObject, org.openelis.gwt.common.data.DataSet>
-     */
-    private HashMap keyMap = new HashMap(); 
+    private HashMap<DataObject,DataSet> keyMap = new HashMap<DataObject,DataSet>(); 
     
     private int selected = -1;
     private int page = 0;
@@ -113,8 +107,8 @@ public class DataModel implements DataObject, Serializable {
     }
     
     public void clear() {
-        entries = new ArrayList();
-        keyMap = new HashMap();
+        entries = new ArrayList<DataSet>();
+        keyMap = new HashMap<DataObject,DataSet>();
         selected = -1;
     }
     

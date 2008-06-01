@@ -21,6 +21,7 @@ import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.widget.AppButton;
@@ -86,7 +87,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
         });
     }
     
-    public void getXMLData(HashMap args) {
+    public void getXMLData(HashMap<String,DataObject> args) {
         service.getXMLData(args, new AsyncCallback() {
            public void onSuccess(Object result){
                initData = (HashMap)result;

@@ -7,10 +7,7 @@ public class Preferences implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
-    /**
-     * @gwt.typeArgs <java.lang.String, java.lang.String>
-     */
-    private HashMap map = new HashMap();
+    private HashMap<String,String> map = new HashMap<String,String>();
     private String key;
     private Integer id;
     
@@ -19,19 +16,19 @@ public class Preferences implements Serializable{
     }
     
     public String get(String key){
-        return (String)map.get(key);
+        return map.get(key);
     }
     
     public boolean getBoolean(String key){
-        return Boolean.valueOf((String)map.get(key)).booleanValue();
+        return Boolean.valueOf(map.get(key)).booleanValue();
     }
     
     public double getDouble(String key){
-        return Double.parseDouble((String)map.get(key));
+        return Double.parseDouble(map.get(key));
     }
     
     public int getInt(String key){
-        return Integer.parseInt((String)map.get(key));
+        return Integer.parseInt(map.get(key));
     }
     
     public void put(String key, String value){

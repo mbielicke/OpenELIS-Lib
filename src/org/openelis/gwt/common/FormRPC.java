@@ -8,14 +8,10 @@ package org.openelis.gwt.common;
 
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DateField;
-import org.openelis.gwt.common.data.OptionField;
-import org.openelis.gwt.common.data.StringField;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -28,13 +24,11 @@ import java.util.Vector;
 public class FormRPC implements IForm, Serializable {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <java.lang.String, org.openelis.gwt.common.data.AbstractField>
-     */
-    private HashMap fields = new HashMap();
+
+    private HashMap<String,AbstractField> fields = new HashMap<String,AbstractField>();
     public int operation;
     public int status;
-    public ArrayList error = new ArrayList();
+    public ArrayList<String> error = new ArrayList<String>();
     public String action;
     public Integer userId;
     public String userName;
@@ -44,7 +38,7 @@ public class FormRPC implements IForm, Serializable {
     public FormRPC() {
     }
 
-    public void setFieldMap(HashMap fields) {
+    public void setFieldMap(HashMap<String,AbstractField> fields) {
         this.fields = fields;
     }
 
@@ -55,7 +49,7 @@ public class FormRPC implements IForm, Serializable {
     public Object getFieldValue(String key) {
         // TODO Auto-generated method stub
         try {
-            AbstractField field = (AbstractField)fields.get(key);
+            AbstractField field = fields.get(key);
             return field.getValue();
         } catch (Exception e) {
             return null;
@@ -63,13 +57,13 @@ public class FormRPC implements IForm, Serializable {
     }
 
     public Vector getFieldValues(String key) {
-        AbstractField field = (AbstractField)fields.get(key);
+        AbstractField field = fields.get(key);
         return field.getValues();
     }
 
     public void setFieldValue(String key, Object value) {
         // TODO Auto-generated method stub
-        AbstractField field = (AbstractField)fields.get(key);
+        AbstractField field = fields.get(key);
         field.setValue(value);
     }
 
@@ -78,7 +72,7 @@ public class FormRPC implements IForm, Serializable {
     }
 
     public void setFieldError(String key, String err) {
-        AbstractField field = (AbstractField)fields.get(key);
+        AbstractField field = fields.get(key);
         field.addError(err);
     }
 
@@ -86,17 +80,7 @@ public class FormRPC implements IForm, Serializable {
         if (!fields.containsKey(key)) {
             return null;
         }
-        Object field = fields.get(key);
-        if (field instanceof OptionField) {
-            return (OptionField)field;
-        }
-        if (field instanceof DateField) {
-            return (DateField)field;
-        }
-        if (field instanceof StringField) {
-            return (StringField)field;
-        }
-        return (AbstractField)field;
+        return fields.get(key);
     }
 
     /*
@@ -117,11 +101,7 @@ public class FormRPC implements IForm, Serializable {
             return true;
         }
         boolean valid = true;
-        Iterator keyIt = fields.keySet().iterator();
-        while (keyIt.hasNext()) {
-            String fieldKey = (String)keyIt.next();
-
-            AbstractField field = (AbstractField)fields.get(fieldKey);
+        for (AbstractField field  : fields.values()) {
             field.clearErrors();
             field.validate();
             if (!field.isValid()) {
@@ -136,22 +116,19 @@ public class FormRPC implements IForm, Serializable {
 
     public void reset() {
         status = IForm.VALID_FORM;
-        error = new ArrayList();
-        Iterator keyIt = fields.keySet().iterator();
-        while (keyIt.hasNext()) {
-            String fieldKey = (String)keyIt.next();
-            AbstractField field = (AbstractField)fields.get(fieldKey);
+        error = new ArrayList<String>();
+        for (AbstractField field : fields.values()) {
             field.clearErrors();
         }
     }
     
     public FormRPC clone(){
         FormRPC clone = new FormRPC();
-        HashMap cloneMap = (HashMap)fields.clone();
+        HashMap<String,AbstractField> cloneMap = (HashMap<String,AbstractField>)fields.clone();
         
         Object[] keys = (Object[]) ((Set)fields.keySet()).toArray();    
         for (int i = 0; i < keys.length; i++) {
-            cloneMap.put((String)keys[i], ((AbstractField)fields.get((String)keys[i])).getInstance());
+            cloneMap.put((String)keys[i], (AbstractField)fields.get((String)keys[i]).getInstance());
         }        
         
         clone.setFieldMap(cloneMap);

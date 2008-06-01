@@ -7,10 +7,8 @@ import java.util.Iterator;
 public class ConstantMap implements DataObject, Serializable{
     
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <java.lang.String, java.lang.String>
-     */
-    private HashMap map = new HashMap();
+
+    private HashMap<String,String> map = new HashMap<String,String>();
 
     public Object getInstance() {
         ConstantMap constMap = new ConstantMap();
@@ -29,7 +27,7 @@ public class ConstantMap implements DataObject, Serializable{
 
     public void setValue(Object object) {
         // TODO Auto-generated method stub
-        map = (HashMap)object;
+        map = (HashMap<String,String>)object;
     }
     
     public String getConstant(String key){

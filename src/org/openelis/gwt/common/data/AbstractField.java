@@ -11,10 +11,8 @@ public class AbstractField implements DataField, Serializable {
      * 
      */
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <java.lang.String>
-     */
-    protected Vector errors = new Vector();
+
+    protected Vector<String> errors = new Vector<String>();
     protected boolean required;
     protected String key;
     protected String tip;
@@ -37,7 +35,7 @@ public class AbstractField implements DataField, Serializable {
     public String[] getErrors() {
         String[] retErrors = new String[errors.size()];
         for (int i = 0; i < errors.size(); i++)
-            retErrors[i] = (String)errors.get(i);
+            retErrors[i] = errors.get(i);
         return retErrors;
     }
 
@@ -65,7 +63,7 @@ public class AbstractField implements DataField, Serializable {
     }
     
     public void clearErrors() {
-        errors = new Vector();
+        errors = new Vector<String>();
     }
 
     public Object getInstance(Node node) {

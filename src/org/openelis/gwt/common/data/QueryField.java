@@ -6,24 +6,15 @@ import java.util.ArrayList;
 public class QueryField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <java.lang.String>
-     */
-    protected ArrayList comparator;
-    protected String value = "";
-    /**
-     * @gwt.typeArgs <java.lang.String>
-     */
-    protected ArrayList parameter;
-    /**
-     * @gwt.typeArgs <java.lang.String>
-     */
-    protected ArrayList logical;
 
-    /**
-     * @gwt.typeArgs <java.lang.String>
-     */
-    private ArrayList operators = new ArrayList();
+    protected ArrayList<String> comparator;
+    protected String value = "";
+
+    protected ArrayList<String> parameter;
+
+    protected ArrayList<String> logical;
+
+    private ArrayList<String> operators = new ArrayList<String>();
     {
         operators.add("!");
         operators.add("~");
@@ -51,9 +42,9 @@ public class QueryField extends AbstractField {
     }
     
     public void parse(String value) {
-        comparator = new ArrayList();
-        parameter = new ArrayList();
-        logical = new ArrayList();
+        comparator = new ArrayList<String>();
+        parameter = new ArrayList<String>();
+        logical = new ArrayList<String>();
         while (value != null && value.length() > 0) {
             String pos = value.substring(0, 1);
             String comp = "";

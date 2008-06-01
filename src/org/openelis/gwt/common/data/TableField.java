@@ -6,9 +6,6 @@ import com.google.gwt.xml.client.Node;
 public class TableField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.TableModel>
-     */
     private TableModel value;
     public static final String TAG_NAME = "rpc-table";
     

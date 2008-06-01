@@ -4,9 +4,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
 
-
 import java.util.Date;
-import java.util.Iterator;
 
 public class QueryDateField extends QueryField {
 
@@ -41,9 +39,7 @@ public class QueryDateField extends QueryField {
     }
 
     public void validate() {
-        Iterator paramIt = parameter.iterator();
-        while (paramIt.hasNext()) {
-            String param = (String)paramIt.next();
+        for (String param : parameter) {
             try {
                 Date date = new Date(param.replaceAll("-", "/"));
             } catch (Exception e) {
@@ -74,9 +70,8 @@ public class QueryDateField extends QueryField {
      */
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        Iterator paramIt = parameter.iterator();
-        while (paramIt.hasNext()) {
-            String[] params = ((String)paramIt.next()).split("..");
+        for (String param : parameter) {
+            String[] params = param.split("..");
             for (int i = 0; i < params.length; i++) {
                 Date date = new Date(params[i].replaceAll("-", "/"));
                 DatetimeRPC dVal = DatetimeRPC.getInstance(begin, end, date);

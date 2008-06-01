@@ -8,15 +8,9 @@ import java.util.HashMap;
 public class TableRow implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.AbstractField>
-     */
-    private ArrayList columns = new ArrayList();
-    /**
-     * 
-     * @gwt.typeArgs <org.openelis.gwt.common.data.AbstractField>
-     */
-    private HashMap hidden = new HashMap();
+
+    private ArrayList<AbstractField> columns = new ArrayList<AbstractField>();
+    private HashMap<String,AbstractField> hidden = new HashMap<String,AbstractField>();
     protected boolean show = true;
 
     public void addColumn(AbstractField field) {
@@ -28,7 +22,7 @@ public class TableRow implements Serializable {
     }
 
     public AbstractField getColumn(int index) {
-        return (AbstractField)columns.get(index);
+        return columns.get(index);
     }
 
     public void removeColumn(int index) {
@@ -44,7 +38,7 @@ public class TableRow implements Serializable {
     }
 
     public AbstractField getHidden(String name) {
-        return (AbstractField)hidden.get(name);
+        return hidden.get(name);
     }
 
     public boolean show() {

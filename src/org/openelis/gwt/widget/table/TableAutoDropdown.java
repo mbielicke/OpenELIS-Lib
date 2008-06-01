@@ -12,7 +12,6 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.OptionField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
@@ -37,7 +36,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     private int width;
     public static final String TAG_NAME = "table-autoDropdown";
     
-    public OptionField fromHidden;
     
     public TableAutoDropdown(){
     	sinkEvents(Event.KEYEVENTS);
@@ -46,7 +44,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     public TableCellWidget getNewInstance() {
     	TableAutoDropdown ta = new TableAutoDropdown();
         ta.multi = multi;
-        ta.fromHidden = fromHidden;
         ta.visible = visible;
         ta.loadFromHidden = loadFromHidden;
         ta.loadFromModel = loadFromModel;
@@ -60,7 +57,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
     public TableAutoDropdown getNewTableAuto() {
     	TableAutoDropdown ta = new TableAutoDropdown();
         ta.multi = multi;
-        ta.fromHidden = fromHidden;
         ta.visible = visible;
         ta.loadFromHidden = loadFromHidden;
         ta.loadFromModel = loadFromModel;

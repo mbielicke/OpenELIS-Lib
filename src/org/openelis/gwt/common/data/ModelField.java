@@ -6,9 +6,7 @@ import com.google.gwt.xml.client.Node;
 public class ModelField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.common.data.DataModel>
-     */
+
     private DataModel value;
     public static final String TAG_NAME = "rpc-model";
     

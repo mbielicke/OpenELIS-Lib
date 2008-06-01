@@ -6,6 +6,8 @@
  */
 package org.openelis.gwt.common;
 
+import org.openelis.gwt.common.data.AbstractField;
+
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -41,7 +43,7 @@ public interface IForm {
     // public void populate(IRequest req);
     public void setFieldValue(String key, Object value);
 
-    public void setFieldMap(HashMap fields);
+    public void setFieldMap(HashMap<String,AbstractField> fields);
 
     public void reset();
 }

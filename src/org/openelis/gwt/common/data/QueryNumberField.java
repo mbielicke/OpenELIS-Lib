@@ -2,8 +2,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import java.util.Iterator;
-
 public class QueryNumberField extends QueryField {
 
     private static final long serialVersionUID = 1L;
@@ -32,9 +30,7 @@ public class QueryNumberField extends QueryField {
     }
 
     public void validate() {
-        Iterator paramIt = parameter.iterator();
-        while (paramIt.hasNext()) {
-            String param = (String)paramIt.next();
+        for(String param : parameter){
             if (type.equals("integer")) {
                 try {
                     Integer.parseInt(param);
@@ -59,9 +55,7 @@ public class QueryNumberField extends QueryField {
         // TODO Auto-generated method stub
         if (value == null)
             return true;
-        Iterator paramIt = parameter.iterator();
-        while (paramIt.hasNext()) {
-            String param = (String)paramIt.next();
+        for (String param : parameter) {
             double pVal = Double.parseDouble(param);
             if (max != null && pVal > max.doubleValue()) {
                 addError("Field exceeded maximum value");

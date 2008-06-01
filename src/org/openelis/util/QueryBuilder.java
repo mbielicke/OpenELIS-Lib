@@ -1,5 +1,17 @@
 package org.openelis.util;
 
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.CollectionField;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.DropDownField;
+import org.openelis.gwt.common.data.NumberObject;
+import org.openelis.gwt.common.data.QueryCheckField;
+import org.openelis.gwt.common.data.QueryDateField;
+import org.openelis.gwt.common.data.QueryField;
+import org.openelis.gwt.common.data.QueryNumberField;
+import org.openelis.gwt.common.data.QueryStringField;
+import org.openelis.gwt.common.data.StringObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,20 +20,6 @@ import java.util.Set;
 
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
-
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.CollectionField;
-import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.common.data.OptionItem;
-import org.openelis.gwt.common.data.QueryCheckField;
-import org.openelis.gwt.common.data.QueryDateField;
-import org.openelis.gwt.common.data.QueryField;
-import org.openelis.gwt.common.data.QueryNumberField;
-import org.openelis.gwt.common.data.QueryOptionField;
-import org.openelis.gwt.common.data.QueryStringField;
-import org.openelis.gwt.common.data.StringObject;
 
 public class QueryBuilder {
 	
@@ -96,35 +94,6 @@ public class QueryBuilder {
             }
             i++;
         }
-        return sb.toString();
-    }
-
-    //TODO get rid of soon
-    public static String getQuery(QueryOptionField field, String fieldName) {
-        if (field.getSelections().size() == 0)
-            return "";
-        StringBuffer sb = new StringBuffer();
-        sb.append(" and (");
-        
-        getQueryNoOperand(field, fieldName);
-        
-        sb.append(") ");
-        
-        return sb.toString();
-    }
-    
-    public static String getQueryNoOperand(QueryOptionField field, String fieldName) {
-    	if (field.getSelections().size() == 0)
-            return "";
-        String paramName = getParamName(fieldName);
-        StringBuffer sb = new StringBuffer();
-        sb.append(fieldName + " in (");
-        for (int i = 0; i < field.getSelections().size(); i++) {
-            if (i > 0)
-                sb.append(",");
-            sb.append(":" + paramName + i);
-        }
-        sb.append(") ");
         return sb.toString();
     }
     
@@ -325,31 +294,6 @@ public class QueryBuilder {
                 query.setParameter(paramName + i, date, TemporalType.DATE);
             }
             i++;
-        }
-    }
-
-    //TODO get rid of soon
-    public static void setParameters(QueryOptionField field,
-                                     String fieldName,
-                                     Query query) {
-        try {
-        String paramName = getParamName(fieldName);
-        Iterator paramsIt = field.getSelections().iterator();
-        int i = 0;
-        while (paramsIt.hasNext()) {
-            OptionItem param = (OptionItem)paramsIt.next();
-            if (field.getType().equals("string") || field.getType().equals("alpha"))
-                query.setParameter(paramName + i, param.akey);
-            else if (field.getType().equals("integer"))
-                query.setParameter(paramName + i,
-                                   new Integer(param.akey.trim()));
-            else if (field.getType().equals("double"))
-                query.setParameter(paramName + i, new Double(param.akey.trim()));
-            i++;
-        }
-        }catch(Exception e){
-            System.out.println("field: "+fieldName);
-            e.printStackTrace();
         }
     }
     
