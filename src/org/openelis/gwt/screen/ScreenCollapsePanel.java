@@ -1,5 +1,6 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -24,6 +25,8 @@ public class ScreenCollapsePanel extends ScreenWidget {
            for (int k = 0; k < widgets.getLength(); k++) {
                if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
                    Widget wid = ScreenWidget.loadWidget(widgets.item(k), screen);
+                   DOM.setStyleAttribute(wid.getElement(), "width", "auto");
+                   DOM.setStyleAttribute(wid.getElement(), "height", "100%");
                    panel.setContent(wid);
                    if(wid instanceof ChangeListener){
                        panel.addChangeListener((ChangeListener)wid);
