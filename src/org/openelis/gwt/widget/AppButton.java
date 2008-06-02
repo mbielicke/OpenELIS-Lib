@@ -10,21 +10,21 @@ import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.widget.FormInt.State;
+
+import java.util.EnumSet;
+
 public class AppButton extends Composite implements SourcesClickEvents, MouseListener {
     
     private DelegatingClickListenerCollection listeners;
     
-    public static final int UNPRESSED = 0,
-                            PRESSED = 1,
-                            DISABLED = 2,
-                            LOCK_PRESSED = 3;
-                            
+    public enum ButtonState {UNPRESSED,PRESSED,DISABLED,LOCK_PRESSED}
     
-    public int state;
+    public ButtonState state;
     public String action;
     public boolean toggle;
-    public int maskedEnabledState = 0;
-    public int maskedLockedState = 0;
+    public EnumSet<State> enabledStates;
+    public EnumSet<State> lockedStates;
     private boolean enabled = true;
     private boolean locked = false;
     
@@ -64,26 +64,26 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
         content.add(widget);
     }
     
-    public void changeState(int state){
+    public void changeState(ButtonState state){
         this.state = state;
-        if(state == UNPRESSED){
+        if(state == ButtonState.UNPRESSED){
             panel.removeStyleName("disabled");
             panel.removeStyleName("Pressed");
             removeClickListener(listener);
             addClickListener(listener);
         }
-        if(state == PRESSED){
+        if(state == ButtonState.PRESSED){
             panel.removeStyleName("disabled");
             panel.addStyleName("Pressed");
             removeClickListener(listener);
             addClickListener(listener);
         }
-        if(state == DISABLED){
+        if(state == ButtonState.DISABLED){
             panel.removeStyleName("Pressed");
             panel.addStyleName("disabled");
             removeClickListener(listener);
         }
-        if(state == LOCK_PRESSED){
+        if(state == ButtonState.LOCK_PRESSED){
             panel.removeStyleName("disabled");
             panel.addStyleName("Pressed");
             removeClickListener(listener);
@@ -111,7 +111,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     }
 
     public void onMouseEnter(Widget sender) {
-        if(state != DISABLED && state != LOCK_PRESSED && !locked)
+        if(state != ButtonState.DISABLED && state != ButtonState.LOCK_PRESSED && !locked)
             panel.addStyleName("Hover");
         
     }
@@ -127,11 +127,11 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     }
 
     public void onMouseUp(Widget sender, int x, int y) {
-        if(toggle && state != DISABLED && state != LOCK_PRESSED &&  !locked){
-            if(state == UNPRESSED)
-                changeState(PRESSED);
+        if(toggle && state != ButtonState.DISABLED && state != ButtonState.LOCK_PRESSED &&  !locked){
+            if(state == ButtonState.UNPRESSED)
+                changeState(ButtonState.PRESSED);
             else
-                changeState(UNPRESSED);
+                changeState(ButtonState.UNPRESSED);
         }
     }
    
@@ -139,20 +139,20 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
 	  classPanel.setStyleName(styleName);
     }
 
-	public void setMaskedEnabledState(int maskedEnabledState) {
-		this.maskedEnabledState = maskedEnabledState;
+	public void setEnabledStates(EnumSet<State> enabledStates) {
+		this.enabledStates = enabledStates;
 	}
 
-	public void setMaskedLockedState(int maskedLockedState) {
-		this.maskedLockedState = maskedLockedState;
+	public void setLockedStates(EnumSet<State> lockedStates) {
+		this.lockedStates = lockedStates;
 	}
 
-	public int getMaskedEnabledState() {
-		return maskedEnabledState;
+	public EnumSet<State> getEnabledStates() {
+		return enabledStates;
 	}
 
-	public int getMaskedLockedState() {
-		return maskedLockedState;
+	public EnumSet<State> getLockedStates() {
+		return lockedStates;
 	}
 
 	public boolean isEnabled() {

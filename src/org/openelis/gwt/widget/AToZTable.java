@@ -22,6 +22,9 @@ import org.openelis.gwt.screen.ScreenButtonPanel;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenVertical;
 import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.widget.AppButton.ButtonState;
+import org.openelis.gwt.widget.ButtonPanel.ButtonPanelState;
+import org.openelis.gwt.widget.FormInt.State;
 import org.openelis.gwt.widget.table.TableController;
 import org.openelis.gwt.widget.table.TableView;
 
@@ -129,7 +132,7 @@ public class AToZTable extends TableController implements
                // DOM.addEventPreview(this);
                 if(!refreshedByLetter){
                     if(selectedButton != null){
-                        selectedButton.changeState(AppButton.UNPRESSED);
+                        selectedButton.changeState(ButtonState.UNPRESSED);
                     }
                 }else{
                     refreshedByLetter = false;
@@ -147,37 +150,29 @@ public class AToZTable extends TableController implements
             return;
         }
         if(sender instanceof AppScreenForm) {
+            State state = ((AppScreenForm)sender).state;
             if(bpanel != null){
-                switch(((AppScreenForm)sender).state) {
-                    case FormInt.ADD:
-                        bpanel.setPanelState(ButtonPanel.LOCKED);
-                        locked = true;
-                        
-                        unselect(selectedRow);
-                        break;
-                    case FormInt.DELETE:
-                    case FormInt.QUERY:
-                        bpanel.setPanelState(ButtonPanel.LOCKED);
-                        locked = true;
-                        unselect(selectedRow);
-                        break;
-                    case FormInt.UPDATE:
-                        bpanel.setPanelState(ButtonPanel.LOCKED);
-                        locked = true;
-                        break;
-                    case FormInt.DEFAULT:
-                    case FormInt.DISPLAY:
-                    case FormInt.BROWSE:
-                        bpanel.setPanelState(ButtonPanel.ENABLED);
-                        locked = false;
-                        break;
+                if(state == State.ADD){
+                    bpanel.setPanelState(ButtonPanelState.LOCKED);
+                    locked = true;
+                    unselect(selectedRow);
+                }else if(state == State.DELETE || state == State.QUERY) {
+                    bpanel.setPanelState(ButtonPanelState.LOCKED);
+                    locked = true;
+                    unselect(selectedRow);
+                }else if(state == State.UPDATE) {
+                    bpanel.setPanelState(ButtonPanelState.LOCKED);
+                    locked = true;
+                }else if(state == State.DEFAULT || state == State.DISPLAY || state == State.BROWSE){
+                    bpanel.setPanelState(ButtonPanelState.ENABLED);
+                    locked = false;
                 }
             }
             return;
         }
         if(sender == bpanel){
             if(selectedButton != null){
-                selectedButton.changeState(AppButton.UNPRESSED);
+                selectedButton.changeState(ButtonState.UNPRESSED);
             }
             selectedButton = bpanel.buttonClicked;
             refreshedByLetter = true;

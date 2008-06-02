@@ -8,13 +8,7 @@ package org.openelis.gwt.widget;
  */
 public interface FormInt {
     
-	public static final int DEFAULT = 1;
-    public static final int DISPLAY = 2;
-    public static final int UPDATE = 4;
-    public static final int ADD = 8;
-    public static final int QUERY = 16;
-    public static final int BROWSE = 32;
-    public static final int DELETE = 64;
+    public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,BROWSE,DELETE}
 
     public void query();
 

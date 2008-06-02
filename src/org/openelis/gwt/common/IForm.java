@@ -28,9 +28,9 @@ public interface IForm {
     final static int DISPLAY_UPDATE = 5;
     final static int DISPLAY_VERSION = 6;
     final static int QUERY = 7;
+     
+    public enum Status {valid,invalid}
     // Status Values
-    final static int VALID_FORM = 0;
-    final static int INVALID_FORM = 1;
     
     final static String[] opNames = {"Display","Insert","Update","Complete","Cancel","Display Update","Display Version","Query"};
 

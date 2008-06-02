@@ -27,7 +27,7 @@ public class FormRPC implements IForm, Serializable {
 
     private HashMap<String,AbstractField> fields = new HashMap<String,AbstractField>();
     public int operation;
-    public int status;
+    public Status status;
     public ArrayList<String> error = new ArrayList<String>();
     public String action;
     public Integer userId;
@@ -97,7 +97,7 @@ public class FormRPC implements IForm, Serializable {
         // TODO Auto-generated method stub
         if (operation == DISPLAY_NEW || operation == DISPLAY
             || operation == DISPLAY_UPDATE) {
-            status = VALID_FORM;
+            status = Status.valid;
             return true;
         }
         boolean valid = true;
@@ -105,17 +105,17 @@ public class FormRPC implements IForm, Serializable {
             field.clearErrors();
             field.validate();
             if (!field.isValid()) {
-                status = INVALID_FORM;
+                status = Status.invalid;
             }
         }
-        if (status == INVALID_FORM)
+        if (status == Status.invalid)
             return false;
-        status = VALID_FORM;
+        status = Status.valid;
         return valid;
     }
 
     public void reset() {
-        status = IForm.VALID_FORM;
+        status = Status.valid;
         error = new ArrayList<String>();
         for (AbstractField field : fields.values()) {
             field.clearErrors();

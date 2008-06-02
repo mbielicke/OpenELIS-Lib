@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
 
@@ -82,13 +81,6 @@ public class WindowBrowser extends Composite{
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(text,window);
-        if(screen instanceof Screen){
-             DeferredCommand.addCommand(new Command() {
-                 public void execute() {
-                     ((Screen)screen).getXML(((Screen)screen).xmlUrl);
-                 }
-             });
-        }
         if(screen instanceof AppScreen){
             DOM.addEventPreview((AppScreen)screen);
         }

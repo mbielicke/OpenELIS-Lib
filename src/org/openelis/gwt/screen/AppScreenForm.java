@@ -13,6 +13,7 @@ import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.common.LastPageException;
 import org.openelis.gwt.common.RPCDeleteException;
+import org.openelis.gwt.common.IForm.Status;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
@@ -48,7 +49,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public DataModelWidget modelWidget = new DataModelWidget();
     protected DataSet key;
     public AppScreenFormServiceIntAsync formService;
-    public int state = FormInt.DEFAULT;
+    public State state = State.DEFAULT;
     protected ChangeListenerCollection changeListeners;
     private boolean busy = false;
 
@@ -68,7 +69,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             bpanel.addChangeListener(this);
             addChangeListener(bpanel);
         }
-        changeState(FormInt.DEFAULT);
+        changeState(State.DEFAULT);
         enable(false);
     }
     
@@ -98,11 +99,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             key = null;
     	busy = false;
     	window.setStatus("", "");
-        changeState(FormInt.DISPLAY);
+        changeState(State.DISPLAY);
     	if(success)
-    		changeState(FormInt.DISPLAY);
+    		changeState(State.DISPLAY);
     	else{
-    		changeState(FormInt.DEFAULT);
+    		changeState(State.DEFAULT);
     		key = null;
     	}
     }
@@ -118,7 +119,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         rpc = (FormRPC)forms.get("query");
         doReset();
         enable(true); 
-        changeState(FormInt.QUERY);
+        changeState(State.QUERY);
     }
 
     /**
@@ -150,7 +151,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public void add() {
         doReset();
         enable(true);
-        changeState(FormInt.ADD);
+        changeState(State.ADD);
         window.setStatus(consts.get("enterInformationPressCommit"),"");
     }
 
@@ -178,10 +179,10 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         if(success){
             enable(true);
             window.setStatus(consts.get("updateFields"),"");
-            changeState(FormInt.UPDATE);
+            changeState(State.UPDATE);
         }else{
             window.setStatus("", "");
-            changeState(FormInt.DISPLAY);
+            changeState(State.DISPLAY);
         }
     }
 
@@ -195,7 +196,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	strikeThru(true);
     	
     	//set the state to delete
-        changeState(FormInt.DELETE);
+        changeState(State.DELETE);
 
         //set the message to delete
         window.setStatus(consts.get("deleteMessage"),"");           
@@ -211,7 +212,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 rpc = (FormRPC)result;
                 forms.put(rpc.key, rpc);
                 load();
-                if (rpc.status == IForm.INVALID_FORM) {
+                if (rpc.status == Status.invalid) {
              	   drawErrors();
              	  afterCommitDelete(false);
                 } else {
@@ -233,7 +234,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	if(success){
             getPage(false,consts.get("deleteComplete"));        
     		strikeThru(false);
-            changeState(FormInt.DEFAULT);
+            changeState(State.DEFAULT);
         }else{
     		if(rpc.getErrors().size() > 0){
     			if(rpc.getErrors().size() > 1){
@@ -251,7 +252,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      */
     public void commit() {
         super.doSubmit();
-        if (state == FormInt.UPDATE) {
+        if (state == State.UPDATE) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
                 window.setStatus(consts.get("updating"),"spinnerIcon");
@@ -262,7 +263,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
             }
         }
-        if (state == FormInt.ADD) {
+        if (state == State.ADD) {
             rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
                 window.setStatus(consts.get("adding"),"spinnerIcon");
@@ -273,7 +274,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
             }
         }
-        if (state == FormInt.QUERY) { 
+        if (state == State.QUERY) { 
             rpc.operation = IForm.QUERY;
             if (rpc.validate() & validate()) {
            		window.setStatus(consts.get("querying"),"spinnerIcon");
@@ -284,7 +285,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
             }
         }
-        if(state == FormInt.DELETE){
+        if(state == State.DELETE){
             commitDelete();
         }
         
@@ -300,7 +301,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                rpc = (FormRPC)result;
                forms.put(rpc.key, rpc);
                load();
-               if (rpc.status == IForm.INVALID_FORM) {
+               if (rpc.status == Status.invalid) {
             	   drawErrors();
             	   afterCommitUpdate(false);
                } else {
@@ -318,7 +319,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	busy = false;
         if(success){
             enable(false);
-            changeState(FormInt.DISPLAY);
+            changeState(State.DISPLAY);
             window.setStatus(consts.get("updatingComplete"),"");
         }else{
         	if(rpc.getErrors().size() > 0){
@@ -342,7 +343,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                rpc = (FormRPC)result;
                forms.put(rpc.key,rpc);
                load();
-               if (rpc.status == IForm.INVALID_FORM) {
+               if (rpc.status == Status.invalid) {
             	   drawErrors();
                    afterCommitAdd(false);
                } else {
@@ -360,7 +361,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     	busy = false;
         if(success){
             enable(false);
-            changeState(FormInt.DEFAULT);
+            changeState(State.DEFAULT);
             window.setStatus(consts.get("addingComplete"),"");
         }else{
         	if(rpc.getErrors().size() > 0){
@@ -441,9 +442,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             load((FormRPC)forms.get("display"));
             enable(false);
             if(modelWidget.getSelectedIndex() > -1)
-            	changeState(FormInt.DISPLAY);
+            	changeState(State.DISPLAY);
             else
-            	changeState(FormInt.DEFAULT);
+            	changeState(State.DEFAULT);
             window.setStatus(consts.get("queryingComplete"),"");
         }else{
             window.setStatus(consts.get("correctErrors"),"ErrorPanel");
@@ -454,7 +455,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      * on a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void abort() {
-        if (state == FormInt.UPDATE) {
+        if (state == State.UPDATE) {
             rpc.operation = IForm.CANCEL;
             clearErrors();
             doReset();
@@ -471,29 +472,29 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
                }
             });
             enable(false);
-            changeState(FormInt.DISPLAY);
+            changeState(State.DISPLAY);
         }
-        if (state == FormInt.ADD) {
+        if (state == State.ADD) {
             doReset();
             clearErrors();
             enable(false);
             window.setStatus(consts.get("addAborted"),"");
-            changeState(FormInt.DEFAULT);
+            changeState(State.DEFAULT);
             afterAbort(true);
         }
-        if (state == FormInt.QUERY) {
+        if (state == State.QUERY) {
         	clearErrors();
             setForm(false);
             load((FormRPC)forms.get("display"));
             enable(false);
             window.setStatus(consts.get("queryAborted"),"");
             
-            changeState(FormInt.DEFAULT);
+            changeState(State.DEFAULT);
         }
-        if(state == FormInt.DELETE){
+        if(state == State.DELETE){
         	strikeThru(false);
         	window.setStatus(consts.get("deleteAborted"),"");
-        	changeState(FormInt.DISPLAY);
+        	changeState(State.DISPLAY);
         }
     }
 
@@ -519,9 +520,9 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      */
     public boolean hasChanges() {
         // TODO Auto-generated method stub
-        if(state == FormInt.ADD ||
-           state == FormInt.QUERY ||
-           state == FormInt.UPDATE){
+        if(state == State.ADD ||
+           state == State.QUERY ||
+           state == State.UPDATE){
                 window.setStatus(consts.get("mustCommitOrAbort"),"ErrorPanel");
             return true;
         }
@@ -609,7 +610,7 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
         }       
     }
     
-    public void changeState(int state){
+    public void changeState(State state){
         this.state = state;
         if(changeListeners != null)
             changeListeners.fireChange(this);

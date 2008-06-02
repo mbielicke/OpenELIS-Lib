@@ -244,14 +244,9 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     public void setContent(final Widget content){
         this.content = content;
         body.insert(content, 0);
-        if(content instanceof ScreenForm){
-            ((ScreenForm)content).message =  message;
-            ((ScreenForm)content).window = this;
-        }else if(content instanceof AppScreen){
+        if(content instanceof AppScreen){
         	//((AppScreenForm)content).message =  message;
             ((AppScreen)content).window = this;
-        }else if(content instanceof Screen) {
-            ((Screen)content).window = this;
         }
     }
     

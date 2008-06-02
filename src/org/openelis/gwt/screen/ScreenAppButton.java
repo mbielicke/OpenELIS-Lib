@@ -1,5 +1,6 @@
 package org.openelis.gwt.screen;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 
 import com.google.gwt.user.client.ui.ClickListener;
@@ -9,6 +10,8 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.widget.AppButton.ButtonState;
+import org.openelis.gwt.widget.FormInt.State;
 
 public class ScreenAppButton extends ScreenWidget {
     
@@ -20,18 +23,19 @@ public class ScreenAppButton extends ScreenWidget {
      * Widget wrapped by this class
      */
     private AppButton button;
-    private static HashMap statesHash;
-    
+    private static HashMap<String,State> statesHash;
+    /*
     static {
-    	statesHash = new HashMap();
-    	statesHash.put("default", new Integer(FormInt.DEFAULT));
-    	statesHash.put("display", new Integer(FormInt.DISPLAY));
-    	statesHash.put("update", new Integer(FormInt.UPDATE));
-    	statesHash.put("add", new Integer(FormInt.ADD));
-    	statesHash.put("query", new Integer(FormInt.QUERY));
-    	statesHash.put("browse", new Integer(FormInt.BROWSE));
-    	statesHash.put("delete", new Integer(FormInt.DELETE));
+    	statesHash = new HashMap<String,State>();
+    	statesHash.put("default", State.DEFAULT);
+    	statesHash.put("display", State.DISPLAY);
+    	statesHash.put("update", State.UPDATE);
+    	statesHash.put("add", State.ADD);
+    	statesHash.put("query", State.QUERY);
+    	statesHash.put("browse", State.BROWSE);
+    	statesHash.put("delete", State.DELETE);
     }
+    */
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
@@ -74,20 +78,25 @@ public class ScreenAppButton extends ScreenWidget {
         
     
         if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
-        	int enabledStatesInt = 0;
+            EnumSet<State> enabledStateSet = EnumSet.noneOf(State.class);
         	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
         	 for(int i = 0; i < enabledStates.length; i++)
-        		 enabledStatesInt = enabledStatesInt + ((Integer)statesHash.get(enabledStates[i])).intValue();
-        	 button.setMaskedEnabledState(enabledStatesInt);
+        		 enabledStateSet.add(State.valueOf(enabledStates[i].toUpperCase()));
+        	 button.setEnabledStates(enabledStateSet);
+        }else{
+            button.setEnabledStates(EnumSet.noneOf(State.class));
         }
         
         if(node.getAttributes().getNamedItem("lockedStates") != null && !"".equals(node.getAttributes().getNamedItem("lockedStates").getNodeValue())){
-        	int lockedStatesInt = 0;
+        	 EnumSet<State> lockedStateSet = EnumSet.noneOf(State.class);
         	 String[] lockedStates = node.getAttributes().getNamedItem("lockedStates").getNodeValue().split(",");
         	 for(int i = 0; i < lockedStates.length; i++)
-        		 lockedStatesInt = lockedStatesInt + ((Integer)statesHash.get(lockedStates[i])).intValue();
-        	 button.setMaskedLockedState(lockedStatesInt);
+        		 lockedStateSet.add(State.valueOf(lockedStates[i].toUpperCase()));
+        	 button.setLockedStates(lockedStateSet);
+        }else{
+            button.setLockedStates(EnumSet.noneOf(State.class));
         }
+            
         
         initWidget(button);
         setDefaults(node, screen);
@@ -103,9 +112,9 @@ public class ScreenAppButton extends ScreenWidget {
     public void enable(boolean enabled){
     	if(!alwaysEnabled){
 	        if(enabled)
-	            button.changeState(AppButton.UNPRESSED);
+	            button.changeState(ButtonState.UNPRESSED);
 	        else
-	            button.changeState(AppButton.DISABLED);
+	            button.changeState(ButtonState.DISABLED);
             super.enable(enabled);
     	}else{
     	    super.enable(true);
