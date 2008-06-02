@@ -393,12 +393,16 @@ public class EditTable extends TableController implements
     public void switchSelectedRow() {
         if(selected > -1){
             if(enabled){
-                for (int i = 0; i < view.table.getCellCount(selected); i++) {
+                int row = selected;
+                unselect(selected);
+                select(row);
+                /*for (int i = 0; i < view.table.getCellCount(selected); i++) {
                     if (selectedCell == i) {
                         saveValue(selected, i);
                     }
                     setCellDisplay(selected, i);
-                }
+                    //selectedCell = -1;
+                }*/
             }
         }
     }
