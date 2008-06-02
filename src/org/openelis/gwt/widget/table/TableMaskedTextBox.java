@@ -63,6 +63,7 @@ public class TableMaskedTextBox extends TableCellInputWidget {
             return;
 		if(editor == null){
 			editor = new MaskedTextBox();
+            editor.addFocusListener(this);
 			editor.setMask(mask);
             editor.setWidth(width+"px");
 		}

@@ -1,10 +1,13 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -75,8 +78,17 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         setWidget(hp);
     }
 
-    public void onFocus(Widget sender) {
-        
+    public void onFocus(final Widget sender) {
+        if(sender instanceof TextBoxBase){
+            //((TextBoxBase)sender).setSelectionRange(0, 0);
+            DeferredCommand.addCommand(new Command(){
+                public void execute() {
+                   //((TextBoxBase)sender).setSelectionRange(0,0);
+                   ((TextBoxBase)sender).setCursorPos(0);
+                   ((TextBoxBase)sender).selectAll();
+                }
+            });
+        }
     }
 
     public void onLostFocus(Widget sender) {
@@ -91,6 +103,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             drawError();
         else{
             errorImg.setStyleName("ErrorPanelHidden");
+        }
+        if(sender instanceof TextBoxBase){
+            ((TextBoxBase)sender).setSelectionRange(0, 0);
         }
     }
     

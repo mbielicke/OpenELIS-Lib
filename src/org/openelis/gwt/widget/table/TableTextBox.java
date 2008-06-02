@@ -1,7 +1,10 @@
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
@@ -66,6 +69,7 @@ public class TableTextBox extends TableCellInputWidget {
             return;
     	if(editor == null){
     		editor = new TextBox();
+            editor.addFocusListener(this);
     		if(fieldCase.equals("upper"))
     			editor.addStyleName("Upper");
     		else if(fieldCase.equals("lower"))

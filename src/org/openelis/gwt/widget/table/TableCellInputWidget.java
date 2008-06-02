@@ -1,12 +1,16 @@
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -16,7 +20,7 @@ import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.MenuLabel;
 
-public class TableCellInputWidget extends SimplePanel implements TableCellWidget, MouseListener, SourcesMouseEvents {
+public class TableCellInputWidget extends SimplePanel implements TableCellWidget, MouseListener, SourcesMouseEvents, FocusListener {
 
     protected AbstractField field;
     protected VerticalPanel errorPanel = new VerticalPanel();
@@ -169,6 +173,25 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     
     public void setCellWidth(int width) {
         
+    }
+
+    public void onFocus(final Widget sender) {
+        if(sender instanceof TextBoxBase){
+            DeferredCommand.addCommand(new Command(){
+                public void execute() {
+                   //((TextBoxBase)sender).setSelectionRange(0,0);
+                   ((TextBoxBase)sender).setCursorPos(0);
+                   ((TextBoxBase)sender).selectAll();
+                }
+            });
+        }
+        
+    }
+
+    public void onLostFocus(Widget sender) {
+        if(sender instanceof TextBoxBase){
+            ((TextBoxBase)sender).setSelectionRange(0, 0);
+        }
     }
 
 }

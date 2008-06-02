@@ -27,7 +27,7 @@ public class TableModel implements Serializable {
 
     private AbstractField[] fields;
 
-    public HashMap<String,AbstractField> hidden = new HashMap<String,AbstractField>();
+    public HashMap<String,DataObject> hidden = new HashMap<String,DataObject>();
 
     public void addRow(TableRow row) {
         if(row == null)
