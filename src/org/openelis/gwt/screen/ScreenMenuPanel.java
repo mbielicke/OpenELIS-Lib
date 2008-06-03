@@ -172,7 +172,7 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener, Mous
     public void itemEnter(ScreenMenuItem item) {
         if(activeItem != null && activeItem != item){
             boolean lowest = false;
-            ArrayList closeList = new ArrayList();
+            ArrayList<ScreenMenuItem> closeList = new ArrayList<ScreenMenuItem>();
             closeList.add(activeItem);
             ScreenMenuItem close = activeItem;
             while(!lowest){
@@ -184,7 +184,7 @@ public class ScreenMenuPanel extends ScreenWidget implements MouseListener, Mous
                 }
             }
             for(int i = closeList.size() -1; i > -1; i--){
-                ((ScreenMenuItem)closeList.get(i)).closePopup();
+                closeList.get(i).closePopup();
             }
             item.createPopup();
         }else if(active)

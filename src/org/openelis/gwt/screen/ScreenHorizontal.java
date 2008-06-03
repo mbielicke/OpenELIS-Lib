@@ -98,13 +98,6 @@ public class ScreenHorizontal extends ScreenWidget {
             if (align.equals("bottom"))
                 panel.setCellVerticalAlignment(wid, HasAlignment.ALIGN_BOTTOM);
         }
-       /* if (widget.getAttributes().getNamedItem("width") != null) {
-            panel.setCellWidth(wid, widget.getAttributes().getNamedItem("width").getNodeValue());
-        }
-        if (widget.getAttributes().getNamedItem("height") != null) {
-            panel.setCellWidth(wid, widget.getAttributes().getNamedItem("height").getNodeValue());
-        }
-        */
     }
 
     public ScreenWidget getInstance(Node node, ScreenBase screen) {

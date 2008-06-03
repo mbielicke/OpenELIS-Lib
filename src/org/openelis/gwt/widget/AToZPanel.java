@@ -172,7 +172,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
     
     public void onChange(Widget sender) {
         if(sender instanceof DataModelWidget){
-            if(((DataModelWidget)sender).event == DataModelWidget.REFRESH) {
+            if(((DataModelWidget)sender).action == DataModelWidget.Action.REFRESH) {
                 modelWidget = (DataModelWidget)sender;
                 dm = ((DataModelWidget)sender).getModel();
                 view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
@@ -188,7 +188,7 @@ public class AToZPanel extends TableController implements ClickListener, ChangeL
                 }
                 active = true;
             }
-            if(((DataModelWidget)sender).event == DataModelWidget.SELECTION){
+            if(((DataModelWidget)sender).action == DataModelWidget.Action.SELECTION){
                 if(selectedRow > -1){
                     view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
                 }

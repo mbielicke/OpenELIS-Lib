@@ -93,7 +93,7 @@ public class AbstractField implements DataField, Serializable {
         return object.getValue();
     }
 
-    public Object getInstance() {
+    public AbstractField getInstance() {
         // TODO Auto-generated method stub
         return null;
     }

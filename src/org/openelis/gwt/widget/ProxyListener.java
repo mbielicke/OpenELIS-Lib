@@ -6,16 +6,14 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import java.util.Vector;
-
-import org.openelis.gwt.screen.ScreenHorizontal;
 import org.openelis.gwt.screen.ScreenWidget;
+
+import java.util.Vector;
 /**
  * ProxyListener is a DragListener for dragging widgets around a 
  * screen by proxy.  It must be in the WidgetMap as "ProxyListener" 

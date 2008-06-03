@@ -32,7 +32,7 @@ public class ServiceUtils {
         }
     }
 
-    public static HashMap getPermissions() throws RPCException {
+    public static HashMap<String,Boolean> getPermissions() throws RPCException {
         // TODO Auto-generated method stub
         try {
             HttpSession sess = SessionManager.getSession();

@@ -1,6 +1,5 @@
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -25,7 +24,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
 	 */
     public HorizontalPanel hp = new HorizontalPanel();
 
-    private ArrayList buttons = new ArrayList();
+    private ArrayList<AppButton> buttons = new ArrayList<AppButton>();
     
     private ChangeListenerCollection changeListeners;
     
@@ -91,12 +90,12 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
             return;
         this.state = state;
         if(state == ButtonPanelState.LOCKED){
-            for(int i = 0; i < buttons.size(); i++){
-                ((AppButton)buttons.get(i)).lock();
+            for(AppButton button : buttons) {
+                button.lock();
             }
         }else{
-            for(int i = 0; i < buttons.size(); i++){
-                ((AppButton)buttons.get(i)).unlock();
+            for(AppButton button : buttons) {
+                button.unlock();
             }
         }
     }
@@ -105,8 +104,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
      * @param state
      */
     public void setState(FormInt.State state) {
-    	for(int i=0;i<buttons.size();i++){
-    		AppButton button = (AppButton)buttons.get(i);
+    	for(AppButton button : buttons) {
     		if(button.getEnabledStates().contains(state) && button.isEnabled())
     			setButtonState(button, ButtonState.UNPRESSED);
     		else if(button.getLockedStates().contains(state) && button.isEnabled())
@@ -122,9 +120,9 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
     
     public void setButtonState(String buttonAction, ButtonState state){
     	if(buttonAction != null){
-	    	for(int i=0;i<buttons.size();i++){
-	    		if(buttonAction.equals(((AppButton)buttons.get(i)).action)){
-	    			((AppButton)buttons.get(i)).changeState(state);
+	    	for(AppButton button : buttons) { 
+	    		if(buttonAction.equals(button.action)){
+	    			button.changeState(state);
 	    			break;
 	    		}
 	    	}	
@@ -133,10 +131,10 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
     
     public void removeButton(String action){
     	if(action != null){
-	    	for(int i=0;i<buttons.size();i++){
-	    		if(action.equals(((AppButton)buttons.get(i)).action)){
-	    			hp.remove((Widget)((AppButton)buttons.get(i)).getParent());
-	    			buttons.remove(i);
+	    	for(AppButton button : buttons) {
+	    		if(action.equals(button.action)){
+	    			hp.remove((Widget)button.getParent());
+	    			buttons.remove(button);
 	    		}
 	    	}
     	}
@@ -144,9 +142,8 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
     
     public void enableButton(String action, boolean enabled){
     	if(action != null){
-	    	for(int i=0;i<buttons.size();i++){
-	    		if(action.equals(((AppButton)buttons.get(i)).action)){
-	    			AppButton button = (AppButton)buttons.get(i);
+	    	for(AppButton button : buttons) {
+	    		if(action.equals(button.action)){
 	    			if(enabled)
 	    	            button.changeState(ButtonState.UNPRESSED);
 	    	        else

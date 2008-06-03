@@ -45,11 +45,12 @@ public class ScreenScrollList extends ScreenWidget {
      */
     public ScreenScrollList(Node node, final ScreenBase screen){
         super(node);
+        final ScreenScrollList sl = this;
         list = new ScrollList() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, sl);
                     }
                 } else {
                     super.onBrowserEvent(event);
@@ -129,8 +130,7 @@ public class ScreenScrollList extends ScreenWidget {
         NodeList items = node.getElementsByTagName("item");
         for(int i = 0; i < items.getLength(); i++){
             if(items.item(i).getNodeType() == Node.ELEMENT_NODE){
-                StringObject so = new StringObject();
-                so.setValue(items.item(i).getAttributes().getNamedItem("value").getNodeValue()); 
+                StringObject so = new StringObject(items.item(i).getAttributes().getNamedItem("value").getNodeValue()); 
                 list.addDropItem(items.item(i).getAttributes().getNamedItem("text").getNodeValue(),so);
             }
         }

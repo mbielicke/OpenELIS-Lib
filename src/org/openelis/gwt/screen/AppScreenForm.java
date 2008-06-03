@@ -10,18 +10,17 @@ import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.FormRPC;
-import org.openelis.gwt.common.IForm;
 import org.openelis.gwt.common.LastPageException;
 import org.openelis.gwt.common.RPCDeleteException;
 import org.openelis.gwt.common.IForm.Status;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
 
+import java.util.EnumSet;
 import java.util.Iterator;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
@@ -253,7 +252,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     public void commit() {
         super.doSubmit();
         if (state == State.UPDATE) {
-            rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
                 window.setStatus(consts.get("updating"),"spinnerIcon");
                 clearErrors();
@@ -264,7 +262,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             }
         }
         if (state == State.ADD) {
-            rpc.operation = IForm.UPDATE;
             if (rpc.validate() & validate()) {
                 window.setStatus(consts.get("adding"),"spinnerIcon");
                 clearErrors();
@@ -275,7 +272,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             }
         }
         if (state == State.QUERY) { 
-            rpc.operation = IForm.QUERY;
             if (rpc.validate() & validate()) {
            		window.setStatus(consts.get("querying"),"spinnerIcon");
            		clearErrors();
@@ -456,7 +452,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      */
     public void abort() {
         if (state == State.UPDATE) {
-            rpc.operation = IForm.CANCEL;
             clearErrors();
             doReset();
             formService.abort(key, (FormRPC)forms.get("display"), new AsyncCallback() {
@@ -520,10 +515,8 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
      */
     public boolean hasChanges() {
         // TODO Auto-generated method stub
-        if(state == State.ADD ||
-           state == State.QUERY ||
-           state == State.UPDATE){
-                window.setStatus(consts.get("mustCommitOrAbort"),"ErrorPanel");
+        if(EnumSet.of(State.ADD,State.QUERY,State.UPDATE).contains(state)){
+            window.setStatus(consts.get("mustCommitOrAbort"),"ErrorPanel");
             return true;
         }
         return false;
@@ -556,11 +549,11 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
     		window.setStatus("","");
     	
         if(sender == modelWidget){
-            if(modelWidget.event == DataModelWidget.SELECTION){
-                key = (DataSet)((DataSet)modelWidget.getSelected()).getInstance();
+            if(modelWidget.action == DataModelWidget.Action.SELECTION){
+                key = modelWidget.getSelected().getInstance();
                 fetch();
             }
-            if(modelWidget.event == DataModelWidget.GETPAGE)
+            if(modelWidget.action == DataModelWidget.Action.GETPAGE)
                 getPage(true, null);
         }
         if(sender == bpanel){

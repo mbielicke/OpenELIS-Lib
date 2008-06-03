@@ -39,7 +39,7 @@ public class DataSet implements Serializable {
         return key;
     }
     
-    public Object getInstance() {
+    public DataSet getInstance() {
         DataSet clone = new DataSet();
         for(int i=0; i < size(); i++){
             clone.addObject((DataObject)getObject(i).getInstance());

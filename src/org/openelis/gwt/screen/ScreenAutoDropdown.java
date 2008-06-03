@@ -1,7 +1,12 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -86,8 +91,38 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         Node widthsNode = ((Element)node).getElementsByTagName("widths").item(0);
         Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
 
-        auto = new AutoCompleteDropdown(cat, url, multiSelect, textBoxDefault, width, popWidth);
+        auto = new AutoCompleteDropdown();
+        final ScreenAutoDropdown sa = this; 
+        auto.textBox = new TextBox() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {       
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB){
+                        screen.doTab(event, sa);                      
+                    }
+                } else {
+                    super.onBrowserEvent(event);
+                }
+            }
+        };
 
+        auto.focusPanel = new FocusPanel() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
+                        onLostFocus(auto.textBox);
+
+                    if (multiSelect) {
+                        auto.visible = false;
+                        auto.choicesPopup.hide();
+                    }
+                    screen.doTab(event, sa);
+                } else {
+                    super.onBrowserEvent(event);
+                }
+            }
+        };
+
+        auto.init(cat, url, multiSelect, textBoxDefault, width, popWidth);
         auto.setForm(screen);
         
         if(node.getAttributes().getNamedItem("autoParams") != null){
@@ -197,32 +232,24 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
     
     public AbstractField[] getFields(Node node) {
         NodeList fieldList = node.getChildNodes();
-        ArrayList list = new ArrayList();
+        ArrayList<AbstractField> list = new ArrayList<AbstractField>();
         for (int i = 0; i < fieldList.getLength(); i++) {
             if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 list.add(ScreenBase.createField(fieldList.item(i)));
             }
         }
-        AbstractField[] fields = new AbstractField[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            fields[i] = (AbstractField)list.get(i);
-        }
-        return fields;
+        return (AbstractField[])list.toArray();
     }
     
     public TableCellWidget[] getEditors(Node node) {
         NodeList editors = node.getChildNodes();
-        ArrayList list = new ArrayList();
+        ArrayList<TableCellWidget> list = new ArrayList<TableCellWidget>();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 list.add(ScreenBase.createCellWidget(editors.item(i),screen));
             }
         }
-        TableCellWidget[] cells = new TableCellWidget[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            cells[i] = (TableCellWidget)list.get(i);
-        }
-        return cells;
+        return (TableCellWidget[])list.toArray();
     }
     
     public String[] getHeaders(Node node){
@@ -246,12 +273,10 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
 
         //id
         if(type.equals("integer")){
-        	NumberObject id = new NumberObject(NumberObject.INTEGER);
-        	id.setValue(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
+        	NumberObject id = new NumberObject(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
         	set.setKey(id);
         }else if(type.equals("string")){
-        	StringObject id = new StringObject();
-        	id.setValue(item.getAttributes().getNamedItem("value").getNodeValue());
+        	StringObject id = new StringObject(item.getAttributes().getNamedItem("value").getNodeValue());
         	set.setKey(id);
         }
         

@@ -33,7 +33,7 @@ public class DropDownField extends AbstractField {
     
     public void setValue(Object val) {
         if(val instanceof ArrayList){
-            selections = (ArrayList)val;
+            selections = (ArrayList<DataSet>)val;
             return;
         }
         selections = new ArrayList<DataSet>();
@@ -49,7 +49,7 @@ public class DropDownField extends AbstractField {
 
     public Object getValue() {
         if(selections.size() == 1)
-            return ((DataSet)selections.get(0)).getKey().getValue();
+            return selections.get(0).getKey().getValue();
         else if(selections.size() > 1)
             return selections;
         else
@@ -58,37 +58,34 @@ public class DropDownField extends AbstractField {
     
     public Object getTextValue(){
     	if(selections.size() == 1)
-            return ((DataSet)selections.get(0)).getObject(0).getValue();
+            return selections.get(0).getObject(0).getValue();
         else if(selections.size() > 1)
             return selections;
         else
             return null;
     }
     
-    public ArrayList getSelections() {
+    public ArrayList<DataSet> getSelections() {
         return selections;
     }
 
     public void add(Integer key) {
         DataSet set = new DataSet();
-        NumberObject no = new NumberObject(NumberObject.INTEGER);
-        no.setValue(key);
+        NumberObject no = new NumberObject(key);
         set.setKey(no);
         add(set);
     }
     
     public void add(Double key){
         DataSet set = new DataSet();
-        NumberObject no = new NumberObject(NumberObject.DOUBLE);
-        no.setValue(key);
+        NumberObject no = new NumberObject(key);
         set.setKey(no);
         add(set);
     }
     
     public void add(String key){
         DataSet set = new DataSet();
-        StringObject so = new StringObject();
-        so.setValue(key);
+        StringObject so = new StringObject(key);
         set.setKey(so);
         add(set);
     }
@@ -105,14 +102,14 @@ public class DropDownField extends AbstractField {
         selections = new ArrayList<DataSet>();
     } 
     
-    public Object getInstance() {
+    public DropDownField getInstance() {
         DropDownField obj = new DropDownField();
         obj.setRequired(required);
         obj.setValue(selections);
         return obj;
     }
     
-    public Object getInstance(Node node){
+    public DropDownField getInstance(Node node){
         return new DropDownField(node);
     }
     

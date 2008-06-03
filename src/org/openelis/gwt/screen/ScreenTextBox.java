@@ -44,11 +44,12 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
      */	
     public ScreenTextBox(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenTextBox sb = this;
         textbox = new TextBox() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, sb);
                         return;
                     }
                 }
@@ -56,7 +57,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             }
         };
         if (node.getAttributes().getNamedItem("tab") != null) {
-            screen.addTab(textbox, node.getAttributes()
+            screen.addTab(this, node.getAttributes()
                                        .getNamedItem("tab")
                                        .getNodeValue()
                                        .split(","));

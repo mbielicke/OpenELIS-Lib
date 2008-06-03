@@ -46,35 +46,9 @@ public class AutoCompleteDropdown extends Composite implements
 		PopupListener, FocusListener, HasFocus, SourcesChangeEvents {
 	public HorizontalPanel mainHP = new HorizontalPanel();
 
-	public TextBox textBox = new TextBox() {
-		public void onBrowserEvent(Event event) {
-			if (DOM.eventGetType(event) == Event.ONKEYDOWN) {		
-				if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB){
-					if(!insideTable)
-						screen.doTab(event, comp);						
-				}
-			} else {
-				super.onBrowserEvent(event);
-			}
-		}
-	};
+	public TextBox textBox = new TextBox();
 
-	public FocusPanel focusPanel = new FocusPanel() {
-		public void onBrowserEvent(Event event) {
-			if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-				if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
-					onLostFocus(textBox);
-
-				if (multiSelect) {
-					visible = false;
-					choicesPopup.hide();
-				}
-				screen.doTab(event, comp);
-			} else {
-				super.onBrowserEvent(event);
-			}
-		}
-	};
+	public FocusPanel focusPanel = new FocusPanel();
 
 	/**
 	 * Widget used to display the suggestions and register click events.
@@ -83,7 +57,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 	HashMap idHashMap = new HashMap();
 
-	final PopupPanel choicesPopup = new PopupPanel(true) {
+	public final PopupPanel choicesPopup = new PopupPanel(true) {
      
 	    public boolean onKeyDownPreview(char key, int modifiers) {
 	        // TODO Auto-generated method stub
@@ -96,7 +70,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 	protected boolean popupAdded = false;
 
-	protected boolean visible = false;
+	public boolean visible = false;
 
 	protected String popupHeight = "";
 
@@ -216,6 +190,15 @@ public class AutoCompleteDropdown extends Composite implements
                                 String textBoxDefault,
                                 String width,
                                 String popWidth) {
+        init(cat,serviceUrl,multi,textBoxDefault,width,popWidth);
+    }
+    
+    public void init(String cat, 
+                     String serviceUrl,
+                     boolean multi, 
+                     String textBoxDefault,
+                     String width,
+                     String popWidth){ 
         if(serviceUrl != null)
             initService(serviceUrl);
 		this.cat = cat;

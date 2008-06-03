@@ -99,14 +99,14 @@ public class ReportUtil {
         }
     }
 
-    public void getReportParameters() {
+    public void getReportParameters(String user) {
         Deserializer   deserializer;
         InputStream    stream = null;
 
         //
         // open the URL and get report specification
         //
-        openURL(baseURL()+"?LOGNAME=web");
+        openURL(baseURL()+"?LOGNAME="+user);
         if (reportURL == null) {
             return;
         }
@@ -176,11 +176,11 @@ public class ReportUtil {
         return decodeType;
     }
 
-    public String encodeURLParameters(FormRPC rpc) {
+    public String encodeURLParameters(FormRPC rpc, String user) {
         String       value;
         StringBuffer buffer = new StringBuffer(256);
 
-        buffer.append("?LOGNAME=web");
+        buffer.append("?LOGNAME="+user);
         Iterator keyIt = rpc.getFieldMap().keySet().iterator();
         while(keyIt.hasNext()) {
             String key = (String)keyIt.next();

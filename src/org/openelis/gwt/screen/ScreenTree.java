@@ -2,6 +2,8 @@ package org.openelis.gwt.screen;
 
 import org.openelis.gwt.common.data.AbstractField;
 
+import java.util.HashMap;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -24,6 +26,8 @@ public class ScreenTree extends ScreenWidget {
 	 * Widget wrapped by this class
 	 */
     private Tree tree;
+    public HashMap<String,TreeItem> treeItems = new HashMap<String,TreeItem>();
+    
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -75,7 +79,7 @@ public class ScreenTree extends ScreenWidget {
     private TreeItem createTreeItem(Node node, ScreenBase screen) {
         TreeItem item = new TreeItem(ScreenBase.createWidget(node, screen));
         if (node.getAttributes().getNamedItem("key") != null) {
-            screen.widgets.put(node.getAttributes()
+            treeItems.put(node.getAttributes()
                                   .getNamedItem("key")
                                   .getNodeValue(), item);
         }

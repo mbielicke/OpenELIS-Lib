@@ -1,17 +1,15 @@
 package org.openelis.gwt.screen;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.widget.AppButton;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 import org.openelis.gwt.widget.FormInt.State;
+
+import java.util.EnumSet;
 
 public class ScreenAppButton extends ScreenWidget {
     
@@ -23,19 +21,6 @@ public class ScreenAppButton extends ScreenWidget {
      * Widget wrapped by this class
      */
     private AppButton button;
-    private static HashMap<String,State> statesHash;
-    /*
-    static {
-    	statesHash = new HashMap<String,State>();
-    	statesHash.put("default", State.DEFAULT);
-    	statesHash.put("display", State.DISPLAY);
-    	statesHash.put("update", State.UPDATE);
-    	statesHash.put("add", State.ADD);
-    	statesHash.put("query", State.QUERY);
-    	statesHash.put("browse", State.BROWSE);
-    	statesHash.put("delete", State.DELETE);
-    }
-    */
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */

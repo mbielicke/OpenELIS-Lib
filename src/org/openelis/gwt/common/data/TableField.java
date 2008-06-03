@@ -54,7 +54,7 @@ public class TableField extends AbstractField {
         return value;
     }
 
-    public Object getInstance() {
+    public TableField getInstance() {
         TableField obj = new TableField();
         obj.setKey(key);
         obj.setRequired(required);
@@ -64,7 +64,7 @@ public class TableField extends AbstractField {
         return obj;
     }
 
-    public Object getInstance(Node node) {
+    public TableField getInstance(Node node) {
         return new TableField(node);
     }
 }

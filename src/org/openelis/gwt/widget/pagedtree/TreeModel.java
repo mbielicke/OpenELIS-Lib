@@ -25,19 +25,8 @@ public class TreeModel implements Serializable {
     public boolean showIndex;
     public boolean autoAdd;
     
-    /**
-     * @gwt.typeArgs <java.lang.Boolean>
-     */
-    //private ArrayList hasDummyChild = new ArrayList();
-    
-    /**
-     * @gwt.typeArgs <org.openelis.gwt.widget.pagedtree.TreeModelItem>
-     */
-     
-    private ArrayList items = new ArrayList();
+    private ArrayList<TreeModelItem> items = new ArrayList<TreeModelItem>();
   
-    //private ScreenTree tree = null;
-
     
     public TreeModelItem getItem(int index){
        return (TreeModelItem)items.get(index);
@@ -56,7 +45,7 @@ public class TreeModel implements Serializable {
     }
     
     public void reset(){
-        items = new ArrayList();
+        items = new ArrayList<TreeModelItem>();
         totalItems = 0;
         shown = 0;        
     }
@@ -127,9 +116,10 @@ public class TreeModel implements Serializable {
     private TreeItem createTreeItem(Node node, ScreenBase screen) {       
         TreeItem item = new TreeItem(ScreenBase.createWidget(node, screen));
         if (node.getAttributes().getNamedItem("key") != null) {
-            screen.widgets.put(node.getAttributes()
+/*            screen.widgets.put(node.getAttributes()
                                   .getNamedItem("key")
                                   .getNodeValue(), item);
+*/
         }
         if (node.getAttributes().getNamedItem("value") != null) {
             item.setUserObject(node.getAttributes()

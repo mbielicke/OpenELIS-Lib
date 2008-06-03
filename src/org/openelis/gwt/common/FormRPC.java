@@ -8,6 +8,7 @@ package org.openelis.gwt.common;
 
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class FormRPC implements IForm, Serializable {
         this.fields = fields;
     }
 
-    public HashMap getFieldMap() {
+    public HashMap<String,AbstractField> getFieldMap() {
         return fields;
     }
 
@@ -95,11 +96,6 @@ public class FormRPC implements IForm, Serializable {
 
     public boolean validate() {
         // TODO Auto-generated method stub
-        if (operation == DISPLAY_NEW || operation == DISPLAY
-            || operation == DISPLAY_UPDATE) {
-            status = Status.valid;
-            return true;
-        }
         boolean valid = true;
         for (AbstractField field  : fields.values()) {
             field.clearErrors();
@@ -128,7 +124,7 @@ public class FormRPC implements IForm, Serializable {
         
         Object[] keys = (Object[]) ((Set)fields.keySet()).toArray();    
         for (int i = 0; i < keys.length; i++) {
-            cloneMap.put((String)keys[i], (AbstractField)fields.get((String)keys[i]).getInstance());
+            cloneMap.put((String)keys[i], fields.get((String)keys[i]).getInstance());
         }        
         
         clone.setFieldMap(cloneMap);

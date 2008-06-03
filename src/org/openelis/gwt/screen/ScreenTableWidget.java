@@ -218,28 +218,27 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     table.setStatFilter(list);
                 }
                 NodeList editors = editorsNode.getChildNodes();
-                ArrayList list = new ArrayList();
+                ArrayList<TableCellWidget> list = new ArrayList<TableCellWidget>();
                 for (int i = 0; i < editors.getLength(); i++) {
-                    if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        
+                    if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {       
                         list.add(ScreenBase.createCellWidget(editors.item(i),screen));
                     }
                 }
                 TableCellWidget[] cells = new TableCellWidget[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                    cells[i] = (TableCellWidget)list.get(i);
+                for(TableCellWidget wid : list){
+                    cells[list.indexOf(wid)] = wid;
                 }
                 table.setEditors(cells);
                 NodeList fieldList = fieldsNode.getChildNodes();
-                list = new ArrayList();
+                ArrayList<AbstractField> alist = new ArrayList<AbstractField>();
                 for (int i = 0; i < fieldList.getLength(); i++) {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        list.add(ScreenBase.createField(fieldList.item(i)));
+                        alist.add(ScreenBase.createField(fieldList.item(i)));
                     }
                 }
-                AbstractField[] fields = new AbstractField[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                    fields[i] = (AbstractField)list.get(i);
+                AbstractField[] fields = new AbstractField[alist.size()];
+                for(AbstractField field : alist){
+                    fields[alist.indexOf(field)] = field;
                 }
                 table.setFields(fields);
                 int rows = 0;
@@ -260,10 +259,6 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     if(node.getAttributes().getNamedItem("showScroll").getNodeValue().equals("true"))
                         table.controller.setShowScroll(true);
                 }
-            //} catch (Exception e) {
-            //    Window.alert("create Table from node" +e.getMessage());
-           // }
-                
             ((AppScreen)screen).addKeyboardListener(table.controller);
             ((AppScreen)screen).addClickListener(table.controller);
             initWidget(table);

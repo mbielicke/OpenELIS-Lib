@@ -1,6 +1,10 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
@@ -55,7 +59,17 @@ public class ScreenCalendar extends ScreenInputWidget {
                                                 .booleanValue());
         else
             cal = new FormCalendarWidget(begin, end, false);
-        cal.setForm(screen);
+        final ScreenCalendar sc = this;
+        cal.textbox = new TextBox() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
+                        screen.doTab(event, sc);
+                } else {
+                    super.onBrowserEvent(event);
+                }
+            }
+        };
         if (node.getAttributes().getNamedItem("shortcut") != null)
             cal.setShortcutKey(node.getAttributes()
                                    .getNamedItem("shortcut")

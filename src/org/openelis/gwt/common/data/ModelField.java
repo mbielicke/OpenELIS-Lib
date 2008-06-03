@@ -40,7 +40,7 @@ public class ModelField extends AbstractField {
         return value;
     }
 
-    public Object getInstance() {
+    public ModelField getInstance() {
         ModelField obj = new ModelField();
        
         obj.setRequired(required);
@@ -52,7 +52,7 @@ public class ModelField extends AbstractField {
         return obj;
     }
 
-    public Object getInstance(Node node) {
+    public ModelField getInstance(Node node) {
        return new ModelField(node);
     }
 }

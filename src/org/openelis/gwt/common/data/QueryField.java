@@ -115,7 +115,7 @@ public class QueryField extends AbstractField {
         return logical;
     }
 
-    public Object getInstance() {
+    public QueryField getInstance() {
         // TODO Auto-generated method stub
         QueryField field = new QueryField();
         field.setRequired(required);

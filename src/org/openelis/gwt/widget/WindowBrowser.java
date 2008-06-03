@@ -29,7 +29,7 @@ import java.util.HashMap;
 public class WindowBrowser extends Composite{
     
     public AbsolutePanel browser = new AbsolutePanel();
-    public HashMap windows = new HashMap();
+    public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
     public int index;
     public int limit ;
     
@@ -111,11 +111,11 @@ public class WindowBrowser extends Composite{
     
     public boolean selectScreen(String text) {
         if (windows.containsKey(text)) {
-            if(index != ((ScreenWindow)windows.get(text)).zIndex){
-                ScreenWindow wid = (ScreenWindow)windows.get(text);
+            if(index != windows.get(text).zIndex){
+                ScreenWindow wid = windows.get(text);
                 index++;
                 //setIndex(((Widget)windows.get(text)).getElement(),index);
-                ((ScreenWindow)windows.get(text)).zIndex = index;
+                windows.get(text).zIndex = index;
                 int top = browser.getWidgetTop(wid);
                 int left = browser.getWidgetLeft(wid);
                 wid.setKeep(true);

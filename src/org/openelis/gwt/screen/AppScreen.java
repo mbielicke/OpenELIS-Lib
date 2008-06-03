@@ -39,8 +39,8 @@ import java.util.HashMap;
 public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
 
     public AppScreenServiceIntAsync service;
-    public HashMap forms = new HashMap();
-    public HashMap initData;
+    public HashMap<String,FormRPC> forms = new HashMap<String,FormRPC>();
+    public HashMap<String,DataObject> initData;
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
     public Element clickTarget;
@@ -76,7 +76,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void getXMLData() {
         service.getXMLData(new AsyncCallback() {
            public void onSuccess(Object result){
-               initData = (HashMap)result;
+               initData = (HashMap<String,DataObject>)result;
                drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
            }
@@ -129,7 +129,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
          
-         try {
+         //try {
              NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
              for(int i = 0; i < rpcList.getLength(); i++){
                  com.google.gwt.xml.client.Element rpcEl = (com.google.gwt.xml.client.Element)rpcList.item(i);
@@ -147,9 +147,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
                  forms.put(form.key, form);
              }
              draw();
-        } catch (Exception e) {
-           Window.alert("FormUtil: " + e.getMessage());
-         }
+        //} catch (Exception e) {
+         //  Window.alert("FormUtil: " + e.getMessage());
+        // }
         
          //load((FormRPC)forms.get("query"));
     }

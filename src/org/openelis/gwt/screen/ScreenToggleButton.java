@@ -37,11 +37,12 @@ public class ScreenToggleButton extends ScreenWidget {
      */
 	public ScreenToggleButton(Node node, final ScreenBase screen) {
 		super(node);
+        final ScreenToggleButton st = this;
 		button = new ToggleButton() {
 			public void onBrowserEvent(Event event) {
 				if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
 					if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-						screen.doTab(event, this);
+						screen.doTab(event, st);
 					}
 				} else {
 					super.onBrowserEvent(event);

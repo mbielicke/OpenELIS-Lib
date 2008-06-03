@@ -62,7 +62,7 @@ public class CollectionField extends AbstractField implements Serializable {
         coll.add(item);
     }
 
-    public Object getInstance() {
+    public CollectionField getInstance() {
         CollectionField obj = new CollectionField();
         obj.setRequired(required);
         obj.setType(type);
@@ -70,7 +70,7 @@ public class CollectionField extends AbstractField implements Serializable {
         return obj;
     }
     
-    public Object getInstance(Node node) {
+    public CollectionField getInstance(Node node) {
         return new CollectionField(node);
     }
 

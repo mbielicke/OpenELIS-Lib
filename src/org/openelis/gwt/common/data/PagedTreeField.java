@@ -43,12 +43,12 @@ public class PagedTreeField extends AbstractField {
 	        return value;
 	    }
 
-	    public Object getInstance() {
+	    public PagedTreeField getInstance() {
 	        // TODO Auto-generated method stub
 	        return null;
 	    }
 
-	    public Object getInstance(Node node) {
+	    public PagedTreeField getInstance(Node node) {
 	        return new PagedTreeField(node);
 	    }
 	    

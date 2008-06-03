@@ -5,8 +5,6 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.screen.ScreenMaskedBox;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -20,16 +18,14 @@ public class MaskedTextBox extends TextBox implements
                                           KeyboardListener,
                                           FocusListener {
     private String mask;
-    private HashSet literals = new HashSet();
-    private ArrayList masks = new ArrayList();
+    private HashSet<String> literals = new HashSet<String>();
+    private ArrayList<String> masks = new ArrayList<String>();
     {
         masks.add("Z");
         masks.add("9");
         masks.add("X");
         masks.add("A");
     }
-    private boolean asTyped;
-    private ScreenMaskedBox screenWid;
 
     public boolean noMask;
     
@@ -48,7 +44,6 @@ public class MaskedTextBox extends TextBox implements
      * @param typed
      */
     public void setAsTyped(boolean typed) {
-        asTyped = typed;
         if (!typed)
             removeKeyboardListener(this);
     }

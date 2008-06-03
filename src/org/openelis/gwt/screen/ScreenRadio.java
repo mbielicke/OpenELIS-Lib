@@ -39,13 +39,14 @@ public class ScreenRadio extends ScreenInputWidget {
      */	
     public ScreenRadio(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenRadio sr = this;
         radio = new RadioButton(node.getAttributes()
                                     .getNamedItem("group")
                                     .getNodeValue()) {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, sr);
                     }
                 } else {
                     super.onBrowserEvent(event);

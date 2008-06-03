@@ -1,7 +1,5 @@
 package org.openelis.gwt.screen;
 
-import com.google.gwt.core.client.GWT;
-
 import java.util.HashMap;
 
 public class ClassFactory {
@@ -10,7 +8,7 @@ public class ClassFactory {
         public Object newInstance(Object[] args);
     }
 
-    private static HashMap classes = new HashMap();
+    private static HashMap<String,Factory> classes = new HashMap<String,Factory>();
 
     public static void addClass(String[] classKeys, Factory factory){
         for(int i = 0; i < classKeys.length;  i++){
@@ -32,7 +30,7 @@ public class ClassFactory {
                         name += "(";
                     else if(i > 0)
                         name += ",";
-                    name += GWT.getTypeName(args[i]);
+                    name += args[i].getClass().getName();
                 }
                 name += ")";
             }

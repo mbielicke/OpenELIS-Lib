@@ -1,6 +1,5 @@
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;

@@ -41,11 +41,12 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
      */	
     public ScreenTextArea(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenTextArea st = this;
         textarea = new TextArea() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, st);
                     }
                 } else {
                     super.onBrowserEvent(event);
@@ -58,7 +59,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
                                       .getNodeValue()
                                       .charAt(0));
         if (node.getAttributes().getNamedItem("tab") != null) {
-            screen.addTab(textarea, node.getAttributes()
+            screen.addTab(this, node.getAttributes()
                                        .getNamedItem("tab")
                                        .getNodeValue()
                                        .split(","));

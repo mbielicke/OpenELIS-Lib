@@ -38,11 +38,12 @@ public class ScreenPassword extends ScreenInputWidget {
      */	
     public ScreenPassword(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenPassword sp = this;
         textbox = new PasswordTextBox() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, sp);
                     }
                 } else {
                     super.onBrowserEvent(event);

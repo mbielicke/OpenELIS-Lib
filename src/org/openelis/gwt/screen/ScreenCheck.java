@@ -12,6 +12,7 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.CheckBox.CheckType;
 /**
  * ScreenCheck wraps a GWT CheckBox to be displayed on a Screen.
  * @author tschmidt
@@ -27,7 +28,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
 	 * Widget wrapped by this class
 	 */
     private CheckBox check;
-    private int defaultType = CheckBox.TWO_STATE;
+    private CheckType defaultType = CheckBox.CheckType.TWO_STATE;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -44,11 +45,12 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
      */
     public ScreenCheck(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenCheck sc = this;
         check = new CheckBox(){
                 public void onBrowserEvent(Event event){
                     if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                         if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                            screen.doTab(event, this);
+                            screen.doTab(event, sc);
                         }
                     } else {
                         super.onBrowserEvent(event);
@@ -57,8 +59,8 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         };
 
         if(node.getAttributes().getNamedItem("threeState") != null){
-            check.setType(CheckBox.THREE_STATE);
-            defaultType = CheckBox.THREE_STATE;
+            check.setType(CheckBox.CheckType.THREE_STATE);
+            defaultType = CheckBox.CheckType.THREE_STATE;
         }
         if (node.getFirstChild() != null){
         	 check.setText(node.getFirstChild().getNodeValue());
@@ -146,7 +148,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     public void setForm(boolean mode) {
         if(queryWidget == null){
             if(mode){
-                check.setType(CheckBox.THREE_STATE);
+                check.setType(CheckBox.CheckType.THREE_STATE);
                 check.setState(CheckBox.UNKNOWN);
             }else
                 check.setType(defaultType);

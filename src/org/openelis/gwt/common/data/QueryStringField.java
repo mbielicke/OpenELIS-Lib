@@ -18,11 +18,11 @@ public class QueryStringField extends QueryField {
             setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }
     
-    public Object getInstance(Node node) {
+    public QueryStringField getInstance(Node node) {
         return new QueryStringField(node);
     }
     
-    public Object getInstance() {
+    public QueryStringField getInstance() {
         return new QueryStringField();
        
     }

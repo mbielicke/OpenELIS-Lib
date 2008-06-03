@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenButtonPanel;
@@ -58,6 +59,30 @@ public class AToZTable extends TableController implements
         if(wid instanceof ScreenButtonPanel){
             bpanel = (ButtonPanel)((ScreenWidget)wid).getWidget();
             bpanel.addChangeListener(this);
+        }
+    }
+    
+    @Override
+    public void onClick(Widget sender) {
+        if(view.table.isAttached()){
+            if(sender instanceof AppScreen){
+                if(active && !DOM.isOrHasChild(view.getElement(), ((AppScreen)sender).clickTarget)){
+                    active = false;
+                }
+                return;
+            }
+            if(!locked && sender == view.nextNav){
+                modelWidget.getModel().selecttLast(false);
+                modelWidget.setPage(modelWidget.getPage()+1);
+                refreshedByLetter = true;
+                return;
+            }
+            if(!locked && sender == view.prevNav){
+                modelWidget.getModel().selecttLast(false);
+                modelWidget.setPage(modelWidget.getPage()-1);
+                refreshedByLetter = true;
+                return;
+            }
         }
     }
 
@@ -123,7 +148,7 @@ public class AToZTable extends TableController implements
 
     public void onChange(Widget sender) {
         if(sender instanceof DataModelWidget){
-            if(((DataModelWidget)sender).event == DataModelWidget.REFRESH) {
+            if(((DataModelWidget)sender).action == DataModelWidget.Action.REFRESH) {
                 modelWidget = (DataModelWidget)sender;
                 dm = ((DataModelWidget)sender).getModel();
                 view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
@@ -139,7 +164,7 @@ public class AToZTable extends TableController implements
                 }
                 active = true;
             }
-            if(((DataModelWidget)sender).event == DataModelWidget.SELECTION){
+            if(((DataModelWidget)sender).action == DataModelWidget.Action.SELECTION){
                 if(selectedRow > -1){
                     view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
                 }

@@ -49,11 +49,12 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
      */
     public ScreenImage(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenImage si = this;
         image = new Image() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, si);
                     }
                 } else {
                     super.onBrowserEvent(event);

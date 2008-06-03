@@ -85,7 +85,7 @@ public class QueryNumberField extends QueryField {
         this.max = (Double)max;
     }
 
-    public Object getInstance() {
+    public QueryNumberField getInstance() {
         QueryNumberField obj = new QueryNumberField();
         obj.setMax(max);
         obj.setMin(min);
@@ -95,7 +95,7 @@ public class QueryNumberField extends QueryField {
         return obj;
     }
 
-    public Object getInstance(Node node) {
+    public QueryNumberField getInstance(Node node) {
         return new QueryNumberField(node);
     }
 }

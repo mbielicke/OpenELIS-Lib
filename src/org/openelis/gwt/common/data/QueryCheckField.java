@@ -16,11 +16,11 @@ public class QueryCheckField extends CheckField {
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }
 
-    public Object getInstance(Node node) {
+    public QueryCheckField getInstance(Node node) {
         return new QueryCheckField(node);
     }
 
-    public Object getInstance() {
+    public QueryCheckField getInstance() {
         QueryCheckField obj = new QueryCheckField();
         obj.setRequired(required);
         obj.setValue(getValue());

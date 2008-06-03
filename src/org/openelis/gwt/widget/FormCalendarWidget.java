@@ -39,24 +39,13 @@ public class FormCalendarWidget extends Composite implements
                                                  MouseListener,
                                                  ChangeListener,
                                                  SourcesChangeEvents {
-    protected TextBox textbox = new TextBox() {
-        public void onBrowserEvent(Event event) {
-            if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
-                    screen.doTab(event, comp);
-            } else {
-                super.onBrowserEvent(event);
-            }
-        }
-    };
+    public TextBox textbox = new TextBox();
 
     protected FocusPanel calendarImage = new FocusPanel();
     protected Image calendar = new Image("Images/1day.png");
     protected HorizontalPanel mainHp = new HorizontalPanel();
     protected byte begin;
     protected byte end;
-    private ScreenBase screen;
-    protected Widget comp;
     protected boolean week;
     protected Date weekDate;
     protected ChangeListenerCollection changeListeners = new ChangeListenerCollection();
@@ -82,7 +71,6 @@ public class FormCalendarWidget extends Composite implements
 
         mainHp.add(textbox);
         mainHp.add(calendarImage);
-        comp = this;
         initWidget(mainHp);
     }
 
@@ -183,10 +171,6 @@ public class FormCalendarWidget extends Composite implements
         pop.setPopupPosition(textbox.getAbsoluteLeft(),
                              textbox.getAbsoluteTop() + textbox.getOffsetHeight());
         pop.show();
-    }
-
-    public void setForm(ScreenBase screen) {
-        this.screen = screen;
     }
 
     public void removeChangeListener(ChangeListener listener) {

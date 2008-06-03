@@ -45,11 +45,12 @@ public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
      */
 	public ScreenButton(Node node, final ScreenBase screen) {
 		super(node);
+        final ScreenButton sb = this;
 		button = new Button() {
 			public void onBrowserEvent(Event event) {
 				if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
 					if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-						screen.doTab(event, this);
+						screen.doTab(event, sb);
 					}
 				} else {
 					super.onBrowserEvent(event);

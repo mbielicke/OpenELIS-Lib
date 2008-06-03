@@ -144,7 +144,7 @@ public class DateField extends AbstractField implements Serializable {
         return ((DateObject)object).end;
     }
 
-    public Object getInstance() {
+    public DateField getInstance() {
         DateField obj = new DateField();
         obj.setMax(max);
         obj.setMin(min);
@@ -152,7 +152,7 @@ public class DateField extends AbstractField implements Serializable {
         return obj;
     }
 
-    public Object getInstance(Node node) {
+    public DateField getInstance(Node node) {
         return new DateField(node);
     }
 }

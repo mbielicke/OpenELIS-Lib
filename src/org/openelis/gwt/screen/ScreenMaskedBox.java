@@ -42,11 +42,12 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
      */
     public ScreenMaskedBox(Node node, final ScreenBase screen) {
         super(node);
+        final ScreenMaskedBox sm = this;
         maskbox = new MaskedTextBox() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, sm);
                     }
                 } else {
                     super.onBrowserEvent(event);
@@ -54,7 +55,7 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
             }
             
             public void complete() {
-                screen.doTab(null,this);
+                screen.doTab(null,sm);
             }
         };
         if (node.getAttributes().getNamedItem("shortcut") != null)

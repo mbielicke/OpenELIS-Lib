@@ -44,7 +44,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     
     private ChangeListenerCollection changeListeners;
     private DataModel dm = new DataModel();
-    private ArrayList selected = new ArrayList();
+    private ArrayList<DataSet> selected = new ArrayList<DataSet>();
     private int maxRows;
     private int start = 0;
     private int top = 0;
@@ -65,12 +65,15 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
     
     public void setDataModel(DataModel dm) {
-        this.dm = dm;
+        if(dm != null)
+            this.dm = dm;
+        else
+            this.dm = new DataModel();
         start = 0;
     }
         
     public void setSelected(ArrayList selections){
-        selected = new ArrayList();
+        selected = new ArrayList<DataSet>();
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
                 if(dm.indexOf(((DataSet)selections.get(i)).getKey()) > -1)
@@ -235,8 +238,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                 String value = "";
                 if(items.item(i).getAttributes().getNamedItem("value") != null)
                     value = items.item(i).getAttributes().getNamedItem("value").getNodeValue();
-                StringObject so = new StringObject();
-                so.setValue(value);
+                StringObject so = new StringObject(value);
                 addDropItem(text,so);
             }
         }
@@ -385,7 +387,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         return maxRows;
     }
 
-    public ArrayList getSelected() {
+    public ArrayList<DataSet> getSelected() {
         return selected;
     }
 

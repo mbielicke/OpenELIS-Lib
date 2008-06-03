@@ -43,11 +43,12 @@ public class ScreenDragList extends ScreenWidget {
      */
     public ScreenDragList(Node node, final ScreenBase screen){
         super(node);
+        final ScreenDragList sd = this;
         list = new DragList() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                     if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, this);
+                        screen.doTab(event, sd);
                     }
                 } else {
                     super.onBrowserEvent(event);

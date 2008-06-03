@@ -8,17 +8,13 @@ import com.google.gwt.user.client.ui.SourcesChangeEvents;
 
 public class DataModelWidget extends Composite implements SourcesChangeEvents {
 
-    public final static int SELECTION = 0,
-                            REFRESH = 1,
-                            GETPAGE = 2,
-                            ADD = 3,
-                            DELETE = 4;
+    public enum Action {SELECTION,REFRESH,GETPAGE,ADD,DELETE}
     
     private ChangeListenerCollection changeListeners;
     
     private DataModel model = new DataModel();
     
-    public int event = -1;
+    public Action action;
     
     public void addChangeListener(ChangeListener listener) {
         if (changeListeners == null)
@@ -31,15 +27,15 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
             changeListeners.remove(listener);
     }
     
-    private void fireChange(int event) {
-        this.event = event;
+    private void fireChange(Action action) {
+        this.action = action;
         if(changeListeners != null)
         	changeListeners.fireChange(this);
     }
     
     public void setModel(DataModel model){
         this.model = model;
-        fireChange(REFRESH);
+        fireChange(Action.REFRESH);
     }
     
     public DataModel getModel() {
@@ -49,33 +45,33 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     public void next() {
         try {
             model.select(model.getSelectedIndex()+1);
-            fireChange(SELECTION);
+            fireChange(Action.SELECTION);
         }catch(IndexOutOfBoundsException e){
             model.setPage(model.getPage()+1);
             model.selecttLast(false);
-            fireChange(GETPAGE);
+            fireChange(Action.GETPAGE);
         }
     }
     
     public void previous() {
         try {
             model.select(model.getSelectedIndex()-1);
-            fireChange(SELECTION);
+            fireChange(Action.SELECTION);
         }catch(IndexOutOfBoundsException e){
             model.setPage(model.getPage()-1);
             model.selecttLast(true);
-            fireChange(GETPAGE);
+            fireChange(Action.GETPAGE);
         }
     }
     
     public void select(int selection) throws IndexOutOfBoundsException {
         model.select(selection);
-        fireChange(SELECTION);
+        fireChange(Action.SELECTION);
     }
     
     public void add(DataSet set){
         model.add(set);
-        fireChange(ADD);
+        fireChange(Action.ADD);
     }
     
     public DataSet getSelected() {
@@ -84,7 +80,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     
     public void delete(int index){
         model.delete(index);
-        fireChange(DELETE);
+        fireChange(Action.DELETE);
     }
     
     public int getSelectedIndex() {
@@ -97,7 +93,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     
     public void setPage(int page) {    	
         model.setPage(page);
-        fireChange(GETPAGE);
+        fireChange(Action.GETPAGE);
     }
 
 }

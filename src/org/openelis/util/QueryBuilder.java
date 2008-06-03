@@ -322,10 +322,10 @@ public class QueryBuilder {
     		Object o = ((DataSet)list.get(i)).getKey();
     		if(o instanceof NumberObject){
 				NumberObject number = (NumberObject)o;
-				if(number.getType() == NumberObject.INTEGER){
+				if(number.getType() == NumberObject.Type.INTEGER){
 					Integer param = (Integer)number.getValue();
 					query.setParameter(paramName + i, param);	
-				}else if(number.getType() == NumberObject.DOUBLE){
+				}else if(number.getType() == NumberObject.Type.DOUBLE){
 					Double param = (Double)number.getValue();
 					query.setParameter(paramName + i, param);	
 				}

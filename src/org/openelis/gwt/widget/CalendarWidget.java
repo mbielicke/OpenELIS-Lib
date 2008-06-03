@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.AppScreen;
@@ -55,7 +56,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
         base += "CalendarServlet";        
         target.setServiceEntryPoint(base);
         service = screenService;
-        HashMap map = new HashMap();
+        HashMap<String,DataObject> map = new HashMap<String,DataObject>();
         map.put("date",new StringObject(date));
         getXMLData(map);
     }

@@ -138,13 +138,6 @@ public class ScreenTablePanel extends ScreenWidget {
             if (rows.item(k).getAttributes().getNamedItem("style") != null) {
             	panel.getRowFormatter().addStyleName(k, rows.item(k).getAttributes().getNamedItem("style").getNodeValue());
             }
-            if (rows.item(k).getAttributes().getNamedItem("id") != null){
-                screen.widgets.put(rows.item(k)
-                                      .getAttributes()
-                                      .getNamedItem("id")
-                                      .getNodeValue(),
-                                  panel.getRowFormatter().getElement(k));
-            }
         }
         setDefaults(node, screen);
     }

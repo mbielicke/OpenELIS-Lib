@@ -114,7 +114,7 @@ public class QueryDateField extends QueryField {
         return this.end;
     }
 
-    public Object getInstance() {
+    public QueryDateField getInstance() {
         QueryDateField obj = new QueryDateField();
         obj.setBegin(begin);
         obj.setEnd(end);
@@ -124,7 +124,7 @@ public class QueryDateField extends QueryField {
         return obj;
     }
 
-    public Object getInstance(Node node) {
+    public QueryDateField getInstance(Node node) {
         return new QueryDateField(node);
     }
 }

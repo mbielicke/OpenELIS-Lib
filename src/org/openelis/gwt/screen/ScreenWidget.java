@@ -64,7 +64,7 @@ public class ScreenWidget extends SimplePanel implements
      * A list of available drop targets for a widget if it uses 
      * Drag and Drop
      */
-    private Vector dropTargets = new Vector();
+    private Vector<String> dropTargets = new Vector<String>();
     /** 
      * Reference back to the Screen this widget is displayed in
      */
@@ -213,7 +213,7 @@ public class ScreenWidget extends SimplePanel implements
                                       .getNamedItem("height")
                                       .getNodeValue());
         if (node.getAttributes().getNamedItem("tab") != null)
-            screen.addTab(getWidget(), node.getAttributes()
+            screen.addTab(this, node.getAttributes()
                                            .getNamedItem("tab")
                                            .getNodeValue()
                                            .split(","));
@@ -395,7 +395,7 @@ public class ScreenWidget extends SimplePanel implements
      * Makes the DropTargets vector available publicly
      * @return
      */
-    public Vector getDropTargets() {
+    public Vector<String> getDropTargets() {
         return dropTargets;
     }
     
@@ -405,9 +405,8 @@ public class ScreenWidget extends SimplePanel implements
      * @return
      */
     public Vector getDropMap(){
-        Vector dropMap = new Vector();
-        for(int i = 0; i < dropTargets.size(); i++){
-            String target = (String)dropTargets.get(i);
+        Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
+        for(String target : dropTargets) {
             DropListenerCollection dropColl = ((ScreenWidget)screen.widgets.get(target)).getDropListeners();
             dropMap.add(dropColl);
         }
@@ -418,7 +417,7 @@ public class ScreenWidget extends SimplePanel implements
      * Set the Vector of DropTargets representing the keys to the widgets that this
      * widget is allowed to drop on.
      */
-    public void setDropTargets(Vector targets){
+    public void setDropTargets(Vector<String> targets){
         dropTargets = targets;
     }
     

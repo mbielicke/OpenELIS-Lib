@@ -4,28 +4,43 @@ import java.io.Serializable;
 
 public class NumberObject implements DataObject, Serializable {
 
-    public static final int   INTEGER          = 1, 
-                              DOUBLE           = 2;
+    public enum Type {INTEGER,DOUBLE}
 
     private static final long serialVersionUID = 1L;
     protected Double          value;
-    protected int             type;
+    protected Type            type;
     protected boolean         invalid;
 
     public NumberObject() {
     }
 
-    public NumberObject(int type) {
+    public NumberObject(Type type) {
         this.type = type;
     }
     
-    public NumberObject(int type, Object value){
+    public NumberObject(Type type, Object value){
         setType(type);
         setValue(value);
     }
+    
+    public NumberObject(Integer value){
+        this(Type.INTEGER,value);
+    }
+    
+    public NumberObject(Double value){
+        this(Type.DOUBLE,value);
+    }
+    
+    public NumberObject(int value){
+        this(Type.INTEGER,new Integer(value));
+    }
+    
+    public NumberObject(double value){
+        this(Type.DOUBLE,new Double(value));
+    }
 
     public Object getValue() {
-        if (type == INTEGER)
+        if (type == Type.INTEGER)
             if (value == null)
                 return null;
             else
@@ -51,11 +66,11 @@ public class NumberObject implements DataObject, Serializable {
         }
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 	

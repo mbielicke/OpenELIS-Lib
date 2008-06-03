@@ -2,7 +2,6 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -36,13 +35,13 @@ public class ScreenBase extends Composite implements FocusListener{
      * All widgets drawn on screen are referenced in this
      * HashMap
      */
-    public HashMap widgets = new HashMap();
+    public HashMap<String,ScreenWidget> widgets = new HashMap<String,ScreenWidget>();
     protected Document xml;
-    protected HashMap tabOrder = new HashMap();
-    protected HashMap tabBack = new HashMap();
+    protected HashMap<ScreenWidget,String> tabOrder = new HashMap<ScreenWidget,String>();
+    protected HashMap<ScreenWidget,String> tabBack = new HashMap<ScreenWidget,String>();
     public boolean keep;
     public String name;
-    public HashMap shortcut = new HashMap();
+    public HashMap<String,Widget> shortcut = new HashMap<String,Widget>();
    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -59,8 +58,8 @@ public class ScreenBase extends Composite implements FocusListener{
      * @return
      */
     public Widget getWidget(String name) {
-        if(widgets.get(name) != null)
-            return ((ScreenWidget)widgets.get(name)).getWidget();
+        if(widgets.containsKey(name))
+            return widgets.get(name).getWidget();
         return null;
     }
 
@@ -92,20 +91,18 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void load() {
-        try {
-            Iterator inputKeys = widgets.keySet().iterator();
-            while (inputKeys.hasNext()) {
-                String key = (String)inputKeys.next();
-                ScreenWidget inputField = (ScreenWidget)widgets.get(key);
+        //try {
+            for(String key : widgets.keySet()) {
+                ScreenWidget inputField = widgets.get(key);
                 if (!rpc.getFieldMap().containsKey(key))
                     continue;
                 AbstractField rpcField = rpc.getField(key);
                 inputField.load(rpcField);   
                 
             }
-        } catch (Exception e) {
-            Window.alert("Load " + e.getMessage());
-        }
+        //} catch (Exception e) {
+        //    Window.alert("Load " + e.getMessage());
+        //}
     }
 
     /**
@@ -114,9 +111,7 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     protected void drawErrors() {
         clearErrors();
-        Iterator wids = widgets.values().iterator();
-        while (wids.hasNext()) {
-            Object wid = wids.next();
+        for (ScreenWidget wid : widgets.values()) {
             if(wid instanceof ScreenInputWidget){
             	String key = ((ScreenInputWidget)wid).key;
                 AbstractField field = rpc.getField(key);
@@ -179,27 +174,14 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void doSubmit() {
-        String key = "";
-        try {
-            rpc.reset();
-            Iterator inputKeys = widgets.keySet().iterator();
-            while (inputKeys.hasNext()) {
-                key = (String)inputKeys.next();
-                ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-                
-               /* if(inputField instanceof ScreenAuto && !((ScreenInputWidget)inputField).queryMode){
-                    AbstractField rpcField = (AbstractField)rpc.getField(key+"Id");
-                    inputField.submit(rpcField);
-                }else{*/
-                    if (!rpc.getFieldMap().containsKey(key)) {
-                        continue;
-                    }
-                    AbstractField rpcField = (AbstractField)rpc.getField(key);
-                    inputField.submit(rpcField);
-                }
-            //}
-        } catch (Exception e) {
-            Window.alert(key + e.getMessage());
+        rpc.reset();
+        for (String key : widgets.keySet()){
+            ScreenWidget inputField = widgets.get(key);
+            if (!rpc.getFieldMap().containsKey(key)) {
+               continue;
+            }
+            AbstractField rpcField = rpc.getField(key);
+            inputField.submit(rpcField);
         }
     }
 
@@ -225,24 +207,14 @@ public class ScreenBase extends Composite implements FocusListener{
      * @param enabled
      */
     protected void strikeThru(boolean enabled) {
-    	String key = "";
-    	Iterator inputKeys = widgets.keySet().iterator();
-        while (inputKeys.hasNext()) {
-            key = (String)inputKeys.next();
-            ScreenWidget inputField = (ScreenWidget)widgets.get(key);
-            
-            //if((inputField instanceof ScreenAuto || inputField instanceof ScreenAutoDropdown) && !((ScreenInputWidget)inputField).queryMode){
-           //     key+="id";
-           // }
-          
+        for(String key : widgets.keySet()) {
             if (!rpc.getFieldMap().containsKey(key) && !rpc.getFieldMap().containsKey(key+"Id")) {
             	continue;
             }
-            
             if(enabled)
-            	((ScreenWidget)widgets.get(key)).addStyleName("strike");
+            	widgets.get(key).addStyleName("strike");
             else
-            	((ScreenWidget)widgets.get(key)).removeStyleName("strike");
+            	widgets.get(key).removeStyleName("strike");
       }
    }
 
@@ -269,9 +241,7 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void doReset() {
-        Iterator rpcKeys = rpc.getFieldMap().keySet().iterator();
-        while (rpcKeys.hasNext()) {
-            String key = (String)rpcKeys.next();
+        for (String key : rpc.getFieldMap().keySet()){
             rpc.setFieldValue(key, null);
         }
         load();
@@ -282,9 +252,7 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void clearErrors() {
-        Iterator it = widgets.values().iterator();
-        while (it.hasNext()){
-            Object wid = it.next();
+        for(ScreenWidget wid : widgets.values()){
             if(wid instanceof ScreenInputWidget){
                 ((ScreenInputWidget)wid).clearError();
             }
@@ -300,23 +268,23 @@ public class ScreenBase extends Composite implements FocusListener{
      * @param event
      * @param wid
      */
-    public void doTab(Event event, Widget wid) {
-        Object obj = null;
+    public void doTab(Event event, ScreenWidget wid) {
+        ScreenWidget obj = null;
         if (event != null && DOM.eventGetShiftKey(event))
-            obj = widgets.get((String)tabBack.get(wid));
+            obj = widgets.get(tabBack.get(wid));
         else
-            obj = widgets.get((String)tabOrder.get(wid));
+            obj = widgets.get(tabOrder.get(wid));
         if (obj != null) {
             boolean tabbed = false;
             while (!tabbed) {
-                if (((Widget)obj).isVisible() && ((ScreenWidget)obj).isEnabled()) {
+                if (obj.isVisible() && obj.isEnabled()) {
                     tabbed = true;
-                    ((ScreenWidget)obj).setFocus(true);
+                    obj.setFocus(true);
                 } else {
                     if (event != null && DOM.eventGetShiftKey(event))
-                        obj = widgets.get((String)tabBack.get(((ScreenWidget)obj).getWidget()));
+                        obj = widgets.get(tabBack.get(obj.getWidget()));
                     else
-                        obj = widgets.get((String)tabOrder.get(((ScreenWidget)obj).getWidget()));
+                        obj = widgets.get(tabOrder.get(obj.getWidget()));
                 }
             }
             if(event != null){
@@ -332,7 +300,7 @@ public class ScreenBase extends Composite implements FocusListener{
      * @param on
      * @param to
      */
-    public void addTab(Widget on, String[] to) {
+    public void addTab(ScreenWidget on, String[] to) {
         tabOrder.put(on, to[0]);
         if (to.length > 1)
             tabBack.put(on, to[1]);
@@ -341,11 +309,9 @@ public class ScreenBase extends Composite implements FocusListener{
     protected void onDetach() {
         // TODO Auto-generated method stub
         if(!keep){
-            Iterator wids = widgets.values().iterator();
-            while (wids.hasNext()) {
-                Widget wid = (Widget)wids.next();
+            for(ScreenWidget wid : widgets.values()) {
                 if(wid instanceof ScreenWidget)
-                    ((ScreenWidget)wid).destroy();
+                    wid.destroy();
             }
             widgets.clear();
             widgets = null;

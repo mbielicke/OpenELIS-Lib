@@ -111,15 +111,15 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                     table.setColAlign(alignments);
                 }
                 NodeList editors = editorsNode.getChildNodes();
-                ArrayList list = new ArrayList();
+                ArrayList<TableCellWidget> list = new ArrayList<TableCellWidget>();
                 for (int i = 0; i < editors.getLength(); i++) {
                     if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         list.add(ScreenBase.createCellWidget(editors.item(i), screen));
                     }
                 }
                 TableCellWidget[] cells = new TableCellWidget[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                    cells[i] = (TableCellWidget)list.get(i);
+                for(TableCellWidget wid : list){
+                    cells[list.indexOf(wid)] = wid;
                 }
                 table.setEditors(cells);
                 fields = fieldsNode.getFirstChild().getNodeValue().split(",");
@@ -134,9 +134,6 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 table.reset();
                 table.enabled(true);
                     
-            //} catch (Exception e) {
-            //    Window.alert("create Table from node" +e.getMessage());
-           // }
             ((AppScreen)screen).addKeyboardListener(table);
             ((AppScreen)screen).addClickListener(table);
             initWidget(table);

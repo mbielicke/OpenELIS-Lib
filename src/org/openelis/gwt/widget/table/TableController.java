@@ -51,8 +51,8 @@ public abstract class TableController extends Composite implements
     public boolean[] sortable;
     public boolean[] filterable;
     public boolean[] colFixed;
-    protected ArrayList statFilters = new ArrayList();
-    protected ArrayList filters = new ArrayList();
+    protected ArrayList<Filter[]> statFilters = new ArrayList<Filter[]>();
+    protected ArrayList<Filter[]> filters = new ArrayList<Filter[]>();
     public HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
     protected boolean resizing;
     protected int startx;
@@ -127,7 +127,7 @@ public abstract class TableController extends Composite implements
      * 
      * @param filters
      */
-    public void setStatFilterable(ArrayList filters) {
+    public void setStatFilterable(ArrayList<Filter[]> filters) {
         this.statFilters = filters;
     }
 

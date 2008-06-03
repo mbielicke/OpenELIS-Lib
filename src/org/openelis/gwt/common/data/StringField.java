@@ -95,7 +95,7 @@ public class StringField extends AbstractField implements Serializable {
         this.max = (Integer)max;
     }
 
-    public Object getInstance() {
+    public StringField getInstance() {
         StringField obj = new StringField();
         obj.setMax(max);
         obj.setMin(min);
@@ -104,7 +104,7 @@ public class StringField extends AbstractField implements Serializable {
         return obj;
     }
 
-    public Object getInstance(Node node) {
+    public StringField getInstance(Node node) {
         return new StringField(node);
     }
 }

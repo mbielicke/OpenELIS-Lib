@@ -57,8 +57,8 @@ public class EditTable extends TableController implements
     public TableCellWidget[] editors;
     public boolean[] sortable;
     public boolean[] filterable;
-    private ArrayList statFilters = new ArrayList();
-    private ArrayList filters = new ArrayList();
+    private ArrayList<Filter[]> statFilters = new ArrayList<Filter[]>();
+    private ArrayList<Filter[]> filters = new ArrayList<Filter[]>();
     public TableCallback callback = new TableCallback();
     public HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
     public TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
@@ -187,7 +187,7 @@ public class EditTable extends TableController implements
      * 
      * @param filters
      */
-    public void setStatFilterable(ArrayList filters) {
+    public void setStatFilterable(ArrayList<Filter[]> filters) {
         this.statFilters = filters;
     }
 
@@ -501,10 +501,10 @@ public class EditTable extends TableController implements
         }   
         if(sender instanceof DataModelWidget){
         	DataModelWidget modelWidget = (DataModelWidget)sender;
-        	if(modelWidget.event == DataModelWidget.SELECTION){
+        	if(modelWidget.action == DataModelWidget.Action.SELECTION){
         		select(modelWidget.getSelectedIndex());
         	}
-        	if(modelWidget.event == DataModelWidget.REFRESH){
+        	if(modelWidget.action == DataModelWidget.Action.REFRESH){
         		manager.setModel(this,modelWidget.getModel());
         	}
         }

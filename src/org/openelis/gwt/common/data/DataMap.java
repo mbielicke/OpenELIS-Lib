@@ -27,7 +27,7 @@ public class DataMap implements DataObject, Serializable{
 
     public void setValue(Object object) {
         // TODO Auto-generated method stub
-        map = (HashMap)object;
+        map = (HashMap<String,DataObject>)object;
     }
 
 }

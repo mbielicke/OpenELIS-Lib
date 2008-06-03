@@ -6,6 +6,7 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DragListenerCollection;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
 import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.dnd.SourcesDragEvents;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -135,7 +136,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
      * The Screen or panel that is displayed by this window.
      */
     public Widget content;
-    private Vector dropMap;
+    private Vector<DropListenerCollection> dropMap;
     private Label message = new Label("Loading...");
     private Label winLabel = new Label(); 
     
@@ -245,7 +246,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         this.content = content;
         body.insert(content, 0);
         if(content instanceof AppScreen){
-        	//((AppScreenForm)content).message =  message;
             ((AppScreen)content).window = this;
         }
     }

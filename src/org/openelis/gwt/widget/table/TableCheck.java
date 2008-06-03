@@ -9,6 +9,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.CheckBox.CheckType;
 
 
 /**
@@ -23,7 +24,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
 	private CheckBox editor;
     private boolean enabled;
     private FocusPanel panel;
-    private int type = CheckBox.TWO_STATE;
+    private CheckType type = CheckType.TWO_STATE;
     private int width;
     public static final String TAG_NAME = "table-check";
    
@@ -62,8 +63,8 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
         this();
         this.screen = screen;
         if(node.getAttributes().getNamedItem("threeState") != null){
-            type = CheckBox.THREE_STATE;
-            editor.setType(CheckBox.THREE_STATE);
+            type = CheckType.THREE_STATE;
+            editor.setType(CheckType.THREE_STATE);
         }
         
     }

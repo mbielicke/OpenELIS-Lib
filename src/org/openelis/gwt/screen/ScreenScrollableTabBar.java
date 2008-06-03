@@ -1,11 +1,10 @@
 package org.openelis.gwt.screen;
 
-import org.openelis.gwt.widget.ScrollableTabBar;
-
-import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
+import org.openelis.gwt.widget.ScrollableTabBar;
 
 public class ScreenScrollableTabBar extends ScreenWidget{
     public static String TAG_NAME = "scrolltabBar";

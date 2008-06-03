@@ -17,6 +17,8 @@ public class CheckBox extends Composite implements ClickListener{
     
     DelegatingKeyboardListenerCollection keyListeners;
     
+    public enum CheckType {TWO_STATE,THREE_STATE};
+    
     public static final String UNCHECKED = "N",
                             CHECKED = "Y",
                             UNKNOWN = null;
@@ -24,13 +26,10 @@ public class CheckBox extends Composite implements ClickListener{
     public static final String UNCHECKED_STYLE = "Unchecked",
                                 CHECKED_STYLE = "Checked",
                                 UNKNOWN_STYLE = "Unknown";
-    
-    public static final int TWO_STATE = 0,
-                            THREE_STATE = 1;
-    
+        
     private String state = UNCHECKED; 
     
-    private int type = TWO_STATE;
+    private CheckType type = CheckType.TWO_STATE;
     
     private HorizontalPanel hp = new HorizontalPanel();
     private final CheckBox check = this;
@@ -52,21 +51,21 @@ public class CheckBox extends Composite implements ClickListener{
         panel.setStyleName(UNCHECKED_STYLE);
     }
     
-    public CheckBox(int type) {
+    public CheckBox(CheckType type) {
         this();
         this.type = type;
-        if(type == THREE_STATE)
+        if(type == CheckType.THREE_STATE)
             setState(UNKNOWN);
     }
     
-    public CheckBox(int type, String text){
+    public CheckBox(CheckType type, String text){
         this(type);
         Label label = new Label(text);
         label.setStyleName("CheckText");
         hp.add(label);
     }
     
-    public CheckBox(int type, Widget widget){
+    public CheckBox(CheckType type, Widget widget){
         this(type);
         hp.add(widget);
     }
@@ -85,15 +84,15 @@ public class CheckBox extends Composite implements ClickListener{
         hp.add(widget);
     }
     
-    public void setType(int type){
+    public void setType(CheckType type){
         this.type = type;
-        if(type == THREE_STATE)
+        if(type == CheckType.THREE_STATE)
             setState(UNKNOWN);
         else
             setState(UNCHECKED);
     }
     
-    public int getType() {
+    public CheckType getType() {
         return type;
     }
     
@@ -107,7 +106,7 @@ public class CheckBox extends Composite implements ClickListener{
             panel.setStyleName(CHECKED_STYLE);
         else if(state == UNCHECKED) 
             panel.setStyleName(UNCHECKED_STYLE);
-        else if(state == UNKNOWN && type == THREE_STATE)
+        else if(state == UNKNOWN && type == CheckType.THREE_STATE)
             panel.setStyleName(UNKNOWN_STYLE);
         else{
             panel.setStyleName(UNCHECKED_STYLE);
@@ -116,7 +115,7 @@ public class CheckBox extends Composite implements ClickListener{
     }
 
     public void onClick(Widget sender) {
-       if(type == TWO_STATE){
+       if(type == CheckType.TWO_STATE){
            if(state == CHECKED)
                setState(UNCHECKED);
            else

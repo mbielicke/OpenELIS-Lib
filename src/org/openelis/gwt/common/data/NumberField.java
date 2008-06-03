@@ -31,9 +31,19 @@ public class NumberField extends AbstractField implements Serializable {
         object = new NumberObject();
     }
     
-    public NumberField(int type) {
+    public NumberField(NumberObject.Type type) {
         object = new NumberObject();
         ((NumberObject)object).type = type;
+    }
+    
+    public NumberField(Integer val){
+        this(NumberObject.Type.INTEGER);
+        setValue(val);
+    }
+    
+    public NumberField(Double val){
+        this(NumberObject.Type.DOUBLE);
+        setValue(val);
     }
     
     public NumberField(Node node){
@@ -44,9 +54,9 @@ public class NumberField extends AbstractField implements Serializable {
                                .getNodeValue());
         if (node.getAttributes().getNamedItem("type") != null){
             if("integer".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
-            	((NumberObject)object).setType(NumberObject.INTEGER);
+            	((NumberObject)object).setType(NumberObject.Type.INTEGER);
             else if("double".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
-            	((NumberObject)object).setType(NumberObject.DOUBLE);
+            	((NumberObject)object).setType(NumberObject.Type.DOUBLE);
         }
         if (node.getAttributes().getNamedItem("required") != null)
             setRequired(new Boolean(node.getAttributes()
@@ -103,12 +113,12 @@ public class NumberField extends AbstractField implements Serializable {
     public String toString() {
         if (((NumberObject)object).value == null)
             return "";
-        if (((NumberObject)object).type == NumberObject.INTEGER)
+        if (((NumberObject)object).type == NumberObject.Type.INTEGER)
             return "" + ((NumberObject)object).value.intValue();
         return ((NumberObject)object).value.toString();
     }
 
-    public void setType(int type) {
+    public void setType(NumberObject.Type type) {
         ((NumberObject)object).type = type;
     }
 
@@ -120,7 +130,7 @@ public class NumberField extends AbstractField implements Serializable {
         this.max = (Double)max;
     }
 
-    public Object getInstance() {
+    public NumberField getInstance() {
         NumberField obj = new NumberField();
         obj.setMax(max);
         obj.setMin(min);
@@ -131,7 +141,7 @@ public class NumberField extends AbstractField implements Serializable {
     }
 
     
-    public Object getInstance(Node node) {
+    public NumberField getInstance(Node node) {
         return new NumberField(node);
     }
     
