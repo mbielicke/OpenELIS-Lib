@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class TableMultiple extends SimplePanel implements TableCellWidget {
     
-    ArrayList cells = new ArrayList();
+    public ArrayList<TableCellWidget> cells = new ArrayList<TableCellWidget>();
     public int active;
     AbstractField field;
     public static final String TAG_NAME = "table-multiple";

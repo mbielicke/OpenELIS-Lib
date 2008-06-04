@@ -1105,35 +1105,14 @@ public class EditTable extends TableController implements
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
             if (selectedCell + 1 >= (rowList[selected]).numColumns()) {
-                int row = selected + 1;
-                int col = 0;
-                if (model.indexOf(rowList[row]) == model.shownRows()){
-                    row = 0;
-                    view.scrollBar.setScrollPosition(0);
-                }
-                while ((editors[col] instanceof TableLabel))
-                    col++;
-                if(row < maxRows - 1){
-                    final int fRow = row;
-                    final int fCol = col;
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
-                            onCellClicked(view.table, fRow, fCol);
-                        }
-                    });
-                }else{
-                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-                    final int fCol = col;
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
-                            onCellClicked(view.table,maxRows -1,fCol);
-                        }
-                    });
-                }
+                tabToNextRow();
             } else {
                 int col = selectedCell + 1;
-                while ((editors[col] instanceof TableLabel))
+                while (col < editors.length && (editors[col] instanceof TableLabel))
                     col++;
+                if(col == editors.length){
+                    tabToNextRow();
+                }
                 final int fCol = col;
                 DeferredCommand.addCommand(new Command() {
                    public void execute() {
@@ -1199,6 +1178,34 @@ public class EditTable extends TableController implements
                     }
                 });
             }
+        }
+    }
+    
+    private void tabToNextRow() {
+        int row = selected + 1;
+        int col = 0;
+        if (model.indexOf(rowList[row]) == model.shownRows()){
+            row = 0;
+            view.scrollBar.setScrollPosition(0);
+        }
+        while ((editors[col] instanceof TableLabel))
+            col++;
+        if(row < maxRows - 1){
+            final int fRow = row;
+            final int fCol = col;
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    onCellClicked(view.table, fRow, fCol);
+                }
+            });
+        }else{
+            view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
+            final int fCol = col;
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    onCellClicked(view.table,maxRows -1,fCol);
+                }
+            });
         }
     }
 

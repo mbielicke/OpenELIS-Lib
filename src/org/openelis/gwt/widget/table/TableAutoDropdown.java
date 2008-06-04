@@ -3,6 +3,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Element;
@@ -17,6 +18,8 @@ import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.widget.AutoCompleteParamsInt;
+
+import java.util.ArrayList;
 
 public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
 
@@ -153,7 +156,11 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 
 	public void saveValue() {
 		//editor.complete();
-        field.setValue(editor.getSelected());
+        if(field instanceof DropDownField)
+            field.setValue(editor.getSelected());
+        else{
+            field.setValue(((DataSet)editor.getSelected().get(0)).getKey().getValue());
+        }
 		editor.closePopup();
         super.saveValue();
 	}
@@ -164,13 +171,17 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			display = new Label();
 			display.setWordWrap(false);
 		}
-		if(((DropDownField)field).getSelections().size() > 0)
-			if(editor.cat == null)
-				display.setText((String)((DataSet)editor.getModel().get(((DataSet)((DropDownField)field).getSelections().get(0)).getKey())).getObject(0).getValue());
-			else
-				display.setText((String)((DataSet)((DropDownField)field).getSelections().get(0)).getObject(0).getValue());
-        else
-            display.setText("");
+        if(field instanceof DropDownField){
+            if(((DropDownField)field).getSelections().size() > 0)
+                if(editor.cat == null)
+                    display.setText((String)((DataSet)editor.getModel().get(((DataSet)((DropDownField)field).getSelections().get(0)).getKey())).getObject(0).getValue());
+                else
+                    display.setText((String)((DataSet)((DropDownField)field).getSelections().get(0)).getObject(0).getValue());
+            else
+                display.setText("");
+        }else{
+            display.setText((String)((DataSet)editor.getModel().get(field.getDataObject())).getObject(0).getValue());
+        }
 		setWidget(display);		
         super.setDisplay();
 	}
@@ -180,15 +191,18 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			editor = new AutoCompleteDropdown();
          //   editor.setWidth(width+"px");
         }
-		editor.setSelected(((DropDownField)field).getSelections());
-
+        if(field instanceof DropDownField)
+            editor.setSelected(((DropDownField)field).getSelections());
+        else{
+            ArrayList selected = new ArrayList();
+            selected.add(field.getDataObject());
+            editor.setSelected(selected);
+        }
 		setWidget(editor);			
 	}
 
 	public void setField(AbstractField field) {
 		this.field = field;
-		if(((DropDownField)field).getSelections().size() > 0)
-            editor.setSelected(((DropDownField)field).getSelections());
     }
 	
 	public int[] getWidths(Node node){
