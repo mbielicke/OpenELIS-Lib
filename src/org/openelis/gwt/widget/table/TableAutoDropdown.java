@@ -11,6 +11,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.StringField;
@@ -171,11 +172,21 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
 			display = new Label();
 			display.setWordWrap(false);
 		}
+        if(field instanceof DropDownField)
+            editor.setSelected(((DropDownField)field).getSelections());
+        else{
+            ArrayList selected = new ArrayList();
+            selected.add(field.getDataObject());
+            editor.setSelected(selected);
+        }
         if(field instanceof DropDownField){
             if(((DropDownField)field).getSelections().size() > 0)
-                if(editor.cat == null)
-                    display.setText((String)((DataSet)editor.getModel().get(((DataSet)((DropDownField)field).getSelections().get(0)).getKey())).getObject(0).getValue());
-                else
+                if(editor.cat == null){
+                    DataObject key = ((DataSet)((DropDownField)field).getSelections().get(0)).getKey();
+                    DataSet selection = (DataSet)editor.getModel().get(key);
+                    String text = (String)selection.getObject(0).getValue();
+                    display.setText(text);
+                }else
                     display.setText((String)((DataSet)((DropDownField)field).getSelections().get(0)).getObject(0).getValue());
             else
                 display.setText("");
