@@ -354,7 +354,7 @@ public class QueryTable extends TableController {
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
             if (selectedCell + 1 >= fields.length) {
                 int col = 0;
-                while ((editors[col] instanceof TableLabel))
+                while (col < editors.length && editors[col] instanceof TableLabel)
                     col++;
                 final int fCol = col;
                 DeferredCommand.addCommand(new Command() {
@@ -364,8 +364,13 @@ public class QueryTable extends TableController {
                 });
             } else {
                 int col = selectedCell + 1;
-                while ((editors[col] instanceof TableLabel))
+                while (col < editors.length && editors[col] instanceof TableLabel)
                     col++;
+                if(col == editors.length){
+                    col = 0;
+                    while (editors[col] instanceof TableLabel)
+                        col++;
+                }
                 final int fCol = col;
                 DeferredCommand.addCommand(new Command() {
                    public void execute() {
@@ -382,11 +387,12 @@ public class QueryTable extends TableController {
                 col = fields.length - 1;
             else
                 col = selectedCell -1;
-             while (col > -1 && (editors[col] instanceof TableLabel))
+             while (col > -1 && editors[col] instanceof TableLabel)
                 col--;
              if(col < 0){
-                selectedCell = 0;
-                onKeyDown(sender,code,modifiers);
+                 col = fields.length - 1;
+                 while (editors[col] instanceof TableLabel)
+                     col--;
              }
              final int fCol = col;
              DeferredCommand.addCommand(new Command() {

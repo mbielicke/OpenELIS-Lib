@@ -564,13 +564,13 @@ public class EditTable extends TableController implements
      * @param col
      */
     public void setCellDisplay(int row, int col) {
-        try{
+        //try{
         	TableCellWidget cell = (TableCellWidget)view.table.getWidget(row, col);
         	cell.setDisplay();
             DOM.setStyleAttribute(cell.getWidget().getElement(), "overflowX", "hidden");
-        }catch(Exception e){
-            Window.alert("setCell Display "+e.getMessage());
-        }
+        //}catch(Exception e){
+        //    Window.alert("setCell Display "+e.getMessage());
+        //}
            
      }
 
