@@ -917,95 +917,6 @@ public class EditTable extends TableController implements
         }
     }
 
-    
-    /*
-     * Catches mouses Events for resizing columns.
-     
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        if(sender instanceof FocusPanel){
-            resizing = true;
-            startx = x;
-            for (int i = 0; i < view.header.getCellCount(0); i++) {
-                if (sender == view.header.getWidget(0, i)) {
-                    resizeColumn = i - 1;
-                    tableCol = resizeColumn / 2;
-                }
-            }
-            FocusPanel bar = new FocusPanel();
-            bar.addMouseListener(this);
-            bar.setHeight((view.table.getOffsetHeight()+17)+"px");
-            bar.setWidth("1px");
-            DOM.setStyleAttribute(bar.getElement(), "background", "red");
-            DOM.setStyleAttribute(bar.getElement(), "position", "absolute");
-            DOM.setStyleAttribute(bar.getElement(),"left",sender.getAbsoluteLeft()+"px");
-            DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
-            RootPanel.get().add(bar);   
-            DOM.setCapture(bar.getElement());
-        }
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     
-    public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     
-    public void onMouseLeave(Widget sender) {
-
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     
-    public void onMouseMove(Widget sender, int x, int y) {
-        if(resizing) {
-            int colA = curColWidth[tableCol] + (x - startx);
-            int colB = curColWidth[(tableCol)+1] - (x - startx);
-            if(colA <= 16 || colB <= 16) 
-                return;
-            curColWidth[tableCol] = colA;
-            curColWidth[(tableCol)+1] = colB;
-            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x-startx))+"px");
-        }
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     
-    public void onMouseUp(Widget sender, int x, int y) {
-        if (resizing) {
-            DOM.releaseCapture(sender.getElement());
-            RootPanel.get().remove(sender);
-            resizing = false;
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    for(int i = 0; i < curColWidth.length; i++){
-                        if( i > 0 && i < curColWidth.length - 1){
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-4)+"px");
-                        }else{
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
-                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-1)+"px");
-                        }   
-                    }
-                    for (int j = 0; j < view.table.getRowCount(); j++) {
-                        for (int i = 0; i < curColWidth.length; i++) {
-                            view.table.getFlexCellFormatter().setWidth(j, i, curColWidth[i] +  "px");
-                            ((TableCellWidget)view.table.getWidget(j,i)).setCellWidth(curColWidth[i]);
-                            ((SimplePanel)view.table.getWidget(j, i)).setWidth((curColWidth[i]) + "px");
-                            //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
-                        }
-                    }
-                }
-            });
-        }
-    }
-  */
     public void addChangeListener(ChangeListener listener) {
         if(changeListeners == null)
             changeListeners = new ChangeListenerCollection(); 
@@ -1108,75 +1019,40 @@ public class EditTable extends TableController implements
                 tabToNextRow();
             } else {
                 int col = selectedCell + 1;
-                while (col < editors.length && (editors[col] instanceof TableLabel))
+                while (col < editors.length && editors[col] instanceof TableLabel)
                     col++;
                 if(col == editors.length){
                     tabToNextRow();
+                }else{
+                    final int fCol = col;
+                    DeferredCommand.addCommand(new Command() {
+                        public void execute() {
+                            onCellClicked(view.table, selected, fCol);
+                            if(((TableCellWidget)view.table.getWidget(selected, fCol)).getWidget() instanceof FocusWidget)
+                                ((FocusWidget)((TableCellWidget)view.table.getWidget(selected, fCol)).getWidget()).setFocus(true);
+                        }
+                    });
                 }
-                final int fCol = col;
-                DeferredCommand.addCommand(new Command() {
-                   public void execute() {
-                       onCellClicked(view.table, selected, fCol);
-                       if(((TableCellWidget)view.table.getWidget(selected, fCol)).getWidget() instanceof FocusWidget)
-                           ((FocusWidget)((TableCellWidget)view.table.getWidget(selected, fCol)).getWidget()).setFocus(true);
-                   }
-                });
                 //((FocusWidget)view.table.getWidget(selected, selectedCell)).setFocus(true);
             }
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && shift) {
             if (selectedCell - 1 < 0) {
-                if(selected == 0) {
-                    if(model.indexOf(rowList[0])== 0){
-                        final int row = maxRows -1;
-                        int col = model.getRow(model.shownRows() -1).numColumns() - 1;
-                        while ((editors[col] instanceof TableLabel))
-                            col--;
-                        final int fCol = col;
-                        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+model.shownRows()*cellHeight);
-                        DeferredCommand.addCommand(new Command() {
-                            public void execute() {
-                                onCellClicked(view.table, row, fCol);
-                            }
-                        });
-                    }else{
-                        int col = model.getRow(model.shownRows() -1).numColumns() - 1;
-                        while ((editors[col] instanceof TableLabel))
-                            col--;
-                        final int fCol = col;
-                        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-                        DeferredCommand.addCommand(new Command() {
-                            public void execute() {
-                                onCellClicked(view.table, 0, fCol);
-                            }
-                        });
-                    }
-                }else{
-                    final int row = selected - 1;
-                    int col = model.getRow(model.shownRows() -1).numColumns() - 1;
-                    while ((editors[col] instanceof TableLabel))
-                        col--;
-                    final int fCol = col;
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
-                            onCellClicked(view.table, row, fCol);
-                        }
-                    });
-                }
+                tabToPrevRow();
             } else {
                 int col = selectedCell - 1;
                 while (col > -1 && (editors[col] instanceof TableLabel))
                     col--;
                 if(col < 0){
-                    selectedCell = 0;
-                    onKeyDown(sender,code,modifiers);
+                    tabToPrevRow();
+                }else{
+                    final int fCol = col;
+                    DeferredCommand.addCommand(new Command() {
+                        public void execute() {
+                            onCellClicked(view.table, selected, fCol);
+                        }
+                    });
                 }
-                final int fCol = col;
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        onCellClicked(view.table, selected, fCol);
-                    }
-                });
             }
         }
     }
@@ -1184,7 +1060,8 @@ public class EditTable extends TableController implements
     private void tabToNextRow() {
         int row = selected + 1;
         int col = 0;
-        if (model.indexOf(rowList[row]) == model.shownRows()){
+       
+        if (row == view.table.getRowCount()) { //model.indexOf(rowList[row]) == model.shownRows()){
             row = 0;
             view.scrollBar.setScrollPosition(0);
         }
@@ -1204,6 +1081,46 @@ public class EditTable extends TableController implements
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     onCellClicked(view.table,maxRows -1,fCol);
+                }
+            });
+        }
+    }
+    
+    private void tabToPrevRow() {
+        if(selected == 0) {
+            if(model.indexOf(rowList[0])== 0){
+                final int row = view.table.getRowCount() -1;
+                int col = model.getRow(model.shownRows() -1).numColumns() - 1;
+                while ((editors[col] instanceof TableLabel))
+                    col--;
+                final int fCol = col;
+                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+model.shownRows()*cellHeight);
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        onCellClicked(view.table, row, fCol);
+                    }
+                });
+            }else{
+                int col = model.getRow(model.shownRows() -1).numColumns() - 1;
+                while ((editors[col] instanceof TableLabel))
+                    col--;
+                final int fCol = col;
+                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        onCellClicked(view.table, 0, fCol);
+                    }
+                });
+            }
+        }else{
+            final int row = selected - 1;
+            int col = model.getRow(model.shownRows() -1).numColumns() - 1;
+            while ((editors[col] instanceof TableLabel))
+                col--;
+            final int fCol = col;
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    onCellClicked(view.table, row, fCol);
                 }
             });
         }

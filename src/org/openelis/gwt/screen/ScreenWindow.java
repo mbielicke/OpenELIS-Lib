@@ -356,29 +356,31 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
 
     public void onMouseDown(Widget sender, final int x, final int y) {
         if(sender == cap){
-            if(browser.index != zIndex){
-                checkZ();
-                return;
-            }
-            final FocusPanel proxy = new FocusPanel();
-            AbsolutePanel ap = new AbsolutePanel();
-            proxy.setWidget(ap);
-            ap.setWidth(outer.getOffsetWidth()+"px");
-            ap.setHeight(outer.getOffsetHeight()+"px");
-            ap.addStyleName("WindowDragPanel");
-            proxy.addDragListener(this);
-            browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
-        //  WindowBrowser.setIndex(proxy.getElement(),browser.index);
-            dropMap = MouseDragGestureRecognizer.getDropMap();
-            MouseDragGestureRecognizer.setDropMap(new Vector());
-            browser.addStyleName("locked");
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    MouseDragGestureRecognizer.getGestureMouse(proxy)
-                                              .onMouseDown(proxy, x, y);
+            if(browser != null) {
+                if(browser.index != zIndex){
+                    checkZ();
+                    return;
                 }
-            });
-        }   
+                final FocusPanel proxy = new FocusPanel();
+                AbsolutePanel ap = new AbsolutePanel();
+                proxy.setWidget(ap);
+                ap.setWidth(outer.getOffsetWidth()+"px");
+                ap.setHeight(outer.getOffsetHeight()+"px");
+                ap.addStyleName("WindowDragPanel");
+                proxy.addDragListener(this);
+                browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
+        //      WindowBrowser.setIndex(proxy.getElement(),browser.index);
+                dropMap = MouseDragGestureRecognizer.getDropMap();
+                MouseDragGestureRecognizer.setDropMap(new Vector());
+                browser.addStyleName("locked");
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        MouseDragGestureRecognizer.getGestureMouse(proxy)
+                            .onMouseDown(proxy, x, y);
+                    }
+                });
+            }
+        }
     }
 
     public void onMouseEnter(Widget sender) {
