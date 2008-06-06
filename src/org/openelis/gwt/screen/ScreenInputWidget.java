@@ -41,7 +41,6 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public void setQueryWidget(ScreenInputWidget qWid){
         queryWidget = qWid;
-        queryWidget.key = key;
     }
     
     public void setForm(boolean mode){
