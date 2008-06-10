@@ -98,7 +98,7 @@ color:gray;
     border:1px solid #99bbe8;
 }
 .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
-.worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .orderIcon, .inventoryIcon, .instrumentIcon, .testIcon, .methodIcon,
+.worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .orderIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
 .systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon{
     width:16px;
@@ -127,7 +127,7 @@ color:gray;
 .storageIcon{background:url('../Images/storagebuttonimage.gif') no-repeat center;}
 .QCIcon{background:url('../Images/qcbuttonimage.gif') no-repeat center;}
 .orderIcon{background:url('../Images/orderbuttonimage.gif') no-repeat center;}
-.inventoryIcon {background:transparent url(../Images/inventorybuttonimage.gif) no-repeat scroll center;}
+.inventoryItemIcon {background:transparent url(../Images/inventorybuttonimage.gif) no-repeat scroll center;}
 .instrumentIcon {background:transparent url(../Images/instrumentbuttonimage.gif) no-repeat scroll center;}
 .testIcon {background:transparent url(../Images/testbuttonimage.gif) no-repeat scroll center;}
 .methodIcon {background:transparent url(../Images/methodbuttonimage.gif) no-repeat scroll center;}
@@ -1050,14 +1050,19 @@ border:none;
 	text-align:right;
 	vertical-align:top;
 }
-
 .CondensedPrompt {
    -moz-user-select: none;
 	color:gray;
 	text-align:right;
 	vertical-align:top;
 }
-
+.CheckboxPrompt {
+   -moz-user-select: none;
+	color:gray;
+	padding:2px 4px 2px 5px;
+	text-align:right;
+	vertical-align:top;
+}
 /********   End Input  Form ***********/
 fieldSet {
     border:1px solid #99BBE8;
