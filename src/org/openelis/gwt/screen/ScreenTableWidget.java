@@ -55,9 +55,13 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     String appClass = node.getAttributes()
                                           .getNamedItem("manager")
                                           .getNodeValue();
-                    TableManager manager = (TableManager)ClassFactory.forName(appClass);
-                    
-                    table.setManager(manager);
+                   
+                    if("this".equals(appClass))
+                        table.setManager((TableManager)screen);
+                    else{
+                        TableManager manager = (TableManager)ClassFactory.forName(appClass);
+                        table.setManager(manager);
+                    }
                 }
                 Node widthsNode = ((Element)node).getElementsByTagName("widths")
                                                  .item(0);
