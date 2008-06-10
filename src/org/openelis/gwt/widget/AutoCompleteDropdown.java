@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -381,7 +382,26 @@ public class AutoCompleteDropdown extends Composite implements
 
 		} else {
 			visible = false;
-			choicesPopup.hide();
+			
+            focusPanel.addStyleName("Selected");
+            
+            HorizontalPanel hp = new HorizontalPanel();
+            hp.setStyleName("Form");
+            
+            Label text = new Label();
+            text.setStyleName("Prompt");
+            text.setText("No records found");
+            
+            hp.add(text);
+
+            choicesPopup.clear();
+            choicesPopup.addStyleName("AutoCompletePopup");
+            choicesPopup.addPopupListener(this);
+            choicesPopup.setPopupPosition(this.getAbsoluteLeft(), this
+                                          .getAbsoluteTop()
+                                          + this.getOffsetHeight() - 1);
+            choicesPopup.setWidget(hp);
+            choicesPopup.show();
 		}
 	}
 
@@ -642,7 +662,7 @@ public class AutoCompleteDropdown extends Composite implements
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
 				textBox.setFocus(true);
-
+                
 				focusPanel.addStyleName("Selected");
 
 				setCurrentValues();
