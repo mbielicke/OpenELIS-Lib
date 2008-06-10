@@ -123,12 +123,13 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
                 auto.setLinear(true);
         }
         
+        if(headersNode != null) {
+            auto.setHeaders(getHeaders(headersNode));
+        }
         if(widthsNode != null) {
         	auto.setWidths(getWidths(widthsNode));
         }
-        if(headersNode != null) {
-        	auto.setHeaders(getHeaders(headersNode));
-        }
+        
         if (node.getAttributes().getNamedItem("onchange") != null){
             String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
