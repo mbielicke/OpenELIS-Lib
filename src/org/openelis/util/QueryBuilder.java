@@ -429,11 +429,6 @@ public class QueryBuilder {
     	whereOperands.add(whereStatement);
     }
     
-    public String[] getWhere(){
-    	return null;
-    	//TODO do this
-    }
-    
     /**
      * Sets the values of the parameters in the query and then returns it.
      * @param query
@@ -481,41 +476,16 @@ public class QueryBuilder {
      */
     public String getEJBQL(){
     	StringBuffer query = new StringBuffer();
-    	query.append("SELECT ").append(selectStatement).append(" FROM ");
+    	query.append(getSelectClause());
     	
     	//from tables
-    	int fromTablesCount = 0;
-
-        for (int i = 0; i < orderedFromTableKeys.size(); i++) {
-        	String tableName = (String)orderedFromTableKeys.get(i);
-    		Meta addTableMeta = fromTables.get(tableName); 
-    		
-    		if(addTableMeta.includeInFrom()){
-	    		
-    			//we use left join on all the tables so we dont care about null values.
-    			//This will also let us use a collection in the query without the IN keyword
-    			if(fromTablesCount>0)
-	    			query.append(" LEFT JOIN ").append(addTableMeta.getEntity()).append(' ').append(addTableMeta.getTable());
-	    		else
-	    			query.append(' ').append(addTableMeta.getEntity()).append(' ').append(addTableMeta.getTable());
-	    		
-	    		fromTablesCount++;
-    		}
-    	}
+        query.append(getFromClause());
         
         //where clause
-        if(whereOperands.size() > 0){
-        	query.append(" WHERE ");
-        	for(int j=0; j < whereOperands.size(); j++)
-        		if(j>0)
-        			query.append(" and (").append(whereOperands.get(j)).append(") ");
-        		else
-        			query.append("(").append(whereOperands.get(j)).append(") ");
-        }
+        query.append(getWhereClause());
         
         //order by
-        if(!"".equals(orderByStatement))
-        	query.append(" ORDER BY ").append(orderByStatement);
+        query.append(getOrderBy());
         
     	return query.toString();
     }
@@ -525,7 +495,50 @@ public class QueryBuilder {
     }
     
     public String getOrderBy(){
-    	return orderByStatement;
+        if(!"".equals(orderByStatement))
+            return " ORDER BY "+orderByStatement;
+        else 
+            return "";
+    }
+    
+    public String getWhereClause(){
+        String returnString = "";
+        if(whereOperands.size() > 0){
+            returnString = " WHERE ";
+            for(int j=0; j < whereOperands.size(); j++)
+                if(j>0)
+                    returnString += " and ("+whereOperands.get(j)+") ";
+                else
+                    returnString += "("+whereOperands.get(j)+") ";
+        }
+        return returnString;
+    }
+    
+    public String getFromClause(){
+        String returnString = "";
+        int fromTablesCount = 0;
+
+        for (int i = 0; i < orderedFromTableKeys.size(); i++) {
+            String tableName = (String)orderedFromTableKeys.get(i);
+            Meta addTableMeta = fromTables.get(tableName); 
+            
+            if(addTableMeta.includeInFrom()){
+                
+                //we use left join on all the tables so we dont care about null values.
+                //This will also let us use a collection in the query without the IN keyword
+                if(fromTablesCount>0)
+                    returnString += " LEFT JOIN "+addTableMeta.getEntity()+' '+addTableMeta.getTable();
+                else
+                    returnString +=' '+addTableMeta.getEntity()+' '+addTableMeta.getTable();
+                
+                fromTablesCount++;
+            }
+        }
+        return returnString;
+    }
+    
+    public String getSelectClause(){
+        return "SELECT "+selectStatement+" FROM ";
     }
 
     /**
