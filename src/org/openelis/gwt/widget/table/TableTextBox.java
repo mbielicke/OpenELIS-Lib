@@ -21,7 +21,7 @@ public class TableTextBox extends TableCellInputWidget {
     
     public String fieldCase = "";
     private int length = -1;
-    private TextBox editor;
+    public TextBox editor;
     private Label display;
     private boolean enabled;
     private int width;
