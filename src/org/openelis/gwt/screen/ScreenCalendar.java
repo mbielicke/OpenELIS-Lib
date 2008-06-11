@@ -70,6 +70,7 @@ public class ScreenCalendar extends ScreenInputWidget {
                 }
             }
         };
+        cal.init();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             cal.setShortcutKey(node.getAttributes()
                                    .getNamedItem("shortcut")

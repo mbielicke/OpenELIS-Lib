@@ -660,8 +660,9 @@ public class EditTable extends TableController implements
     
     public void scrollLoad(int scrollPos){
       
-        	//if(selected > -1)
-        	//	switchSelectedRow();
+        	if(selected > -1)
+                unselect(selected);
+        		//switchSelectedRow();
         	int rowsPer = maxRows;
         	if(maxRows > model.shownRows()){
         		rowsPer = model.shownRows();

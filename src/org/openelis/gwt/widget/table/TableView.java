@@ -50,6 +50,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             // TODO Auto-generated method stub
             if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
                 listeners.fireMouseWheelEvent(this, event);
+                DOM.eventCancelBubble(event, true);
+                DOM.eventPreventDefault(event);
             }
             super.onBrowserEvent(event);
         }

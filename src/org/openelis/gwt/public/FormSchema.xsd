@@ -15,7 +15,7 @@
   <xsd:element name="screen">
     <xsd:annotation>
       <xsd:documentation>
-        form is the root element for all documents.
+        screen is the root element for all documents.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>

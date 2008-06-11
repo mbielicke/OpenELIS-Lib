@@ -3,11 +3,14 @@ package org.openelis.util;
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DateField;
+import org.openelis.gwt.common.data.DropDownField;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -177,18 +180,31 @@ public class ReportUtil {
     }
 
     public String encodeURLParameters(FormRPC rpc, String user) {
-        String       value;
+        String       value ="";
         StringBuffer buffer = new StringBuffer(256);
 
         buffer.append("?LOGNAME="+user);
         Iterator keyIt = rpc.getFieldMap().keySet().iterator();
         while(keyIt.hasNext()) {
+            value = "";
             String key = (String)keyIt.next();
             AbstractField field = rpc.getField(key);
             if (field.getValue() != null) {
                 if(field instanceof DateField)
                     value = DBDatetime.getInstance(DBDatetime.YEAR, DBDatetime.DAY, ((DatetimeRPC)field.getValue()).getDate()).toString();
-                else
+                else if(field instanceof DropDownField){
+                    if(field.getValue() instanceof ArrayList){
+                        ArrayList<DataSet> list = (ArrayList<DataSet>)field.getValue();
+                        for(DataSet set : list){
+                            if(list.indexOf(set) > 0)
+                                value += ",";
+                            value += (String)set.getKey().getValue();
+                        }
+                    }else{
+                       value = field.getValue().toString();   
+                    }
+                    System.out.println("ArrayMulti selection = "+value);
+                }else
                     value = field.getValue().toString();
                 buffer.append("&")
                       .append(key)

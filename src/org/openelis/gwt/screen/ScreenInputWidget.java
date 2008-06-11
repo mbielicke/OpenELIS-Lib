@@ -41,6 +41,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public void setQueryWidget(ScreenInputWidget qWid){
         queryWidget = qWid;
+        queryWidget.key = key;
     }
     
     public void setForm(boolean mode){
@@ -103,6 +104,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             drawError();
         else{
             errorImg.setStyleName("ErrorPanelHidden");
+            if(pop != null){
+                pop.hide();
+            }
         }
         if(sender instanceof TextBoxBase){
             ((TextBoxBase)sender).setSelectionRange(0, 0);
@@ -112,6 +116,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void clearError() {
         if(!showError)
             return;
+        if(pop != null){
+            pop.hide();
+        }
     	errorImg.setStyleName("ErrorPanelHidden");
         errorPanel.clear();
     }

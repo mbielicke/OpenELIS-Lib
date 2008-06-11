@@ -1,26 +1,6 @@
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.openelis.gwt.common.FormErrorException;
-import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.services.AutoCompleteServiceInt;
-import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
-import org.openelis.gwt.widget.table.TableAutoDropdown;
-import org.openelis.gwt.widget.table.TableCellWidget;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -41,6 +21,24 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.common.FormErrorException;
+import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.NumberObject;
+import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.services.AutoCompleteServiceInt;
+import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
+import org.openelis.gwt.widget.table.TableAutoDropdown;
+import org.openelis.gwt.widget.table.TableCellWidget;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AutoCompleteDropdown extends Composite implements
 		KeyboardListener, ChangeListener, ClickListener, MouseListener,
@@ -536,6 +534,10 @@ public class AutoCompleteDropdown extends Composite implements
             if (index > -1 && index < model.size()) {
                 tempStartPos = index;
                 this.startPos = index;
+            }else{
+                textBox.setText("");
+                tempStartPos = 0;
+                return;
             }
 		}
 		clickedArrow = false;
@@ -662,7 +664,7 @@ public class AutoCompleteDropdown extends Composite implements
 				textBox.addStyleName("TextboxSelected");
 				textBox.removeStyleName("TextboxUnselected");
 				textBox.setFocus(true);
-                
+
 				focusPanel.addStyleName("Selected");
 
 				setCurrentValues();
@@ -807,6 +809,8 @@ public class AutoCompleteDropdown extends Composite implements
 	}
 
 	private int getIndexByTextValue(String textValue) {
+        if(textValue.equals(""))
+            return -1;
 		DataModel model = scrollList.getDataModel();
 		int low = 0;
 		int high = model.size() - 1;

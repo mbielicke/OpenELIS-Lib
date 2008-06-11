@@ -1,8 +1,7 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -20,7 +19,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DatetimeRPC;
-import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWidget;
 
 import java.util.Date;
@@ -58,6 +56,9 @@ public class FormCalendarWidget extends Composite implements
         this.begin = begin;
         this.end = end;
         this.week = week;
+    }
+    
+    public void init() {
         textbox.addKeyboardListener(this);
         textbox.addFocusListener(this);
         textbox.setStyleName("TextboxUnselected");
@@ -89,10 +90,10 @@ public class FormCalendarWidget extends Composite implements
                                         .format(date.getDate());
             String to = DateTimeFormat.getFormat("EEEE MMM d, yyyy")
                                       .format(endDate.getDate());
-            textbox.setText(from + " - " + to);
+            setText(from + " - " + to);
             weekDate = date.getDate();
         } else
-            textbox.setText(date.toString());
+            setText(date.toString());
     }
 
     public String getText() {
