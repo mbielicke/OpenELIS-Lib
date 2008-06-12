@@ -218,7 +218,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
                 ft.setWidget(1,0,cellView);
                 ft.getFlexCellFormatter().setRowSpan(0, 1, 2);
                 ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
-                ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_BOTTOM);
+                //ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_BOTTOM);
             }else{
                 ft.setWidget(0,0,cellView);
                 ft.setWidget(0, 1, scrollBar);
