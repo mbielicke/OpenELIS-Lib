@@ -14,7 +14,7 @@ public class ScreenDisclosure extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-	public static String TAG_NAME = "panel-disclosure";
+	public static String TAG_NAME = "DisclosurePanel";
 	/**
 	 * Widget that is wrapped by this class
 	 */

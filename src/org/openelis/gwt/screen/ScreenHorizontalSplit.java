@@ -19,7 +19,7 @@ public class ScreenHorizontalSplit extends ScreenWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
-	public static String TAG_NAME = "panel-hsplit";
+	public static String TAG_NAME = "HorizontalSplitPanel";
 	/**
 	 * Widget wrapped by this class
 	 */

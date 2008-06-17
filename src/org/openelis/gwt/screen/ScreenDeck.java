@@ -14,7 +14,7 @@ public class ScreenDeck extends ScreenWidget {
 	/**
 	 * Default XML Tag Name in XML Definition and WidgetMap
 	 */
-	public static String TAG_NAME = "panel-deck";
+	public static String TAG_NAME = "DeckPanel";
 	/**
 	 * Widget that is wrapped by this class
 	 */

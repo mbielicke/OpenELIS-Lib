@@ -17,7 +17,7 @@ public class ScreenTab extends ScreenWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
-	public static String TAG_NAME = "panel-tab";
+	public static String TAG_NAME = "TabPanel";
 	/**
 	 * Widget wrapped by this class
 	 */

@@ -16,7 +16,7 @@ public class ScreenAbsolute extends ScreenWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
-	public static String TAG_NAME = "panel-absolute";
+	public static String TAG_NAME = "AbsolutePanel";
 	/** 
 	 * Widget wrapped by this class
 	 */

@@ -16,7 +16,7 @@ public class ScreenTablePanel extends ScreenWidget {
 	/**
 	 * Reference String for Widget Map
 	 */
-	public static String TAG_NAME = "panel-table";
+	public static String TAG_NAME = "TablePanel";
 	/**
 	 * Widget wrapped by this class
 	 */

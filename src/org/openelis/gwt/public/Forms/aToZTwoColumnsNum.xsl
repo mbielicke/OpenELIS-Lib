@@ -1,9 +1,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
 <xsl:import href="button.xsl"/>
 	<xsl:template name="aToZLeftPanelButtons">
-	<panel layout="horizontal" xsi:type="Panel" spacing="0" padding="0" style="AtoZ">
-		<panel layout="vertical" xsi:type="Panel" spacing="0">
-		<xsl:call-template name="aToZButton">
+	<HorizontalPanel spacing="0" padding="0" style="AtoZ">
+      <VerticalPanel spacing="0">
+      	<xsl:call-template name="aToZButton">
 			<xsl:with-param name="buttonsParam">#</xsl:with-param>
 		</xsl:call-template>
 		<xsl:call-template name="aToZButton">
@@ -45,8 +45,8 @@
 		<xsl:call-template name="aToZButton">
 			<xsl:with-param name="buttonsParam">M</xsl:with-param>
 		</xsl:call-template>
-          </panel>
-          <panel layout="vertical" xsi:type="Panel" spacing="0">
+      </VerticalPanel>
+      <VerticalPanel spacing="0">
          <xsl:call-template name="aToZButton">
 			<xsl:with-param name="buttonsParam">N</xsl:with-param>
 		</xsl:call-template>
@@ -86,7 +86,7 @@
 		<xsl:call-template name="aToZButton">
 			<xsl:with-param name="buttonsParam">Z</xsl:with-param>
 		</xsl:call-template>
-          </panel>
-          </panel>
+      </VerticalPanel>
+     </HorizontalPanel>
 	</xsl:template>
 </xsl:stylesheet>

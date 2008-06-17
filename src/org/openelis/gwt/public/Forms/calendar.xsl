@@ -25,59 +25,43 @@
 
   <screen id="Calendar" name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
-    <panel layout="vertical" width="100%" style="CalendarWidget">
-      <panel layout="horizontal" style="MonthBar">
+    <VerticalPanel width="100%" style="CalendarWidget">
+      <HorizontalPanel layout="horizontal" style="MonthBar">
         <appButton action="prevMonth" key="prevMonth" onclick="this">
-          <panel layout="absolute" style="PreviousMonth"/>
+          <AbsolutePanel style="PreviousMonth"/>
         </appButton>
-        <widget>
-          <text style="MonthDisplay"><xsl:value-of select="$monthDisplay"/></text>
-        </widget>
+        <text style="MonthDisplay"><xsl:value-of select="$monthDisplay"/></text>
         <appButton action="monthSelect" key="monthSelect" onclick="this">
-		  <panel layout="absolute" style="MonthSelect"/>
+		  <AbsolutePanel style="MonthSelect"/>
         </appButton>
         <appButton action="nextMonth" key="nextMonth" onclick="this">
-		  <panel layout="absolute" style="NextMonth"/>
+		  <AbsolutePanel style="NextMonth"/>
         </appButton>
-      </panel>
-      <panel layout="vertical" width="100%">
-        <panel layout="table" style="Calendar" width="100%" spacing="0" padding="0">
+      </HorizontalPanel>
+      <VerticalPanel width="100%">
+        <TablePanel style="Calendar" width="100%" spacing="0" padding="0">
           <row style="DayBar">
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">S</text>
-              </widget>
-            </panel>
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">M</text>
-              </widget>
-            </panel>
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">T</text>
-              </widget>
-            </panel>
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">W</text>
-              </widget>
-            </panel>
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">T</text>
-              </widget>
-            </panel>
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">F</text>
-              </widget>
-            </panel>
-            <panel layout="absolute" style="DayCell">
-              <widget>
-                 <text style="DayText">S</text>
-              </widget>
-            </panel>
+            <AbsolutePanel style="DayCell">
+               <text style="DayText">S</text>
+            </AbsolutePanel>
+            <AbsolutePanel style="DayCell">
+              <text style="DayText">M</text>
+            </AbsolutePanel>
+            <AbsolutePanel style="DayCell">
+              <text style="DayText">T</text>
+            </AbsolutePanel>
+            <AbsolutePanel style="DayCell">
+              <text style="DayText">W</text>
+            </AbsolutePanel>
+            <AbsolutePanel style="DayCell">
+              <text style="DayText">T</text>
+            </AbsolutePanel>
+            <AbsolutePanel style="DayCell">
+              <text style="DayText">F</text>
+            </AbsolutePanel>
+            <AbsolutePanel style="DayCell">
+              <text style="DayText">S</text>
+            </AbsolutePanel>
           </row>
           <row>
 		    <xsl:call-template name="DateCell">
@@ -217,16 +201,14 @@
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
 		    </xsl:call-template>
          </row>
-      </panel>
-   </panel>
-   <panel layout="absolute" style="TodayBar" width="100%" halign="center">
+      </TablePanel>
+   </VerticalPanel>
+   <AbsolutePanel style="TodayBar" width="100%" halign="center">
      <appButton action="today" key="today">
-       <widget>
-         <text value="{calUtils:getCurrentDateString()}" onPanelClick="this">Today</text>
-       </widget>
+       <text value="{calUtils:getCurrentDateString()}" onPanelClick="this">Today</text>
      </appButton>
-   </panel>
-   </panel>
+   </AbsolutePanel>
+   </VerticalPanel>
    </display>
    <rpc key="display">
      <number key="month" type="integer" required="false"><xsl:value-of select="$month"/></number>
@@ -238,7 +220,7 @@
  
      <xsl:template name="DateCell">
  <xsl:param name="date" />
-            <panel layout="absolute" style="DateCell" hover="Hover" onPanelClick="this" value="{calUtils:getDateString($calendar)}">
+            <AbsolutePanel style="DateCell" hover="Hover" onPanelClick="this" value="{calUtils:getDateString($calendar)}">
               <widget>
                 <text>
                   <xsl:choose>
@@ -255,7 +237,7 @@
                   <xsl:value-of select="$date"/>
                 </text>
               </widget>
-           </panel>
+           </AbsolutePanel>
   </xsl:template>
 
  

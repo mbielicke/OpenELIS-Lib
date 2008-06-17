@@ -10,7 +10,7 @@ import org.openelis.gwt.widget.CollapsePanel;
 public class ScreenCollapsePanel extends ScreenWidget {
     
    protected CollapsePanel panel;
-   public static final String TAG_NAME = "panel-collapse";
+   public static final String TAG_NAME = "CollapsePanel";
    
    public ScreenCollapsePanel() {
        

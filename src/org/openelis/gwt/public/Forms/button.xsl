@@ -21,115 +21,97 @@ version="1.0">
 <!-- query button template -->
 <xsl:template name="queryButton">
 	<appButton action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="q">	
-		<panel xsi:type="Panel" layout="horizontal">
-		<panel xsi:type="Absolute" layout="absolute" style="QueryButtonImage"/>
-	     	<widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"query")'/></text>
-			</widget>
-		</panel>
+		<HorizontalPanel>
+		  <AbsolutePanel style="QueryButtonImage"/>
+          <text><xsl:value-of select='resource:getString($constants,"query")'/></text>
+		</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
 	<appButton action="prev" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="PreviousButtonImage"/>
-	        <widget>
-	           	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
-	        </widget>
-	 	</panel>
+		<HorizontalPanel>
+	    	<AbsolutePanel style="PreviousButtonImage"/>
+           	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
+	 	</HorizontalPanel>
 	</appButton>	
 </xsl:template>
 
 <!-- next button template -->
 <xsl:template name="nextButton">
 	<appButton action="next" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
-		 <panel xsi:type="Panel" layout="horizontal">
-	  		<panel xsi:type="Absolute" layout="absolute" style="NextButtonImage"/>
-	     	<widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
-	     	</widget>
-	 	</panel>
+		 <HorizontalPanel>
+	  		<AbsolutePanel style="NextButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
+	 	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- update button template -->
 <xsl:template name="updateButton">
 	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="UpdateButtonImage"/>
-	        <widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>
-	       	</widget>
-	 	</panel>
+		<HorizontalPanel>
+	    	<AbsolutePanel style="UpdateButtonImage"/>
+         	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>
+	 	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- add button template -->
 <xsl:template name="addButton">
 	<appButton action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add" shortcut="a">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="AddButtonImage"/>
-	        <widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
-	        </widget>
-	 	</panel>
+		<HorizontalPanel>
+	    	<AbsolutePanel style="AddButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
+	 	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- delete button template -->
 <xsl:template name="deleteButton">
 	<appButton action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete" shortcut="d">
-		<panel xsi:type="Panel" layout="horizontal">
-	     	<panel xsi:type="Absolute" layout="absolute" style="DeleteButtonImage"/>
-	        <widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"delete")'/></text>
-	      	</widget>
-	 	</panel>
+		<HorizontalPanel>
+	     	<AbsolutePanel style="DeleteButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"delete")'/></text>
+	 	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
-<appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="c">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
-	        <widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
-	      	</widget>
-	  	</panel>
+    <appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="c">
+		<HorizontalPanel>
+	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
+	  	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
 	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="x">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="AbortButtonImage"/>
-	    	<widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
-	      	</widget>
-	  	</panel>
+		<HorizontalPanel>
+	    	<AbsolutePanel style="AbortButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
+	  	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- options button template -->
 <xsl:template name="optionsButton">
 	<menuPanel key="optionsMenu" layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
-		    <menuItem>
-		        <menuDisplay>
-			    	  <appButton action="" style="ButtonPanelButton">
-		<panel xsi:type="Panel" layout="horizontal">
-			<widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"options")'/></text>
-	      	</widget>
-	    	<panel xsi:type="Absolute" layout="absolute" style="OptionsButtonImage"/>
-	  	</panel>
-	</appButton>
-				</menuDisplay>
-				  <menuPanel style="topMenuContainer" layout="vertical" xsi:type="Panel" position="below">
-				    <xsl:call-template name="menuItem">
+	    <menuItem>
+	        <menuDisplay>
+		    	<appButton action="" style="ButtonPanelButton">
+					<HorizontalPanel>
+		        		<text><xsl:value-of select='resource:getString($constants,"options")'/></text>
+			    		<AbsolutePanel style="OptionsButtonImage"/>
+				  	</HorizontalPanel>
+				</appButton>
+			</menuDisplay>
+			<menuPanel style="topMenuContainer" position="below">
+			    <xsl:call-template name="menuItem">
 				    <xsl:with-param name="key">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="label">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="enabled">true</xsl:with-param>
@@ -144,43 +126,35 @@ version="1.0">
 <!-- popup select button template -->
 <xsl:template name="popupSelectButton">
 <appButton action="commit" style="Button" enabledStates="default" lockedStates="">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
-	        <widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
-	      	</widget>
-	  	</panel>
+		<HorizontalPanel>
+	    	<AbsolutePanel style="CommitButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
+	  	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- popup cancel button template -->
 <xsl:template name="popupCancelButton">
 	<appButton action="abort" style="Button" enabledStates="default" lockedStates="">
-		<panel xsi:type="Panel" layout="horizontal">
-	    	<panel xsi:type="Absolute" layout="absolute" style="AbortButtonImage"/>
-	    	<widget>
-	        	<text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>
-	      	</widget>
-	  	</panel>
+		<HorizontalPanel>
+	    	<AbsolutePanel style="AbortButtonImage"/>
+	        <text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>
+	  	</HorizontalPanel>
 	</appButton>
 </xsl:template>
 
 <!-- buttonpanel divider template -->
 <xsl:template name="buttonPanelDivider">
-	<panel xsi:type="Absolute" layout="absolute" style="ButtonDivider"/>
+	<AbsolutePanel style="ButtonDivider"/>
 </xsl:template>
 
 <!-- A to Z buttons template -->
 <xsl:template name="aToZButton">
 <xsl:param name="keyParam" />
 <xsl:param name="queryParam" />
- <widget>
 	<appButton key="{string($keyParam)}" action="query:{string($queryParam)}" toggle="true" alwaysEnabled="true" style="smallButton">
-    	<widget>
-        	<text><xsl:value-of select="string($keyParam)"/></text>
-     	</widget>
+       	<text><xsl:value-of select="string($keyParam)"/></text>
  	</appButton>
-</widget>
 </xsl:template>
 
 <!-- Menu item template -->

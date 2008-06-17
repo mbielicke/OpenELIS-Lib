@@ -15,7 +15,7 @@ public class ScreenDock extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-	public static String TAG_NAME = "panel-dock";
+	public static String TAG_NAME = "DockPanel";
 	/**
 	 * Widget that is wrapped by this class
 	 */

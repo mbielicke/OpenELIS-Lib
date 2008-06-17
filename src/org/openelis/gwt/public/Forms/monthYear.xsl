@@ -22,9 +22,9 @@
 
   <screen id="Organization" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
-	  <panel layout="vertical" width="100%" style="CalendarWidget">
-	    <panel layout="horizontal" style="Calendar" width="100%">
-	      <panel layout="table" spacing="0" padding="0" width="100%">
+	  <VerticalPanel width="100%" style="CalendarWidget">
+	    <HorizontalPanel style="Calendar" width="100%">
+	      <TablePanel spacing="0" padding="0" width="100%">
 	        <row>
 		      <xsl:call-template name="MYCell">
 		    	  <xsl:with-param name="text">0</xsl:with-param>
@@ -85,14 +85,14 @@
 		    	<xsl:with-param name="type">month</xsl:with-param>
 		    </xsl:call-template>
 	      </row>	          
-	    </panel>
-	    <panel layout="table" spacing="0" padding="0" width="100%">
+	    </TablePanel>
+	    <TablePanel spacing="0" padding="0" width="100%">
 	      <row>
 	        <widget>
-    	        <panel layout="absolute" key="prevDecade" onPanelClick="this" style="prevNavIndex"/>
+    	        <AbsolutePanel key="prevDecade" onPanelClick="this" style="prevNavIndex"/>
     	    </widget>
     	    <widget>
-		        <panel layout="absolute" key="nextDecade" onPanelClick="this" style="nextNavIndex"/>
+		        <AbsolutePanel key="nextDecade" onPanelClick="this" style="nextNavIndex"/>
 		    </widget>
 	      </row>	      
 	      <row>
@@ -145,27 +145,19 @@
 		    	<xsl:with-param name="type">year</xsl:with-param>
 		    </xsl:call-template>
 	      </row>		                         
-	    </panel>
-	    </panel>
-	    <panel layout="absolute" style="SelectBar" halign="center">
-	    <panel layout="horizontal" >
-	      <widget>
+	    </TablePanel>
+	    </HorizontalPanel>
+	    <AbsolutePanel layout="absolute" style="SelectBar" halign="center">
+	    <HorizontalPanel layout="horizontal" >
 	        <appButton action="ok" key="ok" onclick="this">
-	          <widget>
 	            <text>OK</text>
-	          </widget>
 	        </appButton>
-	      </widget>
-	      <widget>
             <appButton action="cancel" key="cancel" onclick="this" align="left">
-	          <widget >
 	            <text>CANCEL</text>
-	          </widget>
             </appButton>
-          </widget>
-	    </panel>
-	   </panel>
-	  </panel>
+	    </HorizontalPanel>
+	   </AbsolutePanel>
+	  </VerticalPanel>
 	</display>
    <rpc key="display">
      <number key="month" type="integer" required="false"><xsl:value-of select="$month"/></number>
@@ -178,9 +170,7 @@
   <xsl:template name="MYCell">
    <xsl:param name="text"/>
    <xsl:param name="type"/>
-          <widget>
-            <panel key="{$type}:{$text}" layout="absolute" hover="Hover" style="MYCell">
-              <widget>
+            <AbsolutePanel key="{$type}:{$text}" hover="Hover" style="MYCell">
                 <label key="{$type}:{$text}Text" onClick="this" wordwrap="true" value="{$type},{$text}">
                   <xsl:choose>
                     <xsl:when test="$type = 'month' and string($month) = string($text)">
@@ -199,9 +189,7 @@
 	                </xsl:otherwise>
 	              </xsl:choose>
                 </label>
-              </widget>
-           </panel>
-         </widget>
+           </AbsolutePanel>
   </xsl:template>
   
 </xsl:stylesheet>

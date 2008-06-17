@@ -20,7 +20,7 @@ public class ScreenHorizontal extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-	public static String TAG_NAME = "panel-horizontal";
+	public static String TAG_NAME = "HorizontalPanel";
 	/**
 	 * Widget wrapped by this class
 	 */
