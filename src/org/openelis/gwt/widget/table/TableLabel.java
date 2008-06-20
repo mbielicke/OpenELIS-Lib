@@ -58,6 +58,8 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 		Object val = field.getValue();
         if (val instanceof Integer)
             editor.setText(((Integer)val).toString());
+        else if (val instanceof Double)
+            editor.setText(((Double)val).toString());
         else if (val == null)
             editor.setText(" ");
         else
