@@ -373,7 +373,7 @@ public class AutoCompleteDropdown extends Composite implements
 				}
 			}
 			
-        if(scrollList.getSelected().size() == 0)
+        if(scrollList.getSelected().size() == 0 && cat!=null)
         	scrollList.setActive(0);
 			
         visible = true;
