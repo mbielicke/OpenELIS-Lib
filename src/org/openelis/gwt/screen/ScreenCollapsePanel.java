@@ -33,10 +33,15 @@ public class ScreenCollapsePanel extends ScreenWidget {
                }
            }
        }
+       
+       if(node.getAttributes().getNamedItem("height") != null)
+           setHeight(node.getAttributes().getNamedItem("height").getNodeValue());
+       else
+           setHeight("100%");
+       
        initWidget(panel);        
        setDefaults(node, screen);
-       setWidth("auto");
-       setHeight("100%");
+       setWidth("auto");;
    }
    
    public ScreenWidget getInstance(Node node, ScreenBase scree) {
