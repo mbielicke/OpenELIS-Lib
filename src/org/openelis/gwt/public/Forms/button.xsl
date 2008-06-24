@@ -110,7 +110,7 @@ version="1.0">
 				  	</HorizontalPanel>
 				</appButton>
 			</menuDisplay>
-			<menuPanel style="topMenuContainer" position="below">
+			<menuPanel style="topMenuContainer" layout="vertical" position="below">
 			    <xsl:call-template name="menuItem">
 				    <xsl:with-param name="key">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="label">duplicateRecord</xsl:with-param>
