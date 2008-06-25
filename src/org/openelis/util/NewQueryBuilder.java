@@ -1,7 +1,7 @@
 package org.openelis.util;
 
 import org.openelis.gwt.common.MetaMap;
-import org.openelis.gwt.common.NewMeta;
+import org.openelis.gwt.common.Meta;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.CollectionField;
 import org.openelis.gwt.common.data.DataSet;
@@ -26,12 +26,11 @@ import javax.persistence.TemporalType;
 public class NewQueryBuilder {
 	
 	private String selectStatement = "";
-    private HashMap<String, NewMeta> fromTables = new HashMap<String, NewMeta>();
+    private HashMap<String, Meta> fromTables = new HashMap<String, Meta>();
 	private ArrayList orderedFromTableKeys = new ArrayList();
 	private HashMap<String, AbstractField> fieldsFromRPC = new HashMap<String, AbstractField>();
 	private ArrayList whereOperands = new ArrayList();
 	private String orderByStatement = "";
-	private ArrayList metaList = new ArrayList();
     private MetaMap meta;
 	
     
@@ -448,7 +447,7 @@ public class NewQueryBuilder {
      * This method adds a table to the from statement in the query.
      * @param meta
      */
-    public void addTable(NewMeta meta){
+    public void addTable(Meta meta){
     	boolean addTableToOrderedArray = false;
     	addTableToOrderedArray = !fromTables.containsKey(meta.getEntity());
     	
@@ -515,7 +514,7 @@ public class NewQueryBuilder {
 
         for (int i = 0; i < orderedFromTableKeys.size(); i++) {
             String tableName = (String)orderedFromTableKeys.get(i);
-            NewMeta addTableMeta = fromTables.get(tableName); 
+            Meta addTableMeta = fromTables.get(tableName); 
             
             /*if(addTableMeta.includeInFrom()){
                 
@@ -536,23 +535,6 @@ public class NewQueryBuilder {
     
     public String getSelectClause(){
         return "SELECT "+selectStatement+" FROM ";
-    }
-
-    /**
-     * Adds a single meta class to the builder.
-     * @param meta
-     */
-    public void addMeta(Meta meta){
-    	metaList.add(meta);
-    }
-    
-    /**
-     * Adds multple meta classes to the builder from an array.
-     * @param metas
-     */
-    public void addMeta(Meta[] metas){
-    	for(int i=0; i<metas.length; i++)
-    		metaList.add(metas[i]);    	
     }
     
     /**

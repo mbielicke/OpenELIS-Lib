@@ -1,6 +1,6 @@
 package org.openelis.gwt.common;
 
-public interface NewMeta {
+public interface Meta {
 
 	public String[] getColumnList();
 	
