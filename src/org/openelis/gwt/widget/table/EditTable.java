@@ -276,7 +276,9 @@ public class EditTable extends TableController implements
                 manager.setMultiple(model.indexOf(row),i,this);
             }
             if(tCell instanceof TableCheck){
-                if(manager != null && !manager.canEdit(model.indexOf(row),i,this)){
+                if(manager != null && manager.canEdit(model.indexOf(row),i,this)){
+                    tCell.enable(true);
+                }else{
                     tCell.enable(false);
                 }
             }
