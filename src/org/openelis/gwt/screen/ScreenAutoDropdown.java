@@ -203,11 +203,16 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
         if(queryMode)
             queryWidget.enable(enabled);
         else{
-            auto.textBox.setReadOnly(!enabled);
-            if(enabled)
-                auto.addFocusListener(this);
-            else
+            if(alwaysEnabled){
                 auto.removeFocusListener(this);
+                auto.addFocusListener(this);
+            }else{
+                auto.textBox.setReadOnly(!enabled);
+                if(enabled)
+                    auto.addFocusListener(this);
+                else
+                    auto.removeFocusListener(this);
+            }
             super.enable(enabled);
         }
     }
