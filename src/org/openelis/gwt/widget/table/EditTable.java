@@ -145,53 +145,6 @@ public class EditTable extends TableController implements
     }
 
     /**
-     * This method will set the initial and minimum widths for columns in a
-     * table. A width of -1 relates to auto.
-     * 
-     * @param widths
-     */
-    public void setColWidths(int[] widths) {
-        colwidth = widths;
-        curColWidth = new int[widths.length];
-        for (int i = 0; i < colwidth.length; i++) {
-            curColWidth[i] = colwidth[i];
-        }
-    }
-
-    /**
-     * This method sets the definition for which columns can be sorted in the
-     * table.
-     * 
-     * @param sortable
-     */
-    public void setSortable(boolean[] sortable) {
-        this.sortable = sortable;
-    }
-
-    /**
-     * This method sets the definition for which columns can be filtered in the
-     * table.
-     * 
-     * @param filterable
-     */
-    public void setFilterable(boolean[] filterable) {
-        this.filterable = filterable;
-        for (int i = 0; i < filterable.length; i++) {
-            filters.add(null);
-        }
-    }
-
-    /**
-     * This method will set the definition for which columns contain static
-     * filter values.
-     * 
-     * @param filters
-     */
-    public void setStatFilterable(ArrayList<Filter[]> filters) {
-        this.statFilters = filters;
-    }
-
-    /**
      * This method will set the definition for the alignment of feilds in the
      * cells of the table. The default alignment is left.
      * 
