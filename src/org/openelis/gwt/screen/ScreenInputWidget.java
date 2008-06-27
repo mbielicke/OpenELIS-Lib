@@ -82,13 +82,13 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void onFocus(final Widget sender) {
         if(sender instanceof TextBoxBase){
             //((TextBoxBase)sender).setSelectionRange(0, 0);
-            DeferredCommand.addCommand(new Command(){
-                public void execute() {
+            //DeferredCommand.addCommand(new Command(){
+              //  public void execute() {
                    //((TextBoxBase)sender).setSelectionRange(0,0);
-                   ((TextBoxBase)sender).setCursorPos(0);
+                //   ((TextBoxBase)sender).setCursorPos(0);
                    ((TextBoxBase)sender).selectAll();
-                }
-            });
+                //}
+            //});
         }
     }
 
@@ -109,7 +109,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             }
         }
         if(sender instanceof TextBoxBase){
-            ((TextBoxBase)sender).setSelectionRange(0, 0);
+          //  ((TextBoxBase)sender).setSelectionRange(0, 0);
         }
     }
     

@@ -192,7 +192,7 @@ public class MaskedTextBox extends TextBox implements
             return;
         }
         setText(applyMask(text, false));
-        if (text.length() == mask.length()){
+        if (text.length() == mask.length() && keyCode != KeyboardListener.KEY_TAB){
             complete();
         }
             
