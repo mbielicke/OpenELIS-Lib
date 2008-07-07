@@ -33,22 +33,10 @@ public class TableField extends AbstractField {
     }
 
     public void validate() {
-        valid = true;
-        
-        if(value == null)
-            return;
-        
-        for(int i = 0; i < value.numRows(); i++){
-            for(int j = 0; j < value.getRow(i).numColumns(); j++){
-                if(!value.getFieldAt(i,j).isValid()){
-                    valid = false;
-                    break;
-                }
-            }
-            if(!valid){
-                break;
-            }
-        }
+    	if(value != null)
+    		valid = value.validate();
+    	else
+    		valid = true;
     }
 
     public boolean isInRange() {
@@ -81,5 +69,9 @@ public class TableField extends AbstractField {
 
     public TableField getInstance(Node node) {
         return new TableField(node);
+    }
+    
+    public void clearErrors() {
+    	value.clearErrors();
     }
 }

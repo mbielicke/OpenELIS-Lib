@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.table.EditTable;
 import org.openelis.gwt.widget.table.TableWidget;
 
 public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
@@ -141,6 +142,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void drawError() {
         if(!showError)
             return;
+        if(this instanceof ScreenTableWidget){
+        	((EditTable)displayWidget).load(0);
+        	return;
+        }
     	String[] errors;
         errors = screen.rpc.getField(key).getErrors();
         

@@ -273,4 +273,24 @@ public class TableModel implements Serializable {
     	
     	return index;
     }
+    
+    public boolean validate() {
+    	boolean valid = true;
+    	for(TableRow row : rows){
+    		for (int i = 0; i < row.numColumns(); i++){
+    			row.getColumn(i).validate();
+    			if(!row.getColumn(i).valid)
+    				valid = false;
+    		}
+    	}
+    	return valid;
+    }
+    
+    public void clearErrors() {
+    	for(TableRow row : rows){
+    		for(int i = 0; i < row.numColumns(); i++){
+    			row.getColumn(i).clearErrors();
+    		}
+    	}
+    }
 }
