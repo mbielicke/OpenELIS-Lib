@@ -18,6 +18,7 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.xml.client.Element;
@@ -340,6 +341,12 @@ public class ScreenTableWidget extends ScreenInputWidget {
         
         public void enable(boolean enabled){
             table.enable(enabled);
+        }
+        
+        public void setFocus(boolean focus){
+        	if(focus){
+        		table.controller.onKeyDown(table.controller.view, (char)KeyboardListener.KEY_TAB, KeyboardListener.MODIFIER_META);
+        	}
         }
 
 }

@@ -986,6 +986,10 @@ public class EditTable extends TableController implements
                 manager.getPreviousPage(this);
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
+        	if(selected < 0){
+        		selected = 0;
+        		selectedCell = -1;
+        	}
             if (selectedCell + 1 >= (rowList[selected]).numColumns()) {
                 tabToNextRow();
             } else {
