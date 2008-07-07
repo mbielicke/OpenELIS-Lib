@@ -990,7 +990,8 @@ public class EditTable extends TableController implements
                 tabToNextRow();
             } else {
                 int col = selectedCell + 1;
-                while (col < editors.length && editors[col] instanceof TableLabel)
+                while (col < editors.length && editors[col] instanceof TableLabel ||
+                       (manager != null && manager.canEdit(selected, col, this)))
                     col++;
                 if(col == editors.length){
                     tabToNextRow();
@@ -1012,7 +1013,8 @@ public class EditTable extends TableController implements
                 tabToPrevRow();
             } else {
                 int col = selectedCell - 1;
-                while (col > -1 && (editors[col] instanceof TableLabel))
+                while (col > -1 && ((editors[col] instanceof TableLabel) ||
+                		            manager != null && manager.canEdit(selected, col, this)))
                     col--;
                 if(col < 0){
                     tabToPrevRow();
@@ -1036,7 +1038,7 @@ public class EditTable extends TableController implements
             row = 0;
             view.scrollBar.setScrollPosition(0);
         }
-        while ((editors[col] instanceof TableLabel))
+        while ((editors[col] instanceof TableLabel) || (manager != null && manager.canEdit(row, col, this)))
             col++;
         if(row < maxRows - 1){
             final int fRow = row;
@@ -1062,7 +1064,7 @@ public class EditTable extends TableController implements
             if(model.indexOf(rowList[0])== 0){
                 final int row = view.table.getRowCount() -1;
                 int col = model.getRow(model.shownRows() -1).numColumns() - 1;
-                while ((editors[col] instanceof TableLabel))
+                while ((editors[col] instanceof TableLabel) || (manager != null && manager.canEdit(row, col, this)))
                     col--;
                 final int fCol = col;
                 view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+model.shownRows()*cellHeight);
@@ -1073,7 +1075,7 @@ public class EditTable extends TableController implements
                 });
             }else{
                 int col = model.getRow(model.shownRows() -1).numColumns() - 1;
-                while ((editors[col] instanceof TableLabel))
+                while ((editors[col] instanceof TableLabel) || (manager != null && manager.canEdit(selected,col,this)))
                     col--;
                 final int fCol = col;
                 view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
@@ -1086,7 +1088,7 @@ public class EditTable extends TableController implements
         }else{
             final int row = selected - 1;
             int col = model.getRow(model.shownRows() -1).numColumns() - 1;
-            while ((editors[col] instanceof TableLabel))
+            while ((editors[col] instanceof TableLabel) || (manager != null && manager.canEdit(row,col,this)))
                 col--;
             final int fCol = col;
             DeferredCommand.addCommand(new Command() {

@@ -470,7 +470,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                 view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
                 selected.add(dm.get(start+active));
             }else{
-                if(active == maxRows -1){
+                if(active == view.table.getRowCount() -1){
                     if(start+active+1 < dm.size()){
                         selected.remove(dm.get(start+active));
                         selected.add(dm.get(start+active+1));
