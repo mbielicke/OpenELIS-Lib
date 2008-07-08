@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class CheckBox extends Composite implements ClickListener{
     
     DelegatingKeyboardListenerCollection keyListeners;
+    boolean enabled = true;
     
     public enum CheckType {TWO_STATE,THREE_STATE};
     
@@ -150,9 +151,11 @@ public class CheckBox extends Composite implements ClickListener{
             panel.removeClickListener(this);
             panel.addClickListener(this);
             panel.sinkEvents(Event.KEYEVENTS);
+            enabled = true;
         }else{
             panel.removeClickListener(this);
             panel.unsinkEvents(Event.KEYEVENTS);
+            enabled = false;
         }
     }
     
@@ -168,5 +171,7 @@ public class CheckBox extends Composite implements ClickListener{
         panel.setFocus(focus);
     }
     
-
+    public boolean isEnabled(){
+        return enabled;
+    }
 }
