@@ -61,7 +61,7 @@ public class FormCalendarWidget extends Composite implements
     protected byte end;
     protected boolean week;
     protected Date weekDate;
-    protected ChangeListenerCollection changeListeners = new ChangeListenerCollection();
+    protected ChangeListenerCollection changeListeners;
     protected PopupPanel pop;
 
     public FormCalendarWidget() {
@@ -291,6 +291,10 @@ public class FormCalendarWidget extends Composite implements
         pop.hide();
         Date date = new Date((String)((ScreenWidget)sender).getUserObject());
         setDate(DatetimeRPC.getInstance(begin, end, date));
+        
+        if (changeListeners != null){
+            changeListeners.fireChange(this);
+        }
     }
 
     public void addChangeListener(ChangeListener listener) {
