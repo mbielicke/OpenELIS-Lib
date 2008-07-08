@@ -18,8 +18,10 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
@@ -33,7 +35,7 @@ import java.util.Date;
  * @author tschmidt
  *
  */
-public class ScreenCalendar extends ScreenInputWidget {
+public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     
     /**
      * Default Tag Name for XML Definition and WidgetMap
@@ -166,7 +168,21 @@ public class ScreenCalendar extends ScreenInputWidget {
     }
     
     public void setFocus(boolean focus){
-        cal.setFocus(focus);
+        if(queryMode)
+            queryWidget.setFocus(focus);
+        else
+            cal.setFocus(focus);
     }
+    
+    public void onLostFocus(Widget sender) {
+        cal.onLostFocus(sender);
+        if(key != null)
+            super.onLostFocus(sender);
+    }
+    
+   public void onFocus(Widget sender) {
+       cal.onFocus(sender);
+       super.onFocus(sender);
+   }
 
 }
