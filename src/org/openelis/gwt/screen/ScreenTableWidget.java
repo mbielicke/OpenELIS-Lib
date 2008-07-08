@@ -348,5 +348,10 @@ public class ScreenTableWidget extends ScreenInputWidget {
         		table.controller.onKeyDown(table.controller.view, (char)KeyboardListener.KEY_TAB, KeyboardListener.MODIFIER_META);
         	}
         }
+        
+        @Override
+        public void drawError() {
+        	table.controller.load(0);
+        }
 
 }
