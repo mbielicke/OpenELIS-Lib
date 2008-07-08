@@ -60,6 +60,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     public ScreenTextBox(Node node, final ScreenBase screen) {
         super(node);
         final ScreenTextBox sb = this;
+
         textbox = new TextBox() {
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
@@ -98,6 +99,18 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
             textbox.setMaxLength(length);
         }
+        
+        if (node.getAttributes().getNamedItem("onchange") != null){
+            String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
+            for(int i = 0; i < listeners.length; i++){
+                if(listeners[i].equals("this")){
+                    textbox.addChangeListener((ChangeListener)screen);
+                }else{
+                    textbox.addChangeListener((ChangeListener)ClassFactory.forName(listeners[i]));
+                }
+            }
+        }
+        
         initWidget(textbox);
         displayWidget = textbox;
         setDefaults(node, screen);
