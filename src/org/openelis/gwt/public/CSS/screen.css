@@ -1285,3 +1285,10 @@ font-weight:bold;
     background:lightblue;
     width:100%;	
 }
+
+.DotsButton {
+	width:14px;
+height:19px;
+cursor:pointer;
+background: url(../Images/dotdotdot.gif) 0px 0px no-repeat;
+}

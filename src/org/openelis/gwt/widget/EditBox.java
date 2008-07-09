@@ -66,7 +66,7 @@ public class EditBox extends Composite implements ClickListener{
 		text.setHeight("18px");
 		hp.add(text);
 		hp.add(fp);
-		fp.setStyleName("CalendarButton");
+		fp.setStyleName("DotsButton");
 		fp.addClickListener(this);
 	}
 
