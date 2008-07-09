@@ -162,7 +162,7 @@ public abstract class TableController extends Composite implements
     }
     
     public void setCellHeight(int height){
-        cellHeight = height;
+        this.cellHeight = height;
     }
     
     public void setShowRows(boolean showRows){
@@ -340,7 +340,8 @@ public abstract class TableController extends Composite implements
                 if(showRows){
                     view.rowsView.setHeight((view.cellView.getOffsetHeight()-17)+"px");
                 }
-                view.titlePanel.setWidth(displayWidth+"px");
+                if(view.width.equals("auto"))
+                	view.titlePanel.setWidth(displayWidth+"px");
             }
         });
     }

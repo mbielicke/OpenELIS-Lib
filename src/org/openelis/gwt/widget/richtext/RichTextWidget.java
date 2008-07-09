@@ -26,9 +26,10 @@ public class RichTextWidget extends Composite {
     private RichTextArea area = new RichTextArea();
     private RichTextToolbar toolbar = new RichTextToolbar(area);
     
-    public RichTextWidget() {
+    public RichTextWidget(boolean tools) {
         initWidget(vp);
-        vp.add(toolbar);
+        if(tools)
+        	vp.add(toolbar);
         vp.add(area);
         area.setSize("100%","100%");
 
@@ -40,6 +41,10 @@ public class RichTextWidget extends Composite {
     
     public String getText(){
         return area.getHTML();
+    }
+    
+    public String getClearText() {
+    	return area.getText();
     }
     
     public void addFocusListener(FocusListener listener){

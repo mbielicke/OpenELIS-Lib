@@ -601,10 +601,12 @@ public class EditTable extends TableController implements
         for(int j= 0; j < editors.length; j++){
             TableCellWidget tcell = editors[j].getNewInstance();
             tcell.setCellWidth(curColWidth[j]);
+            
             if(tcell instanceof TableMultiple){
                 ((TableMultiple)tcell).initCells(model);
             }
             ((SimplePanel)tcell).setWidth((curColWidth[j])+ "px");
+            ((SimplePanel)tcell).setHeight((cellHeight+"px"));
             view.table.setWidget(i,j,(Widget)tcell);
             view.table.getFlexCellFormatter().addStyleName(i,
                                                   j,
@@ -618,7 +620,7 @@ public class EditTable extends TableController implements
             }
             view.table.getFlexCellFormatter().setWidth(i, j, curColWidth[j] + "px");
             view.table.getFlexCellFormatter().setHeight(i, j, cellHeight+"px");
-            view.table.getRowFormatter().addStyleName(i, TableView.rowStyle);
+            //view.table.getRowFormatter().addStyleName(i, TableView.rowStyle);
             if(showRows){
                 Label rowNum = new Label(String.valueOf(i+1));
                 view.rows.setWidget(i,0,rowNum);
