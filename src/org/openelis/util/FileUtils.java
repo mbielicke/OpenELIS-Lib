@@ -11,7 +11,7 @@
 * 
 * The Original Code is OpenELIS code.
 * 
-* Copyright (C) OpenELIS.  All Rights Reserved.
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 /**
  * This class used to perform various file operations

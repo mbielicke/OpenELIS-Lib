@@ -11,7 +11,7 @@
  
  The Original Code is OpenELIS code.
  
- Copyright (C) OpenELIS.  All Rights Reserved.
+ Copyright (C) The University of Iowa.  All Rights Reserved.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xalan="http://xml.apache.org/xalan"
