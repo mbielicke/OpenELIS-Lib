@@ -171,6 +171,9 @@ color:gray;
 .arrowIcon{
    background:url('../Images/nextbuttonimage.gif') no-repeat center;
 }
+.systemUserIcon{background:url('../Images/systemuserbuttonimage.gif') no-repeat center;}
+.applicationIcon{background:url('../Images/applicationbuttonimage.gif') no-repeat center;}
+.templateIcon{background:url('../Images/templatebuttonimage.gif') no-repeat center;}
 /*******END TOP MENU BAR***********/
 
 .WhiteContentPanel{
