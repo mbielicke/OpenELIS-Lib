@@ -19,7 +19,6 @@ import java.io.Serializable;
 
 public class SecuritySection extends SecurityObject implements Serializable {
     
-
     private static final long serialVersionUID = 1L;
     protected boolean hasView, hasAssign, hasComplete, hasRelease, hasCancel;
     
@@ -65,6 +64,21 @@ public class SecuritySection extends SecurityObject implements Serializable {
      */
     public boolean hasReleasePermission() {
        return hasRelease;
+    }
+    
+    public boolean has(Flags fl) {
+        if(fl == Flags.ASSIGN)
+            return hasAssign;
+        else if(fl == Flags.CANCEL)
+            return hasCancel;
+        else if(fl == Flags.COMPLETE)
+            return hasComplete;
+        else if(fl == Flags.RELEASE)
+            return hasRelease;
+        else if(fl == Flags.VIEW)
+            return hasView;
+        else
+            return false;
     }
 
 }

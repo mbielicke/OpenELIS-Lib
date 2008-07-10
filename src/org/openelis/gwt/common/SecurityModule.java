@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 public class SecurityModule extends SecurityObject implements Serializable {
     
+    
     protected boolean hasSelect,hasAdd,hasUpdate,hasDelete;
     protected String clause;
 
@@ -64,6 +65,19 @@ public class SecurityModule extends SecurityObject implements Serializable {
    
    public String getClause() {
        return clause;
+   }
+   
+   public boolean has(Flags fl){
+       if(fl == Flags.ADD)
+           return hasAdd;
+       else if(fl == Flags.DELETE)
+           return hasDelete;
+       else if(fl == Flags.SELECT)
+           return hasSelect;
+       else if(fl == Flags.UPDATE)
+           return hasUpdate;
+       else
+           return false;
    }
     
 

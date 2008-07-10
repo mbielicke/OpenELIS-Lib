@@ -18,6 +18,7 @@ package org.openelis.gwt.common;
 import java.io.Serializable;
 
 public class SecurityObject implements Serializable {
+    public enum Flags {SELECT,ADD,UPDATE,DELETE,VIEW,ASSIGN,COMPLETE,RELEASE,CANCEL}
     
     private static final long serialVersionUID = 1L;
     protected Integer moduleId;
@@ -29,6 +30,10 @@ public class SecurityObject implements Serializable {
     
     public String getName() {
         return moduleName;
+    }
+    
+    public boolean has(Flags fl){
+        return false;
     }
 
 }

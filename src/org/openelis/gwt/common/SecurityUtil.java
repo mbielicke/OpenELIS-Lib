@@ -1,5 +1,7 @@
 package org.openelis.gwt.common;
 
+import org.openelis.gwt.common.SecurityObject.Flags;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -21,6 +23,20 @@ public class SecurityUtil implements Serializable {
     
     public SecurityObject get(String name){
         return mapById.get(name);
+    }
+    
+    public boolean has(Integer id, Flags fl){
+        if(mapById.containsKey(id))
+            return get(id).has(fl);
+        else
+            return false;
+    }
+    
+    public boolean has(String name, Flags fl){
+        if(mapById.containsKey(name))
+            return get(name).has(fl);
+        else
+            return false;
     }
 
 }
