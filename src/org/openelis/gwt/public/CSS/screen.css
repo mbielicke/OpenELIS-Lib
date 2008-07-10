@@ -100,7 +100,7 @@ color:gray;
 .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .orderIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
-.systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon{
+.systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon{
     width:16px;
     height:16px;
 }
