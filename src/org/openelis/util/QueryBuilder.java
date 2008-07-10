@@ -38,7 +38,7 @@ import java.util.Set;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
-public class NewQueryBuilder {
+public class QueryBuilder {
 	
 	private String selectStatement = "";
     private HashMap<String, Meta> fromTables = new HashMap<String, Meta>();
