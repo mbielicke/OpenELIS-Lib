@@ -70,10 +70,6 @@ public class EditTable extends TableController implements
     public int selectedCell = -1;
     public int setRow = -1;
     public TableCellWidget[] editors;
-    public boolean[] sortable;
-    public boolean[] filterable;
-    private ArrayList<Filter[]> statFilters = new ArrayList<Filter[]>();
-    private ArrayList<Filter[]> filters = new ArrayList<Filter[]>();
     public TableCallback callback = new TableCallback();
     public HasHorizontalAlignment.HorizontalAlignmentConstant[] colAlign;
     public TableServiceIntAsync tableService = (TableServiceIntAsync)GWT.create(TableServiceInt.class);
