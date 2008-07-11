@@ -415,8 +415,8 @@ public class QueryBuilder {
                     whereClause = getQueryNoOperand((DropDownField)field, key);	
                 else if(field instanceof QueryCheckField)
                     whereClause = getQueryNoOperand((QueryCheckField)field, key);
-
-            
+                else if(field instanceof QueryDateField)
+                    whereClause = getQueryNoOperand((QueryDateField)field, key);            
         
                 if(!"".equals(whereClause)){
                     whereOperands.add(whereClause);
@@ -454,6 +454,8 @@ public class QueryBuilder {
 					setParameters((DropDownField)o, (String)keys[i], query);
                 else if(o instanceof QueryCheckField)
                     setParameters((QueryCheckField)o, (String)keys[i], query);
+                else if(o instanceof QueryDateField)
+                    setParameters((QueryDateField)o, (String)keys[i], query);
         	}
         }
     }
