@@ -55,7 +55,7 @@ public class AppServlet extends RemoteServiceServlet {
                              getThreadLocalRequest().getRemoteAddr());
         SessionManager.setSession(session);
         try {
-            ServiceUtils.getPermissions();
+           // ServiceUtils.getPermissions();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -353,7 +353,7 @@ public abstract class TableController extends Composite implements
      * @param down
      */
     public void sort(int col, boolean down) {
-        Image img = (Image)((HorizontalPanel)view.header.getWidget(1, col)).getWidget(1);
+        Image img = (Image)((HorizontalPanel)((SimplePanel)view.header.getWidget(0, col * 2)).getWidget()).getWidget(1);
         if (down)
             img.setUrl("Images/go-down.png");
         else

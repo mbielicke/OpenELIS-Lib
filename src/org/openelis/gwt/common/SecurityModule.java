@@ -17,22 +17,40 @@ package org.openelis.gwt.common;
 
 import java.io.Serializable;
 
-public class SecurityModule extends SecurityObject implements Serializable {
+public class SecurityModule implements Serializable {
     
+    public enum ModuleFlags {SELECT,ADD,UPDATE,DELETE}
     
     protected boolean hasSelect,hasAdd,hasUpdate,hasDelete;
     protected String clause;
+    protected String name;
 
     private static final long serialVersionUID = 1L;
     
-    public SecurityModule(Integer id, String name, boolean select, boolean add, boolean update, boolean delete, String clause){
-        moduleId = id;
-        moduleName = name;
+    public SecurityModule(String name, String select, String add, String update, String delete, String clause){
+        this.name = name;
+        if("Y".equals(select))
+            hasSelect = true;
+        if("Y".equals(add))
+            hasAdd = true;
+        if("Y".equals(update))
+            hasUpdate = true;
+        if("Y".equals(delete))
+            hasDelete = true;
+        this.clause = clause;
+    }
+    
+    public SecurityModule(String name, boolean select, boolean add, boolean update, boolean delete, String clause){
+        this.name = name;
         hasSelect = select;
         hasAdd = add;
         hasUpdate = update;
         hasDelete = delete;
         this.clause = clause;
+    }
+    
+    public String getName() {
+        return name;
     }
     
     /**
@@ -67,14 +85,14 @@ public class SecurityModule extends SecurityObject implements Serializable {
        return clause;
    }
    
-   public boolean has(Flags fl){
-       if(fl == Flags.ADD)
+   public boolean has(ModuleFlags fl){
+       if(fl == ModuleFlags.ADD)
            return hasAdd;
-       else if(fl == Flags.DELETE)
+       else if(fl == ModuleFlags.DELETE)
            return hasDelete;
-       else if(fl == Flags.SELECT)
+       else if(fl == ModuleFlags.SELECT)
            return hasSelect;
-       else if(fl == Flags.UPDATE)
+       else if(fl == ModuleFlags.UPDATE)
            return hasUpdate;
        else
            return false;

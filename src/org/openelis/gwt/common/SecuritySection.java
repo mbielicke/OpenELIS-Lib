@@ -17,19 +17,39 @@ package org.openelis.gwt.common;
 
 import java.io.Serializable;
 
-public class SecuritySection extends SecurityObject implements Serializable {
+public class SecuritySection implements Serializable {
+    
+    public enum SectionFlags {VIEW,ASSIGN,COMPLETE,RELEASE,CANCEL}
     
     private static final long serialVersionUID = 1L;
     protected boolean hasView, hasAssign, hasComplete, hasRelease, hasCancel;
+    protected String name;
     
-    public SecuritySection(Integer id, String name, boolean view, boolean assign, boolean complete, boolean release, boolean cancel){
-       moduleId = id;
-       moduleName = name;
+    public SecuritySection(String name, String view, String assign, String complete, String release, String cancel){
+        this.name = name;
+        if("Y".equals("view"))
+            hasView = true;
+        if("Y".equals(assign))
+            hasAssign = true;
+        if("Y".equals(complete))
+            hasComplete = true;
+        if("Y".equals(release))
+            hasRelease = true;
+        if("Y".equals(cancel))
+            hasCancel = true;
+    }
+    
+    public SecuritySection(String name, boolean view, boolean assign, boolean complete, boolean release, boolean cancel){
+       this.name = name;
        hasView = view;
        hasAssign = assign;
        hasComplete = complete;
        hasRelease = release;
        hasCancel = cancel;
+    }
+    
+    public String getName() {
+        return name;
     }
     /**
      * Returns true if user has select permission on this group
@@ -66,16 +86,16 @@ public class SecuritySection extends SecurityObject implements Serializable {
        return hasRelease;
     }
     
-    public boolean has(Flags fl) {
-        if(fl == Flags.ASSIGN)
+    public boolean has(SectionFlags fl) {
+        if(fl == SectionFlags.ASSIGN)
             return hasAssign;
-        else if(fl == Flags.CANCEL)
+        else if(fl == SectionFlags.CANCEL)
             return hasCancel;
-        else if(fl == Flags.COMPLETE)
+        else if(fl == SectionFlags.COMPLETE)
             return hasComplete;
-        else if(fl == Flags.RELEASE)
+        else if(fl == SectionFlags.RELEASE)
             return hasRelease;
-        else if(fl == Flags.VIEW)
+        else if(fl == SectionFlags.VIEW)
             return hasView;
         else
             return false;

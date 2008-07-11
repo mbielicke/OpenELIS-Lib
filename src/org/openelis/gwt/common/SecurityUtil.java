@@ -1,6 +1,7 @@
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.SecurityObject.Flags;
+import org.openelis.gwt.common.SecurityModule.ModuleFlags;
+import org.openelis.gwt.common.SecuritySection.SectionFlags;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -9,34 +10,51 @@ public class SecurityUtil implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    protected HashMap<Integer,SecurityObject> mapById = new HashMap<Integer,SecurityObject>();
-    protected HashMap<String,SecurityObject> mapByName = new HashMap<String,SecurityObject>();
+    protected HashMap<String,SecuritySection> sections = new HashMap<String,SecuritySection>();
+    protected HashMap<String,SecurityModule> modules = new HashMap<String,SecurityModule>();
     
-    public void add(SecurityObject so){
-        mapById.put(so.getId(), so);
-        mapByName.put(so.getName(), so);
+    public void add(SecurityModule sm){
+        modules.put(sm.getName(), sm);
     }
     
-    public SecurityObject get(Integer id){
-        return mapById.get(id);
+    public void add(SecuritySection ss){
+        sections.put(ss.getName(), ss);
     }
     
-    public SecurityObject get(String name){
-        return mapById.get(name);
+    public SecurityModule getModule(String name){
+        return modules.get(name);
     }
     
-    public boolean has(Integer id, Flags fl){
-        if(mapById.containsKey(id))
-            return get(id).has(fl);
+    public SecuritySection getSection(String name){
+        return sections.get(name);
+    }
+    
+    public boolean has(String name, ModuleFlags fl){
+        if(modules.containsKey(name))
+            return modules.get(name).has(fl);
         else
             return false;
     }
     
-    public boolean has(String name, Flags fl){
-        if(mapById.containsKey(name))
-            return get(name).has(fl);
+    public boolean has(String name, SectionFlags fl){
+        if(sections.containsKey(name))
+            return sections.get(name).has(fl);
         else
             return false;
     }
-
+    
+    public boolean hasModule(String name){
+        if(modules.containsKey(name))
+            return modules.get(name).hasSelect;
+        else
+            return false;
+    }
+    
+    public boolean hasSection(String name){
+        if(sections.containsKey(name))
+            return sections.get(name).hasView;
+        else
+            return false;
+    }
+   
 }

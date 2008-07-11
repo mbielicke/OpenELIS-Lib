@@ -16,6 +16,7 @@
 package org.openelis.gwt.server;
 
 import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.SecurityUtil;
 import org.openelis.util.SessionManager;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -31,6 +32,10 @@ import javax.xml.transform.stream.StreamResult;
 public class ServiceUtils {
     
     public static String props;
+    
+    public static SecurityUtil getSecurity() {
+        return (SecurityUtil)SessionManager.getSession().getAttribute("security");
+    }
     
     public static boolean hasPermission(String module) {
         try {
