@@ -434,6 +434,10 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         // TODO Auto-generated method stub
         
     }
+    
+    public void fireChange() {
+        changeListeners.fireChange(this);
+    }
 
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
         int clicked = row;

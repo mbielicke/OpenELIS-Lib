@@ -27,6 +27,10 @@ public class SecurityModule implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+    public SecurityModule() {
+        
+    }
+    
     public SecurityModule(String name, String select, String add, String update, String delete, String clause){
         this.name = name;
         if("Y".equals(select))

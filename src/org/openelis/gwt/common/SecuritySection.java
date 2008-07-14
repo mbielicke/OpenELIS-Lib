@@ -25,6 +25,10 @@ public class SecuritySection implements Serializable {
     protected boolean hasView, hasAssign, hasComplete, hasRelease, hasCancel;
     protected String name;
     
+    public SecuritySection() {
+        
+    }
+    
     public SecuritySection(String name, String view, String assign, String complete, String release, String cancel){
         this.name = name;
         if("Y".equals("view"))

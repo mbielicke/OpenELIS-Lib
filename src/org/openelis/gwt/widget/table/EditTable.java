@@ -46,6 +46,7 @@ import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.common.data.TableRow;
 import org.openelis.gwt.services.TableServiceInt;
 import org.openelis.gwt.services.TableServiceIntAsync;
+import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 import java.util.Iterator;
 
@@ -149,6 +150,9 @@ public class EditTable extends TableController implements
         for(int i = 0; i < editors.length; i++){
             if(editors[i] instanceof TableMultiple){
                 ((TableMultiple)editors[i]).initCells(this);
+            }
+            if(editors[i] instanceof TableAutoDropdown){
+                ((TableAutoDropdown)editors[i]).editor.addChangeListener(this);
             }
         }
         
@@ -459,7 +463,7 @@ public class EditTable extends TableController implements
      */
     public void onChange(Widget sender) {
         try{
-        if(sender instanceof TableAutoDropdown){
+        if(sender instanceof AutoCompleteDropdown){
             int sel = selected;
             unselect(sel);
             select(sel);
@@ -983,6 +987,7 @@ public class EditTable extends TableController implements
                 manager.getPreviousPage(this);
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
+            Window.alert("in editTable");
         	if(selected < 0){
         		selected = 0;
         		selectedCell = -1;

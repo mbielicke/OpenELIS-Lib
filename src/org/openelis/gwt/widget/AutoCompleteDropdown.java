@@ -266,11 +266,14 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	public void onKeyUp(Widget arg0, char arg1, int arg2) {
 		if (!textBox.isReadOnly() && choicesPopup.isVisible()) {
-			if (arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_ENTER
-					|| arg1 == KEY_TAB || arg1 == KEY_LEFT || arg1 == KEY_RIGHT || arg1 == KEY_ALT || 
+			if (arg1 == KEY_DOWN || arg1 == KEY_UP 
+					|| arg1 == KEY_LEFT || arg1 == KEY_RIGHT || arg1 == KEY_ALT || 
 					arg1 == KEY_CTRL || arg1 == KEY_SHIFT)
 				return;
-
+            if(arg1 == KEY_ENTER || arg1 == KEY_TAB){
+                complete();
+                return;
+            }
 			if (arg1 == KEY_ESCAPE) {
 				choicesPopup.hide();
 				visible = false;
@@ -365,6 +368,9 @@ public class AutoCompleteDropdown extends Composite implements
                     		&& (startPos < scrollList.getDataModel().size())){
                     	scrollList.unselectAll();
                     	scrollList.setActive(startPos);
+                    }else{
+                        scrollList.unselectAll();
+                        scrollList.setActive(0);
                     }
                    
 			}else
