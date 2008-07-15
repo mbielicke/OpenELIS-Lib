@@ -68,9 +68,12 @@ public class EJBFactory {
                                   pass);
                 props.setProperty(Context.SECURITY_PRINCIPAL, usrPass[0].trim());
                 ctx = new InitialContext(props);
+            
+                ctx.addToEnvironment("SessionID", SessionManager.getSession().getId().toString());
                 SessionManager.getSession().setAttribute("jndiProps", props);
             }else{
                 ctx = new InitialContext(props);
+                ctx.addToEnvironment("SessionID", SessionManager.getSession().getId().toString());
             }
             return ctx.lookup(bean);
         }catch(Exception e){

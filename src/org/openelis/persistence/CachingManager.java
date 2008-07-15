@@ -27,6 +27,8 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
 import org.apache.log4j.Category;
+
+import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import javax.naming.NamingException;
@@ -122,6 +124,21 @@ public class CachingManager {
         }
         log.debug("CachingManager: " + cacheManager + " initialized.");
     }
+    
+    public static void init(InputStream stream) {
+        try {
+            cacheManager = new CacheManager(stream);
+            // fillTests();
+            // fillMethods();
+        } catch (CacheException cacheE) {
+            log.warn("Unable to initialize cache manager: " + cacheE.getMessage());
+            System.out.println(cacheE.getMessage());
+            // } catch (SQLException sqlE) {
+            // log.warn("Unable to prefil method and test cache: " +
+            // sqlE.getMessage());
+        }
+        log.debug("CachingManager: " + cacheManager + " initialized.");
+    }
 
     /**
      * Perform clean up tasks when this servlet is been shutting down.
@@ -135,5 +152,14 @@ public class CachingManager {
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+    }
+    
+    public static boolean isAlive(String cache) {
+        if(cacheManager != null && cacheManager.getStatus().equals(Status.STATUS_ALIVE)){
+            if(cacheManager.getCache(cache) != null){
+                return true;
+            }
+        }
+        return false; 
     }
 }
