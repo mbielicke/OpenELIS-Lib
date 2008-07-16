@@ -98,82 +98,6 @@ public class RichTextToolbar extends Composite {
     AbstractImagePrototype underline();
   }
 
-  /**
-   * This {@link Constants} interface is used to make the toolbar's strings
-   * internationalizable.
-   */
-  public interface Strings extends Constants {
-
-    String black();
-
-    String blue();
-
-    String bold();
-
-    String color();
-
-    String createLink();
-
-    String font();
-
-    String green();
-
-    String hr();
-
-    String indent();
-
-    String insertImage();
-
-    String italic();
-
-    String justifyCenter();
-
-    String justifyLeft();
-
-    String justifyRight();
-
-    String large();
-
-    String medium();
-
-    String normal();
-
-    String ol();
-
-    String outdent();
-
-    String red();
-
-    String removeFormat();
-
-    String removeLink();
-
-    String size();
-
-    String small();
-
-    String strikeThrough();
-
-    String subscript();
-
-    String superscript();
-
-    String ul();
-
-    String underline();
-
-    String white();
-
-    String xlarge();
-
-    String xsmall();
-
-    String xxlarge();
-
-    String xxsmall();
-
-    String yellow();
-  }
 
   /**
    * We use an inner EventListener class to avoid exposing event methods on the
@@ -272,7 +196,6 @@ public class RichTextToolbar extends Composite {
       RichTextArea.FontSize.XX_LARGE};
 
   private Images images = (Images) GWT.create(Images.class);
-  private Strings strings = (Strings) GWT.create(Strings.class);
   private EventListener listener = new EventListener();
 
   private RichTextArea richText;
@@ -326,38 +249,38 @@ public class RichTextToolbar extends Composite {
     richText.addStyleName("hasRichTextToolbar");
 
     if (basic != null) {
-      topPanel.add(bold = createToggleButton(images.bold(), strings.bold()));
-      topPanel.add(italic = createToggleButton(images.italic(), strings.italic()));
+      topPanel.add(bold = createToggleButton(images.bold(), "Bold"));
+      topPanel.add(italic = createToggleButton(images.italic(), "Italic"));
       topPanel.add(underline = createToggleButton(images.underline(),
-          strings.underline()));
+          "Underline"));
       topPanel.add(subscript = createToggleButton(images.subscript(),
-          strings.subscript()));
+          "Subscript"));
       topPanel.add(superscript = createToggleButton(images.superscript(),
-          strings.superscript()));
+          "Superscript"));
       topPanel.add(justifyLeft = createPushButton(images.justifyLeft(),
-          strings.justifyLeft()));
+          "Justify Left"));
       topPanel.add(justifyCenter = createPushButton(images.justifyCenter(),
-          strings.justifyCenter()));
+          "JustifyCenter"));
       topPanel.add(justifyRight = createPushButton(images.justifyRight(),
-          strings.justifyRight()));
+          "JustifyRight"));
     }
 
     if (extended != null) {
       topPanel.add(strikethrough = createToggleButton(images.strikeThrough(),
-          strings.strikeThrough()));
-      topPanel.add(indent = createPushButton(images.indent(), strings.indent()));
-      topPanel.add(outdent = createPushButton(images.outdent(), strings.outdent()));
-      topPanel.add(hr = createPushButton(images.hr(), strings.hr()));
-      topPanel.add(ol = createPushButton(images.ol(), strings.ol()));
-      topPanel.add(ul = createPushButton(images.ul(), strings.ul()));
+          "Strike Through"));
+      topPanel.add(indent = createPushButton(images.indent(), "Indent"));
+      topPanel.add(outdent = createPushButton(images.outdent(), "Outdent"));
+      topPanel.add(hr = createPushButton(images.hr(), "HR"));
+      topPanel.add(ol = createPushButton(images.ol(), "OL"));
+      topPanel.add(ul = createPushButton(images.ul(), "UL"));
       topPanel.add(insertImage = createPushButton(images.insertImage(),
-          strings.insertImage()));
+          "Insert Image"));
       topPanel.add(createLink = createPushButton(images.createLink(),
-          strings.createLink()));
+          "Create Link"));
       topPanel.add(removeLink = createPushButton(images.removeLink(),
-          strings.removeLink()));
+          "Remove Link"));
       topPanel.add(removeFormat = createPushButton(images.removeFormat(),
-          strings.removeFormat()));
+          "Remove Format"));
     }
 
     if (basic != null) {
@@ -379,12 +302,12 @@ public class RichTextToolbar extends Composite {
     lb.setVisibleItemCount(1);
 
     lb.addItem(caption);
-    lb.addItem(strings.white(), "white");
-    lb.addItem(strings.black(), "black");
-    lb.addItem(strings.red(), "red");
-    lb.addItem(strings.green(), "green");
-    lb.addItem(strings.yellow(), "yellow");
-    lb.addItem(strings.blue(), "blue");
+    lb.addItem("White", "white");
+    lb.addItem("Black", "black");
+    lb.addItem("Red", "red");
+    lb.addItem("Green", "green");
+    lb.addItem("Yellow", "yellow");
+    lb.addItem("Blue", "blue");
     return lb;
   }
 
@@ -393,8 +316,8 @@ public class RichTextToolbar extends Composite {
     lb.addChangeListener(listener);
     lb.setVisibleItemCount(1);
 
-    lb.addItem(strings.font(), "");
-    lb.addItem(strings.normal(), "");
+    lb.addItem("Font", "");
+    lb.addItem("Normal", "");
     lb.addItem("Times New Roman", "Times New Roman");
     lb.addItem("Arial", "Arial");
     lb.addItem("Courier New", "Courier New");
@@ -409,14 +332,14 @@ public class RichTextToolbar extends Composite {
     lb.addChangeListener(listener);
     lb.setVisibleItemCount(1);
 
-    lb.addItem(strings.size());
-    lb.addItem(strings.xxsmall());
-    lb.addItem(strings.xsmall());
-    lb.addItem(strings.small());
-    lb.addItem(strings.medium());
-    lb.addItem(strings.large());
-    lb.addItem(strings.xlarge());
-    lb.addItem(strings.xxlarge());
+    lb.addItem("Size");
+    lb.addItem("XX Small");
+    lb.addItem("X Small");
+    lb.addItem("Small");
+    lb.addItem("Medium");
+    lb.addItem("Large");
+    lb.addItem("X Large");
+    lb.addItem("XX Large");
     return lb;
   }
 
