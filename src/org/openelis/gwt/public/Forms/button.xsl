@@ -95,7 +95,7 @@ version="1.0">
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
-    <appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="c">
+    <appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="m">
 		<HorizontalPanel>
 	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
@@ -105,7 +105,7 @@ version="1.0">
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
-	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="x">
+	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="o">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AbortButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
