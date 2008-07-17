@@ -506,7 +506,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                 selected.add(dm.get(start+active));
             }
         }
-        if (KeyboardListener.KEY_ENTER == code) {
+        if (KeyboardListener.KEY_ENTER == code || KeyboardListener.KEY_TAB == code) {
             if(active > -1){
                 changeListeners.fireChange(this);
             }

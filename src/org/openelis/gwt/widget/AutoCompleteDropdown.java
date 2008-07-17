@@ -594,6 +594,17 @@ public class AutoCompleteDropdown extends Composite implements
     	}
     }
     
+    public void setSelectedIndex(int index) {
+        scrollList.setSelected(index);
+    }
+    
+    public Object getSelectedValue() {
+        ArrayList<DataSet> set = scrollList.getSelected();
+        if(set == null)
+            return null;
+        return set.get(0).getKey().getValue();
+    }
+    
 	public DataModel getModel() {
 		return scrollList.getDataModel();
 	}

@@ -31,7 +31,6 @@
 package org.openelis.gwt.widget.richtext;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.Constants;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -40,12 +39,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI
@@ -108,16 +110,16 @@ public class RichTextToolbar extends Composite {
 
     public void onChange(Widget sender) {
       if (sender == backColors) {
-        basic.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
+        basic.setBackColor((String)backColors.getSelectedValue());
         backColors.setSelectedIndex(0);
       } else if (sender == foreColors) {
-        basic.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
+        basic.setForeColor((String)foreColors.getSelectedValue());
         foreColors.setSelectedIndex(0);
       } else if (sender == fonts) {
-        basic.setFontName(fonts.getValue(fonts.getSelectedIndex()));
+        basic.setFontName((String)fonts.getSelectedValue());
         fonts.setSelectedIndex(0);
       } else if (sender == fontSizes) {
-        basic.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.getSelectedValue())]);
         fontSizes.setSelectedIndex(0);
       }
     }
@@ -224,10 +226,10 @@ public class RichTextToolbar extends Composite {
   private PushButton removeLink;
   private PushButton removeFormat;
 
-  private ListBox backColors;
-  private ListBox foreColors;
-  private ListBox fonts;
-  private ListBox fontSizes;
+  private AutoCompleteDropdown backColors;
+  private AutoCompleteDropdown foreColors;
+  private AutoCompleteDropdown fonts;
+  private AutoCompleteDropdown fontSizes;
 
   /**
    * Creates a new toolbar that drives the given rich text area.
@@ -296,50 +298,51 @@ public class RichTextToolbar extends Composite {
     }
   }
 
-  private ListBox createColorList(String caption) {
-    ListBox lb = new ListBox();
+  private AutoCompleteDropdown createColorList(String caption) {
+    AutoCompleteDropdown lb = new AutoCompleteDropdown();
+    lb.cat = null;
     lb.addChangeListener(listener);
-    lb.setVisibleItemCount(1);
-
-    lb.addItem(caption);
-    lb.addItem("White", "white");
-    lb.addItem("Black", "black");
-    lb.addItem("Red", "red");
-    lb.addItem("Green", "green");
-    lb.addItem("Yellow", "yellow");
-    lb.addItem("Blue", "blue");
+    DataModel model = new DataModel();
+    model.add(new StringObject(caption),new StringObject(""));
+    model.add(new StringObject("White"), new StringObject("white"));
+    model.add(new StringObject("Black"), new StringObject("black"));
+    model.add(new StringObject("Red"), new StringObject("red"));
+    model.add(new StringObject("Green"),new StringObject("green"));
+    model.add(new StringObject("Yellow"), new StringObject("yellow"));
+    model.add(new StringObject("Blue"), new StringObject("blue"));
+    lb.setModel(model);
     return lb;
   }
 
-  private ListBox createFontList() {
-    ListBox lb = new ListBox();
+  private AutoCompleteDropdown createFontList() {
+    AutoCompleteDropdown lb = new AutoCompleteDropdown();
     lb.addChangeListener(listener);
-    lb.setVisibleItemCount(1);
-
-    lb.addItem("Font", "");
-    lb.addItem("Normal", "");
-    lb.addItem("Times New Roman", "Times New Roman");
-    lb.addItem("Arial", "Arial");
-    lb.addItem("Courier New", "Courier New");
-    lb.addItem("Georgia", "Georgia");
-    lb.addItem("Trebuchet", "Trebuchet");
-    lb.addItem("Verdana", "Verdana");
+    DataModel model = new DataModel();
+    model.add(new StringObject("Font"),new StringObject(""));
+    model.add(new StringObject("Normal"), new StringObject(""));
+    model.add(new StringObject("Times New Roman"), new StringObject("Times New Roman"));
+    model.add(new StringObject("Arial"), new StringObject("Arial"));
+    model.add(new StringObject("Courier New"), new StringObject("Courier New"));
+    model.add(new StringObject("Georgia"), new StringObject("Georgia"));
+    model.add(new StringObject("Trebuchet"), new StringObject("Trebuchet"));
+    model.add(new StringObject("Verdana"), new StringObject("Verdana"));
+    lb.setModel(model);
     return lb;
   }
 
-  private ListBox createFontSizes() {
-    ListBox lb = new ListBox();
+  private AutoCompleteDropdown createFontSizes() {
+    AutoCompleteDropdown lb = new AutoCompleteDropdown();
     lb.addChangeListener(listener);
-    lb.setVisibleItemCount(1);
-
-    lb.addItem("Size");
-    lb.addItem("XX Small");
-    lb.addItem("X Small");
-    lb.addItem("Small");
-    lb.addItem("Medium");
-    lb.addItem("Large");
-    lb.addItem("X Large");
-    lb.addItem("XX Large");
+    DataModel model = new DataModel();
+    model.add(new StringObject("Size"),new StringObject("0"));
+    model.add(new StringObject("XX Small"),new StringObject("1"));
+    model.add(new StringObject("X Small"),new StringObject("2"));
+    model.add(new StringObject("Small"),new StringObject("3"));
+    model.add(new StringObject("Medium"),new StringObject("4"));
+    model.add(new StringObject("Large"),new StringObject("5"));
+    model.add(new StringObject("X Large"),new StringObject("6"));
+    model.add(new StringObject("XX Large"),new StringObject("7"));
+    lb.setModel(model);
     return lb;
   }
 
