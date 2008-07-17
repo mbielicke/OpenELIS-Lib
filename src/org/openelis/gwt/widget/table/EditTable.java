@@ -506,7 +506,7 @@ public class EditTable extends TableController implements
                 /*
                  * Even though we set focus above we need to do it again in a 
                  * deferred command for that POS browser IE.
-                */ 
+                 
                 final int rowF = row;
                 final int colF = col;
                 DeferredCommand.addCommand(new Command() {
@@ -518,6 +518,7 @@ public class EditTable extends TableController implements
                         }
                     }
                 });
+                **/
             }
         	selectedCell = col;
         }catch(Exception e){
@@ -566,7 +567,7 @@ public class EditTable extends TableController implements
     public void load(int pos) {
         unselect(-1);
         selectedCell = -1;
-        view.setScrollHeight((model.shownRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+18);
+        view.setScrollHeight((model.shownRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+cellHeight);
         view.scrollBar.setScrollPosition(pos);
         int tRows = maxRows;
         if(model.shownRows() < maxRows){
@@ -987,7 +988,6 @@ public class EditTable extends TableController implements
                 manager.getPreviousPage(this);
         }
         if (KeyboardListener.KEY_TAB == code && selectedCell > -1 && !shift) {
-            Window.alert("in editTable");
         	if(selected < 0){
         		selected = 0;
         		selectedCell = -1;
