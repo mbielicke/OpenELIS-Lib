@@ -185,9 +185,10 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
                     }else if(wid instanceof HasFocus){
                         ((HasFocus)wid).setFocus(true);
                     }
+                    DOM.eventPreventDefault(event);
+                    return false;
                 }
-                DOM.eventPreventDefault(event);
-                return false;
+                return true;
             }
         }
         switch(DOM.eventGetType(event)){
