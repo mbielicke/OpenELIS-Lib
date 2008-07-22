@@ -15,11 +15,10 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 
@@ -29,6 +28,7 @@ import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
@@ -36,7 +36,7 @@ import org.openelis.gwt.widget.AutoCompleteParamsInt;
 
 import java.util.ArrayList;
 
-public class TableAutoDropdown extends TableCellInputWidget implements EventPreview {
+public class TableAutoDropdown extends TableCellInputWidget implements ChangeListener {
 
 	public AutoCompleteDropdown editor;
 	private Label display;
@@ -247,15 +247,6 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
                .getNodeValue()
                .split(",");
    }
-
-	public boolean onEventPreview(Event event) {
-		if (DOM.eventGetType(event) == Event.ONKEYDOWN || DOM.eventGetType(event) == Event.ONKEYUP) {
-	        DOM.eventCancelBubble(event, true);
-	        DOM.eventPreventDefault(event);
-	        return false;
-	    }
-	    return true;
-	}
 	
 	public void enable(boolean enabled) {}
 	
@@ -270,6 +261,10 @@ public class TableAutoDropdown extends TableCellInputWidget implements EventPrev
         }
         if(display != null)
             display.setWidth(width+"px");
+    }
+
+    public void onChange(Widget sender) {
+        
     }
 }
 

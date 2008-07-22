@@ -398,8 +398,9 @@ public class EditTable extends TableController implements
                 }
             }
         }
-        else
+        else{
             return;
+        }
         if(enabled){
             if (selectedCell != col) {
                 if (selectedCell > -1) {
@@ -465,8 +466,9 @@ public class EditTable extends TableController implements
         try{
         if(sender instanceof AutoCompleteDropdown){
             int sel = selected;
+            int selCol = selectedCell;
             unselect(sel);
-            select(sel);
+            select(sel,selCol);
         }   
         if(sender instanceof DataModelWidget){
         	DataModelWidget modelWidget = (DataModelWidget)sender;
@@ -913,8 +915,10 @@ public class EditTable extends TableController implements
     }
 
     public void onKeyDown(Widget sender, char code, int modifiers) {
+
         if(!active)
             return;
+
         boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
         if (KeyboardListener.KEY_DOWN == code) {
             if (selected >= 0 && selected < view.table.getRowCount() -1) {
@@ -991,13 +995,13 @@ public class EditTable extends TableController implements
         	if(selected < 0){
         		selected = 0;
         		selectedCell = -1;
-        	}
-            if (selectedCell + 1 >= (rowList[selected]).numColumns()) {
+            }
+            if (selectedCell + 1 >= rowList[selected].numColumns()) {
                 tabToNextRow();
             } else {
                 int col = selectedCell + 1;
                 while (col < editors.length && (editors[col] instanceof TableLabel ||
-                       (manager != null && !manager.canEdit(selected, col, this))))
+                       (manager != null && !manager.canEdit(model.indexOf(rowList[selected]), col, this))))
                     col++;
                 if(col == editors.length){
                     tabToNextRow();

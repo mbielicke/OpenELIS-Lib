@@ -65,7 +65,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     private int top = 0;
     private int cellHeight = 18;
     private int[] cellWidths;
-    private int active = -1;
+    public int active = -1;
     private int cellspacing = 1;
     public boolean drag;
     public boolean drop;

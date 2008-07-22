@@ -16,6 +16,8 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -72,10 +74,23 @@ public class AutoCompleteDropdown extends Composite implements
 	HashMap idHashMap = new HashMap();
 
 	public final PopupPanel choicesPopup = new PopupPanel(true) {
-     
+        
+        public boolean onEventPreview(Event event){
+            if(DOM.eventGetType(event) == Event.ONKEYDOWN){
+                if(DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB){
+                    if(insideTable){  
+                        //complete();
+                        ((AppScreen)screen).onEventPreview(event);
+                        return true;
+                    }
+                }
+            }
+            return super.onEventPreview(event);
+            
+        }
 	    public boolean onKeyDownPreview(char key, int modifiers) {
 	        // TODO Auto-generated method stub
-            scrollList.onKeyDown(this, key, modifiers);
+            scrollList.onKeyDown(this, key, modifiers);      
 	        return super.onKeyDownPreview(key, modifiers);
 	    }   
     };
