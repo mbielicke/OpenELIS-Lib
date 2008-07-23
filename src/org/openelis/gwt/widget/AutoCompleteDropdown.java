@@ -77,7 +77,7 @@ public class AutoCompleteDropdown extends Composite implements
         
         public boolean onEventPreview(Event event){
             if(DOM.eventGetType(event) == Event.ONKEYDOWN){
-                if(DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB){
+                if(DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB || DOM.eventGetKeyCode(event) == KeyboardListener.KEY_ENTER){
                     if(insideTable){  
                         //complete();
                         ((AppScreen)screen).onEventPreview(event);
@@ -285,10 +285,6 @@ public class AutoCompleteDropdown extends Composite implements
 					|| arg1 == KEY_LEFT || arg1 == KEY_RIGHT || arg1 == KEY_ALT || 
 					arg1 == KEY_CTRL || arg1 == KEY_SHIFT)
 				return;
-            if(arg1 == KEY_ENTER ){
-                complete();
-                return;
-            }
 			if (arg1 == KEY_ESCAPE) {
 				choicesPopup.hide();
 				visible = false;

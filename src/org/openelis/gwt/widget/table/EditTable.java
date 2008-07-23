@@ -964,16 +964,30 @@ public class EditTable extends TableController implements
             }
         }
         if (KeyboardListener.KEY_ENTER == code) {
+            final int fsRow = selected;
+            final int fsCol = selectedCell;
             if (selected >= 0) {
                 if (selectedCell > -1) {
                     if(!(view.table.getWidget(selected, selectedCell) instanceof TableCheck)){
                         saveValue(selected, selectedCell);
                         setCellDisplay(selected, selectedCell);
-                        if(model.autoAdd || autoAdd){
-                            if(manager != null && manager.doAutoAdd(selected,selectedCell,this))
-                                addRow();
-                            else if(manager == null && model.indexOf(rowList[selected]) == model.shownRows() -1)
-                                addRow();
+                        if(autoAdd && fsRow > -1 && rowList[fsRow] == autoAddRow){
+                            if(manager == null || (manager != null && manager.doAutoAdd(model.numRows() -1 ,fsCol,this))){
+                                 autoAddRow = null;
+                                 rowList[fsRow] = model.getRow(model.numRows() -1);
+                                 load(cellHeight*model.shownRows());
+                                 final int fRow;
+                                 if(model.shownRows() >= maxRows)
+                                     fRow = fsRow - 1;
+                                 else
+                                     fRow = fsRow;
+                                 final int fCol = selectedCell;
+                                 DeferredCommand.addCommand(new Command() {
+                                     public void execute() {
+                                        select(fRow, fCol);
+                                     }
+                                 });
+                            }
                         }
                         selectedCell = -1;
                     } else {
