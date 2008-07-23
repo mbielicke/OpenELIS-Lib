@@ -148,6 +148,10 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                 
                 table.reset();
                 table.enabled(true);
+                if(node.getAttributes().getNamedItem("showScroll") != null){
+                    if(node.getAttributes().getNamedItem("showScroll").getNodeValue().equals("true"))
+                        table.setShowScroll(true);
+                }
                     
             ((AppScreen)screen).addKeyboardListener(table);
             ((AppScreen)screen).addClickListener(table);
@@ -164,7 +168,10 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
 
         public void load(AbstractField field) {
             table.loadRow();
-
+        }
+        
+        public void load(){
+            table.loadRow();
         }
 
         public void submit(AbstractField field) {
