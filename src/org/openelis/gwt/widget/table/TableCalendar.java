@@ -20,6 +20,9 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DateField;
+import org.openelis.gwt.common.data.QueryDateField;
+import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
@@ -55,11 +58,14 @@ public class TableCalendar extends TableCellInputWidget {
     		display.setWordWrap(false);
             display.setWidth(width+"px");
     	}
-    	DatetimeRPC val = (DatetimeRPC)field.getValue();
-        if (val != null)
-            display.setText(val.toString());
-        else
-            display.setText("");
+        String val = "";
+        if(field instanceof DateField){
+            DatetimeRPC valDate = (DatetimeRPC)field.getValue();
+            if(valDate != null)
+                val = valDate.toString();
+        }else
+            val = (String)field.getValue();
+        display.setText(val);
         setWidget(display);
         super.setDisplay();
     }
@@ -72,11 +78,14 @@ public class TableCalendar extends TableCellInputWidget {
             editor.init();
             editor.setWidth((width-15)+"px");
     	}
-    	DatetimeRPC val = (DatetimeRPC)field.getValue();
-        if (val != null)
-            editor.setText(val.toString());
-        else
-            editor.setText("");
+        String val = "";
+        if(field instanceof DateField){
+            DatetimeRPC valDate = (DatetimeRPC)field.getValue();
+            if(valDate != null)
+                val = valDate.toString();
+        }else
+            val = (String)field.getValue();
+        editor.setText(val);
         setWidget(editor);
     }
 
@@ -112,7 +121,9 @@ public class TableCalendar extends TableCellInputWidget {
 	public void saveValue() {
         if(!enabled)
             return;
-        if(editor.getValue() != null)
+        if(field instanceof QueryDateField)
+            field.setValue(editor.getText());
+        else
             field.setValue(editor.getValue());
         super.saveValue();
 	}

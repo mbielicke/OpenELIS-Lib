@@ -86,9 +86,9 @@ public class QueryDateField extends QueryField {
     public boolean isInRange() {
         // TODO Auto-generated method stub
         for (String param : parameter) {
-            String[] params = param.split("..");
-            for (int i = 0; i < params.length; i++) {
-                Date date = new Date(params[i].replaceAll("-", "/"));
+            //String[] params = param.split("..");
+            //for (int i = 0; i < params.length; i++) {
+                Date date = new Date(param.replaceAll("-", "/"));
                 DatetimeRPC dVal = DatetimeRPC.getInstance(begin, end, date);
                 if (min != null && dVal.before(DatetimeRPC.getInstance()
                                                           .add(-min.intValue()))) {
@@ -101,7 +101,7 @@ public class QueryDateField extends QueryField {
                     return false;
                 }
             }
-        }
+        //}
         return true;
     }
 
