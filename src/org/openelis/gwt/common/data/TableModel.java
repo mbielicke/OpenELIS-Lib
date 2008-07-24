@@ -277,11 +277,13 @@ public class TableModel implements Serializable {
     public boolean validate() {
     	boolean valid = true;
     	for(TableRow row : rows){
-    		for (int i = 0; i < row.numColumns(); i++){
-    			row.getColumn(i).validate();
-    			if(!row.getColumn(i).valid)
-    				valid = false;
-    		}
+            if(row.show){
+                for (int i = 0; i < row.numColumns(); i++){
+                    row.getColumn(i).validate();
+                    if(!row.getColumn(i).valid)
+                        valid = false;
+                }
+            }
     	}
     	return valid;
     }
