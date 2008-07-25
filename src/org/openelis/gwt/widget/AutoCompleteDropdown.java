@@ -281,7 +281,7 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	public void onKeyUp(Widget arg0, char arg1, int arg2) {
 		if (!textBox.isReadOnly() && choicesPopup.isVisible()) {
-			if (arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_TAB
+			if (arg1 == KEY_DOWN || arg1 == KEY_UP || arg1 == KEY_TAB || arg1 == KEY_ENTER
 					|| arg1 == KEY_LEFT || arg1 == KEY_RIGHT || arg1 == KEY_ALT || 
 					arg1 == KEY_CTRL || arg1 == KEY_SHIFT)
 				return;
@@ -331,6 +331,7 @@ public class AutoCompleteDropdown extends Composite implements
                                               + this.getOffsetHeight() - 1);
                 choicesPopup.setWidget(scrollList);
                 choicesPopup.show();
+                scrollList.active = true;
                
                 scrollList.sizeTable();
                 
@@ -432,6 +433,7 @@ public class AutoCompleteDropdown extends Composite implements
                                           + this.getOffsetHeight() - 1);
             choicesPopup.setWidget(hp);
             choicesPopup.show();
+            scrollList.active = true;
 		}
 	}
 
@@ -698,6 +700,7 @@ public class AutoCompleteDropdown extends Composite implements
 			clickedArrow = false;
 		}
 		visible = false;
+        scrollList.active = false;
 	}
 
 	public void onFocus(Widget sender) {

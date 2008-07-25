@@ -65,7 +65,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     private int top = 0;
     private int cellHeight = 18;
     private int[] cellWidths;
-    public int active = -1;
+    public int activeIndex = -1;
     private int cellspacing = 1;
     public boolean drag;
     public boolean drop;
@@ -170,7 +170,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         view.table.getRowFormatter().removeStyleName(index, TableView.selectedStyle);
         if(selected.contains(dm.get(start+index))){
             view.table.getRowFormatter().addStyleName(index, TableView.selectedStyle);
-            active = index;
+            activeIndex = index;
         }
     }
     
@@ -347,7 +347,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         for(int i=0; i < view.table.getRowCount(); i++){
             view.table.getRowFormatter().removeStyleName(i,TableView.selectedStyle);
         }        
-        active = -1;
+        activeIndex = -1;
     }
 
     public void addChangeListener(ChangeListener listener) {
@@ -365,7 +365,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
 
     public int getActive() {
-        return active;
+        return activeIndex;
     }
 
     public int getStart() {
@@ -377,7 +377,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
 
     public void setActive(int active) {
-        this.active = active;
+        this.activeIndex = active;
         if(active > -1 && view.table.getRowCount() > 0){
             view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
             //this will make sure it isnt already in the array
@@ -390,7 +390,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
             }
             
         }
-        super.active=true;
+        //super.active=true;
         
     }
     
@@ -442,11 +442,11 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
         int clicked = row;
         super.active = true;
-            if(active > -1){
+            if(activeIndex > -1){
                 if(!ctrl){
                     if(!multi){
-                        view.table.getRowFormatter().removeStyleName(active,TableView.selectedStyle);
-                        selected.remove(dm.get(start+active));
+                        view.table.getRowFormatter().removeStyleName(activeIndex,TableView.selectedStyle);
+                        selected.remove(dm.get(start+activeIndex));
                     }
                 }   
             }
@@ -456,8 +456,8 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
             }else{
                 if(!multi)
                     selected.clear();
-                active = clicked;
-                view.table.getRowFormatter().addStyleName(active,TableView.selectedStyle);
+                activeIndex = clicked;
+                view.table.getRowFormatter().addStyleName(activeIndex,TableView.selectedStyle);
                 selected.add(dm.get(start+clicked));
             }
             changeListeners.fireChange(this);
@@ -469,45 +469,45 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
         ctrl = modifiers == KeyboardListener.MODIFIER_CTRL;
         if (KeyboardListener.KEY_DOWN == code) {
-            if(active < 0){
-                active = 0;
-                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                selected.add(dm.get(start+active));
+            if(activeIndex < 0){
+                activeIndex = 0;
+                view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
+                selected.add(dm.get(start+activeIndex));
             }else{
-                if(active == view.table.getRowCount() -1){
-                    if(start+active+1 < dm.size()){
-                        selected.remove(dm.get(start+active));
-                        selected.add(dm.get(start+active+1));
+                if(activeIndex == view.table.getRowCount() -1){
+                    if(start+activeIndex+1 < dm.size()){
+                        selected.remove(dm.get(start+activeIndex));
+                        selected.add(dm.get(start+activeIndex+1));
                     }
                     view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
+                    view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
                 }else{
-                    view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
-                    selected.remove(dm.get(start+active));
-                    active++;
-                    view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                    selected.add(dm.get(start+active));
+                    view.table.getRowFormatter().removeStyleName(activeIndex, TableView.selectedStyle);
+                    selected.remove(dm.get(start+activeIndex));
+                    activeIndex++;
+                    view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
+                    selected.add(dm.get(start+activeIndex));
                 }
             }
         }
         if (KeyboardListener.KEY_UP == code) {
-            if(active == 0){
-                if(start+active-1 > -1){
-                    selected.remove(dm.get(start+active));
-                    selected.add(dm.get(start+active-1));
+            if(activeIndex == 0){
+                if(start+activeIndex-1 > -1){
+                    selected.remove(dm.get(start+activeIndex));
+                    selected.add(dm.get(start+activeIndex-1));
                 }
                 view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-            }else if (active > 0){
-                view.table.getRowFormatter().removeStyleName(active, TableView.selectedStyle);
-                selected.remove(dm.get(start+active));
-                active--;
-                view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-                selected.add(dm.get(start+active));
+                view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
+            }else if (activeIndex > 0){
+                view.table.getRowFormatter().removeStyleName(activeIndex, TableView.selectedStyle);
+                selected.remove(dm.get(start+activeIndex));
+                activeIndex--;
+                view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
+                selected.add(dm.get(start+activeIndex));
             }
         }
         if (KeyboardListener.KEY_ENTER == code || KeyboardListener.KEY_TAB == code) {
-            if(active > -1){
+            if(activeIndex > -1){
                 changeListeners.fireChange(this);
             }
         }       
