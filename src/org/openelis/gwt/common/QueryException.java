@@ -15,17 +15,17 @@
 */
 package org.openelis.gwt.common;
 
-public class QueryNotFoundException extends RPCException {
+public class QueryException extends RPCException {
 
 	private static final long serialVersionUID = 1L;
 	private String msg;
     public String appMsg;
 
-    public QueryNotFoundException() {
+    public QueryException() {
         super();
     }
 
-    public QueryNotFoundException(String msg) {
+    public QueryException(String msg) {
         super(msg);
         this.msg = msg;
     }

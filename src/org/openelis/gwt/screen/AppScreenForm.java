@@ -16,13 +16,8 @@
 package org.openelis.gwt.screen;
 
 //import com.google.gwt.i18n.client.ConstantsWithLookup;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.EnumSet;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.LastPageException;
@@ -35,8 +30,13 @@ import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
 
-import java.util.EnumSet;
-import java.util.Iterator;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
+import com.google.gwt.user.client.ui.Widget;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
  * the ButtonPanel widget and default logic for standard forms that accept
@@ -113,7 +113,6 @@ public class AppScreenForm extends AppScreen implements FormInt, ChangeListener,
             key = null;
     	busy = false;
     	window.setStatus("", "");
-        changeState(State.DISPLAY);
     	if(success)
     		changeState(State.DISPLAY);
     	else{
