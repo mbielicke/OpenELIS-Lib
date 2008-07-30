@@ -216,7 +216,6 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }else{    
             
         }
-        ft.addStyleName("Header");
         if(controller.showRows) {
         	if(headers != null)
         		ft.setWidget(0,1,headerView);

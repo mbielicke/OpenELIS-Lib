@@ -42,10 +42,6 @@ public class StringField extends AbstractField implements Serializable {
     public StringField() {
         object = new StringObject();
     }
-    
-    public StringField(String objValue) {
-        object = new StringObject(objValue);
-    }
 
     public StringField(Node node){
         this();
@@ -65,6 +61,11 @@ public class StringField extends AbstractField implements Serializable {
             setRequired(new Boolean(node.getAttributes()
                                                 .getNamedItem("required")
                                                 .getNodeValue()).booleanValue());
+        if (node.getAttributes().getNamedItem("reset") != null)
+            setAllowReset(new Boolean(node.getAttributes()
+                                                .getNamedItem("reset")
+                                                .getNodeValue()).booleanValue());
+        
         if (node.hasChildNodes()) {
             setValue(node.getFirstChild().getNodeValue());
         }

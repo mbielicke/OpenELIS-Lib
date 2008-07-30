@@ -31,6 +31,8 @@ import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.table.EditTable;
 import org.openelis.gwt.widget.table.TableWidget;
 
+import java.util.ArrayList;
+
 public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
     
     protected ScreenInputWidget queryWidget;
@@ -142,18 +144,17 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         	((EditTable)displayWidget).load(0);
         	return;
         }
-    	String[] errors;
+    	ArrayList<String> errors;
         errors = screen.rpc.getField(key).getErrors();
         
         errorPanel.clear();
-        for (int i = 0; i < errors.length; i++) {
-            String error = errors[i];
+        for (String error : errors) {
             MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
             errorLabel.setStyleName("errorPopupLabel");
             //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
             errorPanel.add(errorLabel);
         }
-        if(errors.length == 0){
+        if(errors.size() == 0){
             errorImg.setStyleName("ErrorPanelHidden");
         }else{
             errorImg.setStyleName("ErrorPanel");

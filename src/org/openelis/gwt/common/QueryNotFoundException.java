@@ -15,25 +15,22 @@
 */
 package org.openelis.gwt.common;
 
-import java.io.Serializable;
+public class QueryNotFoundException extends RPCException {
 
-public class SecurityObject implements Serializable {
-    public enum Flags {SELECT,ADD,UPDATE,DELETE,VIEW,ASSIGN,COMPLETE,RELEASE,CANCEL}
-    
-    private static final long serialVersionUID = 1L;
-    protected Integer moduleId;
-    protected String moduleName;
-    
-    public Integer getId() {
-        return moduleId;
-    }
-    
-    public String getName() {
-        return moduleName;
-    }
-    
-    public boolean has(Flags fl){
-        return false;
+	private static final long serialVersionUID = 1L;
+	private String msg;
+    public String appMsg;
+
+    public QueryNotFoundException() {
+        super();
     }
 
+    public QueryNotFoundException(String msg) {
+        super(msg);
+        this.msg = msg;
+    }
+
+    public String getMessage() {
+        return this.msg;
+    }
 }

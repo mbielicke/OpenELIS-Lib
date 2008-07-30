@@ -35,6 +35,8 @@ import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.MenuLabel;
 
+import java.util.ArrayList;
+
 public class TableCellInputWidget extends SimplePanel implements TableCellWidget, MouseListener, SourcesMouseEvents, FocusListener {
 
     protected AbstractField field;
@@ -79,16 +81,15 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     
     public void drawErrors() {
         addStyleName("CellError");
-        String[] errors = field.getErrors();
+        ArrayList<String> errors = field.getErrors();
         errorPanel.clear();
-        for (int i = 0; i < errors.length; i++) {
-            String error = errors[i];
+        for (String error : errors) {
             MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
             errorLabel.setStyleName("errorPopupLabel");
             //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
             errorPanel.add(errorLabel);
         }
-        if(errors.length == 0){
+        if(errors.size() == 0){
             removeMouseListener(this);
         }else{
             removeMouseListener(this);

@@ -22,8 +22,11 @@
 package org.openelis.gwt.common;
 
 
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
+
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.screen.ScreenBase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,23 +40,38 @@ import java.util.Vector;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class FormRPC implements IForm, Serializable {
+public class FormRPC extends AbstractField implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private HashMap<String,AbstractField> fields = new HashMap<String,AbstractField>();
-    public int operation;
+    public enum Status {valid,invalid}
     public Status status;
     public ArrayList<String> error = new ArrayList<String>();
-    public String action;
-    public Integer userId;
-    public String userName;
-    public String fullName;
     public String key;
+    public boolean load;
 
     public FormRPC() {
     }
 
+    public FormRPC(Node node) {
+        NodeList fieldList = node.getChildNodes();
+        HashMap map = new HashMap();
+        for (int j = 0; j < fieldList.getLength(); j++) {
+            if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                AbstractField field = ScreenBase.createField(fieldList.item(j));
+                map.put((String)field.getKey(), field);
+            }
+        }
+        setFieldMap(map);
+        key = node.getAttributes().getNamedItem("key").getNodeValue();
+        setKey(key);
+        if(node.getAttributes().getNamedItem("load") != null){
+            if(node.getAttributes().getNamedItem("load").getNodeValue().equals("true"))
+                load = true;
+        }
+    }
+    
     public void setFieldMap(HashMap<String,AbstractField> fields) {
         this.fields = fields;
     }
@@ -65,6 +83,11 @@ public class FormRPC implements IForm, Serializable {
     public Object getFieldValue(String key) {
         // TODO Auto-generated method stub
         try {
+            if(key.indexOf(":") > -1){
+                String rpc = key.substring(0,key.indexOf(":"));
+                String field = key.substring(key.indexOf(":")+1,key.length());
+                return ((FormRPC)getField(rpc)).getFieldValue(field);
+            }
             AbstractField field = fields.get(key);
             return field.getValue();
         } catch (Exception e) {
@@ -73,12 +96,23 @@ public class FormRPC implements IForm, Serializable {
     }
 
     public Vector getFieldValues(String key) {
+        if(key.indexOf(":") > -1){
+            String rpc = key.substring(0,key.indexOf(":"));
+            String field = key.substring(key.indexOf(":")+1,key.length());
+            return ((FormRPC)getField(rpc)).getFieldValues(field);
+        }
         AbstractField field = fields.get(key);
         return field.getValues();
     }
 
     public void setFieldValue(String key, Object value) {
         // TODO Auto-generated method stub
+        if(key.indexOf(":") > -1){
+            String rpc = key.substring(0,key.indexOf(":"));
+            String field = key.substring(key.indexOf(":")+1,key.length());
+            ((FormRPC)getField(rpc)).setFieldValue(field,value);
+            return;
+        }
         AbstractField field = fields.get(key);
         field.setValue(value);
     }
@@ -88,15 +122,36 @@ public class FormRPC implements IForm, Serializable {
     }
 
     public void setFieldError(String key, String err) {
+        if(key.indexOf(":") > -1){
+            String rpc = key.substring(0,key.indexOf(":"));
+            String field = key.substring(key.indexOf(":")+1,key.length());
+            ((FormRPC)getField(rpc)).setFieldError(field,err);
+            return;
+        }
         AbstractField field = fields.get(key);
         field.addError(err);
     }
 
     public AbstractField getField(String key) {
+        if(key.indexOf(":") > -1){
+            String rpc = key.substring(0,key.indexOf(":"));
+            String field = key.substring(key.indexOf(":")+1,key.length());
+            return ((FormRPC)getField(rpc)).getField(field);
+        }
         if (!fields.containsKey(key)) {
             return null;
         }
         return fields.get(key);
+    }
+    
+    public void setField(String key, AbstractField field){
+        if(key.indexOf(":") > -1){
+            String rpc = key.substring(0,key.indexOf(":"));
+            String fieldkey = key.substring(key.indexOf(":")+1,key.length());
+            ((FormRPC)getField(rpc)).setField(fieldkey,field);
+            return;
+        }
+        fields.put(key, field);
     }
 
     /*
@@ -104,12 +159,12 @@ public class FormRPC implements IForm, Serializable {
      * 
      * @see edu.uiowa.uhl.inmsp.interfaces.IForm#getError()
      */
-    public ArrayList getErrors() {
+    public ArrayList<String> getErrors() {
         // TODO Auto-generated method stub
         return error;
     }
 
-    public boolean validate() {
+    public void validate() {
         // TODO Auto-generated method stub
         boolean valid = true;
         for (AbstractField field  : fields.values()) {
@@ -120,9 +175,9 @@ public class FormRPC implements IForm, Serializable {
             }
         }
         if (status == Status.invalid)
-            return false;
+            return;
         status = Status.valid;
-        return valid;
+        return;
     }
 
     public void reset() {
@@ -143,13 +198,7 @@ public class FormRPC implements IForm, Serializable {
         }        
         
         clone.setFieldMap(cloneMap);
-        clone.operation = operation;
         clone.status = status;
-        clone.action = action;
-        clone.userId = userId;
-        clone.userName = userName;
-        clone.fullName = fullName;
-        clone.key = key;
         
         return clone;
     }

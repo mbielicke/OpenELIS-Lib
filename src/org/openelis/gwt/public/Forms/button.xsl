@@ -45,7 +45,7 @@ version="1.0">
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<appButton action="prev" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
+	<appButton action="previous" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="PreviousButtonImage"/>
            	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>

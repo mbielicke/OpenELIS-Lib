@@ -19,6 +19,7 @@ import com.google.gwt.xml.client.Node;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class AbstractField implements DataField, Serializable {
@@ -27,12 +28,13 @@ public class AbstractField implements DataField, Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    protected Vector<String> errors = new Vector<String>();
+    protected ArrayList<String> errors = new ArrayList<String>();
     protected boolean required;
     protected String key;
     protected String tip;
     protected DataObject object;
     protected boolean valid = true;
+    protected boolean allowReset = true;
 
     public void setRequired(boolean required) {
         this.required = required;
@@ -47,11 +49,8 @@ public class AbstractField implements DataField, Serializable {
         valid = false;
     }
 
-    public String[] getErrors() {
-        String[] retErrors = new String[errors.size()];
-        for (int i = 0; i < errors.size(); i++)
-            retErrors[i] = errors.get(i);
-        return retErrors;
+    public ArrayList getErrors() {
+        return errors;
     }
 
     public Vector getValues() {
@@ -78,7 +77,7 @@ public class AbstractField implements DataField, Serializable {
     }
     
     public void clearErrors() {
-        errors = new Vector<String>();
+        errors = new ArrayList<String>();
     }
 
     public Object getInstance(Node node) {
@@ -127,5 +126,13 @@ public class AbstractField implements DataField, Serializable {
     
     public DataObject getDataObject() {
         return object;
+    }
+    
+    public void setAllowReset(boolean reset) {
+        allowReset = reset;
+    }
+    
+    public boolean allowsReset() {
+        return allowReset;
     }
 }

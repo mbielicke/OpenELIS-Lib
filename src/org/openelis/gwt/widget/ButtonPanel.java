@@ -15,25 +15,25 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.screen.AppScreenForm;
+import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandListenerCollection;
+import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.ScreenAppButton;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ButtonPanel extends Composite implements ClickListener, SourcesChangeEvents, ChangeListener {
+public class ButtonPanel extends Composite implements ClickListener, SourcesCommandEvents, CommandListener {
 
-    public enum ButtonPanelState {ENABLED,LOCKED} 
+    public enum ButtonPanelState {ENABLED,LOCKED}
+    public enum Action {ADD,UPDATE,DELETE,NEXT,PREVIOUS,RELOAD,QUERY,COMMIT,ABORT,SELECT}
     /**
 	 * Panel used to display buttons
 	 */
@@ -41,12 +41,10 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
 
     private ArrayList<AppButton> buttons = new ArrayList<AppButton>();
     
-    private ChangeListenerCollection changeListeners;
+    private CommandListenerCollection commandListeners;
     
     private ButtonPanelState state = ButtonPanelState.ENABLED;
     
-    public AppButton buttonClicked;
-
     public ButtonPanel() {
         initWidget(hp);
 
@@ -84,8 +82,9 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
      */
     public void onClick(Widget sender) {
         if(state == ButtonPanelState.ENABLED){
-            buttonClicked = (AppButton)sender;
-            changeListeners.fireChange(this);
+            Action action = Action.valueOf(((AppButton)sender).action.toUpperCase().split(":")[0]);
+            if(commandListeners != null)
+                commandListeners.fireCommand(action,sender);
         }else{
             ((AppButton)sender).changeState(ButtonState.UNPRESSED);
         }
@@ -171,25 +170,23 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesChan
     	}    	
     }
 
-    public void addChangeListener(ChangeListener listener) {
-       if(changeListeners == null){
-           changeListeners = new ChangeListenerCollection();
+    public void addCommandListener(CommandListener listener) {
+       if(commandListeners == null){
+           commandListeners = new CommandListenerCollection();
        }
-       changeListeners.add(listener);
+       commandListeners.add(listener);
         
     }
 
-    public void removeChangeListener(ChangeListener listener) {
-        if(changeListeners != null) {
-            changeListeners.remove(listener);
+    public void removeCommandListener(CommandListener listener) {
+        if(commandListeners != null) {
+            commandListeners.remove(listener);
         }
         
     }
 
-    public void onChange(Widget sender) {
-        if(sender instanceof AppScreenForm){
-            setState(((AppScreenForm)sender).state);
-        }
+    public void performCommand(Enum action, Object obj) {
+            setState((FormInt.State)action);
     }
     
     public int numberOfButtons(){

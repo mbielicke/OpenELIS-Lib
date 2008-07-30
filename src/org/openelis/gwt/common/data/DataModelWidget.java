@@ -15,42 +15,50 @@
 */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
+
+import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandListenerCollection;
+import org.openelis.gwt.event.SourcesCommandEvents;
 
 
-public class DataModelWidget extends Composite implements SourcesChangeEvents {
+    public class DataModelWidget extends Composite implements SourcesCommandEvents {
 
-    public enum Action {SELECTION,REFRESH,GETPAGE,ADD,DELETE}
-    
-    private ChangeListenerCollection changeListeners;
-    
-    private DataModel model = new DataModel();
+    public enum Action {SELECTION,REFRESH,GETPAGE,ADD,DELETE,FETCH}
     
     public Action action;
     
-    public void addChangeListener(ChangeListener listener) {
-        if (changeListeners == null)
-            changeListeners = new ChangeListenerCollection();
-        changeListeners.add(listener);
+    private CommandListenerCollection commandListeners;
+    
+    private DataModel model = new DataModel();
+    
+    private int candidate = 0;
+    
+    public Request lastRequest;
+    
+    public void addCommandListener(CommandListener listener) {
+        if (commandListeners == null)
+            commandListeners = new CommandListenerCollection();
+        commandListeners.add(listener);
     }
 
-    public void removeChangeListener(ChangeListener listener) {
-        if (changeListeners != null)
-            changeListeners.remove(listener);
+    public void removeCommandListener(CommandListener listener) {
+        if (commandListeners != null)
+            commandListeners.remove(listener);
     }
     
-    private void fireChange(Action action) {
-        this.action = action;
-        if(changeListeners != null)
-        	changeListeners.fireChange(this);
+    private void fireCommand(Action action,Object obj) {
+        if(commandListeners != null)
+        	commandListeners.fireCommand(action,obj);
     }
     
     public void setModel(DataModel model){
         this.model = model;
-        fireChange(Action.REFRESH);
+        candidate = 0;
+        fireCommand(Action.REFRESH,model);
     }
     
     public DataModel getModel() {
@@ -58,35 +66,45 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     }
     
     public void next() {
-        try {
-            model.select(model.getSelectedIndex()+1);
-            fireChange(Action.SELECTION);
-        }catch(IndexOutOfBoundsException e){
-            model.setPage(model.getPage()+1);
-            model.selecttLast(false);
-            fireChange(Action.GETPAGE);
-        }
+        select(++candidate);
     }
     
     public void previous() {
-        try {
-            model.select(model.getSelectedIndex()-1);
-            fireChange(Action.SELECTION);
-        }catch(IndexOutOfBoundsException e){
-            model.setPage(model.getPage()-1);
-            model.selecttLast(true);
-            fireChange(Action.GETPAGE);
-        }
+        select(--candidate);
     }
     
-    public void select(int selection) throws IndexOutOfBoundsException {
-        model.select(selection);
-        fireChange(Action.SELECTION);
+    public void select(final int selection) throws IndexOutOfBoundsException {
+        if(lastRequest != null && lastRequest.isPending()){
+            lastRequest.cancel();
+        }
+        if(selection > model.size() - 1){
+            setPage(model.getPage()+1);
+        }else if(selection < 0){
+            if(model.getPage() > 0){
+                model.selecttLast(true);
+                setPage(model.getPage()-1);
+	        }
+        }else{
+            AsyncCallback callback = new AsyncCallback() {
+                public void onSuccess(Object result){
+                    model.select(selection);
+                    candidate = selection;
+                    fireCommand(Action.SELECTION,new Integer(selection));
+                }
+            
+                public void onFailure(Throwable caught) {
+                    Window.alert(caught.getMessage());
+            
+                }
+            
+            };
+            fireCommand(Action.FETCH,new Object[] {model.get(selection).getInstance(),callback});
+        }
     }
     
     public void add(DataSet set){
         model.add(set);
-        fireChange(Action.ADD);
+        fireCommand(Action.ADD,null);
     }
     
     public DataSet getSelected() {
@@ -95,7 +113,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     
     public void delete(int index){
         model.delete(index);
-        fireChange(Action.DELETE);
+        fireCommand(Action.DELETE,new Integer(index));
     }
     
     public int getSelectedIndex() {
@@ -108,7 +126,7 @@ public class DataModelWidget extends Composite implements SourcesChangeEvents {
     
     public void setPage(int page) {    	
         model.setPage(page);
-        fireChange(Action.GETPAGE);
+        fireCommand(Action.GETPAGE,new Integer(page));
     }
 
 }

@@ -408,8 +408,8 @@ public class EditTable extends TableController implements
                     setCellDisplay(row, selectedCell);
                 }
             }
-            if(autoAdd && fsRow > -1 && rowList[fsRow] == autoAddRow){
-                if(manager == null || (manager != null && manager.doAutoAdd(model.numRows() -1 ,fsCol,this))){
+            /*if(autoAdd && fsRow > -1 && rowList[fsRow] == autoAddRow){
+                if(manager == null || (manager != null && manager.doAutoAdd(autoAddRow,this))){
                      autoAddRow = null;
                      rowList[row] = model.getRow(model.numRows() -1);
                      load(cellHeight*model.shownRows());
@@ -425,7 +425,8 @@ public class EditTable extends TableController implements
                          }
                      });
                 }
-            }
+            }*/
+            
             if (col > -1 && (manager == null || (manager != null && manager.canEdit(model.indexOf(rowList[row]), col, this))))
                  setCellEditor(row, col);
             else
@@ -464,12 +465,12 @@ public class EditTable extends TableController implements
      */
     public void onChange(Widget sender) {
         try{
-        if(sender instanceof AutoCompleteDropdown){
+        /*if(sender instanceof AutoCompleteDropdown){
             int sel = selected;
             int selCol = selectedCell;
             unselect(sel);
-            select(sel,selCol);
-        }   
+            select(sel);
+        } */  
         if(sender instanceof DataModelWidget){
         	DataModelWidget modelWidget = (DataModelWidget)sender;
         	if(modelWidget.action == DataModelWidget.Action.SELECTION){
@@ -676,8 +677,14 @@ public class EditTable extends TableController implements
         try{
     	TableCellWidget wid = (TableCellWidget)view.table.getWidget(row,col);
     	wid.saveValue();
-        if(rowList[row] == autoAddRow && manager.doAutoAdd(row, col, this)){
+        if(rowList[row] == autoAddRow && manager.doAutoAdd(autoAddRow, this)){
             model.addRow(autoAddRow);
+            autoAddRow = null;
+            rowList[row] = model.getRow(model.numRows() -1);
+            load(cellHeight*model.shownRows());
+            selectedCell = col;
+            selected = row;
+            view.table.getRowFormatter().addStyleName(row, view.selectedStyle);
         }
         if (manager != null) {
                manager.finishedEditing(model.indexOf(rowList[row]), col, this);
@@ -971,8 +978,8 @@ public class EditTable extends TableController implements
                     if(!(view.table.getWidget(selected, selectedCell) instanceof TableCheck)){
                         saveValue(selected, selectedCell);
                         setCellDisplay(selected, selectedCell);
-                        if(autoAdd && fsRow > -1 && rowList[fsRow] == autoAddRow){
-                            if(manager == null || (manager != null && manager.doAutoAdd(model.numRows() -1 ,fsCol,this))){
+                       /* if(autoAdd && fsRow > -1 && rowList[fsRow] == autoAddRow){
+                            if(manager == null || (manager != null && manager.doAutoAdd(autoAddRow,this))){
                                  autoAddRow = null;
                                  rowList[fsRow] = model.getRow(model.numRows() -1);
                                  load(cellHeight*model.shownRows());
@@ -988,7 +995,7 @@ public class EditTable extends TableController implements
                                      }
                                  });
                             }
-                        }
+                        }*/
                         selectedCell = -1;
                     } else {
                         if (manager != null)

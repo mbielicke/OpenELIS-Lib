@@ -15,20 +15,29 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
+import org.openelis.gwt.common.data.AbstractField;
+
+import java.util.ArrayList;
 /**
  * ScreenTab wraps a GWT TabPanel for displaying widgets 
  * on a Screen in Tab Layout.
  * @author tschmidt
  *
  */
-public class ScreenTab extends ScreenWidget {
+public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener {
+    
+    private ArrayList<String> tabList = new ArrayList<String>();
+    private AbstractField field;
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -78,9 +87,14 @@ public class ScreenTab extends ScreenWidget {
                                              .getNodeValue());
                 }
             }
+            if(tabs.item(k).getAttributes().getNamedItem("key") != null)
+                tabList.add(tabs.item(k).getAttributes().getNamedItem("key").getNodeValue());
+            else
+                tabList.add(null);
         }
         panel.selectTab(0);
         panel.addTabListener((TabListener)screen);
+        panel.addTabListener(this);
         setDefaults(node, screen);
     }
 
@@ -92,6 +106,33 @@ public class ScreenTab extends ScreenWidget {
     public void destroy(){
         panel = null;
         super.destroy();
+    }
+    public Panel getPanel() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public void submit(AbstractField field) {
+        if(field != null){
+            field.setValue(tabList.get(panel.getTabBar().getSelectedTab()));
+        }
+    }
+    
+    @Override
+    public void load(AbstractField field) {
+        // TODO Auto-generated method stub
+        this.field = field;
+        if(field.getValue() != null && !field.getValue().equals("")){
+            panel.selectTab(tabList.indexOf(field.getValue()));
+        }
+    }
+    public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+    public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
+        // TODO Auto-generated method stub
+        field.setValue(tabList.get(panel.getTabBar().getSelectedTab()));
     }
 
 }

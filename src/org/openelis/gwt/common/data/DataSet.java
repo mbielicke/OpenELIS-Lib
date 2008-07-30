@@ -18,7 +18,7 @@ package org.openelis.gwt.common.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DataSet implements Serializable {
+public class DataSet implements Serializable, DataObject{
     
     private static final long serialVersionUID = 1L;
 
@@ -81,5 +81,15 @@ public class DataSet implements Serializable {
         }
         return true;
         }
+
+    public Object getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setValue(Object object) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

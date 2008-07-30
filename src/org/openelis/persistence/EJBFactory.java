@@ -48,6 +48,7 @@ public class EJBFactory {
                 props.setProperty(Context.INITIAL_CONTEXT_FACTORY,
                 "org.jboss.security.jndi.LoginInitialContextFactory");
                 props.setProperty(Context.SECURITY_PROTOCOL, "other");
+                props.setProperty("SessionID", SessionManager.getSession().getId());
                 HttpClient httpclient = new HttpClient();
                 String url = ("https://www.uhl.uiowa.edu/cas/uhlcasapter");
                 PostMethod post = new PostMethod(url);
