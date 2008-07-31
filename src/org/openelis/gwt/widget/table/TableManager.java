@@ -16,6 +16,7 @@
 package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.TableRow;
 import org.openelis.gwt.widget.table.TableController;
 
 public interface TableManager {
@@ -31,7 +32,7 @@ public interface TableManager {
 
     public void finishedEditing(int row, int col, TableController controller);
     
-    public boolean doAutoAdd(int row, int col, TableController controller);
+    public boolean doAutoAdd(TableRow row, TableController controller);
     
     public void rowAdded(int row, TableController controller);
     
