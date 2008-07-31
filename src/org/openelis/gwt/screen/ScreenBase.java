@@ -272,6 +272,7 @@ public class ScreenBase extends Composite implements FocusListener{
                 ((FormRPC)field).load = false;
             }else if(field.allowsReset()){
                 field.setValue(null);
+                field.reset();
             }
         }
     }

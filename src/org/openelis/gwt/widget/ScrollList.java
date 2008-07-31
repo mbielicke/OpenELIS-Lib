@@ -235,7 +235,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
             createRow(dm.size() -1);
             loadRow(dm.size()-1);
         }
-        view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
+        view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+(dm.size()*2)+cellspacing);
     }
     
     /**

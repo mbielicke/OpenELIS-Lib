@@ -135,4 +135,9 @@ public class AbstractField implements DataField, Serializable {
     public boolean allowsReset() {
         return allowReset;
     }
+    
+    public void reset() {
+        valid = true;
+        errors.clear();
+    }
 }

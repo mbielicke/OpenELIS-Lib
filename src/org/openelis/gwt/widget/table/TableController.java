@@ -158,7 +158,7 @@ public abstract class TableController extends Composite implements
     
     public void setMaxRows(int rows){
         maxRows = rows;
-        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing));
+        view.setHeight((rows*cellHeight+(rows*cellSpacing)+(rows*2)+cellSpacing));
     }
     
     public void setCellHeight(int height){
