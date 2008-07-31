@@ -570,7 +570,7 @@ public class EditTable extends TableController implements
     public void load(int pos) {
         unselect(-1);
         selectedCell = -1;
-        view.setScrollHeight((model.shownRows()*cellHeight)+(maxRows*cellSpacing)+cellSpacing+cellHeight);
+        view.setScrollHeight((model.shownRows()*cellHeight)+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing+cellHeight);
         view.scrollBar.setScrollPosition(pos);
         int tRows = maxRows;
         if(model.shownRows() < maxRows){
