@@ -15,6 +15,7 @@
 -->
 <module>
   <source path="screen"/>
+  <source path="event"/>
   <stylesheet src="CSS/screen.css"/>
   <servlet path="/CalendarServlet" class="org.openelis.gwt.server.CalendarServlet"/>
 </module>

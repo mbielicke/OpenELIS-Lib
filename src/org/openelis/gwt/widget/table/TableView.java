@@ -216,7 +216,6 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }else{    
             
         }
-        //ft.addStyleName("Header");
         if(controller.showRows) {
         	if(headers != null)
         		ft.setWidget(0,1,headerView);
@@ -246,7 +245,6 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         ft.setCellPadding(0);
         ft.setCellSpacing(0);
         table.setCellSpacing(1);
-        //table.setCellPadding(0);
         table.addStyleName(tableStyle);
         //table.sinkEvents(Event.KEYEVENTS);
         cellView.setWidget(table);

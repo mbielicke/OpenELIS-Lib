@@ -18,6 +18,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public interface DataField extends DataObject {
@@ -28,7 +29,7 @@ public interface DataField extends DataObject {
 
     public void addError(String err);
 
-    public String[] getErrors();
+    public ArrayList<String> getErrors();
 
     public Vector getValues();
 

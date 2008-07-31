@@ -33,8 +33,7 @@ import java.util.Vector;
  * Preferences - Java - Code Style - Code Templates
  */
 public interface IForm {
-     
-    public enum Status {valid,invalid}
+    
     
     public Object getFieldValue(String key);
 

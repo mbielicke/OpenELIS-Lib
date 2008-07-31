@@ -16,6 +16,7 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
@@ -61,6 +62,8 @@ public class AutoCompleteDropdown extends Composite implements
 		KeyboardListener, ChangeListener, ClickListener, MouseListener,
 		PopupListener, FocusListener, HasFocus, SourcesChangeEvents {
 	public HorizontalPanel mainHP = new HorizontalPanel();
+    
+    private Request lastRequest;
 
 	public TextBox textBox = new TextBox();
 
@@ -306,7 +309,11 @@ public class AutoCompleteDropdown extends Composite implements
 					}
 				}
 			} else if (text.length() > 0 && !text.endsWith("*")) {
-				new Delay(text, 350);
+                if (fieldCase.equals("upper"))
+                    text = text.toUpperCase();
+                else if (fieldCase.equals("lower"))
+                    text = text.toLowerCase();
+                callForMatches(text);
 				currentStart = -1;
 				currentActive = -1;
 			} else {
@@ -508,6 +515,8 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	protected void callForMatches(final String text) {
         if(cat != null){
+            if(lastRequest != null && lastRequest.isPending())
+                lastRequest.cancel();
           
             if(screen != null)
                 ((AppScreen)screen).window.setStatus("", "spinnerIcon");
@@ -517,7 +526,7 @@ public class AutoCompleteDropdown extends Composite implements
                 if(autoParams != null){
                     params = autoParams.getParams(screen.rpc);
                 }
-                autoService.getMatches(cat, scrollList.getDataModel(), text, params, new AsyncCallback() {
+                lastRequest = autoService.getMatches(cat, scrollList.getDataModel(), text, params, new AsyncCallback() {
                     public void onSuccess(Object result){
           
                         scrollList.setDataModel((DataModel)result);

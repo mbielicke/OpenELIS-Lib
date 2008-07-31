@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenButtonPanel;
 import org.openelis.gwt.screen.ScreenLabel;
@@ -45,13 +45,13 @@ import org.openelis.gwt.widget.table.TableController;
 import org.openelis.gwt.widget.table.TableView;
 
 public class AToZTable extends TableController implements
-                                              ClickListener, ChangeListener {
+                                              ClickListener, ChangeListener, CommandListener {
     
     private HorizontalPanel mainHP = new HorizontalPanel();
     private ScreenVertical alphabetButtonVP = new ScreenVertical();
     private VerticalPanel tablePanel = new VerticalPanel();
     protected DataModel dm;
-    protected DataModelWidget modelWidget;
+    public DataModelWidget modelWidget;
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean locked;
@@ -73,7 +73,7 @@ public class AToZTable extends TableController implements
         alphabetButtonVP.add(wid);
         if(wid instanceof ScreenButtonPanel){
             bpanel = (ButtonPanel)((ScreenWidget)wid).getWidget();
-            bpanel.addChangeListener(this);
+            bpanel.addCommandListener(this);
         }
     }
     
@@ -162,61 +162,7 @@ public class AToZTable extends TableController implements
     }    
 
     public void onChange(Widget sender) {
-        if(sender instanceof DataModelWidget){
-            if(((DataModelWidget)sender).action == DataModelWidget.Action.REFRESH) {
-                modelWidget = (DataModelWidget)sender;
-                dm = ((DataModelWidget)sender).getModel();
-                view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
-                view.setNavPanel(dm.getPage(), dm.getPage()+1, false);
-                scrollLoad(0);
-               // DOM.addEventPreview(this);
-                if(!refreshedByLetter){
-                    if(selectedButton != null){
-                        selectedButton.changeState(ButtonState.UNPRESSED);
-                    }
-                }else{
-                    refreshedByLetter = false;
-                }
-                active = true;
-            }
-            if(((DataModelWidget)sender).action == DataModelWidget.Action.SELECTION){
-                if(selectedRow > -1){
-                    view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
-                }
-                selectedRow = modelWidget.getSelectedIndex() - start;
-                view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
-                active = true;
-            }
-            return;
-        }
-        if(sender instanceof AppScreenForm) {
-            State state = ((AppScreenForm)sender).state;
-            if(bpanel != null){
-                if(state == State.ADD){
-                    bpanel.setPanelState(ButtonPanelState.LOCKED);
-                    locked = true;
-                    unselect(selectedRow);
-                }else if(state == State.DELETE || state == State.QUERY) {
-                    bpanel.setPanelState(ButtonPanelState.LOCKED);
-                    locked = true;
-                    unselect(selectedRow);
-                }else if(state == State.UPDATE) {
-                    bpanel.setPanelState(ButtonPanelState.LOCKED);
-                    locked = true;
-                }else if(state == State.DEFAULT || state == State.DISPLAY || state == State.BROWSE){
-                    bpanel.setPanelState(ButtonPanelState.ENABLED);
-                    locked = false;
-                }
-            }
-            return;
-        }
-        if(sender == bpanel){
-            if(selectedButton != null){
-                selectedButton.changeState(ButtonState.UNPRESSED);
-            }
-            selectedButton = bpanel.buttonClicked;
-            refreshedByLetter = true;
-        }
+
         if(sender instanceof CollapsePanel) {
             if(((CollapsePanel)sender).isOpen){
                 DeferredCommand.addCommand(new Command() {
@@ -231,17 +177,26 @@ public class AToZTable extends TableController implements
     public void setTableWidth(String width) {
         view.setWidth(width);
     }
-    public void onCellClicked(SourcesTableEvents sender, int row, int col){
+    public void onCellClicked(SourcesTableEvents sender, final int row, int col){
         if(!locked)
             active = true;
         if(selectedRow == row || locked){
             return;
         }
-        if(selectedRow > -1){
-            view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
-        }
-        selectedRow = row;
-        view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
+/*        modelWidget.callback = new AsyncCallback() {
+            public void onSuccess(Object result){
+                if(selectedRow > -1){
+                    view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
+                }
+                selectedRow = row;
+                view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
+            }
+            
+            public void onFailure(Throwable caught) {
+                
+            }
+        };
+*/        
         modelWidget.select(start+row);
     }
 
@@ -301,6 +256,59 @@ public class AToZTable extends TableController implements
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
         // TODO Auto-generated method stub
         
+    }
+
+    public void performCommand(Enum action, Object obj) {
+        if(action == DataModelWidget.Action.REFRESH) {
+            dm = (DataModel)obj;
+            view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
+            view.setNavPanel(dm.getPage(), dm.getPage()+1, false);
+            scrollLoad(0);
+           // DOM.addEventPreview(this);
+            if(!refreshedByLetter){
+                if(selectedButton != null){
+                    selectedButton.changeState(ButtonState.UNPRESSED);
+                }
+            }else{
+                refreshedByLetter = false;
+            }
+            active = true;
+        }
+        else if(action == DataModelWidget.Action.SELECTION){                
+            if(selectedRow > -1){
+                view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
+            }
+            selectedRow = ((Integer)obj).intValue() - start;
+            view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
+            active = true;
+        }
+        else if(action.getDeclaringClass() == State.class) {
+            if(bpanel != null){
+                if(action == State.ADD){
+                    bpanel.setPanelState(ButtonPanelState.LOCKED);
+                    locked = true;
+                    unselect(selectedRow);
+                }else if(action == State.DELETE || action == State.QUERY) {
+                    bpanel.setPanelState(ButtonPanelState.LOCKED);
+                    locked = true;
+                    unselect(selectedRow);
+                }else if(action == State.UPDATE) {
+                    bpanel.setPanelState(ButtonPanelState.LOCKED);
+                    locked = true;
+                }else if(action == State.DEFAULT || action == State.DISPLAY || action == State.BROWSE){
+                    bpanel.setPanelState(ButtonPanelState.ENABLED);
+                    locked = false;
+                }
+            }
+            return;
+        }
+        if(obj instanceof AppButton){
+            if(selectedButton != null){
+                selectedButton.changeState(ButtonState.UNPRESSED);
+            }
+            selectedButton = (AppButton)obj;
+            refreshedByLetter = true;
+        }
     }
 
 }

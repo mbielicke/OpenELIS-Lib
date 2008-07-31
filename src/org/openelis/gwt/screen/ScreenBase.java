@@ -106,18 +106,20 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void load() {
-        //try {
-            for(String key : widgets.keySet()) {
-                ScreenWidget inputField = widgets.get(key);
-                if (!rpc.getFieldMap().containsKey(key))
-                    continue;
-                AbstractField rpcField = rpc.getField(key);
-                inputField.load(rpcField);   
-                
+        load(rpc);
+    }
+    
+    protected void load(FormRPC rpc){
+        for(AbstractField field : rpc.getFieldMap().values()) {
+            if(field instanceof FormRPC){
+                load((FormRPC)field);
+            }else if(widgets.containsKey(field.getKey())){
+                ScreenWidget inputField = widgets.get((String)field.getKey());
+                inputField.load(field);
             }
-        //} catch (Exception e) {
-        //    Window.alert("Load " + e.getMessage());
-        //}
+        }
+        
+        
     }
 
     /**
@@ -189,14 +191,18 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void doSubmit() {
+        doSubmit(rpc);
+    }
+    
+    protected void doSubmit(FormRPC rpc) {
         rpc.reset();
-        for (String key : widgets.keySet()){
-            ScreenWidget inputField = widgets.get(key);
-            if (!rpc.getFieldMap().containsKey(key)) {
-               continue;
+        for (AbstractField field : rpc.getFieldMap().values()){
+            if(field instanceof FormRPC)
+                doSubmit((FormRPC)field);
+            else if(widgets.containsKey(field.getKey())){
+                ScreenWidget inputField = widgets.get(field.getKey());
+                inputField.submit(field);
             }
-            AbstractField rpcField = rpc.getField(key);
-            inputField.submit(rpcField);
         }
     }
 
@@ -255,12 +261,20 @@ public class ScreenBase extends Composite implements FocusListener{
      * This method will reset all input fields to default null value.
      * 
      */
-    protected void doReset() {
-        for (String key : rpc.getFieldMap().keySet()){
-            rpc.setFieldValue(key, null);
-            rpc.getField(key).reset();
+    protected void resetRPC() {
+        resetRPC(rpc);
+    }
+    
+    protected void resetRPC(FormRPC rpc) {
+        for (AbstractField field: rpc.getFieldMap().values()){
+            if(field instanceof FormRPC){
+                resetRPC((FormRPC)field);
+                ((FormRPC)field).load = false;
+            }else if(field.allowsReset()){
+                field.setValue(null);
+                field.reset();
+            }
         }
-        load();
     }
 
     /**

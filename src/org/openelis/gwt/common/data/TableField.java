@@ -46,9 +46,12 @@ public class TableField extends AbstractField {
 
     public void setValue(Object val) {
         // TODO Auto-generated method stub
-        if(val == null)
-            value = null;
-        else
+        if(val == null){
+            if(value != null)
+                ((TableModel)value).reset();
+            else
+                value = null;
+        }else
             value = (TableModel)val;
     }
 

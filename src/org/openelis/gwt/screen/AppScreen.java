@@ -35,7 +35,6 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.FormRPC;
-import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
@@ -117,8 +116,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     }
     
     public void afterDraw(boolean sucess) {
-        try {
-        load((FormRPC)forms.get("display"));
+       // try {
+        this.rpc = (FormRPC)forms.get("display");
+        load();
         DOM.addEventPreview(this);
         if(window != null){
             window.setName(name);
@@ -126,9 +126,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
             RootPanel.get().removeStyleName("ScreenLoad");
             window.setStatus(consts.get("loadCompleteMessage"),"");
         }
-        }catch(Exception e){
-            Window.alert("after draw " +e.getMessage());
-        }
+        //}catch(Exception e){
+        //    Window.alert("after draw " +e.getMessage());
+        //}
     }
     
     public void redrawScreen(String xmlDef){
@@ -144,35 +144,24 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
          
-         try {
-             NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
+         //try {
+             NodeList rpcList = xml.getDocumentElement().getChildNodes();
              for(int i = 0; i < rpcList.getLength(); i++){
-                 com.google.gwt.xml.client.Element rpcEl = (com.google.gwt.xml.client.Element)rpcList.item(i);
-                 NodeList fieldList = rpcEl.getChildNodes();
-                 HashMap map = new HashMap();
-                 for (int j = 0; j < fieldList.getLength(); j++) {
-                     if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                         AbstractField field = ScreenBase.createField(fieldList.item(j));
-                         map.put((String)field.getKey(), field);
-                     }
+                 if(rpcList.item(i).getNodeType() == Node.ELEMENT_NODE && rpcList.item(i).getNodeName().equals("rpc")){
+                     FormRPC form = (FormRPC)ScreenBase.createField(rpcList.item(i));
+                     form.load = true;
+                     forms.put(form.key, form);
                  }
-                 FormRPC form = new FormRPC();
-                 form.setFieldMap(map);
-                 form.key = rpcEl.getAttributes().getNamedItem("key").getNodeValue();
-                 forms.put(form.key, form);
              }
              draw();
-        } catch (Exception e) {
-           Window.alert("FormUtil: " + e.getMessage());
-         }
+        //} catch (Exception e) {
+         //  Window.alert("FormUtil: " + e.getMessage());
+        // }
         
          //load((FormRPC)forms.get("query"));
     }
     
-    protected void load(FormRPC rpc){
-        this.rpc = rpc;
-        load();
-    }
+
 
     public boolean onEventPreview(Event event) {
         if(DOM.eventGetType(event) == Event.ONKEYPRESS){

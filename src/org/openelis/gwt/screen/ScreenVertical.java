@@ -30,6 +30,8 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
+import org.openelis.gwt.common.data.AbstractField;
+
 /**
  * ScreenVertical wraps a GWT VerticalPanel to display widgets on a 
  * Screen in a vertical Column.
@@ -37,7 +39,7 @@ import com.google.gwt.xml.client.XMLParser;
  *
  */
 
-public class ScreenVertical extends ScreenWidget {
+public class ScreenVertical extends ScreenWidget implements ScreenPanel {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
@@ -184,9 +186,15 @@ public class ScreenVertical extends ScreenWidget {
      * This method loads the Widget from a String
      * @param xml
      */
-    public void load(String xml) {
+    public void load(AbstractField xml) {
+        load((String)xml.getValue());
+    }
+    
+    public void load(String xml){
+        clear();
+        if(xml == null || xml.equals(""))
+            return;
         Document doc = XMLParser.parse(xml);
-        panel.clear();
         createPanel(doc.getDocumentElement());
     }
     
@@ -214,6 +222,10 @@ public class ScreenVertical extends ScreenWidget {
                                                                .getAbsoluteLeft()) + "px");
             
         }
+    }
+    public void submit() {
+        // TODO Auto-generated method stub
+        
     }
 
 }
