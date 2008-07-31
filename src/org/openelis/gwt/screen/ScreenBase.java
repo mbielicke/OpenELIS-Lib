@@ -258,6 +258,7 @@ public class ScreenBase extends Composite implements FocusListener{
     protected void doReset() {
         for (String key : rpc.getFieldMap().keySet()){
             rpc.setFieldValue(key, null);
+            rpc.getField(key).reset();
         }
         load();
     }

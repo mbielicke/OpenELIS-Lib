@@ -322,7 +322,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
    
    public void setForm(boolean mode) {
        if(queryWidget == null){
-           if(mode)
+           if(mode && auto.cat == null)
                auto.setMultiSelect(true);
            else
                auto.setMultiSelect(multiSelect);

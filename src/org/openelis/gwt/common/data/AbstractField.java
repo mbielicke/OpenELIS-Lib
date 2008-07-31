@@ -128,4 +128,9 @@ public class AbstractField implements DataField, Serializable {
     public DataObject getDataObject() {
         return object;
     }
+    
+    public void reset() {
+        errors.clear();
+        valid = true;
+    }
 }
