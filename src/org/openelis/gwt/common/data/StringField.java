@@ -42,6 +42,10 @@ public class StringField extends AbstractField implements Serializable {
     public StringField() {
         object = new StringObject();
     }
+    
+    public StringField(String value) {
+        object = new StringObject(value);
+    }
 
     public StringField(Node node){
         this();

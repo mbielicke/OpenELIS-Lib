@@ -51,6 +51,10 @@ public class TableRow implements Serializable {
     public void addHidden(String name, AbstractField field) {
         hidden.put(name, field);
     }
+    
+    public void removeHidden(String name) {
+        hidden.remove(name);
+    }
 
     public AbstractField getHidden(String name) {
         return hidden.get(name);
