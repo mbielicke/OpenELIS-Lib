@@ -276,7 +276,8 @@ public class AToZTable extends TableController implements
         }
         else if(action == DataModelWidget.Action.SELECTION){                
             if(selectedRow > -1){
-                view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
+                if(selectedRow < view.table.getRowCount())
+                    view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
             }
             selectedRow = ((Integer)obj).intValue() - start;
             view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
