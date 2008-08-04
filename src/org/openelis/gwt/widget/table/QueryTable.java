@@ -90,6 +90,13 @@ public class QueryTable extends TableController {
         this.fields = fields;
     }
     
+    public void resetFields() {
+        for(AbstractField field : fields){
+            field.setValue(null);
+            field.reset();
+        }
+    }
+    
     /**
      * This method loads the row form the model specified by the passed index
      * into the table view.
@@ -132,7 +139,7 @@ public class QueryTable extends TableController {
      * 
      * @param row
      */
-    public void unselect(int row) {
+    public void unsfelect(int row) {
         try{
         if(row < 0 && selected < 0)
             return;

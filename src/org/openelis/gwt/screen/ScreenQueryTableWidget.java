@@ -173,6 +173,13 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
         public void load(){
             table.loadRow();
         }
+        
+        public void resetFields() {
+            table.resetFields();
+            table.loadRow();
+            table.selected = -1;
+            table.selectedCell = -1;
+        }
 
         public void submit(AbstractField field) {
             table.switchSelectedRow();

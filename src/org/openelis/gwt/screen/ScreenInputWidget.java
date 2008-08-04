@@ -68,7 +68,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             if(queryWidget != null){
                 initWidget(queryWidget.displayWidget);
                 if(queryWidget instanceof ScreenQueryTableWidget)
-                    ((ScreenQueryTableWidget)queryWidget).load();
+                    ((ScreenQueryTableWidget)queryWidget).resetFields();
             }else{
                 queryMode = false;
             }

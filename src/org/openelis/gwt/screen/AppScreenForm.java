@@ -90,6 +90,22 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         enable(false);
     }
     
+    public void fetch() {
+        AsyncCallback callback = new AsyncCallback() {
+            public void onSuccess(Object result){
+                rpc = (FormRPC)result;
+                forms.put("display",(FormRPC)result);
+                load();
+                afterFetch(true);
+            }
+            
+            public void onFailure(Throwable caught){
+                afterFetch(false);
+            }
+        };
+        fetch(callback);
+    }
+    
     public Request fetch(AsyncCallback callback){
         return fetch((FormRPC)forms.get("display"), callback);
     }
