@@ -135,6 +135,7 @@ public class QueryField extends AbstractField {
         QueryField field = new QueryField();
         field.setRequired(required);
         field.setValue(value);
+        field.setKey(key);
         return field;
     }
 

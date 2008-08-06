@@ -125,6 +125,7 @@ public class StringField extends AbstractField implements Serializable {
         obj.setMin(min);
         obj.setRequired(required);
         obj.setValue(getValue());
+        obj.setKey(key);
         return obj;
     }
 

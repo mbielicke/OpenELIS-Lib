@@ -82,6 +82,7 @@ public class CollectionField extends AbstractField implements Serializable {
         obj.setRequired(required);
         obj.setType(type);
         obj.setValue(coll);
+        obj.setKey(key);
         return obj;
     }
     

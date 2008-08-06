@@ -107,6 +107,7 @@ public class QueryNumberField extends QueryField {
         obj.setType(type);
         obj.setRequired(required);
         obj.setValue(value);
+        obj.setKey(key);
         return obj;
     }
 

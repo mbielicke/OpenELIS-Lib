@@ -131,8 +131,8 @@ public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener 
         return true;
     }
     public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-        // TODO Auto-generated method stub
-        field.setValue(tabList.get(panel.getTabBar().getSelectedTab()));
+        if(field != null)
+            field.setValue(tabList.get(panel.getTabBar().getSelectedTab()));
     }
 
 }

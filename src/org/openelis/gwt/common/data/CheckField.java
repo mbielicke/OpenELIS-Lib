@@ -90,6 +90,7 @@ public class CheckField extends AbstractField implements Serializable {
         CheckField obj = new CheckField();
         obj.setRequired(required);
         obj.setValue(getValue());
+        obj.setKey(key);
         return obj;
     }
 

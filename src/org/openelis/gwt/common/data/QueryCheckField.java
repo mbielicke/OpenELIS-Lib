@@ -39,6 +39,7 @@ public class QueryCheckField extends CheckField {
         QueryCheckField obj = new QueryCheckField();
         obj.setRequired(required);
         obj.setValue(getValue());
+        obj.setKey(key);
         return obj;
     }
 }

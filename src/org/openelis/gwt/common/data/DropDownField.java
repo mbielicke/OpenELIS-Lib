@@ -121,6 +121,7 @@ public class DropDownField extends AbstractField {
         DropDownField obj = new DropDownField();
         obj.setRequired(required);
         obj.setValue(selections);
+        obj.setKey(key);
         return obj;
     }
     

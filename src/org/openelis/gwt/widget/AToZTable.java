@@ -312,4 +312,8 @@ public class AToZTable extends TableController implements
         }
     }
 
+    public void setMaxRows(int rows){
+        maxRows = rows;
+        view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing)); 
+    }
 }

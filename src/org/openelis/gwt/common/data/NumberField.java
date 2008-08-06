@@ -152,6 +152,7 @@ public class NumberField extends AbstractField implements Serializable {
         obj.setRequired(required);
         obj.setValue(getValue());
         obj.setType(((NumberObject)object).type);
+        obj.setKey(key);
         return obj;
     }
 

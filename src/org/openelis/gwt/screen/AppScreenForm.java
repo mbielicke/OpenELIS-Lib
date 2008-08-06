@@ -174,6 +174,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
      */
     public void add() {
         resetRPC();
+        key = null;
         load();
         enable(true);
         changeState(State.ADD);

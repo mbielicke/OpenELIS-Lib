@@ -136,6 +136,7 @@ public class QueryDateField extends QueryField {
         obj.setMax(max);
         obj.setMin(min);
         obj.setValue(value);
+        obj.setKey(key);
         return obj;
     }
 
