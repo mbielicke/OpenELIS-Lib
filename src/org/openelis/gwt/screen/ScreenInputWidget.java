@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.table.EditTable;
 import org.openelis.gwt.widget.table.TableWidget;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
     
     protected ScreenInputWidget queryWidget;
+    protected AbstractField field;
     protected Widget displayWidget;
     protected boolean queryMode;
     protected HorizontalPanel hp;
@@ -55,6 +57,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 showError = false;
         }
             
+    }
+    
+    public void load(AbstractField field){
+        this.field = field;
     }
     
     public void setQueryWidget(ScreenInputWidget qWid){
@@ -109,12 +115,24 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void onLostFocus(Widget sender) {
         if(!showError)
             return;
+        /*
     	String tempKey = key;
-    	
         submit(screen.rpc.getField(tempKey));
         screen.rpc.getField(tempKey).clearErrors();
         screen.rpc.getField(tempKey).validate();
         if(!screen.rpc.getField(tempKey).isValid())
+            drawError();
+        else{
+            errorImg.setStyleName("ErrorPanelHidden");
+            if(pop != null){
+                pop.hide();
+            }
+        }
+        */
+        submit(field);
+        field.clearErrors();
+        field.validate();
+        if(!field.isValid())
             drawError();
         else{
             errorImg.setStyleName("ErrorPanelHidden");
@@ -145,7 +163,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         	return;
         }
     	ArrayList<String> errors;
-        errors = screen.rpc.getField(key).getErrors();
+        errors = field.getErrors();
         
         errorPanel.clear();
         for (String error : errors) {

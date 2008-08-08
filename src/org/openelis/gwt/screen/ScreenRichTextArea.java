@@ -82,8 +82,10 @@ public class ScreenRichTextArea extends ScreenInputWidget {
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else
+        else{
             textarea.setText(field.toString());
+            super.load(field);
+        }
 
     }
 

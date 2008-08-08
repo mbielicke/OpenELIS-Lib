@@ -195,6 +195,7 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
     		queryWidget.load(field);
     	}else{
             auto.setSelected(((DropDownField)field).getSelections());
+            super.load(field);
         }
     }
 

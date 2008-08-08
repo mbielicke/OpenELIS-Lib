@@ -19,6 +19,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
@@ -57,6 +58,7 @@ public class ScreenBase extends Composite implements FocusListener{
     public boolean keep;
     public String name;
     public HashMap<String,Widget> shortcut = new HashMap<String,Widget>();
+    public ScreenInputWidget startWidget;
    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -218,6 +220,9 @@ public class ScreenBase extends Composite implements FocusListener{
             Widget wid = (Widget)wids.next();
             if(wid instanceof ScreenWidget)
                 ((ScreenWidget)wid).enable(enabled);
+        }
+        if(enabled && startWidget != null){
+            startWidget.setFocus(true);
         }
     }
     

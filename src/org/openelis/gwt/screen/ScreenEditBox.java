@@ -28,9 +28,10 @@ public class ScreenEditBox extends ScreenInputWidget {
 	}
 	
     public void load(AbstractField field) {
-        if(!queryMode)
+        if(!queryMode){
             editbox.setText(field.toString().trim());
-        else
+            super.load(field);   
+        }else
             queryWidget.load(field);
     }
 

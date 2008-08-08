@@ -122,6 +122,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                 else
                     cal.setText("");
             }
+            super.load(field);
         }
     }
 

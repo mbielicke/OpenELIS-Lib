@@ -97,8 +97,10 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else
+        else{
             maskbox.setText(field.toString());
+            super.load(field);
+        }
 
     }
 

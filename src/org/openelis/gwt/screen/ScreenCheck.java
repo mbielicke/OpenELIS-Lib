@@ -110,8 +110,10 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else
+        else{
             check.setState((String)field.getValue());
+            super.load(field);
+        }
     }
 
     public void submit(AbstractField field) {

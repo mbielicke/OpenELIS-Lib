@@ -84,8 +84,10 @@ public class ScreenPassword extends ScreenInputWidget {
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else
+        else{
             textbox.setText(field.toString());
+            super.load(field);
+        }
     }
 
     public void submit(AbstractField field) {

@@ -89,8 +89,10 @@ public class ScreenRadio extends ScreenInputWidget {
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else
+        else{
             radio.setChecked(((CheckField)field).isChecked());
+            super.load(field);
+        }
     }
 
     public void submit(AbstractField field) {

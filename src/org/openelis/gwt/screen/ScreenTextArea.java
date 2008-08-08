@@ -95,8 +95,10 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else
+        else{
             textarea.setText(field.toString());
+            super.load(field);
+        }
 
     }
 

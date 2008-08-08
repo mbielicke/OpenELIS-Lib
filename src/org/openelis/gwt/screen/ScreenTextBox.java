@@ -122,9 +122,10 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
 
     public void load(AbstractField field) {
-        if(!queryMode)
+        if(!queryMode){
             textbox.setText(field.toString().trim());
-        else
+            super.load(field);
+        }else
             queryWidget.load(field);
     }
 
