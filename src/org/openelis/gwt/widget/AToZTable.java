@@ -30,9 +30,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.common.data.KeyListManager;
 import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandListenerCollection;
+import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenButtonPanel;
 import org.openelis.gwt.screen.ScreenLabel;
@@ -45,17 +48,18 @@ import org.openelis.gwt.widget.table.TableController;
 import org.openelis.gwt.widget.table.TableView;
 
 public class AToZTable extends TableController implements
-                                              ClickListener, ChangeListener, CommandListener {
+                                              ClickListener, ChangeListener, CommandListener, SourcesCommandEvents {
     
     private HorizontalPanel mainHP = new HorizontalPanel();
     private ScreenVertical alphabetButtonVP = new ScreenVertical();
     private VerticalPanel tablePanel = new VerticalPanel();
     protected DataModel dm;
-    public DataModelWidget modelWidget;
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean locked;
     protected boolean refreshedByLetter;
+    private CommandListenerCollection commandListeners;
+    public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
     
     public AToZTable() { 
         mainHP.setHeight("100%");
@@ -87,14 +91,12 @@ public class AToZTable extends TableController implements
                 return;
             }
             if(!locked && sender == view.nextNav){
-                modelWidget.getModel().selecttLast(false);
-                modelWidget.setPage(modelWidget.getPage()+1);
+                commandListeners.fireCommand(Action.NEXT_PAGE,dm);
                 refreshedByLetter = true;
                 return;
             }
             if(!locked && sender == view.prevNav){
-                modelWidget.getModel().selecttLast(false);
-                modelWidget.setPage(modelWidget.getPage()-1);
+                commandListeners.fireCommand(Action.PREVIOUS_PAGE,dm);
                 refreshedByLetter = true;
                 return;
             }
@@ -183,21 +185,7 @@ public class AToZTable extends TableController implements
         if(selectedRow == row || locked){
             return;
         }
-/*        modelWidget.callback = new AsyncCallback() {
-            public void onSuccess(Object result){
-                if(selectedRow > -1){
-                    view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
-                }
-                selectedRow = row;
-                view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
-            }
-            
-            public void onFailure(Throwable caught) {
-                
-            }
-        };
-*/        
-        modelWidget.select(start+row);
+        commandListeners.fireCommand(Action.ROW_SELECTED,new Integer(start+row));
     }
 
     public void onKeyDown(Widget sender, char code, int modifiers) {
@@ -257,9 +245,17 @@ public class AToZTable extends TableController implements
         // TODO Auto-generated method stub
         
     }
+    
+    public boolean canPerformCommand(Enum action, Object obj) {
+        return (action == AppScreenForm.Action.NEW_MODEL) ||
+               (action == AppScreenForm.Action.NEW_PAGE) ||
+               (action == KeyListManager.Action.SELECTION) ||                
+               (action == KeyListManager.Action.UNSELECT) ||
+               (obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement()));
+    }
 
     public void performCommand(Enum action, Object obj) {
-        if(action == DataModelWidget.Action.REFRESH) {
+        if(action == AppScreenForm.Action.NEW_MODEL) {
             dm = (DataModel)obj;
             view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
             view.setNavPanel(dm.getPage(), dm.getPage()+1, false);
@@ -269,12 +265,18 @@ public class AToZTable extends TableController implements
                 if(selectedButton != null){
                     selectedButton.changeState(ButtonState.UNPRESSED);
                 }
-            }else{
+            }else
                 refreshedByLetter = false;
-            }
             active = true;
         }
-        else if(action == DataModelWidget.Action.SELECTION){                
+        else if(action == AppScreenForm.Action.NEW_PAGE){
+            dm = (DataModel)obj;
+            view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellSpacing)+cellSpacing);
+            view.setNavPanel(dm.getPage(), dm.getPage()+1, false);
+            scrollLoad(0);
+            active = true;
+        }
+        else if(action == KeyListManager.Action.SELECTION){                
             if(selectedRow > -1){
                 if(selectedRow < view.table.getRowCount())
                     view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
@@ -283,6 +285,14 @@ public class AToZTable extends TableController implements
             view.table.getRowFormatter().addStyleName(selectedRow,TableView.selectedStyle);
             active = true;
         }
+        else if(action == KeyListManager.Action.UNSELECT){
+            if(selectedRow > -1){
+                if(selectedRow < view.table.getRowCount())
+                    view.table.getRowFormatter().removeStyleName(selectedRow,TableView.selectedStyle);
+                selectedRow = -1;
+            }
+        }
+        /*
         else if(action.getDeclaringClass() == State.class) {
             if(bpanel != null){
                 if(action == State.ADD){
@@ -297,23 +307,40 @@ public class AToZTable extends TableController implements
                     bpanel.setPanelState(ButtonPanelState.LOCKED);
                     locked = true;
                 }else if(action == State.DEFAULT || action == State.DISPLAY || action == State.BROWSE){
-                    bpanel.setPanelState(ButtonPanelState.ENABLED);
-                    locked = false;
+                    //bpanel.setPanelState(ButtonPanelState.ENABLED);
+                    //locked = false;
                 }
             }
             return;
         }
-        if(obj instanceof AppButton){
+        */
+        if(obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
             if(selectedButton != null){
                 selectedButton.changeState(ButtonState.UNPRESSED);
             }
             selectedButton = (AppButton)obj;
+            ((AppButton)obj).changeState(ButtonState.PRESSED);
             refreshedByLetter = true;
         }
+        
     }
 
+    public void addCommandListener(CommandListener listener) {
+       if(commandListeners == null){
+           commandListeners = new CommandListenerCollection();
+       }
+       commandListeners.add(listener);
+    }
+
+    public void removeCommandListener(CommandListener listener) {
+        if(commandListeners != null)
+            commandListeners.remove(listener);
+        
+    }
+    
     public void setMaxRows(int rows){
         maxRows = rows;
         view.setHeight((rows*cellHeight+(rows*cellSpacing)+cellSpacing)); 
     }
+
 }

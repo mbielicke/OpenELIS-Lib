@@ -1,7 +1,5 @@
 package org.openelis.gwt.event;
 
-import com.google.gwt.http.client.Request;
-
 import java.util.ArrayList;
 
 public class CommandListenerCollection extends ArrayList<CommandListener> {
@@ -10,7 +8,8 @@ public class CommandListenerCollection extends ArrayList<CommandListener> {
 
     public void fireCommand(Enum action, Object obj) {
         for(CommandListener listener : this) {
-            listener.performCommand(action, obj);
+            if(listener.canPerformCommand(action, obj))
+                listener.performCommand(action, obj);
         }
     }
 }

@@ -118,7 +118,7 @@ version="1.0">
 	<menuPanel key="optionsMenu" layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
 	    <menuItem>
 	        <menuDisplay>
-		    	<appButton action="" style="ButtonPanelButton">
+		    	<appButton action="option" style="ButtonPanelButton">
 					<HorizontalPanel>
 		        		<text><xsl:value-of select='resource:getString($constants,"options")'/></text>
 			    		<AbsolutePanel style="OptionsButtonImage"/>
@@ -167,7 +167,7 @@ version="1.0">
 <xsl:template name="aToZButton">
 <xsl:param name="keyParam" />
 <xsl:param name="queryParam" />
-	<appButton key="{string($keyParam)}" action="query:{string($queryParam)}" toggle="true" alwaysEnabled="true" style="smallButton">
+	<appButton key="{string($keyParam)}" action="query:{string($queryParam)}" toggle="true" alwaysEnabled="true" enabledStates="default,display" lockedStates="add,query,update,delete" style="smallButton">
        	<text><xsl:value-of select="string($keyParam)"/></text>
  	</appButton>
 </xsl:template>

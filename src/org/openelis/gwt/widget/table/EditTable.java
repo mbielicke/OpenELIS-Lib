@@ -41,12 +41,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.common.data.KeyListManager;
 import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.common.data.TableRow;
+import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.services.TableServiceInt;
 import org.openelis.gwt.services.TableServiceIntAsync;
-import org.openelis.gwt.widget.AutoCompleteDropdown;
+import org.openelis.gwt.widget.FormInt;
 
 import java.util.Iterator;
 
@@ -63,7 +64,8 @@ public class EditTable extends TableController implements
                             ChangeListener,
                             ClickListener,
                             MouseListener,
-                            SourcesChangeEvents{
+                            SourcesChangeEvents,
+                            CommandListener{
     
     public TableManager manager;
     public int selected = -1;
@@ -470,7 +472,7 @@ public class EditTable extends TableController implements
             int selCol = selectedCell;
             unselect(sel);
             select(sel);
-        } */  
+        }   
         if(sender instanceof DataModelWidget){
         	DataModelWidget modelWidget = (DataModelWidget)sender;
         	if(modelWidget.action == DataModelWidget.Action.SELECTION){
@@ -479,7 +481,7 @@ public class EditTable extends TableController implements
         	if(modelWidget.action == DataModelWidget.Action.REFRESH){
         		manager.setModel(this,modelWidget.getModel());
         	}
-        }
+        }*/
         }catch(Exception e){
             Window.alert("on change: "+e.getMessage());
         }
@@ -1138,6 +1140,21 @@ public class EditTable extends TableController implements
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public boolean canPerformCommand(Enum action, Object obj){
+        return (action.getDeclaringClass() == FormInt.State.class);
+    }
+
+    public void performCommand(Enum action, Object obj) {
+       if(action == FormInt.State.ADD ||
+          action == FormInt.State.UPDATE) {
+           setAutoAdd(true);
+           load(0);
+       }else if(action.getDeclaringClass() ==  FormInt.State.class){
+           setAutoAdd(false);
+           load(0);
+       }
     }
     
 }

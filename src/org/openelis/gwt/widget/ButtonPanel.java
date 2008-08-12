@@ -33,7 +33,7 @@ import java.util.Iterator;
 public class ButtonPanel extends Composite implements ClickListener, SourcesCommandEvents, CommandListener {
 
     public enum ButtonPanelState {ENABLED,LOCKED}
-    public enum Action {ADD,UPDATE,DELETE,NEXT,PREVIOUS,RELOAD,QUERY,COMMIT,ABORT,SELECT}
+    public enum Action {ADD,UPDATE,DELETE,NEXT,PREVIOUS,RELOAD,QUERY,COMMIT,ABORT,SELECT,OPTION}
     /**
 	 * Panel used to display buttons
 	 */
@@ -119,11 +119,15 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
      */
     public void setState(FormInt.State state) {
     	for(AppButton button : buttons) {
-    		if(button.getEnabledStates().contains(state) && button.isEnabled())
-    			setButtonState(button, ButtonState.UNPRESSED);
-    		else if(button.getLockedStates().contains(state) && button.isEnabled())
+    		if(button.getEnabledStates().contains(state) && button.isEnabled()){
+                if(button.state == AppButton.ButtonState.LOCK_PRESSED)
+                    setButtonState(button, ButtonState.PRESSED);
+                else if(button.state != AppButton.ButtonState.PRESSED)
+                    setButtonState(button, ButtonState.UNPRESSED);
+            }
+    		else if(button.getLockedStates().contains(state) && button.isEnabled() && button.state == AppButton.ButtonState.PRESSED)
     			setButtonState(button, ButtonState.LOCK_PRESSED);
-    		else
+    		else if(!button.getEnabledStates().contains(state) && button.isEnabled())
     			setButtonState(button, ButtonState.DISABLED);
     	}
     }
@@ -184,8 +188,13 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
         }
         
     }
+    
+    public boolean canPerformCommand(Enum action, Object obj){
+        return (action.getDeclaringClass() == FormInt.State.class);
+    }
 
     public void performCommand(Enum action, Object obj) {
+        if(action.getDeclaringClass() == FormInt.State.class)
             setState((FormInt.State)action);
     }
     
