@@ -7,14 +7,14 @@ import java.util.ArrayList;
 public class AsyncCallChain extends ArrayList<AsyncCallback> implements AsyncCallback{
     
     private static final long serialVersionUID = 1L;
-    
+        
     public AsyncCallChain() {
         
     }
     
     public AsyncCallChain(AsyncCallback[] callbacks){
         for(AsyncCallback callback: callbacks){
-            add(callback);
+            this.add(callback);
         }
     }
 
@@ -28,6 +28,14 @@ public class AsyncCallChain extends ArrayList<AsyncCallback> implements AsyncCal
         for(AsyncCallback callback : this){
             callback.onFailure(caught);
         }
+    }
+    
+    public Object clone() {
+        AsyncCallChain chain = new AsyncCallChain();
+        for(AsyncCallback callback : this){
+            chain.add(callback);
+        }
+        return chain;
     }
 
 }

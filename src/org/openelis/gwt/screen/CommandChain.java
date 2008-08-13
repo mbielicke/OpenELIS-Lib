@@ -16,7 +16,7 @@ public class CommandChain implements CommandListener {
         return true;
     }
     
-    public void addCommand(Object source){
+    public void addCommand(SourcesCommandEvents source){
         if(source instanceof SourcesCommandEvents)
             ((SourcesCommandEvents)source).addCommandListener(this);
         if(source instanceof CommandListener) {

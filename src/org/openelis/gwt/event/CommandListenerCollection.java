@@ -1,5 +1,7 @@
 package org.openelis.gwt.event;
 
+import com.google.gwt.user.client.Window;
+
 import java.util.ArrayList;
 
 public class CommandListenerCollection extends ArrayList<CommandListener> {

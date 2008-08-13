@@ -81,7 +81,11 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain fetchChain = new AsyncCallChain(new AsyncCallback[] {fetchCallback,afterFetch});
+    protected AsyncCallChain fetchChain = new AsyncCallChain(); 
+    {
+        fetchChain.add(fetchCallback);
+        fetchChain.add(afterFetch);
+    }
     
     protected AsyncCallback updateCallback= new AsyncCallback() {
         public void onSuccess(Object result){
@@ -106,7 +110,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain updateChain = new AsyncCallChain(new AsyncCallback[] {updateCallback,afterUpdate}); 
+    protected AsyncCallChain updateChain = new AsyncCallChain(); 
     
     protected AsyncCallback abortCallback = new AsyncCallback() {
         public void onSuccess(Object result){
@@ -129,7 +133,11 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain abortChain = new AsyncCallChain(new AsyncCallback[] {abortCallback,afterAbort});
+    protected AsyncCallChain abortChain = new AsyncCallChain();
+    {   
+        abortChain.add(abortCallback);
+        abortChain.add(afterAbort);
+    }
     
     protected AsyncCallback deleteCallback = new AsyncCallback() {
         public void onSuccess(Object result){
@@ -151,7 +159,11 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain deleteChain = new AsyncCallChain(new AsyncCallback[] {deleteCallback,afterDelete});
+    protected AsyncCallChain deleteChain = new AsyncCallChain();
+    {
+        deleteChain.add(deleteCallback);
+        deleteChain.add(afterDelete);
+    }
 
     protected AsyncCallback commitAddCallback = new AsyncCallback() {
         public void onSuccess(Object result){
@@ -175,7 +187,11 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain commitAddChain = new AsyncCallChain(new AsyncCallback[] {commitAddCallback,afterCommitAdd});
+    protected AsyncCallChain commitAddChain = new AsyncCallChain();
+    {
+         commitAddChain.add(commitAddCallback);
+         commitAddChain.add(afterCommitAdd);
+    }
 
     protected AsyncCallback commitUpdateCallback = new AsyncCallback() {
         public void onSuccess(Object result){
@@ -199,10 +215,15 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain commitUpdateChain = new AsyncCallChain(new AsyncCallback[] {commitUpdateCallback,afterCommitUpdate});
+    protected AsyncCallChain commitUpdateChain = new AsyncCallChain();
+    {
+        commitUpdateChain.add(commitUpdateCallback);
+        commitUpdateChain.add(afterCommitUpdate);
+    }
 
     protected AsyncCallback commitQueryCallback = new AsyncCallback() {
         public void onSuccess(Object result){
+            try {
             commandListeners.fireCommand(Action.NEW_MODEL, result);
             resetRPC();
             load();
@@ -211,6 +232,9 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             load();
             enable(false);
             window.setStatus(consts.get("queryingComplete"),"");
+            }catch(Exception e){
+                Window.alert(e.getMessage());
+            }
         }
         public void onFailure(Throwable caught){
             handleError(caught);
@@ -226,7 +250,10 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain commitQueryChain = new AsyncCallChain(new AsyncCallback[] {commitQueryCallback,afterCommitQuery});
+    protected AsyncCallChain commitQueryChain = new AsyncCallChain();
+    { commitQueryChain.add(commitQueryCallback);
+      commitQueryChain.add(afterCommitQuery);
+    }
     
     protected void handleError(Throwable caught) {
         if(caught instanceof RPCDeleteException)

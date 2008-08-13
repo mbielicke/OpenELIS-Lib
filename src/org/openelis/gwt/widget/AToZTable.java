@@ -314,13 +314,15 @@ public class AToZTable extends TableController implements
             return;
         }
         */
-        if(obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
+        if(obj != null && obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
             if(selectedButton != null){
                 selectedButton.changeState(ButtonState.UNPRESSED);
             }
             selectedButton = (AppButton)obj;
             ((AppButton)obj).changeState(ButtonState.PRESSED);
             refreshedByLetter = true;
+        
+           
         }
         
     }
