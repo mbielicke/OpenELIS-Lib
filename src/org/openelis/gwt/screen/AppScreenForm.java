@@ -110,7 +110,11 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallChain updateChain = new AsyncCallChain(); 
+    protected AsyncCallChain updateChain = new AsyncCallChain();
+    {
+        updateChain.add(updateCallback);
+        updateChain.add(afterUpdate);
+    }
     
     protected AsyncCallback abortCallback = new AsyncCallback() {
         public void onSuccess(Object result){
