@@ -84,7 +84,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallChain fetchChain = new AsyncCallChain(); 
     {
         fetchChain.add(fetchCallback);
-        fetchChain.add(afterFetch);
     }
     
     protected AsyncCallback updateCallback= new AsyncCallback() {
@@ -113,7 +112,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallChain updateChain = new AsyncCallChain();
     {
         updateChain.add(updateCallback);
-        updateChain.add(afterUpdate);
+        
     }
     
     protected AsyncCallback abortCallback = new AsyncCallback() {
@@ -140,7 +139,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallChain abortChain = new AsyncCallChain();
     {   
         abortChain.add(abortCallback);
-        abortChain.add(afterAbort);
     }
     
     protected AsyncCallback deleteCallback = new AsyncCallback() {
@@ -166,7 +164,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallChain deleteChain = new AsyncCallChain();
     {
         deleteChain.add(deleteCallback);
-        deleteChain.add(afterDelete);
     }
 
     protected AsyncCallback commitAddCallback = new AsyncCallback() {
@@ -194,7 +191,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallChain commitAddChain = new AsyncCallChain();
     {
          commitAddChain.add(commitAddCallback);
-         commitAddChain.add(afterCommitAdd);
     }
 
     protected AsyncCallback commitUpdateCallback = new AsyncCallback() {
@@ -222,7 +218,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallChain commitUpdateChain = new AsyncCallChain();
     {
         commitUpdateChain.add(commitUpdateCallback);
-        commitUpdateChain.add(afterCommitUpdate);
     }
 
     protected AsyncCallback commitQueryCallback = new AsyncCallback() {
@@ -255,8 +250,9 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     };
     
     protected AsyncCallChain commitQueryChain = new AsyncCallChain();
-    { commitQueryChain.add(commitQueryCallback);
-      commitQueryChain.add(afterCommitQuery);
+    {
+        commitQueryChain.add(commitQueryCallback);
+    
     }
     
     protected void handleError(Throwable caught) {
@@ -304,6 +300,14 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         super.afterDraw(sucess);
         changeState(State.DEFAULT);
         enable(false);
+        fetchChain.add(afterFetch);
+        updateChain.add(afterUpdate);
+        abortChain.add(afterAbort);
+        deleteChain.add(afterDelete);
+        commitUpdateChain.add(afterCommitUpdate);
+        commitAddChain.add(afterCommitAdd);
+        commitQueryChain.add(afterCommitQuery);
+        
     }
     
     
