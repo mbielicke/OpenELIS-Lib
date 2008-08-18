@@ -72,15 +72,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
     
-    protected AsyncCallback afterFetch = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
-        }
-    };
-    
     protected AsyncCallChain fetchChain = new AsyncCallChain(); 
     {
         fetchChain.add(fetchCallback);
@@ -100,15 +91,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }            
     };
    
-    protected AsyncCallback afterUpdate = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
-        }
-    };
-    
     protected AsyncCallChain updateChain = new AsyncCallChain();
     {
         updateChain.add(updateCallback);
@@ -127,15 +109,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
     };
    
-    protected AsyncCallback afterAbort = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
-        }
-    };
-    
     protected AsyncCallChain abortChain = new AsyncCallChain();
     {   
         abortChain.add(abortCallback);
@@ -150,15 +123,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
          public void onFailure(Throwable caught){
              handleError(caught);
          }
-    };
-    
-    protected AsyncCallback afterDelete = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
-        }
     };
     
     protected AsyncCallChain deleteChain = new AsyncCallChain();
@@ -179,15 +143,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         } 
     };
 
-    protected AsyncCallback afterCommitAdd = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
-        }
-    };
-    
     protected AsyncCallChain commitAddChain = new AsyncCallChain();
     {
          commitAddChain.add(commitAddCallback);
@@ -203,15 +158,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
         public void onFailure(Throwable caught){
             handleError(caught);
-        }
-    };
-    
-    protected AsyncCallback afterCommitUpdate = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
         }
     };
     
@@ -237,15 +183,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
         public void onFailure(Throwable caught){
             handleError(caught);
-        }
-    };
-    
-    protected AsyncCallback afterCommitQuery = new AsyncCallback() {
-        public void onSuccess(Object result){
-            
-        }
-        public void onFailure(Throwable caught){
-            
         }
     };
     
@@ -300,14 +237,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         super.afterDraw(sucess);
         changeState(State.DEFAULT);
         enable(false);
-        fetchChain.add(afterFetch);
-        updateChain.add(afterUpdate);
-        abortChain.add(afterAbort);
-        deleteChain.add(afterDelete);
-        commitUpdateChain.add(afterCommitUpdate);
-        commitAddChain.add(afterCommitAdd);
-        commitQueryChain.add(afterCommitQuery);
-        
     }
     
     
@@ -333,6 +262,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
      * a the ButtonPanel is clicked.  It is called from the ButtonPanel Widget.
      */
     public void query() {
+        changeState(State.QUERY);
         resetRPC();
         load();
         window.setStatus(consts.get("enterFieldsToQuery"),"");
@@ -341,7 +271,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         resetRPC();
         load();
         enable(true); 
-        changeState(State.QUERY);
+        
     }
     
     /** 
@@ -368,6 +298,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
      */
     public Request update(AsyncCallback callback) {
         window.setStatus(consts.get("lockForUpdate"),"spinnerIcon");
+        resetRPC();
         return formService.fetchForUpdate(key, (FormRPC)forms.get("display"), callback);
     }
     
@@ -498,7 +429,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
      */
     public void abort() {
         if (state == State.UPDATE) {
-            clearErrors();   
+             clearErrors();   
             formService.abort(key, (FormRPC)forms.get("display"), abortChain);
             enable(false);
             changeState(State.DISPLAY);
