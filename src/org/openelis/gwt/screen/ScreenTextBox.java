@@ -15,6 +15,7 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.NumberField;
 /**
  * ScreenTextBox wraps a GWT TextBox to be displayed on a Screen.
  * @author tschmidt
@@ -42,6 +44,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     private TextBox textbox;
     private String fieldCase = "mixed";
     private int length = 255;
+    private NumberFormat numberFormat;
   
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
@@ -100,6 +103,9 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             textbox.setMaxLength(length);
         }
         
+        if (node.getAttributes().getNamedItem("numberFormat") != null)
+            numberFormat = NumberFormat.getFormat(node.getAttributes().getNamedItem("numberFormat").getNodeValue());
+        
         if (node.getAttributes().getNamedItem("onchange") != null){
             String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
@@ -123,7 +129,11 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
 
     public void load(AbstractField field) {
         if(!queryMode){
-            textbox.setText(field.toString().trim());
+            if(numberFormat != null)
+                textbox.setText(numberFormat.format(((Double)field.getValue()).doubleValue()));
+            else
+                textbox.setText(field.toString().trim());
+            
             super.load(field);
         }else
             queryWidget.load(field);
@@ -136,6 +146,10 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
                 text = text.toUpperCase();
             else if(fieldCase.equals("lower"))
                 text = text.toLowerCase();
+            
+            if(numberFormat != null)
+                text = numberFormat.format(Double.valueOf(text).doubleValue());
+            
             field.setValue(text);
         }else
             queryWidget.submit(field);

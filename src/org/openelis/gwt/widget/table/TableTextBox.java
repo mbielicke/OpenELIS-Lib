@@ -15,6 +15,7 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Label;
@@ -40,6 +41,8 @@ public class TableTextBox extends TableCellInputWidget {
     private Label display;
     private boolean enabled;
     private int width;
+    private NumberFormat editorMask;
+    private NumberFormat displayMask;
     public static final String TAG_NAME = "table-textbox";
     
     public TableTextBox() {
@@ -58,6 +61,8 @@ public class TableTextBox extends TableCellInputWidget {
         textbox.fieldCase = fieldCase;
         textbox.enabled = enabled;
         textbox.length = length;
+        textbox.editorMask = editorMask;
+        textbox.displayMask = displayMask;
         return textbox;
     }
 
@@ -71,10 +76,15 @@ public class TableTextBox extends TableCellInputWidget {
                 display.addStyleName("Lower");
             display.setWidth(width+"px");
     	}
-        if(field.getValue() != null)
-            display.setText(field.getValue().toString());
-        else
+        if(field.getValue() != null){
+            String val = field.getValue().toString();
+        
+            if(displayMask != null && !"".equals(val))
+                val = displayMask.format(Double.valueOf(val).doubleValue());
+            display.setText(val);
+        } else
             display.setText("");
+        
         setWidget(display);
         super.setDisplay();
     }
@@ -108,6 +118,12 @@ public class TableTextBox extends TableCellInputWidget {
         
         if (node.getAttributes().getNamedItem("max") != null) 
         	length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
+        
+        if (node.getAttributes().getNamedItem("editorMask") != null) 
+            editorMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("editorMask").getNodeValue());
+        
+        if (node.getAttributes().getNamedItem("displayMask") != null) 
+            displayMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("displayMask").getNodeValue());
     }
 
 	public void saveValue() {
@@ -116,6 +132,10 @@ public class TableTextBox extends TableCellInputWidget {
             val = val.toUpperCase();
         else if(fieldCase.equals("lower"))
             val = val.toLowerCase();
+        
+        if(editorMask != null && !"".equals(val))
+            val = editorMask.format(Double.valueOf(val).doubleValue());
+        
 		field.setValue(val);
         super.saveValue();
 	}

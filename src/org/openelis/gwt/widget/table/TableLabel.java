@@ -17,6 +17,7 @@ package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.data.AbstractField;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,6 +35,7 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 	private Label editor;
 	private AbstractField field;
     private int width;
+    private NumberFormat displayMask;
     public static final String TAG_NAME = "table-label";
 
 	
@@ -47,16 +49,20 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
     }
 
     public TableCellWidget getNewInstance() {
-        return new TableLabel();
+        TableLabel label = new TableLabel();
+        label.width = width;
+        label.displayMask = displayMask;
+        
+        return label;
     }
 
     public Widget getInstance(Node node) {
-        // TODO Auto-generated method stub
         return new TableLabel();
     }
     
     public TableLabel(Node node){
-        this();
+        if (node.getAttributes().getNamedItem("displayMask") != null) 
+            displayMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("displayMask").getNodeValue());
     }
 
 	public void setDisplay() {
@@ -73,8 +79,12 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
 		Object val = field.getValue();
         if (val instanceof Integer)
             editor.setText(((Integer)val).toString());
-        else if (val instanceof Double)
-            editor.setText(((Double)val).toString());
+        else if (val instanceof Double){
+            if(displayMask != null && !"".equals(val)                            )
+                editor.setText(displayMask.format((Double)val));
+            else
+                editor.setText(((Double)val).toString());
+        }
         else if (val == null)
             editor.setText(" ");
         else
