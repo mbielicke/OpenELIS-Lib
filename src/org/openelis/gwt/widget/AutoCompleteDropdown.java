@@ -309,11 +309,8 @@ public class AutoCompleteDropdown extends Composite implements
 					}
 				}
 			} else if (text.length() > 0 && !text.endsWith("*")) {
-                if (fieldCase.equals("upper"))
-                    text = text.toUpperCase();
-                else if (fieldCase.equals("lower"))
-                    text = text.toLowerCase();
-                callForMatches(text);
+                new Delay(text, 350);
+                
 				currentStart = -1;
 				currentActive = -1;
 			} else {
@@ -895,7 +892,7 @@ public class AutoCompleteDropdown extends Composite implements
                 return -1; // NOT FOUND
             else{
                 //we need to do a linear search backwards to find the first entry that matches our search
-                while(((String) model.get(mid).getObject(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
+                while(mid > -1 && ((String) model.get(mid).getObject(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
                     mid--;
 			
                 return (mid+1);
