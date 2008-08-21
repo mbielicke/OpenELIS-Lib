@@ -116,11 +116,11 @@ public class ScreenQueryTableWidget extends ScreenInputWidget {
                     String[] aligns = alignNode.getFirstChild().getNodeValue().split(",");
                     HorizontalAlignmentConstant[] alignments = new HorizontalAlignmentConstant[aligns.length];
                     for (int i = 0; i < aligns.length; i++) {
-                        if (aligns.equals("left"))
+                        if (aligns[i].equals("left"))
                             alignments[i] = HasAlignment.ALIGN_LEFT;
-                        if (aligns.equals("center"))
+                        if (aligns[i].equals("center"))
                             alignments[i] = HasAlignment.ALIGN_CENTER;
-                        if (aligns.equals("right"))
+                        if (aligns[i].equals("right"))
                             alignments[i] = HasAlignment.ALIGN_RIGHT;
                     }
                     table.setColAlign(alignments);
