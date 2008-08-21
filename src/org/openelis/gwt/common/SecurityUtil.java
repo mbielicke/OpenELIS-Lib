@@ -14,8 +14,18 @@ public class SecurityUtil implements Serializable, DataObject {
     protected HashMap<String,SecuritySection> sections = new HashMap<String,SecuritySection>();
     protected HashMap<String,SecurityModule> modules = new HashMap<String,SecurityModule>();
     
+    private Integer system_user_id;
+    
     public SecurityUtil() {
         
+    }
+    
+    public void setSystemUserId(Integer id){
+        this.system_user_id = id;
+    }
+   
+    public Integer getSystemUserId() {
+        return this.system_user_id;
     }
     
     public void add(SecurityModule sm){
