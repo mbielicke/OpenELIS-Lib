@@ -194,7 +194,10 @@ public class FormRPC extends AbstractField implements Serializable {
         
         Object[] keys = (Object[]) ((Set)fields.keySet()).toArray();    
         for (int i = 0; i < keys.length; i++) {
-            cloneMap.put((String)keys[i], fields.get((String)keys[i]).getInstance());
+            if(fields.get((String)keys[i]) instanceof FormRPC)
+                cloneMap.put((String)keys[i], ((FormRPC)fields.get((String)keys[i])).clone());
+            else
+                cloneMap.put((String)keys[i], fields.get((String)keys[i]).getInstance());
         }        
         
         clone.setFieldMap(cloneMap);

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class TableModel implements Serializable {
 
@@ -265,13 +266,51 @@ public class TableModel implements Serializable {
     public int getColumnIndexByFieldName(String fieldName){
     	int index = -1;
     	for(int i=0; i<fields.length;i++){
-    		if(fieldName.equals(fields[i].key)){
+    		if (fieldName.equals(fields[i].key)){
     			index = i;
     			break;
     		}
     	}
     	
     	return index;
+    }
+    
+    public Object getInstance() {
+        TableModel clone = new TableModel();
+        clone.paged = paged;
+        clone.totalPages = totalPages;
+        clone.rowsPerPage = rowsPerPage;
+        clone.sortDown = sortDown;
+        clone.pageIndex = pageIndex;
+        clone.totalRows = totalRows;
+        clone.shown = shown;
+        clone.showIndex = showIndex;
+        clone.autoAdd = autoAdd;
+        clone.hiddenRows = hiddenRows;
+        clone.numRows = numRows;
+        
+        //clone the fields
+        AbstractField[] cloneFields = new AbstractField[fields.length];
+        for(int i = 0; i < fields.length; i++){
+            cloneFields[i] = fields[i].getInstance();
+        }
+        clone.fields = cloneFields;
+        
+        //clone the rows
+        for(int j = 0; j < rows.size(); j++){
+            clone.addRow((TableRow)getRow(j).getInstance());
+        }
+        
+        //clone the hidden values
+        HashMap<String,DataObject> cloneHiddenMap = new HashMap<String,DataObject>();
+        Object[] keys = (Object[]) ((Set)hidden.keySet()).toArray();    
+        
+        for (int j = 0; j < keys.length; j++) 
+            cloneHiddenMap.put((String)keys[j], (DataObject)hidden.get((String)keys[j]).getInstance());
+        
+        clone.hidden = cloneHiddenMap;
+        
+        return clone;
     }
     
     public boolean validate() {

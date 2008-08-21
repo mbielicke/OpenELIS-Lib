@@ -65,7 +65,7 @@ public class TableField extends AbstractField {
         obj.setKey(key);
         obj.setRequired(required);
         obj.setTip(tip);
-        obj.setValue(value);
+        obj.setValue(value.getInstance());
         
         return obj;
     }

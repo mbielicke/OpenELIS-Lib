@@ -19,6 +19,9 @@ package org.openelis.gwt.common.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
+import org.openelis.gwt.common.FormRPC;
 
 public class TableRow implements Serializable {
 
@@ -62,5 +65,27 @@ public class TableRow implements Serializable {
 
     public boolean show() {
         return show;
+    }
+    
+    public TableRow getInstance() {
+        TableRow clone = new TableRow();
+        
+        //clone the columns fields
+        for(int i=0; i < columns.size(); i++){
+            clone.addColumn((AbstractField)getColumn(i).getInstance());
+        }
+        
+        //clone the hidden fields
+        HashMap<String,AbstractField> cloneHiddenMap = new HashMap<String,AbstractField>();
+        Object[] keys = (Object[]) ((Set)hidden.keySet()).toArray();    
+        
+        for (int j = 0; j < keys.length; j++) 
+            cloneHiddenMap.put((String)keys[j], hidden.get((String)keys[j]).getInstance());
+        
+        clone.hidden = cloneHiddenMap;
+        
+        clone.show = show;
+        
+        return clone;
     }
 }
