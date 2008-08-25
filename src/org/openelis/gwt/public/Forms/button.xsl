@@ -103,6 +103,16 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
+<!-- process button template -->
+<xsl:template name="processButton">
+    <appButton action="commit" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="a">
+		<HorizontalPanel>
+	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
+	  	</HorizontalPanel>
+	</appButton>
+</xsl:template>
+
 <!-- abort button template -->
 <xsl:template name="abortButton">
 	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="o">

@@ -16,6 +16,23 @@
 package org.openelis.gwt.screen;
 
 //import com.google.gwt.i18n.client.ConstantsWithLookup;
+import java.util.EnumSet;
+import java.util.Iterator;
+
+import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.LastPageException;
+import org.openelis.gwt.common.RPCDeleteException;
+import org.openelis.gwt.common.FormRPC.Status;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.KeyListManager;
+import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandListenerCollection;
+import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
+import org.openelis.gwt.widget.ButtonPanel;
+import org.openelis.gwt.widget.FormInt;
+
 import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -24,24 +41,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.SyncCallback;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.FormRPC;
-import org.openelis.gwt.common.LastPageException;
-import org.openelis.gwt.common.RPCDeleteException;
-import org.openelis.gwt.common.FormRPC.Status;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
-import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
-import org.openelis.gwt.widget.ButtonPanel;
-import org.openelis.gwt.widget.FormInt;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Iterator;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
  * the ButtonPanel widget and default logic for standard forms that accept
@@ -115,9 +114,22 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     
     protected AsyncCallback deleteCallback = new AsyncCallback() {
         public void onSuccess(Object result){
-            commandListeners.fireCommand(Action.REFRESH_PAGE,null);
-            strikeThru(false);
-            changeState(State.DEFAULT);
+            FormRPC deleteRPC = (FormRPC)result;
+            if (deleteRPC.status == FormRPC.Status.invalid) {
+                drawErrors();
+            
+                if(deleteRPC.getErrors().size() > 0){
+                    if(deleteRPC.getErrors().size() > 1){
+                        window.setMessagePopup((String[])deleteRPC.getErrors().toArray(new String[deleteRPC.getErrors().size()]), "ErrorPanel");
+                        window.setStatus("(Error 1 of "+deleteRPC.getErrors().size()+") "+(String)deleteRPC.getErrors().get(0), "ErrorPanel");
+                    }else
+                        window.setStatus((String)deleteRPC.getErrors().get(0),"ErrorPanel");
+                }
+            }else{
+                commandListeners.fireCommand(Action.REFRESH_PAGE,null);
+                strikeThru(false);
+                changeState(State.DEFAULT);
+            }
          }
          public void onFailure(Throwable caught){
              handleError(caught);
@@ -132,9 +144,15 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallback commitAddCallback = new AsyncCallback() {
         public void onSuccess(Object result){
             loadScreen((FormRPC)result);
-            enable(false);
-            changeState(State.DEFAULT);
-            window.setStatus(consts.get("addingComplete"),"");
+            
+            if(rpc.status == FormRPC.Status.invalid){
+                if(rpc.getErrors().size() == 0)
+                    window.setStatus(consts.get("addingFailed"),"ErrorPanel");
+            }else {
+                enable(false);
+                changeState(State.DEFAULT);
+                window.setStatus(consts.get("addingComplete"),"");
+            }
             
         }
         public void onFailure(Throwable caught){
@@ -150,10 +168,17 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallback commitUpdateCallback = new AsyncCallback() {
         public void onSuccess(Object result){
             loadScreen((FormRPC)result);
-            enable(false);
-            changeState(State.DISPLAY);
-            window.setStatus(consts.get("updatingComplete"),"");
-            clearStatus(5000);
+            
+            if(rpc.status == FormRPC.Status.invalid){
+                if(rpc.getErrors().size() == 0)
+                    window.setStatus(consts.get("updateFailed"),"ErrorPanel");
+                
+            } else {
+                enable(false);
+                changeState(State.DISPLAY);
+                window.setStatus(consts.get("updatingComplete"),"");
+                clearStatus(5000);
+            }
         }
         public void onFailure(Throwable caught){
             handleError(caught);
@@ -203,7 +228,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
                 window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
             }else
                 window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
-        }            
+        }  
     }
     
     protected void loadScreen(FormRPC rpc) {
