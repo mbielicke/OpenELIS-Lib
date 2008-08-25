@@ -124,11 +124,14 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
                     setButtonState(button, ButtonState.PRESSED);
                 else if(button.state != AppButton.ButtonState.PRESSED)
                     setButtonState(button, ButtonState.UNPRESSED);
+                if(button.toggle && state == FormInt.State.DEFAULT)
+                    setButtonState(button, ButtonState.UNPRESSED);
             }
     		else if(button.getLockedStates().contains(state) && button.isEnabled() && button.state == AppButton.ButtonState.PRESSED)
     			setButtonState(button, ButtonState.LOCK_PRESSED);
     		else if(!button.getEnabledStates().contains(state) && button.isEnabled())
     			setButtonState(button, ButtonState.DISABLED);
+            
     	}
     }
     

@@ -55,7 +55,7 @@ version="1.0">
 
 <!-- next button template -->
 <xsl:template name="nextButton">
-	<appButton action="next" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
+	<appButton action="next" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
 		 <HorizontalPanel>
 	  		<AbsolutePanel style="NextButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
@@ -65,7 +65,7 @@ version="1.0">
 
 <!-- update button template -->
 <xsl:template name="updateButton">
-	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
+	<appButton action="update" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="UpdateButtonImage"/>
          	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>

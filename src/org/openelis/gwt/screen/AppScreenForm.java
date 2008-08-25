@@ -62,7 +62,6 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             loadScreen((FormRPC)result);
             window.setStatus("Load Complete", "");
             changeState(State.DISPLAY);
-            clearStatus(5000);
         }
         public void onFailure(Throwable caught){
             handleError(caught);
@@ -83,7 +82,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             enable(true);
             window.setStatus(consts.get("updateFields"),"");
             changeState(State.UPDATE);
-            clearStatus(5000);
+           
         }
         public void onFailure(Throwable caught){
             handleError(caught);
@@ -101,7 +100,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         public void onSuccess(Object result){
             loadScreen((FormRPC)result);
             window.setStatus(consts.get("updateAborted"), "");
-            clearStatus(5000);
+           
         }
         public void onFailure(Throwable caught){
             handleError(caught);
@@ -136,7 +135,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             enable(false);
             changeState(State.DEFAULT);
             window.setStatus(consts.get("addingComplete"),"");
-            clearStatus(5000);
+            
         }
         public void onFailure(Throwable caught){
             handleError(caught);
@@ -177,6 +176,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             load();
             enable(false);
             window.setStatus(consts.get("queryingComplete"),"");
+            changeState(State.DEFAULT);
             }catch(Exception e){
                 Window.alert(e.getMessage());
             }

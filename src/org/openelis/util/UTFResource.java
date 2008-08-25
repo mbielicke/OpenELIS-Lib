@@ -15,6 +15,7 @@
 */
 package org.openelis.util;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
@@ -70,5 +71,9 @@ public class UTFResource {
         cache.put(locale, ret);
         
         return ret;
+    }
+    
+    public  Enumeration<String> getKeys() {
+        return bundle.getKeys();
     }
 }
