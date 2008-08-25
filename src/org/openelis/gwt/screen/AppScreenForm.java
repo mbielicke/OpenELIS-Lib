@@ -213,6 +213,13 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         if (rpc.status == FormRPC.Status.invalid) {
             drawErrors();
         }
+        if(rpc.getErrors().size() > 0){
+            if(rpc.getErrors().size() > 1){
+                window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+                window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+            }else
+                window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+        }            
     }
     
     protected void clearStatus(int delay) {
