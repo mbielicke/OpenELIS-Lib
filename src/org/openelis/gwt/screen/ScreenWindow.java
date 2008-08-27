@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -134,7 +135,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     private FocusPanel leftSide = new FocusPanel();
     private FocusPanel rightSide = new FocusPanel();
     private VerticalPanel body = new VerticalPanel();
-    private HorizontalPanel middleRow = new HorizontalPanel();
+    private Grid middleGrid = new Grid(1,3);
     private HorizontalPanel bottomRow = new HorizontalPanel();
     /**
      * Reference back to the WindowBrowser that this ScreenWindow is 
@@ -228,10 +229,12 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         
         bottomRow.setWidth("100%");
         bottomRow.setSpacing(0);
-        
-        middleRow.add(leftSide);
-        middleRow.add(body);
-        middleRow.add(rightSide);
+              
+        middleGrid.setCellPadding(0);
+        middleGrid.setCellSpacing(0);
+        middleGrid.getCellFormatter().addStyleName(0,0,"WindowLeft");
+        middleGrid.setWidget(0, 1, body);
+        middleGrid.getCellFormatter().addStyleName(0,2,"WindowRight");
         
         bottomRow.add(blCorner);
         bottomRow.add(status);
@@ -241,7 +244,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         
         body.addStyleName("WindowBody");
         
-        outer.add(middleRow);
+        outer.add(middleGrid);
         outer.add(bottomRow);
         outer.addStyleName("WindowPanel");
         outer.sinkEvents(Event.ONCLICK);
@@ -298,11 +301,11 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             close();
         }
         if(sender == collapse){
-            if(middleRow.isVisible())
+            if(middleGrid.isVisible())
                 outer.setWidth(outer.getOffsetWidth()+"px");
             else
                 outer.setWidth("");
-            middleRow.setVisible(!middleRow.isVisible());
+            middleGrid.setVisible(!middleGrid.isVisible());
             bottomRow.setVisible(!bottomRow.isVisible());
         }
         

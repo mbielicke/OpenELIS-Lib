@@ -15,11 +15,14 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -27,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class CollapsePanel extends Composite implements ClickListener, MouseListener, SourcesChangeEvents{
     
-    private HorizontalPanel panel = new HorizontalPanel();
+    private Grid panel = new Grid(1,2);
     private HorizontalPanel content = new HorizontalPanel();
     private FocusPanel middleBar = new FocusPanel();
     private FocusPanel arrow = new FocusPanel();
@@ -36,16 +39,23 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
     
     public CollapsePanel(){
         initWidget(panel);
-        panel.setHeight("100%");
+        panel.setCellPadding(0);
+        panel.setCellSpacing(0);
         content.setVisible(false);
-        middleBar.setHeight("100%");
-        middleBar.setStyleName("LeftMenuPanePanelClosed");
+        //middleBar.setHeight("100%");
+        //middleBar.setStyleName("LeftMenuPanePanelClosed");
+        panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickListener(this);
         arrow.addMouseListener(this);
-        middleBar.add(arrow);
-        panel.add(content);
-        panel.add(middleBar);   
+        //middleBar.add(arrow);
+        panel.setWidget(0, 0, content);
+        panel.setWidget(0,1,arrow);
+        DeferredCommand.addCommand(new Command(){
+           public void execute(){
+               panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+           }
+        });
     }
     
     public void setContent(Widget wid){
@@ -57,7 +67,7 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
     public void open() {
         if(!isOpen){
             content.setVisible(true);
-            middleBar.setStyleName("LeftMenuPanePanelOpen");
+            panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelOpen");
             arrow.setFocus(false);
             isOpen = true;
             changeListeners.fireChange(this);
@@ -67,7 +77,7 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
     public void close(){
         if(isOpen){
             content.setVisible(false);
-            middleBar.setStyleName("LeftMenuPanePanelClosed");
+            panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
             arrow.setFocus(false);
             isOpen = false;
             changeListeners.fireChange(this);
@@ -90,13 +100,13 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
 
     public void onMouseEnter(Widget sender) {
         arrow.addStyleName("Hover");
-        middleBar.addStyleName("Hover");
+        panel.getCellFormatter().addStyleName(0,1,"Hover");
         
     }
 
     public void onMouseLeave(Widget sender) {
         arrow.removeStyleName("Hover");
-        middleBar.addStyleName("Hover");
+        panel.getCellFormatter().addStyleName(0,1,"Hover");
     }
 
     public void onMouseMove(Widget sender, int x, int y) {

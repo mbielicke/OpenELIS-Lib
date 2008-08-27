@@ -216,7 +216,6 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }else{    
             
         }
-        ft.addStyleName("Header");
         if(controller.showRows) {
         	if(headers != null)
         		ft.setWidget(0,1,headerView);
@@ -227,6 +226,8 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             //ft.getFlexCellFormatter().setRowSpan(0, 2, 2);
             ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
             ft.getFlexCellFormatter().setVerticalAlignment(1,2,HasAlignment.ALIGN_TOP);
+            if(headers != null)
+                ft.getFlexCellFormatter().addStyleName(0,2, "Header");
         }else{
         	if(headers != null){
         		ft.setWidget(0,0,headerView);
@@ -235,6 +236,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
                 //ft.getFlexCellFormatter().setRowSpan(1, 1, 2);
                 ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
                 ft.getFlexCellFormatter().setVerticalAlignment(1,1,HasAlignment.ALIGN_TOP);
+                ft.getFlexCellFormatter().addStyleName(0, 1, "Header");
             }else{
                 ft.setWidget(0,0,cellView);
                 ft.setWidget(0, 1, scrollBar);

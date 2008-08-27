@@ -36,6 +36,7 @@ html, body {
     padding:4px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
+    font-weight : bold;
     color:white;
 }
 .Hover .topMenuBarItem, .Selected .topMenuBarItem{
@@ -656,7 +657,7 @@ border:0px;
 }
 /*******TAB PANEL CSS***********/
 .ScreenTab{
-    padding:8px;
+    padding:0 0 0 0;
 }
 
 .gwt-TabBar {
@@ -671,8 +672,8 @@ border:0px;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    padding:0 8px 0 4px;
     height:19px;
+    padding:0 8 0 4;
     cursor:pointer;
     background:url('../Images/tab.gif') no-repeat right;
        -moz-user-select: none;
