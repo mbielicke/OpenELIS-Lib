@@ -193,15 +193,15 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallback commitQueryCallback = new AsyncCallback() {
         public void onSuccess(Object result){
             try {
-            commandListeners.fireCommand(Action.NEW_MODEL, result);
-            resetRPC();
-            load();
-            setForm(false);
-            rpc = (FormRPC)forms.get("display");
-            load();
-            enable(false);
-            window.setStatus(consts.get("queryingComplete"),"");
-            changeState(State.DEFAULT);
+                resetRPC();
+                load();
+                setForm(false);
+                rpc = (FormRPC)forms.get("display");
+                load();
+                enable(false);
+                window.setStatus(consts.get("queryingComplete"),"");
+                changeState(State.DEFAULT);
+                commandListeners.fireCommand(Action.NEW_MODEL, result);
             }catch(Exception e){
                 Window.alert(e.getMessage());
             }

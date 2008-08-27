@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.ScreenWindow;
 
 import java.util.ArrayList;
 
@@ -83,6 +84,7 @@ public abstract class TableController extends Composite implements
     public boolean showScrolls;
     public boolean active;
     public boolean locked;
+    public Event event;
 
     /**
      * This method will set the view for this table.
@@ -320,6 +322,12 @@ public abstract class TableController extends Composite implements
     public void sizeTable() {
         DeferredCommand.addCommand(new Command() {
             public void execute() {
+                int adj1 = 4;
+                int adj2 = 1;
+                if(getAgent().indexOf("safari") > -1){
+                    adj1 = 6;
+                    adj2 = 2;
+                }
                 int width = 0;
                 for(int i = 0; i < curColWidth.length; i++){
                     width += curColWidth[i];
@@ -329,9 +337,11 @@ public abstract class TableController extends Composite implements
                     view.header.setWidth(displayWidth+"px");  
                     for(int i = 0; i < curColWidth.length; i++){
                         if( i > 0 && i < curColWidth.length - 1){
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-adj1)+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-adj1)+"px");
                         }else{
-                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
+                            view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-adj2)+"px");
+                            view.header.getWidget(0,i*2).setWidth((curColWidth[i]-adj2)+"px");
                         }
                     }
                 }           
@@ -427,7 +437,7 @@ public abstract class TableController extends Composite implements
         // TODO Auto-generated method stub
         if(DOM.isOrHasChild(view.header.getElement(), sender.getElement())){
             resizing = true;
-            startx = x;
+            startx = sender.getAbsoluteLeft();
             for (int i = 0; i < view.header.getCellCount(0); i++) {
                 if (sender == view.header.getWidget(0, i)) {
                     resizeColumn1 = i - 1;
@@ -519,13 +529,21 @@ public abstract class TableController extends Composite implements
      */
     public void onMouseMove(Widget sender, int x, int y) {
             if(resizing) {
-                int colA = curColWidth[tableCol1] + (x - startx);
-                int colB = curColWidth[tableCol2] - (x - startx);
-                if(colA <= 16 || colB <= 16) 
-                    return;
-                curColWidth[tableCol1] = colA;
-                curColWidth[tableCol2] = colB;
-                DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x-startx))+"px");
+                if(getAgent().indexOf("msie") > -1){
+                    x = event.getClientX();
+                    int colA = curColWidth[tableCol1] + (x - startx);
+                    int colB = curColWidth[tableCol2] - (x - startx);
+                    if(colA <= 16 || colB <= 16) 
+                        return;
+                    DOM.setStyleAttribute(sender.getElement(),"left",(x)+"px");
+                }
+                else {
+                    int colA = curColWidth[tableCol1] + (x);
+                    int colB = curColWidth[tableCol2] - (x);
+                    if(colA <= 16 || colB <= 16) 
+                        return;
+                    DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x))+"px");
+                }
             }
     }
 
@@ -535,17 +553,25 @@ public abstract class TableController extends Composite implements
     public void onMouseUp(Widget sender, int x, int y) {
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
+                curColWidth[tableCol1] += sender.getAbsoluteLeft() - startx;
+                curColWidth[tableCol2] -= sender.getAbsoluteLeft() - startx;
                 RootPanel.get().remove(sender);
                 resizing = false;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
+                        int adj1 = 4;
+                        int adj2 = 1;
+                        if(getAgent().indexOf("safari") > -1){
+                            adj1 = 6;
+                            adj2 = 2;
+                        }
                         for(int i = 0; i < curColWidth.length; i++){
                             if( i > 0 && i < curColWidth.length - 1){
-                                view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-4)+"px");
-                                view.header.getWidget(0,i*2).setWidth((curColWidth[i]-4)+"px");
+                                view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-adj1)+"px");
+                                view.header.getWidget(0,i*2).setWidth((curColWidth[i]-adj1)+"px");
                             }else{
-                                view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-1)+"px");
-                                view.header.getWidget(0,i*2).setWidth((curColWidth[i]-1)+"px");
+                                view.header.getFlexCellFormatter().setWidth(0, i*2,(curColWidth[i]-adj2)+"px");
+                                view.header.getWidget(0,i*2).setWidth((curColWidth[i]-adj2)+"px");
                             }   
                         }
                         for (int j = 0; j < view.table.getRowCount(); j++) {
@@ -566,6 +592,7 @@ public abstract class TableController extends Composite implements
      */
     public boolean onEventPreview(Event event) {
         // TODO Auto-generated method stub
+        this.event = event;
         if (view.table.isAttached()) {
             if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
                 
@@ -587,5 +614,9 @@ public abstract class TableController extends Composite implements
     public void switchSelectedRow(){
         
     }
+    
+    public native String getAgent() /*-{
+        return navigator.userAgent.toLowerCase();
+    }-*/;
     
 }

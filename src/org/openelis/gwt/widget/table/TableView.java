@@ -62,7 +62,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         }
         
         public void onBrowserEvent(Event event) {
-            // TODO Auto-generated method stub
+            // TODO Auto-generated method stu
             if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
                 listeners.fireMouseWheelEvent(this, event);
                 DOM.eventCancelBubble(event, true);
@@ -137,7 +137,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         initWidget(vp);
     }
     
-    public void initTable(TableController controller) {
+    public void initTable(final TableController controller) {
         this.controller = controller;
         if(title != null && !title.equals("")){
             titleLabel.setText(title);
@@ -149,7 +149,12 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             int j = 0;
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
-                    FocusPanel bar = new FocusPanel();
+                    FocusPanel bar = new FocusPanel() {
+                        public void onBrowserEvent(Event event) {
+                            controller.event = event;
+                            super.onBrowserEvent(event);
+                        }
+                    };
                     bar.addMouseListener(controller);
                     HorizontalPanel hpBar = new HorizontalPanel();
                     AbsolutePanel ap1 = new AbsolutePanel();
