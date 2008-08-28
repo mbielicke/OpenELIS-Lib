@@ -85,6 +85,10 @@ public class NumberField extends AbstractField implements Serializable {
             setMin(new Double(node.getAttributes()
                                           .getNamedItem("min")
                                           .getNodeValue()));
+        if (node.getAttributes().getNamedItem("reset") != null)
+            setAllowReset(new Boolean(node.getAttributes()
+                                                .getNamedItem("reset")
+                                                .getNodeValue()).booleanValue());
         if (node.hasChildNodes()) {
             setValue(node.getFirstChild().getNodeValue());
         }
@@ -153,6 +157,7 @@ public class NumberField extends AbstractField implements Serializable {
         obj.setValue(getValue());
         obj.setType(((NumberObject)object).type);
         obj.setKey(key);
+        obj.setAllowReset(allowReset);
         return obj;
     }
 
