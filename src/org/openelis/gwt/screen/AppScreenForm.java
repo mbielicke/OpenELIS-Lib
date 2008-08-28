@@ -26,7 +26,6 @@ import org.openelis.gwt.common.FormRPC.Status;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.common.data.KeyListManager.Action;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
@@ -40,7 +39,6 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.SyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
@@ -295,7 +293,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
      * a the ButtonPanel is clicked.  It is called from the ButtonPanel Widget.
      */
     public void query() {
-        changeState(State.QUERY);
+        key = null;
         resetRPC();
         load();
         window.setStatus(consts.get("enterFieldsToQuery"),"");
@@ -303,7 +301,8 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         rpc = (FormRPC)forms.get("query");
         resetRPC();
         load();
-        enable(true); 
+        enable(true);
+        changeState(State.QUERY);
         
     }
     
