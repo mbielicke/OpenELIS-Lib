@@ -26,6 +26,7 @@ import org.openelis.gwt.common.FormRPC.Status;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
+import org.openelis.gwt.common.data.KeyListManager.Action;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
@@ -425,31 +426,40 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         return formService.commitQuery(rpcQuery, null, callback); 
     }
     
-    public void getPage(final String messageText, final DataModel model) {
+    protected String messageText;
+    
+    protected AsyncCallback pageCallback = new AsyncCallback() {
+        public void onSuccess(Object result){
+            if(messageText == null){
+                window.setStatus(consts.get("queryingComplete"),"");
+            }else{
+                window.setStatus(messageText, "");
+            }
+            commandListeners.fireCommand(Action.NEW_PAGE,result);
+        }
+                
+        public void onFailure(Throwable caught){
+            if(caught instanceof LastPageException){
+                window.setStatus(caught.getMessage(),"ErrorPanel");
+            }else
+                Window.alert(caught.getMessage());
+        }
+    };
+    
+    public void getPage(final String messageText, final DataModel model, final AsyncCallback callback) {
+        this.messageText = messageText;
     	if(model.getPage() < 0){
     		window.setStatus(consts.get("beginningQueryException"),"ErrorPanel");
     		model.setPage(0);
     	}else{
             window.setStatus(consts.get("querying"),"spinnerIcon");
+            final SyncCallChain chain = new SyncCallChain();
+            chain.add(pageCallback);
+            chain.add(callback);
             DeferredCommand.addCommand( new Command() {
                 public void execute() {
-                    formService.commitQuery(null, model, new SyncCallback() {                        
-                        public void onSuccess(Object result){
-                            commandListeners.fireCommand(Action.NEW_PAGE, result);
-                            if(messageText == null){
-                                window.setStatus(consts.get("queryingComplete"),"");
-                            }else{
-                                window.setStatus(messageText, "");
-                            }
-                        }
-                                
-                        public void onFailure(Throwable caught){
-                            if(caught instanceof LastPageException){
-                                window.setStatus(caught.getMessage(),"ErrorPanel");
-                            }else
-                                Window.alert(caught.getMessage());
-                        }
-                    });
+                    formService.commitQuery(null, model, chain);                        
+
                 }
             });
         }
@@ -579,7 +589,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             callChain.add(call);
             fetch(callChain);
         }else if(action == KeyListManager.Action.GETPAGE)
-            getPage(null,(DataModel)obj);
+            getPage(null,(DataModel)((Object[])obj)[0],(AsyncCallback)((Object[])obj)[1]);
         else if (action == ButtonPanel.Action.QUERY) {
             query();
         }

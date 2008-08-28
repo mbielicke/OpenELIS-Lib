@@ -486,48 +486,48 @@ cursor:default;}
 }
 
 /*PopUP panel*/
-.ErrorWindow .WindowBody{
+.ErrorWindow .middle{
 background:#e5f5f9;;
 padding:0px;
 border:0px;
 }
 
-.ErrorWindow .WindowTR {
+.ErrorWindow .topRight {
     width:2px;
     height:2px;
     background: transparent url("../Images/popuptr.gif") no-repeat;
 }
 
-.ErrorWindow .WindowRight {
+.ErrorWindow .middleRight {
     width:2px;
     height:100%;
     background:url("../Images/popupright.gif") repeat-y;
 }
-.ErrorWindow .WindowBR {
+.ErrorWindow .bottomRight {
     background:url("../Images/popupbr.gif") no-repeat;
     width:2px;
     height:2px;
 }
-.ErrorWindow .StatusBar {
+.ErrorWindow .bottomCenter {
     background:url("../Images/popupbottom.gif") repeat-x bottom;
     height:2px;
 }
-.ErrorWindow .WindowBL {
+.ErrorWindow .bottomLeft {
     width:2px;
     height:2px;
     background:url("../Images/popupbl.gif") no-repeat top;
 }
-.ErrorWindow .WindowLeft {
+.ErrorWindow .middleLeft {
     width:2px;
     height:100%;
     background: url("../Images/popupleft.gif") repeat-y;
 }
-.ErrorWindow .WindowTL {
+.ErrorWindow .topLeft {
     width:2px;
     height:2px;
     background: url("../Images/popuptl.gif") no-repeat;
 }
-.ErrorWindow .Caption{
+.ErrorWindow .topCenter{
     background:url("../Images/popuptop.gif") repeat-x;
     height:2px;
 }

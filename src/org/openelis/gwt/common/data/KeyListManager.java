@@ -42,6 +42,7 @@ import org.openelis.gwt.widget.FormInt;
         
     private boolean selectItem;
     private boolean selectLast;
+
     
     public void addCommandListener(CommandListener listener) {
         if (commandListeners == null)
@@ -127,9 +128,30 @@ import org.openelis.gwt.widget.FormInt;
         return list.getPage();
     }
     
-    public void setPage(int page) {    	
+    public void setPage(int page) {
+        final int currPage = list.getPage();
         list.setPage(page);
-        fireCommand(Action.GETPAGE,list);
+        AsyncCallback callback = new AsyncCallback() {
+            public void onSuccess(Object result) {
+                setModel((DataModel)result);
+                if(selectItem){
+                    if(selectLast)
+                        select(getList().size()-1);
+                    else
+                        select(0);
+                }                
+                selectItem = false;
+                selectLast = false;
+
+            }
+            
+            public void onFailure(Throwable caught){
+                list.setPage(currPage);
+                candidate = list.getSelectedIndex();
+            }
+
+        };
+        fireCommand(Action.GETPAGE,new Object[] {list,callback});
     }
     
     public void unselect() {
@@ -155,7 +177,7 @@ import org.openelis.gwt.widget.FormInt;
         }else if(action == ButtonPanel.Action.PREVIOUS){
             previous();
         }else if(action == AppScreenForm.Action.NEW_PAGE){
-            setModel((DataModel)obj);
+          /*  setModel((DataModel)obj);
             if(selectItem){
                 if(selectLast)
                     select(getList().size()-1);
@@ -164,6 +186,7 @@ import org.openelis.gwt.widget.FormInt;
             }                
             selectItem = false;
             selectLast = false;
+            */
         }else if(action == AppScreenForm.Action.NEW_MODEL){
             setModel((DataModel)obj);
             select(0);

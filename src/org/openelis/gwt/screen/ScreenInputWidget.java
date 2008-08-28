@@ -17,6 +17,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -199,11 +200,13 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
             }
-            ScreenWindow win = new ScreenWindow(pop,"","","",false);
-            win.setStyleName("ErrorWindow");
-            win.setContent(errorPanel);
-            win.setVisible(true);
-            pop.setWidget(win);
+            DecoratorPanel dp = new DecoratorPanel();
+            
+            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            dp.setStyleName("ErrorWindow");
+            dp.add(errorPanel);
+            dp.setVisible(true);
+            pop.setWidget(dp);
             pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
             pop.show();
         }
