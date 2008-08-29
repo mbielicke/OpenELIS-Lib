@@ -18,6 +18,7 @@ package org.openelis.gwt.widget;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -26,11 +27,15 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CheckBox extends Composite implements ClickListener{
+public class CheckBox extends Composite implements ClickListener, SourcesClickEvents{
     
     DelegatingKeyboardListenerCollection keyListeners;
+    
+    private ClickListenerCollection clickListeners;
+    
     boolean enabled = true;
     
     public enum CheckType {TWO_STATE,THREE_STATE};
@@ -144,6 +149,7 @@ public class CheckBox extends Composite implements ClickListener{
            else
                setState(CHECKED);
        }
+       clickListeners.fireClick(sender);
     }
     
     public void enable(boolean enabled){
@@ -173,5 +179,18 @@ public class CheckBox extends Composite implements ClickListener{
     
     public boolean isEnabled(){
         return enabled;
+    }
+
+    public void addClickListener(ClickListener listener) {
+        if(clickListeners == null)
+            clickListeners = new ClickListenerCollection();
+        clickListeners.add(listener);
+        
+    }
+
+    public void removeClickListener(ClickListener listener) {
+        if(clickListeners != null)
+            clickListeners.remove(listener);
+        
     }
 }

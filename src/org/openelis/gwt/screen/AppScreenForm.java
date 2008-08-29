@@ -26,6 +26,7 @@ import org.openelis.gwt.common.FormRPC.Status;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
+import org.openelis.gwt.common.data.KeyListManager.Action;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
@@ -39,6 +40,7 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.SyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
@@ -449,7 +451,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         this.messageText = messageText;
     	if(model.getPage() < 0){
     		window.setStatus(consts.get("beginningQueryException"),"ErrorPanel");
-    		model.setPage(0);
+    		callback.onFailure(new Exception("begining"));
     	}else{
             window.setStatus(consts.get("querying"),"spinnerIcon");
             final SyncCallChain chain = new SyncCallChain();

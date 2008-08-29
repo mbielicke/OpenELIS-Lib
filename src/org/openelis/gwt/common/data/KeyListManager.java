@@ -83,11 +83,12 @@ import org.openelis.gwt.widget.FormInt;
             selectItem = true;
             setPage(list.getPage()+1);
         }else if(selection < 0){
-            if(list.getPage() > 0){
+            //if(list.getPage() > 0){
                 selectItem = true;
                 selectLast = true;
                 setPage(list.getPage()-1);
-	        }
+	        //}else
+              //  candidate = 0;
         }else{
             AsyncCallback callback = new AsyncCallback() {
                 public void onSuccess(Object result){

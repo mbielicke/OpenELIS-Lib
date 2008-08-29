@@ -16,6 +16,7 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,7 +35,7 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  * @author tschmidt
  * 
  */
-public class TableCheck extends TableCellInputWidget implements FocusListener {
+public class TableCheck extends TableCellInputWidget implements FocusListener, ClickListener {
 
 	private CheckBox editor;
     private boolean enabled;
@@ -105,10 +106,25 @@ public class TableCheck extends TableCellInputWidget implements FocusListener {
     public void enable(boolean enabled){
         this.enabled = enabled;
         editor.enable(enabled);
+        if(enabled){
+            editor.removeClickListener(this);
+            editor.addClickListener(this);
+        }else
+            editor.removeClickListener(this);
+          
     }
     
     public void setCellWidth(int width){
         this.width = width;
         panel.setWidth(width+"px");
+    }
+    
+    public void setDisplay() {
+        editor.setState((String)field.getValue());
+    }
+    
+    public void onClick(Widget sender) {
+        if(enabled)
+            saveValue();
     }
 }

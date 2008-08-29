@@ -45,7 +45,7 @@ version="1.0">
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<appButton action="previous" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
+	<appButton action="previous" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="PreviousButtonImage"/>
            	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
@@ -65,7 +65,7 @@ version="1.0">
 
 <!-- update button template -->
 <xsl:template name="updateButton">
-	<appButton action="update" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
+	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="UpdateButtonImage"/>
          	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>

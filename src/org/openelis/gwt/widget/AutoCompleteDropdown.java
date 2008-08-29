@@ -159,21 +159,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 	private ChangeListenerCollection changeListeners;
 
-	private AutoCompleteServiceIntAsync autoService = (AutoCompleteServiceIntAsync) GWT
-			.create(AutoCompleteServiceInt.class);
-
-	private ServiceDefTarget target = (ServiceDefTarget) autoService;
-
-	/**
-	 * This Method will set the url for the AutoCompleteService.
-	 * 
-	 * @param url
-	 */
-	public void initService(String url) {
-		String base = GWT.getModuleBaseURL();
-		base += url;
-		target.setServiceEntryPoint(base);
-	}
+    private AutoCompleteCall autoCall;
 
 	public void setCase(String fieldCase) {
 		this.fieldCase = fieldCase;
@@ -231,8 +217,7 @@ public class AutoCompleteDropdown extends Composite implements
                      String textBoxDefault,
                      String width,
                      String popWidth){ 
-        if(serviceUrl != null)
-            initService(serviceUrl);
+        autoCall = new AutoCompleteCall(serviceUrl,this);
 		this.cat = cat;
 		this.textBoxDefault = textBoxDefault;
 		this.width = width;
@@ -504,6 +489,17 @@ public class AutoCompleteDropdown extends Composite implements
 			changeListeners.fireChange(this);
 		clickedArrow = false;
 	}
+    
+    public void showAutoMatches(DataModel model){
+            
+            scrollList.setDataModel(model);
+            currentActive = 0;
+
+            showMatches(0);
+            
+            if(screen != null)
+                ((AppScreen)screen).window.setStatus("", "");
+    }
 
 	/**
 	 * Method that calls the service to retrieve the suggestions
@@ -512,9 +508,10 @@ public class AutoCompleteDropdown extends Composite implements
 	 */
 	protected void callForMatches(final String text) {
         if(cat != null){
+            /*
             if(lastRequest != null && lastRequest.isPending())
                 lastRequest.cancel();
-          
+           */
             if(screen != null)
                 ((AppScreen)screen).window.setStatus("", "spinnerIcon");
         
@@ -523,26 +520,9 @@ public class AutoCompleteDropdown extends Composite implements
                 if(autoParams != null){
                     params = autoParams.getParams(screen.rpc);
                 }
-                lastRequest = autoService.getMatches(cat, scrollList.getDataModel(), text, params, new AsyncCallback() {
-                    public void onSuccess(Object result){
-          
-                        scrollList.setDataModel((DataModel)result);
-                        currentActive = 0;
+                autoCall.callForMatches(cat, scrollList.getDataModel(), text, params);
 
-                        showMatches(0);
-                        
-                        if(screen != null)
-                            ((AppScreen)screen).window.setStatus("", "");
-                    }
-                    
-                    public void onFailure(Throwable caught) {
-                        if(caught instanceof FormErrorException){
-                            ((AppScreen)screen).window.setStatus(caught.getMessage(), "ErrorPanel");
-                        }else
-                            Window.alert(caught.getMessage());
-                    }
-                });
-            } catch (RPCException e) {
+            } catch (Exception e) {
                 Window.alert(e.getMessage());
             }
         }else{
