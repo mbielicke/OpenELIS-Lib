@@ -24,6 +24,7 @@ import org.w3c.dom.Element;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -93,8 +94,9 @@ public class ServiceUtils {
             propsEL.appendChild(doc.createTextNode(props));
             root.appendChild(propsEL);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            XMLUtil.transformXML(doc, new File(url), new StreamResult(bytes));
-            return bytes.toString();
+            StreamResult result = new StreamResult(bytes);
+            XMLUtil.transformXML(doc, new File(url), result);
+            return new String(bytes.toByteArray(),"UTF-8");
         }catch(Exception e){
             e.printStackTrace();
             throw new RPCException(e.getMessage());

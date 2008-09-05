@@ -30,6 +30,8 @@ import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.widget.AutoCompleteCall;
+import org.openelis.gwt.widget.AutoCompleteCallInt;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.widget.AutoCompleteParamsInt;
 
@@ -120,7 +122,19 @@ public class TableAutoDropdown extends TableCellInputWidget implements ChangeLis
         Node widthsNode = ((Element)node).getElementsByTagName("widths").item(0);
         Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
 
-        auto = new AutoCompleteDropdown(cat, url, multiSelect, textBoxDefault, width,popWidth);
+        auto = new AutoCompleteDropdown(cat, multiSelect, textBoxDefault, width,popWidth);
+        
+        if(node.getAttributes().getNamedItem("autoCall") != null) {
+            String autoCall = node.getAttributes().getNamedItem("autoCall").getNodeValue();
+            if(autoCall.equals(this)){
+                auto.setAutoCall((AutoCompleteCallInt)screen);
+            }else{
+                auto.setAutoCall((AutoCompleteCallInt)ClassFactory.forName(autoCall));
+            }
+        }else if(url != null) {
+            auto.setAutoCall(new AutoCompleteCall(url));
+        }
+        
         auto.mainHP.removeStyleName("AutoDropdown");
         auto.mainHP.addStyleName("TableAutoDropdown");
         auto.focusPanel.removeStyleName("AutoDropdownButton");

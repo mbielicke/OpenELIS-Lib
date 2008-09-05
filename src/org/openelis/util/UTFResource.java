@@ -59,8 +59,13 @@ public class UTFResource {
     public String getString(String key){
         try {
             return new String(this.bundle.getString(key).getBytes("ISO-8859-1"),"UTF-8");
+
         }catch(Exception e){
-            return "EXCEPTION";
+            try {
+                return new String(this.bundle.getString("+"+key).getBytes("ISO-8859-1"),"UTF-8");
+            }catch(Exception ec){
+                return "EXCEPTION";
+            }
         }
     }
     

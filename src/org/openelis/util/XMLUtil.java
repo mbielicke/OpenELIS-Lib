@@ -18,10 +18,19 @@ package org.openelis.util;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.ByteOrder;
+import java.nio.charset.Charset;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,9 +77,15 @@ public class XMLUtil {
         Transformer transformer = TransformerFactory.newInstance()
                                                     .newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new StringWriter());
+        try {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        StreamResult result = new StreamResult(output);
         transformer.transform(source, result);
-        return result.getWriter().toString();
+        
+        return new String(output.toByteArray(),"UTF-8");
+        }catch(Exception e){
+            return null;
+        }
     }
 
     /**

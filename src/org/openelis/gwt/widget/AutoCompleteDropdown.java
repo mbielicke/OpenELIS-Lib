@@ -15,14 +15,10 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -40,8 +36,6 @@ import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.FormErrorException;
-import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
@@ -50,8 +44,6 @@ import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.services.AutoCompleteServiceInt;
-import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
 import org.openelis.gwt.widget.table.TableAutoDropdown;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
@@ -62,8 +54,6 @@ public class AutoCompleteDropdown extends Composite implements
 		KeyboardListener, ChangeListener, ClickListener, MouseListener,
 		PopupListener, FocusListener, HasFocus, SourcesChangeEvents {
 	public HorizontalPanel mainHP = new HorizontalPanel();
-    
-    private Request lastRequest;
 
 	public TextBox textBox = new TextBox();
 
@@ -159,7 +149,7 @@ public class AutoCompleteDropdown extends Composite implements
 
 	private ChangeListenerCollection changeListeners;
 
-    private AutoCompleteCall autoCall;
+    private AutoCompleteCallInt autoCall;
 
 	public void setCase(String fieldCase) {
 		this.fieldCase = fieldCase;
@@ -203,21 +193,18 @@ public class AutoCompleteDropdown extends Composite implements
 	 *            for this widget
 	 */
 	public AutoCompleteDropdown(String cat, 
-                                String serviceUrl,
                                 boolean multi, 
                                 String textBoxDefault,
                                 String width,
                                 String popWidth) {
-        init(cat,serviceUrl,multi,textBoxDefault,width,popWidth);
+        init(cat,multi,textBoxDefault,width,popWidth);
     }
     
     public void init(String cat, 
-                     String serviceUrl,
                      boolean multi, 
                      String textBoxDefault,
                      String width,
                      String popWidth){ 
-        autoCall = new AutoCompleteCall(serviceUrl,this);
 		this.cat = cat;
 		this.textBoxDefault = textBoxDefault;
 		this.width = width;
@@ -516,11 +503,7 @@ public class AutoCompleteDropdown extends Composite implements
                 ((AppScreen)screen).window.setStatus("", "spinnerIcon");
         
             try {
-                HashMap params = null;
-                if(autoParams != null){
-                    params = autoParams.getParams(screen.rpc);
-                }
-                autoCall.callForMatches(cat, scrollList.getDataModel(), text, params);
+                autoCall.callForMatches(this, scrollList.getDataModel(), text);
 
             } catch (Exception e) {
                 Window.alert(e.getMessage());
@@ -943,5 +926,9 @@ public class AutoCompleteDropdown extends Composite implements
     
     public void setAutoParams(AutoCompleteParamsInt autoParams){
         this.autoParams = autoParams;
+    }
+
+    public void setAutoCall(AutoCompleteCallInt autoCall) {
+        this.autoCall = autoCall;
     }
 }

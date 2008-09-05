@@ -26,6 +26,8 @@ public class DataSet implements Serializable, DataObject{
     
     private DataObject key;
     
+    public boolean shown;
+    
     public void addObject(DataObject object) {
         objects.add(object);
     }

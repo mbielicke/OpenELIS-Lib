@@ -33,6 +33,8 @@ import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.widget.AutoCompleteCall;
+import org.openelis.gwt.widget.AutoCompleteCallInt;
 import org.openelis.gwt.widget.AutoCompleteDropdown;
 import org.openelis.gwt.widget.AutoCompleteParamsInt;
 import org.openelis.gwt.widget.table.TableCellWidget;
@@ -137,8 +139,19 @@ public class ScreenAutoDropdown extends ScreenInputWidget implements FocusListen
             }
         };
 
-        auto.init(cat, url, multiSelect, textBoxDefault, width, popWidth);
+        auto.init(cat, multiSelect, textBoxDefault, width, popWidth);
         auto.setForm(screen);
+        
+        if(node.getAttributes().getNamedItem("autoCall") != null) {
+            String autoCall = node.getAttributes().getNamedItem("autoCall").getNodeValue();
+            if(autoCall.equals(this)){
+                auto.setAutoCall((AutoCompleteCallInt)screen);
+            }else{
+                auto.setAutoCall((AutoCompleteCallInt)ClassFactory.forName(autoCall));
+            }
+        }else if(url != null) {
+            auto.setAutoCall(new AutoCompleteCall(url));
+        }
         
         if(node.getAttributes().getNamedItem("autoParams") != null){
             auto.setAutoParams((AutoCompleteParamsInt)ClassFactory.forName(node.getAttributes().getNamedItem("autoParams").getNodeValue()));

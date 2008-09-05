@@ -10,37 +10,30 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
 
-import java.util.HashMap;
-
-public class AutoCompleteCall {
+public class AutoCompleteCall implements AutoCompleteCallInt {
     
     private AutoCompleteServiceIntAsync autoService = (AutoCompleteServiceIntAsync) GWT
     .create(AutoCompleteServiceInt.class);
 
     private ServiceDefTarget target = (ServiceDefTarget) autoService;
     
-    private AutoCompleteDropdown widget; 
-    
-    private AsyncCallback callback = new AsyncCallback() {
-        public void onSuccess(Object result) {
-            widget.showAutoMatches((DataModel)result);
-        }
-        
-        public void onFailure(Throwable caught) {
-            Window.alert(caught.getMessage());
-        }
-    };
-    
-    public AutoCompleteCall(String url, AutoCompleteDropdown widget) {
-        this.widget = widget;
+    public AutoCompleteCall(String url) {
         String base = GWT.getModuleBaseURL();
         base += url;
         target.setServiceEntryPoint(base);
     }
 
-    public void callForMatches(String cat, DataModel model, String text, HashMap params) {
+    public void callForMatches(final AutoCompleteDropdown widget, DataModel model, String text) {
         try {
-            autoService.getMatches(cat, model, text, params, callback);
+            autoService.getMatches(widget.cat, model, text, null, new AsyncCallback() {
+                public void onSuccess(Object result) {
+                    widget.showAutoMatches((DataModel)result);
+                }
+                
+                public void onFailure(Throwable caught) {
+                    Window.alert(caught.getMessage());
+                }
+            });
         } catch (RPCException e) {
             Window.alert(e.getMessage());
         }
