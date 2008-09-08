@@ -31,6 +31,10 @@ public class DropDownField extends AbstractField {
         
     }
     
+    public DropDownField(Object val) {
+        setValue(val);
+    }
+    
     public DropDownField(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()

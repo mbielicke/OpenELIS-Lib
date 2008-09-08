@@ -43,6 +43,11 @@ public class CheckField extends AbstractField implements Serializable {
         object = new StringObject();
     }
     
+    public CheckField(Object val) {
+        object = new StringObject();
+        setValue(val);
+    }
+    
     public CheckField(Node node){
         this();
         if (node.getAttributes().getNamedItem("key") != null)
