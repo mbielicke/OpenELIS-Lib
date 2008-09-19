@@ -105,7 +105,7 @@ version="1.0">
 
 <!-- process button template -->
 <xsl:template name="processButton">
-    <appButton action="commit" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="a">
+    <appButton action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="a">
 		<HorizontalPanel>
 	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
