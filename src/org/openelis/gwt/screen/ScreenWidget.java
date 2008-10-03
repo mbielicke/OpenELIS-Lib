@@ -83,7 +83,7 @@ public class ScreenWidget extends SimplePanel implements
     /** 
      * Reference back to the Screen this widget is displayed in
      */
-    protected ScreenBase screen;
+    public ScreenBase screen;
     public String hoverStyle = "Hover";
     public String key;
     public boolean alwaysEnabled;
@@ -210,7 +210,7 @@ public class ScreenWidget extends SimplePanel implements
         this.screen = screen;
         if(node.getAttributes().getNamedItem("key") != null){
             key = node.getAttributes().getNamedItem("key").getNodeValue();
-        	screen.widgets.put(key, this);
+            screen.widgets.put(key, this);
         }
         if (node.getAttributes().getNamedItem("style") != null){
             String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
@@ -227,11 +227,13 @@ public class ScreenWidget extends SimplePanel implements
             getWidget().setHeight(node.getAttributes()
                                       .getNamedItem("height")
                                       .getNodeValue());
-        if (node.getAttributes().getNamedItem("tab") != null)
+        if (node.getAttributes().getNamedItem("tab") != null){
             screen.addTab(this, node.getAttributes()
                                            .getNamedItem("tab")
                                            .getNodeValue()
                                            .split(","));
+            sinkEvents(Event.KEYEVENTS);
+        }
         if (node.getAttributes().getNamedItem("value") != null){
             setUserObject(node.getAttributes()
                               .getNamedItem("value")
@@ -267,9 +269,9 @@ public class ScreenWidget extends SimplePanel implements
             String[] listeners = node.getAttributes().getNamedItem("mouse").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                	addMouseListener((MouseListener)screen);
+                    addMouseListener((MouseListener)screen);
                 else
-                	addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
+                    addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
             }
         }
         
@@ -306,8 +308,8 @@ public class ScreenWidget extends SimplePanel implements
             }
         }
         if (node.getAttributes().getNamedItem("visible") != null){
-        	if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
-        		getWidget().setVisible(false);
+            if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
+                getWidget().setVisible(false);
         }
         if (node.getAttributes().getNamedItem("shortcut") != null){
             String key = node.getAttributes().getNamedItem("shortcut").getNodeValue();

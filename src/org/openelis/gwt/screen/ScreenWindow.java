@@ -53,11 +53,11 @@ import java.util.Vector;
  *
  */
 public class ScreenWindow extends Composite implements DragListener, MouseListener, ClickListener {
-    	/**
-    	 * Inner class used to create the Draggable Caption portion of the Window.
-    	 * @author tschmidt
-    	 *
-    	 */
+        /**
+         * Inner class used to create the Draggable Caption portion of the Window.
+         * @author tschmidt
+         *
+         */
         private class Caption extends HorizontalPanel implements SourcesMouseEvents, SourcesDragEvents{
         private MouseListenerCollection mouseListeners;
         private DragListenerCollection dragListeners;
@@ -164,17 +164,17 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         initWidget(outer);
         setVisible(false);
         if(container instanceof PopupPanel)
-        	this.popupPanel = (PopupPanel)container;
+            this.popupPanel = (PopupPanel)container;
         else
-        	this.browser = (WindowBrowser) container;
+            this.browser = (WindowBrowser) container;
         
         this.key = key;
         if(browser != null)
-        	zIndex = browser.index;
+            zIndex = browser.index;
         
         //a way to internationalize the loading message
         if(loadingText != null)
-        	message.setText(loadingText);
+            message.setText(loadingText);
         
         tlCorner.addStyleName("WindowTL");
         trCorner.addStyleName("WindowTR");
@@ -269,8 +269,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
     
     public void setName(String name) {
-    	cap.name = name;
-    	winLabel.setText(name);
+        cap.name = name;
+        winLabel.setText(name);
     }
     
     private void checkZ() {
@@ -319,11 +319,11 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         }
         removeFromParent();
         if(browser != null){
-        	browser.browser.remove(this);
-        	browser.windows.remove(key);
+            browser.browser.remove(this);
+            browser.windows.remove(key);
         }
         if(popupPanel != null){
-        	popupPanel.hide();
+            popupPanel.hide();
         }
         destroy();
         
@@ -482,8 +482,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
     }
     
     public void setStatus(String text, String style){
-        message.setText(text);
-        statusImg.setStyleName(style);
+        if(message != null){
+            message.setText(text);
+            statusImg.setStyleName(style);
+        }
     }
 
 }

@@ -20,99 +20,105 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DataModel implements DataObject, Serializable {
+public class DataModel extends ArrayList<DataSet> implements DataObject, Serializable {
     
     private static final long serialVersionUID = 1L;
-
-    private ArrayList<DataSet> entries = new ArrayList<DataSet>();
+    
+    private ArrayList<DataObject> deleted = new ArrayList<DataObject>();
+    
+    public ArrayList<Integer> selections = new ArrayList<Integer>();
     
     private HashMap<DataObject,DataSet> keyMap = new HashMap<DataObject,DataSet>(); 
     
-    private int selected = -1;
+    private DataSet defaultSet;
+    
+    public int selected = -1;
     private int page = 0;
     private boolean selectLast;
+    public boolean multiSelect;
     
-    public int size() {
-        return entries.size();
+    public boolean add(DataSet set){
+        return add(set.getKey(),set);
     }
     
-    public void add(DataSet set) {
-        entries.add(set);
-        if(set.getKey() != null){
-            keyMap.put(set.getKey(), set);
+    public boolean add(DataObject key, DataObject value){
+        if(value instanceof DataSet)
+            return add(key,(DataSet)value);
+        DataSet set = new DataSet();
+        set.setKey(key);
+        set.add(value);
+        return add(key,set);
+    }
+    
+    public boolean add(DataObject key, DataObject[] objects) {
+        DataSet set = new DataSet();
+        for(int i = 0; i < objects.length; i++){
+            set.add(objects[i]);
         }
+        return add(key,set);
     }
     
-    public void add(DataObject key, DataObject value){
-        DataSet data = new DataSet();
-        data.setKey(key);
-        data.addObject(value);
-        add(data);
+    public boolean add(DataObject key, DataSet set){
+        keyMap.put(key,set);
+        return super.add(set);
     }
     
-    public void add(DataObject key, DataObject[] values){
-        DataSet data = new DataSet();
-        data.setKey(key);
-        for(int i = 0; i < values.length; i++){
-            data.addObject(values[i]);
-        }
-        add(data);
+    public DataSet getByKey(DataObject key) {
+        return keyMap.get(key);
     }
-
+    
     public void delete(int index) {
-        entries.remove(index);
+        keyMap.remove(get(index).key);
+        deleted.add(remove(index));
     }
     
-    public void delete(DataObject key){
-        entries.remove(keyMap.get(key));
-        keyMap.remove(key);
+    public void setDefaultSet(DataSet set) {
+        defaultSet = set;
     }
     
-    public void delete(DataSet set){
-        if(set.getKey() != null){
-            keyMap.remove(set.getKey());
-        }
-        entries.remove(set);
-    }
-
-    public DataSet get(int index) {
-        return (DataSet)entries.get(index);
+    public DataSet createNewSet() {
+        return defaultSet.getInstance();
     }
     
-    public DataSet get(DataObject key){
-        return (DataSet)keyMap.get(key);
+    public void addDefualt() {
+        add(createNewSet());
     }
-    
+            
     public void select(int selection) throws IndexOutOfBoundsException {
-        if(selection > entries.size())
+        if(selection > size())
             throw new IndexOutOfBoundsException();
         selected = selection;
+        if(!multiSelect)
+            selections.clear();
+        selections.add(selection);
     }
-    
-    public void select(DataObject key) {
-        selected = entries.indexOf(keyMap.get(key));
-    }
-    
-    public void select(DataSet set){
-        selected = entries.indexOf(set);
+            
+    public void unselect(int index) {
+        if(index == -1){
+            selections.clear();
+            selected = -1;
+        }else{
+            selections.remove(new Integer(index));
+            if(selected == index)
+                selected = -1;
+        }
     }
     
     public int getSelectedIndex() {
-        return selected;
+        return selections.get(0);
     }
     
     public DataSet getSelected() {
         return get(selected);
     }
     
-    public int indexOf(DataObject key){
-        return entries.indexOf(keyMap.get(key));
+    public ArrayList<DataSet> getSelections() {
+        ArrayList<DataSet> selectionSets = new ArrayList<DataSet>();
+        for(int i : selections) 
+            selectionSets.add(get(i));
+        return selectionSets;
     }
-    
-    public int indexOf(DataSet set){
-        return entries.indexOf(set);
-    }
-    
+   
     public int getPage(){
         return page;
     }
@@ -122,9 +128,15 @@ public class DataModel implements DataObject, Serializable {
     }
     
     public void clear() {
-        entries = new ArrayList<DataSet>();
-        keyMap = new HashMap<DataObject,DataSet>();
+        super.clear();
         selected = -1;
+        selections.clear();
+        keyMap.clear();
+    }
+    
+    public void clearSelections() {
+        selected = -1;
+        selections.clear();
     }
     
     public void selecttLast(boolean last){
@@ -154,6 +166,15 @@ public class DataModel implements DataObject, Serializable {
     public void setValue(Object object) {
         // TODO Auto-generated method stub
         
+    }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
+    public ArrayList<DataObject> getDeletions() {
+        return deleted;
     }
 
 }

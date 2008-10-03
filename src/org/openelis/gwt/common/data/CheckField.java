@@ -43,11 +43,6 @@ public class CheckField extends AbstractField implements Serializable {
         object = new StringObject();
     }
     
-    public CheckField(Object val) {
-        object = new StringObject();
-        setValue(val);
-    }
-    
     public CheckField(Node node){
         this();
         if (node.getAttributes().getNamedItem("key") != null)
@@ -104,10 +99,10 @@ public class CheckField extends AbstractField implements Serializable {
     }
     
     public Object getValue() {
-    	String returnValue = (String)object.getValue();
-    	if("".equals(returnValue))
-    		return null;
-    	else
-    		return returnValue;
+        String returnValue = (String)object.getValue();
+        if("".equals(returnValue))
+            return null;
+        else
+            return returnValue;
     }
 }

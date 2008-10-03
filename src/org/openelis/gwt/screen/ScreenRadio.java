@@ -30,17 +30,17 @@ import org.openelis.gwt.common.data.CheckField;
  *
  */
 public class ScreenRadio extends ScreenInputWidget {
-	/**
-	 * Default XML Tag Name for XML definition and WidgetMap
-	 */
-	public static String TAG_NAME = "radio";
-	/**
-	 * Widget wrapped by this class
-	 */
+    /**
+     * Default XML Tag Name for XML definition and WidgetMap
+     */
+    public static String TAG_NAME = "radio";
+    /**
+     * Widget wrapped by this class
+     */
     private RadioButton radio;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenRadio() {
     }
     /**
@@ -51,23 +51,13 @@ public class ScreenRadio extends ScreenInputWidget {
      * 
      * @param node
      * @param screen
-     */	
+     */ 
     public ScreenRadio(Node node, final ScreenBase screen) {
         super(node);
         final ScreenRadio sr = this;
         radio = new RadioButton(node.getAttributes()
                                     .getNamedItem("group")
-                                    .getNodeValue()) {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, sr);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
+                                    .getNodeValue());
         if (node.getFirstChild() != null)
             radio.setText(node.getFirstChild().getNodeValue());
         if (node.getAttributes().getNamedItem("shortcut") != null)

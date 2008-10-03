@@ -37,28 +37,28 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  */
 public class TableCheck extends TableCellInputWidget implements FocusListener, ClickListener {
 
-	private CheckBox editor;
+    private CheckBox editor;
     private boolean enabled;
     private FocusPanel panel;
     private CheckType type = CheckType.TWO_STATE;
     private int width;
     public static final String TAG_NAME = "table-check";
    
-	public TableCheck() {
-		editor = new CheckBox();
+    public TableCheck() {
+        editor = new CheckBox();
         editor.enable(enabled);
         panel = new FocusPanel();
         panel.add(editor);
         setWidget(panel);
         panel.addFocusListener(this);
         DOM.setElementProperty(getElement(), "align", "center");
-	}
+    }
     /**
      * Clears value of cell to default.
      */
     public void clear() {
-    	if(editor != null)
-    		editor.setState(CheckBox.UNKNOWN);
+        if(editor != null)
+            editor.setState(CheckBox.UNKNOWN);
     }
 
     /**
@@ -85,15 +85,15 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
         
     }
 
-	public void saveValue() {
-		field.setValue(editor.getState());
-		super.saveValue();
-	}
+    public void saveValue() {
+        field.setValue(editor.getState());
+        super.saveValue();
+    }
 
-	public void setField(AbstractField field) {
-		this.field = field;
-		editor.setState((String)field.getValue());
-	}
+    public void setField(AbstractField field) {
+        this.field = field;
+        editor.setState((String)field.getValue());
+    }
     
     public void onFocus(Widget sender) {
         DOM.setStyleAttribute(sender.getElement(), "background", "white");
@@ -126,5 +126,9 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
     public void onClick(Widget sender) {
         if(enabled)
             saveValue();
+    }
+    
+    public void setFocus(boolean focused) {
+        editor.setFocus(focused);
     }
 }

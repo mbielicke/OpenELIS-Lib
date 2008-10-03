@@ -15,8 +15,9 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -28,17 +29,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
 import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -49,9 +46,10 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableView extends Composite implements ScrollListener, MouseWheelListener, KeyboardListener {
+public class TableView extends Composite implements TableViewInt, ScrollListener, MouseWheelListener {
     
     public boolean loaded;
+    
     public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
 
         private AbsolutePanel ap = new AbsolutePanel();
@@ -90,7 +88,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             ap.setWidth(width);
         }
         
-        public void setWidget(Widget wid){
+        public void setWidget(final Widget wid){
             ap.clear();
             ap.add(wid);
         }
@@ -110,10 +108,10 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
-    public FlexTable header = new FlexTable();
+    public TableHeader header = null;
     public FlexTable rows = new FlexTable();
-    private int left = 0;
-    private int top = 0;
+    public int left = 0;
+    public int top = 0;
     public String[] headers;
     public Label[] hLabels;
     private String title = "";
@@ -125,128 +123,70 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public static String tableStyle = "Table";
     public static String selectedStyle = "Selected";
     public static String navLinks = "NavLinks";
+    public static String disabledStyle = "Disabled";
     protected HorizontalPanel navPanel = new HorizontalPanel();
     private VerticalPanel vp = new VerticalPanel(); 
     public String width;
     public int height;
-    public TableController controller = null;
+    public TableWidget controller = null;
     public HTML prevNav;
     public HTML nextNav;
+    public VerticalScroll showScroll;
+
     
-    public TableView() {
-        initWidget(vp);
-    }
-    
-    public void initTable(final TableController controller) {
+    public TableView(TableWidget controller, VerticalScroll showScroll) {
         this.controller = controller;
-        if(title != null && !title.equals("")){
-            titleLabel.setText(title);
+        this.showScroll = showScroll;
+        initWidget(vp);
+        if(controller.title != null && !controller.title.equals("")){
+            titleLabel.setText(controller.title);
             titlePanel.add(titleLabel);
             titlePanel.addStyleName("TitlePanel");
         }
-        if(headers != null){
-            header.setCellSpacing(0);
-            int j = 0;
-            for (int i = 0; i < headers.length; i++) {
-                if (i > 0) {
-                    FocusPanel bar = new FocusPanel() {
-                        public void onBrowserEvent(Event event) {
-                            controller.event = event;
-                            super.onBrowserEvent(event);
-                        }
-                    };
-                    bar.addMouseListener(controller);
-                    HorizontalPanel hpBar = new HorizontalPanel();
-                    AbsolutePanel ap1 = new AbsolutePanel();
-                    ap1.addStyleName("HeaderBarPad");
-                    AbsolutePanel ap2 = new AbsolutePanel();
-                    ap2.addStyleName("HeaderBar");
-                    AbsolutePanel ap3 = new AbsolutePanel();
-                    ap3.addStyleName("HeaderBarPad");
-                    hpBar.add(ap1);
-                    hpBar.add(ap2);
-                    hpBar.add(ap3);
-                    bar.add(hpBar);
-                    header.setWidget(0, j, bar);
-                    header.getFlexCellFormatter().addStyleName(0,
-                                                               j,
-                                                               headerCellStyle);
-                    header.getFlexCellFormatter().setWidth(0, j, "3px");
-                    j++;
-                }
-                SimplePanel hp0 = new SimplePanel();
-                DOM.setStyleAttribute(hp0.getElement(), "overflow", "hidden");
-                DOM.setStyleAttribute(hp0.getElement(), "overflowX", "hidden");
-                HorizontalPanel hp = new HorizontalPanel();
-                hLabels[i].addStyleName("HeaderLabel");
-                Image img = new Image("Images/unapply.png");
-                img.setHeight("10px");
-                img.setWidth("10px");
-                DOM.setStyleAttribute(hLabels[i].getElement(),"overflowX","hidden");
-                img.addStyleName("HeaderIMG");
-                if ((controller.sortable == null || !controller.sortable[i]) && 
-                    (controller.filterable == null || !controller.filterable[i]))
-                    img.addStyleName("hide");
-                hp.add(hLabels[i]);
-                hLabels[i].setWordWrap(false);
-                hp.add(img);
-                hp.setCellHorizontalAlignment(hLabels[i],
-                                              HasHorizontalAlignment.ALIGN_RIGHT);
-                hp.setCellHorizontalAlignment(img,
-                                              HasHorizontalAlignment.ALIGN_LEFT);
-                hp0.setWidget(hp);
-                DOM.setElementProperty(hp0.getElement(),"align","center");              
-                header.setWidget(0, j, hp0);
-                header.getFlexCellFormatter().addStyleName(0,
-                                                           j,
-                                                           headerCellStyle);
-                j++;
-               
-            }
-            header.setStyleName(headerStyle);
-            header.addTableListener(controller);
+        if(controller.showHeader){
+            header = new TableHeader(controller);
+            headerView.add(header);
         }
-        //DOM.setStyleAttribute(statView.getElement(), "overflow", "hidden");
-        headerView.add(header);
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollListener(this);
         AbsolutePanel tspacer = new AbsolutePanel();
         tspacer.setStyleName("TableSpacer");
-        if(title != null && !title.equals("")){
-           // HorizontalPanel hp = new HorizontalPanel();
-            //hp.add(titlePanel);
-            //hp.add(new HTML("<td width="))
-        	vp.add(titlePanel);
-        }else{    
-            
+        if(controller.title != null && !controller.title.equals("")){
+            vp.add(titlePanel);
+            vp.setCellWidth(titlePanel, "100%");
         }
         if(controller.showRows) {
-        	if(headers != null)
-        		ft.setWidget(0,1,headerView);
+            if(header != null)
+                ft.setWidget(0,1,headerView);
             ft.setWidget(1,0,rows);
             ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
             ft.setWidget(1,1,cellView);
             ft.setWidget(1, 2, scrollBar);
-            //ft.getFlexCellFormatter().setRowSpan(0, 2, 2);
             ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
             ft.getFlexCellFormatter().setVerticalAlignment(1,2,HasAlignment.ALIGN_TOP);
             if(headers != null)
                 ft.getFlexCellFormatter().addStyleName(0,2, "Header");
         }else{
-        	if(headers != null){
-        		ft.setWidget(0,0,headerView);
+            if(header != null){
+                ft.setWidget(0,0,headerView);
                 ft.setWidget(1,0,cellView);
-                ft.setWidget(1,1,scrollBar);
-                //ft.getFlexCellFormatter().setRowSpan(1, 1, 2);
-                ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
-                ft.getFlexCellFormatter().setVerticalAlignment(1,1,HasAlignment.ALIGN_TOP);
-                ft.getFlexCellFormatter().addStyleName(0, 1, "Header");
+                if(showScroll != VerticalScroll.NEVER){
+                    ft.setWidget(1,1,scrollBar);
+                    ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
+                    ft.getFlexCellFormatter().setVerticalAlignment(1,1,HasAlignment.ALIGN_TOP);
+                    if(showScroll == VerticalScroll.ALWAYS)
+                        ft.getFlexCellFormatter().addStyleName(0, 1, "Header");
+                }
+                ft.getFlexCellFormatter().setVerticalAlignment(1,0,HasAlignment.ALIGN_TOP);
+ 
             }else{
                 ft.setWidget(0,0,cellView);
-                ft.setWidget(0, 1, scrollBar);
-                ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
-                ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_TOP);
+                if(showScroll != VerticalScroll.NEVER){
+                    ft.setWidget(0, 1, scrollBar);
+                    ft.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
+                    ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_TOP);
+                }
             }
         }
         vp.add(ft);
@@ -254,17 +194,24 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         ft.setCellSpacing(0);
         table.setCellSpacing(1);
         table.addStyleName(tableStyle);
-        //table.sinkEvents(Event.KEYEVENTS);
         cellView.setWidget(table);
         ft.setCellSpacing(0);
         scrollBar.setWidth("18px");
         scrollBar.addScrollListener(this);
         AbsolutePanel ap = new AbsolutePanel();
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
-        DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
+        if(showScroll == VerticalScroll.NEEDED)
+            DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
         cellView.addMouseWheelListener(this);
+        table.addTableListener(controller);
+        scrollBar.setAlwaysShowScrollBars(true);
+        DeferredCommand.addCommand(new Command() {
+           public void execute() {
+               titlePanel.setWidth("100%");
+           }
+        });
     }
     
     
@@ -292,47 +239,10 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
         titlePanel.setWidth(width);
     }
 
-    public void setTableListener(TableListener listener) {
-        table.addTableListener(listener);
-        controller = (TableController)listener;
-    }
-
     public void setCell(Widget widget, int row, int col) {
         table.setWidget(row, col, widget);
         if (widget instanceof FocusWidget)
             ((FocusWidget)widget).setFocus(true);
-    }
-/*
-    public void reset() {
-        table = new FlexTable();
-        table.setCellSpacing(1);
-        table.addStyleName(tableStyle);
-        table.addTableListener(controller);
-        if(controller.showRows){
-            rows = new FlexTable();
-            ft.setWidget(1,0,rows);
-            rows.setCellSpacing(1);
-        }
-        cellView.setWidget(table);
-    }
-  */  
-    public void setTable(){
-        cellView.clear();
-        cellView.setWidget(table);
-    }
-
-    public void setHeaders(String[] headers) {
-        this.headers = headers;
-        if(hLabels == null){
-            hLabels = new Label[headers.length];
-            for(int i = 0; i < headers.length; i++){
-                hLabels[i] = new Label(headers[i]);
-            }
-        }else{
-            for(int i = 0; i < headers.length; i++){
-                hLabels[i].setText(headers[i]);
-            }
-        }
     }
 
     public void setTitle(String title) {
@@ -352,11 +262,11 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
 
         prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickListener(controller);
+        prevNav.addClickListener(controller.mouseHandler);
         
         nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickListener(controller);
+        nextNav.addClickListener(controller.mouseHandler);
         
         leftButtonPanel.add(prevNav);
         rightButtonPanel.add(nextNav);
@@ -367,7 +277,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
             leftButtonPanel.removeStyleName("disabled");
         }
         else{          
-        	leftButtonPanel.setStyleName("disabled");
+            leftButtonPanel.setStyleName("disabled");
         }
         if(showIndex){
             for (int i = 1; i <= pages; i++) {
@@ -378,7 +288,7 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
                                    + "'>"
                                    + i
                                    + "</a>");
-                    nav.addClickListener(controller);
+                    nav.addClickListener(controller.mouseHandler);
                 } else {
                     nav = new HTML("" + i);
                     nav.setStyleName("current");
@@ -393,28 +303,33 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     }
 
     public void onScroll(Widget sender, int scrollLeft, final int scrollTop) {
-    	if(sender == scrollBar ) {
-    		if(top != scrollTop){
-    			controller.scrollLoad(scrollTop);
-    			top = scrollTop;
-    		}
-    	}
-    	if(sender == cellView){
-    		if(left != scrollLeft){
-    			headerView.setWidgetPosition(header, -scrollLeft, 0);
-    			left = scrollLeft;
-    		}
-    	}
+        if(sender == scrollBar ) {
+            if(top != scrollTop){
+                controller.renderer.scrollLoad(scrollTop);
+                top = scrollTop;
+            }
+        }
+        if(sender == cellView){
+            if(left != scrollLeft){
+                headerView.setWidgetPosition(header, -scrollLeft, 0);
+                left = scrollLeft;
+            }
+        }
     }
     
-    public void setScrollHeight(int height) {
+    public void setScrollHeight(int scrollHeight) {
         try {
-            scrollBar.getWidget().setHeight(height+"px");
-            if(!controller.showScrolls){
-                if(height > (this.height+controller.cellSpacing))
+            scrollBar.getWidget().setHeight(scrollHeight+"px");
+            if(showScroll == showScroll.NEEDED){
+                if(scrollHeight > (this.height+1)){
                     DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
-                else 
+                    if(header != null)
+                        ft.getFlexCellFormatter().addStyleName(0, 1, "Header");
+                }else{ 
                     DOM.setStyleAttribute(scrollBar.getElement(),"display","none");
+                    if(header != null && ft.isCellPresent(0, 1))
+                        ft.getFlexCellFormatter().removeStyleName(0,1,"Header");
+                }
             }
         }catch(Exception e){
             Window.alert("set scroll height"+e.getMessage());
@@ -424,26 +339,11 @@ public class TableView extends Composite implements ScrollListener, MouseWheelLi
     public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
         int pos = scrollBar.getScrollPosition();
         int delta = velocity.getDeltaY();
-        if(delta < 0 && delta > - controller.cellHeight)
-            delta = -controller.cellHeight;
+        if(delta < 0 && delta > - 18)
+            delta = -18;
         if(delta > 0 && delta < 18)
-            delta = controller.cellHeight;
+            delta = 18;
         scrollBar.setScrollPosition(pos + delta);
-    }
-
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
     }
     
 }

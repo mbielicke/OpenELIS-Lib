@@ -30,10 +30,10 @@ public class AbstractField implements DataField, Serializable {
 
     protected ArrayList<String> errors = new ArrayList<String>();
     protected boolean required;
-    protected String key;
+    public String key;
     protected String tip;
     protected DataObject object;
-    protected boolean valid = true;
+    public boolean valid = true;
     protected boolean allowReset = true;
 
     public void setRequired(boolean required) {
@@ -140,4 +140,23 @@ public class AbstractField implements DataField, Serializable {
         valid = true;
         errors.clear();
     }
+    
+    public int compareTo(Object o) {
+        if(o instanceof AbstractField)
+            return object.compareTo(((AbstractField)o).object);
+        else if(o instanceof DataObject)
+            return object.compareTo(o);
+        else
+            return -1;
+    }
+    
+    public boolean equals(Object o) {
+        if(o instanceof AbstractField)
+            return object.equals(((AbstractField)o).object);
+        else if (o instanceof DataObject)
+            return object.equals(o);
+        else
+            return false;
+    }
+
 }

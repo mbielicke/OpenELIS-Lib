@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
@@ -31,8 +32,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.MenuLabel;
 
 import java.util.ArrayList;
@@ -117,8 +118,9 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
 
     }
 
-    public void setField(AbstractField field) {
-        // TODO Auto-generated method stub
+    public void setField(DataObject field) {
+       if(field instanceof AbstractField)
+           this.field = (AbstractField)field;
 
     }
 
@@ -133,11 +135,13 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
             }
-            ScreenWindow win = new ScreenWindow(pop,"","","",false);
-            win.setStyleName("ErrorWindow");
-            win.setContent(errorPanel);
-            win.setVisible(true);
-            pop.setWidget(win);
+            DecoratorPanel dp = new DecoratorPanel();
+            
+            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            dp.setStyleName("ErrorWindow");
+            dp.add(errorPanel);
+            dp.setVisible(true);
+            pop.setWidget(dp);
             pop.setPopupPosition(sender.getAbsoluteLeft()+sender.getOffsetWidth(), sender.getAbsoluteTop());
             pop.show();
         }
@@ -208,6 +212,9 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
         if(sender instanceof TextBoxBase){
             ((TextBoxBase)sender).setSelectionRange(0, 0);
         }
+    }
+    
+    public void setFocus(boolean focus) {
     }
 
 }

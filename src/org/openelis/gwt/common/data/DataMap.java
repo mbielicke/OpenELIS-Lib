@@ -19,30 +19,33 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class DataMap implements DataObject, Serializable{
+public class DataMap extends HashMap<String,DataObject> implements DataObject, Serializable{
     
     private static final long serialVersionUID = 1L;
 
-    private HashMap<String,DataObject> map = new HashMap<String,DataObject>();
-
     public Object getInstance() {
         DataMap dataMap = new DataMap();
-        Iterator keyIt = map.keySet().iterator();
+        Iterator keyIt = keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
-            dataMap.map.put(key, (DataObject)((DataObject)map.get(key)).getInstance());
+            dataMap.put(key, (DataObject)((DataObject)get(key)).getInstance());
         }
         return dataMap;
     }
 
     public Object getValue() {
         // TODO Auto-generated method stub
-        return map;
+        return this;
     }
 
     public void setValue(Object object) {
         // TODO Auto-generated method stub
-        map = (HashMap<String,DataObject>)object;
+         
+    }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

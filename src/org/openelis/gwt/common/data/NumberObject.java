@@ -88,8 +88,8 @@ public class NumberObject implements DataObject, Serializable {
     public Type getType() {
         return type;
     }
-	
-	public Object getInstance() {
+    
+    public Object getInstance() {
         NumberObject clone = new NumberObject();
         clone.type = type;
         clone.value = new Double(value.doubleValue());
@@ -105,5 +105,10 @@ public class NumberObject implements DataObject, Serializable {
     public int hashCode() {
         // TODO Auto-generated method stub
         return value.hashCode();
+    }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return value.compareTo(((NumberObject)o).value);
     }
 }

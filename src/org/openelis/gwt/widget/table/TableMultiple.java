@@ -20,8 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.TableModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     
     public ArrayList<TableCellWidget> cells = new ArrayList<TableCellWidget>();
     public int active;
-    AbstractField field;
+    DataObject field;
     public static final String TAG_NAME = "table-multiple";
     
     public TableMultiple() {
@@ -54,7 +53,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         NodeList editors = node.getChildNodes();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                cells.add(ScreenBase.createCellWidget(editors.item(i),screen));
+                cells.add((TableCellWidget)ScreenBase.createCellWidget(editors.item(i),screen));
             }
         }
     }
@@ -87,7 +86,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(AbstractField field) {
+    public void setField(DataObject field) {
        this.field = field;
         
     }
@@ -100,7 +99,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         return ((SimplePanel)super.getWidget()).getWidget();
     }
     
-    public void initCells(TableController controller){
+    public void initCells(TableWidget controller){
 
     }
 
@@ -114,6 +113,10 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     public Widget getInstance(Node node) {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    public void setFocus(boolean focused) {
+
     }
 
 }

@@ -34,16 +34,16 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-	public static String TAG_NAME = "maskedbox";
-	/**
-	 * Widget wrapped by this class
-	 */
+    public static String TAG_NAME = "maskedbox";
+    /**
+     * Widget wrapped by this class
+     */
     private MaskedTextBox maskbox;
     private String next;
     
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenMaskedBox() {
     }
     /**
@@ -57,22 +57,7 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
      */
     public ScreenMaskedBox(Node node, final ScreenBase screen) {
         super(node);
-        final ScreenMaskedBox sm = this;
-        maskbox = new MaskedTextBox() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, sm);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-            
-            public void complete() {
-                screen.doTab(null,sm);
-            }
-        };
+        maskbox = new MaskedTextBox();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             maskbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")
@@ -140,19 +125,19 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     }
    
     public void onFocus(Widget sender) {
-		if(!maskbox.isReadOnly()){
-			if(sender == maskbox){
-				super.hp.addStyleName("Focus");
-			}
-		}	
+        if(!maskbox.isReadOnly()){
+            if(sender == maskbox){
+                super.hp.addStyleName("Focus");
+            }
+        }   
         super.onFocus(sender);
-	}
-	public void onLostFocus(Widget sender) {
-		if(!maskbox.isReadOnly()){
-			if(sender == maskbox){
-				super.hp.removeStyleName("Focus");
-			}
-		}
+    }
+    public void onLostFocus(Widget sender) {
+        if(!maskbox.isReadOnly()){
+            if(sender == maskbox){
+                super.hp.removeStyleName("Focus");
+            }
+        }
         super.onLostFocus(sender);
-	}    
+    }    
 }

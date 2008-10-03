@@ -697,11 +697,11 @@ border:0px;
 /*******autodropdown css***********/
 
 .AutoDropdown{
-    height:19px;
+    height:16px;
 }
 .AutoDropdownButton{
     width:16px;
-    height:19px;
+    height:18px;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
@@ -718,7 +718,7 @@ border:0px;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
-.AutoCompletePopup{
+.DropdownPopup{
     background:#FFFFFF;
     border: 1px solid #7eadd9;
 }
@@ -729,7 +729,7 @@ border:0px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:20px;
+    height:16px;
     cursor:default;
 }
 .AutoDropdown .TextboxUnselected{
@@ -739,7 +739,7 @@ border:0px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:20px;
+    height:16px;
     cursor:default;
 }
 

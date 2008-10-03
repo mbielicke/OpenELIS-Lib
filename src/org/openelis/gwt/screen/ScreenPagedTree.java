@@ -15,14 +15,13 @@
 */
 package org.openelis.gwt.screen;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.TableModel;
-import org.openelis.gwt.widget.pagedtree.TreeController;
-import org.openelis.gwt.widget.pagedtree.TreeModel;
-
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.pagedtree.TreeController;
+import org.openelis.gwt.widget.pagedtree.TreeModel;
 
 public class ScreenPagedTree extends ScreenWidget {
    public TreeController controller = new TreeController();

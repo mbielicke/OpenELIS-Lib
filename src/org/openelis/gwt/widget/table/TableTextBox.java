@@ -16,11 +16,8 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
@@ -46,14 +43,14 @@ public class TableTextBox extends TableCellInputWidget {
     public static final String TAG_NAME = "table-textbox";
     
     public TableTextBox() {
-    	
+        
     }
     
     public void clear() {
-    	if(editor != null)
-    		editor.setText("");
-    	if(display != null)
-    		display.setText("");
+        if(editor != null)
+            editor.setText("");
+        if(display != null)
+            display.setText("");
     }
 
     public TableCellWidget getNewInstance() {
@@ -67,15 +64,15 @@ public class TableTextBox extends TableCellInputWidget {
     }
 
     public void setDisplay() {
-    	if(display == null){
-    		display = new Label();
+        if(display == null){
+            display = new Label();
             display.setWordWrap(false);
             if(fieldCase.equals("upper"))
                 display.addStyleName("Upper");
             else if(fieldCase.equals("lower"))
                 display.addStyleName("Lower");
             display.setWidth(width+"px");
-    	}
+        }
         if(field.getValue() != null){
             String val = field.getValue().toString();
         
@@ -92,18 +89,18 @@ public class TableTextBox extends TableCellInputWidget {
     public void setEditor() {
         if(!enabled)
             return;
-    	if(editor == null){
-    		editor = new TextBox();
+        if(editor == null){
+            editor = new TextBox();
             editor.addFocusListener(this);
-    		if(fieldCase.equals("upper"))
-    			editor.addStyleName("Upper");
-    		else if(fieldCase.equals("lower"))
-    			editor.addStyleName("Lower");
-    		
-    		if(length > -1)
-    			editor.setMaxLength(length);
+            if(fieldCase.equals("upper"))
+                editor.addStyleName("Upper");
+            else if(fieldCase.equals("lower"))
+                editor.addStyleName("Lower");
+            
+            if(length > -1)
+                editor.setMaxLength(length);
             editor.setWidth(width+"px");
-    	}
+        }
         if(field.getValue() != null)
             editor.setText(field.getValue().toString());
         else
@@ -117,7 +114,7 @@ public class TableTextBox extends TableCellInputWidget {
             fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
         
         if (node.getAttributes().getNamedItem("max") != null) 
-        	length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
+            length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
         
         if (node.getAttributes().getNamedItem("editorMask") != null) 
             editorMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("editorMask").getNodeValue());
@@ -126,8 +123,8 @@ public class TableTextBox extends TableCellInputWidget {
             displayMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("displayMask").getNodeValue());
     }
 
-	public void saveValue() {
-		String val = editor.getText();
+    public void saveValue() {
+        String val = editor.getText();
         if(fieldCase.equals("upper"))
             val = val.toUpperCase();
         else if(fieldCase.equals("lower"))
@@ -136,13 +133,13 @@ public class TableTextBox extends TableCellInputWidget {
         if(editorMask != null && !"".equals(val))
             val = editorMask.format(Double.valueOf(val).doubleValue());
         
-		field.setValue(val);
+        field.setValue(val);
         super.saveValue();
-	}
+    }
 
-	public void setField(AbstractField field) {
-		this.field = field;
-	}
+    public void setField(AbstractField field) {
+        this.field = field;
+    }
 
     public void enable(boolean enabled) {
        this.enabled = enabled;
@@ -155,6 +152,10 @@ public class TableTextBox extends TableCellInputWidget {
             editor.setWidth(width+"px");
         if(display != null)
             display.setWidth(width+"px");
+    }
+    
+    public void setFocus(boolean focused) {
+        editor.setFocus(focused);
     }
 
 }

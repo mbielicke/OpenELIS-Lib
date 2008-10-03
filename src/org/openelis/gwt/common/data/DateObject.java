@@ -93,4 +93,9 @@ public class DateObject implements DataObject, Serializable {
         return value.hashCode();
     }
 
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return -1;
+    }
+
 }

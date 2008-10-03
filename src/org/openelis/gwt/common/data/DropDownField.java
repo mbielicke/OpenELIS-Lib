@@ -25,14 +25,12 @@ public class DropDownField extends AbstractField {
     
     private ArrayList<DataSet> selections = new ArrayList<DataSet>();
     
+    private DataModel model = new DataModel();
+    
     public static final String TAG_NAME = "rpc-dropdown";
     
     public DropDownField() {
         
-    }
-    
-    public DropDownField(Object val) {
-        setValue(val);
     }
     
     public DropDownField(Node node) {
@@ -52,18 +50,12 @@ public class DropDownField extends AbstractField {
     
     public void setValue(Object val) {
         if(val instanceof ArrayList){
-            selections = (ArrayList<DataSet>)val;
-            return;
+            if(val instanceof DataSet) {
+                selections.clear();
+                selections.add((DataSet)val);
+            }else
+                selections = (ArrayList<DataSet>)val;
         }
-        selections = new ArrayList<DataSet>();
-        if(val instanceof Integer)
-            add((Integer)val);
-        else if(val instanceof Double)
-            add((Double)val);
-        else if(val instanceof String)
-            add((String)val);
-        else if(val instanceof DataSet)
-            add((DataSet)val);
     }
 
     public Object getValue() {
@@ -76,8 +68,8 @@ public class DropDownField extends AbstractField {
     }
     
     public Object getTextValue(){
-    	if(selections.size() == 1)
-            return selections.get(0).getObject(0).getValue();
+        if(selections.size() == 1)
+            return selections.get(0).get(0).getValue();
         else if(selections.size() > 1)
             return selections;
         else
@@ -134,7 +126,7 @@ public class DropDownField extends AbstractField {
     }
     
     public void validate() {
-    	if (required) {
+        if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
             if (selections.size() == 0 || (selections.size() == 1 && selections.get(0).getKey() == null)) {
                 addError("Field is required");
@@ -143,5 +135,13 @@ public class DropDownField extends AbstractField {
             }
         }
         valid = true;
+    }
+
+    public DataModel getModel() {
+        return model;
+    }
+
+    public void setModel(DataModel model) {
+        this.model = model;
     }
 }

@@ -29,17 +29,17 @@ import org.openelis.gwt.common.data.AbstractField;
  *
  */
 public class ScreenPassword extends ScreenInputWidget {
-	/**
-	 * Default XML Tag Name for XML definition and WidgetMap
-	 */
-	public static String TAG_NAME = "password";
-	/**
-	 * Widget wrapped by this class
-	 */
+    /**
+     * Default XML Tag Name for XML definition and WidgetMap
+     */
+    public static String TAG_NAME = "password";
+    /**
+     * Widget wrapped by this class
+     */
     private PasswordTextBox textbox;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenPassword() {
     }
     /**
@@ -50,21 +50,10 @@ public class ScreenPassword extends ScreenInputWidget {
      * 
      * @param node
      * @param screen
-     */	
+     */ 
     public ScreenPassword(Node node, final ScreenBase screen) {
         super(node);
-        final ScreenPassword sp = this;
-        textbox = new PasswordTextBox() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, sp);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
+        textbox = new PasswordTextBox();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")

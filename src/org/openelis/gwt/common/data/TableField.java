@@ -17,12 +17,15 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+import java.util.ArrayList;
+
 
 public class TableField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
-    private TableModel value;
+    private DataModel value = new DataModel();
     public static final String TAG_NAME = "rpc-table";
+    private ArrayList<String> fieldIndex = new ArrayList<String>();
     
     public TableField() {
         
@@ -30,13 +33,6 @@ public class TableField extends AbstractField {
     
     public TableField(Node node){
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
-    }
-
-    public void validate() {
-    	if(value != null)
-    		valid = value.validate();
-    	else
-    		valid = true;
     }
 
     public boolean isInRange() {
@@ -48,11 +44,11 @@ public class TableField extends AbstractField {
         // TODO Auto-generated method stub
         if(val == null){
             if(value != null)
-                ((TableModel)value).reset();
+                ((DataModel)value).clear();
             else
                 value = null;
         }else
-            value = (TableModel)val;
+            value = (DataModel)val;
     }
 
     public Object getValue() {
@@ -74,10 +70,41 @@ public class TableField extends AbstractField {
         return new TableField(node);
     }
     
-    public void clearErrors() {
-        if(value != null)
-            value.clearErrors();
+    public void validate() {
+        valid = validateModel();
     }
     
+    public boolean validateModel() {
+        boolean valid = true;
+        for(DataSet row : value){
+            if(row.shown){
+                for (DataObject obj : row){
+                    if(obj instanceof AbstractField){
+                        ((AbstractField)obj).validate();
+                        if(!((AbstractField)obj).valid)
+                            valid = false;
+                    }
+                }
+            }
+        }
+        return valid;
+    }
+    
+    public void clearErrors() {
+        for(DataSet row : value){
+            for(DataObject obj : row){
+                if(obj instanceof AbstractField)
+                    ((AbstractField)obj).clearErrors();
+            }
+        }
+    }
+    
+    public void setFieldIndex(ArrayList<String> fieldIndex) {
+        this.fieldIndex = fieldIndex;
+    }
+    
+    public AbstractField getField(int row, String field) {
+        return (AbstractField)value.get(row).get(fieldIndex.indexOf(field));
+    }
     
 }

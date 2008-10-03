@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataObject;
 
 
 /**
@@ -32,7 +32,7 @@ import org.openelis.gwt.common.data.AbstractField;
 public class TableLink extends SimplePanel implements TableCellWidget {
     
     private HTML editor;
-    private AbstractField field;
+    private DataObject field;
     private boolean enabled;
     public static final String TAG_NAME = "table-link";
     
@@ -75,7 +75,7 @@ public class TableLink extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(AbstractField field) {
+    public void setField(DataObject field) {
         this.field = field;
         
     }
@@ -88,5 +88,9 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     public void setCellWidth(int width) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void setFocus(boolean focused) {
+
     }
 }

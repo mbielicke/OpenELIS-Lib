@@ -37,12 +37,12 @@ public class StringObject implements DataObject, Serializable {
     }
 
     public void setValue(Object val) {
-    	value = (String)val;
+        value = (String)val;
     }
     
     public Object getInstance() {
         StringObject clone = new StringObject();
-        clone.setValue(value);
+        clone.setValue(new String(value));
         return clone;
     }
     
@@ -54,6 +54,11 @@ public class StringObject implements DataObject, Serializable {
     
     public int hashCode() {
         return value.hashCode();
+    }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return value.compareTo((String)((DataObject)o).getValue());
     }    
 
 }

@@ -29,6 +29,11 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.ScrollList;
+import org.openelis.gwt.widget.table.TableColumn;
+import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
+
+import java.util.ArrayList;
 /**
  * ScreenDragList wraps a DragList Widget to be displayed on a Screen
  * @author tschmidt
@@ -38,14 +43,14 @@ public class ScreenScrollList extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-	public static String TAG_NAME = "scrolllist";
-	/**
-	 * Widget wrapped by this class
-	 */
+    public static String TAG_NAME = "scrolllist";
+    /**
+     * Widget wrapped by this class
+     */
     private ScrollList list;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenScrollList() {
         
     }
@@ -61,45 +66,58 @@ public class ScreenScrollList extends ScreenWidget {
     public ScreenScrollList(Node node, final ScreenBase screen){
         super(node);
         final ScreenScrollList sl = this;
-        list = new ScrollList() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, sl);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
-        list.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
+        int maxRows = (Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
+        int cellHeight = 18;
         if(node.getAttributes().getNamedItem("cellHeight") != null){
-            list.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
+            cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
         }
+        boolean drag = false;
         if(node.getAttributes().getNamedItem("targets") != null)
-            list.drag = true;
+            drag = true;
+        boolean drop = false;
         if(node.getAttributes().getNamedItem("drop") != null)
-            list.drop = true;
+            drop = true;
+        boolean multi = false;
         if(node.getAttributes().getNamedItem("multi") != null){
             if(node.getAttributes().getNamedItem("multi").getNodeValue().equals("true")){
-                list.multi = true;
+                multi = true;
             }
+        }
+        VerticalScroll showScroll = VerticalScroll.NEEDED;
+        if(node.getAttributes().getNamedItem("showScroll") != null){
+            showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
         }
         Node widthsNode = ((Element)node).getElementsByTagName("widths").item(0);
         Node headersNode = ((Element)node).getElementsByTagName("headers").item(0);
         
-        if(headersNode != null)
-            list.setHeaders(getHeaders(headersNode));
-        
-        if(widthsNode !=  null)
-            list.setCellWidths(getWidths(widthsNode));
+        ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>(); 
+        if(widthsNode != null) {
+            String[] widths = widthsNode.getFirstChild()
+            .getNodeValue()
+            .split(",");
+            for (String wid : widths) {
+                TableColumn col = new TableColumn();
+                col.setCurrentWidth(Integer.parseInt(wid));
+                columns.add(col);
+            }
+        }
+        boolean showHeader = false;
+        if(headersNode != null){
+            showHeader = true;
+            String[] headerNames = headersNode.getFirstChild()
+            .getNodeValue()
+            .split(",");
+            for(int i = 0; i < headerNames.length; i++){
+                columns.get(i).setHeader(headerNames[i].trim());
+            }                    
+        }
         
         if(node.getAttributes().getNamedItem("maxHeight") != null){
             if(node.getAttributes().getNamedItem("maxHeight").getNodeValue().equals("true"))
                 list.maxHeight = true;
         }
         
-        initWidget(list);        
+        list = new ScrollList(columns,maxRows,"auto",null,showHeader,showScroll); 
         
         list.setStyleName("ScreenDragList");
         setDefaults(node, screen);
@@ -122,7 +140,7 @@ public class ScreenScrollList extends ScreenWidget {
             list.clear();
             createList(doc.getDocumentElement());
         }else{
-            list.setDataModel((DataModel)field.getValue());
+            list.model.load((DataModel)field.getValue());
         }
             
     }

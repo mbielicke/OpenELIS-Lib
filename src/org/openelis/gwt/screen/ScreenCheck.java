@@ -34,19 +34,19 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  *
  */
 public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents{
-	private DelegatingClickListenerCollection clickListeners;
-	/**
-	 * Default Tag Name for XML Definition and WidgetMap
-	 */
-	public static String TAG_NAME = "check";
-	/**
-	 * Widget wrapped by this class
-	 */
+    private DelegatingClickListenerCollection clickListeners;
+    /**
+     * Default Tag Name for XML Definition and WidgetMap
+     */
+    public static String TAG_NAME = "check";
+    /**
+     * Widget wrapped by this class
+     */
     private CheckBox check;
     private CheckType defaultType = CheckBox.CheckType.TWO_STATE;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenCheck() {
     }
     /**
@@ -60,25 +60,13 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
      */
     public ScreenCheck(Node node, final ScreenBase screen) {
         super(node);
-        final ScreenCheck sc = this;
-        check = new CheckBox(){
-                public void onBrowserEvent(Event event){
-                    if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                        if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                            screen.doTab(event, sc);
-                        }
-                    } else {
-                        super.onBrowserEvent(event);
-                    }
-                }
-        };
-
+        check = new CheckBox();
         if(node.getAttributes().getNamedItem("threeState") != null){
             check.setType(CheckBox.CheckType.THREE_STATE);
             defaultType = CheckBox.CheckType.THREE_STATE;
         }
         if (node.getFirstChild() != null){
-        	 check.setText(node.getFirstChild().getNodeValue());
+             check.setText(node.getFirstChild().getNodeValue());
         }
         if (node.getChildNodes().getLength() > 0){
             NodeList widgets = node.getChildNodes();
@@ -90,11 +78,11 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
             }
         }
         if (node.getAttributes().getNamedItem("onClick") != null){
-        	String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
-        	if(listener.equals("this"))
-        		addClickListener((ClickListener)screen);
-        	else
-        		addClickListener((ClickListener)ClassFactory.forName(listener));
+            String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
+            if(listener.equals("this"))
+                addClickListener((ClickListener)screen);
+            else
+                addClickListener((ClickListener)ClassFactory.forName(listener));
         }
         initWidget(check);
         displayWidget = check;
@@ -143,18 +131,18 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
             check.setFocus(focus);
             
     }
-	public void addClickListener(ClickListener listener) {
-		if(clickListeners == null){
-			clickListeners = new DelegatingClickListenerCollection(this,check.panel);
-		}
-		clickListeners.add(listener);
-	}
-	
-	public void removeClickListener(ClickListener listener) {
-		if(clickListeners != null){
-			clickListeners.remove(listener);
-		}
-	}
+    public void addClickListener(ClickListener listener) {
+        if(clickListeners == null){
+            clickListeners = new DelegatingClickListenerCollection(this,check.panel);
+        }
+        clickListeners.add(listener);
+    }
+    
+    public void removeClickListener(ClickListener listener) {
+        if(clickListeners != null){
+            clickListeners.remove(listener);
+        }
+    }
     
     public void destroy(){
         clickListeners = null;

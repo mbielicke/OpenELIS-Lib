@@ -45,13 +45,6 @@ public class DateField extends AbstractField implements Serializable {
         object = new DateObject();
     }
     
-    public DateField(byte begin, byte end, Object value) {
-        object = new DateObject();
-        setBegin(begin);
-        setEnd(end);
-        setValue(value);
-    }
-    
     public DateField(Node node) {
         this();
         if (node.getAttributes().getNamedItem("key") != null)

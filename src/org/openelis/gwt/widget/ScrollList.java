@@ -15,13 +15,12 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -38,11 +37,18 @@ import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenScrollList;
 import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.table.TableController;
+import org.openelis.gwt.widget.table.TableColumn;
+import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableKeyboardHandlerInt;
+import org.openelis.gwt.widget.table.TableModel;
+import org.openelis.gwt.widget.table.TableMouseHandler;
+import org.openelis.gwt.widget.table.TableRenderer;
 import org.openelis.gwt.widget.table.TableView;
+import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
+import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
+import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,127 +61,123 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class ScrollList extends TableController implements SourcesChangeEvents {
+public class ScrollList extends TableWidget implements SourcesChangeEvents, TableKeyboardHandlerInt, TableWidgetListener {
     
-    private ChangeListenerCollection changeListeners;
-    private DataModel dm = new DataModel();
-    private ArrayList<DataSet> selected = new ArrayList<DataSet>();
-    private int maxRows;
-    private int start = 0;
     private int top = 0;
-    private int cellHeight = 18;
-    private int[] cellWidths;
-    public int activeIndex = -1;
     private int cellspacing = 1;
     public boolean drag;
     public boolean drop;
-    private boolean ctrl;
-    public boolean multi;
     public boolean maxHeight;
     
-    public ScrollList() {
-        view = new TableView();
-        view.setTableListener(this);
-        initWidget(view);
+    public ScrollList(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
+        super();
+        for(TableColumnInt column : columns) {
+            column.setTableWidget(this);
+        }
+        this.columns = columns;
+        this.maxRows = maxRows;
+        this.title = title;
+        this.showHeader = showHeader;
+        renderer = new TableRenderer(this);
+        model = new TableModel(this);
+        view = new TableView(this,showScroll);
+        view.setWidth("auto");
+        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        keyboardHandler = this;
+        mouseHandler = new TableMouseHandler(this);
+        addTableWidgetListener((TableWidgetListener)renderer);
+        setWidget(view);
     }
     
-    public void setDataModel(DataModel dm) {
-        if(dm != null)
-            this.dm = dm;
-        else
-            this.dm = new DataModel();
-        start = 0;
+    public ScrollList(int[] colWidths, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
+        super();
+        columns = new ArrayList<TableColumnInt>();
+        for(int wid : colWidths){
+            TableColumn col = new TableColumn();
+            col.setCurrentWidth(wid);
+            columns.add(col);
+            col.setTableWidget(this);
+        }
+        this.maxRows = maxRows;
+        this.title = title;
+        this.showHeader = showHeader;
+        renderer = new TableRenderer(this);
+        model = new TableModel(this);
+        view = new TableView(this,showScroll);
+        view.setWidth("auto");
+        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        keyboardHandler = this;
+        mouseHandler = new TableMouseHandler(this);
+        addTableWidgetListener((TableWidgetListener)renderer);
+        setWidget(view);
     }
+    
+    
         
     public void setSelected(ArrayList selections){
-        selected = new ArrayList<DataSet>();
+        model.clearSelections();
         for(int i = 0; i < selections.size(); i++){
             if(selections.get(i) instanceof DataSet){
-                if(dm.indexOf(((DataSet)selections.get(i)).getKey()) > -1)
-                	if(multi)
-                		selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
-                	else{
-                		selected.clear();
-                		selected.add(dm.get((DataObject)((DataSet)selections.get(i)).getKey()));
-                	}
-                else{
-                    dm.add((DataSet)selections.get(i));
-                    if(multi)
-                    	selected.add((DataSet)selections.get(i));
-                    else{
-                    	selected.clear();
-                    	selected.add((DataSet)selections.get(i));
-                    }
-                }
-                    
+                model.selectRow(model.getData().indexOf(model.getData().getByKey(((DataSet)selections.get(i)).getKey())));                    
             }else{
-            	if(multi)
-            		selected.add(dm.get((DataObject)selections.get(i)));
-            	else{
-            		selected.clear();
-            		selected.add(dm.get((DataObject)selections.get(i)));
-            	}
+                model.selectRow(model.getData().indexOf(model.getData().getByKey(((DataObject)selections.get(i)))));   
             }
         }
     }
     
     public void setSelected(int index){
-        if(selected.contains(dm.get(index))){
-            selected.remove(dm.get(index));
-        }else{
-            selected.add(dm.get(index));
-        }
+        model.selectRow(index);
     }
     
     public DataModel getDataModel() {
-       return dm; 
+       return model.getData(); 
     }
     
+  /*  
     public void scrollLoad(int scrollPos){
-        
-            int rowsPer = maxRows;
-            if(maxRows > dm.size())
-                rowsPer = dm.size();
-            start = (scrollPos)/(cellHeight);
-            if(start+rowsPer > dm.size())
-                start = start - ((start+rowsPer) - dm.size());
-            if(view.table.getRowCount() < rowsPer){
-                for(int i = view.table.getRowCount(); i < rowsPer; i++){
-                    createRow(i);
-                }
- //               view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
- //               view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
-            }else if(view.table.getRowCount() > rowsPer){
-                for(int i = view.table.getRowCount() -1; i >= rowsPer; i--)
-                    view.table.removeRow(i);
+        int rowsPer = maxRows;
+        if(maxRows > model.shownRows()){
+            rowsPer = model.shownRows();
+        }
+        int loadStart = new Double(Math.ceil(((double)scrollPos)/(cellHeight))).intValue();
+        if(model.numRows() != model.shownRows()){
+            int start = 0;
+            int i = 0;
+            while(start < loadStart && i < model.numRows() -1){
+                if(model.getRow(i).shown)
+                    start++;
+                i++;
             }
-            if(!maxHeight){
-                view.setHeight((rowsPer*cellHeight+(rowsPer*cellspacing)+cellspacing));
-            }else
-                view.setHeight((maxRows*cellHeight+(maxRows*cellspacing)+cellspacing));
-            view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+cellspacing);
-            for(int i = 0; i < rowsPer; i++){
-                loadRow(i);
-            }
-            super.active = true;
-        
+            loadStart = i;   
+        }
+        if(loadStart+rowsPer > model.numRows()){
+            loadStart = loadStart - ((loadStart+rowsPer) - model.numRows());
+        }
+        for(int i = 0; i < rowsPer; i++){
+            while(loadStart+i < model.numRows() && !model.getRow(loadStart+i).shown)
+                loadStart++;
+            loadRow(i,loadStart+i);
+        }
+
     }
     
-    private void loadRow(int index){
-        for(int i = 0; i < cellWidths.length; i++){
+    
+    public void loadRow(int index, int modelIndex){
+        modelIndexList[index] = modelIndex;
+        for(int i = 0; i < columns.size(); i++){
             ScreenLabel label = (ScreenLabel)view.table.getWidget(index,i);
-            label.label.setText(dm.get(start+index).getObject(i).getValue().toString());
-            label.setUserObject(dm.get(start+index).getKey().getValue());
+            label.label.setText(model.getRow(modelIndex).get(i).getValue().toString());
+            label.setUserObject(model.getRow(modelIndex).getKey().getValue());
         }
-        view.table.getRowFormatter().removeStyleName(index, TableView.selectedStyle);
-        if(selected.contains(dm.get(start+index))){
-            view.table.getRowFormatter().addStyleName(index, TableView.selectedStyle);
-            activeIndex = index;
-        }
+        if(model.isSelected(modelIndex)){
+            view.table.getRowFormatter().addStyleName(index, view.selectedStyle);
+        }else
+            view.table.getRowFormatter().removeStyleName(index,view.selectedStyle);
     }
     
-    private void createRow(int index){
-        for(int i = 0; i < cellWidths.length; i++){
+    public void createRow(int index){
+        int i = 0;
+        for(TableColumnInt column : columns) {
             ScreenLabel label = new ScreenLabel("   ",null);
             view.table.setWidget(index, i, label);
             label.label.setWordWrap(false);
@@ -189,12 +191,13 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
                 label.setDropTargets(((ScreenScrollList)getParent()).getDropTargets());
                 label.setScreen(((ScreenScrollList)getParent()).getScreen());
             }
-            label.setWidth(cellWidths[i]+"px");
-            view.table.getFlexCellFormatter().setWidth(index, i, curColWidth[i] + "px");
+            label.setWidth(column.getCurrentWidth()+"px");
+            view.table.getFlexCellFormatter().setWidth(index, i, column.getCurrentWidth() + "px");
             view.table.getFlexCellFormatter().setHeight(index, i, cellHeight+"px");
             view.table.getFlexCellFormatter().addStyleName(index,
                                                            i,
                                                            TableView.cellStyle);
+            i++;
         }
         view.table.getRowFormatter().addStyleName(index, TableView.rowStyle);
         if(index % 2 == 1){
@@ -209,6 +212,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         
         //vp.setCellWidth(hp,cellView.getOffsetWidth()+"px");
     }
+   
    
     /**
      * Method used to add a widget to the list
@@ -228,14 +232,14 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
         DataSet ds = new DataSet();
         StringObject so = new StringObject();
         so.setValue(text);
-        ds.addObject(so);
+        ds.add(so);
         ds.setKey(value);
-        dm.add(ds);
+        model.addRow(ds);
         if(view.table.getRowCount() < maxRows){
-            createRow(dm.size() -1);
-            loadRow(dm.size()-1);
+            //createRow(model.numRows() -1);
+            //loadRow(model.numRows()-1,model.numRows() - 1);
         }
-        view.setScrollHeight((dm.size()*cellHeight)+(dm.size()*cellspacing)+(dm.size()*2)+cellspacing);
+        view.setScrollHeight((model.numRows()*cellHeight)+(model.numRows()*cellspacing)+(model.numRows()*2)+cellspacing);
     }
     
     /**
@@ -271,20 +275,9 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     public void setWidth(String width){
         view.setWidth(width);
     }
-    
-    public void setCellWidths(int[] widths){
-        cellWidths = widths;
-        setColWidths(widths);
-        view.initTable(this);
-    }
-    
-    public void setHeaders(String[] headers){
-        view.setHeaders(headers);
-    }
-    
+        
     public void clear(){
-        view.table.clear();
-        dm = new DataModel();
+        model.clear();
     }
     
     public Iterator getIterator(){
@@ -294,7 +287,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     public void removeItem(ScreenWidget wid){
         for(int i = 0; i < view.table.getRowCount(); i++){
             if(DOM.isOrHasChild(view.table.getRowFormatter().getElement(i),wid.getElement())){
-                dm.delete(start+i);
+                model.deleteRow(modelIndexList[i]);
                 view.table.removeRow(i);
                 break;
             }
@@ -324,30 +317,26 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     public void onClick(Widget sender){
         if(view.table.isAttached()){
             if(sender instanceof AppScreen){
-                if(super.active && !DOM.isOrHasChild(view.table.getElement(), ((AppScreen)sender).clickTarget)){
+                if(focused && !DOM.isOrHasChild(view.table.getElement(), ((AppScreen)sender).clickTarget)){
                     if(changeListeners != null){
                         setActive(-1);
-                        if(super.active)
+                        if(focused)
                             changeListeners.fireChange(this);
-                        super.active = false;
+                        focused = false;
                     }
                     return;
                 }
             }
             
-            if(multi && !ctrl){
+            if(model.getData().multiSelect && !ctrlKey){
                 unselectAll();
-                scrollLoad(view.scrollBar.getScrollPosition());
+                //scrollLoad(view.scrollBar.getScrollPosition());
             }
         }
     }
     
     public void unselectAll() {
-        selected = new ArrayList();
-        for(int i=0; i < view.table.getRowCount(); i++){
-            view.table.getRowFormatter().removeStyleName(i,TableView.selectedStyle);
-        }        
-        activeIndex = -1;
+        model.clearSelections();
     }
 
     public void addChangeListener(ChangeListener listener) {
@@ -365,11 +354,7 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
 
     public int getActive() {
-        return activeIndex;
-    }
-
-    public int getStart() {
-        return start;
+        return activeRow;
     }
 
     public int getCellHeight() {
@@ -377,37 +362,22 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
 
     public void setActive(int active) {
-        this.activeIndex = active;
-        if(active > -1 && view.table.getRowCount() > 0){
-            view.table.getRowFormatter().addStyleName(active, TableView.selectedStyle);
-            //this will make sure it isnt already in the array
-            if(multi){
-            	selected.remove(dm.get(start+active));
-                selected.add(dm.get(start+active));	
-            }else{
-            	selected.clear();
-            	selected.add(dm.get(start+active));
-            }
+        activeRow = active;
+        if(active > -1)
+            model.selectRow(modelIndexList[active]);
             
-        }
-        //super.active=true;
-        
     }
     
-    public void setStart(int start) {
-        this.start = start;
-    }
-
     public int getMaxRows() {
         return maxRows;
     }
 
     public ArrayList<DataSet> getSelected() {
-        return selected;
+        return model.getSelections();
     }
 
     public void setMulti(boolean multi) {
-        this.multi = multi;
+        model.enableMultiSelect(multi);
     }
 
     public void onMouseDown(Widget sender, int x, int y) {
@@ -441,73 +411,75 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
 
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
         int clicked = row;
-        super.active = true;
-            if(activeIndex > -1){
-                if(!ctrl){
-                    if(!multi){
-                        view.table.getRowFormatter().removeStyleName(activeIndex,TableView.selectedStyle);
-                        selected.remove(dm.get(start+activeIndex));
+        focused = true;
+            if(activeRow > -1){
+                if(!ctrlKey){
+                    if(!model.getData().multiSelect){
+                        model.unselectRow(modelIndexList[row]);
                     }
                 }   
             }
-            if(multi && selected.contains(dm.get(start+clicked))){
-                view.table.getRowFormatter().removeStyleName(clicked, TableView.selectedStyle);
-                selected.remove(dm.get(start+clicked));
+            if(model.getData().multiSelect && model.isSelected(modelIndexList[row])){
+                model.unselectRow(modelIndexList[row]);
             }else{
-                if(!multi)
-                    selected.clear();
-                activeIndex = clicked;
-                view.table.getRowFormatter().addStyleName(activeIndex,TableView.selectedStyle);
-                selected.add(dm.get(start+clicked));
+                if(!model.getData().multiSelect)
+                    model.clearSelections();
+                activeRow = clicked;
+                model.selectRow(modelIndexList[row]);
             }
             changeListeners.fireChange(this);
     }
 
     public void onKeyDown(Widget sender, char code, int modifiers) {
-        if(!super.active)
+        if(!focused)
             return;
         boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
-        ctrl = modifiers == KeyboardListener.MODIFIER_CTRL;
+        ctrlKey = modifiers == KeyboardListener.MODIFIER_CTRL;
         if (KeyboardListener.KEY_DOWN == code) {
-            if(activeIndex < 0){
-                activeIndex = 0;
-                view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
-                selected.add(dm.get(start+activeIndex));
+            if(activeRow < 0){
+                activeRow = 0;
+                model.selectRow(activeRow);
             }else{
-                if(activeIndex == view.table.getRowCount() -1){
-                    if(start+activeIndex+1 < dm.size()){
-                        selected.remove(dm.get(start+activeIndex));
-                        selected.add(dm.get(start+activeIndex+1));
+                if(activeRow == view.table.getRowCount() -1){
+                    if(modelIndexList[activeRow]+1 < model.numRows()){
+                        model.unselectRow(-1);
+                        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
+                        DeferredCommand.addCommand(new Command() {
+                            public void execute() {
+                                activeRow = view.table.getRowCount() -1;
+                                model.selectRow(modelIndexList[view.table.getRowCount() -1]);
+                            }
+                        });
                     }
-                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-                    view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
                 }else{
-                    view.table.getRowFormatter().removeStyleName(activeIndex, TableView.selectedStyle);
-                    selected.remove(dm.get(start+activeIndex));
-                    activeIndex++;
-                    view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
-                    selected.add(dm.get(start+activeIndex));
+                    int row = activeRow + 1;
+                    model.unselectRow(-1);
+                    activeRow = row;
+                    model.selectRow(modelIndexList[activeRow]);
                 }
             }
         }
         if (KeyboardListener.KEY_UP == code) {
-            if(activeIndex == 0){
-                if(start+activeIndex-1 > -1){
-                    selected.remove(dm.get(start+activeIndex));
-                    selected.add(dm.get(start+activeIndex-1));
+            if(activeRow == 0){
+                if(modelIndexList[activeRow] - 1 > -1){
+                    model.unselectRow(-1);
+                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
+                    DeferredCommand.addCommand(new Command() {
+                        public void execute() {
+                            activeRow = 0;
+                            model.selectRow(modelIndexList[0]);
+                        }
+                    });
                 }
-                view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-                view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
-            }else if (activeIndex > 0){
-                view.table.getRowFormatter().removeStyleName(activeIndex, TableView.selectedStyle);
-                selected.remove(dm.get(start+activeIndex));
-                activeIndex--;
-                view.table.getRowFormatter().addStyleName(activeIndex, TableView.selectedStyle);
-                selected.add(dm.get(start+activeIndex));
+            }else if (activeRow > 0){
+                int row = activeRow -1;
+                model.unselectRow(-1);
+                activeRow = row;
+                model.selectRow(modelIndexList[activeRow]);
             }
         }
         if (KeyboardListener.KEY_ENTER == code || KeyboardListener.KEY_TAB == code) {
-            if(activeIndex > -1){
+            if(activeRow > -1){
                 changeListeners.fireChange(this);
             }
         }       
@@ -519,6 +491,31 @@ public class ScrollList extends TableController implements SourcesChangeEvents {
     }
 
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void load(int pos) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setCellDisplay(int row, int col) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setCellEditor(int row, int col) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void startedEditing(SourcesTableWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
     }

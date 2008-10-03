@@ -19,38 +19,32 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class ConstantMap implements DataObject, Serializable{
+public class ConstantMap extends HashMap<String,String> implements DataObject, Serializable{
     
     private static final long serialVersionUID = 1L;
 
-    private HashMap<String,String> map = new HashMap<String,String>();
-
     public Object getInstance() {
         ConstantMap constMap = new ConstantMap();
-        Iterator keyIt = map.keySet().iterator();
+        Iterator keyIt = keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
-            constMap.map.put(key, (String)map.get(key));
+            constMap.put(key, (String)get(key));
         }
         return constMap;
     }
 
     public Object getValue() {
         // TODO Auto-generated method stub
-        return map;
+        return null;
     }
 
     public void setValue(Object object) {
         // TODO Auto-generated method stub
-        map = (HashMap<String,String>)object;
     }
-    
-    public String getConstant(String key){
-        return (String)map.get(key);
-    }
-    
-    public HashMap getMap(){
-        return map;
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

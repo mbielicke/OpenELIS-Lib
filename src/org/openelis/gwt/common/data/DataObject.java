@@ -15,7 +15,7 @@
 */
 package org.openelis.gwt.common.data;
 
-public interface DataObject {
+public interface DataObject extends Comparable{
     
     public Object getValue();
     

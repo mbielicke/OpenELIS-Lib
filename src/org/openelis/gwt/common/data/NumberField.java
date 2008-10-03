@@ -69,9 +69,9 @@ public class NumberField extends AbstractField implements Serializable {
                                .getNodeValue());
         if (node.getAttributes().getNamedItem("type") != null){
             if("integer".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
-            	((NumberObject)object).setType(NumberObject.Type.INTEGER);
+                ((NumberObject)object).setType(NumberObject.Type.INTEGER);
             else if("double".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
-            	((NumberObject)object).setType(NumberObject.Type.DOUBLE);
+                ((NumberObject)object).setType(NumberObject.Type.DOUBLE);
         }
         if (node.getAttributes().getNamedItem("required") != null)
             setRequired(new Boolean(node.getAttributes()

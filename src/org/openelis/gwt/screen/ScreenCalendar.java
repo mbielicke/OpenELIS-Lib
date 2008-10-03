@@ -76,17 +76,6 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                                                 .booleanValue());
         else
             cal = new FormCalendarWidget(begin, end, false);
-        final ScreenCalendar sc = this;
-        cal.textbox = new TextBox() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
-                        screen.doTab(event, sc);
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
         cal.init();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             cal.setShortcutKey(node.getAttributes()

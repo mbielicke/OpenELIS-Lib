@@ -22,30 +22,29 @@ import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
-import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
 public class TableCalendar extends TableCellInputWidget {
 
-	private FormCalendarWidget editor;
-	private Label display;
-	private byte begin = 0;
-	private byte end = 2;
-	private boolean week = false;
-	private boolean enabled;
+    private FormCalendarWidget editor;
+    private Label display;
+    private byte begin = 0;
+    private byte end = 2;
+    private boolean week = false;
+    private boolean enabled;
     private int width;
     public static final String TAG_NAME = "table-calendar";
     
     public TableCalendar() {
         setStyleName("ScreenCalendar");
-    	
+        
     }
 
     public TableCalendar(byte begin, byte end, boolean week) {
-    	this.begin = begin;
-    	this.end = end;
-    	this.week = week;
+        this.begin = begin;
+        this.end = end;
+        this.week = week;
         editor = new FormCalendarWidget(begin,end,week);
         editor.init();
         setStyleName("ScreenCalendar");
@@ -53,11 +52,11 @@ public class TableCalendar extends TableCellInputWidget {
 
     public void setDisplay() {
         // TODO Auto-generated method stub
-    	if(display == null){
-    		display = new Label();
-    		display.setWordWrap(false);
+        if(display == null){
+            display = new Label();
+            display.setWordWrap(false);
             display.setWidth(width+"px");
-    	}
+        }
         String val = "";
         if(field instanceof DateField){
             DatetimeRPC valDate = (DatetimeRPC)field.getValue();
@@ -73,11 +72,11 @@ public class TableCalendar extends TableCellInputWidget {
     public void setEditor() {
         if(!enabled)
             return;
-    	if(editor == null){
-    		editor = new FormCalendarWidget(begin,end,week);
+        if(editor == null){
+            editor = new FormCalendarWidget(begin,end,week);
             editor.init();
             editor.setWidth((width-15)+"px");
-    	}
+        }
         String val = "";
         if(field instanceof DateField){
             DatetimeRPC valDate = (DatetimeRPC)field.getValue();
@@ -107,18 +106,18 @@ public class TableCalendar extends TableCellInputWidget {
         setStyleName("ScreenCalendar");
     }
 
-	public TableCellWidget getNewInstance() {
-		// TODO Auto-generated method stub
-		TableCalendar cal = new TableCalendar();
-		cal.begin = begin;
-		cal.end = end;
-		cal.week = week;
+    public TableCellWidget getNewInstance() {
+        // TODO Auto-generated method stub
+        TableCalendar cal = new TableCalendar();
+        cal.begin = begin;
+        cal.end = end;
+        cal.week = week;
         cal.enabled = enabled;
         cal.screen = screen;
-		return cal;
-	}
+        return cal;
+    }
 
-	public void saveValue() {
+    public void saveValue() {
         if(!enabled)
             return;
         if(field instanceof QueryDateField)
@@ -126,11 +125,11 @@ public class TableCalendar extends TableCellInputWidget {
         else
             field.setValue(editor.getValue());
         super.saveValue();
-	}
+    }
 
-	public void setField(AbstractField field) {
-		this.field = field;
-	}
+    public void setField(AbstractField field) {
+        this.field = field;
+    }
 
     public void enable(boolean enabled) {
        this.enabled = enabled;
@@ -142,5 +141,9 @@ public class TableCalendar extends TableCellInputWidget {
             editor.setWidth((width-15)+"px");
         if(display != null)
             display.setWidth(width+"px");
+    }
+    
+    public void setFocus(boolean focused) {
+        editor.setFocus(focused);
     }
 }

@@ -18,34 +18,36 @@ package org.openelis.gwt.common.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DataSet implements Serializable, DataObject{
+public class DataSet extends ArrayList<DataObject> implements Serializable, DataObject{
     
     private static final long serialVersionUID = 1L;
-
-    private ArrayList<DataObject> objects = new ArrayList<DataObject>();
     
-    private DataObject key;
+    protected DataObject key;
     
-    public boolean shown;
+    protected DataObject data;
     
-    public void addObject(DataObject object) {
-        objects.add(object);
+    public boolean shown = true;
+    
+    public boolean enabled = true;
+    
+    public DataSet() {
+        
     }
-
-    public void setObject(int index, DataObject object) {
-        objects.set(index, object);
+    
+    public DataSet(DataObject key) {
+        setKey(key);
     }
-
-    public DataObject getObject(int index) {
-        return (DataObject)objects.get(index);
+    
+    public DataSet(DataObject key, DataObject value){
+        setKey(key);
+        add(value);
     }
-
-    public void removeObject(int index) {
-        objects.remove(index);
-    }
-
-    public int size() {
-        return objects.size();
+    
+    public DataSet(DataObject key, DataObject[] values){
+        setKey(key);
+        for(DataObject val : values){
+            add(val);
+        }
     }
     
     public void setKey(DataObject key){
@@ -59,31 +61,13 @@ public class DataSet implements Serializable, DataObject{
     public DataSet getInstance() {
         DataSet clone = new DataSet();
         for(int i=0; i < size(); i++){
-            clone.addObject((DataObject)getObject(i).getInstance());
+            clone.add((DataObject)get(i).getInstance());
         }
         clone.key = key;
+        clone.data = data;
         return clone;
     }
     
-    public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
-        DataSet comp = (DataSet)obj;
-        if(!(obj instanceof DataSet))
-            return false;
-        if(comp.key != null){
-            if(comp.key.equals(key))
-                return true;
-            return false;
-        }
-        if(comp.size() != size())
-            return false;
-        for(int i=0; i < size(); i++){
-            if(!comp.getObject(i).equals(getObject(i)))
-                return false;
-        }
-        return true;
-        }
-
     public Object getValue() {
         // TODO Auto-generated method stub
         return null;
@@ -92,6 +76,32 @@ public class DataSet implements Serializable, DataObject{
     public void setValue(Object object) {
         // TODO Auto-generated method stub
         
+    }
+
+    public int compareTo(Object obj) {
+        if(!(obj instanceof DataSet))
+            return -1;
+        DataSet comp = (DataSet)obj;
+        if(comp.key != null){
+            if(comp.key.equals(key))
+                return 0;
+            return -1;
+        }
+        if(comp.size() != size())
+            return -1;
+        for(int i=0; i < size(); i++){
+            if(!comp.get(i).equals(get(i)))
+                return -1;
+        }
+        return 0;
+    }
+
+    public DataObject getData() {
+        return data;
+    }
+
+    public void setData(DataObject data) {
+        this.data = data;
     }
 
 }

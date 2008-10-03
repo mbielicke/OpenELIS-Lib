@@ -16,6 +16,7 @@
 package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataObject;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -33,11 +34,13 @@ public interface TableCellWidget {
     
     public void saveValue();
     
-    public void setField(AbstractField field);
+    public void setField(DataObject field);
     
     public Widget getWidget();
     
     public void enable(boolean enabled);
     
     public void setCellWidth(int width);
+    
+    public void setFocus(boolean focus);
 }

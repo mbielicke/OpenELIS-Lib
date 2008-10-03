@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -51,6 +52,7 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
         //middleBar.add(arrow);
         panel.setWidget(0, 0, content);
         panel.setWidget(0,1,arrow);
+        panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
         DeferredCommand.addCommand(new Command(){
            public void execute(){
                panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
@@ -62,6 +64,7 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
         if(content.getWidgetCount() > 0)
             content.remove(0);
         content.add(wid);
+        content.setCellVerticalAlignment(wid,HasAlignment.ALIGN_TOP);
     }
     
     public void open() {

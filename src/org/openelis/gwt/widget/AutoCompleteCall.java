@@ -23,7 +23,8 @@ public class AutoCompleteCall implements AutoCompleteCallInt {
         target.setServiceEntryPoint(base);
     }
 
-    public void callForMatches(final AutoCompleteDropdown widget, DataModel model, String text) {
+    
+    public void callForMatches(final AutoComplete widget, DataModel model, String text) {
         try {
             autoService.getMatches(widget.cat, model, text, null, new AsyncCallback() {
                 public void onSuccess(Object result) {

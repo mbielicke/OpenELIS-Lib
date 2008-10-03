@@ -57,7 +57,7 @@ import org.openelis.gwt.widget.FormInt;
     
     private void fireCommand(Action action,Object obj) {
         if(commandListeners != null)
-        	commandListeners.fireCommand(action,obj);
+            commandListeners.fireCommand(action,obj);
     }
     
     public void setModel(DataModel list){
@@ -87,7 +87,7 @@ import org.openelis.gwt.widget.FormInt;
                 selectItem = true;
                 selectLast = true;
                 setPage(list.getPage()-1);
-	        //}else
+            //}else
               //  candidate = 0;
         }else{
             AsyncCallback callback = new AsyncCallback() {
@@ -117,7 +117,7 @@ import org.openelis.gwt.widget.FormInt;
     }
     
     public void delete(int index){
-        list.delete(index);
+        list.remove(index);
         fireCommand(Action.DELETE,new Integer(index));
     }
     

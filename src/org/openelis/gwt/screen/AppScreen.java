@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerCollection;
@@ -60,6 +61,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public Element clickTarget;
     public ScreenWindow window;
     protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
+    protected ScreenWidget focused;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -118,7 +120,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void afterDraw(boolean sucess) {
        // try {
         this.rpc = (FormRPC)forms.get("display");
-        load();
+        //load();
         DOM.addEventPreview(this);
         if(window != null){
             window.setName(name);

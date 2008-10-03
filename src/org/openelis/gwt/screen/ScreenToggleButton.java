@@ -28,19 +28,19 @@ import com.google.gwt.xml.client.Node;
  *
  */
 public class ScreenToggleButton extends ScreenWidget {
-	/**
-	 * Default Tag Name for XML Definition and WidgetMap
-	 */
-	public static String TAG_NAME = "toggle";
-	/**
-	 * Widget wrapped by this class
-	 */
-	private ToggleButton button;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
-	public ScreenToggleButton() {
-	}
+    /**
+     * Default Tag Name for XML Definition and WidgetMap
+     */
+    public static String TAG_NAME = "toggle";
+    /**
+     * Widget wrapped by this class
+     */
+    private ToggleButton button;
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
+    public ScreenToggleButton() {
+    }
 
     /**
      * Constructor called from getInstance to return a specific instance of this class
@@ -50,40 +50,30 @@ public class ScreenToggleButton extends ScreenWidget {
      * @param node
      * @param screen
      */
-	public ScreenToggleButton(Node node, final ScreenBase screen) {
-		super(node);
-        final ScreenToggleButton st = this;
-		button = new ToggleButton() {
-			public void onBrowserEvent(Event event) {
-				if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-					if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-						screen.doTab(event, st);
-					}
-				} else {
-					super.onBrowserEvent(event);
-				}
-			}
-		};
-		button.setStyleName("ScreenToggleButton");
-		button.addClickListener((ClickListener)screen);
-		if(node.getAttributes().getNamedItem("text") != null){
-		    button.setText(node.getAttributes().getNamedItem("text")
-						.getNodeValue());
-		}
-		if (node.getAttributes().getNamedItem("html") != null)
-			button.setHTML(node.getAttributes().getNamedItem("html")
-					.getNodeValue());
-		initWidget(button);
-		setDefaults(node, screen);
-	}
+    public ScreenToggleButton(Node node, final ScreenBase screen) {
+        super(node);
 
-	public ScreenWidget getInstance(Node node, ScreenBase screen) {
-		return new ScreenToggleButton(node, screen);
-	}
+        button = new ToggleButton();
+        button.setStyleName("ScreenToggleButton");
+        button.addClickListener((ClickListener)screen);
+        if(node.getAttributes().getNamedItem("text") != null){
+            button.setText(node.getAttributes().getNamedItem("text")
+                        .getNodeValue());
+        }
+        if (node.getAttributes().getNamedItem("html") != null)
+            button.setHTML(node.getAttributes().getNamedItem("html")
+                    .getNodeValue());
+        initWidget(button);
+        setDefaults(node, screen);
+    }
 
-	public void setFocus(boolean focus) {
+    public ScreenWidget getInstance(Node node, ScreenBase screen) {
+        return new ScreenToggleButton(node, screen);
+    }
 
-	}
+    public void setFocus(boolean focus) {
+
+    }
     
     public void destroy() {
         button = null;

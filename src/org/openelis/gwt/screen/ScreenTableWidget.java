@@ -15,21 +15,23 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-import org.openelis.gwt.common.Filter;
+
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.TableModel;
-import org.openelis.gwt.widget.table.TableCellWidget;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.TableField;
+import org.openelis.gwt.widget.table.TableColumn;
+import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,13 @@ public class ScreenTableWidget extends ScreenInputWidget {
          */
         public ScreenTableWidget() {
         }
+        
+        @Override
+        public void onBrowserEvent(Event event) {
+            if(table.editingCell != null)
+                return;
+            super.onBrowserEvent(event);
+        }
         /**
          * Constructor called from getInstance to return a specific instance of this class
          * to be displayed on the screen.  It uses the XML Node to create it's widget.
@@ -65,18 +74,29 @@ public class ScreenTableWidget extends ScreenInputWidget {
          */ 
         public ScreenTableWidget(Node node, ScreenBase screen) {
             super(node);
-            table = new TableWidget();
+            
            // try {
+            TableManager manager = null;
+            int cellHeight;
+            String width;
+            int maxRows;
+            String title = "";
+            boolean autoAdd = false;
+            boolean showRows = false;
+            boolean enable = false;
+            VerticalScroll showScroll = VerticalScroll.NEEDED;
+            boolean showHeader = false;
+            ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>();
+            DataModel data = new DataModel();
                 if (node.getAttributes().getNamedItem("manager") != null) {
                     String appClass = node.getAttributes()
                                           .getNamedItem("manager")
                                           .getNodeValue();
                    
                     if("this".equals(appClass))
-                        table.setManager((TableManager)screen);
+                        manager = (TableManager)screen;
                     else{
-                        TableManager manager = (TableManager)ClassFactory.forName(appClass);
-                        table.setManager(manager);
+                        manager = (TableManager)ClassFactory.forName(appClass);
                     }
                 }
                 Node widthsNode = ((Element)node).getElementsByTagName("widths")
@@ -95,195 +115,126 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                                 .item(0);
                 Node alignNode = ((Element)node).getElementsByTagName("colAligns")
                                                 .item(0);
-                Node statFilter = ((Element)node).getElementsByTagName("statFilters")
-                                                 .item(0);
                 Node colFixed = ((Element)node).getElementsByTagName("fixed").item(0);
                 
                 if(node.getAttributes().getNamedItem("cellHeight") != null){
-                    table.setCellHeight(Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
+                    cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
                 }
-                table.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
-                table.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
+                
+                width = node.getAttributes().getNamedItem("width").getNodeValue();
+                maxRows = Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue());
                 //if constants = true we want to get the title from the properties file
                 if(node.getAttributes().getNamedItem("title") != null){
-                    if (node.getAttributes().getNamedItem("constant") != null && node.getAttributes().getNamedItem("constant").getNodeValue().equals("true")) {
-                        table.setTableTitle(table.constants.getString(node.getAttributes().getNamedItem("title").getNodeValue()));
-                    }else{
-                        table.setTableTitle(node.getAttributes()
-                                            .getNamedItem("title")
-                                            .getNodeValue());
-                    }
-                }else
-                    table.setTableTitle("");
+                        title =node.getAttributes().getNamedItem("title").getNodeValue();
+                }
                 if(node.getAttributes().getNamedItem("autoAdd") != null){
                     if(node.getAttributes().getNamedItem("autoAdd").getNodeValue().equals("true"))
-                        table.setAutoAdd(true);
+                        autoAdd = true;
                 }
                 if(node.getAttributes().getNamedItem("showRows") != null){
                     if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
-                        table.setShowRows(true);
+                        showRows = true;
                 }
                 if(node.getAttributes().getNamedItem("enable") != null){
                     if(node.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
-                        table.setEnable(true);
+                        enable = true;
+                }
+                if(node.getAttributes().getNamedItem("showScroll") != null){
+                    showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
                 }
                 if (widthsNode != null) {
                     String[] widths = widthsNode.getFirstChild()
                                                 .getNodeValue()
                                                 .split(",");
-                    int[] width = new int[widths.length];
-                    for (int i = 0; i < widths.length; i++) {
-                        width[i] = Integer.parseInt(widths[i]);
+                    for (String wid : widths) {
+                        TableColumn col = new TableColumn();
+                        col.setCurrentWidth(Integer.parseInt(wid));
+                        columns.add(col);
                     }
-                    table.setColWidths(width);
                 }
                 if(headersNode != null){
-                if (headersNode.getAttributes().getNamedItem("constants") != null) {
-                    String[] headerNames = headersNode.getFirstChild()
-                                                      .getNodeValue()
-                                                      .split(",");
-                    String[] headerVals = new String[headerNames.length];
-                    for (int i = 0; i < headerVals.length; i++) {
-                        headerVals[i] = table.constants.getString(headerNames[i]).trim();
-                    }
-                    table.setHeaders(headerVals);
-                } else {
+                    showHeader = true;
                     String[] headerNames = headersNode.getFirstChild()
                     .getNodeValue()
                     .split(",");
-                    for(int i=0; i<headerNames.length;i++){
-                        headerNames[i] = headerNames[i].trim();
-                    }
-                    table.setHeaders(headerNames);
-                    
-                }
+                    for(int i = 0; i < headerNames.length; i++){
+                        columns.get(i).setHeader(headerNames[i].trim());
+                    }                    
                 }
                 if (filtersNode != null) {
                     String[] filters = filtersNode.getFirstChild()
                                                   .getNodeValue()
                                                   .split(",");
-                    boolean[] filter = new boolean[filters.length];
                     for (int i = 0; i < filters.length; i++) {
-                        filter[i] = Boolean.valueOf(filters[i]).booleanValue();
+                        columns.get(i).setFilterable(Boolean.valueOf(filters[i]).booleanValue());
                     }
-                    table.setFilterable(filter);
                 }
                 if (sortsNode != null) {
                     String[] sorts = sortsNode.getFirstChild()
                                               .getNodeValue()
                                               .split(",");
-                    boolean[] sort = new boolean[sorts.length];
                     for (int i = 0; i < sorts.length; i++) {
-                        sort[i] = Boolean.valueOf(sorts[i]).booleanValue();
+                        columns.get(i).setSortable(Boolean.valueOf(sorts[i]).booleanValue());
                     }
-                    table.setSortable(sort);
                 }
                 if (colFixed != null) {
                     String[] fixeds = colFixed.getFirstChild()
                                               .getNodeValue()
                                               .split(",");
-                    boolean[]  fixed = new boolean[fixeds.length];
                     for (int i = 0; i < fixeds.length; i++) {
-                        fixed[i] = Boolean.valueOf(fixeds[i]).booleanValue();
+                        columns.get(i).setFixedWidth(Boolean.valueOf(fixeds[i]).booleanValue());
                     }
-                    table.setColFixed(fixed);
                 }
                 if (alignNode != null){
                     String[] aligns = alignNode.getFirstChild().getNodeValue().split(",");
-                    HorizontalAlignmentConstant[] alignments = new HorizontalAlignmentConstant[aligns.length];
                     for (int i = 0; i < aligns.length; i++) {
                         if (aligns[i].equals("left"))
-                            alignments[i] = HasAlignment.ALIGN_LEFT;
+                            columns.get(i).setAlign(HasAlignment.ALIGN_LEFT);
                         if (aligns[i].equals("center"))
-                            alignments[i] = HasAlignment.ALIGN_CENTER;
+                            columns.get(i).setAlign(HasAlignment.ALIGN_CENTER);
                         if (aligns[i].equals("right"))
-                            alignments[i] = HasAlignment.ALIGN_RIGHT;
+                            columns.get(i).setAlign(HasAlignment.ALIGN_RIGHT);
                     }
-                    table.setColAlign(alignments);
-                }if (statFilter != null){
-                    NodeList columns = ((Element)statFilter).getElementsByTagName("column");
-                    ArrayList list = new ArrayList();
-                    for (int i = 0; i < columns.getLength(); i++) {
-                        NodeList filters = ((Element)columns.item(i)).getElementsByTagName("filter");
-                        if (filters == null || filters.getLength() == 0)
-                            list.add(null);
-                        else {
-                            Filter[] filt = new Filter[filters.getLength() + 1];
-                            Filter filter = new Filter();
-                            filter.filtered = true;
-                            filter.value = "All";
-                            filt[0] = filter;
-                            for (int j = 0; j < filters.getLength(); j++) {
-                                filter = new Filter();
-                                filter.filtered = false;
-                                filter.display = filters.item(j)
-                                                        .getAttributes()
-                                                        .getNamedItem("display")
-                                                        .getNodeValue();
-                                if (filters.item(j).getAttributes().getNamedItem("value") != null)
-                                    filter.value = filters.item(j)
-                                                          .getAttributes()
-                                                          .getNamedItem("value")
-                                                          .getNodeValue();
-                                if (filters.item(j).getAttributes().getNamedItem("splitOn") != null)
-                                    filter.splitOn = filters.item(j)
-                                                            .getAttributes()
-                                                            .getNamedItem("splitOn")
-                                                            .getNodeValue();
-                                filt[j + 1] = filter;
-                            }
-                            list.add(filt);
-                        }
-                    }
-                    table.setStatFilter(list);
                 }
                 NodeList editors = editorsNode.getChildNodes();
-                ArrayList<TableCellWidget> list = new ArrayList<TableCellWidget>();
+                int j = 0; 
                 for (int i = 0; i < editors.getLength(); i++) {
-                    if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {       
-                        list.add(ScreenBase.createCellWidget(editors.item(i),screen));
+                    if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        columns.get(j).setColumnWidget((Widget)ScreenBase.createCellWidget(editors.item(i),screen));
+                        j++;
                     }
                 }
-                TableCellWidget[] cells = new TableCellWidget[list.size()];
-                for(TableCellWidget wid : list){
-                    cells[list.indexOf(wid)] = wid;
-                }
-                table.setEditors(cells);
                 NodeList fieldList = fieldsNode.getChildNodes();
-                ArrayList<AbstractField> alist = new ArrayList<AbstractField>();
+                DataSet set = new DataSet();
                 for (int i = 0; i < fieldList.getLength(); i++) {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        alist.add(ScreenBase.createField(fieldList.item(i)));
+                        AbstractField field = (ScreenBase.createField(fieldList.item(i)));
+                        set.add(field);
+                        columns.get(i).setKey(field.key);
                     }
                 }
-                AbstractField[] fields = new AbstractField[alist.size()];
-                for(AbstractField field : alist){
-                    fields[alist.indexOf(field)] = field;
-                }
-                table.setFields(fields);
+                data.setDefaultSet(set);
+                table = new TableWidget(columns,maxRows,width,title,showHeader,showScroll);
+                table.enabled(enable);
                 int rows = 0;
                 if (node.getAttributes().getNamedItem("rows") != null) {
                     rows = Integer.parseInt(node.getAttributes()
                                                 .getNamedItem("rows")
                                                 .getNodeValue());
-                    table.init(rows);
-                } else if (node.getAttributes().getNamedItem("serviceUrl") != null) {
-                    table.initService(node.getAttributes()
-                                               .getNamedItem("serviceUrl")
-                                               .getNodeValue());
-                    table.init(-1);
-                } else {
-                    table.init(0);
+                    for(int i = 0; i < rows; i++){
+                        data.addDefualt();
+                    }
                 }
-                if(node.getAttributes().getNamedItem("showScroll") != null){
-                    if(node.getAttributes().getNamedItem("showScroll").getNodeValue().equals("true"))
-                        table.controller.setShowScroll(true);
-                }
-            ((AppScreen)screen).addKeyboardListener(table.controller);
-            ((AppScreen)screen).addClickListener(table.controller);
+               
+                
+                
+            ((AppScreen)screen).addKeyboardListener(table.keyboardHandler);
+            ((AppScreen)screen).addClickListener(table.mouseHandler);
             initWidget(table);
+            table.model.load(data);
             displayWidget = table;
             table.setStyleName("ScreenTable");
+            ((TableKeyboardHandler)table.keyboardHandler).setScreen(this);
             setDefaults(node, screen);
         }
 
@@ -295,17 +246,16 @@ public class ScreenTableWidget extends ScreenInputWidget {
         public void load(AbstractField field) {
             if(!queryMode){
                 if (field.getValue() != null)
-                    table.controller.setModel((TableModel)field.getValue());
+                    table.model.load((DataModel)field.getValue());
                 else{
-                    table.controller.model.reset();
-                    table.controller.reset();
-                    field.setValue(table.controller.model);
+                    table.model.clear();
+                    field.setValue(table.model);
                 }
             }else {
                 if(queryWidget instanceof ScreenTableWidget){
                     if(field.getValue() != null){
                         if (field.getValue() != null)
-                            ((ScreenTableWidget)queryWidget).table.controller.setModel((TableModel)field.getValue());
+                            ((ScreenTableWidget)queryWidget).table.model.load((DataModel)field.getValue());
                     }
                 }else{
                     queryWidget.load(field);
@@ -317,7 +267,11 @@ public class ScreenTableWidget extends ScreenInputWidget {
             if(queryMode)
                 queryWidget.submit(field);
             else{
-                field.setValue(table.controller.model);
+                field.setValue(table.model.unload());
+                ArrayList<String> fieldIndex = new ArrayList<String>();
+                for(TableColumnInt col : table.columns)
+                    fieldIndex.add(col.getKey());
+                ((TableField)field).setFieldIndex(fieldIndex);
             }
         }
 
@@ -340,18 +294,17 @@ public class ScreenTableWidget extends ScreenInputWidget {
         }
         
         public void enable(boolean enabled){
-            table.enable(enabled);
+            table.enabled(enabled);
+            super.enable(enabled);
         }
         
         public void setFocus(boolean focus){
-        	if(focus){
-        		table.controller.onKeyDown(table.controller.view, (char)KeyboardListener.KEY_TAB, KeyboardListener.MODIFIER_META);
-        	}
+            table.setFocus(focus);
         }
         
         @Override
         public void drawError() {
-        	table.controller.load(0);
+            table.model.refresh();
         }
 
 }

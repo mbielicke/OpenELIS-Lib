@@ -28,7 +28,7 @@ public class AppConstants {
     }
     
     public String get(String key) {
-        return map.getConstant(key);
+        return map.get(key);
     }
     
     public void setMap(ConstantMap map) {
@@ -39,10 +39,10 @@ public class AppConstants {
         if(map == null)
             setMap(addMap);
         else{
-            Iterator keyIt = addMap.getMap().keySet().iterator();
+            Iterator keyIt = addMap.keySet().iterator();
             while(keyIt.hasNext()){
                 String key = (String)keyIt.next();
-                map.getMap().put(key, addMap.getConstant(key));
+                map.put(key, addMap.get(key));
             }
         }
     }

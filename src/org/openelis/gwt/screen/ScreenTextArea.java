@@ -32,17 +32,17 @@ import org.openelis.gwt.common.data.AbstractField;
  *
  */
 public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
-	/**
-	 * Default XML Tag Name in XML Definition
-	 */
-	public static String TAG_NAME = "textarea";
-	/**
-	 * Widget wrapped by this class
-	 */
+    /**
+     * Default XML Tag Name in XML Definition
+     */
+    public static String TAG_NAME = "textarea";
+    /**
+     * Widget wrapped by this class
+     */
     private TextArea textarea;
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenTextArea() {
     }
     /**
@@ -53,21 +53,11 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
      * 
      * @param node
      * @param screen
-     */	
+     */ 
     public ScreenTextArea(Node node, final ScreenBase screen) {
         super(node);
-        final ScreenTextArea st = this;
-        textarea = new TextArea() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, st);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
+        
+        textarea = new TextArea();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textarea.setAccessKey(node.getAttributes()
                                       .getNamedItem("shortcut")
@@ -135,19 +125,19 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     }
 
     public void onFocus(Widget sender) {
-		if(!textarea.isReadOnly()){
-			if(sender == textarea){
-				super.hp.addStyleName("Focus");
-			}
-		}
+        if(!textarea.isReadOnly()){
+            if(sender == textarea){
+                super.hp.addStyleName("Focus");
+            }
+        }
         super.onFocus(sender);
-	}
-	public void onLostFocus(Widget sender) {
-		if(!textarea.isReadOnly()){
-			if(sender == textarea){
-				super.hp.removeStyleName("Focus");
-			}
-		}
+    }
+    public void onLostFocus(Widget sender) {
+        if(!textarea.isReadOnly()){
+            if(sender == textarea){
+                super.hp.removeStyleName("Focus");
+            }
+        }
         super.onLostFocus(sender);
-	}    
+    }    
 }

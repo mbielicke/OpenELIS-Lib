@@ -49,24 +49,13 @@ public class ScreenRichTextArea extends ScreenInputWidget {
      */ 
     public ScreenRichTextArea(Node node, final ScreenBase screen) {
         super(node);
-        final ScreenRichTextArea st = this;
         boolean tools = true;
         if(node.getAttributes().getNamedItem("tools") != null){
-        	if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){
-        		tools = false;
-        	}
-        }
-        textarea = new RichTextWidget(tools) {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, st);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
+            if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){
+                tools = false;
             }
-        };
+        }
+        textarea = new RichTextWidget(tools);
         textarea.setSize("100%", "300px");
         initWidget(textarea);
         displayWidget = textarea;

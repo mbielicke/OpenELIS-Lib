@@ -15,12 +15,13 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -30,8 +31,6 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.MenuLabel;
-import org.openelis.gwt.widget.table.EditTable;
-import org.openelis.gwt.widget.table.TableWidget;
 
 import java.util.ArrayList;
 
@@ -49,6 +48,16 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public ScreenInputWidget() {
 
+    }
+    
+    public void onBrowserEvent(Event event) {
+        if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+            if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
+                screen.doTab(event, this);
+                return;
+            }
+        }
+        super.onBrowserEvent(event);
     }
     
     public ScreenInputWidget(Node node){
@@ -74,8 +83,6 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(queryMode){
             if(queryWidget != null){
                 initWidget(queryWidget.displayWidget);
-                if(queryWidget instanceof ScreenQueryTableWidget)
-                    ((ScreenQueryTableWidget)queryWidget).resetFields();
             }else{
                 queryMode = false;
             }
@@ -117,7 +124,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(!showError)
             return;
         /*
-    	String tempKey = key;
+        String tempKey = key;
         submit(screen.rpc.getField(tempKey));
         screen.rpc.getField(tempKey).clearErrors();
         screen.rpc.getField(tempKey).validate();
@@ -152,7 +159,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(pop != null){
             pop.hide();
         }
-    	errorImg.setStyleName("ErrorPanelHidden");
+        errorImg.setStyleName("ErrorPanelHidden");
         errorPanel.clear();
     }
     
@@ -160,10 +167,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(!showError)
             return;
         if(this instanceof ScreenTableWidget){
-        	((EditTable)displayWidget).load(0);
-        	return;
+            //((EditTable)displayWidget).load(0);
+            return;
         }
-    	ArrayList<String> errors;
+        ArrayList<String> errors;
         errors = field.getErrors();
         
         errorPanel.clear();
@@ -185,7 +192,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public void clearBusyIcon(){
-    	errorImg.setStyleName("ErrorPanelHidden");
+        errorImg.setStyleName("ErrorPanelHidden");
     }
 
     public void onMouseDown(Widget sender, int x, int y) {
@@ -237,5 +244,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         return hp.getWidget(0);
     }
     
+    public Widget getQueryWidget() {
+        return queryWidget;
+    }
 
 }

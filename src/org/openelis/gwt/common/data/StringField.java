@@ -74,6 +74,7 @@ public class StringField extends AbstractField implements Serializable {
             setValue(node.getFirstChild().getNodeValue());
         }
     }
+    
     public void validate() {
         if (required) {
             if (((StringObject)object).value == null || ((StringObject)object).value.length() == 0) {

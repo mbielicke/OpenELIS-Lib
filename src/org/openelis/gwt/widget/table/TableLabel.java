@@ -15,13 +15,13 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.AbstractField;
-
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.data.DataObject;
 
 
 /**
@@ -31,21 +31,21 @@ import com.google.gwt.xml.client.Node;
  * 
  */
 public class TableLabel extends SimplePanel implements TableCellWidget {
-	
-	private Label editor;
-	private AbstractField field;
+    
+    private Label editor;
+    private DataObject field;
     private int width;
     private NumberFormat displayMask;
     public static final String TAG_NAME = "table-label";
 
-	
+    
     public TableLabel() {
 
     }
 
     public void clear() {
-    	if(editor != null)
-    		editor.setText("");
+        if(editor != null)
+            editor.setText("");
     }
 
     public TableCellWidget getNewInstance() {
@@ -65,18 +65,18 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
             displayMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("displayMask").getNodeValue());
     }
 
-	public void setDisplay() {
-		setEditor();
-		
-	}
+    public void setDisplay() {
+        setEditor();
+        
+    }
 
-	public void setEditor() {
-		if(editor == null){
-			editor = new Label();
-			editor.setWordWrap(false);
+    public void setEditor() {
+        if(editor == null){
+            editor = new Label();
+            editor.setWordWrap(false);
             editor.setWidth(width+"px");
-		}
-		Object val = field.getValue();
+        }
+        Object val = field.getValue();
         if (val instanceof Integer)
             editor.setText(((Integer)val).toString());
         else if (val instanceof Double){
@@ -90,17 +90,17 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
         else
             editor.setText((String)val);
         setWidget(editor);
-	}
+    }
 
-	public void saveValue() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void saveValue() {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void setField(AbstractField field) {
-		this.field = field;
-		
-	}
+    public void setField(DataObject field) {
+        this.field = field;
+        
+    }
 
     public void enable(boolean enabled) {
         // TODO Auto-generated method stub   
@@ -111,6 +111,10 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
         if(editor != null){
             editor.setWidth(width+"px");
         }
+    }
+    
+    public void setFocus(boolean focused) {
+
     }
     
     

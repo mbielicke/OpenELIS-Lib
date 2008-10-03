@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.widget.AutoCompleteDropdown;
+import org.openelis.gwt.widget.Dropdown;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI
@@ -110,17 +110,17 @@ public class RichTextToolbar extends Composite {
 
     public void onChange(Widget sender) {
       if (sender == backColors) {
-        basic.setBackColor((String)backColors.getSelectedValue());
-        backColors.setSelectedIndex(0);
+        basic.setBackColor((String)backColors.model.getSelection().get(0).getValue());
+        backColors.model.selectRow(0);
       } else if (sender == foreColors) {
-        basic.setForeColor((String)foreColors.getSelectedValue());
-        foreColors.setSelectedIndex(0);
+        basic.setForeColor((String)foreColors.model.getSelection().get(0).getValue());
+        foreColors.model.selectRow(0);
       } else if (sender == fonts) {
-        basic.setFontName((String)fonts.getSelectedValue());
-        fonts.setSelectedIndex(0);
+        basic.setFontName((String)fonts.model.getSelection().get(0).getValue());
+        fonts.model.selectRow(0);
       } else if (sender == fontSizes) {
-        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.getSelectedValue())]);
-        fontSizes.setSelectedIndex(0);
+        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.model.getSelection().get(0).getValue())]);
+        fontSizes.model.selectRow(0);
       }
     }
 
@@ -226,10 +226,10 @@ public class RichTextToolbar extends Composite {
   private PushButton removeLink;
   private PushButton removeFormat;
 
-  private AutoCompleteDropdown backColors;
-  private AutoCompleteDropdown foreColors;
-  private AutoCompleteDropdown fonts;
-  private AutoCompleteDropdown fontSizes;
+  private Dropdown backColors;
+  private Dropdown foreColors;
+  private Dropdown fonts;
+  private Dropdown fontSizes;
 
   /**
    * Creates a new toolbar that drives the given rich text area.
@@ -298,9 +298,8 @@ public class RichTextToolbar extends Composite {
     }
   }
 
-  private AutoCompleteDropdown createColorList(String caption) {
-    AutoCompleteDropdown lb = new AutoCompleteDropdown();
-    lb.cat = null;
+  private Dropdown createColorList(String caption) {
+    Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
     model.add(new StringObject(caption),new StringObject(""));
@@ -314,8 +313,8 @@ public class RichTextToolbar extends Composite {
     return lb;
   }
 
-  private AutoCompleteDropdown createFontList() {
-    AutoCompleteDropdown lb = new AutoCompleteDropdown();
+  private Dropdown createFontList() {
+    Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
     model.add(new StringObject("Font"),new StringObject(""));
@@ -330,8 +329,8 @@ public class RichTextToolbar extends Composite {
     return lb;
   }
 
-  private AutoCompleteDropdown createFontSizes() {
-    AutoCompleteDropdown lb = new AutoCompleteDropdown();
+  private Dropdown createFontSizes() {
+    Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
     model.add(new StringObject("Size"),new StringObject("0"));

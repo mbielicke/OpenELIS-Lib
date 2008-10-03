@@ -19,6 +19,12 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.widget.AToZTable;
+import org.openelis.gwt.widget.table.TableColumn;
+import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableLabel;
+import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
+
+import java.util.ArrayList;
 
 public class ScreenAToZTable extends ScreenWidget {
     public AToZTable azTable;
@@ -30,29 +36,42 @@ public class ScreenAToZTable extends ScreenWidget {
     public ScreenAToZTable(Node node, ScreenBase screen) {
         super(node);
         
-        azTable = new AToZTable();
-        
+
+        String width = "auto";
         if (node.getAttributes().getNamedItem("tablewidth") != null) {
-            azTable.setTableWidth(node.getAttributes().getNamedItem("tablewidth").getNodeValue());
+            width = (node.getAttributes().getNamedItem("tablewidth").getNodeValue());
         }
+        String title = "";
         if (node.getAttributes().getNamedItem("title") != null){
-            azTable.view.setTitle(node.getAttributes().getNamedItem("title").getNodeValue());
+            title = (node.getAttributes().getNamedItem("title").getNodeValue());
         }
-        azTable.setMaxRows((Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue())));
+        int maxRows = ((Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue())));
         String[] widths = node.getAttributes().getNamedItem("colwidths").getNodeValue().split(",");
-        int[] width = new int[widths.length];
-        for (int i = 0; i < widths.length; i++) {
-            width[i] = Integer.parseInt(widths[i]);
+        ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>(); 
+        if(widths != null) {
+            for (String wid : widths) {
+                TableColumn col = new TableColumn();
+                col.setCurrentWidth(Integer.parseInt(wid));
+                col.setColumnWidget(new TableLabel());
+                columns.add(col);
+            }
         }
-        azTable.setColWidths(width);
+        boolean showHeader = false;
         if(node.getAttributes().getNamedItem("headers") != null){
             String[] headers = node.getAttributes().getNamedItem("headers").getNodeValue().split(",");
-            azTable.view.setHeaders(headers);
+            if(headers != null){
+                showHeader = true;
+                for(int i = 0; i < headers.length; i++){
+                    columns.get(i).setHeader(headers[i].trim());
+                }
+            }
         }
+
+        //azPanel.sizeTable();
+        
+        azTable = new AToZTable(columns,maxRows,width,title,showHeader,VerticalScroll.NEVER);
         Node bpanel = ((Element)node).getElementsByTagName("buttonPanel").item(0);
         azTable.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
-        azTable.view.initTable(azTable);
-        //azPanel.sizeTable();
         
         ((AppScreen)screen).addKeyboardListener(azTable);
         ((AppScreen)screen).addClickListener(azTable);

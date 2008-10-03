@@ -21,11 +21,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.data.DataObject;
 
 import java.util.ArrayList;
-
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
 
 /**
  * A Panel that implements CellWidget so that it can be used in a table.
@@ -35,8 +33,8 @@ import org.openelis.gwt.common.data.DataObject;
  */
 public class TableCollection extends SimplePanel implements TableCellWidget {
     
-	private VerticalPanel editor;
-	private AbstractField field;
+    private VerticalPanel editor;
+    private DataObject field;
     public static final String TAG_NAME = "table-collection";
 
     public TableCollection() {
@@ -52,32 +50,32 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
         this();
     }
 
-	public void setDisplay() {
-		setEditor();
-		
-	}
+    public void setDisplay() {
+        setEditor();
+        
+    }
 
-	public void setEditor() {
-		if(editor == null){
-			editor = new VerticalPanel();
-		}else{
-			editor.clear();
-		}
-		ArrayList vals = (ArrayList)field.getValue();
-		for(int i = 0; i < vals.size(); i++){
-			editor.add(new Label((String)((DataObject)vals.get(i)).getValue()));
-		}
-		setWidget(editor);
-	}
+    public void setEditor() {
+        if(editor == null){
+            editor = new VerticalPanel();
+        }else{
+            editor.clear();
+        }
+        ArrayList vals = (ArrayList)field.getValue();
+        for(int i = 0; i < vals.size(); i++){
+            editor.add(new Label((String)((DataObject)vals.get(i)).getValue()));
+        }
+        setWidget(editor);
+    }
 
-	public void saveValue() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void saveValue() {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void setField(AbstractField field) {
-		this.field = field;
-	}
+    public void setField(DataObject field) {
+        this.field = field;
+    }
 
     public void enable(boolean enabled) {
         // TODO Auto-generated method stub
@@ -92,5 +90,9 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
     public Widget getInstance(Node node) {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    public void setFocus(boolean focused) {
+     
     }
 }

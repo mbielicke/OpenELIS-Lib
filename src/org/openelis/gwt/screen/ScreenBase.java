@@ -17,9 +17,9 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
@@ -42,9 +42,9 @@ import java.util.Iterator;
  *
  */
 public class ScreenBase extends Composite implements FocusListener{
-	/**
-	 * All drawn widgets will be held in this panel.
-	 */
+    /**
+     * All drawn widgets will be held in this panel.
+     */
     protected VerticalPanel panel = new VerticalPanel();
     public FormRPC rpc;
     /** 
@@ -59,6 +59,7 @@ public class ScreenBase extends Composite implements FocusListener{
     public String name;
     public HashMap<String,Widget> shortcut = new HashMap<String,Widget>();
     public ScreenInputWidget startWidget;
+    public ScreenWidget focused;
    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -86,10 +87,10 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void draw() {
-    	    Node screen = xml.getElementsByTagName("screen").item(0);
-    	    if(screen.getAttributes().getNamedItem("name") != null){
-    	    	name = screen.getAttributes().getNamedItem("name").getNodeValue();
-    	    }
+            Node screen = xml.getElementsByTagName("screen").item(0);
+            if(screen.getAttributes().getNamedItem("name") != null){
+                name = screen.getAttributes().getNamedItem("name").getNodeValue();
+            }
             Node display = xml.getElementsByTagName("display").item(0);
             NodeList widgets = display.getChildNodes();
             for (int i = 0; i < widgets.getLength(); i++) {
@@ -114,7 +115,11 @@ public class ScreenBase extends Composite implements FocusListener{
     protected void load(FormRPC rpc){
         for(AbstractField field : rpc.getFieldMap().values()) {
             if(field instanceof FormRPC){
-                load((FormRPC)field);
+                ScreenWidget inputField = widgets.get((String)field.getKey());
+                if(inputField == null)
+                    load((FormRPC)field);
+                else
+                    inputField.load(field);
             }else if(widgets.containsKey(field.getKey())){
                 ScreenWidget inputField = widgets.get((String)field.getKey());
                 inputField.load(field);
@@ -132,7 +137,7 @@ public class ScreenBase extends Composite implements FocusListener{
         clearErrors();
         for (ScreenWidget wid : widgets.values()) {
             if(wid instanceof ScreenInputWidget){
-            	String key = ((ScreenInputWidget)wid).key;
+                String key = ((ScreenInputWidget)wid).key;
                 AbstractField field = rpc.getField(key);
                 if(field != null && !field.isValid())
                     ((ScreenInputWidget)wid).drawError();
@@ -199,9 +204,13 @@ public class ScreenBase extends Composite implements FocusListener{
     protected void doSubmit(FormRPC rpc) {
         rpc.reset();
         for (AbstractField field : rpc.getFieldMap().values()){
-            if(field instanceof FormRPC)
-                doSubmit((FormRPC)field);
-            else if(widgets.containsKey(field.getKey())){
+            if(field instanceof FormRPC){
+                ScreenWidget inputField = widgets.get(field.getKey());
+                if(inputField == null)
+                    doSubmit((FormRPC)field);
+                else
+                    inputField.submit(field);
+            }else if(widgets.containsKey(field.getKey())){
                 ScreenWidget inputField = widgets.get(field.getKey());
                 inputField.submit(field);
             }
@@ -235,12 +244,12 @@ public class ScreenBase extends Composite implements FocusListener{
     protected void strikeThru(boolean enabled) {
         for(String key : widgets.keySet()) {
             if (!rpc.getFieldMap().containsKey(key) && !rpc.getFieldMap().containsKey(key+"Id")) {
-            	continue;
+                continue;
             }
             if(enabled)
-            	widgets.get(key).addStyleName("strike");
+                widgets.get(key).addStyleName("strike");
             else
-            	widgets.get(key).removeStyleName("strike");
+                widgets.get(key).removeStyleName("strike");
       }
    }
 
@@ -251,6 +260,7 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     public void onFocus(Widget sender) {
         sender.addStyleName("focused");
+        focused = (ScreenWidget)sender;
     }
 
     /**
@@ -260,6 +270,7 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     public void onLostFocus(Widget sender) {
         sender.removeStyleName("focused");
+        focused = null;
     }
 
     /**
@@ -303,9 +314,17 @@ public class ScreenBase extends Composite implements FocusListener{
      * @param event
      * @param wid
      */
+    
     public void doTab(Event event, ScreenWidget wid) {
+        doTab(DOM.eventGetShiftKey(event),wid);
+        DOM.eventCancelBubble(event, true);
+        DOM.eventPreventDefault(event);
+    }
+    
+    public void doTab(boolean shift, ScreenWidget wid) {
+        
         ScreenWidget obj = null;
-        if (event != null && DOM.eventGetShiftKey(event))
+        if (shift)
             obj = widgets.get(tabBack.get(wid));
         else
             obj = widgets.get(tabOrder.get(wid));
@@ -316,15 +335,11 @@ public class ScreenBase extends Composite implements FocusListener{
                     tabbed = true;
                     obj.setFocus(true);
                 } else {
-                    if (event != null && DOM.eventGetShiftKey(event))
+                    if (shift)
                         obj = widgets.get(tabBack.get(obj));
                     else
                         obj = widgets.get(tabOrder.get(obj));
                 }
-            }
-            if(event != null){
-                DOM.eventCancelBubble(event, true);
-                DOM.eventPreventDefault(event);
             }
         }
     }

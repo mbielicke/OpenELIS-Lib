@@ -77,4 +77,9 @@ public class BooleanObject implements DataObject, Serializable {
     public int hashCode() {
         return value.hashCode();
     }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return value.compareTo((Boolean)o);
+    }
 }

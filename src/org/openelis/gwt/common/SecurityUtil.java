@@ -90,5 +90,10 @@ public class SecurityUtil implements Serializable, DataObject {
         // TODO Auto-generated method stub
         
     }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
    
 }

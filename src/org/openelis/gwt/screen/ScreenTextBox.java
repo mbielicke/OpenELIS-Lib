@@ -33,22 +33,22 @@ import org.openelis.gwt.common.data.NumberField;
  *
  */
 public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
-																FocusListener{
-	/**
-	 * Default XML Tag Name used in XML Definition
-	 */
-	public static String TAG_NAME = "textbox";
-	/**
-	 * Widget wrapped by this class
-	 */
+                                                                FocusListener{
+    /**
+     * Default XML Tag Name used in XML Definition
+     */
+    public static String TAG_NAME = "textbox";
+    /**
+     * Widget wrapped by this class
+     */
     private TextBox textbox;
     private String fieldCase = "mixed";
     private int length = 255;
     private NumberFormat numberFormat;
   
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenTextBox() {
     }
     /**
@@ -59,29 +59,11 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
      *          case="mixed,upper,lower" max="int"/&gt; 
      * @param node
      * @param screen
-     */	
+     */ 
     public ScreenTextBox(Node node, final ScreenBase screen) {
         super(node);
-        final ScreenTextBox sb = this;
-
-        textbox = new TextBox() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, sb);
-                        return;
-                    }
-                }
-                super.onBrowserEvent(event);
-            }
-        };
-        if (node.getAttributes().getNamedItem("tab") != null) {
-            screen.addTab(this, node.getAttributes()
-                                       .getNamedItem("tab")
-                                       .getNodeValue()
-                                       .split(","));
-            textbox.sinkEvents(Event.KEYEVENTS);
-        }
+        
+        textbox = new TextBox();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")
@@ -160,16 +142,16 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
     
     public void enable(boolean enabled){
-    	if(!alwaysEnabled){
-    		if(alwaysDisabled)
-    			enabled = false;
-	        textbox.setReadOnly(!enabled);
-	        if(enabled){
-	            textbox.addFocusListener(this);
-	        }else
-	            textbox.removeFocusListener(this);
+        if(!alwaysEnabled){
+            if(alwaysDisabled)
+                enabled = false;
+            textbox.setReadOnly(!enabled);
+            if(enabled){
+                textbox.addFocusListener(this);
+            }else
+                textbox.removeFocusListener(this);
             super.enable(enabled);
-    	}else
+        }else
             super.enable(true);
     }
     
@@ -192,20 +174,20 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             super.setForm(mode);
     }
     
-	public void onFocus(Widget sender) {
-		if(!textbox.isReadOnly()){
-			if(sender == textbox){
-				super.hp.addStyleName("Focus");
-			}
-		}	
+    public void onFocus(Widget sender) {
+        if(!textbox.isReadOnly()){
+            if(sender == textbox){
+                super.hp.addStyleName("Focus");
+            }
+        }   
         super.onFocus(sender);
-	}
-	public void onLostFocus(Widget sender) {
-		if(!textbox.isReadOnly()){
-			if(sender == textbox){
-				super.hp.removeStyleName("Focus");
-			}
-		}
+    }
+    public void onLostFocus(Widget sender) {
+        if(!textbox.isReadOnly()){
+            if(sender == textbox){
+                super.hp.removeStyleName("Focus");
+            }
+        }
         super.onLostFocus(sender);
-	}    
+    }    
 }

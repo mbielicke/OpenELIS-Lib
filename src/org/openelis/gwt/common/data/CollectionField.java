@@ -48,7 +48,7 @@ public class CollectionField extends AbstractField implements Serializable {
     }
     
     public void validate() {
-    	if (required) {
+        if (required) {
             if (coll.size() == 0) {
                 addError("Field is required");
                 valid = false;
@@ -90,21 +90,21 @@ public class CollectionField extends AbstractField implements Serializable {
         return new CollectionField(node);
     }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		for(int i = 0; i < coll.size(); i++){
-			if(i > 0)
-				sb.append(",");
-			sb.append(((StringObject)coll.get(i)).getValue());
-		}
-		return sb.toString();
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < coll.size(); i++){
+            if(i > 0)
+                sb.append(",");
+            sb.append(((StringObject)coll.get(i)).getValue());
+        }
+        return sb.toString();
+    }
 }

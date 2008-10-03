@@ -15,13 +15,16 @@
 */
 package org.openelis.gwt.common;
 
+import org.openelis.gwt.common.data.DataObject;
+
 import java.io.Serializable;
 
 public class Filter implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public String value;
+    public DataObject obj;
     public boolean filtered;
     public String display;
     public String splitOn;
+    public String value;
 }

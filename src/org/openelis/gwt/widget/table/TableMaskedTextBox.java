@@ -30,22 +30,22 @@ import org.openelis.gwt.widget.MaskedTextBox;
  * 
  */
 public class TableMaskedTextBox extends TableCellInputWidget {
-	
-	private MaskedTextBox editor;
-	private Label display;
-	private String mask;
+    
+    private MaskedTextBox editor;
+    private Label display;
+    private String mask;
     private boolean enabled;
     private int width;
     public static final String TAG_NAME = "table-maskedbox";
-	
+    
     public TableMaskedTextBox() {
     }
 
     public void clear() {
-    	if(editor != null)
-    		editor.setText("");
-    	if(display != null)
-    		display.setText("");
+        if(editor != null)
+            editor.setText("");
+        if(display != null)
+            display.setText("");
     }
 
     public TableCellWidget getNewInstance() {
@@ -62,39 +62,39 @@ public class TableMaskedTextBox extends TableCellInputWidget {
         mask = (node.getAttributes().getNamedItem("mask").getNodeValue());
     }
 
-	public void setDisplay() {
-		if(display == null){
-	        display = new Label();
-	        display.setWordWrap(false);
+    public void setDisplay() {
+        if(display == null){
+            display = new Label();
+            display.setWordWrap(false);
             display.setWidth(width+"px");
-		}
-		display.setText((String)field.getValue());
-		setWidget(display);
+        }
+        display.setText((String)field.getValue());
+        setWidget(display);
         super.setDisplay();
-	}
+    }
 
-	public void setEditor() {
+    public void setEditor() {
         if(!enabled)
             return;
-		if(editor == null){
-			editor = new MaskedTextBox();
+        if(editor == null){
+            editor = new MaskedTextBox();
             editor.addFocusListener(this);
-			editor.setMask(mask);
+            editor.setMask(mask);
             editor.setWidth(width+"px");
-		}
-		editor.setText((String)field.getValue());
-		setWidget(editor);
-	}
+        }
+        editor.setText((String)field.getValue());
+        setWidget(editor);
+    }
 
-	public void saveValue() {
+    public void saveValue() {
         editor.format();
-		field.setValue(editor.getText());
+        field.setValue(editor.getText());
         super.saveValue();
-	}
+    }
 
-	public void setField(AbstractField field) {
-		this.field = field;
-	}
+    public void setField(AbstractField field) {
+        this.field = field;
+    }
 
     public void enable(boolean enabled) {
        this.enabled = enabled;
@@ -106,5 +106,8 @@ public class TableMaskedTextBox extends TableCellInputWidget {
             editor.setWidth(width+"px");
         if(display != null)
             display.setWidth(width+"px");
+    }
+    
+    public void setFocus(boolean focused) {
     }
 }

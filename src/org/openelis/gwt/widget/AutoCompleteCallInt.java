@@ -4,6 +4,6 @@ import org.openelis.gwt.common.data.DataModel;
 
 public interface AutoCompleteCallInt {
     
-    public void callForMatches(AutoCompleteDropdown widget, DataModel model, String text);
+    public void callForMatches(AutoComplete widget, DataModel model, String text);
 
 }
