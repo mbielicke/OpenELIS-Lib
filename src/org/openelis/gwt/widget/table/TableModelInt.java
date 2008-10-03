@@ -60,7 +60,9 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public DataModel getData();
     
-    public void updateCell(int row, int col,Object obj);
+    public void setCell(int row, int col,Object obj);
+    
+    public Object getCell(int row, int col);
     
     public void sort(int col, DataSorterInt.SortDirection direction);
     

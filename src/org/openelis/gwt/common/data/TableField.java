@@ -107,4 +107,12 @@ public class TableField extends AbstractField {
         return (AbstractField)value.get(row).get(fieldIndex.indexOf(field));
     }
     
+    public void setFieldError(int row,String fieldName,String error){
+        getField(row,fieldName).addError(error);
+    }
+    
+    public void clearFieldError(int row, String fieldName) {
+        getField(row,fieldName).clearErrors();
+    }
+    
 }

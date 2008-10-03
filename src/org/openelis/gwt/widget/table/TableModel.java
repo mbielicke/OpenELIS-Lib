@@ -243,9 +243,13 @@ public class TableModel implements TableModelInt, TableWidgetListener {
         return data;
     }
     
-    public void updateCell(int row, int col, Object value) {
+    public void setCell(int row, int col, Object value) {
         data.get(row).get(col).setValue(value);
         tableModelListeners.fireCellUpdated(this, row, col);
+    }
+    
+    public Object getCell(int row, int col) {
+        return data.get(row).get(col).getValue();
     }
     
     public void hideRow(int row) {
