@@ -21,14 +21,12 @@ import org.openelis.gwt.common.DataSorterInt.SortDirection;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableModelListenerCollection;
-import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
-public class TableModel implements TableModelInt, TableWidgetListener {
+public class TableModel implements TableModelInt {
 
     private static final long serialVersionUID = 1L;
     private DataModel data;
@@ -172,16 +170,6 @@ public class TableModel implements TableModelInt, TableWidgetListener {
     public void removeTableModelListener(TableModelListener listener) {
         if(tableModelListeners != null)
             tableModelListeners.remove(listener);
-    }
-
-    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void startedEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        // TODO Auto-generated method stub
-        
     }
     
     public int shownRows() {
