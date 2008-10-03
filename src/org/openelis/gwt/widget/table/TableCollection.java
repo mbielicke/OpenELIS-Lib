@@ -36,6 +36,7 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
     private VerticalPanel editor;
     private DataObject field;
     public static final String TAG_NAME = "table-collection";
+    protected int rowIndex;
 
     public TableCollection() {
     }
@@ -94,5 +95,14 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
     
     public void setFocus(boolean focused) {
      
+    }
+    
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
     }
 }

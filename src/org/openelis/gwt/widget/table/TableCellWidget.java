@@ -43,4 +43,8 @@ public interface TableCellWidget {
     public void setCellWidth(int width);
     
     public void setFocus(boolean focus);
+    
+    public int getRowIndex();
+    
+    public void setRowIndex(int row);
 }

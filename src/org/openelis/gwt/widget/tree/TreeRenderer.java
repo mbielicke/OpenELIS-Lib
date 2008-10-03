@@ -1,11 +1,8 @@
 package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.TreeDataItem;
@@ -15,8 +12,6 @@ import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;
 import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
-
-import java.util.Stack;
 
 public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener  {
     
@@ -29,7 +24,9 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     public void createRow(int i) {
         int j = 0;
         for(TreeColumnInt column : controller.columns) {
-            controller.view.table.setWidget(i,j,column.getWidgetInstance());
+            TableCellWidget wid = (TableCellWidget)column.getWidgetInstance();
+            controller.view.table.setWidget(i,j,(Widget)wid);
+            wid.setRowIndex(i);
             controller.view.table.getFlexCellFormatter().addStyleName(i,
                                                   j,
                                                   TableView.cellStyle);
@@ -55,9 +52,6 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
         int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+(controller.maxRows*2);
-        if(controller.model.isAutoAdd()){
-            ScrollHeight += controller.cellHeight;
-        }
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.model.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
@@ -69,14 +63,9 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             for(int i = 0; i < count; i++){
                 controller.view.table.removeRow(0);
             }
-            if(!controller.model.getAutoAdd())
-                return;
         }
         if(controller.model.shownRows() < controller.maxRows){
             tRows = controller.model.shownRows();
-            if(controller.model.getAutoAdd()){
-                tRows++;
-            }
         }
         if(controller.view.table.getRowCount() > tRows){
             int count = controller.view.table.getRowCount();
@@ -88,9 +77,6 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             for(int i = count; i < tRows; i++){
                 createRow(i);
             }
-        }
-        if(controller.model.getAutoAdd() && controller.view.table.getRowCount() == 0){
-            createRow(0);
         }
         scrollLoad(pos);
 
@@ -124,78 +110,18 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             //if(controller.showRows){
               //  ((Label)controller.view.rows.getWidget(index,0)).setText(String.valueOf(controller.model.indexOf(row)+1));
            // }
-            if(controller.model.isSelected(modelIndex))
-                controller.view.table.getRowFormatter().addStyleName(index, controller.view.selectedStyle);
-            else
-                controller.view.table.getRowFormatter().removeStyleName(index,controller.view.selectedStyle);
-            if(controller.model.isEnabled(modelIndex)) 
-                controller.view.table.getRowFormatter().removeStyleName(index, controller.view.disabledStyle);
-            else
-                controller.view.table.getRowFormatter().addStyleName(index,controller.view.disabledStyle);
+        }
+        if(controller.model.isSelected(modelIndex))
+            controller.view.table.getRowFormatter().addStyleName(index, controller.view.selectedStyle);
+        else
+            controller.view.table.getRowFormatter().removeStyleName(index,controller.view.selectedStyle);
+        if(controller.model.isEnabled(modelIndex)) 
+            controller.view.table.getRowFormatter().removeStyleName(index, controller.view.disabledStyle);
+        else
+            controller.view.table.getRowFormatter().addStyleName(index,controller.view.disabledStyle);
                 
-            
-        }
     }
     
-    public Grid createItem(final TreeDataItem drow, int i) {
-        Grid grid = new Grid(1,2+drow.depth);
-        grid.setCellPadding(0);
-        grid.setCellSpacing(0);
-        grid.setWidth(controller.columns.get(0).getCurrentWidth()+"px");
-        for(int j = 0; j < grid.getColumnCount(); j++) {
-            if(j < grid.getColumnCount() -1)
-                grid.getCellFormatter().setWidth(0,j,"18px");
-            grid.getCellFormatter().setHeight(0,j,controller.cellHeight+"px");
-            if(j == grid.getColumnCount() -2){
-                if(drow.open && drow.size() > 0)
-                    DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
-                else if(drow.size() > 0)
-                    DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
-                else if(j > 0){
-                    if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
-                        DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat");
-                    else
-                        DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat");
-                }
-                if(drow.size() > 0){
-                    grid.addTableListener(new TableListener() {
-                        public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
-                            drow.toggle();
-                            controller.model.getData().setRows();
-                            load(controller.view.scrollBar.getScrollPosition());
-                        }
-                    });
-                }
-            }
-        }
-        if(drow.depth > 1) {
-            Stack<TreeDataItem> levels = new Stack<TreeDataItem>();
-            levels.push(drow.parent);
-            while(levels.peek().depth > 1){
-                levels.push(levels.peek().parent);
-            }
-            for(TreeDataItem item : levels){
-                if(item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
-                    DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
-                }
-            }
-            
-        }
-       // if(i % 2 == 1){
-       //     DOM.setStyleAttribute(grid.getRowFormatter().getElement(0), "background", "#f8f8f9");
-       // }
-        
-        grid.setWidget(0, grid.getColumnCount() - 1, new Label((String)drow.getLabel().getValue()));
-       if(i % 2 == 1){
-             DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,grid.getColumnCount()-1), "background", "#f8f8f9");
-       }
-       grid.addStyleName(TreeView.cellStyle);
-       DOM.setStyleAttribute(grid.getWidget(0,grid.getColumnCount() - 1).getElement(),"padding","2px");
-        return grid;
-        
-    }
-    
-
     
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
@@ -205,8 +131,6 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.model.shownRows()){
             rowsPer = controller.model.shownRows();
-            if(controller.model.getAutoAdd())
-                rowsPer++;
         }
         int loadStart = new Double(Math.ceil(((double)scrollPos)/(controller.cellHeight))).intValue();
         if(controller.model.numRows() != controller.model.shownRows()){
@@ -221,17 +145,12 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         }
         if(loadStart+rowsPer > controller.model.numRows()){
             loadStart = loadStart - ((loadStart+rowsPer) - controller.model.numRows());
-            if(controller.model.getAutoAdd())
-                loadStart++;
         }
         for(int i = 0; i < rowsPer; i++){
             while(loadStart+i < controller.model.numRows() && !controller.model.getRow(loadStart+i).shown)
                 loadStart++;
-            if(loadStart+i < controller.model.numRows())
+            if(loadStart+i < controller.model.numRows()){
                 loadRow(i,loadStart+i);
-            else{
-                controller.model.setAutoAddRow(controller.model.createRow());
-                loadRow(i,controller.model.numRows());
             }
         }
 
@@ -329,6 +248,16 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     }
 
     public void unload(SourcesTreeModelEvents sender) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void rowClosed(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void rowOpened(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
         // TODO Auto-generated method stub
         
     }

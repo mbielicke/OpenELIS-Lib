@@ -34,6 +34,7 @@ public class TableImage extends SimplePanel implements TableCellWidget {
     private Image editor;
     private DataObject field;
     public static final String TAG_NAME = "table-image";
+    public int rowIndex;
     
     public TableImage() {
     }
@@ -90,5 +91,14 @@ public class TableImage extends SimplePanel implements TableCellWidget {
     
     public void setFocus(boolean focused) {
 
+    }
+    
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
     }
 }

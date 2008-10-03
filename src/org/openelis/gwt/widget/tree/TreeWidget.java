@@ -4,10 +4,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
@@ -140,7 +138,7 @@ public class TreeWidget extends FocusPanel implements
             }
             activeRow = row;
             model.selectRow(modelIndexList[row]);
-            if (model.canEdit(modelIndexList[row], col)) {
+            if (model.canEdit(modelIndexList[row], col - 1 )) {
                 activeCell = col;
                 treeWidgetListeners.fireStartedEditing(this, row, col);
             } else
@@ -276,8 +274,19 @@ public class TreeWidget extends FocusPanel implements
     }
 
     public void performCommand(Enum action, Object obj) {
-        ((TreeDataItem)obj).toggle();
-        model.refresh();
+        if(model.canToggle(modelIndexList[(Integer)obj])){
+            model.toggle(modelIndexList[(Integer)obj]);
+        }
+        
+    }
+
+    public void rowClosed(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void rowOpened(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
+        // TODO Auto-generated method stub
         
     }
 }

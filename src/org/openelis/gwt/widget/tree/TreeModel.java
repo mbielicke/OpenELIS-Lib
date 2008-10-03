@@ -1,95 +1,96 @@
 package org.openelis.gwt.widget.tree;
 
-import org.openelis.gwt.common.DataSorterInt.SortDirection;
 import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
-import org.openelis.gwt.widget.table.TableManager;
-import org.openelis.gwt.widget.table.TableWidget;
-import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
 
 import java.util.ArrayList;
 
-public class TreeModel implements SourcesTreeModelEvents {
+public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
     private TreeDataModel data;
+    public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
     private TreeModelListenerCollection treeModelListeners;
     public int shownRows; 
     
-    public DataSet autoAddRow;
-    
     public boolean multiSelect;
     
-    public TableManager manager;
+    public TreeManager manager;
     
     public TreeModel(TreeWidget controller) {
         addTreeModelListener(controller);
         addTreeModelListener((TreeModelListener)controller.renderer);
     }
 
-    public void addRow(DataSet row) {
+    public void addRow(TreeDataItem row) {
         data.add((TreeDataItem)row);
     }
 
-    public void addRow(int index, DataSet row) {
+    public void addRow(int index, TreeDataItem row) {
         data.add(index,(TreeDataItem)row);
     }
 
     public boolean canDelete(int row) {
-        DataSet rowSet;
-        if(row == numRows())
-            rowSet = autoAddRow;
-        else
-            rowSet = data.rows.get(row);
+        TreeDataItem item = rows.get(row);
         if(manager != null)
-            return manager.canDelete(rowSet, row);
+            return manager.canDelete(item, row);
         return true;
     }
 
     public boolean canEdit(int row, int col) {
-        DataSet rowSet;
-        if(row == numRows())
-            rowSet = autoAddRow;
-        else
-            rowSet = data.rows.get(row);
-        if(!rowSet.enabled)
+        TreeDataItem item = rows.get(row);
+        if(!item.enabled)
             return false;
         if(manager != null)
-            return manager.canEdit(rowSet, row, col);
+            return manager.canEdit(item, row, col);
         if(row == numRows())
             return true;
         return true;
     }
 
     public boolean canAdd(int row) {
-        if(!data.rows.get(row).enabled)
+        if(!rows.get(row).enabled)
             return false;
         if(manager != null)
-            return manager.canAdd(data.rows.get(row), row);
+            return manager.canAdd(rows.get(row), row);
         return true;
     }
 
     public boolean canSelect(int row) {
-        DataSet rowSet;
-        if(row == numRows())
-            rowSet = autoAddRow;
-        else
-            rowSet = data.rows.get(row);
-        if(!rowSet.enabled)
+        TreeDataItem item = rows.get(row);
+        if(!item.enabled)
             return false;
         if(manager != null)
-            return manager.canSelect(rowSet,row);
+            return manager.canSelect(item,row);
         if(row == numRows())
             return true;
+        return true;
+    }
+    
+    public boolean canToggle(int row) {
+        if(rows.get(row).open)
+            return canClose(row);
+        return canOpen(row);
+    }
+    
+    public boolean canOpen(int row) {
+        if(manager != null)
+            return manager.canOpen(rows.get(row),row);
+        return true;
+    }
+    
+    public boolean canClose(int row) {
+        if(manager != null)
+            return manager.canClose(rows.get(row),row);
         return true;
     }
 
     public void clear() {
         data.clear();
+        rows.clear();
         treeModelListeners.fireDataChanged(this);
     }
 
@@ -97,15 +98,12 @@ public class TreeModel implements SourcesTreeModelEvents {
         data.clearSelections();
     }
 
-    public DataSet createRow() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     public void deleteRow(int row) {
-        if(data.rows.get(row).shown)
+        if(rows.get(row).shown)
             shownRows--;
-        data.remove(row);
+        data.remove(rows.get(row).hashCode());
+        rows.remove(row);
         treeModelListeners.fireRowDeleted(this, row);
     }
 
@@ -114,32 +112,22 @@ public class TreeModel implements SourcesTreeModelEvents {
         data.multiSelect = multi;
     }
 
-    public boolean getAutoAdd() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public DataSet getAutoAddRow() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public TreeDataModel getData() {
         // TODO Auto-generated method stub
         return data;
     }
 
     public DataObject getObject(int row, int col) {
-        return data.rows.get(row).get(col);
+        return rows.get(row).get(col);
     }
 
 
-    public DataSet getRow(int row) {
-        return data.rows.get(row);
+    public TreeDataItem getRow(int row) {
+        return rows.get(row);
     }
 
-    public DataSet getSelection() {
-        return data.rows.get(data.selected);
+    public TreeDataItem getSelection() {
+        return data.get(data.selected);
     }
 
     public ArrayList<TreeDataItem> getSelections() {
@@ -147,49 +135,42 @@ public class TreeModel implements SourcesTreeModelEvents {
     }
 
     public void hideRow(int row) {
-        data.rows.get(row).shown = false;
+        rows.get(row).shown = false;
         shownRows--;
         treeModelListeners.fireDataChanged(this);
     }
 
-    public boolean isAutoAdd() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
     public boolean isEnabled(int index) {
         if(index < numRows())
-            return data.rows.get(index).enabled;
-        return autoAddRow.enabled;
+            return rows.get(index).enabled;
+        return false;
     }
 
     public boolean isSelected(int index) {
-        // TODO Auto-generated method stub
-        return false;
+        return data.selections.contains(rows.get(index).hashCode());
     }
 
     public void load(TreeDataModel data) {
         this.data = data;
-        data.setRows();
+        rows = data.getVisibleRows();
         data.multiSelect = multiSelect;
         shownRows = 0;
-        for(int i = 0; i < data.size(); i++){
-            if(data.rows.get(i).shown)
+        for(int i = 0; i < rows.size(); i++){
+            if(rows.get(i).shown)
                 shownRows++;
         }
         treeModelListeners.fireDataChanged(this);
     }
 
     public int numRows() {
-        // TODO Auto-generated method stub
-        return data.rows.size();
+        return rows.size();
     }
 
     public void refresh() {
         shownRows = 0;
-        data.setRows();
-        for(int i = 0; i < data.rows.size(); i++){
-            if(data.rows.get(i).shown)
+        rows = data.getVisibleRows();
+        for(int i = 0; i < rows.size(); i++){
+            if(rows.get(i).shown)
                 shownRows++;
         }
         treeModelListeners.fireDataChanged(this);
@@ -197,20 +178,15 @@ public class TreeModel implements SourcesTreeModelEvents {
 
     public void selectRow(int index){
         if(index < numRows())
-            data.select(index);
+            data.select(rows.get(index).hashCode());
         treeModelListeners.fireRowSelected(this, index);
     }
 
     public void selectRow(DataObject key) {
-       // selectRow(data.indexOf(data.getByKey(key)));
+       //selectRow(data.keyMap.get());
     }
 
-    public void setAutoAddRow(DataSet row) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setManager(TableManager manager){
+    public void setManager(TreeManager manager){
         this.manager = manager;
     }
 
@@ -219,25 +195,14 @@ public class TreeModel implements SourcesTreeModelEvents {
         
     }
 
-    public DataSet setRow(int index, DataSet row) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public void showRow(int row) {
-        data.rows.get(row).shown = true;
+        rows.get(row).shown = true;
         shownRows++;
         treeModelListeners.fireDataChanged(this);
     }
 
     public int shownRows() {
-        // TODO Auto-generated method stub
         return shownRows;
-    }
-
-    public void sort(int col, SortDirection direction) {
-        // TODO Auto-generated method stub
-
     }
 
     public TreeDataModel unload() {
@@ -246,13 +211,16 @@ public class TreeModel implements SourcesTreeModelEvents {
     }
 
     public void unselectRow(int index){
-        if(index < numRows())
-            data.unselect(index);
+        if(index < 0) {
+            data.clearSelections();
+            data.selected = -1;
+        }else if(index < numRows())
+            data.unselect(rows.get(index).hashCode());
         treeModelListeners.fireRowUnselected(this, -1);        
     }
 
-    public void updateCell(int row, int col, Object value) {
-        data.rows.get(row).get(col).setValue(value);
+    public void setCell(int row, int col, Object value) {
+        rows.get(row).get(col).setValue(value);
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
@@ -266,5 +234,24 @@ public class TreeModel implements SourcesTreeModelEvents {
         if(treeModelListeners != null)
             treeModelListeners.remove(listener);
     }
+
+    public Object getCell(int row, int col) {
+        return rows.get(row).get(col);
+    }
+
+    public TreeDataItem setRow(int index, TreeDataItem row) {
+        return null;
+    }
+    
+    public void toggle(int row) {
+        rows.get(row).toggle();
+        refresh();
+        if(rows.get(row).open)
+            treeModelListeners.fireRowOpened(this,row,rows.get(row));
+        else
+            treeModelListeners.fireRowClosed(this,row,rows.get(row));
+    }
+
+
 
 }

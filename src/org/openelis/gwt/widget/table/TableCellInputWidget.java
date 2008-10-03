@@ -45,6 +45,7 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     protected PopupPanel pop;
     private MouseListenerCollection listeners = new MouseListenerCollection(); 
     protected ScreenBase screen;
+    protected int rowIndex;
     
     public void clear() {
         // TODO Auto-generated method stub
@@ -215,6 +216,15 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     }
     
     public void setFocus(boolean focus) {
+    }
+    
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
     }
 
 }

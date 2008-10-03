@@ -37,6 +37,7 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
     private int width;
     private NumberFormat displayMask;
     public static final String TAG_NAME = "table-label";
+    public int rowIndex;
 
     
     public TableLabel() {
@@ -115,6 +116,15 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
     
     public void setFocus(boolean focused) {
 
+    }
+    
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
     }
     
     

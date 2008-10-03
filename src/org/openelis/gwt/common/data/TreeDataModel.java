@@ -25,13 +25,15 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
     
     private static final long serialVersionUID = 1L;
     
-    public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
+    private HashMap<Integer,TreeDataItem> itemMap = new HashMap<Integer,TreeDataItem>();
     
-    private HashMap<DataObject,TreeDataItem> keyMap = new HashMap<DataObject,TreeDataItem>(); 
+    private HashMap<DataObject,TreeDataItem> keyMap = new HashMap<DataObject,TreeDataItem>();
     
-    private ArrayList<Integer> selections = new ArrayList<Integer>();
+    public ArrayList<Integer> selections = new ArrayList<Integer>();
     
     private ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
+    
+    private int hashIndex = 0;
     
     public int selected = -1;
     private int page = 0;
@@ -61,6 +63,10 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
     
     public boolean add(DataObject key, TreeDataItem item) {
         keyMap.put(item.getKey(), item);
+        if(item.hash < 0){
+            item.hash = hashIndex;
+            hashIndex++;
+        }
         return super.add(item);
     }
     
@@ -70,23 +76,18 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
     }
     
     public void select(int selection) throws IndexOutOfBoundsException {
-        if(selection > size())
-            throw new IndexOutOfBoundsException();
+        //if(selection > size())
+          //  throw new IndexOutOfBoundsException();
         selected = selection;
         if(!multiSelect)
             selections.clear();
-        selections.add(selection);
+        selections.add(new Integer(selection));
     }
     
     public void unselect(int index) {
-        if(index == -1){
-            selections.clear();
+        selections.remove(new Integer(index));
+        if(selected == index)
             selected = -1;
-        }else{
-            selections.remove(new Integer(index));
-            if(selected == index)
-                selected = -1;
-        }
     }
     
     public int getSelectedIndex() {
@@ -94,13 +95,13 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
     }
     
     public TreeDataItem getSelected() {
-        return get(selected);
+        return itemMap.get(selected);
     }
     
     public ArrayList<TreeDataItem> getSelections() {
         ArrayList<TreeDataItem> selectionSets = new ArrayList<TreeDataItem>();
         for(int i : selections) 
-            selectionSets.add(get(i));
+            selectionSets.add(itemMap.get(i));
         return selectionSets;
     }
     
@@ -115,6 +116,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
     public void clear() {
         super.clear();
         keyMap.clear();
+        itemMap.clear();
         selections.clear();
         selected = -1;
     }
@@ -162,14 +164,14 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
     public TreeDataItem createTreeItem(DataObject key) {
         TreeDataItem item = new TreeDataItem();
         item.setKey(key);
+        item.hash = hashIndex;
+        hashIndex++;
         keyMap.put(key,item);
+        itemMap.put(item.hashCode(), item);
         return item;
     }
-    
-    public int shownRows() {
-       return rows.size();
-    }
-    
+
+    /*
     public ArrayList<TreeDataItem> getTreeItems(int start, int numItems){
         ArrayList<TreeDataItem> retTree = new ArrayList<TreeDataItem>();
         for(int i = start; i < start+numItems; i++){
@@ -177,20 +179,22 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements DataObject
         }
         return retTree;
     }
+    */
     
-    public void setRows() {
-        rows = new ArrayList<TreeDataItem>();
+    public ArrayList<TreeDataItem> getVisibleRows() {
+        ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
         Iterator<TreeDataItem> it = iterator();
         while(it.hasNext())
-            checkChildItems(it.next());
+            checkChildItems(it.next(), rows);
+        return rows;
     }
     
-    public void checkChildItems(TreeDataItem item){
+    public void checkChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows){
         rows.add(item);
         if(item.open && item.size() > 0) {
            Iterator<TreeDataItem> it = item.getItems().iterator();   
            while(it.hasNext())
-               checkChildItems(it.next());
+               checkChildItems(it.next(), rows);
         }
     }
 

@@ -21,6 +21,7 @@ import java.util.Iterator;
 public class TreeDataItem extends DataSet {
     
     private static final long serialVersionUID = 1L;
+    private static int itemIndex = 0;
 
     private ArrayList<TreeDataItem> items = new ArrayList<TreeDataItem>();
     
@@ -33,7 +34,8 @@ public class TreeDataItem extends DataSet {
     public boolean open;
     
     public int depth;
-        
+    
+    public int hash = -1;
     
     public TreeDataItem getInstance() {
         TreeDataItem clone = new TreeDataItem();
@@ -121,6 +123,10 @@ public class TreeDataItem extends DataSet {
             if(items.size() > 0)
                 item.close();
         }
+    }
+    
+    public int hashCode() {
+        return hash;
     }
 
 }

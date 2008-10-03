@@ -31,6 +31,16 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     public int active;
     DataObject field;
     public static final String TAG_NAME = "table-multiple";
+    public int rowIndex;
+    
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
+    }
     
     public TableMultiple() {
         

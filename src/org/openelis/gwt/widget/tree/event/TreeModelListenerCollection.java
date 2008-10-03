@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget.tree.event;
 
+import org.openelis.gwt.common.data.TreeDataItem;
+
 import java.util.ArrayList;
 
 public class TreeModelListenerCollection extends ArrayList<TreeModelListener> {
@@ -42,5 +44,15 @@ public class TreeModelListenerCollection extends ArrayList<TreeModelListener> {
     public void fireUnload(SourcesTreeModelEvents sender) {
         for(TreeModelListener listener : this)
             listener.unload(sender);
+    }
+    
+    public void fireRowOpened(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
+        for(TreeModelListener listener : this)
+            listener.rowOpened(sender,row,item);
+    }
+    
+    public void fireRowClosed(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
+        for(TreeModelListener listener : this)
+            listener.rowClosed(sender,row,item);
     }
 }

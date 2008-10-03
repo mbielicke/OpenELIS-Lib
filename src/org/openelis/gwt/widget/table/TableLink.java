@@ -35,6 +35,7 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     private DataObject field;
     private boolean enabled;
     public static final String TAG_NAME = "table-link";
+    public int rowIndex;
     
     public TableLink() {
         editor = new HTML();
@@ -92,5 +93,14 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     
     public void setFocus(boolean focused) {
 
+    }
+    
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
     }
 }

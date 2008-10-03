@@ -20,16 +20,34 @@ import org.openelis.gwt.widget.tree.TreeView;
 
 import java.util.Stack;
 
-public class TableTree extends SimplePanel implements TableCellWidget, SourcesCommandEvents {
+public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents {
     
-    private Grid editor;
+    private class ItemGrid extends Grid implements TableListener{
+        
+        public int clickCell;
+        
+        public ItemGrid(int rows, int cols) {
+            super(rows,cols);
+            setCellPadding(0);
+            setCellSpacing(0);
+            addTableListener(this);
+        }
+
+        public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
+            if(cell == clickCell){
+                commandListeners.fireCommand(Action.TOGGLE, new Integer(rowIndex));
+            }
+        }
+    }
+    
+    private ItemGrid editor;
+    private CommandListenerCollection commandListeners;
     private DataObject field;
     private int width;
     private NumberFormat displayMask;
     public static final String TAG_NAME = "table-tree";
     public enum Action {TOGGLE};
-    
-    private CommandListenerCollection commandListeners;
+    public int rowIndex;
 
     
     public TableTree() {
@@ -43,7 +61,6 @@ public class TableTree extends SimplePanel implements TableCellWidget, SourcesCo
     public TableCellWidget getNewInstance() {
         TableTree treeItem = new TableTree();
         treeItem.width = width;
-        treeItem.commandListeners = commandListeners;
         return treeItem;
     }
 
@@ -59,10 +76,7 @@ public class TableTree extends SimplePanel implements TableCellWidget, SourcesCo
     }
 
     public void setEditor() {
-        if(editor == null){
-            editor = createItem((TreeDataItem)field);
-            editor.setWidth(width+"px");
-        }
+        createItem((TreeDataItem)field);
         setWidget(editor);
     }
 
@@ -73,7 +87,6 @@ public class TableTree extends SimplePanel implements TableCellWidget, SourcesCo
 
     public void setField(DataObject field) {
         this.field = field;
-        editor = null;
     }
 
     public void enable(boolean enabled) {
@@ -82,44 +95,34 @@ public class TableTree extends SimplePanel implements TableCellWidget, SourcesCo
 
     public void setCellWidth(int width) {
         this.width = width;
-        if(editor != null){
+        if(editor != null)
             editor.setWidth(width+"px");
-        }
     }
     
     public void setFocus(boolean focused) {
 
     }
     
-    public Grid createItem(final TreeDataItem drow) {
-        Grid grid = new Grid(1,2+drow.depth);
-        grid.setCellPadding(0);
-        grid.setCellSpacing(0);
-        grid.setWidth(width+"px");
-        for(int j = 0; j < grid.getColumnCount(); j++) {
-            if(j < grid.getColumnCount() -1)
-                grid.getCellFormatter().setWidth(0,j,"18px");
-            grid.getCellFormatter().setHeight(0,j,"18px");
-            if(j == grid.getColumnCount() -2){
+    public void createItem(final TreeDataItem drow) {
+        editor = new ItemGrid(1,2+drow.depth);    
+        editor.setWidth(width+"px");
+        for(int j = 0; j < editor.getColumnCount(); j++) {
+            if(j < editor.getColumnCount() -1)
+                editor.getCellFormatter().setWidth(0,j,"18px");
+            editor.getCellFormatter().setHeight(0,j,"18px");
+            if(j == editor.getColumnCount() -2){
                 if(drow.open && drow.getItems().size() > 0)
-                    DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
+                    DOM.setStyleAttribute(editor.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
                 else if(drow.getItems().size() > 0)
-                    DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
+                    DOM.setStyleAttribute(editor.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
                 else if(j > 0){
                     if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
-                        DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat");
+                        DOM.setStyleAttribute(editor.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat");
                     else
-                        DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat");
+                        DOM.setStyleAttribute(editor.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat");
                 }
                 if(drow.getItems().size() > 0){
-                    final int clickCell = j;
-                    grid.addTableListener(new TableListener() {
-                        public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
-                            if(cell == clickCell){
-                                commandListeners.fireCommand(Action.TOGGLE, drow);
-                            }
-                        }
-                    });
+                    editor.clickCell = j;
                 }
             }
         }
@@ -131,7 +134,7 @@ public class TableTree extends SimplePanel implements TableCellWidget, SourcesCo
             }
             for(TreeDataItem item : levels){
                 if(item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
-                    DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
+                    DOM.setStyleAttribute(editor.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
                 }
             }
             
@@ -140,29 +143,38 @@ public class TableTree extends SimplePanel implements TableCellWidget, SourcesCo
        //     DOM.setStyleAttribute(grid.getRowFormatter().getElement(0), "background", "#f8f8f9");
        // }
         
-        grid.setWidget(0, grid.getColumnCount() - 1, new Label((String)drow.getLabel().getValue()));
+        editor.setWidget(0, editor.getColumnCount() - 1, new Label((String)drow.getLabel().getValue()));
         /*
        if(i % 2 == 1){
              DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,grid.getColumnCount()-1), "background", "#f8f8f9");
        }
        */
-       grid.addStyleName(TreeView.cellStyle);
-       DOM.setStyleAttribute(grid.getWidget(0,grid.getColumnCount() - 1).getElement(),"padding","2px");
-        return grid;
-        
+       editor.addStyleName(TreeView.cellStyle);
+       DOM.setStyleAttribute(editor.getWidget(0,editor.getColumnCount() - 1).getElement(),"padding","2px");
     }
 
+
+
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int row) {
+        rowIndex = row;
+        
+    }
+    
     public void addCommandListener(CommandListener listener) {
-       if(commandListeners == null)
-           commandListeners = new CommandListenerCollection();
-       commandListeners.add(listener);   
-    }
+        if(commandListeners == null)
+            commandListeners = new CommandListenerCollection();
+        commandListeners.add(listener);   
+     }
 
-    public void removeCommandListener(CommandListener listener) {
-        if(commandListeners != null) 
-            commandListeners.remove(listener);
-        
-    }
+     public void removeCommandListener(CommandListener listener) {
+         if(commandListeners != null) 
+             commandListeners.remove(listener);
+         
+     }
     
 
 }

@@ -86,7 +86,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
 
     public boolean canAdd(int row);
     
-    public boolean canAutoAdd(DataSet addRow);
+    public boolean canAutoAdd(DataSet autoAddRow);
     
     public DataModel unload();
     
