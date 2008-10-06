@@ -76,5 +76,9 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     public boolean canClose(int row);
         
     public TreeDataModel unload();
+    
+    public int getSelectedIndex();
+    
+    public int[] getSelectedIndexes();
         
 }

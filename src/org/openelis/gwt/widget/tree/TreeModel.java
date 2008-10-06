@@ -251,6 +251,17 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         else
             treeModelListeners.fireRowClosed(this,row,rows.get(row));
     }
+    
+    public int getSelectedIndex() {
+        return data.selected;
+    }
+    
+    public int[] getSelectedIndexes() {
+        int[] ret = new int[data.selections.size()];
+        for(int i = 0;  i < data.selections.size(); i++)
+            ret[i] = data.selections.get(i);
+        return ret;
+    }
 
 
 
