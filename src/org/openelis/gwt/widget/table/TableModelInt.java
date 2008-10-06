@@ -94,5 +94,11 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void enableAutoAdd(boolean autoAdd);
     
+    public int getSelectedIndex();
+    
+    public int[] getSelectedIndexes();
+    
+    
+    
     
 }
