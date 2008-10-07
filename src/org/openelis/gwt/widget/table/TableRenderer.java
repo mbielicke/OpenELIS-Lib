@@ -151,8 +151,11 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             }
              loadStart = i;   
         }
-        if(loadStart+rowsPer > controller.model.numRows()){
-            loadStart = loadStart - ((loadStart+rowsPer) - controller.model.numRows());
+        int numRows = controller.model.numRows();
+        if(controller.model.getAutoAdd());
+            numRows++;
+        if(loadStart+rowsPer > numRows){
+            loadStart = loadStart - ((loadStart+rowsPer) - numRows);
             if(controller.model.getAutoAdd())
                 loadStart++;
         }
