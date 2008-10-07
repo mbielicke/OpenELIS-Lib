@@ -53,8 +53,11 @@ public class DropDownField extends AbstractField {
             if(val instanceof DataSet) {
                 selections.clear();
                 selections.add((DataSet)val);
-            }else
-                selections = (ArrayList<DataSet>)val;
+            }else{
+                selections.clear();
+                for(DataSet set : (ArrayList<DataSet>)val)
+                    selections.add(set);
+            }
         }
     }
 
