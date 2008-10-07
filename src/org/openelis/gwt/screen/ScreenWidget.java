@@ -66,7 +66,7 @@ public class ScreenWidget extends SimplePanel implements
                                              SourcesDragEvents,
                                              SourcesClickEvents {
 
-    protected DropListenerCollection dropListeners;
+    public DropListenerCollection dropListeners;
     protected DragListenerCollection dragListeners;
     protected MouseListenerCollection mouseListeners;
     protected ClickListenerCollection clickListeners;
@@ -79,7 +79,7 @@ public class ScreenWidget extends SimplePanel implements
      * A list of available drop targets for a widget if it uses 
      * Drag and Drop
      */
-    private Vector<String> dropTargets = new Vector<String>();
+    public Vector<String> dropTargets = new Vector<String>();
     /** 
      * Reference back to the Screen this widget is displayed in
      */

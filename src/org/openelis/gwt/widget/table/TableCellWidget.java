@@ -15,11 +15,10 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
-
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.data.DataObject;
 
 public interface TableCellWidget {
     public void clear();
