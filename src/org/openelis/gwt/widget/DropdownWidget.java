@@ -114,7 +114,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
         if(!model.canSelect(modelIndexList[row]))
             return;
-        if(activeRow > -1 && multiSelect && !ctrlKey){
+        if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
             model.unselectRow(-1);
         }
         if(multiSelect && ctrlKey && model.isSelected(modelIndexList[row])){
