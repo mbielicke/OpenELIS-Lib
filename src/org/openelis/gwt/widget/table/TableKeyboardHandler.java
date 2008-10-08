@@ -84,8 +84,9 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         if (KeyboardListener.KEY_ENTER == code) {
             if(controller.editingCell != null) {
                 //controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-                controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
-                controller.activeCell = -1;
+                //controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
+                controller.finishEditing();
+                //controller.activeCell = -1;
             }else if(controller.activeRow < 0) {
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
@@ -128,12 +129,12 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 controller.activeRow = 0;
                 controller.activeCell = -1;
             }
-            if((controller.modelIndexList[controller.activeRow] > controller.model.shownRows() || controller.modelIndexList[controller.activeRow] == controller.model.numRows()-1) &&
+            if((controller.modelIndexList[controller.activeRow] > controller.model.shownRows() || controller.modelIndexList[controller.activeRow] >= controller.model.numRows()-1) &&
                 controller.activeCell + 1 >= controller.columns.size()) {
                 if(screen != null){
-                    controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
-                    controller.activeCell = -1;
-                    controller.editingCell = null;
+                    controller.finishEditing();
+                    //controller.activeCell = -1;
+                    //controller.editingCell = null;
                     controller.setFocus(true);
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
@@ -168,9 +169,10 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         if (KeyboardListener.KEY_TAB == code && controller.activeCell > -1 && shift) {
             if (controller.activeCell == 0 && controller.activeRow == 0){
                 if(screen != null){
-                    controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
-                    controller.activeCell = -1;
-                    controller.editingCell = null;
+                    controller.finishEditing();
+                    //controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
+                    //controller.activeCell = -1;
+                    //controller.editingCell = null;
                     controller.setFocus(true);
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {

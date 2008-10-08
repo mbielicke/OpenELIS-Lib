@@ -1,6 +1,7 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.AppScreen;
@@ -22,7 +23,8 @@ public class TableMouseHandler implements TableMouseHandlerInt {
                 if(controller.focused && !DOM.isOrHasChild(controller.view.getElement(), ((AppScreen)sender).clickTarget)){
                     controller.focused = false;
                     if(controller.editingCell != null){
-                        controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow, controller.activeCell);
+                        controller.finishEditing();
+                        //controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow, controller.activeCell);
                     }
                     controller.activeCell = -1;
                     //controller.setFocus(true);
@@ -35,7 +37,7 @@ public class TableMouseHandler implements TableMouseHandlerInt {
 
     public void onMouseDown(Widget sender, int x, int y) {
         // TODO Auto-generated method stub
-        
+        Window.alert("mouse down");
     }
 
     public void onMouseEnter(Widget sender) {
