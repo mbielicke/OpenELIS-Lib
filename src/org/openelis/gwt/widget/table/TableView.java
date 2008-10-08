@@ -312,6 +312,11 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         vp.add(navPanel);
     }
 
+    public void setScrollPosition(int scrollPos) {
+        scrollBar.setScrollPosition(scrollPos);
+        onScroll(scrollBar,0,scrollPos);
+    }
+    
     public void onScroll(Widget sender, int scrollLeft, final int scrollTop) {
         if(sender == scrollBar ) {
             if(top != scrollTop){

@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
@@ -87,6 +88,8 @@ public class TableWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
+    public ScreenWindow window;
+    
     public TableWidget() {
         
     }
@@ -160,6 +163,8 @@ public class TableWidget extends FocusPanel implements
      */
     public void select(final int row, final int col) {
         if(finishEditing()){
+            if(model.numRows() >= maxRows)
+                view.scrollBar.scrollToBottom();
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     renderer.scrollLoad(view.scrollBar.getScrollPosition());
@@ -189,10 +194,7 @@ public class TableWidget extends FocusPanel implements
             if(model.isAutoAdd() && modelIndexList[activeRow] == model.numRows()){
                 if(model.canAutoAdd(model.getAutoAddRow())){
                     model.addRow(model.getAutoAddRow());
-                    if(model.numRows() >= maxRows){
-                        view.scrollBar.scrollToBottom();
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
