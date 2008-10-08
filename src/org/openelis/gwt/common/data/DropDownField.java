@@ -33,6 +33,10 @@ public class DropDownField extends AbstractField {
         
     }
     
+    public DropDownField(Object val) {
+        setValue(val);
+    }
+    
     public DropDownField(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
@@ -58,7 +62,8 @@ public class DropDownField extends AbstractField {
                 for(DataSet set : (ArrayList<DataSet>)val)
                     selections.add(set);
             }
-        }
+        }else
+            selections.clear();
     }
 
     public Object getValue() {
