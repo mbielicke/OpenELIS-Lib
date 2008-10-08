@@ -208,7 +208,8 @@ import org.openelis.gwt.widget.FormInt;
             selectLast = false;
             setPage(getPage()-1);
         }else if(action == AppScreenForm.Action.REFRESH_PAGE){
-            fireCommand(Action.GETPAGE,list);
+            setPage(getPage());
+            //fireCommand(Action.GETPAGE,list);
         }else if(action == AToZTable.Action.ROW_SELECTED){
             select(((Integer)obj).intValue());
         }else if(action == FormInt.State.ADD){
