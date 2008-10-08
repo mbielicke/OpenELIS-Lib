@@ -526,27 +526,6 @@ public class QueryBuilder {
     }
     
     public String getFromClause(String where){
-        String returnString = "";
-        int fromTablesCount = 0;
-
-        for (int i = 0; i < orderedFromTableKeys.size(); i++) {
-            String tableName = (String)orderedFromTableKeys.get(i);
-            Meta addTableMeta = fromTables.get(tableName); 
-            
-            /*if(addTableMeta.includeInFrom()){
-                
-                //we use left join on all the tables so we dont care about null values.
-                //This will also let us use a collection in the query without the IN keyword
-                if(fromTablesCount>0)
-                    returnString += " LEFT JOIN "+addTableMeta.getEntity()+' '+addTableMeta.getTable();
-                else
-                    returnString +=' '+addTableMeta.getEntity()+' '+addTableMeta.getTable();
-                
-                fromTablesCount++;
-                
-            }
-            */
-        }
         return meta.buildFrom(where);
     }
     
