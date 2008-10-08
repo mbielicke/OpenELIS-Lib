@@ -15,12 +15,12 @@
 */
 package org.openelis.gwt.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.TableModel;
+import org.openelis.gwt.widget.table.TableModel;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * TableServiceIntAsync is the Asynchronous version of
