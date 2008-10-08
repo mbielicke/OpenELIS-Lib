@@ -72,7 +72,7 @@ public class TableModel implements TableModelInt {
     public void deleteRow(int row) {
         if(data.get(row).shown)
             shownRows--;
-        data.remove(row);
+        data.delete(row);
         tableModelListeners.fireRowDeleted(this, row);
     }
         
