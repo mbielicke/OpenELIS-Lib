@@ -64,7 +64,7 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
        if(controller.view.table.getRowCount() == 0)
            createRow(0);
        for (int i = 0; i < controller.columns.size(); i++) 
-           controller.columns.get(i).loadWidget(controller.view.table.getWidget(0, i),controller.rpc.getField(controller.columns.get(i).getKey()));
+           controller.columns.get(i).loadWidget(controller.view.table.getWidget(0, i),controller.rpc.getField(controller.columns.get(i).getKey().trim()));
         
     }
 
