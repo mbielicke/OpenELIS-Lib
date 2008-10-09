@@ -226,6 +226,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 data.setDefaultSet(set);
                 table = new TableWidget(columns,maxRows,width,title,showHeader,showScroll);
                 table.enabled(enable);
+                table.model.setManager(manager);
                 int rows = 0;
                 if (node.getAttributes().getNamedItem("rows") != null) {
                     rows = Integer.parseInt(node.getAttributes()
