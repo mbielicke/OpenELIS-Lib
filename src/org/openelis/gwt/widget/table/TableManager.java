@@ -30,14 +30,14 @@ import org.openelis.gwt.common.data.DataSet;
 
 public interface TableManager {
     
-    public boolean canSelect(DataSet set, int row);
+    public boolean canSelect(TableWidget widget, DataSet set, int row);
 
-    public boolean canEdit(DataSet set, int row, int col);
+    public boolean canEdit(TableWidget widget, DataSet set, int row, int col);
 
-    public boolean canDelete(DataSet set, int row);
+    public boolean canDelete(TableWidget widget, DataSet set, int row);
 
-    public boolean canAdd(DataSet set, int row);
+    public boolean canAdd(TableWidget widget, DataSet set, int row);
     
-    public boolean canAutoAdd(DataSet addRow);
+    public boolean canAutoAdd(TableWidget widget, DataSet addRow);
     
 }

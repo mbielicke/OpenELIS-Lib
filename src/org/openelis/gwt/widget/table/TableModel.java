@@ -43,6 +43,7 @@ public class TableModel implements TableModelInt {
     public DataSorterInt sorter = new DataSorter();
     private TableModelListenerCollection tableModelListeners;
     public int shownRows; 
+    private TableWidget controller;
     
     public boolean autoAdd;
     
@@ -53,6 +54,7 @@ public class TableModel implements TableModelInt {
     public TableManager manager;
     
     public TableModel(TableWidget controller) {
+        this.controller = controller;
         addTableModelListener(controller);
         addTableModelListener((TableModelListener)controller.renderer);
     }
@@ -123,7 +125,7 @@ public class TableModel implements TableModelInt {
         else
             rowSet = data.get(row);
         if(manager != null)
-            return manager.canDelete(rowSet, row);
+            return manager.canDelete(controller,rowSet, row);
         return true;
     }
 
@@ -136,7 +138,7 @@ public class TableModel implements TableModelInt {
         if(!rowSet.enabled)
             return false;
         if(manager != null)
-            return manager.canEdit(rowSet, row, col);
+            return manager.canEdit(controller,rowSet, row, col);
         if(row == numRows())
             return true;
         return true;
@@ -146,7 +148,7 @@ public class TableModel implements TableModelInt {
         if(!data.get(row).enabled)
             return false;
         if(manager != null)
-            return manager.canAdd(data.get(row), row);
+            return manager.canAdd(controller,data.get(row), row);
         return true;
     }
 
@@ -159,7 +161,7 @@ public class TableModel implements TableModelInt {
         if(!rowSet.enabled)
             return false;
         if(manager != null)
-            return manager.canSelect(rowSet,row);
+            return manager.canSelect(controller,rowSet,row);
         if(row == numRows())
             return true;
         return true;
@@ -167,7 +169,7 @@ public class TableModel implements TableModelInt {
 
     public boolean canAutoAdd(DataSet addRow) {
         if(manager != null)
-            return manager.canAutoAdd(addRow);
+            return manager.canAutoAdd(controller,addRow);
         return true;
     }
 
