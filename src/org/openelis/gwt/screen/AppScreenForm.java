@@ -588,7 +588,8 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
                (action == ButtonPanel.Action.COMMIT) ||
                (action == ButtonPanel.Action.ADD) ||
                (action == ButtonPanel.Action.RELOAD) ||
-               (action == ButtonPanel.Action.SELECT);
+               (action == ButtonPanel.Action.SELECT) ||
+               (action.getDeclaringClass().equals(State.class));
     }
     
     public void performCommand(Enum action, Object obj) {
