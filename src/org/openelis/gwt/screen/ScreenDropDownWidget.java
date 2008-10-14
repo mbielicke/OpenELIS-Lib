@@ -204,8 +204,13 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         else{
             if(alwaysEnabled){
                 auto.enabled(true);
+                auto.removeFocusListener(this);
+                auto.addFocusListener(this);
             }else{
                 auto.enabled(enabled);
+                auto.removeFocusListener(this);
+                if(enabled)
+                    auto.addFocusListener(this);
             }
             super.enable(enabled);
         }
