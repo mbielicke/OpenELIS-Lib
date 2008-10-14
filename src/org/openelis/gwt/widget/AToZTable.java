@@ -243,26 +243,33 @@ public class AToZTable extends TableWidget implements
             model.refresh();
             focused = true;
         }
-        else if(action == KeyListManager.Action.SELECTION){                
+        else if(action == KeyListManager.Action.SELECTION){   
+            
             if(activeRow > -1){
-                if(activeRow < view.table.getRowCount())
-                    view.table.getRowFormatter().removeStyleName(activeRow,TableView.selectedStyle);
+                model.unselectRow(activeRow);
+                //if(activeRow < view.table.getRowCount())
+                  //  view.table.getRowFormatter().removeStyleName(activeRow,TableView.selectedStyle);
             }
+            
             int select = ((Integer)obj).intValue();
             for(int i = 0; i < modelIndexList.length; i++){
                 if(modelIndexList[i] == select){
                     activeRow = i;
                 }
             }
-            view.table.getRowFormatter().addStyleName(activeRow,TableView.selectedStyle);
-            focused = true;
+            model.selectRow(modelIndexList[activeRow]);
+            //view.table.getRowFormatter().addStyleName(activeRow,TableView.selectedStyle);
+            //focused = true;
         }
         else if(action == KeyListManager.Action.UNSELECT){
-            if(activeRow > -1){
+            if(activeRow > -1)
+                model.unselectRow(-1);
+            /*if(activeRow > -1){
                 if(activeRow < view.table.getRowCount())
                     view.table.getRowFormatter().removeStyleName(activeRow,TableView.selectedStyle);
                 activeRow = -1;
             }
+            */
         }
         if(obj != null && obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
             if(selectedButton != null){

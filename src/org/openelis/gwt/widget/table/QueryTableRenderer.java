@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -111,7 +109,7 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
         ((SimplePanel)cell).getWidget().addStyleName("Enabled");
     }
 
-    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col) {
         if(controller.editingCell != null){
             controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
             setCellDisplay(row,col);
@@ -119,8 +117,13 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
         }
     }
 
-    public void startedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+    public void startEditing(SourcesTableWidgetEvents sender, int row, int col) {
         setCellEditor(0,col);
+        
+    }
+
+    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+        // TODO Auto-generated method stub
         
     }
 

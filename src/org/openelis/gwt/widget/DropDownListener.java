@@ -33,13 +33,14 @@ import com.google.gwt.user.client.ui.Widget;
 public class DropDownListener implements ClickListener, MouseListener, KeyboardListener {
     
     private Dropdown widget;
-   
     
     public DropDownListener(Dropdown widget){
         this.widget = widget;
     }
 
     public void onClick(Widget sender) {
+        if(!widget.isEnabled())
+            return;
         if(sender == widget.focusPanel){
             if(widget.activeRow < 0)
                 if(widget.model.getData().selections.size() > 0)
@@ -88,12 +89,14 @@ public class DropDownListener implements ClickListener, MouseListener, KeyboardL
     }
 
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        if(!widget.isEnabled())
+            return;
         if (!widget.textBox.isReadOnly()) {
             if (keyCode == KEY_DOWN || keyCode == KEY_UP ||  keyCode == KEY_TAB 
                     || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 
                     keyCode == KEY_CTRL || keyCode == KEY_SHIFT || keyCode == KEY_ESCAPE)
                 return;
-            if(keyCode == KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){//!widget.popup.getWidget().isAttached()){
+            if(keyCode == KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
                 if(widget.activeRow < 0)
                     widget.showTable(0);
                 else
@@ -105,17 +108,7 @@ public class DropDownListener implements ClickListener, MouseListener, KeyboardL
                 return;
             }
             String text = widget.textBox.getText();
-/*            if (widget.model.getData().multiSelect) {
-                if (text.length() == 0) {
-                    widget.model.clearSelections();
-                    widget.choicesPopup.hide();
-                } else {
-                    if (text.length() < widget.textBoxDefault.length()) {
-                        widget.textBox.setText(widget.textBoxDefault);
-                        widget.choicesPopup.hide();
-                    }
-                }
-            } else */if (text.length() > 0 && !text.endsWith("*")) {
+            if (text.length() > 0 && !text.endsWith("*")) {
                 widget.setDelay(text, 350);
             } else if(text.length() == 0){
                 widget.activeRow = 0;

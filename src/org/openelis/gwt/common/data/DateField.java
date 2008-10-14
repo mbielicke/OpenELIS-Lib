@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
@@ -44,6 +45,7 @@ public class DateField extends AbstractField implements Serializable {
     private Integer max;
     private Integer min;
     public static final String TAG_NAME = "rpc-date";
+    private String pattern;
 
     public DateField(){
         object = new DateObject();
@@ -102,6 +104,9 @@ public class DateField extends AbstractField implements Serializable {
                                                   getEnd(),
                                                   dat));
         }
+        if(node.getAttributes().getNamedItem("pattern") != null){
+            setFormat(node.getAttributes().getNamedItem("pattern").getNodeValue());
+        }
         
     }
     public void validate() {
@@ -149,10 +154,7 @@ public class DateField extends AbstractField implements Serializable {
     }
 
     public String toString() {
-        if (((DateObject)object).value == null) {
-            return "";
-        }
-        return ((DateObject)object).value.toString();
+        return format();
     }
 
     public void setBegin(byte begin) {
@@ -190,5 +192,26 @@ public class DateField extends AbstractField implements Serializable {
 
     public DateField getInstance(Node node) {
         return new DateField(node);
+    }
+    
+    public String format() {
+        if(((DateObject)object).value == null)
+            return "";
+        if(pattern != null)
+            return DateTimeFormat.getFormat(pattern).format(((DateObject)object).value.getDate());
+        return String.valueOf(((DateObject)object).value);
+    }
+    
+    public void setFormat(String pattern) {
+        this.pattern = pattern;
+    }
+        
+    public void setValue(Object val) {
+        if(pattern == null || val == null || "".equals(val)){
+            super.setValue(val);
+            return;
+        }
+        super.setValue(DateTimeFormat.getFormat(pattern).parse((String)val));
+  
     }
 }

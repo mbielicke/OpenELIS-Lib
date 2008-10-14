@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TextBox;
+import org.openelis.gwt.widget.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
@@ -72,7 +72,6 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public boolean itemSelected;
     
-    public String fieldCase = "upper";
     int currentCursorPos;
     
     public class Delay extends Timer {
@@ -85,10 +84,6 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 
         public void run() {
             if (textBox.getText().equals(text)) {
-                if (fieldCase.equals("upper"))
-                    text = text.toUpperCase();
-                else if (fieldCase.equals("lower"))
-                    text = text.toLowerCase();
                 currentCursorPos = textBox.getText().length();
                 getMatches(text);
             }
@@ -347,7 +342,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 
                 focusPanel.removeStyleName("Selected");
 
-                //complete();
+                complete();
             }
         }
     }

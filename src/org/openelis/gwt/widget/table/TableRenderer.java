@@ -157,7 +157,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
             controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-            finishedEditing(null,controller.activeRow,controller.activeCell);
+            stopEditing(null,controller.activeRow,controller.activeCell);
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.model.shownRows()){
@@ -209,7 +209,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         controller.columns.get(col).setWidgetDisplay(controller.view.table.getWidget(row, col));        
     }
 
-    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col) {
         if(controller.editingCell != null){
             controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
             setCellDisplay(row,col);
@@ -232,7 +232,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         
     }
 
-    public void startedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+    public void startEditing(SourcesTableWidgetEvents sender, int row, int col) {
         setCellEditor(row,col);
     }
 
@@ -289,6 +289,11 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     }
 
     public void unload(SourcesTableModelEvents sender) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
     }

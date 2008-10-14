@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.xml.client.Node;
 
 
@@ -42,6 +43,7 @@ public class NumberField extends AbstractField implements Serializable {
     private static final long serialVersionUID = 1L;
     private Double max;
     private Double min;
+    private String pattern;
     
     public static final String TAG_NAME = "rpc-number";
 
@@ -96,6 +98,9 @@ public class NumberField extends AbstractField implements Serializable {
         if (node.hasChildNodes()) {
             setValue(node.getFirstChild().getNodeValue());
         }
+        if (node.getAttributes().getNamedItem("pattern") != null){
+            setFormat(node.getAttributes().getNamedItem("pattern").getNodeValue());
+        }
     }
     
     public void validate() {
@@ -134,11 +139,7 @@ public class NumberField extends AbstractField implements Serializable {
     }
 
     public String toString() {
-        if (((NumberObject)object).value == null)
-            return "";
-        if (((NumberObject)object).type == NumberObject.Type.INTEGER)
-            return "" + ((NumberObject)object).value.intValue();
-        return ((NumberObject)object).value.toString();
+        return format();
     }
 
     public void setType(NumberObject.Type type) {
@@ -165,9 +166,32 @@ public class NumberField extends AbstractField implements Serializable {
         return obj;
     }
 
-    
     public NumberField getInstance(Node node) {
         return new NumberField(node);
+    }
+    
+    public String format() {
+        if(((NumberObject)object).value == null)
+            return "";
+        if(pattern != null)
+            return NumberFormat.getFormat(pattern).format(((NumberObject)object).value);
+        return String.valueOf(((NumberObject)object).value);
+    }
+    
+    public void setFormat(String pattern) {
+        this.pattern = pattern;
+    }
+        
+    public void setValue(Object val) {
+        if(!(val instanceof String) || (pattern == null || val == null) || "".equals(val)){
+            super.setValue(val);
+            return;
+        }
+        try {
+            super.setValue(Double.parseDouble((String)val));
+        }catch(Exception e){
+            super.setValue(new Double(NumberFormat.getFormat(pattern).parse((String)val)));
+        }
     }
     
 }

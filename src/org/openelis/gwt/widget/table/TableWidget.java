@@ -190,7 +190,7 @@ public class TableWidget extends FocusPanel implements
     
     public boolean finishEditing() {
         if(editingCell != null) {
-            tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
+            tableWidgetListeners.fireStopEditing(this, activeRow, activeCell);
             if(model.isAutoAdd() && modelIndexList[activeRow] == model.numRows()){
                 if(model.canAutoAdd(model.getAutoAddRow())){
                     model.addRow(model.getAutoAddRow());
@@ -198,7 +198,9 @@ public class TableWidget extends FocusPanel implements
                 }
             }
         }
+        tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
         return false;
+        
     }
     
     public void startEditing(int row, int col) {
@@ -282,7 +284,7 @@ public class TableWidget extends FocusPanel implements
 
     public void unload(SourcesTableModelEvents sender) {
        if(editingCell != null) {
-           tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
+           finishEditing();
        }
     }
     

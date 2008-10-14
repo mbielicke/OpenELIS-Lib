@@ -25,25 +25,24 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.NumberField;
+import org.openelis.gwt.widget.TextBox;
 /**
  * ScreenTextBox wraps a GWT TextBox to be displayed on a Screen.
  * @author tschmidt
  *
  */
 public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
-                                                                FocusListener{
+                                                                FocusListener,
+                                                                KeyboardListener{
     /**
      * Default XML Tag Name used in XML Definition
      */
@@ -52,10 +51,18 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
      * Widget wrapped by this class
      */
     private TextBox textbox;
-    private String fieldCase = "mixed";
-    private int length = 255;
-    private NumberFormat numberFormat;
   
+    @Override
+    public void onBrowserEvent(Event event) {
+        if(DOM.eventGetType(event) == Event.ONKEYUP) {
+            if(textbox.autoNext){
+                if(textbox.getText().length() == (textbox.length) && textbox.getCursorPos() == textbox.length)
+                    screen.doTab(false, this);
+            }
+        }
+        super.onBrowserEvent(event);
+    }
+    
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
@@ -81,22 +88,26 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
                                      .charAt(0));
         textbox.setStyleName("ScreenTextBox");
         if (node.getAttributes().getNamedItem("case") != null){
-            fieldCase = node.getAttributes().getNamedItem("case")
-                                            .getNodeValue();
-            if (fieldCase.equals("upper")){
-                textbox.addStyleName("Upper");
-            }
-            if (fieldCase.equals("lower")){
-                textbox.addStyleName("Lower");
-            }
+            String fieldCase = node.getAttributes().getNamedItem("case")
+                                            .getNodeValue().toUpperCase();
+            textbox.setCase(TextBox.Case.valueOf(fieldCase));
+
         }
+
         if (node.getAttributes().getNamedItem("max") != null) {
-            length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
-            textbox.setMaxLength(length);
+            int length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
+            textbox.setLength(length);
         }
         
-        if (node.getAttributes().getNamedItem("numberFormat") != null)
-            numberFormat = NumberFormat.getFormat(node.getAttributes().getNamedItem("numberFormat").getNodeValue());
+        if (node.getAttributes().getNamedItem("align") != null) {
+            String align = node.getAttributes().getNamedItem("align").getNodeValue();
+            if(align.equals("center"))
+                textbox.setTextAlignment(TextBox.ALIGN_CENTER);
+            if(align.equals("right"))
+                textbox.setTextAlignment(TextBox.ALIGN_RIGHT);
+            if(align.equals("left"))   
+                textbox.setTextAlignment(TextBox.ALIGN_LEFT);
+        }
         
         if (node.getAttributes().getNamedItem("onchange") != null){
             String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
@@ -107,6 +118,18 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
                     textbox.addChangeListener((ChangeListener)ClassFactory.forName(listeners[i]));
                 }
             }
+        }
+        
+        if (node.getAttributes().getNamedItem("autoNext") != null){
+            if(node.getAttributes().getNamedItem("autoNext").getNodeValue().equals("true")){
+                textbox.autoNext = true;
+                textbox.addKeyboardListener(this);
+            }
+        }
+        
+        if (node.getAttributes().getNamedItem("mask") != null) {
+            String mask = node.getAttributes().getNamedItem("mask").getNodeValue();
+            textbox.setMask(mask);
         }
         
         initWidget(textbox);
@@ -121,28 +144,15 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
 
     public void load(AbstractField field) {
         if(!queryMode){
-            if(numberFormat != null)
-                textbox.setText(numberFormat.format(((Double)field.getValue()).doubleValue()));
-            else
-                textbox.setText(field.toString().trim());
-            
+            textbox.setText(field.format().trim());
             super.load(field);
         }else
             queryWidget.load(field);
     }
 
     public void submit(AbstractField field) {
-        if(!queryMode){
-            String text = textbox.getText();
-            if(fieldCase.equals("upper"))
-                text = text.toUpperCase();
-            else if(fieldCase.equals("lower"))
-                text = text.toLowerCase();
-            
-            if(numberFormat != null)
-                text = numberFormat.format(Double.valueOf(text).doubleValue());
-            
-            field.setValue(text);
+        if(!queryMode){    
+            field.setValue(textbox.getText());
         }else
             queryWidget.submit(field);
 
@@ -179,7 +189,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             if(mode)
                 textbox.setMaxLength(255);
             else
-                textbox.setMaxLength(length);
+                textbox.setMaxLength(textbox.length);
         }else
             super.setForm(mode);
     }
@@ -199,5 +209,19 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             }
         }
         super.onLostFocus(sender);
+    }
+
+    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+
     }    
 }

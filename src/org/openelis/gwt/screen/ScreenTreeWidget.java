@@ -26,31 +26,21 @@
 package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.common.data.TreeField;
-import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.table.TableColumn;
-import org.openelis.gwt.widget.table.TableColumnInt;
-import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableManager;
-import org.openelis.gwt.widget.table.TableWidget;
-import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 import org.openelis.gwt.widget.tree.TreeColumn;
 import org.openelis.gwt.widget.tree.TreeColumnInt;
 import org.openelis.gwt.widget.tree.TreeKeyboardHandler;
 import org.openelis.gwt.widget.tree.TreeWidget;
+import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 

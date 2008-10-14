@@ -41,6 +41,7 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteCall;
 import org.openelis.gwt.widget.AutoCompleteCallInt;
+import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
@@ -54,7 +55,6 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
 	public static String TAG_NAME = "autoComplete";
-    public String fieldCase = "mixed";
     public boolean loadFromModel = false;
     private boolean multiSelect; 
 	/**
@@ -160,7 +160,11 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
                 }
             }
         }
-
+        
+        if(node.getAttributes().getNamedItem("case") != null){
+            String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
+            auto.textBox.setCase(TextBox.Case.valueOf(textCase));
+        }
         
         auto.setForm(screen);
         

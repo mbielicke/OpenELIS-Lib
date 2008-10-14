@@ -27,7 +27,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -110,7 +109,6 @@ public class AbstractField implements DataField, Serializable {
 
     public void setValue(Object val) {
        object.setValue(val);
-        
     }
 
     public Object getValue() {
@@ -167,6 +165,16 @@ public class AbstractField implements DataField, Serializable {
             return object.equals(o);
         else
             return false;
+    }
+    
+    public String format() {
+        if(getValue() == null)
+            return "";
+        return String.valueOf(getValue());
+    }
+    
+    public void setFormat(String pattern){
+        
     }
 
 }

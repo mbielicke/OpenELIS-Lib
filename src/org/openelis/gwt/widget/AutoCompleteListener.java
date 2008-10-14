@@ -93,7 +93,7 @@ public class AutoCompleteListener implements
                     || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 
                     keyCode == KEY_CTRL || keyCode == KEY_SHIFT || keyCode == KEY_ESCAPE)
                 return;
-            if(keyCode == KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){//!widget.popup.getWidget().isAttached()){
+            if(keyCode == KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
                 if(widget.activeRow < 0)
                     widget.showTable(0);
                 else
@@ -104,19 +104,8 @@ public class AutoCompleteListener implements
                 widget.itemSelected = false;
                 return;
             }
-
             String text = widget.textBox.getText();
-/*            if (widget.model.getData().multiSelect) {
-                if (text.length() == 0) {
-                    widget.model.clearSelections();
-                    widget.choicesPopup.hide();
-                } else {
-                    if (text.length() < widget.textBoxDefault.length()) {
-                        widget.textBox.setText(widget.textBoxDefault);
-                        widget.choicesPopup.hide();
-                    }
-                }
-            } else */if (text.length() > 0 && !text.endsWith("*")) {
+            if (text.length() > 0 && !text.endsWith("*")) {
                 widget.setDelay(text, 350);
             } else if(text.length() == 0) {
                 widget.model.clear();

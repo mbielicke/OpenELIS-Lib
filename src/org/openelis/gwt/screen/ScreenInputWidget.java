@@ -133,20 +133,6 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void onLostFocus(Widget sender) {
         if(!showError)
             return;
-        /*
-        String tempKey = key;
-        submit(screen.rpc.getField(tempKey));
-        screen.rpc.getField(tempKey).clearErrors();
-        screen.rpc.getField(tempKey).validate();
-        if(!screen.rpc.getField(tempKey).isValid())
-            drawError();
-        else{
-            errorImg.setStyleName("ErrorPanelHidden");
-            if(pop != null){
-                pop.hide();
-            }
-        }
-        */
         submit(field);
         field.clearErrors();
         field.validate();
@@ -159,7 +145,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             }
         }
         if(sender instanceof TextBoxBase){
-          //  ((TextBoxBase)sender).setSelectionRange(0, 0);
+          ((TextBoxBase)sender).setText(field.format());
         }
     }
     

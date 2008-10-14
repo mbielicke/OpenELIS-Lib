@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Timer;
-
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
@@ -37,7 +35,7 @@ public class Dropdown extends DropdownWidget {
     
     private int startPos;
     boolean linear;
-    
+    /*
     public class Delay extends Timer {
         public String text;
 
@@ -57,18 +55,24 @@ public class Dropdown extends DropdownWidget {
             }
         }
     };
-
+*/
     public DropDownListener listener = new DropDownListener(this);
     
     public Dropdown() {
         
     }
     
+    private boolean enabled;
+    
     public Dropdown(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
         super(columns, maxRows, width, title, showHeader, showScroll);
         focusPanel.addMouseListener(listener);
         focusPanel.addClickListener(listener);
         textBox.addKeyboardListener(listener);
+        textBox.setReadOnly(!enabled);
+        textBox.removeFocusListener(this);
+        if(enabled)
+            textBox.addFocusListener(this);
     }
     
     public void init(boolean multi, 
@@ -161,5 +165,17 @@ public class Dropdown extends DropdownWidget {
     public void setModel(DataModel model){
         this.model.load(model);
     }
+    
+    public void enabled(boolean enabled) {
+        this.enabled = enabled;
+        textBox.setReadOnly(!enabled);
+        textBox.removeFocusListener(this);
+        if(enabled)
+            textBox.addFocusListener(this);
+        super.enabled(enabled);
+    }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

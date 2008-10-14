@@ -48,6 +48,7 @@ public class AutoComplete extends DropdownWidget {
         focusPanel.addMouseListener(listener);
         focusPanel.addClickListener(listener);
         textBox.addKeyboardListener(listener);
+        mainHP.remove(focusPanel);
     }
     
     public void init(String cat, 

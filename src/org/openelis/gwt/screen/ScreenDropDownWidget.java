@@ -39,6 +39,7 @@ import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
@@ -52,7 +53,6 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
 	public static String TAG_NAME = "dropdown";
-    public String fieldCase = "mixed";
     public boolean loadFromModel = false;
     private boolean multiSelect; 
 	/**
@@ -151,7 +151,13 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
                 }
             }
         }
-
+        
+        if(node.getAttributes().getNamedItem("case") != null){
+            String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
+            auto.textBox.setCase(TextBox.Case.valueOf(textCase));
+        }
+            
+        
         
         auto.setForm(screen);
         
@@ -197,14 +203,9 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
             queryWidget.enable(enabled);
         else{
             if(alwaysEnabled){
-     //           auto.removeFocusListener(this);
-       //         auto.addFocusListener(this);
+                auto.enabled(true);
             }else{
-                auto.textBox.setReadOnly(!enabled);
-                //if(enabled)
-         //           auto.addFocusListener(this);
-             //   else
-           //         auto.removeFocusListener(this);
+                auto.enabled(enabled);
             }
             super.enable(enabled);
         }
