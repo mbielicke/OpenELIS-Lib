@@ -139,7 +139,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 controller.activeRow = 0;
                 controller.activeCell = -1;
             }
-            if((controller.modelIndexList[controller.activeRow] > controller.model.shownRows() || controller.modelIndexList[controller.activeRow] >= controller.model.numRows()-1) &&
+            if((controller.modelIndexList[controller.activeRow] > controller.model.shownRows() || controller.modelIndexList[controller.activeRow] >= controller.model.numRows()) &&
                 controller.activeCell + 1 >= controller.columns.size()) {
                 if(screen != null){
                     if(!controller.finishEditing()){

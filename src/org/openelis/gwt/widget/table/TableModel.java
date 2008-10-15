@@ -166,11 +166,26 @@ public class TableModel implements TableModelInt {
             return true;
         return true;
     }
-
+    
+    public boolean tableRowEmpty(int index){
+        return tableRowEmpty(getRow(index));
+    }
+        
+    private boolean tableRowEmpty(DataSet row){ 
+        boolean empty = true;
+        for(int i=0; i<row.size(); i++){
+            if(row.get(i).getValue() != null && !"".equals(row.get(i).getValue())){
+                empty = false;
+                break;
+            }
+        }
+        return empty;
+    }
+    
     public boolean canAutoAdd(DataSet addRow) {
         if(manager != null)
             return manager.canAutoAdd(controller,addRow);
-        return true;
+        return !tableRowEmpty(addRow);
     }
 
     public void addTableModelListener(TableModelListener listener) {
