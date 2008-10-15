@@ -9,6 +9,8 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
     public boolean enforceLength = true;
     public boolean autoNext = false;
     public int length = 255;
+    public String mask;
+    public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
     
     public void setCase(Case textCase){
         this.textCase = textCase;
@@ -46,8 +48,14 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
     }
     
     public void setMask(String mask) {
+        this.mask = mask;
         new MaskListener(this,mask);
         setLength(mask.length()); 
+    }
+    
+    public void setTextAlignment(TextAlignConstant alignment){
+        this.alignment = alignment;
+        super.setTextAlignment(alignment);
     }
     
 

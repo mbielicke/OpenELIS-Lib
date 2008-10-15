@@ -41,6 +41,7 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.ScrollList;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
@@ -108,6 +109,7 @@ public class ScreenScrollList extends ScreenWidget {
             for (String wid : widths) {
                 TableColumn col = new TableColumn();
                 col.setCurrentWidth(Integer.parseInt(wid));
+                col.setColumnWidget(new TableLabel());
                 columns.add(col);
             }
         }
@@ -122,14 +124,17 @@ public class ScreenScrollList extends ScreenWidget {
             }                    
         }
         
+
+        
+        list = new ScrollList(columns,maxRows,"auto",null,showHeader,showScroll); 
+        
         if(node.getAttributes().getNamedItem("maxHeight") != null){
             if(node.getAttributes().getNamedItem("maxHeight").getNodeValue().equals("true"))
                 list.maxHeight = true;
         }
         
-        list = new ScrollList(columns,maxRows,"auto",null,showHeader,showScroll); 
-        
         list.setStyleName("ScreenDragList");
+        setWidget(list);
         setDefaults(node, screen);
         if(node.hasChildNodes()){
             createList((Element)node);

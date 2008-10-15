@@ -162,14 +162,15 @@ public class TableWidget extends FocusPanel implements
      */
     public void select(final int row, final int col) {
         if(finishEditing()){
-            if(model.numRows() >= maxRows)
+            if(model.numRows() >= maxRows){
                 view.scrollBar.scrollToBottom();
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                    select(row-1,col);
-                }
-            });
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        renderer.scrollLoad(view.scrollBar.getScrollPosition());
+                        select(row-1,col);
+                    }
+                });
+            }
         }
         if(model.canSelect(modelIndexList[row])){
             if(activeRow > -1 && !ctrlKey){
@@ -193,6 +194,7 @@ public class TableWidget extends FocusPanel implements
             if(model.isAutoAdd() && modelIndexList[activeRow] == model.numRows()){
                 if(model.canAutoAdd(model.getAutoAddRow())){
                     model.addRow(model.getAutoAddRow());
+                    tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
                     return true;
                 }
             }

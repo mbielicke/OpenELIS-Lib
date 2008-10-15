@@ -25,13 +25,13 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenTextBox;
+import org.openelis.gwt.widget.TextBox;
 
 
 /**
@@ -42,18 +42,14 @@ import org.openelis.gwt.screen.ScreenBase;
  */
 public class TableTextBox extends TableCellInputWidget {
     
-    public String fieldCase = "";
-    private int length = -1;
     public TextBox editor;
     private Label display;
     private boolean enabled;
     private int width;
-    private NumberFormat editorMask;
-    private NumberFormat displayMask;
     public static final String TAG_NAME = "table-textbox";
     
     public TableTextBox() {
-        
+        editor = new TextBox();  
     }
     
     public void clear() {
@@ -65,11 +61,12 @@ public class TableTextBox extends TableCellInputWidget {
 
     public TableCellWidget getNewInstance() {
         TableTextBox  textbox = new TableTextBox();
-        textbox.fieldCase = fieldCase;
+        textbox.editor.setCase(editor.textCase);
         textbox.enabled = enabled;
-        textbox.length = length;
-        textbox.editorMask = editorMask;
-        textbox.displayMask = displayMask;
+        textbox.editor.setLength(editor.length);
+        if(editor.mask != null)
+            textbox.editor.setMask(editor.mask);
+        textbox.editor.setTextAlignment(editor.alignment);
         return textbox;
     }
 
@@ -77,17 +74,10 @@ public class TableTextBox extends TableCellInputWidget {
         if(display == null){
             display = new Label();
             display.setWordWrap(false);
-            if(fieldCase.equals("upper"))
-                display.addStyleName("Upper");
-            else if(fieldCase.equals("lower"))
-                display.addStyleName("Lower");
             display.setWidth(width+"px");
         }
         if(field.getValue() != null){
             String val = field.getValue().toString();
-        
-            if(displayMask != null && !"".equals(val))
-                val = displayMask.format(Double.valueOf(val).doubleValue());
             display.setText(val);
         } else
             display.setText("");
@@ -99,18 +89,6 @@ public class TableTextBox extends TableCellInputWidget {
     public void setEditor() {
         if(!enabled)
             return;
-        if(editor == null){
-            editor = new TextBox();
-            editor.addFocusListener(this);
-            if(fieldCase.equals("upper"))
-                editor.addStyleName("Upper");
-            else if(fieldCase.equals("lower"))
-                editor.addStyleName("Lower");
-            
-            if(length > -1)
-                editor.setMaxLength(length);
-            editor.setWidth(width+"px");
-        }
         if(field.getValue() != null)
             editor.setText(field.getValue().toString());
         else
@@ -120,29 +98,12 @@ public class TableTextBox extends TableCellInputWidget {
 
     public TableTextBox(Node node, ScreenBase screen) {
         this.screen = screen;
-        if(node.getAttributes().getNamedItem("case") != null)
-            fieldCase = node.getAttributes().getNamedItem("case").getNodeValue();
-        
-        if (node.getAttributes().getNamedItem("max") != null) 
-            length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
-        
-        if (node.getAttributes().getNamedItem("editorMask") != null) 
-            editorMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("editorMask").getNodeValue());
-        
-        if (node.getAttributes().getNamedItem("displayMask") != null) 
-            displayMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("displayMask").getNodeValue());
+        ScreenTextBox sbox = new ScreenTextBox(node,screen);
+        editor = (TextBox)sbox.getWidget();  
     }
 
     public void saveValue() {
         String val = editor.getText();
-        if(fieldCase.equals("upper"))
-            val = val.toUpperCase();
-        else if(fieldCase.equals("lower"))
-            val = val.toLowerCase();
-        
-        if(editorMask != null && !"".equals(val))
-            val = editorMask.format(Double.valueOf(val).doubleValue());
-        
         field.setValue(val);
         super.saveValue();
     }
