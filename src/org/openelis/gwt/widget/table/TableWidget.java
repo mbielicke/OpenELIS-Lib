@@ -88,7 +88,6 @@ public class TableWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
-    public ScreenWindow window;
     
     public TableWidget() {
         

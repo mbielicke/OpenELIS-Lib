@@ -57,7 +57,6 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             controller.shiftKey = true;
 
         boolean shift = modifiers == KeyboardListener.MODIFIER_SHIFT;
-        controller.window.setStatus("what! ","");
         if (KeyboardListener.KEY_DOWN == code) {
             if (controller.activeRow >= 0 && controller.activeRow < controller.model.shownRows() - 1) {
                 if(controller.activeRow < controller.view.table.getRowCount() -1){
