@@ -197,8 +197,8 @@ public class TableWidget extends FocusPanel implements
                     return true;
                 }
             }
+            tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
         }
-        tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
         return false;
         
     }
