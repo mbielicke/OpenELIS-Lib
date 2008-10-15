@@ -49,22 +49,22 @@ import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import java.util.ArrayList;
 
 public class ScreenDropDownWidget extends ScreenInputWidget implements FocusListener {
-	/**
-	 * Default XML Tag Name for XML definition and WidgetMap
-	 */
-	public static String TAG_NAME = "dropdown";
+    /**
+     * Default XML Tag Name for XML definition and WidgetMap
+     */
+    public static String TAG_NAME = "dropdown";
     public boolean loadFromModel = false;
     private boolean multiSelect; 
-	/**
-	 * Widget wrapped by this class.
-	 */
+    /**
+     * Widget wrapped by this class.
+     */
     private Dropdown auto;
     
     private String type = "";
 
-	/**
-	 * Default no-arg constructor used to create reference in the WidgetMap class
-	 */
+    /**
+     * Default no-arg constructor used to create reference in the WidgetMap class
+     */
     public ScreenDropDownWidget() {
     }
     
@@ -86,15 +86,15 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         String popWidth = "auto";
                 
         if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-        	multiSelect = true;
+            multiSelect = true;
         
         if (node.getAttributes().getNamedItem("text") != null)
-        	textBoxDefault = node.getAttributes()
+            textBoxDefault = node.getAttributes()
                                   .getNamedItem("text")
                                   .getNodeValue();
         
         if (node.getAttributes().getNamedItem("width") != null)
-        	width = node.getAttributes()
+            width = node.getAttributes()
                                   .getNamedItem("width")
                                   .getNodeValue();
         
@@ -174,9 +174,9 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     }
 
     public void load(AbstractField field) {
-    	if(queryMode){
-    		queryWidget.load(field);
-    	}else{
+        if(queryMode){
+            queryWidget.load(field);
+        }else{
             auto.setSelections(((DropDownField)field).getSelections());
             super.load(field);
         }
@@ -186,7 +186,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         if(queryMode){
             queryWidget.submit(field);
         }else {
-        	field.setValue(auto.getSelections());
+            field.setValue(auto.getSelections());
         }
     }
 
@@ -199,6 +199,17 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     }
     
     public void enable(boolean enabled){
+        /*
+        if(queryMode)
+            queryWidget.enable(enabled);
+        else{
+            if(alwaysEnabled){
+                auto.enabled(true);
+            }else{
+                auto.enabled(enabled);
+            }
+            super.enable(enabled);
+        }*/
         if(queryMode)
             queryWidget.enable(enabled);
         else{
@@ -217,21 +228,21 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     }
     
     public void destroy() {
-    	//auto.clear();
-    	//auto.scrollList = null;
+        //auto.clear();
+        //auto.scrollList = null;
         //auto = null;
         //super.destroy();
     }
     
     public int[] getWidths(Node node){
-    	 String[] widths = node.getFirstChild()
+         String[] widths = node.getFirstChild()
          .getNodeValue()
          .split(",");
-    	int[] width = new int[widths.length];
-    	for (int i = 0; i < widths.length; i++) {
-    		width[i] = Integer.parseInt(widths[i]);
-    	}
-    	return width;
+        int[] width = new int[widths.length];
+        for (int i = 0; i < widths.length; i++) {
+            width[i] = Integer.parseInt(widths[i]);
+        }
+        return width;
     }
     
     public AbstractField[] getFields(Node node) {
@@ -257,51 +268,51 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     }
     
     public String[] getHeaders(Node node){
-    	return node.getFirstChild()
+        return node.getFirstChild()
                 .getNodeValue()
                 .split(",");
     }
     
     private DataModel getDropDownOptions(Node itemsNode){
-		DataModel dataModel = new DataModel();		
-		
-    	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
-    	for (int i = 0; i < items.getLength(); i++) {
-    	DataSet set = new DataSet();
+        DataModel dataModel = new DataModel();      
+        
+        NodeList items = ((Element)itemsNode).getElementsByTagName("item");
+        for (int i = 0; i < items.getLength(); i++) {
+        DataSet set = new DataSet();
         Node item = items.item(i);
 
-		//display text
+        //display text
         StringObject display = new StringObject();
-		display.setValue((item.getFirstChild() == null ? "" : item.getFirstChild().getNodeValue()));
-		set.add(display);
+        display.setValue((item.getFirstChild() == null ? "" : item.getFirstChild().getNodeValue()));
+        set.add(display);
 
         //id
         if(type.equals("integer")){
-        	NumberObject id = new NumberObject(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
-        	set.setKey(id);
+            NumberObject id = new NumberObject(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
+            set.setKey(id);
         }else if(type.equals("string")){
-        	StringObject id = new StringObject(item.getAttributes().getNamedItem("value").getNodeValue());
-        	set.setKey(id);
+            StringObject id = new StringObject(item.getAttributes().getNamedItem("value").getNodeValue());
+            set.setKey(id);
         }
         
-		dataModel.add(set);
-    	}
+        dataModel.add(set);
+        }
         return dataModel;
-	}
+    }
     
     public ScreenDropDownWidget getQueryWidget(){
-    	return (ScreenDropDownWidget)queryWidget;
+        return (ScreenDropDownWidget)queryWidget;
     }
     
     public void onLostFocus(Widget sender) {
-    	//auto.onLostFocus(sender);
-    	if(key != null)
-    		super.onLostFocus(sender);
+        //auto.onLostFocus(sender);
+        if(key != null)
+            super.onLostFocus(this);
     }
     
    public void onFocus(Widget sender) {
-	   //auto.onFocus(sender);
-	   super.onFocus(sender);
+       //auto.onFocus(sender);
+       super.onFocus(this);
    }
    
    public void setForm(boolean mode) {

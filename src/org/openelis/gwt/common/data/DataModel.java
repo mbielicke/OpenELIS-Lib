@@ -65,6 +65,7 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         for(int i = 0; i < objects.length; i++){
             set.add(objects[i]);
         }
+        set.setKey(key);
         return add(key,set);
     }
     
@@ -90,7 +91,7 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         return defaultSet.getInstance();
     }
     
-    public void addDefualt() {
+    public void addDefault() {
         add(createNewSet());
     }
             
@@ -162,6 +163,9 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         clone.page = page;
         clone.selected = selected;
         clone.selectLast = selectLast;
+        if(defaultSet != null)
+            clone.defaultSet = defaultSet.getInstance();
+        
         for(int i = 0; i < size(); i++){
             clone.add((DataSet)get(i).getInstance());
         }

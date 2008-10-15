@@ -25,9 +25,9 @@
 */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.xml.client.Node;
-
 import java.util.ArrayList;
+
+import com.google.gwt.xml.client.Node;
 
 public class DropDownField extends AbstractField {
 
@@ -134,8 +134,15 @@ public class DropDownField extends AbstractField {
     public DropDownField getInstance() {
         DropDownField obj = new DropDownField();
         obj.setRequired(required);
-        obj.setValue(selections);
+        obj.setModel((DataModel)model.getInstance());
         obj.setKey(key);
+        
+        //need to create a new selections array list by hand to avoid a shallow copy
+        ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
+        for(int i=0; i<selections.size(); i++)
+            cloneSelections.add(selections.get(i).getInstance());
+        obj.setValue(cloneSelections);
+        
         return obj;
     }
     

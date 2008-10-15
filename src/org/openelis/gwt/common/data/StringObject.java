@@ -52,7 +52,8 @@ public class StringObject implements DataObject, Serializable {
     
     public Object getInstance() {
         StringObject clone = new StringObject();
-        clone.setValue(new String(value));
+        if(value != null)
+            clone.setValue(new String(value));
         return clone;
     }
     

@@ -525,7 +525,12 @@ public class ScrollList extends TableWidget implements SourcesChangeEvents, Tabl
         
     }
 
-    public void startedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+    public void startEditing(SourcesTableWidgetEvents sender, int row, int col) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
     }

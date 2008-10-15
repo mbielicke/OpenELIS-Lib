@@ -170,7 +170,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         
         if(node.getAttributes().getNamedItem("autoCall") != null) {
             String autoCall = node.getAttributes().getNamedItem("autoCall").getNodeValue();
-            if(autoCall.equals(this)){
+            if(autoCall.equals("this")){
                 auto.setAutoCall((AutoCompleteCallInt)screen);
             }else{
                 auto.setAutoCall((AutoCompleteCallInt)ClassFactory.forName(autoCall));

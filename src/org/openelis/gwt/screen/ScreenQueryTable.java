@@ -198,7 +198,7 @@ public class ScreenQueryTable extends ScreenInputWidget {
                                               .getNodeValue()
                                               .split(",");
                     for (int i = 0; i < fields.length; i++) {
-                        columns.get(i).setKey(fields[i]);
+                        columns.get(i).setKey(fields[i].trim());
                     }
                 }
                 table = new QueryTable(columns,maxRows,width,title,showHeader,showScroll);

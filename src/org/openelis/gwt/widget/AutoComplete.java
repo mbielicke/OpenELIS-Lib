@@ -40,7 +40,7 @@ public class AutoComplete extends DropdownWidget {
     
 
     AutoCompleteCallInt autoCall;
-    String cat;
+    public String cat;
 
     
     public AutoComplete(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
