@@ -233,7 +233,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                                 .getNamedItem("rows")
                                                 .getNodeValue());
                     for(int i = 0; i < rows; i++){
-                        data.addDefualt();
+                        data.addDefault();
                     }
                 }
                
