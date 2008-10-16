@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import org.openelis.gwt.common.DataSorter;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.DataSorterInt.SortDirection;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
@@ -349,6 +350,16 @@ public class TableModel implements TableModelInt {
         for(int i = 0; i < data.selections.size(); i++)
             ret[i] = data.selections.get(i);
         return ret;
+    }
+    
+    public void setCellError(int row, int col, String error) {
+        ((AbstractField)data.get(row).get(col)).addError(error);
+        tableModelListeners.fireCellUpdated(this, row, col);
+    }
+    
+    public void clearCellError(int row, int col) {
+        ((AbstractField)data.get(row).get(col)).clearErrors();
+        tableModelListeners.fireCellUpdated(this, row, col);
     }
  
     
