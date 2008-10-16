@@ -123,6 +123,10 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public int[] getSelectedIndexes();
     
+    public void setCellError(int row, int col, String Error);
+    
+    public void clearCellError(int row, int col);
+    
     
     
     
