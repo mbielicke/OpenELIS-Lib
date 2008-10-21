@@ -127,7 +127,9 @@ public class TableModel implements TableModelInt {
             rowSet = data.get(row);
         if(manager != null)
             return manager.canDelete(controller,rowSet, row);
-        return true;
+        else if(controller.enabled)
+            return true;
+        return false;
     }
 
     public boolean canEdit(int row, int col) {
@@ -140,7 +142,9 @@ public class TableModel implements TableModelInt {
             return false;
         if(manager != null)
             return manager.canEdit(controller,rowSet, row, col);
-        if(row == numRows())
+        if(!controller.enabled)
+            return false;
+        else if(row == numRows())
             return true;
         return true;
     }
@@ -150,7 +154,9 @@ public class TableModel implements TableModelInt {
             return false;
         if(manager != null)
             return manager.canAdd(controller,data.get(row), row);
-        return true;
+        if(controller.enabled)
+            return true;
+        return false;
     }
 
     public boolean canSelect(int row) {
@@ -163,7 +169,9 @@ public class TableModel implements TableModelInt {
             return false;
         if(manager != null)
             return manager.canSelect(controller,rowSet,row);
-        if(row == numRows())
+        if(!controller.enabled)
+            return false;
+        else if(row == numRows())
             return true;
         return true;
     }

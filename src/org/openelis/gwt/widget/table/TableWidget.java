@@ -161,8 +161,6 @@ public class TableWidget extends FocusPanel implements
      * @param col
      */
     public void select(final int row, final int col) {
-        if(!enabled)
-            return;
         if(finishEditing()){
             if(model.numRows() >= maxRows){
                 view.scrollBar.scrollToBottom();
