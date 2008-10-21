@@ -118,7 +118,8 @@ public class FormRPC extends AbstractField implements Serializable {
             return;
         }
         AbstractField field = fields.get(key);
-        field.setValue(value);
+        if(field != null)
+            field.setValue(value);
     }
 
     public void addError(String err) {
