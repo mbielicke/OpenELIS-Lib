@@ -26,6 +26,7 @@
 package org.openelis.gwt.server;
 
 import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.CalendarServiceInt;
@@ -70,7 +71,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         }
     }
 
-    public HashMap<String,DataObject> getXMLData() throws RPCException {
+    public HashMap<String,Data> getXMLData() throws RPCException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -117,9 +118,9 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         }
     }
 
-	public HashMap<String,DataObject> getXMLData(HashMap<String,DataObject> args) throws RPCException {
+	public HashMap<String,Data> getXMLData(HashMap<String,Data> args) throws RPCException {
         try {
-            String date = (String)args.get("date").getValue();
+            String date = (String)((DataObject)args.get("date")).getValue();
             System.out.println("date = "+date);
             Calendar cal = Calendar.getInstance();
             if(!date.equals("")){
@@ -139,7 +140,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
             Element day = doc.createElement("date");
             day.appendChild(doc.createTextNode(date));
             root.appendChild(day);
-            HashMap<String,DataObject> map = new HashMap<String,DataObject>();
+            HashMap<String,Data> map = new HashMap<String,Data>();
             map.put("xml", new StringObject(ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc)));
             return map;
         }catch(Exception e){
