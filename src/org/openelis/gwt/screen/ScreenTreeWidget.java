@@ -39,6 +39,7 @@ import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.tree.TreeColumn;
 import org.openelis.gwt.widget.tree.TreeColumnInt;
 import org.openelis.gwt.widget.tree.TreeKeyboardHandler;
+import org.openelis.gwt.widget.tree.TreeManager;
 import org.openelis.gwt.widget.tree.TreeWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 
@@ -78,7 +79,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
             super(node);
             
             // try {
-             TableManager manager = null;
+             TreeManager manager = null;
              int cellHeight;
              String width;
              int maxRows;
@@ -96,9 +97,9 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                                            .getNodeValue();
                     
                      if("this".equals(appClass))
-                         manager = (TableManager)screen;
+                         manager = (TreeManager)screen;
                      else{
-                         manager = (TableManager)ClassFactory.forName(appClass);
+                         manager = (TreeManager)ClassFactory.forName(appClass);
                      }
                  }
                  Node widthsNode = ((Element)node).getElementsByTagName("widths")
@@ -107,18 +108,71 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  if(((Element)node).getElementsByTagName("headers").getLength() > 0)
                      headersNode = ((Element)node).getElementsByTagName("headers")
                                                    .item(0);
-                 Node editorsNode = ((Element)node).getElementsByTagName("editors")
-                                                   .item(0);
-                 Node fieldsNode = ((Element)node).getElementsByTagName("fields")
-                                                  .item(0);
                  Node filtersNode = ((Element)node).getElementsByTagName("filters")
-                                                   .item(0);
+                 .item(0);
                  Node sortsNode = ((Element)node).getElementsByTagName("sorts")
-                                                 .item(0);
+                 .item(0);
                  Node alignNode = ((Element)node).getElementsByTagName("colAligns")
                                                  .item(0);
                  Node colFixed = ((Element)node).getElementsByTagName("fixed").item(0);
                  
+                 
+                 if (widthsNode != null) {
+                     String[] widths = widthsNode.getFirstChild()
+                     .getNodeValue()
+                     .split(",");
+                     for (String wid : widths) {
+                         TreeColumn col = new TreeColumn();
+                         col.setCurrentWidth(Integer.parseInt(wid));
+                         columns.add(col);
+                     }
+                 }
+                 
+                 if(headersNode != null){
+                     showHeader = true;
+                     String[] headerNames = headersNode.getFirstChild()
+                     .getNodeValue()
+                     .split(",");
+                     for(int i = 0; i < headerNames.length; i++){
+                         columns.get(i).setHeader(headerNames[i].trim());
+                     }                    
+                 }
+             if (filtersNode != null) {
+                 String[] filters = filtersNode.getFirstChild()
+                                               .getNodeValue()
+                                               .split(",");
+                 for (int i = 0; i < filters.length; i++) {
+                     columns.get(i).setFilterable(Boolean.valueOf(filters[i]).booleanValue());
+                 }
+             }
+             if (sortsNode != null) {
+                 String[] sorts = sortsNode.getFirstChild()
+                                           .getNodeValue()
+                                           .split(",");
+                 for (int i = 0; i < sorts.length; i++) {
+                     columns.get(i).setSortable(Boolean.valueOf(sorts[i]).booleanValue());
+                 }
+             }
+             if (colFixed != null) {
+                 String[] fixeds = colFixed.getFirstChild()
+                                           .getNodeValue()
+                                           .split(",");
+                 for (int i = 0; i < fixeds.length; i++) {
+                     columns.get(i).setFixedWidth(Boolean.valueOf(fixeds[i]).booleanValue());
+                 }
+             }
+
+             if (alignNode != null){
+                 String[] aligns = alignNode.getFirstChild().getNodeValue().split(",");
+                 for (int i = 0; i < aligns.length; i++) {
+                     if (aligns[i].equals("left"))
+                         columns.get(i).setAlign(HasAlignment.ALIGN_LEFT);
+                     if (aligns[i].equals("center"))
+                         columns.get(i).setAlign(HasAlignment.ALIGN_CENTER);
+                     if (aligns[i].equals("right"))
+                         columns.get(i).setAlign(HasAlignment.ALIGN_RIGHT);
+                 }
+             }
                  if(node.getAttributes().getNamedItem("cellHeight") != null){
                      cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
                  }
@@ -144,75 +198,32 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  if(node.getAttributes().getNamedItem("showScroll") != null){
                      showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
                  }
-                 if (widthsNode != null) {
-                     String[] widths = widthsNode.getFirstChild()
-                                                 .getNodeValue()
-                                                 .split(",");
-                     for (String wid : widths) {
-                         TreeColumn col = new TreeColumn();
-                         col.setCurrentWidth(Integer.parseInt(wid));
-                         columns.add(col);
+                 
+                 NodeList leafNodes = ((Element)node).getElementsByTagName("leaf");
+                 
+                 for(int i = 0; i < leafNodes.getLength(); i++) {
+                 
+                     Node editorsNode = ((Element)leafNodes.item(i)).getElementsByTagName("editors")
+                                                       .item(0);
+                     Node fieldsNode = ((Element)leafNodes.item(i)).getElementsByTagName("fields")
+                     .item(0);
+
+                     NodeList editors = editorsNode.getChildNodes();
+                     int j = 0; 
+                     for (int k = 0; k < editors.getLength(); k++) {
+                         if (editors.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                             columns.get(j).setColumnWidget((Widget)ScreenBase.createCellWidget(editors.item(k),screen),leafNodes.item(i).getAttributes().getNamedItem("type").getNodeValue());
+                             j++;
+                         }
                      }
-                 }
-                 if(headersNode != null){
-                     showHeader = true;
-                     String[] headerNames = headersNode.getFirstChild()
-                     .getNodeValue()
-                     .split(",");
-                     for(int i = 0; i < headerNames.length; i++){
-                         columns.get(i).setHeader(headerNames[i].trim());
-                     }                    
-                 }
-                 if (filtersNode != null) {
-                     String[] filters = filtersNode.getFirstChild()
-                                                   .getNodeValue()
-                                                   .split(",");
-                     for (int i = 0; i < filters.length; i++) {
-                         columns.get(i).setFilterable(Boolean.valueOf(filters[i]).booleanValue());
-                     }
-                 }
-                 if (sortsNode != null) {
-                     String[] sorts = sortsNode.getFirstChild()
-                                               .getNodeValue()
-                                               .split(",");
-                     for (int i = 0; i < sorts.length; i++) {
-                         columns.get(i).setSortable(Boolean.valueOf(sorts[i]).booleanValue());
-                     }
-                 }
-                 if (colFixed != null) {
-                     String[] fixeds = colFixed.getFirstChild()
-                                               .getNodeValue()
-                                               .split(",");
-                     for (int i = 0; i < fixeds.length; i++) {
-                         columns.get(i).setFixedWidth(Boolean.valueOf(fixeds[i]).booleanValue());
-                     }
-                 }
-                 if (alignNode != null){
-                     String[] aligns = alignNode.getFirstChild().getNodeValue().split(",");
-                     for (int i = 0; i < aligns.length; i++) {
-                         if (aligns[i].equals("left"))
-                             columns.get(i).setAlign(HasAlignment.ALIGN_LEFT);
-                         if (aligns[i].equals("center"))
-                             columns.get(i).setAlign(HasAlignment.ALIGN_CENTER);
-                         if (aligns[i].equals("right"))
-                             columns.get(i).setAlign(HasAlignment.ALIGN_RIGHT);
-                     }
-                 }
-                 NodeList editors = editorsNode.getChildNodes();
-                 int j = 0; 
-                 for (int i = 0; i < editors.getLength(); i++) {
-                     if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                         columns.get(j).setColumnWidget((Widget)ScreenBase.createCellWidget(editors.item(i),screen));
-                         j++;
-                     }
-                 }
-                 NodeList fieldList = fieldsNode.getChildNodes();
-                 DataSet set = new DataSet();
-                 for (int i = 0; i < fieldList.getLength(); i++) {
-                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                         AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-                         set.add(field);
-                         columns.get(i).setKey(field.key);
+                     NodeList fieldList = fieldsNode.getChildNodes();
+                     DataSet set = new DataSet();
+                     for (int k = 0; k < fieldList.getLength(); k++) {
+                         if (fieldList.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                             AbstractField field = (ScreenBase.createField(fieldList.item(k)));
+                             set.add(field);
+                             columns.get(k).setKey(field.key);
+                         }
                      }
                  }
                  //data.setDefaultSet(set);
