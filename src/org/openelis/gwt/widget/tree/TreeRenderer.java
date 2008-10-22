@@ -74,17 +74,17 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     
     public void createRow(int i) {
         TreeColumnInt column = controller.columns.get(0);
-        TreeDataItem row = controller.model.getRow(i);
+        //TreeDataItem row = controller.model.getRow(i);
         TableTree item = new TableTree();
         item.enabled = controller.enabled;
         ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
         ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
         //ItemGrid item = createItem(row);
         //item.rowIndex = index;
-        item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
+        //item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
         item.setCellWidth(column.getCurrentWidth());
-        item.setField(row);
-        item.setDisplay();
+        //item.setField(row);
+        //item.setDisplay();
         item.setRowIndex(i);
         item.addCommandListener(controller);
         //controller.columns.get(0).loadWidget(controller.view.table.getWidget(index, 0),row);
@@ -168,18 +168,18 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             if(i == 0){
                 TableTree item = (TableTree)controller.view.table.getWidget(index, i);
                 item.enabled = controller.enabled;
-                ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
-                ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
+                //((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
+                //((SimplePanel)item).setHeight((controller.cellHeight+"px"));
                 //ItemGrid item = createItem(row);
                 //item.rowIndex = index;
                 item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
-                item.setCellWidth(column.getCurrentWidth());
+                //item.setCellWidth(column.getCurrentWidth());
                 item.setField(row);
                 item.setDisplay();
-                item.setRowIndex(index);
-                item.addCommandListener(controller);
+                //item.setRowIndex(index);
+               // item.addCommandListener(controller);
                 //controller.columns.get(0).loadWidget(controller.view.table.getWidget(index, 0),row);
-                controller.view.table.setWidget(index, 0, item);
+                //controller.view.table.setWidget(index, 0, item);
             }else{
                 TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);
                 controller.view.table.setWidget(index,i,(Widget)wid);
