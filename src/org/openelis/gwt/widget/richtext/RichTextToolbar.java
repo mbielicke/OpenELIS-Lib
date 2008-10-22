@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.Dropdown;
 
@@ -105,16 +106,16 @@ public class RichTextToolbar extends Composite {
 
     public void onChange(Widget sender) {
       if (sender == backColors) {
-        basic.setBackColor((String)backColors.model.getSelection().get(0).getValue());
+        basic.setBackColor((String)((DataObject)backColors.model.getSelection().get(0)).getValue());
         backColors.model.selectRow(0);
       } else if (sender == foreColors) {
-        basic.setForeColor((String)foreColors.model.getSelection().get(0).getValue());
+        basic.setForeColor((String)((DataObject)foreColors.model.getSelection().get(0)).getValue());
         foreColors.model.selectRow(0);
       } else if (sender == fonts) {
-        basic.setFontName((String)fonts.model.getSelection().get(0).getValue());
+        basic.setFontName((String)((DataObject)fonts.model.getSelection().get(0)).getValue());
         fonts.model.selectRow(0);
       } else if (sender == fontSizes) {
-        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.model.getSelection().get(0).getValue())]);
+        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)((DataObject)fontSizes.model.getSelection().get(0)).getValue())]);
         fontSizes.model.selectRow(0);
       }
     }

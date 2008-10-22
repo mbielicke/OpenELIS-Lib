@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 
 import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 
 public class TableColumn implements TableColumnInt {
@@ -60,7 +61,7 @@ public class TableColumn implements TableColumnInt {
         return (Widget)tcell;
     }
     
-    public void loadWidget(Widget widget, DataObject object) {
+    public void loadWidget(Widget widget, Data object) {
         ((TableCellWidget)widget).setField(object);
         ((TableCellWidget)widget).setDisplay();
     }

@@ -26,30 +26,72 @@
 package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableView;
+import org.openelis.gwt.widget.tree.TableTree.Action;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;
 import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
 
+import java.util.Stack;
+
 public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener  {
     
     private TreeWidget controller;
+    
+    public class ItemGrid extends Grid implements TableListener{
+        
+        public int clickCell;
+        public int rowIndex;
+        
+        public ItemGrid(int rows, int cols) {
+            super(rows,cols);
+            setCellPadding(0);
+            setCellSpacing(0);
+            addTableListener(this);
+        }
+
+        public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
+            if(cell == clickCell){
+                controller.performCommand(Action.TOGGLE, new Integer(rowIndex));
+            }
+        }
+    }
     
     public TreeRenderer(TreeWidget controller){
         this.controller = controller;
     }
     
     public void createRow(int i) {
-        int j = 0;
+        TreeColumnInt column = controller.columns.get(0);
+        TreeDataItem row = controller.model.getRow(i);
+        TableTree item = new TableTree();
+        item.enabled = controller.enabled;
+        ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
+        ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
+        //ItemGrid item = createItem(row);
+        //item.rowIndex = index;
+        item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
+        item.setCellWidth(column.getCurrentWidth());
+        item.setField(row);
+        item.setDisplay();
+        item.setRowIndex(i);
+        item.addCommandListener(controller);
+        //controller.columns.get(0).loadWidget(controller.view.table.getWidget(index, 0),row);
+        controller.view.table.setWidget(i, 0, item);
+        /*int j = 0;
         for(TreeColumnInt column : controller.columns) {
-            TableCellWidget wid = (TableCellWidget)column.getWidgetInstance();
+            TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(controller.model.getRow(i).leafType);
             controller.view.table.setWidget(i,j,(Widget)wid);
             wid.setRowIndex(i);
             controller.view.table.getFlexCellFormatter().addStyleName(i,
@@ -72,6 +114,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             }
             j++;
         }
+        */
     }
     
     public void load(int pos) {
@@ -116,9 +159,45 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
         TreeDataItem row = (TreeDataItem)controller.model.getRow(modelIndex);
-        controller.columns.get(0).loadWidget(controller.view.table.getWidget(index, 0),row);
-        for (int i = 0; i < row.size(); i++) {
-            controller.columns.get(i+1).loadWidget(controller.view.table.getWidget(index, i+1),row.get(i));
+        if(controller.view.table.getRowCount() -1 >= index){
+            int numCells = controller.view.table.getCellCount(index);
+            controller.view.table.removeCells(index, 1, numCells - 1);
+        }
+        for (int i = 0; i < row.size()+1; i++) {
+            TreeColumnInt column = controller.columns.get(i);
+            if(i == 0){
+                TableTree item = (TableTree)controller.view.table.getWidget(index, i);
+                item.enabled = controller.enabled;
+                ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
+                ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
+                //ItemGrid item = createItem(row);
+                //item.rowIndex = index;
+                item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
+                item.setCellWidth(column.getCurrentWidth());
+                item.setField(row);
+                item.setDisplay();
+                item.setRowIndex(index);
+                item.addCommandListener(controller);
+                //controller.columns.get(0).loadWidget(controller.view.table.getWidget(index, 0),row);
+                controller.view.table.setWidget(index, 0, item);
+            }else{
+                TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);
+                controller.view.table.setWidget(index,i,(Widget)wid);
+                controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i-1));
+           // wid.setRowIndex(i);
+            }
+            controller.view.table.getFlexCellFormatter().addStyleName(index,
+                                                  i,
+                                                  TableView.cellStyle);
+            controller.view.table.getFlexCellFormatter()
+                          .setHorizontalAlignment(index, i, column.getAlign());
+
+            //if(index % 2 == 1){
+            //    DOM.setStyleAttribute(controller.view.table.getRowFormatter().getElement(index), "background", "#f8f8f9");
+           // }
+            controller.view.table.getFlexCellFormatter().setWidth(index, i, column.getCurrentWidth() + "px");
+            controller.view.table.getFlexCellFormatter().setHeight(index, i, controller.cellHeight+"px");
+           
             //if(tCell instanceof TableMultiple && manager != null){
               //  manager.setMultiple(model.indexOf(row),i,this);
             //}
@@ -135,6 +214,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             //if(controller.showRows){
               //  ((Label)controller.view.rows.getWidget(index,0)).setText(String.valueOf(controller.model.indexOf(row)+1));
            // }
+            
         }
         if(controller.model.isSelected(modelIndex))
             controller.view.table.getRowFormatter().addStyleName(index, controller.view.selectedStyle);
@@ -147,11 +227,61 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
                 
     }
     
+    public ItemGrid createItem(final TreeDataItem drow) {
+        ItemGrid editorGrid = new ItemGrid(1,2+drow.depth);   
+        editorGrid.setWidth(controller.columns.get(0).getCurrentWidth()+"px");
+        for(int j = 0; j < editorGrid.getColumnCount(); j++) {
+            if(j < editorGrid.getColumnCount() -1)
+                editorGrid.getCellFormatter().setWidth(0,j,"18px");
+            editorGrid.getCellFormatter().setHeight(0,j,"18px");
+            if(j == editorGrid.getColumnCount() -2){
+                if(drow.open && drow.getItems().size() > 0)
+                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
+                else if(drow.getItems().size() > 0)
+                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
+                else if(j > 0){
+                    if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
+                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat");
+                    else
+                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat");
+                }
+                if(drow.getItems().size() > 0){
+                    editorGrid.clickCell = j;
+                }
+            }
+        }
+        if(drow.depth > 1) {
+            Stack<TreeDataItem> levels = new Stack<TreeDataItem>();
+            levels.push(drow.parent);
+            while(levels.peek().depth > 1){
+                levels.push(levels.peek().parent);
+            }
+            for(TreeDataItem item : levels){
+                if(item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
+                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
+                }
+            }
+            
+        }
+       // if(i % 2 == 1){
+       //     DOM.setStyleAttribute(grid.getRowFormatter().getElement(0), "background", "#f8f8f9");
+       // }
+        
+        editorGrid.setWidget(0, editorGrid.getColumnCount() - 1, (Widget)controller.columns.get(0).getWidgetInstance(drow.leafType));
+        /*
+       if(i % 2 == 1){
+             DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,grid.getColumnCount()-1), "background", "#f8f8f9");
+       }
+       */
+       editorGrid.addStyleName(TreeView.cellStyle);
+       DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
+       return editorGrid;
+    }
     
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
             controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-            finishedEditing(null,controller.activeRow,controller.activeCell);
+            stopEditing(null,controller.activeRow,controller.activeCell);
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.model.shownRows()){
@@ -183,19 +313,33 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     
     public void setCellEditor(int row, int col) {
             TableCellWidget cell =  (TableCellWidget)controller.view.table.getWidget(row, col);
-            controller.editingCell = cell;
-            controller.columns.get(col).setWidgetEditor((Widget)cell);
-            ((SimplePanel)cell).getWidget().addStyleName(controller.view.widgetStyle);
-            ((SimplePanel)cell).getWidget().addStyleName("Enabled");
+            if(col > 0){
+                controller.columns.get(col).setWidgetEditor((Widget)cell);
+                ((SimplePanel)cell).getWidget().addStyleName(controller.view.widgetStyle);
+                ((SimplePanel)cell).getWidget().addStyleName("Enabled");
+                controller.editingCell = cell;
+            }else{
+                ((TableTree)cell).editor.setEditor();
+                ((TableTree)cell).editor.setFocus(true);
+                ((SimplePanel)((TableTree)cell).editor).getWidget().addStyleName(controller.view.widgetStyle);
+                ((SimplePanel)((TableTree)cell).editor).getWidget().addStyleName("Enabled");
+                controller.editingCell = ((TableTree)cell).editor;
+            }
     }
     
     public void setCellDisplay(int row, int col) {
-        controller.columns.get(col).setWidgetDisplay(controller.view.table.getWidget(row, col));        
+        if(col > 0)
+            controller.columns.get(col).setWidgetDisplay(controller.view.table.getWidget(row, col));
+        else
+            ((TableTree)controller.view.table.getWidget(row, col)).editor.setDisplay();
     }
 
-    public void finishedEditing(SourcesTreeWidgetEvents sender, int row, int col) {
+    public void stopEditing(SourcesTreeWidgetEvents sender, int row, int col) {
         if(controller.editingCell != null){
-            controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
+            if(col > 0)
+                controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
+            else
+                controller.editingCell.saveValue();
             setCellDisplay(row,col);
             controller.editingCell = null;
         }
@@ -283,6 +427,11 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     }
 
     public void rowOpened(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void finishedEditing(SourcesTreeWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
     }

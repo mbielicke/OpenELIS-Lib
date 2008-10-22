@@ -25,9 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
-
-public class BooleanObject implements DataObject, Serializable {
+public class BooleanObject implements DataObject {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,7 +70,7 @@ public class BooleanObject implements DataObject, Serializable {
             return "N";
     }
     
-    public Object getInstance() {
+    public Object clone() {
         BooleanObject clone = new BooleanObject();
         clone.setValue(value);
         return clone;

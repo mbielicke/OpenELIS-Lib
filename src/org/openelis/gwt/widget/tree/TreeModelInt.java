@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
@@ -48,7 +49,7 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     
     public int numRows();
     
-    public DataObject getObject(int row, int col);
+    public Data getObject(int row, int col);
     
     public void clear();
     
@@ -60,7 +61,7 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     
     public void selectRow(int index);
     
-    public void selectRow(DataObject key);
+    public void selectRow(Data key);
     
     public void unselectRow(int index);
     
@@ -105,5 +106,9 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     public int getSelectedIndex();
     
     public int[] getSelectedIndexes();
+    
+    public void setCellError(int row, int col, String Error);
+    
+    public void clearCellError(int row, int col);
         
 }

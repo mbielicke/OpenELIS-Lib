@@ -68,7 +68,7 @@ public class PagedTreeField extends AbstractField {
 	        return value;
 	    }
 
-	    public PagedTreeField getInstance() {
+	    public PagedTreeField clone() {
 	        // TODO Auto-generated method stub
 	        return null;
 	    }

@@ -25,36 +25,26 @@
 */
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class ConstantMap extends HashMap<String,String> implements DataObject, Serializable{
+public class ConstantMap extends HashMap<String,String> implements Data {
     
     private static final long serialVersionUID = 1L;
-
-    public Object getInstance() {
-        ConstantMap constMap = new ConstantMap();
+    
+    public Object clone() {
+        return null;
+    }
+/*
+    public Object clone() {
+        ConstantMap constMap = (ConstantMap)super.clone();
         Iterator keyIt = keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
             constMap.put(key, (String)get(key));
         }
         return constMap;
+        
     }
-
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setValue(Object object) {
-        // TODO Auto-generated method stub
-    }
-
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
+*/
 }

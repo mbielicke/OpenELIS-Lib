@@ -48,19 +48,19 @@ public class DataSorter implements DataSorterInt {
     }
 
     public int partition(int s, int t, int col) {
-        DataObject x = data.get(s).get(col);
+        DataObject x = (DataObject)data.get(s).get(col);
         int i = s - 1;
         int j = t + 1;
         while (true) {
             if (direction == SortDirection.DOWN) {
-                while (data.get(--j).get(col).compareTo(x) > 0)
+                while (((DataObject)data.get(--j).get(col)).compareTo(x) > 0)
                     ;
-                while (data.get(++i).get(col).compareTo(x) < 0)
+                while (((DataObject)data.get(++i).get(col)).compareTo(x) < 0)
                     ;
             } else {
-                while (data.get(--j).get(col).compareTo(x) < 0)
+                while (((DataObject)data.get(--j).get(col)).compareTo(x) < 0)
                     ;
-                while (data.get(++i).get(col).compareTo(x) > 0)
+                while (((DataObject)data.get(++i).get(col)).compareTo(x) > 0)
                     ;
             }
             if (i < j) {

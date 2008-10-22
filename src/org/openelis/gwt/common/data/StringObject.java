@@ -25,9 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
-
-public class StringObject implements DataObject, Serializable {
+public class StringObject implements DataObject {
 
     private static final long serialVersionUID = 1L;
     protected String value;
@@ -50,7 +48,7 @@ public class StringObject implements DataObject, Serializable {
         value = (String)val;
     }
     
-    public Object getInstance() {
+    public Object clone() {
         StringObject clone = new StringObject();
         if(value != null)
             clone.setValue(new String(value));

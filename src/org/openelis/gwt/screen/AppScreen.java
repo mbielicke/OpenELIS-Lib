@@ -46,6 +46,7 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
@@ -65,7 +66,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
 
     public AppScreenServiceIntAsync service;
     public HashMap<String,FormRPC> forms = new HashMap<String,FormRPC>();
-    public HashMap<String,DataObject> initData;
+    public HashMap<String,Data> initData;
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
     public Element clickTarget;
@@ -102,7 +103,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void getXMLData() {
         service.getXMLData(new AsyncCallback() {
            public void onSuccess(Object result){
-               initData = (HashMap<String,DataObject>)result;
+               initData = (HashMap<String,Data>)result;
                drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
            }
@@ -113,12 +114,16 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
         });
     }
     
-    public void getXMLData(HashMap<String,DataObject> args) {
+    public void getXMLData(HashMap<String,Data> args) {
         service.getXMLData(args, new AsyncCallback() {
            public void onSuccess(Object result){
-               initData = (HashMap)result;
-               drawScreen((String)((StringObject)initData.get("xml")).getValue());
-               afterDraw(true);
+               try {
+                   initData = (HashMap<String,Data>)result;
+                   drawScreen((String)((StringObject)initData.get("xml")).getValue());
+                   afterDraw(true);
+               }catch(Exception e){
+                   Window.alert("error "+e.getMessage() + e.getStackTrace()[0]);
+               }
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
@@ -128,7 +133,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     }
     
     public void afterDraw(boolean sucess) {
-       // try {
+
         this.rpc = (FormRPC)forms.get("display");
         //load();
         DOM.addEventPreview(this);
@@ -138,9 +143,6 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
             RootPanel.get().removeStyleName("ScreenLoad");
             window.setStatus(consts.get("loadCompleteMessage"),"");
         }
-        //}catch(Exception e){
-        //    Window.alert("after draw " +e.getMessage());
-        //}
     }
     
     public void redrawScreen(String xmlDef){

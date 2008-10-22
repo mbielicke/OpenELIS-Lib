@@ -139,7 +139,7 @@ public class QueryDateField extends QueryField {
         return this.end;
     }
 
-    public QueryDateField getInstance() {
+    public Object clone() {
         QueryDateField obj = new QueryDateField();
         obj.setBegin(begin);
         obj.setEnd(end);

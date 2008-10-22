@@ -29,8 +29,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.common.data.Data;
 
 public interface TreeColumnInt {
     
@@ -46,9 +45,9 @@ public interface TreeColumnInt {
     
     public boolean getFilterable();
     
-    public void setColumnWidget(Widget widget);
+    public void setColumnWidget(Widget widget, String leafType);
     
-    public Widget getColumnWidget();
+    public Widget getColumnWidget(String leafType);
         
     public void setPreferredWidth(int width);
     
@@ -70,9 +69,9 @@ public interface TreeColumnInt {
     
     public HasHorizontalAlignment.HorizontalAlignmentConstant getAlign();
     
-    public Widget getWidgetInstance();
+    public Widget getWidgetInstance(String leafType);
     
-    public void loadWidget(Widget widget, DataObject object);
+    public void loadWidget(Widget widget, Data object);
     
     public void setWidgetDisplay(Widget widget);
     

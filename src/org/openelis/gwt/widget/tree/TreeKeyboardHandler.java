@@ -111,7 +111,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         if (KeyboardListener.KEY_ENTER == code) {
             if(controller.editingCell != null) {
                 //controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-                controller.treeWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
+                controller.treeWidgetListeners.fireStopEditing(controller, controller.activeRow,controller.activeCell);
                 controller.activeCell = -1;
             }else if(controller.activeRow < 0) {
                 DeferredCommand.addCommand(new Command() {
@@ -158,7 +158,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
             if((controller.modelIndexList[controller.activeRow] > controller.model.shownRows() || controller.modelIndexList[controller.activeRow] == controller.model.numRows()-1) &&
                 controller.activeCell + 1 >= controller.columns.size()) {
                 if(screen != null){
-                    controller.treeWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
+                    controller.treeWidgetListeners.fireStopEditing(controller, controller.activeRow,controller.activeCell);
                     controller.activeCell = -1;
                     controller.editingCell = null;
                     controller.setFocus(true);
@@ -174,7 +174,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
                 tabToNextRow();
             } else {
                 int col = controller.activeCell + 1;
-                while (col < controller.columns.size() && (controller.columns.get(col).getColumnWidget() instanceof TableLabel ||
+                while (col < controller.columns.size() && (controller.columns.get(col).getColumnWidget(controller.model.getRow(controller.activeRow).leafType) instanceof TableLabel ||
                        (!controller.model.canEdit(controller.activeRow, col))))
                     col++;
                 if(col == controller.columns.size()){
@@ -195,7 +195,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         if (KeyboardListener.KEY_TAB == code && controller.activeCell > -1 && shift) {
             if (controller.activeCell == 0 && controller.activeRow == 0){
                 if(screen != null){
-                    controller.treeWidgetListeners.fireFinishedEditing(controller, controller.activeRow,controller.activeCell);
+                    controller.treeWidgetListeners.fireStopEditing(controller, controller.activeRow,controller.activeCell);
                     controller.activeCell = -1;
                     controller.editingCell = null;
                     controller.setFocus(true);
@@ -211,7 +211,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
                 tabToPrevRow();
             } else {
                 int col = controller.activeCell - 1;
-                while (col > -1 && ((controller.columns.get(col).getColumnWidget() instanceof TableLabel) ||
+                while (col > -1 && ((controller.columns.get(col).getColumnWidget(controller.model.getRow(controller.activeRow).leafType) instanceof TableLabel) ||
                                     (!controller.model.canEdit(controller.activeRow, col))))
                     col--;
                 if(col < 0){
@@ -254,7 +254,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         int row = findNextActive(controller.activeRow);
         int col = 0;
        
-        while ((controller.columns.get(col).getColumnWidget() instanceof TableLabel) || (!controller.model.canEdit(row, col)))
+        while ((controller.columns.get(col).getColumnWidget(controller.model.getRow(row).leafType) instanceof TableLabel) || (!controller.model.canEdit(row, col)))
             col++;
         if(row < controller.view.table.getRowCount() - 1){
             final int fRow = row;
@@ -280,7 +280,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
     private void tabToPrevRow() {
         if(controller.activeRow == 0) {
                 int col = controller.model.getRow(controller.model.shownRows() -1).size() - 1;
-                while ((controller.columns.get(col).getColumnWidget() instanceof TableLabel) || (!controller.model.canEdit(controller.activeRow,col)))
+                while ((controller.columns.get(col).getColumnWidget(controller.model.getRow(0).leafType) instanceof TableLabel) || (!controller.model.canEdit(controller.activeRow,col)))
                     col--;
                 final int fCol = col;
                 controller.view.scrollBar.setScrollPosition(controller.view.scrollBar.getScrollPosition()-18);
@@ -294,7 +294,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         }else{
             final int row = findPrevActive(controller.activeRow);
             int col = controller.model.getRow(controller.model.shownRows() -1).size() - 1;
-            while ((controller.columns.get(col).getColumnWidget() instanceof TableLabel) || (!controller.model.canEdit(row,col)))
+            while ((controller.columns.get(col).getColumnWidget(controller.model.getRow(row).leafType) instanceof TableLabel) || (!controller.model.canEdit(row,col)))
                 col--;
             final int fCol = col;
             DeferredCommand.addCommand(new Command() {

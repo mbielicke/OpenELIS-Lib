@@ -26,18 +26,13 @@
 package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
-
-
-import java.io.Serializable;
-
-;
 /**
  * @author tschmidt
  * 
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class CheckField extends AbstractField implements Serializable {
+public class CheckField extends AbstractField  {
 
     private static final long serialVersionUID = 1L;
     
@@ -90,7 +85,7 @@ public class CheckField extends AbstractField implements Serializable {
         return (object.getValue() != null && "Y".equals((String)object.getValue()));
     }
 
-    public CheckField getInstance() {
+    public Object clone() {
         CheckField obj = new CheckField();
         obj.setRequired(required);
         obj.setValue(getValue());

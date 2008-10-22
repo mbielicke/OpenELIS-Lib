@@ -35,6 +35,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.StringField;
@@ -118,7 +119,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
         if(field instanceof DropDownField)
             field.setValue(editor.getSelections());
         else{
-            field.setValue(((DataSet)editor.getSelections().get(0)).getKey().getValue());
+            field.setValue(((DataObject)((DataSet)editor.getSelections().get(0)).getKey()).getValue());
         }
 		editor.hideTable();
         super.saveValue();

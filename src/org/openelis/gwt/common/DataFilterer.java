@@ -26,6 +26,7 @@
 package org.openelis.gwt.common;
 
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
@@ -40,7 +41,7 @@ public class DataFilterer implements DataFiltererInt {
     public Filter[] getFilterValues(DataModel data,int col) {
         ArrayList<DataObject> filterVals = new ArrayList<DataObject>();
         for (int i = 0; i < data.size(); i++) {
-            DataObject val = data.get(i).get(col);
+            DataObject val = (DataObject)data.get(i).get(col);
             if (val != null && !filterVals.contains(val))
                 filterVals.add(val);
         }
@@ -87,8 +88,8 @@ public class DataFilterer implements DataFiltererInt {
                 if (filterSet.contains("All"))
                     continue;
                 String val = null;
-                if (row.get(j).getValue() != null)
-                    val = row.get(j).getValue().toString();
+                if (((DataObject)row.get(j)).getValue() != null)
+                    val = ((DataObject)row.get(j)).getValue().toString();
                 if (!filterSet.contains(val))
                   data.get(i).shown = false;  
             }
@@ -103,7 +104,7 @@ public class DataFilterer implements DataFiltererInt {
             }
             return;
         }
-        ArrayList<DataObject> filterSet = new ArrayList<DataObject>();
+        ArrayList<Data> filterSet = new ArrayList<Data>();
         //filterSet.add("");
         //filterSet.add(null);
         for (int j = 0; j < filters.length; j++) {
@@ -117,7 +118,7 @@ public class DataFilterer implements DataFiltererInt {
                 row.shown = true;
             if (filterSet.contains(new StringObject("All")))
                 continue;
-            if (row.get(col).getValue() != null && !filterSet.contains(row.get(col)))
+            if (((DataObject)row.get(col)).getValue() != null && !filterSet.contains(row.get(col)))
               row.shown = false;  
         }
     }

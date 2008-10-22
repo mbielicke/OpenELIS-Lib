@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 
 
@@ -45,7 +46,6 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
     private Label editor;
     private DataObject field;
     private int width;
-    private NumberFormat displayMask;
     public static final String TAG_NAME = "table-label";
     public int rowIndex;
 
@@ -62,8 +62,6 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
     public TableCellWidget getNewInstance() {
         TableLabel label = new TableLabel();
         label.width = width;
-        label.displayMask = displayMask;
-        
         return label;
     }
 
@@ -72,8 +70,7 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
     }
     
     public TableLabel(Node node){
-        if (node.getAttributes().getNamedItem("displayMask") != null) 
-            displayMask = NumberFormat.getFormat(node.getAttributes().getNamedItem("displayMask").getNodeValue());
+        
     }
 
     public void setDisplay() {
@@ -91,10 +88,7 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
         if (val instanceof Integer)
             editor.setText(((Integer)val).toString());
         else if (val instanceof Double){
-            if(displayMask != null && !"".equals(val)                            )
-                editor.setText(displayMask.format((Double)val));
-            else
-                editor.setText(((Double)val).toString());
+            editor.setText(((Double)val).toString());
         }
         else if (val == null)
             editor.setText(" ");
@@ -108,8 +102,8 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(DataObject field) {
-        this.field = field;
+    public void setField(Data field) {
+        this.field = (DataObject)field;
         
     }
 

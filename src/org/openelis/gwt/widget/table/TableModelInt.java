@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.DataSorterInt;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
@@ -53,7 +54,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public int numRows();
     
-    public DataObject getObject(int row, int col);
+    public Data getObject(int row, int col);
     
     public void clear();
     
@@ -67,7 +68,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void selectRow(int index);
     
-    public void selectRow(DataObject key);
+    public void selectRow(Data key);
     
     public void unselectRow(int index);
     

@@ -47,7 +47,7 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
                 if(controller.focused && !DOM.isOrHasChild(controller.view.getElement(), ((AppScreen)sender).clickTarget)){
                     controller.focused = false;
                     if(controller.editingCell != null){
-                        controller.treeWidgetListeners.fireFinishedEditing(controller, controller.activeRow, controller.activeCell);
+                        controller.treeWidgetListeners.fireStopEditing(controller, controller.activeRow, controller.activeCell);
                     }
                     controller.activeCell = -1;
                     //controller.setFocus(true);

@@ -25,20 +25,18 @@
 */
 package org.openelis.gwt.common.data;
 
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DataModel extends ArrayList<DataSet> implements DataObject, Serializable {
+public class DataModel extends ArrayList<DataSet> implements Data {
     
     private static final long serialVersionUID = 1L;
     
-    private ArrayList<DataObject> deleted = new ArrayList<DataObject>();
+    private ArrayList<Data> deleted = new ArrayList<Data>();
     
     public ArrayList<Integer> selections = new ArrayList<Integer>();
     
-    private HashMap<DataObject,DataSet> keyMap = new HashMap<DataObject,DataSet>(); 
+    private HashMap<Data,DataSet> keyMap = new HashMap<Data,DataSet>(); 
     
     private DataSet defaultSet;
     
@@ -51,7 +49,7 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         return add(set.getKey(),set);
     }
     
-    public boolean add(DataObject key, DataObject value){
+    public boolean add(Data key, DataObject value){
         if(value instanceof DataSet)
             return add(key,(DataSet)value);
         DataSet set = new DataSet();
@@ -60,7 +58,7 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         return add(key,set);
     }
     
-    public boolean add(DataObject key, DataObject[] objects) {
+    public boolean add(Data key, DataObject[] objects) {
         DataSet set = new DataSet();
         for(int i = 0; i < objects.length; i++){
             set.add(objects[i]);
@@ -69,12 +67,12 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         return add(key,set);
     }
     
-    public boolean add(DataObject key, DataSet set){
+    public boolean add(Data key, DataSet set){
         keyMap.put(key,set);
         return super.add(set);
     }
     
-    public DataSet getByKey(DataObject key) {
+    public DataSet getByKey(Data key) {
         return keyMap.get(key);
     }
     
@@ -88,7 +86,7 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
     }
     
     public DataSet createNewSet() {
-        return defaultSet.getInstance();
+        return (DataSet)defaultSet.clone();
     }
     
     public void addDefault() {
@@ -158,36 +156,21 @@ public class DataModel extends ArrayList<DataSet> implements DataObject, Seriali
         return selectLast;
     }
     
-    public Object getInstance() {
+    public Object clone() {
         DataModel clone = new DataModel();
         clone.page = page;
         clone.selected = selected;
         clone.selectLast = selectLast;
         if(defaultSet != null)
-            clone.defaultSet = defaultSet.getInstance();
+            clone.defaultSet = (DataSet)defaultSet.clone();
         
         for(int i = 0; i < size(); i++){
-            clone.add((DataSet)get(i).getInstance());
+            clone.add((DataSet)get(i).clone());
         }
         return clone;
     }
-
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setValue(Object object) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
     
-    public ArrayList<DataObject> getDeletions() {
+    public ArrayList<Data> getDeletions() {
         return deleted;
     }
 

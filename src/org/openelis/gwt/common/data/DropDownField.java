@@ -78,7 +78,7 @@ public class DropDownField extends AbstractField {
 
     public Object getValue() {
         if(selections.size() == 1)
-            return selections.get(0).getKey().getValue();
+            return ((DataObject)selections.get(0).getKey()).getValue();
         else if(selections.size() > 1)
             return selections;
         else
@@ -87,7 +87,7 @@ public class DropDownField extends AbstractField {
     
     public Object getTextValue(){
         if(selections.size() == 1)
-            return selections.get(0).get(0).getValue();
+            return ((DataObject)selections.get(0).get(0)).getValue();
         else if(selections.size() > 1)
             return selections;
         else
@@ -131,16 +131,16 @@ public class DropDownField extends AbstractField {
         selections = new ArrayList<DataSet>();
     } 
     
-    public DropDownField getInstance() {
+    public Object clone(){
         DropDownField obj = new DropDownField();
         obj.setRequired(required);
-        obj.setModel((DataModel)model.getInstance());
+        obj.setModel((DataModel)model.clone());
         obj.setKey(key);
         
         //need to create a new selections array list by hand to avoid a shallow copy
         ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
         for(int i=0; i<selections.size(); i++)
-            cloneSelections.add(selections.get(i).getInstance());
+            cloneSelections.add((DataSet)selections.get(i).clone());
         obj.setValue(cloneSelections);
         
         return obj;

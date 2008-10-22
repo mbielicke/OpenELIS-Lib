@@ -30,16 +30,16 @@ import org.openelis.gwt.common.data.TreeDataItem;
 
 public interface TreeManager {
     
-    public boolean canSelect(TreeDataItem set, int row);
+    public boolean canSelect(TreeWidget widget, TreeDataItem set, int row);
 
-    public boolean canEdit(TreeDataItem set, int row, int col);
+    public boolean canEdit(TreeWidget widget, TreeDataItem set, int row, int col);
 
-    public boolean canDelete(TreeDataItem set, int row);
+    public boolean canDelete(TreeWidget widget, TreeDataItem set, int row);
 
-    public boolean canAdd(TreeDataItem set, int row);
+    public boolean canAdd(TreeWidget widget, TreeDataItem set, int row);
     
-    public boolean canOpen(TreeDataItem addRow, int row);
+    public boolean canOpen(TreeWidget widget, TreeDataItem addRow, int row);
     
-    public boolean canClose(TreeDataItem set, int row);
+    public boolean canClose(TreeWidget widget, TreeDataItem set, int row);
     
 }

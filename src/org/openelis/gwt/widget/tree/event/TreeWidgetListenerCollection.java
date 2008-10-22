@@ -34,6 +34,11 @@ public class TreeWidgetListenerCollection extends ArrayList<TreeWidgetListener>{
            listener.startedEditing(sender, row, col);
    }
     
+   public void fireStopEditing(SourcesTreeWidgetEvents sender, int row, int col){
+       for(TreeWidgetListener listener : this)
+           listener.stopEditing(sender, row, col);
+   }
+   
    public void fireFinishedEditing(SourcesTreeWidgetEvents sender, int row, int col){
        for(TreeWidgetListener listener : this)
            listener.finishedEditing(sender, row, col);

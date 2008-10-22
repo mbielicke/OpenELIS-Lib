@@ -140,7 +140,7 @@ public class QueryField extends AbstractField {
         return logical;
     }
 
-    public QueryField getInstance() {
+    public Object clone() {
         // TODO Auto-generated method stub
         QueryField field = new QueryField();
         field.setRequired(required);

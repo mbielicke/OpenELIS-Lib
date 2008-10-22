@@ -47,7 +47,7 @@ public class QueryStringField extends QueryField {
         return new QueryStringField(node);
     }
     
-    public QueryStringField getInstance() {
+    public Object clone() {
         return new QueryStringField();
        
     }

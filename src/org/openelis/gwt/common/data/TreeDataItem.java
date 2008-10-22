@@ -32,13 +32,15 @@ public class TreeDataItem extends DataSet {
     
     private static final long serialVersionUID = 1L;
     private static int itemIndex = 0;
+    
+    public String leafType;
 
     private ArrayList<TreeDataItem> items = new ArrayList<TreeDataItem>();
     
     public TreeDataItem parent;
         
-    private DataObject label;
-        
+    public DataObject leafField;
+    
     public boolean loaded;
     
     public boolean open;
@@ -47,24 +49,16 @@ public class TreeDataItem extends DataSet {
     
     public int hash = -1;
     
-    public TreeDataItem getInstance() {
+    public Object clone() {
         TreeDataItem clone = new TreeDataItem();
         for(int i=0; i < size(); i++){
-            clone.add((DataObject)get(i).getInstance());
+            clone.add((DataObject)get(i).clone());
         }
         for(int i=0; i < size(); i++){
-            clone.addItem((TreeDataItem)getItem(i).getInstance());
+            clone.addItem((TreeDataItem)getItem(i).clone());
         }
         clone.parent = parent;
         return clone;
-    }
-
-    public DataObject getLabel() {
-        return label;
-    }
-
-    public void setLabel(DataObject label) {
-        this.label = label;
     }
     
     public void addItem(TreeDataItem item) {

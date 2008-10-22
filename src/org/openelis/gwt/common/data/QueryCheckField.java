@@ -45,7 +45,7 @@ public class QueryCheckField extends CheckField {
         return new QueryCheckField(node);
     }
 
-    public QueryCheckField getInstance() {
+    public Object clone() {
         QueryCheckField obj = new QueryCheckField();
         obj.setRequired(required);
         obj.setValue(getValue());

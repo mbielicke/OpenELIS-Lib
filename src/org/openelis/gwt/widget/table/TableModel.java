@@ -29,6 +29,7 @@ import org.openelis.gwt.common.DataSorter;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.DataSorterInt.SortDirection;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
@@ -101,7 +102,7 @@ public class TableModel implements TableModelInt {
         return data.size();
     }
 
-    public DataObject getObject(int row, int col) {
+    public Data getObject(int row, int col) {
         return data.get(row).get(col);
     }
 
@@ -183,7 +184,7 @@ public class TableModel implements TableModelInt {
     private boolean tableRowEmpty(DataSet row){ 
         boolean empty = true;
         for(int i=0; i<row.size(); i++){
-            if(row.get(i).getValue() != null && !"".equals(row.get(i).getValue())){
+            if(((DataObject)row.get(i)).getValue() != null && !"".equals(((DataObject)row.get(i)).getValue())){
                 empty = false;
                 break;
             }
@@ -268,12 +269,12 @@ public class TableModel implements TableModelInt {
     }
     
     public void setCell(int row, int col, Object value) {
-        data.get(row).get(col).setValue(value);
+        ((DataObject)data.get(row).get(col)).setValue(value);
         tableModelListeners.fireCellUpdated(this, row, col);
     }
     
     public Object getCell(int row, int col) {
-        return data.get(row).get(col).getValue();
+        return ((DataObject)data.get(row).get(col)).getValue();
     }
     
     public void hideRow(int row) {
@@ -316,7 +317,7 @@ public class TableModel implements TableModelInt {
         
     }
 
-    public void selectRow(DataObject key) {
+    public void selectRow(Data key) {
         selectRow(data.indexOf(data.getByKey(key)));
     }
     

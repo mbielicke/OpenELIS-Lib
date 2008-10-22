@@ -110,7 +110,7 @@ public class QueryNumberField extends QueryField {
         this.max = (Double)max;
     }
 
-    public QueryNumberField getInstance() {
+    public Object clone() {
         QueryNumberField obj = new QueryNumberField();
         obj.setMax(max);
         obj.setMin(min);

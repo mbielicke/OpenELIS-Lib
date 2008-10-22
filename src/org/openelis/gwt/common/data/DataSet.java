@@ -1,15 +1,14 @@
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DataSet extends ArrayList<DataObject> implements Serializable, DataObject{
+public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
     
     private static final long serialVersionUID = 1L;
     
-    protected DataObject key;
+    protected Data key;
     
-    protected DataObject data;
+    protected Data data;
     
     public boolean shown = true;
     
@@ -19,48 +18,40 @@ public class DataSet extends ArrayList<DataObject> implements Serializable, Data
         
     }
     
-    public DataSet(DataObject key) {
+    public DataSet(Data key) {
         setKey(key);
     }
     
-    public DataSet(DataObject key, DataObject value){
+    public DataSet(Data key, DataObject value){
         setKey(key);
         add(value);
     }
     
-    public DataSet(DataObject key, DataObject[] values){
+    public DataSet(Data key, DataObject[] values){
         setKey(key);
         for(DataObject val : values){
             add(val);
         }
     }
     
-    public void setKey(DataObject key){
+    public void setKey(Data key){
         this.key = key;
     }
     
-    public DataObject getKey() {
+    public Data getKey() {
         return key;
     }
     
-    public DataSet getInstance() {
+    public Object clone() {
         DataSet clone = new DataSet();
         for(int i=0; i < size(); i++){
-            clone.add((DataObject)get(i).getInstance());
+            clone.add((DataObject)get(i).clone());
         }
-        clone.key = key;
-        clone.data = data;
+        if(key != null)
+            clone.key = (Data)key.clone();
+        if(data != null)
+            clone.data = (Data)data.clone();
         return clone;
-    }
-    
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setValue(Object object) {
-        // TODO Auto-generated method stub
-        
     }
 
     public int compareTo(Object obj) {
@@ -81,11 +72,11 @@ public class DataSet extends ArrayList<DataObject> implements Serializable, Data
         return 0;
     }
 
-    public DataObject getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(DataObject data) {
+    public void setData(Data data) {
         this.data = data;
     }
 

@@ -65,11 +65,11 @@ public class ModelField extends AbstractField {
         return value;
     }
 
-    public ModelField getInstance() {
+    public Object clone() {
         ModelField obj = new ModelField();
        
         obj.setRequired(required);
-        obj.setValue(value.getInstance());
+        obj.setValue(value.clone());
         obj.setRequired(required);
         obj.setTip(tip);
         obj.setKey(key);

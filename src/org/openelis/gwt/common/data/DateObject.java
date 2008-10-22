@@ -27,9 +27,7 @@ package org.openelis.gwt.common.data;
 
 import org.openelis.gwt.common.DatetimeRPC;
 
-import java.io.Serializable;
-
-public class DateObject implements DataObject, Serializable {
+public class DateObject implements DataObject {
     
 
     private static final long serialVersionUID = 1L;
@@ -85,7 +83,7 @@ public class DateObject implements DataObject, Serializable {
         return this.end;
     }
     
-    public Object getInstance() {
+    public Object clone() {
         DateObject clone = new DateObject();
         clone.begin = begin;
         clone.end = end;

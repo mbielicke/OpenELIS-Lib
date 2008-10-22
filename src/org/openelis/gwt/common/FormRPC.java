@@ -32,7 +32,6 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -44,7 +43,7 @@ import java.util.Vector;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class FormRPC extends AbstractField implements Serializable {
+public class FormRPC extends AbstractField {
 
     private static final long serialVersionUID = 1L;
 
@@ -193,16 +192,16 @@ public class FormRPC extends AbstractField implements Serializable {
         }
     }
     
-    public FormRPC clone(){
+    public Object clone(){
         FormRPC clone = new FormRPC();
         HashMap<String,AbstractField> cloneMap = (HashMap<String,AbstractField>)fields.clone();
         
         Object[] keys = (Object[]) ((Set)fields.keySet()).toArray();    
         for (int i = 0; i < keys.length; i++) {
             if(fields.get((String)keys[i]) instanceof FormRPC)
-                cloneMap.put((String)keys[i], ((FormRPC)fields.get((String)keys[i])).clone());
+                cloneMap.put((String)keys[i], (FormRPC)fields.get((String)keys[i]).clone());
             else
-                cloneMap.put((String)keys[i], fields.get((String)keys[i]).getInstance());
+                cloneMap.put((String)keys[i], (FormRPC)fields.get((String)keys[i]).clone());
         }        
         
         clone.setFieldMap(cloneMap);

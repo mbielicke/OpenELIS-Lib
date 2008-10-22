@@ -32,16 +32,19 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 
 import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableWidget;
+
+import java.util.HashMap;
 
 public class TreeColumn implements TreeColumnInt {
 
     public String header;
     public boolean sortable;
     public boolean filterable;
-    public TableCellWidget cellWidget;
+    public HashMap<String,TableCellWidget> cellMap = new HashMap<String,TableCellWidget>();
     public int preferredWidth;
     public int currentWidth;
     public int minWidth;
@@ -54,15 +57,15 @@ public class TreeColumn implements TreeColumnInt {
     public String key;
     
     
-    public Widget getWidgetInstance() {
-        TableCellWidget tcell = cellWidget.getNewInstance();
+    public Widget getWidgetInstance(String leafType) {
+        TableCellWidget tcell = cellMap.get(leafType).getNewInstance();
         tcell.setCellWidth(currentWidth);
         ((SimplePanel)tcell).setWidth((currentWidth)+ "px");
         ((SimplePanel)tcell).setHeight((controller.cellHeight+"px"));
         return (Widget)tcell;
     }
     
-    public void loadWidget(Widget widget, DataObject object) {
+    public void loadWidget(Widget widget, Data object) {
         ((TableCellWidget)widget).setField(object);
         ((TableCellWidget)widget).setDisplay();
         if(widget instanceof TableTree) {
@@ -85,15 +88,16 @@ public class TreeColumn implements TreeColumnInt {
     }
 
     public void enable(boolean enable) {
-        cellWidget.enable(enable);
+        for(TableCellWidget cellWidget : cellMap.values())
+            cellWidget.enable(enable);
     }
     
     public HorizontalAlignmentConstant getAlign() {
         return alignment;
     }
 
-    public Widget getColumnWidget() {
-        return (Widget)cellWidget;
+    public Widget getColumnWidget(String leafType) {
+        return (Widget)cellMap.get(leafType);
     }
 
     public int getCurrentWidth() {
@@ -128,8 +132,8 @@ public class TreeColumn implements TreeColumnInt {
         alignment = align;
     }
 
-    public void setColumnWidget(Widget widget) {
-        cellWidget = (TableCellWidget)widget;
+    public void setColumnWidget(Widget widget, String leafType) {
+        cellMap.put(leafType,(TableCellWidget)widget);
     }
 
     public void setCurrentWidth(int width) {
@@ -162,8 +166,10 @@ public class TreeColumn implements TreeColumnInt {
     
     public void setTreeWidget(TreeWidget controller){
         this.controller = controller;
-        if(cellWidget instanceof TableTree)
-            ((TableTree)cellWidget).addCommandListener(controller);
+        for(TableCellWidget cellWidget : cellMap.values()){
+            if(cellWidget instanceof TableTree)
+                ((TableTree)cellWidget).addCommandListener(controller);
+        }
     }
     
     public TreeWidget getTreeWidget() {

@@ -25,37 +25,21 @@
 */
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class DataMap extends HashMap<String,DataObject> implements DataObject, Serializable{
+public class DataMap extends HashMap<String,Data> implements Data {
     
     private static final long serialVersionUID = 1L;
 
-    public Object getInstance() {
+    public Object clone() {
         DataMap dataMap = new DataMap();
         Iterator keyIt = keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
-            dataMap.put(key, (DataObject)((DataObject)get(key)).getInstance());
+            dataMap.put(key, (Data)get(key).clone());
         }
         return dataMap;
-    }
-
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        return this;
-    }
-
-    public void setValue(Object object) {
-        // TODO Auto-generated method stub
-         
-    }
-
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
     }
 
 }

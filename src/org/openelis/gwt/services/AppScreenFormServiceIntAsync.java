@@ -25,12 +25,12 @@
 */
 package org.openelis.gwt.services;
 
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
-
-import com.google.gwt.http.client.Request;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface AppScreenFormServiceIntAsync extends AppScreenServiceIntAsync {
 
@@ -38,7 +38,7 @@ public interface AppScreenFormServiceIntAsync extends AppScreenServiceIntAsync {
     
     public Request commitAdd(FormRPC rpcSend, FormRPC rpcReturn, AsyncCallback callback);
     
-    public Request commitQuery(FormRPC rpcSend, DataModel model, AsyncCallback callback);
+    public Request commitQuery(FormRPC rpcSend, DataModel data, AsyncCallback callback);
     
     public Request fetch(DataSet key, FormRPC rpcReturn, AsyncCallback callback);
     

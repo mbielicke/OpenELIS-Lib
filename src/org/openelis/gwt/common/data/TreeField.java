@@ -65,12 +65,12 @@ public class TreeField extends AbstractField {
         return value;
     }
 
-    public TableField getInstance() {
+    public Object clone() {
         TableField obj = new TableField();
         obj.setKey(key);
         obj.setRequired(required);
         obj.setTip(tip);
-        obj.setValue(value.getInstance());
+        obj.setValue(value.clone());
         
         return obj;
     }
@@ -87,7 +87,7 @@ public class TreeField extends AbstractField {
         boolean valid = true;
         for(DataSet row : value){
             if(row.shown){
-                for (DataObject obj : row){
+                for (Data obj : row){
                     if(obj instanceof AbstractField){
                         ((AbstractField)obj).validate();
                         if(!((AbstractField)obj).valid)
@@ -101,7 +101,7 @@ public class TreeField extends AbstractField {
     
     public void clearErrors() {
         for(DataSet row : value){
-            for(DataObject obj : row){
+            for(Data obj : row){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();
             }

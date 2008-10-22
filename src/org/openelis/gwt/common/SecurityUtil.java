@@ -27,12 +27,11 @@ package org.openelis.gwt.common;
 
 import org.openelis.gwt.common.SecurityModule.ModuleFlags;
 import org.openelis.gwt.common.SecuritySection.SectionFlags;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.Data;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
-public class SecurityUtil implements Serializable, DataObject {
+public class SecurityUtil implements Data {
 
     private static final long serialVersionUID = 1L;
     
@@ -97,28 +96,10 @@ public class SecurityUtil implements Serializable, DataObject {
             return false;
     }
 
-    /** 
-     * Not used, only here to satisfy DataObject Interface for RPC
-     * @return
-     */
-    public Object getInstance() {
+    public Object clone() {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setValue(Object object) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
    
 }

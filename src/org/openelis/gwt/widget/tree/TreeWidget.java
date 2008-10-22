@@ -118,11 +118,10 @@ public class TreeWidget extends FocusPanel implements
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
         focused = true;
-        if(col > 0) {
-            if (activeRow == row && activeCell == col)
-                return;
-            select(row, col);
-        }
+        if (activeRow == row && activeCell == col)
+            return;
+        select(row, col);
+        
     }
 
     /**
@@ -133,7 +132,7 @@ public class TreeWidget extends FocusPanel implements
      */
     public void unselect(int row) {
         if (editingCell != null) {
-            treeWidgetListeners.fireFinishedEditing(this,
+            treeWidgetListeners.fireStopEditing(this,
                                                      activeRow,
                                                      activeCell);
         }
@@ -175,7 +174,7 @@ public class TreeWidget extends FocusPanel implements
 
     public boolean finishEditing() {
         if (editingCell != null) {
-            treeWidgetListeners.fireFinishedEditing(this,
+            treeWidgetListeners.fireStopEditing(this,
                                                      activeRow,
                                                      activeCell);
             /*if (model.isAutoAdd() && modelIndexList[activeRow] == model.numRows()) {
@@ -188,6 +187,7 @@ public class TreeWidget extends FocusPanel implements
                 }
             }
             */
+            treeWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
         }
         return false;
     }
@@ -214,7 +214,11 @@ public class TreeWidget extends FocusPanel implements
         }
         Iterator widIt = view.table.iterator();
         while (widIt.hasNext()) {
-            ((TableCellWidget)widIt.next()).enable(enabled);
+            Widget wid = (Widget)widIt.next();
+            if(wid instanceof TreeRenderer.ItemGrid)
+                ((TableCellWidget)((TreeRenderer.ItemGrid)wid).getWidget(0, ((TreeRenderer.ItemGrid)wid).getCellCount(0)-1)).enable(enabled);
+            else
+                ((TableCellWidget)widIt.next()).enable(enabled);
         }
     }
 
@@ -273,7 +277,7 @@ public class TreeWidget extends FocusPanel implements
 
     public void unload(SourcesTreeModelEvents sender) {
         if (editingCell != null) {
-            treeWidgetListeners.fireFinishedEditing(this,
+            treeWidgetListeners.fireStopEditing(this,
                                                      activeRow,
                                                      activeCell);
         }

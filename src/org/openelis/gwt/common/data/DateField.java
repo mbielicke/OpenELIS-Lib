@@ -29,8 +29,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
-
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -39,7 +37,7 @@ import java.util.Date;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class DateField extends AbstractField implements Serializable {
+public class DateField extends AbstractField {
     
     private static final long serialVersionUID = 1L;
     private Integer max;
@@ -181,7 +179,7 @@ public class DateField extends AbstractField implements Serializable {
         return ((DateObject)object).end;
     }
 
-    public DateField getInstance() {
+    public Object clone() {
         DateField obj = new DateField();
         obj.setMax(max);
         obj.setMin(min);

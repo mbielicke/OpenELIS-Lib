@@ -113,7 +113,7 @@ import org.openelis.gwt.widget.FormInt;
                 }
             
             };
-            fireCommand(Action.FETCH,new Object[] {list.get(selection).getInstance(),callback});
+            fireCommand(Action.FETCH,new Object[] {list.get(selection).clone(),callback});
         }
     }
     

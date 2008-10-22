@@ -60,8 +60,6 @@ public interface DataField extends DataObject {
     public boolean isValid();
 
     public boolean isInRange();
-
-    public Object getInstance();
     
     public String getTip();
 

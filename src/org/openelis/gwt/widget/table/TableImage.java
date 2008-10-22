@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 
 
@@ -84,8 +85,8 @@ public class TableImage extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(DataObject field) {
-        this.field = field;
+    public void setField(Data field) {
+        this.field = (DataObject)field;
         
     }
 

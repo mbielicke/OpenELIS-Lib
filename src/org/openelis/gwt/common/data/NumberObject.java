@@ -25,9 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
-
-public class NumberObject implements DataObject, Serializable {
+public class NumberObject implements DataObject {
 
     public enum Type {INTEGER,DOUBLE}
 
@@ -99,7 +97,7 @@ public class NumberObject implements DataObject, Serializable {
         return type;
     }
     
-    public Object getInstance() {
+    public Object clone() {
         NumberObject clone = new NumberObject();
         clone.type = type;
         clone.value = new Double(value.doubleValue());

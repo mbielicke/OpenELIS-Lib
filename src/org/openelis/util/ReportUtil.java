@@ -28,6 +28,7 @@ package org.openelis.util;
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.DropDownField;
@@ -223,7 +224,7 @@ public class ReportUtil {
                         for(DataSet set : list){
                             if(list.indexOf(set) > 0)
                                 value += ",";
-                            value += (String)set.getKey().getValue();
+                            value += (String)((DataObject)set.getKey()).getValue();
                         }
                     }else{
                        value = field.getValue().toString();   

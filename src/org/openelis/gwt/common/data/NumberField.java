@@ -28,17 +28,13 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.xml.client.Node;
 
-
-import java.io.Serializable;
-
-;
 /**
  * @author tschmidt
  * 
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class NumberField extends AbstractField implements Serializable {
+public class NumberField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
     private Double max;
@@ -154,7 +150,7 @@ public class NumberField extends AbstractField implements Serializable {
         this.max = (Double)max;
     }
 
-    public NumberField getInstance() {
+    public Object clone() {
         NumberField obj = new NumberField();
         obj.setMax(max);
         obj.setMin(min);

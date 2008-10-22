@@ -26,12 +26,11 @@
 package org.openelis.gwt.common.data;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.google.gwt.xml.client.Node;
 
-public class CollectionField extends AbstractField implements Serializable {
+public class CollectionField extends AbstractField  {
 
     private static final long serialVersionUID = 1L;
     private ArrayList<DataObject> coll = new ArrayList<DataObject>();
@@ -87,7 +86,7 @@ public class CollectionField extends AbstractField implements Serializable {
         coll.add(item);
     }
 
-    public CollectionField getInstance() {
+    public Object clone() {
         CollectionField obj = new CollectionField();
         obj.setRequired(required);
         obj.setType(type);

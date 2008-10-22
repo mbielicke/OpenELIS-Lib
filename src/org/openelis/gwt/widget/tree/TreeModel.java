@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
@@ -40,12 +42,13 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
     private TreeModelListenerCollection treeModelListeners;
     public int shownRows; 
-    
+    public TreeWidget controller;
     public boolean multiSelect;
     
     public TreeManager manager;
     
     public TreeModel(TreeWidget controller) {
+        this.controller = controller;
         addTreeModelListener(controller);
         addTreeModelListener((TreeModelListener)controller.renderer);
     }
@@ -61,8 +64,10 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public boolean canDelete(int row) {
         TreeDataItem item = rows.get(row);
         if(manager != null)
-            return manager.canDelete(item, row);
-        return true;
+            return manager.canDelete(controller,item, row);
+        if(controller.enabled)
+            return true;
+        return false;
     }
 
     public boolean canEdit(int row, int col) {
@@ -70,18 +75,20 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(!item.enabled)
             return false;
         if(manager != null)
-            return manager.canEdit(item, row, col);
-        if(row == numRows())
+            return manager.canEdit(controller, item, row, col);
+        if(controller.enabled)
             return true;
-        return true;
+        return false;
     }
 
     public boolean canAdd(int row) {
         if(!rows.get(row).enabled)
             return false;
         if(manager != null)
-            return manager.canAdd(rows.get(row), row);
-        return true;
+            return manager.canAdd(controller,rows.get(row), row);
+        if(controller.enabled)
+            return true;
+        return false;
     }
 
     public boolean canSelect(int row) {
@@ -89,10 +96,10 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(!item.enabled)
             return false;
         if(manager != null)
-            return manager.canSelect(item,row);
-        if(row == numRows())
+            return manager.canSelect(controller,item,row);
+        if(controller.enabled)
             return true;
-        return true;
+        return false;
     }
     
     public boolean canToggle(int row) {
@@ -103,14 +110,18 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
     public boolean canOpen(int row) {
         if(manager != null)
-            return manager.canOpen(rows.get(row),row);
-        return true;
+            return manager.canOpen(controller,rows.get(row),row);
+        if(controller.enabled)
+            return true;
+        return false;
     }
     
     public boolean canClose(int row) {
         if(manager != null)
-            return manager.canClose(rows.get(row),row);
-        return true;
+            return manager.canClose(controller,rows.get(row),row);
+        if(controller.enabled)
+            return true;
+        return false;
     }
 
     public void clear() {
@@ -142,7 +153,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return data;
     }
 
-    public DataObject getObject(int row, int col) {
+    public Data getObject(int row, int col) {
         return rows.get(row).get(col);
     }
 
@@ -207,7 +218,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         treeModelListeners.fireRowSelected(this, index);
     }
 
-    public void selectRow(DataObject key) {
+    public void selectRow(Data key) {
        //selectRow(data.keyMap.get());
     }
 
@@ -245,7 +256,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void setCell(int row, int col, Object value) {
-        rows.get(row).get(col).setValue(value);
+        ((DataObject)rows.get(row).get(col)).setValue(value);
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
@@ -286,6 +297,17 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         for(int i = 0;  i < data.selections.size(); i++)
             ret[i] = data.selections.get(i);
         return ret;
+    }
+
+    public void clearCellError(int row, int col) {
+        ((AbstractField)rows.get(row).get(col)).clearErrors();
+        treeModelListeners.fireCellUpdated(this, row, col);
+    }
+
+    public void setCellError(int row, int col, String Error) {
+        ((AbstractField)rows.get(row).get(col)).addError(Error);
+        treeModelListeners.fireCellUpdated(this, row, col);
+        
     }
 
 
