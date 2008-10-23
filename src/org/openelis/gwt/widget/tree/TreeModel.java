@@ -35,6 +35,7 @@ import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
@@ -44,6 +45,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public int shownRows; 
     public TreeWidget controller;
     public boolean multiSelect;
+
     
     public TreeManager manager;
     
@@ -308,6 +310,14 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         ((AbstractField)rows.get(row).get(col)).addError(Error);
         treeModelListeners.fireCellUpdated(this, row, col);
         
+    }
+    
+    public TreeDataItem createTreeItem(String leafType, DataObject key) {
+        return data.createTreeItem(leafType, key);
+    }
+    
+    public void setLeaves(HashMap<String,TreeDataItem> leaves){
+        data.leaves = leaves;
     }
 
 

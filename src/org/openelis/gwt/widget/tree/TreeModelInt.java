@@ -32,6 +32,7 @@ import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface TreeModelInt extends SourcesTreeModelEvents {
     
@@ -110,5 +111,9 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     public void setCellError(int row, int col, String Error);
     
     public void clearCellError(int row, int col);
+    
+    public TreeDataItem createTreeItem(String leafType, DataObject key);
+    
+    public void setLeaves(HashMap<String,TreeDataItem> leaves);
         
 }

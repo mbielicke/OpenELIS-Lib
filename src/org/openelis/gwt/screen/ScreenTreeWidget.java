@@ -33,6 +33,7 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.common.data.TreeField;
 import org.openelis.gwt.widget.table.TableManager;
@@ -44,6 +45,7 @@ import org.openelis.gwt.widget.tree.TreeWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * ScreenTable wraps the FormTable widget to be displayed
@@ -201,6 +203,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  
                  NodeList leafNodes = ((Element)node).getElementsByTagName("leaf");
                  
+                 HashMap<String,TreeDataItem> items = new HashMap<String,TreeDataItem>();
                  for(int i = 0; i < leafNodes.getLength(); i++) {
                  
                      Node editorsNode = ((Element)leafNodes.item(i)).getElementsByTagName("editors")
@@ -208,23 +211,26 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                      Node fieldsNode = ((Element)leafNodes.item(i)).getElementsByTagName("fields")
                      .item(0);
 
+                     String leafType = leafNodes.item(i).getAttributes().getNamedItem("type").getNodeValue();
                      NodeList editors = editorsNode.getChildNodes();
                      int j = 0; 
                      for (int k = 0; k < editors.getLength(); k++) {
                          if (editors.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                             columns.get(j).setColumnWidget((Widget)ScreenBase.createCellWidget(editors.item(k),screen),leafNodes.item(i).getAttributes().getNamedItem("type").getNodeValue());
+                             columns.get(j).setColumnWidget((Widget)ScreenBase.createCellWidget(editors.item(k),screen),leafType);
                              j++;
                          }
                      }
                      NodeList fieldList = fieldsNode.getChildNodes();
-                     DataSet set = new DataSet();
+                     TreeDataItem item = new TreeDataItem();
+                     item.leafType = leafType;
                      for (int k = 0; k < fieldList.getLength(); k++) {
                          if (fieldList.item(k).getNodeType() == Node.ELEMENT_NODE) {
                              AbstractField field = (ScreenBase.createField(fieldList.item(k)));
-                             set.add(field);
+                             item.add(field);
                              columns.get(k).setKey(field.key);
                          }
                      }
+                     items.put(leafType,item);
                  }
                  //data.setDefaultSet(set);
                  tree = new TreeWidget(columns,maxRows,width,title,showHeader,showScroll);
@@ -246,6 +252,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
              ((AppScreen)screen).addClickListener(tree.mouseHandler);
              initWidget(tree);
              tree.model.load(data);
+             tree.model.setLeaves(items);
              displayWidget = tree;
              tree.setStyleName("ScreenTable");
              ((TreeKeyboardHandler)tree.keyboardHandler).setScreen(this);

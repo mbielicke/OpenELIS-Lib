@@ -214,11 +214,7 @@ public class TreeWidget extends FocusPanel implements
         }
         Iterator widIt = view.table.iterator();
         while (widIt.hasNext()) {
-            Widget wid = (Widget)widIt.next();
-            if(wid instanceof TreeRenderer.ItemGrid)
-                ((TableCellWidget)((TreeRenderer.ItemGrid)wid).getWidget(0, ((TreeRenderer.ItemGrid)wid).getCellCount(0)-1)).enable(enabled);
-            else
-                ((TableCellWidget)widIt.next()).enable(enabled);
+            ((TableCellWidget)widIt.next()).enable(enabled);
         }
     }
 

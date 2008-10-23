@@ -31,33 +31,33 @@ import java.util.Iterator;
 public class TreeDataItem extends DataSet {
     
     private static final long serialVersionUID = 1L;
-    private static int itemIndex = 0;
     
     public String leafType;
 
     private ArrayList<TreeDataItem> items = new ArrayList<TreeDataItem>();
     
     public TreeDataItem parent;
-        
-    public DataObject leafField;
     
     public boolean loaded;
     
     public boolean open;
     
+    public boolean lazy;
+    
     public int depth;
     
-    public int hash = -1;
+    public int hash =  -1;
     
     public Object clone() {
         TreeDataItem clone = new TreeDataItem();
         for(int i=0; i < size(); i++){
             clone.add((DataObject)get(i).clone());
         }
-        for(int i=0; i < size(); i++){
+        for(int i=0; i < items.size(); i++){
             clone.addItem((TreeDataItem)getItem(i).clone());
         }
         clone.parent = parent;
+        clone.leafType = leafType;
         return clone;
     }
     

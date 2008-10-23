@@ -135,7 +135,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
         this.field = field;
         TreeDataItem item = (TreeDataItem)field;
         //editor = cells.get(item.leafCell).getNewInstance();
-        editor.setField(item.leafField);
+        editor.setField(item.get(0));
         editor.enable(enabled);
         editor.setCellWidth(width - ((item.depth+1)*18));
         ((SimplePanel)editor).setWidth(width - ((item.depth+1)*18)+"px");

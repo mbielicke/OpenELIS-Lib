@@ -41,6 +41,8 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     private ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
     
+    public HashMap<String,TreeDataItem> leaves = new HashMap<String,TreeDataItem>();
+    
     private int hashIndex = 0;
     
     public int selected = -1;
@@ -71,11 +73,17 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     public boolean add(Data key, TreeDataItem item) {
         keyMap.put(item.getKey(), item);
-        if(item.hash < 0){
-            item.hash = hashIndex;
-            hashIndex++;
-        }
+        setHash(item);
         return super.add(item);
+    }
+    
+    private void setHash(TreeDataItem item) {
+        if(item.hash < 0){
+            item.hash = hashIndex++;
+            itemMap.put(item.hashCode(), item);
+        }
+        for(TreeDataItem sub : item.getItems())
+            setHash(sub);
     }
     
     public void delete(int index){
@@ -145,8 +153,12 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     public Object clone() {
         TreeDataModel clone = new TreeDataModel();
         clone.page = page;
+        for(Integer sel : selections)
+            clone.selections.add(sel);
         clone.selected = selected;
         clone.selectLast = selectLast;
+        for(TreeDataItem leaf : leaves.values())
+            clone.leaves.put(leaf.leafType,leaf); 
         for(int i = 0; i < size(); i++){
             clone.add((TreeDataItem)get(i).clone());
         }
@@ -159,13 +171,9 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         set(index1,item);
     }
     
-    public TreeDataItem createTreeItem(Data key) {
-        TreeDataItem item = new TreeDataItem();
+    public TreeDataItem createTreeItem(String leafType, Data key) {
+        TreeDataItem item = (TreeDataItem)leaves.get(leafType).clone();
         item.setKey(key);
-        item.hash = hashIndex;
-        hashIndex++;
-        keyMap.put(key,item);
-        itemMap.put(item.hashCode(), item);
         return item;
     }
 
@@ -189,6 +197,8 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     public void checkChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows){
         rows.add(item);
+        if(item.hash < 0)
+            setHash(item);
         if(item.open && item.shownItems() > 0) {
            Iterator<TreeDataItem> it = item.getItems().iterator();   
            while(it.hasNext())

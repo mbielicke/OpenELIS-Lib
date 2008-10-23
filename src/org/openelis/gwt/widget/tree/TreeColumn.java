@@ -33,9 +33,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.table.TableWidget;
 
 import java.util.HashMap;
 
@@ -68,10 +66,6 @@ public class TreeColumn implements TreeColumnInt {
     public void loadWidget(Widget widget, Data object) {
         ((TableCellWidget)widget).setField(object);
         ((TableCellWidget)widget).setDisplay();
-        if(widget instanceof TableTree) {
-            ((TableTree)widget).removeCommandListener(controller);
-            ((TableTree)widget).addCommandListener(controller);
-        }
     }
     
     public void setWidgetDisplay(Widget widget) {
