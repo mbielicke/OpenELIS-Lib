@@ -27,9 +27,12 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.data.Data;
+
 import java.util.ArrayList;
 
-public class AsyncCallChain extends ArrayList<AsyncCallback> implements AsyncCallback{
+public class AsyncCallChain<T> extends ArrayList<AsyncCallback> implements AsyncCallback<T>{
     
     private static final long serialVersionUID = 1L;
         
@@ -43,7 +46,7 @@ public class AsyncCallChain extends ArrayList<AsyncCallback> implements AsyncCal
         }
     }
 
-    public void onSuccess(Object result) {
+    public void onSuccess(T result) {
         for(AsyncCallback callback : this){
             callback.onSuccess(result);
         }

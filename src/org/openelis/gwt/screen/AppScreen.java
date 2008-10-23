@@ -88,9 +88,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     }
 
     public void getXML() {
-        service.getXML(new AsyncCallback() {
-           public void onSuccess(Object result){
-               drawScreen((String)result);
+        service.getXML(new AsyncCallback<String>() {
+           public void onSuccess(String result){
+               drawScreen(result);
                afterDraw(true);
            }
            public void onFailure(Throwable caught){
@@ -101,9 +101,9 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     }
     
     public void getXMLData() {
-        service.getXMLData(new AsyncCallback() {
-           public void onSuccess(Object result){
-               initData = (HashMap<String,Data>)result;
+        service.getXMLData(new AsyncCallback<HashMap<String,Data>>() {
+           public void onSuccess(HashMap<String,Data> result){
+               initData = result;
                drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
            }
@@ -115,10 +115,10 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     }
     
     public void getXMLData(HashMap<String,Data> args) {
-        service.getXMLData(args, new AsyncCallback() {
-           public void onSuccess(Object result){
+        service.getXMLData(args, new AsyncCallback<HashMap<String,Data>>() {
+           public void onSuccess(HashMap<String,Data> result){
                try {
-                   initData = (HashMap<String,Data>)result;
+                   initData = result;
                    drawScreen((String)((StringObject)initData.get("xml")).getValue());
                    afterDraw(true);
                }catch(Exception e){
@@ -134,7 +134,7 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     
     public void afterDraw(boolean sucess) {
 
-        this.rpc = (FormRPC)forms.get("display");
+        this.rpc = forms.get("display");
         //load();
         DOM.addEventPreview(this);
         if(window != null){

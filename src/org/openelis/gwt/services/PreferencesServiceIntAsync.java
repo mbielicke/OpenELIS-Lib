@@ -31,7 +31,7 @@ import org.openelis.gwt.common.Preferences;
 
 public interface PreferencesServiceIntAsync {
     
-    public void getPreferences(String key, AsyncCallback callback);
+    public void getPreferences(String key, AsyncCallback<Preferences> callback);
     
     public void storePreferences(Preferences prefs, AsyncCallback callback);
 

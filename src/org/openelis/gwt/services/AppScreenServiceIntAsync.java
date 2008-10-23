@@ -34,10 +34,10 @@ import java.util.HashMap;
 
 public interface AppScreenServiceIntAsync {
     
-    public void getXML(AsyncCallback callback);
+    public void getXML(AsyncCallback<String> callback);
     
-    public void getXMLData(AsyncCallback callback);
+    public void getXMLData(AsyncCallback<HashMap<String,Data>> callback);
     
-    public void getXMLData(HashMap<String,Data> args, AsyncCallback callback);
+    public void getXMLData(HashMap<String,Data> args, AsyncCallback<HashMap<String,Data>> callback);
 
 }

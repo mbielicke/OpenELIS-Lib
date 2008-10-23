@@ -42,6 +42,6 @@ import java.util.HashMap;
  */
 public interface AutoCompleteServiceIntAsync {
 
-    public Request getMatches(String cat, DataModel model, String match, HashMap<String,Data> params, AsyncCallback callback) throws RPCException;
+    public Request getMatches(String cat, DataModel model, String match, HashMap<String,Data> params, AsyncCallback<DataModel> callback) throws RPCException;
 
 }
