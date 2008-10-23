@@ -55,7 +55,7 @@ public interface DataField extends DataObject {
 
     public void clearErrors();
 
-    public Object getInstance(Node node);
+    public <T extends DataField> T getInstance(Node node);
 
     public boolean isValid();
 
