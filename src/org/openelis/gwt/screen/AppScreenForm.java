@@ -37,7 +37,6 @@ import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.common.data.KeyListManager.Action;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
@@ -63,7 +62,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandEvents, CommandListener {
     
     protected DataSet key;
-    public AppScreenFormServiceIntAsync<FormRPC,DataSet,DataModel> formService;
+    public AppScreenFormServiceIntAsync<Data,Data,Data> formService;
     public State state = State.DEFAULT;
     protected CommandListenerCollection commandListeners;
     public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE};
