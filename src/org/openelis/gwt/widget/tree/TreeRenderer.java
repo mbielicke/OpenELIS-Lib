@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -43,7 +44,7 @@ import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
 
 import java.util.Stack;
 
-public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener  {
+public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener {
     
     private TreeWidget controller;
     
@@ -73,6 +74,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     public void createRow(int i) {
         TreeColumnInt column = controller.columns.get(0);
         TableTree item = new TableTree();
+        item.addDropListener(controller.drag);
         item.enabled = controller.enabled;
         ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
         ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
@@ -80,6 +82,9 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         item.setRowIndex(i);
         item.addCommandListener(controller);
         controller.view.table.setWidget(i, 0, item);
+        DOM.setEventListener(controller.view.table.getRowFormatter().getElement(i), controller.drag);
+        DOM.sinkEvents(controller.view.table.getRowFormatter().getElement(i), Event.MOUSEEVENTS);
+        controller.view.table.getRowFormatter().getElement(i).setAttribute("indexVal",String.valueOf(i));        
     }
     
     public void load(int pos) {
@@ -140,6 +145,9 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
                 TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);
                 controller.view.table.setWidget(index,i,(Widget)wid);
                 controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
+                controller.view.table.getFlexCellFormatter().addStyleName(index,
+                                                                          i,
+                                                                          TableView.cellStyle);
             }
             controller.view.table.getFlexCellFormatter().addStyleName(index,
                                                   i,
@@ -307,7 +315,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     }
 
     public void dataChanged(SourcesTreeModelEvents sender) {
-        load(0);
+        load(controller.view.scrollBar.getScrollPosition());
     }
 
     public void rowDeleted(SourcesTreeModelEvents sender, int row) {

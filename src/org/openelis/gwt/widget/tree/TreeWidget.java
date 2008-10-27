@@ -25,13 +25,34 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DragListenerCollection;
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
+import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
+import com.google.gwt.user.client.dnd.SourcesDragEvents;
+import com.google.gwt.user.client.dnd.SourcesDropEvents;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerCollection;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
+import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
@@ -39,6 +60,8 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -47,8 +70,10 @@ import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 
 public class TreeWidget extends FocusPanel implements
                                           TableListener,
@@ -81,6 +106,8 @@ public class TreeWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
+    public DragHandler drag = new DragHandler();
+    public ScreenWindow window;
 
     public TreeWidget() {
 
@@ -314,4 +341,261 @@ public class TreeWidget extends FocusPanel implements
         // TODO Auto-generated method stub
         
     }
+    
+    public class DragHandler implements EventListener, MouseListener, DragListener, DropListener {
+        
+        MouseListenerCollection mouseEvents = new MouseListenerCollection();
+        
+        public DragHandler() {
+            sinkEvents(Event.MOUSEEVENTS);
+            mouseEvents.add(this);
+        }
+        
+        private class DragWidget extends HTMLPanel implements SourcesDragEvents, SourcesDropEvents, SourcesMouseEvents{
+            public int modelIndex;
+            public HTMLPanel html= new HTMLPanel("<div/>");
+            public int x;
+            public int y;
+            DragListenerCollection dragEvents = new DragListenerCollection();
+            DropListenerCollection dropEvents = new DropListenerCollection();
+            MouseListenerCollection mouseEvents = new MouseListenerCollection();
+            
+            @Override
+            public void onBrowserEvent(Event event) {
+                switch(DOM.eventGetType(event)){
+                    case Event.ONMOUSEDOWN :
+                    case Event.ONMOUSEMOVE :
+                    case Event.ONMOUSEOUT :
+                    case Event.ONMOUSEOVER :
+                    case Event.ONMOUSEUP :
+                        DOM.eventPreventDefault(event);
+                        mouseEvents.fireMouseEvent(this, event);
+                }
+            }
+            
+            public DragWidget(String html) {
+                super(html);
+                sinkEvents(Event.MOUSEEVENTS);
+               
+            }
+
+            public void addDragListener(DragListener listener) {
+                dragEvents.add(listener, this);
+                
+            }
+
+            public void removeDragListener(DragListener listener) {
+                dragEvents.remove(listener);
+                
+            }
+
+            public void addDropListener(DropListener listener) {
+                dropEvents.add(listener);
+                
+            }
+
+            public void removeDropListener(DropListener listener) {
+                dropEvents.remove(listener);
+                
+            }
+            public void addMouseListener(MouseListener listener) {
+                mouseEvents.add(listener);
+                
+            }
+            public void removeMouseListener(MouseListener listener) {
+                mouseEvents.remove(listener);
+                
+            }
+        }
+        
+        private class DragDelay extends Timer {
+            public DragWidget drag;
+            public int x;
+            public int y;
+            
+            public DragDelay(DragWidget drag, int x, int y){
+                this.drag = drag;
+                this.x = x;
+                this.y = y;
+                this.schedule(500);
+            }
+            
+            public void run() {
+                mouseEvents.fireMouseDown(drag, x, y);
+            }
+        };
+        
+        DragDelay delay;
+        Timer scroll;
+    
+        public void onBrowserEvent(Event event) {
+            
+            switch(DOM.eventGetType(event)){
+                case Event.ONMOUSEDOWN :
+                    int rowIndex = Integer.parseInt(event.getCurrentTarget().getAttribute("indexVal"));
+                    if(model.canDrag(modelIndexList[rowIndex])) {
+                        DragWidget drag = new DragWidget(event.getCurrentTarget().getString());
+                        drag.modelIndex = modelIndexList[(Integer.parseInt(event.getCurrentTarget().getAttribute("indexVal")))];
+                        drag.x = DOM.getAbsoluteLeft((Element)event.getCurrentTarget());
+                        drag.y = DOM.getAbsoluteTop((Element)event.getCurrentTarget());
+                        int x = DOM.eventGetClientX(event)
+                        - DOM.getAbsoluteLeft((Element)event.getCurrentTarget())
+                        + DOM.getElementPropertyInt((Element)event.getCurrentTarget(), "scrollLeft")
+                        + Window.getScrollLeft();
+                        int y = DOM.eventGetClientY(event)
+                        - DOM.getAbsoluteTop((Element)event.getCurrentTarget())
+                        + DOM.getElementPropertyInt((Element)event.getCurrentTarget(), "scrollTop")
+                        + Window.getScrollTop();
+                        DOM.eventPreventDefault(event);
+                        if(delay != null)
+                            delay.cancel();
+                        delay = new DragDelay(drag,x,y);
+                    }
+                    break;
+                case Event.ONMOUSEUP :
+                    if(delay != null){
+                        delay.cancel();
+                        delay = null;
+                    }
+                    break;
+            }
+        }
+
+        public void onMouseDown(final Widget sender, final int x, final int y) {
+            AbsolutePanel dragIndicator = new AbsolutePanel();
+            dragIndicator.setStyleName("DragStatus");
+            dragIndicator.addStyleName("NoDrop");
+            HorizontalPanel hp = new HorizontalPanel();
+            hp.add(dragIndicator);
+            hp.add(sender);
+            hp.setStyleName(sender.getStyleName());
+            RootPanel.get().add(hp);
+            ((DragWidget)sender).addDragListener(this);
+            MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse((DragWidget)sender);
+            mouse.setDrag(hp);
+            Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
+            for(int i = 0; i < view.table.getRowCount(); i++){
+                dropMap.add(((TableTree)view.table.getWidget(i,0)).dropListeners);
+            }
+            MouseDragGestureRecognizer.setDropMap(dropMap);
+            MouseDragGestureRecognizer.setWidgetPosition(hp,
+                                                         ((DragWidget)sender).x,
+                                                         ((DragWidget)sender).y);
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    MouseDragGestureRecognizer.getGestureMouse(sender)
+                                              .onMouseDown(sender, x, y);
+                }
+            });
+        }
+
+        public void onMouseEnter(Widget sender) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void onMouseLeave(Widget sender) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void onMouseMove(Widget sender, int x, int y) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void onMouseUp(Widget sender, int x, int y) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void onDragDropEnd(Widget sender, Widget target) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void onDragEnd(Widget sender, int x, int y) {
+            DOM.removeChild(RootPanel.get().getElement(), sender.getParent().getElement());
+            
+        }
+
+        public void onDragEnter(Widget sender, Widget target) {
+            
+            
+        }
+
+        public void onDragExit(Widget sender, Widget target) {
+            
+            
+        }
+
+        public void onDragMouseMoved(Widget sender, int x, int y) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void onDragOver(Widget sender, Widget target) {
+           // DOM.setStyleAttribute(sender.getElement(), "background", "red");
+            
+        }
+
+        public void onDragStart(Widget sender, int x, int y) {
+            view.addStyleName("locked");
+            
+        }
+
+        public void onDrop(Widget sender, Widget source) {
+            if(model.canDrop(((DragWidget)source).modelIndex, modelIndexList[((TableTree)sender).rowIndex])){
+                model.drop(((DragWidget)source).modelIndex,modelIndexList[((TableTree)sender).rowIndex]);
+                model.refresh();
+                /*
+                TreeDataItem dropItem = model.getRow(modelIndexList[((TableTree)sender).rowIndex]);
+                TreeDataItem dragItem = (TreeDataItem)model.getRow(((DragWidget)source).modelIndex).clone();
+                if(dropItem.depth == dragItem.depth && dropItem.parent == dragItem.parent){
+                    model.deleteRow(((DragWidget)source).modelIndex);
+                    model.addRow(modelIndexList[((TableTree)sender).rowIndex], dragItem);
+                    model.refresh();
+                }
+                mouseEvents.fireMouseUp(sender, 0, 0);
+                */
+            }
+        }
+
+        public void onDropEnter(Widget sender, Widget source) {
+            final int rowIndex = ((TableTree)sender).rowIndex;
+            if(rowIndex == 0 || rowIndex == 9){
+                scroll = new Timer() {
+                    public void run() {
+                        if(rowIndex == 9){
+                            if(modelIndexList[rowIndex] == model.rows.size() -1){
+                                cancel();
+                            }else{
+                                view.setScrollPosition(view.scrollBar.getScrollPosition()+10);
+                            }
+                        }
+                        if(rowIndex == 0){
+                            if(modelIndexList[rowIndex] == 0){
+                                cancel();
+                            }else{
+                                view.setScrollPosition(view.scrollBar.getScrollPosition()-10);
+                            }
+                        }
+                    }
+                };
+                scroll.scheduleRepeating(50);
+            }else if(scroll != null)
+                scroll.cancel();
+        }
+
+        public void onDropExit(Widget sender, Widget source) {
+           
+            
+        }
+
+        public void onDropOver(Widget sender, Widget source) {
+            // TODO Auto-generated method stub
+            
+        }
+    }
+    
 }

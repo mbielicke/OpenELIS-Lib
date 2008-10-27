@@ -42,4 +42,10 @@ public interface TreeManager {
     
     public boolean canClose(TreeWidget widget, TreeDataItem set, int row);
     
+    public boolean canDrag(TreeWidget widget, TreeDataItem item, int row);
+    
+    public boolean canDrop(TreeWidget widget, TreeDataItem dragItem, TreeDataItem dropTarget, int dragRow, int targetRow);
+    
+    public void drop(TreeWidget widget, TreeDataItem dragItem, TreeDataItem dropTarget, int dragRow, int targetRow);
+    
 }

@@ -87,8 +87,15 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     }
     
     public void delete(int index){
-        keyMap.remove(get(index).key);
-        deleted.add(remove(index));        
+        TreeDataItem item = itemMap.get(index);
+        if(item.parent != null){
+            item.parent.getItems().remove(item);
+            itemMap.remove(index);
+        }else{
+            keyMap.remove(item.key);
+            deleted.add(item);
+            remove(item);
+        }
     }
     
     public void select(int selection) throws IndexOutOfBoundsException {

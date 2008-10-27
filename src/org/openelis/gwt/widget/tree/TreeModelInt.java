@@ -101,6 +101,12 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     public boolean canOpen(int row);
     
     public boolean canClose(int row);
+    
+    public boolean canDrag(int row);
+    
+    public boolean canDrop(int dragRow, int targetRow);
+    
+    public void drop(int dragRow, int targetRow);
         
     public TreeDataModel unload();
     

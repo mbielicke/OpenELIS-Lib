@@ -27,6 +27,9 @@ package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
+import com.google.gwt.user.client.dnd.SourcesDropEvents;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -52,7 +55,7 @@ import org.openelis.gwt.widget.tree.TreeView;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents {
+public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents, SourcesDropEvents {
     
     private class ItemGrid extends Grid implements TableListener{
         
@@ -83,6 +86,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
     public enum Action {TOGGLE};
     public int rowIndex;
     public boolean enabled;
+    public DropListenerCollection dropListeners = new DropListenerCollection();
 
     
     public TableTree() {
@@ -208,7 +212,8 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
              DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,grid.getColumnCount()-1), "background", "#f8f8f9");
        }
        */
-       editorGrid.addStyleName(TreeView.cellStyle);
+       //editorGrid.addStyleName(TreeView.cellStyle);
+       DOM.setStyleAttribute(editorGrid.getElement(), "background-color", "none");
        DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
     }
 
@@ -234,6 +239,16 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
              commandListeners.remove(listener);
          
      }
+
+    public void addDropListener(DropListener listener) {
+       dropListeners.add(listener,this);
+        
+    }
+
+    public void removeDropListener(DropListener listener) {
+        dropListeners.remove(listener);
+        
+    }
     
 
 }

@@ -40,4 +40,6 @@ public interface TreeViewInt {
     public void setTitle(String title);
     
     public void setScrollHeight(int height);
+    
+    public void setScrollPosition(int pos);
 }

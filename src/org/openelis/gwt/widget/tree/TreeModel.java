@@ -125,6 +125,28 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
             return true;
         return false;
     }
+    
+    public boolean canDrag(int row) {
+        if(manager != null)
+            return manager.canDrag(controller,rows.get(row),row);
+        if(controller.enabled)
+            return true;
+        return false;
+    }
+
+    public boolean canDrop(int dragRow, int targetRow) {
+        if(manager != null)
+            return manager.canDrop(controller,rows.get(dragRow),rows.get(targetRow),dragRow,targetRow);
+        if(controller.enabled)
+            return true;
+        return false;
+    }
+    
+    public void drop(int dragRow, int targetRow) {
+        if(manager != null)
+            manager.drop(controller,rows.get(dragRow),rows.get(targetRow),dragRow,targetRow);
+        
+    }
 
     public void clear() {
         data.clear();
@@ -140,7 +162,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public void deleteRow(int row) {
         if(rows.get(row).shown)
             shownRows--;
-        data.remove(rows.get(row).hashCode());
+        data.delete(rows.get(row).hashCode());
         rows.remove(row);
         treeModelListeners.fireRowDeleted(this, row);
     }
