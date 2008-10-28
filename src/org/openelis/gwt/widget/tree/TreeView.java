@@ -204,7 +204,7 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
         vp.add(ft);
         ft.setCellPadding(0);
         ft.setCellSpacing(0);
-        table.setCellSpacing(1);
+        table.setCellSpacing(0);
         table.addStyleName(tableStyle);
         DOM.setStyleAttribute(table.getElement(), "background", "white");
         cellView.setWidget(table);

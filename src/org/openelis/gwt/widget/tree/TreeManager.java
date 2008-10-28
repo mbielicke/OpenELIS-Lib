@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import org.openelis.gwt.common.data.TreeDataItem;
 
 
@@ -44,8 +46,8 @@ public interface TreeManager {
     
     public boolean canDrag(TreeWidget widget, TreeDataItem item, int row);
     
-    public boolean canDrop(TreeWidget widget, TreeDataItem dragItem, TreeDataItem dropTarget, int dragRow, int targetRow);
+    public boolean canDrop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
     
-    public void drop(TreeWidget widget, TreeDataItem dragItem, TreeDataItem dropTarget, int dragRow, int targetRow);
+    public void drop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
     
 }

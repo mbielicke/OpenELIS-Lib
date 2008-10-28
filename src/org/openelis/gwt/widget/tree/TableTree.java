@@ -180,9 +180,9 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
                     DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
                 else if(j > 0){
                     if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
-                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat");
+                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat center");
                     else
-                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat");
+                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat center");
                 }
                 if(drow.getItems().size() > 0){
                     editorGrid.clickCell = j;
@@ -214,7 +214,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
        */
        //editorGrid.addStyleName(TreeView.cellStyle);
        DOM.setStyleAttribute(editorGrid.getElement(), "background-color", "none");
-       DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
+       //DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
     }
 
 

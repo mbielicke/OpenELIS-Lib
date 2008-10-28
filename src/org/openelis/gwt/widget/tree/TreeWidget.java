@@ -99,7 +99,7 @@ public class TreeWidget extends FocusPanel implements
     public boolean ctrlKey;
     public int maxRows;
     public int cellHeight = 18;
-    public int cellSpacing = 1;
+    public int cellSpacing = 0;
     public TableCellWidget editingCell = null;
     public int[] modelIndexList;
     public boolean showRows;
@@ -351,7 +351,7 @@ public class TreeWidget extends FocusPanel implements
             mouseEvents.add(this);
         }
         
-        private class DragWidget extends HTMLPanel implements SourcesDragEvents, SourcesDropEvents, SourcesMouseEvents{
+        public class DragWidget extends HTMLPanel implements SourcesDragEvents, SourcesDropEvents, SourcesMouseEvents{
             public int modelIndex;
             public HTMLPanel html= new HTMLPanel("<div/>");
             public int x;
@@ -425,8 +425,11 @@ public class TreeWidget extends FocusPanel implements
             }
         };
         
+        
+        
         DragDelay delay;
         Timer scroll;
+        Timer open;
     
         public void onBrowserEvent(Event event) {
             
@@ -434,7 +437,7 @@ public class TreeWidget extends FocusPanel implements
                 case Event.ONMOUSEDOWN :
                     int rowIndex = Integer.parseInt(event.getCurrentTarget().getAttribute("indexVal"));
                     if(model.canDrag(modelIndexList[rowIndex])) {
-                        DragWidget drag = new DragWidget(event.getCurrentTarget().getString());
+                        DragWidget drag = new DragWidget("<table>"+event.getCurrentTarget().getString()+"</table>");
                         drag.modelIndex = modelIndexList[(Integer.parseInt(event.getCurrentTarget().getAttribute("indexVal")))];
                         drag.x = DOM.getAbsoluteLeft((Element)event.getCurrentTarget());
                         drag.y = DOM.getAbsoluteTop((Element)event.getCurrentTarget());
@@ -545,8 +548,8 @@ public class TreeWidget extends FocusPanel implements
         }
 
         public void onDrop(Widget sender, Widget source) {
-            if(model.canDrop(((DragWidget)source).modelIndex, modelIndexList[((TableTree)sender).rowIndex])){
-                model.drop(((DragWidget)source).modelIndex,modelIndexList[((TableTree)sender).rowIndex]);
+            if(model.canDrop(source, modelIndexList[((TableTree)sender).rowIndex])){
+                model.drop(source, modelIndexList[((TableTree)sender).rowIndex]);
                 model.refresh();
                 /*
                 TreeDataItem dropItem = model.getRow(modelIndexList[((TableTree)sender).rowIndex]);
@@ -563,7 +566,8 @@ public class TreeWidget extends FocusPanel implements
 
         public void onDropEnter(Widget sender, Widget source) {
             final int rowIndex = ((TableTree)sender).rowIndex;
-            if(rowIndex == 0 || rowIndex == 9){
+            if((rowIndex == 0 && modelIndexList[rowIndex] > 0) || 
+               (rowIndex == 9 && modelIndexList[rowIndex] < model.rows.size() -1)){
                 scroll = new Timer() {
                     public void run() {
                         if(rowIndex == 9){
@@ -583,18 +587,36 @@ public class TreeWidget extends FocusPanel implements
                     }
                 };
                 scroll.scheduleRepeating(50);
-            }else if(scroll != null)
+            }else if(scroll != null){
                 scroll.cancel();
+                scroll = null;
+            }else if(open != null) {
+                open.cancel();
+                open = null;
+            }else if(!model.getRow(modelIndexList[rowIndex]).open){
+                open = new Timer() {
+                    public void run() {
+                        if(model.canToggle(modelIndexList[rowIndex]))
+                            model.toggle(modelIndexList[rowIndex]);
+                    }
+                };
+                open.schedule(1000);
+            }
         }
 
         public void onDropExit(Widget sender, Widget source) {
-           
-            
+            if(scroll != null) {
+                scroll.cancel();
+                scroll = null;
+            }   
+            if(open != null) {
+                open.cancel();
+                open = null;
+            }
         }
 
         public void onDropOver(Widget sender, Widget source) {
-            // TODO Auto-generated method stub
-            
+
         }
     }
     

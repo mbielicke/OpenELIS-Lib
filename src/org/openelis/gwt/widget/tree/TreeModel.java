@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
@@ -134,18 +136,23 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return false;
     }
 
-    public boolean canDrop(int dragRow, int targetRow) {
+    public boolean canDrop(Widget dragWidget, int targetRow) {
         if(manager != null)
-            return manager.canDrop(controller,rows.get(dragRow),rows.get(targetRow),dragRow,targetRow);
+            return manager.canDrop(controller,dragWidget,rows.get(targetRow),targetRow);
         if(controller.enabled)
             return true;
         return false;
     }
     
-    public void drop(int dragRow, int targetRow) {
+    public void drop(Widget dragWidget, int targetRow) {
         if(manager != null)
-            manager.drop(controller,rows.get(dragRow),rows.get(targetRow),dragRow,targetRow);
-        
+            manager.drop(controller,dragWidget,rows.get(targetRow),targetRow);
+        TreeDataItem dropItem = getRow(targetRow);
+        TreeDataItem dragItem = (TreeDataItem)getRow(((TreeWidget.DragHandler.DragWidget)dragWidget).modelIndex).clone();
+        if(dropItem.depth == dragItem.depth && dropItem.parent == dragItem.parent){
+            deleteRow(((TreeWidget.DragHandler.DragWidget)dragWidget).modelIndex);
+            addRow(targetRow, dragItem);
+        }
     }
 
     public void clear() {
