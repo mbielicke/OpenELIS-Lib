@@ -132,5 +132,12 @@ public class TreeDataItem extends DataSet {
     public int hashCode() {
         return hash;
     }
+    
+    public boolean equals(Object obj) {
+        if(!(obj instanceof TreeDataItem))
+            return false;
+        return hash == ((TreeDataItem)obj).hash;
+                       
+    }
 
 }
