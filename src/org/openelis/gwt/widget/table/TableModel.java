@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import org.openelis.gwt.common.DataSorter;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.DataSorterInt.SortDirection;
@@ -33,8 +35,10 @@ import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableModelListenerCollection;
+import org.openelis.gwt.widget.tree.TreeRow;
 
 import java.util.ArrayList;
 
@@ -197,6 +201,32 @@ public class TableModel implements TableModelInt {
             return manager.canAutoAdd(controller,addRow);
         return !tableRowEmpty(addRow);
     }
+    
+    public boolean canDrag(int row) {
+        if(manager != null)
+            return manager.canDrag(controller,getRow(row),row);
+        if(controller.enabled)
+            return true;
+        return false;
+    }
+
+    public boolean canDrop(Widget dragWidget, int targetRow) {
+        if(manager != null)
+            return manager.canDrop(controller,dragWidget,getRow(targetRow),targetRow);
+        if(controller.enabled)
+            return true;
+        return false;
+    }
+    
+    public void drop(Widget dragWidget, int targetRow) {
+        if(manager != null)
+            manager.drop(controller,dragWidget,getRow(targetRow),targetRow);
+        DataSet dropItem = getRow(targetRow);
+        DataSet dragItem = (DataSet)((TableRow)dragWidget).row.clone();
+        deleteRow(((TableRow)dragWidget).modelIndex);
+        addRow(targetRow, dragItem);
+    }
+
 
     public void addTableModelListener(TableModelListener listener) {
         if(tableModelListeners == null)

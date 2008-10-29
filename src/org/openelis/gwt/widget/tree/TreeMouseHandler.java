@@ -25,10 +25,20 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
+import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.AppScreen;
+
+import java.util.Vector;
 
 public class TreeMouseHandler implements TreeMouseHandlerInt {
     
@@ -50,26 +60,63 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
                         controller.treeWidgetListeners.fireStopEditing(controller, controller.activeRow, controller.activeCell);
                     }
                     controller.activeCell = -1;
-                    //controller.setFocus(true);
                 }
                 return;
             }
         }
  
     }
+    
+    Timer delay;
 
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
+    public void onMouseDown(final Widget sender, final int x, final int y) {
+        if(!controller.model.canDrag(((TreeRow)sender).modelIndex))
+            return;
+        if(delay != null)
+            delay.cancel();
+        delay = new Timer() {
+            public void run() {
+                final TreeRow proxy = ((TreeRow)sender).getProxy();
+                proxy.removeStyleName("Highlighted");
+                AbsolutePanel dragIndicator = new AbsolutePanel();
+                dragIndicator.setStyleName("DragStatus");
+                dragIndicator.addStyleName("NoDrop");
+                HorizontalPanel hp = new HorizontalPanel();
+                hp.add(dragIndicator);
+                hp.add(proxy);
+                hp.setStyleName(sender.getStyleName());
+                proxy.addDragListener(controller.drag);
+                RootPanel.get().add(hp);
+                MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
+                mouse.setDrag(hp);
+                Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
+                for(TreeRow row : controller.renderer.getRows()) {
+                    dropMap.add(row.dropListeners);
+                }
+                MouseDragGestureRecognizer.setDropMap(dropMap);
+                MouseDragGestureRecognizer.setWidgetPosition(hp,
+                                                              sender.getAbsoluteLeft(),
+                                                              sender.getAbsoluteTop());
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        MouseDragGestureRecognizer.getGestureMouse(proxy)
+                                                  .onMouseDown(proxy, x, y);
+                    }
+                });
+            }
+            
+        };
+        delay.schedule(500);
         
     }
-
+    
     public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
+       sender.addStyleName("Highlighted");
         
     }
 
     public void onMouseLeave(Widget sender) {
-        // TODO Auto-generated method stub
+        sender.removeStyleName("Highlighted");
         
     }
 
@@ -79,7 +126,10 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
     }
 
     public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
+       if(delay != null){
+           delay.cancel();
+           delay = null;
+       }
         
     }
 

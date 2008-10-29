@@ -25,47 +25,23 @@
 */
 package org.openelis.gwt.widget.tree;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableView;
-import org.openelis.gwt.widget.tree.TableTree.Action;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;
 import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
 
-import java.util.Stack;
+import java.util.ArrayList;
 
 public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener {
     
     private TreeWidget controller;
-    
-    public class ItemGrid extends Grid implements TableListener{
-        
-        public int clickCell;
-        public int rowIndex;
-        
-        public ItemGrid(int rows, int cols) {
-            super(rows,cols);
-            setCellPadding(0);
-            setCellSpacing(0);
-            addTableListener(this);
-        }
-
-        public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
-            if(cell == clickCell){
-                controller.performCommand(Action.TOGGLE, new Integer(rowIndex));
-            }
-        }
-    }
+    public ArrayList<TreeRow> rows = new ArrayList<TreeRow>();
     
     public TreeRenderer(TreeWidget controller){
         this.controller = controller;
@@ -74,7 +50,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     public void createRow(int i) {
         TreeColumnInt column = controller.columns.get(0);
         TableTree item = new TableTree();
-        item.addDropListener(controller.drag);
+        //item.addDropListener(controller.drag);
         item.enabled = controller.enabled;
         ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
         ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
@@ -82,14 +58,16 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         item.setRowIndex(i);
         item.addCommandListener(controller);
         controller.view.table.setWidget(i, 0, item);
-        DOM.setEventListener(controller.view.table.getRowFormatter().getElement(i), controller.drag);
-        DOM.sinkEvents(controller.view.table.getRowFormatter().getElement(i), Event.MOUSEEVENTS);
-        controller.view.table.getRowFormatter().getElement(i).setAttribute("indexVal",String.valueOf(i));        
+        TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i),true);
+        row.addDropListener(controller.drag);
+        row.addMouseListener(controller.mouseHandler);
+        row.index = i;
+        rows.add(row);
     }
     
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+(controller.maxRows*2);
+        int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+controller.maxRows*2;
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.model.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
@@ -100,6 +78,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             int count = controller.view.table.getRowCount();
             for(int i = 0; i < count; i++){
                 controller.view.table.removeRow(0);
+                rows.remove(0);
             }
         }
         if(controller.model.shownRows() < controller.maxRows){
@@ -129,6 +108,8 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
         TreeDataItem row = (TreeDataItem)controller.model.getRow(modelIndex);
+        rows.get(index).item = row;
+        rows.get(index).modelIndex = modelIndex;
         if(controller.view.table.getRowCount() -1 >= index){
             int numCells = controller.view.table.getCellCount(index);
             controller.view.table.removeCells(index, 1, numCells - 1);
@@ -170,49 +151,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
                 
     }
     
-    public ItemGrid createItem(final TreeDataItem drow) {
-        ItemGrid editorGrid = new ItemGrid(1,2+drow.depth);   
-        editorGrid.setWidth(controller.columns.get(0).getCurrentWidth()+"px");
-        for(int j = 0; j < editorGrid.getColumnCount(); j++) {
-            if(j < editorGrid.getColumnCount() -1)
-                editorGrid.getCellFormatter().setWidth(0,j,"18px");
-            editorGrid.getCellFormatter().setHeight(0,j,"18px");
-            if(j == editorGrid.getColumnCount() -2){
-                if(drow.open && drow.getItems().size() > 0)
-                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
-                else if(drow.getItems().size() > 0)
-                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
-                else if(j > 0){
-                    if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
-                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat");
-                    else
-                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat");
-                }
-                if(drow.getItems().size() > 0){
-                    editorGrid.clickCell = j;
-                }
-            }
-        }
-        if(drow.depth > 1) {
-            Stack<TreeDataItem> levels = new Stack<TreeDataItem>();
-            levels.push(drow.parent);
-            while(levels.peek().depth > 1){
-                levels.push(levels.peek().parent);
-            }
-            for(TreeDataItem item : levels){
-                if(item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
-                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
-                }
-            }
-            
-        }
-        
-        editorGrid.setWidget(0, editorGrid.getColumnCount() - 1, (Widget)controller.columns.get(0).getWidgetInstance(drow.leafType));
 
-        editorGrid.addStyleName(TreeView.cellStyle);
-        DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
-        return editorGrid;
-    }
     
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
@@ -234,8 +173,9 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             }
              loadStart = i;   
         }
-        if(loadStart+rowsPer > controller.model.numRows()){
-            loadStart = loadStart - ((loadStart+rowsPer) - controller.model.numRows());
+        int numRows = controller.model.numRows();
+        if(loadStart+rowsPer > numRows){
+            loadStart = loadStart - ((loadStart+rowsPer) - numRows);
         }
         for(int i = 0; i < rowsPer; i++){
             while(loadStart+i < controller.model.numRows() && !controller.model.getRow(loadStart+i).shown)
@@ -370,6 +310,10 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     public void finishedEditing(SourcesTreeWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
+    }
+
+    public ArrayList<TreeRow> getRows() {
+        return rows;
     }
 
 

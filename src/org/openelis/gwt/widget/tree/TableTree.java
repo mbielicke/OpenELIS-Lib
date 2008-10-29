@@ -55,9 +55,9 @@ import org.openelis.gwt.widget.tree.TreeView;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents, SourcesDropEvents {
+public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents {
     
-    private class ItemGrid extends Grid implements TableListener{
+    public class ItemGrid extends Grid implements TableListener{
         
         public int clickCell;
         
@@ -76,7 +76,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
     }
     
     public ArrayList<TableCellWidget> cells = new ArrayList<TableCellWidget>();
-    private ItemGrid editorGrid;
+    public ItemGrid editorGrid;
     public TableCellWidget editor;
     private CommandListenerCollection commandListeners;
     private Data field;
@@ -86,7 +86,6 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
     public enum Action {TOGGLE};
     public int rowIndex;
     public boolean enabled;
-    public DropListenerCollection dropListeners = new DropListenerCollection();
 
     
     public TableTree() {
@@ -213,7 +212,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
        }
        */
        //editorGrid.addStyleName(TreeView.cellStyle);
-       DOM.setStyleAttribute(editorGrid.getElement(), "background-color", "none");
+       DOM.setStyleAttribute(editorGrid.getRowFormatter().getElement(0), "background", "none");
        //DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
     }
 
@@ -239,16 +238,6 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
              commandListeners.remove(listener);
          
      }
-
-    public void addDropListener(DropListener listener) {
-       dropListeners.add(listener,this);
-        
-    }
-
-    public void removeDropListener(DropListener listener) {
-        dropListeners.remove(listener);
-        
-    }
     
 
 }

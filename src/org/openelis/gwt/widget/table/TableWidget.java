@@ -88,6 +88,7 @@ public class TableWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
+    public TableDragHandler drag;
     
     public TableWidget() {
         
@@ -108,6 +109,7 @@ public class TableWidget extends FocusPanel implements
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = new TableKeyboardHandler(this);
         mouseHandler = new TableMouseHandler(this);
+        drag = new TableDragHandler(this);
         addTableWidgetListener((TableWidgetListener)renderer);
         setWidget(view);
         addFocusListener(this);
@@ -127,6 +129,7 @@ public class TableWidget extends FocusPanel implements
         view.table.addTableListener(this);
         keyboardHandler = new TableKeyboardHandler(this);
         mouseHandler = new TableMouseHandler(this);
+        drag = new TableDragHandler(this);
     }
 
     /**

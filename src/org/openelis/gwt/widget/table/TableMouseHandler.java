@@ -25,11 +25,21 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
+import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.AppScreen;
+
+import java.util.Vector;
 
 public class TableMouseHandler implements TableMouseHandlerInt {
     
@@ -60,18 +70,57 @@ public class TableMouseHandler implements TableMouseHandlerInt {
  
     }
 
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        Window.alert("mouse down");
-    }
+    Timer delay;
 
+    public void onMouseDown(final Widget sender, final int x, final int y) {
+        if(!controller.model.canDrag(((TableRow)sender).modelIndex))
+            return;
+        if(delay != null)
+            delay.cancel();
+        delay = new Timer() {
+            public void run() {
+                final TableRow proxy = ((TableRow)sender).getProxy();
+                proxy.removeStyleName("Highlighted");
+                DOM.setStyleAttribute((Element)proxy.getElement(),"height",controller.cellHeight+"px");
+                AbsolutePanel dragIndicator = new AbsolutePanel();
+                dragIndicator.setStyleName("DragStatus");
+                dragIndicator.addStyleName("NoDrop");
+                HorizontalPanel hp = new HorizontalPanel();
+                hp.add(dragIndicator);
+                hp.add(proxy);
+                hp.setStyleName(sender.getStyleName());
+                proxy.addDragListener(controller.drag);
+                RootPanel.get().add(hp);
+                MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
+                mouse.setDrag(hp);
+                Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
+                for(TableRow row : controller.renderer.getRows()) {
+                    dropMap.add(row.dropListeners);
+                }
+                MouseDragGestureRecognizer.setDropMap(dropMap);
+                MouseDragGestureRecognizer.setWidgetPosition(hp,
+                                                              sender.getAbsoluteLeft(),
+                                                              sender.getAbsoluteTop());
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        MouseDragGestureRecognizer.getGestureMouse(proxy)
+                                                  .onMouseDown(proxy, x, y);
+                    }
+                });
+            }
+            
+        };
+        delay.schedule(500);
+        
+    }
+    
     public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
+       sender.addStyleName("Highlighted");
         
     }
 
     public void onMouseLeave(Widget sender) {
-        // TODO Auto-generated method stub
+        sender.removeStyleName("Highlighted");
         
     }
 
@@ -81,7 +130,10 @@ public class TableMouseHandler implements TableMouseHandlerInt {
     }
 
     public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
+       if(delay != null){
+           delay.cancel();
+           delay = null;
+       }
         
     }
 

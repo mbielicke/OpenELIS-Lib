@@ -127,12 +127,12 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
     public String[] headers;
     public Label[] hLabels;
     private String title = "";
-    public static String widgetStyle = "TableWidget";
-    public static String cellStyle = "TableCell";
-    public static String rowStyle = "TableRow";
+    public static String widgetStyle = "TreeWidget";
+    public static String cellStyle = "TreeCell";
+    public static String rowStyle = "TreeRow";
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
-    public static String tableStyle = "Table";
+    public static String tableStyle = "Tree";
     public static String selectedStyle = "Selected";
     public static String navLinks = "NavLinks";
     public static String disabledStyle = "Disabled";

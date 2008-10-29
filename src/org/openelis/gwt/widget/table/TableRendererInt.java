@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+
 public interface TableRendererInt {
     
     public void createRow(int i);
@@ -37,5 +39,6 @@ public interface TableRendererInt {
     
     public void setCellEditor(int row, int col);
     
+    public ArrayList<TableRow> getRows();
 
 }

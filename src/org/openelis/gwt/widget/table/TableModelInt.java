@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
@@ -113,6 +115,12 @@ public interface TableModelInt extends SourcesTableModelEvents {
     public boolean canAdd(int row);
     
     public boolean canAutoAdd(DataSet autoAddRow);
+    
+    public boolean canDrag(int row);
+    
+    public boolean canDrop(Widget dropWidget,  int row);
+    
+    public void drop(Widget dropWidget, int targetRow);
     
     public DataModel unload();
     

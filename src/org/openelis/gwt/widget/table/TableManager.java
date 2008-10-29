@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import org.openelis.gwt.common.data.DataSet;
 
 
@@ -39,5 +41,11 @@ public interface TableManager {
     public boolean canAdd(TableWidget widget, DataSet set, int row);
     
     public boolean canAutoAdd(TableWidget widget, DataSet addRow);
+    
+    public boolean canDrag(TableWidget widget, DataSet item, int row);
+    
+    public boolean canDrop(TableWidget widget, Widget dragWidget, DataSet dropTarget, int targetRow);
+    
+    public void drop(TableWidget widget, Widget dragWidget, DataSet dropTarget, int targetRow);
     
 }

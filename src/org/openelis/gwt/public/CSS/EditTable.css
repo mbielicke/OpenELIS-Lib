@@ -22,10 +22,10 @@
     height:18px;
     background:white;
 }
-.AltTableRow{
-    height:16px;
+tr .AltTableRow{
     background:#f8f8f9;
 }
+
 .TableCell {  
 height:18px;
     overflow:hidden;

@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,9 +37,12 @@ import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
+import java.util.ArrayList;
+
 public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener {
     
     private TableWidget controller;
+    public ArrayList<TableRow> rows = new ArrayList<TableRow>();
     
     public TableRenderer(TableWidget controller){
         this.controller = controller;
@@ -54,9 +58,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             controller.view.table.getFlexCellFormatter()
                           .setHorizontalAlignment(i, j, column.getAlign());
 
-            if(i % 2 == 1){
-                DOM.setStyleAttribute(controller.view.table.getRowFormatter().getElement(i), "background", "#f8f8f9");
-            }
+           
             controller.view.table.getFlexCellFormatter().setWidth(i, j, column.getCurrentWidth() + "px");
             controller.view.table.getFlexCellFormatter().setHeight(i, j, controller.cellHeight+"px");
             //view.table.getRowFormatter().addStyleName(i, TableView.rowStyle);
@@ -68,6 +70,14 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             }
             j++;
         }
+        TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i),true);
+        row.addMouseListener(controller.mouseHandler);
+        row.addDropListener(controller.drag);
+        row.index = i;
+        if(i % 2 == 1){
+            row.addStyleName("AltTableRow");
+        }
+        rows.add(row);
     }
     
     public void load(int pos) {
@@ -86,6 +96,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             int count = controller.view.table.getRowCount();
             for(int i = 0; i < count; i++){
                 controller.view.table.removeRow(0);
+                rows.remove(0);
             }
             if(!controller.model.getAutoAdd())
                 return;
@@ -100,6 +111,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             int count = controller.view.table.getRowCount();
             for(int i = count -1; i > tRows -1; i--){
                 controller.view.table.removeRow(i);
+                rows.remove(i);
             }
         }else if(controller.view.table.getRowCount() < tRows){
             int count = controller.view.table.getRowCount();
@@ -123,6 +135,8 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
         DataSet row = controller.model.getRow(modelIndex);
+        rows.get(index).modelIndex = modelIndex;
+        rows.get(index).row = row;
         for (int i = 0; i < row.size(); i++) {
             controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
             //if(tCell instanceof TableMultiple && manager != null){
@@ -142,13 +156,13 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
               //  ((Label)controller.view.rows.getWidget(index,0)).setText(String.valueOf(controller.model.indexOf(row)+1));
            // }
             if(controller.model.isSelected(modelIndex))
-                controller.view.table.getRowFormatter().addStyleName(index, controller.view.selectedStyle);
+                rows.get(index).addStyleName(controller.view.selectedStyle);
             else
-                controller.view.table.getRowFormatter().removeStyleName(index,controller.view.selectedStyle);
+                rows.get(index).removeStyleName(controller.view.selectedStyle);
             if(controller.model.isEnabled(modelIndex)) 
-                controller.view.table.getRowFormatter().removeStyleName(index, controller.view.disabledStyle);
+                rows.get(index).removeStyleName(controller.view.disabledStyle);
             else
-                controller.view.table.getRowFormatter().addStyleName(index,controller.view.disabledStyle);
+                rows.get(index).addStyleName(controller.view.disabledStyle);
                 
             
         }
@@ -296,6 +310,10 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public ArrayList<TableRow> getRows() {
+        return rows;
     }
 
 

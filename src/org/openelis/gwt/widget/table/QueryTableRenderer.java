@@ -31,6 +31,8 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
+import java.util.ArrayList;
+
 public class QueryTableRenderer implements TableRendererInt, TableWidgetListener {
     
     private QueryTable controller;
@@ -125,6 +127,11 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
     public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
         // TODO Auto-generated method stub
         
+    }
+
+    public ArrayList<TableRow> getRows() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

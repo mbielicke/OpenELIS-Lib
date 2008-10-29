@@ -148,9 +148,9 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(manager != null)
             manager.drop(controller,dragWidget,rows.get(targetRow),targetRow);
         TreeDataItem dropItem = getRow(targetRow);
-        TreeDataItem dragItem = (TreeDataItem)getRow(((TreeWidget.DragHandler.DragWidget)dragWidget).modelIndex).clone();
+        TreeDataItem dragItem = (TreeDataItem)((TreeRow)dragWidget).item.clone();
         if(dropItem.depth == dragItem.depth && dropItem.parent == dragItem.parent){
-            deleteRow(((TreeWidget.DragHandler.DragWidget)dragWidget).modelIndex);
+            deleteRow(((TreeRow)dragWidget).modelIndex);
             addRow(targetRow, dragItem);
         }
     }

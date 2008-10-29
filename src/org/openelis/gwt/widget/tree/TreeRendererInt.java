@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import java.util.ArrayList;
+
 public interface TreeRendererInt {
     
     public void createRow(int i);
@@ -37,5 +39,6 @@ public interface TreeRendererInt {
     
     public void setCellEditor(int row, int col);
     
+    public ArrayList<TreeRow> getRows();
 
 }
