@@ -158,7 +158,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public void clear() {
         data.clear();
         rows.clear();
-        treeModelListeners.fireDataChanged(this);
+        refresh();
     }
 
     public void clearSelections() {
