@@ -25,10 +25,11 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataSet;
@@ -39,7 +40,7 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
-public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener {
+public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener, ClickListener {
     
     private TableWidget controller;
     public ArrayList<TableRow> rows = new ArrayList<TableRow>();
@@ -51,7 +52,11 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     public void createRow(int i) {
         int j = 0;
         for(TableColumnInt column : controller.columns) {
-            controller.view.table.setWidget(i,j,column.getWidgetInstance());
+            Widget wid = column.getWidgetInstance();
+            if(wid instanceof SourcesClickEvents) {
+                ((SourcesClickEvents)wid).addClickListener(this);
+            }
+            controller.view.table.setWidget(i,j,wid);
             controller.view.table.getFlexCellFormatter().addStyleName(i,
                                                   j,
                                                   TableView.cellStyle);
@@ -314,6 +319,10 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     
     public ArrayList<TableRow> getRows() {
         return rows;
+    }
+
+    public void onClick(Widget sender) {
+        controller.finishEditing();
     }
 
 

@@ -25,10 +25,15 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
@@ -45,7 +50,7 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  * @author tschmidt
  * 
  */
-public class TableCheck extends TableCellInputWidget implements FocusListener, ClickListener {
+public class TableCheck extends TableCellInputWidget implements FocusListener, ClickListener, SourcesClickEvents {
 
     private CheckBox editor;
     private boolean enabled;
@@ -53,6 +58,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
     private CheckType type = CheckType.TWO_STATE;
     private int width;
     public static final String TAG_NAME = "table-check";
+    private ClickListenerCollection clickListeners;
    
     public TableCheck() {
         editor = new CheckBox();
@@ -134,11 +140,29 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
     }
     
     public void onClick(Widget sender) {
-        if(enabled)
-            saveValue();
+        if(enabled){
+            final Widget wid = this;
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    clickListeners.fireClick(wid);
+                }
+            });
+        }
     }
     
     public void setFocus(boolean focused) {
-        editor.setFocus(focused);
+       // editor.setFocus(focused);
+    }
+    
+    public void addClickListener(ClickListener listener) {
+        if(clickListeners == null){
+            clickListeners = new ClickListenerCollection();
+        }
+        clickListeners.add(listener);
+    }
+    
+    public void removeClickListener(ClickListener listener) {
+        if(clickListeners != null)
+            clickListeners.remove(listener);
     }
 }
