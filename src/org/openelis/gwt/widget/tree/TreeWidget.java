@@ -61,6 +61,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.screen.ScreenTreeWidget;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableCellWidget;
@@ -107,8 +108,9 @@ public class TreeWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
-    public TreeDragHandler drag;
-    public ScreenWindow window;
+    public DragListener drag;
+    public DropListener drop;
+    public ScreenTreeWidget screenWidget;
 
     public TreeWidget() {
 
@@ -136,7 +138,6 @@ public class TreeWidget extends FocusPanel implements
                         + (maxRows * 2) + cellSpacing));
         keyboardHandler = new TreeKeyboardHandler(this);
         mouseHandler = new TreeMouseHandler(this);
-        drag = new TreeDragHandler(this);
         addTreeWidgetListener((TreeWidgetListener)renderer);
         setWidget(view);
         addFocusListener(this);

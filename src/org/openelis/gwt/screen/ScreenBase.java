@@ -97,6 +97,7 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void draw() {
+           
             Node screen = xml.getElementsByTagName("screen").item(0);
             if(screen.getAttributes().getNamedItem("name") != null){
                 name = screen.getAttributes().getNamedItem("name").getNodeValue();

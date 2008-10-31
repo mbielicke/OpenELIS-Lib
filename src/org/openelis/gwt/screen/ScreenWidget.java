@@ -49,6 +49,7 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.AppButton;
 
+import java.util.ArrayList;
 import java.util.Vector;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
@@ -260,7 +261,7 @@ public class ScreenWidget extends SimplePanel implements
                                   .getNodeValue();
             if (listener.equals("this"))
                 addDropListener((DropListener)screen);
-            else {
+            else if (!listener.equals("default")){
                 addDropListener((DropListener)ClassFactory.forName(listener));
             }
         }
@@ -270,7 +271,7 @@ public class ScreenWidget extends SimplePanel implements
                                   .getNodeValue();
             if (listener.equals("this"))
                 addDragListener((DragListener)screen);
-            else {
+            else if(!listener.equals("default")){
                 addDragListener((DragListener)ClassFactory.forName(listener));
             }
         }
@@ -434,8 +435,9 @@ public class ScreenWidget extends SimplePanel implements
     public Vector getDropMap(){
         Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
         for(String target : dropTargets) {
-            DropListenerCollection dropColl = ((ScreenWidget)screen.widgets.get(target)).getDropListeners();
-            dropMap.add(dropColl);
+            ArrayList<DropListenerCollection> dropColl = ((ScreenWidget)screen.widgets.get(target)).getDropListeners();
+            for(DropListenerCollection coll : dropColl)
+                dropMap.add(coll);
         }
         return dropMap;
     }
@@ -452,8 +454,10 @@ public class ScreenWidget extends SimplePanel implements
      * Getter for the DropListener Collection
      * @return
      */
-    public DropListenerCollection getDropListeners(){
-        return dropListeners;
+    public ArrayList<DropListenerCollection> getDropListeners(){
+        ArrayList<DropListenerCollection> drops = new ArrayList<DropListenerCollection>();
+        drops.add(dropListeners);
+        return drops;
     }
     
     /**

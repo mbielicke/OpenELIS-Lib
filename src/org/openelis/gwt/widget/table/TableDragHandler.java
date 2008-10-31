@@ -7,9 +7,6 @@ import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.TreeDataItem;
-
 public class TableDragHandler implements DragListener, DropListener {
     
     private TableWidget controller;
@@ -53,16 +50,25 @@ public class TableDragHandler implements DragListener, DropListener {
     }
 
     public void onDrop(Widget sender, Widget source) {
-        if(controller.model.canDrop(source, ((TableRow)sender).modelIndex)){
-            controller.model.drop(source, ((TableRow)sender).modelIndex);
-            controller.model.refresh();
+        sender.removeStyleName("Highlighted");
+        if(sender instanceof TableRow){
+            if(controller.model.canDrop(source, ((TableRow)sender).modelIndex)){
+                controller.model.drop(source, ((TableRow)sender).modelIndex);
+                controller.model.refresh();
+            }
+        }else {
+            controller.model.drop(source);
         }
+        
     }
 
     Timer scroll;
     
     public void onDropEnter(Widget sender, final Widget source) {
+      
         sender.addStyleName("Highlighted");
+        if(!(sender instanceof TableRow))
+            return;
         final int rowIndex = ((TableRow)sender).index;
         final int modelIndex = ((TableRow)sender).modelIndex;
         if((rowIndex == 0 && modelIndex > 0) || 
@@ -93,7 +99,10 @@ public class TableDragHandler implements DragListener, DropListener {
     }
 
     public void onDropExit(Widget sender, Widget source) {
+       
         sender.removeStyleName("Highlighted");
+        if(!(sender instanceof TableRow))
+            return;
         if(scroll != null) {
             scroll.cancel();
             scroll = null;

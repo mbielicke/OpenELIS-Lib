@@ -48,4 +48,6 @@ public interface TableManager {
     
     public void drop(TableWidget widget, Widget dragWidget, DataSet dropTarget, int targetRow);
     
+    public void drop(TableWidget widget, Widget dragWidget);
+    
 }

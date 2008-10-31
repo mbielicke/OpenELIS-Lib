@@ -52,10 +52,16 @@ public class TreeDragHandler implements DragListener, DropListener {
     }
 
     public void onDrop(Widget sender, Widget source) {
-        if(controller.model.canDrop(source, ((TreeRow)sender).modelIndex)){
-            controller.model.drop(source, ((TreeRow)sender).modelIndex);
-            controller.model.refresh();
+        sender.removeStyleName("Highlighted");
+        if(sender instanceof TreeRow){
+            if(controller.model.canDrop(source, ((TreeRow)sender).modelIndex)){
+                controller.model.drop(source, ((TreeRow)sender).modelIndex);
+                controller.model.refresh();
+            }
+        }else {
+            controller.model.drop(source);
         }
+        
     }
 
     Timer scroll;

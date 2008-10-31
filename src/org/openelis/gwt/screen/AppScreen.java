@@ -117,13 +117,13 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
     public void getXMLData(HashMap<String,Data> args) {
         service.getXMLData(args, new AsyncCallback<HashMap<String,Data>>() {
            public void onSuccess(HashMap<String,Data> result){
-               try {
+               //try {
                    initData = result;
                    drawScreen((String)((StringObject)initData.get("xml")).getValue());
                    afterDraw(true);
-               }catch(Exception e){
-                   Window.alert("error "+e.getMessage() + e.getStackTrace()[0]);
-               }
+               //}catch(Exception e){
+                 //  Window.alert("error "+e.getMessage() + e.getStackTrace()[0]);
+              // }
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());

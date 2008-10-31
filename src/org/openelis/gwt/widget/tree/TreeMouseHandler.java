@@ -70,7 +70,7 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
     Timer delay;
 
     public void onMouseDown(final Widget sender, final int x, final int y) {
-        if(!controller.model.canDrag(((TreeRow)sender).modelIndex))
+        if(controller.drag == null || !controller.model.canDrag(((TreeRow)sender).modelIndex))
             return;
         if(delay != null)
             delay.cancel();
@@ -89,11 +89,7 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
                 RootPanel.get().add(hp);
                 MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
                 mouse.setDrag(hp);
-                Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
-                for(TreeRow row : controller.renderer.getRows()) {
-                    dropMap.add(row.dropListeners);
-                }
-                MouseDragGestureRecognizer.setDropMap(dropMap);
+                MouseDragGestureRecognizer.setDropMap(controller.screenWidget.getDropMap());
                 MouseDragGestureRecognizer.setWidgetPosition(hp,
                                                               sender.getAbsoluteLeft(),
                                                               sender.getAbsoluteTop());

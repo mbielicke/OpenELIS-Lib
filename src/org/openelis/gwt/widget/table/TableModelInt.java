@@ -122,6 +122,8 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void drop(Widget dropWidget, int targetRow);
     
+    public void drop(Widget dragWidget);
+    
     public DataModel unload();
     
     public boolean isAutoAdd();

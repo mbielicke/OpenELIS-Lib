@@ -18,9 +18,9 @@ import org.openelis.gwt.common.data.DataSet;
 
 public class TableRow extends Widget implements SourcesMouseEvents, SourcesDragEvents, SourcesDropEvents {
 
-    MouseListenerCollection mouseListeners = new MouseListenerCollection();
-    DropListenerCollection dropListeners = new DropListenerCollection();
-    DragListenerCollection dragListeners = new DragListenerCollection();
+    public MouseListenerCollection mouseListeners = new MouseListenerCollection();
+    public DropListenerCollection dropListeners = new DropListenerCollection();
+    public DragListenerCollection dragListeners = new DragListenerCollection();
     
     public int index;
     public int modelIndex;
@@ -57,7 +57,8 @@ public class TableRow extends Widget implements SourcesMouseEvents, SourcesDragE
     }
 
     public void addDragListener(DragListener listener) {
-        dragListeners.add(listener,this);
+        if(listener != null)
+            dragListeners.add(listener,this);
         
     }
 
@@ -67,7 +68,8 @@ public class TableRow extends Widget implements SourcesMouseEvents, SourcesDragE
     }
 
     public void addDropListener(DropListener listener) {
-        dropListeners.add(listener,this);
+        if(listener != null)
+            dropListeners.add(listener,this);
         
     }
 

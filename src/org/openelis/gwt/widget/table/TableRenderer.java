@@ -72,7 +72,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         }
         TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i),true);
         row.addMouseListener(controller.mouseHandler);
-        row.addDropListener(controller.drag);
+        row.addDropListener(controller.drop);
         row.index = i;
         if(i % 2 == 1){
             row.addStyleName("AltTableRow");

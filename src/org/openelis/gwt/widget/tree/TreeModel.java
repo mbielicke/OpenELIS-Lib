@@ -349,6 +349,11 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         data.leaves = leaves;
     }
 
+    public void drop(Widget dragWidget) {
+        if(manager != null)
+            manager.drop(controller, dragWidget);
+    }
+
 
 
 }

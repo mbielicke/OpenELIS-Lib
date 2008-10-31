@@ -50,4 +50,6 @@ public interface TreeManager {
     
     public void drop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
     
+    public void drop(TreeWidget widget, Widget dragWidget);
+    
 }

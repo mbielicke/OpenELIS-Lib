@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -37,10 +40,13 @@ import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.common.data.TreeField;
 import org.openelis.gwt.widget.table.TableManager;
+import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.tree.TreeColumn;
 import org.openelis.gwt.widget.tree.TreeColumnInt;
+import org.openelis.gwt.widget.tree.TreeDragHandler;
 import org.openelis.gwt.widget.tree.TreeKeyboardHandler;
 import org.openelis.gwt.widget.tree.TreeManager;
+import org.openelis.gwt.widget.tree.TreeRow;
 import org.openelis.gwt.widget.tree.TreeWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 
@@ -91,6 +97,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
              boolean enable = false;
              VerticalScroll showScroll = VerticalScroll.NEEDED;
              boolean showHeader = false;
+             String targets = "";
              ArrayList<TreeColumnInt> columns = new ArrayList<TreeColumnInt>();
              TreeDataModel data = new TreeDataModel();
                  if (node.getAttributes().getNamedItem("manager") != null) {
@@ -234,6 +241,21 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  }
                  //data.setDefaultSet(set);
                  tree = new TreeWidget(columns,maxRows,width,title,showHeader,showScroll);
+                 if(node.getAttributes().getNamedItem("drag") != null) {
+                     String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
+                     if(drag.equals("default"))
+                         tree.drag = new TreeDragHandler(tree);
+                 }
+                 if(node.getAttributes().getNamedItem("drop") != null) {
+                     String drop = node.getAttributes().getNamedItem("drop").getNodeValue();
+                     if(drop.equals("default")){
+                         if(tree.drag != null)
+                             tree.drop = (DropListener)tree.drag;
+                         else
+                             tree.drop = new TreeDragHandler(tree);
+                         super.addDropListener(tree.drop);
+                     }
+                 }
                  tree.enabled(enable);
                  //int rows = 0;
                  /*if (node.getAttributes().getNamedItem("rows") != null) {
@@ -257,6 +279,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
              tree.setStyleName("ScreenTable");
              ((TreeKeyboardHandler)tree.keyboardHandler).setScreen(this);
              setDefaults(node, screen);
+             tree.screenWidget = this;
         }
 
         public ScreenWidget getInstance(Node node, ScreenBase screen) {
@@ -327,4 +350,27 @@ public class ScreenTreeWidget extends ScreenInputWidget {
         public void drawError() {
             tree.model.refresh();
         }
+        
+        @Override
+        public void addDragListener(DragListener listener) {
+            tree.drag = listener;
+        }
+        
+        @Override
+        public void addDropListener(DropListener listener) {
+            tree.drop = listener;
+        }
+        
+        @Override
+        public ArrayList<DropListenerCollection> getDropListeners() {
+            // TODO Auto-generated method stub
+            ArrayList<DropListenerCollection> drops = new ArrayList<DropListenerCollection>();
+            for(TreeRow row : tree.renderer.getRows())
+                drops.add(row.dropListeners);
+            ArrayList<DropListenerCollection> sup = super.getDropListeners();
+            drops.add(sup.get(0));
+            drops.get(0).hasChildren = true;
+            return drops;
+        }
+        
 }

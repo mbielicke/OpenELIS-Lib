@@ -27,6 +27,8 @@ package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
@@ -38,6 +40,7 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.screen.ScreenTableWidget;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
@@ -88,7 +91,9 @@ public class TableWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
-    public TableDragHandler drag;
+    public DragListener drag;
+    public DropListener drop;
+    public ScreenTableWidget screenWidget;
     
     public TableWidget() {
         
@@ -109,7 +114,6 @@ public class TableWidget extends FocusPanel implements
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = new TableKeyboardHandler(this);
         mouseHandler = new TableMouseHandler(this);
-        drag = new TableDragHandler(this);
         addTableWidgetListener((TableWidgetListener)renderer);
         setWidget(view);
         addFocusListener(this);
@@ -129,7 +133,6 @@ public class TableWidget extends FocusPanel implements
         view.table.addTableListener(this);
         keyboardHandler = new TableKeyboardHandler(this);
         mouseHandler = new TableMouseHandler(this);
-        drag = new TableDragHandler(this);
     }
 
     /**

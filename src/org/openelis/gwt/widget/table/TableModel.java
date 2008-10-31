@@ -219,12 +219,24 @@ public class TableModel implements TableModelInt {
     }
     
     public void drop(Widget dragWidget, int targetRow) {
-        if(manager != null)
+        if(manager != null){
             manager.drop(controller,dragWidget,getRow(targetRow),targetRow);
+            return;
+        }
         DataSet dropItem = getRow(targetRow);
         DataSet dragItem = (DataSet)((TableRow)dragWidget).row.clone();
         deleteRow(((TableRow)dragWidget).modelIndex);
         addRow(targetRow, dragItem);
+    }
+    
+    public void drop(Widget dragWidget) {
+        if(manager != null){
+            manager.drop(controller, dragWidget);
+            return;
+        }
+        if(dragWidget instanceof TableRow)
+            addRow((DataSet)((TableRow)dragWidget).row.clone());
+        
     }
 
 

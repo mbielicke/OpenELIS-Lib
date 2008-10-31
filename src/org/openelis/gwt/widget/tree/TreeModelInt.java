@@ -109,6 +109,8 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     public boolean canDrop(Widget dropWidget, int targetRow);
     
     public void drop(Widget dropWidget, int targetRow);
+    
+    public void drop(Widget dragWidget);
         
     public TreeDataModel unload();
     

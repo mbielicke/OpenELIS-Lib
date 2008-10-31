@@ -26,6 +26,9 @@
 package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -38,12 +41,17 @@ import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableDragHandler;
 import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableManager;
+import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
+import org.openelis.gwt.widget.tree.TreeDragHandler;
+import org.openelis.gwt.widget.tree.TreeRow;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * ScreenTable wraps the FormTable widget to be displayed
@@ -225,6 +233,22 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 }
                 data.setDefaultSet(set);
                 table = new TableWidget(columns,maxRows,width,title,showHeader,showScroll);
+                if(node.getAttributes().getNamedItem("drag") != null) {
+                    String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
+                    if(drag.equals("default")){
+                        table.drag = new TableDragHandler(table);
+                    }
+                }
+                if(node.getAttributes().getNamedItem("drop") != null) {
+                    String drop = node.getAttributes().getNamedItem("drop").getNodeValue();
+                    if(drop.equals("default")){
+                        if(table.drag != null)
+                            table.drop = (DropListener)table.drag;
+                        else
+                            table.drop = new TableDragHandler(table);
+                       super.addDropListener(table.drop);
+                    }
+                }
                 table.enabled(enable);
                 table.model.setManager(manager);
                 int rows = 0;
@@ -247,6 +271,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
             table.setStyleName("ScreenTable");
             ((TableKeyboardHandler)table.keyboardHandler).setScreen(this);
             setDefaults(node, screen);
+            table.screenWidget = this;
         }
 
         public ScreenWidget getInstance(Node node, ScreenBase screen) {
@@ -318,4 +343,29 @@ public class ScreenTableWidget extends ScreenInputWidget {
             table.model.refresh();
         }
 
+        @Override
+        public void addDragListener(DragListener listener) {
+            table.drag = listener;
+            
+        }
+        
+        @Override
+        public void addDropListener(DropListener listener) {
+            table.drop = listener;
+        }
+        
+        @Override
+        public ArrayList<DropListenerCollection> getDropListeners() {
+            // TODO Auto-generated method stub
+            ArrayList<DropListenerCollection> drops = new ArrayList<DropListenerCollection>();
+            for(TableRow row : table.renderer.getRows())
+                drops.add(row.dropListeners);
+            ArrayList<DropListenerCollection> sup = super.getDropListeners();
+            drops.add(sup.get(0));
+            drops.get(0).hasChildren = true;
+            return drops;
+        }
+        
 }
+        
+       
