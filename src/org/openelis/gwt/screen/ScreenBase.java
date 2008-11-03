@@ -202,6 +202,10 @@ public class ScreenBase extends Composite implements FocusListener{
     protected boolean validate() {
         return true;
     }
+    
+    protected void validate(AbstractField field) {
+        
+    }
 
     /**
      * This method will pull information inputed by the user and prepare it to

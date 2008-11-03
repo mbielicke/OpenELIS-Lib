@@ -136,6 +136,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         submit(field);
         field.clearErrors();
         field.validate();
+        screen.validate(field);
         if(!field.isValid())
             drawError();
         else{
