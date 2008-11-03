@@ -55,6 +55,12 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         return add(item.getKey(),item);
     }
     
+    public void add(int index, TreeDataItem item) {
+        keyMap.put(item.getKey(), item);
+        setHash(item);
+        super.add(index,item);
+    }
+    
     public void add(Data key, DataObject value){
         TreeDataItem item = new TreeDataItem();
         item.setKey(key);
@@ -211,6 +217,10 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
            while(it.hasNext())
                checkChildItems(it.next(), rows);
         }
+    }
+    
+    public ArrayList<TreeDataItem> getDeletions() {
+        return deleted;
     }
 
 }

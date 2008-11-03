@@ -68,6 +68,13 @@ public class TreeDataItem extends DataSet {
         item.parent = this;
     }
     
+    public void addItem(int index, TreeDataItem item) {
+        items.add(index, item);
+        item.depth = depth+1;
+        item.increaseDepth();
+        item.parent = this;
+    }
+    
     public void increaseDepth(){
         if(items.size() > 0){
             Iterator<TreeDataItem> it = items.iterator();
