@@ -25,11 +25,8 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -143,7 +140,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     }
     public void addClickListener(ClickListener listener) {
         if(clickListeners == null){
-            clickListeners = new DelegatingClickListenerCollection(this,check.panel);
+            clickListeners = new DelegatingClickListenerCollection(this,check);
         }
         clickListeners.add(listener);
     }
