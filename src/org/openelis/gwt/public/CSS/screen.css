@@ -8,6 +8,13 @@ html, body {
     cursor:default;
 }
 
+.TableFooter{
+    background:url("../Images/buttonbarbg.gif") repeat-x;
+    height:26px;
+    margin:0 8px 8px 8px;
+    border-left:1px solid #8DB2E3;
+    border-right:1px solid #8DB2E3;
+}
 
 .ScreenLeftPanel{
     padding:2px;
