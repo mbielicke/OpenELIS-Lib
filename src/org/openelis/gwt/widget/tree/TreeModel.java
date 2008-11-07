@@ -47,6 +47,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public int shownRows; 
     public TreeWidget controller;
     public boolean multiSelect;
+    public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
 
     
     public TreeManager manager;
@@ -167,6 +168,9 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
 
     public void deleteRow(int row) {
+        if(selectedRows.contains(row)){
+            unselectRow(row);
+        }
         if(rows.get(row).shown)
             shownRows--;
         data.delete(rows.get(row).hashCode());
@@ -214,11 +218,13 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public boolean isSelected(int index) {
-        return data.selections.contains(rows.get(index).hashCode());
+        return selectedRows.contains(index);
     }
 
     public void load(TreeDataModel data) {
         this.data = data;
+        refresh();
+        /*selectedRows.clear();
         rows = data.getVisibleRows();
         data.multiSelect = multiSelect;
         shownRows = 0;
@@ -227,6 +233,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
                 shownRows++;
         }
         treeModelListeners.fireDataChanged(this);
+        */
     }
 
     public int numRows() {
@@ -236,22 +243,27 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public void refresh() {
         shownRows = 0;
         rows = data.getVisibleRows();
+        selectedRows.clear();
         for(int i = 0; i < rows.size(); i++){
             if(rows.get(i).shown)
                 shownRows++;
+            if(data.selections.contains(rows.get(i).hash))
+                selectedRows.add(i);
         }
         treeModelListeners.fireDataChanged(this);
     }
 
     public void selectRow(int index){
-        if(index < numRows())
+        if(index < numRows()){
+            if(!multiSelect || selectedRows.size() == 0)
+                selectedRows.add(index);
+            else
+                selectedRows.set(0,index);
             data.select(rows.get(index).hashCode());
+        }    
         treeModelListeners.fireRowSelected(this, index);
     }
 
-    public void selectRow(Data key) {
-       //selectRow(data.keyMap.get());
-    }
 
     public void setManager(TreeManager manager){
         this.manager = manager;
@@ -281,8 +293,11 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(index < 0) {
             data.clearSelections();
             data.selected = -1;
-        }else if(index < numRows())
+            selectedRows.clear();
+        }else if(index < numRows()){
             data.unselect(rows.get(index).hashCode());
+            selectedRows.remove(new Integer(index));
+        }
         treeModelListeners.fireRowUnselected(this, -1);        
     }
 
@@ -319,14 +334,14 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
             treeModelListeners.fireRowClosed(this,row,rows.get(row));
     }
     
-    public int getSelectedIndex() {
-        return data.selected;
+    public int getSelectedRowIndex() {
+        return selectedRows.get(0);
     }
     
-    public int[] getSelectedIndexes() {
-        int[] ret = new int[data.selections.size()];
-        for(int i = 0;  i < data.selections.size(); i++)
-            ret[i] = data.selections.get(i);
+    public int[] getSelectedRowIndexes() {
+        int[] ret = new int[selectedRows.size()];
+        for(int i = 0;  i < selectedRows.size(); i++)
+            ret[i] = selectedRows.get(i);
         return ret;
     }
 

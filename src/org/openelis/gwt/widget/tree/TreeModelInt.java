@@ -64,8 +64,6 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     
     public void selectRow(int index);
     
-    public void selectRow(Data key);
-    
     public void unselectRow(int index);
     
     public void clearSelections();
@@ -114,9 +112,9 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
         
     public TreeDataModel unload();
     
-    public int getSelectedIndex();
+    public int getSelectedRowIndex();
     
-    public int[] getSelectedIndexes();
+    public int[] getSelectedRowIndexes();
     
     public void setCellError(int row, int col, String Error);
     
