@@ -330,6 +330,7 @@ public class TreeWidget extends FocusPanel implements
 
     public void performCommand(Enum action, Object obj) {
         if(model.canToggle(modelIndexList[(Integer)obj])){
+            finishEditing();
             model.toggle(modelIndexList[(Integer)obj]);
         }
         
