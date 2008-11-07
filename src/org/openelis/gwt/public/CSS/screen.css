@@ -14,6 +14,7 @@ html, body {
     margin:0 8px 8px 8px;
     border-left:1px solid #8DB2E3;
     border-right:1px solid #8DB2E3;
+    width:521px;
 }
 
 .ScreenLeftPanel{
@@ -95,8 +96,8 @@ color:gray;
 .Hover .TopMenuRowContainer, .Hover .FavMenuRowContainer{
     cursor:pointer;
     padding:0;
-    background:url('../Images/white-top-bottom.gif') repeat-x 0px -1px;
-    border:1px solid #8db2e3;
+    background:url('../Images/white-top-bottom.gif') #d9e8fb repeat-x 0px 0px;
+    border:1px solid #aaccf6;
 }
 .FavoritesTitlePanel{
     background:#99bbe8 url("../Images/headersprite.gif") repeat-x;
