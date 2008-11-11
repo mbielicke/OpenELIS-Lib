@@ -8,14 +8,15 @@ html, body {
     cursor:default;
 }
 
+/************
 .TableFooter{
-    background:url("../Images/buttonbarbg.gif") repeat-x;
+    background:url("../Images/tablefooterbg.gif") repeat-x;
     height:26px;
     margin:0 8px 8px 8px;
     border-left:1px solid #8DB2E3;
     border-right:1px solid #8DB2E3;
-    width:521px;
 }
+******************/
 
 .ScreenLeftPanel{
     padding:2px;
@@ -501,43 +502,43 @@ border:0px;
 }
 
 .ErrorWindow .topRight {
-    width:2px;
-    height:2px;
+    width:10px;
+    height:10px;
     background: transparent url("../Images/popuptr.gif") no-repeat;
 }
 
 .ErrorWindow .middleRight {
-    width:2px;
+    width:10px;
     height:100%;
     background:url("../Images/popupright.gif") repeat-y;
 }
 .ErrorWindow .bottomRight {
     background:url("../Images/popupbr.gif") no-repeat;
-    width:2px;
-    height:2px;
+    width:10px;
+    height:10px;
 }
 .ErrorWindow .bottomCenter {
     background:url("../Images/popupbottom.gif") repeat-x bottom;
-    height:2px;
+    height:10px;
 }
 .ErrorWindow .bottomLeft {
-    width:2px;
-    height:2px;
+    width:10px;
+    height:10px;
     background:url("../Images/popupbl.gif") no-repeat top;
 }
 .ErrorWindow .middleLeft {
-    width:2px;
+    width:10px;
     height:100%;
     background: url("../Images/popupleft.gif") repeat-y;
 }
 .ErrorWindow .topLeft {
-    width:2px;
-    height:2px;
+    width:10px;
+    height:10px;
     background: url("../Images/popuptl.gif") no-repeat;
 }
 .ErrorWindow .topCenter{
     background:url("../Images/popuptop.gif") repeat-x;
-    height:2px;
+    height:10px;
 }
 /*ErrorWindow end*/
 
@@ -694,7 +695,7 @@ border:0px;
 }
 
 .gwt-TabPanelBottom{
-    background:#eee;
+    background:#fbfbfb;
     border:1px solid #8db2e3;
 }
 .gwt-TabBar .gwt-TabBarRest {
@@ -737,7 +738,6 @@ border:0px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:16px;
     cursor:default;
 }
 .AutoDropdown .TextboxUnselected{
@@ -747,7 +747,6 @@ border:0px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:16px;
     cursor:default;
 }
 
@@ -1083,13 +1082,12 @@ border:none;
 }
 /********   End Input  Form ***********/
 fieldSet {
-    border:1px solid #99BBE8;
+    border:1px solid #b5b8c8;
     padding: 2px;
     margin:5px;
 }
 
 legend {
-	background-color:#FFFFFF;
 }
 
 .LegendTitle {
