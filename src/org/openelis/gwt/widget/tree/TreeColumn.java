@@ -169,30 +169,23 @@ public class TreeColumn implements TreeColumnInt {
     public TreeWidget getTreeWidget() {
         return controller;
     }
-    /*
+    
     public Filter[] getFilter() {
-        Filter[] filter = dataFilterer.getFilterValues(controller.model.getData(),controller.columns.indexOf(this));
-        if (filters != null) {
-            for (int j = 0; j < filter.length; j++) {
-                for (int k = 0; k < filters.length; k++) {
-                    if (filter[j].obj.equals(filters[k].obj)) {
-                        filter[j].filtered = filters[k].filtered;
-                        k = filters.length;
-                    }
-                }
-            }
-        }
-        return filter;
+        return null;
     }
     
     public void setFilter(Filter[] filter) {
-        filters = filter;
+        
     }
     
     public void applyFilter() {
-        dataFilterer.applyFilter(controller.model.getData(), filters, controller.columns.indexOf(this));
+        
     }
-*/
+
+    public void applyQueryFilter() {
+       
+    }
+    
     public String getKey() {
         return key;
     }
@@ -202,19 +195,5 @@ public class TreeColumn implements TreeColumnInt {
         
     }
 
-    public void applyFilter() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public Filter[] getFilter() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setFilter(Filter[] filter) {
-        // TODO Auto-generated method stub
-        
-    }
     
 }

@@ -39,11 +39,17 @@ import org.openelis.gwt.screen.ScreenWidget;
 public class HoverListener extends MouseListenerAdapter {
     
    public void onMouseEnter(Widget arg0) {
-       arg0.addStyleName(((ScreenWidget)arg0).hoverStyle);
+       if(arg0 instanceof ScreenWidget)
+           arg0.addStyleName(((ScreenWidget)arg0).hoverStyle);
+       else
+           arg0.addStyleName("Hover");
    }
    
    public void onMouseLeave(Widget arg0) {
-       arg0.removeStyleName(((ScreenWidget)arg0).hoverStyle);   
+       if(arg0 instanceof ScreenWidget)
+           arg0.removeStyleName(((ScreenWidget)arg0).hoverStyle);
+       else
+           arg0.removeStyleName("Hover");
    }
 
 }

@@ -31,6 +31,8 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.common.data.TreeDataModel;
+import org.openelis.gwt.widget.table.QueryFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -119,6 +121,23 @@ public class DataFilterer implements DataFiltererInt {
             if (filterSet.contains(new StringObject("All")))
                 continue;
             if (((DataObject)row.get(col)).getValue() != null && !filterSet.contains(row.get(col)))
+              row.shown = false;  
+        }
+    }
+    
+    public void applyQueryFilter(DataModel data, String query, int col) {
+        if(query == null){
+            if(col == 0){
+                for (int i = 0; i < data.size(); i++) 
+                    data.get(i).shown = true;
+            }
+            return;
+        }
+        for (int i = 0; i < data.size(); i++) {
+            DataSet row = data.get(i);
+            if(col == 0)
+                row.shown = true;
+            if (((DataObject)row.get(col)).getValue() != null && !((String)((DataObject)row.get(col)).getValue()).toLowerCase().startsWith(query.toLowerCase()))
               row.shown = false;  
         }
     }

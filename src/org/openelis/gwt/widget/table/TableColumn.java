@@ -34,12 +34,16 @@ import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.screen.ScreenMenuItem;
+import org.openelis.gwt.widget.MenuItem;
 
 public class TableColumn implements TableColumnInt {
 
     public String header;
+    public ScreenMenuItem headerMenu;
     public boolean sortable;
     public boolean filterable;
+    public boolean queryable;
     public TableCellWidget cellWidget;
     public int preferredWidth;
     public int currentWidth;
@@ -51,6 +55,8 @@ public class TableColumn implements TableColumnInt {
     public int columnIndex;
     public Filter[] filters;
     public String key;
+    public boolean filterDisplayed = false;
+    public String query;
     
     
     public Widget getWidgetInstance() {
@@ -185,6 +191,10 @@ public class TableColumn implements TableColumnInt {
     public void applyFilter() {
         dataFilterer.applyFilter(controller.model.getData(), filters, controller.columns.indexOf(this));
     }
+    
+    public void applyQueryFilter() {
+        dataFilterer.applyQueryFilter(controller.model.getData(),query,controller.columns.indexOf(this));
+    }
 
     public String getKey() {
         return key;
@@ -193,6 +203,22 @@ public class TableColumn implements TableColumnInt {
     public void setKey(String key) {
         this.key = key;
         
+    }
+    
+    public void setHeaderMenu(ScreenMenuItem menu) {
+        this.headerMenu = menu;
+    }
+
+    public ScreenMenuItem getHeaderMenu() {
+        return headerMenu;
+    }
+
+    public boolean queryable() {
+        return queryable;
+    }
+
+    public void setQuerayable(boolean queryable) {
+        this.queryable = queryable;
     }
     
 }

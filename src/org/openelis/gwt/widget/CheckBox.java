@@ -80,6 +80,7 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
         hp.setVerticalAlignment(HasAlignment.ALIGN_MIDDLE);
         hp.add(panel);
         panel.setStyleName(UNCHECKED_STYLE);
+        sinkEvents(Event.KEYEVENTS);
     }
     
     public CheckBox(CheckType type) {

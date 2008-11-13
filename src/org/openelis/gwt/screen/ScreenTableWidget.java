@@ -39,6 +39,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.TableField;
+import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableDragHandler;
@@ -131,6 +132,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                                   .item(0);
                 Node sortsNode = ((Element)node).getElementsByTagName("sorts")
                                                 .item(0);
+                Node queryNode = ((Element)node).getElementsByTagName("query").item(0);
                 Node alignNode = ((Element)node).getElementsByTagName("colAligns")
                                                 .item(0);
                 Node colFixed = ((Element)node).getElementsByTagName("fixed").item(0);
@@ -172,12 +174,21 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 }
                 if(headersNode != null){
                     showHeader = true;
-                    String[] headerNames = headersNode.getFirstChild()
-                    .getNodeValue()
-                    .split(",");
-                    for(int i = 0; i < headerNames.length; i++){
-                        columns.get(i).setHeader(headerNames[i].trim());
-                    }                    
+                    if(((Element)headersNode).getElementsByTagName("menuItem").getLength() > 0) {
+                        NodeList menus = headersNode.getChildNodes();
+                        int j = 0;
+                        for(int i = 0; i < menus.getLength(); i++) {
+                            if(menus.item(i).getNodeType() == Node.ELEMENT_NODE && menus.item(i).getNodeName().equals("menuItem")) {
+                                columns.get(j).setHeaderMenu((ScreenMenuItem)ScreenWidget.loadWidget(menus.item(i), screen));
+                                j++;
+                            }
+                        }
+                    }else{
+                        String[] headerNames = headersNode.getFirstChild().getNodeValue().split(",");
+                        for(int i = 0; i < headerNames.length; i++){
+                            columns.get(i).setHeader(headerNames[i].trim());
+                        }
+                    }
                 }
                 if (filtersNode != null) {
                     String[] filters = filtersNode.getFirstChild()
@@ -193,6 +204,12 @@ public class ScreenTableWidget extends ScreenInputWidget {
                                               .split(",");
                     for (int i = 0; i < sorts.length; i++) {
                         columns.get(i).setSortable(Boolean.valueOf(sorts[i]).booleanValue());
+                    }
+                }
+                if (queryNode != null) {
+                    String[] query = queryNode.getFirstChild().getNodeValue().split(",");
+                    for(int i = 0; i < query.length; i++) {
+                        columns.get(i).setQuerayable(Boolean.valueOf(query[i]).booleanValue());
                     }
                 }
                 if (colFixed != null) {

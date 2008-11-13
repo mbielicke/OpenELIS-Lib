@@ -132,7 +132,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
             .getNodeValue()
             .split(",");
             for(int i = 0; i < headerNames.length; i++){
-                columns.get(i).setHeader(headerNames[i].trim());
+                columns.get(i).setHeaderMenu(new ScreenMenuItem(headerNames[i].trim()));
             }                    
         }
       

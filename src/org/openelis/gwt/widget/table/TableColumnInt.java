@@ -31,10 +31,16 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.screen.ScreenMenuItem;
+import org.openelis.gwt.widget.MenuItem;
 
 public interface TableColumnInt {
     
     public void  setHeader(String header);
+    
+    public void setHeaderMenu(ScreenMenuItem menu);
+    
+    public ScreenMenuItem getHeaderMenu();
     
     public String getHeader();
     
@@ -95,5 +101,9 @@ public interface TableColumnInt {
     public void setKey(String key);
     
     public String getKey();
+    
+    public boolean queryable();
+     
+    public void setQuerayable(boolean queryable);
     
 }

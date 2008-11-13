@@ -25,11 +25,12 @@
 */
 package org.openelis.gwt.common;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 
 import java.io.Serializable;
 
-public class Filter implements Serializable {
+public class Filter implements Data, Serializable {
 
     private static final long serialVersionUID = 1L;
     public DataObject obj;
@@ -37,4 +38,19 @@ public class Filter implements Serializable {
     public String display;
     public String splitOn;
     public String value;
+    
+    public Filter() {
+        
+    }
+    
+    public Object clone() {
+        Filter clone = new Filter();
+        clone.display = display;
+        clone.filtered = filtered;
+        clone.obj = obj;
+        clone.display = display;
+        clone.splitOn = splitOn;
+        clone.value = value;
+        return clone;
+    }
 }

@@ -35,12 +35,9 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.common.data.TreeField;
-import org.openelis.gwt.widget.table.TableManager;
-import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.tree.TreeColumn;
 import org.openelis.gwt.widget.tree.TreeColumnInt;
 import org.openelis.gwt.widget.tree.TreeDragHandler;
@@ -121,6 +118,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  .item(0);
                  Node sortsNode = ((Element)node).getElementsByTagName("sorts")
                  .item(0);
+                
                  Node alignNode = ((Element)node).getElementsByTagName("colAligns")
                                                  .item(0);
                  Node colFixed = ((Element)node).getElementsByTagName("fixed").item(0);

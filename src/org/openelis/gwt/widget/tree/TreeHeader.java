@@ -171,7 +171,7 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
         if (columns.get(cell/2).getSortable() || columns.get(cell/2).getFilterable()) {
             Filter[] colFilters = null;
             if (controller.columns.get(cell/2).getFilterable())
-                colFilters = controller.columns.get(cell/2).getFilter();
+              //  colFilters = controller.columns.get(cell/2).getFilter();
             showMenu(row, cell, colFilters);
         }   
     }

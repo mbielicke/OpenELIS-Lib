@@ -85,12 +85,6 @@ public interface TreeColumnInt {
     
     public void enable(boolean enable);
     
-    public Filter[] getFilter();
-    
-    public void setFilter(Filter[] filter);
-    
-    public void applyFilter();
-    
     public void setKey(String key);
     
     public String getKey();

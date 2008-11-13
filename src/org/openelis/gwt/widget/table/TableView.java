@@ -118,7 +118,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
     public final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
-    public TableHeader header = null;
+    public TableHeaderMenuBar header = null;
     public FlexTable rows = new FlexTable();
     public int left = 0;
     public int top = 0;
@@ -154,7 +154,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
             titlePanel.addStyleName("TitlePanel");
         }
         if(controller.showHeader){
-            header = new TableHeader(controller);
+            header = new TableHeaderMenuBar(controller);
             headerView.add(header);
         }
         cellView.setWidget(table);

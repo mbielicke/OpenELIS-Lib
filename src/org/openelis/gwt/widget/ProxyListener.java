@@ -112,7 +112,7 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
     }
 
     public void onDragStart(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
+       
 
     }
 }

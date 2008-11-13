@@ -216,3 +216,61 @@ a.index:hover{
 .Disabled .TableCell .gwt-Label {
 	color:grey;
 }
+
+.topHeaderBar { 
+    height:18px;
+    width:100%;
+    background:black url("../Images/headersprite.gif") repeat-x;
+}
+
+.topHeaderBarItem {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    font-weight : bold;
+    color:white;
+}
+.Hover .topHeaderBarItem, .Selected .topHeaderBarItem{
+    color:black;
+    cursor:pointer;
+    border:1px solid #333;
+    background:#f0f0f0;
+}
+
+.topHeaderContainer{
+    border:1px solid #333;
+    border-top:0;
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+}
+
+.topHeaderItemMiddle{
+    height:2em;
+
+}
+.topHeaderItemTitle{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+}
+
+.disabled .topHeaderItemTitle {
+color:gray;
+}
+
+.topHeaderItemDesc{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:9px;
+    color:gray;
+}
+.topHeaderIcon{
+    width:20px;
+    height:2em;
+}
+.TopHeaderRowContainer{
+    width:200px;
+}
+
+.Hover .TopHeaderRowContainer, .TopHeaderRowContainer Hover {
+    cursor:pointer;
+    padding:0;
+    background:url('../Images/white-top-bottom.gif') repeat-x;
+    border:1px solid #8db2e3;
+}
