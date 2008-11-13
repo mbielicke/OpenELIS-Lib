@@ -25,14 +25,11 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.common.data.TreeDataModel;
-import org.openelis.gwt.widget.table.QueryFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
