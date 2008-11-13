@@ -481,8 +481,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                     item.setStyleName("topHeaderRowContainer");
                     //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
                     filterMenu.menuItemsPanel.add(item);
-                    item.args.add(filter);
-                    item.args.add(new NumberObject(index));
+                    item.args = new Object[] {filter,new NumberObject(index)};
                     item.removeClickListener(item);
                     item.addClickListener(this);
                     
@@ -549,8 +548,8 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     public void onClick(Widget sender) {
         if(sender instanceof MenuItem) {
             doFilter = true;
-            Filter filter = (Filter)((MenuItem)sender).args.get(0);
-            TableColumn col = (TableColumn)controller.columns.get(((Integer)((NumberObject)((MenuItem)sender).args.get(1)).getValue()).intValue());
+            Filter filter = (Filter)((MenuItem)sender).args[0];
+            TableColumn col = (TableColumn)controller.columns.get(((Integer)((NumberObject)((MenuItem)sender).args[1]).getValue()).intValue());
             filter.filtered = !filter.filtered;
             if(filter.filtered)
                 ((MenuItem)sender).iconPanel.setStyleName("Checked");
