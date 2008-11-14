@@ -367,8 +367,8 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 resizing = false;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                        int adj1 = 4;
-                        int adj2 = 1;
+                        int adj1 = 0;
+                        int adj2 = 3;
                         /*if(getAgent().indexOf("safari") > -1){
                             adj1 = 6;
                             adj2 = 2;
@@ -376,16 +376,16 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                         */
                         for(int i = 0; i < columns.size(); i++){
                             if( i > 0 && i < columns.size() - 1){
-                                panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()-adj1)+"px");
-                                ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()-adj1 -16)+"px");
+                                panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj1)+"px");
+                                ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj1 -16)+"px");
                             }else{
-                                panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()-adj2)+"px");
-                                ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()-adj2 - 16)+"px");
+                                panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj2)+"px");
+                                ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj2 - 16)+"px");
                             }   
                         }
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
-                                controller.view.table.getFlexCellFormatter().setWidth(j, i, columns.get(i).getCurrentWidth() +  "px");
+                                controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
                                 ((TableCellWidget)controller.view.table.getWidget(j,i)).setCellWidth(columns.get(i).getCurrentWidth());
                                 ((SimplePanel)controller.view.table.getWidget(j, i)).setWidth((columns.get(i).getCurrentWidth()) + "px");
                                 //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
@@ -400,8 +400,8 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     public void sizeHeader() {
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                int adj1 = 4;
-                int adj2 = 1;
+                int adj1 = 0;
+                int adj2 = 3;
                 //if(getAgent().indexOf("safari") > -1){
                 //    adj1 = 6;
                 //    adj2 = 2;
@@ -413,11 +413,11 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 setWidth(displayWidth+"px");  
                 for(int i = 0; i < columns.size(); i++){
                     if( i > 0 && i < columns.size() - 1){
-                        panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()-adj1)+"px");
-                        ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()-adj1 -16)+"px");
+                        panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj1)+"px");
+                        ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj1 -16)+"px");
                     }else{
-                        panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()-adj2)+"px");
-                        ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()-adj2 - 16)+"px");
+                        panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj2)+"px");
+                        ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj2 - 16)+"px");
                     }
                 }
                 setWidth(displayWidth+"px");
