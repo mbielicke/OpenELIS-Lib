@@ -128,8 +128,8 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
         iconPanel.setStyleName(icon);
         VerticalPanel textPanel = new VerticalPanel();
         //Label label = new Label(labelText);
-        //label.setStyleName("topMenuItemTitle");
-        //label.addStyleName("locked");
+        wid.setStyleName("topMenuItemTitle");
+        wid.addStyleName("locked");
         
         Label description;
         if("EXCEPTION".equals(descriptionText))
@@ -154,8 +154,8 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
         iconPanel.setStyleName(icon);
         VerticalPanel textPanel = new VerticalPanel();
         //Label label = new Label(labelText);
-        //label.setStyleName("topMenuItemTitle");
-        //label.addStyleName("locked");
+        wid.setStyleName("topMenuItemTitle");
+        wid.addStyleName("locked");
         
         Label description;
         if("EXCEPTION".equals(descriptionText))
