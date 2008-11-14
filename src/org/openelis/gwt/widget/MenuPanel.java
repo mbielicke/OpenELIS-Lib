@@ -126,6 +126,10 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
             ((MenuItem)wid).parent = this;
             menuItems.add((MenuItem)wid);
         }
+        if(wid instanceof ScreenMenuItem) {
+            ((MenuItem)((ScreenMenuItem)wid).getWidget()).parent = this;
+            menuItems.add((MenuItem)((ScreenMenuItem)wid).getWidget());
+        }
         panel.add(wid);
     }
     
