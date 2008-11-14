@@ -308,13 +308,13 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
             //removeMouseListener(this);
             addMouseListener(this);
             sinkEvents(Event.MOUSEEVENTS);
-            removeStyleName("disabled");
+            getWidget().removeStyleName("disabled");
         }else{
            // removeClickListener(this);
            // removeMouseListener(this);
             unsinkEvents(Event.ONCLICK);
             unsinkEvents(Event.MOUSEEVENTS);
-            addStyleName("disabled");
+            getWidget().addStyleName("disabled");
         }
     }
 
