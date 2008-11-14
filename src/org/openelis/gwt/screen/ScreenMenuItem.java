@@ -87,7 +87,7 @@ public class ScreenMenuItem extends ScreenWidget {
             while(displayList.item(i).getNodeType() != Node.ELEMENT_NODE)
                 i++;
             wid = ScreenWidget.loadWidget(displayList.item(i), screen);
-            item = new MenuItem("",wid,"");
+            item = new MenuItem(wid);
         }else if(node.getAttributes().getNamedItem("header") != null){
             wid = MenuItem.createTableHeader("", new Label(node.getAttributes().getNamedItem("label").getNodeValue()));
             item = new MenuItem(wid);

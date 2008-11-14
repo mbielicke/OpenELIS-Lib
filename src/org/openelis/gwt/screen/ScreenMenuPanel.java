@@ -99,7 +99,10 @@ public class ScreenMenuPanel extends ScreenWidget {
               //      ((MenuItem)((ScreenMenuItem)wid).getWidget()).parent = panel;
               //      panel.menuItems.add(((MenuItem)((ScreenMenuItem)wid).getWidget()));
               //  }
-                panel.add(wid);
+                if(wid instanceof ScreenMenuItem)
+                    panel.add(((ScreenMenuItem)wid).getWidget());
+                else
+                    panel.add(wid);
             }
         }
     }
