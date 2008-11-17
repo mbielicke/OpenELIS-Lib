@@ -87,6 +87,7 @@ public class AbstractField implements DataField, Serializable {
     
     public void clearErrors() {
         errors = new ArrayList<String>();
+        valid = true;
     }
 
     public DataField getInstance(Node node) {
