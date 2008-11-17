@@ -136,7 +136,7 @@ version="1.0">
 
 <!-- options button template -->
 <xsl:template name="optionsButton">
-	<menuPanel key="optionsMenu" layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
+	<menuPanel key="optionsMenu" layout="vertical" style="topBarItemHolder">
 	    <menuItem>
 	        <menuDisplay>
 		    	<appButton action="option" style="ButtonPanelButton">
@@ -165,6 +165,16 @@ version="1.0">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
+	  	</HorizontalPanel>
+	</appButton>
+</xsl:template>
+
+<!-- popup transfer button template -->
+<xsl:template name="popupTransferButton">
+<appButton action="commit" style="Button" enabledStates="default" lockedStates="">
+		<HorizontalPanel>
+	    	<AbsolutePanel style="CommitButtonImage"/>
+        	<text><xsl:value-of select='resource:getString($constants,"transfer")'/></text>
 	  	</HorizontalPanel>
 	</appButton>
 </xsl:template>
