@@ -109,16 +109,22 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
             field.setValue(textarea.getText());
     }
     
+    
     public void enable(boolean enabled){
         if(queryMode)
             queryWidget.enable(enabled);
         else{
-            textarea.setReadOnly(!enabled);
-            if(enabled)
-                textarea.addFocusListener(this);
-            else
-                textarea.removeFocusListener(this);
-            super.enable(enabled);
+            if(!alwaysEnabled){
+                if(alwaysDisabled)
+                    enabled = false;
+                textarea.setReadOnly(!enabled);
+                if(enabled){
+                    textarea.addFocusListener(this);
+                }else
+                    textarea.removeFocusListener(this);
+                super.enable(enabled);
+            }else
+                super.enable(true);
         }
     }
     
