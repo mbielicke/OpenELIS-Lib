@@ -44,10 +44,11 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
 
     private static final long serialVersionUID = 1L;
 
-    private static String appRoot;
+    private static String appRoot ;
     
     public void init() throws ServletException {
         appRoot = getServletConfig().getInitParameter("app.root");
+        //appRoot = "/home/tschmidt/workspace/TestWidgets/www/edu.uiowa.uhl.tw.TestWidgets/";
     }
     
     public String getXML() throws RPCException {
@@ -79,7 +80,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
     public String getMonth(String month, String year, String date) throws RPCException {
         try {
             Calendar cal = Calendar.getInstance();
-            if(!date.equals("")){
+            if(date != null && !date.equals("")){
                 date = date.replace('-','/');
                 cal.setTime(new Date(date));
             }else{
@@ -127,7 +128,6 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
 	public HashMap<String,Data> getXMLData(HashMap<String,Data> args) throws RPCException {
         try {
             String date = (String)((DataObject)args.get("date")).getValue();
-            System.out.println("date = "+date);
             Calendar cal = Calendar.getInstance();
             if(!date.equals("")){
                 date = date.replace('-','/');

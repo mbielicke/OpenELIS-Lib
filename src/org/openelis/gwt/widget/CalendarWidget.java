@@ -157,8 +157,8 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
             });
             return;
         }
-        if(sender == ok || 
-           sender == cancel){
+        if(sender == getWidget("ok") || 
+           sender == getWidget("cancel")){
             final AppScreen scr = this;
             screenService.getMonth(month.getValue().toString(), year.getValue().toString(), (String)rpc.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
@@ -187,14 +187,14 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
             years[0].label.addStyleName("Current");
             return;
         }
-        if(Arrays.asList(months).contains(sender)){
+        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("month:")){
             String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
             months[((Integer)month.getValue()).intValue()].label.removeStyleName("Current");
             month.setValue(value[1]);
             ((ScreenLabel)sender).label.addStyleName("Current");
             return;
         }
-        if(Arrays.asList(years).contains(sender)){
+        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("year:")){
             String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
             years[((Integer)year.getValue()).intValue()%10].label.removeStyleName("Current");
             year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10+Integer.parseInt(value[1])));

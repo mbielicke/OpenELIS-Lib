@@ -34,6 +34,7 @@ import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
+import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
 import java.util.Date;
@@ -51,7 +52,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     /**
      * Widget wrapped by this class
      */
-    private FormCalendarWidget cal;
+    private CalendarLookUp cal;
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
@@ -75,20 +76,21 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                                       .getNamedItem("end")
                                       .getNodeValue());
         if (node.getAttributes().getNamedItem("week") != null)
-            cal = new FormCalendarWidget(begin,
+            cal = new CalendarLookUp(begin,
                                          end,
                                          Boolean.valueOf(node.getAttributes()
                                                              .getNamedItem("week")
                                                              .getNodeValue())
                                                 .booleanValue());
         else
-            cal = new FormCalendarWidget(begin, end, false);
-        cal.init();
-        if (node.getAttributes().getNamedItem("shortcut") != null)
+            cal = new CalendarLookUp(begin, end, false);
+        //l.init();
+        /*if (node.getAttributes().getNamedItem("shortcut") != null)
             cal.setShortcutKey(node.getAttributes()
                                    .getNamedItem("shortcut")
                                    .getNodeValue()
                                    .charAt(0));
+        */
         if (node.getAttributes().getNamedItem("onChange") != null){
             String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
             if (listener.equals("this"))
@@ -155,7 +157,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
         if(queryMode)
             queryWidget.enable(enabled);
         else{
-            cal.setEnabled(enabled);
+            cal.enable(enabled);
             if(enabled)
                 cal.addFocusListener(this);
             else
