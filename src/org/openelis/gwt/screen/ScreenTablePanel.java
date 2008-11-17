@@ -78,9 +78,13 @@ public class ScreenTablePanel extends ScreenWidget {
                                                       .getNamedItem("spacing")
                                                       .getNodeValue()));
         if (node.getAttributes().getNamedItem("padding") != null)
-            panel.setCellSpacing(Integer.parseInt(node.getAttributes()
+            panel.setCellPadding(Integer.parseInt(node.getAttributes()
                                                       .getNamedItem("padding")
                                                       .getNodeValue()));
+        if (node.getAttributes().getNamedItem("style") != null){
+            panel.addStyleName(node.getAttributes().getNamedItem("style").getNodeValue());
+        }
+        
         NodeList rows = ((Element)node).getElementsByTagName("row");
         for (int k = 0; k < rows.getLength(); k++) {
         	
