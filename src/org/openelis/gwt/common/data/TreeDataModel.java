@@ -171,7 +171,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         clone.selected = selected;
         clone.selectLast = selectLast;
         for(TreeDataItem leaf : leaves.values())
-            clone.leaves.put(leaf.leafType,leaf); 
+            clone.leaves.put(leaf.leafType,(TreeDataItem)leaf.clone()); 
         for(int i = 0; i < size(); i++){
             clone.add((TreeDataItem)get(i).clone());
         }
