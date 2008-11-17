@@ -78,7 +78,13 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
     
     public String getMonth(String month, String year, String date) throws RPCException {
         try {
-            date = date.replace('-','/');
+            Calendar cal = Calendar.getInstance();
+            if(!date.equals("")){
+                date = date.replace('-','/');
+                cal.setTime(new Date(date));
+            }else{
+                date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
+            }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element monthEl = doc.createElement("month");

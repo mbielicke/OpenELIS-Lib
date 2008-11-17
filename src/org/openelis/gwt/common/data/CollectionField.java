@@ -33,7 +33,7 @@ import com.google.gwt.xml.client.Node;
 public class CollectionField extends AbstractField  {
 
     private static final long serialVersionUID = 1L;
-    private ArrayList<DataObject> coll = new ArrayList<DataObject>();
+    private ArrayList<Data> coll = new ArrayList<Data>();
     private String type = "";
     public static final String TAG_NAME = "rpc-collection";
 

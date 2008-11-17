@@ -33,6 +33,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
+import org.openelis.gwt.common.data.QueryDateField;
 import org.openelis.gwt.widget.FormCalendarWidget;
 
 import java.util.Date;
@@ -128,10 +129,11 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
             field.setValue(null);
             Date date = null;
             String entered = cal.getText();
+            entered = entered.replaceAll("-", "/");
             if (field instanceof DateField) {
                 if (entered != null && !entered.equals("")) {
                     try {
-                        date = new Date(entered.replaceAll("-", "/"));
+                        date = new Date(entered);
                     } catch (Exception e) {
                         field.addError("Not a Valid Date");
                     }
@@ -142,6 +144,10 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                                                            date));
                 }
             }
+            if(field instanceof QueryDateField && !entered.equals("")) {
+                field.setValue(entered);
+            }
+            
         }
     }
     
