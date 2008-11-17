@@ -201,7 +201,7 @@ public class FormRPC extends AbstractField {
             if(fields.get((String)keys[i]) instanceof FormRPC)
                 cloneMap.put((String)keys[i], (FormRPC)fields.get((String)keys[i]).clone());
             else
-                cloneMap.put((String)keys[i], (FormRPC)fields.get((String)keys[i]).clone());
+                cloneMap.put((String)keys[i], (AbstractField)fields.get((String)keys[i]).clone());
         }        
         
         clone.setFieldMap(cloneMap);
