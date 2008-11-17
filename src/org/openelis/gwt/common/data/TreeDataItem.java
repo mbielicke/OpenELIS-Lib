@@ -56,6 +56,9 @@ public class TreeDataItem extends DataSet {
         for(int i=0; i < items.size(); i++){
             clone.addItem((TreeDataItem)getItem(i).clone());
         }
+        if(data != null)
+            clone.data = (Data)data.clone();
+        
         clone.parent = parent;
         clone.leafType = leafType;
         return clone;
