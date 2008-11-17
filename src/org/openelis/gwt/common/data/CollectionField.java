@@ -82,7 +82,7 @@ public class CollectionField extends AbstractField  {
         return coll;
     }
 
-    public void addItem(DataObject item) {
+    public void addItem(Data item) {
         coll.add(item);
     }
 
