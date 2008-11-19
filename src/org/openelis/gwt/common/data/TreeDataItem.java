@@ -48,6 +48,12 @@ public class TreeDataItem extends DataSet {
     
     public int hash =  -1;
     
+    public int y;
+    
+    public int x;
+    
+    public int childIndex = -1;
+    
     public Object clone() {
         TreeDataItem clone = new TreeDataItem();
         for(int i=0; i < size(); i++){
@@ -69,6 +75,7 @@ public class TreeDataItem extends DataSet {
         item.depth = depth+1;
         item.increaseDepth();
         item.parent = this;
+        item.childIndex = items.size()-1;
     }
     
     public void addItem(int index, TreeDataItem item) {
@@ -76,6 +83,7 @@ public class TreeDataItem extends DataSet {
         item.depth = depth+1;
         item.increaseDepth();
         item.parent = this;
+        item.childIndex = items.size() -1;
     }
     
     public void increaseDepth(){
@@ -149,5 +157,34 @@ public class TreeDataItem extends DataSet {
         return hash == ((TreeDataItem)obj).hash;
                        
     }
+    
+    public TreeDataItem getPreviousSibling() {
+        if(childIndex < 1)
+            return null;
+        return parent.getItem(childIndex -1);
 
+    }
+    
+    public TreeDataItem getNextSibling() {
+        if(childIndex < 0 || childIndex == parent.getItems().size())
+            return null;
+        return parent.getItem(childIndex+1);
+    }
+
+    public boolean hasChildren() {
+        return items.size() > 0 || (lazy && !loaded);
+    }
+    
+    public TreeDataItem getLastChild() {
+        if(items.size() > 0)
+            return items.get(items.size()-1);
+        return null;
+    }
+    
+    public TreeDataItem getFirstChild() {
+        if(items.size() > 0)
+            return items.get(0);
+        return null;
+    }
+    
 }

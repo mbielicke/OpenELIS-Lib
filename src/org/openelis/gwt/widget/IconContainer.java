@@ -45,6 +45,7 @@ public class IconContainer extends AbsolutePanel implements SourcesMouseEvents, 
     }
     
     public IconContainer(String style) {
+        this();
         setStyleName(style);
     }
 

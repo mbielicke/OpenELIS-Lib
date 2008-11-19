@@ -44,6 +44,8 @@ import org.openelis.gwt.widget.tree.TreeDragHandler;
 import org.openelis.gwt.widget.tree.TreeKeyboardHandler;
 import org.openelis.gwt.widget.tree.TreeManager;
 import org.openelis.gwt.widget.tree.TreeRow;
+import org.openelis.gwt.widget.tree.TreeServiceCall;
+import org.openelis.gwt.widget.tree.TreeServiceCallInt;
 import org.openelis.gwt.widget.tree.TreeWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 
@@ -239,6 +241,16 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  }
                  //data.setDefaultSet(set);
                  tree = new TreeWidget(columns,maxRows,width,title,showHeader,showScroll);
+                 if(node.getAttributes().getNamedItem("treeCall") != null) {
+                     String treeCall = node.getAttributes().getNamedItem("treeCall").getNodeValue();
+                     if(treeCall.equals("this")){
+                         tree.model.treeService = (TreeServiceCallInt)screen;
+                     }else{
+                         tree.model.treeService = (TreeServiceCallInt)ClassFactory.forName(treeCall);
+                     }
+                 }else if(node.getAttributes().getNamedItem("serviceUrl") != null) {
+                     tree.model.treeService = new TreeServiceCall(node.getAttributes().getNamedItem("serviceUrl").getNodeValue());
+                 }
                  if(node.getAttributes().getNamedItem("drag") != null) {
                      String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
                      if(drag.equals("default"))

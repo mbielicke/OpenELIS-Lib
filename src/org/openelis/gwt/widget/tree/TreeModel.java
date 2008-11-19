@@ -48,6 +48,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public TreeWidget controller;
     public boolean multiSelect;
     public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
+    public TreeServiceCallInt treeService;
 
     
     public TreeManager manager;
@@ -326,6 +327,10 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
     
     public void toggle(int row) {
+        if(rows.get(row).lazy && !rows.get(row).loaded){
+            treeService.getChildNodes(this,row);
+            return;
+        }
         rows.get(row).toggle();
         refresh();
         if(rows.get(row).open)
