@@ -173,9 +173,9 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
                 editorGrid.getCellFormatter().setWidth(0,j,"18px");
             editorGrid.getCellFormatter().setHeight(0,j,"18px");
             if(j == editorGrid.getColumnCount() -2){
-                if(drow.open && drow.getItems().size() > 0)
+                if(drow.open && drow.hasChildren())
                     DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
-                else if(drow.getItems().size() > 0)
+                else if(drow.hasChildren())
                     DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
                 else if(j > 0){
                     if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
@@ -183,7 +183,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
                     else
                         DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat center");
                 }
-                if(drow.getItems().size() > 0){
+                if(drow.hasChildren()){
                     editorGrid.clickCell = j;
                 }
             }
