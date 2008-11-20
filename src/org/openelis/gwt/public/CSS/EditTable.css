@@ -26,12 +26,38 @@ tr .AltTableRow{
     background:#f8f8f9;
 }
 
-.TableCell {  
-height:18px;
-    overflow:hidden;
-    cursor:pointer;
-    color: black;
+tr .TableHighlighted{
+    color:#000000;
+    background:#EFEFEF url('../Images/row-over.gif') repeat-x scroll left top;
+    border: 1px solid #DDDDDD;
 }
+
+.TableCell, .TableCellRight, .TableCellMiddle{  
+border-color:#FFFFFF #EDEDED #EDEDED;
+border-style:solid;
+border-width:1px 1px 1px 0px;
+color:black;
+cursor:pointer;
+font-family:Verdana,Arial,Helvetica,sans-serif;
+font-size:10px;
+height:18px;
+overflow:hidden;
+padding:1px 1px 0px;
+}
+
+.TableCellLeft{  
+border-color:#FFFFFF #EDEDED #EDEDED #EDEDED;
+border-style:solid;
+border-width:1px 1px 1px 1px;
+color:black;
+cursor:pointer;
+font-family:Verdana,Arial,Helvetica,sans-serif;
+font-size:10px;
+height:18px;
+overflow:hidden;
+padding:1px 1px 0px;
+}
+
 .RowNum {
     
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -41,8 +67,28 @@ height:18px;
 }
 
 .Selected .TableCell{
-    color:#333;
-    background:#d9e8fb;
+background:#DFE8F6 none repeat scroll 0 0 !important;
+border:1px dotted #A3BAE9;
+}
+
+.Selected .TableCellLeft{
+background:#DFE8F6;
+border-left:1px dotted #A3BAE9;
+border-top:1px dotted #A3BAE9;
+border-bottom:1px dotted #A3BAE9;
+}
+
+.Selected .TableCellMiddle{
+background:#DFE8F6;
+border-top:1px dotted #A3BAE9;
+border-bottom:1px dotted #A3BAE9;
+}
+
+.Selected .TableCellRight{
+background:#DFE8F6;
+border-right:1px dotted #A3BAE9;
+border-top:1px dotted #A3BAE9;
+border-bottom:1px dotted #A3BAE9;
 }
 
 .Enabled{
@@ -79,7 +125,7 @@ height:18px;
 .HeaderBar{
     width:3px;
     height:17px;
-    background:url('../Images/buttondivider.gif') no-repeat center center;
+    background:url('../Images/headerdivider.gif') no-repeat center center;
     cursor:e-resize;
 }
 .HeaderBarPad{
@@ -99,7 +145,7 @@ height:18px;
 }
 .HeaderLabel {
     overflow:hidden;
-    color:#486095;
+    color:#000000;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
        -moz-user-select: none;
@@ -199,15 +245,11 @@ a.index:hover{
    text-decoration:none;
 }
 
-.Highlighted{
+tr .Highlighted{
     color:#000000;
-    background:#ffe290;
+    background:#EFEFEF url('../Images/row-over.gif') repeat-x scroll left top;
+    border: 1px solid #DDDDDD;
 }
-
-/*.Dropdown .Selected .TableCell{
-    color:#FFFFFF;
-    background:blue;
-}*/
 
 .CellError {
     height:16px;

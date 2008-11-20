@@ -6,7 +6,7 @@
 
 .TreeWidget{
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size:6px;
+    font-size:10px;
 }
 
 .Tree td {
@@ -25,29 +25,24 @@
     height:16px;
     background:#f8f8f9;
 }
-.TreeCell, .TableCell {  
-height:18px;
-    overflow:hidden;
-    cursor:pointer;
-    color: black;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 10px;
+.TreeCell {  
+   height:18px;
+   overflow:hidden;
+   cursor:pointer;
+   color: black;
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+   font-size: 10px;
 }
 
 .Selected .TreeCell{
     color:#333;
-    background:#d9e8fb;
+    background:#D9E8FB;
 }
 
-tr .Highlighted{
+tr .TreeHighlighted{
     color:#000000;
-    background:#fbfbfb;
+    background:#EEEEEE;
 }
-
-/*.Dropdown .Selected .TableCell{
-    color:#FFFFFF;
-    background:blue;
-}*/
 
 .CellError {
     height:16px;

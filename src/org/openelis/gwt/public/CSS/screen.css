@@ -8,6 +8,22 @@ html, body {
     cursor:default;
 }
 
+.SectionHeader{
+ background:#CCCCCC;
+ border: black solid 1px;
+ text-align: center;
+ margin: 3px;
+}
+
+.SectionHeaderText{
+    -moz-user-select: none;
+	color:gray;
+	padding:4px 0px 4px 0px;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:12px;
+    font-weight:bold;
+}
+
 /************
 .TableFooter{
     background:url("../Images/tablefooterbg.gif") repeat-x;
@@ -260,7 +276,16 @@ color:gray;
 .disabled .StandardNoteButtonImage{
     background:url("../Images/standardnotebuttonimagedisabled.gif") no-repeat;
 }
-
+.LookupButtonImage{
+    background:url("../Images/querybuttonimage.gif") no-repeat;
+}
+.disabled .LookupButtonImage{
+    background:url("../Images/querybuttonimagedisabled.gif") no-repeat;
+}
+.LookupButtonImage{
+    width:16px;
+    height:16px;
+}
 .FindButtonImage{
     width:20px;
     height:20px;
@@ -704,13 +729,12 @@ border:0px;
 /*******END TAB PANEL CSS***********/
 
 /*******autodropdown css***********/
-
 .AutoDropdown{
-    height:16px;
+    height:19px;
 }
 .AutoDropdownButton{
     width:16px;
-    height:18px;
+    height:19px;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
@@ -727,7 +751,7 @@ border:0px;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
-.DropdownPopup{
+.AutoCompletePopup{
     background:#FFFFFF;
     border: 1px solid #7eadd9;
 }
@@ -738,6 +762,7 @@ border:0px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
+    height:20px;
     cursor:default;
 }
 .AutoDropdown .TextboxUnselected{
@@ -747,6 +772,7 @@ border:0px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
+    height:20px;
     cursor:default;
 }
 
@@ -1055,7 +1081,7 @@ border:none;
     font-size:11px;
     padding:0 8px 0 4px;
     height:18px;
-    background:url("../Images/headersprite.gif") repeat-x;
+    background:url("../Images/headersprite-blue.gif") repeat-x;
     border:1px solid #99bbe8;
     border-bottom:0;
     margin-right:8px;
