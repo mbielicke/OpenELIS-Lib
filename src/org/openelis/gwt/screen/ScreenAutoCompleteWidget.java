@@ -195,8 +195,11 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
     	if(queryMode){
     		queryWidget.load(field);
     	}else{
-            if(((DropDownField)field).getModel().size() > 0)
+            if(((DropDownField)field).getModel().size() > 0){
+                auto.activeRow = -1;
+                auto.activeCell = -1;
                 auto.model.load(((DropDownField)field).getModel());
+            }
             auto.setSelections(((DropDownField)field).getSelections());
             super.load(field);
         }
