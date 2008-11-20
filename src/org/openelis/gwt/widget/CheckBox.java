@@ -160,7 +160,9 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
            else
                setState(CHECKED);
        }
-       clickListeners.fireClick(sender);
+       
+       if(clickListeners != null)
+           clickListeners.fireClick(sender);
     }
     
     public void enable(boolean enabled){
