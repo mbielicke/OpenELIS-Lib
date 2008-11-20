@@ -52,6 +52,8 @@ public class TreeView extends Composite {
     public String width;
     public String height;
     private String navLinks = "NavLinks";
+    public static String cellStyle = "TreeCell";
+    public static String rowStyle = "TreeRow";
     
     interface MyTreeImages extends TreeImages {
         

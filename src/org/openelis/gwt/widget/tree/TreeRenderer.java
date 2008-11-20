@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.TreeDataItem;
+import org.openelis.gwt.widget.pagedtree.TreeView;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableView;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -128,11 +129,11 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
                 controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
                 controller.view.table.getFlexCellFormatter().addStyleName(index,
                                                                           i,
-                                                                          TableView.cellStyle);
+                                                                          TreeView.cellStyle);
             }
             controller.view.table.getFlexCellFormatter().addStyleName(index,
                                                   i,
-                                                  TableView.cellStyle);
+                                                  TreeView.cellStyle);
             controller.view.table.getFlexCellFormatter()
                           .setHorizontalAlignment(index, i, column.getAlign());
 

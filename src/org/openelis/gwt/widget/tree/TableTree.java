@@ -211,7 +211,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
              DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,grid.getColumnCount()-1), "background", "#f8f8f9");
        }
        */
-       //editorGrid.addStyleName(TreeView.cellStyle);
+       editorGrid.addStyleName(TreeView.cellStyle);
        DOM.setStyleAttribute(editorGrid.getRowFormatter().getElement(0), "background", "none");
        //DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
     }

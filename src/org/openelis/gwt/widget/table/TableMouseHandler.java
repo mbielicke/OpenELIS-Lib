@@ -83,7 +83,7 @@ public class TableMouseHandler implements TableMouseHandlerInt {
         delay = new Timer() {
             public void run() {
                 final TableRow proxy = ((TableRow)sender).getProxy();
-                proxy.removeStyleName("Highlighted");
+                proxy.removeStyleName("TableHighlighted");
                 DOM.setStyleAttribute((Element)proxy.getElement(),"height",controller.cellHeight+"px");
                 AbsolutePanel dragIndicator = new AbsolutePanel();
                 dragIndicator.setStyleName("DragStatus");
@@ -115,12 +115,12 @@ public class TableMouseHandler implements TableMouseHandlerInt {
     }
     
     public void onMouseEnter(Widget sender) {
-       sender.addStyleName("Highlighted");
+       sender.addStyleName("TableHighlighted");
         
     }
 
     public void onMouseLeave(Widget sender) {
-        sender.removeStyleName("Highlighted");
+        sender.removeStyleName("TableHighlighted");
         
     }
 

@@ -36,6 +36,7 @@ import java.util.ArrayList;
 public class QueryTableRenderer implements TableRendererInt, TableWidgetListener {
     
     private QueryTable controller;
+    private boolean showAltRowColors = true;
     
     public QueryTableRenderer(QueryTable controller){
         this.controller = controller;
@@ -84,7 +85,7 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
 */
         
     }
-
+    
     public void load(int pos) {
        if(controller.view.table.getRowCount() == 0)
            createRow(0);

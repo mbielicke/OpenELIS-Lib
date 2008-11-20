@@ -77,7 +77,7 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
         delay = new Timer() {
             public void run() {
                 final TreeRow proxy = ((TreeRow)sender).getProxy();
-                proxy.removeStyleName("Highlighted");
+                proxy.removeStyleName("TreeHighlighted");
                 AbsolutePanel dragIndicator = new AbsolutePanel();
                 dragIndicator.setStyleName("DragStatus");
                 dragIndicator.addStyleName("NoDrop");
@@ -107,12 +107,12 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
     }
     
     public void onMouseEnter(Widget sender) {
-       sender.addStyleName("Highlighted");
+       sender.addStyleName("TreeHighlighted");
         
     }
 
     public void onMouseLeave(Widget sender) {
-        sender.removeStyleName("Highlighted");
+        sender.removeStyleName("TreeHighlighted");
         
     }
 

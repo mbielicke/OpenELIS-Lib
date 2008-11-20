@@ -94,6 +94,7 @@ public class TableWidget extends FocusPanel implements
     public DragListener drag;
     public DropListener drop;
     public ScreenTableWidget screenWidget;
+    public boolean showAltRowColors = true;
     
     public TableWidget() {
         

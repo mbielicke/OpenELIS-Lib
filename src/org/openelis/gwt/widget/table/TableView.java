@@ -127,6 +127,9 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
     private String title = "";
     public static String widgetStyle = "TableWidget";
     public static String cellStyle = "TableCell";
+    public static String cellStyleLeft = "TableCellLeft";
+    public static String cellStyleMiddle = "TableCellMiddle";
+    public static String cellStyleRight = "TableCellRight";
     public static String rowStyle = "TableRow";
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
@@ -202,7 +205,8 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         vp.add(ft);
         ft.setCellPadding(0);
         ft.setCellSpacing(0);
-        table.setCellSpacing(1);
+        table.setCellSpacing(0);
+        table.setCellPadding(0);
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
         ft.setCellSpacing(0);

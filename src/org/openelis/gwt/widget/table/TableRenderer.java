@@ -57,9 +57,24 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
                 ((SourcesClickEvents)wid).addClickListener(this);
             }
             controller.view.table.setWidget(i,j,wid);
-            controller.view.table.getFlexCellFormatter().addStyleName(i,
-                                                  j,
-                                                  TableView.cellStyle);
+            
+            if(controller.columns.size() == 1)
+                controller.view.table.getFlexCellFormatter().addStyleName(i,
+                                                                          j,
+                                                                          TableView.cellStyle); 
+            else if(j == 0)
+                controller.view.table.getFlexCellFormatter().addStyleName(i,
+                                                                          j,
+                                                                          TableView.cellStyleLeft);
+            else if(j == controller.columns.size()-1)
+                controller.view.table.getFlexCellFormatter().addStyleName(i,
+                                                                          j,
+                                                                          TableView.cellStyleRight);
+            else
+                controller.view.table.getFlexCellFormatter().addStyleName(i,
+                                                                          j,
+                                                                          TableView.cellStyleMiddle);
+            
             controller.view.table.getFlexCellFormatter()
                           .setHorizontalAlignment(i, j, column.getAlign());
 
@@ -79,12 +94,12 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         row.addMouseListener(controller.mouseHandler);
         row.addDropListener(controller.drop);
         row.index = i;
-        if(i % 2 == 1){
+        if(i % 2 == 1 && controller.showAltRowColors){
             row.addStyleName("AltTableRow");
         }
         rows.add(row);
     }
-    
+
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
         int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+(controller.maxRows*2);
@@ -116,6 +131,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             int count = controller.view.table.getRowCount();
             for(int i = count -1; i > tRows -1; i--){
                 controller.view.table.removeRow(i);
+                //if(i < rows.size())
                 rows.remove(i);
             }
         }else if(controller.view.table.getRowCount() < tRows){

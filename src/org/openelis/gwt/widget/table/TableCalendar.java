@@ -154,6 +154,7 @@ public class TableCalendar extends TableCellInputWidget {
     }
     
     public void setFocus(boolean focused) {
-        editor.setFocus(focused);
+        if(editor != null)
+            editor.setFocus(focused);
     }
 }

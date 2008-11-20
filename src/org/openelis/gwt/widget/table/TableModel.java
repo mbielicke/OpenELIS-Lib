@@ -279,6 +279,9 @@ public class TableModel implements TableModelInt {
     public void unselectRow(int index){
         if(index < numRows())
             data.unselect(index);
+        
+        controller.activeRow = -1;
+        
         tableModelListeners.fireRowUnselected(this, -1);        
     }
     
