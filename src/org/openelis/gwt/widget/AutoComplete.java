@@ -49,6 +49,8 @@ public class AutoComplete extends DropdownWidget {
         focusPanel.addClickListener(listener);
         textBox.addKeyboardListener(listener);
         mainHP.remove(focusPanel);
+        
+        this.showAltRowColors = false;
     }
     
     public void init(String cat, 

@@ -74,6 +74,8 @@ public class Dropdown extends DropdownWidget {
         textBox.removeFocusListener(this);
         if(enabled)
             textBox.addFocusListener(this);
+        
+        this.showAltRowColors = false;
     }
     
     public void init(boolean multi, 
