@@ -260,7 +260,7 @@ color:gray;
 color:gray;
 }
 
-.RemoveRowButtonImage, .StandardNoteButtonImage{
+.AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage{
     width:20px;
     height:20px;
 }
@@ -270,6 +270,14 @@ color:gray;
 .disabled .RemoveRowButtonImage{
     background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
 }
+
+.AddRowButtonImage{
+    background:url("../Images/addrowbuttonimage.gif") no-repeat;
+}
+.disabled .AddRowButtonImage{
+    background:url("../Images/addrowbuttonimagedisabled.gif") no-repeat;
+}
+
 .StandardNoteButtonImage{
     background:url("../Images/note.gif") no-repeat;
 }
