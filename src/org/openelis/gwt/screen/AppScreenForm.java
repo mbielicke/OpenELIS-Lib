@@ -89,13 +89,13 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     protected AsyncCallback<? extends Data> updateCallback= new AsyncCallback<FormRPC>() {
         public void onSuccess(FormRPC result){
             loadScreen(result);
-            enable(true);
             window.setStatus(consts.get("updateFields"),"");
             changeState(State.UPDATE);
            
         }
         public void onFailure(Throwable caught){
             handleError(caught);
+            enable(false);
             changeState(State.DISPLAY);
         }            
     };
@@ -333,6 +333,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
     }
 
     public void update(){
+        enable(true);
         update(updateChain);
     }
     
@@ -372,7 +373,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void commit() {
-        super.doSubmit();
+        doSubmit();
         if (state == State.UPDATE) {
             rpc.validate();
             if (rpc.status == Status.valid && validate()) {
