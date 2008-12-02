@@ -181,7 +181,8 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void enableMultiSelect(boolean multi) {
         this.multiSelect = multi;
-        data.multiSelect = multi;
+        if(data != null)
+            data.multiSelect = multi;
     }
 
     public TreeDataModel getData() {
