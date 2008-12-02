@@ -248,7 +248,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void selectRow(int index){
         if(index < numRows()){
-            if(!multiSelect || selectedRows.size() == 0)
+            if(multiSelect || selectedRows.size() == 0)
                 selectedRows.add(index);
             else
                 selectedRows.set(0,index);
