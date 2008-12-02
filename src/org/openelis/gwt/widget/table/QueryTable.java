@@ -251,6 +251,7 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
     }
     
     public FormRPC unload() {
+        tableWidgetListeners.fireStopEditing(this, activeRow, activeCell);
         tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
         return rpc;
     }
