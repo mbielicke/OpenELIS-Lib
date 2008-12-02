@@ -241,6 +241,11 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  }
                  //data.setDefaultSet(set);
                  tree = new TreeWidget(columns,maxRows,width,title,showHeader,showScroll);
+                 if(node.getAttributes().getNamedItem("multiSelect") != null){
+                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true")){
+                         tree.model.enableMultiSelect(true);
+                     }
+                 }
                  if(node.getAttributes().getNamedItem("treeCall") != null) {
                      String treeCall = node.getAttributes().getNamedItem("treeCall").getNodeValue();
                      if(treeCall.equals("this")){

@@ -224,17 +224,8 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void load(TreeDataModel data) {
         this.data = data;
-        refresh();
-        /*selectedRows.clear();
-        rows = data.getVisibleRows();
         data.multiSelect = multiSelect;
-        shownRows = 0;
-        for(int i = 0; i < rows.size(); i++){
-            if(rows.get(i).shown)
-                shownRows++;
-        }
-        treeModelListeners.fireDataChanged(this);
-        */
+        refresh();
     }
 
     public int numRows() {
