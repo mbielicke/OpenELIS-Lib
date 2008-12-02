@@ -250,6 +250,10 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 }
                 data.setDefaultSet(set);
                 table = new TableWidget(columns,maxRows,width,title,showHeader,showScroll);
+                if(node.getAttributes().getNamedItem("multiSelect") != null){
+                    if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
+                        table.model.enableMultiSelect(true);
+                }
                 if(node.getAttributes().getNamedItem("drag") != null) {
                     String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
                     if(drag.equals("default")){
