@@ -86,6 +86,7 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
 
     public boolean finishEditing() {
         if(editingCell != null) {
+            tableWidgetListeners.fireStopEditing(this,activeRow,activeCell);
             tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
         }
         return false;
