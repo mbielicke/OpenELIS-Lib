@@ -272,6 +272,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                      }
                  }
                  tree.enabled(enable);
+                 tree.model.setManager(manager);
                  //int rows = 0;
                  /*if (node.getAttributes().getNamedItem("rows") != null) {
                      rows = Integer.parseInt(node.getAttributes()
