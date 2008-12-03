@@ -78,7 +78,7 @@ public class DropDownField extends AbstractField {
 
     public Object getValue() {
         if(selections.size() == 1)
-            return ((DataObject)selections.get(0).getKey()).getValue();
+            return (DataSet)selections.get(0);
         else if(selections.size() > 1)
             return selections;
         else
@@ -96,6 +96,15 @@ public class DropDownField extends AbstractField {
     
     public ArrayList<DataSet> getSelections() {
         return selections;
+    }
+    
+    public Object getSelectedKey() {
+        if(selections.size() == 1)
+            return ((DataObject)selections.get(0).getKey()).getValue();
+        else if(selections.size() > 1)
+            return selections;
+        else
+            return null;       
     }
 
     public void add(Integer key) {
