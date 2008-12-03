@@ -42,6 +42,11 @@ public class CheckField extends AbstractField  {
         object = new StringObject();
     }
     
+    public CheckField(String val) {
+        object = new StringObject();
+        setValue(val);
+    }
+    
     public CheckField(Node node){
         this();
         if (node.getAttributes().getNamedItem("key") != null)
