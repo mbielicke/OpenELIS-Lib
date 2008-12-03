@@ -183,6 +183,7 @@ public class TableWidget extends FocusPanel implements
             if(activeRow > -1 && !ctrlKey){
                 model.unselectRow(-1);
             }
+            focused = true;
             activeRow = row;
             model.selectRow(modelIndexList[row]);           
             if(model.canEdit(modelIndexList[row],col)){
