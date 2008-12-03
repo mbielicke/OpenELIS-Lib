@@ -79,6 +79,7 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
     
     public void select(int row, int col) {
         finishEditing();
+        focused = true;
         activeRow = 0;
         activeCell = col;
         tableWidgetListeners.fireStartedEditing(this, row, col);
@@ -251,9 +252,14 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
     }
     
     public FormRPC unload() {
-        tableWidgetListeners.fireStopEditing(this, activeRow, activeCell);
+        tableWidgetListeners.fireStopEditing(this,activeRow,activeCell);
         tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
         return rpc;
+    }
+    
+    public void setCellValue(String rpcKey, int col, Object value){
+        rpc.setFieldValue(rpcKey, value);
+        renderer.setCellDisplay(0,col);
     }
  
     

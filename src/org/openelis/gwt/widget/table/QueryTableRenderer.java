@@ -87,6 +87,8 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
     }
     
     public void load(int pos) {
+        controller.editingCell = null;
+        
        if(controller.view.table.getRowCount() == 0)
            createRow(0);
        for (int i = 0; i < controller.columns.size(); i++) 
