@@ -192,7 +192,7 @@ public class TreeWidget extends FocusPanel implements
             }
             activeRow = row;
             model.selectRow(modelIndexList[row]);
-            if (model.canEdit(modelIndexList[row], col - 1 )) {
+            if (model.canEdit(modelIndexList[row], col)) {
                 activeCell = col;
                 treeWidgetListeners.fireStartedEditing(this, row, col);
             } else
