@@ -166,7 +166,7 @@ public class Dropdown extends DropdownWidget {
     }
     
     public void setModel(DataModel model){
-        this.model.load(model);
+        this.model.load((DataModel)model.clone());
     }
     
     public void enabled(boolean enabled) {
