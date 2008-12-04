@@ -79,5 +79,11 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
     public void setData(Data data) {
         this.data = data;
     }
+    
+    public boolean equals(Object object) {
+        if(! (object instanceof DataSet)) 
+            return false;
+        return ((DataSet)object).getKey().equals(key);
+    }
 
 }
