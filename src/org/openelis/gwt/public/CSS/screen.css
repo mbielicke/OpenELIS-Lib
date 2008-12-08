@@ -4,6 +4,10 @@ html, body {
    height:100%;
 }
  
+td {outline:0px;}
+
+div{outline:0px;}
+
 .Disabled{
     cursor:default;
 }
@@ -46,7 +50,7 @@ html, body {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
     background:#e5f5f9;
-    padding:2px;
+    padding:0 7px 5px 0;
 }
 /*******TOP MENU BAR CSS***********/
 .topMenuBar { 
@@ -663,7 +667,7 @@ border:0px;
 }
 
 .ScreenTable {
-    border:1px solid #8db2e3;
+    border:1px solid #B5B8C8;
     background:white;
     margin:8px 8px 0 8px;
 }
@@ -735,6 +739,15 @@ border:0px;
     background:white;
 }
 /*******END TAB PANEL CSS***********/
+
+/******* header dropdown ***********/
+
+.HeaderDropdownButton{
+    width:16px;
+    height:19px;
+    border-bottom: 1px solid #d8d8d8;
+    background: url(../Images/trigger.gif) 2px -2px no-repeat;
+}
 
 /*******autodropdown css***********/
 .AutoDropdown{
@@ -1097,7 +1110,7 @@ border:none;
 .Prompt {
    -moz-user-select: none;
 	color:gray;
-	padding:2px 4px 2px 2px;
+	padding:2px 0 2px 2px;
 	text-align:right;
 	vertical-align:top;
 }
