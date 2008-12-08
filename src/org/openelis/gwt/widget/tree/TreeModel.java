@@ -147,8 +147,10 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
     
     public void drop(Widget dragWidget, int targetRow) {
-        if(manager != null)
+        if(manager != null) {
             manager.drop(controller,dragWidget,rows.get(targetRow),targetRow);
+            return; 
+        }    
         TreeDataItem dropItem = getRow(targetRow);
         TreeDataItem dragItem = (TreeDataItem)((TreeRow)dragWidget).item.clone();
         if(dropItem.depth == dragItem.depth && dropItem.parent == dragItem.parent){
