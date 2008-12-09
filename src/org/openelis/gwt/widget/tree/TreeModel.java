@@ -64,7 +64,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void addRow(int index, TreeDataItem row) {
-        data.add(index,(TreeDataItem)row);
+        data.add(rows.get(index).hash,(TreeDataItem)row);
     }
 
     public boolean canDelete(int row) {
