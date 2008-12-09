@@ -177,8 +177,8 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(rows.get(row).shown)
             shownRows--;
         data.delete(rows.get(row).hashCode());
-        rows.remove(row);
         treeModelListeners.fireRowDeleted(this, row);
+        refresh();
     }
 
     public void enableMultiSelect(boolean multi) {
