@@ -65,7 +65,7 @@ public class TreeDataItem extends DataSet {
         if(data != null)
             clone.data = (Data)data.clone();
         
-        clone.parent = parent;
+        //clone.parent = parent;
         clone.leafType = leafType;
         return clone;
     }

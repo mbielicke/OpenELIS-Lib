@@ -56,6 +56,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     }
     
     public void add(int index, TreeDataItem item) {
+        item.parent = null;
         keyMap.put(item.getKey(), item);
         setHash(item);
         super.add(index,item);
@@ -84,10 +85,8 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     }
     
     private void setHash(TreeDataItem item) {
-        if(item.hash < 0){
-            item.hash = hashIndex++;
-            itemMap.put(item.hashCode(), item);
-        }
+        item.hash = hashIndex++;
+        itemMap.put(item.hashCode(), item);
         for(TreeDataItem sub : item.getItems())
             setHash(sub);
     }
