@@ -96,7 +96,8 @@ public class TreeRow extends Widget implements SourcesMouseEvents, SourcesDragEv
        // clone.dropListeners = dropListeners;
         clone.index = index;
         clone.modelIndex = modelIndex;
-        clone.item  = item;
+        clone.item  = (TreeDataItem)item.clone();
+        clone.item.hash = item.hash;
         return clone;
     }
     
