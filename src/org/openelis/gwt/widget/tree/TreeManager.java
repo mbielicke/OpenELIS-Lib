@@ -48,6 +48,8 @@ public interface TreeManager {
     
     public boolean canDrop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
     
+    public boolean canDrop(TreeWidget widget, Widget dragWidget, Widget dropWidget);
+    
     public void drop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
     
     public void drop(TreeWidget widget, Widget dragWidget);

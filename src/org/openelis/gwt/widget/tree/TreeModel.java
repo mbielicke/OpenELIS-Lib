@@ -146,6 +146,14 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return false;
     }
     
+    public boolean canDrop(Widget dragWidget, Widget dropWidget) {
+        if(manager != null)
+            return manager.canDrop(controller,dragWidget,dropWidget);
+        if(controller.enabled)
+            return true;
+        return false;
+    }
+    
     public void drop(Widget dragWidget, int targetRow) {
         if(manager != null) {
             manager.drop(controller,dragWidget,rows.get(targetRow),targetRow);

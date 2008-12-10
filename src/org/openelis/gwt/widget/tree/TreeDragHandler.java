@@ -59,7 +59,8 @@ public class TreeDragHandler implements DragListener, DropListener {
                 controller.model.refresh();
             }
         }else {
-            controller.model.drop(source);
+            if(controller.model.canDrop(source,sender))
+                controller.model.drop(source);
         }
         
     }
