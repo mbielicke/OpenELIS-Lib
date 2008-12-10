@@ -43,8 +43,8 @@ import javax.naming.NamingException;
  * @author fyu
  */
 public class CachingManager {
-    private static Category log = Category.getInstance(CachingManager.class.getName());
-    private static CacheManager cacheManager;
+    protected static Category log = Category.getInstance(CachingManager.class.getName());
+    protected static CacheManager cacheManager;
 
     /**
      * Get database connection.
@@ -165,5 +165,9 @@ public class CachingManager {
             }
         }
         return false; 
+    }
+    
+    public static void remove(String cacheName, String key) {
+        cacheManager.getCache(cacheName).remove(key);
     }
 }

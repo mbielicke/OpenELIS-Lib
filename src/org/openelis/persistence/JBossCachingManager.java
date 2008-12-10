@@ -155,4 +155,16 @@ public class JBossCachingManager {
         }
         return false; 
     }
+    
+    public static boolean isAlive(String app){
+        return cacheManagers.containsKey(app);
+    }
+    
+    public static Element getCacheElement(String app, String cacheName, Serializable key) {
+        return cacheManagers.get(app).getCache(cacheName).get(key);
+    }
+    
+    public static void expireElement(String app, String cacheName, Serializable key) {
+        cacheManagers.get(app).getCache(cacheName).remove(key);
+    }
 }
