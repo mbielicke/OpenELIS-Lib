@@ -89,6 +89,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             int count = controller.view.table.getRowCount();
             for(int i = count -1; i > tRows -1; i--){
                 controller.view.table.removeRow(i);
+                rows.remove(i);
             }
         }else if(controller.view.table.getRowCount() < tRows){
             int count = controller.view.table.getRowCount();

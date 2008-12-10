@@ -378,6 +378,16 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
             manager.drop(controller, dragWidget);
     }
 
+    public void unlink(TreeDataItem item) {
+        if(rows.contains(item)){
+            data.remove(item);
+        }
+        if(item.parent != null){
+            item.parent.removeItem(item.childIndex);
+        }
+        item.childIndex = -1;
+        item.parent = null;
+    }
 
 
 }

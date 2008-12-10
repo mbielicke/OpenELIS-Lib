@@ -67,6 +67,7 @@ public class TreeDataItem extends DataSet {
         
         //clone.parent = parent;
         clone.leafType = leafType;
+        clone.key = key;
         return clone;
     }
     
@@ -76,6 +77,7 @@ public class TreeDataItem extends DataSet {
         item.increaseDepth();
         item.parent = this;
         item.childIndex = items.size()-1;
+        
     }
     
     public void addItem(int index, TreeDataItem item) {
@@ -186,5 +188,6 @@ public class TreeDataItem extends DataSet {
             return items.get(0);
         return null;
     }
+    
     
 }
