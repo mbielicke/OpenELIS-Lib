@@ -56,10 +56,11 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     }
     
     public void add(int index, TreeDataItem item) {
+        int topIndex = indexOf(itemMap.get(index));
         item.parent = null;
         keyMap.put(item.getKey(), item);
         setHash(item);
-        super.add(index,item);
+        super.add(topIndex,item);
     }
     
     public void add(Data key, DataObject value){
