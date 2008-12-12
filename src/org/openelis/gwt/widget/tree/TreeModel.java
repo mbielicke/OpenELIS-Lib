@@ -38,6 +38,7 @@ import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
@@ -64,7 +65,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void addRow(int index, TreeDataItem row) {
-        data.add(rows.get(index).hash,(TreeDataItem)row);
+        data.add(rows.get(index),(TreeDataItem)row);
     }
 
     public boolean canDelete(int row) {
@@ -182,9 +183,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(selectedRows.contains(row)){
             unselectRow(row);
         }
-        if(rows.get(row).shown)
-            shownRows--;
-        data.delete(rows.get(row).hashCode());
+        data.delete(rows.get(row));
         treeModelListeners.fireRowDeleted(this, row);
         refresh();
     }
@@ -196,7 +195,6 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public TreeDataModel getData() {
-        // TODO Auto-generated method stub
         return data;
     }
 
@@ -210,11 +208,15 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public TreeDataItem getSelection() {
-        return data.get(data.selected);
+        return data.getSelected();
     }
 
     public ArrayList<TreeDataItem> getSelections() {
         return data.getSelections();
+    }
+    
+    public int getSelectedIndex() {
+        return selectedRows.get(0);
     }
 
     public void hideRow(int row) {
@@ -245,12 +247,12 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void refresh() {
         shownRows = 0;
-        rows = data.getVisibleRows();
+        getVisibleRows();
         selectedRows.clear();
         for(int i = 0; i < rows.size(); i++){
             if(rows.get(i).shown)
                 shownRows++;
-            if(data.selections.contains(rows.get(i).hash))
+            if(data.selections.contains(rows.get(i)))
                 selectedRows.add(i);
         }
         treeModelListeners.fireDataChanged(this);
@@ -262,7 +264,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
                 selectedRows.add(index);
             else
                 selectedRows.set(0,index);
-            data.select(rows.get(index).hashCode());
+            data.select(rows.get(index));
         }    
         treeModelListeners.fireRowSelected(this, index);
     }
@@ -295,10 +297,9 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public void unselectRow(int index){
         if(index < 0) {
             data.clearSelections();
-            data.selected = -1;
             selectedRows.clear();
         }else if(index < numRows()){
-            data.unselect(rows.get(index).hashCode());
+            data.unselect(rows.get(index));
             selectedRows.remove(new Integer(index));
         }
         treeModelListeners.fireRowUnselected(this, -1);        
@@ -387,6 +388,22 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         }
         item.childIndex = -1;
         item.parent = null;
+    }
+    
+    private void getVisibleRows() {
+        rows = new ArrayList<TreeDataItem>();
+        Iterator<TreeDataItem> it = data.iterator();
+        while(it.hasNext())
+            checkChildItems(it.next());
+    }
+    
+    private void checkChildItems(TreeDataItem item){
+        rows.add(item);
+        if(item.open && item.shownItems() > 0) {
+           Iterator<TreeDataItem> it = item.getItems().iterator();   
+           while(it.hasNext())
+               checkChildItems(it.next());
+        }
     }
 
 

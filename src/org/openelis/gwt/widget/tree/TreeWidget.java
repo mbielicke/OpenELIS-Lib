@@ -25,45 +25,23 @@
 */
 package org.openelis.gwt.widget.tree;
 
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DragListenerCollection;
 import com.google.gwt.user.client.dnd.DropListener;
-import com.google.gwt.user.client.dnd.DropListenerCollection;
-import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
-import com.google.gwt.user.client.dnd.SourcesDragEvents;
-import com.google.gwt.user.client.dnd.SourcesDropEvents;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.screen.ScreenTreeWidget;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -72,10 +50,8 @@ import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
 
-
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
 
 public class TreeWidget extends FocusPanel implements
                                           TableListener,
@@ -311,11 +287,10 @@ public class TreeWidget extends FocusPanel implements
 
     public void scrollToSelection() {
         if (model.numRows() == model.shownRows()) {
-            view.scrollBar.setScrollPosition(cellHeight * model.getData()
-                                                               .getSelectedIndex());
+            view.scrollBar.setScrollPosition(cellHeight * model.getSelectedIndex());
         } else {
             int shownIndex = 0;
-            for (int i = 0; i < model.getData().getSelectedIndex(); i++) {
+            for (int i = 0; i < model.getSelectedIndex(); i++) {
                 if (model.getRow(i).shown)
                     shownIndex++;
             }
