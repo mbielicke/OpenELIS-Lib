@@ -49,7 +49,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     public void add(TreeDataItem item, TreeDataItem newItem) {
         item.parent = null;
-        super.add(indexOf(item),item);
+        super.add(indexOf(item),newItem);
     }
     
     public void add(Data key, DataObject value){
