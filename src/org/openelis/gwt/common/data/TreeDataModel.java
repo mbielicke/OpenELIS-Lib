@@ -27,25 +27,17 @@ package org.openelis.gwt.common.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     private static final long serialVersionUID = 1L;
-    
-    private HashMap<Integer,TreeDataItem> itemMap = new HashMap<Integer,TreeDataItem>();
-    
-    private HashMap<Data,TreeDataItem> keyMap = new HashMap<Data,TreeDataItem>();
-    
-    public ArrayList<Integer> selections = new ArrayList<Integer>();
+            
+    public ArrayList<TreeDataItem> selections = new ArrayList<TreeDataItem>();
     
     private ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
     
     public HashMap<String,TreeDataItem> leaves = new HashMap<String,TreeDataItem>();
-    
-    private int hashIndex = 0;
-    
-    public int selected = -1;
+        
     private int page = 0;
     private boolean selectLast;
     public boolean multiSelect;
@@ -55,12 +47,9 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         return add(item.getKey(),item);
     }
     
-    public void add(int index, TreeDataItem item) {
-        int topIndex = indexOf(itemMap.get(index));
+    public void add(TreeDataItem item, TreeDataItem newItem) {
         item.parent = null;
-        keyMap.put(item.getKey(), item);
-        setHash(item);
-        super.add(topIndex,item);
+        super.add(indexOf(item),item);
     }
     
     public void add(Data key, DataObject value){
@@ -80,58 +69,33 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     }
     
     public boolean add(Data key, TreeDataItem item) {
-        keyMap.put(item.getKey(), item);
-        setHash(item);
         return super.add(item);
     }
     
-    private void setHash(TreeDataItem item) {
-        item.hash = hashIndex++;
-        itemMap.put(item.hashCode(), item);
-        for(TreeDataItem sub : item.getItems())
-            setHash(sub);
-    }
-    
-    public void delete(int index){
-        TreeDataItem item = itemMap.get(index);
+    public void delete(TreeDataItem item){
         if(item.parent != null){
             item.parent.getItems().remove(item);
-            itemMap.remove(index);
-        }else{
-            keyMap.remove(item.key);
-            deleted.add(item);
-            remove(item);
         }
+        deleted.add(item);
+        remove(item);
     }
     
-    public void select(int selection) throws IndexOutOfBoundsException {
-        //if(selection > size())
-          //  throw new IndexOutOfBoundsException();
-        selected = selection;
+    public void select(TreeDataItem item) throws IndexOutOfBoundsException {
         if(!multiSelect)
             selections.clear();
-        selections.add(new Integer(selection));
+        selections.add(item);
     }
     
-    public void unselect(int index) {
-        selections.remove(new Integer(index));
-        if(selected == index)
-            selected = -1;
+    public void unselect(TreeDataItem item) {
+        selections.remove(item);
     }
-    
-    public int getSelectedIndex() {
+        
+    public TreeDataItem getSelected() {
         return selections.get(0);
     }
     
-    public TreeDataItem getSelected() {
-        return itemMap.get(selected);
-    }
-    
     public ArrayList<TreeDataItem> getSelections() {
-        ArrayList<TreeDataItem> selectionSets = new ArrayList<TreeDataItem>();
-        for(int i : selections) 
-            selectionSets.add(itemMap.get(i));
-        return selectionSets;
+        return selections;
     }
     
     public int getPage(){
@@ -144,15 +108,11 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     public void clear() {
         super.clear();
-        keyMap.clear();
-        itemMap.clear();
         selections.clear();
-        selected = -1;
     }
     
     public void clearSelections() {
         selections.clear();
-        selected = -1;
     }
     
     public void selecttLast(boolean last){
@@ -166,14 +126,15 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     public Object clone() {
         TreeDataModel clone = new TreeDataModel();
         clone.page = page;
-        for(Integer sel : selections)
-            clone.selections.add(sel);
-        clone.selected = selected;
         clone.selectLast = selectLast;
         for(TreeDataItem leaf : leaves.values())
             clone.leaves.put(leaf.leafType,(TreeDataItem)leaf.clone()); 
         for(int i = 0; i < size(); i++){
-            clone.add((TreeDataItem)get(i).clone());
+            TreeDataItem itemClone = (TreeDataItem)get(i).clone();
+            clone.add(itemClone);
+            if(selections.contains(get(i))){
+                clone.selections.add(itemClone);
+            }
         }
         return clone;
     }
@@ -188,35 +149,6 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         TreeDataItem item = (TreeDataItem)leaves.get(leafType).clone();
         item.setKey(key);
         return item;
-    }
-
-    /*
-    public ArrayList<TreeDataItem> getTreeItems(int start, int numItems){
-        ArrayList<TreeDataItem> retTree = new ArrayList<TreeDataItem>();
-        for(int i = start; i < start+numItems; i++){
-            retTree.add(rows.get(i));
-        }
-        return retTree;
-    }
-    */
-    
-    public ArrayList<TreeDataItem> getVisibleRows() {
-        ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
-        Iterator<TreeDataItem> it = iterator();
-        while(it.hasNext())
-            checkChildItems(it.next(), rows);
-        return rows;
-    }
-    
-    public void checkChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows){
-        rows.add(item);
-        if(item.hash < 0)
-            setHash(item);
-        if(item.open && item.shownItems() > 0) {
-           Iterator<TreeDataItem> it = item.getItems().iterator();   
-           while(it.hasNext())
-               checkChildItems(it.next(), rows);
-        }
     }
     
     public ArrayList<TreeDataItem> getDeletions() {

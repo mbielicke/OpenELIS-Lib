@@ -45,9 +45,7 @@ public class TreeDataItem extends DataSet {
     public boolean lazy;
     
     public int depth;
-    
-    public int hash =  -1;
-    
+        
     public int y;
     
     public int x;
@@ -147,17 +145,6 @@ public class TreeDataItem extends DataSet {
             if(items.size() > 0)
                 item.close();
         }
-    }
-    
-    public int hashCode() {
-        return hash;
-    }
-    
-    public boolean equals(Object obj) {
-        if(!(obj instanceof TreeDataItem))
-            return false;
-        return hash == ((TreeDataItem)obj).hash;
-                       
     }
     
     public TreeDataItem getPreviousSibling() {
