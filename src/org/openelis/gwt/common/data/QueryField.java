@@ -81,6 +81,10 @@ public class QueryField extends AbstractField {
                     pos = value.substring(0, 1);
             }
             if (param.indexOf("..") > -1) {
+            	String[] paramTemp = param.split("\\.\\.");
+            	if(paramTemp.length == 2){
+            		param = paramTemp[0]+","+paramTemp[1];
+            	}
                 comp = "between ";
                 comparator.set(comparator.size() - 1, comp);
             }

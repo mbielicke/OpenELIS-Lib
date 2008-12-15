@@ -54,14 +54,19 @@ public class QueryDateField extends QueryField {
     }
 
     public void validate() {
+    	valid = true;
         for (String param : parameter) {
-            try {
-                Date date = new Date(param.replaceAll("-", "/"));
-            } catch (Exception e) {
-                addError("Not a Valid Date");
-                valid = false;
-                return;
-            }
+        	String[] params = param.split(",");
+        	for(String sub : params) {
+        		try {
+        			if(!sub.trim().equalsIgnoreCase("null"))
+        				new Date(sub.replaceAll("-", "/"));
+        		} catch (Exception e) {
+        			addError("Not a Valid Date");
+        			valid = false;
+        			return;
+        		}
+        	}
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -86,22 +91,24 @@ public class QueryDateField extends QueryField {
     public boolean isInRange() {
         // TODO Auto-generated method stub
         for (String param : parameter) {
-            //String[] params = param.split("..");
-            //for (int i = 0; i < params.length; i++) {
-                Date date = new Date(param.replaceAll("-", "/"));
-                DatetimeRPC dVal = DatetimeRPC.getInstance(begin, end, date);
-                if (min != null && dVal.before(DatetimeRPC.getInstance()
-                                                          .add(-min.intValue()))) {
-                    addError("Date is too far in the past");
-                    return false;
-                }
-                if (max != null && dVal.after(DatetimeRPC.getInstance()
-                                                         .add(max.intValue()))) {
-                    addError("Date is too far in the future");
-                    return false;
-                }
+            String[] params = param.split(",");
+            for (int i = 0; i < params.length; i++) {
+            	if(!params[i].trim().equalsIgnoreCase("null")){
+            		Date date = new Date(params[i].replaceAll("-", "/"));
+            		DatetimeRPC dVal = DatetimeRPC.getInstance(begin, end, date);
+            		if (min != null && dVal.before(DatetimeRPC.getInstance()
+            				.add(-min.intValue()))) {
+            			addError("Date is too far in the past");
+            			return false;
+            		}
+            		if (max != null && dVal.after(DatetimeRPC.getInstance()
+            				.add(max.intValue()))) {
+            			addError("Date is too far in the future");
+            			return false;
+            		}
+            	}
             }
-        //}
+        }
         return true;
     }
 
