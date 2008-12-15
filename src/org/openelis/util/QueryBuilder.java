@@ -80,9 +80,13 @@ public class QueryBuilder {
         while (fieldCompIt.hasNext()) {
             sb.append(fieldName + " ");
             String comp = (String)fieldCompIt.next();
+            if(comp.startsWith("!=")) {
+            	sb.append("<> ");
+            	comp = comp.substring(2);
+            }
             if (comp.startsWith("!")) {
-                sb.append("not ");
-                comp = comp.substring(1);
+                //sb.append("not ");
+                comp = "not ";
             }
             if (comp.equals("~"))
                 comp = "like ";
@@ -103,7 +107,12 @@ public class QueryBuilder {
                           + paramName
                           + i
                           + "1 ");
-            } else
+            } else if(param.trim().equalsIgnoreCase("null")){
+            	if(comp.equals("not ")){
+            		sb.append("is not null ");
+            	}else 
+            		sb.append(comp + " NULL ");
+            }else
                 sb.append(comp + " :" + paramName + i + " ");
             if (fieldLogicalIt.hasNext()) {
                 String logical = (String)fieldLogicalIt.next();
@@ -311,8 +320,12 @@ public class QueryBuilder {
                                        TemporalType.DATE);
                 }
             } else {
-                Date date = new Date(param);
-                query.setParameter(paramName + i, date, TemporalType.DATE);
+            	if(!param.trim().equalsIgnoreCase("null")){
+            		//query.setParameter(paramName + i, null);
+      
+            		Date date = new Date(param);
+            		query.setParameter(paramName + i, date, TemporalType.DATE);
+            	}
             }
             i++;
         }
