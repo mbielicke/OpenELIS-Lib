@@ -68,7 +68,7 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
         this.showHeader = showHeader;
         renderer = new QueryTableRenderer(this);
         view = new TableView(this,showScroll);
-        view.setWidth("auto");
+        view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = this;
         mouseHandler = this;
