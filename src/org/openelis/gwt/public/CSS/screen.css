@@ -264,14 +264,14 @@ color:gray;
 color:gray;
 }
 
-.AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupButtonImage, .ungroupButtonImage{
+.AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupRowButtonImage, .ungroupRowButtonImage{
     width:16px;
     height:16px;
 }
 .groupRowButtonImage{
     background:url("../Images/group.gif") no-repeat;
 }
-.disabled .RowButtonImage{
+.disabled .groupRowButtonImage{
     background:url("../Images/groupdisabled.gif") no-repeat;
 }
 .ungroupRowButtonImage{
