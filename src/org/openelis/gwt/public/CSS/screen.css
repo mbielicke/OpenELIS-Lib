@@ -264,9 +264,21 @@ color:gray;
 color:gray;
 }
 
-.AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage{
-    width:20px;
-    height:20px;
+.AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupButtonImage, .ungroupButtonImage{
+    width:16px;
+    height:16px;
+}
+.groupRowButtonImage{
+    background:url("../Images/group.gif") no-repeat;
+}
+.disabled .RowButtonImage{
+    background:url("../Images/groupdisabled.gif") no-repeat;
+}
+.ungroupRowButtonImage{
+    background:url("../Images/ungroup.gif") no-repeat;
+}
+.disabled .ungroupRowButtonImage{
+    background:url("../Images/ungroupdisabled.gif") no-repeat;
 }
 .RemoveRowButtonImage{
     background:url("../Images/removerowbuttonimage.gif") no-repeat;
