@@ -81,6 +81,12 @@ public class DataModel extends ArrayList<DataSet> implements Data {
         deleted.add(remove(index));
     }
     
+    public void delete(DataSet set){
+        keyMap.remove(set.getKey());
+        deleted.add(set);
+        remove(set);
+    }
+    
     public void setDefaultSet(DataSet set) {
         defaultSet = set;
     }
