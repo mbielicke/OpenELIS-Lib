@@ -84,8 +84,7 @@ div{outline:0px;}
 }
 
 .topMenuItemMiddle{
-    height:2em;
-    padding:2px 2px 2px 8px;
+    padding:0 0 0 8px;
 
 }
 .topMenuItemTitle{
@@ -104,7 +103,6 @@ color:gray;
 }
 .topMenuIcon{
     width:20px;
-    height:2em;
 }
 .TopMenuRowContainer{
     width:200px;
@@ -112,7 +110,6 @@ color:gray;
 }
 .FavMenuRowContainer{
     width:200px;
-    padding:1px;
 }
 .Hover .TopMenuRowContainer, .Hover .FavMenuRowContainer{
     cursor:pointer;
@@ -551,43 +548,43 @@ border:0px;
 }
 
 .ErrorWindow .topRight {
-    width:10px;
-    height:10px;
-    background: transparent url("../Images/popuptr.gif") no-repeat;
+    width:5px;
+    height:5px;
+    background: transparent url("../Images/popuptr.gif") no-repeat right top;
 }
 
 .ErrorWindow .middleRight {
-    width:10px;
+    width:5px;
     height:100%;
-    background:url("../Images/popupright.gif") repeat-y;
+    background:url("../Images/popupright.gif") repeat-y right;
 }
 .ErrorWindow .bottomRight {
-    background:url("../Images/popupbr.gif") no-repeat;
-    width:10px;
-    height:10px;
+    background:url("../Images/popupbr.gif") no-repeat right bottom;
+    width:5px;
+    height:5px;
 }
 .ErrorWindow .bottomCenter {
     background:url("../Images/popupbottom.gif") repeat-x bottom;
-    height:10px;
+    height:5px;
 }
 .ErrorWindow .bottomLeft {
-    width:10px;
-    height:10px;
-    background:url("../Images/popupbl.gif") no-repeat top;
+    width:5px;
+    height:5px;
+    background:url("../Images/popupbl.gif") no-repeat left bottom;
 }
 .ErrorWindow .middleLeft {
-    width:10px;
+    width:5px;
     height:100%;
-    background: url("../Images/popupleft.gif") repeat-y;
+    background: url("../Images/popupleft.gif") repeat-y left;
 }
 .ErrorWindow .topLeft {
-    width:10px;
-    height:10px;
-    background: url("../Images/popuptl.gif") no-repeat;
+    width:5px;
+    height:5px;
+    background: url("../Images/popuptl.gif") no-repeat left top;
 }
 .ErrorWindow .topCenter{
-    background:url("../Images/popuptop.gif") repeat-x;
-    height:10px;
+    background:url("../Images/popuptop.gif") repeat-x top;
+    height:5px;
 }
 /*ErrorWindow end*/
 
@@ -681,7 +678,7 @@ border:0px;
 .ScreenTable {
     border:1px solid #B5B8C8;
     background:white;
-    margin:8px 8px 0 8px;
+    margin:8px;
 }
 
 .TitlePanel{
@@ -715,7 +712,7 @@ border:0px;
 }
 /*******TAB PANEL CSS***********/
 .ScreenTab{
-    padding:0 0 0 0;
+    margin:8px;
 }
 
 .gwt-TabBar {
