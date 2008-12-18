@@ -124,7 +124,7 @@ border-bottom:1px dotted #A3BAE9;
 }
 .HeaderBar{
     width:3px;
-    height:17px;
+    height:18px;
     background:url('../Images/headerdivider.gif') no-repeat center bottom;
     cursor:e-resize;
 }
@@ -263,6 +263,7 @@ tr .Highlighted{
     height:18px;
     width:100%;
     background:black url("../Images/headersprite.gif") repeat-x;
+        border-bottom: 1px solid #b5b8c8;
 }
 
 .topHeaderBarItem {
@@ -279,7 +280,7 @@ tr .Highlighted{
 }
 
 .topHeaderContainer{
-    border:1px solid #333;
+    border:1px solid #b5b8c8;
     border-top:0;
     background:#f0f0f0 url('../Images/menu.gif') repeat-y;
 }
