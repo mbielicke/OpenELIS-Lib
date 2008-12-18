@@ -111,6 +111,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             editor.changeListeners = null;
             editor.addChangeListener(this);
         }
+        editor.lookUp.setIconHeight("18px");
         textValue.setValue("");
 	}
 
@@ -142,7 +143,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             selected.add(field.getDataObject());
             editor.setSelections(selected);
         }
-        display.setText(editor.textBox.getText());
+        display.setText(editor.lookUp.getText());
 		setWidget(display);		
         super.setDisplay();
 	}
@@ -160,7 +161,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             selected.add(field.getDataObject());
             editor.setSelections(selected);
         }
-        editor.setWidth(width+"px");
+        editor.setWidth((width-18)+"px");
 		setWidget(editor);			
 	}
 

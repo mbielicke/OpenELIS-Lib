@@ -67,13 +67,13 @@ public class Dropdown extends DropdownWidget {
     
     public Dropdown(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
         super(columns, maxRows, width, title, showHeader, showScroll);
-        focusPanel.addMouseListener(listener);
-        focusPanel.addClickListener(listener);
-        textBox.addKeyboardListener(listener);
-        textBox.setReadOnly(!enabled);
-        textBox.removeFocusListener(this);
+        lookUp.addMouseListener(listener);
+        lookUp.addClickListener(listener);
+        lookUp.textbox.addKeyboardListener(listener);
+        lookUp.textbox.setReadOnly(!enabled);
+        lookUp.textbox.removeFocusListener(this);
         if(enabled)
-            textBox.addFocusListener(this);
+            lookUp.textbox.addFocusListener(this);
         
         this.showAltRowColors = false;
     }
@@ -85,7 +85,7 @@ public class Dropdown extends DropdownWidget {
         this.multiSelect = multi;
         model.enableMultiSelect(multi);
         if (textBoxDefault != null)
-            textBox.setText(textBoxDefault);
+            lookUp.textbox.setText(textBoxDefault);
 
        setWidth(width);
     }
@@ -101,17 +101,17 @@ public class Dropdown extends DropdownWidget {
             this.startPos = index;
         }
 
-        if (tempStartPos == -1 && !textBox.getText().equals("")) {
+        if (tempStartPos == -1 && !lookUp.textbox.getText().equals("")) {
             // set textbox text back to what it was before
-            textBox.setText(textBox.getText().substring(0, currentCursorPos));
+            lookUp.textbox.setText(lookUp.textbox.getText().substring(0, currentCursorPos));
             this.startPos = 0;
-            index = getIndexByTextValue(textBox.getText()); 
+            index = getIndexByTextValue(lookUp.textbox.getText()); 
 
             if (index > -1 && index < model.size()) {
                 tempStartPos = index;
                 this.startPos = index;
             }else{
-                textBox.setText("");
+                lookUp.textbox.setText("");
                 tempStartPos = 0;
                 return;
             }
@@ -171,10 +171,11 @@ public class Dropdown extends DropdownWidget {
     
     public void enabled(boolean enabled) {
         this.enabled = enabled;
-        textBox.setReadOnly(!enabled);
-        textBox.removeFocusListener(this);
+        lookUp.textbox.setReadOnly(!enabled);
+        lookUp.textbox.removeFocusListener(this);
         if(enabled)
-            textBox.addFocusListener(this);
+            lookUp.textbox.addFocusListener(this);
+        lookUp.icon.enable(enabled);
         super.enabled(enabled);
     }
 

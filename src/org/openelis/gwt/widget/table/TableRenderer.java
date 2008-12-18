@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -238,6 +237,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             controller.columns.get(col).setWidgetEditor((Widget)cell);
             ((SimplePanel)cell).getWidget().addStyleName(controller.view.widgetStyle);
             ((SimplePanel)cell).getWidget().addStyleName("Enabled");
+            
     }
     
     public void setCellDisplay(int row, int col) {

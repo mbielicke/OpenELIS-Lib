@@ -43,7 +43,7 @@ public class AutoCompleteListener implements
     }
 
     public void onClick(Widget sender) {
-        if(sender == widget.focusPanel){
+        if(sender == widget.lookUp.icon){
             if(widget.activeRow < 0)
                 widget.showTable(0);
             else
@@ -88,7 +88,7 @@ public class AutoCompleteListener implements
     }
 
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-        if (!widget.textBox.isReadOnly()) {
+        if (!widget.lookUp.textbox.isReadOnly()) {
             if (keyCode == KEY_DOWN || keyCode == KEY_UP ||  keyCode == KEY_TAB 
                     || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 
                     keyCode == KEY_CTRL || keyCode == KEY_SHIFT || keyCode == KEY_ESCAPE)
@@ -104,7 +104,7 @@ public class AutoCompleteListener implements
                 widget.itemSelected = false;
                 return;
             }
-            String text = widget.textBox.getText();
+            String text = widget.lookUp.textbox.getText();
             if (text.length() > 0 && !text.endsWith("*")) {
                 widget.setDelay(text, 350);
             } else if(text.length() == 0) {

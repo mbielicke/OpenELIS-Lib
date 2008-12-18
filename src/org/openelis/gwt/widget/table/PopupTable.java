@@ -26,11 +26,16 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesPopupEvents;
+import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
@@ -128,6 +133,31 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
             }
         });
         focused = true;
+        view.scrollBar.setScrollPosition((active*cellHeight));
+        renderer.load(view.scrollBar.getScrollPosition());
+        activeRow = -1;
+        
+        for(int i = 0; i < view.table.getRowCount(); i++){
+            if(modelIndexList[i] == active)
+                activeRow = i;
+            }
+        if(view.table.getRowCount() > 0)
+            model.selectRow(active);
+    }
+    
+    public void showTable(final int active,Widget wid) {
+        popup.setPopupPosition(wid.getAbsoluteLeft(), wid
+                                      .getAbsoluteTop()
+                                      + wid.getOffsetHeight() - 1);
+        popup.show();
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                if(view.header != null)
+                   view.header.sizeHeader();
+            }
+        });
+        focused = true;
+        
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;

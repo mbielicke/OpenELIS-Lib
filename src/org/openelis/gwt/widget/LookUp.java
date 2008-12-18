@@ -23,6 +23,7 @@ public class LookUp extends Composite implements SourcesClickEvents, SourcesMous
         hp.add(icon);
         hp.setSpacing(0);
         initWidget(hp);
+        hp.setWidth("auto");
     }
     
     public void setIconStyle(String style) {
@@ -107,6 +108,10 @@ public class LookUp extends Composite implements SourcesClickEvents, SourcesMous
     
     public void setFocus(boolean focus) {
         textbox.setFocus(focus);
+    }
+    
+    public TextBox getTextBox() {
+        return textbox;
     }
     
     

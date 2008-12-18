@@ -47,6 +47,7 @@ import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
+import org.openelis.gwt.widget.LookUp;
 
 import java.util.ArrayList;
 
@@ -163,7 +164,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         
         if(node.getAttributes().getNamedItem("case") != null){
             String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
-            auto.textBox.setCase(TextBox.Case.valueOf(textCase));
+            auto.lookUp.getTextBox().setCase(TextBox.Case.valueOf(textCase));
         }
         
         auto.setForm(screen);
@@ -218,7 +219,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         if(queryMode)
             queryWidget.setFocus(focused);
         else
-            auto.textBox.setFocus(focused);
+            auto.lookUp.setFocus(focused);
     }
     
     public void enable(boolean enabled){
@@ -229,7 +230,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
      //           auto.removeFocusListener(this);
        //         auto.addFocusListener(this);
             }else{
-                auto.textBox.setReadOnly(!enabled);
+                auto.lookUp.getTextBox().setReadOnly(!enabled);
                 //if(enabled)
          //           auto.addFocusListener(this);
              //   else

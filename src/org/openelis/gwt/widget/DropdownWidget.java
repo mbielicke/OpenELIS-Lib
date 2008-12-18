@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -58,11 +59,11 @@ import java.util.ArrayList;
 
 public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
     
-    public HorizontalPanel mainHP = new HorizontalPanel();
+    //public HorizontalPanel mainHP = new HorizontalPanel();
 
-    public TextBox textBox = new TextBox();
+   // public TextBox textBox = new TextBox();
 
-    public FocusPanel focusPanel = new FocusPanel();
+    //public FocusPanel focusPanel = new FocusPanel();
     
     public ScreenBase screen;
     
@@ -74,6 +75,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     int currentCursorPos;
     
+    public LookUp lookUp = new LookUp();
+    
     public class Delay extends Timer {
         public String text;
 
@@ -83,8 +86,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
 
         public void run() {
-            if (textBox.getText().equals(text)) {
-                currentCursorPos = textBox.getText().length();
+            if (lookUp.getText().equals(text)) {
+                currentCursorPos = lookUp.getText().length();
                 getMatches(text);
             }
         }
@@ -111,19 +114,25 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         keyboardHandler = this;
         mouseHandler = new TableMouseHandler(this);
         addTableWidgetListener((TableWidgetListener)renderer);
+        setWidget(lookUp);
+        lookUp.setStyleName("AutoDropDown");
+        lookUp.setIconStyle("AutoDropDownButton");
+        lookUp.textbox.setStyleName("TextboxUnselected");
+        lookUp.textbox.addFocusListener(this);
         
+        /*
         setWidget(mainHP);
         mainHP.add(textBox);
         textBox.setStyleName("TextboxUnselected");
         textBox.addFocusListener(this);
-        textBox.setWidth("100%");
+        textBox.setWidth("auto");
         mainHP.setSpacing(0);
         mainHP.setStyleName("AutoDropdown");
         
         mainHP.add(focusPanel);
         mainHP.setCellHorizontalAlignment(focusPanel, HasAlignment.ALIGN_LEFT);
         focusPanel.setStyleName("AutoDropdownButton");
-        
+        */
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
         popup.addPopupListener(this);
@@ -231,10 +240,15 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
          
         textValue = getTextBoxDisplay();
 
-        textBox.setText(textValue.trim());
+        lookUp.setText(textValue.trim());
         textBoxDefault = textValue;
 
-        textBox.setFocus(true);
+        /**
+         * This was commented out to fix a problem with IE.  
+         * If you need this back than try commenting out complete() in onLostFocus
+         * and restest.
+         */
+        //textBox.setFocus(true);
         
         hideTable();
 
@@ -306,7 +320,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         model.clearSelections();
         for(DataSet set : selections)
             model.selectRow(set.getKey());
-        textBox.setText(getTextBoxDisplay());
+        lookUp.setText(getTextBoxDisplay());
     }
     
     public ArrayList<DataSet> getSelections() {
@@ -314,18 +328,18 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
     
     public void setFocus(boolean focus) {
-        textBox.setFocus(focus);
+        lookUp.setFocus(focus);
     }
     
     public void onFocus(Widget sender) {
-        if (!textBox.isReadOnly()) {
-            if (sender == textBox) {
+        if (!lookUp.textbox.isReadOnly()) {
+            if (sender == lookUp.textbox) {
                 // we need to set the selected style name to the textbox
-                textBox.addStyleName("TextboxSelected");
-                textBox.removeStyleName("TextboxUnselected");
-                textBox.setFocus(true);
+                lookUp.textbox.addStyleName("TextboxSelected");
+                lookUp.textbox.removeStyleName("TextboxUnselected");
+                lookUp.textbox.setFocus(true);
 
-                focusPanel.addStyleName("Selected");
+                lookUp.icon.addStyleName("Selected");
 
                 //setCurrentValues();
                     
@@ -334,13 +348,13 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
 
     public void onLostFocus(Widget sender) {
-        if (!textBox.isReadOnly()) {
-            if (sender == textBox) {
+        if (!lookUp.textbox.isReadOnly()) {
+            if (sender == lookUp.textbox) {
                 // we need to set the unselected style name to the textbox
-                textBox.addStyleName("TextboxUnselected");
-                textBox.removeStyleName("TextboxSelected");
+                lookUp.textbox.addStyleName("TextboxUnselected");
+                lookUp.textbox.removeStyleName("TextboxSelected");
 
-                focusPanel.removeStyleName("Selected");
+                lookUp.icon.removeStyleName("Selected");
 
                 complete();
             }
@@ -348,11 +362,11 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
 
     public void addFocusListener(FocusListener listener) {
-        textBox.addFocusListener(listener);
+        lookUp.textbox.addFocusListener(listener);
     }
 
     public void removeFocusListener(FocusListener listener) {
-        textBox.removeFocusListener(listener);
+        lookUp.textbox.removeFocusListener(listener);
 
     }
 
@@ -382,7 +396,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
     
     public void setWidth(String width) {
-        mainHP.setWidth(width);
+        lookUp.setWidth(width);
+        
     }
     
     public void setWidth(int width){

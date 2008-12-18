@@ -154,7 +154,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         
         if(node.getAttributes().getNamedItem("case") != null){
             String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
-            auto.textBox.setCase(TextBox.Case.valueOf(textCase));
+            auto.lookUp.getTextBox().setCase(TextBox.Case.valueOf(textCase));
         }
             
         
@@ -195,7 +195,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         if(queryMode)
             queryWidget.setFocus(focused);
         else
-            auto.textBox.setFocus(focused);
+            auto.lookUp.getTextBox().setFocus(focused);
     }
     
     public void enable(boolean enabled){

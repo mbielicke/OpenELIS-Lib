@@ -45,10 +45,10 @@ public class AutoComplete extends DropdownWidget {
     
     public AutoComplete(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
         super(columns, maxRows, width, title, showHeader, showScroll);
-        focusPanel.addMouseListener(listener);
-        focusPanel.addClickListener(listener);
-        textBox.addKeyboardListener(listener);
-        mainHP.remove(focusPanel);
+        lookUp.icon.addMouseListener(listener);
+        lookUp.icon.addClickListener(listener);
+        lookUp.textbox.addKeyboardListener(listener);
+        lookUp.setIconStyle("");
         
         this.showAltRowColors = false;
     }
@@ -64,7 +64,7 @@ public class AutoComplete extends DropdownWidget {
         this.multiSelect = multi;
         model.enableMultiSelect(multi);
         if (textBoxDefault != null)
-            textBox.setText(textBoxDefault);
+            lookUp.textbox.setText(textBoxDefault);
 
         setWidth(width);
 
