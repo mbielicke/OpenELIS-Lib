@@ -113,6 +113,10 @@ public class TableField extends AbstractField {
         this.fieldIndex = fieldIndex;
     }
     
+    public ArrayList<String> getFieldIndex() {
+        return fieldIndex;
+    }
+    
     public AbstractField getField(int row, String field) {
         return (AbstractField)value.get(row).get(fieldIndex.indexOf(field));
     }
