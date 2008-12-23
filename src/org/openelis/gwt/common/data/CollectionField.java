@@ -149,12 +149,11 @@ public class CollectionField extends AbstractField  {
     }
     */
 
-    /* I don't think is used anymore
+    // I don't think is used anymore
     public String getType() {
         return type;
     }
-    */
-
+    
     /* I don't think this used anymore
     public void setType(String type) {
         this.type = type;
