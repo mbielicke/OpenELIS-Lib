@@ -26,9 +26,16 @@
 package org.openelis.gwt.common.data;
 
 
+import com.google.gwt.xml.client.Node;
+
 import java.util.ArrayList;
 
-import com.google.gwt.xml.client.Node;
+/**
+ * A CollectionField wraps an ArrayList<Data> to be used in communication between
+ * a client and the server.  It extends AbstractField and can be used in the FormRPC.  
+ * @author tschmidt
+ *
+ */
 
 public class CollectionField extends AbstractField  {
 
@@ -37,26 +44,42 @@ public class CollectionField extends AbstractField  {
     private String type = "";
     public static final String TAG_NAME = "rpc-collection";
 
+    /**
+     * Default constructor
+     *
+     */
     public CollectionField() {
         
     }
     
+    /**
+     * Contstructor that accepts a XML definition for this field to set it's
+     * member fields and value.
+     * @param node
+     */
     public CollectionField(Node node){
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
                                .getNamedItem("key")
                                .getNodeValue());
+        /*
         if (node.getAttributes().getNamedItem("type") != null)
             setType(node.getAttributes()
                                .getNamedItem("type")
                                .getNodeValue());
+        */                       
         if (node.getAttributes().getNamedItem("required") != null)
             setRequired(new Boolean(node.getAttributes()
                                                 .getNamedItem("required")
                                                 .getNodeValue()).booleanValue());
     }
     
+    /**
+     * This method will be called when the screen is validated before it is 
+     * submitted to the server.
+     */
     public void validate() {
+        valid = true;
         if (required) {
             if (coll.size() == 0) {
                 addError("Field is required");
@@ -64,49 +87,84 @@ public class CollectionField extends AbstractField  {
                 return;
             }
         }
-        valid = true;
+        for(Data data : coll) {
+            if(data instanceof AbstractField){
+                ((AbstractField)data).validate();
+                if(!((AbstractField)data).valid)
+                    valid = false;
+            }
+        }
+        
     }
 
+    /**
+     * This method is hard coded to true for a CollectionField
+     */
     public boolean isInRange() {
         // TODO Auto-generated method stub
         return true;
     }
 
+    /**
+     * This method accepts an ArrayList<Data> as a parameter 
+     */
     public void setValue(Object val) {
         // TODO Auto-generated method stub
         coll = (ArrayList)val;
     }
 
+    /**
+     * Returns the ArrayList<Data> wrapped by this field.
+     */
     public Object getValue() {
         // TODO Auto-generated method stub
         return coll;
     }
-
+    
+    /**
+     * This method will add the item passed to the end of this
+     * fields current list
+     * @param item
+     */
     public void addItem(Data item) {
         coll.add(item);
     }
 
+    /**
+     * This method creates a new object and sets it's member fields
+     * and values to the calling object
+     */
     public Object clone() {
         CollectionField obj = new CollectionField();
         obj.setRequired(required);
-        obj.setType(type);
+       // obj.setType(type);
         obj.setValue(coll);
         obj.setKey(key);
         return obj;
     }
     
+    /* I don't think this used anymore
     public CollectionField getInstance(Node node) {
         return new CollectionField(node);
     }
+    */
 
+    /* I don't think is used anymore
     public String getType() {
         return type;
     }
+    */
 
+    /* I don't think this used anymore
     public void setType(String type) {
         this.type = type;
     }
+    */
     
+    /**
+     * This method will return a comma seprated list of all values in 
+     * the current list
+     */
     public String toString() {
         StringBuffer sb = new StringBuffer();
         for(int i = 0; i < coll.size(); i++){
