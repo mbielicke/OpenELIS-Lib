@@ -79,9 +79,14 @@ public class MaskListener implements KeyboardListener, FocusListener{
     
     public String applyMask(String text, boolean end) {
         
-        String retText = text;
+        String retText = "";
         String input = String.valueOf(text.charAt(text.length() - 1));
         String maskChar = String.valueOf(mask.charAt(text.length() - 1));
+        while(text.length() == 1 && literals.contains(maskChar)){
+            retText += maskChar;
+            maskChar = String.valueOf(mask.charAt(retText.length()));
+        }
+        retText += text;
         if (literals.contains(String.valueOf(input)) || end) {
             int li = text.length();
             if (!end) {
@@ -128,8 +133,9 @@ public class MaskListener implements KeyboardListener, FocusListener{
         if (checkMask(input, maskChar)) {
             if (text.length() == mask.length())
                 return text;
-            if (literals.contains(String.valueOf(mask.charAt(text.length()))))
-                retText = text + String.valueOf(mask.charAt(text.length()));
+            while(literals.contains(String.valueOf(mask.charAt(retText.length())))){
+                retText += String.valueOf(mask.charAt(retText.length()));
+            }
             if (input.equals("0") && maskChar.equals("Z"))
                 retText = text.substring(0, text.length() - 1) + " ";
         } else {
