@@ -41,8 +41,8 @@ import org.openelis.gwt.widget.TextBox;
  *
  */
 public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
-                                                                FocusListener,
-                                                                KeyboardListener{
+                                                                FocusListener
+                                                               {
     /**
      * Default XML Tag Name used in XML Definition
      */
@@ -55,9 +55,12 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     @Override
     public void onBrowserEvent(Event event) {
         if(DOM.eventGetType(event) == Event.ONKEYUP) {
-            if(textbox.autoNext){
-                if(textbox.getText().length() == (textbox.length) && textbox.getCursorPos() == textbox.length)
-                    screen.doTab(false, this);
+            if(textbox.enforceMask){
+                if(textbox.autoNext && DOM.eventGetKeyCode(event) != KeyboardListener.KEY_TAB){
+                    if(textbox.getText().length() == (textbox.length) && textbox.getCursorPos() == textbox.length){
+                        screen.doTab(false, this);
+                    }
+                }
             }
         }
         super.onBrowserEvent(event);
@@ -102,11 +105,12 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         if (node.getAttributes().getNamedItem("align") != null) {
             String align = node.getAttributes().getNamedItem("align").getNodeValue();
             if(align.equals("center"))
-                textbox.setTextAlignment(TextBox.ALIGN_CENTER);
+                textbox.alignment = TextBox.ALIGN_CENTER;
             if(align.equals("right"))
-                textbox.setTextAlignment(TextBox.ALIGN_RIGHT);
+                textbox.alignment = TextBox.ALIGN_RIGHT;
             if(align.equals("left"))   
-                textbox.setTextAlignment(TextBox.ALIGN_LEFT);
+                textbox.alignment = TextBox.ALIGN_LEFT;
+            textbox.setTextAlignment(textbox.alignment);
         }
         
         if (node.getAttributes().getNamedItem("onchange") != null){
@@ -123,7 +127,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         if (node.getAttributes().getNamedItem("autoNext") != null){
             if(node.getAttributes().getNamedItem("autoNext").getNodeValue().equals("true")){
                 textbox.autoNext = true;
-                textbox.addKeyboardListener(this);
             }
         }
         
@@ -186,10 +189,18 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     
     public void setForm(boolean mode) {
         if(queryWidget == null){
-            if(mode)
+            if(mode){
                 textbox.setMaxLength(255);
-            else
+                textbox.enforceLength = false;
+                textbox.enforceMask = false;
+                textbox.setTextAlignment(TextBox.ALIGN_LEFT);
+            }else{
                 textbox.setMaxLength(textbox.length);
+                textbox.enforceLength = true;
+                textbox.enforceMask = true;
+                textbox.setTextAlignment(textbox.alignment);
+            }
+            
         }else
             super.setForm(mode);
     }
@@ -211,17 +222,5 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         super.onLostFocus(sender);
     }
 
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-
-    }    
 }
