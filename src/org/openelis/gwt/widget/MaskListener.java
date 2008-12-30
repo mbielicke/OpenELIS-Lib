@@ -160,6 +160,8 @@ public class MaskListener implements KeyboardListener, FocusListener{
 
     public void onKeyDown(Widget sender, char keyCode, int modifiers) {
         // TODO Auto-generated method stub
+        if(!textbox.enforceMask)
+            return;
         if (keyCode == KeyboardListener.KEY_BACKSPACE) {
             if (literals.contains(String.valueOf(textbox.getText().charAt(textbox.getText().length() - 1))))
                 textbox.setText(textbox.getText().substring(0, textbox.getText().length() - 1));
@@ -172,6 +174,8 @@ public class MaskListener implements KeyboardListener, FocusListener{
 
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
         // TODO Auto-generated method stub
+        if(!textbox.enforceMask)
+            return;
         if (keyCode == KeyboardListener.KEY_BACKSPACE || keyCode == KeyboardListener.KEY_SHIFT || noMask) {
             return;
         }
@@ -193,8 +197,9 @@ public class MaskListener implements KeyboardListener, FocusListener{
     }
 
     public void onLostFocus(Widget sender) {
-        if(!textbox.isReadOnly())
-            format();
+        if(textbox.isReadOnly() || !textbox.enforceMask)
+            return;
+        format();
     }
     
     public void complete(){

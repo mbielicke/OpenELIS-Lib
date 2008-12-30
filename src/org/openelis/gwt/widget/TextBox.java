@@ -54,7 +54,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
     }
     
     public void setTextAlignment(TextAlignConstant alignment){
-        this.alignment = alignment;
+        //this.alignment = alignment;
         super.setTextAlignment(alignment);
     }
     
