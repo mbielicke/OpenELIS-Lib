@@ -206,7 +206,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
             try {
                 resetRPC();
                 load();
-                setForm(false);
+                setForm(FormInt.State.DISPLAY);
                 rpc = forms.get("display");
                 load();
                 enable(false);
@@ -309,7 +309,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         resetRPC();
         load();
         window.setStatus(consts.get("enterFieldsToQuery"),"");
-        setForm(true);
+        setForm(FormInt.State.QUERY);
         rpc = forms.get("query");
         resetRPC();
         load();
@@ -498,7 +498,7 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         }
         if (state == State.QUERY) {
         	clearErrors();
-            setForm(false);
+            setForm(FormInt.State.DISPLAY);
             this.rpc = forms.get("display");
             load();
             enable(false);
@@ -545,12 +545,12 @@ public class AppScreenForm extends AppScreen implements FormInt, SourcesCommandE
         super.onDetach();
     }
     
-    public void setForm(boolean mode){
+    public void setForm(State state){
         Iterator widIt = widgets.values().iterator();
         while(widIt.hasNext()){
             ScreenWidget wid = (ScreenWidget)widIt.next();
             if(wid instanceof ScreenInputWidget){
-                ((ScreenInputWidget)wid).setForm(mode);
+                ((ScreenInputWidget)wid).setForm(state);
             }
         }
         

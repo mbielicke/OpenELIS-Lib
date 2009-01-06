@@ -41,6 +41,7 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteCall;
 import org.openelis.gwt.widget.AutoCompleteCallInt;
+import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -328,13 +329,13 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
 	   super.onFocus(sender);
    }
    
-   public void setForm(boolean mode) {
+   public void setForm(FormInt.State state) {
        if(queryWidget == null){
-          // if(mode && auto.cat == null)
-         //      auto.setMultiSelect(true);
-           //else
-           //    auto.setMultiSelect(multiSelect);
+          if(state == FormInt.State.QUERY)
+              auto.queryMode = true;
+           else
+              auto.queryMode = false;
        }else
-           super.setForm(mode);
+           super.setForm(state);
    }
 }

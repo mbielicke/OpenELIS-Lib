@@ -302,6 +302,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 
     public void setMultiSelect(boolean multiSelect) {
         this.multiSelect = multiSelect;
+        model.enableMultiSelect(multiSelect);
     }
     
     public void getMatches(String text) {

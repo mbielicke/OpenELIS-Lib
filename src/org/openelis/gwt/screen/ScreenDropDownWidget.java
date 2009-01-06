@@ -39,6 +39,7 @@ import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -304,13 +305,13 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
 	   super.onFocus(this);
    }
    
-   public void setForm(boolean mode) {
+   public void setForm(FormInt.State state) {
        if(queryWidget == null){
-          // if(mode && auto.cat == null)
-         //      auto.setMultiSelect(true);
-           //else
-           //    auto.setMultiSelect(multiSelect);
+           if(state == FormInt.State.QUERY)
+               auto.setMultiSelect(true);
+           else
+               auto.setMultiSelect(multiSelect);
        }else
-           super.setForm(mode);
+           super.setForm(state);
    }
 }

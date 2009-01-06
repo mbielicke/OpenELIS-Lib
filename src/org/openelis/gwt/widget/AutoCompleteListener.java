@@ -88,6 +88,8 @@ public class AutoCompleteListener implements
     }
 
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+        if(widget.queryMode)
+            return;
         if (!widget.lookUp.textbox.isReadOnly()) {
             if (keyCode == KEY_DOWN || keyCode == KEY_UP ||  keyCode == KEY_TAB 
                     || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 

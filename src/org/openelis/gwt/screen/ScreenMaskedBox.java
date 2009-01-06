@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MaskedTextBox;
 
 /**
@@ -126,11 +127,14 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
         super.destroy();
     }
     
-    public void setForm(boolean mode) {
+    public void setForm(FormInt.State state) {
         if(queryWidget == null){
-            maskbox.noMask = mode;
+            if(state == FormInt.State.QUERY)
+                maskbox.noMask = true;
+            else
+                maskbox.noMask = false;
         }else{
-            super.setForm(mode);
+            super.setForm(state);
         }
     }
    

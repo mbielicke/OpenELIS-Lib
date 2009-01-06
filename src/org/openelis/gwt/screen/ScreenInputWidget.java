@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MenuLabel;
 
 import java.util.ArrayList;
@@ -88,8 +89,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         queryWidget.key = key;
     }
     
-    public void setForm(boolean mode){
-        this.queryMode = mode;
+    public void setForm(FormInt.State state){
+        if(state == FormInt.State.QUERY)
+            this.queryMode = true;
         if(queryMode){
             if(queryWidget != null){
                 initWidget(queryWidget.displayWidget);

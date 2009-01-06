@@ -37,6 +37,7 @@ import java.util.ArrayList;
 public class AutoComplete extends DropdownWidget {
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
+    public boolean queryMode;
     
 
     AutoCompleteCallInt autoCall;

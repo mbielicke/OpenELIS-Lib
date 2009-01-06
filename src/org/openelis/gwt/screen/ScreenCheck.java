@@ -34,6 +34,7 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.CheckBox.CheckType;
 /**
  * ScreenCheck wraps a GWT CheckBox to be displayed on a Screen.
@@ -157,15 +158,15 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         super.destroy();
     }
     
-    public void setForm(boolean mode) {
+    public void setForm(FormInt.State state) {
         if(queryWidget == null){
-            if(mode){
+            if(state == FormInt.State.QUERY){
                 check.setType(CheckBox.CheckType.THREE_STATE);
                 check.setState(CheckBox.UNKNOWN);
             }else
                 check.setType(defaultType);
         }else
-            super.setForm(mode);
+            super.setForm(state);
     }
 
 }

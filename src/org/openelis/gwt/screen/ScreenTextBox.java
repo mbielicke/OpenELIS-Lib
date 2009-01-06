@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 /**
  * ScreenTextBox wraps a GWT TextBox to be displayed on a Screen.
@@ -187,9 +188,9 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         super.destroy();
     }
     
-    public void setForm(boolean mode) {
+    public void setForm(FormInt.State state) {
         if(queryWidget == null){
-            if(mode){
+            if(state == FormInt.State.QUERY){
                 textbox.setMaxLength(255);
                 textbox.enforceLength = false;
                 textbox.enforceMask = false;
@@ -202,7 +203,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             }
             
         }else
-            super.setForm(mode);
+            super.setForm(state);
     }
     
     public void onFocus(Widget sender) {
