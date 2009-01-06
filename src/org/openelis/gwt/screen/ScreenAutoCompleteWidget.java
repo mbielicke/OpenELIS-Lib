@@ -232,6 +232,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
        //         auto.addFocusListener(this);
             }else{
                 auto.lookUp.getTextBox().setReadOnly(!enabled);
+                auto.enabled = enabled;
                 //if(enabled)
          //           auto.addFocusListener(this);
              //   else
