@@ -198,7 +198,8 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
             case Event.ONKEYDOWN:
             case Event.ONKEYUP:
             case Event.ONKEYPRESS:
-                keyListeners.fireKeyboardEvent(this, event);
+                if(keyListeners != null)
+                    keyListeners.fireKeyboardEvent(this, event);
                 break;
             case Event.ONCLICK:
                 clickTarget = DOM.eventGetTarget(event);
@@ -237,6 +238,10 @@ public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboa
             clickListeners.remove(listener);
         }
         
+    }
+    
+    public Enum getCommand(String command) {
+        return null;
     }
 
 }
