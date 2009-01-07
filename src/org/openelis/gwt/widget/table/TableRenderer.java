@@ -130,8 +130,8 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             int count = controller.view.table.getRowCount();
             for(int i = count -1; i > tRows -1; i--){
                 controller.view.table.removeRow(i);
-                //if(i < rows.size())
-                rows.remove(i);
+                if(i < rows.size())
+                    rows.remove(i);
             }
         }else if(controller.view.table.getRowCount() < tRows){
             int count = controller.view.table.getRowCount();
