@@ -92,6 +92,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void setForm(FormInt.State state){
         if(state == FormInt.State.QUERY)
             this.queryMode = true;
+        else
+            this.queryMode = false;
         if(queryMode){
             if(queryWidget != null){
                 initWidget(queryWidget.displayWidget);

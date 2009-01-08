@@ -2,31 +2,75 @@ package org.openelis.gwt.common.data;
 
 import java.util.ArrayList;
 
+/**
+ * DataSet is a class that extends ArrayList<DataObject> and implements the Data
+ * interface so that it can be used to send and recieve data from the client to the 
+ * server.  DataSet is the building block for the DataModel and represents entries into the 
+ * model.
+ * @author tschmidt
+ *
+ */
 public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
     
     private static final long serialVersionUID = 1L;
     
+    /**
+     * Key value for this DataSet and is expected to be unique to the DataSet
+     * when grouped in a model.
+     */
     protected Data key;
     
+    /**
+     * This member is used to attach some set of data to the dataset useful to the 
+     * program but not accessed or seen  by the user.
+     */
     protected Data data;
     
+    /**
+     * Flag letting Widgets know if this DataSet should be shown on screen or 
+     * if it is currently hidden.  Used when filtering.
+     */
     public boolean shown = true;
     
+    /**
+     * Flag letting Widgets know if this DataSet is enabled and is available for
+     * selection by users.
+     */
     public boolean enabled = true;
     
+    /**
+     * Default constructor
+     *
+     */
     public DataSet() {
         
     }
     
+    /**
+     * Constructor that creates an empty DataSet with the passed key value
+     * @param key
+     */
     public DataSet(Data key) {
         setKey(key);
     }
     
+    /**
+     * Constructor that creates a DataSet with the passed key value and the single
+     * value passed.
+     * @param key
+     * @param value
+     */
     public DataSet(Data key, DataObject value){
         setKey(key);
         add(value);
     }
     
+    /**
+     * Constructor that creates a DataSet with passed key vlaue and all the data values
+     * passed int the DataObject[]
+     * @param key
+     * @param values
+     */
     public DataSet(Data key, DataObject[] values){
         setKey(key);
         for(DataObject val : values){
@@ -34,14 +78,26 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
         }
     }
     
+    /**
+     * This method will set the key value of the DataSet
+     * @param key
+     */
     public void setKey(Data key){
         this.key = key;
     }
     
+    /**
+     * This method will return the key value of the DataSet
+     * @return
+     */
     public Data getKey() {
         return key;
     }
     
+    /**
+     * This method will create a new DataSet and set the values of it
+     * to be the same as this one.
+     */
     public Object clone() {
         DataSet clone = new DataSet();
         for(int i=0; i < size(); i++){
@@ -51,9 +107,15 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
             clone.key = (Data)key.clone();
         if(data != null)
             clone.data = (Data)data.clone();
+        clone.enabled = enabled;
         return clone;
     }
 
+    /**
+     * This method is implemented for the Comparable interface so that 
+     * DataSets can be compared when sorting 
+     *
+     */
     public int compareTo(Object obj) {
         if(!(obj instanceof DataSet))
             return -1;
@@ -72,14 +134,28 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
         return 0;
     }
 
+    /**
+     * This method will return the data member that is used by programs to attach
+     * info to this dataset but is not accessible to end users
+     * @return
+     */
     public Data getData() {
         return data;
     }
 
+    /**
+     * This method will set the data member that is used by programs to attach
+     * info to this dataset but is not accessible to end users
+     * @param data
+     */
     public void setData(Data data) {
         this.data = data;
     }
     
+    /**
+     * Override of the .equals(Object obj) method used when sorting and filtering 
+     * datasets
+     */
     public boolean equals(Object object) {
         if(! (object instanceof DataSet)) 
             return false;
