@@ -12,6 +12,7 @@ div{outline:0px;}
     cursor:default;
 }
 
+
 .SectionHeader{
  background:#CCCCCC;
  border: black solid 1px;
@@ -83,6 +84,13 @@ div{outline:0px;}
     padding:4px;
 }
 
+.screen .topMenuContainer{
+    border:1px solid #B5B8C8;
+    border-top:0;
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+}
+
 .topMenuItemMiddle{
     padding:0 0 0 8px;
 
@@ -133,7 +141,7 @@ color:gray;
     height:16px;
 }
 .preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
-.EditSettings{background:url('../Images/cog.gif') no-repeat center;}
+.EditSettings{background:url('../Images/editsettingsbuttonimage.png') no-repeat center;}
 .favoritesMenuIcon{background:url('../Images/favoritesbuttonimage.gif') no-repeat center;}
 .logoutIcon{background:url('../Images/logoutbuttonimage.gif') no-repeat center;}
 .cutIcon{background:url('../Images/cutbuttonimage.gif') no-repeat center;}
@@ -211,6 +219,7 @@ color:gray;
 
 .WhiteContentPanel{
     background:white;
+    padding:4px;
 }
 
 
@@ -255,6 +264,7 @@ color:gray;
 }
 .disabled .ButtonContent{
     background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+    height:19px;
 }
 
 .disabled .ScreenLabel{
@@ -262,8 +272,8 @@ color:gray;
 }
 
 .AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupRowButtonImage, .ungroupRowButtonImage{
-    width:16px;
-    height:16px;
+    width:20px;
+    height:20px;
 }
 .groupRowButtonImage{
     background:url("../Images/group.gif") no-repeat;
@@ -319,6 +329,97 @@ color:gray;
 }
 /*******End General Button Class***********/
 
+/*******Fav header Button Class***********/
+.FavHeader .Button{
+    padding:2px;
+}
+
+.FavHeader .ButtonRightSide{
+    margin:0;
+    width:0;    
+    height:0;
+    background:none;
+    cursor:default;
+}
+.FavHeader  .disabled .ButtonRightSide{
+    background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
+}
+
+.FavHeader .ButtonLeftSide{
+    margin:0;
+    width:0;    
+    height:0;
+    background:none;
+    cursor:default;
+}
+.FavHeader .disabled .ButtonLeftSide{
+    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
+}
+
+.FavHeader .ButtonContent{
+    margin:0;
+    width:16px;    
+    height:16px;
+    cursor:default;
+    background:none;
+       -moz-user-select: none;
+}
+.FavHeader .Hover .ButtonContent, .Pressed .ButtonContent {
+    background:none;
+    cursor:pointer;
+}
+.FavHeader .disabled .ButtonContent{
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+}
+
+/*******Field Button***********/
+
+.FieldButton .ButtonContent {
+    background:none;
+padding:0;
+}
+.Hover .FieldButton .ButtonContent, .Pressed .FieldButton .ButtonContent {
+  //  background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:pointer;
+}
+.disabled .FieldButton .ButtonContent{
+padding:0;
+    background:none;
+}
+.FieldButton .ButtonContent .ScreenLabel{
+    color:black;
+    background:none;
+}
+.disabled  .FieldButton .ButtonContent .ScreenLabel{
+    cursor:default;
+    color:gray;
+    background:none;
+}
+
+.FieldButton .ButtonRightSide{
+   //  width:2px;
+     background:none;
+}
+.Hover .FieldButton .ButtonRightSide, .Pressed .FieldButton .ButtonRightSide{
+   // background:url("../Images/screenbuttonrs.gif") no-repeat;
+}
+.Disabled .FieldButton .ButtonRightSide{
+    background:none;
+    cursor:default;
+}
+.FieldButton .ButtonLeftSide{
+    background:none;
+}
+.Hover .FieldButton .ButtonLeftSide, .Pressed .FieldButton .ButtonLeftSide{
+  //  background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+.Disabled .FieldButton .ButtonLeftSide{
+    background:none;
+    cursor:default;
+}
+.FieldButton .LookupButtonImage{
+    background:url("../Images/fieldlookup.png") no-repeat;
+}
 
 /*******Button Panel***********/
 .ButtonPanelContainer{
@@ -676,9 +777,9 @@ border:0px;
 }
 
 .ScreenTable {
-    border:1px solid #B5B8C8;
+    border-bottom:1px solid #B5B8C8;
     background:white;
-    margin:8px;
+    //margin:4px;
 }
 
 .TitlePanel{
@@ -712,7 +813,7 @@ border:0px;
 }
 /*******TAB PANEL CSS***********/
 .ScreenTab{
-    margin:8px;
+    margin:4px;
 }
 
 .gwt-TabBar {
@@ -1104,17 +1205,34 @@ border:none;
 .Form {
     font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
     font-size:11px;
+        margin:4px 8px ;
 }
+
+.subform{
+    border:1px solid #8DB2E3;
+    margin:4px 4px ;
+}
+
+.subformButtons{
+    text-align:right;
+}
+
+.subform .Form {
+margin:0px;
+}
+
 .FormTitle{
+text-align:center;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    padding:0 8px 0 4px;
+ //   padding:0 8px 0 4px;
     height:18px;
-    background:url("../Images/headersprite-blue.gif") repeat-x;
-    border:1px solid #99bbe8;
-    border-bottom:0;
-    margin-right:8px;
+background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+
+//   border:1px solid #99bbe8;
+ //   border-bottom:0;
+//    margin-right:8px;
 }
 .Prompt {
    -moz-user-select: none;
@@ -1140,8 +1258,8 @@ border:none;
 fieldSet {
     border:1px solid #b5b8c8;
     padding: 2px;
-    margin:5px;
-}
+    margin:-1px 8px 8px 8px;
+    }
 
 legend {
 }
@@ -1338,18 +1456,21 @@ font-weight:bold;
   height:13px;
   width:13px;
   background:url("../Images/apply.png") left center no-repeat;
+    cursor:pointer;
 }
 
 .Unchecked {
   height:13px;
   width:13px;
   background:url("../Images/unapply.png") left center no-repeat;
+  cursor:pointer;
 }
 
 .Unknown {
   height:13px;
   width:13px;
   background:url("../Images/unknow.png") left center no-repeat;
+    cursor:pointer;
 }
 
 

@@ -119,8 +119,8 @@ border-bottom:1px dotted #A3BAE9;
 .Header{
     height:17px;
     background:#eeeff1 url("../Images/headersprite.gif") repeat-x;
-    border-collapse:collapse;
     overflow:hidden;
+   // border:1px solid #B5B8C8;
 }
 .HeaderBar{
     width:3px;
