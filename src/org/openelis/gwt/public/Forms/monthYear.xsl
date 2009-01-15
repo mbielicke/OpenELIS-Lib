@@ -28,7 +28,6 @@ UIRF Software License are applicable instead of those above.
                 xmlns:xalan="http://xml.apache.org/xalan"
                 xmlns:cal="xalan://java.util.Calendar"
                 xmlns:calUtils="xalan://org.openelis.util.CalendarUtils"
-                extension-element-prefixes="resource"
                 version="1.0">
 
   <xalan:component prefix="cal">

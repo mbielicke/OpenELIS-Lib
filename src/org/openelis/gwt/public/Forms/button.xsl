@@ -29,7 +29,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xalan="http://xml.apache.org/xalan" 
 xmlns:resource="xalan://org.openelis.util.UTFResource" 
 xmlns:locale="xalan://java.util.Locale" 
-extension-element-prefixes="resource" 
 version="1.0">
 
 <xalan:component prefix="resource">
