@@ -239,7 +239,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         }
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
-        headerView.setHeight("18px");
+        headerView.setHeight("20px");
 
     }
 

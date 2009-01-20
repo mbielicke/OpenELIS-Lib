@@ -279,7 +279,7 @@ public class TableWidget extends FocusPanel implements
         
     }
 
-    public void rowSelectd(SourcesTableModelEvents sender, int row) {
+    public void rowSelected(SourcesTableModelEvents sender, int row) {
         
     }
 
