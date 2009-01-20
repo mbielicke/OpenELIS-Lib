@@ -301,7 +301,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         load(0);
     }
 
-    public void rowSelectd(SourcesTableModelEvents sender, int row) {
+    public void rowSelected(SourcesTableModelEvents sender, int row) {
         if(controller.activeRow < 0)
             return;
         controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
