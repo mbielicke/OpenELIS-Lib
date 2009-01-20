@@ -37,7 +37,7 @@ public interface TableModelListener {
     
     public void dataChanged(SourcesTableModelEvents sender);
     
-    public void rowSelectd(SourcesTableModelEvents sender, int row);
+    public void rowSelected(SourcesTableModelEvents sender, int row);
     
     public void rowUnselected(SourcesTableModelEvents sender, int row);
     

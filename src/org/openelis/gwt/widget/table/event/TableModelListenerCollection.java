@@ -56,7 +56,7 @@ public class TableModelListenerCollection extends ArrayList<TableModelListener> 
     
     public void fireRowSelected(SourcesTableModelEvents sender, int row){
         for(TableModelListener listener : this)
-            listener.rowSelectd(sender, row);
+            listener.rowSelected(sender, row);
     }
     
     public void fireRowUnselected(SourcesTableModelEvents sender, int row) {
