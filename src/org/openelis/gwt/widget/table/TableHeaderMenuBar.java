@@ -141,7 +141,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
            mouseListeners.remove(listener); 
         }
         public void onMouseEnter(Widget sender) {
-            getWidget(1).setStyleName("AutoDropdownButton");
+            getWidget(1).setStyleName("HeaderDropdownButton");
         }
 
         /**
@@ -149,7 +149,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
          */
         public void onMouseLeave(Widget sender) {
             if(!((MenuItem)getWidget(1)).popShowing)
-                getWidget(1).removeStyleName("AutoDropdownButton");
+                getWidget(1).removeStyleName("HeaderDropdownButton");
         }
 
         public void onMouseDown(Widget sender, int x, int y) {
@@ -168,7 +168,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         }
 
         public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-            getWidget(1).removeStyleName("AutoDropdownButton");
+            getWidget(1).removeStyleName("HeaderDropdownButton");
 
             
         }
