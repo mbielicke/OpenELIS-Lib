@@ -222,6 +222,10 @@ color:gray;
     padding:4px;
 }
 
+.LeftSidePanel{
+    background:white;
+}
+
 
 /*******General Button Class***********/
 .Button{
