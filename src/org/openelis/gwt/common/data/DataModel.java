@@ -145,6 +145,7 @@ public class DataModel extends ArrayList<DataSet> implements Data {
     public void clear() {
         super.clear();
         selected = -1;
+        page = 0;
         selections.clear();
         keyMap.clear();
     }
