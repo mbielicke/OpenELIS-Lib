@@ -322,7 +322,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public Object getCell(int row, int col) {
-        return rows.get(row).get(col);
+        return rows.get(row).get(col).getValue();
     }
 
     public TreeDataItem setRow(int index, TreeDataItem row) {
