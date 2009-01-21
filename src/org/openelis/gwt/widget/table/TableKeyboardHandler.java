@@ -31,11 +31,12 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.ScreenWidget;
 
 public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     
-    private TableWidget controller;
+    private TableWidget<? extends DataSet> controller;
     private ScreenWidget screen;
     
     public TableKeyboardHandler(TableWidget controller) {
