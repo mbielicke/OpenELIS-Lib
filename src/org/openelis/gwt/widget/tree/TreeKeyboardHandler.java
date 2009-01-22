@@ -110,9 +110,22 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         }
         if (KeyboardListener.KEY_ENTER == code) {
             if(controller.editingCell != null) {
-                //controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-                controller.treeWidgetListeners.fireStopEditing(controller, controller.activeRow,controller.activeCell);
-                controller.activeCell = -1;
+                if(controller.finishEditing()){
+                    if(controller.model.numRows() >= controller.maxRows){
+                        controller.view.scrollBar.scrollToBottom();
+                        DeferredCommand.addCommand(new Command() {
+                            public void execute() {
+                                controller.activeRow--;
+                                controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
+                                
+                            }
+                        });
+                    }else{
+                        controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
+                    }
+                }else{
+                    controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
+                }
             }else if(controller.activeRow < 0) {
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
@@ -127,18 +140,6 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
                     }
                 });
             }
-            /*if (controller.activeRow >= 0) {
-                if (controller.activeCell > -1) {
-                    if(!(controller.view.table.getWidget(controller.activeRow, controller.activeCell) instanceof TableCheck)){
-                        saveValue(controller.activeRow, controller.activeCell);
-                        setCellDisplay(selected, selectedCell);
-                        selectedCell = -1;
-                    } else {
-                        if (manager != null)
-                            manager.action(selected, -1, this);
-                    }
-                }
-            }*/
         }
         /*
         if (KeyboardListener.KEY_RIGHT == code && model.paged) {
