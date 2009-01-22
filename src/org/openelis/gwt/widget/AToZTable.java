@@ -252,7 +252,7 @@ public class AToZTable extends TableWidget implements
             }
             
             int select = ((Integer)obj).intValue();
-            for(int i = 0; i < modelIndexList.length; i++){
+            for(int i = 0; i < model.shownRows(); i++){
                 if(modelIndexList[i] == select){
                     activeRow = i;
                 }
