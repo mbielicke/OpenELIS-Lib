@@ -41,6 +41,10 @@ public class TreeField extends AbstractField {
     }
     
     public TreeField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node){
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }
 
@@ -60,8 +64,7 @@ public class TreeField extends AbstractField {
             value = (TreeDataModel)val;
     }
 
-    public Object getValue() {
-        // TODO Auto-generated method stub
+    public TreeDataModel getValue() {
         return value;
     }
 
@@ -83,28 +86,48 @@ public class TreeField extends AbstractField {
         valid = validateModel();
     }
     
+    private boolean valid;
+    
     public boolean validateModel() {
-        boolean valid = true;
-        for(DataSet row : value){
-            if(row.shown){
-                for (Data obj : row){
-                    if(obj instanceof AbstractField){
-                        ((AbstractField)obj).validate();
-                        if(!((AbstractField)obj).valid)
-                            valid = false;
-                    }
-                }
-            }
+        valid = true;
+        for(TreeDataItem row : value){
+            validateItem(row);
         }
         return valid;
     }
     
-    public void clearErrors() {
-        for(DataSet row : value){
-            for(Data obj : row){
-                if(obj instanceof AbstractField)
-                    ((AbstractField)obj).clearErrors();
+    public void validateItem(TreeDataItem item) {      
+        if(item.hasChildren()) {
+            for(TreeDataItem child : item.getItems()){
+                validateItem(child);
             }
+        }
+        if(item.shown){
+            for (Data obj : item){
+                if(obj instanceof AbstractField){
+                    ((AbstractField)obj).validate();
+                    if(!((AbstractField)obj).valid)
+                        valid = false;
+                }
+            }       
+        }
+    }
+    
+    public void clearErrors() {
+        for(TreeDataItem row : value){
+            clearItem(row);
+        }
+    }
+    
+    public void clearItem(TreeDataItem item) {
+        if(item.hasChildren()) {
+            for(TreeDataItem child : item.getItems()){
+                clearItem(child);
+            }
+        }
+        for(Data obj : item){
+            if(obj instanceof AbstractField)
+                ((AbstractField)obj).clearErrors();
         }
     }
     
