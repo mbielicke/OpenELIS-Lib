@@ -32,7 +32,7 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.widget.ScrollableTabBar;
 
 public class ScreenScrollableTabBar extends ScreenWidget{
-    public static String TAG_NAME = "scrolltabBar";
+    public static String TAG_NAME = "ScrollTabBar";
     
     private ScrollableTabBar scrollableTabBar;
     
@@ -43,8 +43,16 @@ public class ScreenScrollableTabBar extends ScreenWidget{
     public ScreenScrollableTabBar(Node node, ScreenBase screen) {
         super(node);
         scrollableTabBar = new ScrollableTabBar();
-        scrollableTabBar.setStyleName("ScreenTab");        
+        scrollableTabBar.setStyleName("ScreenTab");  
+        String width = null;
         initWidget(scrollableTabBar);        
+        
+        if (node.getAttributes().getNamedItem("width") != null){
+            width = node.getAttributes()
+                                  .getNamedItem("width")
+                                  .getNodeValue();
+            scrollableTabBar.setWidth(width);
+        }
         NodeList tabs = ((Element)node).getElementsByTagName("tab");           
         if(tabs.getLength()>0){
          for (int k = 0; k < tabs.getLength(); k++) {                       
@@ -60,7 +68,6 @@ public class ScreenScrollableTabBar extends ScreenWidget{
     }
     
     public ScreenWidget getInstance(Node node, ScreenBase screen) {
-        // TODO Auto-generated method stub
         return new ScreenScrollableTabBar(node, screen);
     }
     

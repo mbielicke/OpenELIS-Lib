@@ -41,16 +41,24 @@ public class ScrollableTabBar extends Composite implements ClickListener{
   private HorizontalPanel mainPanel = new HorizontalPanel();
   private AbsolutePanel scrollPanel = new AbsolutePanel();
   private TabBar tabBar = new TabBar();
-  private HTML next = new HTML("<img src=\"Images/resultset_next.png\">");
-  private HTML previous = new HTML("<img src=\"Images/resultset_previous.png\">");
+  private ScreenBase tablistener = null;
+  private HTML next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
+  private HTML previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
   private boolean noHTMLs = true;
   private boolean nextDisabled = false;   
-  private boolean prevDisabled = false; 
+  private boolean prevDisabled = false;
+  //private int scrollWidth;
+  //private int imageWidth;
   
   public ScrollableTabBar(){
       initWidget(mainPanel);
       scrollPanel.add(tabBar);
+      //mainPanel.setWidth("300px");
       scrollPanel.setWidth("300px");
+      //imageWidth = next.getOffsetWidth()+previous.getOffsetWidth();
+      //scrollWidth = mainPanel.getOffsetWidth()-imageWidth;
+      
+      //scrollPanel.setWidth("\""+new Integer(scrollWidth).toString()+"px"+"\"");
       scrollPanel.setHeight("20px");
       scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-10 , 0);       
       DOM.setStyleAttribute(scrollPanel.getElement(), "overflow", "hidden"); 
@@ -73,17 +81,14 @@ public class ScrollableTabBar extends Composite implements ClickListener{
   }
   
   public void onClick(Widget sender) {   
-    if(sender == next){        
-        //Window.alert(new Integer(left).toString());  
-      scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+10 , 0);
-      //Window.alert("left "+new Integer(left).toString());
+    if(sender == next){                 
+      scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+10 , 0);      
       manageScrolling(scrollPanel.getWidgetLeft(tabBar)+10);
     }
-    if(sender == previous){       
-        //Window.alert(new Integer(right).toString()); 
+    if(sender == previous){               
        scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-10 , 0);
        manageScrolling(scrollPanel.getWidgetLeft(tabBar)-10);
-    }
+    }   
   }
   
   public void selectTab(int index){
@@ -91,34 +96,25 @@ public class ScrollableTabBar extends Composite implements ClickListener{
   }
   
   public void addTabListener(ScreenBase screen){
+     tablistener = screen;
      tabBar.addTabListener((TabListener)screen);
+  }
+  
+  public void setWidth(String width){
+      mainPanel.setWidth(width);         
   }
   
   public void addTab(String text){           
       tabBar.addTab(text);     
       if(scrollPanel.getOffsetWidth() < tabBar.getOffsetWidth()){                   
-             mainPanel.clear(); 
-             /*if(scrollPanel.getOffsetWidth() < tabBar.getOffsetWidth()){
-                 
-             }
-             else{
-               previous = new HTML("<img src=\"Images/resultset_previous_disabled.png\">");   
-             }*/
-             previous = new HTML("<img src=\"Images/resultset_previous.png\">");
+             mainPanel.clear();              
+             previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
              previous.addClickListener(this);
              
              mainPanel.add(previous); 
              mainPanel.add(scrollPanel);
-             
-            /* if(scrollPanel.getWidgetLeft(tabBar)==0){
-                 next = new HTML("<img src=\"Images/resultset_next_disabled.png\">");
-             }
-                     
-               next = new HTML("<img src=\"Images/resultset_next.png\">");
-               next.addClickListener(this);
-             }*/
-             mainPanel.add(next);         
-             
+                       
+             mainPanel.add(next);                      
       }
    }
   
@@ -133,13 +129,28 @@ public class ScrollableTabBar extends Composite implements ClickListener{
              mainPanel.add(scrollPanel);             
          } 
       }
+  
+  public void clearTabs(){      
+     tabBar = new TabBar(); 
+     if(tablistener != null) {
+        tabBar.addTabListener((TabListener)tablistener); 
+     }  
+     scrollPanel.clear();
+     scrollPanel.add(tabBar);
+     mainPanel.clear();  
+     mainPanel.add(scrollPanel);
+  }
+  
+  public TabBar getTabBar(){
+      return tabBar;
+  }
      
   
   
   private void manageScrolling(int left){           
        if(left >= 0){          
            mainPanel.remove(2);
-           next = new HTML("<img src=\"Images/resultset_next_disabled.png\">");
+           next = new HTML("<img src=\"Images/nextbuttonimagedisabled.gif\">");
            //next.setEnabled(false);  
            nextDisabled = true;
            mainPanel.add(next);
@@ -149,7 +160,7 @@ public class ScrollableTabBar extends Composite implements ClickListener{
           //Window.alert("nextDisabled "+new Boolean(nextDisabled).toString()); 
           if(nextDisabled){ 
            mainPanel.remove(2);
-           next = new HTML("<img src=\"Images/resultset_next.png\">");
+           next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
            //next.setEnabled(true);  
            next.addClickListener(this);
            mainPanel.add(next);    
@@ -160,7 +171,7 @@ public class ScrollableTabBar extends Composite implements ClickListener{
        
        if(tabBar.getOffsetWidth() < (scrollPanel.getOffsetWidth()-left)){
            mainPanel.clear();
-           previous = new HTML("<img src=\"Images/resultset_previous_disabled.png\">");
+           previous = new HTML("<img src=\"Images/previousbuttonimagedisabled.gif\">");
            //previous.setEnabled(false);
            mainPanel.add(previous);
            mainPanel.add(scrollPanel);
@@ -171,7 +182,7 @@ public class ScrollableTabBar extends Composite implements ClickListener{
            // Window.alert("prevDisabled "+new Boolean(prevDisabled).toString());    
          if(prevDisabled){  
            mainPanel.clear();
-           previous = new HTML("<img src=\"Images/resultset_previous.png\">");           
+           previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");           
            //previous.setEnabled(true);
            previous.addClickListener(this);
            mainPanel.add(previous);
