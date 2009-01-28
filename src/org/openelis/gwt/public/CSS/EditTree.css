@@ -15,11 +15,13 @@
 
 .Tree tr {
    background:white;
+   border-bottom:1px solid black;
 }
 
 .TreeRow{
     height:18px;
     background:white;
+
 }
 .AltTreeRow{
     height:16px;
@@ -41,7 +43,7 @@
 
 tr .TreeHighlighted{
     color:#000000;
-    background:#EEEEEE;
+    background:#FBFBFB;
 }
 
 .CellError {

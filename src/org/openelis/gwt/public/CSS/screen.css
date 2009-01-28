@@ -38,7 +38,9 @@ div{outline:0px;}
     border-right:1px solid #8DB2E3;
 }
 ******************/
-
+.TableButtonFooter{
+margin-left:-2px;
+}
 .ScreenLeftPanel{
     padding:2px;
     background:white;
@@ -259,7 +261,7 @@ color:gray;
     padding: 2px 4px 0 4px;
     height:21px;
     cursor:default;
-    background:url("../Images/screenbuttonbg.gif") repeat-x;
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
        -moz-user-select: none;
 }
 .Hover .ButtonContent, .Pressed .ButtonContent {
@@ -268,7 +270,6 @@ color:gray;
 }
 .disabled .ButtonContent{
     background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
-    height:19px;
 }
 
 .disabled .ScreenLabel{
@@ -421,10 +422,28 @@ padding:0;
     background:none;
     cursor:default;
 }
-.FieldButton .LookupButtonImage{
+.LookupButtonImage{
     background:url("../Images/fieldlookup.png") no-repeat;
 }
-
+.disabled .LookupButtonImage{
+    background:url("../Images/fieldlookupdisabled.png") no-repeat;
+}
+.CommentButtonImage{
+    background:url("../Images/fieldcomment.png") no-repeat;
+}
+.disabled .CommentButtonImage{
+    background:url("../Images/fieldcommentdisabled.png") no-repeat;
+}
+.AdvancedButtonImage{
+    background:url("../Images/fieldadvanced.png") no-repeat;
+}
+.disabled .AdvancedButtonImage{
+    background:url("../Images/fieldadvanceddisabled.png") no-repeat;
+}
+.LookupButtonImage, .CommentButtonImage, .AdvancedButtonImage{
+    width:16px;
+    height:16px;
+}
 /*******Button Panel***********/
 .ButtonPanelContainer{
     height:26px;
@@ -781,9 +800,9 @@ border:0px;
 }
 
 .ScreenTable {
-    border-bottom:1px solid #B5B8C8;
+    border:1px solid #B5B8C8;
     background:white;
-    //margin:4px;
+    margin:4px;
 }
 
 .TitlePanel{
@@ -848,6 +867,7 @@ border:0px;
 .gwt-TabPanelBottom{
     background:#fbfbfb;
     border:1px solid #8db2e3;
+    padding:4px;
 }
 .gwt-TabBar .gwt-TabBarRest {
     background:white;
