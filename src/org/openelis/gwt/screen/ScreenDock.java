@@ -66,7 +66,14 @@ public class ScreenDock extends ScreenWidget {
      */
     public ScreenDock(Node node, ScreenBase screen) {
         super(node);
-        panel = new DockPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (DockPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new DockPanel();
         panel.addStyleName("ScreenDock");
         initWidget(panel);
         if (node.getAttributes().getNamedItem("spacing") != null)

@@ -68,7 +68,14 @@ public class ScreenDisclosure extends ScreenWidget {
      */
     public ScreenDisclosure(Node node, ScreenBase screen) {
         super(node);
-        dp = new DisclosurePanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            dp = (DisclosurePanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            dp = new DisclosurePanel();
         dp.setStyleName("ScreenDisclosure");
         initWidget(dp);
         Element header = (Element) ((Element)node).getElementsByTagName("header").item(0);

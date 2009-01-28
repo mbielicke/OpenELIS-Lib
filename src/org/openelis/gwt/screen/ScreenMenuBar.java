@@ -73,12 +73,20 @@ public class ScreenMenuBar extends ScreenWidget {
      */	
 	public ScreenMenuBar(Node node, ScreenBase screen){
 		super(node);
-		if(node.getAttributes().getNamedItem("vertical") != null){
-			if(node.getAttributes().getNamedItem("vertical").getNodeValue().equals("true"))
-				menuBar = new MenuBar(true);
-			else 
-				menuBar = new MenuBar();
-		}
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            menuBar = (MenuBar)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else {
+            if(node.getAttributes().getNamedItem("vertical") != null){
+                if(node.getAttributes().getNamedItem("vertical").getNodeValue().equals("true"))
+                    menuBar = new MenuBar(true);
+                else 
+                    menuBar = new MenuBar();
+            }
+        }
 		if(node.getAttributes().getNamedItem("autoOpen") != null){
 			if(node.getAttributes().getNamedItem("autoOpen").getNodeValue().equals("true"))
 				menuBar.setAutoOpen(true);

@@ -30,6 +30,7 @@ import org.openelis.gwt.widget.TitledPanel;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -53,8 +54,14 @@ public class ScreenTitledPanel extends ScreenWidget{
     
     public ScreenTitledPanel(Node node, ScreenBase screen) {
         super(node);
-        titledPanel = new TitledPanel();
-        
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            titledPanel = (TitledPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            titledPanel = new TitledPanel();
         Element legend = (Element) ((Element)node).getElementsByTagName("legend").item(0);
         NodeList widgets = legend.getChildNodes();
         for (int k = 0; k < widgets.getLength(); k++) {

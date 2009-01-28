@@ -53,8 +53,16 @@ public class TabBrowser extends Composite {
     private int tabLimit = 3;
     private int heightAdj = 8;
     private Widget sizeWidget;
+    
+    public TabBrowser() {
+        
+    }
 
     public TabBrowser(boolean size, int tabLimit) {
+        init(size,tabLimit);
+    }
+    
+    public void init(boolean size, int tabLimit) {
         this.tabLimit = tabLimit;
         initWidget(browser);
         setStyleName("TabBrowser");

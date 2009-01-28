@@ -25,9 +25,10 @@
 */
 package org.openelis.gwt.services;
 
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 
-public interface CalendarServiceInt extends AppScreenServiceInt {
+public interface CalendarServiceInt<D extends RPC> extends AppScreenServiceInt<D> {
     
     public String getMonth(String month, String year, String date) throws RPCException;
     

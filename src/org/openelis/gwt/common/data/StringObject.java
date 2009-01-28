@@ -38,7 +38,7 @@ public class StringObject implements DataObject {
         setValue(val);
     }
     
-    public Object getValue() {
+    public String getValue() {
         if(value == null)
             return "";
         return value;
@@ -67,7 +67,7 @@ public class StringObject implements DataObject {
 
     public int compareTo(Object o) {
         // TODO Auto-generated method stub
-        return value.compareTo((String)((DataObject)o).getValue());
+        return value.compareTo(((StringObject)o).getValue());
     }    
 
 }

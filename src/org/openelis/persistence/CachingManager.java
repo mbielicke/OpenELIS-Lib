@@ -170,4 +170,12 @@ public class CachingManager {
     public static void remove(String cacheName, String key) {
         cacheManager.getCache(cacheName).remove(key);
     }
+    
+    public static Element getCacheElement(String cacheName, Serializable key) {
+        return cacheManager.getCache(cacheName).get(key);
+    }
+    
+    public static void expireElement(String cacheName, Serializable key) {
+        cacheManager.getCache(cacheName).remove(key);
+    }
 }

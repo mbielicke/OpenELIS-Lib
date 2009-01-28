@@ -64,10 +64,18 @@ public class ScreenRadio extends ScreenInputWidget {
      */ 
     public ScreenRadio(Node node, final ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         final ScreenRadio sr = this;
-        radio = new RadioButton(node.getAttributes()
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            radio = (RadioButton)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else{
+            radio = new RadioButton(node.getAttributes()
                                     .getNamedItem("group")
                                     .getNodeValue());
+        }
         if (node.getFirstChild() != null)
             radio.setText(node.getFirstChild().getNodeValue());
         if (node.getAttributes().getNamedItem("shortcut") != null)

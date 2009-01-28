@@ -59,6 +59,14 @@ public class ScreenTabBrowser extends ScreenWidget {
      */	
     public ScreenTabBrowser(Node node, ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            tb = (TabBrowser)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            tb = new TabBrowser();
         int tabLimit = Integer.parseInt(node.getAttributes()
                                             .getNamedItem("tabLimit")
                                             .getNodeValue());

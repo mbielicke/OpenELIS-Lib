@@ -31,7 +31,8 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.ScreenInputWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
@@ -46,9 +47,9 @@ import java.util.ArrayList;
  * @author tschmidt
  * 
  */
-public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, TableMouseHandlerInt{
+public class QueryTable<D extends DataSet> extends TableWidget<D> implements TableKeyboardHandlerInt, TableMouseHandlerInt{
     
-    public FormRPC rpc;
+    public Form form;
     public ScreenInputWidget screen;
     /**
      * Default constructor, puts table on top of the event stack.
@@ -59,6 +60,10 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
     }
 
     public QueryTable(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
+        init(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void init(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
         for(TableColumnInt column : columns) {
             column.setTableWidget(this);
         }
@@ -246,19 +251,19 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
         
     }
     
-    public void load(FormRPC rpc) {
-        this.rpc = rpc;
+    public void load(Form form) {
+        this.form = form;
         renderer.load(0);
     }
     
-    public FormRPC unload() {
+    public Form unload() {
         tableWidgetListeners.fireStopEditing(this,activeRow,activeCell);
         tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
-        return rpc;
+        return form;
     }
     
     public void setCellValue(String rpcKey, int col, Object value){
-        rpc.setFieldValue(rpcKey, value);
+        form.setFieldValue(rpcKey, value);
         renderer.setCellDisplay(0,col);
     }
  

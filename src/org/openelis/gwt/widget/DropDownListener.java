@@ -31,6 +31,8 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataSet;
+
 public class DropDownListener implements ClickListener, MouseListener, KeyboardListener {
     
     private Dropdown widget;
@@ -45,7 +47,7 @@ public class DropDownListener implements ClickListener, MouseListener, KeyboardL
         if(sender == widget.lookUp){
             if(widget.activeRow < 0)
                 if(widget.model.getData().selections.size() > 0)
-                    widget.showTable(widget.model.getData().selections.get(0));
+                    widget.showTable((Integer)widget.model.getData().selections.get(0));
                 else
                     widget.showTable(0);
             else

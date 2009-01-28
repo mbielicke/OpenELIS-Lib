@@ -32,16 +32,10 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.widget.table.QueryTable;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
-import org.openelis.gwt.widget.table.TableKeyboardHandler;
-import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
@@ -85,7 +79,14 @@ public class ScreenQueryTable extends ScreenInputWidget {
          */ 
         public ScreenQueryTable(Node node, ScreenBase screen) {
             super(node);
-            
+            init(node, screen);
+        }
+        
+        public void init(Node node, ScreenBase screen) {
+            if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+                table = (QueryTable)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+            else
+                table = new QueryTable();
            // try {
             int cellHeight;
             String width;
@@ -201,7 +202,7 @@ public class ScreenQueryTable extends ScreenInputWidget {
                         columns.get(i).setKey(fields[i].trim());
                     }
                 }
-                table = new QueryTable(columns,maxRows,width,title,showHeader,showScroll);
+                table.init(columns,maxRows,width,title,showHeader,showScroll);
                 table.enabled(enable);
             
             ((AppScreen)screen).addKeyboardListener(table.keyboardHandler);
@@ -222,14 +223,14 @@ public class ScreenQueryTable extends ScreenInputWidget {
             table.enabled(true);
             table.activeCell = -1;
             table.activeRow = -1;
-            table.load(screen.rpc);
+            table.load(screen.form);
             
         }
 
         public void submit(AbstractField field) {
             table.unload();
-            for(TableColumnInt column : table.columns){
-                screen.rpc.setFieldValue(column.getKey(), table.rpc.getFieldValue(column.getKey()));
+            for(TableColumnInt column : (ArrayList<TableColumnInt>)table.columns){
+                screen.form.setFieldValue(column.getKey(), table.form.getFieldValue(column.getKey()));
             }
             //((FormRPC)field).setFieldMap(((FormRPC)table.unload()).getFieldMap());
         }

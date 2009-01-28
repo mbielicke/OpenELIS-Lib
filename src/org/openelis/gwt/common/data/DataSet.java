@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
-public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
+public class DataSet<Key extends Data> extends ArrayList<DataObject> implements Data,Comparable{
     
     private static final long serialVersionUID = 1L;
     
@@ -18,7 +18,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
      * Key value for this DataSet and is expected to be unique to the DataSet
      * when grouped in a model.
      */
-    protected Data key;
+    protected Key key;
     
     /**
      * This member is used to attach some set of data to the dataset useful to the 
@@ -50,7 +50,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
      * Constructor that creates an empty DataSet with the passed key value
      * @param key
      */
-    public DataSet(Data key) {
+    public DataSet(Key key) {
         setKey(key);
     }
     
@@ -60,7 +60,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
      * @param key
      * @param value
      */
-    public DataSet(Data key, DataObject value){
+    public DataSet(Key key, DataObject value){
         setKey(key);
         add(value);
     }
@@ -71,7 +71,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
      * @param key
      * @param values
      */
-    public DataSet(Data key, DataObject[] values){
+    public DataSet(Key key, DataObject[] values){
         setKey(key);
         for(DataObject val : values){
             add(val);
@@ -82,7 +82,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
      * This method will set the key value of the DataSet
      * @param key
      */
-    public void setKey(Data key){
+    public void setKey(Key key){
         this.key = key;
     }
     
@@ -90,7 +90,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
      * This method will return the key value of the DataSet
      * @return
      */
-    public Data getKey() {
+    public Key getKey() {
         return key;
     }
     
@@ -104,7 +104,7 @@ public class DataSet extends ArrayList<DataObject> implements Data,Comparable{
             clone.add((DataObject)get(i).clone());
         }
         if(key != null)
-            clone.key = (Data)key.clone();
+            clone.key = key;
         if(data != null)
             clone.data = (Data)data.clone();
         clone.enabled = enabled;

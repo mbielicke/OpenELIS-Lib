@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
@@ -39,12 +40,12 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
-public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener, ClickListener {
+public class TableRenderer<D extends DataSet> implements TableRendererInt, TableModelListener, TableWidgetListener, ClickListener {
     
-    private TableWidget controller;
+    private TableWidget<DataSet> controller;
     public ArrayList<TableRow> rows = new ArrayList<TableRow>();
     
-    public TableRenderer(TableWidget controller){
+    public TableRenderer(TableWidget<DataSet> controller){
         this.controller = controller;
     }
     
@@ -158,7 +159,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         rows.get(index).modelIndex = modelIndex;
         rows.get(index).row = row;
         for (int i = 0; i < row.size(); i++) {
-            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
+            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),(Data)row.get(i));
             //if(tCell instanceof TableMultiple && manager != null){
               //  manager.setMultiple(model.indexOf(row),i,this);
             //}
@@ -277,7 +278,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
                 controller.view.table.getRowFormatter().removeStyleName(i,controller.view.selectedStyle);
             }
         }else
-            controller.view.table.getRowFormatter().removeStyleName(controller.activeRow, controller.view.selectedStyle);
+            controller.view.table.getRowFormatter().removeStyleName(row, controller.view.selectedStyle);
         
     }
 

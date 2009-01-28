@@ -29,6 +29,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -48,6 +49,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.widget.MenuItem;
@@ -62,19 +64,19 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     public static String headerCellStyle = "HeaderCell";
     public ArrayList<Label> hLabels = new ArrayList<Label>();
     public ArrayList<MenuItem> hMenus = new ArrayList<MenuItem>();
-    private ArrayList<TableColumnInt> columns;
-    private boolean resizing;
-    private int startx;
+    protected ArrayList<TableColumnInt> columns;
+    protected boolean resizing;
+    protected int startx;
     protected int resizeColumn1 = -1;
     protected int tableCol1 = -1;
     protected int resizeColumn2 = -1;
     protected int tableCol2 = -1;
-    private TableWidget controller;
+    protected TableWidget<? extends DataSet> controller;
     public boolean doFilter;
     public boolean doQuery;
     
     public TableHeaderMenuBar() {
-            
+        super("horizontal");
     }
     
     public class BarContainer extends AbsolutePanel implements SourcesMouseEvents {
@@ -176,8 +178,8 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     }
     
     
-    public TableHeaderMenuBar(TableWidget controller) {
-        super("horizontal");
+    public void init(TableWidget controller) {
+        
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.columns;
@@ -369,11 +371,12 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                     public void execute() {
                         int adj1 = 0;
                         int adj2 = 3;
-                        /*if(getAgent().indexOf("safari") > -1){
+                        if(getUserAgent().indexOf("webkit") > -1){
+                            Window.alert(getUserAgent());
                             adj1 = 6;
                             adj2 = 2;
                         }
-                        */
+                        
                         for(int i = 0; i < columns.size(); i++){
                             if( i > 0 && i < columns.size() - 1){
                                 panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj1)+"px");
@@ -402,10 +405,10 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
             public void execute() {
                 int adj1 = 0;
                 int adj2 = 3;
-                //if(getAgent().indexOf("safari") > -1){
-                //    adj1 = 6;
-                //    adj2 = 2;
-                //}
+                if(getUserAgent().indexOf("webkit") > -1){
+                    adj1 = 6;
+                    adj2 = 2;
+                }
                 int width = 0;
                 for(TableColumnInt column : columns)
                     width += column.getCurrentWidth();
@@ -581,6 +584,10 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         }
         
     }
+    
+    public static native String getUserAgent() /*-{
+        return navigator.userAgent.toLowerCase();
+     }-*/;
     
 
 }

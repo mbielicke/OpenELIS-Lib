@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.NumberField;
@@ -55,7 +56,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, ClickListener {
+public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEvents, ClickListener {
     
     protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
     .create(CalendarServiceInt.class);
@@ -84,13 +85,13 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
         service = screenService;
         HashMap<String,Data> map = new HashMap<String,Data>();
         map.put("date",new StringObject(date));
-        getXMLData(map);
+        getXMLData(map, new RPC());
     }
     
     public void afterDraw(boolean success) {
         super.afterDraw(success);
-        year = (NumberField)rpc.getField("year");
-        month = (NumberField)rpc.getField("month");
+        year = (NumberField)form.getField("year");
+        month = (NumberField)form.getField("month");
         prevMonth = (AppButton)getWidget("prevMonth");
         nextMonth = (AppButton)getWidget("nextMonth");
         monthSelect = (AppButton)getWidget("monthSelect");
@@ -115,7 +116,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
                 year.setValue(new Integer(((Integer)year.getValue()).intValue() - 1));
             }
             final AppScreen scr = this;
-            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)rpc.getFieldValue("date"), new AsyncCallback() {
+            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)form.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                     DOM.removeEventPreview(scr);
@@ -133,7 +134,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
                 year.setValue(new Integer(((Integer)year.getValue()).intValue() + 1));
             }
             final AppScreen scr = this;
-            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)rpc.getFieldValue("date"), new AsyncCallback() {
+            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)form.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                     DOM.removeEventPreview(scr);
@@ -160,7 +161,7 @@ public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, C
         if(sender == getWidget("ok") || 
            sender == getWidget("cancel")){
             final AppScreen scr = this;
-            screenService.getMonth(month.getValue().toString(), year.getValue().toString(), (String)rpc.getFieldValue("date"), new AsyncCallback() {
+            screenService.getMonth(month.getValue().toString(), year.getValue().toString(), (String)form.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                     DOM.removeEventPreview(scr);

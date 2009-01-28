@@ -36,7 +36,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 /**
- * ScreenSplit wraps a GWT HorizontalSplitPanel for display on a Screen.
+ * ScreenSplit wraps a GWT HorizontalSplitPanel for display on a Screen.    
  * @author tschmidt
  *
  */
@@ -72,7 +72,15 @@ public class ScreenHorizontalSplit extends ScreenWidget {
      */	
     public ScreenHorizontalSplit(Node node, ScreenBase screen) {
         super(node);
-        hp = new HorizontalSplitPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            hp = (HorizontalSplitPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            hp = new HorizontalSplitPanel();
+        
         hp.setStyleName("ScreenSplit");
         initWidget(hp);
         NodeList sections = ((Element)node).getElementsByTagName("section");

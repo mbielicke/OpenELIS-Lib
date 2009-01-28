@@ -63,7 +63,14 @@ public class ScreenPassword extends ScreenInputWidget {
      */ 
     public ScreenPassword(Node node, final ScreenBase screen) {
         super(node);
-        textbox = new PasswordTextBox();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            textbox = (PasswordTextBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            textbox = new PasswordTextBox();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")

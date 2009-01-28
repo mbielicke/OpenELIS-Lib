@@ -28,10 +28,20 @@ package org.openelis.gwt.common.data;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * DataMap extends HashMap<String, Data> and implements the Data interface for passing 
+ * maps of Data objects between a client and the Server. 
+ * @author tschmidt
+ *
+ */
 public class DataMap extends HashMap<String,Data> implements Data {
     
     private static final long serialVersionUID = 1L;
 
+    /**
+     * This method will create a new object and set it's member fields a
+     * and values to the same as the object being called.
+     */
     public Object clone() {
         DataMap dataMap = new DataMap();
         Iterator keyIt = keySet().iterator();

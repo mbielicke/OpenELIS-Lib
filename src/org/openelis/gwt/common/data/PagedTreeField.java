@@ -43,6 +43,10 @@ public class PagedTreeField extends AbstractField {
         }
         
         public PagedTreeField(Node node){
+           setAttributes(node);
+        }
+        
+        public void setAttributes(Node node) {
             setKey(node.getAttributes().getNamedItem("key").getNodeValue());
         }
 	    

@@ -66,8 +66,15 @@ public class WindowBrowser extends Composite{
         return Number(elem.style.zIndex);
     }-*/;
     
+    public WindowBrowser() {
+        
+    }
     
     public WindowBrowser(boolean size, int limit) {
+        init(size,limit);
+    }
+    
+    public void init(boolean size, int limit) {
         this.limit = limit;
         initWidget(browser);
         //setIndex(getElement(),index);

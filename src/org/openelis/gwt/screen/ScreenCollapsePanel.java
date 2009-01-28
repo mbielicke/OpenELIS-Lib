@@ -43,7 +43,14 @@ public class ScreenCollapsePanel extends ScreenWidget {
    
    public ScreenCollapsePanel(Node node, ScreenBase screen){
        super(node);
-       panel = new CollapsePanel();
+       init(node,screen);
+   }
+   
+   public void init(Node node, ScreenBase screen) {
+       if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+           panel = (CollapsePanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+       else
+           panel = new CollapsePanel();
        if (node.getChildNodes().getLength() > 0){
            NodeList widgets = node.getChildNodes();
            for (int k = 0; k < widgets.getLength(); k++) {

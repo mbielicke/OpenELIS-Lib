@@ -26,6 +26,8 @@
 package org.openelis.gwt.common.data;
 
 
+import com.google.gwt.xml.client.Node;
+
 import java.util.ArrayList;
 
 public class QueryField extends AbstractField {
@@ -154,6 +156,10 @@ public class QueryField extends AbstractField {
             return "";
         else
             return value;
+    }
+    
+    public void setAttributes(Node node){
+        
     }
 
 }

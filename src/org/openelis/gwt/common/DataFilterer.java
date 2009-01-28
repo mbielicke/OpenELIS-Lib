@@ -40,7 +40,7 @@ public class DataFilterer implements DataFiltererInt {
     public Filter[] getFilterValues(DataModel data,int col) {
         ArrayList<DataObject> filterVals = new ArrayList<DataObject>();
         for (int i = 0; i < data.size(); i++) {
-            DataObject val = (DataObject)data.get(i).get(col);
+            DataObject val = (DataObject)((DataSet)data.get(i)).get(col);
             if (val != null && !filterVals.contains(val))
                 filterVals.add(val);
         }
@@ -78,8 +78,8 @@ public class DataFilterer implements DataFiltererInt {
             filterSets.add(filterSet);
         }
         for (int i = 0; i < data.size(); i++) {
-            DataSet row = data.get(i);
-            data.get(i).shown = true;
+            DataSet row = (DataSet)data.get(i);
+            ((DataSet)data.get(i)).shown = true;
             for (int j = 0; j < filterSets.size(); j++) {
                 if (filterSets.get(j) == null)
                     continue;
@@ -90,7 +90,7 @@ public class DataFilterer implements DataFiltererInt {
                 if (((DataObject)row.get(j)).getValue() != null)
                     val = ((DataObject)row.get(j)).getValue().toString();
                 if (!filterSet.contains(val))
-                  data.get(i).shown = false;  
+                  ((DataSet)data.get(i)).shown = false;  
             }
         }
     }
@@ -99,7 +99,7 @@ public class DataFilterer implements DataFiltererInt {
         if(filters == null){
             if(col == 0){
                 for (int i = 0; i < data.size(); i++) 
-                    data.get(i).shown = true;
+                    ((DataSet)data.get(i)).shown = true;
             }
             return;
         }
@@ -112,7 +112,7 @@ public class DataFilterer implements DataFiltererInt {
             }
         }
         for (int i = 0; i < data.size(); i++) {
-            DataSet row = data.get(i);
+            DataSet row = (DataSet)data.get(i);
             if(col == 0)
                 row.shown = true;
             if (filterSet.contains(new StringObject("All")))
@@ -126,12 +126,12 @@ public class DataFilterer implements DataFiltererInt {
         if(query == null){
             if(col == 0){
                 for (int i = 0; i < data.size(); i++) 
-                    data.get(i).shown = true;
+                    ((DataSet)data.get(i)).shown = true;
             }
             return;
         }
         for (int i = 0; i < data.size(); i++) {
-            DataSet row = data.get(i);
+            DataSet row = (DataSet)data.get(i);
             if(col == 0)
                 row.shown = true;
             if (((DataObject)row.get(col)).getValue() != null && !((String)((DataObject)row.get(col)).getValue()).toLowerCase().startsWith(query.toLowerCase()))

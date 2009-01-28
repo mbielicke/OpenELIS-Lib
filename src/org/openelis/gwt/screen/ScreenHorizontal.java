@@ -76,7 +76,14 @@ public class ScreenHorizontal extends ScreenWidget {
      */
     public ScreenHorizontal(Node node, ScreenBase screen) {
         super(node);
-        panel = new HorizontalPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (HorizontalPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new HorizontalPanel();
         if (node.getAttributes().getNamedItem("spacing") != null)
                 panel.setSpacing(Integer.parseInt(node.getAttributes()
                                                       .getNamedItem("spacing")

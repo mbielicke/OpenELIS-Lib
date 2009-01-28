@@ -25,23 +25,27 @@
 */
 package org.openelis.gwt.services;
 
+import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.Data;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 
-public interface AppScreenFormServiceInt<F extends Data,K extends Data,Q extends Data> extends AppScreenServiceInt {
+public interface AppScreenFormServiceInt<ScreenRPC extends RPC,QModel extends DataModel<? extends DataSet>> extends AppScreenServiceInt<ScreenRPC> {
     
-    public <T extends Data> T commitUpdate(F rpcSend, F rpcReturn) throws RPCException;
+    public <T extends Data> T commitUpdate(ScreenRPC rpc) throws RPCException;
     
-    public <T extends Data> T commitAdd(F rpcSend, F rpcReturn) throws RPCException;
+    public <T extends Data> T commitAdd(ScreenRPC rpc) throws RPCException;
     
-    public <T extends Data> T commitQuery(F rpcSend, Q data) throws RPCException;
+    public <T extends Data> T commitQuery(Form form, QModel data) throws RPCException;
     
-    public <T extends Data> T fetch(K key, F rpcReturn) throws RPCException;
+    public <T extends Data> T fetch(ScreenRPC rpc) throws RPCException;
     
-    public <T extends Data> T fetchForUpdate(K key, F rpcReturn) throws RPCException;
+    public <T extends Data> T fetchForUpdate(ScreenRPC rpc) throws RPCException;
     
-    public <T extends Data> T commitDelete(K key, F rpcReturn) throws RPCException;
+    public <T extends Data> T commitDelete(ScreenRPC rpc) throws RPCException;
     
-    public <T extends Data> T abort(K key, F rpcReturn) throws RPCException;
+    public <T extends Data> T abort(ScreenRPC rpcReturn) throws RPCException;
     
 }

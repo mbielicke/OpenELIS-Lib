@@ -45,8 +45,14 @@ public class ScreenAToZTable extends ScreenWidget {
 
     public ScreenAToZTable(Node node, ScreenBase screen) {
         super(node);
-        
-
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            azTable = (AToZTable)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            azTable = new AToZTable();
         String width = "auto";
         if (node.getAttributes().getNamedItem("tablewidth") != null) {
             width = (node.getAttributes().getNamedItem("tablewidth").getNodeValue());
@@ -79,7 +85,7 @@ public class ScreenAToZTable extends ScreenWidget {
 
         //azPanel.sizeTable();
         
-        azTable = new AToZTable(columns,maxRows,width,title,showHeader,VerticalScroll.NEVER);
+        azTable.init(columns,maxRows,width,title,showHeader,VerticalScroll.NEVER);
         Node bpanel = ((Element)node).getElementsByTagName("buttonPanel").item(0);
         azTable.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
         

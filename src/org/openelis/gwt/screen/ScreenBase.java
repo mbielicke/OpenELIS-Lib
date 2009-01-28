@@ -27,7 +27,6 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -36,7 +35,7 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
@@ -56,12 +55,13 @@ public class ScreenBase extends Composite implements FocusListener{
      * All drawn widgets will be held in this panel.
      */
     protected VerticalPanel panel = new VerticalPanel();
-    public FormRPC rpc;
+    public Form form;
     /** 
      * All widgets drawn on screen are referenced in this
      * HashMap
      */
     public HashMap<String,ScreenWidget> widgets = new HashMap<String,ScreenWidget>();
+    public HashMap<String,Widget> wrappedWidgets = new HashMap<String,Widget>();
     protected Document xml;
     protected HashMap<ScreenWidget,String> tabOrder = new HashMap<ScreenWidget,String>();
     protected HashMap<ScreenWidget,String> tabBack = new HashMap<ScreenWidget,String>();
@@ -76,7 +76,7 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     public ScreenBase() {
         initWidget(panel);
-        rpc = new FormRPC();
+        form = new Form();
     }
 
     /**
@@ -113,6 +113,9 @@ public class ScreenBase extends Composite implements FocusListener{
             panel.setStyleName("Screen"); 
     }
     
+    public void setWidget(ScreenWidget widget) {
+        
+    }
 
     /**
      * This method will load the form with data provided by the callService
@@ -120,15 +123,15 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void load() {
-        load(rpc);
+        load(form);
     }
     
-    protected void load(FormRPC rpc){
+    protected void load(Form rpc){
         for(AbstractField field : rpc.getFieldMap().values()) {
-            if(field instanceof FormRPC){
+            if(field instanceof Form){
                 ScreenWidget inputField = widgets.get((String)field.getKey());
                 if(inputField == null)
-                    load((FormRPC)field);
+                    load((Form)field);
                 else
                     inputField.load(field);
             }else if(widgets.containsKey(field.getKey())){
@@ -146,14 +149,22 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     protected void drawErrors() {
         clearErrors();
-        for (ScreenWidget wid : widgets.values()) {
-            if(wid instanceof ScreenInputWidget){
-                String key = ((ScreenInputWidget)wid).key;
-                AbstractField field = rpc.getField(key);
-                if(field != null && !field.isValid())
+        drawErrors(form);
+    }
+    
+    protected void drawErrors(Form rpc){
+        for(AbstractField field : rpc.getFieldMap().values()) {
+            if(field instanceof Form){
+                 drawErrors((Form)field);
+            }else if(widgets.containsKey(field.getKey())){
+                ScreenWidget wid = widgets.get(field.getKey());
+                if((wid instanceof ScreenInputWidget) && field != null && !field.isValid()){
                     ((ScreenInputWidget)wid).drawError();
+                }   
             }
         }
+        
+        
     }
     
     /**
@@ -169,6 +180,11 @@ public class ScreenBase extends Composite implements FocusListener{
             widName += "-" + node.getAttributes()
                                  .getNamedItem("layout")
                                  .getNodeValue();
+        if(node.getAttributes().getNamedItem("key") != null && screen.widgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue())){
+            ScreenWidget sw = (ScreenWidget)screen.widgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+            sw.init(node, screen);
+            return sw;
+        }
         return (ScreenWidget)ClassFactory.forName(widName,new Object[] {node,screen});
     }
     
@@ -189,6 +205,8 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     public static AbstractField createField(Node node) {
         String fName = "rpc-" + node.getNodeName();
+        if(node.getAttributes().getNamedItem("class") != null)
+            fName = node.getAttributes().getNamedItem("class").getNodeValue();
         return (AbstractField)ClassFactory.forName(fName,new Object[] {node});
     }
     
@@ -212,17 +230,17 @@ public class ScreenBase extends Composite implements FocusListener{
      * be sent back to the server for processing
      * 
      */
-    protected void doSubmit() {
-        doSubmit(rpc);
+    protected void submitForm() {
+        submitForm(form);
     }
     
-    protected void doSubmit(FormRPC rpc) {
-        rpc.reset();
-        for (AbstractField field : rpc.getFieldMap().values()){
-            if(field instanceof FormRPC){
+    protected void submitForm(Form form) {
+        form.removeErrors();
+        for (AbstractField field : form.getFieldMap().values()){
+            if(field instanceof Form){
                 ScreenWidget inputField = widgets.get(field.getKey());
                 if(inputField == null)
-                    doSubmit((FormRPC)field);
+                    submitForm((Form)field);
                 else
                     inputField.submit(field);
             }else if(widgets.containsKey(field.getKey())){
@@ -258,7 +276,7 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     protected void strikeThru(boolean enabled) {
         for(String key : widgets.keySet()) {
-            if (!rpc.getFieldMap().containsKey(key) && !rpc.getFieldMap().containsKey(key+"Id")) {
+            if (!form.getFieldMap().containsKey(key) && !form.getFieldMap().containsKey(key+"Id")) {
                 continue;
             }
             if(enabled)
@@ -292,18 +310,18 @@ public class ScreenBase extends Composite implements FocusListener{
      * This method will reset all input fields to default null value.
      * 
      */
-    protected void resetRPC() {
-        resetRPC(rpc);
+    protected void resetForm() {
+        resetForm(form);
     }
     
-    protected void resetRPC(FormRPC rpc) {
+    protected void resetForm(Form rpc) {
         for (AbstractField field: rpc.getFieldMap().values()){
-            if(field instanceof FormRPC){
-                resetRPC((FormRPC)field);
-                ((FormRPC)field).load = false;
+            if(field instanceof Form){
+                resetForm((Form)field);
+                ((Form)field).load = false;
             }else if(field.allowsReset()){
                 field.setValue(null);
-                field.reset();
+                field.removeErrors();
             }
         }
     }
@@ -385,7 +403,7 @@ public class ScreenBase extends Composite implements FocusListener{
             tabOrder = null;
             tabBack.clear();
             tabBack = null;
-            rpc = null;
+            form = null;
         }
         super.onDetach();
     }

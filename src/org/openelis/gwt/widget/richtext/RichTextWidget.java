@@ -36,7 +36,15 @@ public class RichTextWidget extends Composite {
     private RichTextArea area = new RichTextArea();
     private RichTextToolbar toolbar = new RichTextToolbar(area);
     
+    public RichTextWidget() {
+        
+    }
+    
     public RichTextWidget(boolean tools) {
+        init(tools);
+    }
+    
+    public void init(boolean tools){
         initWidget(vp);
         if(tools)
         	vp.add(toolbar);

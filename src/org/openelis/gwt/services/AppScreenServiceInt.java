@@ -27,17 +27,21 @@ package org.openelis.gwt.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.Data;
 
 import java.util.HashMap;
 
-public interface AppScreenServiceInt extends RemoteService {
+public interface AppScreenServiceInt<ScreenRPC extends RPC> extends RemoteService {
     
     public String getXML() throws RPCException;
     
     public HashMap<String,Data> getXMLData() throws RPCException;
     
     public HashMap<String,Data> getXMLData(HashMap<String,Data> args) throws RPCException;
+    
+    public ScreenRPC getScreen(ScreenRPC defintiion) throws RPCException;
+    
 
 }

@@ -34,7 +34,7 @@ import com.google.gwt.xml.client.Node;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class NumberField extends AbstractField {
+public class NumberField extends AbstractField<NumberObject> {
 
     private static final long serialVersionUID = 1L;
     private Double max;
@@ -45,12 +45,12 @@ public class NumberField extends AbstractField {
 
     
     public NumberField() {
-        object = new NumberObject();
+        super(new NumberObject());
     }
     
     public NumberField(NumberObject.Type type) {
-        object = new NumberObject();
-        ((NumberObject)object).type = type;
+        super(new NumberObject());
+        object.type = type;
     }
     
     public NumberField(Integer val){
@@ -65,6 +65,10 @@ public class NumberField extends AbstractField {
     
     public NumberField(Node node){
         this();
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
                                .getNamedItem("key")
@@ -100,19 +104,19 @@ public class NumberField extends AbstractField {
     }
     
     public void validate() {
-        if (((NumberObject)object).invalid){
+        if (object.invalid){
             valid = false;
             addError("Field must be numeric");
             return;
         }
         if (required) {
-            if (((NumberObject)object).value == null) {
+            if (object.value == null) {
                 addError("Field is required");
                 valid = false;
                 return;
             }
         }
-        if (((NumberObject)object).value != null && !isInRange()) {
+        if (object.value != null && !isInRange()) {
             valid = false;
             return;
         }
@@ -123,11 +127,11 @@ public class NumberField extends AbstractField {
         // TODO Auto-generated method stub
         if (object.getValue() == null)
             return true;
-        if (max != null && ((NumberObject)object).value.doubleValue() > max.doubleValue()) {
+        if (max != null && object.value.doubleValue() > max.doubleValue()) {
             addError("Field exceeded maximum value");
             return false;
         }
-        if (min != null && ((NumberObject)object).value.doubleValue() < min.doubleValue()) {
+        if (min != null && object.value.doubleValue() < min.doubleValue()) {
             addError("Field is below minimum value");
             return false;
         }
@@ -139,7 +143,7 @@ public class NumberField extends AbstractField {
     }
 
     public void setType(NumberObject.Type type) {
-        ((NumberObject)object).type = type;
+        object.type = type;
     }
 
     public void setMin(Object min) {
@@ -167,11 +171,11 @@ public class NumberField extends AbstractField {
     }
     
     public String format() {
-        if(((NumberObject)object).value == null)
+        if(object.value == null)
             return "";
         if(pattern != null)
-            return NumberFormat.getFormat(pattern).format(((NumberObject)object).value);
-        return String.valueOf(((NumberObject)object).value);
+            return NumberFormat.getFormat(pattern).format(object.value);
+        return String.valueOf(object.value);
     }
     
     public void setFormat(String pattern) {
@@ -188,6 +192,14 @@ public class NumberField extends AbstractField {
         }catch(Exception e){
             super.setValue(new Double(NumberFormat.getFormat(pattern).parse((String)val)));
         }
+    }
+    
+    public Double getDoubleValue(){
+        return (Double)super.getValue();
+    }
+    
+    public Integer getIntegerValue() {
+        return (Integer)super.getValue();
     }
     
 }

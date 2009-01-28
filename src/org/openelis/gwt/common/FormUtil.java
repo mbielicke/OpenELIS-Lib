@@ -36,7 +36,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
 
 public class FormUtil {
-    public static void create(FormRPC form, String xml) {
+    public static void create(Form form, String xml) {
         try {
             Document formDoc = XMLParser.parse(xml);
             NodeList rpcList = formDoc.getDocumentElement()

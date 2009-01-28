@@ -68,18 +68,15 @@ public class ScreenDragList extends ScreenWidget {
      */
     public ScreenDragList(Node node, final ScreenBase screen){
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         final ScreenDragList sd = this;
-        list = new DragList() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, sd);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            list = (DragList)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            list = new DragList();
         initWidget(list);        
         list.setStyleName("ScreenDragList");
         setDefaults(node, screen);

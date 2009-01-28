@@ -68,7 +68,14 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
      */
     public ScreenCheck(Node node, final ScreenBase screen) {
         super(node);
-        check = new CheckBox();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            check = (CheckBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            check = new CheckBox();
         if(node.getAttributes().getNamedItem("threeState") != null){
             check.setType(CheckBox.CheckType.THREE_STATE);
             defaultType = CheckBox.CheckType.THREE_STATE;

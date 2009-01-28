@@ -74,7 +74,14 @@ public class ScreenButtonPanel extends ScreenWidget {
      */
     public ScreenButtonPanel(Node node, ScreenBase screen) {
         super(node);
-        bPanel = new ButtonPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            bPanel = (ButtonPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            bPanel = new ButtonPanel();
         NodeList buttons = node.getChildNodes();
         for (int k = 0; k < buttons.getLength(); k++) {
             if(buttons.item(k).getNodeType() == Node.ELEMENT_NODE){

@@ -96,6 +96,10 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
     }
     
     public MenuPanel(String layout) {
+        init(layout);
+    }
+    
+    public void init(String layout) {
         if(layout.equals("vertical"))
             panel = new VerticalPanel();
         else

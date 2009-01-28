@@ -68,7 +68,14 @@ public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
      */
     public ScreenMaskedBox(Node node, final ScreenBase screen) {
         super(node);
-        maskbox = new MaskedTextBox();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            maskbox = (MaskedTextBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            maskbox = new MaskedTextBox();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             maskbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")

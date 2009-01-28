@@ -80,7 +80,14 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
      */
     public ScreenDropDownWidget(Node node, final ScreenBase screen) {
         super(node);
-        
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            auto = (Dropdown)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            auto = new Dropdown();
         multiSelect = false;
         String textBoxDefault = null;
         String width = null;
@@ -138,7 +145,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         }
       
 
-        auto = new Dropdown(columns,10,popWidth,null,showHeader,VerticalScroll.NEEDED);
+        auto.setup(columns,10,popWidth,null,showHeader,VerticalScroll.NEEDED);
         auto.init(multiSelect, width);
         final ScreenDropDownWidget sa = this; 
 

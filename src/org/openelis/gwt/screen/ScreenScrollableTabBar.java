@@ -42,11 +42,17 @@ public class ScreenScrollableTabBar extends ScreenWidget{
     
     public ScreenScrollableTabBar(Node node, ScreenBase screen) {
         super(node);
-        scrollableTabBar = new ScrollableTabBar();
-        scrollableTabBar.setStyleName("ScreenTab");  
-        String width = null;
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            scrollableTabBar = (ScrollableTabBar)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            scrollableTabBar = new ScrollableTabBar();
+        scrollableTabBar.setStyleName("ScreenTab");        
         initWidget(scrollableTabBar);        
-        
+        String width = "";
         if (node.getAttributes().getNamedItem("width") != null){
             width = node.getAttributes()
                                   .getNamedItem("width")
@@ -68,6 +74,7 @@ public class ScreenScrollableTabBar extends ScreenWidget{
     }
     
     public ScreenWidget getInstance(Node node, ScreenBase screen) {
+        // TODO Auto-generated method stub
         return new ScreenScrollableTabBar(node, screen);
     }
     

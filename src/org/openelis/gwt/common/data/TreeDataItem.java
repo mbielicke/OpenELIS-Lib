@@ -28,7 +28,7 @@ package org.openelis.gwt.common.data;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TreeDataItem extends DataSet {
+public class TreeDataItem extends DataSet<DataObject> {
     
     private static final long serialVersionUID = 1L;
     
@@ -36,7 +36,7 @@ public class TreeDataItem extends DataSet {
 
     private ArrayList<TreeDataItem> items = new ArrayList<TreeDataItem>();
     
-    public TreeDataItem parent;
+    public TreeDataItem parent = null;
     
     public boolean loaded;
     

@@ -28,23 +28,26 @@ package org.openelis.gwt.services;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Data;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 
-public interface AppScreenFormServiceIntAsync<F extends Data,K extends Data,Q extends Data> extends AppScreenServiceIntAsync {
+public interface AppScreenFormServiceIntAsync<ScreenRPC extends RPC,QModel extends DataModel<? extends DataSet>> extends AppScreenServiceIntAsync<ScreenRPC> {
 
-    public Request commitUpdate(F rpcSend, F rpcReturn, AsyncCallback<? extends Data> callback);
+    public Request commitUpdate(ScreenRPC rpc, AsyncCallback<? extends Data> callback);
     
-    public Request commitAdd(F rpcSend, F rpcReturn, AsyncCallback<? extends Data> callback);
+    public Request commitAdd(ScreenRPC rpc, AsyncCallback<? extends Data> callback);
     
-    public Request commitQuery(F rpcSend, Q data, AsyncCallback<? extends Data> callback);
+    public Request commitQuery(Form form, QModel d, AsyncCallback<? extends Data> callback);
     
-    public Request fetch(K key, F rpcReturn, AsyncCallback<? extends Data> callback);
+    public Request fetch(ScreenRPC rpc, AsyncCallback<? extends Data> callback);
     
-    public Request fetchForUpdate(K key, F rpcReturn, AsyncCallback<? extends Data> callback);
+    public Request fetchForUpdate(ScreenRPC rpc, AsyncCallback<? extends Data> callback);
     
-    public Request commitDelete(K key, F rpcReturn, AsyncCallback<? extends Data> callback);
+    public Request commitDelete(ScreenRPC rpc, AsyncCallback<? extends Data> callback);
     
-    public Request abort(K key, F rpcReturn, AsyncCallback<? extends Data> callback);
+    public Request abort(ScreenRPC rpc, AsyncCallback<? extends Data> callback);
     
 }

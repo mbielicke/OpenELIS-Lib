@@ -25,9 +25,11 @@
 */
 package org.openelis.gwt.widget.table;
 
+import org.openelis.gwt.common.data.DataSet;
+
 import java.util.ArrayList;
 
-public interface TableRendererInt {
+public interface TableRendererInt<D extends DataSet> {
     
     public void createRow(int i);
     

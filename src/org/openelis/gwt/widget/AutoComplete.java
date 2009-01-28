@@ -27,14 +27,16 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.Window;
 
+import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
-public class AutoComplete extends DropdownWidget {
+public class AutoComplete extends DropdownWidget<DataSet<Data>> {
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;
@@ -42,10 +44,19 @@ public class AutoComplete extends DropdownWidget {
 
     AutoCompleteCallInt autoCall;
     public String cat;
+    
+    public AutoComplete() {
+        super();
+    }
 
     
     public AutoComplete(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
-        super(columns, maxRows, width, title, showHeader, showScroll);
+        super();
+        setup(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void setup(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
+        super.init(columns, maxRows, width, title, showHeader, showScroll);
         lookUp.icon.addMouseListener(listener);
         lookUp.icon.addClickListener(listener);
         lookUp.textbox.addKeyboardListener(listener);

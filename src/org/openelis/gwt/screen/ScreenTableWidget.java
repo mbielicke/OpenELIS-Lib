@@ -70,7 +70,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
         /**
          * Widget wrapped by this class
          */
-        private TableWidget table;
+        private TableWidget<? extends DataSet> table;
         /**
          * Default no-arg constructor used to create reference in the WidgetMap class
          */
@@ -93,6 +93,14 @@ public class ScreenTableWidget extends ScreenInputWidget {
          */ 
         public ScreenTableWidget(Node node, ScreenBase screen) {
             super(node);
+            init(node,screen);
+        }
+        
+        public void init(Node node, ScreenBase screen) {
+            if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+                table = (TableWidget)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+            else
+                table = new TableWidget();
             
            // try {
             TableManager manager = null;
@@ -249,7 +257,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     }
                 }
                 data.setDefaultSet(set);
-                table = new TableWidget(columns,maxRows,width,title,showHeader,showScroll);
+                table.init(columns,maxRows,width,title,showHeader,showScroll);
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
                         table.model.enableMultiSelect(true);
@@ -326,7 +334,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
             else{
                 field.setValue(table.model.unload());
                 ArrayList<String> fieldIndex = new ArrayList<String>();
-                for(TableColumnInt col : table.columns)
+                for(TableColumnInt col : (ArrayList<TableColumnInt>)table.columns)
                     fieldIndex.add(col.getKey());
                 ((TableField)field).setFieldIndex(fieldIndex);
             }

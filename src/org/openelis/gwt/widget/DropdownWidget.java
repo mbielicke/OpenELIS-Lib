@@ -57,7 +57,7 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
-public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
+public class DropdownWidget<D extends DataSet> extends PopupTable<D> implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
     
     //public HorizontalPanel mainHP = new HorizontalPanel();
 
@@ -99,6 +99,10 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public DropdownWidget(ArrayList<TableColumnInt> columns,int maxRows,String width, String title, boolean showHeader, VerticalScroll showScroll) {
         super();
+        init(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void init(ArrayList<TableColumnInt> columns,int maxRows,String width, String title, boolean showHeader, VerticalScroll showScroll) {
         for(TableColumnInt column : columns) {
             column.setTableWidget(this);
         }
@@ -324,7 +328,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         lookUp.setText(getTextBoxDisplay());
     }
     
-    public ArrayList<DataSet> getSelections() {
+    public ArrayList<D> getSelections() {
         return model.getSelections();
     }
     

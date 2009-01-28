@@ -28,6 +28,19 @@ package org.openelis.gwt.common.data;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * ConstantMap extends HashMap<String,String> that implements the Data interface
+ * so that it can be serialized to the client through the RPC interfaces.  
+ * 
+ * For the OpenELIS application the ConstantMap is used to provide internationalized 
+ * constants based on the logged in users provided location.  The internationlized 
+ * constants are loaded when the user logs on and is delivered with the initializing
+ * screen.  A Screen or other client side objects are then able to retrieve this map 
+ * by calling ClassFactory.forName("AppConstants"); 
+ * 
+ * @author tschmidt
+ *
+ */
 public class ConstantMap extends HashMap<String,String> implements Data {
     
     private static final long serialVersionUID = 1L;

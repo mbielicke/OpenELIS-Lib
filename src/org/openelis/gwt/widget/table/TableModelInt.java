@@ -36,15 +36,15 @@ import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 
 import java.util.ArrayList;
 
-public interface TableModelInt extends SourcesTableModelEvents {
+public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvents {
 
     public void addRow();
     
     public void addRow(int index);
     
-    public void addRow(DataSet row);
+    public void addRow(D row);
     
-    public void addRow(int index, DataSet row);
+    public void addRow(int index, D row);
     
     public void deleteRow(int row);
         
@@ -52,7 +52,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void showRow(int row);
     
-    public DataSet getRow(int row);
+    public D getRow(int row);
     
     public int numRows();
     
@@ -60,13 +60,13 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void clear();
     
-    public DataSet setRow(int index, DataSet row);
+    public D setRow(int index, D row);
     
     public int shownRows();
     
-    public DataSet createRow();
+    public D createRow();
     
-    public void load(DataModel data);
+    public void load(DataModel<D> data);
     
     public void selectRow(int index);
     
@@ -76,15 +76,15 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void clearSelections();
     
-    public ArrayList<DataSet> getSelections();
+    public ArrayList<D> getSelections();
     
-    public DataSet getSelection();
+    public D getSelection();
     
     public boolean getAutoAdd();
     
-    public DataSet getAutoAddRow();
+    public D getAutoAddRow();
     
-    public void setAutoAddRow(DataSet row);
+    public void setAutoAddRow(D row);
     
     public DataModel getData();
     
@@ -100,7 +100,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void enableMultiSelect(boolean multi);
     
-    public void setModel(DataModel data);
+    public void setModel(DataModel<D> data);
     
     public boolean isEnabled(int index);
     
@@ -114,7 +114,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
 
     public boolean canAdd(int row);
     
-    public boolean canAutoAdd(DataSet autoAddRow);
+    public boolean canAutoAdd(D autoAddRow);
     
     public boolean canDrag(int row);
     
@@ -124,7 +124,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void drop(Widget dragWidget);
     
-    public DataModel unload();
+    public DataModel<D> unload();
     
     public boolean isAutoAdd();
     

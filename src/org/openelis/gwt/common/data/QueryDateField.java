@@ -46,6 +46,10 @@ public class QueryDateField extends QueryField {
     }
     
     public QueryDateField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node){
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
         setBegin(Byte.parseByte(node.getAttributes()
                                           .getNamedItem("begin")

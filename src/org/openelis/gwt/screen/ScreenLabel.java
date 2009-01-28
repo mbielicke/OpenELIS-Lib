@@ -78,7 +78,14 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
      */
     public ScreenLabel(Node node, ScreenBase screen) {
         super(node);
-        label = new Label();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            label = (Label)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            label = new Label();
         if (node.getAttributes().getNamedItem("text") != null){
             label.setText(node.getAttributes().getNamedItem("text").getNodeValue());
         } 

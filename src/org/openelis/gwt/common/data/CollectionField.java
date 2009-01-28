@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *
  */
 
-public class CollectionField extends AbstractField  {
+public class CollectionField extends AbstractField<StringObject>  {
 
     private static final long serialVersionUID = 1L;
     private ArrayList<Data> coll = new ArrayList<Data>();
@@ -58,6 +58,10 @@ public class CollectionField extends AbstractField  {
      * @param node
      */
     public CollectionField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node){
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
                                .getNamedItem("key")
@@ -116,7 +120,7 @@ public class CollectionField extends AbstractField  {
     /**
      * Returns the ArrayList<Data> wrapped by this field.
      */
-    public Object getValue() {
+    public ArrayList<Data> getValue() {
         // TODO Auto-generated method stub
         return coll;
     }
@@ -149,16 +153,15 @@ public class CollectionField extends AbstractField  {
     }
     */
 
-    // I don't think is used anymore
+
     public String getType() {
         return type;
     }
-    
-    /* I don't think this used anymore
+
     public void setType(String type) {
         this.type = type;
     }
-    */
+
     
     /**
      * This method will return a comma seprated list of all values in 

@@ -64,7 +64,14 @@ public class ScreenDeck extends ScreenWidget {
      */
     public ScreenDeck(Node node, ScreenBase screen) {
         super(node);
-        panel = new DeckPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (DeckPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new DeckPanel();
         panel.setStyleName("ScreenDeck");
         initWidget(panel);
         NodeList decks = ((Element)node).getElementsByTagName("deck");

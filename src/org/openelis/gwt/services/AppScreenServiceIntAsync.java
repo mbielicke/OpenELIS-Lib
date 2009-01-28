@@ -28,16 +28,19 @@ package org.openelis.gwt.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Data;
 
 import java.util.HashMap;
 
-public interface AppScreenServiceIntAsync {
+public interface AppScreenServiceIntAsync<ScreenRPC extends RPC> {
     
     public void getXML(AsyncCallback<String> callback);
     
     public void getXMLData(AsyncCallback<HashMap<String,Data>> callback);
     
     public void getXMLData(HashMap<String,Data> args, AsyncCallback<HashMap<String,Data>> callback);
+    
+    public void getScreen(ScreenRPC definition, AsyncCallback<? extends RPC> callback);
 
 }

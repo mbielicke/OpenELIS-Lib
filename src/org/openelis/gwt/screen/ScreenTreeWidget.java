@@ -84,7 +84,14 @@ public class ScreenTreeWidget extends ScreenInputWidget {
          */ 
         public ScreenTreeWidget(Node node, ScreenBase screen) {
             super(node);
-            
+            init(node,screen);
+        }
+        
+        public void init(Node node, ScreenBase screen) {
+            if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+                tree = (TreeWidget)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+            else
+                tree = new TreeWidget();
             // try {
              TreeManager manager = null;
              int cellHeight;
@@ -240,7 +247,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                      items.put(leafType,item);
                  }
                  //data.setDefaultSet(set);
-                 tree = new TreeWidget(columns,maxRows,width,title,showHeader,showScroll);
+                 tree.init(columns,maxRows,width,title,showHeader,showScroll);
                  if(node.getAttributes().getNamedItem("multiSelect") != null){
                      if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true")){
                          tree.model.enableMultiSelect(true);

@@ -98,6 +98,10 @@ public class TreeWidget extends FocusPanel implements
                        String title,
                        boolean showHeader,
                        VerticalScroll showScroll) {
+        init(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void init(ArrayList<TreeColumnInt> columns,int maxRows,String width, String title, boolean showHeader, VerticalScroll showScroll) {
         for (TreeColumnInt column : columns) {
             column.setTreeWidget(this);
         }

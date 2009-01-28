@@ -30,6 +30,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import java.util.HashMap;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
@@ -75,9 +76,16 @@ public class ScreenTree extends ScreenWidget {
      */	
     public ScreenTree(Node node, ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         this.screen = screen;
         int height = -1;
-        tree = new Tree();
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            tree = (Tree)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            tree = new Tree();
         tree.addTreeListener((TreeListener)screen);
         createTree(node);
         initWidget(tree);

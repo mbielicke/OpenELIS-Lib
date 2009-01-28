@@ -120,6 +120,11 @@ public class ScreenWidget extends SimplePanel implements
         if (node.getAttributes().getNamedItem("onPanelClick") != null)
             sinkEvents(Event.ONCLICK);
     }
+    
+    public void init(Node node, ScreenBase screen) {
+        
+    }
+    
     /**
      * This stub should be overridden by the extending class.  It will be called
      * when the widget needs to be drawn by the screen.

@@ -79,7 +79,14 @@ public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener 
      */	
     public ScreenTab(Node node, ScreenBase screen) {
         super(node);
-        panel = new TabPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (TabPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new TabPanel();
         panel.setStyleName("ScreenTab");
         initWidget(panel);
         NodeList tabs = ((Element)node).getElementsByTagName("tab");

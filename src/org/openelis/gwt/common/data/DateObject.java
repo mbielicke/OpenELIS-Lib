@@ -26,26 +26,56 @@
 package org.openelis.gwt.common.data;
 
 import org.openelis.gwt.common.DatetimeRPC;
+/**
+ * DateObject is an implementation of DataObject that wraps a
+ * Date value to be passed between the server and the client.
+ * @author tschmidt
+ *
+ */
 
 public class DateObject implements DataObject {
     
 
     private static final long serialVersionUID = 1L;
+    /**
+     * Begin precision of the Date value
+     */
     protected byte begin;
+    /**
+     * End precision of the Date value
+     */
     protected byte end;
 
+    /**
+     * The date value that is wrapped by this object
+     */
     protected DatetimeRPC value = null;
     
+    /**
+     * Default constructor
+     *
+     */
     public DateObject() {
         
     }
     
+    /**
+     * Constructor that accepts begin and end precisions along with
+     * a default value for the object
+     * @param begin
+     * @param end
+     * @param value
+     */
     public DateObject(byte begin, byte end, Object value) {
         setBegin(begin);
         setEnd(end);
         setValue(value);
     }
     
+    /**
+     * Sets the value of the date wrapped by this object. The value passed can be of 
+     * type DatetimeRPC or java.util.Date.
+     */
     public void setValue(Object val) {
         if (val == null || val == "") {
             value = null;
@@ -56,10 +86,16 @@ public class DateObject implements DataObject {
         }
     }
 
-    public Object getValue() {
+    /**
+     * Returns the value of the this object as a DatetimeRPC
+     */
+    public DatetimeRPC getValue() {
         return value;
     }
     
+    /**
+     * Returns the value of this object a string 
+     */
     public String toString() {
         if (value == null) {
             return "";
@@ -67,22 +103,42 @@ public class DateObject implements DataObject {
         return value.toString();
     }
 
+    /**
+     * Sets the begin precision for this object.
+     * @param begin
+     */
     public void setBegin(byte begin) {
         this.begin = begin;
     }
 
+    /**
+     * Sets the end precision for this object.
+     * @param end
+     */
     public void setEnd(byte end) {
         this.end = end;
     }
 
+    /**
+     * Returns the begin precision of this object.
+     * @return
+     */
     public byte getBegin() {
         return this.begin;
     }
 
+    /**
+     * Returns the end precision of this object.
+     * @return
+     */
     public byte getEnd() {
         return this.end;
     }
     
+    /**
+     * Creates a new DateObject setting the values of the new
+     * object to the same as this object.
+     */
     public Object clone() {
         DateObject clone = new DateObject();
         clone.begin = begin;
@@ -91,16 +147,26 @@ public class DateObject implements DataObject {
         return clone;
     }
     
+    /**
+     * Overrride of the .equals() method
+     */
     public boolean equals(Object obj) {
         if(!(obj instanceof DateObject))
             return false;
         return ((DateObject)obj).value.equals(value);
     }
     
+    /**
+     * Override of hashCode() method returning the hashCode of the wrapped
+     * value object
+     */
     public int hashCode() {
         return value.hashCode();
     }
 
+    /**
+     * Implementation of the compareTo(object obj)
+     */
     public int compareTo(Object o) {
         // TODO Auto-generated method stub
         return -1;

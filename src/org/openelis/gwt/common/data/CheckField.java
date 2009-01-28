@@ -29,26 +29,45 @@ import com.google.gwt.xml.client.Node;
 /**
  * @author tschmidt
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ * CheckField is an implementation of AbstractField that represents
+ * data used for Checkboxes.
  */
-public class CheckField extends AbstractField  {
+public class CheckField extends AbstractField<StringObject>  {
 
     private static final long serialVersionUID = 1L;
     
     public static final String TAG_NAME = "rpc-check";
 
+    /** 
+     * Default contstructor that sets up a StringObject for storing this
+     * fields value
+     *
+     */
     public CheckField() {
-        object = new StringObject();
+        super(new StringObject());
     }
     
+    /**
+     * A constructor that excepts an intializing value the is a String with values
+     * of either "Y" or "N"
+     * @param val
+     */
     public CheckField(String val) {
-        object = new StringObject();
+        super(new StringObject());
         setValue(val);
     }
     
+    /**
+     * A constructor that accpets a XML definition of this field from a screen
+     * to set it's parameters
+     * @param node
+     */
     public CheckField(Node node){
         this();
+        setAttributes(node);
+    }
+
+    public void setAttributes(Node node){        
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
                              .getNamedItem("key")
@@ -62,6 +81,9 @@ public class CheckField extends AbstractField  {
         }
     }
     
+    /**
+     * This method will be used to validate the field for submission to the server.
+     */
     public void validate() {
         if (required) {
             if (object.getValue()  == null) {
@@ -77,19 +99,33 @@ public class CheckField extends AbstractField  {
         valid = true;
     }
 
+    /**
+     * Hard coded to reuturn true always for checkboxes
+     */
     public boolean isInRange() {
         // TODO Auto-generated method stub
         return true;
     }
 
+    /**
+     * Returns the string value of this field as either "Y" or "N"
+     */
     public String toString() {
-       return (String)object.getValue();
+       return object.getValue();
     }
 
+    /**
+     * Returns true if the value of the field is "Y" and false for null or "N"
+     * @return
+     */
     public boolean isChecked() {
-        return (object.getValue() != null && "Y".equals((String)object.getValue()));
+        return (object.getValue() != null && "Y".equals(object.getValue()));
     }
 
+    /**
+     * Will create a new CheckField object and set all of the values and members the 
+     * same the calling object.
+     */
     public Object clone() {
         CheckField obj = new CheckField();
         obj.setRequired(required);
@@ -97,13 +133,19 @@ public class CheckField extends AbstractField  {
         obj.setKey(key);
         return obj;
     }
-
+    
+    /*I don't think this is used anymore.
     public CheckField getInstance(Node node) {
         return new CheckField(node);
     }
+    */
     
-    public Object getValue() {
-        String returnValue = (String)object.getValue();
+    /**
+     * Returns the value of this Checkfield by returning the value of the wrapped
+     * StringField
+     */
+    public String getValue() {
+        String returnValue = object.getValue();
         if("".equals(returnValue))
             return null;
         else

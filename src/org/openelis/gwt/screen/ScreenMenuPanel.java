@@ -74,9 +74,17 @@ public class ScreenMenuPanel extends ScreenWidget {
      */	
     public ScreenMenuPanel(Node node, ScreenBase screen){
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         this.screen = screen;
         String layout = node.getAttributes().getNamedItem("layout").getNodeValue();
-        panel = new MenuPanel(node.getAttributes().getNamedItem("layout").getNodeValue());
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (MenuPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new MenuPanel();
+        panel.init(layout);
         createPanel(node);
         initWidget(panel);
         setDefaults(node, screen);

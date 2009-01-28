@@ -30,26 +30,28 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.CommandButton;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 import org.openelis.gwt.widget.FormInt.State;
 
 import java.util.EnumSet;
 
-public class ScreenAppButton extends ScreenWidget {
+public class ScreenCommandButton extends ScreenWidget {
     
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-    public static String TAG_NAME = "appButton";
+    public static String TAG_NAME = "comButton";
     /**
      * Widget wrapped by this class
      */
-    private AppButton button;
+    private CommandButton button;
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
-    public ScreenAppButton() {
+    public ScreenCommandButton() {
     }
 
     /**
@@ -61,17 +63,20 @@ public class ScreenAppButton extends ScreenWidget {
      * @param node
      * @param screen
      */
-    public ScreenAppButton(Node node, ScreenBase screen) {
+    public ScreenCommandButton(Node node, final ScreenBase screen) {
         super(node);
         init(node,screen);
     }
     
     public void init(Node node, ScreenBase screen) {
         if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            button = (AppButton)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+            button = (CommandButton)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
-            button = new AppButton();
-        button.action = node.getAttributes().getNamedItem("action").getNodeValue();
+            button = new CommandButton();
+        button.command = ClassFactory.getEnum(node.getAttributes().getNamedItem("command").getNodeValue());
+        if(node.getAttributes().getNamedItem("value") != null){
+            button.value = node.getAttributes().getNamedItem("value").getNodeValue();
+        }
         if(node.getAttributes().getNamedItem("toggle") != null){
             if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
                 button.toggle = true;
@@ -83,13 +88,13 @@ public class ScreenAppButton extends ScreenWidget {
                 button.setWidget(wid);
             }
         }
-        if (node.getAttributes().getNamedItem("onclick") != null){
-            String[] listeners = node.getAttributes().getNamedItem("onclick").getNodeValue().split(",");
+        if (node.getAttributes().getNamedItem("listeners") != null){
+            String[] listeners = node.getAttributes().getNamedItem("listeners").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                    button.addClickListener((ClickListener)screen);
+                    button.addCommandListener((CommandListener)screen);
                 else
-                    button.addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
+                    button.addCommandListener((CommandListener)ClassFactory.forName(listeners[i]));
             }
         }
         
@@ -123,17 +128,19 @@ public class ScreenAppButton extends ScreenWidget {
     }
     
     public ScreenWidget getInstance(Node node, ScreenBase screen){
-        return new ScreenAppButton(node,screen);
+        return new ScreenCommandButton(node,screen);
     }
     
     public void enable(boolean enabled){
     	if(!alwaysEnabled){
 	        if(enabled)
-	            button.changeState(ButtonState.UNPRESSED);
+	            button.changeState(CommandButton.ButtonState.UNPRESSED);
 	        else
-	            button.changeState(ButtonState.DISABLED);
+	            button.changeState(CommandButton.ButtonState.DISABLED);
+            button.setEnabled(enabled);
             super.enable(enabled);
     	}else{
+            button.setEnabled(enabled);
     	    super.enable(true);
         }
     }

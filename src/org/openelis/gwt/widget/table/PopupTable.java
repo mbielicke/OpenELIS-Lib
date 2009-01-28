@@ -35,13 +35,14 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesPopupEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
-public class PopupTable extends TableWidget implements PopupListener, SourcesPopupEvents {
+public class PopupTable<D extends DataSet> extends TableWidget<D> implements PopupListener, SourcesPopupEvents {
     
     
     public class DropPopup extends PopupPanel {

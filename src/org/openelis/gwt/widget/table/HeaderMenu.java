@@ -41,6 +41,8 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
 
+import java.util.ArrayList;
+
 /**
  * This class displays the PopupMenu for the Table Header columns Displays
  * options for sorting and filtering the table.
@@ -123,8 +125,8 @@ public class HeaderMenu extends PopupPanel implements
      */
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
         if (doFilter) {
-            controller.columns.get(col).setFilter(filter);
-            for(TableColumnInt column : controller.columns){
+            ((TableColumnInt)controller.columns.get(col)).setFilter(filter);
+            for(TableColumnInt column : (ArrayList<TableColumnInt>)controller.columns){
                 column.applyFilter();
             }
             controller.model.refresh();

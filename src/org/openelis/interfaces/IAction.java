@@ -25,10 +25,11 @@
 */
 package org.openelis.interfaces;
 
-import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.util.ValidationException;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -38,16 +39,16 @@ import java.sql.SQLException;
  * @author fyu
  */
 public interface IAction {
-    public void execute(FormRPC form) throws SQLException,
+    public void execute(Form form) throws SQLException,
                                      IOException,
                                      ValidationException,
                                      RPCException;
 
-    public boolean hasPermission(FormRPC form) throws SQLException,
+    public boolean hasPermission(Form form) throws SQLException,
                                               IOException,
                                               ValidationException;
 
-    public AbstractField query(FormRPC form) throws SQLException,
+    public AbstractField query(Form form) throws SQLException,
                                      IOException,
                                      ValidationException,
                                      RPCException;

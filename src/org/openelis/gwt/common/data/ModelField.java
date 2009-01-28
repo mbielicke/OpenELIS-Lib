@@ -40,6 +40,10 @@ public class ModelField extends AbstractField {
     }
     
     public ModelField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node) {
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }
 
@@ -60,8 +64,7 @@ public class ModelField extends AbstractField {
             value = (DataModel)val;
     }
 
-    public Object getValue() {
-        // TODO Auto-generated method stub
+    public DataModel getValue() {
         return value;
     }
 

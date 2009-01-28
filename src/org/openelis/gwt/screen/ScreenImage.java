@@ -74,18 +74,15 @@ public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
      */
     public ScreenImage(Node node, final ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         final ScreenImage si = this;
-        image = new Image() {
-            public void onBrowserEvent(Event event) {
-                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                        screen.doTab(event, si);
-                    }
-                } else {
-                    super.onBrowserEvent(event);
-                }
-            }
-        };
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            image = (Image)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            image = new Image();
         image.setUrl(node.getAttributes().getNamedItem("url").getNodeValue());
         if (node.getAttributes().getNamedItem("onclick") != null) {
         	String listener = node.getAttributes().getNamedItem("onclick").getNodeValue();

@@ -7,11 +7,13 @@ import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataSet;
+
 public class TableDragHandler implements DragListener, DropListener {
     
-    private TableWidget controller;
+    private TableWidget<? extends DataSet> controller;
     
-    public TableDragHandler(TableWidget controller) {
+    public TableDragHandler(TableWidget<? extends DataSet> controller) {
         this.controller = controller;
     }
 

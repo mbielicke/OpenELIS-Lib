@@ -31,6 +31,7 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -62,6 +63,8 @@ public class ScreenVertical extends ScreenWidget implements ScreenPanel {
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
     public ScreenVertical() {
+        panel = new VerticalPanel();
+        initWidget(panel);
     }
     /**
      * Constructor called from getInstance to return a specific instance of this class
@@ -85,7 +88,14 @@ public class ScreenVertical extends ScreenWidget implements ScreenPanel {
     }
     public ScreenVertical(Node node, ScreenBase screen) {
         super(node);
-        panel = new VerticalPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (VerticalPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new VerticalPanel();
         if (node.getAttributes().getNamedItem("spacing") != null){
             panel.setSpacing(Integer.parseInt(node.getAttributes()
                                                   .getNamedItem("spacing")

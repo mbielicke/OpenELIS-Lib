@@ -59,13 +59,21 @@ public class ScreenRichTextArea extends ScreenInputWidget {
      */ 
     public ScreenRichTextArea(Node node, final ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            textarea = (RichTextWidget)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            textarea = new RichTextWidget();
         boolean tools = true;
         if(node.getAttributes().getNamedItem("tools") != null){
             if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){
                 tools = false;
             }
         }
-        textarea = new RichTextWidget(tools);
+        textarea.init(tools);
         textarea.setSize("100%", "300px");
         initWidget(textarea);
         displayWidget = textarea;

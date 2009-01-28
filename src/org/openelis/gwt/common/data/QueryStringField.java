@@ -39,6 +39,10 @@ public class QueryStringField extends QueryField {
     }
     
     public QueryStringField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node){
         if(node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }

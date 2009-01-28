@@ -28,6 +28,7 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.widget.MenuLabel;
@@ -63,7 +64,14 @@ public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
      */	
     public ScreenMenuLabel(Node node, ScreenBase screen) {
         super(node);
-        label = new MenuLabel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            label = (MenuLabel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            label = new MenuLabel();
         if (node.getAttributes().getNamedItem("text") != null){
             label.setText(node.getAttributes().getNamedItem("text").getNodeValue());
         }

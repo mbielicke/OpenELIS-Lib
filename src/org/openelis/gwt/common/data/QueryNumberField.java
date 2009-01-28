@@ -40,6 +40,10 @@ public class QueryNumberField extends QueryField {
     }
     
     public QueryNumberField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node) {
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
         setType(node.getAttributes()
                             .getNamedItem("type")

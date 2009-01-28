@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.widget.WindowBrowser;
@@ -62,14 +63,22 @@ public class ScreenWindowBrowser extends ScreenWidget {
      */	
     public ScreenWindowBrowser(Node node, ScreenBase screen){
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            browser = (WindowBrowser)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            browser = new WindowBrowser();
         int limit = 10;
         if(node.getAttributes().getNamedItem("winLimit") != null){
             limit = Integer.parseInt(node.getAttributes().getNamedItem("winLimit").getNodeValue());
         }
         if(node.getAttributes().getNamedItem("sizeToWindow") != null)
-            browser = new WindowBrowser(true,limit);
+            browser.init(true,limit);
         else
-            browser = new WindowBrowser(false,limit);
+            browser.init(false,limit);
         initWidget(browser);
         browser.setStyleName("ScreenWindowBrowser");
         setDefaults(node,screen);

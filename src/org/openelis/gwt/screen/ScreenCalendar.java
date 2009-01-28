@@ -69,21 +69,29 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
      */
     public ScreenCalendar(Node node, final ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         byte begin = Byte.parseByte(node.getAttributes()
                                         .getNamedItem("begin")
                                         .getNodeValue());
         byte end = Byte.parseByte(node.getAttributes()
                                       .getNamedItem("end")
                                       .getNodeValue());
-        if (node.getAttributes().getNamedItem("week") != null)
-            cal = new CalendarLookUp(begin,
-                                         end,
-                                         Boolean.valueOf(node.getAttributes()
-                                                             .getNamedItem("week")
-                                                             .getNodeValue())
-                                                .booleanValue());
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            cal = (CalendarLookUp)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
-            cal = new CalendarLookUp(begin, end, false);
+            cal = new CalendarLookUp();
+        if (node.getAttributes().getNamedItem("week") != null)
+            cal.init(begin,
+                     end,
+                     Boolean.valueOf(node.getAttributes()
+                                          .getNamedItem("week")
+                                          .getNodeValue())
+                                          .booleanValue());
+        else
+            cal.init(begin, end, false);
         //l.init();
         /*if (node.getAttributes().getNamedItem("shortcut") != null)
             cal.setShortcutKey(node.getAttributes()

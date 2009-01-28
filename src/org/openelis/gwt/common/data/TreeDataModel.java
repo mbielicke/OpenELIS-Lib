@@ -54,14 +54,14 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     public void add(Data key, DataObject value){
         TreeDataItem item = new TreeDataItem();
-        item.setKey(key);
+        item.setKey((DataObject)key);
         item.add(value);
         add(key,item);
     }
     
     public void add(Data key, DataObject[] values){
         TreeDataItem item = new TreeDataItem();
-        item.setKey(key);
+        item.setKey((DataObject)key);
         for(int i = 0; i < values.length; i++){
             item.add(values[i]);
         }
@@ -147,7 +147,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
     
     public TreeDataItem createTreeItem(String leafType, Data key) {
         TreeDataItem item = (TreeDataItem)leaves.get(leafType).clone();
-        item.setKey(key);
+        item.setKey((DataObject)key);
         return item;
     }
     

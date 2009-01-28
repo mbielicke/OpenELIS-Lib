@@ -83,6 +83,14 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
      */
     public ScreenAutoCompleteWidget(Node node, final ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            auto = (AutoComplete)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            auto = new AutoComplete();
         String cat = null;
         if(node.getAttributes().getNamedItem("cat") != null)
             cat = node.getAttributes().getNamedItem("cat").getNodeValue();
@@ -149,7 +157,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         }
       
 
-        auto = new AutoComplete(columns,10,popWidth,null,showHeader,VerticalScroll.NEEDED);
+        auto.setup(columns,10,popWidth,null,showHeader,VerticalScroll.NEEDED);
         auto.init(cat, multiSelect, textBoxDefault, width);
         final ScreenAutoCompleteWidget sa = this; 
         if (node.getAttributes().getNamedItem("onchange") != null){

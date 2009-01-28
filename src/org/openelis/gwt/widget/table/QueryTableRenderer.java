@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
@@ -35,10 +36,10 @@ import java.util.ArrayList;
 
 public class QueryTableRenderer implements TableRendererInt, TableWidgetListener {
     
-    private QueryTable controller;
+    private QueryTable<? extends DataSet> controller;
     private boolean showAltRowColors = true;
     
-    public QueryTableRenderer(QueryTable controller){
+    public QueryTableRenderer(QueryTable<? extends DataSet> controller){
         this.controller = controller;
     }
 
@@ -92,7 +93,7 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
        if(controller.view.table.getRowCount() == 0)
            createRow(0);
        for (int i = 0; i < controller.columns.size(); i++) 
-           controller.columns.get(i).loadWidget(controller.view.table.getWidget(0, i),controller.rpc.getField(controller.columns.get(i).getKey().trim()));
+           controller.columns.get(i).loadWidget(controller.view.table.getWidget(0, i),controller.form.getField(controller.columns.get(i).getKey().trim()));
         
     }
 
@@ -102,7 +103,7 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
     }
 
     public void setCellDisplay(int row, int col) {
-        controller.columns.get(col).setWidgetDisplay(controller.view.table.getWidget(row, col));  
+        ((TableColumnInt)controller.columns.get(col)).setWidgetDisplay(controller.view.table.getWidget(row, col));  
         
     }
 

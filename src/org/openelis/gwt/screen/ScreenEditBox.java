@@ -27,6 +27,10 @@ package org.openelis.gwt.screen;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.EditBox;
+import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
+
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -43,7 +47,14 @@ public class ScreenEditBox extends ScreenInputWidget {
 	
 	public ScreenEditBox(Node node, ScreenBase screen){
 		super(node);
-		editbox = new EditBox();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            editbox = (EditBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            editbox = new EditBox();
 		initWidget(editbox);
 		setDefaults(node,screen);
 	}

@@ -26,7 +26,7 @@
 package org.openelis.util;
 
 import org.openelis.gwt.common.DatetimeRPC;
-import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
@@ -205,16 +205,16 @@ public class ReportUtil {
         return decodeType;
     }
 
-    public String encodeURLParameters(FormRPC rpc, String user) {
+    public String encodeURLParameters(Form form, String user) {
         String       value ="";
         StringBuffer buffer = new StringBuffer(256);
 
         buffer.append("?LOGNAME="+user);
-        Iterator keyIt = rpc.getFieldMap().keySet().iterator();
+        Iterator keyIt = form.getFieldMap().keySet().iterator();
         while(keyIt.hasNext()) {
             value = "";
             String key = (String)keyIt.next();
-            AbstractField field = rpc.getField(key);
+            AbstractField field = form.getField(key);
             if (field.getValue() != null) {
                 if(field instanceof DateField)
                     value = DBDatetime.getInstance(DBDatetime.YEAR, DBDatetime.DAY, ((DatetimeRPC)field.getValue()).getDate()).toString();

@@ -66,7 +66,14 @@ public class ScreenTablePanel extends ScreenWidget {
      */	
     public ScreenTablePanel(Node node, ScreenBase screen) {
         super(node);
-        panel = new FlexTable();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (FlexTable)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new FlexTable();
         panel.setStyleName("ScreenTablePanel");
         initWidget(panel);
         

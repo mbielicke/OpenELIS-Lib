@@ -80,19 +80,27 @@ public class ScreenMenuItem extends ScreenWidget {
     
     public ScreenMenuItem(Node node, ScreenBase screen){
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
         wid = null;
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            item = (MenuItem)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            item = new MenuItem();
         if(((Element)node).getElementsByTagName("menuDisplay").getLength() > 0 &&  ((Element)node).getElementsByTagName("menuDisplay").item(0).getParentNode().equals(node)){
             NodeList displayList = ((Element)node).getElementsByTagName("menuDisplay").item(0).getChildNodes();
             int i = 0; 
             while(displayList.item(i).getNodeType() != Node.ELEMENT_NODE)
                 i++;
             wid = ScreenWidget.loadWidget(displayList.item(i), screen);
-            item = new MenuItem(wid);
+            item.init(wid);
         }else if(node.getAttributes().getNamedItem("header") != null){
             wid = MenuItem.createTableHeader("", new Label(node.getAttributes().getNamedItem("label").getNodeValue()));
-            item = new MenuItem(wid);
+            item.init(wid);
         }else{
-            item = new MenuItem(node.getAttributes().getNamedItem("icon").getNodeValue(), 
+            item.init(node.getAttributes().getNamedItem("icon").getNodeValue(), 
                                          node.getAttributes().getNamedItem("label").getNodeValue(), 
                                          node.getAttributes().getNamedItem("description").getNodeValue());
             label = node.getAttributes().getNamedItem("label").getNodeValue();

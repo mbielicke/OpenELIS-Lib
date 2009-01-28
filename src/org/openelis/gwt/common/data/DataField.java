@@ -25,11 +25,13 @@
 */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.xml.client.Node;
-
-
 import java.util.ArrayList;
-import java.util.Vector;
+/**
+ * This interface is used to mark objects that are used in the FormRPC and used for 
+ * user input into screens for the application
+ * @author tschmidt
+ *
+ */
 
 public interface DataField extends DataObject {
     
@@ -41,8 +43,8 @@ public interface DataField extends DataObject {
 
     public ArrayList<String> getErrors();
 
-    public Vector getValues();
-
+    //public Vector getValues();
+ 
     public void setMin(Object min);
 
     public void setMax(Object max);
@@ -51,11 +53,11 @@ public interface DataField extends DataObject {
 
     public Object getKey();
 
-    public void addOption(Object key, Object val);
+    //public void addOption(Object key, Object val);
 
     public void clearErrors();
 
-    public <T extends DataField> T getInstance(Node node);
+    //public <T extends DataField> T getInstance(Node node);
 
     public boolean isValid();
 

@@ -27,7 +27,7 @@ package org.openelis.gwt.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
-import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.AbstractField;
 
@@ -41,8 +41,8 @@ import org.openelis.gwt.common.data.AbstractField;
  */
 public interface ScreenServiceInt extends RemoteService {
 
-    public FormRPC action(FormRPC rpc) throws RPCException;
+    public Form action(Form rpc) throws RPCException;
     
-    public AbstractField query(FormRPC rpc) throws RPCException;
+    public AbstractField query(Form rpc) throws RPCException;
     
 }

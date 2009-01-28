@@ -27,9 +27,6 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import org.openelis.gwt.common.FormRPC;
-import org.openelis.gwt.common.data.Data;
-
 import java.util.ArrayList;
 
 public class AsyncCallChain<T> extends ArrayList<AsyncCallback> implements AsyncCallback<T>{

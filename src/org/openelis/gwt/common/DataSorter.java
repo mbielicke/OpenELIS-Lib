@@ -27,6 +27,7 @@ package org.openelis.gwt.common;
 
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.DataSet;
 
 public class DataSorter implements DataSorterInt {
     
@@ -48,19 +49,19 @@ public class DataSorter implements DataSorterInt {
     }
 
     public int partition(int s, int t, int col) {
-        DataObject x = (DataObject)data.get(s).get(col);
+        DataObject x = (DataObject)((DataSet)data.get(s)).get(col);
         int i = s - 1;
         int j = t + 1;
         while (true) {
             if (direction == SortDirection.DOWN) {
-                while (((DataObject)data.get(--j).get(col)).compareTo(x) > 0)
+                while (((DataObject)((DataSet)data.get(--j)).get(col)).compareTo(x) > 0)
                     ;
-                while (((DataObject)data.get(++i).get(col)).compareTo(x) < 0)
+                while (((DataObject)((DataSet)data.get(++i)).get(col)).compareTo(x) < 0)
                     ;
             } else {
-                while (((DataObject)data.get(--j).get(col)).compareTo(x) < 0)
+                while (((DataObject)((DataSet)data.get(--j)).get(col)).compareTo(x) < 0)
                     ;
-                while (((DataObject)data.get(++i).get(col)).compareTo(x) > 0)
+                while (((DataObject)((DataSet)data.get(++i)).get(col)).compareTo(x) > 0)
                     ;
             }
             if (i < j) {

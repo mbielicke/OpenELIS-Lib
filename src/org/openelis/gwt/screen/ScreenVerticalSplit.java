@@ -29,6 +29,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -73,7 +74,14 @@ public class ScreenVerticalSplit extends ScreenWidget{
      */	
     public ScreenVerticalSplit(Node node, ScreenBase screen) {
         super(node);
-        vp = new VerticalSplitPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            vp = (VerticalSplitPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            vp = new VerticalSplitPanel();
         vp.setStyleName("ScreenSplit");
         initWidget(vp);
         NodeList sections = ((Element)node).getElementsByTagName("section");

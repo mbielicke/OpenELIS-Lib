@@ -69,7 +69,14 @@ public class ScreenStack extends ScreenWidget {
      */	
     public ScreenStack(Node node, ScreenBase screen) {
         super(node);
-        stack = new StackPanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            stack = (StackPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key"));
+        else
+            stack = new StackPanel();
         stack.setStyleName("ScreenStack");
         //stack.setStylePrimaryName("ScreenStack");
         initWidget(stack);

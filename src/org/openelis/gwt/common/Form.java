@@ -35,7 +35,6 @@ import org.openelis.gwt.screen.ScreenBase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.Vector;
 
 /**
  * @author tschmidt
@@ -43,36 +42,45 @@ import java.util.Vector;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class FormRPC extends AbstractField {
+public class Form extends AbstractField {
 
     private static final long serialVersionUID = 1L;
-
-    private HashMap<String,AbstractField> fields = new HashMap<String,AbstractField>();
+    
+    public HashMap<String,AbstractField> fields = new HashMap<String,AbstractField>();
     public enum Status {valid,invalid}
     public Status status;
     public ArrayList<String> error = new ArrayList<String>();
-    public String key;
     public boolean load;
 
-    public FormRPC() {
+    public Form() {
     }
-
-    public FormRPC(Node node) {
+    
+    public Form(Node node) {
+        createFields(node);
+    }
+    
+    public void createFields(Node node){ 
         NodeList fieldList = node.getChildNodes();
-        HashMap map = new HashMap();
         for (int j = 0; j < fieldList.getLength(); j++) {
             if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                AbstractField field = ScreenBase.createField(fieldList.item(j));
-                map.put((String)field.getKey(), field);
+                String key = fieldList.item(j).getAttributes().getNamedItem("key").getNodeValue();
+                if(fields.containsKey(key)){
+                    fields.get(key).setAttributes(fieldList.item(j));
+                }else{
+                    AbstractField field = ScreenBase.createField(fieldList.item(j));
+                    fields.put(field.key,field);
+                }
             }
         }
-        setFieldMap(map);
         key = node.getAttributes().getNamedItem("key").getNodeValue();
-        setKey(key);
         if(node.getAttributes().getNamedItem("load") != null){
             if(node.getAttributes().getNamedItem("load").getNodeValue().equals("true"))
                 load = true;
         }
+    }
+    
+    public void setAttributes(Node node) {
+        createFields(node);
     }
     
     public void setFieldMap(HashMap<String,AbstractField> fields) {
@@ -89,23 +97,13 @@ public class FormRPC extends AbstractField {
             if(key.indexOf(":") > -1){
                 String rpc = key.substring(0,key.indexOf(":"));
                 String field = key.substring(key.indexOf(":")+1,key.length());
-                return ((FormRPC)getField(rpc)).getFieldValue(field);
+                return ((Form)fields.get(rpc)).getFieldValue(field);
             }
-            AbstractField field = fields.get(key);
+            AbstractField field = getField(key);
             return field.getValue();
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public Vector getFieldValues(String key) {
-        if(key.indexOf(":") > -1){
-            String rpc = key.substring(0,key.indexOf(":"));
-            String field = key.substring(key.indexOf(":")+1,key.length());
-            return ((FormRPC)getField(rpc)).getFieldValues(field);
-        }
-        AbstractField field = fields.get(key);
-        return field.getValues();
     }
 
     public void setFieldValue(String key, Object value) {
@@ -113,10 +111,10 @@ public class FormRPC extends AbstractField {
         if(key.indexOf(":") > -1){
             String rpc = key.substring(0,key.indexOf(":"));
             String field = key.substring(key.indexOf(":")+1,key.length());
-            ((FormRPC)getField(rpc)).setFieldValue(field,value);
+            ((Form)getField(rpc)).setFieldValue(field,value);
             return;
         }
-        AbstractField field = fields.get(key);
+        AbstractField field = getField(key);
         if(field != null)
             field.setValue(value);
     }
@@ -129,10 +127,10 @@ public class FormRPC extends AbstractField {
         if(key.indexOf(":") > -1){
             String rpc = key.substring(0,key.indexOf(":"));
             String field = key.substring(key.indexOf(":")+1,key.length());
-            ((FormRPC)getField(rpc)).setFieldError(field,err);
+            ((Form)getField(rpc)).setFieldError(field,err);
             return;
         }
-        AbstractField field = fields.get(key);
+        AbstractField field = getField(key);
         field.addError(err);
     }
 
@@ -140,7 +138,7 @@ public class FormRPC extends AbstractField {
         if(key.indexOf(":") > -1){
             String rpc = key.substring(0,key.indexOf(":"));
             String field = key.substring(key.indexOf(":")+1,key.length());
-            return ((FormRPC)getField(rpc)).getField(field);
+            return ((Form)getField(rpc)).getField(field);
         }
         if (!fields.containsKey(key)) {
             return null;
@@ -152,7 +150,7 @@ public class FormRPC extends AbstractField {
         if(key.indexOf(":") > -1){
             String rpc = key.substring(0,key.indexOf(":"));
             String fieldkey = key.substring(key.indexOf(":")+1,key.length());
-            ((FormRPC)getField(rpc)).setField(fieldkey,field);
+            ((Form)getField(rpc)).setField(fieldkey,field);
             return;
         }
         fields.put(key, field);
@@ -184,7 +182,7 @@ public class FormRPC extends AbstractField {
         return;
     }
 
-    public void reset() {
+    public void removeErrors() {
         status = Status.valid;
         error = new ArrayList<String>();
         for (AbstractField field : fields.values()) {
@@ -193,20 +191,41 @@ public class FormRPC extends AbstractField {
     }
     
     public Object clone(){
-        FormRPC clone = new FormRPC();
-        HashMap<String,AbstractField> cloneMap = (HashMap<String,AbstractField>)fields.clone();
+        Form clone = new Form();
         
         Object[] keys = (Object[]) ((Set)fields.keySet()).toArray();    
         for (int i = 0; i < keys.length; i++) {
-            if(fields.get((String)keys[i]) instanceof FormRPC)
-                cloneMap.put((String)keys[i], (FormRPC)fields.get((String)keys[i]).clone());
+            if(fields.get((String)keys[i]) instanceof Form)
+                clone.setField((String)keys[i], (Form)fields.get((String)keys[i]).clone());
             else
-                cloneMap.put((String)keys[i], (AbstractField)fields.get((String)keys[i]).clone());
+                clone.setField((String)keys[i], (AbstractField)fields.get((String)keys[i]).clone());
         }        
         
-        clone.setFieldMap(cloneMap);
         clone.status = status;
         
         return clone;
+    }
+    
+    public AbstractField createField(Node node, String key) {
+        NodeList fields = node.getChildNodes();
+        for(int i = 0; i < fields.getLength(); i++){
+            if(fields.item(i).getNodeType() == Node.ELEMENT_NODE){
+                if(fields.item(i).getAttributes().getNamedItem("key").getNodeValue().equals(key))
+                    return (AbstractField)ScreenBase.createField(fields.item(i));
+            }
+        }
+        return null;
+    }
+    
+    public HashMap<String,Node> createNodeMap(Node node) {
+        HashMap<String,Node> nmap = new HashMap<String,Node>();
+        NodeList fields = node.getChildNodes();
+        for(int i = 0; i < fields.getLength(); i++){
+            if(fields.item(i).getNodeType() == Node.ELEMENT_NODE){
+                String key = fields.item(i).getAttributes().getNamedItem("key").getNodeValue();
+                nmap.put(key, fields.item(i));
+            }
+        }
+        return nmap;
     }
 }

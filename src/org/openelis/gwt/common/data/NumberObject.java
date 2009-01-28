@@ -70,6 +70,14 @@ public class NumberObject implements DataObject {
                 return new Integer(value.intValue());
         return value;
     }
+    
+    public Integer getIntegerValue() {
+        return new Integer(value.intValue());
+    }
+    
+    public Double getDoubleValue() {
+        return value;
+    }
 
     public void setValue(Object object) {
         invalid = false;

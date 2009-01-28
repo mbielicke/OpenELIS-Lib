@@ -47,6 +47,10 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     
     public CalendarLookUp(byte begin,byte end,boolean week) {
         this();
+        init(begin,end,week);
+    }
+    
+    public void init(byte begin,byte end,boolean week){
         this.begin = begin;
         this.end = end;
         this.week = week;

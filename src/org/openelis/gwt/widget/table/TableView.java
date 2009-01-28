@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -157,7 +158,8 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
             titlePanel.addStyleName("TitlePanel");
         }
         if(controller.showHeader){
-            header = new TableHeaderMenuBar(controller);
+            header = GWT.create(TableHeaderMenuBar.class);
+            header.init(controller);
             headerView.add(header);
         }
         cellView.setWidget(table);

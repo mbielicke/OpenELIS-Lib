@@ -17,7 +17,14 @@ public class ScreenLookUp extends ScreenInputWidget {
     
     public ScreenLookUp(Node node, ScreenBase screen) {
         super(node);
-        look = new LookUp();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            look = (LookUp)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            look = new LookUp();
 
         if(node.getAttributes().getNamedItem("icon") != null){
             look.setIconStyle(node.getAttributes().getNamedItem("icon").getNodeValue());

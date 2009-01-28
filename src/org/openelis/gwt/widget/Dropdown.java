@@ -27,12 +27,13 @@ package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
-public class Dropdown extends DropdownWidget {
+public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
     
     private int startPos;
     boolean linear;
@@ -66,7 +67,11 @@ public class Dropdown extends DropdownWidget {
     private boolean enabled;
     
     public Dropdown(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
-        super(columns, maxRows, width, title, showHeader, showScroll);
+        setup(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void setup(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
+        super.init(columns,maxRows,width,title,showHeader,showScroll);
         lookUp.addMouseListener(listener);
         lookUp.addClickListener(listener);
         lookUp.textbox.addKeyboardListener(listener);
@@ -122,7 +127,7 @@ public class Dropdown extends DropdownWidget {
     private int getIndexByTextValue(String textValue) {
         if(textValue.equals(""))
             return -1;
-        DataModel model = this.model.getData();
+        DataModel<DataSet> model = this.model.getData();
         int low = 0;
         int high = model.size() - 1;
         int mid = -1;
@@ -165,8 +170,8 @@ public class Dropdown extends DropdownWidget {
         return value.substring(0,length).toUpperCase().compareTo(textValue.toUpperCase());
     }
     
-    public void setModel(DataModel model){
-        this.model.load((DataModel)model.clone());
+    public void setModel(DataModel<D> model){
+        this.model.load((DataModel<D>)model.clone());
     }
     
     public void enabled(boolean enabled) {

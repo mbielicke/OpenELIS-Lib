@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.server;
 
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 
 import javax.servlet.ServletException;
 
-public class CalendarServlet extends AppServlet implements CalendarServiceInt{
+public class CalendarServlet extends AppServlet implements CalendarServiceInt<RPC>{
 
     private static final long serialVersionUID = 1L;
 
@@ -154,5 +155,10 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
             throw new RPCException(e.getMessage());
         }
 	}
+
+    public RPC getScreen(RPC rpc) throws RPCException {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

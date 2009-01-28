@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
@@ -60,7 +61,7 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class AToZTable extends TableWidget implements
+public class AToZTable<D extends DataSet> extends TableWidget<D> implements
                                               ClickListener, ChangeListener, CommandListener, TableKeyboardHandlerInt, TableMouseHandlerInt, SourcesCommandEvents {
     
     private HorizontalPanel mainHP = new HorizontalPanel();
@@ -74,8 +75,16 @@ public class AToZTable extends TableWidget implements
     private CommandListenerCollection commandListeners;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
 
+    public AToZTable() {
+        super();
+    }
+    
     public AToZTable(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
         super();
+        init(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void init(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
         for(TableColumnInt column : columns) {
             column.setTableWidget(this);
         }
@@ -83,8 +92,8 @@ public class AToZTable extends TableWidget implements
         this.maxRows = maxRows;
         this.title = title;
         this.showHeader = showHeader;
-        renderer = new TableRenderer(this);
-        model = new TableModel(this);
+        renderer = new TableRenderer<D>((TableWidget)this);
+        model = new TableModel<D>(this);
         view = new TableView(this,showScroll);
         view.setWidth("auto");
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));

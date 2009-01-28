@@ -27,6 +27,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextArea;
@@ -66,8 +67,14 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
      */ 
     public ScreenTextArea(Node node, final ScreenBase screen) {
         super(node);
-        
-        textarea = new TextArea();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            textarea = (TextArea)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            textarea = new TextArea();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textarea.setAccessKey(node.getAttributes()
                                       .getNamedItem("shortcut")

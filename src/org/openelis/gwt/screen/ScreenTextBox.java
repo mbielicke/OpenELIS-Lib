@@ -72,6 +72,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
      */
     public ScreenTextBox() {
     }
+    
     /**
      * Constructor called from getInstance to return a specific instance of this class
      * to be displayed on the screen.  It uses the XML Node to create it's widget.
@@ -83,8 +84,16 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
      */ 
     public ScreenTextBox(Node node, final ScreenBase screen) {
         super(node);
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue())){
+            textbox = (TextBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        }else{
+            textbox = new TextBox();
+        }
         
-        textbox = new TextBox();
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")
@@ -103,8 +112,8 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             textbox.setLength(length);
         }
         
-        if (node.getAttributes().getNamedItem("align") != null) {
-            String align = node.getAttributes().getNamedItem("align").getNodeValue();
+        if (node.getAttributes().getNamedItem("textAlign") != null) {
+            String align = node.getAttributes().getNamedItem("textAlign").getNodeValue();
             if(align.equals("center"))
                 textbox.alignment = TextBox.ALIGN_CENTER;
             if(align.equals("right"))

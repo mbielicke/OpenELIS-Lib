@@ -38,6 +38,10 @@ public class QueryCheckField extends CheckField {
     }
     
     public QueryCheckField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node){
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }
 

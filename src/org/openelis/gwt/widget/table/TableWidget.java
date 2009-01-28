@@ -31,7 +31,6 @@ import com.google.gwt.user.client.dnd.DragListener;
 import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -40,8 +39,8 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.ScreenTableWidget;
-import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
@@ -60,7 +59,7 @@ import java.util.Iterator;
  * @author tschmidt
  * 
  */
-public class TableWidget extends FocusPanel implements
+public class TableWidget<D extends DataSet> extends FocusPanel implements
                             TableListener,
                             SourcesChangeEvents,
                             SourcesTableWidgetEvents,
@@ -75,9 +74,9 @@ public class TableWidget extends FocusPanel implements
     public boolean focused;
     public int activeRow = -1;
     public int activeCell = -1;
-    public TableModelInt model;
+    public TableModelInt<D> model;
     public TableView view;
-    public TableRendererInt renderer;
+    public TableRendererInt<D> renderer;
     public TableKeyboardHandlerInt keyboardHandler;
     public TableMouseHandlerInt mouseHandler;
     public boolean shiftKey;
@@ -101,6 +100,10 @@ public class TableWidget extends FocusPanel implements
     }
     
     public TableWidget(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
+        init(columns,maxRows,width,title,showHeader,showScroll);
+    }
+    
+    public void init(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
         for(TableColumnInt column : columns) {
             column.setTableWidget(this);
         }
@@ -109,7 +112,7 @@ public class TableWidget extends FocusPanel implements
         this.title = title;
         this.showHeader = showHeader;
         renderer = new TableRenderer(this);
-        model = new TableModel(this);
+        model = new TableModel<D>(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
@@ -124,7 +127,11 @@ public class TableWidget extends FocusPanel implements
      * Default constructor, puts table on top of the event stack.
      * 
      */
-    public TableWidget(ArrayList<TableColumnInt> columns,TableModel model, TableView view, TableRenderer renderer) {
+    public TableWidget(ArrayList<TableColumnInt> columns,TableModel<D> model, TableView view, TableRenderer renderer) {
+        init(columns,model,view,renderer);
+    }
+    
+    public void init(ArrayList<TableColumnInt> columns,TableModel<D> model, TableView view, TableRenderer renderer){
         this.columns = columns;
         this.model = model;
         this.view = view;

@@ -28,6 +28,7 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.xml.client.Node;
@@ -62,8 +63,14 @@ public class ScreenToggleButton extends ScreenWidget {
      */
     public ScreenToggleButton(Node node, final ScreenBase screen) {
         super(node);
-
-        button = new ToggleButton();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            button = (ToggleButton)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            button = new ToggleButton();
         button.setStyleName("ScreenToggleButton");
         button.addClickListener((ClickListener)screen);
         if(node.getAttributes().getNamedItem("text") != null){

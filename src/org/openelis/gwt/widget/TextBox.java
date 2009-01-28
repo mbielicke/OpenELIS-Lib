@@ -12,6 +12,10 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
     public String mask;
     public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
     
+    public TextBox() {
+        
+    }
+    
     public void setCase(Case textCase){
         this.textCase = textCase;
         if (textCase == Case.UPPER){

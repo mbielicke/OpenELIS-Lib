@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.DataSet;
 
 import java.util.ArrayList;
 
@@ -59,10 +60,10 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
     protected int tableCol1 = -1;
     protected int resizeColumn2 = -1;
     protected int tableCol2 = -1;
-    private TableWidget controller;
+    private TableWidget<DataSet> controller;
     
     
-    public TableHeader(TableWidget controller) {
+    public TableHeader(TableWidget<DataSet> controller) {
         this.controller = controller;
         this.columns = controller.columns;
         setCellSpacing(0);

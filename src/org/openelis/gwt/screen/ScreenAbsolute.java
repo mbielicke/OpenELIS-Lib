@@ -68,7 +68,14 @@ public class ScreenAbsolute extends ScreenWidget {
      */
     public ScreenAbsolute(Node node, ScreenBase screen) {
         super(node);
-        panel = new AbsolutePanel();
+        init(node,screen);
+    }
+    
+    public void init(Node node, ScreenBase screen){
+        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
+            panel = (AbsolutePanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else
+            panel = new AbsolutePanel();
         panel.setStyleName("ScreenAbsolute");
         if(node.getAttributes().getNamedItem("overflow") != null)
             DOM.setStyleAttribute(panel.getElement(),"overflow",node.getAttributes().getNamedItem("overflow").getNodeValue());

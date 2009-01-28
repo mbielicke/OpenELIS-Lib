@@ -99,8 +99,15 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
         super.onBrowserEvent(event);
     }
     
+    public MenuItem() {
+        
+    }
     
     public MenuItem(String icon, String labelText, String description) {
+        init(icon,labelText,description);
+    }
+    
+    public void init(String icon, String labelText, String description) {
         Label label = new Label(labelText);
         label.setStyleName("topMenuItemTitle");
         label.addStyleName("locked");
@@ -109,11 +116,19 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     }
     
     public MenuItem(String icon, Widget wid, String description) {
+        init(icon,wid,description);
+    }
+    
+    public void init(String icon, Widget wid, String description) {
         setWidget(create(icon,wid,description));
         enable(true);
     }
     
     public MenuItem(Widget wid) {
+        init(wid);
+    }
+    
+    public void init(Widget wid) {
         setWidget(wid);
         enable(true);
     }

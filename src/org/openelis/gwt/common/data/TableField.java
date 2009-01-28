@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class TableField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
-    private DataModel value = new DataModel();
+    private DataModel<DataSet> value = new DataModel<DataSet>();
     public static final String TAG_NAME = "rpc-table";
     private ArrayList<String> fieldIndex = new ArrayList<String>();
     
@@ -42,6 +42,10 @@ public class TableField extends AbstractField {
     }
     
     public TableField(Node node){
+        setAttributes(node);
+    }
+    
+    public void setAttributes(Node node) {
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
     }
 
@@ -61,8 +65,7 @@ public class TableField extends AbstractField {
             value = (DataModel)val;
     }
 
-    public Object getValue() {
-        // TODO Auto-generated method stub
+    public DataModel getValue() {
         return value;
     }
 
@@ -86,7 +89,7 @@ public class TableField extends AbstractField {
     
     public boolean validateModel() {
         boolean valid = true;
-        for(DataSet row : value){
+        for(DataSet<Data> row : value){
             if(row.shown){
                 for (Data obj : row){
                     if(obj instanceof AbstractField){
@@ -101,7 +104,7 @@ public class TableField extends AbstractField {
     }
     
     public void clearErrors() {
-        for(DataSet row : value){
+        for(DataSet<Data> row : value){
             for(Data obj : row){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();
