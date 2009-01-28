@@ -106,8 +106,14 @@ public class TreeField extends AbstractField {
             for (Data obj : item){
                 if(obj instanceof AbstractField){
                     ((AbstractField)obj).validate();
-                    if(!((AbstractField)obj).valid)
+                    if(!((AbstractField)obj).valid){
                         valid = false;
+                        TreeDataItem parent = item.parent;
+                        while(parent != null){
+                            parent.open = true;
+                            parent = parent.parent;
+                        }
+                    }
                 }
             }       
         }
