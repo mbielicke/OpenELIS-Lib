@@ -66,6 +66,11 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
         for(int i = 0; i < iconPanel.getWidgetCount(); i++){
            ((IconContainer)iconPanel.getWidget(i)).enable(enabled);
         }
+        if(!enabled)
+            iconPanel.addStyleName("disabled");
+        else
+            iconPanel.removeStyleName("disabled");
+    
     }
     
     public void setWidth(String width) {
