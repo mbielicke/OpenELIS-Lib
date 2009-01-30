@@ -1,5 +1,6 @@
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -39,7 +40,15 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
             if(icons.item(i).getNodeType() == Node.ELEMENT_NODE){
                 String style = icons.item(i).getAttributes().getNamedItem("style").getNodeValue();
                 Enum command = ClassFactory.getEnum(icons.item(i).getAttributes().getNamedItem("command").getNodeValue());
-                look.addButton(style, command, null);
+                MouseListener listener = null;
+                if(node.getAttributes().getNamedItem("mouse") != null) {
+                    String click = node.getAttributes().getNamedItem("mouse").getNodeValue();
+                    if(click.equals("this"))
+                        listener = ((MouseListener)screen);
+                    else
+                        listener = ((MouseListener)ClassFactory.forName(click));
+                }
+                look.addButton(style, command, null, listener);
             }
         }
         look.setStyleName("ScreenLookUp");

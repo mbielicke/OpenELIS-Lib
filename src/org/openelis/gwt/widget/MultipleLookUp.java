@@ -3,6 +3,7 @@ package org.openelis.gwt.widget;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.event.CommandListener;
@@ -27,7 +28,7 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
         hp.setWidth("auto");
     }
     
-    public void addButton(String style, final Enum command, final Object data) {
+    public void addButton(String style, final Enum command, final Object data, MouseListener mouse) {
         IconContainer icon = new IconContainer(style);
         icon.addClickListener(new ClickListener() {
             public void onClick(Widget sender) {
@@ -35,6 +36,7 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
             }
         });
         icon.setStyleName(style);
+        icon.addMouseListener(mouse);
         iconPanel.add(icon);
     }
     
