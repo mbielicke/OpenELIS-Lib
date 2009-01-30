@@ -1,5 +1,6 @@
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -29,7 +30,10 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
     }
     
     public void addButton(String style, final Enum command, final Object data, MouseListener mouse) {
-        IconContainer icon = new IconContainer(style);
+        AbsolutePanel ap = new AbsolutePanel();
+        ap.setStyleName(style);
+        IconContainer icon = new IconContainer();
+        icon.add(ap);
         icon.addClickListener(new ClickListener() {
             public void onClick(Widget sender) {
                 commandListeners.fireCommand(command, data);
@@ -65,11 +69,11 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
         textbox.setReadOnly(!enabled);
         for(int i = 0; i < iconPanel.getWidgetCount(); i++){
            ((IconContainer)iconPanel.getWidget(i)).enable(enabled);
+           if(!enabled)
+               ((IconContainer)iconPanel.getWidget(i)).addStyleName("disabled");
+           else
+               ((IconContainer)iconPanel.getWidget(i)).removeStyleName("disabled"); 
         }
-        if(!enabled)
-            iconPanel.addStyleName("disabled");
-        else
-            iconPanel.removeStyleName("disabled");
     
     }
     
