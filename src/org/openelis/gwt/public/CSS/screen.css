@@ -321,6 +321,7 @@ color:gray;
 .LookupButtonImage{
     width:16px;
     height:16px;
+    padding:2px;
 }
 .FindButtonImage{
     width:20px;
@@ -377,72 +378,45 @@ color:gray;
     background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
 }
 
-/*******Field Button***********/
-
-.FieldButton .ButtonContent {
-    background:none;
-padding:0;
+/*******ScreenLookUp***********/
+.ScreenLookUp{
+border:1px solid #D8D8D8;
 }
-.Hover .FieldButton .ButtonContent, .Pressed .FieldButton .ButtonContent {
-  //  background:url("../Images/screenbuttonhover.gif") repeat-x;
-    cursor:pointer;
-}
-.disabled .FieldButton .ButtonContent{
-padding:0;
-    background:none;
-}
-.FieldButton .ButtonContent .ScreenLabel{
-    color:black;
-    background:none;
-}
-.disabled  .FieldButton .ButtonContent .ScreenLabel{
-    cursor:default;
-    color:gray;
-    background:none;
-}
-
-.FieldButton .ButtonRightSide{
-   //  width:2px;
-     background:none;
-}
-.Hover .FieldButton .ButtonRightSide, .Pressed .FieldButton .ButtonRightSide{
-   // background:url("../Images/screenbuttonrs.gif") no-repeat;
-}
-.Disabled .FieldButton .ButtonRightSide{
-    background:none;
-    cursor:default;
-}
-.FieldButton .ButtonLeftSide{
-    background:none;
-}
-.Hover .FieldButton .ButtonLeftSide, .Pressed .FieldButton .ButtonLeftSide{
-  //  background:url("../Images/screenbuttonls.gif") no-repeat;
-}
-.Disabled .FieldButton .ButtonLeftSide{
-    background:none;
-    cursor:default;
+.ScreenLookUp .ScreenTextBox{
+ border:none;
 }
 .LookupButtonImage{
-    background:url("../Images/fieldlookup.png") no-repeat;
+    background:url("../Images/fieldlookup.png") no-repeat center center;
 }
 .disabled .LookupButtonImage{
-    background:url("../Images/fieldlookupdisabled.png") no-repeat;
+    background:url("../Images/fieldlookupdisabled.png") no-repeat center center;
+    cursor:default;
 }
 .CommentButtonImage{
-    background:url("../Images/fieldcomment.png") no-repeat;
+    background:url("../Images/fieldcomment.png") no-repeat center center;
 }
 .disabled .CommentButtonImage{
-    background:url("../Images/fieldcommentdisabled.png") no-repeat;
+    background:url("../Images/fieldcommentdisabled.png") no-repeat center center;
+    cursor:default;
 }
 .AdvancedButtonImage{
-    background:url("../Images/fieldadvanced.png") no-repeat;
+    background:url("../Images/fieldadvanced.png") no-repeat center center;
 }
 .disabled .AdvancedButtonImage{
-    background:url("../Images/fieldadvanceddisabled.png") no-repeat;
+    background:url("../Images/fieldadvanceddisabled.png") no-repeat center center;
+    cursor:default;
 }
 .LookupButtonImage, .CommentButtonImage, .AdvancedButtonImage{
     width:16px;
     height:16px;
+    padding:2px;
+    cursor:pointer;
+    border-left:1px solid #D8D8D8;
+}
+.Screenlookup .Hover{
+    background:#D8D8D8;
+  //   background:black;
+
 }
 /*******Button Panel***********/
 .ButtonPanelContainer{
@@ -664,6 +638,56 @@ cursor:default;}
     height:28px;
 }
 
+.unfocused{
+background:#BAC8D9 none repeat scroll 0 0;
+opacity:0.5;
+zoom: 1;
+filter: alpha(opacity = 50);
+}
+/*
+.unfocused .WindowTR {
+    width:7px;
+    height:29px;
+    background: transparent url("../Images/unfocusedwindowtr.gif");
+}
+.unfocused .WindowTL {
+    width:7px;
+    height:29px;
+    background: url("../Images/unfocusedwindowtl.gif");
+}
+.unfocused .WindowBR {
+    width:7px;
+    height:28px;
+    background: url("../Images/unfocusedwindowbr.gif");
+}
+.unfocused .WindowBL {
+    width:7px;
+    height:28px;
+    background: url("../Images/unfocusedwindowbl.gif");
+}
+.unfocused .WindowLeft {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/unfocusedwindowleft.gif");
+}
+.unfocused .WindowRight {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/unfocusedwindowright.gif") repeat-y;
+}
+
+.unfocused .Caption{
+    background:url("../Images/unfocusedwindowheader.gif") repeat-x;
+    height:29px;
+    cursor:move;
+}
+.unfocused .StatusBar {
+    background:url("../Images/unfocusedwindowfooter.gif") repeat-x;
+    height:28px;
+}
+*/
 /*PopUP panel*/
 .ErrorWindow .middle{
 background:#e5f5f9;;

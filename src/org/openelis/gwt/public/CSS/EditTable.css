@@ -109,7 +109,7 @@ border-bottom:1px dotted #A3BAE9;
     background:#dde0e3;
 }
 
-.FavoritesHeader{
+.FavHeader{
     height:20px;
     background:url("../Images/headersprite.gif") repeat-x;
     border-collapse:collapse;
@@ -133,7 +133,7 @@ border-bottom:1px dotted #A3BAE9;
 }
 .HeaderCell{
     overflow:hidden;
-    cursor:pointer;
+  //  cursor:pointer;
     height:18px;
     vertical-align:middle;
 }
