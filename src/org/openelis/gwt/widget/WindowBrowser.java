@@ -139,6 +139,7 @@ public class WindowBrowser extends Composite{
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(key,window);
+        setFocusedWindow();
     }
     
     public boolean selectScreen(String text) {
@@ -153,6 +154,7 @@ public class WindowBrowser extends Composite{
                 wid.setKeep(true);
                 browser.add(wid, left, top);
                 wid.setKeep(false);
+                setFocusedWindow();
             }
             return true;
         }
@@ -163,6 +165,17 @@ public class WindowBrowser extends Composite{
         if (browser.isVisible()) {
             browser.setHeight((Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
             browser.setWidth((Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
+        }
+    }
+    
+    public void setFocusedWindow() {
+        for(ScreenWindow wind : windows.values()) {
+            if(wind.zIndex != index){
+                if(wind.getStyleName().indexOf("unfocused") < 0)
+                    wind.addStyleName("unfocused");
+            }else{
+                wind.removeStyleName("unfocused");
+            }
         }
     }
 

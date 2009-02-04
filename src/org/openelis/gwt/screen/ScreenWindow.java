@@ -296,6 +296,7 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                DOM.removeEventPreview((AppScreen)content);
                DOM.addEventPreview((AppScreen)content);
            }
+           browser.setFocusedWindow();
         }
     }
     

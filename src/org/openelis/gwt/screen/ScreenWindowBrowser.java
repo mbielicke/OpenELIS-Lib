@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.widget.WindowBrowser;
