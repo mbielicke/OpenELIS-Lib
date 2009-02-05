@@ -3,7 +3,9 @@ html, body {
    padding:0pt;
    height:100%;
 }
- 
+
+
+
 td {outline:0px;}
 
 div{outline:0px;}
@@ -11,13 +13,52 @@ div{outline:0px;}
 .Disabled{
     cursor:default;
 }
+/****
+.ScreenPanel .ScreenWindowBrowser .unfocused *{
+background:#BAC8D9 none repeat scroll 0 0;
+color:gray;
+}
+****/
+.unfocused .WindowTR {
+    width:7px;
+    height:29px;
+    background: transparent url("../Images/unfocusedwindowtr.gif");
+}
+.unfocused .WindowTL {
+    width:7px;
+    height:29px;
+    background: url("../Images/unfocusedwindowtl.gif");
+}
+.unfocused .WindowBR {
+    width:7px;
+    height:28px;
+    background: url("../Images/unfocusedwindowbr.gif");
+}
+.unfocused .WindowBL {
+    width:7px;
+    height:28px;
+    background: url("../Images/unfocusedwindowbl.gif");
+}
+.unfocused .WindowLeft {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/unfocusedwindowleft.gif");
+}
+.unfocused .WindowRight {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/unfocusedwindowright.gif") repeat-y;
+}
 
-
-.SectionHeader{
- background:#CCCCCC;
- border: black solid 1px;
- text-align: center;
- margin: 3px;
+.unfocused .Caption{
+    background:url("../Images/unfocusedwindowheader.gif") repeat-x;
+    height:29px;
+}
+.unfocused .StatusBar {
+    background:url("../Images/unfocusedwindowfooter.gif") repeat-x;
+    height:28px;
 }
 
 .SectionHeaderText{
@@ -637,57 +678,6 @@ cursor:default;}
     background:url("../Images/windowfooter.gif") repeat-x;
     height:28px;
 }
-
-.unfocused{
-background:#BAC8D9 none repeat scroll 0 0;
-opacity:0.5;
-zoom: 1;
-filter: alpha(opacity = 50);
-}
-/*
-.unfocused .WindowTR {
-    width:7px;
-    height:29px;
-    background: transparent url("../Images/unfocusedwindowtr.gif");
-}
-.unfocused .WindowTL {
-    width:7px;
-    height:29px;
-    background: url("../Images/unfocusedwindowtl.gif");
-}
-.unfocused .WindowBR {
-    width:7px;
-    height:28px;
-    background: url("../Images/unfocusedwindowbr.gif");
-}
-.unfocused .WindowBL {
-    width:7px;
-    height:28px;
-    background: url("../Images/unfocusedwindowbl.gif");
-}
-.unfocused .WindowLeft {
-    width:7px;
-    height:100%;
-    overflow:hidden;
-    background: url("../Images/unfocusedwindowleft.gif");
-}
-.unfocused .WindowRight {
-    width:7px;
-    height:100%;
-    overflow:hidden;
-    background: url("../Images/unfocusedwindowright.gif") repeat-y;
-}
-
-.unfocused .Caption{
-    background:url("../Images/unfocusedwindowheader.gif") repeat-x;
-    height:29px;
-    cursor:move;
-}
-.unfocused .StatusBar {
-    background:url("../Images/unfocusedwindowfooter.gif") repeat-x;
-    height:28px;
-}
-*/
 /*PopUP panel*/
 .ErrorWindow .middle{
 background:#e5f5f9;;
@@ -1045,7 +1035,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
 .ScreenCalendar .TextboxSelected{
     border:1px solid #7eadd9;
     color:#000000;
-    background:#ffffff;
+    background:#ffffff none;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
@@ -1533,3 +1523,4 @@ height:19px;
 cursor:pointer;
 background: url(../Images/dotdotdot.gif) 0px 0px no-repeat;
 }
+
