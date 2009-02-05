@@ -337,7 +337,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             popupPanel.hide();
         }
         destroy();
-        
+        browser.index--;
+        browser.setFocusedWindow();
     }
     
     public void onDragDropEnd(Widget sender, Widget target) {
