@@ -69,7 +69,7 @@ public class TreeField extends AbstractField {
     }
 
     public Object clone() {
-        TableField obj = new TableField();
+        TreeField obj = new TreeField();
         obj.setKey(key);
         obj.setRequired(required);
         obj.setTip(tip);
