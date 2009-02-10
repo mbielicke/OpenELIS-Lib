@@ -42,7 +42,7 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
                 Enum command = ClassFactory.getEnum(icons.item(i).getAttributes().getNamedItem("command").getNodeValue());
                 MouseListener listener = null;
                 if(icons.item(i).getAttributes().getNamedItem("mouse") != null) {
-                    String click = node.getAttributes().getNamedItem("mouse").getNodeValue();
+                    String click = icons.item(i).getAttributes().getNamedItem("mouse").getNodeValue();
                     if(click.equals("this"))
                         listener = ((MouseListener)screen);
                     else
