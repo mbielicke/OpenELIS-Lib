@@ -51,7 +51,7 @@ import java.util.ArrayList;
 
 public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListener, MouseListener{
     
-    public static String headerStyle = "Header";
+    public static String headerStyle = "topHeaderBar";
     public static String headerCellStyle = "HeaderCell";
     public ArrayList<Label> hLabels = new ArrayList<Label>();
     private ArrayList<TreeColumnInt> columns;
@@ -124,6 +124,8 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
         }
         setStyleName(headerStyle);
         setHeight("18px");
+        setCellPadding(0);
+        setCellSpacing(0);
         addTableListener(this);
         sizeHeader();
     }

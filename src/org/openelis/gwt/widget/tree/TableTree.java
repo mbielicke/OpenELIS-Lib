@@ -171,17 +171,24 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
         for(int j = 0; j < editorGrid.getColumnCount(); j++) {
             if(j < editorGrid.getColumnCount() -1)
                 editorGrid.getCellFormatter().setWidth(0,j,"18px");
-            editorGrid.getCellFormatter().setHeight(0,j,"18px");
+            if(j == 0)
+                editorGrid.getCellFormatter().setHeight(0,j,"18px");
+            
             if(j == editorGrid.getColumnCount() -2){
                 if(drow.open && drow.hasChildren())
-                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
+                    editorGrid.getCellFormatter().setStyleName(0,j,"treeOpenImage");
+//                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
                 else if(drow.hasChildren())
-                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
+                    editorGrid.getCellFormatter().setStyleName(0,j,"treeClosedImage");
+                    //DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
                 else if(j > 0){
+                    
                     if(drow.parent.getItems().indexOf(drow) == drow.parent.getItems().size()-1)
-                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat center");
+                        editorGrid.getCellFormatter().setStyleName(0,j,"treeLImage");
+                    //    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsL.gif') no-repeat center");
                     else
-                        DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat center");
+                        editorGrid.getCellFormatter().setStyleName(0,j,"treeTImage");
+                        //DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/treedotsT.gif') no-repeat center");
                 }
                 if(drow.hasChildren()){
                     editorGrid.clickCell = j;
@@ -196,7 +203,8 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
             }
             for(TreeDataItem item : levels){
                 if(item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
-                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
+                    editorGrid.getCellFormatter().setStyleName(0,item.depth,"treeIImage");
+                    //DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
                 }
             }
             
@@ -211,7 +219,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
              DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,grid.getColumnCount()-1), "background", "#f8f8f9");
        }
        */
-       editorGrid.addStyleName(TreeView.cellStyle);
+       editorGrid.addStyleName("TreeTableLeftTree");
        DOM.setStyleAttribute(editorGrid.getRowFormatter().getElement(0), "background", "none");
        //DOM.setStyleAttribute(editorGrid.getWidget(0,editorGrid.getColumnCount() - 1).getElement(),"padding","2px");
     }
