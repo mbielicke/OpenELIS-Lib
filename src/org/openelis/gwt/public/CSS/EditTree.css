@@ -54,6 +54,11 @@ tr .TreeHighlighted .treeOpenImage{
         height:18px;
         width:18px;
 }
+.treeTImage {
+		background:transparent url(../Images/treedotsT.gif) no-repeat scroll center center;
+		height:18px;
+		width:18px;
+}
 .TreeRow{
     height:18px;
     background:white;
