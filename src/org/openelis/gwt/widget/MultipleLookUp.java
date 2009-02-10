@@ -20,6 +20,7 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
     
     public MultipleLookUp() {
         textbox = new TextBox();
+        textbox.setStyleName("ScreenTextBox");
         hp = new HorizontalPanel();
         iconPanel = new HorizontalPanel();
         hp.add(textbox);
@@ -39,7 +40,7 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
                 commandListeners.fireCommand(command, data);
             }
         });
-        icon.setStyleName(style);
+        //icon.setStyleName(style);
         icon.addMouseListener(mouse);
         iconPanel.add(icon);
     }
