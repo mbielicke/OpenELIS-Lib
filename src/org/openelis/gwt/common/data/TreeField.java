@@ -144,4 +144,8 @@ public class TreeField extends AbstractField {
     public AbstractField getField(int row, String field) {
         return (AbstractField)value.get(row).get(fieldIndex.indexOf(field));
     }
+    
+    public boolean isValid() {
+        return valid;
+    }
 }
