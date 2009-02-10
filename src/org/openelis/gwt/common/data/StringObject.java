@@ -25,49 +25,13 @@
 */
 package org.openelis.gwt.common.data;
 
-public class StringObject implements DataObject {
+public class StringObject extends DataObject<String>  {
 
     private static final long serialVersionUID = 1L;
-    protected String value;
-    
-    public StringObject() {
-        
-    }
-    
-    public StringObject(String val){
-        setValue(val);
-    }
-    
-    public String getValue() {
-        if(value == null)
-            return "";
-        return value;
-    }
 
-    public void setValue(Object val) {
-        value = (String)val;
-    }
+    public StringObject() {}
     
-    public Object clone() {
-        StringObject clone = new StringObject();
-        if(value != null)
-            clone.setValue(new String(value));
-        return clone;
+    public StringObject(String val) {
+        super(val);
     }
-    
-    public boolean equals(Object obj) {
-        if(!(obj instanceof StringObject))
-            return false;
-        return ((StringObject)obj).value.equals(value);
-    }
-    
-    public int hashCode() {
-        return value.hashCode();
-    }
-
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return value.compareTo(((StringObject)o).getValue());
-    }    
-
 }

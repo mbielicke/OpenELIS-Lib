@@ -28,7 +28,7 @@ package org.openelis.gwt.common.data;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TreeDataItem extends DataSet<DataObject> {
+public class TreeDataItem extends DataSet<Integer> {
     
     private static final long serialVersionUID = 1L;
     
@@ -55,13 +55,11 @@ public class TreeDataItem extends DataSet<DataObject> {
     public Object clone() {
         TreeDataItem clone = new TreeDataItem();
         for(int i=0; i < size(); i++){
-            clone.add((DataObject)get(i).clone());
+            clone.add(get(i));
         }
         for(int i=0; i < items.size(); i++){
             clone.addItem((TreeDataItem)getItem(i).clone());
         }
-        if(data != null)
-            clone.data = (Data)data.clone();
         
         //clone.parent = parent;
         clone.leafType = leafType;

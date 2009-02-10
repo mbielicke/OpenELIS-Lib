@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.ScreenTableWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
@@ -59,7 +58,7 @@ import java.util.Iterator;
  * @author tschmidt
  * 
  */
-public class TableWidget<D extends DataSet> extends FocusPanel implements
+public class TableWidget extends FocusPanel implements
                             TableListener,
                             SourcesChangeEvents,
                             SourcesTableWidgetEvents,
@@ -74,9 +73,9 @@ public class TableWidget<D extends DataSet> extends FocusPanel implements
     public boolean focused;
     public int activeRow = -1;
     public int activeCell = -1;
-    public TableModelInt<D> model;
+    public TableModelInt model;
     public TableView view;
-    public TableRendererInt<D> renderer;
+    public TableRendererInt renderer;
     public TableKeyboardHandlerInt keyboardHandler;
     public TableMouseHandlerInt mouseHandler;
     public boolean shiftKey;
@@ -112,7 +111,7 @@ public class TableWidget<D extends DataSet> extends FocusPanel implements
         this.title = title;
         this.showHeader = showHeader;
         renderer = new TableRenderer(this);
-        model = new TableModel<D>(this);
+        model = new TableModel(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
@@ -127,11 +126,11 @@ public class TableWidget<D extends DataSet> extends FocusPanel implements
      * Default constructor, puts table on top of the event stack.
      * 
      */
-    public TableWidget(ArrayList<TableColumnInt> columns,TableModel<D> model, TableView view, TableRenderer renderer) {
+    public TableWidget(ArrayList<TableColumnInt> columns,TableModel model, TableView view, TableRenderer renderer) {
         init(columns,model,view,renderer);
     }
     
-    public void init(ArrayList<TableColumnInt> columns,TableModel<D> model, TableView view, TableRenderer renderer){
+    public void init(ArrayList<TableColumnInt> columns,TableModel model, TableView view, TableRenderer renderer){
         this.columns = columns;
         this.model = model;
         this.view = view;

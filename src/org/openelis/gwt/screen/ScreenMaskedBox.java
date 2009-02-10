@@ -25,10 +25,7 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
@@ -41,7 +38,7 @@ import org.openelis.gwt.widget.MaskedTextBox;
  * @author tschmidt
  *
  */
-public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
+@Deprecated public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */

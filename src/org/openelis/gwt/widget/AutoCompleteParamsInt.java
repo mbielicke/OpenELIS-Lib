@@ -30,7 +30,7 @@ import org.openelis.gwt.common.data.AbstractField;
 
 import java.util.HashMap;
 
-public interface AutoCompleteParamsInt {
+@Deprecated public interface AutoCompleteParamsInt {
 
     public HashMap<String,AbstractField> getParams(Form rpc);
 }

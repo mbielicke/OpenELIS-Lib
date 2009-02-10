@@ -40,7 +40,7 @@ import org.openelis.gwt.screen.ScreenLabel;
  * @author tschmidt
  *
  */
-public class MenuList extends Composite{
+@Deprecated public class MenuList extends Composite{
     
     private VerticalPanel vp = new VerticalPanel();
     private ScrollPanel scroll = new ScrollPanel();

@@ -26,14 +26,12 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
-public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
+public class Dropdown extends DropdownWidget {
     
     private int startPos;
     boolean linear;
@@ -96,7 +94,7 @@ public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
     }
     
     public void getMatches(String match) {
-        DataModel model = this.model.getData();
+        DataModel<Object> model = (DataModel<Object>)this.model.getData();
         int tempStartPos = -1;
         int index = getIndexByTextValue(match);
         
@@ -127,7 +125,7 @@ public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
     private int getIndexByTextValue(String textValue) {
         if(textValue.equals(""))
             return -1;
-        DataModel<DataSet> model = this.model.getData();
+        DataModel<Object> model = (DataModel<Object>)this.model.getData();
         int low = 0;
         int high = model.size() - 1;
         int mid = -1;
@@ -135,7 +133,7 @@ public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
         
         if(linear){
             for(int i = 0; i < model.size(); i++){
-                if(((String) ((DataObject)model.get(i).get(0)).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
+                if(((String) model.get(i).get(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
                     return i;
             }
             return -1;
@@ -144,9 +142,9 @@ public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
             while (low <= high) {
                 mid = (low + high) / 2;
 
-                if (compareValue((String)((DataObject)model.get(mid).get(0)).getValue(),textValue,length) < 0)
+                if (compareValue((String)model.get(mid).get(0).getValue(),textValue,length) < 0)
                     low = mid + 1;
-                else if (compareValue((String)((DataObject)model.get(mid).get(0)).getValue(),textValue,length) > 0)
+                else if (compareValue((String)model.get(mid).get(0).getValue(),textValue,length) > 0)
                     high = mid - 1;
                 else
                     break;
@@ -156,7 +154,7 @@ public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
                 return -1; // NOT FOUND
             else{
                 //we need to do a linear search backwards to find the first entry that matches our search
-                while(mid > -1 && compareValue((String)((DataObject)model.get(mid).get(0)).getValue(),textValue,length) == 0)
+                while(mid > -1 && compareValue((String)model.get(mid).get(0).getValue(),textValue,length) == 0)
                     mid--;
             
                 return (mid+1);
@@ -170,8 +168,8 @@ public class Dropdown<D extends DataSet> extends DropdownWidget<D> {
         return value.substring(0,length).toUpperCase().compareTo(textValue.toUpperCase());
     }
     
-    public void setModel(DataModel<D> model){
-        this.model.load((DataModel<D>)model.clone());
+    public void setModel(DataModel<? extends Object> model){
+        this.model.load((DataModel<Object>)model.clone());
     }
     
     public void enabled(boolean enabled) {

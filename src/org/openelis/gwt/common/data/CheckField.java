@@ -32,7 +32,7 @@ import com.google.gwt.xml.client.Node;
  * CheckField is an implementation of AbstractField that represents
  * data used for Checkboxes.
  */
-public class CheckField extends AbstractField<StringObject>  {
+public class CheckField extends AbstractField<String> {
 
     private static final long serialVersionUID = 1L;
     
@@ -44,7 +44,7 @@ public class CheckField extends AbstractField<StringObject>  {
      *
      */
     public CheckField() {
-        super(new StringObject());
+        super();
     }
     
     /**
@@ -53,8 +53,7 @@ public class CheckField extends AbstractField<StringObject>  {
      * @param val
      */
     public CheckField(String val) {
-        super(new StringObject());
-        setValue(val);
+        super(val);
     }
     
     /**
@@ -86,7 +85,7 @@ public class CheckField extends AbstractField<StringObject>  {
      */
     public void validate() {
         if (required) {
-            if (object.getValue()  == null) {
+            if (value == null) {
                 addError("Field is required");
                 valid =  false;
                 return;
@@ -111,7 +110,7 @@ public class CheckField extends AbstractField<StringObject>  {
      * Returns the string value of this field as either "Y" or "N"
      */
     public String toString() {
-       return object.getValue();
+       return value;
     }
 
     /**
@@ -119,7 +118,7 @@ public class CheckField extends AbstractField<StringObject>  {
      * @return
      */
     public boolean isChecked() {
-        return (object.getValue() != null && "Y".equals(object.getValue()));
+        return (value != null && "Y".equals(value));
     }
 
     /**
@@ -129,7 +128,7 @@ public class CheckField extends AbstractField<StringObject>  {
     public Object clone() {
         CheckField obj = new CheckField();
         obj.setRequired(required);
-        obj.setValue(getValue());
+        obj.setValue(value);
         obj.setKey(key);
         return obj;
     }
@@ -145,10 +144,9 @@ public class CheckField extends AbstractField<StringObject>  {
      * StringField
      */
     public String getValue() {
-        String returnValue = object.getValue();
-        if("".equals(returnValue))
+        if("".equals(value))
             return null;
         else
-            return returnValue;
+            return value;
     }
 }

@@ -37,10 +37,10 @@ import java.util.ArrayList;
  *
  */
 
-public class CollectionField extends AbstractField<StringObject>  {
+@Deprecated public class CollectionField  extends AbstractField<ArrayList<DataObject>>  {
 
     private static final long serialVersionUID = 1L;
-    private ArrayList<Data> coll = new ArrayList<Data>();
+    private ArrayList<DataObject> coll = new ArrayList<DataObject>();
     private String type = "";
     public static final String TAG_NAME = "rpc-collection";
 
@@ -91,7 +91,7 @@ public class CollectionField extends AbstractField<StringObject>  {
                 return;
             }
         }
-        for(Data data : coll) {
+        for(DataObject data : coll) {
             if(data instanceof AbstractField){
                 ((AbstractField)data).validate();
                 if(!((AbstractField)data).valid)
@@ -109,28 +109,13 @@ public class CollectionField extends AbstractField<StringObject>  {
         return true;
     }
 
-    /**
-     * This method accepts an ArrayList<Data> as a parameter 
-     */
-    public void setValue(Object val) {
-        // TODO Auto-generated method stub
-        coll = (ArrayList)val;
-    }
-
-    /**
-     * Returns the ArrayList<Data> wrapped by this field.
-     */
-    public ArrayList<Data> getValue() {
-        // TODO Auto-generated method stub
-        return coll;
-    }
     
     /**
      * This method will add the item passed to the end of this
      * fields current list
      * @param item
      */
-    public void addItem(Data item) {
+    public void addItem(DataObject item) {
         coll.add(item);
     }
 
@@ -142,7 +127,7 @@ public class CollectionField extends AbstractField<StringObject>  {
         CollectionField obj = new CollectionField();
         obj.setRequired(required);
        // obj.setType(type);
-        obj.setValue(coll);
+        obj.setValue(value);
         obj.setKey(key);
         return obj;
     }

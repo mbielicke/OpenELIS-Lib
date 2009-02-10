@@ -33,7 +33,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.pagedtree.TreeController;
 import org.openelis.gwt.widget.pagedtree.TreeModel;
 
-public class ScreenPagedTree extends ScreenWidget {
+@Deprecated public class ScreenPagedTree extends ScreenWidget {
    public TreeController controller = new TreeController();
    private int itemsPerPage = 0;
     /**

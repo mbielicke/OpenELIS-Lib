@@ -39,7 +39,7 @@ import java.util.Date;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class DateField extends AbstractField<DateObject> {
+public class DateField extends AbstractField<DatetimeRPC> {
     
     private static final long serialVersionUID = 1L;
     
@@ -68,7 +68,7 @@ public class DateField extends AbstractField<DateObject> {
      *
      */
     public DateField(){
-        super(new DateObject());
+        super();
     }
     
     /**
@@ -79,7 +79,7 @@ public class DateField extends AbstractField<DateObject> {
      * @param val
      */
     public DateField(byte begin, byte end, DatetimeRPC val){
-        super(new DateObject());
+        super();
         setBegin(begin);
         setEnd(end);
         setValue(val);
@@ -93,7 +93,7 @@ public class DateField extends AbstractField<DateObject> {
      * @param val
      */
     public DateField(byte begin, byte end, Date val){
-        super(new DateObject());
+        super();
         setBegin(begin);
         setEnd(end);
         setValue(DatetimeRPC.getInstance(getBegin(),
@@ -156,13 +156,13 @@ public class DateField extends AbstractField<DateObject> {
      */
     public void validate() {
         if (required) {
-            if (object.value == null) {
+            if (value == null) {
                 addError("Field is required");
                 valid = false;
                 return;
             }
         }
-        if (object.value != null && !isInRange()) {
+        if (value != null && !isInRange()) {
             valid = false;
         }
         valid = true;
@@ -181,12 +181,12 @@ public class DateField extends AbstractField<DateObject> {
     */
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        if (min != null && object.value.before(DatetimeRPC.getInstance()
+        if (min != null && value.before(DatetimeRPC.getInstance()
                                                    .add(-min.intValue()))) {
             addError("Date is too far in the past");
             return false;
         }
-        if (max != null && object.value.after(DatetimeRPC.getInstance()
+        if (max != null && value.after(DatetimeRPC.getInstance()
                                                   .add(max.intValue()))) {
             addError("Date is too far in the future");
             return false;
@@ -206,7 +206,7 @@ public class DateField extends AbstractField<DateObject> {
      * @param begin
      */
     public void setBegin(byte begin) {
-        object.begin = begin;
+        value.startCode = begin;
     }
 
     /**
@@ -214,7 +214,7 @@ public class DateField extends AbstractField<DateObject> {
      * @param end
      */
     public void setEnd(byte end) {
-        object.end = end;
+       value.endCode = end;
     }
     
     /**
@@ -238,7 +238,7 @@ public class DateField extends AbstractField<DateObject> {
      * @return
      */
     public byte getBegin() {
-        return object.begin;
+        return value.startCode;
     }
 
     /**
@@ -246,7 +246,7 @@ public class DateField extends AbstractField<DateObject> {
      * @return
      */
     public byte getEnd() {
-        return object.end;
+        return value.endCode;
     }
 
     /**
@@ -257,7 +257,7 @@ public class DateField extends AbstractField<DateObject> {
         DateField obj = new DateField();
         obj.setMax(max);
         obj.setMin(min);
-        obj.setValue(getValue());
+        obj.setValue(value);
         obj.setKey(key);
         return obj;
     }
@@ -275,11 +275,11 @@ public class DateField extends AbstractField<DateObject> {
      * Formats the string representation of this fields value using the set pattern
      */
     public String format() {
-        if(object.value == null)
+        if(value == null)
             return "";
         if(pattern != null)
-            return DateTimeFormat.getFormat(pattern).format(object.value.getDate());
-        return String.valueOf(object.value);
+            return DateTimeFormat.getFormat(pattern).format(value.getDate());
+        return String.valueOf(value);
     }
     
     /**
@@ -294,15 +294,17 @@ public class DateField extends AbstractField<DateObject> {
      * Sets the value of the field from the passed string representation of this fields value.
      * If a pattern is set then the date must be passed in the pattern format to be valid.
      */
-    public void setValue(Object val) {
-        if(pattern == null || val == null || "".equals(val)){
-            super.setValue(val);
-            return;
-        }
-        super.setValue(DateTimeFormat.getFormat(pattern).parse((String)val));
+    public void setValue(String val) {
+        if(pattern == null) {
+            if (val == null || val == "") 
+                super.setValue(null);
+           else 
+                setValue(DatetimeRPC.getInstance(value.startCode, value.endCode, val));
+        }else
+            setValue(DatetimeRPC.getInstance(value.startCode, value.endCode, DateTimeFormat.getFormat(pattern).parse((String)val)));
     }
     
     public DatetimeRPC getValue() {
-        return (DatetimeRPC)super.getValue();
+        return value;
     }
 }

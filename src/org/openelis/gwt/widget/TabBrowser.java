@@ -46,7 +46,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
-public class TabBrowser extends Composite {
+@Deprecated public class TabBrowser extends Composite {
 
     private TabPanel browser = new TabPanel();
     private ArrayList tabs = new ArrayList();

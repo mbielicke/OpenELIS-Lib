@@ -28,10 +28,10 @@ package org.openelis.gwt.widget.tree;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.widget.pagedtree.TreeView;
 import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.table.TableView;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;
 import org.openelis.gwt.widget.tree.event.TreeModelListener;
@@ -109,7 +109,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
      */
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
-        TreeDataItem row = (TreeDataItem)controller.model.getRow(modelIndex);
+        TreeDataItem row = controller.model.getRow(modelIndex);
         rows.get(index).item = row;
         rows.get(index).modelIndex = modelIndex;
         if(controller.view.table.getRowCount() -1 >= index){
@@ -122,7 +122,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
                 TableTree item = (TableTree)controller.view.table.getWidget(index, i);
                 item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
                 
-                item.setField(row);
+                item.setField((Field)row);
                 item.setDisplay();
             }else{
                 TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);

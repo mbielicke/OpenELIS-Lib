@@ -56,7 +56,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEvents, ClickListener {
+@Deprecated public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEvents, ClickListener {
     
     protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
     .create(CalendarServiceInt.class);
@@ -84,8 +84,8 @@ public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEven
         target.setServiceEntryPoint(base);
         service = screenService;
         HashMap<String,Data> map = new HashMap<String,Data>();
-        map.put("date",new StringObject(date));
-        getXMLData(map, new RPC());
+       // map.put("date",new StringObject(date));
+        //getXMLData(map, new RPC());
     }
     
     public void afterDraw(boolean success) {
@@ -109,6 +109,7 @@ public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEven
     }
     
     public void onClick(Widget sender){
+        /*
         if(sender == prevMonth){
             month.setValue(new Integer(((Integer)month.getValue()).intValue() - 1));
             if(((Integer)month.getValue()).intValue() < 0) {
@@ -203,6 +204,7 @@ public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEven
             return;
         }
         changeListeners.fireChange(sender);
+        */
     }
 
     public void addChangeListener(ChangeListener listener) {

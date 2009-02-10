@@ -30,8 +30,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.Field;
 
 
 /**
@@ -43,7 +43,7 @@ import org.openelis.gwt.common.data.DataObject;
 public class TableLink extends SimplePanel implements TableCellWidget {
     
     private HTML editor;
-    private DataObject field;
+    private Field field;
     private boolean enabled;
     public static final String TAG_NAME = "table-link";
     public int rowIndex;
@@ -82,13 +82,13 @@ public class TableLink extends SimplePanel implements TableCellWidget {
     }
 
     public void setEditor() {
-        editor.setHTML("<div><a>" + (String)field.getValue() + "</a></div>");
+        editor.setHTML("<div><a>" + (String)((AbstractField)field).getValue() + "</a></div>");
         addStyleName("encounters");
         
     }
 
-    public void setField(Data field) {
-        this.field = (DataObject)field;
+    public void setField(Field field) {
+        this.field = field;
         
     }
 

@@ -31,6 +31,6 @@ public interface DataSorterInt {
     
     public enum SortDirection{UP,DOWN};
     
-    public void sort(DataModel data, int col, SortDirection direction);
+    public void sort(DataModel<Object> data, int col, SortDirection direction);
 
 }

@@ -27,16 +27,14 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.Window;
 
-import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
-public class AutoComplete extends DropdownWidget<DataSet<Data>> {
+public class AutoComplete extends DropdownWidget {
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;
@@ -93,7 +91,7 @@ public class AutoComplete extends DropdownWidget<DataSet<Data>> {
          }
     }
     
-    public void showAutoMatches(DataModel data){
+    public void showAutoMatches(DataModel<Object> data){
         data.multiSelect = multiSelect;
         activeRow = -1;
         activeCell = -1;

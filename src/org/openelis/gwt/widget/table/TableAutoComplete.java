@@ -32,14 +32,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.screen.ScreenAutoCompleteWidget;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoComplete;
-
-import java.util.ArrayList;
 
 public class TableAutoComplete extends TableCellInputWidget implements ChangeListener {
 
@@ -54,7 +52,6 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
     public String loadFromHidden = null;
     private boolean multi;
     private int visible = 1;
-    private String fieldCase = "mixed";
     private String type = "";
     private int width;
     public static final String TAG_NAME = "table-autoComplete";
@@ -113,7 +110,7 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 			display.setWordWrap(false);
 		}
         editor.model.load(((DropDownField)field).getModel());
-        editor.setSelections(((DropDownField)field).getSelections());
+        editor.setSelections(((DropDownField<Object>)field).getValue());
         
         display.setText(editor.getTextBoxDisplay());
 		setWidget(display);
@@ -124,7 +121,7 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
         editor.model.load(((DropDownField)field).getModel());
         editor.activeCell = -1;
         editor.activeRow = -1;
-        editor.setSelections(((DropDownField)field).getSelections());
+        editor.setSelections(((DropDownField<Object>)field).getValue());
         editor.setWidth(width+"px");
 		setWidget(editor);			
 	}

@@ -25,14 +25,13 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.Field;
 
 
 /**
@@ -44,7 +43,7 @@ import org.openelis.gwt.common.data.DataObject;
 public class TableLabel extends SimplePanel implements TableCellWidget {
     
     private Label editor;
-    private DataObject field;
+    private Field field;
     private int width;
     public static final String TAG_NAME = "table-label";
     public int rowIndex;
@@ -102,8 +101,8 @@ public class TableLabel extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Data field) {
-        this.field = (DataObject)field;
+    public void setField(Field field) {
+        this.field = field;
         
     }
 

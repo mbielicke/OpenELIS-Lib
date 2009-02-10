@@ -34,9 +34,11 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
+import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteCall;
@@ -48,7 +50,6 @@ import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
-import org.openelis.gwt.widget.LookUp;
 
 import java.util.ArrayList;
 
@@ -210,7 +211,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
                 auto.activeCell = -1;
                 auto.model.load(((DropDownField)field).getModel());
             }
-            auto.setSelections(((DropDownField)field).getSelections());
+            auto.setSelections((ArrayList<DataSet<Object>>)((DropDownField)field).getValue());
             super.load(field);
         }
     }
@@ -301,21 +302,21 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
 		
     	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
     	for (int i = 0; i < items.getLength(); i++) {
-    	DataSet set = new DataSet();
+    	DataSet<Object> set = new DataSet<Object>();
         Node item = items.item(i);
 
 		//display text
-        StringObject display = new StringObject();
+        StringField display = new StringField();
 		display.setValue((item.getFirstChild() == null ? "" : item.getFirstChild().getNodeValue()));
 		set.add(display);
 
         //id
         if(type.equals("integer")){
-        	NumberObject id = new NumberObject(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
-        	set.setKey(id);
+        	//NumberObject id = new NumberObject(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
+        	set.setKey(new Integer(item.getAttributes().getNamedItem("value").getNodeValue()));
         }else if(type.equals("string")){
-        	StringObject id = new StringObject(item.getAttributes().getNamedItem("value").getNodeValue());
-        	set.setKey(id);
+        	//Stringt id = new StringObject(item.getAttributes().getNamedItem("value").getNodeValue());
+        	set.setKey(item.getAttributes().getNamedItem("value").getNodeValue());
         }
         
 		dataModel.add(set);

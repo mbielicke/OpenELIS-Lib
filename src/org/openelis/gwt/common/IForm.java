@@ -36,7 +36,7 @@ import java.util.Vector;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public interface IForm {
+@Deprecated public interface IForm {
     
     
     public Object getFieldValue(String key);

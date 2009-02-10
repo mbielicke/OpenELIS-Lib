@@ -28,8 +28,7 @@ package org.openelis.gwt.widget.tree;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -61,11 +60,11 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void addRow(TreeDataItem row) {
-        data.add((TreeDataItem)row);
+        data.add(row);
     }
 
     public void addRow(int index, TreeDataItem row) {
-        data.add(rows.get(index),(TreeDataItem)row);
+        data.add(rows.get(index),row);
     }
 
     public boolean canDelete(int row) {
@@ -198,7 +197,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return data;
     }
 
-    public Data getObject(int row, int col) {
+    public Field getObject(int row, int col) {
         return rows.get(row).get(col);
     }
 
@@ -305,8 +304,8 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         treeModelListeners.fireRowUnselected(this, -1);        
     }
 
-    public void setCell(int row, int col, Object value) {
-        ((DataObject)rows.get(row).get(col)).setValue(value);
+    public void setCell(int row, int col,Object value) {
+        rows.get(row).get(col).setValue(value);
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
@@ -366,8 +365,8 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         
     }
     
-    public TreeDataItem createTreeItem(String leafType, DataObject key) {
-        return data.createTreeItem(leafType, key);
+    public TreeDataItem createTreeItem(String leafType) {
+        return data.createTreeItem(leafType);
     }
     
     public void setLeaves(HashMap<String,TreeDataItem> leaves){

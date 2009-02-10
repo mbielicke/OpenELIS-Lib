@@ -2,33 +2,10 @@ package org.openelis.gwt.common.data;
 
 import java.util.ArrayList;
 
-/**
- * DataSet is a class that extends ArrayList<DataObject> and implements the Data
- * interface so that it can be used to send and recieve data from the client to the 
- * server.  DataSet is the building block for the DataModel and represents entries into the 
- * model.
- * @author tschmidt
- *
- */
-/*
- * This class has been marked as a Field for backwards compatibility only.  Remove once 
- * all screens have been upgraded to create smaller code.
- */
-public class DataSet<Key> extends ArrayList<DataObject> implements Field, Comparable{
+public class TableRow extends ArrayList<Field> {
     
     private static final long serialVersionUID = 1L;
-    
-    /**
-     * Key value for this DataSet and is expected to be unique to the DataSet
-     * when grouped in a model.
-     */
-    protected Key key;
-    /**
-     * This member is used to attach some set of data to the dataset useful to the 
-     * program but not accessed or seen  by the user.
-     */
-    protected Field data;
-    
+
     /**
      * Flag letting Widgets know if this DataSet should be shown on screen or 
      * if it is currently hidden.  Used when filtering.
@@ -45,7 +22,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * Default constructor
      *
      */
-    public DataSet() {
+    public TableRow() {
         
     }
     
@@ -53,9 +30,9 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * Constructor that creates an empty DataSet with the passed key value
      * @param key
      */
-    public DataSet(Key key) {
-        setKey(key);
-    }
+    //public TableR(Key key) {
+      //  setKey(key);
+    //}
     
     /**
      * Constructor that creates a DataSet with the passed key value and the single
@@ -63,8 +40,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * @param key
      * @param value
      */
-    public DataSet(Key key, DataObject val){
-        setKey(key);
+    public TableRow(Field val){
         add(val);
     }
     
@@ -74,9 +50,8 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * @param key
      * @param values
      */
-    public DataSet(Key key, DataObject[] values){
-        setKey(key);
-        for(DataObject val : values){
+    public TableRow(Field[] values){
+        for(Field val : values){
             add(val);
         }
     }
@@ -85,29 +60,29 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * This method will set the key value of the DataSet
      * @param key
      */
-    public void setKey(Key key){
-        this.key = key;
-    }
+    //public void setKey(Key key){
+      //  this.key = key;
+    //}
     
     /**
      * This method will return the key value of the DataSet
      * @return
      */
-    public Key getKey() {
-        return key;
-    }
+    //public Key getKey() {
+      //  return key;
+    //}
     
     /**
      * This method will create a new DataSet and set the values of it
      * to be the same as this one.
      */
     public Object clone() {
-        DataSet<Key> clone = new DataSet<Key>();
+        TableRow clone = new TableRow();
         for(int i=0; i < size(); i++){
-            clone.add((DataObject)get(i).clone());
+            clone.add(get(i));
         }
-        if(key != null)
-            clone.key = key;
+        //if(key != null)
+           // clone.key = key;
         //if(data != null)
           //  clone.data = (Data)data.clone();
         clone.enabled = enabled;
@@ -143,42 +118,33 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * info to this dataset but is not accessible to end users
      * @return
      */
-    public Field getData() {
-       return data;
-    }
+   // public UserData getData() {
+     //  return data;
+   // }
 
     /**
      * This method will set the data member that is used by programs to attach
      * info to this dataset but is not accessible to end users
      * @param data
      */
-    public void setData(Field data) {
-       this.data = data;
-    }
+   // public void setData(UserData data) {
+     //  this.data = data;
+  // }
     
     /**
      * Override of the .equals(Object obj) method used when sorting and filtering 
      * datasets
      */
-    public boolean equals(Object object) {
-        if(! (object instanceof DataSet)) 
-            return false;
-        return ((DataSet)object).getKey().equals(key);
-    }
+    //public boolean equals(Object object) {
+      //  if(! (object instanceof DataSet)) 
+        //    return false;
+        //return ((DataSet)object).getKey().equals(key);
+    //}
     
-    @Override
-    public int hashCode() {
+    //@Override
+    //public int hashCode() {
         // TODO Auto-generated method stub
-        return key.hashCode();
-    }
+      //  return key.hashCode();
+   // }
 
-    public Object getValue() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setValue(Object obj) {
-        // TODO Auto-generated method stub
-        
-    }
 }

@@ -27,8 +27,7 @@ package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -52,7 +51,7 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     
     public int numRows();
     
-    public Data getObject(int row, int col);
+    public Field getObject(int row, int col);
     
     public void clear();
     
@@ -120,7 +119,7 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     
     public void clearCellError(int row, int col);
     
-    public TreeDataItem createTreeItem(String leafType, DataObject key);
+    public TreeDataItem createTreeItem(String leafType);
     
     public void setLeaves(HashMap<String,TreeDataItem> leaves);
         

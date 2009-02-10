@@ -25,9 +25,9 @@
 */
 package org.openelis.gwt.common.data;
 
-import java.util.ArrayList;
-
 import com.google.gwt.xml.client.Node;
+
+import java.util.ArrayList;
 /**
  * DropDownField is an implementation of AbstractField that is 
  * used to send and recieve data for Dropdown and AutoComplete 
@@ -35,14 +35,9 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  *
  */
-public class DropDownField extends AbstractField {
+public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> {
 
     private static final long serialVersionUID = 1L;
-    
-    /**
-     * Member to hold all current selections for this field
-     */
-    private ArrayList<DataSet> selections = new ArrayList<DataSet>();
     
     /**
      * Member to hold the DataModel that represents the Options for this 
@@ -50,7 +45,7 @@ public class DropDownField extends AbstractField {
      * this model for its options overriding what options it has stored in 
      * the widget itself
      */
-    private DataModel model = new DataModel();
+    private DataModel<Key> model = new DataModel<Key>();
     
     /**
      * Tag name used in XML defintion of an rpc
@@ -62,14 +57,15 @@ public class DropDownField extends AbstractField {
      *
      */
     public DropDownField() {
-        
+        super(new ArrayList<DataSet<Key>>());
     }
     
     /**
      * Constructor that accpets a defualt value as the passed parameter.
      * @param val
      */
-    public DropDownField(Object val) {
+    public DropDownField(DataSet<Key> val) {
+        this();
         setValue(val);
     }
     
@@ -92,38 +88,30 @@ public class DropDownField extends AbstractField {
                                                 .getNodeValue()).booleanValue());
         if (node.getFirstChild() != null) {
             String dflt = node.getFirstChild().getNodeValue();
-            setValue(dflt);
+            DataSet<Key> ds = new DataSet<Key>();
+            ds.setKey((Key)dflt);
+            setValue(ds);
         }
     }
     
     /**
      * This method will set this fields current value
      */
-    public void setValue(Object val) {
-        if(val instanceof ArrayList){
-            if(val instanceof DataSet) {
-                selections.clear();
-                selections.add((DataSet)val);
-            }else{
-                selections.clear();
-                for(DataSet set : (ArrayList<DataSet>)val)
-                    selections.add(set);
-            }
-        }else
-            selections.clear();
+    public void setValue(ArrayList<DataSet<Key>> val) {
+       if(value == null)
+           value = new ArrayList<DataSet<Key>>();
+       else
+           value.clear();
+       if(val != null){
+           for(DataSet<Key> set : val)
+               value.add(set);
+       }
     }
-
-    /**
-     * Method that returns the current selected entry for this field
-     * as a DataSet.
-     */
-    public Object getValue() {
-        if(selections.size() == 1)
-            return (DataSet)selections.get(0);
-        else if(selections.size() > 1)
-            return selections;
-        else
-            return null;       
+    
+    public void setValue(DataSet<Key> val) {
+        value.clear();
+        if(val != null)
+            value.add(val);
     }
     
     /**
@@ -131,20 +119,12 @@ public class DropDownField extends AbstractField {
      * @return
      */
     public Object getTextValue(){
-        if(selections.size() == 1)
-            return (String)((DataObject)selections.get(0).get(0)).getValue();
-        else if(selections.size() > 1)
-            return selections;
+        if(value.size() == 1)
+            return value.get(0).get(0);
+        else if(value.size() > 1)
+            return value;
         else
             return null;
-    }
-    
-    /**
-     * Returns all current selections as a ArrayList<DataSet>
-     * @return
-     */
-    public ArrayList<DataSet> getSelections() {
-        return selections;
     }
     
     /**
@@ -152,10 +132,10 @@ public class DropDownField extends AbstractField {
      * @return
      */
     public Object getSelectedKey() {
-        if(selections.size() == 1)
-            return ((DataObject)selections.get(0).getKey()).getValue();
-        else if(selections.size() > 1)
-            return selections;
+        if(value.size() == 1)
+            return value.get(0).getKey();
+        else if(value.size() > 1)
+            return value;
         else
             return null;       
     }
@@ -198,7 +178,7 @@ public class DropDownField extends AbstractField {
      * @param key
      */
     public void add(DataSet set) {
-        selections.add(set);
+        value.add(set);
     }
     
     /**
@@ -206,7 +186,7 @@ public class DropDownField extends AbstractField {
      * @param set
      */
     public void remove(DataSet set){
-        selections.remove(set);
+        value.remove(set);
     }
     
     /**
@@ -214,7 +194,7 @@ public class DropDownField extends AbstractField {
      *
      */
     public void clear() {
-        selections = new ArrayList<DataSet>();
+        value.clear();
     } 
     
     /**
@@ -229,8 +209,8 @@ public class DropDownField extends AbstractField {
         
         //need to create a new selections array list by hand to avoid a shallow copy
         ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
-        for(int i=0; i<selections.size(); i++)
-            cloneSelections.add((DataSet)selections.get(i).clone());
+        for(int i=0; i < value.size(); i++)
+            cloneSelections.add((DataSet)value.get(i).clone());
         obj.setValue(cloneSelections);
         
         return obj;
@@ -251,7 +231,7 @@ public class DropDownField extends AbstractField {
     public void validate() {
         if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
-            if (selections.size() == 0 || (selections.size() == 1 && selections.get(0).getKey() == null)) {
+            if (value.size() == 0 || (value.size() == 1 && value.get(0).getKey() == null)) {
                 addError("Field is required");
                 valid = false;
                 return;

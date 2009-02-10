@@ -29,12 +29,12 @@ import org.openelis.gwt.widget.pagedtree.TreeModel;
 
 import com.google.gwt.xml.client.Node;
 
-public class PagedTreeField extends AbstractField {
+@Deprecated public class PagedTreeField extends AbstractField<TreeModel> {
 
 
 	private static final long serialVersionUID = 1L;
 
-	    private TreeModel value;
+	    //private TreeModel value;
         
         public static final String TAG_NAME = "rpc-tree";
         
@@ -59,18 +59,6 @@ public class PagedTreeField extends AbstractField {
 	        return true;
 	    }
 
-	    public void setValue(Object val) {
-	        // TODO Auto-generated method stub
-	        if(val == null)
-	            value = null;
-	        else
-	            value = (TreeModel)val;
-	    }
-
-	    public Object getValue() {
-	        // TODO Auto-generated method stub
-	        return value;
-	    }
 
 	    public PagedTreeField clone() {
 	        // TODO Auto-generated method stub

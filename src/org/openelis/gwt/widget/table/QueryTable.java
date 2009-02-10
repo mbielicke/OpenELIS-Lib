@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.ScreenInputWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
  * @author tschmidt
  * 
  */
-public class QueryTable<D extends DataSet> extends TableWidget<D> implements TableKeyboardHandlerInt, TableMouseHandlerInt{
+public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, TableMouseHandlerInt{
     
     public Form form;
     public ScreenInputWidget screen;

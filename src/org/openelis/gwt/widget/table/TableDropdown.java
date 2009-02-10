@@ -59,7 +59,6 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
     public String loadFromHidden = null;
     private boolean multi;
     private int visible = 1;
-    private String fieldCase = "mixed";
     private String type = "";
     private int width;
     public static final String TAG_NAME = "table-dropdown";
@@ -136,11 +135,11 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             if(((DropDownField)field).getModel().size() > 0){
                 editor.setModel(((DropDownField)field).getModel());
             }
-            editor.setSelections(((DropDownField)field).getSelections());
+            editor.setSelections(((DropDownField<Object>)field).getValue());
             
         }else{
             ArrayList selected = new ArrayList();
-            selected.add(field.getDataObject());
+            selected.add(field);
             editor.setSelections(selected);
         }
         display.setText(editor.lookUp.getText());
@@ -155,10 +154,10 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             }
             editor.activeCell = -1;
             editor.activeRow = -1;
-            editor.setSelections(((DropDownField)field).getSelections());
+            editor.setSelections(((DropDownField<Object>)field).getValue());
         }else{
             ArrayList selected = new ArrayList();
-            selected.add(field.getDataObject());
+            selected.add(field);
             editor.setSelections(selected);
         }
         editor.setWidth((width-18)+"px");

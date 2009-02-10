@@ -28,13 +28,13 @@ package org.openelis.gwt.common.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
+public class TreeDataModel extends ArrayList<TreeDataItem> implements Field {
     
     private static final long serialVersionUID = 1L;
             
     public ArrayList<TreeDataItem> selections = new ArrayList<TreeDataItem>();
     
-    private ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
+    public ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
     
     public HashMap<String,TreeDataItem> leaves = new HashMap<String,TreeDataItem>();
         
@@ -44,7 +44,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         
 
     public boolean add(TreeDataItem item) {
-        return add(item.getKey(),item);
+        return super.add(item);
     }
     
     public void add(TreeDataItem item, TreeDataItem newItem) {
@@ -52,25 +52,22 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         super.add(indexOf(item),newItem);
     }
     
-    public void add(Data key, DataObject value){
-        TreeDataItem item = new TreeDataItem();
-        item.setKey((DataObject)key);
-        item.add(value);
-        add(key,item);
-    }
+    //public void add(Key key, DataObject value){
+    //    TreeDataItem item = new TreeDataItem();
+     //   item.setKey((DataObject)key);
+      //  item.add(value);
+       // add(key,item);
+   // }
     
-    public void add(Data key, DataObject[] values){
-        TreeDataItem item = new TreeDataItem();
-        item.setKey((DataObject)key);
-        for(int i = 0; i < values.length; i++){
-            item.add(values[i]);
-        }
-        add(key,item);
-    }
+    //public void add(Data key, DataObject[] values){
+      //  TreeDataItem item = new TreeDataItem();
+        //item.setKey((DataObject)key);
+        //for(int i = 0; i < values.length; i++){
+          //  item.add(values[i]);
+        //}
+        //add(key,item);
+   // }
     
-    public boolean add(Data key, TreeDataItem item) {
-        return super.add(item);
-    }
     
     public void delete(TreeDataItem item){
         if(item.parent != null){
@@ -145,14 +142,28 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements Data {
         set(index1,item);
     }
     
-    public TreeDataItem createTreeItem(String leafType, Data key) {
+    public TreeDataItem createTreeItem(String leafType) {
         TreeDataItem item = (TreeDataItem)leaves.get(leafType).clone();
-        item.setKey((DataObject)key);
         return item;
     }
     
     public ArrayList<TreeDataItem> getDeletions() {
         return deleted;
+    }
+
+    public Object getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setValue(Object obj) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public int compareTo(Object arg0) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

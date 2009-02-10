@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Label;
  * @author tschmidt
  *
  */
-public class DragWidget extends Label {
+@Deprecated public class DragWidget extends Label {
     public boolean selected;
     public Object value;
 

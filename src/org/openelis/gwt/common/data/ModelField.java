@@ -28,11 +28,11 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 
-public class ModelField extends AbstractField {
+@Deprecated public class ModelField extends AbstractField<DataModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private DataModel value;
+    //private DataModel value;
     public static final String TAG_NAME = "rpc-model";
     
     public ModelField() {
@@ -56,23 +56,11 @@ public class ModelField extends AbstractField {
         return true;
     }
 
-    public void setValue(Object val) {
-        // TODO Auto-generated method stub
-        if(val == null)
-            value = null;
-        else
-            value = (DataModel)val;
-    }
-
-    public DataModel getValue() {
-        return value;
-    }
-
     public Object clone() {
         ModelField obj = new ModelField();
        
         obj.setRequired(required);
-        obj.setValue(value.clone());
+       // obj.setValue(value.clone());
         obj.setRequired(required);
         obj.setTip(tip);
         obj.setKey(key);

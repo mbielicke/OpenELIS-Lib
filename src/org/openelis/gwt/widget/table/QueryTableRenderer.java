@@ -28,7 +28,6 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
@@ -36,10 +35,10 @@ import java.util.ArrayList;
 
 public class QueryTableRenderer implements TableRendererInt, TableWidgetListener {
     
-    private QueryTable<? extends DataSet> controller;
+    private QueryTable controller;
     private boolean showAltRowColors = true;
     
-    public QueryTableRenderer(QueryTable<? extends DataSet> controller){
+    public QueryTableRenderer(QueryTable controller){
         this.controller = controller;
     }
 

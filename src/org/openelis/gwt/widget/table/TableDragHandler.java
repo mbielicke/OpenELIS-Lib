@@ -7,13 +7,11 @@ import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataSet;
-
 public class TableDragHandler implements DragListener, DropListener {
     
-    private TableWidget<? extends DataSet> controller;
+    private TableWidget controller;
     
-    public TableDragHandler(TableWidget<? extends DataSet> controller) {
+    public TableDragHandler(TableWidget controller) {
         this.controller = controller;
     }
 
@@ -80,7 +78,7 @@ public class TableDragHandler implements DragListener, DropListener {
                     controller.view.setScrollPosition(controller.view.scrollBar.getScrollPosition()+10);
                     scroll = new Timer() {
                         public void run() {
-                            onDropEnter(controller.renderer.getRows().get(controller.maxRows -1),source);
+                            onDropEnter((Widget)controller.renderer.getRows().get(controller.maxRows -1),source);
                         }
                     };
                     scroll.schedule(150);
@@ -91,7 +89,7 @@ public class TableDragHandler implements DragListener, DropListener {
                     controller.view.setScrollPosition(controller.view.scrollBar.getScrollPosition()-10);
                     scroll = new Timer() {
                         public void run() {
-                            onDropEnter(controller.renderer.getRows().get(0),source);
+                            onDropEnter((Widget)controller.renderer.getRows().get(0),source);
                         }
                     };
                     scroll.schedule(150);

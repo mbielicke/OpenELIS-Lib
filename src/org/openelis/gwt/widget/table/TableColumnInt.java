@@ -29,10 +29,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.widget.MenuItem;
 
 public interface TableColumnInt {
     
@@ -78,7 +76,7 @@ public interface TableColumnInt {
     
     public Widget getWidgetInstance();
     
-    public void loadWidget(Widget widget, Data object);
+    public void loadWidget(Widget widget, Field object);
     
     public void setWidgetDisplay(Widget widget);
     

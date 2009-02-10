@@ -54,7 +54,7 @@ import java.util.Date;
  * @author tschmidt
  * 
  */
-public class FormCalendarWidget extends Composite implements
+@Deprecated public class FormCalendarWidget extends Composite implements
                                                  ClickListener,
                                                  KeyboardListener,
                                                  FocusListener,

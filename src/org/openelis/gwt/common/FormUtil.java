@@ -35,7 +35,7 @@ import com.google.gwt.xml.client.XMLParser;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
 
-public class FormUtil {
+@Deprecated public class FormUtil {
     public static void create(Form form, String xml) {
         try {
             Document formDoc = XMLParser.parse(xml);

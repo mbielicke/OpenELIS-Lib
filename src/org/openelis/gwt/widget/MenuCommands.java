@@ -32,7 +32,7 @@ import com.google.gwt.user.client.Command;
  * @author tschmidt
  *
  */
-public interface MenuCommands {
+@Deprecated public interface MenuCommands {
 	
 	public Command getCommand(String cmd);
 

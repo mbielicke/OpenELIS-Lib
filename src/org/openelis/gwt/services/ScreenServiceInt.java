@@ -39,7 +39,7 @@ import org.openelis.gwt.common.data.AbstractField;
  * @author tschmidt
  *
  */
-public interface ScreenServiceInt extends RemoteService {
+@Deprecated public interface ScreenServiceInt extends RemoteService {
 
     public Form action(Form rpc) throws RPCException;
     

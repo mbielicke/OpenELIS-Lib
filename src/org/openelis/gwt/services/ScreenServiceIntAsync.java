@@ -34,7 +34,7 @@ import org.openelis.gwt.common.Form;
  * @author tschmidt
  *
  */
-public interface ScreenServiceIntAsync {
+@Deprecated public interface ScreenServiceIntAsync {
 
     public void action(Form rpc, AsyncCallback callback);
     

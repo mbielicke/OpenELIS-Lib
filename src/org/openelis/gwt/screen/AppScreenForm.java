@@ -39,9 +39,7 @@ import org.openelis.gwt.common.LastPageException;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCDeleteException;
 import org.openelis.gwt.common.Form.Status;
-import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
@@ -59,15 +57,15 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? extends DataSet>,Display extends Form> extends AppScreen<ScreenRPC> implements FormInt, SourcesCommandEvents, CommandListener {
+public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> extends AppScreen<ScreenRPC> implements FormInt, SourcesCommandEvents, CommandListener {
    
-    public DataSet key;
-    public AppScreenFormServiceIntAsync<ScreenRPC,QModel> formService;
+    public Key key;
+    public AppScreenFormServiceIntAsync<ScreenRPC,Key> formService;
     public State state = State.DEFAULT;
     protected CommandListenerCollection commandListeners;
     public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE};
 
-    protected AsyncCallback<? extends Data> fetchCallback = new AsyncCallback<ScreenRPC>() {
+    protected AsyncCallback<ScreenRPC> fetchCallback = new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result) {
             rpc = result;
             loadScreen(rpc.form);
@@ -82,12 +80,12 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         }
     };
     
-    protected AsyncCallChain<? extends Data> fetchChain = new AsyncCallChain<Data>(); 
+    protected AsyncCallChain<ScreenRPC> fetchChain = new AsyncCallChain<ScreenRPC>(); 
     {
         fetchChain.add(fetchCallback);
     }
     
-    protected AsyncCallback<? extends Data> updateCallback= new AsyncCallback<ScreenRPC>() {
+    protected AsyncCallback<ScreenRPC> updateCallback= new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result){
             rpc = result;
             loadScreen(rpc.form);
@@ -101,13 +99,13 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         }            
     };
    
-    protected AsyncCallChain<? extends Data> updateChain = new AsyncCallChain<Data>();
+    protected AsyncCallChain<ScreenRPC> updateChain = new AsyncCallChain<ScreenRPC>();
     {
         updateChain.add(updateCallback);
         
     }
     
-    protected AsyncCallback<? extends Data> abortCallback = new AsyncCallback<ScreenRPC>() {
+    protected AsyncCallback<ScreenRPC> abortCallback = new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result){
             rpc = result;
             loadScreen(rpc.form);
@@ -120,13 +118,13 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         }
     };
    
-    protected AsyncCallChain<? extends Data> abortChain = new AsyncCallChain<Data>();
+    protected AsyncCallChain<ScreenRPC> abortChain = new AsyncCallChain<ScreenRPC>();
     { 
         abortChain.add(abortCallback);
 
     }
     
-    protected AsyncCallback<? extends Data> deleteCallback = new AsyncCallback<ScreenRPC>() {
+    protected AsyncCallback<ScreenRPC> deleteCallback = new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result){
             rpc = result;
             Form delete = rpc.form;
@@ -151,12 +149,12 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
          }
     };
     
-    protected AsyncCallChain<? extends Data> deleteChain = new AsyncCallChain<Data>();
+    protected AsyncCallChain<ScreenRPC> deleteChain = new AsyncCallChain<ScreenRPC>();
     {
         deleteChain.add(deleteCallback);
     }
 
-    protected AsyncCallback<? extends Data> commitAddCallback = new AsyncCallback<ScreenRPC>() {
+    protected AsyncCallback<ScreenRPC> commitAddCallback = new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result){
             rpc = result;
             loadScreen(rpc.form);
@@ -175,12 +173,12 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         } 
     };
 
-    protected AsyncCallChain<? extends Data> commitAddChain = new AsyncCallChain<Data>();
+    protected AsyncCallChain<ScreenRPC> commitAddChain = new AsyncCallChain<ScreenRPC>();
     {
         commitAddChain.add(commitAddCallback);
     }
 
-    protected AsyncCallback<? extends Data> commitUpdateCallback = new AsyncCallback<ScreenRPC>() {
+    protected AsyncCallback<ScreenRPC> commitUpdateCallback = new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result){
             rpc = result;
             loadScreen(rpc.form);
@@ -200,13 +198,13 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         }
     };
     
-    protected AsyncCallChain<? extends Data> commitUpdateChain = new AsyncCallChain<Data>();
+    protected AsyncCallChain<ScreenRPC> commitUpdateChain = new AsyncCallChain<ScreenRPC>();
     {
         commitUpdateChain.add(commitUpdateCallback);
     }
 
-    protected AsyncCallback<QModel> commitQueryCallback = new AsyncCallback<QModel>() {
-        public void onSuccess(QModel result){
+    protected AsyncCallback<DataModel<Key>> commitQueryCallback = new AsyncCallback<DataModel<Key>>() {
+        public void onSuccess(DataModel<Key> result){
             try {
                 resetForm();
                 load();
@@ -226,7 +224,7 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         }
     };
     
-    protected AsyncCallChain<? extends Data> commitQueryChain = new AsyncCallChain<Data>();
+    protected AsyncCallChain<DataModel<Key>> commitQueryChain = new AsyncCallChain<DataModel<Key>>();
     {
         commitQueryChain.add(commitQueryCallback);
     }
@@ -290,11 +288,11 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         fetch(key,fetchChain);
     }
     
-    public Request fetch(AsyncCallback<? extends Data> callback){
+    public Request fetch(AsyncCallback<ScreenRPC> callback){
         return fetch(key,callback);
     }
     
-    public Request fetch(DataSet key, AsyncCallback<? extends Data> callback){
+    public Request fetch(Key key, AsyncCallback<ScreenRPC> callback){
         window.setStatus("Loading...", "spinnerIcon");
         rpc.key = key;
         return formService.fetch(rpc, callback);
@@ -341,7 +339,7 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
      * This method provides the default behavior for when the Update button of a
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public Request update(AsyncCallback<? extends Data> callback) {
+    public Request update(AsyncCallback<ScreenRPC> callback) {
         window.setStatus(consts.get("lockForUpdate"),"spinnerIcon");
         resetForm();
         return formService.fetchForUpdate(rpc, callback);
@@ -362,7 +360,7 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         commitDelete(deleteChain);
     }
     
-    public Request commitDelete(AsyncCallback<? extends Data> callback){
+    public Request commitDelete(AsyncCallback<ScreenRPC> callback){
         window.setStatus(consts.get("deleting"),"spinnerIcon");
     	return formService.commitDelete(rpc,callback); 
     }
@@ -417,7 +415,7 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         commitUpdate(commitUpdateChain);
     }
     
-    public Request commitUpdate(AsyncCallback<? extends Data> callback) {
+    public Request commitUpdate(AsyncCallback<ScreenRPC> callback) {
         return formService.commitUpdate(rpc, callback);
     }
     
@@ -425,7 +423,7 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         commitAdd(commitAddChain);
     }
     
-    public Request commitAdd(AsyncCallback<? extends Data> callback) {
+    public Request commitAdd(AsyncCallback<ScreenRPC> callback) {
         rpc.key = null;
         return formService.commitAdd(rpc,callback); 
     }
@@ -434,14 +432,14 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         return commitQuery(form,commitQueryChain);
     }
     
-    public Request commitQuery(Form form, AsyncCallback<? extends Data> callback) {    	
+    public Request commitQuery(Form form, AsyncCallback<DataModel<Key>> callback) {    	
         window.setStatus(consts.get("querying"),"spinnerIcon");
         return formService.commitQuery(form, null, callback); 
     }
     
     protected String messageText;
     
-    protected AsyncCallback<? extends Data> pageCallback = new AsyncCallback<DataModel>() {
+    protected AsyncCallback<DataModel<Key>> pageCallback = new AsyncCallback<DataModel<Key>>() {
         public void onSuccess(DataModel result){
             if(messageText == null){
                 window.setStatus(consts.get("queryingComplete"),"");
@@ -459,7 +457,7 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
         }
     };
     
-    public void getPage(final String messageText, final QModel model, final AsyncCallback<? extends Data> callback) {
+    public void getPage(final String messageText, final DataModel<Key> model, final AsyncCallback<DataModel<Key>> callback) {
         this.messageText = messageText;
     	if(model.getPage() < 0){
     		window.setStatus(consts.get("beginningQueryException"),"ErrorPanel");
@@ -596,14 +594,14 @@ public class AppScreenForm<ScreenRPC extends RPC,QModel extends DataModel<? exte
     
     public void performCommand(Enum action, Object obj) {
         if(action == KeyListManager.Action.FETCH){
-            key = (DataSet)((Object[])obj)[0];
+            key = (Key)((Object[])obj)[0];
             final AsyncCallback call = ((AsyncCallback)((Object[])obj)[1]);
             resetForm();
             AsyncCallChain callChain = (AsyncCallChain)fetchChain.clone();
             callChain.add(call);
             fetch(callChain);
         }else if(action == KeyListManager.Action.GETPAGE)
-            getPage(null,(QModel)((Object[])obj)[0],(AsyncCallback)((Object[])obj)[1]);
+            getPage(null,(DataModel<Key>)((Object[])obj)[0],(AsyncCallback)((Object[])obj)[1]);
         else if (action == ButtonPanel.Action.QUERY) {
             query();
         }

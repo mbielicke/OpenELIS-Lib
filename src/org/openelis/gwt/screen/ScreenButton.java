@@ -25,12 +25,9 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.xml.client.Node;
 
@@ -40,7 +37,7 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  * 
  */
-public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
+@Deprecated public class ScreenButton extends ScreenWidget implements SourcesClickEvents{
 	
 	private DelegatingClickListenerCollection clickListeners;
 

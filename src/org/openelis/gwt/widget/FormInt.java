@@ -31,7 +31,7 @@ package org.openelis.gwt.widget;
  * @author tschmidt
  *
  */
-public interface FormInt {
+@Deprecated public interface FormInt {
     
     public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,BROWSE,DELETE}
 

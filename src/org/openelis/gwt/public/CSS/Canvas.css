@@ -1,0 +1,8 @@
+.TreeNode {
+	background : lightgray;
+	border : 1px solid black;
+}
+
+.TreeNode Hover {
+	border :1px solid red;
+}    

@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * @author tschmidt
  *
  */
-public class MenuTree extends Composite {
+@Deprecated public class MenuTree extends Composite {
 
     public Tree menu = new Tree();
     private VerticalPanel vp = new VerticalPanel();

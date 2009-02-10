@@ -29,4 +29,6 @@ import com.google.gwt.user.client.rpc.SyncCallback;
 
 public class SyncCallChain extends AsyncCallChain implements SyncCallback {
 
+    private static final long serialVersionUID = 1L;
+
 }

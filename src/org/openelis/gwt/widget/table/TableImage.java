@@ -30,8 +30,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.Field;
 
 
 /**
@@ -43,7 +43,7 @@ import org.openelis.gwt.common.data.DataObject;
 public class TableImage extends SimplePanel implements TableCellWidget {
   
     private Image editor;
-    private DataObject field;
+    private Field field;
     public static final String TAG_NAME = "table-image";
     public int rowIndex;
     
@@ -76,7 +76,7 @@ public class TableImage extends SimplePanel implements TableCellWidget {
         if(editor == null){
             editor = new Image();
         }
-        editor.setUrl((String)field.getValue());
+        editor.setUrl((String)((AbstractField)field).getValue());
         setWidget(editor);
     }
 
@@ -85,8 +85,8 @@ public class TableImage extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Data field) {
-        this.field = (DataObject)field;
+    public void setField(Field field) {
+        this.field = field;
         
     }
 

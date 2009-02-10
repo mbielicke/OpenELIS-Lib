@@ -35,7 +35,6 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
 import org.openelis.gwt.widget.CalendarLookUp;
-import org.openelis.gwt.widget.FormCalendarWidget;
 
 import java.util.Date;
 /**

@@ -40,7 +40,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
-public abstract class AbstractField<DObject extends DataObject> implements DataField, Serializable {
+public abstract class AbstractField<Type> extends DataObject<Type> implements DataField, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,16 +48,15 @@ public abstract class AbstractField<DObject extends DataObject> implements DataF
     protected boolean required;
     public String key;
     protected String tip;
-    protected DObject object;
     public boolean valid = true;
     protected boolean allowReset = true;
     
     public AbstractField() {
-        object = null;
+        setValue(null);
     }
     
-    public AbstractField(DObject obj) {
-        object = obj;
+    public AbstractField(Type val) {
+        setValue(val);
     }
     /**
      * Setting this flag to true will cause an error to 
@@ -178,21 +177,21 @@ public abstract class AbstractField<DObject extends DataObject> implements DataF
         // TODO Auto-generated method stub
         return false;
     }
-
+    
     /**
      * This field's value will be set to the object being 
      * passed.
      */
-    public void setValue(Object val) {
-       object.setValue(val);
-    }
+    //public void setValue(Object val) {
+      // object.setValue(val);
+    //}
 
     /**
      * returns the current value of this field
      */
-    public Object getValue() {
-        return object.getValue();
-    }
+   // public Object getValue() {
+     //   return object.getValue();
+   // }
 
     /**
      * Returns a new field with the same attributes and values
@@ -230,9 +229,9 @@ public abstract class AbstractField<DObject extends DataObject> implements DataF
     /**
      * Returns the DataObject used to store the value of this field.
      */
-    public DObject getDataObject() {
-        return object;
-    }
+   // public DObject getDataObject() {
+     //   return object;
+   // }
     
     /**
      * This method tells the screen if this fields value should be 
@@ -272,9 +271,9 @@ public abstract class AbstractField<DObject extends DataObject> implements DataF
      */
     public int compareTo(Object o) {
         if(o instanceof AbstractField)
-            return object.compareTo(((AbstractField)o).object);
+            return compareTo(((AbstractField)o));
         else if(o instanceof DataObject)
-            return object.compareTo(o);
+            return compareTo(o);
         else
             return -1;
     }
@@ -285,9 +284,9 @@ public abstract class AbstractField<DObject extends DataObject> implements DataF
      */
     public boolean equals(Object o) {
         if(o instanceof AbstractField)
-            return object.equals(((AbstractField)o).object);
+            return value.equals(((AbstractField)o).value);
         else if (o instanceof DataObject)
-            return object.equals(o);
+            return equals(o);
         else
             return false;
     }

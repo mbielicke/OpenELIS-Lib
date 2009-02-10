@@ -37,7 +37,9 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -70,7 +72,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
         /**
          * Widget wrapped by this class
          */
-        private TableWidget<? extends DataSet> table;
+        private TableWidget table;
         /**
          * Default no-arg constructor used to create reference in the WidgetMap class
          */
@@ -248,7 +250,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     }
                 }
                 NodeList fieldList = fieldsNode.getChildNodes();
-                DataSet set = new DataSet();
+                DataSet<Object> set = new DataSet<Object>();
                 for (int i = 0; i < fieldList.getLength(); i++) {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         AbstractField field = (ScreenBase.createField(fieldList.item(i)));
@@ -387,7 +389,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
         public ArrayList<DropListenerCollection> getDropListeners() {
             // TODO Auto-generated method stub
             ArrayList<DropListenerCollection> drops = new ArrayList<DropListenerCollection>();
-            for(TableRow row : table.renderer.getRows())
+            for(TableRow row : (ArrayList<TableRow>)table.renderer.getRows())
                 drops.add(row.dropListeners);
             ArrayList<DropListenerCollection> sup = super.getDropListeners();
             drops.add(sup.get(0));

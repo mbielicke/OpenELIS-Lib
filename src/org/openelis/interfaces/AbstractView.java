@@ -42,7 +42,7 @@ import javax.xml.transform.stream.StreamResult;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public abstract class AbstractView implements IView {
+@Deprecated public abstract class AbstractView implements IView {
     private static Category log = Category.getInstance(AbstractView.class.getName());
 
     /*

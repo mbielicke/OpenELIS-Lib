@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -51,27 +50,7 @@ public class ScreenButtonPanel extends ScreenWidget {
 	 */
     public ScreenButtonPanel() {
     }
-    /**
-     * Constructor called from getInstance to return a specific instance of this class
-     * to be displayed on the screen.  It uses the XML Node to create it's widget
-     * <br/><br/>
-     * &lt;buttonPanel key="string" buttons="qunpbdcra"/&gt;
-     * <br/>
-     * <pre>
-     * buttons attribute represents which buttons to display
-     *   q - Query
-     *   u - Update
-     *   n - Next
-     *   p - Previous
-     *   b - Abort
-     *   d - Delete
-     *   c - Commit
-     *   r - Reload
-     *   a - Add
-     * </pre>
-     * @param node
-     * @param screen
-     */
+  
     public ScreenButtonPanel(Node node, ScreenBase screen) {
         super(node);
         init(node,screen);

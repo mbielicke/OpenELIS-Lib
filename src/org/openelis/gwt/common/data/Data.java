@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author tschmidt
  *
  */
-public interface Data extends Serializable, Cloneable {
+@Deprecated public interface Data extends Serializable, Cloneable {
     
     public Object clone();
 

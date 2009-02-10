@@ -41,7 +41,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class ConstantMap extends HashMap<String,String> implements Data {
+public class ConstantMap extends HashMap<String,String> implements Field  {
     
     private static final long serialVersionUID = 1L;
     
@@ -60,4 +60,19 @@ public class ConstantMap extends HashMap<String,String> implements Data {
         
     }
 */
+
+    public Object getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setValue(Object obj) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  */
 
-public interface DataField extends DataObject {
+public interface DataField {
     
     public void setRequired(boolean required);
 

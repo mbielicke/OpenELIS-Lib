@@ -1,8 +1,8 @@
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.Data;
+import java.io.Serializable;
 
-public class RPC<Display extends Form,Key extends Data> implements Data {
+public class RPC<Display extends Form,Key> implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
@@ -10,8 +10,5 @@ public class RPC<Display extends Form,Key extends Data> implements Data {
     public Key key;
     public Display form;
     
-    public Object clone() {
-        return null;
-    }
 
 }

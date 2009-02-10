@@ -1,6 +1,5 @@
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.widget.canvastree.CanvasTree;

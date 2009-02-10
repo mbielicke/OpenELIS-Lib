@@ -25,25 +25,45 @@
 */
 package org.openelis.gwt.common.data;
 
-/**
- * This interface is implemented by classes that will hold some specific type of 
- * data to be used in the FormRPC and in AbstractField to send and recieve data 
- * from the server to the client and vice-versa.
- * @author tschmidt
- *
- */
-public interface DataObject extends Comparable, Data{
+
+public class DataObject<Type> implements Field<Type> {
     
-    /**
-     * Interface method to return the value stored by this object
-     * @return
-     */
-    public Object getValue();
+    private static final long serialVersionUID = 1L;
+    public Type value;
     
-    /**
-     * Interface method to set the value for this object
-     * @param object
-     */
-    public void setValue(Object object);
+    public DataObject() {
+        
+    }
+    
+    public DataObject(Type value) {
+        setValue(value);
+    }
+    
+    public Type getValue() {
+        return value;
+    }
+    
+    public void setValue(Type value) {
+        this.value = value;
+    }
+    
+    public Object clone() {
+        return new DataObject<Type>(value);
+    }
+    
+    public boolean equals(Object obj) {
+        return value.equals(obj);
+    }
+    
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    public int compareTo(Object o) {
+        if(value instanceof Comparable)
+            return ((Comparable)value).compareTo(o);
+        else
+            return -1;
+    }    
     
 }

@@ -28,23 +28,22 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 
 import java.util.ArrayList;
 
-public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvents {
+public interface TableModelInt extends SourcesTableModelEvents {
 
     public void addRow();
     
     public void addRow(int index);
     
-    public void addRow(D row);
+    public void addRow(DataSet<? extends Object> row);
     
-    public void addRow(int index, D row);
+    public void addRow(int index, DataSet<Object> row);
     
     public void deleteRow(int row);
         
@@ -52,41 +51,41 @@ public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvent
     
     public void showRow(int row);
     
-    public D getRow(int row);
+    public DataSet getRow(int row);
     
     public int numRows();
     
-    public Data getObject(int row, int col);
+    public Field getObject(int row, int col);
     
     public void clear();
     
-    public D setRow(int index, D row);
+    public DataSet<Object> setRow(int index, DataSet<Object> row);
     
     public int shownRows();
     
-    public D createRow();
+    public DataSet<? extends Object> createRow();
     
-    public void load(DataModel<D> data);
+    public void load(DataModel<? extends Object> data);
     
     public void selectRow(int index);
     
-    public void selectRow(Data key);
+    public void selectRow(Object key);
     
     public void unselectRow(int index);
     
     public void clearSelections();
     
-    public ArrayList<D> getSelections();
+    public ArrayList<DataSet<Object>> getSelections();
     
-    public D getSelection();
+    public DataSet<Object> getSelection();
     
     public boolean getAutoAdd();
     
-    public D getAutoAddRow();
+    public DataSet<Object> getAutoAddRow();
     
-    public void setAutoAddRow(D row);
+    public void setAutoAddRow(DataSet<Object> row);
     
-    public DataModel getData();
+    public DataModel<? extends Object> getData();
     
     public void setCell(int row, int col,Object obj);
     
@@ -100,7 +99,7 @@ public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvent
     
     public void enableMultiSelect(boolean multi);
     
-    public void setModel(DataModel<D> data);
+    public void setModel(DataModel<Object> data);
     
     public boolean isEnabled(int index);
     
@@ -114,7 +113,7 @@ public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvent
 
     public boolean canAdd(int row);
     
-    public boolean canAutoAdd(D autoAddRow);
+    public boolean canAutoAdd(DataSet<Object> autoAddRow);
     
     public boolean canDrag(int row);
     
@@ -124,7 +123,7 @@ public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvent
     
     public void drop(Widget dragWidget);
     
-    public DataModel<D> unload();
+    public DataModel<Object> unload();
     
     public boolean isAutoAdd();
     
@@ -137,8 +136,4 @@ public interface TableModelInt<D extends DataSet> extends SourcesTableModelEvent
     public void setCellError(int row, int col, String Error);
     
     public void clearCellError(int row, int col);
-    
-    
-    
-    
 }

@@ -3,23 +3,20 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.screen.ClassFactory;
 
 public class TableDate extends SimplePanel implements TableCellWidget {
     
     public int rowIndex;
-    private int width;
     public static final String TAG_NAME = "table-date";
-    
+    private int width;
     protected MouseListenerCollection mouseListeners = new MouseListenerCollection();
 
     private AbsolutePanel editor = new AbsolutePanel() {
@@ -88,7 +85,7 @@ public class TableDate extends SimplePanel implements TableCellWidget {
 
     }
 
-    public void setField(Data field) {
+    public void setField(Field field) {
         // TODO Auto-generated method stub
 
     }

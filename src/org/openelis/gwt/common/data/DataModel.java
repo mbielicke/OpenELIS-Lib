@@ -33,7 +33,12 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
+/*
+ * This class has been marked as a Field for backwards compatibility only.  
+ * When all screens have been upgraded remove this interface to create smalller
+ * code
+ */
+public class DataModel<Key> extends ArrayList<DataSet<Key>> implements Field {
     
     private static final long serialVersionUID = 1L;
     
@@ -41,7 +46,7 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * This list will be returned to the server containing all entries from the 
      * model that have been deleted on the client end.
      */
-    private ArrayList<D> deleted = new ArrayList<D>();
+    private ArrayList<DataSet<Key>> deleted = new ArrayList<DataSet<Key>>();
     
     /**
      * This list will hold the index to all entries that have marked as selected.
@@ -52,13 +57,13 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * This map is used to access the entries in the model randomly using
      * the key value set in the DataSet for each entry 
      */
-    private HashMap<Data,D> keyMap = new HashMap<Data,D>(); 
+    private HashMap<Key,DataSet<Key>> keyMap = new HashMap<Key,DataSet<Key>>(); 
     
     /**
      * This DataSet represents the default data for each entry in the model.
      * It is used to create new entries for the model.
      */
-    private D defaultSet;
+    private DataSet<Key> defaultSet;
     
     /**
      * The index of the selected entry
@@ -82,9 +87,9 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
     /**
      * Adds the passed DataSet to the end of the Model list.
      */
-    public boolean add(D set){
-        return add(set.getKey(),set);
-    }
+    //public boolean add(DS set){
+    //    return add(set);
+   // }
     
     /**
      * This method will create a new DataSet consisting of the key, and data object passesd and 
@@ -93,14 +98,14 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * @param value
      * @return
      */
-    public boolean add(Data key, DataObject value){
-        if(value instanceof DataSet)
-            return add(key,(D)value);
-        DataSet set = new DataSet();
-        set.setKey(key);
-        set.add(value);
-        return add(key,(D)set);
-    }
+    //public boolean add(Key key, DO value){
+      //  if(value instanceof DataSet)
+        //    return add(key,(Type)value);
+        //DataSet<Key,Type,UserData> set = new DataSet<Key,Type,UserData>();
+        //set.setKey(key);
+        //set.add(new DataObject<Type>(value));
+        //return add(key,set);
+    //}
     
     /**
      * This Method will create a new DataSet consisting of the key and adding each DataObject in
@@ -109,15 +114,15 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * @param objects
      * @return
      */
-    public boolean add(Data key, DataObject[] objects) {
-        DataSet set = new DataSet();
+    /*public boolean add(Key key,DO[] objects) {
+       DataSet<Key,DO> set = new DataSet<Key,DO>();
         for(int i = 0; i < objects.length; i++){
             set.add(objects[i]);
         }
         set.setKey(key);
-        return add(key,(D)set);
+        return add(set);
     }
-    
+    */
     /**
      * This method will add the passed DataSet to the end of the model list and also sets the the 
      * DataSet in the Key map using the passed key so that it can be access randomly by this key value.
@@ -125,8 +130,8 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * @param set
      * @return
      */
-    public boolean add(Data key, D set){
-        keyMap.put(key,set);
+    public boolean add(DataSet<Key> set){
+        keyMap.put((Key)set.key,set);
         return super.add(set);
     }
     
@@ -135,7 +140,7 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * @param key
      * @return
      */
-    public D getByKey(Data key) {
+    public DataSet<Key> getByKey(Key key) {
         return keyMap.get(key);
     }
     
@@ -154,7 +159,7 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * from the keyMap.
      * @param set
      */
-    public void delete(D set){
+    public void delete(DataSet<Key> set){
         keyMap.remove(set.getKey());
         deleted.add(set);
         remove(set);
@@ -165,7 +170,7 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * method to add new entries to the Model. 
      * @param set
      */
-    public void setDefaultSet(D set) {
+    public void setDefaultSet(DataSet<Key> set) {
         defaultSet = set;
     }
     
@@ -174,8 +179,8 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * and the entry added to the model.
      * @return
      */
-    public D createNewSet() {
-        return (D)defaultSet.clone();
+    public DataSet<Key> createNewSet() {
+        return (DataSet<Key>)defaultSet.clone();
     }
     
     /**
@@ -230,7 +235,7 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * Returns the selected entry in the model.
      * @return
      */
-    public D getSelected() {
+    public DataSet<Key> getSelected() {
         return get(selected);
     }
     
@@ -238,8 +243,8 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * Returns the selected entries as an ArrayList<DataSet> 
      * @return
      */
-    public ArrayList<D> getSelections() {
-        ArrayList<D> selectionSets = new ArrayList<D>();
+    public ArrayList<DataSet<Key>> getSelections() {
+        ArrayList<DataSet<Key>> selectionSets = new ArrayList<DataSet<Key>>();
         for(int i : selections) 
             selectionSets.add(get(i));
         return selectionSets;
@@ -306,15 +311,15 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * 
      */
     public Object clone() {
-        DataModel<D> clone = new DataModel<D>();
+        DataModel<Key> clone = new DataModel<Key>();
         clone.page = page;
         clone.selected = selected;
         clone.selectLast = selectLast;
         if(defaultSet != null)
-            clone.defaultSet = (D)defaultSet.clone();
+            clone.defaultSet = (DataSet<Key>)defaultSet.clone();
         
         for(int i = 0; i < size(); i++){
-            clone.add((D)get(i).clone());
+            clone.add((DataSet<Key>)get(i).clone());
         }
         return clone;
     }
@@ -323,8 +328,23 @@ public class DataModel<D extends DataSet> extends ArrayList<D> implements Data {
      * Returns the ArrayList<DataSet> of all deleted entries from this model.
      * @return
      */
-    public ArrayList<D> getDeletions() {
+    public ArrayList<DataSet<Key>> getDeletions() {
         return deleted;
+    }
+
+    public Object getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setValue(Object obj) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

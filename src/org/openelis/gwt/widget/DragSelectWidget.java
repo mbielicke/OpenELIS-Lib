@@ -51,7 +51,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class DragSelectWidget extends Composite implements
+@Deprecated public class DragSelectWidget extends Composite implements
                                                KeyboardListener,
                                                MouseListener,
                                                FocusListener,

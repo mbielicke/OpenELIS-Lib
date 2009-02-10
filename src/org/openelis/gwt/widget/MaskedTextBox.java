@@ -39,7 +39,7 @@ import java.util.HashSet;
  * @author tschmidt
  *
  */
-public class MaskedTextBox extends TextBox implements
+@Deprecated public class MaskedTextBox extends TextBox implements
                                           KeyboardListener,
                                           FocusListener {
     private String mask;

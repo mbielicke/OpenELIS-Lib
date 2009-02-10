@@ -34,32 +34,35 @@ import com.google.gwt.xml.client.Node;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class NumberField extends AbstractField<NumberObject> {
+public class NumberField extends AbstractField<Double> {
 
     private static final long serialVersionUID = 1L;
     private Double max;
     private Double min;
     private String pattern;
+    public enum Type {INTEGER,DOUBLE}
+    public Type type;
+    protected boolean         invalid;
     
     public static final String TAG_NAME = "rpc-number";
 
     
     public NumberField() {
-        super(new NumberObject());
+        super();
     }
     
-    public NumberField(NumberObject.Type type) {
-        super(new NumberObject());
-        object.type = type;
+    public NumberField(NumberField.Type type) {
+        super();
+        this.type = type;
     }
     
     public NumberField(Integer val){
-        this(NumberObject.Type.INTEGER);
-        setValue(val);
+        this(NumberField.Type.INTEGER);
+        super.setValue(new Double(val));
     }
     
     public NumberField(Double val){
-        this(NumberObject.Type.DOUBLE);
+        this(NumberField.Type.DOUBLE);
         setValue(val);
     }
     
@@ -75,9 +78,9 @@ public class NumberField extends AbstractField<NumberObject> {
                                .getNodeValue());
         if (node.getAttributes().getNamedItem("type") != null){
             if("integer".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
-                ((NumberObject)object).setType(NumberObject.Type.INTEGER);
+                setType(Type.INTEGER);
             else if("double".equals(node.getAttributes().getNamedItem("type").getNodeValue()))
-                ((NumberObject)object).setType(NumberObject.Type.DOUBLE);
+                setType(Type.DOUBLE);
         }
         if (node.getAttributes().getNamedItem("required") != null)
             setRequired(new Boolean(node.getAttributes()
@@ -104,19 +107,19 @@ public class NumberField extends AbstractField<NumberObject> {
     }
     
     public void validate() {
-        if (object.invalid){
+        if (invalid){
             valid = false;
             addError("Field must be numeric");
             return;
         }
         if (required) {
-            if (object.value == null) {
+            if (value == null) {
                 addError("Field is required");
                 valid = false;
                 return;
             }
         }
-        if (object.value != null && !isInRange()) {
+        if (value != null && !isInRange()) {
             valid = false;
             return;
         }
@@ -125,13 +128,13 @@ public class NumberField extends AbstractField<NumberObject> {
 
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        if (object.getValue() == null)
+        if (value == null)
             return true;
-        if (max != null && object.value.doubleValue() > max.doubleValue()) {
+        if (max != null && value.doubleValue() > max.doubleValue()) {
             addError("Field exceeded maximum value");
             return false;
         }
-        if (min != null && object.value.doubleValue() < min.doubleValue()) {
+        if (min != null && value.doubleValue() < min.doubleValue()) {
             addError("Field is below minimum value");
             return false;
         }
@@ -142,8 +145,8 @@ public class NumberField extends AbstractField<NumberObject> {
         return format();
     }
 
-    public void setType(NumberObject.Type type) {
-        object.type = type;
+    public void setType(NumberField.Type type) {
+        this.type = type;
     }
 
     public void setMin(Object min) {
@@ -159,8 +162,8 @@ public class NumberField extends AbstractField<NumberObject> {
         obj.setMax(max);
         obj.setMin(min);
         obj.setRequired(required);
-        obj.setValue(getValue());
-        obj.setType(((NumberObject)object).type);
+        obj.setValue(value);
+        obj.setType(type);
         obj.setKey(key);
         obj.setAllowReset(allowReset);
         return obj;
@@ -171,27 +174,32 @@ public class NumberField extends AbstractField<NumberObject> {
     }
     
     public String format() {
-        if(object.value == null)
+        if(value == null)
             return "";
         if(pattern != null)
-            return NumberFormat.getFormat(pattern).format(object.value);
-        return String.valueOf(object.value);
+            return NumberFormat.getFormat(pattern).format(value);
+        return String.valueOf(value);
     }
     
     public void setFormat(String pattern) {
         this.pattern = pattern;
     }
         
-    public void setValue(Object val) {
-        if(!(val instanceof String) || (pattern == null || val == null) || "".equals(val)){
-            super.setValue(val);
-            return;
+    public void setValue(String val) {
+        if(pattern == null) {
+            if(val == null || "".equals(val))
+                super.setValue(null);
+        }else{
+            try {
+                setObject(Double.parseDouble((String)val));
+            }catch(Exception e){
+                setObject(new Double(NumberFormat.getFormat(pattern).parse((String)val)));
+            }
         }
-        try {
-            super.setValue(Double.parseDouble((String)val));
-        }catch(Exception e){
-            super.setValue(new Double(NumberFormat.getFormat(pattern).parse((String)val)));
-        }
+    }
+    
+    public void setValue(Integer val) {
+        setValue(new Double(val));
     }
     
     public Double getDoubleValue(){
@@ -199,7 +207,24 @@ public class NumberField extends AbstractField<NumberObject> {
     }
     
     public Integer getIntegerValue() {
-        return (Integer)super.getValue();
+        return new Integer(value.intValue());
     }
     
+    private void setObject(Object val) {
+        invalid = false;
+        try {
+            if (val != null && !"".equals(val)) {
+                if (val instanceof String && !((String)val).equals(""))
+                    value = Double.valueOf((String)val);
+                else if (val instanceof Double)
+                    value = (Double)val;
+                else if (val instanceof Integer)
+                    value = new Double(((Integer)val).doubleValue());
+            } else {
+                value = null;
+            }
+        } catch (Exception e) {
+            invalid = true;
+        }
+    }
 }

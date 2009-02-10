@@ -30,10 +30,9 @@ import com.google.gwt.xml.client.Node;
 import java.util.ArrayList;
 
 
-public class TableField extends AbstractField {
+public class TableField<Key> extends AbstractField<DataModel<Key>> {
 
     private static final long serialVersionUID = 1L;
-    private DataModel<DataSet> value = new DataModel<DataSet>();
     public static final String TAG_NAME = "rpc-table";
     private ArrayList<String> fieldIndex = new ArrayList<String>();
     
@@ -54,18 +53,18 @@ public class TableField extends AbstractField {
         return true;
     }
 
-    public void setValue(Object val) {
+    public void setValue(DataModel<Key> val) {
         // TODO Auto-generated method stub
         if(val == null){
             if(value != null)
                 ((DataModel)value).clear();
             else
-                value = null;
+                value = new DataModel<Key>();
         }else
-            value = (DataModel)val;
+            value = val;
     }
 
-    public DataModel getValue() {
+    public DataModel<Key> getValue() {
         return value;
     }
 
@@ -74,7 +73,7 @@ public class TableField extends AbstractField {
         obj.setKey(key);
         obj.setRequired(required);
         obj.setTip(tip);
-        obj.setValue(value.clone());
+        obj.setValue((DataModel<Key>)value.clone());
         
         return obj;
     }
@@ -89,9 +88,9 @@ public class TableField extends AbstractField {
     
     public boolean validateModel() {
         boolean valid = true;
-        for(DataSet<Data> row : value){
+        for(DataSet<Key> row : value){
             if(row.shown){
-                for (Data obj : row){
+                for (Field obj : row){
                     if(obj instanceof AbstractField){
                         ((AbstractField)obj).validate();
                         if(!((AbstractField)obj).valid)
@@ -104,8 +103,8 @@ public class TableField extends AbstractField {
     }
     
     public void clearErrors() {
-        for(DataSet<Data> row : value){
-            for(Data obj : row){
+        for(DataSet<Key> row : value){
+            for(Field obj : row){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();
             }

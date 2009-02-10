@@ -44,7 +44,7 @@ import org.openelis.gwt.widget.FormInt;
  * @author tschmidt
  *
  */
-public class KeyListManager implements SourcesCommandEvents, CommandListener {
+public class KeyListManager<Key> implements SourcesCommandEvents, CommandListener {
 
     public enum Action {
         SELECTION, REFRESH, GETPAGE, ADD, DELETE, FETCH, UNSELECT
@@ -57,7 +57,7 @@ public class KeyListManager implements SourcesCommandEvents, CommandListener {
     /**
      * The model to store the list of keys from a query
      */
-    private DataModel list = new DataModel();
+    private DataModel<Key> list = new DataModel<Key>();
 
     /**
      * The current index for the key being attempted to fetch.
@@ -107,7 +107,7 @@ public class KeyListManager implements SourcesCommandEvents, CommandListener {
      * Sets the list of keys that this object will manage.
      * @param list
      */
-    public void setModel(DataModel list) {
+    public void setModel(DataModel<Key> list) {
         this.list = list;
         candidate = 0;
         // fireCommand(Action.REFRESH,list);
@@ -117,7 +117,7 @@ public class KeyListManager implements SourcesCommandEvents, CommandListener {
      * Returns the list of keys that this object is currently managing.
      * @return
      */
-    public DataModel getList() {
+    public DataModel<Key> getList() {
         return list;
     }
 
@@ -171,7 +171,7 @@ public class KeyListManager implements SourcesCommandEvents, CommandListener {
 
             };
             fireCommand(Action.FETCH,
-                        new Object[] {((DataSet)list.get(selection)).clone(), callback});
+                        new Object[] {list.get(selection).key, callback});
         }
     }
 
@@ -179,7 +179,7 @@ public class KeyListManager implements SourcesCommandEvents, CommandListener {
      * Adds a key to the list that is being managed.
      * @param set
      */
-    public void add(DataSet set) {
+    public void add(DataSet<Key> set) {
         list.add(set);
         fireCommand(Action.ADD, null);
     }
@@ -188,8 +188,8 @@ public class KeyListManager implements SourcesCommandEvents, CommandListener {
      * Returns the currently selected key in the list.
      * @return
      */
-    public DataSet getSelected() {
-        return list.getSelected();
+    public Key getSelected() {
+        return list.getSelected().key;
     }
 
     /**

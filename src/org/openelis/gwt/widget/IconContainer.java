@@ -73,11 +73,6 @@ public class IconContainer extends AbsolutePanel implements SourcesMouseEvents, 
     
     public void enable(boolean enabled) {
         this.enabled = enabled;
-        if(!enabled) {
-            addStyleName("disabled");
-        }else{
-            removeStyleName("disabled");
-        }
     }
     
 }

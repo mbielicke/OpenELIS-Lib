@@ -31,19 +31,19 @@ import org.openelis.gwt.common.DataSorter;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.DataSorterInt.SortDirection;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableModelListenerCollection;
 
 import java.util.ArrayList;
 
-public class TableModel<D extends DataSet> implements TableModelInt<D> {
+public class TableModel implements TableModelInt {
 
     private static final long serialVersionUID = 1L;
-    private DataModel<D> data;
+    private DataModel<Object> data;
     public DataSorterInt sorter = new DataSorter();
     private TableModelListenerCollection tableModelListeners;
     public int shownRows; 
@@ -51,7 +51,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
     
     public boolean autoAdd;
     
-    public D autoAddRow;
+    public DataSet<Object> autoAddRow;
     
     public boolean multiSelect;
     
@@ -71,14 +71,14 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         addRow(index,createRow());
     }
     
-    public void addRow(D row) {
-        data.add(row);
+    public void addRow(DataSet<? extends Object> row) {
+        data.add((DataSet<Object>)row);
         if(row.shown)
             shownRows++;
         tableModelListeners.fireRowAdded(this, numRows() - 1);
     }
     
-    public void addRow(int index, D row) {
+    public void addRow(int index, DataSet<Object> row) {
         data.add(index, row);
         if(row.shown)
             shownRows++;
@@ -92,7 +92,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         tableModelListeners.fireRowDeleted(this, row);
     }
         
-    public D getRow(int row) {
+    public DataSet<Object> getRow(int row) {
         if(row < numRows())
             return data.get(row);
         if(autoAdd)
@@ -104,26 +104,24 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         return data.size();
     }
 
-    public Data getObject(int row, int col) {
-        return (Data)data.get(row).get(col);
+    public Field getObject(int row, int col) {
+        return data.get(row).get(col);
     }
 
-
-    
     public void clear() {
         data.clear();
         shownRows = 0;
         tableModelListeners.fireDataChanged(this);
     }
     
-    public D setRow(int index, D row){
-        D set =  data.set(index, row);
+    public DataSet<Object> setRow(int index, DataSet<Object> row){
+        DataSet<Object> set =  data.set(index, row);
         tableModelListeners.fireRowUpdated(this, index);
         return set;
     }
 
     public boolean canDelete(int row) {
-        DataSet rowSet;
+        DataSet<Object> rowSet;
         if(row == numRows())
             rowSet = autoAddRow;
         else
@@ -136,7 +134,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
     }
 
     public boolean canEdit(int row, int col) {
-        DataSet rowSet;
+        DataSet<Object> rowSet;
         if(row == numRows())
             rowSet = autoAddRow;
         else
@@ -163,7 +161,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
     }
 
     public boolean canSelect(int row) {
-        D rowSet;
+        DataSet<Object> rowSet;
         if(row == numRows())
             rowSet = autoAddRow;
         else
@@ -183,9 +181,9 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         return tableRowEmpty(getRow(index));
     }
         
-    private boolean tableRowEmpty(D row){ 
+    private boolean tableRowEmpty(DataSet<Object> row){ 
         boolean empty = true;
-        for(int i=0; i<row.size(); i++){
+        for(int i=0; i< row.size(); i++){
             if(((DataObject)row.get(i)).getValue() != null && !"".equals(((DataObject)row.get(i)).getValue())){
                 empty = false;
                 break;
@@ -194,7 +192,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         return empty;
     }
     
-    public boolean canAutoAdd(D addRow) {
+    public boolean canAutoAdd(DataSet<Object> addRow) {
         if(manager != null)
             return manager.canAutoAdd(controller,addRow);
         return !tableRowEmpty(addRow);
@@ -221,8 +219,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
             manager.drop(controller,dragWidget,getRow(targetRow),targetRow);
             return;
         }
-        D dropItem = getRow(targetRow);
-        D dragItem = (D)((TableRow)dragWidget).row.clone();
+        DataSet<Object> dragItem = (DataSet<Object>)((TableRow)dragWidget).row.clone();
         deleteRow(((TableRow)dragWidget).modelIndex);
         addRow(targetRow, dragItem);
     }
@@ -233,7 +230,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
             return;
         }
         if(dragWidget instanceof TableRow)
-            addRow((D)((TableRow)dragWidget).row.clone());
+            addRow((DataSet<Object>)((TableRow)dragWidget).row.clone());
         
     }
 
@@ -253,16 +250,16 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         return shownRows;
     }
     
-    public D createRow() {
+    public DataSet<Object> createRow() {
         return data.createNewSet();
     }
     
-    public void load(DataModel<D> data) {
-        this.data = data;
+    public void load(DataModel<? extends Object> data) {
+        this.data = (DataModel<Object>)data;
         data.multiSelect = multiSelect;
         shownRows = 0;
         for(int i = 0; i < data.size(); i++){
-            if(data.get(i).shown)
+            if(((DataSet)data.get(i)).shown)
                 shownRows++;
         }
         tableModelListeners.fireDataChanged(this);
@@ -287,7 +284,7 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         data.clearSelections();
     }
     
-    public ArrayList<D> getSelections() {
+    public ArrayList<DataSet<Object>> getSelections() {
         return data.getSelections();
     }
 
@@ -297,27 +294,27 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
     }
 
 
-    public D getAutoAddRow() {
+    public DataSet<Object> getAutoAddRow() {
         return autoAddRow;
     }
 
 
-    public void setAutoAddRow(D row) {
+    public void setAutoAddRow(DataSet<Object> row) {
         autoAddRow = row;
     }
 
-    public DataModel<D> getData() {
+    public DataModel<? extends Object> getData() {
         // TODO Auto-generated method stub
         return data;
     }
     
     public void setCell(int row, int col, Object value) {
-        ((DataObject)data.get(row).get(col)).setValue(value);
+        data.get(row).get(col).setValue(value);
         tableModelListeners.fireCellUpdated(this, row, col);
     }
     
     public Object getCell(int row, int col) {
-        return ((DataObject)data.get(row).get(col)).getValue();
+        return data.get(row).get(col).getValue();
     }
     
     public void hideRow(int row) {
@@ -355,12 +352,12 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         data.multiSelect = multi;
     }
 
-    public void setModel(DataModel<D> data) {
+    public void setModel(DataModel<Object> data) {
         this.data = data;
         
     }
 
-    public void selectRow(Data key) {
+    public void selectRow(Object key) {
         selectRow(data.indexOf(data.getByKey(key)));
     }
     
@@ -374,11 +371,11 @@ public class TableModel<D extends DataSet> implements TableModelInt<D> {
         this.manager = manager;
     }
 
-    public D getSelection() {
-        return data.get(data.selected);
+    public DataSet<Object> getSelection() {
+        return (DataSet<Object>)data.get(data.selected);
     }
 
-    public DataModel<D> unload() {
+    public DataModel<Object> unload() {
         tableModelListeners.fireUnload(this);
         return data;
     }

@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.KeyListManager;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
@@ -59,15 +58,14 @@ import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class AToZTable<D extends DataSet> extends TableWidget<D> implements
+public class AToZTable extends TableWidget implements
                                               ClickListener, ChangeListener, CommandListener, TableKeyboardHandlerInt, TableMouseHandlerInt, SourcesCommandEvents {
     
     private HorizontalPanel mainHP = new HorizontalPanel();
     private ScreenVertical alphabetButtonVP = new ScreenVertical();
     private VerticalPanel tablePanel = new VerticalPanel();
-    protected DataModel dm;
+    protected DataModel<Object> dm;
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean locked;
@@ -92,8 +90,8 @@ public class AToZTable<D extends DataSet> extends TableWidget<D> implements
         this.maxRows = maxRows;
         this.title = title;
         this.showHeader = showHeader;
-        renderer = new TableRenderer<D>((TableWidget)this);
-        model = new TableModel<D>(this);
+        renderer = new TableRenderer((TableWidget)this);
+        model = new TableModel(this);
         view = new TableView(this,showScroll);
         view.setWidth("auto");
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
@@ -232,7 +230,7 @@ public class AToZTable<D extends DataSet> extends TableWidget<D> implements
 
     public void performCommand(Enum action, Object obj) {
         if(action == AppScreenForm.Action.NEW_MODEL) {
-            model.load((DataModel)obj);
+            model.load((DataModel<Object>)obj);
             view.setScrollHeight((model.getData().size()*cellHeight)+(model.getData().size()*cellSpacing)+cellSpacing);
             view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
             //model.refresh();
@@ -246,7 +244,7 @@ public class AToZTable<D extends DataSet> extends TableWidget<D> implements
             focused = true;
         }
         else if(action == AppScreenForm.Action.NEW_PAGE){
-            model.load((DataModel)obj);
+            model.load((DataModel<Object>)obj);
             view.setScrollHeight((model.getData().size()*cellHeight)+(model.getData().size()*cellSpacing)+cellSpacing);
             view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
             model.refresh();

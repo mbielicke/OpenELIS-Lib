@@ -34,7 +34,7 @@ import org.openelis.gwt.widget.TabBrowser;
  * @author tschmidt
  *
  */
-public class ScreenTabBrowser extends ScreenWidget {
+@Deprecated public class ScreenTabBrowser extends ScreenWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */

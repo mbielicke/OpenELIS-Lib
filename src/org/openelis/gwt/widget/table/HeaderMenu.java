@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.AbstractField;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,6 @@ public class HeaderMenu extends PopupPanel implements
     public int col;
     public Filter[] filter;
     public DataSorterInt.SortDirection sortDirection;
-    private String widget;
     private boolean doFilter;
     private TableWidget controller;
 

@@ -44,20 +44,20 @@ public class AsyncCallChain<T> extends ArrayList<AsyncCallback> implements Async
     }
 
     public void onSuccess(T result) {
-        for(AsyncCallback callback : this){
+        for(AsyncCallback<T> callback : this){
             callback.onSuccess(result);
         }
     }
     
     public void onFailure(Throwable caught) {
-        for(AsyncCallback callback : this){
+        for(AsyncCallback<T> callback : this){
             callback.onFailure(caught);
         }
     }
     
     public Object clone() {
-        AsyncCallChain chain = new AsyncCallChain();
-        for(AsyncCallback callback : this){
+        AsyncCallChain<T> chain = new AsyncCallChain<T>();
+        for(AsyncCallback<T> callback : this){
             chain.add(callback);
         }
         return chain;

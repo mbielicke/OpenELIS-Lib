@@ -105,6 +105,7 @@ public class RichTextToolbar extends Composite {
       KeyboardListener {
 
     public void onChange(Widget sender) {
+        /*
       if (sender == backColors) {
         basic.setBackColor((String)((DataObject)backColors.model.getSelection().get(0)).getValue());
         backColors.model.selectRow(0);
@@ -118,6 +119,7 @@ public class RichTextToolbar extends Composite {
         basic.setFontSize(fontSizesConstants[Integer.parseInt((String)((DataObject)fontSizes.model.getSelection().get(0)).getValue())]);
         fontSizes.model.selectRow(0);
       }
+      */
     }
 
     public void onClick(Widget sender) {
@@ -298,6 +300,7 @@ public class RichTextToolbar extends Composite {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
+    /*
     model.add(new StringObject(caption),new StringObject(""));
     model.add(new StringObject("White"), new StringObject("white"));
     model.add(new StringObject("Black"), new StringObject("black"));
@@ -305,6 +308,7 @@ public class RichTextToolbar extends Composite {
     model.add(new StringObject("Green"),new StringObject("green"));
     model.add(new StringObject("Yellow"), new StringObject("yellow"));
     model.add(new StringObject("Blue"), new StringObject("blue"));
+    */
     lb.setModel(model);
     return lb;
   }
@@ -313,6 +317,7 @@ public class RichTextToolbar extends Composite {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
+    /*
     model.add(new StringObject("Font"),new StringObject(""));
     model.add(new StringObject("Normal"), new StringObject(""));
     model.add(new StringObject("Times New Roman"), new StringObject("Times New Roman"));
@@ -321,6 +326,7 @@ public class RichTextToolbar extends Composite {
     model.add(new StringObject("Georgia"), new StringObject("Georgia"));
     model.add(new StringObject("Trebuchet"), new StringObject("Trebuchet"));
     model.add(new StringObject("Verdana"), new StringObject("Verdana"));
+    */
     lb.setModel(model);
     return lb;
   }
@@ -329,6 +335,7 @@ public class RichTextToolbar extends Composite {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
+    /*
     model.add(new StringObject("Size"),new StringObject("0"));
     model.add(new StringObject("XX Small"),new StringObject("1"));
     model.add(new StringObject("X Small"),new StringObject("2"));
@@ -337,6 +344,7 @@ public class RichTextToolbar extends Composite {
     model.add(new StringObject("Large"),new StringObject("5"));
     model.add(new StringObject("X Large"),new StringObject("6"));
     model.add(new StringObject("XX Large"),new StringObject("7"));
+    */
     lb.setModel(model);
     return lb;
   }

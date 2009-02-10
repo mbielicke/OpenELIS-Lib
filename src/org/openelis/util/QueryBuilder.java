@@ -161,7 +161,7 @@ public class QueryBuilder {
     
     public static String getQuery(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getSelections();
+        ArrayList list = (ArrayList) field.getValue();
         if (list.size() == 0)
             return "";
         StringBuffer sb = new StringBuffer();
@@ -180,7 +180,7 @@ public class QueryBuilder {
     
     public static String getQueryNoOperand(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getSelections();
+        ArrayList list = (ArrayList) field.getValue();
         if (list.size() == 0)
             return "";
         String paramName = getParamName(fieldName);
@@ -346,7 +346,7 @@ public class QueryBuilder {
     }
     
     public static void setParameters(DropDownField field, String fieldName, Query query) {
-    	ArrayList list = (ArrayList) field.getSelections();
+    	ArrayList list = (ArrayList) field.getValue();
     	String paramName = getParamName(fieldName);
     
     	for(int i = 0;i<list.size();i++){
@@ -354,7 +354,7 @@ public class QueryBuilder {
     		if(o instanceof NumberObject){
 				NumberObject number = (NumberObject)o;
 				if(number.getType() == NumberObject.Type.INTEGER){
-					Integer param = (Integer)number.getValue();
+					Integer param = number.getIntegerValue();
 					query.setParameter(paramName + i, param);	
 				}else if(number.getType() == NumberObject.Type.DOUBLE){
 					Double param = (Double)number.getValue();

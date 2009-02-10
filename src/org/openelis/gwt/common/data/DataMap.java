@@ -34,7 +34,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class DataMap extends HashMap<String,Data> implements Data {
+@ Deprecated public class DataMap extends HashMap<String,Field> implements Field {
     
     private static final long serialVersionUID = 1L;
 
@@ -47,9 +47,24 @@ public class DataMap extends HashMap<String,Data> implements Data {
         Iterator keyIt = keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
-            dataMap.put(key, (Data)get(key).clone());
+            dataMap.put(key, (Field)((DataObject)get(key)).clone());
         }
         return dataMap;
+    }
+
+    public Object getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setValue(Object obj) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public int compareTo(Object arg0) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

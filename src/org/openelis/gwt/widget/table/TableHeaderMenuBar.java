@@ -49,7 +49,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.widget.MenuItem;
@@ -71,7 +71,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     protected int tableCol1 = -1;
     protected int resizeColumn2 = -1;
     protected int tableCol2 = -1;
-    protected TableWidget<? extends DataSet> controller;
+    protected TableWidget controller;
     public boolean doFilter;
     public boolean doQuery;
     
@@ -474,7 +474,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                      col.setFilter(filters);
                 for (int i = 0; i < filters.length; i++) {
                     final Filter filter = filters[i];
-                    String theText = filter.obj.getValue().toString();
+                    String theText = ((AbstractField)filter.obj).getValue().toString();
                     if (filter.display != null)
                         theText = filter.display;
                     String filtered = "Unchecked";
@@ -552,14 +552,14 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         if(sender instanceof MenuItem) {
             doFilter = true;
             Filter filter = (Filter)((MenuItem)sender).args[0];
-            TableColumn col = (TableColumn)controller.columns.get(((Integer)((NumberObject)((MenuItem)sender).args[1]).getValue()).intValue());
+            TableColumn col = (TableColumn)controller.columns.get((((NumberObject)((MenuItem)sender).args[1]).getIntegerValue()));
             filter.filtered = !filter.filtered;
             if(filter.filtered)
                 ((MenuItem)sender).iconPanel.setStyleName("Checked");
             else
                 ((MenuItem)sender).iconPanel.setStyleName("Unchecked");
             Filter[] filters = col.filters;
-            if(filter.obj.getValue().equals("All")){
+            if(((AbstractField)filter.obj).getValue().equals("All")){
                 for (int i = 1; i < filters.length; i++) {
                     if (filters[i].filtered) {
                         filters[i].filtered = false;

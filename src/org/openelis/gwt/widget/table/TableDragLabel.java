@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.table;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -35,8 +34,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenLabel;
@@ -51,7 +50,7 @@ import org.openelis.gwt.screen.ScreenLabel;
 public class TableDragLabel extends SimplePanel implements TableCellWidget {
     
     private ScreenLabel editor;
-    private Data field;
+    private Field field;
     private int width;
     private NumberFormat displayMask;
     public static final String TAG_NAME = "table-dragLabel";
@@ -143,7 +142,7 @@ public class TableDragLabel extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Data field) {
+    public void setField(Field field) {
         this.field = field;
         editor.setUserObject(field);
         

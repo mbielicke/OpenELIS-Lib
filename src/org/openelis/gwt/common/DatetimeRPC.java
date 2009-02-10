@@ -41,7 +41,7 @@ public class DatetimeRPC implements java.io.Serializable {
      */
     public static final byte YEAR = 0, MONTH = 1, DAY = 2, HOUR = 3,
                     MINUTE = 4, SECOND = 5, FRACTION = 6;
-    protected byte startCode, endCode;
+    public byte startCode, endCode;
     protected Date date;
     protected boolean parsed;
     protected final static String[][] YMD = { {"yyyy",

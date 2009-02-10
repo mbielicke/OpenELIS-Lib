@@ -26,24 +26,18 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasFocus;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
-import org.openelis.gwt.widget.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
-import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.table.PopupTable;
 import org.openelis.gwt.widget.table.TableColumnInt;
@@ -57,7 +51,7 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
-public class DropdownWidget<D extends DataSet> extends PopupTable<D> implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
+public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
     
     //public HorizontalPanel mainHP = new HorizontalPanel();
 
@@ -281,17 +275,17 @@ public class DropdownWidget<D extends DataSet> extends PopupTable<D> implements 
     
     public String getTextBoxDisplay(){
         String textValue = "";
-        ArrayList selected = model.getSelections();
+        ArrayList<DataSet<Object>> selected = model.getSelections();
         
         for(int i=0;i<selected.size();i++){
             if(selected.get(i) instanceof DataSet){
-                 DataSet select = (DataSet)selected.get(i);
-                 textValue = (String) ((StringObject) select.get(0)).getValue()
+                 DataSet<Object> select = selected.get(i);
+                 textValue = (String) select.get(0).getValue()
                                 + (!"".equals(textValue) ? "|" : "") + textValue;
             }else{
-                NumberObject select = (NumberObject)selected.get(i);
+                Object select = selected.get(i).get(i).getValue();
                 
-                String tempTextValue = (String)((DataObject)((DataSet)model.getData().getByKey(select)).get(0)).getValue();
+                String tempTextValue = (String)((DataModel<Object>)model.getData()).getByKey(select).get(0).getValue();
                 
                 textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
             }
@@ -321,14 +315,14 @@ public class DropdownWidget<D extends DataSet> extends PopupTable<D> implements 
         this.screen = screen;
     }
     
-    public void setSelections(ArrayList<DataSet> selections){
+    public void setSelections(ArrayList<DataSet<Object>> selections){
         model.clearSelections();
-        for(DataSet set : selections)
+        for(DataSet<Object> set : selections)
             model.selectRow(set.getKey());
         lookUp.setText(getTextBoxDisplay());
     }
     
-    public ArrayList<D> getSelections() {
+    public ArrayList<DataSet<Object>> getSelections() {
         return model.getSelections();
     }
     

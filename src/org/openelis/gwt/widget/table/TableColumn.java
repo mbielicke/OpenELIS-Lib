@@ -32,10 +32,9 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 
 import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.DataObject;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.widget.MenuItem;
 
 public class TableColumn implements TableColumnInt {
 
@@ -67,7 +66,7 @@ public class TableColumn implements TableColumnInt {
         return (Widget)tcell;
     }
     
-    public void loadWidget(Widget widget, Data object) {
+    public void loadWidget(Widget widget, Field object) {
         ((TableCellWidget)widget).setField(object);
         ((TableCellWidget)widget).setDisplay();
     }
@@ -170,7 +169,7 @@ public class TableColumn implements TableColumnInt {
     }
     
     public Filter[] getFilter() {
-        Filter[] filter = dataFilterer.getFilterValues(controller.model.getData(),controller.columns.indexOf(this));
+        Filter[] filter = dataFilterer.getFilterValues((DataModel<Object>)controller.model.getData(),controller.columns.indexOf(this));
         if (filters != null) {
             for (int j = 0; j < filter.length; j++) {
                 for (int k = 0; k < filters.length; k++) {
@@ -189,11 +188,11 @@ public class TableColumn implements TableColumnInt {
     }
     
     public void applyFilter() {
-        dataFilterer.applyFilter(controller.model.getData(), filters, controller.columns.indexOf(this));
+        dataFilterer.applyFilter((DataModel<Object>)controller.model.getData(), filters, controller.columns.indexOf(this));
     }
     
     public void applyQueryFilter() {
-        dataFilterer.applyQueryFilter(controller.model.getData(),query,controller.columns.indexOf(this));
+        dataFilterer.applyQueryFilter((DataModel<Object>)controller.model.getData(),query,controller.columns.indexOf(this));
     }
 
     public String getKey() {

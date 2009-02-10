@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  * @author fyu
  */
-public abstract class AbstractAction implements IAction {
+@Deprecated public abstract class AbstractAction implements IAction {
     protected static Category log = Category.getInstance(AbstractAction.class.getName());
 
     /**

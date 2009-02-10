@@ -38,7 +38,7 @@ import java.sql.SQLException;
  * 
  * @author fyu
  */
-public interface IAction {
+@Deprecated public interface IAction {
     public void execute(Form form) throws SQLException,
                                      IOException,
                                      ValidationException,

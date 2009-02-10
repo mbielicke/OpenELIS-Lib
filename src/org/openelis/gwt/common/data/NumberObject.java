@@ -25,12 +25,11 @@
 */
 package org.openelis.gwt.common.data;
 
-public class NumberObject implements DataObject {
+public class NumberObject extends DataObject<Double> {
 
     public enum Type {INTEGER,DOUBLE}
 
     private static final long serialVersionUID = 1L;
-    protected Double          value;
     protected Type            type;
     protected boolean         invalid;
 
@@ -41,35 +40,26 @@ public class NumberObject implements DataObject {
         this.type = type;
     }
     
-    public NumberObject(Type type, Object value){
-        setType(type);
+    public NumberObject(Integer value){
+        type = Type.INTEGER;
         setValue(value);
     }
     
-    public NumberObject(Integer value){
-        this(Type.INTEGER,value);
-    }
-    
     public NumberObject(Double value){
-        this(Type.DOUBLE,value);
+        type = Type.DOUBLE;
+        setValue(value);
     }
     
     public NumberObject(int value){
-        this(Type.INTEGER,new Integer(value));
+        type = Type.INTEGER;
+        setValue(new Integer(value));
     }
     
     public NumberObject(double value){
-        this(Type.DOUBLE,new Double(value));
+        type = Type.DOUBLE;
+        setValue(new Double(value));
     }
 
-    public Object getValue() {
-        if (type == Type.INTEGER)
-            if (value == null)
-                return null;
-            else
-                return new Integer(value.intValue());
-        return value;
-    }
     
     public Integer getIntegerValue() {
         return new Integer(value.intValue());
@@ -79,22 +69,22 @@ public class NumberObject implements DataObject {
         return value;
     }
 
-    public void setValue(Object object) {
+    public void setValue(String object) {
         invalid = false;
         try {
             if (object != null && !"".equals(object)) {
                 if (object instanceof String && !((String)object).equals(""))
-                    value = Double.valueOf((String)object);
-                else if (object instanceof Double)
-                    value = (Double)object;
-                else if (object instanceof Integer)
-                    value = new Double(((Integer)object).doubleValue());
+                    setValue(Double.valueOf((String)object));
             } else {
                 value = null;
             }
         } catch (Exception e) {
             invalid = true;
         }
+    }
+    
+    public void setValue(Integer object) {
+        setValue(new Double(((Integer)object).doubleValue()));
     }
 
     public void setType(Type type) {

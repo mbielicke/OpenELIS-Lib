@@ -25,12 +25,7 @@
 */
 package org.openelis.gwt.screen;
 
-import org.openelis.gwt.common.data.AbstractField;
-
-import java.util.HashMap;
-
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
@@ -38,6 +33,10 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
+
+import org.openelis.gwt.common.data.AbstractField;
+
+import java.util.HashMap;
 /**
  * ScreenTree wraps a GWT Tree to display widgets on a Screen.
  * @author tschmidt

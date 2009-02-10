@@ -6,7 +6,7 @@ import org.openelis.gwt.common.data.TreeDataItem;
 
 import java.util.ArrayList;
 
-public interface TreeSercviceInt extends RemoteService {
+@Deprecated public interface TreeSercviceInt extends RemoteService {
 
     public ArrayList<TreeDataItem> getChildNodes(TreeDataItem item);
 }

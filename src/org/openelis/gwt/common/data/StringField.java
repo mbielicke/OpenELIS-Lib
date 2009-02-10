@@ -33,7 +33,7 @@ import com.google.gwt.xml.client.Node;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class StringField extends AbstractField<StringObject> {
+public class StringField extends AbstractField<String> {
     
     private static final long serialVersionUID = 1L;
     private Integer min;
@@ -41,15 +41,15 @@ public class StringField extends AbstractField<StringObject> {
     public static final String TAG_NAME = "rpc-string";
     
     public StringField() {
-        super(new StringObject());
+        super();
     }
     
     public StringField(String value) {
-        super(new StringObject(value));
+        super(value);
     }
 
     public StringField(Node node){
-        super(new StringObject());
+        super();
         setAttributes(node);
     }
     
@@ -86,13 +86,13 @@ public class StringField extends AbstractField<StringObject> {
     
     public void validate() {
         if (required) {
-            if (object.value == null || object.value.length() == 0) {
+            if (value == null || value.length() == 0) {
                 addError("Field is required");
                 valid = false;
                 return;
             }
         }
-        if (object.value != null && !isInRange()) {
+        if (value != null && !isInRange()) {
             valid =  false;
             return;
         }
@@ -100,14 +100,14 @@ public class StringField extends AbstractField<StringObject> {
     }
 
     public boolean isInRange() {
-        if (object.value == null)
+        if (value == null)
             return true;
-        if (max != null && object.value.length() > ((Integer)max).intValue()) {
+        if (max != null && value.length() > ((Integer)max).intValue()) {
             addError("Field exceeded maximum length");
             return false;
         }
-        if (min != null && object.value.length() < ((Integer)min).intValue() &&
-            object.value.length() > 0) {
+        if (min != null && value.length() < ((Integer)min).intValue() &&
+            value.length() > 0) {
             addError("Field is below minimum length");
             return false;
         }
@@ -116,9 +116,9 @@ public class StringField extends AbstractField<StringObject> {
 
 
     public String toString() {
-        if (object.value == null)
+        if (value == null)
             return "";
-        return object.value;
+        return value;
     }
 
     public void setMin(Object min) {
