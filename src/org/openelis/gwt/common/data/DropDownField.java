@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
-public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> {
+public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> implements FieldType {
 
     private static final long serialVersionUID = 1L;
     
@@ -112,6 +112,19 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> {
         value.clear();
         if(val != null)
             value.add(val);
+    }
+    
+    public void setValue(Object val) {
+        if(val == null){
+            if(value == null){
+                value = new ArrayList<DataSet<Key>>();
+            }else
+                value.clear();
+        }else if(val instanceof DataSet){
+            setValue((DataSet<Key>)val);
+        }else if(val instanceof ArrayList){
+            setValue((ArrayList<DataSet<Key>>)val);
+        }
     }
     
     /**

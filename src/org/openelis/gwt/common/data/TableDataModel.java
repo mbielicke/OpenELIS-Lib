@@ -38,7 +38,7 @@ import java.util.HashMap;
  * When all screens have been upgraded remove this interface to create smalller
  * code
  */
-public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType {
+public class TableDataModel<Key,Row extends DataSet<Key>> extends ArrayList<Row> implements Field {
     
     private static final long serialVersionUID = 1L;
     
@@ -46,7 +46,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * This list will be returned to the server containing all entries from the 
      * model that have been deleted on the client end.
      */
-    private ArrayList<DataSet<Key>> deleted = new ArrayList<DataSet<Key>>();
+    private ArrayList<Row> deleted = new ArrayList<Row>();
     
     /**
      * This list will hold the index to all entries that have marked as selected.
@@ -57,7 +57,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * This map is used to access the entries in the model randomly using
      * the key value set in the DataSet for each entry 
      */
-    private HashMap<Key,DataSet<Key>> keyMap = new HashMap<Key,DataSet<Key>>(); 
+    private HashMap<Key,Row> keyMap = new HashMap<Key,Row>(); 
     
     /**
      * This DataSet represents the default data for each entry in the model.
@@ -130,8 +130,8 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * @param set
      * @return
      */
-    public boolean add(DataSet<Key> set){
-        keyMap.put((Key)set.key,set);
+    public boolean add(Row set){
+        keyMap.put(set.key,set);
         return super.add(set);
     }
     
@@ -140,7 +140,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * @param key
      * @return
      */
-    public DataSet<Key> getByKey(Key key) {
+    public Row getByKey(Key key) {
         return keyMap.get(key);
     }
     
@@ -159,7 +159,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * from the keyMap.
      * @param set
      */
-    public void delete(DataSet<Key> set){
+    public void delete(Row set){
         keyMap.remove(set.getKey());
         deleted.add(set);
         remove(set);
@@ -170,7 +170,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * method to add new entries to the Model. 
      * @param set
      */
-    public void setDefaultSet(DataSet<Key> set) {
+    public void setDefaultSet(Row set) {
         defaultSet = set;
     }
     
@@ -179,8 +179,8 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * and the entry added to the model.
      * @return
      */
-    public DataSet<Key> createNewSet() {
-        return (DataSet<Key>)defaultSet.clone();
+    public Row createNewSet() {
+        return (Row)defaultSet.clone();
     }
     
     /**
@@ -235,7 +235,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * Returns the selected entry in the model.
      * @return
      */
-    public DataSet<Key> getSelected() {
+    public Row getSelected() {
         return get(selected);
     }
     
@@ -243,8 +243,8 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * Returns the selected entries as an ArrayList<DataSet> 
      * @return
      */
-    public ArrayList<DataSet<Key>> getSelections() {
-        ArrayList<DataSet<Key>> selectionSets = new ArrayList<DataSet<Key>>();
+    public ArrayList<Row> getSelections() {
+        ArrayList<Row> selectionSets = new ArrayList<Row>();
         for(int i : selections) 
             selectionSets.add(get(i));
         return selectionSets;
@@ -311,15 +311,15 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * 
      */
     public Object clone() {
-        DataModel<Key> clone = new DataModel<Key>();
+        TableDataModel<Key,Row> clone = new TableDataModel<Key,Row>();
         clone.page = page;
         clone.selected = selected;
         clone.selectLast = selectLast;
         if(defaultSet != null)
-            clone.defaultSet = (DataSet<Key>)defaultSet.clone();
+            clone.defaultSet = (Row)defaultSet.clone();
         
         for(int i = 0; i < size(); i++){
-            clone.add((DataSet<Key>)get(i).clone());
+            clone.add((Row)get(i).clone());
         }
         return clone;
     }
@@ -328,7 +328,7 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
      * Returns the ArrayList<DataSet> of all deleted entries from this model.
      * @return
      */
-    public ArrayList<DataSet<Key>> getDeletions() {
+    public ArrayList<Row> getDeletions() {
         return deleted;
     }
 

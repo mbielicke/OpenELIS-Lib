@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
-public class NumberObject extends DataObject<Double> {
+public class NumberObject extends DataObject<Double> implements FieldType {
 
     public enum Type {INTEGER,DOUBLE}
 

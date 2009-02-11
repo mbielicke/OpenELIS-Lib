@@ -119,7 +119,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
         if(field instanceof DropDownField)
             field.setValue(editor.getSelections());
         else{
-            field.setValue(((DataObject)((DataSet)editor.getSelections().get(0)).getKey()).getValue());
+            field.setValue(editor.getSelections().get(0).getKey());
         }
 		editor.hideTable();
         super.saveValue();

@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.Field;
 
 import java.util.ArrayList;
 
@@ -105,7 +105,7 @@ public class HeaderMenu extends PopupPanel implements
                 CheckBox check = new CheckBox();
                 filterMenu.setWidget(i, 0, check);
                 check.setChecked(filter[i].filtered);
-                String theText = filter[i].obj.getValue().toString();
+                String theText = ((Field)filter[i].obj).getValue().toString();
                 if (filter[i].display != null)
                     theText = filter[i].display;
                 check.setText(theText);

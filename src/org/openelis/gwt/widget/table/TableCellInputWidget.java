@@ -43,6 +43,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.MenuLabel;
 
@@ -129,7 +130,7 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
 
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
        if(field instanceof AbstractField)
            this.field = (AbstractField)field;
 

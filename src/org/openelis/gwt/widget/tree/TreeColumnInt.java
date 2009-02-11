@@ -28,7 +28,7 @@ package org.openelis.gwt.widget.tree;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 public interface TreeColumnInt {
     
@@ -70,7 +70,7 @@ public interface TreeColumnInt {
     
     public Widget getWidgetInstance(String leafType);
     
-    public void loadWidget(Widget widget, Field object);
+    public void loadWidget(Widget widget, FieldType object);
     
     public void setWidgetDisplay(Widget widget);
     

@@ -29,7 +29,7 @@ import org.openelis.gwt.widget.pagedtree.TreeModel;
 
 import com.google.gwt.xml.client.Node;
 
-@Deprecated public class PagedTreeField extends AbstractField<TreeModel> {
+@Deprecated public class PagedTreeField extends AbstractField<TreeModel> implements FieldType {
 
 
 	private static final long serialVersionUID = 1L;

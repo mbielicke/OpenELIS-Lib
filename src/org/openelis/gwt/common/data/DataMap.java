@@ -34,7 +34,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-@ Deprecated public class DataMap extends HashMap<String,Field> implements Field {
+@ Deprecated public class DataMap extends HashMap<String,FieldType> implements FieldType {
     
     private static final long serialVersionUID = 1L;
 
@@ -47,7 +47,7 @@ import java.util.Iterator;
         Iterator keyIt = keySet().iterator();
         while(keyIt.hasNext()){
             String key = (String)keyIt.next();
-            dataMap.put(key, (Field)((DataObject)get(key)).clone());
+            dataMap.put(key, (FieldType)get(key).clone());
         }
         return dataMap;
     }

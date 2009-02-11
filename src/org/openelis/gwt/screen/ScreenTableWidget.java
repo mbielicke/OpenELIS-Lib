@@ -40,6 +40,7 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -254,7 +255,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                 for (int i = 0; i < fieldList.getLength(); i++) {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-                        set.add(field);
+                        set.add((FieldType)field);
                         columns.get(i).setKey(field.key);
                     }
                 }
@@ -316,7 +317,7 @@ public class ScreenTableWidget extends ScreenInputWidget {
                     table.model.load((DataModel)field.getValue());
                 else{
                     table.model.clear();
-                    field.setValue(table.model);
+                    field.setValue(table.model.getData());
                 }
             }else {
                 if(queryWidget instanceof ScreenTableWidget){

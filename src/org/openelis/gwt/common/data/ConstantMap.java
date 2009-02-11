@@ -41,7 +41,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class ConstantMap extends HashMap<String,String> implements Field  {
+public class ConstantMap extends HashMap<String,String> implements FieldType  {
     
     private static final long serialVersionUID = 1L;
     

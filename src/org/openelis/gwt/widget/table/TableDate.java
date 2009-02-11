@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ClassFactory;
 
 public class TableDate extends SimplePanel implements TableCellWidget {
@@ -85,7 +86,7 @@ public class TableDate extends SimplePanel implements TableCellWidget {
 
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
         // TODO Auto-generated method stub
 
     }

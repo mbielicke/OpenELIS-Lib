@@ -32,6 +32,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 
 /**
@@ -43,7 +44,7 @@ import org.openelis.gwt.common.data.Field;
 public class TableLink extends SimplePanel implements TableCellWidget {
     
     private HTML editor;
-    private Field field;
+    private FieldType field;
     private boolean enabled;
     public static final String TAG_NAME = "table-link";
     public int rowIndex;
@@ -87,7 +88,7 @@ public class TableLink extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
         this.field = field;
         
     }

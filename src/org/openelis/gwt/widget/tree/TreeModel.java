@@ -28,7 +28,7 @@ package org.openelis.gwt.widget.tree;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -197,7 +197,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return data;
     }
 
-    public Field getObject(int row, int col) {
+    public FieldType getObject(int row, int col) {
         return rows.get(row).get(col);
     }
 
@@ -305,7 +305,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void setCell(int row, int col,Object value) {
-        rows.get(row).get(col).setValue(value);
+        ((AbstractField)rows.get(row).get(col)).setValue(value);
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
@@ -321,7 +321,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public Object getCell(int row, int col) {
-        return rows.get(row).get(col).getValue();
+        return ((AbstractField)rows.get(row).get(col)).getValue();
     }
 
     public TreeDataItem setRow(int index, TreeDataItem row) {

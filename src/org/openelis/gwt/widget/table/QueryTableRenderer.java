@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
@@ -92,7 +93,7 @@ public class QueryTableRenderer implements TableRendererInt, TableWidgetListener
        if(controller.view.table.getRowCount() == 0)
            createRow(0);
        for (int i = 0; i < controller.columns.size(); i++) 
-           controller.columns.get(i).loadWidget(controller.view.table.getWidget(0, i),controller.form.getField(controller.columns.get(i).getKey().trim()));
+           controller.columns.get(i).loadWidget(controller.view.table.getWidget(0, i),(FieldType)controller.form.getField(controller.columns.get(i).getKey().trim()));
         
     }
 

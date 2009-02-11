@@ -27,13 +27,14 @@ package org.openelis.gwt.common;
 
 import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 import java.io.Serializable;
 
 public class Filter implements Data, Serializable {
 
     private static final long serialVersionUID = 1L;
-    public Field obj;
+    public FieldType obj;
     public boolean filtered;
     public String display;
     public String splitOn;

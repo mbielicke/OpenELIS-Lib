@@ -34,7 +34,7 @@ import com.google.gwt.xml.client.Node;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class NumberField extends AbstractField<Double> {
+public class NumberField extends AbstractField<Double> implements FieldType{
 
     private static final long serialVersionUID = 1L;
     private Double max;
@@ -185,10 +185,15 @@ public class NumberField extends AbstractField<Double> {
         this.pattern = pattern;
     }
         
-    public void setValue(String val) {
+    public void setValue(Object val) {
         if(pattern == null) {
             if(val == null || "".equals(val))
                 super.setValue(null);
+            if(val instanceof Integer)
+                value = new Double((Integer)val);
+            if(val instanceof Double){
+                value = (Double)val;
+            }
         }else{
             try {
                 setObject(Double.parseDouble((String)val));
@@ -212,19 +217,21 @@ public class NumberField extends AbstractField<Double> {
     
     private void setObject(Object val) {
         invalid = false;
-        try {
-            if (val != null && !"".equals(val)) {
-                if (val instanceof String && !((String)val).equals(""))
-                    value = Double.valueOf((String)val);
-                else if (val instanceof Double)
-                    value = (Double)val;
-                else if (val instanceof Integer)
-                    value = new Double(((Integer)val).doubleValue());
-            } else {
-                value = null;
+       
+            try {
+                if (val != null && !"".equals(val)) {
+                    if (val instanceof String && !((String)val).equals(""))
+                        value = Double.valueOf((String)val);
+                    else if (val instanceof Double)
+                        value = (Double)val;
+                    else if (val instanceof Integer)
+                        value = new Double(((Integer)val).doubleValue());
+                } else {
+                    value = null;
+                }
+            } catch (Exception e) {
+                invalid = true;
             }
-        } catch (Exception e) {
-            invalid = true;
-        }
+       
     }
 }

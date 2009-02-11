@@ -28,7 +28,7 @@ package org.openelis.gwt.common.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TreeDataModel extends ArrayList<TreeDataItem> implements Field {
+public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType {
     
     private static final long serialVersionUID = 1L;
             

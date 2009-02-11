@@ -43,8 +43,8 @@ public class DataObject<Type> implements Field<Type> {
         return value;
     }
     
-    public void setValue(Type value) {
-        this.value = value;
+    public void setValue(Object value) {
+        this.value = (Type)value;
     }
     
     public Object clone() {

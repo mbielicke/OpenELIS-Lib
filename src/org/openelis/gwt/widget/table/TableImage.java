@@ -32,6 +32,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 
 /**
@@ -43,7 +44,7 @@ import org.openelis.gwt.common.data.Field;
 public class TableImage extends SimplePanel implements TableCellWidget {
   
     private Image editor;
-    private Field field;
+    private FieldType field;
     public static final String TAG_NAME = "table-image";
     public int rowIndex;
     
@@ -85,7 +86,7 @@ public class TableImage extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
         this.field = field;
         
     }

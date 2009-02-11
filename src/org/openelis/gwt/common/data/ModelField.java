@@ -28,7 +28,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 
-@Deprecated public class ModelField extends AbstractField<DataModel> {
+@Deprecated public class ModelField extends AbstractField<DataModel> implements FieldType {
 
     private static final long serialVersionUID = 1L;
 

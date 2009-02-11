@@ -36,6 +36,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
@@ -70,7 +71,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
     public ItemGrid editorGrid;
     public TableCellWidget editor;
     private CommandListenerCollection commandListeners;
-    private Field field;
+    private FieldType field;
     private int width;
     private NumberFormat displayMask;
     public static final String TAG_NAME = "table-tree";
@@ -125,7 +126,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
         
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
         this.field = field;
         TreeDataItem item = (TreeDataItem)field;
         //editor = cells.get(item.leafCell).getNewInstance();

@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
-public class BooleanObject extends DataObject<Boolean> {
+public class BooleanObject extends DataObject<Boolean> implements FieldType {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,5 +48,10 @@ public class BooleanObject extends DataObject<Boolean> {
         else
             setValue(new Boolean(false));
     }
+    
+    public Object clone() {
+        return new BooleanObject(value);
+    }
+
 
 }

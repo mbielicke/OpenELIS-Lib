@@ -35,6 +35,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.common.data.TreeField;
@@ -240,7 +241,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                      for (int k = 0; k < fieldList.getLength(); k++) {
                          if (fieldList.item(k).getNodeType() == Node.ELEMENT_NODE) {
                              AbstractField field = (ScreenBase.createField(fieldList.item(k)));
-                             item.add(field);
+                             item.add((FieldType)field);
                              columns.get(k).setKey(field.key);
                          }
                      }

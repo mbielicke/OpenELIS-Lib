@@ -1,6 +1,6 @@
 package org.openelis.gwt.common.data;
 
-public class IntegerObject extends DataObject<Integer> {
+public class IntegerObject extends DataObject<Integer> implements FieldType{
     
     private static final long serialVersionUID = 1L;
 
@@ -12,6 +12,10 @@ public class IntegerObject extends DataObject<Integer> {
     
     public IntegerObject(int val){
         setValue(new Integer(val));
+    }
+    
+    public Object clone() {
+        return new IntegerObject(value);
     }
 
 }

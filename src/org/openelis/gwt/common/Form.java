@@ -30,6 +30,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import java.util.Set;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class Form extends AbstractField<String> {
+public class Form extends AbstractField<String> implements FieldType {
 
     private static final long serialVersionUID = 1L;
     

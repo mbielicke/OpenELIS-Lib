@@ -28,7 +28,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 public interface TableCellWidget {
     public void clear();
@@ -43,7 +43,7 @@ public interface TableCellWidget {
     
     public void saveValue();
     
-    public void setField(Field field);
+    public void setField(FieldType field);
     
     public Widget getWidget();
     

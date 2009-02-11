@@ -31,6 +31,7 @@ import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public int numRows();
     
-    public Field getObject(int row, int col);
+    public FieldType getObject(int row, int col);
     
     public void clear();
     

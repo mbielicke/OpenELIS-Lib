@@ -29,7 +29,7 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
 
-public class TreeField extends AbstractField<TreeDataModel> {
+public class TreeField extends AbstractField<TreeDataModel> implements FieldType {
 
     private static final long serialVersionUID = 1L;
     public static final String TAG_NAME = "rpc-tree";
@@ -102,7 +102,7 @@ public class TreeField extends AbstractField<TreeDataModel> {
             }
         }
         if(item.shown){
-            for (Field obj : item){
+            for (FieldType obj : item){
                 if(obj instanceof AbstractField){
                     ((AbstractField)obj).validate();
                     if(!((AbstractField)obj).valid){
@@ -130,7 +130,7 @@ public class TreeField extends AbstractField<TreeDataModel> {
                 clearItem(child);
             }
         }
-        for(Field obj : item){
+        for(FieldType obj : item){
             if(obj instanceof AbstractField)
                 ((AbstractField)obj).clearErrors();
         }

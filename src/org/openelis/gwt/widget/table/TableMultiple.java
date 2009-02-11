@@ -31,6 +31,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     
     public ArrayList<TableCellWidget> cells = new ArrayList<TableCellWidget>();
     public int active;
-    Field field;
+    FieldType field;
     public static final String TAG_NAME = "table-multiple";
     public int rowIndex;
     
@@ -106,7 +107,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
        this.field = field;
         
     }

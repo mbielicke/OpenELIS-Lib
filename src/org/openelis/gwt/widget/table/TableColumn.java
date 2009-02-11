@@ -34,6 +34,7 @@ import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenMenuItem;
 
 public class TableColumn implements TableColumnInt {
@@ -66,7 +67,7 @@ public class TableColumn implements TableColumnInt {
         return (Widget)tcell;
     }
     
-    public void loadWidget(Widget widget, Field object) {
+    public void loadWidget(Widget widget, FieldType object) {
         ((TableCellWidget)widget).setField(object);
         ((TableCellWidget)widget).setDisplay();
     }

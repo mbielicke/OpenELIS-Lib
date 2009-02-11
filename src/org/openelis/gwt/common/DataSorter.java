@@ -28,6 +28,7 @@ package org.openelis.gwt.common;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 public class DataSorter implements DataSorterInt {
     
@@ -49,19 +50,19 @@ public class DataSorter implements DataSorterInt {
     }
 
     public int partition(int s, int t, int col) {
-        Field x = data.get(s).get(col);
+        FieldType x = data.get(s).get(col);
         int i = s - 1;
         int j = t + 1;
         while (true) {
             if (direction == SortDirection.DOWN) {
-                while (data.get(--j).get(col).compareTo(x) > 0)
+                while (((Field)data.get(--j).get(col)).compareTo(x) > 0)
                     ;
-                while (data.get(++i).get(col).compareTo(x) < 0)
+                while (((Field)data.get(++i).get(col)).compareTo(x) < 0)
                     ;
             } else {
-                while (data.get(--j).get(col).compareTo(x) < 0)
+                while (((Field)data.get(--j).get(col)).compareTo(x) < 0)
                     ;
-                while (data.get(++i).get(col).compareTo(x) > 0)
+                while (((Field)data.get(++i).get(col)).compareTo(x) > 0)
                     ;
             }
             if (i < j) {

@@ -33,7 +33,7 @@ import com.google.gwt.xml.client.Node;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class StringField extends AbstractField<String> {
+public class StringField extends AbstractField<String> implements FieldType {
     
     private static final long serialVersionUID = 1L;
     private Integer min;

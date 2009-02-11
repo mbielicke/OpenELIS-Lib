@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * This class has been marked as a Field for backwards compatibility only.  Remove once 
  * all screens have been upgraded to create smaller code.
  */
-public class DataSet<Key> extends ArrayList<DataObject> implements Field, Comparable{
+public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Comparable{
     
     private static final long serialVersionUID = 1L;
     
@@ -27,7 +27,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * This member is used to attach some set of data to the dataset useful to the 
      * program but not accessed or seen  by the user.
      */
-    protected Field data;
+    protected FieldType data;
     
     /**
      * Flag letting Widgets know if this DataSet should be shown on screen or 
@@ -63,7 +63,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * @param key
      * @param value
      */
-    public DataSet(Key key, DataObject val){
+    public DataSet(Key key, FieldType val){
         setKey(key);
         add(val);
     }
@@ -74,9 +74,9 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * @param key
      * @param values
      */
-    public DataSet(Key key, DataObject[] values){
+    public DataSet(Key key, FieldType[] values){
         setKey(key);
-        for(DataObject val : values){
+        for(FieldType val : values){
             add(val);
         }
     }
@@ -104,7 +104,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
     public Object clone() {
         DataSet<Key> clone = new DataSet<Key>();
         for(int i=0; i < size(); i++){
-            clone.add((DataObject)get(i).clone());
+            clone.add((FieldType)get(i).clone());
         }
         if(key != null)
             clone.key = key;
@@ -143,7 +143,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * info to this dataset but is not accessible to end users
      * @return
      */
-    public Field getData() {
+    public FieldType getData() {
        return data;
     }
 
@@ -152,7 +152,7 @@ public class DataSet<Key> extends ArrayList<DataObject> implements Field, Compar
      * info to this dataset but is not accessible to end users
      * @param data
      */
-    public void setData(Field data) {
+    public void setData(FieldType data) {
        this.data = data;
     }
     

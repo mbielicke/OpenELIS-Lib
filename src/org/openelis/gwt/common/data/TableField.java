@@ -30,7 +30,7 @@ import com.google.gwt.xml.client.Node;
 import java.util.ArrayList;
 
 
-public class TableField<Key> extends AbstractField<DataModel<Key>> {
+public class TableField<Key> extends AbstractField<DataModel<Key>> implements FieldType {
 
     private static final long serialVersionUID = 1L;
     public static final String TAG_NAME = "rpc-table";
@@ -63,6 +63,16 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> {
         }else
             value = val;
     }
+    
+    public void setValue(Object val) {
+        if(val == null){
+            if(value == null)
+                value = new DataModel<Key>();
+            else
+                value.clear();
+        }else
+           value = (DataModel<Key>)val;
+    }
 
     public DataModel<Key> getValue() {
         return value;
@@ -90,7 +100,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> {
         boolean valid = true;
         for(DataSet<Key> row : value){
             if(row.shown){
-                for (Field obj : row){
+                for (FieldType obj : row){
                     if(obj instanceof AbstractField){
                         ((AbstractField)obj).validate();
                         if(!((AbstractField)obj).valid)
@@ -104,7 +114,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> {
     
     public void clearErrors() {
         for(DataSet<Key> row : value){
-            for(Field obj : row){
+            for(FieldType obj : row){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();
             }

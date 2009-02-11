@@ -32,7 +32,7 @@ import com.google.gwt.xml.client.Node;
  * CheckField is an implementation of AbstractField that represents
  * data used for Checkboxes.
  */
-public class CheckField extends AbstractField<String> {
+public class CheckField extends AbstractField<String> implements FieldType {
 
     private static final long serialVersionUID = 1L;
     

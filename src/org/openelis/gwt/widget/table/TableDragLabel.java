@@ -36,6 +36,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenLabel;
@@ -50,7 +51,7 @@ import org.openelis.gwt.screen.ScreenLabel;
 public class TableDragLabel extends SimplePanel implements TableCellWidget {
     
     private ScreenLabel editor;
-    private Field field;
+    private FieldType field;
     private int width;
     private NumberFormat displayMask;
     public static final String TAG_NAME = "table-dragLabel";
@@ -142,7 +143,7 @@ public class TableDragLabel extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
         this.field = field;
         editor.setUserObject(field);
         

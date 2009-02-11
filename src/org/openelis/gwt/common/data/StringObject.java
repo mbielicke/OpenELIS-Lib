@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
-public class StringObject extends DataObject<String>  {
+public class StringObject extends DataObject<String> implements FieldType {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,5 +33,9 @@ public class StringObject extends DataObject<String>  {
     
     public StringObject(String val) {
         super(val);
+    }
+    
+    public Object clone() {
+        return new StringObject(value);
     }
 }

@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.widget.pagedtree.TreeView;
 import org.openelis.gwt.widget.table.TableCellWidget;
@@ -122,7 +123,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
                 TableTree item = (TableTree)controller.view.table.getWidget(index, i);
                 item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
                 
-                item.setField((Field)row);
+                item.setField((FieldType)row);
                 item.setDisplay();
             }else{
                 TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);

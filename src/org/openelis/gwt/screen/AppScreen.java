@@ -47,7 +47,7 @@ import com.google.gwt.xml.client.XMLParser;
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.widget.AppButton;
@@ -66,7 +66,7 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
 
     public AppScreenServiceIntAsync<ScreenRPC> service;
     public HashMap<String,Form> forms = new HashMap<String,Form>();
-    public HashMap<String,Field> initData;
+    public HashMap<String,FieldType> initData;
     public ScreenRPC rpc;
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
@@ -104,8 +104,8 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
     
     @Deprecated public void getXMLData(ScreenRPC rpc) {
         this.rpc = rpc;
-        service.getXMLData(new AsyncCallback<HashMap<String,Field>>() {
-           public void onSuccess(HashMap<String,Field> result){
+        service.getXMLData(new AsyncCallback<HashMap<String,FieldType>>() {
+           public void onSuccess(HashMap<String,FieldType> result){
                initData = result;
                drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
@@ -133,10 +133,10 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         });
     }
     
-    @Deprecated public void getXMLData(HashMap<String,Field> args, ScreenRPC rpc) {
+    @Deprecated public void getXMLData(HashMap<String, FieldType> args, ScreenRPC rpc) {
         this.rpc = rpc;
-        service.getXMLData(args, new AsyncCallback<HashMap<String,Field>>() {
-           public void onSuccess(HashMap<String,Field> result){
+        service.getXMLData(args, new AsyncCallback<HashMap<String,FieldType>>() {
+           public void onSuccess(HashMap<String,FieldType> result){
                //try {
                    initData = result;
                    drawScreen((String)((StringObject)initData.get("xml")).getValue());

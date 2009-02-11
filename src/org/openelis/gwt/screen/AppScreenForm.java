@@ -205,7 +205,7 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
 
     protected AsyncCallback<DataModel<Key>> commitQueryCallback = new AsyncCallback<DataModel<Key>>() {
         public void onSuccess(DataModel<Key> result){
-            try {
+           // try {
                 resetForm();
                 load();
                 setForm(FormInt.State.DISPLAY);
@@ -215,9 +215,9 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
                 window.setStatus(consts.get("queryingComplete"),"");
                 changeState(State.DEFAULT);
                 commandListeners.fireCommand(Action.NEW_MODEL, result);
-            }catch(Exception e){
-                Window.alert(e.getMessage());
-            }
+           // }catch(Exception e){
+               // Window.alert(e.getMessage());
+           // }
         }
         public void onFailure(Throwable caught){
             handleError(caught);

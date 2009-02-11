@@ -29,7 +29,7 @@ import org.openelis.gwt.common.DatetimeRPC;
 
 import java.util.Date;
 
-public class DateObject extends DataObject<DatetimeRPC> {
+public class DateObject extends DataObject<DatetimeRPC> implements FieldType {
     
     private static final long serialVersionUID = 1L;
 
@@ -45,6 +45,9 @@ public class DateObject extends DataObject<DatetimeRPC> {
         setValue(val);
     }
     
+    public Object clone() {
+        return new DateObject(value);
+    }
  
 
 }

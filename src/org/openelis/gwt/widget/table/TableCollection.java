@@ -34,6 +34,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 public class TableCollection extends SimplePanel implements TableCellWidget {
     
     private VerticalPanel editor;
-    private Field field;
+    private FieldType field;
     public static final String TAG_NAME = "table-collection";
     protected int rowIndex;
 
@@ -74,7 +75,7 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
         }else{
             editor.clear();
         }
-        ArrayList vals = (ArrayList)field.getValue();
+        ArrayList vals = (ArrayList)((AbstractField)field).getValue();
         for(int i = 0; i < vals.size(); i++){
             editor.add(new Label((String)((DataObject)vals.get(i)).getValue()));
         }
@@ -86,7 +87,7 @@ public class TableCollection extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(Field field) {
+    public void setField(FieldType field) {
         this.field = field;
     }
 

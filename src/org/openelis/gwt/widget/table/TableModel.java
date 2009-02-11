@@ -35,6 +35,7 @@ import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableModelListenerCollection;
 
@@ -104,8 +105,8 @@ public class TableModel implements TableModelInt {
         return data.size();
     }
 
-    public Field getObject(int row, int col) {
-        return data.get(row).get(col);
+    public FieldType getObject(int row, int col) {
+        return (FieldType)data.get(row).get(col);
     }
 
     public void clear() {
@@ -309,12 +310,12 @@ public class TableModel implements TableModelInt {
     }
     
     public void setCell(int row, int col, Object value) {
-        data.get(row).get(col).setValue(value);
+        ((AbstractField)data.get(row).get(col)).setValue(value);
         tableModelListeners.fireCellUpdated(this, row, col);
     }
     
     public Object getCell(int row, int col) {
-        return data.get(row).get(col).getValue();
+        return ((AbstractField)data.get(row).get(col)).getValue();
     }
     
     public void hideRow(int row) {

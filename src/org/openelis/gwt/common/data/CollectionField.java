@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *
  */
 
-@Deprecated public class CollectionField  extends AbstractField<ArrayList<DataObject>>  {
+@Deprecated public class CollectionField  extends AbstractField<ArrayList<DataObject>>  implements FieldType {
 
     private static final long serialVersionUID = 1L;
     private ArrayList<DataObject> coll = new ArrayList<DataObject>();

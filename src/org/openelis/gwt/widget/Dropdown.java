@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
