@@ -30,7 +30,7 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
 
-public class QueryField extends AbstractField<String> {
+public class QueryField extends AbstractField<String> implements FieldType{
 
     private static final long serialVersionUID = 1L;
 
@@ -64,6 +64,11 @@ public class QueryField extends AbstractField<String> {
     public void setValue(String val) {
         // TODO Auto-generated method stub
         value = val;
+        parse((String)val);
+    }
+    
+    public void setValue(Object val) {
+        value = (String)val;
         parse((String)val);
     }
     
