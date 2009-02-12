@@ -317,7 +317,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                     tree.model.load((TreeDataModel)field.getValue());
                 else{
                     tree.model.clear();
-                    field.setValue(tree.model);
+                    field.setValue(tree.model.getData());
                 }
             }else {
                 if(queryWidget instanceof ScreenTableWidget){
