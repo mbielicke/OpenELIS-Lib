@@ -34,6 +34,7 @@ import com.google.gwt.xml.client.Node;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
+@Deprecated
 public class NumberField extends AbstractField<Double> implements FieldType{
 
     private static final long serialVersionUID = 1L;
