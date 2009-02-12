@@ -68,7 +68,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      *
      */
     public DateField(){
-        super();
+        super(DatetimeRPC.getInstance());
     }
     
     /**
@@ -79,7 +79,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param val
      */
     public DateField(byte begin, byte end, DatetimeRPC val){
-        super();
+        super(DatetimeRPC.getInstance());
         setBegin(begin);
         setEnd(end);
         setValue(val);
@@ -93,7 +93,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param val
      */
     public DateField(byte begin, byte end, Date val){
-        super();
+        super(DatetimeRPC.getInstance());
         setBegin(begin);
         setEnd(end);
         setValue(DatetimeRPC.getInstance(getBegin(),
@@ -106,7 +106,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param node
      */
     public DateField(Node node) {
-        this();
+        super(DatetimeRPC.getInstance());
         setAttributes(node);
     }
     
