@@ -43,12 +43,12 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
     }
     
     public void setText(String text) {
-        if(textCase == Case.UPPER)
-            super.setText(text.toUpperCase());
-        else if(textCase == Case.LOWER)
-            super.setText(text.toLowerCase());
-        else 
+        if(text == null || textCase == Case.MIXED)
             super.setText(text);
+        else if(textCase == Case.UPPER)
+            super.setText(text.toUpperCase());
+        else 
+            super.setText(text.toLowerCase());
     }
     
     public void setMask(String mask) {
