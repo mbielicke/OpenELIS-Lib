@@ -133,7 +133,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      */
     public Object getTextValue(){
         if(value.size() == 1)
-            return value.get(0).get(0);
+            return value.get(0).get(0).toString();
         else if(value.size() > 1)
             return value;
         else
