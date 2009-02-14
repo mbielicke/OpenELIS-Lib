@@ -88,9 +88,6 @@ public class ScreenAToZTable extends ScreenWidget {
         azTable.init(columns,maxRows,width,title,showHeader,VerticalScroll.NEVER);
         Node bpanel = ((Element)node).getElementsByTagName("buttonPanel").item(0);
         azTable.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
-        
-        ((AppScreen)screen).addKeyboardListener(azTable);
-        ((AppScreen)screen).addClickListener(azTable);
         initWidget(azTable);        
         setDefaults(node, screen);
     }

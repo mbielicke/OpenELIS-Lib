@@ -38,16 +38,16 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.HasCommandHandlers;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents {
+public class TableTree extends SimplePanel implements TableCellWidget , HasCommandHandlers {
     
     public class ItemGrid extends Grid implements TableListener{
         
@@ -227,13 +227,13 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
         
     }
     
-    public void addCommandListener(CommandListener listener) {
+    public void addCommandListener(CommandHandler listener) {
         if(commandListeners == null)
             commandListeners = new CommandListenerCollection();
         commandListeners.add(listener);   
      }
 
-     public void removeCommandListener(CommandListener listener) {
+     public void removeCommandListener(CommandHandler listener) {
          if(commandListeners != null) 
              commandListeners.remove(listener);
          

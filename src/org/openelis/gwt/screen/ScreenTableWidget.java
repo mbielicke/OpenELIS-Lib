@@ -292,11 +292,6 @@ public class ScreenTableWidget extends ScreenInputWidget {
                         data.addDefault();
                     }
                 }
-               
-                
-                
-            ((AppScreen)screen).addKeyboardListener(table.keyboardHandler);
-            ((AppScreen)screen).addClickListener(table.mouseHandler);
             initWidget(table);
             table.model.load(data);
             displayWidget = table;

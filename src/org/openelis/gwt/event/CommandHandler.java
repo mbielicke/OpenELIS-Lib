@@ -25,10 +25,12 @@
 */
 package org.openelis.gwt.event;
 
-public interface CommandListener {
+import com.google.gwt.event.shared.EventHandler;
+
+public interface CommandHandler<D> extends EventHandler {
     
-    public void performCommand(Enum action, Object obj);
+    public void performCommand(Enum action, D obj);
     
-    public boolean canPerformCommand(Enum action, Object obj);
+    public boolean canPerformCommand(Enum action, D obj);
 
 }

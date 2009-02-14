@@ -50,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.TextBox;

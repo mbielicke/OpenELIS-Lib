@@ -25,12 +25,7 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
@@ -38,7 +33,6 @@ import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -46,9 +40,12 @@ import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
-import java.util.ArrayList;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
-public class ScreenDropDownWidget extends ScreenInputWidget implements FocusListener {
+public class ScreenDropDownWidget extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -152,9 +149,9 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
             String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this")){
-                    auto.addChangeListener((ChangeListener)screen);
+                    auto.addValueChangeHandler((ValueChangeHandler<ArrayList<DataSet<Object>>>)screen);
                 }else{
-                    auto.addChangeListener((ChangeListener)ClassFactory.forName(listeners[i]));
+                    auto.addValueChangeHandler((ValueChangeHandler<ArrayList<DataSet<Object>>>)ClassFactory.forName(listeners[i]));
                 }
             }
         }
@@ -167,9 +164,6 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         
         
         auto.setForm(screen);
-        
-        ((AppScreen)screen).addKeyboardListener(auto.keyboardHandler);
-        ((AppScreen)screen).addClickListener(auto.mouseHandler);
         initWidget(auto);
         displayWidget = auto;
         setDefaults(node, screen);
@@ -211,13 +205,8 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         else{
             if(alwaysEnabled){
                 auto.enabled(true);
-                auto.removeFocusListener(this);
-                auto.addFocusListener(this);
             }else{
                 auto.enabled(enabled);
-                auto.removeFocusListener(this);
-                if(enabled)
-                    auto.addFocusListener(this);
             }
             super.enable(enabled);
         }
@@ -300,20 +289,10 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     	return (ScreenDropDownWidget)queryWidget;
     }
     
-    public void onLostFocus(Widget sender) {
-    	//auto.onLostFocus(sender);
-    	if(key != null)
-    		super.onLostFocus(this);
-    }
-    
-   public void onFocus(Widget sender) {
-	   //auto.onFocus(sender);
-	   super.onFocus(this);
-   }
    
-   public void setForm(FormInt.State state) {
+   public void setForm(AppScreenForm.State state) {
        if(queryWidget == null){
-           if(state == FormInt.State.QUERY)
+           if(state == AppScreenForm.State.QUERY)
                auto.setMultiSelect(true);
            else
                auto.setMultiSelect(multiSelect);

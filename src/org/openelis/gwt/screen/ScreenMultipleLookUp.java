@@ -5,7 +5,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.widget.MultipleLookUp;
 
 public class ScreenMultipleLookUp extends ScreenInputWidget {
@@ -30,9 +30,9 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
             String[] listeners = node.getAttributes().getNamedItem("listeners").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                    look.addCommandListener((CommandListener)screen);
+                    look.addCommandListener((CommandHandler)screen);
                 else
-                    look.addCommandListener((CommandListener)ClassFactory.forName(listeners[i]));
+                    look.addCommandListener((CommandHandler)ClassFactory.forName(listeners[i]));
             }
         }
         NodeList icons = node.getChildNodes();

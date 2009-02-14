@@ -25,27 +25,32 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.MenuLabel;
+
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.FormInt;
-import org.openelis.gwt.widget.MenuLabel;
-
-import java.util.ArrayList;
-
-public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
+public class ScreenInputWidget extends ScreenWidget implements FocusHandler, BlurHandler, KeyDownHandler, MouseOverHandler,MouseOutHandler {
     
     protected ScreenInputWidget queryWidget;
     protected AbstractField field;
@@ -57,18 +62,16 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     protected PopupPanel pop;
     protected boolean showError = true;
     
+    
     public ScreenInputWidget() {
 
     }
     
-    public void onBrowserEvent(Event event) {
-        if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
-            if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
-                screen.doTab(event, this);
+    public void onKeyDown(KeyDownEvent event) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_TAB) {
+            screen.doTab(event, this);
                 return;
-            }
-        }
-        super.onBrowserEvent(event);
+        }   
     }
     
     public ScreenInputWidget(Node node){
@@ -77,6 +80,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             if(node.getAttributes().getNamedItem("showError").getNodeValue().equals("false"))
                 showError = false;
         }
+        addDomHandler(this,KeyDownEvent.getType());
             
     }
     
@@ -89,8 +93,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         queryWidget.key = key;
     }
     
-    public void setForm(FormInt.State state){
-        if(state == FormInt.State.QUERY)
+    public void setForm(AppScreenForm.State state){
+        if(state == AppScreenForm.State.QUERY)
             this.queryMode = true;
         else
             this.queryMode = false;
@@ -110,7 +114,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             hp = new HorizontalPanel();
             if(showError){
                 errorImg.setStyleName("ErrorPanelHidden");
-                errorImg.addMouseListener(this);
+                errorImg.addMouseOverHandler(this);
+                errorImg.addMouseOutHandler(this);
                 hp.add(errorImg);
             }
         }
@@ -121,39 +126,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         setWidget(hp);
     }
 
-    public void onFocus(final Widget sender) {
-        if(sender instanceof TextBoxBase){
-            //((TextBoxBase)sender).setSelectionRange(0, 0);
-            //DeferredCommand.addCommand(new Command(){
-              //  public void execute() {
-                   //((TextBoxBase)sender).setSelectionRange(0,0);
-                //   ((TextBoxBase)sender).setCursorPos(0);
-                   ((TextBoxBase)sender).selectAll();
-                //}
-            //});
-        }
-    }
 
-    public void onLostFocus(Widget sender) {
-        if(!showError)
-            return;
-        submit(field);
-        field.clearErrors();
-        field.validate();
-        screen.validate(field);
-        if(!field.isValid())
-            drawError();
-        else{
-            errorImg.setStyleName("ErrorPanelHidden");
-            if(pop != null){
-                pop.hide();
-            }
-        }
-        if(sender instanceof TextBoxBase){
-          ((TextBoxBase)sender).setText(field.format());
-        }
-    }
-    
     public void clearError() {
         if(!showError)
             return;
@@ -196,12 +169,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         errorImg.setStyleName("ErrorPanelHidden");
     }
 
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onMouseEnter(Widget sender) {
+    public void onMouseOver (MouseOverEvent event) {
         // TODO Auto-generated method stub
         if(errorImg.getStyleName().equals("ErrorPanel")){
             if(pop == null){
@@ -215,29 +183,19 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             dp.add(errorPanel);
             dp.setVisible(true);
             pop.setWidget(dp);
-            pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
+            pop.setPopupPosition(errorImg.getAbsoluteLeft()+16, errorImg.getAbsoluteTop());
             pop.show();
         }
         
     }
 
-    public void onMouseLeave(Widget sender) {
+    public void onMouseOut(MouseOutEvent event) {
         // TODO Auto-generated method stub
         if(errorImg.getStyleName().equals("ErrorPanel")){
             if(pop != null){
                 pop.hide();
             }
         }
-        
-    }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
         
     }
     
@@ -248,5 +206,33 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public Widget getQueryWidget() {
         return queryWidget;
     }
+
+	public void onFocus(FocusEvent event) {
+        if(event.getSource() instanceof TextBoxBase){
+        	((TextBoxBase)event.getSource()).selectAll();
+        }
+		
+	}
+
+	public void onBlur(BlurEvent event) {
+        if(!showError)
+            return;
+        submit(field);
+        field.clearErrors();
+        field.validate();
+        screen.validate(field);
+        if(!field.isValid())
+            drawError();
+        else{
+            errorImg.setStyleName("ErrorPanelHidden");
+            if(pop != null){
+                pop.hide();
+            }
+        }
+        if(event.getSource() instanceof TextBoxBase){
+          ((TextBoxBase)event.getSource()).setText(field.format());
+        }
+		
+	}
 
 }

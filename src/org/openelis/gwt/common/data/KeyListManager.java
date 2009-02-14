@@ -25,17 +25,18 @@
  */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.CommandEvent;
+import org.openelis.gwt.event.CommandHandler;
+import org.openelis.gwt.event.HasCommandHandlers;
 import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.widget.AToZTable;
 import org.openelis.gwt.widget.ButtonPanel;
-import org.openelis.gwt.widget.FormInt;
+
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * KeyListManager is used by extending instances of AppScreenForm to manage primary key results from 
@@ -44,15 +45,13 @@ import org.openelis.gwt.widget.FormInt;
  * @author tschmidt
  *
  */
-public class KeyListManager<Key> implements SourcesCommandEvents, CommandListener {
+public class KeyListManager<Key> extends Widget implements HasCommandHandlers<Object>, CommandHandler<Object> {
 
     public enum Action {
         SELECTION, REFRESH, GETPAGE, ADD, DELETE, FETCH, UNSELECT
     }
 
     public Action action;
-
-    private CommandListenerCollection commandListeners;
 
     /**
      * The model to store the list of keys from a query
@@ -78,29 +77,8 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * CommandListener interface.  This object will then be called when
      * the KeyListManager broadcasts a command.
      */
-    public void addCommandListener(CommandListener listener) {
-        if (commandListeners == null)
-            commandListeners = new CommandListenerCollection();
-        commandListeners.add(listener);
-    }
-
-    /**
-     * Removes a CommandListener previously added to this objects
-     * CommandListenerCollection.
-     */
-    public void removeCommandListener(CommandListener listener) {
-        if (commandListeners != null)
-            commandListeners.remove(listener);
-    }
-
-    /**
-     * Fires a command to all registered listeners with the Enum and data Object passed
-     * @param action
-     * @param obj
-     */
-    private void fireCommand(Action action, Object obj) {
-        if (commandListeners != null)
-            commandListeners.fireCommand(action, obj);
+    public HandlerRegistration addCommand(CommandHandler handler) {
+        return addHandler(handler,CommandEvent.getType());
     }
 
     /**
@@ -248,7 +226,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
                || (action == AToZTable.Action.PREVIOUS_PAGE)
                || (action == AppScreenForm.Action.REFRESH_PAGE)
                || (action == AToZTable.Action.ROW_SELECTED)
-               || (action == FormInt.State.ADD);
+               || (action == AppScreenForm.State.ADD);
     }
 
     public void performCommand(Enum action, Object obj) {
@@ -276,9 +254,13 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
             // fireCommand(Action.GETPAGE,list);
         } else if (action == AToZTable.Action.ROW_SELECTED) {
             select(((Integer)obj).intValue());
-        } else if (action == FormInt.State.ADD) {
+        } else if (action == AppScreenForm.State.ADD) {
             unselect();
         }
+    } 
+    
+    public void fireCommand(Enum command, Object data){
+    	CommandEvent.fire(this, command, data);
     }
 
     public void onBrowserEvent(Event event) {

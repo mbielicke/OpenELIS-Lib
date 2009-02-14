@@ -25,14 +25,8 @@
 */
 package org.openelis.gwt.screen;
 
-//import com.google.gwt.i18n.client.ConstantsWithLookup;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.EnumSet;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.LastPageException;
@@ -41,15 +35,20 @@ import org.openelis.gwt.common.RPCDeleteException;
 import org.openelis.gwt.common.Form.Status;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.CommandEvent;
+import org.openelis.gwt.event.CommandHandler;
+import org.openelis.gwt.event.HasCommandHandlers;
 import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.widget.ButtonPanel;
-import org.openelis.gwt.widget.FormInt;
 
-import java.util.EnumSet;
-import java.util.Iterator;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
  * the ButtonPanel widget and default logic for standard forms that accept
@@ -57,13 +56,14 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> extends AppScreen<ScreenRPC> implements FormInt, SourcesCommandEvents, CommandListener {
+public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> extends AppScreen<ScreenRPC> implements HasCommandHandlers<Object>, CommandHandler<Object> {
    
     public Key key;
     public AppScreenFormServiceIntAsync<ScreenRPC,Key> formService;
+    public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,BROWSE,DELETE}
     public State state = State.DEFAULT;
-    protected CommandListenerCollection commandListeners;
     public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE};
+    private HasCommandHandlers<Object> commandHandler = this;
 
     protected AsyncCallback<ScreenRPC> fetchCallback = new AsyncCallback<ScreenRPC>() {
         public void onSuccess(ScreenRPC result) {
@@ -139,7 +139,7 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
                         window.setStatus((String)delete.getErrors().get(0),"ErrorPanel");
                 }
             }else{
-                commandListeners.fireCommand(Action.REFRESH_PAGE,null);
+            	CommandEvent.fire(commandHandler,Action.REFRESH_PAGE,null);
                 strikeThru(false);
                 changeState(State.DEFAULT);
             }
@@ -208,13 +208,13 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
            // try {
                 resetForm();
                 load();
-                setForm(FormInt.State.DISPLAY);
+                setForm(State.DISPLAY);
                 form = rpc.form;
                 load();
                 enable(false);
                 window.setStatus(consts.get("queryingComplete"),"");
                 changeState(State.DEFAULT);
-                commandListeners.fireCommand(Action.NEW_MODEL, result);
+                CommandEvent.fire(commandHandler,Action.NEW_MODEL, result);
            // }catch(Exception e){
                // Window.alert(e.getMessage());
            // }
@@ -307,7 +307,7 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         resetForm();
         load();
         window.setStatus(consts.get("enterFieldsToQuery"),"");
-        setForm(FormInt.State.QUERY);
+        setForm(State.QUERY);
         form = forms.get("query");
         resetForm();
         load();
@@ -446,7 +446,7 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
             }else{
                 window.setStatus(messageText, "");
             }
-            commandListeners.fireCommand(Action.NEW_PAGE,result);
+            CommandEvent.fire(commandHandler,Action.NEW_PAGE,result);
         }
                 
         public void onFailure(Throwable caught){
@@ -497,7 +497,7 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         }
         if (state == State.QUERY) {
         	clearErrors();
-            setForm(FormInt.State.DISPLAY);
+            setForm(State.DISPLAY);
             this.form = forms.get("display");
             load();
             enable(false);
@@ -559,23 +559,9 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
 
     }
 
-    public void addCommandListener(CommandListener listener) {
-        if(commandListeners == null){
-            commandListeners = new CommandListenerCollection();
-        }
-        commandListeners.add(listener);
-    }
-
-    public void removeCommandListener(CommandListener listener) {
-        if(commandListeners != null){
-            commandListeners.remove(listener);
-        }       
-    }
-    
     public void changeState(State state){
         this.state = state;
-        if(commandListeners != null)
-            commandListeners.fireCommand(state,this);
+        CommandEvent.fire(this, state, null);
     }
     
     public boolean canPerformCommand(Enum action, Object obj) {
@@ -592,38 +578,38 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
                (action.getDeclaringClass().equals(State.class));
     }
     
-    public void performCommand(Enum action, Object obj) {
-        if(action == KeyListManager.Action.FETCH){
-            key = (Key)((Object[])obj)[0];
-            final AsyncCallback call = ((AsyncCallback)((Object[])obj)[1]);
+    public void performCommand(Enum command, Object data) {
+        if(command == KeyListManager.Action.FETCH){
+            key = (Key)((Object[])data)[0];
+            final AsyncCallback call = ((AsyncCallback)((Object[])data)[1]);
             resetForm();
             AsyncCallChain callChain = (AsyncCallChain)fetchChain.clone();
             callChain.add(call);
             fetch(callChain);
-        }else if(action == KeyListManager.Action.GETPAGE)
-            getPage(null,(DataModel<Key>)((Object[])obj)[0],(AsyncCallback)((Object[])obj)[1]);
-        else if (action == ButtonPanel.Action.QUERY) {
+        }else if(command == KeyListManager.Action.GETPAGE)
+            getPage(null,(DataModel<Key>)((Object[])data)[0],(AsyncCallback)((Object[])data)[1]);
+        else if (command == ButtonPanel.Action.QUERY) {
             query();
         }
-        else if (action == ButtonPanel.Action.ADD) {
+        else if (command == ButtonPanel.Action.ADD) {
             add();
         }
-        else if (action == ButtonPanel.Action.UPDATE) {
+        else if (command == ButtonPanel.Action.UPDATE) {
             update();
         }
-        else if (action == ButtonPanel.Action.DELETE) {
+        else if (command == ButtonPanel.Action.DELETE) {
             delete();
         }
-        else if (action == ButtonPanel.Action.COMMIT) {
+        else if (command == ButtonPanel.Action.COMMIT) {
             commit();
         }
-        else if (action == ButtonPanel.Action.ABORT) {
+        else if (command == ButtonPanel.Action.ABORT) {
             abort();
         }
-        else if (action == ButtonPanel.Action.RELOAD) {
+        else if (command == ButtonPanel.Action.RELOAD) {
             reload();
         }
-        else if (action == ButtonPanel.Action.SELECT) {
+        else if (command == ButtonPanel.Action.SELECT) {
             select();
         }
     }
@@ -637,4 +623,10 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         // TODO Auto-generated method stub
         
     }
+
+	public HandlerRegistration addCommand(CommandHandler<Object> handler) {
+		return addHandler(handler, CommandEvent.getType());
+	}
+	
+	
 }

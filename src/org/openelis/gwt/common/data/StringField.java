@@ -143,4 +143,5 @@ public class StringField extends AbstractField<String> implements FieldType {
     public StringField getInstance(Node node) {
         return new StringField(node);
     }
+
 }

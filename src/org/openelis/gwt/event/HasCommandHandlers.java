@@ -25,18 +25,11 @@
 */
 package org.openelis.gwt.event;
 
-import com.google.gwt.user.client.Window;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 
-import java.util.ArrayList;
+public interface HasCommandHandlers<D> extends HasHandlers {
+	
+	public HandlerRegistration addCommand(CommandHandler<D> handler);
 
-public class CommandListenerCollection extends ArrayList<CommandListener> {
-    
-    private static final long serialVersionUID = 1L;
-
-    public void fireCommand(Enum action, Object obj) {
-        for(CommandListener listener : this) {
-            if(listener.canPerformCommand(action, obj))
-                listener.performCommand(action, obj);
-        }
-    }
 }

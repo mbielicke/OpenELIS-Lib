@@ -27,7 +27,6 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-@Deprecated
 public class QueryNumberField extends QueryField {
 
     private static final long serialVersionUID = 1L;

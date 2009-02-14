@@ -26,6 +26,12 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -57,42 +63,20 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableView extends Composite implements TableViewInt, ScrollListener, MouseWheelListener {
+public class TableView extends Composite implements TableViewInt, ScrollHandler, MouseWheelHandler {
     
     public boolean loaded;
     
-    public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
+    public class CellView extends ScrollPanel implements HasMouseWheelHandlers {
 
         private AbsolutePanel ap = new AbsolutePanel();
         
         public CellView() {
             super.setWidget(ap);
-            sinkEvents(Event.ONMOUSEWHEEL);
         }
         
-        public void onBrowserEvent(Event event) {
-            // TODO Auto-generated method stu
-            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
-                listeners.fireMouseWheelEvent(this, event);
-                DOM.eventCancelBubble(event, true);
-                DOM.eventPreventDefault(event);
-            }
-            super.onBrowserEvent(event);
-        }
-        
-        private MouseWheelListenerCollection listeners;
-        
-        public void addMouseWheelListener(MouseWheelListener listener) {
-            if(listeners == null){
-                listeners = new MouseWheelListenerCollection();
-            }
-            listeners.add(listener);
-        }
-
-        public void removeMouseWheelListener(MouseWheelListener listener) {
-            if(listeners != null){
-                listeners.remove(listener);
-            }    
+        public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+        	return addDomHandler(handler, MouseWheelEvent.getType());
         }
         
         public void setScrollWidth(String width){
@@ -164,7 +148,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         }
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
-        cellView.addScrollListener(this);
+        cellView.addScrollHandler(this);
         AbsolutePanel tspacer = new AbsolutePanel();
         tspacer.setStyleName("TableSpacer");
         if(controller.title != null && !controller.title.equals("")){
@@ -213,15 +197,15 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         cellView.setWidget(table);
         ft.setCellSpacing(0);
         scrollBar.setWidth("18px");
-        scrollBar.addScrollListener(this);
+        scrollBar.addScrollHandler(this);
         AbsolutePanel ap = new AbsolutePanel();
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
         if(showScroll == VerticalScroll.NEEDED)
             DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
-        cellView.addMouseWheelListener(this);
-        table.addTableListener(controller);
+        cellView.addMouseWheelHandler(this);
+        table.addClickHandler(controller);
         scrollBar.setAlwaysShowScrollBars(true);
         DeferredCommand.addCommand(new Command() {
            public void execute() {
@@ -278,11 +262,11 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
 
         prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickListener(controller.mouseHandler);
+        prevNav.addClickHandler(controller.mouseHandler);
         
         nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickListener(controller.mouseHandler);
+        nextNav.addClickHandler(controller.mouseHandler);
         
         leftButtonPanel.add(prevNav);
         rightButtonPanel.add(nextNav);
@@ -304,7 +288,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
                                    + "'>"
                                    + i
                                    + "</a>");
-                    nav.addClickListener(controller.mouseHandler);
+                    nav.addClickHandler(controller.mouseHandler);
                 } else {
                     nav = new HTML("" + i);
                     nav.setStyleName("current");
@@ -322,18 +306,18 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         scrollBar.setScrollPosition(scrollPos);
         onScroll(scrollBar,0,scrollPos);
     }
-    
-    public void onScroll(Widget sender, int scrollLeft, final int scrollTop) {
-        if(sender == scrollBar ) {
-            if(top != scrollTop){
-                controller.renderer.scrollLoad(scrollTop);
-                top = scrollTop;
+   
+    public void onScroll(ScrollEvent event) {
+        if(event.getSource() == scrollBar ) {
+            if(top != scrollBar.getScrollPosition()){
+                controller.renderer.scrollLoad(scrollBar.getScrollPosition());
+                top = scrollBar.getScrollPosition();
             }
         }
-        if(sender == cellView){
-            if(left != scrollLeft){
-                headerView.setWidgetPosition(header, -scrollLeft, 0);
-                left = scrollLeft;
+        if(event.getSource() == cellView){
+            if(left != cellView.getHorizontalScrollPosition()){
+                headerView.setWidgetPosition(header, -cellView.getHorizontalScrollPosition(), 0);
+                left = cellView.getHorizontalScrollPosition();
             }
         }
     }
@@ -357,9 +341,9 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         }
     }
 
-    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
+    public void onMouseWheel(MouseWheelEvent event) {
         int pos = scrollBar.getScrollPosition();
-        int delta = velocity.getDeltaY();
+        int delta = event.getDeltaY();
         if(delta < 0 && delta > - 18)
             delta = -18;
         if(delta > 0 && delta < 18)

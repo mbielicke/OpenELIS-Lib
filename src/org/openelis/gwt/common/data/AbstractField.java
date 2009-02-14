@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.xml.client.Node;
 
 import java.io.Serializable;

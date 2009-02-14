@@ -165,9 +165,9 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(AppScreenForm.State state) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY){
+            if(state == AppScreenForm.State.QUERY){
                 check.setType(CheckBox.CheckType.THREE_STATE);
                 check.setState(CheckBox.UNKNOWN);
             }else

@@ -25,28 +25,24 @@
 */
 package org.openelis.gwt.screen;
 
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.CommandEvent;
+import org.openelis.gwt.event.CommandHandler;
+import org.openelis.gwt.event.HasCommandHandlers;
 
-public class CommandChain implements CommandListener {
-    
-    private CommandListenerCollection listeners = new CommandListenerCollection();
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
 
-    public void performCommand(Enum action, Object obj) {
-        listeners.fireCommand(action, obj);
-    }
+public class CommandChain implements HasCommandHandlers<Object> {
     
-    public boolean canPerformCommand(Enum action, Object obj){
-        return true;
-    }
-    
-    public void addCommand(SourcesCommandEvents source){
-        if(source instanceof SourcesCommandEvents)
-            ((SourcesCommandEvents)source).addCommandListener(this);
-        if(source instanceof CommandListener) {
-            listeners.add((CommandListener)source);
-        }
-    }
+    private HandlerManager handlerManager = new HandlerManager(this);
+
+	public HandlerRegistration addCommand(CommandHandler<Object> handler) {
+		return handlerManager.addHandler(CommandEvent.getType(),handler);
+	}
+
+	public void fireEvent(GwtEvent<?> event) {
+		handlerManager.fireEvent(event);
+	}
 
 }

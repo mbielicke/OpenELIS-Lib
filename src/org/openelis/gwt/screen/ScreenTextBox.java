@@ -25,15 +25,21 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 /**
@@ -42,7 +48,8 @@ import org.openelis.gwt.widget.TextBox;
  *
  */
 public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
-                                                                FocusListener
+                                                                FocusListener,
+                                                                ValueChangeHandler<String>
                                                                {
     /**
      * Default XML Tag Name used in XML Definition
@@ -93,7 +100,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         }else{
             textbox = new TextBox();
         }
-        
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")
@@ -197,9 +203,9 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(AppScreenForm.State state) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY){
+            if(state == AppScreenForm.State.QUERY){
                 textbox.setMaxLength(255);
                 textbox.enforceLength = false;
                 textbox.enforceMask = false;
@@ -223,6 +229,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         }   
         super.onFocus(sender);
     }
+    
     public void onLostFocus(Widget sender) {
         if(!textbox.isReadOnly()){
             if(sender == textbox){
@@ -232,5 +239,9 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         super.onLostFocus(sender);
     }
 
+	public void onValueChange(ValueChangeEvent<String> event) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

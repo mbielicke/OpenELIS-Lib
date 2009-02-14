@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TreeDataItem;
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.screen.ScreenTreeWidget;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
@@ -59,7 +59,7 @@ public class TreeWidget extends FocusPanel implements
                                           SourcesTreeWidgetEvents,
                                           TreeModelListener,
                                           FocusListener,
-                                          CommandListener{
+                                          CommandHandler{
 
     public ArrayList<TreeColumnInt> columns;
     public ChangeListenerCollection changeListeners;

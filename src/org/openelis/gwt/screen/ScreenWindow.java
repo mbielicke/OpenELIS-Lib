@@ -25,6 +25,12 @@
 */
 package org.openelis.gwt.screen;
 
+import java.util.Vector;
+
+import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.WindowBrowser;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -49,12 +55,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.widget.FormInt;
-import org.openelis.gwt.widget.MenuLabel;
-import org.openelis.gwt.widget.WindowBrowser;
-
-import java.util.Vector;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -292,10 +292,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
            int left = browser.browser.getWidgetLeft(this);
            browser.browser.add((Widget)this,left,top);
            setKeep(false);
-           if(content instanceof AppScreen){
-               DOM.removeEventPreview((AppScreen)content);
-               DOM.addEventPreview((AppScreen)content);
-           }
            browser.setFocusedWindow();
         }
     }
@@ -499,5 +495,12 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             statusImg.setStyleName(style);
         }
     }
+    
+    public boolean isActiveWindow() {
+    	if(browser == null || zIndex == browser.index)
+    		return true;
+    	return false;
+    }
+    
 
 }

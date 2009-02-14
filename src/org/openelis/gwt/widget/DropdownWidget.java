@@ -25,18 +25,10 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.HasFocus;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.PopupListener;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.table.PopupTable;
@@ -49,15 +41,26 @@ import org.openelis.gwt.widget.table.TableView;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
-import java.util.ArrayList;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.PopupPanel;
 
-public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
-    
-    //public HorizontalPanel mainHP = new HorizontalPanel();
-
-   // public TextBox textBox = new TextBox();
-
-    //public FocusPanel focusPanel = new FocusPanel();
+public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, 
+CloseHandler<PopupPanel>, FocusHandler, BlurHandler, Focusable, HasValueChangeHandlers<ArrayList<DataSet<Object>>> {
     
     public ScreenBase screen;
     
@@ -116,29 +119,18 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         lookUp.setStyleName("AutoDropDown");
         lookUp.setIconStyle("AutoDropDownButton");
         lookUp.textbox.setStyleName("TextboxUnselected");
-        lookUp.textbox.addFocusListener(this);
+        lookUp.textbox.addFocusHandler(this);
+        lookUp.textbox.addBlurHandler(this);
         
-        /*
-        setWidget(mainHP);
-        mainHP.add(textBox);
-        textBox.setStyleName("TextboxUnselected");
-        textBox.addFocusListener(this);
-        textBox.setWidth("auto");
-        mainHP.setSpacing(0);
-        mainHP.setStyleName("AutoDropdown");
-        
-        mainHP.add(focusPanel);
-        mainHP.setCellHorizontalAlignment(focusPanel, HasAlignment.ALIGN_LEFT);
-        focusPanel.setStyleName("AutoDropdownButton");
-        */
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
-        popup.addPopupListener(this);
+        popup.addCloseHandler(this);
         
         model.setModel(new DataModel());
     }
     
-    public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
+    public void onClick(ClickEvent event) {
+    	int row = view.table.getCellForEvent(event).getRowIndex();
         if(!model.canSelect(modelIndexList[row]))
             return;
         if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
@@ -154,14 +146,14 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             complete();
     }
     
-    public void onKeyDown(Widget sender, char code, int modifiers) {
+    public void onKeyDown(KeyDownEvent event) {
         if(!popup.isShowing())
             return;
-        if(code == KeyboardListener.KEY_CTRL)
+        if(event.isControlKeyDown())
             ctrlKey = true;
-        if(code == KeyboardListener.KEY_SHIFT)
+        if(event.isShiftKeyDown())
             shiftKey = true;
-        if (KeyboardListener.KEY_DOWN == code) {
+        if (event.isDownArrow()) {
             if(activeRow < 0){
                 activeRow = findNextActive(0);
                 model.selectRow(activeRow);    
@@ -183,7 +175,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                 }
             }
         }
-        if (KeyboardListener.KEY_UP == code) {
+        if (event.isUpArrow()) {
             if(activeRow == 0){
                 if(modelIndexList[activeRow] - 1 > -1){
                     view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
@@ -200,13 +192,13 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                 model.selectRow(modelIndexList[activeRow]);
             }
         }
-        if (KeyboardListener.KEY_ENTER == code || KeyboardListener.KEY_TAB == code) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER || KeyCodes.KEY_TAB == event.getNativeKeyCode()) {
             if(activeRow > -1){
                 itemSelected = true;
                 complete();
             }
         }
-        if (KeyboardListener.KEY_ESCAPE == code){
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE){
             complete();
         }
     }
@@ -249,26 +241,20 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         //textBox.setFocus(true);
         
         hideTable();
+        ValueChangeEvent.fire(this, getSelections());
 
-        if (changeListeners != null)
-            changeListeners.fireChange(this);
     }
 
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-        if(keyCode == KeyboardListener.KEY_CTRL)
+    public void onKeyUp(KeyUpEvent event) {
+        if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             ctrlKey = false;
-        if(keyCode == KeyboardListener.KEY_SHIFT)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             shiftKey = false;
         
     }
 
-    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-        if(multiSelect && autoClosed){
+    public void onClose(CloseEvent<PopupPanel> event) {
+        if(multiSelect && event.isAutoClosed()){
             complete();
         }
     }
@@ -330,9 +316,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         lookUp.setFocus(focus);
     }
     
-    public void onFocus(Widget sender) {
+    public void onFocus(FocusEvent event) {
         if (!lookUp.textbox.isReadOnly()) {
-            if (sender == lookUp.textbox) {
+            if (event.getSource() == lookUp.textbox) {
                 // we need to set the selected style name to the textbox
                 lookUp.textbox.addStyleName("TextboxSelected");
                 lookUp.textbox.removeStyleName("TextboxUnselected");
@@ -346,9 +332,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
     }
 
-    public void onLostFocus(Widget sender) {
+    public void onBlur(BlurEvent event) {
         if (!lookUp.textbox.isReadOnly()) {
-            if (sender == lookUp.textbox) {
+            if (event.getSource() == lookUp.textbox) {
                 // we need to set the unselected style name to the textbox
                 lookUp.textbox.addStyleName("TextboxUnselected");
                 lookUp.textbox.removeStyleName("TextboxSelected");
@@ -360,38 +346,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
     }
 
-    public void addFocusListener(FocusListener listener) {
-        lookUp.textbox.addFocusListener(listener);
-    }
-
-    public void removeFocusListener(FocusListener listener) {
-        lookUp.textbox.removeFocusListener(listener);
-
-    }
-
     public int getTabIndex() {
         // TODO Auto-generated method stub
         return 0;
-    }
-
-    public void setAccessKey(char key) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void setTabIndex(int index) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void addKeyboardListener(KeyboardListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void removeKeyboardListener(KeyboardListener listener) {
-        // TODO Auto-generated method stub
-        
     }
     
     public void setWidth(String width) {
@@ -402,6 +359,11 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public void setWidth(int width){
         setWidth(width+"px");
     }
+
+	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<ArrayList<DataSet<Object>>> handler) {
+		// TODO Auto-generated method stub
+		return addHandler(handler, ValueChangeEvent.getType());
+	}
 
     
 }

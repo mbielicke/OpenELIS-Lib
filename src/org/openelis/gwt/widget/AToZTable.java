@@ -25,22 +25,12 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.CommandHandler;
+import org.openelis.gwt.event.HasCommandHandlers;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ScreenButtonPanel;
@@ -57,10 +47,19 @@ import org.openelis.gwt.widget.table.TableWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
-import java.util.ArrayList;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class AToZTable extends TableWidget implements
-                                              ClickListener, ChangeListener, CommandListener, TableKeyboardHandlerInt, TableMouseHandlerInt, SourcesCommandEvents {
+                                              ClickListener, ChangeListener, CommandHandler, TableKeyboardHandlerInt, TableMouseHandlerInt, HasCommandHandlers {
     
     private HorizontalPanel mainHP = new HorizontalPanel();
     private ScreenVertical alphabetButtonVP = new ScreenVertical();
@@ -70,7 +69,6 @@ public class AToZTable extends TableWidget implements
     protected AppButton selectedButton;
     protected boolean locked;
     protected boolean refreshedByLetter;
-    private CommandListenerCollection commandListeners;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
 
     public AToZTable() {
@@ -291,14 +289,14 @@ public class AToZTable extends TableWidget implements
         
     }
 
-    public void addCommandListener(CommandListener listener) {
+    public void addCommandListener(CommandHandler listener) {
        if(commandListeners == null){
            commandListeners = new CommandListenerCollection();
        }
        commandListeners.add(listener);
     }
 
-    public void removeCommandListener(CommandListener listener) {
+    public void removeCommandListener(CommandHandler listener) {
         if(commandListeners != null)
             commandListeners.remove(listener);
         

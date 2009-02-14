@@ -7,11 +7,11 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.HasCommandHandlers;
 
-public class MultipleLookUp extends Composite implements SourcesCommandEvents {
+public class MultipleLookUp extends Composite implements HasCommandHandlers {
     
     protected TextBox textbox;
     protected HorizontalPanel hp;
@@ -102,7 +102,7 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
         return textbox;
     }
 
-    public void addCommandListener(CommandListener listener) {
+    public void addCommandListener(CommandHandler listener) {
        if(commandListeners == null) {
            commandListeners = new CommandListenerCollection();
        }
@@ -110,7 +110,7 @@ public class MultipleLookUp extends Composite implements SourcesCommandEvents {
         
     }
 
-    public void removeCommandListener(CommandListener listener) {
+    public void removeCommandListener(CommandHandler listener) {
         if(commandListeners != null){
             commandListeners.remove(listener);
         }

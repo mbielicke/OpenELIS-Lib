@@ -74,13 +74,12 @@ import java.util.Vector;
 public class ScreenWidget extends SimplePanel implements
                                              SourcesDropEvents,
                                              SourcesMouseEvents,
-                                             SourcesDragEvents,
-                                             SourcesClickEvents {
+                                             SourcesDragEvents
+                                              {
 
     public DropListenerCollection dropListeners;
     protected DragListenerCollection dragListeners;
     protected MouseListenerCollection mouseListeners;
-    protected ClickListenerCollection clickListeners;
     /** 
      * userObject can be used to attach specific application
      * data to a screen widget.
@@ -314,15 +313,6 @@ public class ScreenWidget extends SimplePanel implements
             if (node.getAttributes().getNamedItem("alwaysDisabled").getNodeValue().equals("true"))
                 alwaysDisabled = true;
         }
-        if (node.getAttributes().getNamedItem("onPanelClick") != null){
-            String[] listeners = node.getAttributes().getNamedItem("onPanelClick").getNodeValue().split(",");
-            for(int i = 0; i < listeners.length; i++){
-                if(listeners[i].equals("this"))
-                    addClickListener((ClickListener)screen);
-                else
-                    addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
-            }
-        }
         if (node.getAttributes().getNamedItem("visible") != null){
             if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
                 getWidget().setVisible(false);
@@ -344,12 +334,6 @@ public class ScreenWidget extends SimplePanel implements
         mouseListeners.add(listener);
     }
 
-    public void addClickListener(ClickListener listener) {
-        if (clickListeners == null) {
-            clickListeners = new ClickListenerCollection();
-        }
-        clickListeners.add(listener);
-    }
     /** 
      * This method will add DragListeners to this widget to be fired if any Drag events 
      * are detected on this widget.
@@ -376,11 +360,6 @@ public class ScreenWidget extends SimplePanel implements
                     mouseListeners.fireMouseEvent(this, event);
                 }
                 break;
-            case Event.ONCLICK:
-                if (clickListeners != null) {
-                    clickListeners.fireClick(this);
-                }
-                break;
         }
     }
 
@@ -390,12 +369,6 @@ public class ScreenWidget extends SimplePanel implements
     public void removeMouseListener(MouseListener listener) {
         if (mouseListeners != null) {
             mouseListeners.remove(listener);
-        }
-    }
-    
-    public void removeClickListener(ClickListener listener) {
-        if (clickListeners != null) {
-            clickListeners.remove(listener);
         }
     }
 

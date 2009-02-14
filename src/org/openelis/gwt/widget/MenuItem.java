@@ -47,11 +47,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.HasCommandHandlers;
 
-public class MenuItem extends SimplePanel implements MouseListener, ClickListener, PopupListener, SourcesClickEvents, SourcesMouseEvents, SourcesCommandEvents {
+public class MenuItem extends SimplePanel implements MouseListener, ClickListener, PopupListener, SourcesClickEvents, SourcesMouseEvents, HasCommandHandlers {
     
     public MenuPanel parent;
     public boolean cursorOn;
@@ -353,7 +353,7 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     }
 
 
-    public void addCommandListener(CommandListener listener) {
+    public void addCommandListener(CommandHandler listener) {
         if(commandListeners == null){
             commandListeners = new CommandListenerCollection();
         }
@@ -361,7 +361,7 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     }
 
 
-    public void removeCommandListener(CommandListener listener) {
+    public void removeCommandListener(CommandHandler listener) {
         if(commandListeners != null)
             commandListeners.remove(listener);
     }

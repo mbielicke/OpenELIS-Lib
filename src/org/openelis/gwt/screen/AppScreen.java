@@ -25,34 +25,25 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
-import com.google.gwt.user.client.ui.HasFocus;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.KeyboardListenerCollection;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
-import com.google.gwt.user.client.ui.SourcesKeyboardEvents;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
-import com.google.gwt.xml.client.XMLParser;
+import java.util.HashMap;
 
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.widget.AppButton;
 
-import java.util.HashMap;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
+import com.google.gwt.xml.client.XMLParser;
 /**
  * The Screen class is the base class for displaying a screen 
  * drawn on the client machine.  It can also validate input and
@@ -62,18 +53,14 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
+public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements KeyPressHandler {
 
     public AppScreenServiceIntAsync<ScreenRPC> service;
     public HashMap<String,Form> forms = new HashMap<String,Form>();
-    public HashMap<String,FieldType> initData;
+    @Deprecated public HashMap<String,FieldType> initData;
     public ScreenRPC rpc;
-    private KeyboardListenerCollection keyListeners;
-    private ClickListenerCollection clickListeners;
-    public Element clickTarget;
     public ScreenWindow window;
     protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
-    protected ScreenWidget focused;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -85,36 +72,7 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
     public AppScreen(AppScreenServiceIntAsync<ScreenRPC> service){
         this();
         this.service = service;
-        //getXML();
-    }
-   
-    @Deprecated public void getXML(ScreenRPC rpc) {
-        this.rpc = rpc;
-        service.getXML(new AsyncCallback<String>() {
-           public void onSuccess(String result){
-               drawScreen(result);
-               afterDraw(true);
-           }
-           public void onFailure(Throwable caught){
-               Window.alert(caught.getMessage());
-               afterDraw(false);
-           }
-        });
-    }
-    
-    @Deprecated public void getXMLData(ScreenRPC rpc) {
-        this.rpc = rpc;
-        service.getXMLData(new AsyncCallback<HashMap<String,FieldType>>() {
-           public void onSuccess(HashMap<String,FieldType> result){
-               initData = result;
-               drawScreen((String)((StringObject)initData.get("xml")).getValue());
-               afterDraw(true);
-           }
-           public void onFailure(Throwable caught){
-               Window.alert(caught.getMessage());
-               afterDraw(false);
-           }
-        });
+        addDomHandler(this,KeyPressEvent.getType());
     }
     
     public void getScreen(ScreenRPC screen) {
@@ -132,18 +90,46 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
             }
         });
     }
+   
+    @Deprecated 
+    public void getXML(ScreenRPC rpc) {
+        this.rpc = rpc;
+        service.getXML(new AsyncCallback<String>() {
+           public void onSuccess(String result){
+               drawScreen(result);
+               afterDraw(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterDraw(false);
+           }
+        });
+    }
     
-    @Deprecated public void getXMLData(HashMap<String, FieldType> args, ScreenRPC rpc) {
+    @Deprecated 
+    public void getXMLData(ScreenRPC rpc) {
+        this.rpc = rpc;
+        service.getXMLData(new AsyncCallback<HashMap<String,FieldType>>() {
+           public void onSuccess(HashMap<String,FieldType> result){
+               initData = result;
+               drawScreen((String)((StringObject)initData.get("xml")).getValue());
+               afterDraw(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterDraw(false);
+           }
+        });
+    }
+    
+    @Deprecated 
+    public void getXMLData(HashMap<String, FieldType> args, ScreenRPC rpc) {
         this.rpc = rpc;
         service.getXMLData(args, new AsyncCallback<HashMap<String,FieldType>>() {
            public void onSuccess(HashMap<String,FieldType> result){
-               //try {
-                   initData = result;
-                   drawScreen((String)((StringObject)initData.get("xml")).getValue());
-                   afterDraw(true);
-               //}catch(Exception e){
-                 //  Window.alert("error "+e.getMessage() + e.getStackTrace()[0]);
-              // }
+               initData = result;
+               drawScreen((String)((StringObject)initData.get("xml")).getValue());
+               afterDraw(true);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
@@ -153,10 +139,7 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
     }
     
     public void afterDraw(boolean sucess) {
-
         this.form = forms.get("display");
-        //load();
-        DOM.addEventPreview(this);
         if(window != null){
             window.setName(name);
             window.setVisible(true);
@@ -166,104 +149,39 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         rpc.xml = null;
     }
     
-    public void redrawScreen(String xmlDef){
-        panel.clear();
-        tabOrder = new HashMap();
-        tabBack = new HashMap();
-        widgets = new HashMap();
-        forms = new HashMap();
-        drawScreen(xmlDef);
-        afterDraw(true);
-    }
-    
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
          
-         //try {
-             NodeList rpcList = xml.getDocumentElement().getChildNodes();
-             for(int i = 0; i < rpcList.getLength(); i++){
-                 if(rpcList.item(i).getNodeType() == Node.ELEMENT_NODE && rpcList.item(i).getNodeName().equals("rpc")){
-                     String key = rpcList.item(i).getAttributes().getNamedItem("key").getNodeValue();
-                     if(forms.containsKey(key)){
-                         forms.get(key).createFields(rpcList.item(i));
-                         forms.get(key).load = true;
-                     }else{
-                         Form form = (Form)ScreenBase.createField(rpcList.item(i));
-                         form.load = true;
-                         forms.put(form.key, form);
-                     }
+         NodeList rpcList = xml.getDocumentElement().getChildNodes();
+         for(int i = 0; i < rpcList.getLength(); i++){
+             if(rpcList.item(i).getNodeType() == Node.ELEMENT_NODE && rpcList.item(i).getNodeName().equals("rpc")){
+                 String key = rpcList.item(i).getAttributes().getNamedItem("key").getNodeValue();
+                 if(forms.containsKey(key)){
+                     forms.get(key).createFields(rpcList.item(i));
+                     forms.get(key).load = true;
+                 }else{
+                     Form form = (Form)ScreenBase.createField(rpcList.item(i));
+                     form.load = true;
+                     forms.put(form.key, form);
                  }
              }
-             rpc.form = forms.get("display");
-             draw();
-        //} catch (Exception e) {
-         //  Window.alert("FormUtil: " + e.getMessage());
-        // }
-        
-         //load((FormRPC)forms.get("query"));
+         }
+         rpc.form = forms.get("display");
+         draw();
     }
 
-
-    public boolean onEventPreview(Event event) {
-        if(DOM.eventGetType(event) == Event.ONKEYPRESS){
-            if(DOM.eventGetCtrlKey(event)){
-                String key = String.valueOf((char)DOM.eventGetKeyCode(event));
-                if(shortcut.containsKey(key)){
-                    Widget wid = (Widget)shortcut.get(key);
-                    if(wid instanceof AppButton){
-                        ((AppButton)wid).fireClick();
-                    }else if(wid instanceof HasFocus){
-                        ((HasFocus)wid).setFocus(true);
-                    }
-                    DOM.eventPreventDefault(event);
-                    return false;
-                }
-                return true;
-            }
-        }
-        switch(DOM.eventGetType(event)){
-            case Event.ONKEYDOWN:
-            case Event.ONKEYUP:
-            case Event.ONKEYPRESS:
-                if(keyListeners != null)
-                    keyListeners.fireKeyboardEvent(this, event);
-                break;
-            case Event.ONCLICK:
-                clickTarget = DOM.eventGetTarget(event);
-                if(clickListeners != null)
-                    clickListeners.fireClick(this);
-                break;
-        }
-        return true;   
-    }
-
-    public void addKeyboardListener(KeyboardListener listener) {
-        if(keyListeners == null){
-            keyListeners = new KeyboardListenerCollection();
-        }
-        keyListeners.add(listener);
-        
-    }
-
-    public void removeKeyboardListener(KeyboardListener listener) {
-        if(keyListeners != null){
-            keyListeners.remove(listener);
-        }
-        
-    }
-
-    public void addClickListener(ClickListener listener) {
-        if(clickListeners == null){
-            clickListeners = new ClickListenerCollection();
-        }
-        clickListeners.add(listener);
-        
-    }
-
-    public void removeClickListener(ClickListener listener) {
-        if(clickListeners != null){
-            clickListeners.remove(listener);
-        }
-        
-    }
+	public void onKeyPress(KeyPressEvent event) {
+		 if(window.isActiveWindow() && event.isControlKeyDown()){
+			 String key = String.valueOf(event.getCharCode());
+			 if(shortcut.containsKey(key)){
+				 Widget wid = (Widget)shortcut.get(key);
+				 if(wid instanceof AppButton){
+					 ((AppButton)wid).fireCommand();
+				 }else if(wid instanceof Focusable){
+					 ((Focusable)wid).setFocus(true);
+				 }
+				 event.preventDefault();
+			 }
+		 }
+	}
 }

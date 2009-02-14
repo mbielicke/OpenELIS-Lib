@@ -25,22 +25,22 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 /**
  * The Screen class is the base class for displaying a screen 
  * drawn on the client machine.  It can also validate input and
@@ -50,7 +50,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class ScreenBase extends Composite implements FocusListener{
+public class ScreenBase extends Composite {
     /**
      * All drawn widgets will be held in this panel.
      */
@@ -68,8 +68,6 @@ public class ScreenBase extends Composite implements FocusListener{
     public boolean keep;
     public String name;
     public HashMap<String,Widget> shortcut = new HashMap<String,Widget>();
-    public ScreenInputWidget startWidget;
-    public ScreenWidget focused;
    
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -263,9 +261,6 @@ public class ScreenBase extends Composite implements FocusListener{
             if(wid instanceof ScreenWidget)
                 ((ScreenWidget)wid).enable(enabled);
         }
-        if(enabled && startWidget != null){
-            startWidget.setFocus(true);
-        }
     }
     
     /**
@@ -285,26 +280,6 @@ public class ScreenBase extends Composite implements FocusListener{
                 widgets.get(key).removeStyleName("strike");
       }
    }
-
-    /**
-     * Implementation of the onFocus method from FocusListener. Any widget that adds
-     * the Screen as a FocusListener will call this method when focused. May be overridden
-     * by the extending class to change the default behavior.
-     */
-    public void onFocus(Widget sender) {
-        sender.addStyleName("focused");
-        focused = (ScreenWidget)sender;
-    }
-
-    /**
-     * Implementation of the onFocus method from FocusListener. Any widget that adds
-     * the Screen as a FocusListener will call this method when focus is lost. May be overridden
-     * by the extending class to change the default behavior.
-     */
-    public void onLostFocus(Widget sender) {
-        sender.removeStyleName("focused");
-        focused = null;
-    }
 
     /**
      * This method will reset all input fields to default null value.
@@ -348,10 +323,10 @@ public class ScreenBase extends Composite implements FocusListener{
      * @param wid
      */
     
-    public void doTab(Event event, ScreenWidget wid) {
-        doTab(DOM.eventGetShiftKey(event),wid);
-        DOM.eventCancelBubble(event, true);
-        DOM.eventPreventDefault(event);
+    public void doTab(KeyDownEvent event, ScreenWidget wid) {
+        doTab(event.isShiftKeyDown(),wid);
+        event.stopPropagation();
+        event.preventDefault();
     }
     
     public void doTab(boolean shift, ScreenWidget wid) {
@@ -407,4 +382,5 @@ public class ScreenBase extends Composite implements FocusListener{
         }
         super.onDetach();
     }
+
 }

@@ -51,14 +51,14 @@ import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.TextBox;
 
 import java.util.ArrayList;
 
-public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, MouseListener, CommandListener, PopupListener, ClickListener{
+public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, MouseListener, CommandHandler, PopupListener, ClickListener{
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";

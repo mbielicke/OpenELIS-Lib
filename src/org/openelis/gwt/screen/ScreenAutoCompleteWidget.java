@@ -25,25 +25,16 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.StringField;
-import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteCall;
 import org.openelis.gwt.widget.AutoCompleteCallInt;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -51,9 +42,14 @@ import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
-import java.util.ArrayList;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
-public class ScreenAutoCompleteWidget extends ScreenInputWidget implements FocusListener {
+public class ScreenAutoCompleteWidget extends ScreenInputWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -165,9 +161,9 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
             String[] listeners = node.getAttributes().getNamedItem("onchange").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this")){
-                    auto.addChangeListener((ChangeListener)screen);
+                    auto.addValueChangeHandler((ValueChangeHandler<ArrayList<DataSet<Object>>>)screen);
                 }else{
-                    auto.addChangeListener((ChangeListener)ClassFactory.forName(listeners[i]));
+                    auto.addValueChangeHandler((ValueChangeHandler<ArrayList<DataSet<Object>>>)ClassFactory.forName(listeners[i]));
                 }
             }
         }
@@ -189,9 +185,6 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         }else if(url != null) {
             auto.setAutoCall(new AutoCompleteCall(url));
         }
-        
-        ((AppScreen)screen).addKeyboardListener(auto.keyboardHandler);
-        ((AppScreen)screen).addClickListener(auto.mouseHandler);
         initWidget(auto);
         displayWidget = auto;
         setDefaults(node, screen);
@@ -328,20 +321,20 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
     	return (ScreenAutoCompleteWidget)queryWidget;
     }
     
-    public void onLostFocus(Widget sender) {
+    public void onFocus(FocusEvent event) {
     	//auto.onLostFocus(sender);
     	if(key != null)
-    		super.onLostFocus(sender);
+    		super.onFocus(event);
     }
     
-   public void onFocus(Widget sender) {
+   public void onBlur(BlurEvent event) {
 	   //auto.onFocus(sender);
-	   super.onFocus(sender);
+	   super.onBlur(event);
    }
    
-   public void setForm(FormInt.State state) {
+   public void setForm(AppScreenForm.State state) {
        if(queryWidget == null){
-          if(state == FormInt.State.QUERY)
+          if(state == AppScreenForm.State.QUERY)
               auto.queryMode = true;
            else
               auto.queryMode = false;

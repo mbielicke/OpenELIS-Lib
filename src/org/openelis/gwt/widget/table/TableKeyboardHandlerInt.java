@@ -25,8 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 
-public interface TableKeyboardHandlerInt extends KeyboardListener{
+public interface TableKeyboardHandlerInt extends HasAllKeyHandlers{
 
 }

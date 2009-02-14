@@ -25,18 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DropListener;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.screen.ScreenTableWidget;
@@ -47,8 +37,19 @@ import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 import org.openelis.gwt.widget.table.event.TableWidgetListenerCollection;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.ui.FocusPanel;
 
 /**
  * This class is the main controller for the Table widget. It hooks the model to
@@ -59,15 +60,14 @@ import java.util.Iterator;
  * 
  */
 public class TableWidget extends FocusPanel implements
-                            TableListener,
-                            SourcesChangeEvents,
+                            ClickHandler,
+                            HasChangeHandlers,
                             SourcesTableWidgetEvents,
                             TableModelListener,
-                            FocusListener{
+                            FocusHandler{
     
 
     public ArrayList<TableColumnInt> columns;
-    public ChangeListenerCollection changeListeners;
     public TableWidgetListenerCollection tableWidgetListeners; 
     public boolean enabled;
     public boolean focused;
@@ -119,7 +119,7 @@ public class TableWidget extends FocusPanel implements
         mouseHandler = new TableMouseHandler(this);
         addTableWidgetListener((TableWidgetListener)renderer);
         setWidget(view);
-        addFocusListener(this);
+        addFocusHandler(this);
     }
     
     /**
@@ -137,7 +137,7 @@ public class TableWidget extends FocusPanel implements
         this.renderer = renderer;
         model.addTableModelListener(renderer);
         addTableWidgetListener(renderer);
-        view.table.addTableListener(this);
+        view.table.addClickHandler(this);
         keyboardHandler = new TableKeyboardHandler(this);
         mouseHandler = new TableMouseHandler(this);
     }
@@ -145,8 +145,10 @@ public class TableWidget extends FocusPanel implements
     /**
      * This method handles all click events on the body of the table
      */
-    public void onCellClicked(SourcesTableEvents sender, int row, int col) {
+    public void onClick(ClickEvent event) {
         focused = true;
+        int row = view.table.getCellForEvent(event).getCellIndex();
+        int col = view.table.getCellForEvent(event).getRowIndex();
         if(activeRow == row && activeCell == col)
             return;
         select(row, col);
@@ -222,15 +224,8 @@ public class TableWidget extends FocusPanel implements
         select(row,col);
     }
     
-    public void addChangeListener(ChangeListener listener) {
-        if(changeListeners == null)
-            changeListeners = new ChangeListenerCollection(); 
-        changeListeners.add(listener);
-    }
-
-    public void removeChangeListener(ChangeListener listener) {
-        if(changeListeners != null)
-            changeListeners.remove(listener);
+    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+    	return addDomHandler(handler, ChangeEvent.getType());
     }
     
     public void enabled(boolean enabled){
@@ -260,14 +255,11 @@ public class TableWidget extends FocusPanel implements
         super.setFocus(focused);
     }
 
-    public void onFocus(Widget sender) {
+    public void onFocus(FocusEvent event) {
        this.focused = true;
         
     }
 
-    public void onLostFocus(Widget sender) {
-        
-    }
 
     public void cellUpdated(SourcesTableModelEvents sender, int row, int cell) {
         

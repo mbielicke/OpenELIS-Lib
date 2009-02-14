@@ -204,9 +204,6 @@ public class ScreenQueryTable extends ScreenInputWidget {
                 }
                 table.init(columns,maxRows,width,title,showHeader,showScroll);
                 table.enabled(enable);
-            
-            ((AppScreen)screen).addKeyboardListener(table.keyboardHandler);
-            ((AppScreen)screen).addClickListener(table.mouseHandler);
             initWidget(table);
             displayWidget = table;
             table.setStyleName("ScreenTable");

@@ -31,16 +31,16 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.event.CommandListener;
+import org.openelis.gwt.event.CommandHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.event.HasCommandHandlers;
 import org.openelis.gwt.screen.ScreenAppButton;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ButtonPanel extends Composite implements ClickListener, SourcesCommandEvents, CommandListener {
+public class ButtonPanel extends Composite implements ClickListener, HasCommandHandlers, CommandHandler {
 
     public enum ButtonPanelState {ENABLED,LOCKED}
     public enum Action {ADD,UPDATE,DELETE,NEXT,PREVIOUS,RELOAD,QUERY,COMMIT,ABORT,SELECT,OPTION}
@@ -92,7 +92,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
      */
     public void onClick(Widget sender) {
         if(state == ButtonPanelState.ENABLED){
-            Action action = Action.valueOf(((AppButton)sender).action.toUpperCase().split(":")[0]);
+            Action action = Action.valueOf(((AppButton)sender).command.toUpperCase().split(":")[0]);
             if(commandListeners != null)
                 commandListeners.fireCommand(action,sender);
         }else{
@@ -152,7 +152,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
     public void setButtonState(String buttonAction, ButtonState state){
     	if(buttonAction != null){
 	    	for(AppButton button : buttons) { 
-	    		if(buttonAction.equals(button.action)){
+	    		if(buttonAction.equals(button.command)){
 	    			button.changeState(state);
 	    			break;
 	    		}
@@ -163,7 +163,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
     public void removeButton(String action){
     	if(action != null){
 	    	for(AppButton button : buttons) {
-	    		if(action.equals(button.action)){
+	    		if(action.equals(button.command)){
 	    			hp.remove((Widget)button.getParent());
 	    			buttons.remove(button);
 	    		}
@@ -174,7 +174,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
     public void enableButton(String action, boolean enabled){
     	if(action != null){
 	    	for(AppButton button : buttons) {
-	    		if(action.equals(button.action)){
+	    		if(action.equals(button.command)){
 	    			if(enabled)
 	    	            button.changeState(ButtonState.UNPRESSED);
 	    	        else
@@ -187,7 +187,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
     	}    	
     }
 
-    public void addCommandListener(CommandListener listener) {
+    public void addCommandListener(CommandHandler listener) {
        if(commandListeners == null){
            commandListeners = new CommandListenerCollection();
        }
@@ -195,7 +195,7 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
         
     }
 
-    public void removeCommandListener(CommandListener listener) {
+    public void removeCommandListener(CommandHandler listener) {
         if(commandListeners != null) {
             commandListeners.remove(listener);
         }
