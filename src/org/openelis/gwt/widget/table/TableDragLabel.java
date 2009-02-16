@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.table;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -74,7 +73,6 @@ public class TableDragLabel extends SimplePanel implements TableCellWidget {
         label.width = width;
         label.displayMask = displayMask;
         label.editor.dropTargets = editor.dropTargets;
-        label.editor.dropListeners = editor.dropListeners;
         label.editor.screen = editor.screen;
         return label;
     }
@@ -90,10 +88,10 @@ public class TableDragLabel extends SimplePanel implements TableCellWidget {
             String listener = node.getAttributes()
                                   .getNamedItem("drop")
                                   .getNodeValue();
-            if (listener.equals("this"))
-                editor.addDropListener((DropListener)screen);
-            else {
-                editor.addDropListener((DropListener)ClassFactory.forName(listener));
+            if (listener.equals("this")){
+
+            }else {
+
             }
         }
             

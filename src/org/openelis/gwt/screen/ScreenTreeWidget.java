@@ -25,9 +25,6 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DropListener;
-import com.google.gwt.user.client.dnd.DropListenerCollection;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -266,17 +263,19 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  }
                  if(node.getAttributes().getNamedItem("drag") != null) {
                      String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
-                     if(drag.equals("default"))
-                         tree.drag = new TreeDragHandler(tree);
+                     if(drag.equals("default")){
+                         //tree.drag = new TreeDragHandler(tree);
+                     }
                  }
                  if(node.getAttributes().getNamedItem("drop") != null) {
                      String drop = node.getAttributes().getNamedItem("drop").getNodeValue();
                      if(drop.equals("default")){
-                         if(tree.drag != null)
+                    /*     if(tree.drag != null)
                              tree.drop = (DropListener)tree.drag;
                          else
                              tree.drop = new TreeDragHandler(tree);
                          super.addDropListener(tree.drop);
+                     */
                      }
                  }
                  tree.enabled(enable);
@@ -373,28 +372,6 @@ public class ScreenTreeWidget extends ScreenInputWidget {
         @Override
         public void drawError() {
             tree.model.refresh();
-        }
-        
-        @Override
-        public void addDragListener(DragListener listener) {
-            tree.drag = listener;
-        }
-        
-        @Override
-        public void addDropListener(DropListener listener) {
-            tree.drop = listener;
-        }
-        
-        @Override
-        public ArrayList<DropListenerCollection> getDropListeners() {
-            // TODO Auto-generated method stub
-            ArrayList<DropListenerCollection> drops = new ArrayList<DropListenerCollection>();
-            for(TreeRow row : tree.renderer.getRows())
-                drops.add(row.dropListeners);
-            ArrayList<DropListenerCollection> sup = super.getDropListeners();
-            drops.add(sup.get(0));
-            drops.get(0).hasChildren = true;
-            return drops;
         }
         
 }

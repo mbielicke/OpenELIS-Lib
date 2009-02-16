@@ -2,12 +2,10 @@ package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TableDragHandler implements DragListener, DropListener {
+public class TableDragHandler {
     
     private TableWidget controller;
     

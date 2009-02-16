@@ -30,8 +30,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.dnd.DropListenerCollection;
-import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -73,7 +71,7 @@ public class TableMouseHandler implements TableMouseHandlerInt {
     Timer delay;
 
     public void onMouseDown(final Widget sender, final int x, final int y) {
-        if(controller.drag == null || !controller.model.canDrag(((TableRow)sender).modelIndex))
+    /*    if(controller.drag == null || !controller.model.canDrag(((TableRow)sender).modelIndex))
             return;
         if(delay != null)
             delay.cancel();
@@ -108,7 +106,7 @@ public class TableMouseHandler implements TableMouseHandlerInt {
             
         };
         delay.schedule(500);
-        
+      */  
     }
     
     public void onMouseEnter(Widget sender) {

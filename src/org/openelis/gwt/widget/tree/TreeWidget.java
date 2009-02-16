@@ -27,8 +27,6 @@ package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -84,8 +82,6 @@ public class TreeWidget extends FocusPanel implements
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
-    public DragListener drag;
-    public DropListener drop;
     public ScreenTreeWidget screenWidget;
 
     public TreeWidget() {

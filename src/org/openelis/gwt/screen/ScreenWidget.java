@@ -25,15 +25,14 @@
 */
 package org.openelis.gwt.screen;
 
+import java.util.Vector;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.AppButton;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DragListenerCollection;
-import com.google.gwt.user.client.dnd.DropListener;
-import com.google.gwt.user.client.dnd.DropListenerCollection;
-import com.google.gwt.user.client.dnd.SourcesDragEvents;
-import com.google.gwt.user.client.dnd.SourcesDropEvents;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -45,12 +44,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.AppButton;
-
-import java.util.ArrayList;
-import java.util.Vector;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
  * screen using the XML definition and provides base functionality for all
@@ -72,13 +65,9 @@ import java.util.Vector;
  *
  */
 public class ScreenWidget extends SimplePanel implements
-                                             SourcesDropEvents,
                                              SourcesMouseEvents,
-                                             SourcesDragEvents,
                                              SourcesClickEvents {
 
-    public DropListenerCollection dropListeners;
-    protected DragListenerCollection dragListeners;
     protected MouseListenerCollection mouseListeners;
     protected ClickListenerCollection clickListeners;
     /** 
@@ -197,25 +186,6 @@ public class ScreenWidget extends SimplePanel implements
     }
 
     /**
-     * This method will add DropListeners to be fired if any Drop events are detected on the Widget.
-     */
-    public void addDropListener(DropListener listener) {
-        if (dropListeners == null) {
-            dropListeners = new DropListenerCollection();
-        }
-        dropListeners.add(listener, this);
-    }
-
-    /** 
-     * This method will DropListeners from this widget.
-     */
-    public void removeDropListener(DropListener listener) {
-        if (dropListeners != null) {
-            dropListeners.remove(listener);
-        }
-    }
-
-    /**
      * This method is called by the extending class to inspect the
      * node for any common attributes that can be applied to any 
      * ScreenWidget.
@@ -264,20 +234,20 @@ public class ScreenWidget extends SimplePanel implements
             String listener = node.getAttributes()
                                   .getNamedItem("drop")
                                   .getNodeValue();
-            if (listener.equals("this"))
-                addDropListener((DropListener)screen);
-            else if (!listener.equals("default")){
-                addDropListener((DropListener)ClassFactory.forName(listener));
+            if (listener.equals("this")){
+                //addDropListener((DropListener)screen);
+            }else if (!listener.equals("default")){
+                //addDropListener((DropListener)ClassFactory.forName(listener));
             }
         }
         if (node.getAttributes().getNamedItem("drag") != null) {
             String listener = node.getAttributes()
                                   .getNamedItem("drag")
                                   .getNodeValue();
-            if (listener.equals("this"))
-                addDragListener((DragListener)screen);
-            else if(!listener.equals("default")){
-                addDragListener((DragListener)ClassFactory.forName(listener));
+            if (listener.equals("this")){
+                //addDragListener((DragListener)screen);
+            }else if(!listener.equals("default")){
+                //addDragListener((DragListener)ClassFactory.forName(listener));
             }
         }
         
@@ -350,16 +320,7 @@ public class ScreenWidget extends SimplePanel implements
         }
         clickListeners.add(listener);
     }
-    /** 
-     * This method will add DragListeners to this widget to be fired if any Drag events 
-     * are detected on this widget.
-     */
-    public void addDragListener(DragListener listener) {
-        if (dragListeners == null) {
-            dragListeners = new DragListenerCollection();
-        }
-        dragListeners.add(listener, this);
-    }
+
 
     /**
      * This is an override of the Widget onBrowserEvent to make the SimplePanel 
@@ -400,15 +361,6 @@ public class ScreenWidget extends SimplePanel implements
     }
 
     /**
-     * This method will remove DragListeners that have been added to the Widget.
-     */
-    public void removeDragListener(DragListener listener) {
-        if (dragListeners != null) {
-            dragListeners.remove(listener);
-        }
-    }
-
-    /**
      * This method will set the Application data for this widget in the userObject field
      * @param obj
      */
@@ -432,20 +384,6 @@ public class ScreenWidget extends SimplePanel implements
         return dropTargets;
     }
     
-    /**
-     * Returns a Vector of widgets pulled from the Screen using the Keys stored in the 
-     * DropTargets vector.
-     * @return
-     */
-    public Vector getDropMap(){
-        Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
-        for(String target : dropTargets) {
-            ArrayList<DropListenerCollection> dropColl = ((ScreenWidget)screen.widgets.get(target)).getDropListeners();
-            for(DropListenerCollection coll : dropColl)
-                dropMap.add(coll);
-        }
-        return dropMap;
-    }
    
     /**
      * Set the Vector of DropTargets representing the keys to the widgets that this
@@ -453,16 +391,6 @@ public class ScreenWidget extends SimplePanel implements
      */
     public void setDropTargets(Vector<String> targets){
         dropTargets = targets;
-    }
-    
-    /**
-     * Getter for the DropListener Collection
-     * @return
-     */
-    public ArrayList<DropListenerCollection> getDropListeners(){
-        ArrayList<DropListenerCollection> drops = new ArrayList<DropListenerCollection>();
-        drops.add(dropListeners);
-        return drops;
     }
     
     /**
@@ -482,8 +410,6 @@ public class ScreenWidget extends SimplePanel implements
     }
     
     public void destroy() {
-        dropListeners = null;
-        dragListeners = null;
         mouseListeners = null;
         userObject = null;
         dropTargets = null;

@@ -2,14 +2,12 @@ package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.TreeDataItem;
 
-public class TreeDragHandler implements DragListener, DropListener {
+public class TreeDragHandler {
     
     private TreeWidget controller;
     
