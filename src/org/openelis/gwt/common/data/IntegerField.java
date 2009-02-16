@@ -105,7 +105,7 @@ public class IntegerField extends AbstractField<Integer> implements FieldType {
     }
     
     public Object clone() {
-        NumberField obj = new NumberField();
+        IntegerField obj = new IntegerField();
         obj.setMax(max);
         obj.setMin(min);
         obj.setRequired(required);
