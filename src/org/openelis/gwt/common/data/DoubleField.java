@@ -105,7 +105,7 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
     }
     
     public Object clone() {
-        NumberField obj = new NumberField();
+        DoubleField obj = new DoubleField();
         obj.setMax(max);
         obj.setMin(min);
         obj.setRequired(required);
