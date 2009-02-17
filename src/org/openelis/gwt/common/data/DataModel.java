@@ -174,6 +174,10 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
         defaultSet = set;
     }
     
+    public DataSet<Key> getDefaultSet() {
+        return defaultSet;
+    }
+    
     /**
      * Clones the the DefaultSet for this model and returns it so that data can be set
      * and the entry added to the model.
