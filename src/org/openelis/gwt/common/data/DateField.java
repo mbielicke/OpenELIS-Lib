@@ -42,6 +42,8 @@ import java.util.Date;
 public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
     
     private static final long serialVersionUID = 1L;
+    private byte begin;
+    private byte end;
     
     /**
      * Number of days in the future from current date that this field is 
@@ -68,7 +70,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      *
      */
     public DateField(){
-        super(DatetimeRPC.getInstance());
+        super();
     }
     
     /**
@@ -79,7 +81,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param val
      */
     public DateField(byte begin, byte end, DatetimeRPC val){
-        super(DatetimeRPC.getInstance());
+        //super(DatetimeRPC.getInstance());
         setBegin(begin);
         setEnd(end);
         setValue(val);
@@ -93,7 +95,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param val
      */
     public DateField(byte begin, byte end, Date val){
-        super(DatetimeRPC.getInstance());
+        //super(DatetimeRPC.getInstance());
         setBegin(begin);
         setEnd(end);
         setValue(DatetimeRPC.getInstance(getBegin(),
@@ -206,7 +208,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param begin
      */
     public void setBegin(byte begin) {
-        value.startCode = begin;
+        this.begin = begin;
     }
 
     /**
@@ -214,7 +216,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param end
      */
     public void setEnd(byte end) {
-       value.endCode = end;
+       this.end = end;
     }
     
     /**
@@ -238,7 +240,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @return
      */
     public byte getBegin() {
-        return value.startCode;
+        return begin;
     }
 
     /**
@@ -246,7 +248,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @return
      */
     public byte getEnd() {
-        return value.endCode;
+        return end;
     }
 
     /**
@@ -259,6 +261,8 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
         obj.setMin(min);
         obj.setValue(value);
         obj.setKey(key);
+        obj.setBegin(begin);
+        obj.setEnd(end);
         return obj;
     }
 
@@ -299,9 +303,9 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
             if (val == null || val == "") 
                 super.setValue(null);
            else 
-                setValue(DatetimeRPC.getInstance(value.startCode, value.endCode, val));
+                setValue(DatetimeRPC.getInstance(begin, end, val));
         }else
-            setValue(DatetimeRPC.getInstance(value.startCode, value.endCode, DateTimeFormat.getFormat(pattern).parse((String)val)));
+            setValue(DatetimeRPC.getInstance(begin, end, DateTimeFormat.getFormat(pattern).parse((String)val)));
     }
     
     public DatetimeRPC getValue() {
