@@ -57,7 +57,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      *
      */
     public DropDownField() {
-        super(new ArrayList<DataSet<Key>>());
+        super();
     }
     
     /**
@@ -98,17 +98,27 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * This method will set this fields current value
      */
     public void setValue(ArrayList<DataSet<Key>> val) {
+        if(val == null){
+            value = null;
+            return;
+        }
        if(value == null)
            value = new ArrayList<DataSet<Key>>();
        else
            value.clear();
-       if(val != null){
-           for(DataSet<Key> set : val)
-               value.add(set);
-       }
+       for(DataSet<Key> set : val)
+           value.add(set);
     }
     
     public void setValue(DataSet<Key> val) {
+        if(val == null){
+            value = null;
+            return;
+        }
+        if(value == null)
+            value = new ArrayList<DataSet<Key>>();
+        else
+            value.clear();
         value.clear();
         if(val != null)
             value.add(val);
