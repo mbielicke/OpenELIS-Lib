@@ -317,7 +317,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public void setSelections(ArrayList<DataSet<Object>> selections){
         model.clearSelections();
-        if(selections == null) {
+        if(selections != null) {
             for(DataSet<Object> set : selections)
                 model.selectRow(set.getKey());
             lookUp.setText(getTextBoxDisplay());
