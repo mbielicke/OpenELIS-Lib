@@ -125,15 +125,13 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
     }
     
     public void setValue(Object val) {
-        if(val == null){
-            if(value == null){
-                value = new ArrayList<DataSet<Key>>();
-            }else
-                value.clear();
-        }else if(val instanceof DataSet){
+        if(val instanceof DataSet){
             setValue((DataSet<Key>)val);
         }else if(val instanceof ArrayList){
             setValue((ArrayList<DataSet<Key>>)val);
+        }else if(val == null){
+                value = null; 
+                return;
         }
     }
     
@@ -231,10 +229,14 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
         obj.setKey(key);
         
         //need to create a new selections array list by hand to avoid a shallow copy
-        ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
-        for(int i=0; i < value.size(); i++)
-            cloneSelections.add((DataSet)value.get(i).clone());
-        obj.setValue(cloneSelections);
+        if(value != null){
+            ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
+            for(int i=0; i < value.size(); i++)
+                cloneSelections.add((DataSet)value.get(i).clone());
+            
+            obj.setValue(cloneSelections);
+        }else
+            obj.setValue(null);
         
         return obj;
     }
