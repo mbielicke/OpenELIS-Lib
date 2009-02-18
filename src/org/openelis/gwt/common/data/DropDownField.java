@@ -140,6 +140,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * @return
      */
     public Object getTextValue(){
+        if(value == null)
+            return null;
+        
         if(value.size() == 1)
             return value.get(0).get(0).toString();
         else if(value.size() > 1)
@@ -153,6 +156,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * @return
      */
     public Object getSelectedKey() {
+        if(value == null)
+            return null;
+        
         if(value.size() == 1)
             return value.get(0).getKey();
         else if(value.size() > 1)
@@ -215,7 +221,8 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      *
      */
     public void clear() {
-        value.clear();
+        if(value != null)
+            value.clear();
     } 
     
     /**
