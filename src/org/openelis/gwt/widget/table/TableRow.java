@@ -1,7 +1,5 @@
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.DataSet;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -10,20 +8,28 @@ import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.DataSet;
+
 public class TableRow extends Widget implements SourcesMouseEvents {
 
     public MouseListenerCollection mouseListeners = new MouseListenerCollection();
     
     public int index;
     public int modelIndex;
+    public DataSet<Object> row;
     
-    public DataSet row;
+    public int dragIndex;
+    public int dragModelIndex;
+    public DataSet<Object> dragRow;
     
-    public TableRow(Element elem, boolean setEvent) {
+    public TableRow() {
+        
+    }
+    
+    public TableRow(Element elem) {
         setElement(elem);
         sinkEvents(Event.MOUSEEVENTS);
-        if(setEvent)
-            onAttach();
+        onAttach();
     }
     
 
@@ -40,26 +46,18 @@ public class TableRow extends Widget implements SourcesMouseEvents {
         switch(DOM.eventGetType(event)){
             case Event.ONMOUSEDOWN :
             case Event.ONMOUSEMOVE :
-            case Event.ONMOUSEOUT :
-            case Event.ONMOUSEOVER :
             case Event.ONMOUSEUP :
+            case Event.ONMOUSEOVER :
+            case Event.ONMOUSEOUT :
                 DOM.eventPreventDefault(event);
                 mouseListeners.fireMouseEvent(this, event);
+                break;
         }
     }
     
-    public TableRow getProxy() {
-        removeStyleName("Highlighted");
-        Element div = DOM.createDiv();
-        Element table = DOM.createTable();
-        div.appendChild(table);
-        Element tr = (Element)getElement().cloneNode(true);
-        table.appendChild(tr);
-        TableRow clone = new TableRow(div,false);
-        clone.index = index;
-        clone.modelIndex = modelIndex;
-        clone.row   = row;
-        return clone;
+    public void setDragValues() {
+        dragIndex = index;
+        dragModelIndex = modelIndex;
+        dragRow = (DataSet<Object>)row.clone();
     }
-    
 }

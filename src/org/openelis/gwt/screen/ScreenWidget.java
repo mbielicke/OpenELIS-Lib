@@ -25,11 +25,6 @@
 */
 package org.openelis.gwt.screen;
 
-import java.util.Vector;
-
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.AppButton;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -44,6 +39,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.widget.AppButton;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
  * screen using the XML definition and provides base functionality for all
@@ -75,11 +73,6 @@ public class ScreenWidget extends SimplePanel implements
      * data to a screen widget.
      */
     private Object userObject;
-    /**
-     * A list of available drop targets for a widget if it uses 
-     * Drag and Drop
-     */
-    public Vector<String> dropTargets = new Vector<String>();
     /** 
      * Reference back to the Screen this widget is displayed in
      */
@@ -101,8 +94,6 @@ public class ScreenWidget extends SimplePanel implements
      */
     public ScreenWidget(Node node) {
         if (node.getAttributes().getNamedItem("mouse") != null || 
-            node.getAttributes().getNamedItem("drag") != null  ||
-            node.getAttributes().getNamedItem("drop") != null ||
             node.getAttributes().getNamedItem("hover") != null) {
             sinkEvents(Event.MOUSEEVENTS);
         }
@@ -230,26 +221,6 @@ public class ScreenWidget extends SimplePanel implements
                              .getNodeValue());
             }
         }
-        if (node.getAttributes().getNamedItem("drop") != null) {
-            String listener = node.getAttributes()
-                                  .getNamedItem("drop")
-                                  .getNodeValue();
-            if (listener.equals("this")){
-                //addDropListener((DropListener)screen);
-            }else if (!listener.equals("default")){
-                //addDropListener((DropListener)ClassFactory.forName(listener));
-            }
-        }
-        if (node.getAttributes().getNamedItem("drag") != null) {
-            String listener = node.getAttributes()
-                                  .getNamedItem("drag")
-                                  .getNodeValue();
-            if (listener.equals("this")){
-                //addDragListener((DragListener)screen);
-            }else if(!listener.equals("default")){
-                //addDragListener((DragListener)ClassFactory.forName(listener));
-            }
-        }
         
         if(node.getAttributes().getNamedItem("mouse") != null){
             String[] listeners = node.getAttributes().getNamedItem("mouse").getNodeValue().split(",");
@@ -258,15 +229,6 @@ public class ScreenWidget extends SimplePanel implements
                     addMouseListener((MouseListener)screen);
                 else
                     addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
-            }
-        }
-        
-        if (node.getAttributes().getNamedItem("targets") != null) {
-            String targets[] = node.getAttributes()
-                                  .getNamedItem("targets")
-                                  .getNodeValue().split(",");
-            for(int i = 0; i < targets.length; i++){
-                    dropTargets.add(targets[i]);
             }
         }
         if (node.getAttributes().getNamedItem("hover") != null){
@@ -375,23 +337,6 @@ public class ScreenWidget extends SimplePanel implements
     public Object getUserObject() {
         return userObject;
     }
-   
-    /**
-     * Makes the DropTargets vector available publicly
-     * @return
-     */
-    public Vector<String> getDropTargets() {
-        return dropTargets;
-    }
-    
-   
-    /**
-     * Set the Vector of DropTargets representing the keys to the widgets that this
-     * widget is allowed to drop on.
-     */
-    public void setDropTargets(Vector<String> targets){
-        dropTargets = targets;
-    }
     
     /**
      * Getter for the Screen that contains this Widget
@@ -412,7 +357,6 @@ public class ScreenWidget extends SimplePanel implements
     public void destroy() {
         mouseListeners = null;
         userObject = null;
-        dropTargets = null;
         screen = null;
         clear();
     }

@@ -25,11 +25,8 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -48,8 +45,6 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
-
-import java.util.Vector;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -241,6 +236,9 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         outer.addStyleName("WindowPanel");
         outer.sinkEvents(Event.ONCLICK);
         outer.setWidth("auto");
+        if(browser != null){
+            browser.dragController.makeDraggable(this, cap);
+        }
     }
     
     public ScreenWindow(WindowBrowser brws, String key){
@@ -318,25 +316,11 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         if(popupPanel != null){
             popupPanel.hide();
         }
+        ((ScreenBase)content).destroy();
         destroy();
         browser.index--;
         browser.setFocusedWindow();
     }
-
-    public void onDragEnd(Widget sender, int x, int y) {
-        int X = browser.browser.getWidgetLeft(sender);
-        int Y = browser.browser.getWidgetTop(sender);
-        if(X < 0)
-            X = 0;
-        if(Y <  0)
-            Y = 0;
-        browser.browser.setWidgetPosition(this,X,Y);
-        browser.browser.remove(sender);
-        browser.removeStyleName("locked");
-
-        
-    }
-
 
     public void onMouseDown(Widget sender, final int x, final int y) {
         if(sender == cap){
@@ -345,25 +329,6 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
                     checkZ();
                     return;
                 }
-/*                final FocusPanel proxy = new FocusPanel();
-                AbsolutePanel ap = new AbsolutePanel();
-                proxy.setWidget(ap);
-                ap.setWidth(outer.getOffsetWidth()+"px");
-                ap.setHeight(outer.getOffsetHeight()+"px");
-                ap.addStyleName("WindowDragPanel");
-                proxy.addDragListener(this);
-                browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
-        //      WindowBrowser.setIndex(proxy.getElement(),browser.index);
-                dropMap = MouseDragGestureRecognizer.getDropMap();
-                MouseDragGestureRecognizer.setDropMap(new Vector());
-                browser.addStyleName("locked");
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        MouseDragGestureRecognizer.getGestureMouse(proxy)
-                            .onMouseDown(proxy, x, y);
-                    }
-                });
-                */
             }
         }
     }
@@ -424,6 +389,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         key = null;
         content = null;
         message = null;
+
     }
     
     public void setKeep(boolean keep){

@@ -47,6 +47,7 @@ import org.openelis.gwt.screen.ScreenLabel;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableDragLabel extends SimplePanel implements TableCellWidget {
     
     private ScreenLabel editor;
@@ -72,7 +73,7 @@ public class TableDragLabel extends SimplePanel implements TableCellWidget {
         TableDragLabel label = new TableDragLabel();
         label.width = width;
         label.displayMask = displayMask;
-        label.editor.dropTargets = editor.dropTargets;
+        //label.editor.dropTargets = editor.dropTargets;
         label.editor.screen = editor.screen;
         return label;
     }
@@ -100,7 +101,7 @@ public class TableDragLabel extends SimplePanel implements TableCellWidget {
                                   .getNamedItem("targets")
                                   .getNodeValue().split(",");
             for(int i = 0; i < targets.length; i++){
-                    editor.dropTargets.add(targets[i]);
+                    //editor.dropTargets.add(targets[i]);
             }
         }     
         if (node.getAttributes().getNamedItem("displayMask") != null) 

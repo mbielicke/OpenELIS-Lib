@@ -5,68 +5,68 @@ import com.google.gwt.xml.client.Node;
 
 public class DoubleField extends AbstractField<Double> implements FieldType {
 
-    private static final long serialVersionUID = 1L;
+    private static final long  serialVersionUID = 1L;
 
-    private Double max;
-    private Double min;
-    private String pattern;
-    protected boolean invalid;
-    
-    public static final String TAG_NAME = "rpc-double";
+    private Double             max;
+    private Double             min;
+    private String             pattern;
+    protected boolean          invalid;
+
+    public static final String TAG_NAME         = "rpc-double";
 
     public DoubleField() {
         super();
     }
-    
+
     public DoubleField(Double value) {
         super(value);
     }
-    
+
     public DoubleField(Node node) {
         this();
         setAttributes(node);
     }
-    
+
     @Override
     public void setAttributes(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
-            setKey(node.getAttributes()
-                               .getNamedItem("key")
-                               .getNodeValue());
+            setKey(node.getAttributes().getNamedItem("key").getNodeValue());
         if (node.getAttributes().getNamedItem("required") != null)
             setRequired(new Boolean(node.getAttributes()
-                                                .getNamedItem("required")
-                                                .getNodeValue()).booleanValue());
+                                        .getNamedItem("required")
+                                        .getNodeValue()).booleanValue());
         if (node.getAttributes().getNamedItem("max") != null)
             setMax(new Double(node.getAttributes()
-                                          .getNamedItem("max")
-                                          .getNodeValue()));
+                                  .getNamedItem("max")
+                                  .getNodeValue()));
         if (node.getAttributes().getNamedItem("min") != null)
             setMin(new Double(node.getAttributes()
-                                          .getNamedItem("min")
-                                          .getNodeValue()));
+                                  .getNamedItem("min")
+                                  .getNodeValue()));
         if (node.getAttributes().getNamedItem("reset") != null)
             setAllowReset(new Boolean(node.getAttributes()
-                                                .getNamedItem("reset")
-                                                .getNodeValue()).booleanValue());
+                                          .getNamedItem("reset")
+                                          .getNodeValue()).booleanValue());
         if (node.hasChildNodes()) {
             setValue(new Integer(node.getFirstChild().getNodeValue()));
         }
-        if (node.getAttributes().getNamedItem("pattern") != null){
-            setFormat(node.getAttributes().getNamedItem("pattern").getNodeValue());
-        }   
+        if (node.getAttributes().getNamedItem("pattern") != null) {
+            setFormat(node.getAttributes()
+                          .getNamedItem("pattern")
+                          .getNodeValue());
+        }
     }
-    
+
     public void setMax(Double max) {
         this.max = max;
     }
-    
+
     public void setMin(Double min) {
         this.min = min;
     }
-    
+
     public void validate() {
-        if (invalid){
+        if (invalid) {
             valid = false;
             addError("Field must be numeric");
             return;
@@ -103,9 +103,9 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
     public String toString() {
         return format();
     }
-    
+
     public Object clone() {
-        NumberField obj = new NumberField();
+        DoubleField obj = new DoubleField();
         obj.setMax(max);
         obj.setMin(min);
         obj.setRequired(required);
@@ -114,40 +114,43 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
         obj.setAllowReset(allowReset);
         return obj;
     }
-    
+
     public String format() {
-        if(value == null)
+        if (value == null)
             return "";
-        if(pattern != null)
+        if (pattern != null)
             return NumberFormat.getFormat(pattern).format(value);
         return String.valueOf(value);
     }
-    
+
     public void setFormat(String pattern) {
         this.pattern = pattern;
     }
-    
-    public void setValue(String val) {
+
+    public void setValue(Object val) {
         invalid = false;
-        if(pattern == null) {
+        if (pattern == null) {
             try {
-                if (val != null && !"".equals(val)) {
-                    if (val instanceof String && !((String)val).equals(""))
-                        value = Double.valueOf((String)val);
+                if (val instanceof Double) {
+                    value = (Double)val;
+                } else if (val != null && !"".equals(val)) {
+                    value = Double.valueOf(val.toString());
                 } else {
                     value = null;
                 }
             } catch (Exception e) {
                 invalid = true;
             }
-        }else{
+        } else {
             try {
-                setValue(new Integer((String)val));
-            }catch(Exception e){
-                setValue(Integer.valueOf(Double.toString(NumberFormat.getFormat(pattern).parse((String)val))));
+                if (val != null && !"".equals(val))
+                    value = Double.valueOf(NumberFormat.getFormat(pattern)
+                                                       .parse(val.toString()));
+
+            } catch (Exception e) {
+                invalid = true;
             }
         }
-   
     }
 
 }

@@ -64,7 +64,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void addRow(int index, TreeDataItem row) {
-        data.add(rows.get(index),row);
+        data.add(index,row);
     }
 
     public boolean canDelete(int row) {
@@ -182,9 +182,14 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         if(selectedRows.contains(row)){
             unselectRow(row);
         }
-        data.delete(rows.get(row));
-        treeModelListeners.fireRowDeleted(this, row);
+        TreeDataItem item = rows.get(row);
+        if(item.parent != null){
+            item.parent.removeItem(item.childIndex);
+        }else{
+            data.delete(rows.get(row).childIndex);
+        }
         refresh();
+        treeModelListeners.fireRowDeleted(this, row);
     }
 
     public void enableMultiSelect(boolean multi) {

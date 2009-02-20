@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
@@ -83,6 +84,8 @@ public class TreeWidget extends FocusPanel implements
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
     public ScreenTreeWidget screenWidget;
+    public TreeDragController dragController;
+    public TreeIndexDropController dropController;
 
     public TreeWidget() {
 
@@ -111,12 +114,13 @@ public class TreeWidget extends FocusPanel implements
         view.setWidth("auto");
         view.setHeight((maxRows * cellHeight
                         + (maxRows * cellSpacing)
-                        + (maxRows * 2) + cellSpacing));
+                        + (maxRows * 3) + cellSpacing));
         keyboardHandler = new TreeKeyboardHandler(this);
         mouseHandler = new TreeMouseHandler(this);
         addTreeWidgetListener((TreeWidgetListener)renderer);
         setWidget(view);
         addFocusListener(this);
+        
     }
     
     /**
@@ -215,6 +219,8 @@ public class TreeWidget extends FocusPanel implements
 
     public void enabled(boolean enabled) {
         this.enabled = enabled;
+        if(dragController != null)
+            dragController.setEnable(enabled);
         for (TreeColumnInt column : columns) {
             column.enable(enabled);
         }

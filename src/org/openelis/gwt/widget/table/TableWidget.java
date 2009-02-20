@@ -25,12 +25,15 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
@@ -89,6 +92,8 @@ public class TableWidget extends FocusPanel implements
     public ArrayList<Filter[]> filters;
     public ScreenTableWidget screenWidget;
     public boolean showAltRowColors = true;
+    public TableDragController dragController;
+    public TableIndexDropController dropController;
     
     public TableWidget() {
         
@@ -231,6 +236,8 @@ public class TableWidget extends FocusPanel implements
     
     public void enabled(boolean enabled){
         this.enabled = enabled;
+        if(dragController != null)
+            dragController.setEnable(enabled);
         for(TableColumnInt column : columns) {
             column.enable(enabled);
         }

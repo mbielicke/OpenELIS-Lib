@@ -44,12 +44,16 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
         
 
     public boolean add(TreeDataItem item) {
+        item.childIndex = size();
         return super.add(item);
     }
     
-    public void add(TreeDataItem item, TreeDataItem newItem) {
+    public void add(int index, TreeDataItem item) {
         item.parent = null;
-        super.add(indexOf(item),newItem);
+        item.depth = 0;
+        super.add(index, item);
+        for(int i = 0; i < size(); i++)
+            get(i).childIndex = i;
     }
     
     //public void add(Key key, DataObject value){
@@ -69,12 +73,9 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
    // }
     
     
-    public void delete(TreeDataItem item){
-        if(item.parent != null){
-            item.parent.getItems().remove(item);
-        }
-        deleted.add(item);
-        remove(item);
+    public void delete(int index){
+        deleted.add(get(index));
+        super.remove(index);
     }
     
     public void select(TreeDataItem item) throws IndexOutOfBoundsException {

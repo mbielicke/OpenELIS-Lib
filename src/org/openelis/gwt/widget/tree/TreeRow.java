@@ -19,15 +19,20 @@ public class TreeRow extends Widget implements SourcesMouseEvents {
     
     public int index;
     public int modelIndex;
-    
     public TreeDataItem item;
     
-    public TreeRow(Element elem, boolean setEvent) {
-        //super(elem.getString());
+    public int dragIndex;
+    public int dragModelIndex;
+    public TreeDataItem dragItem;
+    
+    public TreeRow() {
+        
+    }
+    
+    public TreeRow(Element elem) {
         setElement(elem);
         sinkEvents(Event.MOUSEEVENTS);
-        if(setEvent)
-            onAttach();
+        onAttach();
     }
     
 
@@ -52,27 +57,10 @@ public class TreeRow extends Widget implements SourcesMouseEvents {
         }
     }
     
-    public TreeRow getProxy() {
-        removeStyleName("Highlighted");
-        Element div = DOM.createDiv();
-        Element table = DOM.createTable();
-        div.appendChild(table);
-        Element tr = (Element)getElement().cloneNode(true);
-        //setStyleName(tr, "Highlighted",false);
-        table.appendChild(tr);
-        TreeRow clone = new TreeRow(div,false);
-        //clone.dragListeners = dragListeners;
-       // clone.mouseListeners = mouseListeners;
-       // clone.dropListeners = dropListeners;
-        clone.index = index;
-        clone.modelIndex = modelIndex;
-        clone.item  = item;
-        return clone;
-    }
-    
-    @Override
-    protected void onAttach() {
-        super.onAttach();
+    public void setDragValues() {
+        dragIndex = index;
+        dragModelIndex = modelIndex;
+        dragItem = (TreeDataItem)item.clone();
     }
     
 }

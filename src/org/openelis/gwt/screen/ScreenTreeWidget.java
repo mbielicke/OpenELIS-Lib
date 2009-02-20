@@ -25,7 +25,10 @@
 */
 package org.openelis.gwt.screen;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -36,12 +39,17 @@ import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.common.data.TreeField;
+import org.openelis.gwt.event.DragManager;
+import org.openelis.gwt.event.DropManager;
+import org.openelis.gwt.event.HasDragController;
+import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.widget.table.TableIndexDropController;
 import org.openelis.gwt.widget.tree.TreeColumn;
 import org.openelis.gwt.widget.tree.TreeColumnInt;
-import org.openelis.gwt.widget.tree.TreeDragHandler;
+import org.openelis.gwt.widget.tree.TreeDragController;
+import org.openelis.gwt.widget.tree.TreeIndexDropController;
 import org.openelis.gwt.widget.tree.TreeKeyboardHandler;
 import org.openelis.gwt.widget.tree.TreeManager;
-import org.openelis.gwt.widget.tree.TreeRow;
 import org.openelis.gwt.widget.tree.TreeServiceCall;
 import org.openelis.gwt.widget.tree.TreeServiceCallInt;
 import org.openelis.gwt.widget.tree.TreeWidget;
@@ -49,6 +57,7 @@ import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 /**
  * ScreenTable wraps the FormTable widget to be displayed
@@ -56,7 +65,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class ScreenTreeWidget extends ScreenInputWidget {
+public class ScreenTreeWidget extends ScreenInputWidget implements HasDragController, HasDropController{
     
 
         /**
@@ -67,6 +76,8 @@ public class ScreenTreeWidget extends ScreenInputWidget {
          * Widget wrapped by this class
          */
         private TreeWidget tree ;
+        private Vector<String> dropTargets = new Vector<String>();
+        private boolean dropInited;
         /**
          * Default no-arg constructor used to create reference in the WidgetMap class
          */
@@ -101,7 +112,6 @@ public class ScreenTreeWidget extends ScreenInputWidget {
              boolean enable = false;
              VerticalScroll showScroll = VerticalScroll.NEEDED;
              boolean showHeader = false;
-             String targets = "";
              ArrayList<TreeColumnInt> columns = new ArrayList<TreeColumnInt>();
              TreeDataModel data = new TreeDataModel();
                  if (node.getAttributes().getNamedItem("manager") != null) {
@@ -212,6 +222,7 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                  if(node.getAttributes().getNamedItem("showScroll") != null){
                      showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
                  }
+
                  
                  NodeList leafNodes = ((Element)node).getElementsByTagName("leaf");
                  
@@ -278,8 +289,6 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                      */
                      }
                  }
-                 tree.enabled(enable);
-                 tree.model.setManager(manager);
                  //int rows = 0;
                  /*if (node.getAttributes().getNamedItem("rows") != null) {
                      rows = Integer.parseInt(node.getAttributes()
@@ -290,7 +299,42 @@ public class ScreenTreeWidget extends ScreenInputWidget {
                      }
                  }
                  */
-                
+                 if (node.getAttributes().getNamedItem("targets") != null) {
+                     dropTargets = new Vector<String>();
+                     String targets[] = node.getAttributes()
+                                           .getNamedItem("targets")
+                                           .getNodeValue().split(",");
+                     for(int i = 0; i < targets.length; i++){
+                             dropTargets.add(targets[i]);
+                     }
+                     tree.dragController = new TreeDragController(RootPanel.get());
+                 }
+                 if (node.getAttributes().getNamedItem("dropManager") != null){
+                     tree.dropController = new TreeIndexDropController(tree);
+                     String appClass = node.getAttributes()
+                     .getNamedItem("dropManager")
+                     .getNodeValue();
+
+                     if("this".equals(appClass))
+                         tree.dropController.manager =(DropManager)screen;
+                     else{
+                         tree.dropController.manager = (DropManager)ClassFactory.forName(appClass);
+                     }
+                 }
+                 if (node.getAttributes().getNamedItem("dragManager") != null){
+                     getDragController();
+                     String appClass = node.getAttributes()
+                     .getNamedItem("dragManager")
+                     .getNodeValue();
+
+                     if("this".equals(appClass))
+                         tree.dragController.manager =(DragManager)screen;
+                     else{
+                         tree.dragController.manager = (DragManager)ClassFactory.forName(appClass);
+                     }
+                 }
+                // enable(enable);
+                 tree.model.setManager(manager);
                  
                  
              ((AppScreen)screen).addKeyboardListener(tree.keyboardHandler);
@@ -361,6 +405,14 @@ public class ScreenTreeWidget extends ScreenInputWidget {
         }
         
         public void enable(boolean enabled){
+            if(enabled && !dropInited){
+                if(dropTargets != null){
+                    for(String target : dropTargets) {         
+                        getDragController().registerDropController(((HasDropController)screen.widgets.get(target)).getDropController());
+                    }
+                }
+                dropInited = true;
+            }
             tree.enabled(enabled);
             super.enable(enabled);
         }
@@ -372,6 +424,24 @@ public class ScreenTreeWidget extends ScreenInputWidget {
         @Override
         public void drawError() {
             tree.model.refresh();
+        }
+        public TreeDragController getDragController() {
+            if(tree.dragController == null)
+                tree.dragController = new TreeDragController(RootPanel.get());
+            return tree.dragController;
+        }
+        public void setDragController(DragController controller) {
+            tree.dragController = (TreeDragController)controller;
+            
+        }
+        public TreeIndexDropController getDropController() {
+            if(tree.dropController == null)
+                tree.dropController = new TreeIndexDropController(tree);
+            return tree.dropController;
+        }
+        public void setDropController(DropController controller) {
+           tree.dropController = (TreeIndexDropController)controller;
+            
         }
         
 }
