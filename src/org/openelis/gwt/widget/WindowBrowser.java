@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -57,6 +59,8 @@ public class WindowBrowser extends Composite{
     public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
     public int index;
     public int limit ;
+    public PickupDragController dragController = new PickupDragController(browser,true);
+    public AbsolutePositionDropController dropController = new AbsolutePositionDropController(browser);
     
     public static native void setIndex(Element elem, int index) /*-{
         elem.style.zIndex = index;
@@ -77,6 +81,8 @@ public class WindowBrowser extends Composite{
     public void init(boolean size, int limit) {
         this.limit = limit;
         initWidget(browser);
+        dragController.setBehaviorDragProxy(true);
+        dragController.registerDropController(dropController);
         //setIndex(getElement(),index);
         DOM.setStyleAttribute(browser.getElement(),
                               "overflow",

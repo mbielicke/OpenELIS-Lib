@@ -28,8 +28,6 @@ package org.openelis.gwt.widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
@@ -47,12 +45,13 @@ import java.util.Vector;
  * @author tschmidt
  *
  */
-public class ProxyListener extends MouseListenerAdapter implements DragListener {
+@Deprecated
+public class ProxyListener extends MouseListenerAdapter {
 
     Vector dropMap;
     
     public void onMouseDown(Widget sender, final int x, final int y) {
-
+/*
         final ScreenWidget proxy = ((ScreenWidget)sender).getInstance();
         AbsolutePanel dragIndicator = new AbsolutePanel();
         dragIndicator.setStyleName("DragStatus");
@@ -62,9 +61,9 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
         hp.add(proxy);
         hp.setStyleName(sender.getStyleName());
         proxy.setUserObject(sender);
-        proxy.addDragListener(this);
+        //proxy.addDragListener(this);
         RootPanel.get().add(hp);
-        MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
+        //MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
         mouse.setDrag(hp);
         dropMap = MouseDragGestureRecognizer.getDropMap();
         MouseDragGestureRecognizer.setDropMap(((ScreenWidget)sender).getDropMap());
@@ -77,6 +76,7 @@ public class ProxyListener extends MouseListenerAdapter implements DragListener 
                                           .onMouseDown(proxy, x, y);
             }
         });
+        */
     }
 
     public void onDragDropEnd(Widget sender, Widget target) {

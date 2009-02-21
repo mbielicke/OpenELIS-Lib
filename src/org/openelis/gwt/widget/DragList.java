@@ -26,17 +26,22 @@
 package org.openelis.gwt.widget;
 
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenDragList;
 import org.openelis.gwt.screen.ScreenLabel;
 import org.openelis.gwt.screen.ScreenWidget;
 
+import com.allen_sauer.gwt.dnd.client.DragContext;
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.IndexedDropController;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -57,12 +62,23 @@ public class DragList extends Composite {
 
     private VerticalPanel vp = new VerticalPanel();
     private ScrollPanel scroll = new ScrollPanel();
-    private ProxyListener listener = new ProxyListener();
+    public PickupDragController dragController = new PickupDragController(RootPanel.get(),false);
+    public IndexedDropController dropController = new IndexedDropController(vp){
+        @Override
+        public void onDrop(DragContext context) {
+            // TODO Auto-generated method stub
+            Window.alert("dropping");
+            super.onDrop(context);
+        }
+    };
+    public Vector<String> targets = new Vector<String>();
     
     public DragList() {
         initWidget(scroll);
         scroll.setStyleName("DragContainer");
         scroll.setWidget(vp);
+        dragController.setBehaviorDragProxy(true);
+        dragController.registerDropController(dropController);
     }
     /**
      * Method used to add a widget to the list
@@ -85,9 +101,9 @@ public class DragList extends Composite {
      */
     public void addDropItem(String text, Object value){
         ScreenLabel label = new ScreenLabel(text,value);
-        label.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
+        //label.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
         label.sinkEvents(Event.MOUSEEVENTS);
-        label.setDropTargets(((ScreenDragList)getParent()).getDropTargets());
+        //label.setDropTargets(((ScreenDragList)getParent()).getDropTargets());
         label.setScreen(((ScreenDragList)getParent()).getScreen());
         addItem(label);
     }
@@ -110,7 +126,7 @@ public class DragList extends Composite {
                 ScreenLabel label = new ScreenLabel();
                 ((Label)label.getWidget()).setText(text);
                 label.setUserObject(value);
-                label.addMouseListener(listener);
+                //label.addMouseListener(listener);
                 addItem(label);
             }
         }
@@ -145,10 +161,10 @@ public class DragList extends Composite {
         Iterator it = vp.iterator();
         while(it.hasNext()){
             ScreenWidget wid = (ScreenWidget)it.next();
-            wid.removeMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
-            if(enabled){
-                wid.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
-            }
+            if(enabled)
+                dragController.makeDraggable(wid);
+            else
+                dragController.makeNotDraggable(wid);
         }
     }
     

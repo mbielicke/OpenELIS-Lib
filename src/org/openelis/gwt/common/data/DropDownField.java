@@ -45,7 +45,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * this model for its options overriding what options it has stored in 
      * the widget itself
      */
-    private DataModel<Key> model = new DataModel<Key>();
+    private DataModel<Key> model;
     
     /**
      * Tag name used in XML defintion of an rpc

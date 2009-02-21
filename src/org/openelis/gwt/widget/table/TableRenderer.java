@@ -89,9 +89,10 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             }
             j++;
         }
-        TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i),true);
+        TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i));
         row.addMouseListener(controller.mouseHandler);
-        row.addDropListener(controller.drop);
+        if(controller.dragController != null)
+            controller.dragController.makeDraggable(row);
         row.index = i;
         if(i % 2 == 1 && controller.showAltRowColors){
             row.addStyleName("AltTableRow");
@@ -290,15 +291,15 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     }
 
     public void rowDeleted(SourcesTableModelEvents sender, int row) {
-        load(0);        
+        load(controller.view.scrollBar.getScrollPosition());        
     }
 
     public void rowAdded(SourcesTableModelEvents sender, int row) {
-        load(0);        
+        load(controller.view.scrollBar.getScrollPosition());        
     }
 
     public void rowUpdated(SourcesTableModelEvents sender, int row) {
-        load(0);
+        load(controller.view.scrollBar.getScrollPosition());
     }
 
     public void rowSelected(SourcesTableModelEvents sender, int row) {

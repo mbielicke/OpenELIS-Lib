@@ -28,9 +28,6 @@ package org.openelis.gwt.widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DropListener;
-import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -54,9 +51,7 @@ import com.google.gwt.user.client.ui.Widget;
 @Deprecated public class DragSelectWidget extends Composite implements
                                                KeyboardListener,
                                                MouseListener,
-                                               FocusListener,
-                                               DragListener,
-                                               DropListener {
+                                               FocusListener{
     private final FocusPanel from = new FocusPanel();
     private final FocusPanel to = new FocusPanel();
     private final ScrollPanel fromScroll = new ScrollPanel();
@@ -97,8 +92,6 @@ import com.google.gwt.user.client.ui.Widget;
     private void draw() {
         from.add(fromScroll);
         to.add(toScroll);
-        from.addDropListener(this);
-        to.addDropListener(this);
         fromScroll.add(fromPanel);
         toScroll.add(toPanel);
         outer.add(from, DockPanel.WEST);
@@ -155,7 +148,7 @@ import com.google.gwt.user.client.ui.Widget;
     }
 
     public void onMouseDown(Widget sender, final int x, final int y) {
-        dragWidget = (DragWidget)sender;
+    /*    dragWidget = (DragWidget)sender;
         final Label proxy = new Label(dragWidget.getText());
         proxy.addDragListener(this);
         RootPanel.get().add(proxy);
@@ -168,6 +161,7 @@ import com.google.gwt.user.client.ui.Widget;
                                           .onMouseDown(proxy, x, y);
             }
         });
+        */
     }
 
     public void onMouseUp(Widget sender, int x, int y) {

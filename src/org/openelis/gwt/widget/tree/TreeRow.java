@@ -4,12 +4,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DragListenerCollection;
-import com.google.gwt.user.client.dnd.DropListener;
-import com.google.gwt.user.client.dnd.DropListenerCollection;
-import com.google.gwt.user.client.dnd.SourcesDragEvents;
-import com.google.gwt.user.client.dnd.SourcesDropEvents;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
@@ -19,23 +13,26 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.TreeDataItem;
 
-public class TreeRow extends Widget implements SourcesMouseEvents, SourcesDragEvents, SourcesDropEvents {
+public class TreeRow extends Widget implements SourcesMouseEvents {
     
     public MouseListenerCollection mouseListeners = new MouseListenerCollection();
-    public DropListenerCollection dropListeners = new DropListenerCollection();
-    public DragListenerCollection dragListeners = new DragListenerCollection();
     
     public int index;
     public int modelIndex;
-    
     public TreeDataItem item;
     
-    public TreeRow(Element elem, boolean setEvent) {
-        //super(elem.getString());
+    public int dragIndex;
+    public int dragModelIndex;
+    public TreeDataItem dragItem;
+    
+    public TreeRow() {
+        
+    }
+    
+    public TreeRow(Element elem) {
         setElement(elem);
         sinkEvents(Event.MOUSEEVENTS);
-        if(setEvent)
-            onAttach();
+        onAttach();
     }
     
 
@@ -59,50 +56,11 @@ public class TreeRow extends Widget implements SourcesMouseEvents, SourcesDragEv
                 mouseListeners.fireMouseEvent(this, event);
         }
     }
-
-    public void addDragListener(DragListener listener) {
-        if(listener != null)
-            dragListeners.add(listener,this);
-        
-    }
-
-    public void removeDragListener(DragListener listener) {
-        dragListeners.remove(listener);
-        
-    }
-
-    public void addDropListener(DropListener listener) {
-        if(listener != null)
-            dropListeners.add(listener,this);
-        
-    }
-
-    public void removeDropListener(DropListener listener) {
-        dropListeners.remove(listener);
-        
-    }
     
-    public TreeRow getProxy() {
-        removeStyleName("Highlighted");
-        Element div = DOM.createDiv();
-        Element table = DOM.createTable();
-        div.appendChild(table);
-        Element tr = (Element)getElement().cloneNode(true);
-        //setStyleName(tr, "Highlighted",false);
-        table.appendChild(tr);
-        TreeRow clone = new TreeRow(div,false);
-        //clone.dragListeners = dragListeners;
-       // clone.mouseListeners = mouseListeners;
-       // clone.dropListeners = dropListeners;
-        clone.index = index;
-        clone.modelIndex = modelIndex;
-        clone.item  = item;
-        return clone;
-    }
-    
-    @Override
-    protected void onAttach() {
-        super.onAttach();
+    public void setDragValues() {
+        dragIndex = index;
+        dragModelIndex = modelIndex;
+        dragItem = (TreeDataItem)item.clone();
     }
     
 }

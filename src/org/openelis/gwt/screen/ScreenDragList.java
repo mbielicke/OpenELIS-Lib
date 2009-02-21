@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.screen;
 
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -42,6 +43,7 @@ import org.openelis.gwt.widget.DragList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenDragList extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
@@ -51,6 +53,7 @@ public class ScreenDragList extends ScreenWidget {
 	 * Widget wrapped by this class
 	 */
     private DragList list;
+    private boolean dropInited = false;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -77,6 +80,14 @@ public class ScreenDragList extends ScreenWidget {
             list = (DragList)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
             list = new DragList();
+        if (node.getAttributes().getNamedItem("targets") != null) {
+            String targets[] = node.getAttributes()
+                                  .getNamedItem("targets")
+                                  .getNodeValue().split(",");
+            for(int i = 0; i < targets.length; i++){
+                    list.targets.add(targets[i]);
+            }
+        }
         initWidget(list);        
         list.setStyleName("ScreenDragList");
         setDefaults(node, screen);
@@ -120,14 +131,24 @@ public class ScreenDragList extends ScreenWidget {
                 ScreenLabel label = new ScreenLabel(items.item(i),screen);
                 label.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
                 label.sinkEvents(Event.MOUSEEVENTS);
-                label.setDropTargets(getDropTargets());
+                //label.setDropTargets(getDropTargets());
                 list.addItem(label);
             }
         }
     }
     
     public void enable(boolean enabled){
+        if(enabled && !dropInited){
+            for(String target : list.targets) {         
+               // list.dragController.registerDropController(screen.widgets.get(target).getDropController());
+            }
+            dropInited = true;    
+        }
         list.enable(enabled);
+    }
+   
+    public DropController getDropController() {
+        return list.dropController;
     }
     
     public void destroy() {

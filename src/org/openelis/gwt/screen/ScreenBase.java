@@ -364,23 +364,20 @@ public class ScreenBase extends Composite {
             tabBack.put(on, to[1]);
     }
     
-    protected void onDetach() {
-        // TODO Auto-generated method stub
-        if(!keep){
-            for(ScreenWidget wid : widgets.values()) {
-                if(wid instanceof ScreenWidget)
-                    wid.destroy();
-            }
-            widgets.clear();
-            widgets = null;
-            xml = null;
-            tabOrder.clear();
-            tabOrder = null;
-            tabBack.clear();
-            tabBack = null;
-            form = null;
+    protected void destroy() {
+       // TODO Auto-generated method stub
+       for(ScreenWidget wid : widgets.values()) {
+            if(wid instanceof ScreenWidget)
+                wid.destroy();
         }
-        super.onDetach();
+        widgets.clear();
+        widgets = null;
+        xml = null;
+        tabOrder.clear();
+        tabOrder = null;
+        tabBack.clear();
+        tabBack = null;
+        form = null;        
     }
 
 }
