@@ -57,7 +57,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      *
      */
     public DropDownField() {
-        super(new ArrayList<DataSet<Key>>());
+        super();
     }
     
     /**
@@ -98,32 +98,40 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * This method will set this fields current value
      */
     public void setValue(ArrayList<DataSet<Key>> val) {
+        if(val == null){
+            value = null;
+            return;
+        }
        if(value == null)
            value = new ArrayList<DataSet<Key>>();
        else
            value.clear();
-       if(val != null){
-           for(DataSet<Key> set : val)
-               value.add(set);
-       }
+       for(DataSet<Key> set : val)
+           value.add(set);
     }
     
     public void setValue(DataSet<Key> val) {
+        if(val == null){
+            value = null;
+            return;
+        }
+        if(value == null)
+            value = new ArrayList<DataSet<Key>>();
+        else
+            value.clear();
         value.clear();
         if(val != null)
             value.add(val);
     }
     
     public void setValue(Object val) {
-        if(val == null){
-            if(value == null){
-                value = new ArrayList<DataSet<Key>>();
-            }else
-                value.clear();
-        }else if(val instanceof DataSet){
+        if(val instanceof DataSet){
             setValue((DataSet<Key>)val);
         }else if(val instanceof ArrayList){
             setValue((ArrayList<DataSet<Key>>)val);
+        }else if(val == null){
+                value = null; 
+                return;
         }
     }
     
@@ -132,6 +140,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * @return
      */
     public Object getTextValue(){
+        if(value == null)
+            return null;
+        
         if(value.size() == 1)
             return value.get(0).get(0).toString();
         else if(value.size() > 1)
@@ -145,6 +156,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * @return
      */
     public Object getSelectedKey() {
+        if(value == null)
+            return null;
+        
         if(value.size() == 1)
             return value.get(0).getKey();
         else if(value.size() > 1)
@@ -207,7 +221,8 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      *
      */
     public void clear() {
-        value.clear();
+        if(value != null)
+            value.clear();
     } 
     
     /**
@@ -221,10 +236,14 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
         obj.setKey(key);
         
         //need to create a new selections array list by hand to avoid a shallow copy
-        ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
-        for(int i=0; i < value.size(); i++)
-            cloneSelections.add((DataSet)value.get(i).clone());
-        obj.setValue(cloneSelections);
+        if(value != null){
+            ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
+            for(int i=0; i < value.size(); i++)
+                cloneSelections.add((DataSet)value.get(i).clone());
+            
+            obj.setValue(cloneSelections);
+        }else
+            obj.setValue(null);
         
         return obj;
     }

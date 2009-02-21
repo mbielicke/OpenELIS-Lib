@@ -213,7 +213,10 @@ public class NumberField extends AbstractField<Double> implements FieldType{
     }
     
     public Integer getIntegerValue() {
-        return new Integer(value.intValue());
+        if(value != null)
+            return new Integer(value.intValue());
+        else 
+            return null;
     }
     
     private void setObject(Object val) {

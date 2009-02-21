@@ -303,9 +303,12 @@ CloseHandler<PopupPanel>, FocusHandler, BlurHandler, Focusable, HasValueChangeHa
     
     public void setSelections(ArrayList<DataSet<Object>> selections){
         model.clearSelections();
-        for(DataSet<Object> set : selections)
-            model.selectRow(set.getKey());
-        lookUp.setText(getTextBoxDisplay());
+        if(selections != null) {
+            for(DataSet<Object> set : selections)
+                model.selectRow(set.getKey());
+            lookUp.setText(getTextBoxDisplay());
+        }else
+            lookUp.setText("");
     }
     
     public ArrayList<DataSet<Object>> getSelections() {
