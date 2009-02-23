@@ -43,6 +43,7 @@ import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.AppScreenForm;
+import org.openelis.gwt.screen.ScreenAToZTable;
 import org.openelis.gwt.screen.ScreenButtonPanel;
 import org.openelis.gwt.screen.ScreenVertical;
 import org.openelis.gwt.screen.ScreenWidget;
@@ -72,6 +73,7 @@ public class AToZTable extends TableWidget implements
     protected boolean refreshedByLetter;
     private CommandListenerCollection commandListeners;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
+    public ScreenAToZTable screenWidget;
 
     public AToZTable() {
         super();

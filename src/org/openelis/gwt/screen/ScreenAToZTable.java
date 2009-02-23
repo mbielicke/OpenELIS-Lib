@@ -25,18 +25,29 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.widget.AToZTable;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableDragHandler;
+import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableLabel;
+import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
-public class ScreenAToZTable extends ScreenWidget {
+public class ScreenAToZTable extends ScreenInputWidget {
     public AToZTable azTable;
     public static final String TAG_NAME = "azTable";
     
@@ -53,40 +64,258 @@ public class ScreenAToZTable extends ScreenWidget {
             azTable = (AToZTable)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
             azTable = new AToZTable();
-        String width = "auto";
-        if (node.getAttributes().getNamedItem("tablewidth") != null) {
-            width = (node.getAttributes().getNamedItem("tablewidth").getNodeValue());
-        }
-        String title = "";
-        if (node.getAttributes().getNamedItem("title") != null){
-            title = (node.getAttributes().getNamedItem("title").getNodeValue());
-        }
-        int maxRows = ((Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue())));
-        String[] widths = node.getAttributes().getNamedItem("colwidths").getNodeValue().split(",");
-        ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>(); 
-        if(widths != null) {
-            for (String wid : widths) {
-                TableColumn col = new TableColumn();
-                col.setCurrentWidth(Integer.parseInt(wid));
-                col.setColumnWidget(new TableLabel());
-                columns.add(col);
+        NodeList children = node.getChildNodes();
+        Node bpanel = null;
+        Node table = null;
+        Node query = null;
+        for(int i = 0; i < children.getLength(); i++){
+            if(children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                if(children.item(i).getNodeName().equals("buttonPanel"))
+                    bpanel = children.item(i);
+                else if(children.item(i).getNodeName().equals("table"))
+                    table = children.item(i);
+                else if(children.item(i).getNodeName().equals("query"))
+                    query = children.item(i);
             }
         }
-        boolean showHeader = false;
-        if(node.getAttributes().getNamedItem("headers") != null){
-            String[] headers = node.getAttributes().getNamedItem("headers").getNodeValue().split(",");
-            if(headers != null){
-                showHeader = true;
-                for(int i = 0; i < headers.length; i++){
-                    columns.get(i).setHeader(headers[i].trim());
+        if(table == null) {
+            String width = "auto";
+            if (node.getAttributes().getNamedItem("tablewidth") != null) {
+                width = (node.getAttributes().getNamedItem("tablewidth").getNodeValue());
+            }
+            String title = "";
+            if (node.getAttributes().getNamedItem("title") != null){
+                title = (node.getAttributes().getNamedItem("title").getNodeValue());
+            }
+            int maxRows = ((Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue())));
+            String[] widths = node.getAttributes().getNamedItem("colwidths").getNodeValue().split(",");
+            ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>(); 
+            if(widths != null) {
+                for (String wid : widths) {
+                    TableColumn col = new TableColumn();
+                    col.setCurrentWidth(Integer.parseInt(wid));
+                    col.setColumnWidget(new TableLabel());
+                    columns.add(col);
                 }
             }
+            boolean showHeader = false;
+            if(node.getAttributes().getNamedItem("headers") != null){
+                String[] headers = node.getAttributes().getNamedItem("headers").getNodeValue().split(",");
+                if(headers != null){
+                    showHeader = true;
+                    for(int i = 0; i < headers.length; i++){
+                        columns.get(i).setHeader(headers[i].trim());
+                    }
+                }
+            }
+            azTable.init(columns,maxRows,width,title,showHeader,VerticalScroll.NEVER);
+        }else{
+            TableManager manager = null;
+            int cellHeight;
+            String width;
+            int maxRows;
+            String title = "";
+            boolean autoAdd = false;
+            boolean showRows = false;
+            boolean enable = false;
+            VerticalScroll showScroll = VerticalScroll.NEEDED;
+            boolean showHeader = false;
+            ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>();
+            DataModel data = new DataModel();
+                if (table.getAttributes().getNamedItem("manager") != null) {
+                    String appClass = table.getAttributes()
+                                          .getNamedItem("manager")
+                                          .getNodeValue();
+                   
+                    if("this".equals(appClass))
+                        manager = (TableManager)screen;
+                    else{
+                        manager = (TableManager)ClassFactory.forName(appClass);
+                    }
+                }
+                Node widthsNode = ((Element)table).getElementsByTagName("widths")
+                                                 .item(0);
+                Node headersNode = null;
+                if(((Element)table).getElementsByTagName("headers").getLength() > 0)
+                    headersNode = ((Element)table).getElementsByTagName("headers")
+                                                  .item(0);
+                Node editorsNode = ((Element)table).getElementsByTagName("editors")
+                                                  .item(0);
+                Node fieldsNode = ((Element)table).getElementsByTagName("fields")
+                                                 .item(0);
+                Node filtersNode = ((Element)table).getElementsByTagName("filters")
+                                                  .item(0);
+                Node sortsNode = ((Element)table).getElementsByTagName("sorts")
+                                                .item(0);
+                Node queryNode = ((Element)node).getElementsByTagName("query").item(0);
+                Node alignNode = ((Element)table).getElementsByTagName("colAligns")
+                                                .item(0);
+                Node colFixed = ((Element)table).getElementsByTagName("fixed").item(0);
+                
+                if(table.getAttributes().getNamedItem("cellHeight") != null){
+                    cellHeight = (Integer.parseInt(table.getAttributes().getNamedItem("cellHeight").getNodeValue()));
+                }
+                
+                width = table.getAttributes().getNamedItem("width").getNodeValue();
+                maxRows = Integer.parseInt(table.getAttributes().getNamedItem("maxRows").getNodeValue());
+                //if constants = true we want to get the title from the properties file
+                if(table.getAttributes().getNamedItem("title") != null){
+                        title =table.getAttributes().getNamedItem("title").getNodeValue();
+                }
+                if(table.getAttributes().getNamedItem("autoAdd") != null){
+                    if(table.getAttributes().getNamedItem("autoAdd").getNodeValue().equals("true"))
+                        autoAdd = true;
+                }
+                if(table.getAttributes().getNamedItem("showRows") != null){
+                    if(table.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
+                        showRows = true;
+                }
+                if(table.getAttributes().getNamedItem("enable") != null){
+                    if(table.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
+                        enable = true;
+                }
+                if(table.getAttributes().getNamedItem("showScroll") != null){
+                    showScroll = VerticalScroll.valueOf((table.getAttributes().getNamedItem("showScroll").getNodeValue()));
+                }
+                if (widthsNode != null) {
+                    String[] widths = widthsNode.getFirstChild()
+                                                .getNodeValue()
+                                                .split(",");
+                    for (String wid : widths) {
+                        TableColumn col = new TableColumn();
+                        col.setCurrentWidth(Integer.parseInt(wid));
+                        columns.add(col);
+                    }
+                }
+                if(headersNode != null){
+                    showHeader = true;
+                    if(((Element)headersNode).getElementsByTagName("menuItem").getLength() > 0) {
+                        NodeList menus = headersNode.getChildNodes();
+                        int j = 0;
+                        for(int i = 0; i < menus.getLength(); i++) {
+                            if(menus.item(i).getNodeType() == Node.ELEMENT_NODE && menus.item(i).getNodeName().equals("menuItem")) {
+                                columns.get(j).setHeaderMenu((ScreenMenuItem)ScreenWidget.loadWidget(menus.item(i), screen));
+                                j++;
+                            }
+                        }
+                    }else{
+                        String[] headerNames = headersNode.getFirstChild().getNodeValue().split(",");
+                        for(int i = 0; i < headerNames.length; i++){
+                            columns.get(i).setHeader(headerNames[i].trim());
+                        }
+                    }
+                }
+                if (filtersNode != null) {
+                    String[] filters = filtersNode.getFirstChild()
+                                                  .getNodeValue()
+                                                  .split(",");
+                    for (int i = 0; i < filters.length; i++) {
+                        columns.get(i).setFilterable(Boolean.valueOf(filters[i]).booleanValue());
+                    }
+                }
+                if (sortsNode != null) {
+                    String[] sorts = sortsNode.getFirstChild()
+                                              .getNodeValue()
+                                              .split(",");
+                    for (int i = 0; i < sorts.length; i++) {
+                        columns.get(i).setSortable(Boolean.valueOf(sorts[i]).booleanValue());
+                    }
+                }
+                if (queryNode != null) {
+                    String[] queryCols = queryNode.getFirstChild().getNodeValue().split(",");
+                    for(int i = 0; i < queryCols.length; i++) {
+                        columns.get(i).setQuerayable(Boolean.valueOf(queryCols[i]).booleanValue());
+                    }
+                }
+                if (colFixed != null) {
+                    String[] fixeds = colFixed.getFirstChild()
+                                              .getNodeValue()
+                                              .split(",");
+                    for (int i = 0; i < fixeds.length; i++) {
+                        columns.get(i).setFixedWidth(Boolean.valueOf(fixeds[i]).booleanValue());
+                    }
+                }
+                if (alignNode != null){
+                    String[] aligns = alignNode.getFirstChild().getNodeValue().split(",");
+                    for (int i = 0; i < aligns.length; i++) {
+                        if (aligns[i].equals("left"))
+                            columns.get(i).setAlign(HasAlignment.ALIGN_LEFT);
+                        if (aligns[i].equals("center"))
+                            columns.get(i).setAlign(HasAlignment.ALIGN_CENTER);
+                        if (aligns[i].equals("right"))
+                            columns.get(i).setAlign(HasAlignment.ALIGN_RIGHT);
+                    }
+                }
+                NodeList editors = editorsNode.getChildNodes();
+                int j = 0; 
+                for (int i = 0; i < editors.getLength(); i++) {
+                    if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        columns.get(j).setColumnWidget((Widget)ScreenBase.createCellWidget(editors.item(i),screen));
+                        j++;
+                    }
+                }
+                NodeList fieldList = fieldsNode.getChildNodes();
+                DataSet<Object> set = new DataSet<Object>();
+                for (int i = 0; i < fieldList.getLength(); i++) {
+                    if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        AbstractField field = (ScreenBase.createField(fieldList.item(i)));
+                        set.add((FieldType)field);
+                        columns.get(i).setKey(field.key);
+                    }
+                }
+                data.setDefaultSet(set);
+                azTable.init(columns,maxRows,width,title,showHeader,showScroll);
+                if(table.getAttributes().getNamedItem("multiSelect") != null){
+                    if(table.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
+                        azTable.model.enableMultiSelect(true);
+                }
+                if(table.getAttributes().getNamedItem("drag") != null) {
+                    String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
+                    if(drag.equals("default")){
+                        azTable.drag = new TableDragHandler(azTable);
+                    }
+                }
+                if(table.getAttributes().getNamedItem("drop") != null) {
+                    String drop = table.getAttributes().getNamedItem("drop").getNodeValue();
+                    if(drop.equals("default")){
+                        if(azTable.drag != null)
+                            azTable.drop = (DropListener)azTable.drag;
+                        else
+                            azTable.drop = new TableDragHandler(azTable);
+                       super.addDropListener(azTable.drop);
+                    }
+                }
+                azTable.enabled(enable);
+                azTable.model.setManager(manager);
+                int rows = 0;
+                if (node.getAttributes().getNamedItem("rows") != null) {
+                    rows = Integer.parseInt(node.getAttributes()
+                                                .getNamedItem("rows")
+                                                .getNodeValue());
+                    for(int i = 0; i < rows; i++){
+                        data.addDefault();
+                    }
+                }
+            azTable.model.load(data);
+            
+            azTable.setStyleName("ScreenTable");
+            ((TableKeyboardHandler)azTable.keyboardHandler).setScreen(this);
+            azTable.screenWidget = this;
         }
+        if(query != null){
+            NodeList inputList = query.getChildNodes();
+            Node input = null;
+            for (int m = 0; m < inputList.getLength(); m++) {
+                if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
+                    input = inputList.item(m);
+                    m = 100;
+                }
+            }
+            Widget queryWid = ScreenBase.createWidget(input, screen);
+            setQueryWidget((ScreenInputWidget)queryWid);
+        }
+        displayWidget = azTable;
 
-        //azPanel.sizeTable();
-        
-        azTable.init(columns,maxRows,width,title,showHeader,VerticalScroll.NEVER);
-        Node bpanel = ((Element)node).getElementsByTagName("buttonPanel").item(0);
         azTable.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
         
         ((AppScreen)screen).addKeyboardListener(azTable);
