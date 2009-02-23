@@ -81,7 +81,8 @@ public class TreeDataItem extends DataSet<Integer> {
         item.depth = depth+1;
         item.increaseDepth();
         item.parent = this;
-        item.childIndex = items.size() -1;
+        for(int i = 0; i < items.size(); i++)
+            items.get(i).childIndex = i;
     }
     
     public void increaseDepth(){
@@ -111,6 +112,8 @@ public class TreeDataItem extends DataSet<Integer> {
     
     public void removeItem(int index) {
         items.remove(index);
+        for(int i = 0; i < items.size(); i++) 
+            items.get(i).childIndex = i;
     }
     
     public int shownItems() {
