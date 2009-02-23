@@ -60,17 +60,18 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         item.setRowIndex(i);
         item.addCommandListener(controller);
         controller.view.table.setWidget(i, 0, item);
-        TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i),true);
-        row.addDropListener(controller.drop);
+        TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i));
         row.addMouseListener(controller.mouseHandler);
         row.index = i;
+        if(controller.dragController != null)
+            controller.dragController.makeDraggable(row);
         rows.add(row);
     }
     
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+controller.maxRows*2;
-        int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
+        int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+controller.maxRows*3;
+        int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*3)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.model.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
         controller.view.setScrollHeight(ScrollHeight);

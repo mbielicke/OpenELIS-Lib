@@ -25,16 +25,8 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.dnd.DragListener;
-import com.google.gwt.user.client.dnd.DragListenerCollection;
-import com.google.gwt.user.client.dnd.DropListenerCollection;
-import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
-import com.google.gwt.user.client.dnd.SourcesDragEvents;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -54,23 +46,21 @@ import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
 
-import java.util.Vector;
-
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
  * ScreenWindows are currently only used inside a WindowBrowser 
  * @author tschmidt
  *
  */
-public class ScreenWindow extends Composite implements DragListener, MouseListener, ClickListener {
+public class ScreenWindow extends Composite implements MouseListener, ClickListener {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
          *
          */
-        private class Caption extends HorizontalPanel implements SourcesMouseEvents, SourcesDragEvents{
+        private class Caption extends HorizontalPanel implements SourcesMouseEvents { 
         private MouseListenerCollection mouseListeners;
-        private DragListenerCollection dragListeners;
+
         public String name;
         
         public Caption() {
@@ -83,13 +73,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                 mouseListeners = new MouseListenerCollection();
             }
             mouseListeners.add(listener);
-        }
-
-        public void addDragListener(DragListener listener) {
-            if (dragListeners == null) {
-                dragListeners = new DragListenerCollection();
-            }
-            dragListeners.add(listener, this);
         }
 
         public void onBrowserEvent(Event event) {
@@ -112,11 +95,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
             }
         }
 
-        public void removeDragListener(DragListener listener) {
-            if (dragListeners != null) {
-                dragListeners.remove(listener);
-            }
-        }
     }
     private Caption cap = new Caption();
     protected VerticalPanel messagePanel;
@@ -162,7 +140,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
      * The Screen or panel that is displayed by this window.
      */
     public Widget content;
-    private Vector<DropListenerCollection> dropMap;
     private Label message = new Label("Loading...");
     private Label winLabel = new Label(); 
     
@@ -259,6 +236,9 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         outer.addStyleName("WindowPanel");
         outer.sinkEvents(Event.ONCLICK);
         outer.setWidth("auto");
+        if(browser != null){
+            browser.dragController.makeDraggable(this, cap);
+        }
     }
     
     public ScreenWindow(WindowBrowser brws, String key){
@@ -336,52 +316,10 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         if(popupPanel != null){
             popupPanel.hide();
         }
+        ((ScreenBase)content).destroy();
         destroy();
         browser.index--;
         browser.setFocusedWindow();
-    }
-    
-    public void onDragDropEnd(Widget sender, Widget target) {
-        
-    }
-
-    public void onDragEnd(Widget sender, int x, int y) {
-        int X = browser.browser.getWidgetLeft(sender);
-        int Y = browser.browser.getWidgetTop(sender);
-        if(X < 0)
-            X = 0;
-        if(Y <  0)
-            Y = 0;
-        browser.browser.setWidgetPosition(this,X,Y);
-        browser.browser.remove(sender);
-        browser.removeStyleName("locked");
-        MouseDragGestureRecognizer.setDropMap(dropMap);
-        
-    }
-
-    public void onDragEnter(Widget sender, Widget target) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onDragExit(Widget sender, Widget target) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onDragMouseMoved(Widget sender, int x, int y) {
-        // Gets the elements
-        
-    }
-
-    public void onDragOver(Widget sender, Widget target) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onDragStart(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
     }
 
     public void onMouseDown(Widget sender, final int x, final int y) {
@@ -391,24 +329,6 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
                     checkZ();
                     return;
                 }
-                final FocusPanel proxy = new FocusPanel();
-                AbsolutePanel ap = new AbsolutePanel();
-                proxy.setWidget(ap);
-                ap.setWidth(outer.getOffsetWidth()+"px");
-                ap.setHeight(outer.getOffsetHeight()+"px");
-                ap.addStyleName("WindowDragPanel");
-                proxy.addDragListener(this);
-                browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
-        //      WindowBrowser.setIndex(proxy.getElement(),browser.index);
-                dropMap = MouseDragGestureRecognizer.getDropMap();
-                MouseDragGestureRecognizer.setDropMap(new Vector());
-                browser.addStyleName("locked");
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        MouseDragGestureRecognizer.getGestureMouse(proxy)
-                            .onMouseDown(proxy, x, y);
-                    }
-                });
             }
         }
     }
@@ -468,8 +388,8 @@ public class ScreenWindow extends Composite implements DragListener, MouseListen
         close = null;
         key = null;
         content = null;
-        dropMap = null;
         message = null;
+
     }
     
     public void setKeep(boolean keep){

@@ -25,8 +25,11 @@
 */
 package org.openelis.gwt.screen;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -36,20 +39,27 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.event.DragManager;
+import org.openelis.gwt.event.DropManager;
+import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.widget.AToZTable;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
-import org.openelis.gwt.widget.table.TableDragHandler;
+import org.openelis.gwt.widget.table.TableDragController;
+import org.openelis.gwt.widget.table.TableIndexDropController;
 import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class ScreenAToZTable extends ScreenInputWidget {
     public AToZTable azTable;
     public static final String TAG_NAME = "azTable";
+    public Vector<String> dropTargets;
+    public boolean dropInited;
     
     public ScreenAToZTable() {
     }
@@ -269,20 +279,38 @@ public class ScreenAToZTable extends ScreenInputWidget {
                     if(table.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
                         azTable.model.enableMultiSelect(true);
                 }
-                if(table.getAttributes().getNamedItem("drag") != null) {
-                    String drag = node.getAttributes().getNamedItem("drag").getNodeValue();
-                    if(drag.equals("default")){
-                        azTable.drag = new TableDragHandler(azTable);
+                if (node.getAttributes().getNamedItem("targets") != null) {
+                    dropTargets = new Vector<String>();
+                    String targets[] = node.getAttributes()
+                                          .getNamedItem("targets")
+                                          .getNodeValue().split(",");
+                    for(int i = 0; i < targets.length; i++){
+                            dropTargets.add(targets[i]);
+                    }
+                    azTable.dragController = new TableDragController(RootPanel.get());
+                }
+                if (node.getAttributes().getNamedItem("dropManager") != null){
+                    azTable.dropController = new TableIndexDropController(azTable);
+                    String appClass = node.getAttributes()
+                    .getNamedItem("dropManager")
+                    .getNodeValue();
+
+                    if("this".equals(appClass))
+                        azTable.dropController.manager =(DropManager)screen;
+                    else{
+                        azTable.dropController.manager = (DropManager)ClassFactory.forName(appClass);
                     }
                 }
-                if(table.getAttributes().getNamedItem("drop") != null) {
-                    String drop = table.getAttributes().getNamedItem("drop").getNodeValue();
-                    if(drop.equals("default")){
-                        if(azTable.drag != null)
-                            azTable.drop = (DropListener)azTable.drag;
-                        else
-                            azTable.drop = new TableDragHandler(azTable);
-                       super.addDropListener(azTable.drop);
+                if (node.getAttributes().getNamedItem("dragManager") != null){
+                    getDragController();
+                    String appClass = node.getAttributes()
+                    .getNamedItem("dragManager")
+                    .getNodeValue();
+
+                    if("this".equals(appClass))
+                        azTable.dragController.manager =(DragManager)screen;
+                    else{
+                        azTable.dragController.manager = (DragManager)ClassFactory.forName(appClass);
                     }
                 }
                 azTable.enabled(enable);
@@ -329,5 +357,58 @@ public class ScreenAToZTable extends ScreenInputWidget {
         return new ScreenAToZTable(node, screen);
     }
 
+    public void setQueryWidget(ScreenInputWidget qWid){
+        queryWidget = qWid;
+        
+    }
+    
+    public ScreenInputWidget getQueryWidget(){
+        return queryWidget;
+    }
+    
+    public void enable(boolean enabled){
+        if(enabled && !dropInited){
+            if(dropTargets.size() > 0){
+                for(String target : dropTargets) {         
+                    getDragController().registerDropController(((HasDropController)screen.widgets.get(target)).getDropController());
+                }
+            }
+            dropInited = true;    
+        }
+        azTable.enabled(enabled);
+        super.enable(enabled);
+    }
+    
+    public void setFocus(boolean focus){
+        azTable.setFocus(focus);
+    }
+    
+    @Override
+    public void drawError() {
+        azTable.model.refresh();
+    }
+    
+    public TableIndexDropController getDropController() {
+        if(azTable.dropController == null)
+            azTable.dropController = new TableIndexDropController(azTable);
+        return azTable.dropController;
+        
+    }
+
+    public TableDragController getDragController() {
+        if(azTable.dragController == null)
+            azTable.dragController = new TableDragController(RootPanel.get());
+        return azTable.dragController;
+    }
+
+    public void setDragController(DragController controller) {
+        azTable.dragController = (TableDragController)controller;
+        
+    }
+
+    public void setDropController(DropController controller) {
+        azTable.dropController = (TableIndexDropController)controller;
+        
+    }
 
 }

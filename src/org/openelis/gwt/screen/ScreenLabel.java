@@ -120,17 +120,6 @@ public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
     public void load(AbstractField field) {
         label.setText(field.toString());
     }
-    
-    
-    public ScreenLabel getDropInstance(){
-        ScreenLabel slabel = new ScreenLabel();
-        slabel.setDropTargets(getDropTargets());
-        slabel.label = new Label(label.getText());
-        slabel.label.setWordWrap(label.getWordWrap());
-        slabel.initWidget(slabel.label);
-        slabel.setUserObject(getUserObject());
-        return slabel;
-    }
 
     public void addClickListener(ClickListener arg0) {
        if(clickListeners == null)

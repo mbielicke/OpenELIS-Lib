@@ -198,43 +198,6 @@ public class TableModel implements TableModelInt {
             return manager.canAutoAdd(controller,addRow);
         return !tableRowEmpty(addRow);
     }
-    
-    public boolean canDrag(int row) {
-        if(manager != null)
-            return manager.canDrag(controller,getRow(row),row);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-
-    public boolean canDrop(Widget dragWidget, int targetRow) {
-        if(manager != null)
-            return manager.canDrop(controller,dragWidget,getRow(targetRow),targetRow);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-    
-    public void drop(Widget dragWidget, int targetRow) {
-        if(manager != null){
-            manager.drop(controller,dragWidget,getRow(targetRow),targetRow);
-            return;
-        }
-        DataSet<Object> dragItem = (DataSet<Object>)((TableRow)dragWidget).row.clone();
-        deleteRow(((TableRow)dragWidget).modelIndex);
-        addRow(targetRow, dragItem);
-    }
-    
-    public void drop(Widget dragWidget) {
-        if(manager != null){
-            manager.drop(controller, dragWidget);
-            return;
-        }
-        if(dragWidget instanceof TableRow)
-            addRow((DataSet<Object>)((TableRow)dragWidget).row.clone());
-        
-    }
-
 
     public void addTableModelListener(TableModelListener listener) {
         if(tableModelListeners == null)
