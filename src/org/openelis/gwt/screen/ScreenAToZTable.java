@@ -38,6 +38,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.event.DragManager;
 import org.openelis.gwt.event.DropManager;
 import org.openelis.gwt.event.HasDropController;
@@ -156,7 +157,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
                                                   .item(0);
                 Node sortsNode = ((Element)table).getElementsByTagName("sorts")
                                                 .item(0);
-                Node queryNode = ((Element)node).getElementsByTagName("query").item(0);
+                Node queryNode = ((Element)table).getElementsByTagName("query").item(0);
                 Node alignNode = ((Element)table).getElementsByTagName("colAligns")
                                                 .item(0);
                 Node colFixed = ((Element)table).getElementsByTagName("fixed").item(0);
@@ -350,7 +351,38 @@ public class ScreenAToZTable extends ScreenInputWidget {
         initWidget(azTable);        
         setDefaults(node, screen);
     }
-    
+   
+    public void load(AbstractField field) {
+        if(!queryMode){
+            if (field.getValue() != null)
+                azTable.model.load((DataModel)field.getValue());
+            else{
+                azTable.model.clear();
+                field.setValue(azTable.model.getData());
+            }
+        }else {
+            if(queryWidget instanceof ScreenAToZTable){
+                if(field.getValue() != null){
+                    if (field.getValue() != null)
+                        ((ScreenAToZTable)queryWidget).azTable.model.load((DataModel)field.getValue());
+                }
+            }else{
+                queryWidget.load(field);
+            }
+        }
+    }
+
+    public void submit(AbstractField field) {
+        if(queryMode)
+            queryWidget.submit(field);
+        else{
+            field.setValue(azTable.model.unload());
+            ArrayList<String> fieldIndex = new ArrayList<String>();
+            for(TableColumnInt col : (ArrayList<TableColumnInt>)azTable.columns)
+                fieldIndex.add(col.getKey());
+            ((TableField)field).setFieldIndex(fieldIndex);
+        }
+    }
 
     public ScreenWidget getInstance(Node node, ScreenBase screen) {
         return new ScreenAToZTable(node, screen);
@@ -367,7 +399,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
     
     public void enable(boolean enabled){
         if(enabled && !dropInited){
-            if(dropTargets.size() > 0){
+            if(dropTargets != null && dropTargets.size() > 0){
                 for(String target : dropTargets) {         
                     getDragController().registerDropController(((HasDropController)screen.widgets.get(target)).getDropController());
                 }

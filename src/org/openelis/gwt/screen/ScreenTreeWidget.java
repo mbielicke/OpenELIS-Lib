@@ -406,7 +406,7 @@ public class ScreenTreeWidget extends ScreenInputWidget implements HasDragContro
         
         public void enable(boolean enabled){
             if(enabled && !dropInited){
-                if(dropTargets != null){
+                if(dropTargets != null && dropTargets.size() > 0){
                     for(String target : dropTargets) {         
                         getDragController().registerDropController(((HasDropController)screen.widgets.get(target)).getDropController());
                     }
