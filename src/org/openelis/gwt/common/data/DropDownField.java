@@ -45,7 +45,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * this model for its options overriding what options it has stored in 
      * the widget itself
      */
-    private DataModel<Key> model;
+    private DataModel<Key> model = new DataModel<Key>();
     
     /**
      * Tag name used in XML defintion of an rpc
@@ -56,6 +56,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * Default Constructor
      *
      */
+     
     public DropDownField() {
         super();
     }
@@ -98,16 +99,17 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * This method will set this fields current value
      */
     public void setValue(ArrayList<DataSet<Key>> val) {
-        if(val == null){
+        if(val != null){
+            if(value == null)
+                value = new ArrayList<DataSet<Key>>();
+            
+            value.clear();
+            
+            for(DataSet<Key> set : val)
+                value.add(set);
+        }else
             value = null;
-            return;
-        }
-       if(value == null)
-           value = new ArrayList<DataSet<Key>>();
-       else
-           value.clear();
-       for(DataSet<Key> set : val)
-           value.add(set);
+ 
     }
     
     public void setValue(DataSet<Key> val) {
@@ -144,7 +146,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
             return null;
         
         if(value.size() == 1)
-            return value.get(0).get(0).toString();
+            return value.get(0).get(0).getValue().toString();
         else if(value.size() > 1)
             return value;
         else

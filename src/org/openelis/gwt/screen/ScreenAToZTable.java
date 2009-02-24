@@ -327,7 +327,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
             azTable.model.load(data);
             
             azTable.setStyleName("ScreenTable");
-            ((TableKeyboardHandler)azTable.keyboardHandler).setScreen(this);
+            //((AToZTable)azTable.keyboardHandler).setssetScreen(this);
             azTable.screenWidget = this;
         }
         if(query != null){
@@ -344,7 +344,8 @@ public class ScreenAToZTable extends ScreenInputWidget {
         }
         displayWidget = azTable;
 
-        azTable.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
+        if(bpanel != null)
+            azTable.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
         
         ((AppScreen)screen).addKeyboardListener(azTable);
         ((AppScreen)screen).addClickListener(azTable);

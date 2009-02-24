@@ -318,8 +318,10 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         }
         ((ScreenBase)content).destroy();
         destroy();
-        browser.index--;
-        browser.setFocusedWindow();
+        if(browser != null){
+            browser.index--;
+            browser.setFocusedWindow();
+        }
     }
 
     public void onMouseDown(Widget sender, final int x, final int y) {

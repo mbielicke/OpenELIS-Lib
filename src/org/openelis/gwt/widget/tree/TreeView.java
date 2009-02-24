@@ -177,8 +177,12 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
             ft.setWidget(1, 2, scrollBar);
             ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
             ft.getFlexCellFormatter().setVerticalAlignment(1,2,HasAlignment.ALIGN_TOP);
-            if(headers != null)
-                ft.getFlexCellFormatter().addStyleName(0,2, "Header");
+            if(headers != null){
+                HTML html = new HTML();
+                html.setHTML("&#160;");
+                ft.setWidget(0, 1, html);
+                ft.getFlexCellFormatter().addStyleName(0,2, "topHeaderBar");
+            }
         }else{
         	if(header != null){
         		ft.setWidget(0,0,headerView);
@@ -187,8 +191,12 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
                     ft.setWidget(1,1,scrollBar);
                     ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
                     ft.getFlexCellFormatter().setVerticalAlignment(1,1,HasAlignment.ALIGN_TOP);
-                    if(showScroll == VerticalScroll.ALWAYS)
-                        ft.getFlexCellFormatter().addStyleName(0, 1, "Header");
+                    if(showScroll == VerticalScroll.ALWAYS){
+                        HTML html = new HTML();
+                        html.setHTML("&#160;");
+                        ft.setWidget(0, 1, html);
+                        ft.getFlexCellFormatter().addStyleName(0, 1, "topHeaderBar");
+                    }
                 }
                 ft.getFlexCellFormatter().setVerticalAlignment(1,0,HasAlignment.ALIGN_TOP);
  
@@ -205,6 +213,7 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
         ft.setCellPadding(0);
         ft.setCellSpacing(0);
         table.setCellSpacing(0);
+        table.setCellPadding(0);
         table.addStyleName(tableStyle);
         DOM.setStyleAttribute(table.getElement(), "background", "white");
         cellView.setWidget(table);
@@ -238,7 +247,7 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
         }
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
-        headerView.setHeight("18px");
+        //headerView.setHeight("18px");
 
     }
 
