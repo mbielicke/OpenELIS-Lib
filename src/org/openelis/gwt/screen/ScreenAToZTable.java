@@ -27,7 +27,6 @@ package org.openelis.gwt.screen;
 
 import com.allen_sauer.gwt.dnd.client.DragController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.google.gwt.user.client.dnd.DropListener;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -122,7 +121,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
         }else{
             TableManager manager = null;
             int cellHeight;
-            String width;
+            String width = "";
             int maxRows;
             String title = "";
             boolean autoAdd = false;
