@@ -342,6 +342,11 @@ public class ScreenAToZTable extends ScreenInputWidget {
             Widget queryWid = ScreenBase.createWidget(input, screen);
             setQueryWidget((ScreenInputWidget)queryWid);
         }
+        if(node.getAttributes().getNamedItem("showNavPanel") != null){
+            if(node.getAttributes().getNamedItem("showNavPanel").getNodeValue().equals("false"))
+                azTable.showNavPanel = false;
+        }
+            
         displayWidget = azTable;
 
         if(bpanel != null)

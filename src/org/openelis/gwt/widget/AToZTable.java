@@ -74,6 +74,7 @@ public class AToZTable extends TableWidget implements
     private CommandListenerCollection commandListeners;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
     public ScreenAToZTable screenWidget;
+    public boolean showNavPanel = true;
 
     public AToZTable() {
         super();
@@ -234,7 +235,8 @@ public class AToZTable extends TableWidget implements
         if(action == AppScreenForm.Action.NEW_MODEL) {
             model.load((DataModel<Object>)obj);
             view.setScrollHeight((model.getData().size()*cellHeight)+(model.getData().size()*cellSpacing)+cellSpacing);
-            view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
+            if(showNavPanel)
+                view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
             //model.refresh();
            // DOM.addEventPreview(this);
             if(!refreshedByLetter){
@@ -248,7 +250,8 @@ public class AToZTable extends TableWidget implements
         else if(action == AppScreenForm.Action.NEW_PAGE){
             model.load((DataModel<Object>)obj);
             view.setScrollHeight((model.getData().size()*cellHeight)+(model.getData().size()*cellSpacing)+cellSpacing);
-            view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
+            if(showNavPanel)
+                view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
             model.refresh();
             focused = true;
         }
