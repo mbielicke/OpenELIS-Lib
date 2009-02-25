@@ -235,6 +235,7 @@ public class TableWidget extends FocusPanel implements
     }
     
     public void enabled(boolean enabled){
+        finishEditing();
         this.enabled = enabled;
         if(dragController != null)
             dragController.setEnable(enabled);
