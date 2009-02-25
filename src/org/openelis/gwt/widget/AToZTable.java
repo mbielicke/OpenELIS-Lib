@@ -160,9 +160,13 @@ public class AToZTable extends TableWidget implements
         if(!locked)
             focused = true;
         if(activeRow == row || locked){
+            super.onCellClicked(sender, row, col);
             return;
         }
-        commandListeners.fireCommand(Action.ROW_SELECTED,new Integer(modelIndexList[row]));
+        if(model.canSelect(row)){
+            commandListeners.fireCommand(Action.ROW_SELECTED,new Integer(modelIndexList[row]));
+            super.onCellClicked(sender, row, col);
+        }
     }
 
     public void onKeyDown(Widget sender, char code, int modifiers) {
