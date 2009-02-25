@@ -537,13 +537,6 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         return false;
     }
     
-    public void onDetach() {
-        if(!keep){
-            window = null;
-        }
-        super.onDetach();
-    }
-    
     public void setForm(State state){
         Iterator widIt = widgets.values().iterator();
         while(widIt.hasNext()){
