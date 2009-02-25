@@ -230,7 +230,7 @@ public class AToZTable extends TableWidget implements
                (action == AppScreenForm.Action.NEW_PAGE) ||
                (action == KeyListManager.Action.SELECTION) ||                
                (action == KeyListManager.Action.UNSELECT) ||
-               (obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement()));
+               (obj instanceof AppButton && bpanel != null && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement()));
     }
 
     public void performCommand(Enum action, Object obj) {
