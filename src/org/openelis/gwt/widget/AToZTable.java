@@ -69,7 +69,6 @@ public class AToZTable extends TableWidget implements
     protected DataModel<Object> dm;
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
-    protected boolean locked;
     protected boolean refreshedByLetter;
     private CommandListenerCollection commandListeners;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
@@ -126,12 +125,12 @@ public class AToZTable extends TableWidget implements
                 }
                 return;
             }
-            if(!locked && sender == view.nextNav){
+            if(sender == view.nextNav){
                 commandListeners.fireCommand(Action.NEXT_PAGE,dm);
                 refreshedByLetter = true;
                 return;
             }
-            if(!locked && sender == view.prevNav){
+            if(sender == view.prevNav){
                 commandListeners.fireCommand(Action.PREVIOUS_PAGE,dm);
                 refreshedByLetter = true;
                 return;
@@ -157,13 +156,12 @@ public class AToZTable extends TableWidget implements
         view.setWidth(width);
     }
     public void onCellClicked(SourcesTableEvents sender, final int row, int col){
-        if(!locked)
-            focused = true;
-        if(activeRow == row || locked){
+        focused = true;
+        if(activeRow == row){
             super.onCellClicked(sender, row, col);
             return;
         }
-        if(model.canSelect(row)){
+        if(model.canSelect(modelIndexList[row])){
             commandListeners.fireCommand(Action.ROW_SELECTED,new Integer(modelIndexList[row]));
             super.onCellClicked(sender, row, col);
         }
