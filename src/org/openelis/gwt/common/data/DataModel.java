@@ -255,8 +255,10 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      */
     public ArrayList<DataSet<Key>> getSelections() {
         ArrayList<DataSet<Key>> selectionSets = new ArrayList<DataSet<Key>>();
-        for(int i : selections) 
-            selectionSets.add(get(i));
+        for(int i : selections){ 
+            if(i > -1)
+                selectionSets.add(get(i));
+        }
         return selectionSets;
     }
    
