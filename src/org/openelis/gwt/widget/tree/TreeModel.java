@@ -199,9 +199,11 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         Collections.sort(rowIndexes);
         Collections.reverse(rowIndexes);
         for(int row : rowIndexes) {
+            /*
             if(selectedRows.contains(row)){
                 unselectRow(row);
             }
+            */
             TreeDataItem item = rows.get(row);
             if(item.parent != null){
                 item.parent.removeItem(item.childIndex);
