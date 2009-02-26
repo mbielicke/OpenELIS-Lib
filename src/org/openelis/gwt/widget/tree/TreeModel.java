@@ -192,7 +192,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         treeModelListeners.fireRowDeleted(this, row);
     }
     
-    public void deletRows(int[] rowIndexes) {
+    public void deleteRows(int[] rowIndexes) {
         ArrayList<TreeDataItem> deletions = new ArrayList<TreeDataItem>();
         for(int row : rowIndexes) {
             if(selectedRows.contains(row)){
