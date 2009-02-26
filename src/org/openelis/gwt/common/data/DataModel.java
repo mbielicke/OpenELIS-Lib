@@ -73,6 +73,8 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      * The page number of the model if the model is paged
      */
     private int page = 0;
+    
+    public boolean paged = true;
     /**
      * This flag is used when walking through a paged model such as AZ query reuslts.
      * if SelectLast is set then on return of the new page the last entry should be selected

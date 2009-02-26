@@ -146,17 +146,17 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * @throws IndexOutOfBoundsException
      */
     public void select(final int selection) throws IndexOutOfBoundsException {
-        if (selection > list.size() - 1) {
+        if (list.paged && selection > list.size() - 1) {
             selectItem = true;
             setPage(list.getPage() + 1);
-        } else if (selection < 0) {
+        } else if (list.paged && selection < 0) {
             // if(list.getPage() > 0){
             selectItem = true;
             selectLast = true;
             setPage(list.getPage() - 1);
             // }else
             // candidate = 0;
-        } else {
+        } else if(selection > -1 && selection < list.size()) {
             AsyncCallback callback = new AsyncCallback() {
                 public void onSuccess(Object result) {
                     list.select(selection);
