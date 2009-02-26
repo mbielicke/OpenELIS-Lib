@@ -38,7 +38,7 @@ import java.util.HashMap;
  * When all screens have been upgraded remove this interface to create smalller
  * code
  */
-public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType {
+public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> implements FieldType {
     
     private static final long serialVersionUID = 1L;
     
@@ -152,6 +152,10 @@ public class DataModel<Key> extends ArrayList<DataSet<Key>> implements FieldType
     public void delete(int index) {
         keyMap.remove(get(index).key);
         deleted.add(remove(index));
+    }
+    
+    public DataSet<?> set(int index, DataSet<?> row) {
+        return super.set(index, (DataSet<Key>)row);
     }
     
     /**

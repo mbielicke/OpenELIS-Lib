@@ -115,8 +115,8 @@ public class TableModel implements TableModelInt {
         tableModelListeners.fireDataChanged(this);
     }
     
-    public DataSet<Object> setRow(int index, DataSet<Object> row){
-        DataSet<Object> set =  data.set(index, row);
+    public DataSet<?> setRow(int index, DataSet<?> row){
+        DataSet<?> set =  data.set(index, row);
         tableModelListeners.fireRowUpdated(this, index);
         return set;
     }
@@ -225,7 +225,7 @@ public class TableModel implements TableModelInt {
         for(int i = 0; i < data.size(); i++){
             if(((DataSet)data.get(i)).shown)
                 shownRows++;
-        }
+        }        
         tableModelListeners.fireDataChanged(this);
     }
     

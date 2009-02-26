@@ -57,7 +57,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void clear();
     
-    public DataSet<Object> setRow(int index, DataSet<Object> row);
+    public DataSet<?> setRow(int index, DataSet<?> row);
     
     public int shownRows();
     

@@ -283,7 +283,13 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     }
 
     public void cellUpdated(SourcesTableModelEvents sender, int row, int cell) {
-        setCellDisplay(row,cell);
+            for(TableRow trow : rows) {
+                if(trow.modelIndex == row){
+                    setCellDisplay(trow.index,cell);
+                    break;
+                }
+            }
+           
     }
 
     public void dataChanged(SourcesTableModelEvents sender) {

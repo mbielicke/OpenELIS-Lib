@@ -3,6 +3,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.xml.client.Node;
 
+
 public class IntegerField extends AbstractField<Integer> implements FieldType {
 
     private static final long  serialVersionUID = 1L;
@@ -134,7 +135,7 @@ public class IntegerField extends AbstractField<Integer> implements FieldType {
                 if (val instanceof Integer) {
                     value = (Integer)val;
                 } else if (val != null && !"".equals(val)) {
-                    value = Integer.valueOf(val.toString());
+                    value = new Double(val.toString()).intValue();
                 } else {
                     value = null;
                 }
