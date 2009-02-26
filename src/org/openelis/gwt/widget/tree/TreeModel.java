@@ -193,6 +193,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
     
     public void deletRows(int[] rowIndexes) {
+        ArrayList<TreeDataItem> deletions = new ArrayList<TreeDataItem>();
         for(int row : rowIndexes) {
             if(selectedRows.contains(row)){
                 unselectRow(row);
@@ -201,9 +202,10 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
             if(item.parent != null){
                 item.parent.removeItem(item.childIndex);
             }else{
-                data.delete(rows.get(row).childIndex);
+                deletions.add(data.get(rows.get(row).childIndex));
             }
         }
+        data.delete(deletions);
         refresh();
     }
 

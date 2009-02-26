@@ -26,6 +26,7 @@
 package org.openelis.gwt.common.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType {
@@ -76,6 +77,11 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
     public void delete(int index){
         deleted.add(get(index));
         super.remove(index);
+    }
+    
+    public void delete(Collection<TreeDataItem> items) {
+        deleted.addAll(items);
+        super.removeAll(items);
     }
     
     public void select(TreeDataItem item) throws IndexOutOfBoundsException {
