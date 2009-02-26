@@ -379,6 +379,10 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return ret;
     }
 
+    public ArrayList<Integer> getSelectedRowList() {
+        return selectedRows;
+    }
+    
     public void clearCellError(int row, int col) {
         ((AbstractField)rows.get(row).get(col)).clearErrors();
         treeModelListeners.fireCellUpdated(this, row, col);
