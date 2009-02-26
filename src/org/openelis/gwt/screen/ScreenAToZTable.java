@@ -360,7 +360,6 @@ public class ScreenAToZTable extends ScreenInputWidget {
    
     public void load(AbstractField field) {
         if(!queryMode){
-            azTable.finishEditing();
             if (field.getValue() != null){
                 azTable.model.load((DataModel)field.getValue());
             }else{
