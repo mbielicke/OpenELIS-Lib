@@ -191,6 +191,21 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         refresh();
         treeModelListeners.fireRowDeleted(this, row);
     }
+    
+    public void deletRows(int[] rowIndexes) {
+        for(int row : rowIndexes) {
+            if(selectedRows.contains(row)){
+                unselectRow(row);
+            }
+            TreeDataItem item = rows.get(row);
+            if(item.parent != null){
+                item.parent.removeItem(item.childIndex);
+            }else{
+                data.delete(rows.get(row).childIndex);
+            }
+        }
+        refresh();
+    }
 
     public void enableMultiSelect(boolean multi) {
         this.multiSelect = multi;
