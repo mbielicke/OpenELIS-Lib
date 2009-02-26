@@ -79,11 +79,6 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
         super.remove(index);
     }
     
-    public void delete(Collection<TreeDataItem> items) {
-        deleted.addAll(items);
-        super.removeAll(items);
-    }
-    
     public void select(TreeDataItem item) throws IndexOutOfBoundsException {
         if(!multiSelect)
             selections.clear();

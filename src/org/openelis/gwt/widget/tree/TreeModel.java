@@ -36,8 +36,11 @@ import org.openelis.gwt.widget.tree.event.TreeModelListener;
 import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
@@ -192,8 +195,9 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         treeModelListeners.fireRowDeleted(this, row);
     }
     
-    public void deleteRows(int[] rowIndexes) {
-        ArrayList<TreeDataItem> deletions = new ArrayList<TreeDataItem>();
+    public void deleteRows(List<Integer> rowIndexes) {
+        Collections.sort(rowIndexes);
+        Collections.reverse(rowIndexes);
         for(int row : rowIndexes) {
             if(selectedRows.contains(row)){
                 unselectRow(row);
@@ -202,10 +206,9 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
             if(item.parent != null){
                 item.parent.removeItem(item.childIndex);
             }else{
-                deletions.add(data.get(rows.get(row).childIndex));
+                data.delete(rows.get(row).childIndex);
             }
         }
-        data.delete(deletions);
         refresh();
     }
 
