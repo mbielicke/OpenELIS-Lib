@@ -247,6 +247,7 @@ public class AToZTable extends TableWidget implements
                 }
             }else
                 refreshedByLetter = false;
+            enabled(true);
             focused = true;
         }
         else if(action == AppScreenForm.Action.NEW_PAGE){
@@ -256,6 +257,7 @@ public class AToZTable extends TableWidget implements
                 view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
             model.refresh();
             focused = true;
+            enabled(true);
         }
         else if(action == KeyListManager.Action.SELECTION){   
             
