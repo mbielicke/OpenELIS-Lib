@@ -3,6 +3,8 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.xml.client.Node;
 
+import java.util.HashMap;
+
 public class DoubleField extends AbstractField<Double> implements FieldType {
 
     private static final long  serialVersionUID = 1L;
@@ -27,7 +29,8 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
         setAttributes(node);
     }
 
-    @Override
+ 
+    /*
     public void setAttributes(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes().getNamedItem("key").getNodeValue());
@@ -56,6 +59,25 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
                           .getNodeValue());
         }
     }
+    */
+    
+    public void setAttributes(HashMap<String,String> attribs) {
+        if (attribs.containsKey("key"))
+            setKey(attribs.get("key"));
+        if (attribs.containsKey("required"))
+            setRequired(new Boolean(attribs.get("required")));
+        if (attribs.containsKey("max"))
+            setMax(new Double(attribs.get("max")));
+        if (attribs.containsKey("min"))
+            setMin(new Double(attribs.get("min")));
+        if (attribs.containsKey("reset"))
+            setAllowReset(new Boolean(attribs.get("reset")));
+        if (attribs.containsKey("value"))
+            setValue(new Integer(attribs.get("value")));
+        if (attribs.containsKey("pattern"))
+            setFormat(attribs.get("pattern"));
+    }
+    
 
     public void setMax(Double max) {
         this.max = max;

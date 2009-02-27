@@ -29,6 +29,7 @@ import com.google.gwt.xml.client.Node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * AbstractField is an abstract superclass for objects that can be used for 
  * entering and transferring data back and forth between the GWT client and the 
@@ -179,21 +180,6 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Da
     }
     
     /**
-     * This field's value will be set to the object being 
-     * passed.
-     */
-    //public void setValue(Object val) {
-      // object.setValue(val);
-    //}
-
-    /**
-     * returns the current value of this field
-     */
-   // public Object getValue() {
-     //   return object.getValue();
-   // }
-
-    /**
      * Returns a new field with the same attributes and values
      * as the one the function was called on.
      */
@@ -218,20 +204,6 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Da
         this.tip = tip;
     }
     
-    /**
-     * This method will is used to set what type of data that this field 
-     * can hold(String,Number,Date...).
-     */
-   // public void setDataObject(DataObject object){
-   //     this.object = object;
-   // }
-    
-    /**
-     * Returns the DataObject used to store the value of this field.
-     */
-   // public DObject getDataObject() {
-     //   return object;
-   // }
     
     /**
      * This method tells the screen if this fields value should be 
@@ -311,7 +283,19 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Da
         
     }
     
-    public abstract void setAttributes(Node node);
+    public void setAttributes(Node node) {
+        HashMap<String,String> attribs = new HashMap<String,String>();
+        for(int i = 0; i < node.getAttributes().getLength(); i++){
+            attribs.put(node.getAttributes().item(i).getNodeName(), node.getAttributes().item(i).getNodeValue());
+        }
+        if (node.hasChildNodes()) {
+            attribs.put("value",node.getFirstChild().getNodeValue());
+        }
+        setAttributes(attribs);
+    }
+    
+    public void setAttributes(HashMap<String,String> attribs) {
         
+    }
 
 }

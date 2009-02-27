@@ -30,6 +30,7 @@ import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * DateField is an implementation of AbstractField that represents data
@@ -112,6 +113,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
         setAttributes(node);
     }
     
+    /*
     public void setAttributes(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
@@ -152,6 +154,37 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
             setFormat(node.getAttributes().getNamedItem("pattern").getNodeValue());
         }   
     }
+    */
+    
+    public void setAttributes(HashMap<String,String> attribs) {
+        if (attribs.containsKey("key"))
+            setKey(attribs.get("key"));
+        if (attribs.containsKey("required"))
+            setRequired(new Boolean(attribs.get("required")));
+        if (attribs.containsKey("begin"))
+            setBegin(Byte.parseByte(attribs.get("begin")));
+        if (attribs.containsKey("end"))
+            setEnd(Byte.parseByte(attribs.get("end")));
+        if (attribs.containsKey("max"))
+            setMax(new Integer(attribs.get("max")));
+        if (attribs.containsKey("min"))
+            setMin(new Integer(attribs.get("min")));
+        if (attribs.containsKey("value")){
+            String def = attribs.get("value");
+            Date dat = null;
+            if (def.equals("current"))
+                dat = new Date();
+            else
+                dat = new Date(def);
+            setValue(DatetimeRPC.getInstance(getBegin(),
+                                                  getEnd(),
+                                                  dat));
+        }
+        if(attribs.containsKey("pattern"))
+            setFormat(attribs.get("pattern"));
+    }
+    
+    
     
     /**
      * This method is called by the FormRPC and will check to see if the value set is valid.

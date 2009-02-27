@@ -28,6 +28,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class TableField<Key> extends AbstractField<DataModel<Key>> implements FieldType {
@@ -44,8 +45,8 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
         setAttributes(node);
     }
     
-    public void setAttributes(Node node) {
-        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+    public void setAttributes(HashMap<String,String> attribs) {
+        setKey(attribs.get("key"));
     }
 
     public boolean isInRange() {
@@ -100,7 +101,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
         boolean valid = true;
         for(DataSet<Key> row : value){
             if(row.shown){
-                for (FieldType obj : row){
+                for (FieldType obj : row.list){
                     if(obj instanceof AbstractField){
                         ((AbstractField)obj).validate();
                         if(!((AbstractField)obj).valid)
@@ -114,7 +115,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     
     public void clearErrors() {
         for(DataSet<Key> row : value){
-            for(FieldType obj : row){
+            for(FieldType obj : row.list){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();
             }

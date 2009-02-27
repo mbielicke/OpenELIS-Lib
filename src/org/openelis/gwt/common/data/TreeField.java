@@ -28,6 +28,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TreeField extends AbstractField<TreeDataModel> implements FieldType {
 
@@ -43,8 +44,8 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
         setAttributes(node);
     }
     
-    public void setAttributes(Node node){
-        setKey(node.getAttributes().getNamedItem("key").getNodeValue());
+    public void setAttributes(HashMap<String,String> attribs){
+        setKey(attribs.get("key"));
     }
 
     public boolean isInRange() {
@@ -102,7 +103,7 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
             }
         }
         if(item.shown){
-            for (FieldType obj : item){
+            for (FieldType obj : item.list){
                 if(obj instanceof AbstractField){
                     ((AbstractField)obj).validate();
                     if(!((AbstractField)obj).valid){
@@ -130,7 +131,7 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
                 clearItem(child);
             }
         }
-        for(FieldType obj : item){
+        for(FieldType obj : item.list){
             if(obj instanceof AbstractField)
                 ((AbstractField)obj).clearErrors();
         }

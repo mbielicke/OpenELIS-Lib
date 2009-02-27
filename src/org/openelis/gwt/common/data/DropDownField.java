@@ -28,6 +28,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * DropDownField is an implementation of AbstractField that is 
  * used to send and recieve data for Dropdown and AutoComplete 
@@ -77,7 +78,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
     public DropDownField(Node node) {
         setAttributes(node);
     }
-    
+    /*
     public void setAttributes(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
@@ -94,43 +95,45 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
             setValue(ds);
         }
     }
+    */
     
-    /**
-     * This method will set this fields current value
-     */
-    public void setValue(ArrayList<DataSet<Key>> val) {
-        if(val != null){
-            if(value == null)
-                value = new ArrayList<DataSet<Key>>();
-            
-            value.clear();
-            
-            for(DataSet<Key> set : val)
-                value.add(set);
-        }else
-            value = null;
- 
-    }
-    
-    public void setValue(DataSet<Key> val) {
-        if(val == null){
-            value = null;
-            return;
+    public void setAttributes(HashMap<String,String> attribs) {
+        if (attribs.containsKey("key"))
+            setKey(attribs.get("key"));
+        if (attribs.containsKey("required"))
+            setRequired(new Boolean(attribs.get("required")));
+        if (attribs.containsKey("value")){
+            String dflt = attribs.get("value");
+            DataSet<Key> ds = new DataSet<Key>();
+            ds.setKey((Key)dflt);
+            setValue(ds);
         }
-        if(value == null)
-            value = new ArrayList<DataSet<Key>>();
-        else
-            value.clear();
-        value.clear();
-        if(val != null)
-            value.add(val);
     }
     
     public void setValue(Object val) {
         if(val instanceof DataSet){
-            setValue((DataSet<Key>)val);
+            if(val == null){
+                value = null;
+                return;
+            }
+            if(value == null)
+                value = new ArrayList<DataSet<Key>>();
+            else
+                value.clear();
+            value.clear();
+            if(val != null)
+                value.add((DataSet<Key>)val);
         }else if(val instanceof ArrayList){
-            setValue((ArrayList<DataSet<Key>>)val);
+            if(val != null){
+                if(value == null)
+                    value = new ArrayList<DataSet<Key>>();
+                
+                value.clear();
+                
+                for(DataSet<Key> set : (ArrayList<DataSet<Key>>)val)
+                    value.add(set);
+            }else
+                value = null;
         }else if(val == null){
                 value = null; 
                 return;

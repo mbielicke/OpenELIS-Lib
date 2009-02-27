@@ -27,6 +27,8 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+import java.util.HashMap;
+
 /**
  * @author tschmidt
  * 
@@ -57,6 +59,7 @@ public class StringField extends AbstractField<String> implements FieldType {
         return (String)super.getValue();
     }
     
+    /*
     public void setAttributes(Node node) {
         if (node.getAttributes().getNamedItem("key") != null)
             setKey(node.getAttributes()
@@ -81,6 +84,22 @@ public class StringField extends AbstractField<String> implements FieldType {
         
         if (node.hasChildNodes()) {
             setValue(node.getFirstChild().getNodeValue());
+        }
+        
+    }
+    */
+    
+    public void setAttributes(HashMap<String,String> attribs) {
+        if (attribs.containsKey("key"))
+            setKey(attribs.get("key"));
+        if (attribs.containsKey("max"))
+            setMax(new Integer(attribs.get("max")));
+        if (attribs.containsKey("min"))
+            setMin(new Integer(attribs.get("min")));
+        if (attribs.containsKey("required"))
+            setRequired(new Boolean(attribs.get("required")));        
+        if (attribs.containsKey("value")) {
+            setValue(attribs.get("value"));
         }
     }
     
