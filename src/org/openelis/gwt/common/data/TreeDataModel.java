@@ -26,14 +26,11 @@
 package org.openelis.gwt.common.data;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType {
     
     private static final long serialVersionUID = 1L;
-            
-    public ArrayList<TreeDataItem> selections = new ArrayList<TreeDataItem>();
     
     public ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
     
@@ -79,6 +76,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
         super.remove(index);
     }
     
+    /*
     public void select(TreeDataItem item) throws IndexOutOfBoundsException {
         if(!multiSelect)
             selections.clear();
@@ -96,7 +94,7 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
     public ArrayList<TreeDataItem> getSelections() {
         return selections;
     }
-    
+    */
     public int getPage(){
         return page;
     }
@@ -107,13 +105,14 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
     
     public void clear() {
         super.clear();
-        selections.clear();
+        //selections.clear();
     }
     
+    /*
     public void clearSelections() {
-        selections.clear();
+        //selections.clear();
     }
-    
+    */
     public void selecttLast(boolean last){
         this.selectLast = last;    
     }
@@ -131,9 +130,11 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
         for(int i = 0; i < size(); i++){
             TreeDataItem itemClone = (TreeDataItem)get(i).clone();
             clone.add(itemClone);
+            /*
             if(selections.contains(get(i))){
                 clone.selections.add(itemClone);
             }
+            */
         }
         return clone;
     }

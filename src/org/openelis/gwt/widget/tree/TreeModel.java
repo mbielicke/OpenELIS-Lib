@@ -172,11 +172,14 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     public void clear() {
         data.clear();
         rows.clear();
+        selectedRows.clear();
         refresh();
     }
 
     public void clearSelections() {
-        data.clearSelections();
+        for(int i : selectedRows){
+            rows.get(i).selected = false;
+        }
     }
 
 
@@ -199,7 +202,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         Collections.reverse(rowIndexes);
         for(int row : rowIndexes) {
             if(selectedRows.contains(row)){
-                data.unselect(rows.get(row));
+                rows.get(row).selected = false;
                 selectedRows.remove(new Integer(row));
             }
         }
@@ -234,11 +237,15 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public TreeDataItem getSelection() {
-        return data.getSelected();
+        return rows.get(selectedRows.get(0));
     }
 
     public ArrayList<TreeDataItem> getSelections() {
-        return data.getSelections();
+        ArrayList<TreeDataItem> selections = new ArrayList<TreeDataItem>();
+        for(int i : selectedRows) {
+            selections.add(rows.get(i));
+        }
+        return selections;
     }
     
     public int getSelectedIndex() {
@@ -278,7 +285,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         for(int i = 0; i < rows.size(); i++){
             if(rows.get(i).shown)
                 shownRows++;
-            if(data.selections.contains(rows.get(i)))
+            if(rows.get(i).selected)
                 selectedRows.add(i);
         }
         treeModelListeners.fireDataChanged(this);
@@ -290,7 +297,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
                 selectedRows.add(index);
             else
                 selectedRows.set(0,index);
-            data.select(rows.get(index));
+            rows.get(index).selected = true;
         }    
         treeModelListeners.fireRowSelected(this, index);
     }
@@ -322,10 +329,9 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void unselectRow(int index){
         if(index < 0) {
-            data.clearSelections();
-            selectedRows.clear();
+            clearSelections();
         }else if(index < numRows()){
-            data.unselect(rows.get(index));
+            rows.get(index).selected = false;
             selectedRows.remove(new Integer(index));
         }
         treeModelListeners.fireRowUnselected(this, -1);        
