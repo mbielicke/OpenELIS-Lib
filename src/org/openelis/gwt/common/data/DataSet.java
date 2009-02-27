@@ -14,10 +14,11 @@ import java.util.ArrayList;
  * This class has been marked as a Field for backwards compatibility only.  Remove once 
  * all screens have been upgraded to create smaller code.
  */
-public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Comparable{
+public class DataSet<Key> implements FieldType, Comparable{
     
     private static final long serialVersionUID = 1L;
     
+    public ArrayList<FieldType> list;
     /**
      * Key value for this DataSet and is expected to be unique to the DataSet
      * when grouped in a model.
@@ -46,7 +47,7 @@ public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Com
      *
      */
     public DataSet() {
-        
+        list = new ArrayList<FieldType>();
     }
     
     /**
@@ -55,6 +56,7 @@ public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Com
      */
     public DataSet(Key key) {
         setKey(key);
+        list = new ArrayList<FieldType>();
     }
     
     /**
@@ -65,7 +67,8 @@ public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Com
      */
     public DataSet(Key key, FieldType val){
         setKey(key);
-        add(val);
+        list = new ArrayList<FieldType>();
+        list.add(val);
     }
     
     /**
@@ -76,8 +79,9 @@ public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Com
      */
     public DataSet(Key key, FieldType[] values){
         setKey(key);
+        list = new ArrayList<FieldType>();
         for(FieldType val : values){
-            add(val);
+            list.add(val);
         }
     }
     
@@ -103,8 +107,8 @@ public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Com
      */
     public Object clone() {
         DataSet<Key> clone = new DataSet<Key>();
-        for(int i=0; i < size(); i++){
-            clone.add((FieldType)get(i).clone());
+        for(int i=0; i < list.size(); i++){
+            clone.list.add((FieldType)list.get(i).clone());
         }
         if(key != null)
             clone.key = key;
@@ -180,5 +184,17 @@ public class DataSet<Key> extends ArrayList<FieldType> implements FieldType, Com
     public void setValue(Object obj) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void add(FieldType obj) {
+        list.add(obj);
+    }
+    
+    public FieldType get(int index) {
+        return list.get(index);
+    }
+    
+    public int size() {
+        return list.size();
     }
 }

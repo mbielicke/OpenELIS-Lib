@@ -99,7 +99,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     
     public boolean validateModel() {
         boolean valid = true;
-        for(DataSet<Key> row : value){
+        for(DataSet<Key> row : value.list){
             if(row.shown){
                 for (FieldType obj : row.list){
                     if(obj instanceof AbstractField){
@@ -114,7 +114,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     }
     
     public void clearErrors() {
-        for(DataSet<Key> row : value){
+        for(DataSet<Key> row : value.list){
             for(FieldType obj : row.list){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();

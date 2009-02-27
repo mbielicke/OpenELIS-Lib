@@ -322,7 +322,7 @@ public class TableModel implements TableModelInt {
     }
 
     public void selectRow(Object key) {
-        selectRow(data.indexOf(data.getByKey(key)));
+        selectRow(data.list.indexOf(data.getByKey(key)));
     }
     
     public boolean isEnabled(int index) {

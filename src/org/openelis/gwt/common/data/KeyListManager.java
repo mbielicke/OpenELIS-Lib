@@ -197,7 +197,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * @param index
      */
     public void delete(int index) {
-        list.remove(index);
+        list.delete(index);
         fireCommand(Action.DELETE, new Integer(index));
     }
 

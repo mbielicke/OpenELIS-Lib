@@ -38,9 +38,11 @@ import java.util.HashMap;
  * When all screens have been upgraded remove this interface to create smalller
  * code
  */
-public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> implements FieldType {
+public class DataModel<Key extends Object> implements FieldType {
     
     private static final long serialVersionUID = 1L;
+    
+    public ArrayList<DataSet<Key>> list = new ArrayList<DataSet<Key>>();
     
     /**
      * This list will be returned to the server containing all entries from the 
@@ -125,6 +127,7 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
         return add(set);
     }
     */
+    
     /**
      * This method will add the passed DataSet to the end of the model list and also sets the the 
      * DataSet in the Key map using the passed key so that it can be access randomly by this key value.
@@ -134,7 +137,12 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      */
     public boolean add(DataSet<Key> set){
         keyMap.put((Key)set.key,set);
-        return super.add(set);
+        return list.add(set);
+    }
+    
+    public void add(int index, DataSet<Key> set) {
+        keyMap.put((Key)set.key,set);
+        list.add(index,set);
     }
     
     /**
@@ -152,12 +160,12 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      * @param index
      */
     public void delete(int index) {
-        keyMap.remove(get(index).key);
-        deleted.add(remove(index));
+        keyMap.remove(list.get(index).key);
+        deleted.add(list.remove(index));
     }
     
     public DataSet<?> set(int index, DataSet<?> row) {
-        return super.set(index, (DataSet<Key>)row);
+        return list.set(index, (DataSet<Key>)row);
     }
     
     /**
@@ -168,7 +176,7 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
     public void delete(DataSet<Key> set){
         keyMap.remove(set.getKey());
         deleted.add(set);
-        remove(set);
+        list.remove(set);
     }
     
     /**
@@ -208,7 +216,7 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      * @throws IndexOutOfBoundsException
      */
     public void select(int selection) throws IndexOutOfBoundsException {
-        if(selection > size())
+        if(selection > list.size())
             throw new IndexOutOfBoundsException();
         selected = selection;
         if(!multiSelect)
@@ -246,7 +254,7 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      * @return
      */
     public DataSet<Key> getSelected() {
-        return get(selected);
+        return list.get(selected);
     }
     
     /**
@@ -257,7 +265,7 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
         ArrayList<DataSet<Key>> selectionSets = new ArrayList<DataSet<Key>>();
         for(int i : selections){ 
             if(i > -1)
-                selectionSets.add(get(i));
+                selectionSets.add(list.get(i));
         }
         return selectionSets;
     }
@@ -284,7 +292,7 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
      * and delettions along with the key mapping.
      */
     public void clear() {
-        super.clear();
+        list.clear();
         selected = -1;
         page = 0;
         selections.clear();
@@ -330,8 +338,8 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
         if(defaultSet != null)
             clone.defaultSet = (DataSet<Key>)defaultSet.clone();
         
-        for(int i = 0; i < size(); i++){
-            clone.add((DataSet<Key>)get(i).clone());
+        for(int i = 0; i < list.size(); i++){
+            clone.add((DataSet<Key>)list.get(i).clone());
         }
         return clone;
     }
@@ -357,6 +365,14 @@ public class DataModel<Key extends Object> extends ArrayList<DataSet<Key>> imple
     public int compareTo(Object o) {
         // TODO Auto-generated method stub
         return 0;
+    }
+    
+    public DataSet<Key> get(int index) {
+        return list.get(index);
+    }
+    
+    public int size() {
+        return list.size();
     }
 
 }
