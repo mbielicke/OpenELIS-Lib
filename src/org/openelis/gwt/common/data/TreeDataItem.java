@@ -56,7 +56,7 @@ public class TreeDataItem extends DataSet<Integer> {
     
     public Object clone() {
         TreeDataItem clone = new TreeDataItem();
-        for(int i=0; i < list.size(); i++){
+        for(int i=0; i < size(); i++){
             clone.add((FieldType)get(i).clone());
         }
         for(int i=0; i < items.size(); i++){
