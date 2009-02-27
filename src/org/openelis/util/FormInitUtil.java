@@ -14,7 +14,7 @@ public class FormInitUtil {
             if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
                 String key = fieldList.item(j).getAttributes().getNamedItem("key").getNodeValue();
                 if(form.fields.containsKey(key)){
-                    form.fields.get(key).setAttributes(FormInitUtil.getAttributesMap(node));
+                    form.fields.get(key).setAttributes(FormInitUtil.getAttributesMap(fieldList.item(j)));
                 }
             }
         }
