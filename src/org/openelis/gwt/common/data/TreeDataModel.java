@@ -28,11 +28,13 @@ package org.openelis.gwt.common.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType {
+public class TreeDataModel implements FieldType {
     
     private static final long serialVersionUID = 1L;
     
     public ArrayList<TreeDataItem> deleted = new ArrayList<TreeDataItem>();
+    
+    public ArrayList<TreeDataItem> list = new ArrayList<TreeDataItem>();
     
     public HashMap<String,TreeDataItem> leaves = new HashMap<String,TreeDataItem>();
         
@@ -42,16 +44,16 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
         
 
     public boolean add(TreeDataItem item) {
-        item.childIndex = size();
-        return super.add(item);
+        item.childIndex = list.size();
+        return list.add(item);
     }
     
     public void add(int index, TreeDataItem item) {
         item.parent = null;
         item.depth = 0;
-        super.add(index, item);
-        for(int i = 0; i < size(); i++)
-            get(i).childIndex = i;
+        list.add(index, item);
+        for(int i = 0; i < list.size(); i++)
+            list.get(i).childIndex = i;
     }
     
     //public void add(Key key, DataObject value){
@@ -72,8 +74,8 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
     
     
     public void delete(int index){
-        deleted.add(get(index));
-        super.remove(index);
+        deleted.add(list.get(index));
+        list.remove(index);
     }
     
     /*
@@ -104,15 +106,9 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
     }
     
     public void clear() {
-        super.clear();
-        //selections.clear();
+        list.clear();
     }
     
-    /*
-    public void clearSelections() {
-        //selections.clear();
-    }
-    */
     public void selecttLast(boolean last){
         this.selectLast = last;    
     }
@@ -127,22 +123,17 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
         clone.selectLast = selectLast;
         for(TreeDataItem leaf : leaves.values())
             clone.leaves.put(leaf.leafType,(TreeDataItem)leaf.clone()); 
-        for(int i = 0; i < size(); i++){
-            TreeDataItem itemClone = (TreeDataItem)get(i).clone();
+        for(int i = 0; i < list.size(); i++){
+            TreeDataItem itemClone = (TreeDataItem)list.get(i).clone();
             clone.add(itemClone);
-            /*
-            if(selections.contains(get(i))){
-                clone.selections.add(itemClone);
-            }
-            */
         }
         return clone;
     }
     
     public void swapItems(int index1, int index2){
-        TreeDataItem item = remove(index2);
-        set(index2, remove(index1));
-        set(index1,item);
+        TreeDataItem item = list.remove(index2);
+        list.set(index2, list.remove(index1));
+        list.set(index1,item);
     }
     
     public TreeDataItem createTreeItem(String leafType) {
@@ -167,6 +158,14 @@ public class TreeDataModel extends ArrayList<TreeDataItem> implements FieldType 
     public int compareTo(Object arg0) {
         // TODO Auto-generated method stub
         return 0;
+    }
+    
+    public int size() {
+        return list.size();
+    }
+    
+    public TreeDataItem get(int index) {
+        return list.get(index);
     }
 
 }

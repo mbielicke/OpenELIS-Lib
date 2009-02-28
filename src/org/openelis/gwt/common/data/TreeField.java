@@ -90,7 +90,7 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
     
     public boolean validateModel() {
         valid = true;
-        for(TreeDataItem row : value){
+        for(TreeDataItem row : value.list){
             validateItem(row);
         }
         return valid;
@@ -120,7 +120,7 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
     }
     
     public void clearErrors() {
-        for(TreeDataItem row : value){
+        for(TreeDataItem row : value.list){
             clearItem(row);
         }
     }

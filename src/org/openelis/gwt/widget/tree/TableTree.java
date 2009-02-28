@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
@@ -160,6 +161,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
     public void createItem(final TreeDataItem drow) {
         editorGrid = new ItemGrid(1,2+drow.depth);    
         editorGrid.setWidth(width+"px");
+        try {
         for(int j = 0; j < editorGrid.getColumnCount(); j++) {
             if(j < editorGrid.getColumnCount() -1)
                 editorGrid.getCellFormatter().setWidth(0,j,"18px");
@@ -176,7 +178,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
 //                    DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree-.gif') no-repeat center");
                 else if(drow.hasChildren())
                     editorGrid.getCellFormatter().setStyleName(0,j,"treeClosedImage");
-                    //DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
+                    //DOM.setStyleAttribute(edhitorGrid.getCellFormatter().getElement(0,j), "background", "url('Images/tree+.gif') no-repeat center");
                 else if(j > 0){
                     
                     if(drow.childIndex == drow.parent.getItems().size()-1)
@@ -191,6 +193,10 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
                 }
             }
         }
+        }catch(Exception e){
+            Window.alert(e.getMessage());
+        }
+        try {
         if(drow.depth > 1) {
             Stack<TreeDataItem> levels = new Stack<TreeDataItem>();
             levels.push(drow.parent);
@@ -198,12 +204,15 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
                 levels.push(levels.peek().parent);
             }
             for(TreeDataItem item : levels){
-                if(item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
+                if(item.childIndex < item.parent.getItems().size() -1){//item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
                     editorGrid.getCellFormatter().setStyleName(0,item.depth,"treeIImage");
                     //DOM.setStyleAttribute(editorGrid.getCellFormatter().getElement(0,item.depth), "background", "url('Images/treedotsI.gif') no-repeat center");
                 }
             }
             
+        }
+        }catch(Exception  e){
+            Window.alert("parent stack "+e.getMessage());
         }
        // if(i % 2 == 1){
        //     DOM.setStyleAttribute(grid.getRowFormatter().getElement(0), "background", "#f8f8f9");

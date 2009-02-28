@@ -252,12 +252,24 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
                     }
                 }
                 NodeList fieldList = fieldsNode.getChildNodes();
-                DataSet<Object> set = new DataSet<Object>();
+                
+                DataSet<Object> set = null;
+                if(fieldsNode.getAttributes().getNamedItem("class") != null){
+                    String rowClass = fieldsNode.getAttributes().getNamedItem("class").getNodeValue();
+                    set = (DataSet<Object>)ClassFactory.forName(rowClass);
+                    
+                }else
+                    set = new DataSet<Object>();
                 for (int i = 0; i < fieldList.getLength(); i++) {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                        AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-                        set.add((FieldType)field);
-                        columns.get(i).setKey(field.key);
+                        if(set.size() > i) {
+                            ((AbstractField)set.get(i)).setAttributes(fieldList.item(i));
+                        }else{
+                            AbstractField field = (ScreenBase.createField(fieldList.item(i)));
+                            set.add((FieldType)field);
+                        }
+                        if(fieldList.item(i).getAttributes().getNamedItem("key") != null)
+                            columns.get(i).setKey(fieldList.item(i).getAttributes().getNamedItem("key").getNodeValue());
                     }
                 }
                 data.setDefaultSet(set);

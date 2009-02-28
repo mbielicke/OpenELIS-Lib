@@ -63,18 +63,19 @@ public class TreeDataItem extends DataSet<Integer> {
             clone.addItem((TreeDataItem)getItem(i).clone());
         }
         
-        //clone.parent = parent;
+        clone.parent = parent;
         clone.leafType = leafType;
-        clone.key = key;
         clone.selected = selected;
+        clone.childIndex = childIndex;
+        clone.depth = depth;
         return clone;
     }
     
     public void addItem(TreeDataItem item) {
         items.add(item);
         item.depth = depth+1;
-        item.increaseDepth();
         item.parent = this;
+        item.increaseDepth();
         item.childIndex = items.size()-1;
         
     }
@@ -94,6 +95,7 @@ public class TreeDataItem extends DataSet<Integer> {
             while(it.hasNext()){
                 TreeDataItem item = it.next();
                 item.depth = depth+1;
+                item.parent = this;
                 item.increaseDepth();
             }
         }

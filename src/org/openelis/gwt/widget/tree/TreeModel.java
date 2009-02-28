@@ -180,6 +180,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         for(int i : selectedRows){
             rows.get(i).selected = false;
         }
+        selectedRows.clear();
     }
 
 
@@ -287,13 +288,15 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void selectRow(int index){
         if(index < numRows()){
-            if(multiSelect || selectedRows.size() == 0)
-                selectedRows.add(index);
-            else
-                selectedRows.set(0,index);
-            rows.get(index).selected = true;
+           if(!multiSelect && selectedRows.size() > 0){
+               rows.get(selectedRows.get(0)).selected = false;
+               treeModelListeners.fireRowUnselected(this,-1);
+               selectedRows.clear();
+           }
+           rows.get(index).selected = true;
+           selectedRows.add(index);
+           treeModelListeners.fireRowSelected(this, index);
         }    
-        treeModelListeners.fireRowSelected(this, index);
     }
 
 
@@ -411,7 +414,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
 
     public void unlink(TreeDataItem item) {
         if(rows.contains(item)){
-            data.remove(item);
+            data.list.remove(item);
         }
         if(item.parent != null){
             item.parent.removeItem(item.childIndex);
@@ -422,7 +425,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
     private void getVisibleRows() {
         rows = new ArrayList<TreeDataItem>();
-        Iterator<TreeDataItem> it = data.iterator();
+        Iterator<TreeDataItem> it = data.list.iterator();
         while(it.hasNext())
             checkChildItems(it.next());
     }

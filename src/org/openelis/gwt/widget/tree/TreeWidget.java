@@ -41,6 +41,7 @@ import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.screen.ScreenTreeWidget;
+import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
@@ -86,7 +87,7 @@ public class TreeWidget extends FocusPanel implements
     public ScreenTreeWidget screenWidget;
     public TreeDragController dragController;
     public TreeIndexDropController dropController;
-
+    
     public TreeWidget() {
 
     }
@@ -159,17 +160,21 @@ public class TreeWidget extends FocusPanel implements
      */
     public void select(final int row, final int col) {
         if (finishEditing()) {
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                    select(row - 1, col);
-                }
-            });
+            if(model.numRows() >= maxRows){
+                view.scrollBar.scrollToBottom();
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        renderer.scrollLoad(view.scrollBar.getScrollPosition());
+                        select(row-1,col);
+                    }
+                });
+            }
         }
         if (model.canSelect(modelIndexList[row])) {
             if (activeRow > -1 && !ctrlKey) {
                 model.unselectRow(-1);
             }
+            focused = true;
             activeRow = row;
             model.selectRow(modelIndexList[row]);
             if (model.canEdit(modelIndexList[row], col)) {
@@ -180,6 +185,10 @@ public class TreeWidget extends FocusPanel implements
         } else {
             return;
         }
+        String rows = "";
+        for(int i : model.selectedRows){
+            rows += " "+i;
+        }
     }
 
     public boolean finishEditing() {
@@ -187,16 +196,6 @@ public class TreeWidget extends FocusPanel implements
             treeWidgetListeners.fireStopEditing(this,
                                                      activeRow,
                                                      activeCell);
-            /*if (model.isAutoAdd() && modelIndexList[activeRow] == model.numRows()) {
-                if (model.canAutoAdd(model.getAutoAddRow())) {
-                    model.addRow(model.getAutoAddRow());
-                    if (model.numRows() >= maxRows) {
-                        view.scrollBar.scrollToBottom();
-                        return true;
-                    }
-                }
-            }
-            */
             treeWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
         }
         return false;
