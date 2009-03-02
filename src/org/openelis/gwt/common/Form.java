@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.persistence.Transient;
+
 /**
  * @author tschmidt
  * 
@@ -46,6 +48,10 @@ import java.util.Set;
 public class Form extends AbstractField<String> implements FieldType {
 
     private static final long serialVersionUID = 1L;
+    
+    @Transient
+    public static Node node;
+    
     
     public HashMap<String,AbstractField> fields = new HashMap<String,AbstractField>();
     public enum Status {valid,invalid}
@@ -57,10 +63,12 @@ public class Form extends AbstractField<String> implements FieldType {
     }
     
     public Form(Node node) {
+        this.node = node;
         createFields(node);
     }
     
-    public void createFields(Node node){ 
+    public void createFields(Node node){
+        this.node = node;
         NodeList fieldList = node.getChildNodes();
         for (int j = 0; j < fieldList.getLength(); j++) {
             if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
@@ -81,6 +89,7 @@ public class Form extends AbstractField<String> implements FieldType {
     }
     
     public void setAttributes(Node node) {
+        this.node = node;
         createFields(node);
     }
     
