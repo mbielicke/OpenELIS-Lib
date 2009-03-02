@@ -98,9 +98,10 @@ public class StringField extends AbstractField<String> implements FieldType {
             setMin(new Integer(attribs.get("min")));
         if (attribs.containsKey("required"))
             setRequired(new Boolean(attribs.get("required")));        
-        if (attribs.containsKey("value")) {
+        if (attribs.containsKey("reset")) 
+            setAllowReset(new Boolean(attribs.get("reset")));
+        if (attribs.containsKey("value"))
             setValue(attribs.get("value"));
-        }
     }
     
     public void validate() {
