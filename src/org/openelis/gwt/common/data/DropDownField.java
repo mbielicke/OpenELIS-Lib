@@ -268,7 +268,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
     public void validate() {
         if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
-            if (value.size() == 0 || (value.size() == 1 && value.get(0).getKey() == null)) {
+            if (value == null || value.size() == 0 || (value.size() == 1 && value.get(0).getKey() == null)) {
                 addError("Field is required");
                 valid = false;
                 return;
