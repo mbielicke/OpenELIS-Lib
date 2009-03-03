@@ -26,6 +26,7 @@ import org.openelis.gwt.widget.AToZTable.Action;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableManager;
+import org.openelis.gwt.widget.table.TableModelInt;
 import org.openelis.gwt.widget.table.TableWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
@@ -47,6 +48,7 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
     public ScreenAToZTable screenWidget;
     public boolean showNavPanel = true;
+    public TableModelInt model;
     
     public ResultsTable() {
         mainHP.setHeight("100%");
@@ -61,6 +63,7 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
         this.table = table;
         table.model.setManager(this);
         table.addClickListener(this);
+        model = table.model;
         tablePanel.add(table);
     }
 
