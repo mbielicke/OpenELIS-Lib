@@ -38,7 +38,7 @@ import java.util.HashMap;
  * When all screens have been upgraded remove this interface to create smalller
  * code
  */
-public class DataModel<Key extends Object> implements FieldType {
+public class DataModel<Key> implements FieldType {
     
     private static final long serialVersionUID = 1L;
     
@@ -294,7 +294,7 @@ public class DataModel<Key extends Object> implements FieldType {
     public void clear() {
         list.clear();
         selected = -1;
-        page = 0;
+        //page = 0;
         selections.clear();
         deleted.clear();
         keyMap.clear();

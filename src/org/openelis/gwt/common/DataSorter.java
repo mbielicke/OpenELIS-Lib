@@ -32,10 +32,10 @@ import org.openelis.gwt.common.data.FieldType;
 
 public class DataSorter implements DataSorterInt {
     
-    DataModel<Object> data;
+    DataModel<?> data;
     SortDirection direction;
     
-    public void sort(DataModel<Object> data, int col, SortDirection direction) {
+    public void sort(DataModel<?> data, int col, SortDirection direction) {
         this.data = data;
         this.direction = direction;
         quicksort(0, data.size() - 1, col);

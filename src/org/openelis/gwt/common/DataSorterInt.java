@@ -26,11 +26,12 @@
 package org.openelis.gwt.common;
 
 import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.DataSet;
 
 public interface DataSorterInt {
     
     public enum SortDirection{UP,DOWN};
     
-    public void sort(DataModel<Object> data, int col, SortDirection direction);
+    public void sort(DataModel<?> data, int col, SortDirection direction);
 
 }

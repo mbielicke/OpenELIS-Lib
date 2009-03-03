@@ -36,6 +36,7 @@ import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.widget.AToZTable;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.widget.ResultsTable;
 
 /**
  * KeyListManager is used by extending instances of AppScreenForm to manage primary key results from 
@@ -246,8 +247,11 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
                || (action == AppScreenForm.Action.NEW_MODEL)
                || (action == AToZTable.Action.NEXT_PAGE)
                || (action == AToZTable.Action.PREVIOUS_PAGE)
+                || (action == ResultsTable.Action.NEXT_PAGE)
+               || (action == ResultsTable.Action.PREVIOUS_PAGE)
                || (action == AppScreenForm.Action.REFRESH_PAGE)
                || (action == AToZTable.Action.ROW_SELECTED)
+               || (action == ResultsTable.Action.ROW_SELECTED)
                || (action == FormInt.State.ADD);
     }
 
@@ -271,10 +275,18 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
         } else if (action == AToZTable.Action.PREVIOUS_PAGE) {
             selectLast = false;
             setPage(getPage() - 1);
+        } else if (action == ResultsTable.Action.NEXT_PAGE) {
+            selectLast = false;
+            setPage(getPage() + 1);
+        } else if (action == ResultsTable.Action.PREVIOUS_PAGE) {
+            selectLast = false;
+            setPage(getPage() - 1);
         } else if (action == AppScreenForm.Action.REFRESH_PAGE) {
             setPage(getPage());
             // fireCommand(Action.GETPAGE,list);
         } else if (action == AToZTable.Action.ROW_SELECTED) {
+            select(((Integer)obj).intValue());
+        } else if (action == ResultsTable.Action.ROW_SELECTED){
             select(((Integer)obj).intValue());
         } else if (action == FormInt.State.ADD) {
             unselect();
