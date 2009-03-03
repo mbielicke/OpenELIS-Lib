@@ -412,15 +412,18 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
             manager.drop(controller, dragWidget);
     }
 
-    public void unlink(TreeDataItem item) {
-        if(rows.contains(item)){
-            data.list.remove(item);
+    public void unlink(int row) {
+        if(selectedRows.contains(row)){
+            unselectRow(row);
         }
+        TreeDataItem item = rows.get(row);
         if(item.parent != null){
             item.parent.removeItem(item.childIndex);
+        }else{
+            data.list.remove(rows.get(row).childIndex);
         }
-        item.childIndex = -1;
-        item.parent = null;
+        refresh();
+        treeModelListeners.fireRowDeleted(this, row);
     }
     
     private void getVisibleRows() {

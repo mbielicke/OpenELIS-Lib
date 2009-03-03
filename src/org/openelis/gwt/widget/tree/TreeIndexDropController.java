@@ -89,7 +89,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
      if(tree.dragController == context.dragController){
          if(modelIndex < tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
              targetRow--;
-         tree.model.deleteRow(modelIndex);
+         tree.model.unlink(modelIndex);
      }   
      boolean advanceScroll = false;
      TreeDataItem targetItem = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).item;
