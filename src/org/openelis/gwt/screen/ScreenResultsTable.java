@@ -86,7 +86,11 @@ public class ScreenResultsTable extends ScreenInputWidget {
             Widget queryWid = ScreenBase.createWidget(input, screen);
             setQueryWidget((ScreenInputWidget)queryWid);
         }
-            
+        if(node.getAttributes().getNamedItem("showNavPanel") != null) {
+            if(node.getAttributes().getNamedItem("showNavPanel").getNodeValue().equals("false")){
+                results.showNavPanel = false;
+            }
+        }
         displayWidget = results;
 
         if(bpanel != null)
@@ -94,6 +98,7 @@ public class ScreenResultsTable extends ScreenInputWidget {
         
         initWidget(results);        
         setDefaults(node, screen);
+        
     }
     
     public void load(AbstractField field) {
@@ -118,7 +123,7 @@ public class ScreenResultsTable extends ScreenInputWidget {
             tableWidget.submit(field);
         }
     }
-    
+   
     public void enable(boolean enabled) {
         tableWidget.enable(enabled);
     }
