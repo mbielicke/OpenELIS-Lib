@@ -26,6 +26,7 @@ import org.openelis.gwt.widget.AToZTable.Action;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableManager;
+import org.openelis.gwt.widget.table.TableModel;
 import org.openelis.gwt.widget.table.TableModelInt;
 import org.openelis.gwt.widget.table.TableWidget;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
@@ -61,7 +62,8 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
     
     public void setTable(TableWidget table) {
         this.table = table;
-        table.model.setManager(this);
+        if(((TableModel)table.model).getManager() == null)
+            table.model.setManager(this);
         table.addClickListener(this);
         model = table.model;
         tablePanel.add(table);
