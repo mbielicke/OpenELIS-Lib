@@ -29,9 +29,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.widget.ResultsTable;
+import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableWidget;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class ScreenResultsTable extends ScreenInputWidget {
@@ -92,6 +97,29 @@ public class ScreenResultsTable extends ScreenInputWidget {
         
         initWidget(results);        
         setDefaults(node, screen);
+    }
+    
+    public void load(AbstractField field) {
+        if(!queryMode){
+           tableWidget.load(field);
+        }else {
+            if(queryWidget instanceof ScreenTableWidget){
+                if(field.getValue() != null){
+                    if (field.getValue() != null)
+                        ((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).model.load((DataModel)field.getValue());
+                }
+            }else{
+                queryWidget.load(field);
+            }
+        }
+    }
+
+    public void submit(AbstractField field) {
+        if(queryMode)
+            queryWidget.submit(field);
+        else{
+            tableWidget.submit(field);
+        }
     }
    
 
