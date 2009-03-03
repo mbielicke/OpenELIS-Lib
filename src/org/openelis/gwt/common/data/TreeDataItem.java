@@ -68,6 +68,7 @@ public class TreeDataItem extends DataSet<Integer> {
         clone.selected = selected;
         clone.childIndex = childIndex;
         clone.depth = depth;
+        if(data!=null)
         clone.data = (FieldType)data.clone();
         return clone;
     }
