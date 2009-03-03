@@ -31,12 +31,9 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.widget.ResultsTable;
-import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableWidget;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class ScreenResultsTable extends ScreenInputWidget {
@@ -120,6 +117,10 @@ public class ScreenResultsTable extends ScreenInputWidget {
         else{
             tableWidget.submit(field);
         }
+    }
+    
+    public void enable(boolean enabled) {
+        tableWidget.enable(enabled);
     }
    
 
