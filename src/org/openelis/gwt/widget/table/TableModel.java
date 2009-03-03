@@ -334,6 +334,10 @@ public class TableModel implements TableModelInt {
     public void setManager(TableManager manager){
         this.manager = manager;
     }
+    
+    public TableManager getManager() {
+        return manager;
+    }
 
     public DataSet<Object> getSelection() {
         return (DataSet<Object>)data.get(data.selected);
