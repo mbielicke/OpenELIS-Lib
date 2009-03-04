@@ -1519,8 +1519,12 @@ font-weight:bold;
 
 .DotsButton {
 	width:14px;
-height:19px;
-cursor:pointer;
-background: url(../Images/dotdotdot.gif) 0px 0px no-repeat;
+	height:19px;
+	cursor:pointer;
+	background: url(../Images/dotdotdot.gif) 0px 0px no-repeat;
+}
+
+.DropPositioner {
+    background:green;
 }
 

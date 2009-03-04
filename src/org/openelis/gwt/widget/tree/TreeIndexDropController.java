@@ -24,7 +24,7 @@ import org.openelis.gwt.event.DropManager;
 */
 public final class TreeIndexDropController extends AbstractPositioningDropController {
 
- private static final String CSS_DEMO_TABLE_POSITIONER = "demo-table-positioner";
+ private static final String CSS_DROP_POSITIONER = "DropPositioner";
 
  private TreeWidget tree;
 
@@ -222,8 +222,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
  
  Widget newPositioner(DragContext context) {
      Widget p = new SimplePanel();
-     p.addStyleName(CSS_DEMO_TABLE_POSITIONER);
-     DOM.setStyleAttribute(p.getElement(),"background","green");
+     p.addStyleName(CSS_DROP_POSITIONER);
      p.setPixelSize(tree.getOffsetWidth(), 1);
      return p;
    }
