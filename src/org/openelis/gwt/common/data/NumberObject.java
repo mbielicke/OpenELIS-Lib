@@ -1,36 +1,28 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.common.data;
 
-@Deprecated
-public class NumberObject extends DataObject<Double> implements FieldType {
+import java.io.Serializable;
+
+public class NumberObject implements DataObject, Serializable {
 
     public enum Type {INTEGER,DOUBLE}
 
     private static final long serialVersionUID = 1L;
+    protected Double          value;
     protected Type            type;
     protected boolean         invalid;
 
@@ -41,51 +33,52 @@ public class NumberObject extends DataObject<Double> implements FieldType {
         this.type = type;
     }
     
-    public NumberObject(Integer value){
-        type = Type.INTEGER;
+    public NumberObject(Type type, Object value){
+        setType(type);
         setValue(value);
+    }
+    
+    public NumberObject(Integer value){
+        this(Type.INTEGER,value);
     }
     
     public NumberObject(Double value){
-        type = Type.DOUBLE;
-        setValue(value);
+        this(Type.DOUBLE,value);
     }
     
     public NumberObject(int value){
-        type = Type.INTEGER;
-        setValue(new Integer(value));
+        this(Type.INTEGER,new Integer(value));
     }
     
     public NumberObject(double value){
-        type = Type.DOUBLE;
-        setValue(new Double(value));
+        this(Type.DOUBLE,new Double(value));
     }
 
-    
-    public Integer getIntegerValue() {
-        return new Integer(value.intValue());
-    }
-    
-    public Double getDoubleValue() {
+    public Object getValue() {
+        if (type == Type.INTEGER)
+            if (value == null)
+                return null;
+            else
+                return new Integer(value.intValue());
         return value;
     }
 
-    public void setValue(String object) {
+    public void setValue(Object object) {
         invalid = false;
         try {
             if (object != null && !"".equals(object)) {
                 if (object instanceof String && !((String)object).equals(""))
-                    setValue(Double.valueOf((String)object));
+                    value = Double.valueOf((String)object);
+                else if (object instanceof Double)
+                    value = (Double)object;
+                else if (object instanceof Integer)
+                    value = new Double(((Integer)object).doubleValue());
             } else {
                 value = null;
             }
         } catch (Exception e) {
             invalid = true;
         }
-    }
-    
-    public void setValue(Integer object) {
-        setValue(new Double(((Integer)object).doubleValue()));
     }
 
     public void setType(Type type) {
@@ -95,8 +88,8 @@ public class NumberObject extends DataObject<Double> implements FieldType {
     public Type getType() {
         return type;
     }
-    
-    public Object clone() {
+	
+	public Object getInstance() {
         NumberObject clone = new NumberObject();
         clone.type = type;
         clone.value = new Double(value.doubleValue());
@@ -112,10 +105,5 @@ public class NumberObject extends DataObject<Double> implements FieldType {
     public int hashCode() {
         // TODO Auto-generated method stub
         return value.hashCode();
-    }
-
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return value.compareTo(((NumberObject)o).value);
     }
 }

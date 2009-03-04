@@ -1,30 +1,21 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
@@ -50,17 +41,30 @@ public class ScreenButtonPanel extends ScreenWidget {
 	 */
     public ScreenButtonPanel() {
     }
-  
+    /**
+     * Constructor called from getInstance to return a specific instance of this class
+     * to be displayed on the screen.  It uses the XML Node to create it's widget
+     * <br/><br/>
+     * &lt;buttonPanel key="string" buttons="qunpbdcra"/&gt;
+     * <br/>
+     * <pre>
+     * buttons attribute represents which buttons to display
+     *   q - Query
+     *   u - Update
+     *   n - Next
+     *   p - Previous
+     *   b - Abort
+     *   d - Delete
+     *   c - Commit
+     *   r - Reload
+     *   a - Add
+     * </pre>
+     * @param node
+     * @param screen
+     */
     public ScreenButtonPanel(Node node, ScreenBase screen) {
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            bPanel = (ButtonPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            bPanel = new ButtonPanel();
+        bPanel = new ButtonPanel();
         NodeList buttons = node.getChildNodes();
         for (int k = 0; k < buttons.getLength(); k++) {
             if(buttons.item(k).getNodeType() == Node.ELEMENT_NODE){

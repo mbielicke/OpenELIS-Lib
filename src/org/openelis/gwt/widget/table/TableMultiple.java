@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget.table;
 
@@ -30,8 +20,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.TableModel;
 import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
@@ -40,18 +30,8 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     
     public ArrayList<TableCellWidget> cells = new ArrayList<TableCellWidget>();
     public int active;
-    FieldType field;
+    AbstractField field;
     public static final String TAG_NAME = "table-multiple";
-    public int rowIndex;
-    
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int row) {
-        rowIndex = row;
-        
-    }
     
     public TableMultiple() {
         
@@ -74,7 +54,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         NodeList editors = node.getChildNodes();
         for (int i = 0; i < editors.getLength(); i++) {
             if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                cells.add((TableCellWidget)ScreenBase.createCellWidget(editors.item(i),screen));
+                cells.add(ScreenBase.createCellWidget(editors.item(i),screen));
             }
         }
     }
@@ -107,7 +87,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         
     }
 
-    public void setField(FieldType field) {
+    public void setField(AbstractField field) {
        this.field = field;
         
     }
@@ -120,7 +100,7 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
         return ((SimplePanel)super.getWidget()).getWidget();
     }
     
-    public void initCells(TableWidget controller){
+    public void initCells(TableController controller){
 
     }
 
@@ -134,10 +114,6 @@ public class TableMultiple extends SimplePanel implements TableCellWidget {
     public Widget getInstance(Node node) {
         // TODO Auto-generated method stub
         return null;
-    }
-    
-    public void setFocus(boolean focused) {
-
     }
 
 }

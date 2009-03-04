@@ -1,32 +1,20 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget;
 
-import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -59,8 +47,6 @@ public class WindowBrowser extends Composite{
     public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
     public int index;
     public int limit ;
-    public PickupDragController dragController = new PickupDragController(browser,true);
-    public AbsolutePositionDropController dropController = new AbsolutePositionDropController(browser);
     
     public static native void setIndex(Element elem, int index) /*-{
         elem.style.zIndex = index;
@@ -70,19 +56,10 @@ public class WindowBrowser extends Composite{
         return Number(elem.style.zIndex);
     }-*/;
     
-    public WindowBrowser() {
-        
-    }
     
     public WindowBrowser(boolean size, int limit) {
-        init(size,limit);
-    }
-    
-    public void init(boolean size, int limit) {
         this.limit = limit;
         initWidget(browser);
-        dragController.setBehaviorDragProxy(true);
-        dragController.registerDropController(dropController);
         //setIndex(getElement(),index);
         DOM.setStyleAttribute(browser.getElement(),
                               "overflow",
@@ -145,7 +122,6 @@ public class WindowBrowser extends Composite{
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(key,window);
-        setFocusedWindow();
     }
     
     public boolean selectScreen(String text) {
@@ -160,7 +136,6 @@ public class WindowBrowser extends Composite{
                 wid.setKeep(true);
                 browser.add(wid, left, top);
                 wid.setKeep(false);
-                setFocusedWindow();
             }
             return true;
         }
@@ -171,17 +146,6 @@ public class WindowBrowser extends Composite{
         if (browser.isVisible()) {
             browser.setHeight((Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
             browser.setWidth((Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
-        }
-    }
-    
-    public void setFocusedWindow() {
-        for(ScreenWindow wind : windows.values()) {
-            if(wind.zIndex != index){
-                if(wind.getStyleName().indexOf("unfocused") < 0)
-                    wind.addStyleName("unfocused");
-            }else{
-                wind.removeStyleName("unfocused");
-            }
         }
     }
 

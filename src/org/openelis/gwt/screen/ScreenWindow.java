@@ -1,36 +1,33 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DragListenerCollection;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
+import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
+import com.google.gwt.user.client.dnd.SourcesDragEvents;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -42,10 +39,11 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
+
+import java.util.Vector;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -53,15 +51,15 @@ import org.openelis.gwt.widget.WindowBrowser;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends Composite implements MouseListener, ClickListener {
-        /**
-         * Inner class used to create the Draggable Caption portion of the Window.
-         * @author tschmidt
-         *
-         */
-        private class Caption extends HorizontalPanel implements SourcesMouseEvents { 
+public class ScreenWindow extends Composite implements DragListener, MouseListener, ClickListener {
+    	/**
+    	 * Inner class used to create the Draggable Caption portion of the Window.
+    	 * @author tschmidt
+    	 *
+    	 */
+        private class Caption extends HorizontalPanel implements SourcesMouseEvents, SourcesDragEvents{
         private MouseListenerCollection mouseListeners;
-
+        private DragListenerCollection dragListeners;
         public String name;
         
         public Caption() {
@@ -74,6 +72,13 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
                 mouseListeners = new MouseListenerCollection();
             }
             mouseListeners.add(listener);
+        }
+
+        public void addDragListener(DragListener listener) {
+            if (dragListeners == null) {
+                dragListeners = new DragListenerCollection();
+            }
+            dragListeners.add(listener, this);
         }
 
         public void onBrowserEvent(Event event) {
@@ -96,6 +101,11 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             }
         }
 
+        public void removeDragListener(DragListener listener) {
+            if (dragListeners != null) {
+                dragListeners.remove(listener);
+            }
+        }
     }
     private Caption cap = new Caption();
     protected VerticalPanel messagePanel;
@@ -124,7 +134,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     private FocusPanel leftSide = new FocusPanel();
     private FocusPanel rightSide = new FocusPanel();
     private VerticalPanel body = new VerticalPanel();
-    private Grid middleGrid = new Grid(1,3);
+    private HorizontalPanel middleRow = new HorizontalPanel();
     private HorizontalPanel bottomRow = new HorizontalPanel();
     /**
      * Reference back to the WindowBrowser that this ScreenWindow is 
@@ -141,6 +151,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
      * The Screen or panel that is displayed by this window.
      */
     public Widget content;
+    private Vector<DropListenerCollection> dropMap;
     private Label message = new Label("Loading...");
     private Label winLabel = new Label(); 
     
@@ -152,17 +163,17 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         initWidget(outer);
         setVisible(false);
         if(container instanceof PopupPanel)
-            this.popupPanel = (PopupPanel)container;
+        	this.popupPanel = (PopupPanel)container;
         else
-            this.browser = (WindowBrowser) container;
+        	this.browser = (WindowBrowser) container;
         
         this.key = key;
         if(browser != null)
-            zIndex = browser.index;
+        	zIndex = browser.index;
         
         //a way to internationalize the loading message
         if(loadingText != null)
-            message.setText(loadingText);
+        	message.setText(loadingText);
         
         tlCorner.addStyleName("WindowTL");
         trCorner.addStyleName("WindowTR");
@@ -217,12 +228,10 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         
         bottomRow.setWidth("100%");
         bottomRow.setSpacing(0);
-              
-        middleGrid.setCellPadding(0);
-        middleGrid.setCellSpacing(0);
-        middleGrid.getCellFormatter().addStyleName(0,0,"WindowLeft");
-        middleGrid.setWidget(0, 1, body);
-        middleGrid.getCellFormatter().addStyleName(0,2,"WindowRight");
+        
+        middleRow.add(leftSide);
+        middleRow.add(body);
+        middleRow.add(rightSide);
         
         bottomRow.add(blCorner);
         bottomRow.add(status);
@@ -232,14 +241,11 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         
         body.addStyleName("WindowBody");
         
-        outer.add(middleGrid);
+        outer.add(middleRow);
         outer.add(bottomRow);
         outer.addStyleName("WindowPanel");
         outer.sinkEvents(Event.ONCLICK);
         outer.setWidth("auto");
-        if(browser != null){
-            browser.dragController.makeDraggable(this, cap);
-        }
     }
     
     public ScreenWindow(WindowBrowser brws, String key){
@@ -260,8 +266,8 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     }
     
     public void setName(String name) {
-        cap.name = name;
-        winLabel.setText(name);
+    	cap.name = name;
+    	winLabel.setText(name);
     }
     
     private void checkZ() {
@@ -277,7 +283,6 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
                DOM.removeEventPreview((AppScreen)content);
                DOM.addEventPreview((AppScreen)content);
            }
-           browser.setFocusedWindow();
         }
     }
     
@@ -293,11 +298,11 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             close();
         }
         if(sender == collapse){
-            if(middleGrid.isVisible())
+            if(middleRow.isVisible())
                 outer.setWidth(outer.getOffsetWidth()+"px");
             else
                 outer.setWidth("");
-            middleGrid.setVisible(!middleGrid.isVisible());
+            middleRow.setVisible(!middleRow.isVisible());
             bottomRow.setVisible(!bottomRow.isVisible());
         }
         
@@ -311,18 +316,57 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         }
         removeFromParent();
         if(browser != null){
-            browser.browser.remove(this);
-            browser.windows.remove(key);
+        	browser.browser.remove(this);
+        	browser.windows.remove(key);
         }
         if(popupPanel != null){
-            popupPanel.hide();
+        	popupPanel.hide();
         }
-        ((ScreenBase)content).destroy();
         destroy();
-        if(browser != null){
-            browser.index--;
-            browser.setFocusedWindow();
-        }
+        
+    }
+    
+    public void onDragDropEnd(Widget sender, Widget target) {
+        
+    }
+
+    public void onDragEnd(Widget sender, int x, int y) {
+        int X = browser.browser.getWidgetLeft(sender);
+        int Y = browser.browser.getWidgetTop(sender);
+        if(X < 0)
+            X = 0;
+        if(Y <  0)
+            Y = 0;
+        browser.browser.setWidgetPosition(this,X,Y);
+        browser.browser.remove(sender);
+        browser.removeStyleName("locked");
+        MouseDragGestureRecognizer.setDropMap(dropMap);
+        
+    }
+
+    public void onDragEnter(Widget sender, Widget target) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onDragExit(Widget sender, Widget target) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onDragMouseMoved(Widget sender, int x, int y) {
+        // Gets the elements
+        
+    }
+
+    public void onDragOver(Widget sender, Widget target) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onDragStart(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+
     }
 
     public void onMouseDown(Widget sender, final int x, final int y) {
@@ -332,6 +376,24 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
                     checkZ();
                     return;
                 }
+                final FocusPanel proxy = new FocusPanel();
+                AbsolutePanel ap = new AbsolutePanel();
+                proxy.setWidget(ap);
+                ap.setWidth(outer.getOffsetWidth()+"px");
+                ap.setHeight(outer.getOffsetHeight()+"px");
+                ap.addStyleName("WindowDragPanel");
+                proxy.addDragListener(this);
+                browser.browser.add(proxy,browser.browser.getWidgetLeft(this),browser.browser.getWidgetTop(this));
+        //      WindowBrowser.setIndex(proxy.getElement(),browser.index);
+                dropMap = MouseDragGestureRecognizer.getDropMap();
+                MouseDragGestureRecognizer.setDropMap(new Vector());
+                browser.addStyleName("locked");
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        MouseDragGestureRecognizer.getGestureMouse(proxy)
+                            .onMouseDown(proxy, x, y);
+                    }
+                });
             }
         }
     }
@@ -391,8 +453,8 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         close = null;
         key = null;
         content = null;
+        dropMap = null;
         message = null;
-
     }
     
     public void setKeep(boolean keep){
@@ -417,10 +479,8 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     }
     
     public void setStatus(String text, String style){
-        if(message != null){
-            message.setText(text);
-            statusImg.setStyleName(style);
-        }
+        message.setText(text);
+        statusImg.setStyleName(style);
     }
 
 }

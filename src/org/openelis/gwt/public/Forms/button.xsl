@@ -1,34 +1,24 @@
 <!--
-Exhibit A - UIRF Open-source Based Public Software License.
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
 
-The contents of this file are subject to the UIRF Open-source Based
-Public Software License(the "License"); you may not use this file except
-in compliance with the License. You may obtain a copy of the License at
-openelis.uhl.uiowa.edu
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is OpenELIS code.
-
-The Initial Developer of the Original Code is The University of Iowa.
-Portions created by The University of Iowa are Copyright 2006-2008. All
-Rights Reserved.
-
-Contributor(s): ______________________________________.
-
-Alternatively, the contents of this file marked
-"Separately-Licensed" may be used under the terms of a UIRF Software
-license ("UIRF Software License"), in which case the provisions of a
-UIRF Software License are applicable instead of those above. 
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations under
+ the License.
+ 
+ The Original Code is OpenELIS code.
+ 
+ Copyright (C) The University of Iowa.  All Rights Reserved.
 -->
  <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xmlns:xalan="http://xml.apache.org/xalan" 
 xmlns:resource="xalan://org.openelis.util.UTFResource" 
 xmlns:locale="xalan://java.util.Locale" 
+extension-element-prefixes="resource" 
 version="1.0">
 
 <xalan:component prefix="resource">
@@ -55,7 +45,7 @@ version="1.0">
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<appButton action="previous" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
+	<appButton action="prev" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="PreviousButtonImage"/>
            	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
@@ -65,7 +55,7 @@ version="1.0">
 
 <!-- next button template -->
 <xsl:template name="nextButton">
-	<appButton action="next" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
+	<appButton action="next" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
 		 <HorizontalPanel>
 	  		<AbsolutePanel style="NextButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
@@ -113,16 +103,6 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
-<!-- process button template -->
-<xsl:template name="processButton">
-    <appButton action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="a">
-		<HorizontalPanel>
-	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
-        	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
-	  	</HorizontalPanel>
-	</appButton>
-</xsl:template>
-
 <!-- abort button template -->
 <xsl:template name="abortButton">
 	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="o">
@@ -135,10 +115,10 @@ version="1.0">
 
 <!-- options button template -->
 <xsl:template name="optionsButton">
-	<menuPanel key="optionsMenu" layout="vertical" style="topBarItemHolder">
+	<menuPanel key="optionsMenu" layout="horizontal" xsi:type="Panel" style="topBarItemHolder" spacing="0" padding="0">
 	    <menuItem>
 	        <menuDisplay>
-		    	<appButton action="option" style="ButtonPanelButton">
+		    	<appButton action="" style="ButtonPanelButton">
 					<HorizontalPanel>
 		        		<text><xsl:value-of select='resource:getString($constants,"options")'/></text>
 			    		<AbsolutePanel style="OptionsButtonImage"/>
@@ -168,16 +148,6 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
-<!-- popup transfer button template -->
-<xsl:template name="popupTransferButton">
-<appButton action="commit" style="Button" enabledStates="default" lockedStates="">
-		<HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage"/>
-        	<text><xsl:value-of select='resource:getString($constants,"transfer")'/></text>
-	  	</HorizontalPanel>
-	</appButton>
-</xsl:template>
-
 <!-- popup cancel button template -->
 <xsl:template name="popupCancelButton">
 	<appButton action="abort" style="Button" enabledStates="default" lockedStates="">
@@ -197,7 +167,7 @@ version="1.0">
 <xsl:template name="aToZButton">
 <xsl:param name="keyParam" />
 <xsl:param name="queryParam" />
-	<appButton key="{string($keyParam)}" action="query:{string($queryParam)}" toggle="true" alwaysEnabled="true" enabledStates="default,display" lockedStates="add,query,update,delete" style="smallButton">
+	<appButton key="{string($keyParam)}" action="query:{string($queryParam)}" toggle="true" alwaysEnabled="true" style="smallButton">
        	<text><xsl:value-of select="string($keyParam)"/></text>
  	</appButton>
 </xsl:template>

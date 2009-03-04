@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
@@ -44,10 +34,9 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
-import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.RPC;
+import org.openelis.gwt.common.FormRPC;
+import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.widget.AppButton;
@@ -62,18 +51,16 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
+public class AppScreen extends ScreenBase implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
 
-    public AppScreenServiceIntAsync<ScreenRPC> service;
-    public HashMap<String,Form> forms = new HashMap<String,Form>();
-    public HashMap<String,FieldType> initData;
-    public ScreenRPC rpc;
+    public AppScreenServiceIntAsync service;
+    public HashMap<String,FormRPC> forms = new HashMap<String,FormRPC>();
+    public HashMap<String,DataObject> initData;
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
     public Element clickTarget;
     public ScreenWindow window;
     protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
-    protected ScreenWidget focused;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -82,17 +69,16 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         super();
     }
     
-    public AppScreen(AppScreenServiceIntAsync<ScreenRPC> service){
+    public AppScreen(AppScreenServiceIntAsync service){
         this();
         this.service = service;
-        //getXML();
+        getXML();
     }
-   
-    @Deprecated public void getXML(ScreenRPC rpc) {
-        this.rpc = rpc;
-        service.getXML(new AsyncCallback<String>() {
-           public void onSuccess(String result){
-               drawScreen(result);
+
+    public void getXML() {
+        service.getXML(new AsyncCallback() {
+           public void onSuccess(Object result){
+               drawScreen((String)result);
                afterDraw(true);
            }
            public void onFailure(Throwable caught){
@@ -102,11 +88,10 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         });
     }
     
-    @Deprecated public void getXMLData(ScreenRPC rpc) {
-        this.rpc = rpc;
-        service.getXMLData(new AsyncCallback<HashMap<String,FieldType>>() {
-           public void onSuccess(HashMap<String,FieldType> result){
-               initData = result;
+    public void getXMLData() {
+        service.getXMLData(new AsyncCallback() {
+           public void onSuccess(Object result){
+               initData = (HashMap<String,DataObject>)result;
                drawScreen((String)((StringObject)initData.get("xml")).getValue());
                afterDraw(true);
            }
@@ -117,33 +102,12 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         });
     }
     
-    public void getScreen(ScreenRPC screen) {
-        rpc = screen;
-        service.getScreen(rpc,new AsyncCallback<ScreenRPC>() {
-            public void onSuccess(ScreenRPC result){
-                rpc = result;
-                drawScreen(rpc.xml);
-                afterDraw(true);
-            }
-            
-            public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-                afterDraw(false);
-            }
-        });
-    }
-    
-    @Deprecated public void getXMLData(HashMap<String, FieldType> args, ScreenRPC rpc) {
-        this.rpc = rpc;
-        service.getXMLData(args, new AsyncCallback<HashMap<String,FieldType>>() {
-           public void onSuccess(HashMap<String,FieldType> result){
-               //try {
-                   initData = result;
-                   drawScreen((String)((StringObject)initData.get("xml")).getValue());
-                   afterDraw(true);
-               //}catch(Exception e){
-                 //  Window.alert("error "+e.getMessage() + e.getStackTrace()[0]);
-              // }
+    public void getXMLData(HashMap<String,DataObject> args) {
+        service.getXMLData(args, new AsyncCallback() {
+           public void onSuccess(Object result){
+               initData = (HashMap)result;
+               drawScreen((String)((StringObject)initData.get("xml")).getValue());
+               afterDraw(true);
            }
            public void onFailure(Throwable caught){
                Window.alert(caught.getMessage());
@@ -153,9 +117,8 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
     }
     
     public void afterDraw(boolean sucess) {
-
-        this.form = forms.get("display");
-        //load();
+        try {
+        load((FormRPC)forms.get("display"));
         DOM.addEventPreview(this);
         if(window != null){
             window.setName(name);
@@ -163,7 +126,9 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
             RootPanel.get().removeStyleName("ScreenLoad");
             window.setStatus(consts.get("loadCompleteMessage"),"");
         }
-        rpc.xml = null;
+        }catch(Exception e){
+            Window.alert("after draw " +e.getMessage());
+        }
     }
     
     public void redrawScreen(String xmlDef){
@@ -179,30 +144,35 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
          
-         //try {
-             NodeList rpcList = xml.getDocumentElement().getChildNodes();
+         try {
+             NodeList rpcList = xml.getDocumentElement().getElementsByTagName("rpc");
              for(int i = 0; i < rpcList.getLength(); i++){
-                 if(rpcList.item(i).getNodeType() == Node.ELEMENT_NODE && rpcList.item(i).getNodeName().equals("rpc")){
-                     String key = rpcList.item(i).getAttributes().getNamedItem("key").getNodeValue();
-                     if(forms.containsKey(key)){
-                         forms.get(key).createFields(rpcList.item(i));
-                         forms.get(key).load = true;
-                     }else{
-                         Form form = (Form)ScreenBase.createField(rpcList.item(i));
-                         form.load = true;
-                         forms.put(form.key, form);
+                 com.google.gwt.xml.client.Element rpcEl = (com.google.gwt.xml.client.Element)rpcList.item(i);
+                 NodeList fieldList = rpcEl.getChildNodes();
+                 HashMap map = new HashMap();
+                 for (int j = 0; j < fieldList.getLength(); j++) {
+                     if (fieldList.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                         AbstractField field = ScreenBase.createField(fieldList.item(j));
+                         map.put((String)field.getKey(), field);
                      }
                  }
+                 FormRPC form = new FormRPC();
+                 form.setFieldMap(map);
+                 form.key = rpcEl.getAttributes().getNamedItem("key").getNodeValue();
+                 forms.put(form.key, form);
              }
-             rpc.form = forms.get("display");
              draw();
-        //} catch (Exception e) {
-         //  Window.alert("FormUtil: " + e.getMessage());
-        // }
+        } catch (Exception e) {
+           Window.alert("FormUtil: " + e.getMessage());
+         }
         
          //load((FormRPC)forms.get("query"));
     }
-
+    
+    protected void load(FormRPC rpc){
+        this.rpc = rpc;
+        load();
+    }
 
     public boolean onEventPreview(Event event) {
         if(DOM.eventGetType(event) == Event.ONKEYPRESS){
@@ -225,8 +195,7 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
             case Event.ONKEYDOWN:
             case Event.ONKEYUP:
             case Event.ONKEYPRESS:
-                if(keyListeners != null)
-                    keyListeners.fireKeyboardEvent(this, event);
+                keyListeners.fireKeyboardEvent(this, event);
                 break;
             case Event.ONCLICK:
                 clickTarget = DOM.eventGetTarget(event);
@@ -266,4 +235,5 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         }
         
     }
+
 }

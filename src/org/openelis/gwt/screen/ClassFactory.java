@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
@@ -32,25 +22,17 @@ public class ClassFactory {
     public static interface Factory {
         public Object newInstance(Object[] args);
     }
-    
-    private static HashMap<String,Factory> classFactories = new HashMap<String,Factory>();
-    
-    private static HashMap<String,Class> classes = new HashMap<String,Class>();
 
-    public static void addClassFactory(String[] classKeys, Factory factory){
+    private static HashMap<String,Factory> classes = new HashMap<String,Factory>();
+
+    public static void addClass(String[] classKeys, Factory factory){
         for(int i = 0; i < classKeys.length;  i++){
-            classFactories.put(classKeys[i], factory);
-        }
-    }
-    
-    public static void addClass(String[] classKeys, Class classs){
-        for(int i = 0; i < classKeys.length;  i++){
-            classes.put(classKeys[i], classs);
+            classes.put(classKeys[i], factory);
         }
     }
 
     public static Object forName(String name, Object[] args) {
-        Factory factory = (Factory)classFactories.get(name);
+        Factory factory = (Factory)classes.get(name);
 
         if (factory == null) { 
             throw new IllegalArgumentException("Don't know how to create a " + name);
@@ -75,15 +57,6 @@ public class ClassFactory {
     public static Object forName(String name) {
         return forName(name,null);
     }
-    
-    public static Class getClass(String name) {
-        return classes.get(name);
-    }
-    
-    public static Enum getEnum(String name) {
-        String classs = name.substring(0,name.lastIndexOf("."));
-        String enumValue = name.substring(name.lastIndexOf(".")+1);
-        return Enum.valueOf(classes.get(classs), enumValue);
-    }
+
     
 }

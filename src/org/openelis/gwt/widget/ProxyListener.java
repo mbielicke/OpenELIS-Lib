@@ -1,33 +1,25 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.MouseDragGestureRecognizer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
@@ -45,12 +37,12 @@ import java.util.Vector;
  * @author tschmidt
  *
  */
-public class ProxyListener extends MouseListenerAdapter {
+public class ProxyListener extends MouseListenerAdapter implements DragListener {
 
     Vector dropMap;
     
     public void onMouseDown(Widget sender, final int x, final int y) {
-/*
+
         final ScreenWidget proxy = ((ScreenWidget)sender).getInstance();
         AbsolutePanel dragIndicator = new AbsolutePanel();
         dragIndicator.setStyleName("DragStatus");
@@ -60,9 +52,9 @@ public class ProxyListener extends MouseListenerAdapter {
         hp.add(proxy);
         hp.setStyleName(sender.getStyleName());
         proxy.setUserObject(sender);
-        //proxy.addDragListener(this);
+        proxy.addDragListener(this);
         RootPanel.get().add(hp);
-        //MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
+        MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
         mouse.setDrag(hp);
         dropMap = MouseDragGestureRecognizer.getDropMap();
         MouseDragGestureRecognizer.setDropMap(((ScreenWidget)sender).getDropMap());
@@ -75,7 +67,6 @@ public class ProxyListener extends MouseListenerAdapter {
                                           .onMouseDown(proxy, x, y);
             }
         });
-        */
     }
 
     public void onDragDropEnd(Widget sender, Widget target) {
@@ -111,7 +102,7 @@ public class ProxyListener extends MouseListenerAdapter {
     }
 
     public void onDragStart(Widget sender, int x, int y) {
-       
+        // TODO Auto-generated method stub
 
     }
 }

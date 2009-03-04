@@ -1,33 +1,29 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.dnd.DragListener;
+import com.google.gwt.user.client.dnd.DragListenerCollection;
+import com.google.gwt.user.client.dnd.DropListener;
+import com.google.gwt.user.client.dnd.DropListenerCollection;
+import com.google.gwt.user.client.dnd.SourcesDragEvents;
+import com.google.gwt.user.client.dnd.SourcesDropEvents;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -42,6 +38,8 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.AppButton;
+
+import java.util.Vector;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
  * screen using the XML definition and provides base functionality for all
@@ -63,9 +61,13 @@ import org.openelis.gwt.widget.AppButton;
  *
  */
 public class ScreenWidget extends SimplePanel implements
+                                             SourcesDropEvents,
                                              SourcesMouseEvents,
+                                             SourcesDragEvents,
                                              SourcesClickEvents {
 
+    protected DropListenerCollection dropListeners;
+    protected DragListenerCollection dragListeners;
     protected MouseListenerCollection mouseListeners;
     protected ClickListenerCollection clickListeners;
     /** 
@@ -73,10 +75,15 @@ public class ScreenWidget extends SimplePanel implements
      * data to a screen widget.
      */
     private Object userObject;
+    /**
+     * A list of available drop targets for a widget if it uses 
+     * Drag and Drop
+     */
+    private Vector<String> dropTargets = new Vector<String>();
     /** 
      * Reference back to the Screen this widget is displayed in
      */
-    public ScreenBase screen;
+    protected ScreenBase screen;
     public String hoverStyle = "Hover";
     public String key;
     public boolean alwaysEnabled;
@@ -94,17 +101,14 @@ public class ScreenWidget extends SimplePanel implements
      */
     public ScreenWidget(Node node) {
         if (node.getAttributes().getNamedItem("mouse") != null || 
+            node.getAttributes().getNamedItem("drag") != null  ||
+            node.getAttributes().getNamedItem("drop") != null ||
             node.getAttributes().getNamedItem("hover") != null) {
             sinkEvents(Event.MOUSEEVENTS);
         }
         if (node.getAttributes().getNamedItem("onPanelClick") != null)
             sinkEvents(Event.ONCLICK);
     }
-    
-    public void init(Node node, ScreenBase screen) {
-        
-    }
-    
     /**
      * This stub should be overridden by the extending class.  It will be called
      * when the widget needs to be drawn by the screen.
@@ -177,6 +181,25 @@ public class ScreenWidget extends SimplePanel implements
     }
 
     /**
+     * This method will add DropListeners to be fired if any Drop events are detected on the Widget.
+     */
+    public void addDropListener(DropListener listener) {
+        if (dropListeners == null) {
+            dropListeners = new DropListenerCollection();
+        }
+        dropListeners.add(listener, this);
+    }
+
+    /** 
+     * This method will DropListeners from this widget.
+     */
+    public void removeDropListener(DropListener listener) {
+        if (dropListeners != null) {
+            dropListeners.remove(listener);
+        }
+    }
+
+    /**
      * This method is called by the extending class to inspect the
      * node for any common attributes that can be applied to any 
      * ScreenWidget.
@@ -187,7 +210,7 @@ public class ScreenWidget extends SimplePanel implements
         this.screen = screen;
         if(node.getAttributes().getNamedItem("key") != null){
             key = node.getAttributes().getNamedItem("key").getNodeValue();
-            screen.widgets.put(key, this);
+        	screen.widgets.put(key, this);
         }
         if (node.getAttributes().getNamedItem("style") != null){
             String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
@@ -204,13 +227,11 @@ public class ScreenWidget extends SimplePanel implements
             getWidget().setHeight(node.getAttributes()
                                       .getNamedItem("height")
                                       .getNodeValue());
-        if (node.getAttributes().getNamedItem("tab") != null){
+        if (node.getAttributes().getNamedItem("tab") != null)
             screen.addTab(this, node.getAttributes()
                                            .getNamedItem("tab")
                                            .getNodeValue()
                                            .split(","));
-            sinkEvents(Event.KEYEVENTS);
-        }
         if (node.getAttributes().getNamedItem("value") != null){
             setUserObject(node.getAttributes()
                               .getNamedItem("value")
@@ -221,14 +242,43 @@ public class ScreenWidget extends SimplePanel implements
                              .getNodeValue());
             }
         }
+        if (node.getAttributes().getNamedItem("drop") != null) {
+            String listener = node.getAttributes()
+                                  .getNamedItem("drop")
+                                  .getNodeValue();
+            if (listener.equals("this"))
+                addDropListener((DropListener)screen);
+            else {
+                addDropListener((DropListener)ClassFactory.forName(listener));
+            }
+        }
+        if (node.getAttributes().getNamedItem("drag") != null) {
+            String listener = node.getAttributes()
+                                  .getNamedItem("drag")
+                                  .getNodeValue();
+            if (listener.equals("this"))
+                addDragListener((DragListener)screen);
+            else {
+                addDragListener((DragListener)ClassFactory.forName(listener));
+            }
+        }
         
         if(node.getAttributes().getNamedItem("mouse") != null){
             String[] listeners = node.getAttributes().getNamedItem("mouse").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                    addMouseListener((MouseListener)screen);
+                	addMouseListener((MouseListener)screen);
                 else
-                    addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
+                	addMouseListener((MouseListener)ClassFactory.forName(listeners[i]));
+            }
+        }
+        
+        if (node.getAttributes().getNamedItem("targets") != null) {
+            String targets[] = node.getAttributes()
+                                  .getNamedItem("targets")
+                                  .getNodeValue().split(",");
+            for(int i = 0; i < targets.length; i++){
+                    dropTargets.add(targets[i]);
             }
         }
         if (node.getAttributes().getNamedItem("hover") != null){
@@ -256,8 +306,8 @@ public class ScreenWidget extends SimplePanel implements
             }
         }
         if (node.getAttributes().getNamedItem("visible") != null){
-            if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
-                getWidget().setVisible(false);
+        	if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
+        		getWidget().setVisible(false);
         }
         if (node.getAttributes().getNamedItem("shortcut") != null){
             String key = node.getAttributes().getNamedItem("shortcut").getNodeValue();
@@ -282,7 +332,16 @@ public class ScreenWidget extends SimplePanel implements
         }
         clickListeners.add(listener);
     }
-
+    /** 
+     * This method will add DragListeners to this widget to be fired if any Drag events 
+     * are detected on this widget.
+     */
+    public void addDragListener(DragListener listener) {
+        if (dragListeners == null) {
+            dragListeners = new DragListenerCollection();
+        }
+        dragListeners.add(listener, this);
+    }
 
     /**
      * This is an override of the Widget onBrowserEvent to make the SimplePanel 
@@ -323,6 +382,15 @@ public class ScreenWidget extends SimplePanel implements
     }
 
     /**
+     * This method will remove DragListeners that have been added to the Widget.
+     */
+    public void removeDragListener(DragListener listener) {
+        if (dragListeners != null) {
+            dragListeners.remove(listener);
+        }
+    }
+
+    /**
      * This method will set the Application data for this widget in the userObject field
      * @param obj
      */
@@ -336,6 +404,44 @@ public class ScreenWidget extends SimplePanel implements
      */
     public Object getUserObject() {
         return userObject;
+    }
+   
+    /**
+     * Makes the DropTargets vector available publicly
+     * @return
+     */
+    public Vector<String> getDropTargets() {
+        return dropTargets;
+    }
+    
+    /**
+     * Returns a Vector of widgets pulled from the Screen using the Keys stored in the 
+     * DropTargets vector.
+     * @return
+     */
+    public Vector getDropMap(){
+        Vector<DropListenerCollection> dropMap = new Vector<DropListenerCollection>();
+        for(String target : dropTargets) {
+            DropListenerCollection dropColl = ((ScreenWidget)screen.widgets.get(target)).getDropListeners();
+            dropMap.add(dropColl);
+        }
+        return dropMap;
+    }
+   
+    /**
+     * Set the Vector of DropTargets representing the keys to the widgets that this
+     * widget is allowed to drop on.
+     */
+    public void setDropTargets(Vector<String> targets){
+        dropTargets = targets;
+    }
+    
+    /**
+     * Getter for the DropListener Collection
+     * @return
+     */
+    public DropListenerCollection getDropListeners(){
+        return dropListeners;
     }
     
     /**
@@ -355,8 +461,11 @@ public class ScreenWidget extends SimplePanel implements
     }
     
     public void destroy() {
+        dropListeners = null;
+        dragListeners = null;
         mouseListeners = null;
         userObject = null;
+        dropTargets = null;
         screen = null;
         clear();
     }

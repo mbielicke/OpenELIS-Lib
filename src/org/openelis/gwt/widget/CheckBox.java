@@ -1,34 +1,23 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -37,15 +26,11 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CheckBox extends Composite implements ClickListener, SourcesClickEvents{
+public class CheckBox extends Composite implements ClickListener{
     
     DelegatingKeyboardListenerCollection keyListeners;
-    
-    private ClickListenerCollection clickListeners;
-    
     boolean enabled = true;
     
     public enum CheckType {TWO_STATE,THREE_STATE};
@@ -80,7 +65,6 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
         hp.setVerticalAlignment(HasAlignment.ALIGN_MIDDLE);
         hp.add(panel);
         panel.setStyleName(UNCHECKED_STYLE);
-        sinkEvents(Event.KEYEVENTS);
     }
     
     public CheckBox(CheckType type) {
@@ -160,9 +144,6 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
            else
                setState(CHECKED);
        }
-       
-       if(clickListeners != null)
-           clickListeners.fireClick(sender);
     }
     
     public void enable(boolean enabled){
@@ -192,18 +173,5 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
     
     public boolean isEnabled(){
         return enabled;
-    }
-
-    public void addClickListener(ClickListener listener) {
-        if(clickListeners == null)
-            clickListeners = new ClickListenerCollection();
-        clickListeners.add(listener);
-        
-    }
-
-    public void removeClickListener(ClickListener listener) {
-        if(clickListeners != null)
-            clickListeners.remove(listener);
-        
     }
 }

@@ -1,40 +1,29 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.common.data;
 
 
-import com.google.gwt.xml.client.Node;
-
 import java.util.ArrayList;
 
-public class QueryField extends AbstractField<String> implements FieldType{
+public class QueryField extends AbstractField {
 
     private static final long serialVersionUID = 1L;
 
     protected ArrayList<String> comparator;
+    protected String value = "";
 
     protected ArrayList<String> parameter;
 
@@ -61,14 +50,9 @@ public class QueryField extends AbstractField<String> implements FieldType{
         return true;
     }
 
-    public void setValue(String val) {
-        // TODO Auto-generated method stub
-        value = val;
-        parse((String)val);
-    }
-    
     public void setValue(Object val) {
-        value = (String)val;
+        // TODO Auto-generated method stub
+        this.value = (String)val;
         parse((String)val);
     }
     
@@ -97,6 +81,10 @@ public class QueryField extends AbstractField<String> implements FieldType{
                     pos = value.substring(0, 1);
             }
             if (param.indexOf("..") > -1) {
+            	String[] paramTemp = param.split("\\.\\.");
+            	if(paramTemp.length == 2){
+            		param = paramTemp[0]+","+paramTemp[1];
+            	}
                 comp = "between ";
                 comparator.set(comparator.size() - 1, comp);
             }
@@ -127,7 +115,7 @@ public class QueryField extends AbstractField<String> implements FieldType{
         }
     }
 
-    public String setValue() {
+    public Object getValue() {
         // TODO Auto-generated method stub
         if (value == null)
             return "";
@@ -146,12 +134,11 @@ public class QueryField extends AbstractField<String> implements FieldType{
         return logical;
     }
 
-    public Object clone() {
+    public QueryField getInstance() {
         // TODO Auto-generated method stub
         QueryField field = new QueryField();
         field.setRequired(required);
         field.setValue(value);
-        field.setKey(key);
         return field;
     }
 
@@ -160,10 +147,6 @@ public class QueryField extends AbstractField<String> implements FieldType{
             return "";
         else
             return value;
-    }
-    
-    public void setAttributes(Node node){
-        
     }
 
 }

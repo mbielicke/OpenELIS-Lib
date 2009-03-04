@@ -1,36 +1,28 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MaskedTextBox;
 
 /**
@@ -38,20 +30,20 @@ import org.openelis.gwt.widget.MaskedTextBox;
  * @author tschmidt
  *
  */
-@Deprecated public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
+public class ScreenMaskedBox extends ScreenInputWidget implements FocusListener{
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
      */
-    public static String TAG_NAME = "maskedbox";
-    /**
-     * Widget wrapped by this class
-     */
+	public static String TAG_NAME = "maskedbox";
+	/**
+	 * Widget wrapped by this class
+	 */
     private MaskedTextBox maskbox;
     private String next;
     
-    /**
-     * Default no-arg constructor used to create reference in the WidgetMap class
-     */
+	/**
+	 * Default no-arg constructor used to create reference in the WidgetMap class
+	 */
     public ScreenMaskedBox() {
     }
     /**
@@ -65,14 +57,22 @@ import org.openelis.gwt.widget.MaskedTextBox;
      */
     public ScreenMaskedBox(Node node, final ScreenBase screen) {
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            maskbox = (MaskedTextBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            maskbox = new MaskedTextBox();
+        final ScreenMaskedBox sm = this;
+        maskbox = new MaskedTextBox() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
+                        screen.doTab(event, sm);
+                    }
+                } else {
+                    super.onBrowserEvent(event);
+                }
+            }
+            
+            public void complete() {
+                screen.doTab(null,sm);
+            }
+        };
         if (node.getAttributes().getNamedItem("shortcut") != null)
             maskbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")
@@ -97,10 +97,8 @@ import org.openelis.gwt.widget.MaskedTextBox;
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else{
+        else
             maskbox.setText(field.toString());
-            super.load(field);
-        }
 
     }
 
@@ -131,31 +129,28 @@ import org.openelis.gwt.widget.MaskedTextBox;
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(boolean mode) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY)
-                maskbox.noMask = true;
-            else
-                maskbox.noMask = false;
+            maskbox.noMask = mode;
         }else{
-            super.setForm(state);
+            super.setForm(mode);
         }
     }
    
     public void onFocus(Widget sender) {
-        if(!maskbox.isReadOnly()){
-            if(sender == maskbox){
-                super.hp.addStyleName("Focus");
-            }
-        }   
+		if(!maskbox.isReadOnly()){
+			if(sender == maskbox){
+				super.hp.addStyleName("Focus");
+			}
+		}	
         super.onFocus(sender);
-    }
-    public void onLostFocus(Widget sender) {
-        if(!maskbox.isReadOnly()){
-            if(sender == maskbox){
-                super.hp.removeStyleName("Focus");
-            }
-        }
+	}
+	public void onLostFocus(Widget sender) {
+		if(!maskbox.isReadOnly()){
+			if(sender == maskbox){
+				super.hp.removeStyleName("Focus");
+			}
+		}
         super.onLostFocus(sender);
-    }    
+	}    
 }

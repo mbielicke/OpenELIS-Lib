@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget.table;
 
@@ -29,7 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
@@ -42,12 +31,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.MenuLabel;
-
-import java.util.ArrayList;
 
 public class TableCellInputWidget extends SimplePanel implements TableCellWidget, MouseListener, SourcesMouseEvents, FocusListener {
 
@@ -56,7 +42,6 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     protected PopupPanel pop;
     private MouseListenerCollection listeners = new MouseListenerCollection(); 
     protected ScreenBase screen;
-    protected int rowIndex;
     
     public void clear() {
         // TODO Auto-generated method stub
@@ -94,15 +79,16 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     
     public void drawErrors() {
         addStyleName("CellError");
-        ArrayList<String> errors = field.getErrors();
+        String[] errors = field.getErrors();
         errorPanel.clear();
-        for (String error : errors) {
+        for (int i = 0; i < errors.length; i++) {
+            String error = errors[i];
             MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
             errorLabel.setStyleName("errorPopupLabel");
             //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
             errorPanel.add(errorLabel);
         }
-        if(errors.size() == 0){
+        if(errors.length == 0){
             removeMouseListener(this);
         }else{
             removeMouseListener(this);
@@ -130,14 +116,9 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
 
     }
 
-    public void setField(FieldType field) {
-       if(field instanceof AbstractField)
-           this.field = (AbstractField)field;
+    public void setField(AbstractField field) {
+        // TODO Auto-generated method stub
 
-    }
-    
-    public AbstractField getField() {
-        return field;
     }
 
     public void onMouseDown(Widget sender, int x, int y) {
@@ -151,13 +132,11 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
             }
-            DecoratorPanel dp = new DecoratorPanel();
-            
-            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
-            dp.setStyleName("ErrorWindow");
-            dp.add(errorPanel);
-            dp.setVisible(true);
-            pop.setWidget(dp);
+            ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            win.setStyleName("ErrorWindow");
+            win.setContent(errorPanel);
+            win.setVisible(true);
+            pop.setWidget(win);
             pop.setPopupPosition(sender.getAbsoluteLeft()+sender.getOffsetWidth(), sender.getAbsoluteTop());
             pop.show();
         }
@@ -228,18 +207,6 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
         if(sender instanceof TextBoxBase){
             ((TextBoxBase)sender).setSelectionRange(0, 0);
         }
-    }
-    
-    public void setFocus(boolean focus) {
-    }
-    
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int row) {
-        rowIndex = row;
-        
     }
 
 }

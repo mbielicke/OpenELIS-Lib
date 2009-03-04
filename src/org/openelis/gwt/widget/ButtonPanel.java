@@ -1,49 +1,39 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.screen.ScreenAppButton;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ButtonPanel extends Composite implements ClickListener, SourcesCommandEvents, CommandListener {
+public class ButtonPanel extends Composite implements ClickListener, SourcesChangeEvents, ChangeListener {
 
-    public enum ButtonPanelState {ENABLED,LOCKED}
-    public enum Action {ADD,UPDATE,DELETE,NEXT,PREVIOUS,RELOAD,QUERY,COMMIT,ABORT,SELECT,OPTION}
+    public enum ButtonPanelState {ENABLED,LOCKED} 
     /**
 	 * Panel used to display buttons
 	 */
@@ -51,10 +41,12 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
 
     private ArrayList<AppButton> buttons = new ArrayList<AppButton>();
     
-    private CommandListenerCollection commandListeners;
+    private ChangeListenerCollection changeListeners;
     
     private ButtonPanelState state = ButtonPanelState.ENABLED;
     
+    public AppButton buttonClicked;
+
     public ButtonPanel() {
         initWidget(hp);
 
@@ -92,9 +84,8 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
      */
     public void onClick(Widget sender) {
         if(state == ButtonPanelState.ENABLED){
-            Action action = Action.valueOf(((AppButton)sender).action.toUpperCase().split(":")[0]);
-            if(commandListeners != null)
-                commandListeners.fireCommand(action,sender);
+            buttonClicked = (AppButton)sender;
+            changeListeners.fireChange(this);
         }else{
             ((AppButton)sender).changeState(ButtonState.UNPRESSED);
         }
@@ -129,19 +120,12 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
      */
     public void setState(FormInt.State state) {
     	for(AppButton button : buttons) {
-    		if(button.getEnabledStates().contains(state) && button.isEnabled()){
-                if(button.state == AppButton.ButtonState.LOCK_PRESSED)
-                    setButtonState(button, ButtonState.PRESSED);
-                else if(button.state != AppButton.ButtonState.PRESSED)
-                    setButtonState(button, ButtonState.UNPRESSED);
-                if(button.toggle && state == FormInt.State.DEFAULT)
-                    setButtonState(button, ButtonState.UNPRESSED);
-            }
-    		else if(button.getLockedStates().contains(state) && button.isEnabled() && button.state == AppButton.ButtonState.PRESSED)
+    		if(button.getEnabledStates().contains(state) && button.isEnabled())
+    			setButtonState(button, ButtonState.UNPRESSED);
+    		else if(button.getLockedStates().contains(state) && button.isEnabled())
     			setButtonState(button, ButtonState.LOCK_PRESSED);
-    		else if(!button.getEnabledStates().contains(state) && button.isEnabled())
+    		else
     			setButtonState(button, ButtonState.DISABLED);
-            
     	}
     }
     
@@ -187,28 +171,25 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
     	}    	
     }
 
-    public void addCommandListener(CommandListener listener) {
-       if(commandListeners == null){
-           commandListeners = new CommandListenerCollection();
+    public void addChangeListener(ChangeListener listener) {
+       if(changeListeners == null){
+           changeListeners = new ChangeListenerCollection();
        }
-       commandListeners.add(listener);
+       changeListeners.add(listener);
         
     }
 
-    public void removeCommandListener(CommandListener listener) {
-        if(commandListeners != null) {
-            commandListeners.remove(listener);
+    public void removeChangeListener(ChangeListener listener) {
+        if(changeListeners != null) {
+            changeListeners.remove(listener);
         }
         
     }
-    
-    public boolean canPerformCommand(Enum action, Object obj){
-        return (action.getDeclaringClass() == FormInt.State.class);
-    }
 
-    public void performCommand(Enum action, Object obj) {
-        if(action.getDeclaringClass() == FormInt.State.class)
-            setState((FormInt.State)action);
+    public void onChange(Widget sender) {
+        if(sender instanceof AppScreenForm){
+            setState(((AppScreenForm)sender).state);
+        }
     }
     
     public int numberOfButtons(){

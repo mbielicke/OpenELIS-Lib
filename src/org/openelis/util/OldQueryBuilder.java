@@ -1,33 +1,22 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.util;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.CollectionField;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.NumberObject;
@@ -124,7 +113,6 @@ public class OldQueryBuilder {
     }
     
     //TODO could get rid of this after new dropdownfield is implemented
-    /*
     public static String getQuery(CollectionField field, String fieldName) {
         ArrayList list = (ArrayList) field.getValue();
         if (list.size() == 0)
@@ -154,10 +142,10 @@ public class OldQueryBuilder {
         sb.append(") ");
         return sb.toString();
     }
-    */
+    
     public static String getQuery(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
-        ArrayList<DataSet<Object>> list = (ArrayList<DataSet<Object>>)field.getValue();
+        ArrayList list = (ArrayList) field.getSelections();
         if (list.size() == 0)
             return "";
         StringBuffer sb = new StringBuffer();
@@ -176,7 +164,7 @@ public class OldQueryBuilder {
     
     public static String getQueryNoOperand(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getValue();
+        ArrayList list = (ArrayList) field.getSelections();
         if (list.size() == 0)
             return "";
         String paramName = getParamName(fieldName);
@@ -323,7 +311,7 @@ public class OldQueryBuilder {
             i++;
         }
     }
-    /*
+    
     public static void setParameters(CollectionField field,
             						 String fieldName,
             						 Query query) {
@@ -340,9 +328,9 @@ public class OldQueryBuilder {
 			}
 		}	
     }
-    */
+    
     public static void setParameters(DropDownField field, String fieldName, Query query) {
-    	ArrayList list = (ArrayList) field.getValue();
+    	ArrayList list = (ArrayList) field.getSelections();
     	String paramName = getParamName(fieldName);
     
     	for(int i = 0;i<list.size();i++){
@@ -350,7 +338,7 @@ public class OldQueryBuilder {
     		if(o instanceof NumberObject){
 				NumberObject number = (NumberObject)o;
 				if(number.getType() == NumberObject.Type.INTEGER){
-					Integer param = number.getIntegerValue();
+					Integer param = (Integer)number.getValue();
 					query.setParameter(paramName + i, param);	
 				}else if(number.getType() == NumberObject.Type.DOUBLE){
 					Double param = (Double)number.getValue();

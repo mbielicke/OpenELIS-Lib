@@ -1,35 +1,22 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.server;
 
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.util.XMLUtil;
@@ -42,15 +29,14 @@ import java.util.HashMap;
 
 import javax.servlet.ServletException;
 
-public class CalendarServlet extends AppServlet implements CalendarServiceInt<RPC>{
+public class CalendarServlet extends AppServlet implements CalendarServiceInt{
 
     private static final long serialVersionUID = 1L;
 
-    private static String appRoot ;
+    private static String appRoot;
     
     public void init() throws ServletException {
         appRoot = getServletConfig().getInitParameter("app.root");
-        //appRoot = "/home/tschmidt/workspace/TestWidgets/www/edu.uiowa.uhl.tw.TestWidgets/";
     }
     
     public String getXML() throws RPCException {
@@ -74,20 +60,18 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt<RP
         }
     }
 
-    public HashMap<String, FieldType> getXMLData() throws RPCException {
+    public HashMap<String,DataObject> getXMLData() throws RPCException {
         // TODO Auto-generated method stub
         return null;
     }
     
     public String getMonth(String month, String year, String date) throws RPCException {
         try {
-            Calendar cal = Calendar.getInstance();
-            if(date != null && !date.equals("")){
-                date = date.replace('-','/');
-                cal.setTime(new Date(date));
-            }else{
-                date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
-            }
+        	Calendar cal = Calendar.getInstance();
+        	if(date != null && !date.equals(""))
+        		date = date.replace('-','/');
+        	else 
+        		date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element monthEl = doc.createElement("month");
@@ -127,9 +111,10 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt<RP
         }
     }
 
-	public HashMap<String, FieldType> getXMLData(HashMap<String, FieldType> args) throws RPCException {
+	public HashMap<String,DataObject> getXMLData(HashMap<String,DataObject> args) throws RPCException {
         try {
-            String date = (String)((DataObject)args.get("date")).getValue();
+            String date = (String)args.get("date").getValue();
+            System.out.println("date = "+date);
             Calendar cal = Calendar.getInstance();
             if(!date.equals("")){
                 date = date.replace('-','/');
@@ -148,7 +133,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt<RP
             Element day = doc.createElement("date");
             day.appendChild(doc.createTextNode(date));
             root.appendChild(day);
-            HashMap<String,FieldType> map = new HashMap<String,FieldType>();
+            HashMap<String,DataObject> map = new HashMap<String,DataObject>();
             map.put("xml", new StringObject(ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc)));
             return map;
         }catch(Exception e){
@@ -156,10 +141,5 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt<RP
             throw new RPCException(e.getMessage());
         }
 	}
-
-    public RPC getScreen(RPC rpc) throws RPCException {
-        // TODO Auto-generated method stub
-        return null;
-    }
     
 }

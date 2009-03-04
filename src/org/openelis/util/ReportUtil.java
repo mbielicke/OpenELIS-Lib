@@ -1,34 +1,23 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.util;
 
 import org.openelis.gwt.common.DatetimeRPC;
-import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.DropDownField;
@@ -205,16 +194,16 @@ public class ReportUtil {
         return decodeType;
     }
 
-    public String encodeURLParameters(Form form, String user) {
+    public String encodeURLParameters(FormRPC rpc, String user) {
         String       value ="";
         StringBuffer buffer = new StringBuffer(256);
 
         buffer.append("?LOGNAME="+user);
-        Iterator keyIt = form.getFieldMap().keySet().iterator();
+        Iterator keyIt = rpc.getFieldMap().keySet().iterator();
         while(keyIt.hasNext()) {
             value = "";
             String key = (String)keyIt.next();
-            AbstractField field = form.getField(key);
+            AbstractField field = rpc.getField(key);
             if (field.getValue() != null) {
                 if(field instanceof DateField)
                     value = DBDatetime.getInstance(DBDatetime.YEAR, DBDatetime.DAY, ((DatetimeRPC)field.getValue()).getDate()).toString();
@@ -224,7 +213,7 @@ public class ReportUtil {
                         for(DataSet set : list){
                             if(list.indexOf(set) > 0)
                                 value += ",";
-                            value += (String)((DataObject)set.getKey()).getValue();
+                            value += (String)set.getKey().getValue();
                         }
                     }else{
                        value = field.getValue().toString();   

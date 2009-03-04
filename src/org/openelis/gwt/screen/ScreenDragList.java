@@ -1,31 +1,20 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
-import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -43,7 +32,6 @@ import org.openelis.gwt.widget.DragList;
  * @author tschmidt
  *
  */
-@Deprecated
 public class ScreenDragList extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap
@@ -53,7 +41,6 @@ public class ScreenDragList extends ScreenWidget {
 	 * Widget wrapped by this class
 	 */
     private DragList list;
-    private boolean dropInited = false;
 	/**
 	 * Default no-arg constructor used to create reference in the WidgetMap class
 	 */
@@ -71,23 +58,18 @@ public class ScreenDragList extends ScreenWidget {
      */
     public ScreenDragList(Node node, final ScreenBase screen){
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
         final ScreenDragList sd = this;
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            list = (DragList)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            list = new DragList();
-        if (node.getAttributes().getNamedItem("targets") != null) {
-            String targets[] = node.getAttributes()
-                                  .getNamedItem("targets")
-                                  .getNodeValue().split(",");
-            for(int i = 0; i < targets.length; i++){
-                    list.targets.add(targets[i]);
+        list = new DragList() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
+                        screen.doTab(event, sd);
+                    }
+                } else {
+                    super.onBrowserEvent(event);
+                }
             }
-        }
+        };
         initWidget(list);        
         list.setStyleName("ScreenDragList");
         setDefaults(node, screen);
@@ -131,24 +113,14 @@ public class ScreenDragList extends ScreenWidget {
                 ScreenLabel label = new ScreenLabel(items.item(i),screen);
                 label.addMouseListener((MouseListener)ClassFactory.forName("ProxyListener"));
                 label.sinkEvents(Event.MOUSEEVENTS);
-                //label.setDropTargets(getDropTargets());
+                label.setDropTargets(getDropTargets());
                 list.addItem(label);
             }
         }
     }
     
     public void enable(boolean enabled){
-        if(enabled && !dropInited){
-            for(String target : list.targets) {         
-               // list.dragController.registerDropController(screen.widgets.get(target).getDropController());
-            }
-            dropInited = true;    
-        }
         list.enable(enabled);
-    }
-   
-    public DropController getDropController() {
-        return list.dropController;
     }
     
     public void destroy() {

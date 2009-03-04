@@ -22,42 +22,16 @@
     height:18px;
     background:white;
 }
-tr .AltTableRow{
+.AltTableRow{
+    height:16px;
     background:#f8f8f9;
 }
-
-tr .TableHighlighted{
-    color:#000000;
-    background:#EFEFEF url('../Images/row-over.gif') repeat-x scroll left top;
-    border: 1px solid #DDDDDD;
-}
-
-.TableCell, .TableCellRight, .TableCellMiddle{  
-border-color:#FFFFFF #EDEDED #EDEDED;
-border-style:solid;
-border-width:1px 1px 1px 0px;
-color:black;
-cursor:pointer;
-font-family:Verdana,Arial,Helvetica,sans-serif;
-font-size:10px;
+.TableCell {  
 height:18px;
-overflow:hidden;
-padding:1px 1px 0px;
+    overflow:hidden;
+    cursor:pointer;
+    color: black;
 }
-
-.TableCellLeft{  
-border-color:#FFFFFF #EDEDED #EDEDED #EDEDED;
-border-style:solid;
-border-width:1px 1px 1px 1px;
-color:black;
-cursor:pointer;
-font-family:Verdana,Arial,Helvetica,sans-serif;
-font-size:10px;
-height:18px;
-overflow:hidden;
-padding:1px 1px 0px;
-}
-
 .RowNum {
     
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -67,28 +41,8 @@ padding:1px 1px 0px;
 }
 
 .Selected .TableCell{
-background:#DFE8F6 none repeat scroll 0 0 !important;
-border:1px dotted #A3BAE9;
-}
-
-.Selected .TableCellLeft{
-background:#DFE8F6;
-border-left:1px dotted #A3BAE9;
-border-top:1px dotted #A3BAE9;
-border-bottom:1px dotted #A3BAE9;
-}
-
-.Selected .TableCellMiddle{
-background:#DFE8F6;
-border-top:1px dotted #A3BAE9;
-border-bottom:1px dotted #A3BAE9;
-}
-
-.Selected .TableCellRight{
-background:#DFE8F6;
-border-right:1px dotted #A3BAE9;
-border-top:1px dotted #A3BAE9;
-border-bottom:1px dotted #A3BAE9;
+    color:#333;
+    background:#d9e8fb;
 }
 
 .Enabled{
@@ -108,24 +62,16 @@ border-bottom:1px dotted #A3BAE9;
     font-size: 10px;
     background:#dde0e3;
 }
-
-.FavHeader{
-    height:20px;
+.Header{
+    height:18px;
     background:url("../Images/headersprite.gif") repeat-x;
     border-collapse:collapse;
     overflow:hidden;
 }
-
-.Header{
-    height:17px;
-    background:#eeeff1 url("../Images/headersprite.gif") repeat-x;
-    overflow:hidden;
-   // border:1px solid #B5B8C8;
-}
 .HeaderBar{
     width:3px;
-    height:18px;
-    background:url('../Images/headerdivider.gif') no-repeat center bottom;
+    height:17px;
+    background:url('../Images/buttondivider.gif') no-repeat center center;
     cursor:e-resize;
 }
 .HeaderBarPad{
@@ -133,7 +79,7 @@ border-bottom:1px dotted #A3BAE9;
 }
 .HeaderCell{
     overflow:hidden;
-  //  cursor:pointer;
+    cursor:pointer;
     height:18px;
     vertical-align:middle;
 }
@@ -145,7 +91,7 @@ border-bottom:1px dotted #A3BAE9;
 }
 .HeaderLabel {
     overflow:hidden;
-    color:grey;
+    color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
        -moz-user-select: none;
@@ -245,75 +191,20 @@ a.index:hover{
    text-decoration:none;
 }
 
-tr .Highlighted{
+.Highlighted{
     color:#000000;
-    background:#EFEFEF url('../Images/row-over.gif') repeat-x scroll left top;
-    border: 1px solid #DDDDDD;
+    background:#ffe290;
 }
+
+/*.Dropdown .Selected .TableCell{
+    color:#FFFFFF;
+    background:blue;
+}*/
 
 .CellError {
     height:16px;
 	border-bottom:1px dashed red;
 }
-.Disabled .TableCell .gwt-Label {
-	color:grey;
-}
-
-.topHeaderBar { 
-    height:18px;
-    width:100%;
-    background:black url("../Images/headersprite.gif") repeat-x;
-        border-bottom: 1px solid #b5b8c8;
-}
-
-.topHeaderBarItem {
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:10px;
-    font-weight : bold;
-    color:white;
-}
-.Hover .topHeaderBarItem, .Selected .topHeaderBarItem{
-    color:black;
-    cursor:pointer;
-    border:1px solid #333;
-    background:#f0f0f0;
-}
-
-.topHeaderContainer{
-    border:1px solid #b5b8c8;
-    border-top:0;
-    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
-}
-
-.topHeaderItemMiddle{
-    height:2em;
-
-}
-.topHeaderItemTitle{
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:10px;
-}
-
-.disabled .topHeaderItemTitle {
-color:gray;
-}
-
-.topHeaderItemDesc{
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:9px;
-    color:gray;
-}
-.topHeaderIcon{
-    width:20px;
-    height:2em;
-}
-.TopHeaderRowContainer{
-    width:200px;
-}
-
-.Hover .TopHeaderRowContainer, .TopHeaderRowContainer Hover {
-    cursor:pointer;
-    padding:0;
-    background:url('../Images/white-top-bottom.gif') repeat-x;
-    border:1px solid #8db2e3;
+.Header .Holiday {
+	background:lightblue;
 }

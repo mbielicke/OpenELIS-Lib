@@ -1,55 +1,42 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
 //import com.google.gwt.i18n.client.ConstantsWithLookup;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.EnumSet;
+import java.util.Iterator;
 
-import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.FormRPC;
 import org.openelis.gwt.common.LastPageException;
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCDeleteException;
-import org.openelis.gwt.common.Form.Status;
+import org.openelis.gwt.common.IForm.Status;
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.common.data.DataModelWidget;
+import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.services.AppScreenFormServiceIntAsync;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.FormInt;
 
-import java.util.EnumSet;
-import java.util.Iterator;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
+import com.google.gwt.user.client.ui.Widget;
 /**
  * ScreenForm extends Screen to include functionality for integrating 
  * the ButtonPanel widget and default logic for standard forms that accept
@@ -57,216 +44,28 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> extends AppScreen<ScreenRPC> implements FormInt, SourcesCommandEvents, CommandListener {
-   
-    public Key key;
-    public AppScreenFormServiceIntAsync<ScreenRPC,Key> formService;
+public class AppScreenForm extends AppScreen implements FormInt, ChangeListener, SourcesChangeEvents {
+    
+    /**
+     * Reference to the ButtonPanel that is defined on this
+     * Screen.  This needs to be set by the Extending class 
+     * after the screen is drawn.
+     */
+    private ButtonPanel bpanel = null;
+    /**
+     * Reference to the Label that will display the Form Messages to
+     * the User.  If this Screen is set in a ScreenWindow this 
+     * field will be set by that class.  If not, then the Extending class
+     * must set this field after the Screen is drawn.
+     */
+    public Label message = new Label();
+    
+    public DataModelWidget modelWidget = new DataModelWidget();
+    protected DataSet key;
+    public AppScreenFormServiceIntAsync formService;
     public State state = State.DEFAULT;
-    protected CommandListenerCollection commandListeners;
-    public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE};
-
-    protected AsyncCallback<ScreenRPC> fetchCallback = new AsyncCallback<ScreenRPC>() {
-        public void onSuccess(ScreenRPC result) {
-            rpc = result;
-            loadScreen(rpc.form);
-            window.setStatus("Load Complete", "");
-            changeState(State.DISPLAY);
-        }
-        public void onFailure(Throwable caught){
-            handleError(caught);
-            window.setStatus("Load Failed", "");
-            changeState(State.DEFAULT);
-            key = null;
-        }
-    };
-    
-    protected AsyncCallChain<ScreenRPC> fetchChain = new AsyncCallChain<ScreenRPC>(); 
-    {
-        fetchChain.add(fetchCallback);
-    }
-    
-    protected AsyncCallback<ScreenRPC> updateCallback= new AsyncCallback<ScreenRPC>() {
-        public void onSuccess(ScreenRPC result){
-            rpc = result;
-            loadScreen(rpc.form);
-            window.setStatus(consts.get("updateFields"),"");
-            changeState(State.UPDATE);
-        }
-        public void onFailure(Throwable caught){
-            handleError(caught);
-            enable(false);
-            changeState(State.DISPLAY);
-        }            
-    };
-   
-    protected AsyncCallChain<ScreenRPC> updateChain = new AsyncCallChain<ScreenRPC>();
-    {
-        updateChain.add(updateCallback);
-        
-    }
-    
-    protected AsyncCallback<ScreenRPC> abortCallback = new AsyncCallback<ScreenRPC>() {
-        public void onSuccess(ScreenRPC result){
-            rpc = result;
-            loadScreen(rpc.form);
-            window.setStatus(consts.get("updateAborted"), "");
-           
-        }
-        public void onFailure(Throwable caught){
-            handleError(caught);
-            window.setStatus(consts.get("updateAborted"), "");
-        }
-    };
-   
-    protected AsyncCallChain<ScreenRPC> abortChain = new AsyncCallChain<ScreenRPC>();
-    { 
-        abortChain.add(abortCallback);
-
-    }
-    
-    protected AsyncCallback<ScreenRPC> deleteCallback = new AsyncCallback<ScreenRPC>() {
-        public void onSuccess(ScreenRPC result){
-            rpc = result;
-            Form delete = rpc.form;
-            if (delete.status == Form.Status.invalid) {
-                drawErrors();
-            
-                if(delete.getErrors().size() > 0){
-                    if(delete.getErrors().size() > 1){
-                        window.setMessagePopup((String[])delete.getErrors().toArray(new String[delete.getErrors().size()]), "ErrorPanel");
-                        window.setStatus("(Error 1 of "+delete.getErrors().size()+") "+(String)delete.getErrors().get(0), "ErrorPanel");
-                    }else
-                        window.setStatus((String)delete.getErrors().get(0),"ErrorPanel");
-                }
-            }else{
-                commandListeners.fireCommand(Action.REFRESH_PAGE,null);
-                strikeThru(false);
-                changeState(State.DEFAULT);
-            }
-         }
-         public void onFailure(Throwable caught){
-             handleError(caught);
-         }
-    };
-    
-    protected AsyncCallChain<ScreenRPC> deleteChain = new AsyncCallChain<ScreenRPC>();
-    {
-        deleteChain.add(deleteCallback);
-    }
-
-    protected AsyncCallback<ScreenRPC> commitAddCallback = new AsyncCallback<ScreenRPC>() {
-        public void onSuccess(ScreenRPC result){
-            rpc = result;
-            loadScreen(rpc.form);
-            if(form.status == Form.Status.invalid){
-                if(form.getErrors().size() == 0)
-                    window.setStatus(consts.get("addingFailed"),"ErrorPanel");
-            }else {
-                enable(false);
-                changeState(State.DEFAULT);
-                window.setStatus(consts.get("addingComplete"),"");
-            }
-            
-        }
-        public void onFailure(Throwable caught){
-            handleError(caught);
-        } 
-    };
-
-    protected AsyncCallChain<ScreenRPC> commitAddChain = new AsyncCallChain<ScreenRPC>();
-    {
-        commitAddChain.add(commitAddCallback);
-    }
-
-    protected AsyncCallback<ScreenRPC> commitUpdateCallback = new AsyncCallback<ScreenRPC>() {
-        public void onSuccess(ScreenRPC result){
-            rpc = result;
-            loadScreen(rpc.form);
-            if(form.status == Form.Status.invalid){
-                if(form.getErrors().size() == 0)
-                    window.setStatus(consts.get("updateFailed"),"ErrorPanel");
-                
-            } else {
-                enable(false);
-                changeState(State.DISPLAY);
-                window.setStatus(consts.get("updatingComplete"),"");
-                clearStatus(5000);
-            }
-        }
-        public void onFailure(Throwable caught){
-            handleError(caught);
-        }
-    };
-    
-    protected AsyncCallChain<ScreenRPC> commitUpdateChain = new AsyncCallChain<ScreenRPC>();
-    {
-        commitUpdateChain.add(commitUpdateCallback);
-    }
-
-    protected AsyncCallback<DataModel<Key>> commitQueryCallback = new AsyncCallback<DataModel<Key>>() {
-        public void onSuccess(DataModel<Key> result){
-           // try {
-                resetForm();
-                load();
-                setForm(FormInt.State.DISPLAY);
-                form = rpc.form;
-                load();
-                enable(false);
-                window.setStatus(consts.get("queryingComplete"),"");
-                changeState(State.DEFAULT);
-                commandListeners.fireCommand(Action.NEW_MODEL, result);
-           // }catch(Exception e){
-               // Window.alert(e.getMessage());
-           // }
-        }
-        public void onFailure(Throwable caught){
-            handleError(caught);
-        }
-    };
-    
-    protected AsyncCallChain<DataModel<Key>> commitQueryChain = new AsyncCallChain<DataModel<Key>>();
-    {
-        commitQueryChain.add(commitQueryCallback);
-    }
-    
-    protected void handleError(Throwable caught) {
-        if(caught instanceof RPCDeleteException)
-            window.setStatus(caught.getMessage(),"ErrorPanel");
-        else
-            Window.alert(caught.getMessage());
-        if(form.getErrors().size() > 0){
-            if(form.getErrors().size() > 1){
-                window.setMessagePopup((String[])form.getErrors().toArray(new String[form.getErrors().size()]), "ErrorPanel");
-                window.setStatus("(Error 1 of "+form.getErrors().size()+") "+(String)form.getErrors().get(0), "ErrorPanel");
-            }else
-                window.setStatus((String)form.getErrors().get(0),"ErrorPanel");
-        }  
-    }
-    
-    protected void loadScreen(Form form) {
-        this.form = form;
-        forms.put(form.key, form);
-        load();
-        if (form.status == Form.Status.invalid) {
-            drawErrors();
-        }
-        if(form.getErrors().size() > 0){
-            if(form.getErrors().size() > 1){
-                window.setMessagePopup((String[])form.getErrors().toArray(new String[form.getErrors().size()]), "ErrorPanel");
-                window.setStatus("(Error 1 of "+form.getErrors().size()+") "+(String)form.getErrors().get(0), "ErrorPanel");
-            }else
-                window.setStatus((String)form.getErrors().get(0),"ErrorPanel");
-        }            
-    }
-    
-    protected void clearStatus(int delay) {
-       Timer timer = new Timer() {
-            public void run() {
-                window.setStatus("", "");
-            }
-        };
-        timer.schedule(delay);
-    }
+    protected ChangeListenerCollection changeListeners;
+    private boolean busy = false;
 
     public AppScreenForm(AppScreenFormServiceIntAsync service) {
         super(service);
@@ -275,27 +74,51 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
     
     public AppScreenForm() {
         super();
+        modelWidget.addChangeListener(this);
     }
     
     public void afterDraw(boolean sucess) {
         super.afterDraw(sucess);
+        if(bpanel != null){
+            bpanel.addChangeListener(this);
+            addChangeListener(bpanel);
+        }
         changeState(State.DEFAULT);
         enable(false);
     }
     
-    
-    public void fetch() {
-        fetch(key,fetchChain);
+    public void fetch(){
+       	if(busy)
+    		return;
+    	busy = true;
+        window.setStatus(consts.get("loading"), "spinnerIcon");
+
+    	
+        formService.fetch(key, (FormRPC)forms.get("display"), new AsyncCallback(){
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               forms.put(rpc.key, rpc);
+               load();
+               afterFetch(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterFetch(false);
+           }
+        });
     }
     
-    public Request fetch(AsyncCallback<ScreenRPC> callback){
-        return fetch(key,callback);
-    }
-    
-    public Request fetch(Key key, AsyncCallback<ScreenRPC> callback){
-        window.setStatus("Loading...", "spinnerIcon");
-        rpc.key = key;
-        return formService.fetch(rpc, callback);
+    public void afterFetch(boolean success){
+       if(!success)
+            key = null;
+    	busy = false;
+    	window.setStatus("", "");
+    	if(success)
+    		changeState(State.DISPLAY);
+    	else{
+    		changeState(State.DEFAULT);
+    		key = null;
+    	}
     }
     
     /**
@@ -303,48 +126,84 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
      * a the ButtonPanel is clicked.  It is called from the ButtonPanel Widget.
      */
     public void query() {
-        key = null;
-        resetForm();
-        load();
+        doReset();
         window.setStatus(consts.get("enterFieldsToQuery"),"");
-        setForm(FormInt.State.QUERY);
-        form = forms.get("query");
-        resetForm();
-        load();
-        enable(true);
+        setForm(true);
+        rpc = (FormRPC)forms.get("query");
+        doReset();
+        enable(true); 
         changeState(State.QUERY);
+    }
+
+    /**
+     * This stub can be overridden to handle the default behavior for when the
+     * Next button on a ButtonPanel is clicked.  It is called from the ButtonPanel
+     * Widget.
+     */
+    public void next() {
+        // TODO Auto-generated method stub
+        modelWidget.next();
         
     }
     
+    /**
+     * This stub can be overridden to handle the default behavior for when the
+     * Previous button on a ButtonPanel is clicked.  It is called from the ButtonPanel
+     * Widget.
+     */
+    public void prev() {
+        // TODO Auto-generated method stub
+        modelWidget.previous();
+    }
+
     /** 
      * This method provides the default behavior for a form when the Add button on a 
      * ButtonPanel is clicked.  It is called from the ButtonPanel Widget.  If overridden 
      * in the extending class be sure to call super.add(state).
      */
     public void add() {
-        resetForm();
-        key = null;
-        load();
+        doReset();
         enable(true);
         changeState(State.ADD);
         window.setStatus(consts.get("enterInformationPressCommit"),"");
     }
 
-    public void update(){
-        enable(true);
-        update(updateChain);
-    }
-    
     /**
      * This method provides the default behavior for when the Update button of a
      * ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
-    public Request update(AsyncCallback<ScreenRPC> callback) {
+    public void update() {
         window.setStatus(consts.get("lockForUpdate"),"spinnerIcon");
-        resetForm();
-        return formService.fetchForUpdate(rpc, callback);
+        formService.fetchForUpdate(key, (FormRPC)forms.get("display"), new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               forms.put(rpc.key, rpc);
+               load();
+               afterUpdate(true);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterUpdate(false);
+           }
+        });
     }
     
+    public void afterUpdate(boolean success){
+        if(success){
+            enable(true);
+            window.setStatus(consts.get("updateFields"),"");
+            changeState(State.UPDATE);
+        }else{
+            window.setStatus("", "");
+            changeState(State.DISPLAY);
+        }
+    }
+
+    /** 
+     * This stub can be overridden by the extending class to handle the behavior 
+     * for when the Delete button on a ButtonPanel is clicked.  It is called from 
+     * the ButtonPanel widget.
+     */
     public void delete() {
     	//strikethru all the input widgets
     	strikeThru(true);
@@ -356,25 +215,58 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         window.setStatus(consts.get("deleteMessage"),"");           
     }
     
-    public void commitDelete() {
-        commitDelete(deleteChain);
-    }
-    
-    public Request commitDelete(AsyncCallback<ScreenRPC> callback){
+    public void commitDelete(){
+    	if(busy)
+    		return;
+    	busy = true;
         window.setStatus(consts.get("deleting"),"spinnerIcon");
-    	return formService.commitDelete(rpc,callback); 
+    	formService.commitDelete(key, (FormRPC)forms.get("display"), new AsyncCallback() {
+            public void onSuccess(Object result){
+                rpc = (FormRPC)result;
+                forms.put(rpc.key, rpc);
+                load();
+                if (rpc.status == Status.invalid) {
+             	   drawErrors();
+             	  afterCommitDelete(false);
+                } else {
+                	afterCommitDelete(true);
+                }
+            }
+            public void onFailure(Throwable caught){
+            	if(caught instanceof RPCDeleteException)
+            		window.setStatus(caught.getMessage(),"ErrorPanel");
+                else
+            		Window.alert(caught.getMessage());
+                afterCommitDelete(false);
+            }
+         });
     }
     
+    public void afterCommitDelete(boolean success){
+    	busy = false;
+    	if(success){
+            getPage(false,consts.get("deleteComplete"));        
+    		strikeThru(false);
+            changeState(State.DEFAULT);
+        }else{
+    		if(rpc.getErrors().size() > 0){
+    			if(rpc.getErrors().size() > 1){
+    				window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+    				window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+    			}else
+    				window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+    		}    		
+        }
+    }
 
     /**
      * This method provides the default behavior for a form when the Commit button
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void commit() {
-        submitForm();
+        super.doSubmit();
         if (state == State.UPDATE) {
-            form.validate();
-            if (form.status == Status.valid && validate()) {
+            if (rpc.validate() & validate()) {
                 window.setStatus(consts.get("updating"),"spinnerIcon");
                 clearErrors();
                 commitUpdate();
@@ -384,8 +276,7 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
             }
         }
         if (state == State.ADD) {
-            form.validate();
-            if (form.status == Status.valid && validate()) {
+            if (rpc.validate() & validate()) {
                 window.setStatus(consts.get("adding"),"spinnerIcon");
                 clearErrors();
                 commitAdd();
@@ -394,12 +285,11 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
             }
         }
-        if (state == State.QUERY) {
-            form.validate();
-            if (form.status == Status.valid && validate()) {
+        if (state == State.QUERY) { 
+            if (rpc.validate() & validate()) {
            		window.setStatus(consts.get("querying"),"spinnerIcon");
            		clearErrors();
-           		commitQuery(form);
+           		commitQuery(rpc);
             } else {
                 drawErrors();
                 window.setStatus(consts.get("correctErrors"),"ErrorPanel");
@@ -410,98 +300,204 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         }
         
     }
-   
+    
     public void commitUpdate() {
-        commitUpdate(commitUpdateChain);
+    	if(busy)
+    		return;
+    	busy = true;
+    	
+        formService.commitUpdate(rpc, (FormRPC)forms.get("display"),new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               forms.put(rpc.key, rpc);
+               load();
+               if (rpc.status == Status.invalid) {
+            	   drawErrors();
+            	   afterCommitUpdate(false);
+               } else {
+            	   afterCommitUpdate(true);
+               }
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterCommitUpdate(false);
+           }
+        });
     }
     
-    public Request commitUpdate(AsyncCallback<ScreenRPC> callback) {
-        return formService.commitUpdate(rpc, callback);
+    public void afterCommitUpdate(boolean success) {
+    	busy = false;
+        if(success){
+            enable(false);
+            changeState(State.DISPLAY);
+            window.setStatus(consts.get("updatingComplete"),"");
+        }else{
+        	if(rpc.getErrors().size() > 0){
+        		if(rpc.getErrors().size() > 1){
+        			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+            		window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+            	}else
+            		window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+        	}else{
+        		window.setStatus(consts.get("updateFailed"),"ErrorPanel");
+        	}
+        }
     }
     
     public void commitAdd() {
-        commitAdd(commitAddChain);
+    	if(busy)
+    		return;
+    	busy = true;
+        formService.commitAdd(rpc, (FormRPC)forms.get("display"), new AsyncCallback() {
+           public void onSuccess(Object result){
+               rpc = (FormRPC)result;
+               forms.put(rpc.key,rpc);
+               load();
+               if (rpc.status == Status.invalid) {
+            	   drawErrors();
+                   afterCommitAdd(false);
+               } else {
+                   afterCommitAdd(true);
+               }
+           }
+           public void onFailure(Throwable caught){
+            	   Window.alert(caught.getMessage());
+            	   afterCommitAdd(false);
+           }
+        });
     }
     
-    public Request commitAdd(AsyncCallback<ScreenRPC> callback) {
-        rpc.key = null;
-        return formService.commitAdd(rpc,callback); 
+    public void afterCommitAdd(boolean success) {
+    	busy = false;
+        if(success){
+            enable(false);
+            changeState(State.DEFAULT);
+            window.setStatus(consts.get("addingComplete"),"");
+        }else{
+        	if(rpc.getErrors().size() > 0){
+        		if(rpc.getErrors().size() > 1){
+        			window.setMessagePopup((String[])rpc.getErrors().toArray(new String[rpc.getErrors().size()]), "ErrorPanel");
+            		window.setStatus("(Error 1 of "+rpc.getErrors().size()+") "+(String)rpc.getErrors().get(0), "ErrorPanel");
+            	}else
+            		window.setStatus((String)rpc.getErrors().get(0),"ErrorPanel");
+        	}else{
+        		window.setStatus(consts.get("addingFailed"),"ErrorPanel");
+        	}
+        }
     }
     
-    public Request commitQuery(Form form) {
-        return commitQuery(form,commitQueryChain);
-    }
-    
-    public Request commitQuery(Form form, AsyncCallback<DataModel<Key>> callback) {    	
+    public void commitQuery(FormRPC rpcQuery) {
+    	if(busy)
+    		return;
+    	busy = true;
+    	
         window.setStatus(consts.get("querying"),"spinnerIcon");
-        return formService.commitQuery(form, null, callback); 
+        formService.commitQuery(rpcQuery, modelWidget.getModel(), new AsyncCallback() {
+           public void onSuccess(Object result){
+               modelWidget.setModel((DataModel)result);
+               afterCommitQuery(true);
+               modelWidget.select(0);
+           }
+           public void onFailure(Throwable caught){
+               Window.alert(caught.getMessage());
+               afterCommitQuery(false);
+           }
+        });
     }
     
-    protected String messageText;
-    
-    protected AsyncCallback<DataModel<Key>> pageCallback = new AsyncCallback<DataModel<Key>>() {
-        public void onSuccess(DataModel result){
-            if(messageText == null){
-                window.setStatus(consts.get("queryingComplete"),"");
-            }else{
-                window.setStatus(messageText, "");
-            }
-            commandListeners.fireCommand(Action.NEW_PAGE,result);
-        }
-                
-        public void onFailure(Throwable caught){
-            if(caught instanceof LastPageException){
-                window.setStatus(caught.getMessage(),"ErrorPanel");
-            }else
-                Window.alert(caught.getMessage());
-        }
-    };
-    
-    public void getPage(final String messageText, final DataModel<Key> model, final AsyncCallback<DataModel<Key>> callback) {
-        this.messageText = messageText;
-    	if(model.getPage() < 0){
+    public void getPage(final boolean selectItem, final String messageText) {
+    	if(modelWidget.getPage() < 0){
     		window.setStatus(consts.get("beginningQueryException"),"ErrorPanel");
-    		callback.onFailure(new Exception("begining"));
+    		modelWidget.getModel().setPage(0);
+    		modelWidget.getModel().select(modelWidget.getSelectedIndex()+1);
     	}else{
             window.setStatus(consts.get("querying"),"spinnerIcon");
-            final SyncCallChain chain = new SyncCallChain();
-            chain.add(pageCallback);
-            chain.add(callback);
-            DeferredCommand.addCommand( new Command() {
-                public void execute() {
-                    formService.commitQuery(null, model, chain);                        
-
-                }
-            });
+    	    formService.commitQuery(null, modelWidget.getModel(), new AsyncCallback() {
+    	        public void onSuccess(Object result){
+    	            modelWidget.setModel((DataModel)result);
+    	            if(selectItem){
+    	                if(modelWidget.getModel().isSelectLast())
+    	                    modelWidget.select(modelWidget.getModel().size()-1);
+    	                else
+    	                    modelWidget.select(0);
+    	            }                       
+    	            if(messageText == null){
+    	                window.setStatus(consts.get("queryingComplete"),"");
+    	            }else{
+    	                message.setText(messageText);
+    	            }
+    	        }
+                        
+    	        public void onFailure(Throwable caught){
+    	            
+    	            if(caught instanceof LastPageException){
+    	                modelWidget.getModel().setPage(modelWidget.getPage()-1);
+    	                if(modelWidget.getSelectedIndex() == modelWidget.getModel().size()){
+    	                    modelWidget.getModel().select(modelWidget.getSelectedIndex()-1);
+    	                    window.setStatus(consts.get("endingQueryException"),"ErrorPanel");             		   
+    	                }else
+    	                    window.setStatus(caught.getMessage(),"ErrorPanel");
+    	            }else
+    	                Window.alert(caught.getMessage());
+    	        }
+    	        });
         }
     }
     
+    public void afterCommitQuery(boolean success) {
+    	busy = false;
+        if(success){
+        	doReset();
+        	setForm(false);
+            load((FormRPC)forms.get("display"));
+            enable(false);
+            if(modelWidget.getSelectedIndex() > -1)
+            	changeState(State.DISPLAY);
+            else
+            	changeState(State.DEFAULT);
+            window.setStatus(consts.get("queryingComplete"),"");
+        }else{
+            window.setStatus(consts.get("correctErrors"),"ErrorPanel");
+        }
+    }
     /**
      * This method provides the default behavior for a form when the Abort button 
      * on a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
      */
     public void abort() {
         if (state == State.UPDATE) {
-            clearErrors();   
-            formService.abort(rpc, abortChain);
+            clearErrors();
+            doReset();
+            formService.abort(key, (FormRPC)forms.get("display"), new AsyncCallback() {
+               public void onSuccess(Object result){
+                   rpc = (FormRPC)result;
+                   forms.put(rpc.key, rpc);
+                   load();
+                   afterAbort(true);
+               }
+               public void onFailure(Throwable caught){
+                   Window.alert(caught.getMessage());
+                   afterAbort(false);
+               }
+            });
             enable(false);
             changeState(State.DISPLAY);
         }
         if (state == State.ADD) {
-            resetForm();
-            load();
+            doReset();
             clearErrors();
             enable(false);
             window.setStatus(consts.get("addAborted"),"");
             changeState(State.DEFAULT);
+            afterAbort(true);
         }
         if (state == State.QUERY) {
         	clearErrors();
-            setForm(FormInt.State.DISPLAY);
-            this.form = forms.get("display");
-            load();
+            setForm(false);
+            load((FormRPC)forms.get("display"));
             enable(false);
             window.setStatus(consts.get("queryAborted"),"");
+            
             changeState(State.DEFAULT);
         }
         if(state == State.DELETE){
@@ -511,6 +507,9 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         }
     }
 
+    public void afterAbort(boolean success) {
+        window.setStatus(consts.get("updateAborted"), "");
+    }
     /** 
      * This method provides the default logic for a form when the Reload button
      * of a ButtonPanel is clicked.  It is called from the ButtonPanel widget.
@@ -537,97 +536,106 @@ public class AppScreenForm<ScreenRPC extends RPC,Display extends Form,Key> exten
         return false;
     }
     
-    public void setForm(State state){
+    public void onDetach() {
+        if(!keep){
+            bpanel = null;
+            message = null;      
+            window = null;
+            modelWidget = null;            
+        }
+        super.onDetach();
+    }
+    
+    public void setForm(boolean mode){
         Iterator widIt = widgets.values().iterator();
         while(widIt.hasNext()){
             ScreenWidget wid = (ScreenWidget)widIt.next();
             if(wid instanceof ScreenInputWidget){
-                ((ScreenInputWidget)wid).setForm(state);
+                ((ScreenInputWidget)wid).setForm(mode);
             }
         }
         
     }
 
     public void onChange(Widget sender) {
-
-    }
-
-    public void addCommandListener(CommandListener listener) {
-        if(commandListeners == null){
-            commandListeners = new CommandListenerCollection();
+    	//clear the message, the action method can set it to something else
+    	if(message != null)
+    		window.setStatus("","");
+    	
+        if(sender == modelWidget){
+            if(modelWidget.action == DataModelWidget.Action.SELECTION){
+                key = modelWidget.getSelected().getInstance();
+                fetch();
+            }
+            if(modelWidget.action == DataModelWidget.Action.GETPAGE)
+                getPage(true, null);
         }
-        commandListeners.add(listener);
+        if(sender == bpanel){
+            if (bpanel.buttonClicked.action.equals("query")) {
+                query();
+            }
+            else if (bpanel.buttonClicked.action.equals("next")) {
+                next();
+            }
+            else if (bpanel.buttonClicked.action.equals("prev")) {
+                prev();
+            }
+            else if (bpanel.buttonClicked.action.equals("add")) {
+                add();
+            }
+            else if (bpanel.buttonClicked.action.equals("update")) {
+                update();
+            }
+            else if (bpanel.buttonClicked.action.equals("delete")) {
+                delete();
+            }
+            else if (bpanel.buttonClicked.action.equals("commit")) {
+                commit();
+            }
+            else if (bpanel.buttonClicked.action.equals("abort")) {
+                abort();
+            }
+            else if (bpanel.buttonClicked.action.equals("reload")) {
+                reload();
+            }
+            else if (bpanel.buttonClicked.action.equals("select")) {
+                select();
+            }
+        }
     }
 
-    public void removeCommandListener(CommandListener listener) {
-        if(commandListeners != null){
-            commandListeners.remove(listener);
+    public void addChangeListener(ChangeListener listener) {
+        if(changeListeners == null){
+            changeListeners = new ChangeListenerCollection();
+        }
+        changeListeners.add(listener);
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        if(changeListeners != null){
+            changeListeners.remove(listener);
         }       
     }
     
     public void changeState(State state){
         this.state = state;
-        if(commandListeners != null)
-            commandListeners.fireCommand(state,this);
-    }
-    
-    public boolean canPerformCommand(Enum action, Object obj) {
-        return (action == KeyListManager.Action.FETCH) ||
-               (action == KeyListManager.Action.GETPAGE) ||
-               (action == ButtonPanel.Action.QUERY) ||
-               (action == ButtonPanel.Action.ABORT) ||
-               (action == ButtonPanel.Action.UPDATE) ||
-               (action == ButtonPanel.Action.DELETE) ||
-               (action == ButtonPanel.Action.COMMIT) ||
-               (action == ButtonPanel.Action.ADD) ||
-               (action == ButtonPanel.Action.RELOAD) ||
-               (action == ButtonPanel.Action.SELECT) ||
-               (action.getDeclaringClass().equals(State.class));
-    }
-    
-    public void performCommand(Enum action, Object obj) {
-        if(action == KeyListManager.Action.FETCH){
-            key = (Key)((Object[])obj)[0];
-            final AsyncCallback call = ((AsyncCallback)((Object[])obj)[1]);
-            resetForm();
-            AsyncCallChain callChain = (AsyncCallChain)fetchChain.clone();
-            callChain.add(call);
-            fetch(callChain);
-        }else if(action == KeyListManager.Action.GETPAGE)
-            getPage(null,(DataModel<Key>)((Object[])obj)[0],(AsyncCallback)((Object[])obj)[1]);
-        else if (action == ButtonPanel.Action.QUERY) {
-            query();
-        }
-        else if (action == ButtonPanel.Action.ADD) {
-            add();
-        }
-        else if (action == ButtonPanel.Action.UPDATE) {
-            update();
-        }
-        else if (action == ButtonPanel.Action.DELETE) {
-            delete();
-        }
-        else if (action == ButtonPanel.Action.COMMIT) {
-            commit();
-        }
-        else if (action == ButtonPanel.Action.ABORT) {
-            abort();
-        }
-        else if (action == ButtonPanel.Action.RELOAD) {
-            reload();
-        }
-        else if (action == ButtonPanel.Action.SELECT) {
-            select();
-        }
+        if(changeListeners != null)
+            changeListeners.fireChange(this);
     }
 
-    public void next() {
-        // TODO Auto-generated method stub
-        
-    }
+	public ButtonPanel getBpanel() {
+		return bpanel;
+	}
 
-    public void prev() {
-        // TODO Auto-generated method stub
-        
-    }
+	public void setBpanel(ButtonPanel bpanel) {
+		this.bpanel = bpanel;
+	}
+
+	public boolean isBusy() {
+		return busy;
+	}
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
+	}
 }

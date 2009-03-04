@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
@@ -30,49 +20,34 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.FormInt;
-import org.openelis.gwt.widget.TextBox;
 /**
  * ScreenTextBox wraps a GWT TextBox to be displayed on a Screen.
  * @author tschmidt
  *
  */
 public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
-                                                                FocusListener
-                                                               {
-    /**
-     * Default XML Tag Name used in XML Definition
-     */
-    public static String TAG_NAME = "textbox";
-    /**
-     * Widget wrapped by this class
-     */
+																FocusListener{
+	/**
+	 * Default XML Tag Name used in XML Definition
+	 */
+	public static String TAG_NAME = "textbox";
+	/**
+	 * Widget wrapped by this class
+	 */
     private TextBox textbox;
+    private String fieldCase = "mixed";
+    private int length = 255;
   
-    @Override
-    public void onBrowserEvent(Event event) {
-        if(DOM.eventGetType(event) == Event.ONKEYUP) {
-            if(textbox.enforceMask){
-                if(textbox.autoNext && DOM.eventGetKeyCode(event) != KeyboardListener.KEY_TAB){
-                    if(textbox.getText().length() == (textbox.length) && textbox.getCursorPos() == textbox.length){
-                        screen.doTab(false, this);
-                    }
-                }
-            }
-        }
-        super.onBrowserEvent(event);
-    }
-    
-    /**
-     * Default no-arg constructor used to create reference in the WidgetMap class
-     */
+	/**
+	 * Default no-arg constructor used to create reference in the WidgetMap class
+	 */
     public ScreenTextBox() {
     }
-    
     /**
      * Constructor called from getInstance to return a specific instance of this class
      * to be displayed on the screen.  It uses the XML Node to create it's widget.
@@ -81,19 +56,29 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
      *          case="mixed,upper,lower" max="int"/&gt; 
      * @param node
      * @param screen
-     */ 
+     */	
     public ScreenTextBox(Node node, final ScreenBase screen) {
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue())){
-            textbox = (TextBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        }else{
-            textbox = new TextBox();
+        final ScreenTextBox sb = this;
+
+        textbox = new TextBox() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
+                        screen.doTab(event, sb);
+                        return;
+                    }
+                }
+                super.onBrowserEvent(event);
+            }
+        };
+        if (node.getAttributes().getNamedItem("tab") != null) {
+            screen.addTab(this, node.getAttributes()
+                                       .getNamedItem("tab")
+                                       .getNodeValue()
+                                       .split(","));
+            textbox.sinkEvents(Event.KEYEVENTS);
         }
-        
         if (node.getAttributes().getNamedItem("shortcut") != null)
             textbox.setAccessKey(node.getAttributes()
                                      .getNamedItem("shortcut")
@@ -101,26 +86,18 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
                                      .charAt(0));
         textbox.setStyleName("ScreenTextBox");
         if (node.getAttributes().getNamedItem("case") != null){
-            String fieldCase = node.getAttributes().getNamedItem("case")
-                                            .getNodeValue().toUpperCase();
-            textbox.setCase(TextBox.Case.valueOf(fieldCase));
-
+            fieldCase = node.getAttributes().getNamedItem("case")
+                                            .getNodeValue();
+            if (fieldCase.equals("upper")){
+                textbox.addStyleName("Upper");
+            }
+            if (fieldCase.equals("lower")){
+                textbox.addStyleName("Lower");
+            }
         }
-
         if (node.getAttributes().getNamedItem("max") != null) {
-            int length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
-            textbox.setLength(length);
-        }
-        
-        if (node.getAttributes().getNamedItem("textAlign") != null) {
-            String align = node.getAttributes().getNamedItem("textAlign").getNodeValue();
-            if(align.equals("center"))
-                textbox.alignment = TextBox.ALIGN_CENTER;
-            if(align.equals("right"))
-                textbox.alignment = TextBox.ALIGN_RIGHT;
-            if(align.equals("left"))   
-                textbox.alignment = TextBox.ALIGN_LEFT;
-            textbox.setTextAlignment(textbox.alignment);
+            length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
+            textbox.setMaxLength(length);
         }
         
         if (node.getAttributes().getNamedItem("onchange") != null){
@@ -134,17 +111,6 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
             }
         }
         
-        if (node.getAttributes().getNamedItem("autoNext") != null){
-            if(node.getAttributes().getNamedItem("autoNext").getNodeValue().equals("true")){
-                textbox.autoNext = true;
-            }
-        }
-        
-        if (node.getAttributes().getNamedItem("mask") != null) {
-            String mask = node.getAttributes().getNamedItem("mask").getNodeValue();
-            textbox.setMask(mask);
-        }
-        
         initWidget(textbox);
         displayWidget = textbox;
         setDefaults(node, screen);
@@ -156,16 +122,20 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
 
     public void load(AbstractField field) {
-        if(!queryMode){
-            textbox.setText(field.format().trim());
-            super.load(field);
-        }else
+        if(!queryMode)
+            textbox.setText(field.toString().trim());
+        else
             queryWidget.load(field);
     }
 
     public void submit(AbstractField field) {
-        if(!queryMode){    
-            field.setValue(textbox.getText());
+        if(!queryMode){
+            String text = textbox.getText();
+            if(fieldCase.equals("upper"))
+                text = text.toUpperCase();
+            else if(fieldCase.equals("lower"))
+                text = text.toLowerCase();
+            field.setValue(text);
         }else
             queryWidget.submit(field);
 
@@ -175,16 +145,16 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
     
     public void enable(boolean enabled){
-        if(!alwaysEnabled){
-            if(alwaysDisabled)
-                enabled = false;
-            textbox.setReadOnly(!enabled);
-            if(enabled){
-                textbox.addFocusListener(this);
-            }else
-                textbox.removeFocusListener(this);
+    	if(!alwaysEnabled){
+    		if(alwaysDisabled)
+    			enabled = false;
+	        textbox.setReadOnly(!enabled);
+	        if(enabled){
+	            textbox.addFocusListener(this);
+	        }else
+	            textbox.removeFocusListener(this);
             super.enable(enabled);
-        }else
+    	}else
             super.enable(true);
     }
     
@@ -197,40 +167,30 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(boolean mode) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY){
+            if(mode)
                 textbox.setMaxLength(255);
-                textbox.enforceLength = false;
-                textbox.enforceMask = false;
-                textbox.setTextAlignment(TextBox.ALIGN_LEFT);
-            }else{
-                textbox.setMaxLength(textbox.length);
-                textbox.enforceLength = true;
-                textbox.enforceMask = true;
-                textbox.setTextAlignment(textbox.alignment);
-            }
-            
+            else
+                textbox.setMaxLength(length);
         }else
-            super.setForm(state);
+            super.setForm(mode);
     }
     
-    public void onFocus(Widget sender) {
-        if(!textbox.isReadOnly()){
-            if(sender == textbox){
-                super.hp.addStyleName("Focus");
-            }
-        }   
+	public void onFocus(Widget sender) {
+		if(!textbox.isReadOnly()){
+			if(sender == textbox){
+				super.hp.addStyleName("Focus");
+			}
+		}	
         super.onFocus(sender);
-    }
-    public void onLostFocus(Widget sender) {
-        if(!textbox.isReadOnly()){
-            if(sender == textbox){
-                super.hp.removeStyleName("Focus");
-            }
-        }
+	}
+	public void onLostFocus(Widget sender) {
+		if(!textbox.isReadOnly()){
+			if(sender == textbox){
+				super.hp.removeStyleName("Focus");
+			}
+		}
         super.onLostFocus(sender);
-    }
-
-
+	}    
 }

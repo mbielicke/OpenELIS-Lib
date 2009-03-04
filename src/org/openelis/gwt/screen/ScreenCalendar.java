@@ -1,32 +1,26 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
@@ -34,7 +28,7 @@ import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
-import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.FormCalendarWidget;
 
 import java.util.Date;
 /**
@@ -51,7 +45,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     /**
      * Widget wrapped by this class
      */
-    private CalendarLookUp cal;
+    private FormCalendarWidget cal;
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
@@ -68,36 +62,38 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
      */
     public ScreenCalendar(Node node, final ScreenBase screen) {
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
         byte begin = Byte.parseByte(node.getAttributes()
                                         .getNamedItem("begin")
                                         .getNodeValue());
         byte end = Byte.parseByte(node.getAttributes()
                                       .getNamedItem("end")
                                       .getNodeValue());
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            cal = (CalendarLookUp)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            cal = new CalendarLookUp();
         if (node.getAttributes().getNamedItem("week") != null)
-            cal.init(begin,
-                     end,
-                     Boolean.valueOf(node.getAttributes()
-                                          .getNamedItem("week")
-                                          .getNodeValue())
-                                          .booleanValue());
+            cal = new FormCalendarWidget(begin,
+                                         end,
+                                         Boolean.valueOf(node.getAttributes()
+                                                             .getNamedItem("week")
+                                                             .getNodeValue())
+                                                .booleanValue());
         else
-            cal.init(begin, end, false);
-        //l.init();
-        /*if (node.getAttributes().getNamedItem("shortcut") != null)
+            cal = new FormCalendarWidget(begin, end, false);
+        final ScreenCalendar sc = this;
+        cal.textbox = new TextBox() {
+            public void onBrowserEvent(Event event) {
+                if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                    if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
+                        screen.doTab(event, sc);
+                } else {
+                    super.onBrowserEvent(event);
+                }
+            }
+        };
+        cal.init();
+        if (node.getAttributes().getNamedItem("shortcut") != null)
             cal.setShortcutKey(node.getAttributes()
                                    .getNamedItem("shortcut")
                                    .getNodeValue()
                                    .charAt(0));
-        */
         if (node.getAttributes().getNamedItem("onChange") != null){
             String listener = node.getAttributes().getNamedItem("onChange").getNodeValue();
             if (listener.equals("this"))
@@ -127,7 +123,6 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                 else
                     cal.setText("");
             }
-            super.load(field);
         }
     }
 
@@ -138,7 +133,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
             field.setValue(null);
             Date date = null;
             String entered = cal.getText();
-            entered = entered.replaceAll("-", "/");
+            entered = entered.replaceAll("-","/");
             if (field instanceof DateField) {
                 if (entered != null && !entered.equals("")) {
                     try {
@@ -148,15 +143,14 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                     }
                 }
                 if (date != null) {
-                    field.setValue(DatetimeRPC.getInstance(((DateField)field).getBegin(),
-                                                           ((DateField)field).getEnd(),
-                                                           date));
+                   field.setValue(DatetimeRPC.getInstance(((DateField)field).getBegin(),
+                	       ((DateField)field).getEnd(),
+                			date));
                 }
             }
             if(field instanceof QueryDateField && !entered.equals("")) {
-                field.setValue(entered);
+            	field.setValue(entered);
             }
-            
         }
     }
     
@@ -164,7 +158,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
         if(queryMode)
             queryWidget.enable(enabled);
         else{
-            cal.enable(enabled);
+            cal.setEnabled(enabled);
             if(enabled)
                 cal.addFocusListener(this);
             else

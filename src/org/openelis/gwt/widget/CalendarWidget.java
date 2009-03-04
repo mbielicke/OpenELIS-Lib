@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget;
 
@@ -35,8 +25,6 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.data.Data;
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.NumberField;
 import org.openelis.gwt.common.data.StringObject;
@@ -56,7 +44,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-@Deprecated public class CalendarWidget  extends AppScreen<RPC> implements SourcesChangeEvents, ClickListener {
+public class CalendarWidget  extends AppScreen implements SourcesChangeEvents, ClickListener {
     
     protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
     .create(CalendarServiceInt.class);
@@ -83,15 +71,15 @@ import java.util.HashMap;
         base += "CalendarServlet";        
         target.setServiceEntryPoint(base);
         service = screenService;
-        HashMap<String,Data> map = new HashMap<String,Data>();
-       // map.put("date",new StringObject(date));
-        //getXMLData(map, new RPC());
+        HashMap<String,DataObject> map = new HashMap<String,DataObject>();
+        map.put("date",new StringObject(date));
+        getXMLData(map);
     }
     
     public void afterDraw(boolean success) {
         super.afterDraw(success);
-        year = (NumberField)form.getField("year");
-        month = (NumberField)form.getField("month");
+        year = (NumberField)rpc.getField("year");
+        month = (NumberField)rpc.getField("month");
         prevMonth = (AppButton)getWidget("prevMonth");
         nextMonth = (AppButton)getWidget("nextMonth");
         monthSelect = (AppButton)getWidget("monthSelect");
@@ -109,7 +97,6 @@ import java.util.HashMap;
     }
     
     public void onClick(Widget sender){
-        /*
         if(sender == prevMonth){
             month.setValue(new Integer(((Integer)month.getValue()).intValue() - 1));
             if(((Integer)month.getValue()).intValue() < 0) {
@@ -117,7 +104,7 @@ import java.util.HashMap;
                 year.setValue(new Integer(((Integer)year.getValue()).intValue() - 1));
             }
             final AppScreen scr = this;
-            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)form.getFieldValue("date"), new AsyncCallback() {
+            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)rpc.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                     DOM.removeEventPreview(scr);
@@ -135,7 +122,7 @@ import java.util.HashMap;
                 year.setValue(new Integer(((Integer)year.getValue()).intValue() + 1));
             }
             final AppScreen scr = this;
-            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)form.getFieldValue("date"), new AsyncCallback() {
+            screenService.getMonth(String.valueOf(month), String.valueOf(year), (String)rpc.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                     DOM.removeEventPreview(scr);
@@ -159,10 +146,10 @@ import java.util.HashMap;
             });
             return;
         }
-        if(sender == getWidget("ok") || 
-           sender == getWidget("cancel")){
+        if(sender == ok || 
+           sender == cancel){
             final AppScreen scr = this;
-            screenService.getMonth(month.getValue().toString(), year.getValue().toString(), (String)form.getFieldValue("date"), new AsyncCallback() {
+            screenService.getMonth(month.getValue().toString(), year.getValue().toString(), (String)rpc.getFieldValue("date"), new AsyncCallback() {
                 public void onSuccess(Object result) {
                     redrawScreen((String)result);
                     DOM.removeEventPreview(scr);
@@ -189,14 +176,14 @@ import java.util.HashMap;
             years[0].label.addStyleName("Current");
             return;
         }
-        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("month:")){
+        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("month:")) {
             String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
             months[((Integer)month.getValue()).intValue()].label.removeStyleName("Current");
             month.setValue(value[1]);
             ((ScreenLabel)sender).label.addStyleName("Current");
             return;
         }
-        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("year:")){
+        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("year:")) {
             String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
             years[((Integer)year.getValue()).intValue()%10].label.removeStyleName("Current");
             year.setValue(new Integer(((Integer)year.getValue()).intValue()/10*10+Integer.parseInt(value[1])));
@@ -204,7 +191,6 @@ import java.util.HashMap;
             return;
         }
         changeListeners.fireChange(sender);
-        */
     }
 
     public void addChangeListener(ChangeListener listener) {

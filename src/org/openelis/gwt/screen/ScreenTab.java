@@ -1,53 +1,34 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
-
-import org.openelis.gwt.common.data.AbstractField;
-
-import java.util.ArrayList;
 /**
  * ScreenTab wraps a GWT TabPanel for displaying widgets 
  * on a Screen in Tab Layout.
  * @author tschmidt
  *
  */
-public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener {
-    
-    private ArrayList<String> tabList = new ArrayList<String>();
-    private AbstractField field;
+public class ScreenTab extends ScreenWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap
 	 */
@@ -79,14 +60,7 @@ public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener 
      */	
     public ScreenTab(Node node, ScreenBase screen) {
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            panel = (TabPanel)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            panel = new TabPanel();
+        panel = new TabPanel();
         panel.setStyleName("ScreenTab");
         initWidget(panel);
         NodeList tabs = ((Element)node).getElementsByTagName("tab");
@@ -104,14 +78,9 @@ public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener 
                                              .getNodeValue());
                 }
             }
-            if(tabs.item(k).getAttributes().getNamedItem("key") != null)
-                tabList.add(tabs.item(k).getAttributes().getNamedItem("key").getNodeValue());
-            else
-                tabList.add(null);
         }
         panel.selectTab(0);
         panel.addTabListener((TabListener)screen);
-        panel.addTabListener(this);
         setDefaults(node, screen);
     }
 
@@ -123,33 +92,6 @@ public class ScreenTab extends ScreenWidget implements ScreenPanel, TabListener 
     public void destroy(){
         panel = null;
         super.destroy();
-    }
-    public Panel getPanel() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    public void submit(AbstractField field) {
-        if(field != null){
-            field.setValue(tabList.get(panel.getTabBar().getSelectedTab()));
-        }
-    }
-    
-    @Override
-    public void load(AbstractField field) {
-        // TODO Auto-generated method stub
-        this.field = field;
-        if(field.getValue() != null && !field.getValue().equals("")){
-            panel.selectTab(tabList.indexOf(field.getValue()));
-        }
-    }
-    public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-        // TODO Auto-generated method stub
-        return true;
-    }
-    public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-        if(field != null)
-            field.setValue(tabList.get(panel.getTabBar().getSelectedTab()));
     }
 
 }

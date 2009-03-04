@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.widget.table;
 
@@ -38,11 +28,7 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.Field;
-
-import java.util.ArrayList;
 
 /**
  * This class displays the PopupMenu for the Table Header columns Displays
@@ -60,9 +46,10 @@ public class HeaderMenu extends PopupPanel implements
     private VerticalPanel menuPanel = new VerticalPanel();
     public int col;
     public Filter[] filter;
-    public DataSorterInt.SortDirection sortDirection;
+    public boolean sortDirection;
+    private String widget;
     private boolean doFilter;
-    private TableWidget controller;
+    private TableController controller;
 
     /**
      * Constructor called from TableController.
@@ -75,7 +62,7 @@ public class HeaderMenu extends PopupPanel implements
     public HeaderMenu(int col,
                       boolean sort,
                       Filter[] filter,
-                      TableWidget controller) {
+                      TableController controller) {
         super(true);
         addPopupListener(this);
         this.col = col;
@@ -105,7 +92,7 @@ public class HeaderMenu extends PopupPanel implements
                 CheckBox check = new CheckBox();
                 filterMenu.setWidget(i, 0, check);
                 check.setChecked(filter[i].filtered);
-                String theText = ((Field)filter[i].obj).getValue().toString();
+                String theText = filter[i].value;
                 if (filter[i].display != null)
                     theText = filter[i].display;
                 check.setText(theText);
@@ -125,11 +112,7 @@ public class HeaderMenu extends PopupPanel implements
      */
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
         if (doFilter) {
-            ((TableColumnInt)controller.columns.get(col)).setFilter(filter);
-            for(TableColumnInt column : (ArrayList<TableColumnInt>)controller.columns){
-                column.applyFilter();
-            }
-            controller.model.refresh();
+            controller.filter(col, filter);
         }
     }
 
@@ -196,10 +179,10 @@ public class HeaderMenu extends PopupPanel implements
             }
         } else {
             if (row == 0)
-                sortDirection = DataSorterInt.SortDirection.UP;
+                sortDirection = false;
             if (row == 1)
-                sortDirection = DataSorterInt.SortDirection.DOWN;
-            controller.model.sort(col, sortDirection);
+                sortDirection = true;
+            controller.sort(col, sortDirection);
             hide();
         }
     }

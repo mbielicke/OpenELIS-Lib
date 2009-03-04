@@ -1,34 +1,27 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Element;
@@ -37,14 +30,9 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
 
-public class ScreenMenuItem extends ScreenWidget {
+public class ScreenMenuItem extends ScreenWidget implements MouseListener, ClickListener, PopupListener {
     
     private MenuItem item;
     private Node popupNode;
@@ -58,74 +46,48 @@ public class ScreenMenuItem extends ScreenWidget {
     public ScreenMenuPanel menuItemsPanel;
     public static final String TAG_NAME = "menuItem";
     public String label;
-
+    public String objClass;
+    public DataObject[] args;
     
     public ScreenMenuItem() {
         super();
     }
     
-    public ScreenMenuItem(String icon, Widget wid, String description) {
-        item = new MenuItem(icon,wid,description);
-        initWidget(item);
-        sinkEvents(Event.MOUSEEVENTS);
-        addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
-    }
-    
-    public ScreenMenuItem(String label) {
-        wid = MenuItem.createTableHeader("", new Label(label));
-        item = new MenuItem(wid);
-        initWidget(item);
-        sinkEvents(Event.MOUSEEVENTS);
-    }
-    
     public ScreenMenuItem(Node node, ScreenBase screen){
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
         wid = null;
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            item = (MenuItem)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            item = new MenuItem();
-        if(((Element)node).getElementsByTagName("menuDisplay").getLength() > 0 &&  ((Element)node).getElementsByTagName("menuDisplay").item(0).getParentNode().equals(node)){
+        if(((Element)node).getElementsByTagName("menuDisplay").getLength() > 0){
             NodeList displayList = ((Element)node).getElementsByTagName("menuDisplay").item(0).getChildNodes();
             int i = 0; 
             while(displayList.item(i).getNodeType() != Node.ELEMENT_NODE)
                 i++;
             wid = ScreenWidget.loadWidget(displayList.item(i), screen);
-            item.init(wid);
-        }else if(node.getAttributes().getNamedItem("header") != null){
-            wid = MenuItem.createTableHeader("", new Label(node.getAttributes().getNamedItem("label").getNodeValue()));
-            item.init(wid);
         }else{
-            item.init(node.getAttributes().getNamedItem("icon").getNodeValue(), 
+            wid = MenuItem.createDefault(node.getAttributes().getNamedItem("icon").getNodeValue(), 
                                          node.getAttributes().getNamedItem("label").getNodeValue(), 
                                          node.getAttributes().getNamedItem("description").getNodeValue());
             label = node.getAttributes().getNamedItem("label").getNodeValue();
         }
-
-        if (node.getAttributes().getNamedItem("class") != null){
-            item.objClass = node.getAttributes().getNamedItem("class").getNodeValue();
-        }
-        if (node.getAttributes().getNamedItem("args") != null && !"".equals(node.getAttributes().getNamedItem("args").getNodeValue())){
-            String[] argStrings = node.getAttributes().getNamedItem("args").getNodeValue().split(",");
-            item.args = new Object[argStrings.length];
-            for(int i = 0; i < argStrings.length; i++){
-                item.args[i] = new StringObject(argStrings[i]);
-            }
-        }
-        
         if (node.getAttributes().getNamedItem("onClick") != null){
             String[] listeners = node.getAttributes().getNamedItem("onClick").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
                 if(listeners[i].equals("this"))
-                    item.addClickListener((ClickListener)screen);
+                    addClickListener((ClickListener)screen);
                 else
-                    item.addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
+                    addClickListener((ClickListener)ClassFactory.forName(listeners[i]));
             }
         }
+        if (node.getAttributes().getNamedItem("class") != null){
+            objClass = node.getAttributes().getNamedItem("class").getNodeValue();
+        }
+        if (node.getAttributes().getNamedItem("args") != null && !"".equals(node.getAttributes().getNamedItem("args").getNodeValue())){
+            String[] argStrings = node.getAttributes().getNamedItem("args").getNodeValue().split(",");
+            args = new DataObject[argStrings.length];
+            for(int i = 0; i < argStrings.length; i++){
+                args[i] = new StringObject(argStrings[i]);
+            }
+        }
+        item = new MenuItem(wid);
         popupNode = ((Element)node).getElementsByTagName("menuPanel").item(0);
         if(node.getAttributes().getNamedItem("enabled") != null){
             if(node.getAttributes().getNamedItem("enabled").getNodeValue().equals("true"))
@@ -135,23 +97,123 @@ public class ScreenMenuItem extends ScreenWidget {
         }else
             enable(true);
         
-        if(popupNode != null){
-            item.menuItemsPanel = (MenuPanel)((ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen)).getWidget();
-            if(popupNode.getAttributes().getNamedItem("position") != null)
-                item.popPosition = MenuItem.PopPosition.valueOf(popupNode.getAttributes().getNamedItem("position").getNodeValue().toUpperCase());
-        }
+        if(popupNode != null)
+            menuItemsPanel = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
 
-        if(node.getAttributes().getNamedItem("key") != null){
-            item.key = node.getAttributes().getNamedItem("key").getNodeValue();
-        }
-        
         initWidget(item);
         setDefaults(node,screen);
-        sinkEvents(Event.MOUSEEVENTS);
+    }
+
+    public void onMouseDown(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onMouseEnter(Widget sender) {
+        menuBar.itemEnter(this);
+        cursorOn = true;
+    }
+
+    public void onMouseLeave(Widget sender) {
+        menuBar.itemLeave(this);
+        cursorOn = false;
+        
+    }
+
+    public void onMouseMove(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onMouseUp(Widget sender, int x, int y) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void onClick(Widget sender) {
+        if(popupNode != null){
+            if(popClosed)
+                popClosed = false;
+            else
+                createPopup();
+            mouseListeners.fireMouseEnter(sender);
+            return;
+        }
+        if(menuBar.getParent() instanceof PopupPanel)
+            ((PopupPanel)menuBar.getParent()).hide();
+        mouseListeners.fireMouseLeave(sender);
+    }
+
+    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
+        if(cursorOn)
+            popClosed = true;
+        if(DOM.getElementProperty(sender.getElement(), "closeAll").equals("true")){
+                if(menuBar.getParent() instanceof PopupPanel)
+                    ((PopupPanel)menuBar.getParent()).hide();
+                
+        }
+        menuBar.activeItem = null;
+        menuBar.active = false;
+        removeStyleName("Selected");
+    }
+    
+    public void createPopup(){
+        menuBar.activeItem = this;
+        if(popupNode == null)
+            return;
+        if(pop == null) {
+            pop = new PopupPanel(true,false);
+            //ScreenMenuPanel mp = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
+            //use the menuItemsPanel so you can disable certain rows on the fly
+            pop.setWidget(menuItemsPanel);
+        
+            pop.addPopupListener(this);
+ 
+        }
+        
+        //to be able to use the widget on a screen we always need to set the position
+        if(popupNode.getAttributes().getNamedItem("position").getNodeValue().equals("below"))
+            pop.setPopupPosition(wid.getAbsoluteLeft()+8, 
+                                 wid.getAbsoluteTop()+wid.getOffsetHeight());
+        else
+            pop.setPopupPosition(getAbsoluteLeft()+getOffsetWidth(),
+                                 getAbsoluteTop());
+        
+        pop.show();
+        child = ((ScreenMenuPanel)pop.getWidget());
+        DOM.setElementProperty(pop.getElement(),"closeAll", "true");
+        ((ScreenMenuPanel)pop.getWidget()).active = true;
+        DeferredCommand.addCommand(new Command() {
+            public void execute(){
+                ((ScreenMenuPanel)pop.getWidget()).setSize(pop.getPopupTop());
+            }
+        });
+        addStyleName("Selected");
+    }
+    
+    public void closePopup() {
+        if(pop != null){
+            DOM.setElementProperty(pop.getElement(),"closeAll", "false");
+            pop.hide();
+        }
     }
     
     public void enable(boolean enabled){
-        item.enable(enabled);
+        if(enabled){
+           // removeClickListener(this);
+            addClickListener(this);
+            sinkEvents(Event.ONCLICK);
+            //removeMouseListener(this);
+            addMouseListener(this);
+            sinkEvents(Event.MOUSEEVENTS);
+            removeStyleName("disabled");
+        }else{
+           // removeClickListener(this);
+           // removeMouseListener(this);
+            unsinkEvents(Event.ONCLICK);
+            unsinkEvents(Event.MOUSEEVENTS);
+            addStyleName("disabled");
+        }
     }
     
     public ScreenWidget getInstance() {

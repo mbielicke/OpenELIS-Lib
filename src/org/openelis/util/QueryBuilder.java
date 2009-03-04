@@ -1,27 +1,17 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.util;
 
@@ -90,9 +80,13 @@ public class QueryBuilder {
         while (fieldCompIt.hasNext()) {
             sb.append(fieldName + " ");
             String comp = (String)fieldCompIt.next();
+            if(comp.startsWith("!=")) {
+            	sb.append("<> ");
+            	comp = comp.substring(2);
+            }
             if (comp.startsWith("!")) {
-                sb.append("not ");
-                comp = comp.substring(1);
+                //sb.append("not ");
+                comp = "not ";
             }
             if (comp.equals("~"))
                 comp = "like ";
@@ -113,7 +107,12 @@ public class QueryBuilder {
                           + paramName
                           + i
                           + "1 ");
-            } else
+            } else if(param.trim().equalsIgnoreCase("null")){
+            	if(comp.equals("not ")){
+            		sb.append("is not null ");
+            	}else 
+            		sb.append(comp + " NULL ");
+            }else
                 sb.append(comp + " :" + paramName + i + " ");
             if (fieldLogicalIt.hasNext()) {
                 String logical = (String)fieldLogicalIt.next();
@@ -161,7 +160,7 @@ public class QueryBuilder {
     
     public static String getQuery(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getValue();
+        ArrayList list = (ArrayList) field.getSelections();
         if (list.size() == 0)
             return "";
         StringBuffer sb = new StringBuffer();
@@ -180,7 +179,7 @@ public class QueryBuilder {
     
     public static String getQueryNoOperand(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getValue();
+        ArrayList list = (ArrayList) field.getSelections();
         if (list.size() == 0)
             return "";
         String paramName = getParamName(fieldName);
@@ -321,8 +320,12 @@ public class QueryBuilder {
                                        TemporalType.DATE);
                 }
             } else {
-                Date date = new Date(param);
-                query.setParameter(paramName + i, date, TemporalType.DATE);
+            	if(!param.trim().equalsIgnoreCase("null")){
+            		//query.setParameter(paramName + i, null);
+      
+            		Date date = new Date(param);
+            		query.setParameter(paramName + i, date, TemporalType.DATE);
+            	}
             }
             i++;
         }
@@ -346,7 +349,7 @@ public class QueryBuilder {
     }
     
     public static void setParameters(DropDownField field, String fieldName, Query query) {
-    	ArrayList list = (ArrayList) field.getValue();
+    	ArrayList list = (ArrayList) field.getSelections();
     	String paramName = getParamName(fieldName);
     
     	for(int i = 0;i<list.size();i++){
@@ -354,7 +357,7 @@ public class QueryBuilder {
     		if(o instanceof NumberObject){
 				NumberObject number = (NumberObject)o;
 				if(number.getType() == NumberObject.Type.INTEGER){
-					Integer param = number.getIntegerValue();
+					Integer param = (Integer)number.getValue();
 					query.setParameter(paramName + i, param);	
 				}else if(number.getType() == NumberObject.Type.DOUBLE){
 					Double param = (Double)number.getValue();
@@ -536,6 +539,27 @@ public class QueryBuilder {
     }
     
     public String getFromClause(String where){
+        String returnString = "";
+        int fromTablesCount = 0;
+
+        for (int i = 0; i < orderedFromTableKeys.size(); i++) {
+            String tableName = (String)orderedFromTableKeys.get(i);
+            Meta addTableMeta = fromTables.get(tableName); 
+            
+            /*if(addTableMeta.includeInFrom()){
+                
+                //we use left join on all the tables so we dont care about null values.
+                //This will also let us use a collection in the query without the IN keyword
+                if(fromTablesCount>0)
+                    returnString += " LEFT JOIN "+addTableMeta.getEntity()+' '+addTableMeta.getTable();
+                else
+                    returnString +=' '+addTableMeta.getEntity()+' '+addTableMeta.getTable();
+                
+                fromTablesCount++;
+                
+            }
+            */
+        }
         return meta.buildFrom(where);
     }
     

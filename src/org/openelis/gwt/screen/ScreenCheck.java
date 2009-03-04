@@ -1,32 +1,25 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -34,7 +27,6 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.CheckBox.CheckType;
 /**
  * ScreenCheck wraps a GWT CheckBox to be displayed on a Screen.
@@ -42,19 +34,19 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  *
  */
 public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents{
-    private DelegatingClickListenerCollection clickListeners;
-    /**
-     * Default Tag Name for XML Definition and WidgetMap
-     */
-    public static String TAG_NAME = "check";
-    /**
-     * Widget wrapped by this class
-     */
+	private DelegatingClickListenerCollection clickListeners;
+	/**
+	 * Default Tag Name for XML Definition and WidgetMap
+	 */
+	public static String TAG_NAME = "check";
+	/**
+	 * Widget wrapped by this class
+	 */
     private CheckBox check;
     private CheckType defaultType = CheckBox.CheckType.TWO_STATE;
-    /**
-     * Default no-arg constructor used to create reference in the WidgetMap class
-     */
+	/**
+	 * Default no-arg constructor used to create reference in the WidgetMap class
+	 */
     public ScreenCheck() {
     }
     /**
@@ -68,20 +60,25 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
      */
     public ScreenCheck(Node node, final ScreenBase screen) {
         super(node);
-        init(node,screen);
-    }
-    
-    public void init(Node node, ScreenBase screen) {
-        if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
-            check = (CheckBox)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
-        else
-            check = new CheckBox();
+        final ScreenCheck sc = this;
+        check = new CheckBox(){
+                public void onBrowserEvent(Event event){
+                    if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
+                        if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_TAB) {
+                            screen.doTab(event, sc);
+                        }
+                    } else {
+                        super.onBrowserEvent(event);
+                    }
+                }
+        };
+
         if(node.getAttributes().getNamedItem("threeState") != null){
             check.setType(CheckBox.CheckType.THREE_STATE);
             defaultType = CheckBox.CheckType.THREE_STATE;
         }
         if (node.getFirstChild() != null){
-             check.setText(node.getFirstChild().getNodeValue());
+        	 check.setText(node.getFirstChild().getNodeValue());
         }
         if (node.getChildNodes().getLength() > 0){
             NodeList widgets = node.getChildNodes();
@@ -93,11 +90,11 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
             }
         }
         if (node.getAttributes().getNamedItem("onClick") != null){
-            String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
-            if(listener.equals("this"))
-                addClickListener((ClickListener)screen);
-            else
-                addClickListener((ClickListener)ClassFactory.forName(listener));
+        	String listener = node.getAttributes().getNamedItem("onClick").getNodeValue();
+        	if(listener.equals("this"))
+        		addClickListener((ClickListener)screen);
+        	else
+        		addClickListener((ClickListener)ClassFactory.forName(listener));
         }
         initWidget(check);
         displayWidget = check;
@@ -113,10 +110,8 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     public void load(AbstractField field) {
         if(queryMode)
             queryWidget.load(field);
-        else{
+        else
             check.setState((String)field.getValue());
-            super.load(field);
-        }
     }
 
     public void submit(AbstractField field) {
@@ -146,18 +141,18 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
             check.setFocus(focus);
             
     }
-    public void addClickListener(ClickListener listener) {
-        if(clickListeners == null){
-            clickListeners = new DelegatingClickListenerCollection(this,check);
-        }
-        clickListeners.add(listener);
-    }
-    
-    public void removeClickListener(ClickListener listener) {
-        if(clickListeners != null){
-            clickListeners.remove(listener);
-        }
-    }
+	public void addClickListener(ClickListener listener) {
+		if(clickListeners == null){
+			clickListeners = new DelegatingClickListenerCollection(this,check.panel);
+		}
+		clickListeners.add(listener);
+	}
+	
+	public void removeClickListener(ClickListener listener) {
+		if(clickListeners != null){
+			clickListeners.remove(listener);
+		}
+	}
     
     public void destroy(){
         clickListeners = null;
@@ -165,15 +160,15 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(boolean mode) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY){
+            if(mode){
                 check.setType(CheckBox.CheckType.THREE_STATE);
                 check.setState(CheckBox.UNKNOWN);
             }else
                 check.setType(defaultType);
         }else
-            super.setForm(state);
+            super.setForm(mode);
     }
 
 }

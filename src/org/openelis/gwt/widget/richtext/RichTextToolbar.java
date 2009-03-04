@@ -1,28 +1,33 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
+/**
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
 * 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
+* License for the specific language governing rights and limitations under
+* the License.
 * 
 * The Original Code is OpenELIS code.
 * 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
+* Copyright (C) The University of Iowa.  All Rights Reserved.
 */
+/*
+ * Copyright 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.openelis.gwt.widget.richtext;
 
 import com.google.gwt.core.client.GWT;
@@ -41,9 +46,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.AutoCompleteDropdown;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI
@@ -105,21 +109,19 @@ public class RichTextToolbar extends Composite {
       KeyboardListener {
 
     public void onChange(Widget sender) {
-        /*
       if (sender == backColors) {
-        basic.setBackColor((String)((DataObject)backColors.model.getSelection().get(0)).getValue());
-        backColors.model.selectRow(0);
+        basic.setBackColor((String)backColors.getSelectedValue());
+        backColors.setSelectedIndex(0);
       } else if (sender == foreColors) {
-        basic.setForeColor((String)((DataObject)foreColors.model.getSelection().get(0)).getValue());
-        foreColors.model.selectRow(0);
+        basic.setForeColor((String)foreColors.getSelectedValue());
+        foreColors.setSelectedIndex(0);
       } else if (sender == fonts) {
-        basic.setFontName((String)((DataObject)fonts.model.getSelection().get(0)).getValue());
-        fonts.model.selectRow(0);
+        basic.setFontName((String)fonts.getSelectedValue());
+        fonts.setSelectedIndex(0);
       } else if (sender == fontSizes) {
-        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)((DataObject)fontSizes.model.getSelection().get(0)).getValue())]);
-        fontSizes.model.selectRow(0);
+        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.getSelectedValue())]);
+        fontSizes.setSelectedIndex(0);
       }
-      */
     }
 
     public void onClick(Widget sender) {
@@ -224,10 +226,10 @@ public class RichTextToolbar extends Composite {
   private PushButton removeLink;
   private PushButton removeFormat;
 
-  private Dropdown backColors;
-  private Dropdown foreColors;
-  private Dropdown fonts;
-  private Dropdown fontSizes;
+  private AutoCompleteDropdown backColors;
+  private AutoCompleteDropdown foreColors;
+  private AutoCompleteDropdown fonts;
+  private AutoCompleteDropdown fontSizes;
 
   /**
    * Creates a new toolbar that drives the given rich text area.
@@ -296,11 +298,11 @@ public class RichTextToolbar extends Composite {
     }
   }
 
-  private Dropdown createColorList(String caption) {
-    Dropdown lb = new Dropdown();
+  private AutoCompleteDropdown createColorList(String caption) {
+    AutoCompleteDropdown lb = new AutoCompleteDropdown();
+    lb.cat = null;
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
-    /*
     model.add(new StringObject(caption),new StringObject(""));
     model.add(new StringObject("White"), new StringObject("white"));
     model.add(new StringObject("Black"), new StringObject("black"));
@@ -308,16 +310,14 @@ public class RichTextToolbar extends Composite {
     model.add(new StringObject("Green"),new StringObject("green"));
     model.add(new StringObject("Yellow"), new StringObject("yellow"));
     model.add(new StringObject("Blue"), new StringObject("blue"));
-    */
     lb.setModel(model);
     return lb;
   }
 
-  private Dropdown createFontList() {
-    Dropdown lb = new Dropdown();
+  private AutoCompleteDropdown createFontList() {
+    AutoCompleteDropdown lb = new AutoCompleteDropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
-    /*
     model.add(new StringObject("Font"),new StringObject(""));
     model.add(new StringObject("Normal"), new StringObject(""));
     model.add(new StringObject("Times New Roman"), new StringObject("Times New Roman"));
@@ -326,16 +326,14 @@ public class RichTextToolbar extends Composite {
     model.add(new StringObject("Georgia"), new StringObject("Georgia"));
     model.add(new StringObject("Trebuchet"), new StringObject("Trebuchet"));
     model.add(new StringObject("Verdana"), new StringObject("Verdana"));
-    */
     lb.setModel(model);
     return lb;
   }
 
-  private Dropdown createFontSizes() {
-    Dropdown lb = new Dropdown();
+  private AutoCompleteDropdown createFontSizes() {
+    AutoCompleteDropdown lb = new AutoCompleteDropdown();
     lb.addChangeListener(listener);
     DataModel model = new DataModel();
-    /*
     model.add(new StringObject("Size"),new StringObject("0"));
     model.add(new StringObject("XX Small"),new StringObject("1"));
     model.add(new StringObject("X Small"),new StringObject("2"));
@@ -344,7 +342,6 @@ public class RichTextToolbar extends Composite {
     model.add(new StringObject("Large"),new StringObject("5"));
     model.add(new StringObject("X Large"),new StringObject("6"));
     model.add(new StringObject("XX Large"),new StringObject("7"));
-    */
     lb.setModel(model);
     return lb;
   }
