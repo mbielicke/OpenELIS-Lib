@@ -89,6 +89,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
         ch.type = type;
         ch.editor.setType(type);
         ch.screen = screen;
+        ch.clickListeners = clickListeners;
         return ch;
     }
 
