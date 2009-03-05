@@ -112,8 +112,8 @@ public class DataSet<Key> implements FieldType, Comparable{
         }
         if(key != null)
             clone.key = key;
-        //if(data != null)
-          //  clone.data = (Data)data.clone();
+        if(data != null)
+          clone.data = (FieldType)data.clone();
         clone.enabled = enabled;
         return clone;
     }
