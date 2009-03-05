@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CheckBox.CheckType;
@@ -97,6 +98,13 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
         if(node.getAttributes().getNamedItem("threeState") != null){
             type = CheckType.THREE_STATE;
             editor.setType(CheckType.THREE_STATE);
+        }
+        if(node.getAttributes().getNamedItem("onclick") != null){
+            String listener = node.getAttributes().getNamedItem("onclick").getNodeValue();
+            if("this".equals(listener)){
+                addClickListener((ClickListener)screen);
+            }else
+                addClickListener((ClickListener)ClassFactory.forName(listener));
         }
         
     }
