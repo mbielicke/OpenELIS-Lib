@@ -162,7 +162,7 @@ public class QueryBuilder {
     public static String getQuery(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
         ArrayList list = (ArrayList) field.getValue();
-        if (list.size() == 0)
+        if (list == null || list.size() == 0)
             return "";
         StringBuffer sb = new StringBuffer();
         
@@ -181,7 +181,7 @@ public class QueryBuilder {
     public static String getQueryNoOperand(DropDownField field, String fieldName) {
     	//this should always be an arraylist of datasets
         ArrayList list = (ArrayList) field.getValue();
-        if (list.size() == 0)
+        if (list == null || list.size() == 0)
             return "";
         String paramName = getParamName(fieldName);
 
@@ -347,6 +347,8 @@ public class QueryBuilder {
     
     public static void setParameters(DropDownField field, String fieldName, Query query) {
     	ArrayList list = (ArrayList) field.getValue();
+        if(list == null)
+            return;
     	String paramName = getParamName(fieldName);
     
     	for(int i = 0;i<list.size();i++){
