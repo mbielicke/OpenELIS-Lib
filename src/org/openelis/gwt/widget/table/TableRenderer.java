@@ -56,6 +56,9 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
                 ((SourcesClickEvents)wid).addClickListener(this);
             }
             controller.view.table.setWidget(i,j,wid);
+            if(wid instanceof TableCellInputWidget) {
+                ((TableCellInputWidget)wid).rowIndex = i;
+            }
             
             if(controller.columns.size() == 1)
                 controller.view.table.getFlexCellFormatter().addStyleName(i,
@@ -160,6 +163,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         rows.get(index).row = row;
         for (int i = 0; i < row.size(); i++) {
             controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
+            
             //if(tCell instanceof TableMultiple && manager != null){
               //  manager.setMultiple(model.indexOf(row),i,this);
             //}
