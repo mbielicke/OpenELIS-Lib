@@ -45,6 +45,8 @@ public class TreeDataModel implements FieldType {
 
     public boolean add(TreeDataItem item) {
         item.childIndex = list.size();
+        item.depth = 0;
+        item.parent = null;
         return list.add(item);
     }
     
@@ -76,6 +78,8 @@ public class TreeDataModel implements FieldType {
     public void delete(int index){
         deleted.add(list.get(index));
         list.remove(index);
+        for(int i = 0; i < list.size(); i++)
+            list.get(i).childIndex = i;
     }
     
     /*
