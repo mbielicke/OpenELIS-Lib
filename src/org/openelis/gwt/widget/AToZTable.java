@@ -74,6 +74,7 @@ public class AToZTable extends TableWidget implements
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
     public ScreenAToZTable screenWidget;
     public boolean showNavPanel = true;
+    public boolean locked;
 
     public AToZTable() {
         super();
@@ -156,6 +157,8 @@ public class AToZTable extends TableWidget implements
         view.setWidth(width);
     }
     public void onCellClicked(SourcesTableEvents sender, final int row, int col){
+        if(locked)
+            return;
         focused = true;
         if(activeRow == row){
             super.onCellClicked(sender, row, col);
@@ -230,6 +233,7 @@ public class AToZTable extends TableWidget implements
                (action == AppScreenForm.Action.NEW_PAGE) ||
                (action == KeyListManager.Action.SELECTION) ||                
                (action == KeyListManager.Action.UNSELECT) ||
+               (action.getDeclaringClass() == FormInt.State.class) ||
                (obj instanceof AppButton && bpanel != null && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement()));
     }
 
@@ -297,6 +301,11 @@ public class AToZTable extends TableWidget implements
         
            
         }
+        
+        if(action == FormInt.State.UPDATE)
+            locked = true;
+        else if(action.getDeclaringClass() == FormInt.State.class)
+            locked = false;
         
     }
 
