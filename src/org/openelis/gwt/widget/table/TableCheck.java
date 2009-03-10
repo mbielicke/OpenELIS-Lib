@@ -28,7 +28,6 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -153,6 +152,8 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
             final Widget wid = this;
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
+                    saveValue();
+                    setDisplay();
                     clickListeners.fireClick(wid);
                 }
             });
