@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DataSorter;
@@ -229,10 +231,15 @@ public class TableModel implements TableModelInt {
         tableModelListeners.fireDataChanged(this);
     }
     
-    public void selectRow(int index){
+    public void selectRow(final int index){
         if(index < numRows())
             data.select(index);
-        tableModelListeners.fireRowSelected(this, index);
+        final TableModel source = this;
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                tableModelListeners.fireRowSelected(source, index);
+            }
+        });
     }
     
     public void unselectRow(int index){
