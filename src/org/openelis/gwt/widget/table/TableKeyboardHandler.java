@@ -104,6 +104,13 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         if (KeyboardListener.KEY_ENTER == code) {
             if(controller.editingCell != null) {
                 if(controller.finishEditing()){
+                    if(controller.columns.get(controller.activeCell).getColumnWidget() instanceof TableCheck) {
+                            ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).check();
+                            if(controller.finishEditing()){
+                                controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
+                            }
+                            ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).onFocus(null);
+                    }
                     if(controller.model.numRows() >= controller.maxRows){
                         controller.view.scrollBar.scrollToBottom();
                         DeferredCommand.addCommand(new Command() {
@@ -119,6 +126,14 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 }else{
                     controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
                 }
+            }else if(controller.activeCell > -1){
+                if(controller.columns.get(controller.activeCell).getColumnWidget() instanceof TableCheck) {
+                    ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).check();
+                    if(controller.finishEditing()){
+                        controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
+                    }
+                    ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).onFocus(null);
+            }
             }else if(controller.activeRow < 0) {
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
@@ -167,9 +182,11 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                     final int fCol = col;
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
-                            controller.onCellClicked(controller.view.table, controller.activeRow, fCol);
+                            controller.select(controller.activeRow, fCol);
+                            /*controller.onCellClicked(controller.view.table, controller.activeRow, fCol);
                             if(((TableCellWidget)controller.view.table.getWidget(controller.activeRow, fCol)).getWidget() instanceof FocusWidget)
                                 ((FocusWidget)((TableCellWidget)controller.view.table.getWidget(controller.activeRow, fCol)).getWidget()).setFocus(true);
+                            */
                         }
                     });
                 }

@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -50,7 +51,7 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  * @author tschmidt
  * 
  */
-public class TableCheck extends TableCellInputWidget implements FocusListener, ClickListener, SourcesClickEvents {
+public class TableCheck extends TableCellInputWidget implements FocusListener {
 
     private CheckBox editor;
     private boolean enabled;
@@ -62,6 +63,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
    
     public TableCheck() {
         editor = new CheckBox();
+        editor.unsinkEvents(Event.KEYEVENTS);
         editor.enable(enabled);
         panel = new FocusPanel();
         panel.add(editor);
@@ -99,6 +101,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
             type = CheckType.THREE_STATE;
             editor.setType(CheckType.THREE_STATE);
         }
+        /*
         if(node.getAttributes().getNamedItem("onclick") != null){
             String listener = node.getAttributes().getNamedItem("onclick").getNodeValue();
             if("this".equals(listener)){
@@ -106,6 +109,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
             }else
                 addClickListener((ClickListener)ClassFactory.forName(listener));
         }
+        */
         
     }
 
@@ -120,23 +124,19 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
     }
     
     public void onFocus(Widget sender) {
-        DOM.setStyleAttribute(sender.getElement(), "background", "white");
+        DOM.setStyleAttribute(getElement(), "background", "white");
         
     }
     public void onLostFocus(Widget sender) {
-        DOM.setStyleAttribute(sender.getElement(), "background", "none");
+        DOM.setStyleAttribute(getElement(), "background", "none");
     }
+    
     
     public void enable(boolean enabled){
         this.enabled = enabled;
-        editor.enable(enabled);
-        if(enabled){
-            editor.removeClickListener(this);
-            editor.addClickListener(this);
-        }else
-            editor.removeClickListener(this);
-          
+        //editor.enable(enabled);
     }
+    
     
     public void setCellWidth(int width){
         this.width = width;
@@ -147,6 +147,7 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
         editor.setState((String)field.getValue());
     }
     
+    /*
     public void onClick(Widget sender) {
         if(enabled){
             final Widget wid = this;
@@ -158,6 +159,11 @@ public class TableCheck extends TableCellInputWidget implements FocusListener, C
                 }
             });
         }
+    }
+    */
+    
+    public void check() {
+        editor.onClick(editor);
     }
     
     public void setFocus(boolean focused) {

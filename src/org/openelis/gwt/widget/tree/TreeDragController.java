@@ -69,14 +69,23 @@ public class TreeDragController extends PickupDragController {
     
     @Override
     public void dragStart() {
+        context.draggable.addStyleName("disabled");
         if(manager != null)
             manager.dragStarted(context);
         super.dragStart();
     }
+   
+    @Override
+    public void dragMove() {
+        context.desiredDraggableX = context.mouseX;
+        context.desiredDraggableY = context.mouseY;
+        super.dragMove();
+      }
     
     @Override
     public void dragEnd() {
         context.draggable.removeStyleName("TreeHighlighted");
+        context.draggable.removeStyleName("disabled");
         if(manager != null)
             manager.dragEnded(context);
         super.dragEnd();

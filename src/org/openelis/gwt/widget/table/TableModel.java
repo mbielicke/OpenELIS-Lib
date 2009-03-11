@@ -234,12 +234,10 @@ public class TableModel implements TableModelInt {
     public void selectRow(final int index){
         if(index < numRows())
             data.select(index);
-        final TableModel source = this;
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                tableModelListeners.fireRowSelected(source, index);
-            }
-        });
+     
+       tableModelListeners.fireRowSelected(this, index);
+    
+       
     }
     
     public void unselectRow(int index){

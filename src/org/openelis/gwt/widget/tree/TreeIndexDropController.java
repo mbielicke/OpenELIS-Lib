@@ -30,6 +30,8 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
 
  public boolean dropping;
  
+ public boolean validDrop;
+ 
  private Widget positioner;
  
  public DropManager manager;
@@ -63,6 +65,8 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
 
  @Override
  public void onPreviewDrop(DragContext context) throws VetoDragException {
+     if(!validDrop)
+         throw new VetoDragException();
     if(manager != null)
         manager.previewDrop(context);
     super.onPreviewDrop(context);
@@ -148,6 +152,18 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
        context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
    Location tableLocation = new WidgetLocation(tree, context.boundaryPanel);
    if(tree.model.numRows() > 0){
+       if(tree.dragController == context.dragController){
+           int checkIndex = targetRow;
+           if(checkIndex < 0) 
+               checkIndex = 0;
+           if(checkIndex >= tree.maxRows)
+               checkIndex = tree.maxRows - 1;
+           if(((TreeRow)context.draggable).dragModelIndex == tree.modelIndexList[checkIndex]){
+               positioner.removeFromParent();
+               validDrop = false;
+               return;
+           }
+       }
        TreeRow row = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
        Location widgetLocation = new WidgetLocation(row, context.boundaryPanel);
        context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
@@ -156,6 +172,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
        Location headerLocation = new WidgetLocation(tree.view.header,context.boundaryPanel);
        context.boundaryPanel.add(positioner,tableLocation.getLeft(),headerLocation.getTop()+tree.view.header.getOffsetHeight());
    }
+   validDrop = true;
    if(targetRow == 0 || targetRow == tree.maxRows -1)
        checkScroll(targetRow);
    if(targetRow > -1 && targetRow < tree.maxRows){

@@ -1,10 +1,15 @@
 package org.openelis.gwt.widget.table;
 
+import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
+import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.event.DragManager;
@@ -15,9 +20,9 @@ import java.util.HashMap;
 public class TableDragController extends PickupDragController {
     
     public DragManager manager;
-    
+    private static final String PRIVATE_CSS_PROXY = "dragdrop-proxy";
     private boolean enabled;
-    
+    private Widget proxy;
     private HashMap<Widget, SavedWidgetInfo> savedWidgetInfoMap;
     private static class SavedWidgetInfo {
 
@@ -56,6 +61,7 @@ public class TableDragController extends PickupDragController {
         if(manager != null)
             manager.dragStarted(context);
         super.previewDragStart();
+        
     }
     
     @Override
@@ -65,16 +71,41 @@ public class TableDragController extends PickupDragController {
         super.previewDragEnd();
     }
     
+    public void dragMove() {
+        context.desiredDraggableX = context.mouseX;
+        context.desiredDraggableY = context.mouseY;
+        super.dragMove();
+      }
+    
     @Override
     public void dragStart() {
+        context.draggable.addStyleName("disabled");
         if(manager != null)
             manager.dragStarted(context);
         super.dragStart();
     }
     
+    protected Widget newDragProxy(DragContext context) {
+        AbsolutePanel container = new AbsolutePanel();
+        container.getElement().getStyle().setProperty("overflow", "visible");
+
+        WidgetArea draggableArea = new WidgetArea(context.draggable, null);
+        for (Widget widget : context.selectedWidgets) {
+          WidgetArea widgetArea = new WidgetArea(widget, null);
+          Widget proxy = new SimplePanel();
+          proxy.setPixelSize(widget.getOffsetWidth(), widget.getOffsetHeight());
+          proxy.addStyleName(PRIVATE_CSS_PROXY);
+          container.add(proxy, widgetArea.getLeft() - draggableArea.getLeft(), widgetArea.getTop()
+              - draggableArea.getTop());
+        }
+        this.proxy = container;
+        return container;
+      }
+    
     @Override
     public void dragEnd() {
         context.draggable.removeStyleName("TableHighlighted");
+        context.draggable.removeStyleName("disabled");
         if(manager != null)
             manager.dragEnded(context);
         super.dragEnd();

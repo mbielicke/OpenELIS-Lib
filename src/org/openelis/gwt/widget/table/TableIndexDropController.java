@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.event.DropManager;
+import org.openelis.gwt.widget.tree.TreeRow;
 
 /**
 * Allows one or more table rows to be dropped into an existing table.
@@ -27,6 +28,8 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  private TableWidget table;
 
  public boolean dropping;
+ 
+ private boolean validDrop;
  
  private Widget positioner;
  
@@ -61,6 +64,8 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
  @Override
  public void onPreviewDrop(DragContext context) throws VetoDragException {
+     if(!validDrop) 
+         throw new VetoDragException();
     if(manager != null)
         manager.previewDrop(context);
     super.onPreviewDrop(context);
@@ -120,6 +125,18 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
        context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
    Location tableLocation = new WidgetLocation(table, context.boundaryPanel);
    if(table.model.numRows() > 0){
+       if(table.dragController == context.dragController){
+           int checkIndex = targetRow;
+           if(checkIndex < 0) 
+               checkIndex = 0;
+           if(checkIndex >= table.maxRows)
+               checkIndex = table.maxRows - 1;
+           if(((TableRow)context.draggable).dragModelIndex == table.modelIndexList[checkIndex]){
+               positioner.removeFromParent();
+               validDrop = false;
+               return;
+           }
+       }
        TableRow row = table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
        Location widgetLocation = new WidgetLocation(row, context.boundaryPanel);
        context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
@@ -128,6 +145,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
        Location headerLocation = new WidgetLocation(table.view.header,context.boundaryPanel);
        context.boundaryPanel.add(positioner,tableLocation.getLeft(),headerLocation.getTop()+table.view.header.getOffsetHeight());
    }
+   validDrop = true;
    if(targetRow == 0 || targetRow == table.maxRows -1)
        checkScroll(targetRow);
  }

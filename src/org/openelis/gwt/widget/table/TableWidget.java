@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
@@ -61,6 +62,7 @@ public class TableWidget extends FocusPanel implements
                             SourcesChangeEvents,
                             SourcesTableWidgetEvents,
                             TableModelListener,
+                            TableWidgetListener,
                             FocusListener{
     
 
@@ -91,6 +93,7 @@ public class TableWidget extends FocusPanel implements
     public boolean showAltRowColors = true;
     public TableDragController dragController;
     public TableIndexDropController dropController;
+    public boolean selectedByClick;
     
     public TableWidget() {
         
@@ -116,8 +119,10 @@ public class TableWidget extends FocusPanel implements
         keyboardHandler = new TableKeyboardHandler(this);
         mouseHandler = new TableMouseHandler(this);
         addTableWidgetListener((TableWidgetListener)renderer);
+        //addTableWidgetListener(this);
         setWidget(view);
         addFocusListener(this);
+        
     }
     
     /**
@@ -145,9 +150,11 @@ public class TableWidget extends FocusPanel implements
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
         focused = true;
-        if(activeRow == row && activeCell == col)
+        if(!(columns.get(col).getColumnWidget() instanceof TableCheck) && activeRow == row && activeCell == col)
             return;
+        selectedByClick = true;
         select(row, col);
+        selectedByClick = false;
     }
 
     /**
@@ -182,17 +189,29 @@ public class TableWidget extends FocusPanel implements
                     }
                 });
             }
+            view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
         }
         if(model.canSelect(modelIndexList[row])){
-            if(activeRow > -1 && !ctrlKey){
-                model.unselectRow(-1);
-            }
             focused = true;
-            activeRow = row;
-            model.selectRow(modelIndexList[row]);           
+            if(activeRow != row){
+                if(activeRow > -1 && !ctrlKey){
+                    model.unselectRow(-1);
+                }
+                activeRow = row;
+                model.selectRow(modelIndexList[row]);
+            }
             if(model.canEdit(modelIndexList[row],col)){
                 activeCell = col;
                 tableWidgetListeners.fireStartedEditing(this, row, col);
+                if(columns.get(col).getColumnWidget() instanceof TableCheck) {
+                    if(selectedByClick){
+                        ((TableCheck)view.table.getWidget(row,col)).check();
+                        if(finishEditing()){
+                            view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
+                        }
+                        ((TableCheck)view.table.getWidget(row,col)).onFocus(this);
+                    }
+                }
             }else
                 activeCell = -1;
         }else{
@@ -211,6 +230,11 @@ public class TableWidget extends FocusPanel implements
                 }
             }
             tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
+        }
+        if(activeCell > -1){
+            if(columns.get(activeCell).getColumnWidget() instanceof TableCheck) {
+                ((TableCheck)view.table.getWidget(activeRow,activeCell)).onLostFocus(this);
+            }
         }
         return false;
         
@@ -314,6 +338,29 @@ public class TableWidget extends FocusPanel implements
             }
             view.scrollBar.setScrollPosition(cellHeight*shownIndex);
         }
+    }
+
+    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
+        if(columns.get(col).getColumnWidget() instanceof TableCheck) {
+            ((SimplePanel)(TableCellWidget)view.table.getWidget(row, col)).addStyleName(view.widgetStyle);
+            ((SimplePanel)(TableCellWidget)view.table.getWidget(row, col)).addStyleName("Enabled");
+        }
+        
+    }
+
+    public void startEditing(SourcesTableWidgetEvents sender, int row, int col) {
+        if(columns.get(col).getColumnWidget() instanceof TableCheck) {
+            if(selectedByClick){
+                ((TableCheck)view.table.getWidget(row,col)).check();
+                finishEditing();
+            }
+        }
+        
+    }
+
+    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col) {
+        // TODO Auto-generated method stub
+        
     }
     
 }
