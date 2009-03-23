@@ -132,42 +132,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
         return false;
     }
     
-    public boolean canDrag(int row) {
-        if(manager != null)
-            return manager.canDrag(controller,rows.get(row),row);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
 
-    public boolean canDrop(Widget dragWidget, int targetRow) {
-        if(manager != null)
-            return manager.canDrop(controller,dragWidget,rows.get(targetRow),targetRow);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-    
-    public boolean canDrop(Widget dragWidget, Widget dropWidget) {
-        if(manager != null)
-            return manager.canDrop(controller,dragWidget,dropWidget);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-    
-    public void drop(Widget dragWidget, int targetRow) {
-        if(manager != null) {
-            manager.drop(controller,dragWidget,rows.get(targetRow),targetRow);
-            return; 
-        }    
-        TreeDataItem dropItem = getRow(targetRow);
-        TreeDataItem dragItem = (TreeDataItem)((TreeRow)dragWidget).item.clone();
-        if(dropItem.depth == dragItem.depth && dropItem.parent == dragItem.parent){
-            deleteRow(((TreeRow)dragWidget).modelIndex);
-            addRow(targetRow, dragItem);
-        }
-    }
 
     public void clear() {
         data.clear();
@@ -320,6 +285,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public TreeDataModel unload() {
+        clearSelections();
         treeModelListeners.fireUnload(this);
         return data;
     }
@@ -405,11 +371,6 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
     public void setLeaves(HashMap<String,TreeDataItem> leaves){
         data.leaves = leaves;
-    }
-
-    public void drop(Widget dragWidget) {
-        if(manager != null)
-            manager.drop(controller, dragWidget);
     }
 
     public void unlink(int row) {
