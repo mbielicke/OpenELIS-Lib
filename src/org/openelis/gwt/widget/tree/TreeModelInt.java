@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget.tree;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
@@ -100,14 +98,6 @@ public interface TreeModelInt extends SourcesTreeModelEvents {
     public boolean canOpen(int row);
     
     public boolean canClose(int row);
-    
-    public boolean canDrag(int row);
-    
-    public boolean canDrop(Widget dropWidget, int targetRow);
-    
-    public void drop(Widget dropWidget, int targetRow);
-    
-    public void drop(Widget dragWidget);
         
     public TreeDataModel unload();
     
