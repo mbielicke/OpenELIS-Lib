@@ -37,6 +37,10 @@ public class QueryCheckField extends CheckField {
         
     }
     
+    public QueryCheckField(String key) {
+        this.key = key;
+    }
+    
     public QueryCheckField(Node node){
         setAttributes(node);
     }

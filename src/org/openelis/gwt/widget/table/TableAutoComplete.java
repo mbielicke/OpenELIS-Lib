@@ -110,7 +110,7 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 			display.setWordWrap(false);
 		}
         editor.model.load(((DropDownField)field).getModel());
-        editor.setSelections(((DropDownField<Object>)field).getValue());
+        editor.setSelections(((DropDownField<Object>)field).getKeyValues());
         
         display.setText(editor.getTextBoxDisplay());
 		setWidget(display);
@@ -121,7 +121,7 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
         editor.model.load(((DropDownField)field).getModel());
         editor.activeCell = -1;
         editor.activeRow = -1;
-        editor.setSelections(((DropDownField<Object>)field).getValue());
+        editor.setSelections(((DropDownField<Object>)field).getKeyValues());
         editor.setWidth(width+"px");
 		setWidget(editor);			
 	}

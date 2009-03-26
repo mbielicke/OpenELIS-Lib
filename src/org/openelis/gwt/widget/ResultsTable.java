@@ -10,9 +10,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.Query;
 import org.openelis.gwt.common.data.KeyListManager;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
@@ -22,18 +23,11 @@ import org.openelis.gwt.screen.ScreenAToZTable;
 import org.openelis.gwt.screen.ScreenButtonPanel;
 import org.openelis.gwt.screen.ScreenVertical;
 import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.AToZTable.Action;
 import org.openelis.gwt.widget.AppButton.ButtonState;
-import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableModel;
 import org.openelis.gwt.widget.table.TableModelInt;
 import org.openelis.gwt.widget.table.TableWidget;
-import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
-import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
-import org.openelis.gwt.widget.table.event.TableModelListener;
-
-import java.util.ArrayList;
 
 public class ResultsTable extends Composite implements ClickListener, CommandListener, SourcesCommandEvents, ChangeListener, TableManager{
     
@@ -100,10 +94,10 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
     
     public void performCommand(Enum action, Object obj) {
         if(action == AppScreenForm.Action.NEW_MODEL) {
-            table.model.load((DataModel<Object>)obj);
+            table.model.load(((Query)obj).results);
             table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);
             if(showNavPanel){
-                table.view.setNavPanel(table.model.getData().getPage(), table.model.getData().getPage()+1, false);
+                table.view.setNavPanel(((Query)obj).page, ((Query)obj).page+1, false);
                 table.view.prevNav.addClickListener(this);
                 table.view.nextNav.addClickListener(this);
             }
@@ -117,10 +111,10 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
             table.focused = true;
         }
         else if(action == AppScreenForm.Action.NEW_PAGE){
-            table.model.load((DataModel<Object>)obj);
+            table.model.load(((Query)obj).results);
             table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);
             if(showNavPanel){
-                table.view.setNavPanel(table.model.getData().getPage(), table.model.getData().getPage()+1, false);
+                table.view.setNavPanel(((Query)obj).page, ((Query)obj).page+1, false);
                 table.view.prevNav.addClickListener(this);
                 table.view.nextNav.addClickListener(this);
             }
@@ -191,27 +185,27 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
     }
 
 
-    public boolean canAdd(TableWidget widget, DataSet set, int row) {
+    public boolean canAdd(TableWidget widget, TableDataRow set, int row) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    public boolean canAutoAdd(TableWidget widget, DataSet addRow) {
+    public boolean canAutoAdd(TableWidget widget, TableDataRow addRow) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    public boolean canDelete(TableWidget widget, DataSet set, int row) {
+    public boolean canDelete(TableWidget widget, TableDataRow set, int row) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    public boolean canEdit(TableWidget widget, DataSet set, int row, int col) {
+    public boolean canEdit(TableWidget widget, TableDataRow set, int row, int col) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    public boolean canSelect(TableWidget widget, DataSet set, int row) {
+    public boolean canSelect(TableWidget widget, TableDataRow set, int row) {
         commandListeners.fireCommand(Action.ROW_SELECTED,new Integer(row));
         return false;
     }

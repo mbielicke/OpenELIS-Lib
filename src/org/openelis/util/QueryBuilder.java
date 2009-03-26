@@ -25,25 +25,22 @@
 */
 package org.openelis.util;
 
-import org.openelis.gwt.common.MetaMap;
 import org.openelis.gwt.common.Meta;
+import org.openelis.gwt.common.MetaMap;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.CollectionField;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.NumberObject;
 import org.openelis.gwt.common.data.QueryCheckField;
 import org.openelis.gwt.common.data.QueryDateField;
+import org.openelis.gwt.common.data.QueryDoubleField;
 import org.openelis.gwt.common.data.QueryField;
-import org.openelis.gwt.common.data.QueryNumberField;
+import org.openelis.gwt.common.data.QueryIntegerField;
 import org.openelis.gwt.common.data.QueryStringField;
-import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.common.data.TableDataRow;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
@@ -53,7 +50,7 @@ public class QueryBuilder {
 	private String selectStatement = "";
     private HashMap<String, Meta> fromTables = new HashMap<String, Meta>();
 	private ArrayList orderedFromTableKeys = new ArrayList();
-	private HashMap<String, AbstractField> fieldsFromRPC = new HashMap<String, AbstractField>();
+	private ArrayList<AbstractField> fieldsFromRPC = new ArrayList<AbstractField>();
 	private ArrayList whereOperands = new ArrayList();
 	private String orderByStatement = "";
     private MetaMap meta;
@@ -125,37 +122,6 @@ public class QueryBuilder {
             }
             i++;
         }
-        return sb.toString();
-    }
-    
-    //TODO could get rid of this after new dropdownfield is implemented
-    public static String getQuery(CollectionField field, String fieldName) {
-        ArrayList list = (ArrayList) field.getValue();
-        if (list.size() == 0)
-            return "";
-        StringBuffer sb = new StringBuffer();
-        sb.append(" and (");
-       
-        getQueryNoOperand(field, fieldName);
-        
-        sb.append(") ");
-        
-        return sb.toString();
-    }
-    
-    public static String getQueryNoOperand(CollectionField field, String fieldName) {
-        ArrayList list = (ArrayList) field.getValue();
-        if (list.size() == 0)
-            return "";
-        String paramName = getParamName(fieldName);
-        StringBuffer sb = new StringBuffer();
-        sb.append(fieldName + " in (");
-        for (int i = 0; i < list.size(); i++) {
-            if (i > 0)
-                sb.append(",");
-            sb.append(":" + paramName + i);
-        }
-        sb.append(") ");
         return sb.toString();
     }
     
@@ -250,12 +216,14 @@ public class QueryBuilder {
         }
     }
 
-    public static void setParameters(QueryNumberField field,
+
+    
+    public static void setParameters(QueryIntegerField field,
                                      String fieldName,
                                      Query query) {
-    	if(field.getParameter() == null)
-    		return;
-    	
+        if(field.getParameter() == null)
+            return;
+        
         String paramName = getParamName(fieldName);
         Iterator fieldParamIt = field.getParameter().iterator();
         int i = 0;
@@ -267,32 +235,54 @@ public class QueryBuilder {
                 String param2 = param.substring(param.indexOf("..") + 2,
                                                 param.length());
 
-                if (field.getType().equals("integer")) {
-                    query.setParameter(paramName + i + "0",
-                                       new Integer(param1.trim()));
-                    query.setParameter(paramName + i + "1",
+                query.setParameter(paramName + i + "0",
+                                   new Integer(param1.trim()));
+                query.setParameter(paramName + i + "1",
                                        new Integer(param2.trim()));
-                } else {
-                    query.setParameter(paramName + i + "0",
-                                       new Double(param1.trim()));
-                    query.setParameter(paramName + i + "1",
-                                       new Double(param2.trim()));
-                }
+
             } else if (param.indexOf(",") > -1) {
                 String[] params = param.split(",");
                 for (int j = 0; j < params.length; j++) {
-                    if (field.getType().equals("integer"))
-                        query.setParameter(paramName + i + j,
-                                           new Integer(params[j].trim()));
-                    else
-                        query.setParameter(paramName + i + j,
-                                           new Double(params[j].trim()));
+                    query.setParameter(paramName + i + j,
+                                       new Integer(params[j].trim()));
+
                 }
             } else {
-                if (field.getType().equals("integer"))
-                    query.setParameter(paramName + i, new Integer(param.trim()));
-                else
-                    query.setParameter(paramName + i, new Double(param.trim()));
+                query.setParameter(paramName + i, new Integer(param.trim()));
+            }
+            i++;
+        }
+    }
+    
+    public static void setParameters(QueryDoubleField field,
+                                     String fieldName,
+                                     Query query) {
+        if(field.getParameter() == null)
+            return;
+        
+        String paramName = getParamName(fieldName);
+        Iterator fieldParamIt = field.getParameter().iterator();
+        int i = 0;
+        while (fieldParamIt.hasNext()) {
+            String param = (String)fieldParamIt.next();
+
+            if (param.indexOf("..") > -1) {
+                String param1 = param.substring(0, param.indexOf(".."));
+                String param2 = param.substring(param.indexOf("..") + 2,
+                                                param.length());
+
+                query.setParameter(paramName + i + "0",
+                                   new Double(param1.trim()));
+                query.setParameter(paramName + i + "1",
+                                   new Double(param2.trim()));
+            } else if (param.indexOf(",") > -1) {
+                String[] params = param.split(",");
+                for (int j = 0; j < params.length; j++) {
+                    query.setParameter(paramName + i + j,
+                                       new Double(params[j].trim()));
+                }
+            } else {
+                query.setParameter(paramName + i, new Double(param.trim()));
             }
             i++;
         }
@@ -328,23 +318,6 @@ public class QueryBuilder {
         }
     }
     
-    public static void setParameters(CollectionField field,
-            						 String fieldName,
-            						 Query query) {
-    	ArrayList list = (ArrayList) field.getValue();
-		String paramName = getParamName(fieldName);
-		for(int i = 0;i<list.size();i++){
-			if (field.getType().equals("string")){
-				String param = (String)list.get(i); 
-				query.setParameter(paramName + i, param.trim());
-			}else if (field.getType().equals("integer")){
-				Integer param = (Integer)list.get(i);
-				query.setParameter(paramName + i,
-									new Integer(param));
-			}
-		}	
-    }
-    
     public static void setParameters(DropDownField field, String fieldName, Query query) {
     	ArrayList list = (ArrayList) field.getValue();
         if(list == null)
@@ -352,7 +325,9 @@ public class QueryBuilder {
     	String paramName = getParamName(fieldName);
     
     	for(int i = 0;i<list.size();i++){
-    		Object o = ((DataSet)list.get(i)).getKey();
+    		Object o = ((TableDataRow)list.get(i)).key;
+            query.setParameter(paramName+i, o);
+            /*
     		if(o instanceof NumberObject){
 				NumberObject number = (NumberObject)o;
 				if(number.getType() == NumberObject.Type.INTEGER){
@@ -366,6 +341,7 @@ public class QueryBuilder {
 				String param = (String)((StringObject)o).getValue(); 
 				query.setParameter(paramName + i, param.trim());
 			}
+            */
     	}	
     }
     
@@ -406,10 +382,10 @@ public class QueryBuilder {
      * @param fields
      * @throws Exception
      */
-    public void addWhere(HashMap<String,AbstractField> fields) throws Exception{
+    public void addWhere(ArrayList<AbstractField> fields) throws Exception{
     	fieldsFromRPC = fields;
 //    	where clause
-    	for (AbstractField field : fields.values()){
+    	for (AbstractField field : fields){
        		String key = (String)field.getKey();
             if(field.getValue() != null) {
                 boolean columnFound = meta.hasColumn(key);
@@ -419,9 +395,7 @@ public class QueryBuilder {
 
 //   		set the where param            	            	
                 String whereClause = "";
-                if(field instanceof QueryNumberField)
-                    whereClause = getQueryNoOperand((QueryNumberField)field, key);
-                else if(field instanceof QueryStringField)
+                if(field instanceof QueryStringField)
                     whereClause = getQueryNoOperand((QueryStringField)field, key);
                 else if(field instanceof DropDownField)
                     whereClause = getQueryNoOperand((DropDownField)field, key);	
@@ -454,21 +428,19 @@ public class QueryBuilder {
      * @return
      */
     public void setQueryParams(Query query){
-    	Object[] keys = (Object[]) ((Set)fieldsFromRPC.keySet()).toArray();
-        for (int i = 0; i < keys.length; i++) {
-        	Object o = fieldsFromRPC.get((String)keys[i]);    
-        	if(fieldsFromRPC.containsKey((String)keys[i])){
-				if(o instanceof QueryNumberField) 
-					setParameters((QueryNumberField)o, (String)keys[i], query);
-				else if(o instanceof QueryStringField) 	
-					setParameters((QueryStringField)o, (String)keys[i], query);
-				else if(o instanceof DropDownField) 
-					setParameters((DropDownField)o, (String)keys[i], query);
-                else if(o instanceof QueryCheckField)
-                    setParameters((QueryCheckField)o, (String)keys[i], query);
-                else if(o instanceof QueryDateField)
-                    setParameters((QueryDateField)o, (String)keys[i], query);
-        	}
+        for (AbstractField field : fieldsFromRPC) {//int i = 0; i < keys.length; i++) {
+            if(field instanceof QueryIntegerField)
+                setParameters((QueryIntegerField)field, field.key, query);
+            else if(field instanceof QueryDoubleField)
+                setParameters((QueryDoubleField)field, field.key, query);
+			else if(field instanceof QueryStringField) 	
+			    setParameters((QueryStringField)field, field.key, query);
+			else if(field instanceof DropDownField) 
+			    setParameters((DropDownField)field, field.key, query);
+            else if(field instanceof QueryCheckField)
+                setParameters((QueryCheckField)field, field.key, query);
+            else if(field instanceof QueryDateField)
+                setParameters((QueryDateField)field, field.key, query);
         }
     }
     

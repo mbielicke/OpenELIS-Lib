@@ -25,13 +25,10 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.data.DataSet;
 
 public class DropDownListener implements ClickListener, MouseListener, KeyboardListener {
     

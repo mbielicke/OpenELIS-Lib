@@ -28,17 +28,16 @@ package org.openelis.gwt.services;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.data.DataModel;
 
-public interface AppScreenFormServiceIntAsync<ScreenRPC extends RPC,Key> extends AppScreenServiceIntAsync<ScreenRPC> {
+
+public interface AppScreenFormServiceIntAsync<ScreenRPC extends RPC,QueryRPC extends RPC> extends AppScreenServiceIntAsync<ScreenRPC> {
 
     public Request commitUpdate(ScreenRPC rpc, AsyncCallback<ScreenRPC> callback);
     
     public Request commitAdd(ScreenRPC rpc, AsyncCallback<ScreenRPC> callback);
     
-    public Request commitQuery(Form form, DataModel<Key> d, AsyncCallback<DataModel<Key>> callback);
+    public Request commitQuery(QueryRPC d, AsyncCallback<QueryRPC> callback);
     
     public Request fetch(ScreenRPC rpc, AsyncCallback<ScreenRPC> callback);
     

@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.KeyListManager;
+import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
@@ -66,7 +66,7 @@ public class AToZTable extends TableWidget implements
     private HorizontalPanel mainHP = new HorizontalPanel();
     private ScreenVertical alphabetButtonVP = new ScreenVertical();
     private VerticalPanel tablePanel = new VerticalPanel();
-    protected DataModel<Object> dm;
+    protected TableDataModel dm;
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean refreshedByLetter;
@@ -233,13 +233,13 @@ public class AToZTable extends TableWidget implements
                (action == AppScreenForm.Action.NEW_PAGE) ||
                (action == KeyListManager.Action.SELECTION) ||                
                (action == KeyListManager.Action.UNSELECT) ||
-               (action.getDeclaringClass() == FormInt.State.class) ||
+               (action.getDeclaringClass() == AppScreenForm.State.class) ||
                (obj instanceof AppButton && bpanel != null && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement()));
     }
 
     public void performCommand(Enum action, Object obj) {
         if(action == AppScreenForm.Action.NEW_MODEL) {
-            model.load((DataModel<Object>)obj);
+            model.load((TableDataModel)obj);
             view.setScrollHeight((model.getData().size()*cellHeight)+(model.getData().size()*cellSpacing)+cellSpacing);
             if(showNavPanel)
                 view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
@@ -255,7 +255,7 @@ public class AToZTable extends TableWidget implements
             focused = true;
         }
         else if(action == AppScreenForm.Action.NEW_PAGE){
-            model.load((DataModel<Object>)obj);
+            model.load((TableDataModel)obj);
             view.setScrollHeight((model.getData().size()*cellHeight)+(model.getData().size()*cellSpacing)+cellSpacing);
             if(showNavPanel)
                 view.setNavPanel(model.getData().getPage(), model.getData().getPage()+1, false);
@@ -302,9 +302,9 @@ public class AToZTable extends TableWidget implements
            
         }
         
-        if(action == FormInt.State.UPDATE)
+        if(action == AppScreenForm.State.UPDATE)
             locked = true;
-        else if(action.getDeclaringClass() == FormInt.State.class)
+        else if(action.getDeclaringClass() == AppScreenForm. State.class)
             locked = false;
         
     }

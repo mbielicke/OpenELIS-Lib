@@ -34,6 +34,7 @@ import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.CalendarLookUp;
 
 import java.util.Date;
@@ -118,7 +119,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     }
 
     public void load(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.load(field);
         else{
             if (field instanceof DateField) {
@@ -132,7 +133,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     }
 
     public void submit(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.submit(field);
         else{
             field.setValue(null);
@@ -161,7 +162,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     }
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
             cal.enable(enabled);
@@ -179,7 +180,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     }
     
     public void setFocus(boolean focus){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focus);
         else
             cal.setFocus(focus);
@@ -194,6 +195,14 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
    public void onFocus(Widget sender) {
        cal.onFocus(sender);
        super.onFocus(sender);
+   }
+   
+   public void setForm(State state){
+       if(queryWidget == null){
+           if(state == State.QUERY) 
+               queryField = field.getQueryField();
+       }
+       super.setForm(state);
    }
 
 }

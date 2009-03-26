@@ -54,8 +54,9 @@ public class CheckField extends AbstractField<String> implements FieldType {
      * of either "Y" or "N"
      * @param val
      */
-    public CheckField(String val) {
-        super(val);
+    public CheckField(String key) {
+        super();
+        this.key = key;
     }
     
     /**
@@ -161,5 +162,9 @@ public class CheckField extends AbstractField<String> implements FieldType {
             return null;
         else
             return value;
+    }
+    
+    public AbstractField getQueryField() {
+        return new QueryStringField(key);
     }
 }

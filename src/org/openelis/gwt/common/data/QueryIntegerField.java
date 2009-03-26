@@ -38,6 +38,10 @@ public class QueryIntegerField extends QueryField {
         
     }
     
+    public QueryIntegerField(String key){
+        this.key = key;
+    }
+    
     public QueryIntegerField(Node node){
         setAttributes(node);
     }

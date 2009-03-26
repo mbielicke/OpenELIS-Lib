@@ -25,18 +25,17 @@
 */
 package org.openelis.gwt.services;
 
-import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.DataModel;
 
-public interface AppScreenFormServiceInt<ScreenRPC extends RPC,Key> extends AppScreenServiceInt<ScreenRPC> {
+
+public interface AppScreenFormServiceInt<ScreenRPC extends RPC,QueryRPC extends RPC> extends AppScreenServiceInt<ScreenRPC> {
     
     public ScreenRPC commitUpdate(ScreenRPC rpc) throws RPCException;
     
     public ScreenRPC commitAdd(ScreenRPC rpc) throws RPCException;
     
-    public DataModel<Key> commitQuery(Form form, DataModel<Key> data) throws RPCException;
+    public QueryRPC commitQuery(QueryRPC data) throws RPCException;
     
     public ScreenRPC fetch(ScreenRPC rpc) throws RPCException;
     

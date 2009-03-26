@@ -42,8 +42,6 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
 
@@ -304,8 +302,8 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     }
     
     public void close() {
-        if(content instanceof FormInt){
-            if(((FormInt)content).hasChanges()){
+        if(content instanceof AppScreenForm){
+            if(((AppScreenForm)content).hasChanges()){
                 return;
             }
         }
@@ -422,5 +420,24 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             statusImg.setStyleName(style);
         }
     }
-
+    
+    public void setBusy() {
+        setStatus("","spinnerIcon");
+    }
+    
+    public void setBusy(String message) {
+        setStatus(message,"spinnerIcon");
+    }
+    
+    public void clearStatus() {
+        setStatus("","");
+    }
+    
+    public void setDone(String message) {
+        setStatus(message,"");
+    }
+    
+    public void setError(String message) {
+        setStatus(message,"ErrorPanel");
+    }
 }

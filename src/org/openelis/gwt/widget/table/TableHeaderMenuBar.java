@@ -50,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.NumberObject;
+import org.openelis.gwt.common.data.IntegerObject;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
@@ -484,7 +484,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                     item.setStyleName("topHeaderRowContainer");
                     //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
                     filterMenu.menuItemsPanel.add(item);
-                    item.args = new Object[] {filter,new NumberObject(index)};
+                    item.args = new Object[] {filter,new IntegerObject(index)};
                     item.removeClickListener(item);
                     item.addClickListener(this);
                     
@@ -552,7 +552,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         if(sender instanceof MenuItem) {
             doFilter = true;
             Filter filter = (Filter)((MenuItem)sender).args[0];
-            TableColumn col = (TableColumn)controller.columns.get((((NumberObject)((MenuItem)sender).args[1]).getIntegerValue()));
+            TableColumn col = (TableColumn)controller.columns.get((((IntegerObject)((MenuItem)sender).args[1]).getValue()));
             filter.filtered = !filter.filtered;
             if(filter.filtered)
                 ((MenuItem)sender).iconPanel.setStyleName("Checked");

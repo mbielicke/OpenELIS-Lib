@@ -25,10 +25,10 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.TableDataModel;
 
 public interface AutoCompleteCallInt {
     
-    public void callForMatches(AutoComplete widget, DataModel model, String text);
+    public void callForMatches(AutoComplete widget, TableDataModel model, String text);
 
 }

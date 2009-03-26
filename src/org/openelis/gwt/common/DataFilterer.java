@@ -25,23 +25,22 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class DataFilterer implements DataFiltererInt {
     
-    public Filter[] getFilterValues(DataModel<Object> data,int col) {
+    public <T extends TableDataRow> Filter[] getFilterValues(TableDataModel<T> data,int col) {
         ArrayList<FieldType> filterVals = new ArrayList<FieldType>();
         for (int i = 0; i < data.size(); i++) {
-            FieldType val = data.get(i).get(col);
+            FieldType val = (FieldType)data.get(i).getCells().get(col);
             if (val != null && !filterVals.contains(val))
                 filterVals.add(val);
         }
@@ -60,7 +59,7 @@ public class DataFilterer implements DataFiltererInt {
         return filters;
     }
     
-    public void applyFilters(DataModel<Object> data, ArrayList<Filter[]> filters) {
+    public <T extends TableDataRow> void applyFilters(TableDataModel<T> data, ArrayList<Filter[]> filters) {
         ArrayList<HashSet> filterSets = new ArrayList<HashSet>();
         for (int i = 0; i < filters.size(); i++) {
             if (filters.get(i) == null) {
@@ -79,8 +78,8 @@ public class DataFilterer implements DataFiltererInt {
             filterSets.add(filterSet);
         }
         for (int i = 0; i < data.size(); i++) {
-            DataSet<Object> row = data.get(i);
-            ((DataSet)data.get(i)).shown = true;
+            TableDataRow<? extends Object> row = data.get(i);
+            row.shown = true;
             for (int j = 0; j < filterSets.size(); j++) {
                 if (filterSets.get(j) == null)
                     continue;
@@ -88,15 +87,15 @@ public class DataFilterer implements DataFiltererInt {
                 if (filterSet.contains("All"))
                     continue;
                 String val = null;
-                if (((Field)row.get(j)).getValue() != null)
-                    val = ((Field)row.get(j)).getValue().toString();
+                if (((Field)row.getCells().get(j)).getValue() != null)
+                    val = ((Field)row.getCells().get(j)).getValue().toString();
                 if (!filterSet.contains(val))
                   data.get(i).shown = false;  
             }
         }
     }
     
-    public void applyFilter(DataModel<Object> data, Filter[] filters, int col) {
+    public <T extends TableDataRow> void applyFilter(TableDataModel<T> data, Filter[] filters, int col) {
         if(filters == null){
             if(col == 0){
                 for (int i = 0; i < data.size(); i++) 
@@ -113,17 +112,17 @@ public class DataFilterer implements DataFiltererInt {
             }
         }
         for (int i = 0; i < data.size(); i++) {
-            DataSet<Object> row = data.get(i);
+            TableDataRow<? extends Object> row = data.get(i);
             if(col == 0)
                 row.shown = true;
             if (filterSet.contains(new DataObject<String>("All")))
                 continue;
-            if (((Field)row.get(col)).getValue() != null && !filterSet.contains(row.get(col)))
+            if (((Field)row.getCells().get(col)).getValue() != null && !filterSet.contains(row.getCells().get(col)))
               row.shown = false;  
         }
     }
     
-    public void applyQueryFilter(DataModel<Object> data, String query, int col) {
+    public <T extends TableDataRow> void applyQueryFilter(TableDataModel<T> data, String query, int col) {
         if(query == null){
             if(col == 0){
                 for (int i = 0; i < data.size(); i++) 
@@ -132,10 +131,10 @@ public class DataFilterer implements DataFiltererInt {
             return;
         }
         for (int i = 0; i < data.size(); i++) {
-            DataSet<Object> row = data.get(i);
+            TableDataRow<? extends Object> row = data.get(i);
             if(col == 0)
                 row.shown = true;
-            if (((Field)row.get(col)).getValue() != null && !((String)((Field)row.get(col)).getValue()).toLowerCase().startsWith(query.toLowerCase()))
+            if (((Field)row.getCells().get(col)).getValue() != null && !((String)((Field)row.getCells().get(col)).getValue()).toLowerCase().startsWith(query.toLowerCase()))
               row.shown = false;  
         }
     }

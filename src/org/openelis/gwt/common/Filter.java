@@ -25,13 +25,9 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.Data;
-import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
 
-import java.io.Serializable;
-
-public class Filter implements Data, Serializable {
+public class Filter implements RPC {
 
     private static final long serialVersionUID = 1L;
     public FieldType obj;

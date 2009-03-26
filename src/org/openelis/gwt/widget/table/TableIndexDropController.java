@@ -8,15 +8,13 @@ import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.allen_sauer.gwt.dnd.client.util.WidgetLocation;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.event.DropManager;
-import org.openelis.gwt.widget.tree.TreeRow;
 
 /**
 * Allows one or more table rows to be dropped into an existing table.
@@ -87,7 +85,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
          drop = (TableRow)manager.getDropWidget(context);
      else
          drop = (TableRow)context.draggable;
-     DataSet<Object> row = drop.dragRow;
+     TableDataRow<Object> row = drop.dragRow;
      int modelIndex = drop.dragModelIndex;
      if(table.model.numRows() == 0 || table.model.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
          table.model.addRow(row);

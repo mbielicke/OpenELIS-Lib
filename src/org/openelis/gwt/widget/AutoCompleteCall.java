@@ -31,7 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
 
@@ -49,11 +49,11 @@ public class AutoCompleteCall implements AutoCompleteCallInt {
     }
 
     
-    public void callForMatches(final AutoComplete widget, DataModel model, String text) {
+    public void callForMatches(final AutoComplete widget, TableDataModel model, String text) {
         try {
             autoService.getMatches(widget.cat, model, text, null, new AsyncCallback() {
                 public void onSuccess(Object result) {
-                    widget.showAutoMatches((DataModel)result);
+                    widget.showAutoMatches((TableDataModel)result);
                 }
                 
                 public void onFailure(Throwable caught) {

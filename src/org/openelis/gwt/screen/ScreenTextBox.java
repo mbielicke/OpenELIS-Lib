@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.TextBox;
 /**
  * ScreenTextBox wraps a GWT TextBox to be displayed on a Screen.
@@ -156,19 +156,21 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
 
     public void load(AbstractField field) {
-        if(!queryMode){
+        if(queryMode && queryWidget != null){
+            queryWidget.load(field);
+        }else{
             textbox.setText(field.format().trim());
             super.load(field);
-        }else
-            queryWidget.load(field);
+        }
+            
     }
 
     public void submit(AbstractField field) {
-        if(!queryMode){    
-            field.setValue(textbox.getText());
-        }else
+        if(queryMode && queryWidget != null){  
             queryWidget.submit(field);
-
+        }else
+            field.setValue(textbox.getText());
+            
     }
 
     public void onChange(Widget sender) {    
@@ -197,22 +199,22 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(State state) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY){
+            if(state == State.QUERY){
                 textbox.setMaxLength(255);
                 textbox.enforceLength = false;
                 textbox.enforceMask = false;
                 textbox.setTextAlignment(TextBox.ALIGN_LEFT);
+                queryField = field.getQueryField();
             }else{
                 textbox.setMaxLength(textbox.length);
                 textbox.enforceLength = true;
                 textbox.enforceMask = true;
                 textbox.setTextAlignment(textbox.alignment);
             }
-            
-        }else
-            super.setForm(state);
+        }
+        super.setForm(state);
     }
     
     public void onFocus(Widget sender) {

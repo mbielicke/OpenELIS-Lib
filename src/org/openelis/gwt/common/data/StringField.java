@@ -46,8 +46,14 @@ public class StringField extends AbstractField<String> implements FieldType {
         super();
     }
     
-    public StringField(String value) {
+    public StringField(String key) {
+        super();
+        this.key = key;
+    }
+    
+    public StringField(String key, String value) {
         super(value);
+        this.key = key;
     }
 
     public StringField(Node node){
@@ -162,5 +168,9 @@ public class StringField extends AbstractField<String> implements FieldType {
 
     public StringField getInstance(Node node) {
         return new StringField(node);
+    }
+    
+    public AbstractField getQueryField() {
+        return new QueryStringField(key);
     }
 }

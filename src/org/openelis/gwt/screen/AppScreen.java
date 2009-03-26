@@ -25,12 +25,14 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.HasFocus;
@@ -45,10 +47,7 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.services.AppScreenServiceInt;
 import org.openelis.gwt.services.AppScreenServiceIntAsync;
 import org.openelis.gwt.widget.AppButton;
 
@@ -62,17 +61,16 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
+public class AppScreen<ScreenRPC extends Form> extends ScreenBase<ScreenRPC> implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
 
     public AppScreenServiceIntAsync<ScreenRPC> service;
-    public HashMap<String,Form> forms = new HashMap<String,Form>();
-    public HashMap<String,FieldType> initData;
-    public ScreenRPC rpc;
+    //public HashMap<String,Form> forms = new HashMap<String,Form>();
+    //public HashMap<String,FieldType> initData;
     private KeyboardListenerCollection keyListeners;
     private ClickListenerCollection clickListeners;
     public Element clickTarget;
     public ScreenWindow window;
-    protected AppConstants consts = (AppConstants)ClassFactory.forName("AppConstants");
+    public static HashMap<String,String> consts;
     protected ScreenWidget focused;
     
     /**
@@ -87,9 +85,17 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         this.service = service;
         //getXML();
     }
-   
+    
+    public AppScreen(String serviceClass) {
+        super();         
+        service = (AppScreenServiceIntAsync)GWT.create(AppScreenServiceInt.class);
+        ServiceDefTarget target = (ServiceDefTarget)service;
+        target.setServiceEntryPoint(target.getServiceEntryPoint()+"?service="+serviceClass);
+    }
+    
+   /*
     @Deprecated public void getXML(ScreenRPC rpc) {
-        this.rpc = rpc;
+        this.form = rpc;
         service.getXML(new AsyncCallback<String>() {
            public void onSuccess(String result){
                drawScreen(result);
@@ -103,7 +109,7 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
     }
     
     @Deprecated public void getXMLData(ScreenRPC rpc) {
-        this.rpc = rpc;
+        this.form = rpc;
         service.getXMLData(new AsyncCallback<HashMap<String,FieldType>>() {
            public void onSuccess(HashMap<String,FieldType> result){
                initData = result;
@@ -116,13 +122,13 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
            }
         });
     }
-    
+    */
     public void getScreen(ScreenRPC screen) {
-        rpc = screen;
-        service.getScreen(rpc,new AsyncCallback<ScreenRPC>() {
+        form = screen;
+        service.getScreen(form,new AsyncCallback<ScreenRPC>() {
             public void onSuccess(ScreenRPC result){
-                rpc = result;
-                drawScreen(rpc.xml);
+                form = result;
+                drawScreen(form.xml);
                 afterDraw(true);
             }
             
@@ -133,8 +139,9 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         });
     }
     
+    /*
     @Deprecated public void getXMLData(HashMap<String, FieldType> args, ScreenRPC rpc) {
-        this.rpc = rpc;
+        this.form = rpc;
         service.getXMLData(args, new AsyncCallback<HashMap<String,FieldType>>() {
            public void onSuccess(HashMap<String,FieldType> result){
                //try {
@@ -151,10 +158,11 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
            }
         });
     }
+    */
     
     public void afterDraw(boolean sucess) {
 
-        this.form = forms.get("display");
+        //this.form = forms.get("display");
         //load();
         DOM.addEventPreview(this);
         if(window != null){
@@ -163,7 +171,7 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
             RootPanel.get().removeStyleName("ScreenLoad");
             window.setStatus(consts.get("loadCompleteMessage"),"");
         }
-        rpc.xml = null;
+        form.xml = null;
     }
     
     public void redrawScreen(String xmlDef){
@@ -171,36 +179,31 @@ public class AppScreen<ScreenRPC extends RPC> extends ScreenBase implements Even
         tabOrder = new HashMap();
         tabBack = new HashMap();
         widgets = new HashMap();
-        forms = new HashMap();
+        //forms = new HashMap();
         drawScreen(xmlDef);
         afterDraw(true);
     }
     
     public void drawScreen(String xmlDef) {
          xml = XMLParser.parse(xmlDef);
-         
-         //try {
              NodeList rpcList = xml.getDocumentElement().getChildNodes();
              for(int i = 0; i < rpcList.getLength(); i++){
                  if(rpcList.item(i).getNodeType() == Node.ELEMENT_NODE && rpcList.item(i).getNodeName().equals("rpc")){
                      String key = rpcList.item(i).getAttributes().getNamedItem("key").getNodeValue();
-                     if(forms.containsKey(key)){
-                         forms.get(key).createFields(rpcList.item(i));
-                         forms.get(key).load = true;
-                     }else{
+                     //if(forms.containsKey(key)){
+                         form.createFields(rpcList.item(i));
+                         form.load = true;
+                         break;
+                     /*}else{
                          Form form = (Form)ScreenBase.createField(rpcList.item(i));
                          form.load = true;
                          forms.put(form.key, form);
+                         
                      }
+                     */
                  }
              }
-             rpc.form = forms.get("display");
              draw();
-        //} catch (Exception e) {
-         //  Window.alert("FormUtil: " + e.getMessage());
-        // }
-        
-         //load((FormRPC)forms.get("query"));
     }
 
 

@@ -25,16 +25,13 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.CommandButton;
-import org.openelis.gwt.widget.AppButton.ButtonState;
-import org.openelis.gwt.widget.FormInt.State;
 
 import java.util.EnumSet;
 

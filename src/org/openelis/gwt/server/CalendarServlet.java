@@ -25,12 +25,8 @@
 */
 package org.openelis.gwt.server;
 
-import org.openelis.gwt.common.RPC;
+import org.openelis.gwt.common.CalendarForm;
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -38,11 +34,10 @@ import org.w3c.dom.Element;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 
-public class CalendarServlet extends AppServlet implements CalendarServiceInt<RPC>{
+public class CalendarServlet extends AppServlet implements CalendarServiceInt<CalendarForm>{
 
     private static final long serialVersionUID = 1L;
 
@@ -50,56 +45,31 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt<RP
     
     public void init() throws ServletException {
         appRoot = getServletConfig().getInitParameter("app.root");
-        //appRoot = "/home/tschmidt/workspace/TestWidgets/www/edu.uiowa.uhl.tw.TestWidgets/";
+        //appRoot = "/home/tschmidt/workspace/OpenELIS-KitchenSink/www/org.openelis.ks.KitchenSink/";
     }
     
-    public String getXML() throws RPCException {
+    public CalendarForm getMonth(CalendarForm form) throws RPCException {
         try {
             Calendar cal = Calendar.getInstance();
-            Document doc = XMLUtil.createNew("doc");
-            Element root = doc.getDocumentElement();
-            Element month = doc.createElement("month");
-            month.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.MONTH))));
-            root.appendChild(month);
-            Element year = doc.createElement("year");
-            year.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.YEAR))));
-            root.appendChild(year);
-            Element day = doc.createElement("day");
-            day.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.DATE))));
-            root.appendChild(day);
-            return ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
-        }catch(Exception e){
-            e.printStackTrace();
-            throw new RPCException(e.getMessage());
-        }
-    }
-
-    public HashMap<String, FieldType> getXMLData() throws RPCException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    public String getMonth(String month, String year, String date) throws RPCException {
-        try {
-            Calendar cal = Calendar.getInstance();
-            if(date != null && !date.equals("")){
-                date = date.replace('-','/');
-                cal.setTime(new Date(date));
+            if(form.date != null && !form.date.equals("")){
+                form.date = form.date.replace('-','/');
+                cal.setTime(new Date(form.date));
             }else{
-                date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
+                form.date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
             }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element monthEl = doc.createElement("month");
-            monthEl.appendChild(doc.createTextNode(month));
+            monthEl.appendChild(doc.createTextNode(String.valueOf(form.month)));
             root.appendChild(monthEl);
             Element yearEl = doc.createElement("year");
-            yearEl.appendChild(doc.createTextNode(year));
+            yearEl.appendChild(doc.createTextNode(String.valueOf(form.year)));
             root.appendChild(yearEl);
             Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(date));
+            day.appendChild(doc.createTextNode(form.date));
             root.appendChild(day);
-            return ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
+            form.xml = ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
+            return form;
         }catch(Exception e){
             e.printStackTrace();
             throw new RPCException(e.getMessage());
@@ -107,59 +77,55 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt<RP
         
     }
 
-    public String getMonthSelect(String month, String year) throws RPCException {
+    public CalendarForm getMonthSelect(CalendarForm form) throws RPCException {
         try {
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element monthEl = doc.createElement("month");
-            monthEl.appendChild(doc.createTextNode(month));
+            monthEl.appendChild(doc.createTextNode(String.valueOf(form.month)));
             root.appendChild(monthEl);
             Element yearEl = doc.createElement("year");
-            yearEl.appendChild(doc.createTextNode(String.valueOf(Integer.parseInt(year)/10*10)));
+            yearEl.appendChild(doc.createTextNode(String.valueOf(form.year/10*10)));
             root.appendChild(yearEl);
             Element yearCellEl = doc.createElement("yearCell");
-            yearCellEl.appendChild(doc.createTextNode(String.valueOf(Integer.parseInt(year)%10)));
+            yearCellEl.appendChild(doc.createTextNode(String.valueOf(form.year%10)));
             root.appendChild(yearCellEl);
-            return ServiceUtils.getXML(appRoot+"Forms/monthYear.xsl",doc);
+            form.xml = ServiceUtils.getXML(appRoot+"Forms/monthYear.xsl",doc);
+            return form;
         }catch(Exception e){
             e.printStackTrace();
             throw new RPCException(e.getMessage());
         }
     }
 
-	public HashMap<String, FieldType> getXMLData(HashMap<String, FieldType> args) throws RPCException {
+    public CalendarForm getScreen(CalendarForm rpc) throws RPCException {
         try {
-            String date = (String)((DataObject)args.get("date")).getValue();
             Calendar cal = Calendar.getInstance();
-            if(!date.equals("")){
-                date = date.replace('-','/');
-                cal.setTime(new Date(date));
+            if(!rpc.date.equals("")){
+                rpc.date = rpc.date.replace('-','/');
+                cal.setTime(new Date(rpc.date));
             }else{
-                date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
+                rpc.date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
             }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element month = doc.createElement("month");
-            month.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.MONTH))));
+            rpc.month = cal.get(Calendar.MONTH);
+            month.appendChild(doc.createTextNode(String.valueOf(rpc.month)));
             root.appendChild(month);
             Element year = doc.createElement("year");
-            year.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.YEAR))));
+            rpc.year = cal.get(Calendar.YEAR);
+            year.appendChild(doc.createTextNode(String.valueOf(rpc.year)));
             root.appendChild(year);
             Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(date));
+            day.appendChild(doc.createTextNode(rpc.date));
             root.appendChild(day);
-            HashMap<String,FieldType> map = new HashMap<String,FieldType>();
-            map.put("xml", new StringObject(ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc)));
-            return map;
+            rpc.xml = ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
+            return rpc;
         }catch(Exception e){
             e.printStackTrace();
             throw new RPCException(e.getMessage());
         }
-	}
-
-    public RPC getScreen(RPC rpc) throws RPCException {
-        // TODO Auto-generated method stub
-        return null;
     }
     
 }

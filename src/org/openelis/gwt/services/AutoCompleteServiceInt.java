@@ -28,8 +28,8 @@ package org.openelis.gwt.services;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataModel;
 
 import java.util.HashMap;
 
@@ -44,6 +44,6 @@ import java.util.HashMap;
  */
 public interface AutoCompleteServiceInt extends RemoteService {
 
-    public DataModel getMatches(String cat, DataModel model, String match, HashMap<String,FieldType> params) throws RPCException;
+    public TableDataModel getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params) throws RPCException;
 
 }

@@ -29,6 +29,9 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
         setAttributes(node);
     }
 
+    public DoubleField(String key){
+        this.key = key;
+    }
  
     /*
     public void setAttributes(Node node) {
@@ -173,6 +176,13 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
                 invalid = true;
             }
         }
+    }
+    
+    public AbstractField getQueryField() {
+        QueryDoubleField qField = new QueryDoubleField(key);
+        qField.setMax(max);
+        qField.setMin(min);
+        return qField;
     }
 
 }

@@ -28,35 +28,9 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.PopupListener;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
-import org.openelis.gwt.widget.TextBox;
-import org.openelis.gwt.widget.table.TableHeaderMenuBar.ListenContainer;
-
-import java.util.ArrayList;
 
 public class TableHeaderMenuBarWebkitImpl extends TableHeaderMenuBar {
     

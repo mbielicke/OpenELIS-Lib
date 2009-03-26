@@ -262,7 +262,7 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
     }
     
     public void setCellValue(String rpcKey, int col, Object value){
-        form.setFieldValue(rpcKey, value);
+        //form.getFieldMap().get(rpcKey).setValue(value);
         renderer.setCellDisplay(0,col);
     }
  

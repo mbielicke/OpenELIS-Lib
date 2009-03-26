@@ -33,12 +33,9 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -181,16 +178,16 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     }
 
     public void load(AbstractField field) {
-    	if(queryMode){
+    	if(queryMode && queryWidget != null){
     		queryWidget.load(field);
     	}else{
-            auto.setSelections(((DropDownField<Object>)field).getValue());
+            auto.setSelections(((DropDownField<Object>)field).getKeyValues());
             super.load(field);
         }
     }
 
     public void submit(AbstractField field) {
-        if(queryMode){
+        if(queryMode && queryWidget != null){
             queryWidget.submit(field);
         }else {
         	field.setValue(auto.getSelections());
@@ -199,14 +196,14 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
 
     public void setFocus(boolean focused) {
         // TODO Auto-generated method stub
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focused);
         else
             auto.lookUp.getTextBox().setFocus(focused);
     }
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
             if(alwaysEnabled){
@@ -268,7 +265,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
                 .getNodeValue()
                 .split(",");
     }
-    
+    /*
     private DataModel getDropDownOptions(Node itemsNode){
 		DataModel dataModel = new DataModel();		
 		
@@ -295,7 +292,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
     	}
         return dataModel;
 	}
-    
+    */
     public ScreenDropDownWidget getQueryWidget(){
     	return (ScreenDropDownWidget)queryWidget;
     }
@@ -311,13 +308,20 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
 	   super.onFocus(this);
    }
    
-   public void setForm(FormInt.State state) {
+   public void setForm(State state) {
        if(queryWidget == null){
-           if(state == FormInt.State.QUERY)
+           if(state == State.QUERY){
                auto.setMultiSelect(true);
-           else
+               queryField = field;
+           }else
                auto.setMultiSelect(multiSelect);
-       }else
-           super.setForm(state);
+       }
+       super.setForm(state);
+   }
+   
+   public void submitQuery(ArrayList<AbstractField> qList) {
+       if(queryField != null && queryField.getValue() != null && ((ArrayList)queryField.getValue()).size() > 0 ) {
+           qList.add(queryField);
+       }
    }
 }

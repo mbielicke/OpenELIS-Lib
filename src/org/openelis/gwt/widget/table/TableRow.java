@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.TableDataRow;
 
 public class TableRow extends Widget implements SourcesMouseEvents {
 
@@ -16,11 +16,11 @@ public class TableRow extends Widget implements SourcesMouseEvents {
     
     public int index;
     public int modelIndex;
-    public DataSet<Object> row;
+    public TableDataRow<Object> row;
     
     public int dragIndex;
     public int dragModelIndex;
-    public DataSet<Object> dragRow;
+    public TableDataRow<Object> dragRow;
     
     public TableRow() {
         
@@ -58,6 +58,6 @@ public class TableRow extends Widget implements SourcesMouseEvents {
     public void setDragValues() {
         dragIndex = index;
         dragModelIndex = modelIndex;
-        dragRow = (DataSet<Object>)row.clone();
+        dragRow = (TableDataRow<Object>)row.clone();
     }
 }

@@ -45,6 +45,10 @@ public class QueryDateField extends QueryField {
         
     }
     
+    public QueryDateField(String key){
+        this.key = key;
+    }
+    
     public QueryDateField(Node node){
         setAttributes(node);
     }

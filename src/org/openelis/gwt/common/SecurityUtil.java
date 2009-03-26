@@ -27,11 +27,10 @@ package org.openelis.gwt.common;
 
 import org.openelis.gwt.common.SecurityModule.ModuleFlags;
 import org.openelis.gwt.common.SecuritySection.SectionFlags;
-import org.openelis.gwt.common.data.Data;
 
 import java.util.HashMap;
 
-public class SecurityUtil implements Data {
+public class SecurityUtil implements RPC {
 
     private static final long serialVersionUID = 1L;
     

@@ -30,10 +30,11 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.ResultsTable;
 import org.openelis.gwt.widget.table.TableWidget;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class ScreenResultsTable extends ScreenInputWidget {
@@ -42,6 +43,7 @@ public class ScreenResultsTable extends ScreenInputWidget {
     public static final String TAG_NAME = "resultsTable";
     public Vector<String> dropTargets;
     public boolean dropInited;
+    public boolean queryable;
     
     public ScreenResultsTable() {
     }
@@ -91,6 +93,11 @@ public class ScreenResultsTable extends ScreenInputWidget {
                 results.showNavPanel = false;
             }
         }
+        if(node.getAttributes().getNamedItem("query") != null){
+            if(node.getAttributes().getNamedItem("query").getNodeValue().equals("true")){
+                queryable = true;
+            }
+        }
         displayWidget = results;
 
         if(bpanel != null)
@@ -103,29 +110,28 @@ public class ScreenResultsTable extends ScreenInputWidget {
     
     public void load(AbstractField field) {
         if(!queryMode){
-           tableWidget.load(field);
-        }else {
-            if(queryWidget instanceof ScreenTableWidget){
-                if(field.getValue() != null){
-                    if (field.getValue() != null)
-                        ((TableWidget)((ScreenTableWidget)queryWidget).getWidget()).model.load((DataModel)field.getValue());
-                }
-            }else{
-                queryWidget.load(field);
-            }
-        }
+            tableWidget.load(field);
+         }else {
+            queryWidget.load(field);
+         }
     }
 
     public void submit(AbstractField field) {
-        if(queryMode)
-            queryWidget.submit(field);
-        else{
-            tableWidget.submit(field);
-        }
+        tableWidget.submit(field);
     }
    
-    public void enable(boolean enabled) {
+    public void enable(boolean enabled){
         tableWidget.enable(enabled);
+    }
+    
+    public void setForm(State state) {
+        if(queryable)
+            tableWidget.setForm(state);
+    }
+    
+    public void submitQuery(ArrayList<AbstractField> qList) {
+        if(queryable)
+            tableWidget.submitQuery(qList);
     }
    
 

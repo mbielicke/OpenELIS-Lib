@@ -25,16 +25,17 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 
 import java.util.ArrayList;
 
 public interface DataFiltererInt {
     
-    public Filter[] getFilterValues(DataModel<Object> data,int col);
+    public <T extends TableDataRow> Filter[] getFilterValues(TableDataModel<T> data,int col);
     
-    public void applyFilters(DataModel<Object> data, ArrayList<Filter[]> filters);
+    public <T extends TableDataRow> void applyFilters(TableDataModel<T> data, ArrayList<Filter[]> filters);
     
-    public void applyFilter(DataModel<Object> data, Filter[] filter, int col);
+    public <T extends TableDataRow> void applyFilter(TableDataModel<T> data, Filter[] filter, int col);
 
 }

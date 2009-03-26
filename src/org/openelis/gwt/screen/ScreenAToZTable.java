@@ -35,9 +35,9 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.event.DragManager;
 import org.openelis.gwt.event.DropManager;
@@ -47,7 +47,6 @@ import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableDragController;
 import org.openelis.gwt.widget.table.TableIndexDropController;
-import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
@@ -131,7 +130,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
             VerticalScroll showScroll = VerticalScroll.NEEDED;
             boolean showHeader = false;
             ArrayList<TableColumnInt> columns = new ArrayList<TableColumnInt>();
-            DataModel data = new DataModel();
+            TableDataModel data = new TableDataModel();
                 if (table.getAttributes().getNamedItem("manager") != null) {
                     String appClass = table.getAttributes()
                                           .getNamedItem("manager")
@@ -265,11 +264,11 @@ public class ScreenAToZTable extends ScreenInputWidget {
                     }
                 }
                 NodeList fieldList = fieldsNode.getChildNodes();
-                DataSet<Object> set = new DataSet<Object>();
+                TableDataRow<Integer> set = new TableDataRow<Integer>(fieldList.getLength());
                 for (int i = 0; i < fieldList.getLength(); i++) {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-                        set.add((FieldType)field);
+                        set.cells[i] = ((FieldType)field);
                         columns.get(i).setKey(field.key);
                     }
                 }
@@ -361,7 +360,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
     public void load(AbstractField field) {
         if(!queryMode){
             if (field.getValue() != null){
-                azTable.model.load((DataModel)field.getValue());
+                azTable.model.load((TableDataModel)field.getValue());
             }else{
                 azTable.model.clear();
                 field.setValue(azTable.model.getData());
@@ -370,7 +369,7 @@ public class ScreenAToZTable extends ScreenInputWidget {
             if(queryWidget instanceof ScreenAToZTable){
                 if(field.getValue() != null){
                     if (field.getValue() != null)
-                        ((ScreenAToZTable)queryWidget).azTable.model.load((DataModel)field.getValue());
+                        ((ScreenAToZTable)queryWidget).azTable.model.load((TableDataModel)field.getValue());
                 }
             }else{
                 queryWidget.load(field);

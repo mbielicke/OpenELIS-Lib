@@ -31,13 +31,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableModelListener;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener, ClickListener {
     
@@ -158,11 +160,12 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
      */
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
-        DataSet<Object> row = controller.model.getRow(modelIndex);
+        org.openelis.gwt.common.data.TableDataRow<Object> row = controller.model.getRow(modelIndex);
         rows.get(index).modelIndex = modelIndex;
         rows.get(index).row = row;
-        for (int i = 0; i < row.size(); i++) {
-            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
+        List<FieldType> cells = row.getCells();
+        for (int i = 0; i < cells.size(); i++) {
+            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),cells.get(i));
             
             //if(tCell instanceof TableMultiple && manager != null){
               //  manager.setMultiple(model.indexOf(row),i,this);
@@ -229,7 +232,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             if(loadStart+i < controller.model.numRows())
                 loadRow(i,loadStart+i);
             else{
-                controller.model.setAutoAddRow((DataSet<Object>)controller.model.createRow());
+                controller.model.setAutoAddRow((TableDataRow<Object>)controller.model.createRow());
                 loadRow(i,controller.model.numRows());
             }
         }
@@ -351,6 +354,5 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     public void onClick(Widget sender) {
         controller.finishEditing();
     }
-
 
 }

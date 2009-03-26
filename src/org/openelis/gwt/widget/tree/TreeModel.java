@@ -188,7 +188,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public FieldType getObject(int row, int col) {
-        return rows.get(row).get(col);
+        return rows.get(row).cells[col];
     }
 
 
@@ -301,7 +301,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void setCell(int row, int col,Object value) {
-        ((AbstractField)rows.get(row).get(col)).setValue(value);
+        ((AbstractField)rows.get(row).cells[0]).setValue(value);
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
@@ -317,7 +317,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public Object getCell(int row, int col) {
-        return ((AbstractField)rows.get(row).get(col)).getValue();
+        return ((AbstractField)rows.get(row).cells[col]).getValue();
     }
 
     public TreeDataItem setRow(int index, TreeDataItem row) {
@@ -355,12 +355,12 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
     
     public void clearCellError(int row, int col) {
-        ((AbstractField)rows.get(row).get(col)).clearErrors();
+        ((AbstractField)rows.get(row).cells[col]).clearErrors();
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
     public void setCellError(int row, int col, String Error) {
-        ((AbstractField)rows.get(row).get(col)).addError(Error);
+        ((AbstractField)rows.get(row).cells[col]).addError(Error);
         treeModelListeners.fireCellUpdated(this, row, col);
         
     }

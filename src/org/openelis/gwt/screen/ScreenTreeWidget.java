@@ -244,13 +244,15 @@ public class ScreenTreeWidget extends ScreenInputWidget implements HasDragContro
                          }
                      }
                      NodeList fieldList = fieldsNode.getChildNodes();
-                     TreeDataItem item = new TreeDataItem();
+                     TreeDataItem item = new TreeDataItem(fieldList.getLength());
                      item.leafType = leafType;
+                     int l = 0;
                      for (int k = 0; k < fieldList.getLength(); k++) {
                          if (fieldList.item(k).getNodeType() == Node.ELEMENT_NODE) {
                              AbstractField field = (ScreenBase.createField(fieldList.item(k)));
-                             item.add((FieldType)field);
+                             item.cells[l] = ((FieldType)field);
                              columns.get(k).setKey(field.key);
+                             l++;
                          }
                      }
                      items.put(leafType,item);

@@ -40,9 +40,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.widget.Dropdown;
 
 /**
@@ -299,7 +297,7 @@ public class RichTextToolbar extends Composite {
   private Dropdown createColorList(String caption) {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
-    DataModel model = new DataModel();
+    TableDataModel model = new TableDataModel();
     /*
     model.add(new StringObject(caption),new StringObject(""));
     model.add(new StringObject("White"), new StringObject("white"));
@@ -316,7 +314,7 @@ public class RichTextToolbar extends Composite {
   private Dropdown createFontList() {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
-    DataModel model = new DataModel();
+    TableDataModel model = new TableDataModel();
     /*
     model.add(new StringObject("Font"),new StringObject(""));
     model.add(new StringObject("Normal"), new StringObject(""));
@@ -334,7 +332,7 @@ public class RichTextToolbar extends Composite {
   private Dropdown createFontSizes() {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
-    DataModel model = new DataModel();
+    TableDataModel model = new TableDataModel();
     /*
     model.add(new StringObject("Size"),new StringObject("0"));
     model.add(new StringObject("XX Small"),new StringObject("1"));

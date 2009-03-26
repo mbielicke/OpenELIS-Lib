@@ -29,8 +29,8 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.DataModel;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataModel;
 
 import java.util.HashMap;
 
@@ -42,6 +42,6 @@ import java.util.HashMap;
  */
 public interface AutoCompleteServiceIntAsync {
 
-    public Request getMatches(String cat, DataModel model, String match, HashMap<String,FieldType> params, AsyncCallback<DataModel> callback) throws RPCException;
+    public Request getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params, AsyncCallback<TableDataModel> callback) throws RPCException;
 
 }

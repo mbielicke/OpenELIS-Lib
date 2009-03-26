@@ -25,21 +25,18 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
-import org.openelis.gwt.widget.FormInt.State;
+import org.openelis.gwt.screen.AppScreenForm.State;
 
 import java.util.EnumSet;
 

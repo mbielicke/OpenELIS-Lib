@@ -20,6 +20,10 @@ public class IntegerField extends AbstractField<Integer> implements FieldType {
     public IntegerField() {
         super();
     }
+    
+    public IntegerField(String key) {
+        this.key = key;
+    }
 
     public IntegerField(Integer value) {
         super(value);
@@ -172,5 +176,12 @@ public class IntegerField extends AbstractField<Integer> implements FieldType {
                 invalid = true;
             }
         }
+    }
+    
+    public AbstractField getQueryField() {
+        QueryIntegerField qField = new QueryIntegerField(key);
+        qField.setMax(max);
+        qField.setMin(min);
+        return qField;
     }
 }

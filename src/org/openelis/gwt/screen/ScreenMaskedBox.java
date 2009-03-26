@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.MaskedTextBox;
 
 /**
@@ -131,9 +131,9 @@ import org.openelis.gwt.widget.MaskedTextBox;
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(State state) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY)
+            if(state == State.QUERY)
                 maskbox.noMask = true;
             else
                 maskbox.noMask = false;

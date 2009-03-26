@@ -50,12 +50,12 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
-public class ScreenBase extends Composite implements FocusListener{
+public class ScreenBase<ScreenRPC extends Form> extends Composite implements FocusListener{
     /**
      * All drawn widgets will be held in this panel.
      */
     protected VerticalPanel panel = new VerticalPanel();
-    public Form form;
+    public ScreenRPC form;
     /** 
      * All widgets drawn on screen are referenced in this
      * HashMap
@@ -76,7 +76,7 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     public ScreenBase() {
         initWidget(panel);
-        form = new Form();
+        //form = new Form();
     }
 
     /**
@@ -97,7 +97,6 @@ public class ScreenBase extends Composite implements FocusListener{
      * 
      */
     protected void draw() {
-           
             Node screen = xml.getElementsByTagName("screen").item(0);
             if(screen.getAttributes().getNamedItem("name") != null){
                 name = screen.getAttributes().getNamedItem("name").getNodeValue();
@@ -110,7 +109,8 @@ public class ScreenBase extends Composite implements FocusListener{
                     panel.add(wid);
                 }
             }
-            panel.setStyleName("Screen"); 
+            panel.setStyleName("Screen");
+         
     }
     
     public void setWidget(ScreenWidget widget) {
@@ -126,8 +126,8 @@ public class ScreenBase extends Composite implements FocusListener{
         load(form);
     }
     
-    protected void load(Form rpc){
-        for(AbstractField field : rpc.getFieldMap().values()) {
+    protected <T> void load(Form<T> form){
+        for(AbstractField field : form.getFields()) {
             if(field instanceof Form){
                 ScreenWidget inputField = widgets.get((String)field.getKey());
                 if(inputField == null)
@@ -152,8 +152,8 @@ public class ScreenBase extends Composite implements FocusListener{
         drawErrors(form);
     }
     
-    protected void drawErrors(Form rpc){
-        for(AbstractField field : rpc.getFieldMap().values()) {
+    protected <T> void drawErrors(Form<T> form){
+        for(AbstractField field : form.getFields()) {
             if(field instanceof Form){
                  drawErrors((Form)field);
             }else if(widgets.containsKey(field.getKey())){
@@ -230,13 +230,13 @@ public class ScreenBase extends Composite implements FocusListener{
      * be sent back to the server for processing
      * 
      */
-    protected void submitForm() {
+     protected void submitForm() {
         submitForm(form);
-    }
+     }
     
     protected void submitForm(Form form) {
         form.removeErrors();
-        for (AbstractField field : form.getFieldMap().values()){
+        for (AbstractField field : form.getFields()){
             if(field instanceof Form){
                 ScreenWidget inputField = widgets.get(field.getKey());
                 if(inputField == null)
@@ -276,9 +276,9 @@ public class ScreenBase extends Composite implements FocusListener{
      */
     protected void strikeThru(boolean enabled) {
         for(String key : widgets.keySet()) {
-            if (!form.getFieldMap().containsKey(key) && !form.getFieldMap().containsKey(key+"Id")) {
-                continue;
-            }
+            //if (!form.getFields().contains(key) && !form.getFieldList().contains(key+"Id")) {
+              //  continue;
+           // }
             if(enabled)
                 widgets.get(key).addStyleName("strike");
             else
@@ -314,8 +314,8 @@ public class ScreenBase extends Composite implements FocusListener{
         resetForm(form);
     }
     
-    protected void resetForm(Form rpc) {
-        for (AbstractField field: rpc.getFieldMap().values()){
+    protected void resetForm(Form form) {
+        for (AbstractField field: form.getFields()){
             if(field instanceof Form){
                 resetForm((Form)field);
                 ((Form)field).load = false;

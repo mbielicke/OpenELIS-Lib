@@ -128,7 +128,7 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             }else{
                 TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);
                 controller.view.table.setWidget(index,i,(Widget)wid);
-                controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.get(i));
+                controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.cells[i]);
                 controller.view.table.getFlexCellFormatter().addStyleName(index,
                                                                           i,
                                                                           TreeView.cellStyle);

@@ -34,10 +34,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.table.PopupTable;
 import org.openelis.gwt.widget.table.TableColumnInt;
@@ -135,7 +133,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         popup.setWidget(view);
         popup.addPopupListener(this);
         
-        model.setModel(new DataModel());
+        model.setModel(new TableDataModel<TableDataRow<Object>>());
     }
     
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
@@ -275,21 +273,21 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public String getTextBoxDisplay(){
         String textValue = "";
-        ArrayList<DataSet<Object>> selected = model.getSelections();
+        ArrayList<TableDataRow<Object>> selected = model.getSelections();
         
         for(int i=0;i<selected.size();i++){
-            if(selected.get(i) instanceof DataSet){
-                 DataSet<Object> select = selected.get(i);
-                 textValue = (String)select.get(0).getValue()
+            if(selected.get(i) instanceof TableDataRow){
+                 TableDataRow<? extends Object> select = selected.get(i);
+                 textValue = (String)select.getCells().get(0).getValue()
                                 + (!"".equals(textValue) ? "|" : "") + textValue;
-            }else{
-                Object select = ((AbstractField)selected.get(i).get(i)).getValue();
+            }/*else{
+                Object select = ((AbstractField)selected.get(i).getCells().get(i)).getValue();
                 
-                String tempTextValue = (String)((DataModel<Object>)model.getData()).getByKey(select).get(0).getValue();
+                String tempTextValue = (String)((TableDataModel<TableDataRow<? extends Object>>)model.getData()).getByKey(select).get(0).getValue();
                 
                 textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
             }
-               
+             */  
         }   
         return textValue;
     }
@@ -315,18 +313,18 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         this.screen = screen;
     }
     
-    public void setSelections(ArrayList<DataSet<Object>> selections){
+    public void setSelections(ArrayList<Object> selections){
         model.clearSelections();
         if(selections != null) {
-            for(DataSet<Object> set : selections)
-                model.selectRow(set.getKey());
+            for(Object key : selections)
+                model.selectRow(key);
             lookUp.setText(getTextBoxDisplay());
         }else
             lookUp.setText("");
     }
     
-    public ArrayList<DataSet<Object>> getSelections() {
-        return model.getSelections();
+    public <T extends TableDataRow> ArrayList<T> getSelections() {
+        return (ArrayList<T>)model.getSelections();
     }
     
     public void setFocus(boolean focus) {

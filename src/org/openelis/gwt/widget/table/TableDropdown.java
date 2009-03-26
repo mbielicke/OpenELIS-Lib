@@ -34,14 +34,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenDropDownWidget;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.Dropdown;
 
 import java.util.ArrayList;
@@ -119,7 +119,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
         if(field instanceof DropDownField)
             field.setValue(editor.getSelections());
         else{
-            field.setValue(editor.getSelections().get(0).getKey());
+            field.setValue(editor.getSelections().get(0).key);
         }
 		editor.hideTable();
         super.saveValue();
@@ -132,10 +132,10 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
 			display.setWordWrap(false);
 		}
         if(field instanceof DropDownField){
-            if(((DropDownField)field).getModel().size() > 0){
+            if(((DropDownField)field).getModel() != null && ((DropDownField)field).getModel().size() > 0){
                 editor.setModel(((DropDownField)field).getModel());
             }
-            editor.setSelections(((DropDownField<Object>)field).getValue());
+            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
             
         }else{
             ArrayList selected = new ArrayList();
@@ -154,7 +154,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             }
             editor.activeCell = -1;
             editor.activeRow = -1;
-            editor.setSelections(((DropDownField<Object>)field).getValue());
+            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
         }else{
             ArrayList selected = new ArrayList();
             selected.add(field);
@@ -181,7 +181,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             display.setWidth(width+"px");
     }
     
-    public void setModel(DataModel model){
+    public <T extends TableDataRow> void setModel(TableDataModel<T> model){
         editor.setModel(model);
     }
     
@@ -204,6 +204,13 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
     public void onChange(Widget sender) {
         listeners.fireChange(this);
         
+    }
+    
+    public void setForm(State state) {
+        if(state == State.QUERY)
+            editor.setMultiSelect(true);
+        else
+            editor.setMultiSelect(multi);
     }
     
     

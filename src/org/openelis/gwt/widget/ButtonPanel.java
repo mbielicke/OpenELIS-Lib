@@ -35,6 +35,7 @@ import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.ScreenAppButton;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import java.util.ArrayList;
@@ -127,14 +128,14 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
      * Sets the ButtonPanel to the state passed in.
      * @param state
      */
-    public void setState(FormInt.State state) {
+    public void setState(State state) {
     	for(AppButton button : buttons) {
     		if(button.getEnabledStates().contains(state) && button.isEnabled()){
                 if(button.state == AppButton.ButtonState.LOCK_PRESSED)
                     setButtonState(button, ButtonState.PRESSED);
                 else if(button.state != AppButton.ButtonState.PRESSED)
                     setButtonState(button, ButtonState.UNPRESSED);
-                if(button.toggle && state == FormInt.State.DEFAULT)
+                if(button.toggle && state == State.DEFAULT)
                     setButtonState(button, ButtonState.UNPRESSED);
             }
     		else if(button.getLockedStates().contains(state) && button.isEnabled() && button.state == AppButton.ButtonState.PRESSED)
@@ -203,12 +204,12 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
     }
     
     public boolean canPerformCommand(Enum action, Object obj){
-        return (action.getDeclaringClass() == FormInt.State.class);
+        return (action.getDeclaringClass() == State.class);
     }
 
     public void performCommand(Enum action, Object obj) {
-        if(action.getDeclaringClass() == FormInt.State.class)
-            setState((FormInt.State)action);
+        if(action.getDeclaringClass() == State.class)
+            setState((State)action);
     }
     
     public int numberOfButtons(){

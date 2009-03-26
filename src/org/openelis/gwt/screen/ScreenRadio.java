@@ -25,14 +25,12 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.CheckField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 
 /**
  * ScreenRadio wraps a GWT RadioButton widget for Display on a Screen.
@@ -104,14 +102,14 @@ public class ScreenRadio extends ScreenInputWidget {
     }
 
     public void submit(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.submit(field);
         else
             field.setValue(new Boolean(radio.isChecked()));
     }
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
             radio.setEnabled(enabled);
@@ -124,7 +122,7 @@ public class ScreenRadio extends ScreenInputWidget {
     }
     
     public void setFocus(boolean focus){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focus);
         else
             radio.setFocus(focus);
@@ -135,4 +133,11 @@ public class ScreenRadio extends ScreenInputWidget {
         super.destroy();
     }
 
+    public void setForm(State state){
+        if(queryWidget == null){
+            if(state == State.QUERY)
+                queryField = field.getQueryField();
+        }
+        super.setForm(state);
+    }
 }

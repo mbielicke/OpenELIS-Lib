@@ -33,8 +33,8 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.CheckBox.CheckType;
 /**
  * ScreenCheck wraps a GWT CheckBox to be displayed on a Screen.
@@ -111,7 +111,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     }
 
     public void load(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.load(field);
         else{
             check.setState((String)field.getValue());
@@ -120,14 +120,14 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     }
 
     public void submit(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.submit(field);
         else
             field.setValue(check.getState());
     }
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(true);
         else{
             check.enable(enabled);
@@ -140,7 +140,7 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
     }
     
     public void setFocus(boolean focus){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focus);
         else
             check.setFocus(focus);
@@ -165,15 +165,16 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         super.destroy();
     }
     
-    public void setForm(FormInt.State state) {
+    public void setForm(State state) {
         if(queryWidget == null){
-            if(state == FormInt.State.QUERY){
+            if(state == State.QUERY){
                 check.setType(CheckBox.CheckType.THREE_STATE);
                 check.setState(CheckBox.UNKNOWN);
+                queryField = field.getQueryField();
             }else
                 check.setType(defaultType);
-        }else
-            super.setForm(state);
+        }
+        super.setForm(state);
     }
 
 }

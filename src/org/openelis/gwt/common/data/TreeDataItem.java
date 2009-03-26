@@ -25,10 +25,11 @@
 */
 package org.openelis.gwt.common.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TreeDataItem extends DataSet<Integer> {
+public class TreeDataItem extends TableDataRow<Integer> implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
@@ -51,13 +52,21 @@ public class TreeDataItem extends DataSet<Integer> {
     public int x;
     
     public int childIndex = -1;
+  
+    public boolean selected; 
+  
+    public TreeDataItem() {
+        
+    }
     
-    public boolean selected;
+    public TreeDataItem(int size) {
+        super(size);
+    }
     
     public Object clone() {
-        TreeDataItem clone = new TreeDataItem();
+        TreeDataItem clone = new TreeDataItem(size());
         for(int i=0; i < size(); i++){
-            clone.add((FieldType)get(i).clone());
+            clone.cells[i] = (FieldType)cells[i].clone();
         }
         for(int i=0; i < items.size(); i++){
             clone.addItem((TreeDataItem)getItem(i).clone());

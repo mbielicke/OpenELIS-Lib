@@ -33,17 +33,12 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.NumberObject;
-import org.openelis.gwt.common.data.StringField;
-import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.common.data.QueryStringField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteCall;
 import org.openelis.gwt.widget.AutoCompleteCallInt;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -203,21 +198,21 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
     }
 
     public void load(AbstractField field) {
-    	if(queryMode){
+    	if(queryMode && queryWidget != null){
     		queryWidget.load(field);
     	}else{
-            if(((DropDownField)field).getModel().size() > 0){
+            if(((DropDownField)field).getModel() != null && ((DropDownField)field).getModel().size() > 0){
                 auto.activeRow = -1;
                 auto.activeCell = -1;
                 auto.model.load(((DropDownField)field).getModel());
             }
-            auto.setSelections((ArrayList<DataSet<Object>>)((DropDownField)field).getValue());
+            auto.setSelections(((DropDownField)field).getKeyValues());
             super.load(field);
         }
     }
 
     public void submit(AbstractField field) {
-        if(queryMode){
+        if(queryMode && queryWidget != null){
             queryWidget.submit(field);
         }else {
         	field.setValue(auto.getSelections());
@@ -226,14 +221,14 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
 
     public void setFocus(boolean focused) {
         // TODO Auto-generated method stub
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focused);
         else
             auto.lookUp.setFocus(focused);
     }
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
             if(alwaysEnabled){
@@ -296,13 +291,13 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
                 .getNodeValue()
                 .split(",");
     }
-    
-    private DataModel getDropDownOptions(Node itemsNode){
-		DataModel dataModel = new DataModel();		
+    /*
+    private TableDataModel<TableDataRow<Integer>> getDropDownOptions(Node itemsNode){
+		TableDataModel dataModel = new TableDataModel();		
 		
     	NodeList items = ((Element)itemsNode).getElementsByTagName("item");
     	for (int i = 0; i < items.getLength(); i++) {
-    	DataSet<Object> set = new DataSet<Object>();
+    	TableDataRow<Integer> set = new TableDataRow<Integer>();
         Node item = items.item(i);
 
 		//display text
@@ -323,7 +318,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
     	}
         return dataModel;
 	}
-    
+    */
     public ScreenAutoCompleteWidget getQueryWidget(){
     	return (ScreenAutoCompleteWidget)queryWidget;
     }
@@ -339,13 +334,11 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
 	   super.onFocus(sender);
    }
    
-   public void setForm(FormInt.State state) {
+   public void setForm(State state) {
        if(queryWidget == null){
-          if(state == FormInt.State.QUERY)
-              auto.queryMode = true;
-           else
-              auto.queryMode = false;
-       }else
-           super.setForm(state);
+          if(state == State.QUERY)
+              queryField = new QueryStringField(key);
+       }
+       super.setForm(state);
    }
 }

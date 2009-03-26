@@ -42,9 +42,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.MenuLabel;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
     protected PopupPanel pop;
     private MouseListenerCollection listeners = new MouseListenerCollection(); 
     protected ScreenBase screen;
-    protected int rowIndex;
+    public int rowIndex;
     
     public void clear() {
         // TODO Auto-generated method stub
@@ -239,6 +239,9 @@ public class TableCellInputWidget extends SimplePanel implements TableCellWidget
 
     public void setRowIndex(int row) {
         rowIndex = row;
+    }
+    
+    public void setForm(State state) {
         
     }
 

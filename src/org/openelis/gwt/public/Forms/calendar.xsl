@@ -236,8 +236,8 @@ UIRF Software License are applicable instead of those above.
    </VerticalPanel>
    </display>
    <rpc key="display">
-     <number key="month" type="integer" required="false"><xsl:value-of select="$month"/></number>
-     <number key="year" type="integer" required="false"><xsl:value-of select="$year"/></number>
+     <integer key="month" required="false"><xsl:value-of select="$month"/></integer>
+     <integer key="year" required="false"><xsl:value-of select="$year"/></integer>
      <string key="date" required="false"><xsl:value-of select="$selected"/></string>
    </rpc>
    </screen>

@@ -92,7 +92,7 @@ tr .TreeHighlighted .treeOpenImage{
 }
 
 
-.CellError {
+.CellError div {
     height:16px;
 	border-bottom:1px dashed red;
 }

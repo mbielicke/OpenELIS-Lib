@@ -38,6 +38,10 @@ public class QueryStringField extends QueryField {
         
     }
     
+    public QueryStringField(String key) {
+        this.key = key;
+    }
+    
     public QueryStringField(Node node){
         setAttributes(node);
     }
@@ -52,7 +56,7 @@ public class QueryStringField extends QueryField {
     }
     
     public Object clone() {
-        return new QueryStringField();
+        return new QueryStringField(key);
        
     }
 }

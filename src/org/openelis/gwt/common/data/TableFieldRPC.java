@@ -29,26 +29,28 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class TreeField extends AbstractField<TreeDataModel> implements FieldType {
+
+public class TableFieldRPC<Key extends TableDataRow> extends AbstractField<TableDataModel<Key>> implements FieldType {
 
     private static final long serialVersionUID = 1L;
-    public static final String TAG_NAME = "rpc-tree";
+    public static final String TAG_NAME = "rpc-table";
     private ArrayList<String> fieldIndex = new ArrayList<String>();
     
-    public TreeField() {
+    public TableFieldRPC() {
         
     }
     
-    public TreeField(String key) {
-        this.key = key;
-    }
-    
-    public TreeField(Node node){
+    public TableFieldRPC(Node node){
         setAttributes(node);
     }
     
-    public void setAttributes(HashMap<String,String> attribs){
+    public TableFieldRPC(String key) {
+        this.key = key;
+    }
+    
+    public void setAttributes(HashMap<String,String> attribs) {
         setKey(attribs.get("key"));
     }
 
@@ -57,87 +59,71 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
         return true;
     }
 
-    public void setValue(TreeDataModel val) {
+    public void setValue(TableDataModel val) {
         // TODO Auto-generated method stub
         if(val == null){
             if(value != null)
-                ((TreeDataModel)value).clear();
+                ((TableDataModel)value).clear();
             else
-                value = null;
+                value = new TableDataModel();
         }else
-            value = (TreeDataModel)val;
+            value = val;
+    }
+    
+    public void setValue(Object val) {
+        if(val == null){
+            if(value == null)
+                value = new TableDataModel<Key>();
+            else
+                value.clear();
+        }else
+           value = (TableDataModel<Key>)val;
     }
 
-    public TreeDataModel getValue() {
+    public TableDataModel<Key> getValue() {
         return value;
     }
 
     public Object clone() {
-        TreeField obj = new TreeField();
+        TableFieldRPC obj = new TableFieldRPC();
         obj.setKey(key);
         obj.setRequired(required);
         obj.setTip(tip);
-        obj.setValue((TreeDataModel)value.clone());
+        obj.setValue((TableDataModel<Key>)value.clone());
         
         return obj;
     }
 
-    public TableField getInstance(Node node) {
-        return new TableField(node);
+    public TableFieldRPC getInstance(Node node) {
+        return new TableFieldRPC(node);
     }
     
     public void validate() {
         valid = validateModel();
     }
     
-    private boolean valid;
-    
     public boolean validateModel() {
-        valid = true;
-        for(TreeDataItem row : value.list){
-            validateItem(row);
+        boolean valid = true;
+        for(TableDataRow row : value.list){
+            if(row.shown){
+                for (AbstractField obj : (List<AbstractField>)row.getCells()){
+                    if(obj instanceof AbstractField){
+                        ((AbstractField)obj).validate();
+                        if(!((AbstractField)obj).valid)
+                            valid = false;
+                    }
+                }
+            }
         }
         return valid;
     }
     
-    public void validateItem(TreeDataItem item) {      
-        if(item.hasChildren()) {
-            for(TreeDataItem child : item.getItems()){
-                validateItem(child);
-            }
-        }
-        if(item.shown){
-            for (FieldType obj : item.getCells()){
-                if(obj instanceof AbstractField){
-                    ((AbstractField)obj).validate();
-                    if(!((AbstractField)obj).valid){
-                        valid = false;
-                        TreeDataItem parent = item.parent;
-                        while(parent != null){
-                            parent.open = true;
-                            parent = parent.parent;
-                        }
-                    }
-                }
-            }       
-        }
-    }
-    
     public void clearErrors() {
-        for(TreeDataItem row : value.list){
-            clearItem(row);
-        }
-    }
-    
-    public void clearItem(TreeDataItem item) {
-        if(item.hasChildren()) {
-            for(TreeDataItem child : item.getItems()){
-                clearItem(child);
+        for(TableDataRow row : value.list){
+            for(AbstractField obj : (List<AbstractField>)row.getCells()){
+                if(obj instanceof AbstractField)
+                    ((AbstractField)obj).clearErrors();
             }
-        }
-        for(FieldType obj : item.getCells()){
-            if(obj instanceof AbstractField)
-                ((AbstractField)obj).clearErrors();
         }
     }
     
@@ -145,11 +131,20 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
         this.fieldIndex = fieldIndex;
     }
     
+    public ArrayList<String> getFieldIndex() {
+        return fieldIndex;
+    }
+    
     public AbstractField getField(int row, String field) {
         return (AbstractField)value.get(row).getCells().get(fieldIndex.indexOf(field));
     }
     
-    public boolean isValid() {
-        return valid;
+    public void setFieldError(int row,String fieldName,String error){
+        getField(row,fieldName).addError(error);
     }
+    
+    public void clearFieldError(int row, String fieldName) {
+        getField(row,fieldName).clearErrors();
+    }
+    
 }

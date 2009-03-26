@@ -26,9 +26,9 @@
 package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.data.DataModel;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 
 import java.util.ArrayList;
@@ -39,9 +39,9 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void addRow(int index);
     
-    public void addRow(DataSet<? extends Object> row);
+    public <T> void addRow(TableDataRow<T> row);
     
-    public void addRow(int index, DataSet<Object> row);
+    public <T> void addRow(int index, TableDataRow<T> row);
     
     public void deleteRow(int row);
         
@@ -49,7 +49,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void showRow(int row);
     
-    public DataSet getRow(int row);
+    public <T extends TableDataRow> T getRow(int row);
     
     public int numRows();
     
@@ -57,33 +57,33 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void clear();
     
-    public DataSet<?> setRow(int index, DataSet<?> row);
+    public <T> TableDataRow<T> setRow(int index, TableDataRow<T> row);
     
     public int shownRows();
     
-    public DataSet<? extends Object> createRow();
+    public <T extends TableDataRow> T createRow();
     
-    public void load(DataModel<? extends Object> data);
+    public <T extends TableDataRow<?>> void load(TableDataModel<T> data);
     
     public void selectRow(int index);
     
-    public void selectRow(Object key);
+    public <T> void selectRow(T key);
     
     public void unselectRow(int index);
     
     public void clearSelections();
     
-    public ArrayList<DataSet<Object>> getSelections();
+    public <T> ArrayList<TableDataRow<T>> getSelections();
     
-    public DataSet<Object> getSelection();
+    public <T> TableDataRow<T> getSelection();
     
     public boolean getAutoAdd();
     
-    public DataSet<Object> getAutoAddRow();
+    public <T> TableDataRow<T> getAutoAddRow();
     
-    public void setAutoAddRow(DataSet<Object> row);
+    public void setAutoAddRow(TableDataRow<?> row);
     
-    public DataModel<? extends Object> getData();
+    public <T extends TableDataRow<?>> TableDataModel<T> getData();
     
     public void setCell(int row, int col,Object obj);
     
@@ -97,7 +97,7 @@ public interface TableModelInt extends SourcesTableModelEvents {
     
     public void enableMultiSelect(boolean multi);
     
-    public void setModel(DataModel<Object> data);
+    public <T extends TableDataRow<?>> void setModel(TableDataModel<T> data);
     
     public boolean isEnabled(int index);
     
@@ -111,9 +111,9 @@ public interface TableModelInt extends SourcesTableModelEvents {
 
     public boolean canAdd(int row);
     
-    public boolean canAutoAdd(DataSet<Object> autoAddRow);
+    public <T> boolean canAutoAdd(TableDataRow<T> autoAddRow);
     
-    public DataModel<Object> unload();
+    public <T> TableDataModel<TableDataRow<T>> unload();
     
     public boolean isAutoAdd();
     

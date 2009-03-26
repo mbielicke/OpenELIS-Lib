@@ -74,6 +74,10 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
         super();
     }
     
+    public DateField(String key) {
+        this.key = key;
+    }
+    
     /**
      * Constructor that takes values for the begin and end precsion and the value of the 
      * date in a DatetimeRPC object
@@ -343,5 +347,15 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
     
     public DatetimeRPC getValue() {
         return value;
+    }
+    
+    public AbstractField getQueryField() {
+        QueryDateField qField = new QueryDateField();
+        qField.key = key;
+        qField.setMax(max);
+        qField.setMin(min);
+        qField.setBegin(begin);
+        qField.setEnd(end);
+        return qField;
     }
 }

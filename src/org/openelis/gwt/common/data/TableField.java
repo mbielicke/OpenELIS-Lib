@@ -29,9 +29,10 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
-public class TableField<Key> extends AbstractField<DataModel<Key>> implements FieldType {
+public class TableField<Key extends TableDataRow> extends AbstractField<TableDataModel<Key>> implements FieldType {
 
     private static final long serialVersionUID = 1L;
     public static final String TAG_NAME = "rpc-table";
@@ -45,6 +46,10 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
         setAttributes(node);
     }
     
+    public TableField(String key) {
+        this.key = key;
+    }
+    
     public void setAttributes(HashMap<String,String> attribs) {
         setKey(attribs.get("key"));
     }
@@ -54,13 +59,13 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
         return true;
     }
 
-    public void setValue(DataModel<Key> val) {
+    public void setValue(TableDataModel val) {
         // TODO Auto-generated method stub
         if(val == null){
             if(value != null)
-                ((DataModel)value).clear();
+                ((TableDataModel)value).clear();
             else
-                value = new DataModel<Key>();
+                value = new TableDataModel();
         }else
             value = val;
     }
@@ -68,29 +73,29 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     public void setValue(Object val) {
         if(val == null){
             if(value == null)
-                value = new DataModel<Key>();
+                value = new TableDataModel<Key>();
             else
                 value.clear();
         }else
-           value = (DataModel<Key>)val;
+           value = (TableDataModel<Key>)val;
     }
 
-    public DataModel<Key> getValue() {
+    public TableDataModel<Key> getValue() {
         return value;
     }
 
     public Object clone() {
-        TableField obj = new TableField();
+        TableFieldRPC obj = new TableFieldRPC();
         obj.setKey(key);
         obj.setRequired(required);
         obj.setTip(tip);
-        obj.setValue((DataModel<Key>)value.clone());
+        obj.setValue((TableDataModel<Key>)value.clone());
         
         return obj;
     }
 
-    public TableField getInstance(Node node) {
-        return new TableField(node);
+    public TableFieldRPC getInstance(Node node) {
+        return new TableFieldRPC(node);
     }
     
     public void validate() {
@@ -99,9 +104,9 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     
     public boolean validateModel() {
         boolean valid = true;
-        for(DataSet<Key> row : value.list){
+        for(TableDataRow row : value.list){
             if(row.shown){
-                for (FieldType obj : row.list){
+                for (AbstractField obj : (List<AbstractField>)row.getCells()){
                     if(obj instanceof AbstractField){
                         ((AbstractField)obj).validate();
                         if(!((AbstractField)obj).valid)
@@ -114,8 +119,8 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     }
     
     public void clearErrors() {
-        for(DataSet<Key> row : value.list){
-            for(FieldType obj : row.list){
+        for(TableDataRow row : value.list){
+            for(AbstractField obj : (List<AbstractField>)row.getCells()){
                 if(obj instanceof AbstractField)
                     ((AbstractField)obj).clearErrors();
             }
@@ -131,7 +136,7 @@ public class TableField<Key> extends AbstractField<DataModel<Key>> implements Fi
     }
     
     public AbstractField getField(int row, String field) {
-        return (AbstractField)value.get(row).get(fieldIndex.indexOf(field));
+        return (AbstractField)value.get(row).getCells().get(fieldIndex.indexOf(field));
     }
     
     public void setFieldError(int row,String fieldName,String error){

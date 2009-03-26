@@ -194,6 +194,7 @@ public class ScreenQueryTable extends ScreenInputWidget {
                         j++;
                     }
                 }
+                
                 if (fieldsNode != null) {
                     String[] fields = fieldsNode.getFirstChild()
                                               .getNodeValue()
@@ -230,7 +231,7 @@ public class ScreenQueryTable extends ScreenInputWidget {
         public void submit(AbstractField field) {
             table.unload();
             for(TableColumnInt column : (ArrayList<TableColumnInt>)table.columns){
-                screen.form.setFieldValue(column.getKey(), table.form.getFieldValue(column.getKey()));
+                //screen.form.getFieldMap().get(column.getKey()).setValue, table.form.getFieldMap().get(column.getKey()).getValue());
             }
             //((FormRPC)field).setFieldMap(((FormRPC)table.unload()).getFieldMap());
         }

@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.widget.table;
 
-
 import java.util.ArrayList;
 
 public interface TableRendererInt {

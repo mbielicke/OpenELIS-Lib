@@ -25,19 +25,17 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.DataSet;
-
+import org.openelis.gwt.common.data.TableDataRow;
 
 public interface TableManager {
     
-    public boolean canSelect(TableWidget widget, DataSet set, int row);
+    public <T> boolean canSelect(TableWidget widget, TableDataRow<T> set, int row);
 
-    public boolean canEdit(TableWidget widget, DataSet set, int row, int col);
+    public <T> boolean canEdit(TableWidget widget, TableDataRow<T> set, int row, int col);
 
-    public boolean canDelete(TableWidget widget, DataSet set, int row);
+    public <T> boolean canDelete(TableWidget widget, TableDataRow<T> set, int row);
 
-    public boolean canAdd(TableWidget widget, DataSet set, int row);
+    public <T> boolean canAdd(TableWidget widget, TableDataRow<T> set, int row);
     
-    public boolean canAutoAdd(TableWidget widget, DataSet addRow);
-    
+    public <T> boolean canAutoAdd(TableWidget widget, TableDataRow<T> addRow);
 }

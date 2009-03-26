@@ -27,7 +27,7 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.user.client.Window;
 
-import org.openelis.gwt.common.data.DataModel;
+import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
@@ -91,7 +91,7 @@ public class AutoComplete extends DropdownWidget {
          }
     }
     
-    public void showAutoMatches(DataModel<Object> data){
+    public void showAutoMatches(TableDataModel data){
         data.multiSelect = multiSelect;
         activeRow = -1;
         activeCell = -1;

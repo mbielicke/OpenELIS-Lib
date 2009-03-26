@@ -25,15 +25,12 @@
 */
 package org.openelis.gwt.screen;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.EditBox;
-import org.openelis.gwt.widget.table.TableColumnInt;
-import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
-
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.AppScreenForm.State;
+import org.openelis.gwt.widget.EditBox;
 
 public class ScreenEditBox extends ScreenInputWidget {
 	
@@ -64,19 +61,22 @@ public class ScreenEditBox extends ScreenInputWidget {
 	}
 	
     public void load(AbstractField field) {
-        if(!queryMode){
+        if(queryMode && queryWidget != null){
+            queryWidget.load(field);
+        }else{
             editbox.setText(field.toString().trim());
             super.load(field);   
-        }else
-            queryWidget.load(field);
+        }   
     }
 
     public void submit(AbstractField field) {
-        if(!queryMode){
+        if(queryMode && queryWidget != null){
+            queryWidget.submit(field);
+        }else{
             String text = editbox.getText();
             field.setValue(text);
-        }else
-            queryWidget.submit(field);
+        }
+           
 
     }
 
@@ -121,6 +121,15 @@ public class ScreenEditBox extends ScreenInputWidget {
 			}
 		}
         super.onLostFocus(sender);
-	}    
+	} 
+    
+    public void setForm(State state) {
+        if(queryWidget == null){
+            if(state == State.QUERY){
+                queryField = field.getQueryField();
+            }
+        }
+        super.setForm(state);
+    }
 
 }

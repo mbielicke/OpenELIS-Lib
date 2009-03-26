@@ -44,14 +44,4 @@ public interface TreeManager {
     
     public boolean canClose(TreeWidget widget, TreeDataItem set, int row);
     
-    public boolean canDrag(TreeWidget widget, TreeDataItem item, int row);
-    
-    public boolean canDrop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
-    
-    public boolean canDrop(TreeWidget widget, Widget dragWidget, Widget dropWidget);
-    
-    public void drop(TreeWidget widget, Widget dragWidget, TreeDataItem dropTarget, int targetRow);
-    
-    public void drop(TreeWidget widget, Widget dragWidget);
-    
 }

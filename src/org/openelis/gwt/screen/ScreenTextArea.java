@@ -25,16 +25,14 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 
 /** 
  * ScreenTextArea wraps a GWT TextArea widget to be displayed on 
@@ -100,7 +98,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     }
 
     public void load(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.load(field);
         else{
             textarea.setText(field.toString());
@@ -110,7 +108,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     }
 
     public void submit(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.submit(field);
         else
             field.setValue(textarea.getText());
@@ -118,7 +116,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
             if(!alwaysEnabled){
@@ -136,7 +134,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     }
     
     public void setFocus(boolean focus){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focus);
         else
             textarea.setFocus(focus);
@@ -163,4 +161,13 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
         }
         super.onLostFocus(sender);
     }    
+    
+    public void setForm(State state) {
+        if(state == State.QUERY) {
+            if(queryWidget == null) {
+                queryField = field.getQueryField();
+            }
+        }
+        super.setForm(state);
+    }
 }

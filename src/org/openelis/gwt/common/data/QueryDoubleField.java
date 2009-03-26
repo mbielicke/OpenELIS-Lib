@@ -42,6 +42,10 @@ public class QueryDoubleField extends QueryField {
         setAttributes(node);
     }
     
+    public QueryDoubleField(String key) {
+        this.key = key;
+    }
+    
     public void setAttributes(Node node) {
         setKey(node.getAttributes().getNamedItem("key").getNodeValue());
         if (node.getAttributes().getNamedItem("max") != null)

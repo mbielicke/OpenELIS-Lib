@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.widget.FormInt;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.MenuLabel;
 
 import java.util.ArrayList;
@@ -48,6 +48,7 @@ import java.util.ArrayList;
 public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
     
     protected ScreenInputWidget queryWidget;
+    protected AbstractField queryField;
     protected AbstractField field;
     protected Widget displayWidget;
     protected boolean queryMode;
@@ -89,16 +90,17 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         queryWidget.key = key;
     }
     
-    public void setForm(FormInt.State state){
-        if(state == FormInt.State.QUERY)
+    public void setForm(State state){
+        if(state == State.QUERY)
             this.queryMode = true;
         else
             this.queryMode = false;
         if(queryMode){
             if(queryWidget != null){
                 initWidget(queryWidget.displayWidget);
-            }else{
-                queryMode = false;
+            }
+            if(queryField != null){
+                field = queryField;
             }
         }else{
            initWidget(displayWidget);
@@ -247,6 +249,12 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public Widget getQueryWidget() {
         return queryWidget;
+    }
+    
+    public void submitQuery(ArrayList<AbstractField> qList) {
+        if(queryField != null && queryField.getValue() != null && !"".equals(queryField.getValue())){
+            qList.add(queryField);
+        }
     }
 
 }

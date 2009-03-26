@@ -131,7 +131,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
         this.field = field;
         TreeDataItem item = (TreeDataItem)field;
         //editor = cells.get(item.leafCell).getNewInstance();
-        editor.setField(item.get(0));
+        editor.setField(item.cells[0]);
         editor.enable(enabled);
         editor.setCellWidth(width - ((item.depth+1)*18));
         ((SimplePanel)editor).setWidth(width - ((item.depth+1)*18)+"px");
@@ -167,7 +167,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
                 editorGrid.getCellFormatter().setWidth(0,j,"18px");
             if(j == 0)
                 editorGrid.getCellFormatter().setHeight(0,j,"18px");
-            
+            editorGrid.getCellFormatter().setStyleName(0,j,"treeungrouped");
             if(j == editorGrid.getColumnCount() -2){
                 if(!drow.hasChildren()) {
                     editorGrid.getCellFormatter().setStyleName(0,j,"");

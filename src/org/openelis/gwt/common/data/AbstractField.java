@@ -41,7 +41,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public abstract class AbstractField<Type> extends DataObject<Type> implements DataField, Serializable {
+public abstract class AbstractField<Type> extends DataObject<Type> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -296,6 +296,16 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Da
     
     public void setAttributes(HashMap<String,String> attribs) {
         
+    }
+    
+    @Override
+    public int hashCode() {
+        // TODO Auto-generated method stub
+        return key.hashCode();
+    }
+    
+    public AbstractField getQueryField() {
+        return null;
     }
 
 }

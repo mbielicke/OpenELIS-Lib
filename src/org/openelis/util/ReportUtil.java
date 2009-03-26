@@ -29,15 +29,14 @@ import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DataSet;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.DropDownField;
+import org.openelis.gwt.common.data.TableDataRow;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Vector;
 
 public class ReportUtil {
@@ -205,26 +204,24 @@ public class ReportUtil {
         return decodeType;
     }
 
-    public String encodeURLParameters(Form form, String user) {
+    public String encodeURLParameters(Form<Object> form, String user) {
         String       value ="";
         StringBuffer buffer = new StringBuffer(256);
 
         buffer.append("?LOGNAME="+user);
-        Iterator keyIt = form.getFieldMap().keySet().iterator();
-        while(keyIt.hasNext()) {
+        for(AbstractField field : form.getFields()) {
             value = "";
-            String key = (String)keyIt.next();
-            AbstractField field = form.getField(key);
+            String key = field.key;
             if (field.getValue() != null) {
                 if(field instanceof DateField)
                     value = DBDatetime.getInstance(DBDatetime.YEAR, DBDatetime.DAY, ((DatetimeRPC)field.getValue()).getDate()).toString();
                 else if(field instanceof DropDownField){
                     if(field.getValue() instanceof ArrayList){
-                        ArrayList<DataSet> list = (ArrayList<DataSet>)field.getValue();
-                        for(DataSet set : list){
+                        ArrayList<TableDataRow> list = (ArrayList<TableDataRow>)field.getValue();
+                        for(TableDataRow set : list){
                             if(list.indexOf(set) > 0)
                                 value += ",";
-                            value += (String)((DataObject)set.getKey()).getValue();
+                            value += (String)((DataObject)set.key).getValue();
                         }
                     }else{
                        value = field.getValue().toString();   

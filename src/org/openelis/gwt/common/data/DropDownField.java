@@ -36,7 +36,9 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> implements FieldType {
+public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key>>> implements FieldType {
+    
+
 
     private static final long serialVersionUID = 1L;
     
@@ -46,7 +48,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * this model for its options overriding what options it has stored in 
      * the widget itself
      */
-    private DataModel<Key> model = new DataModel<Key>();
+    private TableDataModel<TableDataRow<Key>> model;
     
     /**
      * Tag name used in XML defintion of an rpc
@@ -62,11 +64,15 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
         super();
     }
     
+    public DropDownField(String key){
+        this.key = key;
+    }
+    
     /**
      * Constructor that accpets a defualt value as the passed parameter.
      * @param val
      */
-    public DropDownField(DataSet<Key> val) {
+    public DropDownField(TableDataRow<Key> val) {
         this();
         setValue(val);
     }
@@ -104,34 +110,53 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
             setRequired(new Boolean(attribs.get("required")));
         if (attribs.containsKey("value")){
             String dflt = attribs.get("value");
-            DataSet<Key> ds = new DataSet<Key>();
-            ds.setKey((Key)dflt);
+            TableDataRow<Key> ds = new TableDataRow<Key>();
+            ds.key = ((Key)dflt);
             setValue(ds);
         }
     }
     
     public void setValue(Object val) {
-        if(val instanceof DataSet){
+        if(val instanceof TableDataRow){
             if(val == null){
                 value = null;
                 return;
             }
             if(value == null)
-                value = new ArrayList<DataSet<Key>>();
+                value = new ArrayList<TableDataRow<Key>>(1);
             else
                 value.clear();
             value.clear();
-            if(val != null)
-                value.add((DataSet<Key>)val);
+            if(val != null){
+                //Selection<Key> sel = new Selection<Key>();
+                //sel.key = ((DataSet<Key>)val).key;
+                //if(((TableDataR<Key>)val).getFields().size() > 0) {
+                  //  sel.display = (String)((DataSet<Key>)val).get(0).getValue();
+                //}
+                value.add((TableDataRow<Key>)val);
+            }
         }else if(val instanceof ArrayList){
             if(val != null){
                 if(value == null)
-                    value = new ArrayList<DataSet<Key>>();
+                    value = new ArrayList<TableDataRow<Key>>(1);
                 
                 value.clear();
-                
-                for(DataSet<Key> set : (ArrayList<DataSet<Key>>)val)
-                    value.add(set);
+                if(((ArrayList)val).get(0) instanceof TableDataRow){
+                    //for(DataSet<Key> set : (ArrayList<DataSet<Key>>)val){
+                        //Selection<Key> sel = new Selection<Key>();
+                        //sel.key = set.key;
+                        //if(set.getFields().size() > 0) {
+                          //  sel.display = (String)set.get(0).getValue();
+                        //}
+                        for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
+                            value.add(sel);
+                        
+                }/*else{
+                    for(Selection<Key> sel : (ArrayList<Selection<Key>>)val)
+                        value.add(sel);
+                }
+                */
+                    
             }else
                 value = null;
         }else if(val == null){
@@ -144,12 +169,13 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * Method that returns the the selected entrys display value as a string
      * @return
      */
+    
     public Object getTextValue(){
         if(value == null)
             return null;
         
         if(value.size() == 1)
-            return value.get(0).get(0).getValue().toString();
+            return value.get(0).cells[1].getValue();
         else if(value.size() > 1)
             return value;
         else
@@ -165,43 +191,16 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
             return null;
         
         if(value.size() == 1)
-            return value.get(0).getKey();
+            return value.get(0).key;
         else if(value.size() > 1)
             return value;
         else
             return null;       
     }
 
-    /**
-     * Adds the entry to the selections list that matches the key passed.
-     * @param key
-     */
-    public void add(Integer key) {
-        DataSet set = new DataSet();
-        NumberObject no = new NumberObject(key);
-        set.setKey(no);
-        add(set);
-    }
-    
-    /**
-     * Adds the entry to the selections list that matches the key passed.
-     * @param key
-     */
-    public void add(Double key){
-        DataSet set = new DataSet();
-        NumberObject no = new NumberObject(key);
-        set.setKey(no);
-        add(set);
-    }
-    
-    /**
-     * Adds the entry to the selections list that matches the key passed.
-     * @param key
-     */
-    public void add(String key){
-        DataSet set = new DataSet();
-        StringObject so = new StringObject(key);
-        set.setKey(so);
+    public void add(Key key) {
+        TableDataRow<Key> set = new TableDataRow<Key>();
+        set.key = key;
         add(set);
     }
     
@@ -209,15 +208,15 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * Adds the passed entry to the selections list.
      * @param key
      */
-    public void add(DataSet set) {
-        value.add(set);
+    public void add(TableDataRow<Key> set) {
+        value.add(set);//new Selection<Key>(set.key,(String)set.get(0).getValue()));
     }
     
     /**
      * Removes the passed entry from the selections list
      * @param set
      */
-    public void remove(DataSet set){
+    public void remove(TableDataRow<Key> set){
         value.remove(set);
     }
     
@@ -235,16 +234,17 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * same as the object called
      */
     public Object clone(){
-        DropDownField obj = new DropDownField();
+        DropDownField<Key> obj = new DropDownField<Key>();
         obj.setRequired(required);
-        obj.setModel((DataModel)model.clone());
+        if(model != null)
+            obj.setModel((TableDataModel<TableDataRow<Key>>)model.clone());
         obj.setKey(key);
         
         //need to create a new selections array list by hand to avoid a shallow copy
         if(value != null){
-            ArrayList<DataSet> cloneSelections = new ArrayList<DataSet>();
+            ArrayList<Selection> cloneSelections = new ArrayList<Selection>();
             for(int i=0; i < value.size(); i++)
-                cloneSelections.add((DataSet)value.get(i).clone());
+                cloneSelections.add((Selection)value.get(i).clone());
             
             obj.setValue(cloneSelections);
         }else
@@ -268,7 +268,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
     public void validate() {
         if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
-            if (value == null || value.size() == 0 || (value.size() == 1 && value.get(0).getKey() == null)) {
+            if (value == null || value.size() == 0 || (value.size() == 1 && value.get(0).key == null)) {
                 addError("Field is required");
                 valid = false;
                 return;
@@ -282,7 +282,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      *  widget will display if not empty
      * @return
      */
-    public DataModel getModel() {
+    public TableDataModel<TableDataRow<Key>> getModel() {
         return model;
     }
 
@@ -291,7 +291,22 @@ public class DropDownField<Key> extends AbstractField<ArrayList<DataSet<Key>>> i
      * set in the widget for this specific field 
      * @param model
      */
-    public void setModel(DataModel model) {
+    public void setModel(TableDataModel<TableDataRow<Key>> model) {
         this.model = model;
+    }
+    
+    public AbstractField getQueryField() {
+        return this;
+    }
+    
+    public ArrayList<Key> getKeyValues() {
+        ArrayList<Key> keys = new ArrayList<Key>();
+        if(getValue() != null){
+            for(TableDataRow<Key> sel : getValue()) {
+                keys.add(sel.key);
+            }
+        }
+        return keys;
+    
     }
 }

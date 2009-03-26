@@ -25,10 +25,12 @@
 */
 package org.openelis.gwt.common.data;
 
+import org.openelis.gwt.common.RPC;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TreeDataModel implements FieldType {
+public class TreeDataModel implements RPC,FieldType {
     
     private static final long serialVersionUID = 1L;
     

@@ -29,13 +29,13 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import org.openelis.gwt.common.Query;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.AppScreenForm;
 import org.openelis.gwt.widget.AToZTable;
 import org.openelis.gwt.widget.ButtonPanel;
-import org.openelis.gwt.widget.FormInt;
 import org.openelis.gwt.widget.ResultsTable;
 
 /**
@@ -58,8 +58,8 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
     /**
      * The model to store the list of keys from a query
      */
-    private DataModel<Key> list = new DataModel<Key>();
-
+    //private TableDataModel<TableDataRow<Key>> list = new TableDataModel<TableDataRow<Key>>();
+     private Query<TableDataRow<Key>> query = new Query<TableDataRow<Key>>();
     /**
      * The current index for the key being attempted to fetch.
      * If fetch is successful then the candidate will become the 
@@ -108,18 +108,23 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * Sets the list of keys that this object will manage.
      * @param list
      */
-    public void setModel(DataModel<Key> list) {
-        this.list = list;
+    public void setModel(TableDataModel<TableDataRow<Key>> list) {
+        query.results = list;
         candidate = 0;
         // fireCommand(Action.REFRESH,list);
+    }
+    
+    public void setQueryResults(Query query) {
+        this.query = query;
+        candidate = 0;
     }
 
     /**
      * Returns the list of keys that this object is currently managing.
      * @return
      */
-    public DataModel<Key> getList() {
-        return list;
+    public TableDataModel<TableDataRow<Key>> getList() {
+        return query.results;
     }
 
     /**
@@ -147,20 +152,20 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * @throws IndexOutOfBoundsException
      */
     public void select(final int selection) throws IndexOutOfBoundsException {
-        if (list.paged && selection > list.size() - 1) {
+        if (selection > query.results.size() - 1) {
             selectItem = true;
-            setPage(list.getPage() + 1);
-        } else if (list.paged && selection < 0) {
+            setPage(query.page + 1);
+        } else if (selection < 0) {
             // if(list.getPage() > 0){
             selectItem = true;
             selectLast = true;
-            setPage(list.getPage() - 1);
+            setPage(query.page - 1);
             // }else
             // candidate = 0;
-        } else if(selection > -1 && selection < list.size()) {
+        } else if(selection > -1 && selection < query.results.size()) {
             AsyncCallback callback = new AsyncCallback() {
                 public void onSuccess(Object result) {
-                    list.select(selection);
+                    query.results.select(selection);
                     candidate = selection;
                     fireCommand(Action.SELECTION, new Integer(selection));
                 }
@@ -172,7 +177,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
 
             };
             fireCommand(Action.FETCH,
-                        new Object[] {list.get(selection).key, callback});
+                        new Object[] {query.results.get(selection).key, callback});
         }
     }
 
@@ -180,8 +185,8 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * Adds a key to the list that is being managed.
      * @param set
      */
-    public void add(DataSet<Key> set) {
-        list.add(set);
+    public void add(TableDataRow<Key> set) {
+        query.results.add(set);
         fireCommand(Action.ADD, null);
     }
 
@@ -190,7 +195,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * @return
      */
     public Key getSelected() {
-        return list.getSelected().key;
+        return (Key)query.results.getSelected().key;
     }
 
     /**
@@ -198,24 +203,26 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
      * @param index
      */
     public void delete(int index) {
-        list.delete(index);
+        query.results.delete(index);
         fireCommand(Action.DELETE, new Integer(index));
     }
 
     public int getSelectedIndex() {
-        return list.getSelectedIndex();
+        return query.results.getSelectedIndex();
     }
 
     public int getPage() {
-        return list.getPage();
+        return query.page;
     }
 
     public void setPage(int page) {
-        final int currPage = list.getPage();
-        list.setPage(page);
-        AsyncCallback callback = new AsyncCallback() {
-            public void onSuccess(Object result) {
-                setModel((DataModel)result);
+        if(page < 0)
+            return;
+        final int currPage = query.page;
+        query.page = page;
+        AsyncCallback callback = new AsyncCallback<Query>() {
+            public void onSuccess(Query result) {
+                setQueryResults(result);
                 if (selectItem) {
                     if (selectLast)
                         select(getList().size() - 1);
@@ -228,16 +235,16 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
             }
 
             public void onFailure(Throwable caught) {
-                list.setPage(currPage);
-                candidate = list.getSelectedIndex();
+                query.page = currPage;
+                candidate = query.results.getSelectedIndex();
             }
 
         };
-        fireCommand(Action.GETPAGE, new Object[] {list, callback});
+        fireCommand(Action.GETPAGE, new Object[] {query, callback});
     }
 
     public void unselect() {
-        list.select(-1);
+        query.results.select(-1);
         fireCommand(Action.UNSELECT, null);
     }
 
@@ -252,7 +259,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
                || (action == AppScreenForm.Action.REFRESH_PAGE)
                || (action == AToZTable.Action.ROW_SELECTED)
                || (action == ResultsTable.Action.ROW_SELECTED)
-               || (action == FormInt.State.ADD);
+               || (action == AppScreenForm.State.ADD);
     }
 
     public void performCommand(Enum action, Object obj) {
@@ -267,7 +274,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
              * selectLast = false;
              */
         } else if (action == AppScreenForm.Action.NEW_MODEL) {
-            setModel((DataModel)obj);
+            setQueryResults((Query<TableDataRow<Key>>)obj);
             select(0);
         } else if (action == AToZTable.Action.NEXT_PAGE) {
             selectLast = false;
@@ -288,7 +295,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
             select(((Integer)obj).intValue());
         } else if (action == ResultsTable.Action.ROW_SELECTED){
             select(((Integer)obj).intValue());
-        } else if (action == FormInt.State.ADD) {
+        } else if (action == AppScreenForm.State.ADD) {
             unselect();
         }
     }

@@ -31,6 +31,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenTextBox;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.TextBox;
 
 
@@ -127,6 +128,20 @@ public class TableTextBox extends TableCellInputWidget {
     
     public void setFocus(boolean focused) {
         editor.setFocus(focused);
+    }
+    
+    public void setForm(State state) {
+        if(state == State.QUERY){
+            editor.setMaxLength(255);
+            editor.enforceLength = false;
+            editor.enforceMask = false;
+            editor.setTextAlignment(TextBox.ALIGN_LEFT);
+        }else{
+            editor.setMaxLength(editor.length);
+            editor.enforceLength = true;
+            editor.enforceMask = true;
+            editor.setTextAlignment(editor.alignment);
+        }
     }
 
 }

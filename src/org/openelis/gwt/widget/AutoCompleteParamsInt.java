@@ -25,12 +25,12 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.AbstractField;
 
 import java.util.HashMap;
 
-@Deprecated public interface AutoCompleteParamsInt {
+@Deprecated public interface AutoCompleteParamsInt<F extends RPC> {
 
-    public HashMap<String,AbstractField> getParams(Form rpc);
+    public HashMap<String,AbstractField> getParams(F rpc);
 }
