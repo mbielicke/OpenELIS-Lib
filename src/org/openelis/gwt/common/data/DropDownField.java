@@ -218,9 +218,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
         
         //need to create a new selections array list by hand to avoid a shallow copy
         if(value != null){
-            ArrayList<Selection> cloneSelections = new ArrayList<Selection>();
+            ArrayList<TableDataRow<Key>> cloneSelections = new ArrayList<TableDataRow<Key>>();
             for(int i=0; i < value.size(); i++)
-                cloneSelections.add((Selection)value.get(i).clone());
+                cloneSelections.add((TableDataRow<Key>)value.get(i).clone());
             
             obj.setValue(cloneSelections);
         }else
