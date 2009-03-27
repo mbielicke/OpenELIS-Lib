@@ -25,10 +25,10 @@
 */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.xml.client.Node;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.google.gwt.xml.client.Node;
 /**
  * DropDownField is an implementation of AbstractField that is 
  * used to send and recieve data for Dropdown and AutoComplete 
@@ -118,50 +118,26 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
     
     public void setValue(Object val) {
         if(val instanceof TableDataRow){
-            if(val == null){
-                value = null;
-                return;
-            }
             if(value == null)
                 value = new ArrayList<TableDataRow<Key>>(1);
             else
                 value.clear();
-            value.clear();
-            if(val != null){
-                //Selection<Key> sel = new Selection<Key>();
-                //sel.key = ((DataSet<Key>)val).key;
-                //if(((TableDataR<Key>)val).getFields().size() > 0) {
-                  //  sel.display = (String)((DataSet<Key>)val).get(0).getValue();
-                //}
-                value.add((TableDataRow<Key>)val);
-            }
+
+            value.add((TableDataRow<Key>)val);
         }else if(val instanceof ArrayList){
-            if(val != null){
-                if(value == null)
-                    value = new ArrayList<TableDataRow<Key>>(1);
-                
+            if(value == null)
+                value = new ArrayList<TableDataRow<Key>>(1);
+            else
                 value.clear();
-                if(((ArrayList)val).get(0) instanceof TableDataRow){
-                    //for(DataSet<Key> set : (ArrayList<DataSet<Key>>)val){
-                        //Selection<Key> sel = new Selection<Key>();
-                        //sel.key = set.key;
-                        //if(set.getFields().size() > 0) {
-                          //  sel.display = (String)set.get(0).getValue();
-                        //}
-                        for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
-                            value.add(sel);
-                        
-                }/*else{
-                    for(Selection<Key> sel : (ArrayList<Selection<Key>>)val)
-                        value.add(sel);
-                }
-                */
+            
+            if(((ArrayList)val).get(0) instanceof TableDataRow){
+                for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
+                    value.add(sel);
                     
-            }else
-                value = null;
-        }else if(val == null){
-                value = null; 
-                return;
+            }
+        }else {
+            value = null; 
+            return;
         }
     }
     
