@@ -129,16 +129,16 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
                 value = new ArrayList<TableDataRow<Key>>(1);
             else
                 value.clear();
-            
-            if(((ArrayList)val).get(0) instanceof TableDataRow){
-                for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
-                    value.add(sel);
-                    
+            if(((ArrayList)val).size() > 0){
+ 			    if(((ArrayList)val).get(0) instanceof TableDataRow){
+		             for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
+        		        value.add(sel);
+				}                    
             }
-        }else {
+       }else {
             value = null; 
             return;
-        }
+       }
     }
     
     /**
