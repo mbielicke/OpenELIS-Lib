@@ -35,6 +35,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.StringField;
+import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.screen.ScreenAutoCompleteWidget;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.AutoComplete;
@@ -112,7 +113,8 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
         if(((DropDownField)field).getModel() != null){
             editor.model.load(((DropDownField)field).getModel());
             editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        }
+        }else
+            editor.model.load(new TableDataModel());
         display.setText(editor.getTextBoxDisplay());
 		setWidget(display);
         super.setDisplay();
@@ -122,7 +124,8 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
         if(((DropDownField)field).getModel() != null){
             editor.model.load(((DropDownField)field).getModel());
             editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        }
+        }else
+            editor.model.load((new TableDataModel()));
         editor.activeCell = -1;
         editor.activeRow = -1;
         editor.setWidth(width+"px");
