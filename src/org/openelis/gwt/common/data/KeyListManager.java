@@ -244,7 +244,8 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
     }
 
     public void unselect() {
-        query.results.select(-1);
+        if(query != null && query.results != null)
+            query.results.select(-1);
         fireCommand(Action.UNSELECT, null);
     }
 
