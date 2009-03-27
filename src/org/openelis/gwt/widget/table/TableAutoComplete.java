@@ -109,9 +109,10 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 			display = new Label();
 			display.setWordWrap(false);
 		}
-        editor.model.load(((DropDownField)field).getModel());
-        editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        
+        if(((DropDownField)field).getModel() != null){
+            editor.model.load(((DropDownField)field).getModel());
+            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+        }
         display.setText(editor.getTextBoxDisplay());
 		setWidget(display);
         super.setDisplay();
