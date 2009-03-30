@@ -36,6 +36,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
@@ -466,10 +467,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     }
     
     public void submitQuery(ArrayList<AbstractField> qList) {
-        /*
+        
         if(queryModel != null) {
-            //DataSet<Object> querySet = queryModel.get(0);
-            for(FieldType field : querySet.getFields()){
+            TableDataRow<Object> querySet = queryModel.get(0);
+            for(FieldType field : querySet.getCells()){
                 if(field instanceof DropDownField) {
                     if(field != null && field.getValue() != null && ((ArrayList)field.getValue()).size() > 0 )
                         qList.add((AbstractField)field);
@@ -477,7 +478,7 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
                     qList.add((AbstractField)field);
             }
         }
-        */
+        
     }
     
     public static TableCellWidget createCellWidget(Node node, ScreenBase screen) {
