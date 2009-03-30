@@ -100,6 +100,8 @@ public class TableModel implements TableModelInt {
     }
 
     public int numRows() {
+        if(data == null)
+            return 0;
         return data.size();
     }
 
