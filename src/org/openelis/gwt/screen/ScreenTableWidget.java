@@ -437,11 +437,11 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             if(state == State.QUERY) {
                 if(queryModel == null) {
                     queryModel = new TableDataModel();
-                    //TableDataRow querySet = new TableDataRow();
-                    //for(FieldType field : table.model.getData().getDefaultSet().getFields()){
-                     //   querySet.add((FieldType)((AbstractField)field).getQueryField());
-                   // }
-                    //queryModel.setDefaultSet(querySet);
+                    TableDataRow querySet = new TableDataRow(table.model.getData().getDefaultSet().cells.length);
+                    for(int i = 0; i < table.model.getData().getDefaultSet().cells.length; i++){
+                       querySet.cells[i] = (FieldType)((AbstractField)table.model.getData().getDefaultSet().cells[i]).getQueryField();
+                    }
+                    queryModel.setDefaultSet(querySet);
                     
                 }
                 for(TableColumnInt column : table.columns) {
