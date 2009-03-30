@@ -140,7 +140,7 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
             if(table.activeRow > -1)
                 table.model.unselectRow(-1);
         }
-        if(obj != null && obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
+        if(obj != null && obj instanceof AppButton && bpanel != null && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
             if(selectedButton != null){
                 selectedButton.changeState(ButtonState.UNPRESSED);
             }

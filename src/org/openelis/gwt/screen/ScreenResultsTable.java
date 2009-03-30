@@ -101,6 +101,7 @@ public class ScreenResultsTable extends ScreenInputWidget {
             }
         }
         displayWidget = results;
+        tableWidget.displayWidget = results;
 
         if(bpanel != null)
             results.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
@@ -128,9 +129,12 @@ public class ScreenResultsTable extends ScreenInputWidget {
     
     public void setForm(State state) {
         if(queryable){
-            TableManager man = ((TableModel)tableWidget.table.model).manager;
+            TableManager man = null;
+            if(state == State.QUERY)
+                man = ((TableModel)tableWidget.table.model).manager;
             tableWidget.setForm(state);
-            tableWidget.table.model.setManager(man);
+            if(state == State.QUERY)
+                tableWidget.table.model.setManager(man);
         }
     }
     

@@ -76,7 +76,7 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     /**
      * Widget wrapped by this class
      */
-    private TableWidget table;
+    public TableWidget table;
     private Vector<String> dropTargets;
     private boolean dropInited;
     private TableDataModel queryModel;

@@ -103,7 +103,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 field = queryField;
             }
         }else{
-           initWidget(displayWidget);
+           if(queryWidget != null)
+               initWidget(displayWidget);
         }
     }
     
