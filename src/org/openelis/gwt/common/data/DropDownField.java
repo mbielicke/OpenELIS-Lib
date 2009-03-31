@@ -151,7 +151,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
             return null;
         
         if(value.size() == 1)
-            return value.get(0).cells[1].getValue();
+            return value.get(0).cells[0].getValue();
         else if(value.size() > 1)
             return value;
         else
