@@ -124,8 +124,10 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
         if(((DropDownField)field).getModel() != null){
             editor.model.load(((DropDownField)field).getModel());
             editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        }else
+        }else{
             editor.model.load((new TableDataModel()));
+            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+        }
         editor.activeCell = -1;
         editor.activeRow = -1;
         editor.setWidth(width+"px");
