@@ -370,8 +370,9 @@ public class ScreenTreeWidget extends ScreenInputWidget implements HasDragContro
                         if (field.getValue() != null)
                             ((ScreenTreeWidget)queryWidget).tree.model.load((TreeDataModel)field.getValue());
                     }
-                }else if(queryWidget != null){
-                    queryWidget.load(field);
+                }else{
+                    if(queryWidget != null)
+                        queryWidget.load(field);
                 }
             }
         }

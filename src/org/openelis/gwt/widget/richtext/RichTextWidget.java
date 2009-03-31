@@ -26,15 +26,19 @@
 package org.openelis.gwt.widget.richtext;
 
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class RichTextWidget extends Composite {
+public class RichTextWidget extends Composite implements FocusListener{
     
-    private VerticalPanel vp = new VerticalPanel();
-    private RichTextArea area = new RichTextArea();
+    private FlexTable vp = new FlexTable();
+    public RichTextArea area = new RichTextArea();
     private RichTextToolbar toolbar = new RichTextToolbar(area);
+    private boolean tools;
+    private boolean enabled;
     
     public RichTextWidget() {
         
@@ -45,11 +49,17 @@ public class RichTextWidget extends Composite {
     }
     
     public void init(boolean tools){
+        this.tools = tools;
         initWidget(vp);
-        if(tools)
-        	vp.add(toolbar);
-        vp.add(area);
+        if(tools){
+        	vp.setWidget(0,0,toolbar);
+            vp.getFlexCellFormatter().setHeight(0, 0,"75px");
+            vp.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
+            vp.setWidget(1,0,area);
+        }else
+            vp.setWidget(0,0,area);
         area.setSize("100%","100%");
+        area.addFocusListener(this);
 
     }
     
@@ -74,7 +84,10 @@ public class RichTextWidget extends Composite {
     }
     
     public void setFocus(boolean focused) {
-        area.setFocus(focused);
+        if(enabled)
+            area.setFocus(focused);
+        else
+            area.setFocus(false);
     }
     
     public boolean isEnabled(){
@@ -87,6 +100,24 @@ public class RichTextWidget extends Composite {
     
     public void setHeight(String height){
         vp.setHeight(height);
+    }
+    
+    public void enable(boolean enabled) {
+        this.enabled = enabled;
+        if(tools) {
+            toolbar.enable(enabled);
+        }
+        area.setEnabled(enabled);
+    }
+
+    public void onFocus(Widget sender) {
+        if(!enabled)
+            area.setFocus(false);
+    }
+
+    public void onLostFocus(Widget sender) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

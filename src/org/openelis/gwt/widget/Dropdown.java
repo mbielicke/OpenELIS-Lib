@@ -25,9 +25,13 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.ui.Label;
+
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableColumnInt;
+import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
@@ -60,7 +64,12 @@ public class Dropdown extends DropdownWidget {
     public DropDownListener listener = new DropDownListener(this);
     
     public Dropdown() {
-        
+        TableColumn tc = new TableColumn();
+        tc.currentWidth = 100;
+        tc.cellWidget = new TableLabel();
+        ArrayList<TableColumnInt> colList = new ArrayList<TableColumnInt>();
+        colList.add(tc);
+        setup(colList,10,"100px","",false,VerticalScroll.NEEDED);
     }
     
     private boolean enabled;

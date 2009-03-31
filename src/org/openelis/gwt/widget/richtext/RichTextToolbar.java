@@ -31,16 +31,18 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.widget.Dropdown;
 
 /**
@@ -103,21 +105,21 @@ public class RichTextToolbar extends Composite {
       KeyboardListener {
 
     public void onChange(Widget sender) {
-        /*
+        
       if (sender == backColors) {
-        basic.setBackColor((String)((DataObject)backColors.model.getSelection().get(0)).getValue());
+        basic.setBackColor((String)backColors.model.getSelection().cells[0].getValue());
         backColors.model.selectRow(0);
       } else if (sender == foreColors) {
-        basic.setForeColor((String)((DataObject)foreColors.model.getSelection().get(0)).getValue());
+        basic.setForeColor((String)foreColors.model.getSelection().cells[0].getValue());
         foreColors.model.selectRow(0);
       } else if (sender == fonts) {
-        basic.setFontName((String)((DataObject)fonts.model.getSelection().get(0)).getValue());
+        basic.setFontName((String)fonts.model.getSelection().cells[0].getValue());
         fonts.model.selectRow(0);
       } else if (sender == fontSizes) {
-        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)((DataObject)fontSizes.model.getSelection().get(0)).getValue())]);
+        basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.model.getSelection().cells[0].getValue())]);
         fontSizes.model.selectRow(0);
       }
-      */
+      
     }
 
     public void onClick(Widget sender) {
@@ -200,7 +202,7 @@ public class RichTextToolbar extends Composite {
   private RichTextArea.BasicFormatter basic;
   private RichTextArea.ExtendedFormatter extended;
 
-  private VerticalPanel outer = new VerticalPanel();
+  private Grid outer = new Grid(2,1);
   private HorizontalPanel topPanel = new HorizontalPanel();
   private HorizontalPanel bottomPanel = new HorizontalPanel();
   private ToggleButton bold;
@@ -237,11 +239,11 @@ public class RichTextToolbar extends Composite {
     this.basic = richText.getBasicFormatter();
     this.extended = richText.getExtendedFormatter();
 
-    outer.add(topPanel);
-    outer.add(bottomPanel);
+    outer.setWidget(0,0,topPanel);
+    outer.setWidget(1,0,bottomPanel);
     topPanel.setWidth("100%");
     bottomPanel.setWidth("100%");
-
+    outer.setHeight("75px");
     initWidget(outer);
     setStyleName("gwt-RichTextToolbar");
     richText.addStyleName("hasRichTextToolbar");
@@ -297,53 +299,55 @@ public class RichTextToolbar extends Composite {
   private Dropdown createColorList(String caption) {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
-    TableDataModel model = new TableDataModel();
-    /*
-    model.add(new StringObject(caption),new StringObject(""));
-    model.add(new StringObject("White"), new StringObject("white"));
-    model.add(new StringObject("Black"), new StringObject("black"));
-    model.add(new StringObject("Red"), new StringObject("red"));
-    model.add(new StringObject("Green"),new StringObject("green"));
-    model.add(new StringObject("Yellow"), new StringObject("yellow"));
-    model.add(new StringObject("Blue"), new StringObject("blue"));
-    */
+    TableDataModel<TableDataRow<String>> model = new TableDataModel<TableDataRow<String>>();
+    
+    model.add(new TableDataRow<String>("",new StringObject(caption)));
+    model.add(new TableDataRow<String>("white", new StringObject("White")));
+    model.add(new TableDataRow<String>("black", new StringObject("Black")));
+    model.add(new TableDataRow<String>("red",new StringObject("Red")));
+    model.add(new TableDataRow<String>("green",new StringObject("Green")));
+    model.add(new TableDataRow<String>("yellow",new StringObject("Yellow")));
+    model.add(new TableDataRow<String>("blue",new StringObject("Blue")));
+    
     lb.setModel(model);
+    lb.setSelection("");
     return lb;
   }
 
   private Dropdown createFontList() {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
-    TableDataModel model = new TableDataModel();
-    /*
-    model.add(new StringObject("Font"),new StringObject(""));
-    model.add(new StringObject("Normal"), new StringObject(""));
-    model.add(new StringObject("Times New Roman"), new StringObject("Times New Roman"));
-    model.add(new StringObject("Arial"), new StringObject("Arial"));
-    model.add(new StringObject("Courier New"), new StringObject("Courier New"));
-    model.add(new StringObject("Georgia"), new StringObject("Georgia"));
-    model.add(new StringObject("Trebuchet"), new StringObject("Trebuchet"));
-    model.add(new StringObject("Verdana"), new StringObject("Verdana"));
-    */
+    TableDataModel<TableDataRow<String>> model = new TableDataModel<TableDataRow<String>>();
+    
+    model.add(new TableDataRow<String>("",new StringObject("Font")));
+    model.add(new TableDataRow<String>("Times New Roman", new StringObject("Times New Roman")));
+    model.add(new TableDataRow<String>("Arial", new StringObject("Arial")));
+    model.add(new TableDataRow<String>("Courier New", new StringObject("Courier New")));
+    model.add(new TableDataRow<String>("Georgia", new StringObject("Georgia")));
+    model.add(new TableDataRow<String>("Trebuchet", new StringObject("Trebuchet")));
+    model.add(new TableDataRow<String>("Verdana", new StringObject("Verdana")));
+    
     lb.setModel(model);
+    lb.setSelection("");
     return lb;
   }
 
   private Dropdown createFontSizes() {
     Dropdown lb = new Dropdown();
     lb.addChangeListener(listener);
-    TableDataModel model = new TableDataModel();
-    /*
-    model.add(new StringObject("Size"),new StringObject("0"));
-    model.add(new StringObject("XX Small"),new StringObject("1"));
-    model.add(new StringObject("X Small"),new StringObject("2"));
-    model.add(new StringObject("Small"),new StringObject("3"));
-    model.add(new StringObject("Medium"),new StringObject("4"));
-    model.add(new StringObject("Large"),new StringObject("5"));
-    model.add(new StringObject("X Large"),new StringObject("6"));
-    model.add(new StringObject("XX Large"),new StringObject("7"));
-    */
+    TableDataModel<TableDataRow<String>> model = new TableDataModel<TableDataRow<String>>();
+    
+    model.add(new TableDataRow<String>("0",new StringObject("Size")));
+    model.add(new TableDataRow<String>("1",new StringObject("XX Small")));
+    model.add(new TableDataRow<String>("2",new StringObject("X Small")));
+    model.add(new TableDataRow<String>("3",new StringObject("Small")));
+    model.add(new TableDataRow<String>("4",new StringObject("Medium")));
+    model.add(new TableDataRow<String>("5",new StringObject("Large")));
+    model.add(new TableDataRow<String>("6",new StringObject("X Large")));
+    model.add(new TableDataRow<String>("7",new StringObject("XX Large")));
+    
     lb.setModel(model);
+    lb.setSelection("0");
     return lb;
   }
 
@@ -376,6 +380,13 @@ public class RichTextToolbar extends Composite {
     if (extended != null) {
       strikethrough.setDown(extended.isStrikethrough());
     }
+  }
+  
+  public void enable(boolean enabled) {
+      backColors.enabled(enabled);
+      foreColors.enabled(enabled);
+      fonts.enabled(enabled);
+      fontSizes.enabled(enabled);
   }
 }
 
