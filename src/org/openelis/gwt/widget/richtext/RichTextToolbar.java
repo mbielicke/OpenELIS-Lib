@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.richtext;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -35,14 +36,13 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.Dropdown;
 
 /**
@@ -205,24 +205,24 @@ public class RichTextToolbar extends Composite {
   private Grid outer = new Grid(2,1);
   private HorizontalPanel topPanel = new HorizontalPanel();
   private HorizontalPanel bottomPanel = new HorizontalPanel();
-  private ToggleButton bold;
-  private ToggleButton italic;
-  private ToggleButton underline;
-  private ToggleButton subscript;
-  private ToggleButton superscript;
-  private ToggleButton strikethrough;
-  private PushButton indent;
-  private PushButton outdent;
-  private PushButton justifyLeft;
-  private PushButton justifyCenter;
-  private PushButton justifyRight;
-  private PushButton hr;
-  private PushButton ol;
-  private PushButton ul;
-  private PushButton insertImage;
-  private PushButton createLink;
-  private PushButton removeLink;
-  private PushButton removeFormat;
+  private AppButton bold;
+  private AppButton italic;
+  private AppButton underline;
+  private AppButton subscript;
+  private AppButton superscript;
+  private AppButton strikethrough;
+  private AppButton indent;
+  private AppButton outdent;
+  private AppButton justifyLeft;
+  private AppButton justifyCenter;
+  private AppButton justifyRight;
+  private AppButton hr;
+  private AppButton ol;
+  private AppButton ul;
+  private AppButton insertImage;
+  private AppButton createLink;
+  private AppButton removeLink;
+  private AppButton removeFormat;
 
   private Dropdown backColors;
   private Dropdown foreColors;
@@ -249,37 +249,37 @@ public class RichTextToolbar extends Composite {
     richText.addStyleName("hasRichTextToolbar");
 
     if (basic != null) {
-      topPanel.add(bold = createToggleButton(images.bold(), "Bold"));
-      topPanel.add(italic = createToggleButton(images.italic(), "Italic"));
-      topPanel.add(underline = createToggleButton(images.underline(),
+      topPanel.add(bold = createToggleButton("Bold", "Bold"));
+      topPanel.add(italic = createToggleButton("Italic", "Italic"));
+      topPanel.add(underline = createToggleButton("Underline",
           "Underline"));
-      topPanel.add(subscript = createToggleButton(images.subscript(),
+      topPanel.add(subscript = createToggleButton("Subscript",
           "Subscript"));
-      topPanel.add(superscript = createToggleButton(images.superscript(),
+      topPanel.add(superscript = createToggleButton("Superscript",
           "Superscript"));
-      topPanel.add(justifyLeft = createPushButton(images.justifyLeft(),
+      topPanel.add(justifyLeft = createPushButton("JustifyLeft",
           "Justify Left"));
-      topPanel.add(justifyCenter = createPushButton(images.justifyCenter(),
+      topPanel.add(justifyCenter = createPushButton("JustifyCenter",
           "JustifyCenter"));
-      topPanel.add(justifyRight = createPushButton(images.justifyRight(),
+      topPanel.add(justifyRight = createPushButton("JustifyRight",
           "JustifyRight"));
     }
 
     if (extended != null) {
-      topPanel.add(strikethrough = createToggleButton(images.strikeThrough(),
+      topPanel.add(strikethrough = createToggleButton("StrikeThrough",
           "Strike Through"));
-      topPanel.add(indent = createPushButton(images.indent(), "Indent"));
-      topPanel.add(outdent = createPushButton(images.outdent(), "Outdent"));
-      topPanel.add(hr = createPushButton(images.hr(), "HR"));
-      topPanel.add(ol = createPushButton(images.ol(), "OL"));
-      topPanel.add(ul = createPushButton(images.ul(), "UL"));
-      topPanel.add(insertImage = createPushButton(images.insertImage(),
+      topPanel.add(indent = createPushButton("Indent", "Indent"));
+      topPanel.add(outdent = createPushButton("Outdent", "Outdent"));
+      topPanel.add(hr = createPushButton("HR", "HR"));
+      topPanel.add(ol = createPushButton("OL", "OL"));
+      topPanel.add(ul = createPushButton("UL", "UL"));
+      topPanel.add(insertImage = createPushButton("InsertImage",
           "Insert Image"));
-      topPanel.add(createLink = createPushButton(images.createLink(),
+      topPanel.add(createLink = createPushButton("CreateLink",
           "Create Link"));
-      topPanel.add(removeLink = createPushButton(images.removeLink(),
+      topPanel.add(removeLink = createPushButton("RemoveLink",
           "Remove Link"));
-      topPanel.add(removeFormat = createPushButton(images.removeFormat(),
+      topPanel.add(removeFormat = createPushButton("RemoveFormat",
           "Remove Format"));
     }
 
@@ -351,18 +351,33 @@ public class RichTextToolbar extends Composite {
     return lb;
   }
 
-  private PushButton createPushButton(AbstractImagePrototype img, String tip) {
+  private AppButton createPushButton(String img, String action) {
+      AppButton ab = new AppButton();
+      ab.action = action;
+      AbsolutePanel ap = new AbsolutePanel();
+      ap.setStyleName(img);
+      ab.setWidget(ap);
+      ab.addClickListener(listener);
+      /*
     PushButton pb = new PushButton(img.createImage());
     pb.addClickListener(listener);
     pb.setTitle(tip);
-    return pb;
+    */
+    return ab;
   }
 
-  private ToggleButton createToggleButton(AbstractImagePrototype img, String tip) {
-    ToggleButton tb = new ToggleButton(img.createImage());
+  private AppButton createToggleButton(String img, String action) {
+    AppButton ab = new AppButton();
+    ab.action = action;
+    AbsolutePanel ap = new AbsolutePanel();
+    ap.setStyleName(img);
+    ab.setWidget(ap);
+    ab.toggle = true;
+    ab.addClickListener(listener);
+      /*ToggleButton tb = new ToggleButton(img.createImage());
     tb.addClickListener(listener);
-    tb.setTitle(tip);
-    return tb;
+    tb.setTitle(tip);*/
+    return ab;
   }
 
   /**
@@ -370,15 +385,15 @@ public class RichTextToolbar extends Composite {
    */
   private void updateStatus() {
     if (basic != null) {
-      bold.setDown(basic.isBold());
-      italic.setDown(basic.isItalic());
-      underline.setDown(basic.isUnderlined());
-      subscript.setDown(basic.isSubscript());
-      superscript.setDown(basic.isSuperscript());
+      //bold.setDown(basic.isBold());
+      //italic.setDown(basic.isItalic());
+      //underline.setDown(basic.isUnderlined());
+      //subscript.setDown(basic.isSubscript());
+      //superscript.setDown(basic.isSuperscript());
     }
 
     if (extended != null) {
-      strikethrough.setDown(extended.isStrikethrough());
+      //strikethrough.setDown(extended.isStrikethrough());
     }
   }
   

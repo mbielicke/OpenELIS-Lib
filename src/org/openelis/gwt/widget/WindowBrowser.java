@@ -115,7 +115,7 @@ public class WindowBrowser extends Composite{
         RootPanel.get().addStyleName("ScreenLoad");
         final WindowBrowser brws = this;
         index++;
-        ScreenWindow window = new ScreenWindow(brws, text, category, loadingText);
+        ScreenWindow window = new ScreenWindow(brws, text, category, loadingText,false);
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(text,window);
