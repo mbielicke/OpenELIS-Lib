@@ -337,17 +337,17 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         
     }
     
-    public void close() {
+    public void close() {        
+        if(content instanceof AppScreenForm){
+            if(((AppScreenForm)content).hasChanges()){
+                return;
+            }
+        }
         if(glass != null) {
             DOM.removeEventPreview(this);
             removeFromParent();
             RootPanel.get().remove(glass);
             return;
-        }
-        if(content instanceof AppScreenForm){
-            if(((AppScreenForm)content).hasChanges()){
-                return;
-            }
         }
         removeFromParent();
         if(browser != null){
