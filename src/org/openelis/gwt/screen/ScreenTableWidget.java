@@ -181,7 +181,7 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             }
             if(node.getAttributes().getNamedItem("query") != null){
                 if(node.getAttributes().getNamedItem("query").getNodeValue().equals("false"))
-                    enable = false;
+                    queryable = false;
             }
             if(node.getAttributes().getNamedItem("showScroll") != null){
                 showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
