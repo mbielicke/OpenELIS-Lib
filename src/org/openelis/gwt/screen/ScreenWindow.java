@@ -254,9 +254,10 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         }
         if(modal){
             glass = new AbsolutePanel();
+            glass.setStyleName("GlassPanel");
             glass.setHeight(Window.getClientHeight()+"px");
             glass.setWidth(Window.getClientWidth()+"px");
-            glass.add(this,(Window.getClientWidth()/2),(Window.getClientHeight()/2));
+            glass.add(this,100,100);
             RootPanel.get().add(glass, 0, 0);
             setVisible(true);
             dragController = new PickupDragController(glass,true);
@@ -270,6 +271,13 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     
     public ScreenWindow(WindowBrowser brws, String key){
         this(brws,key,"ScreenWindow","Loading...",false);
+    }
+    
+    public void setContent(Widget content, int x, int y) {
+        if(glass != null){
+            glass.setWidgetPosition(this, x, y);
+        }
+        setContent(content);
     }
     
     /**
