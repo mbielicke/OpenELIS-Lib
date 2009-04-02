@@ -81,6 +81,7 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     private Vector<String> dropTargets;
     private boolean dropInited;
     private TableDataModel queryModel;
+    private boolean queryable = true;
     
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
@@ -177,6 +178,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             if(node.getAttributes().getNamedItem("enable") != null){
                 if(node.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
                     enable = true;
+            }
+            if(node.getAttributes().getNamedItem("query") != null){
+                if(node.getAttributes().getNamedItem("query").getNodeValue().equals("false"))
+                    enable = false;
             }
             if(node.getAttributes().getNamedItem("showScroll") != null){
                 showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
@@ -434,6 +439,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     }
     
     public void setForm(State state) {
+        if(state == State.QUERY && !queryable){
+            table.model.clear();
+            return;
+        }
         if(queryWidget == null) {
             if(state == State.QUERY) {
                 if(queryModel == null) {
