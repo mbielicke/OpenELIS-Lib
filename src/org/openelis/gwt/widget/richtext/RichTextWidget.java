@@ -32,16 +32,19 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.screen.ScreenBase;
+
 public class RichTextWidget extends Composite implements FocusListener{
     
     private FlexTable vp = new FlexTable();
-    public RichTextArea area = new RichTextArea();
-    private RichTextToolbar toolbar = new RichTextToolbar(area);
+    public RichTextArea area;
+    public RichTextToolbar toolbar;
     private boolean tools;
     private boolean enabled;
     
-    public RichTextWidget() {
-        
+    public RichTextWidget(ScreenBase screen) {
+        area = new RichTextArea();
+        toolbar = new RichTextToolbar(area,screen);
     }
     
     public RichTextWidget(boolean tools) {

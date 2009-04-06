@@ -36,14 +36,20 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.XMLParser;
 
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenMenuPanel;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.MenuItem;
+import org.openelis.gwt.widget.MenuPanel;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI
@@ -57,6 +63,7 @@ public class RichTextToolbar extends Composite {
    * bundle allows all of these images to be packed into a single image, which
    * saves a lot of HTTP requests, drastically improving startup time.
    */
+    /*
   public interface Images extends ImageBundle {
 
     AbstractImagePrototype bold();
@@ -96,7 +103,7 @@ public class RichTextToolbar extends Composite {
     AbstractImagePrototype underline();
   }
 
-
+*/
   /**
    * We use an inner EventListener class to avoid exposing event methods on the
    * RichTextToolbar itself.
@@ -195,7 +202,7 @@ public class RichTextToolbar extends Composite {
       RichTextArea.FontSize.LARGE, RichTextArea.FontSize.X_LARGE,
       RichTextArea.FontSize.XX_LARGE};
 
-  private Images images = (Images) GWT.create(Images.class);
+  //private Images images = (Images) GWT.create(Images.class);
   private EventListener listener = new EventListener();
 
   private RichTextArea richText;
@@ -228,13 +235,60 @@ public class RichTextToolbar extends Composite {
   private Dropdown foreColors;
   private Dropdown fonts;
   private Dropdown fontSizes;
+  
+  private ScreenMenuPanel fontsMenu;
+  private ScreenMenuPanel fontSizeMenu;
+  
+  private ScreenBase screen;
+  
+  private static String fontsMenuXMl =  "<menuPanel key=\"optionsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
+  "<menuItem>" +
+  "<menuDisplay>"+
+      "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
+          "<HorizontalPanel>"+
+              "<AbsolutePanel style=\"FontSize\"/>"+
+          "</HorizontalPanel>" +
+      "</appButton>" +
+  "</menuDisplay>" +
+  "<menuPanel style=\"topMenuContainer\" layout=\"vertical\" position=\"below\">" +
+     "<menuItem key=\"FontTimes\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Times New Roman\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontArial\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Arial\" icon=\"\" description=\"\"/>"+
+     "<menuItem key=\"FontCourier\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Courier New\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontGeorgia\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Georgia\" icon=\"\" description=\"\"/>"+ 
+     "<menuItem key=\"FontTrebuchet\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Trebuchet\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontVerdana\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Verdana\" icon=\"\" description=\"\"/>"+  
+   "</menuPanel>" +
+  "</menuItem>"+
+"</menuPanel>"; 
+  
+  private static String fontSizeMenuXMl =  "<menuPanel key=\"optionsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
+  "<menuItem>" +
+  "<menuDisplay>"+
+      "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
+          "<HorizontalPanel>"+
+              "<AbsolutePanel style=\"FontSize\"/>"+
+          "</HorizontalPanel>" +
+      "</appButton>" +
+  "</menuDisplay>" +
+  "<menuPanel style=\"topMenuContainer\" layout=\"vertical\" position=\"below\">" +
+     "<menuItem key=\"FontXXSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"XX Small\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontXSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"X Small\" icon=\"\" description=\"\"/>"+
+     "<menuItem key=\"FontSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Small\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontMedium\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Medium\" icon=\"\" description=\"\"/>"+ 
+     "<menuItem key=\"FontLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Large\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontXLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"X Large\" icon=\"\" description=\"\"/>"+
+     "<menuItem key=\"FontXXLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"XX Large\" icon=\"\" description=\"\"/>"+
+   "</menuPanel>" +
+  "</menuItem>"+
+"</menuPanel>"; 
 
   /**
    * Creates a new toolbar that drives the given rich text area.
    * 
    * @param richText the rich text area to be controlled
    */
-  public RichTextToolbar(RichTextArea richText) {
+  public RichTextToolbar(RichTextArea richText, ScreenBase screen) {
+    this.screen = screen;
     this.richText = richText;
     this.basic = richText.getBasicFormatter();
     this.extended = richText.getExtendedFormatter();
@@ -273,22 +327,61 @@ public class RichTextToolbar extends Composite {
       topPanel.add(hr = createPushButton("HR", "HR"));
       topPanel.add(ol = createPushButton("OL", "OL"));
       topPanel.add(ul = createPushButton("UL", "UL"));
-      topPanel.add(insertImage = createPushButton("InsertImage",
+      /*topPanel.add(insertImage = createPushButton("InsertImage",
           "Insert Image"));
       topPanel.add(createLink = createPushButton("CreateLink",
           "Create Link"));
       topPanel.add(removeLink = createPushButton("RemoveLink",
           "Remove Link"));
+          */
       topPanel.add(removeFormat = createPushButton("RemoveFormat",
           "Remove Format"));
     }
-
+    
+    
     if (basic != null) {
-      bottomPanel.add(backColors = createColorList("Background"));
-      bottomPanel.add(foreColors = createColorList("Foreground"));
-      bottomPanel.add(fonts = createFontList());
-      bottomPanel.add(fontSizes = createFontSizes());
-
+      //bottomPanel.add(backColors = createColorList("Background"));
+      //bottomPanel.add(foreColors = createColorList("Foreground"));
+      //bottomPanel.add(fonts = createFontList());
+      //bottomPanel.add(fontSizes = createFontSizes());
+ /*     
+        MenuPanel fontsPanel = new MenuPanel();
+        fontsPanel.init("vertical");
+        fontsPanel.menuItems.add(new MenuItem("","Times New Roman",""));
+        fontsPanel.menuItems.add(new MenuItem("","Arial",""));
+        fontsPanel.menuItems.add(new MenuItem("","Courier New",""));
+        fontsPanel.menuItems.add(new MenuItem("","Georgia",""));
+        fontsPanel.menuItems.add(new MenuItem("","Trebuchet",""));
+        fontsPanel.menuItems.add(new MenuItem("","Verdana",""));
+        AbsolutePanel fntImg = new AbsolutePanel();
+        fntImg.add(new Label("Fonts"));
+        fntImg.setStyleName("FontsImage");
+        fontsPanel.add(fntImg);
+        MenuItem fontsItem = new MenuItem(fntImg);
+        fontsItem.menuItemsPanel = fontsPanel;
+        fontsItem.enable(true);
+        topPanel.add(fontsItem);
+        
+        MenuPanel fontSizePanel = new MenuPanel();
+        fontSizePanel.init("vertical");
+        fontSizePanel.menuItems.add(new MenuItem("","XX Small",""));
+        fontSizePanel.menuItems.add(new MenuItem("","X Small",""));
+        fontSizePanel.menuItems.add(new MenuItem("","Small",""));
+        fontSizePanel.menuItems.add(new MenuItem("","Medium",""));
+        fontSizePanel.menuItems.add(new MenuItem("","Large",""));
+        fontSizePanel.menuItems.add(new MenuItem("","X Large",""));
+        fontSizePanel.menuItems.add(new MenuItem("","XX Large",""));
+        AbsolutePanel fntSizeImg = new AbsolutePanel();
+        fntSizeImg.add(new Label("Font Size"));
+        fntSizeImg.setStyleName("FontSizeImge");
+        fontSizePanel.add(fntSizeImg);
+        MenuItem fontSizeItem = new MenuItem(fntSizeImg);
+        fontSizeItem.menuItemsPanel = fontSizePanel;
+        topPanel.add(fontSizeItem);
+        fontSizeItem.enable(true);
+   */
+        topPanel.add(new ScreenMenuPanel(XMLParser.parse(fontSizeMenuXMl).getDocumentElement(),screen));
+        topPanel.add(new ScreenMenuPanel(XMLParser.parse(fontsMenuXMl).getDocumentElement(),screen));
       // We only use these listeners for updating status, so don't hook them up
       // unless at least basic editing is supported.
       richText.addKeyboardListener(listener);
@@ -398,10 +491,10 @@ public class RichTextToolbar extends Composite {
   }
   
   public void enable(boolean enabled) {
-      backColors.enabled(enabled);
-      foreColors.enabled(enabled);
-      fonts.enabled(enabled);
-      fontSizes.enabled(enabled);
+      //backColors.enabled(enabled);
+      //foreColors.enabled(enabled);
+      //fonts.enabled(enabled);
+      //fontSizes.enabled(enabled);
   }
 }
 

@@ -38,6 +38,7 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.QueryStringField;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.common.data.TableField;
@@ -46,6 +47,7 @@ import org.openelis.gwt.event.DropManager;
 import org.openelis.gwt.event.HasDragController;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.AppScreenForm.State;
+import org.openelis.gwt.widget.table.TableAutoComplete;
 import org.openelis.gwt.widget.table.TableCellInputWidget;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -449,7 +451,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
                     queryModel = new TableDataModel();
                     TableDataRow querySet = new TableDataRow(table.model.getData().getDefaultSet().cells.length);
                     for(int i = 0; i < table.model.getData().getDefaultSet().cells.length; i++){
-                       querySet.cells[i] = (FieldType)((AbstractField)table.model.getData().getDefaultSet().cells[i]).getQueryField();
+                       if(table.columns.get(i).getColumnWidget() instanceof TableAutoComplete)
+                           querySet.cells[i] = new QueryStringField();
+                       else
+                           querySet.cells[i] = (FieldType)((AbstractField)table.model.getData().getDefaultSet().cells[i]).getQueryField();
                     }
                     queryModel.setDefaultSet(querySet);
                     

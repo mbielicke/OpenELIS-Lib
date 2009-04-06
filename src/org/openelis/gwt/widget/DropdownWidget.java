@@ -361,7 +361,10 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                 lookUp.textbox.removeStyleName("TextboxSelected");
 
                 lookUp.icon.removeStyleName("Selected");
-
+                if(this instanceof AutoComplete){
+                    if(((AutoComplete)this).queryMode)
+                        return;
+                }
                 complete();
             }
         }

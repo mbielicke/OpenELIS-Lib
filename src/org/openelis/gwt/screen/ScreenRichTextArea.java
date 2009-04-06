@@ -63,7 +63,7 @@ public class ScreenRichTextArea extends ScreenInputWidget {
         if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
             textarea = (RichTextWidget)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
-            textarea = new RichTextWidget();
+            textarea = new RichTextWidget(screen);
         boolean tools = true;
         if(node.getAttributes().getNamedItem("tools") != null){
             if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){

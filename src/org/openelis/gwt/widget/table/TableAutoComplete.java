@@ -34,10 +34,12 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.QueryStringField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.screen.ScreenAutoCompleteWidget;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.AutoComplete;
 
 public class TableAutoComplete extends TableCellInputWidget implements ChangeListener {
@@ -96,11 +98,15 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 	}
 
 	public void saveValue() {
-        if(editor.model.getData().size() == 0)
-            return;
-        field.setValue(editor.getSelections());
-        ((DropDownField)field).setModel(editor.model.getData());
-		editor.hideTable();
+	    if(editor.queryMode) {
+	        field.setValue(editor.lookUp.getText());
+	    }else{
+	        if(editor.model.getData().size() == 0)
+	            return;
+	        field.setValue(editor.getSelections());
+	        ((DropDownField)field).setModel(editor.model.getData());
+	        editor.hideTable();
+	    }
         super.saveValue();
 	}
 
@@ -110,26 +116,34 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 			display = new Label();
 			display.setWordWrap(false);
 		}
-        if(((DropDownField)field).getModel() != null){
-            editor.model.load(((DropDownField)field).getModel());
-            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        }else
-            editor.model.load(new TableDataModel());
-        display.setText(editor.getTextBoxDisplay());
+		if(editor.queryMode){
+		    display.setText((String)field.getValue());
+		}else{
+		    if(((DropDownField)field).getModel() != null){
+		        editor.model.load(((DropDownField)field).getModel());
+		        editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+		    }else
+		        editor.model.load(new TableDataModel());
+		    display.setText(editor.getTextBoxDisplay());
+		}
 		setWidget(display);
         super.setDisplay();
 	}
 
 	public void setEditor() {
-        if(((DropDownField)field).getModel() != null){
-            editor.model.load(((DropDownField)field).getModel());
-            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        }else{
-            editor.model.load((new TableDataModel()));
-            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
-        }
-        editor.activeCell = -1;
-        editor.activeRow = -1;
+	    if(editor.queryMode) {
+	        editor.lookUp.setText((String)field.getValue());
+	    }else{
+	        if(((DropDownField)field).getModel() != null){
+	            editor.model.load(((DropDownField)field).getModel());
+	            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+	        }else{
+	            editor.model.load((new TableDataModel()));
+	            editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+	        }
+	        editor.activeCell = -1;
+	        editor.activeRow = -1;
+	    }
         editor.setWidth(width+"px");
 		setWidget(editor);			
 	}
@@ -157,6 +171,14 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
     
     public void setFocus(boolean focused) {
         editor.setFocus(focused);
+    }
+    
+    public void setForm(State state) {
+        if(state == State.QUERY){
+            editor.queryMode = true;
+        }else
+            editor.queryMode = false;
+        super.setForm(state);
     }
 }
 
