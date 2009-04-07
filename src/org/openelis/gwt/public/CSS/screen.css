@@ -1292,6 +1292,11 @@ background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 	text-align:right;
 	vertical-align:top;
 }
+.TopPrompt {
+  -moz-user-select:none;
+   color:gray;
+   vertical-align:top;
+}
 /********   End Input  Form ***********/
 fieldSet {
     border:1px solid #b5b8c8;
