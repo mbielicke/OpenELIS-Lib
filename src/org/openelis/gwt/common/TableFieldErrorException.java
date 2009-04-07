@@ -52,6 +52,13 @@ public class TableFieldErrorException extends FieldErrorException{
         this.rowIndex = rowIndex;
     }
     
+    public TableFieldErrorException(String msg, int rowIndex, String fieldName,String tableKey) {
+        super(msg, fieldName);
+        
+        this.rowIndex = rowIndex;
+        this.tableKey = tableKey;
+    }
+    
     public int getRowIndex(){
     	return rowIndex;
     }
