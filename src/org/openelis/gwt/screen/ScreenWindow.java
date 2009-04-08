@@ -27,6 +27,7 @@ package org.openelis.gwt.screen;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
@@ -149,6 +150,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     private Label winLabel = new Label();
     
     private AbsolutePanel glass;
+    private AbsolutePanel modalPanel;
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
     
@@ -257,11 +259,16 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             glass.setStyleName("GlassPanel");
             glass.setHeight(Window.getClientHeight()+"px");
             glass.setWidth(Window.getClientWidth()+"px");
-            glass.add(this,100,100);
             RootPanel.get().add(glass, 0, 0);
+            modalPanel = new AbsolutePanel();
+            modalPanel.setStyleName("ModalPanel");
+            modalPanel.setHeight(Window.getClientHeight()+"px");
+            modalPanel.setWidth(Window.getClientWidth()+"px");
+            modalPanel.add(this,100,100);
+            RootPanel.get().add(modalPanel,0,0);
             setVisible(true);
-            dragController = new PickupDragController(glass,true);
-            dropController = new AbsolutePositionDropController(glass);
+            dragController = new PickupDragController(modalPanel,true);
+            dropController = new AbsolutePositionDropController(modalPanel);
            // dragController.setBehaviorDragProxy(true);
             dragController.registerDropController(dropController);
             dragController.makeDraggable(this,cap);
@@ -347,6 +354,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             DOM.removeEventPreview(this);
             removeFromParent();
             RootPanel.get().remove(glass);
+            RootPanel.get().remove(modalPanel);
             return;
         }
         removeFromParent();
@@ -485,6 +493,9 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
 
     public boolean onEventPreview(Event event) {
         DOM.eventPreventDefault(event);
-        return true;
+        //if(DOM.isOrHasChild((com.google.gwt.user.client.Element)event.getToElement(),(com.google.gwt.user.client.Element)this.getElement()))
+        //    return false;
+        //else
+            return true;
     }
 }
