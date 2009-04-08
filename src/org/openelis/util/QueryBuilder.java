@@ -403,7 +403,10 @@ public class QueryBuilder {
                     whereClause = getQueryNoOperand((QueryCheckField)field, key);
                 else if(field instanceof QueryDateField)
                     whereClause = getQueryNoOperand((QueryDateField)field, key);            
-        
+                else if(field instanceof QueryIntegerField)
+                    whereClause = getQueryNoOperand((QueryIntegerField)field, key);      
+                else if(field instanceof QueryDoubleField)
+                    whereClause = getQueryNoOperand((QueryDoubleField)field, key);      
                 if(!"".equals(whereClause)){
                     whereOperands.add(whereClause);
 		
