@@ -76,7 +76,7 @@ public class ScreenRichTextArea extends ScreenInputWidget {
             width = node.getAttributes().getNamedItem("width").getNodeValue();
         }
         if(node.getAttributes().getNamedItem("height") != null) {
-            height = node.getAttributes().getNamedItem("height").getNodeName();
+            height = node.getAttributes().getNamedItem("height").getNodeValue();
         }
         textarea.init(tools);
         textarea.area.setSize(width, height);

@@ -241,7 +241,7 @@ public class RichTextToolbar extends Composite {
   
   private ScreenBase screen;
   
-  private static String fontsMenuXMl =  "<menuPanel key=\"optionsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
+  private static String fontsMenuXMl =  "<menuPanel key=\"fontsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
   "<menuItem>" +
   "<menuDisplay>"+
       "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
@@ -261,7 +261,7 @@ public class RichTextToolbar extends Composite {
   "</menuItem>"+
 "</menuPanel>"; 
   
-  private static String fontSizeMenuXMl =  "<menuPanel key=\"optionsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
+  private static String fontSizeMenuXMl =  "<menuPanel key=\"fontSizeMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
   "<menuItem>" +
   "<menuDisplay>"+
       "<appButton action=\"option\" style=\"ButtonPanelButton\">"+

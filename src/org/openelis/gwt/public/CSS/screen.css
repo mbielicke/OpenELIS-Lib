@@ -285,6 +285,9 @@ color:gray;
 .disabled .ButtonRightSide{
     background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
 }
+.pressed .ButtonRightSide{
+    background:url("../screenbuttonrspressed.gif") no-repeat;
+}
 
 .ButtonLeftSide{
     margin:2px 0 0 4px;
@@ -297,6 +300,10 @@ color:gray;
     background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
 }
 
+.pressed .ButtonLeftSide{
+    background:url("../screenbuttonlspressed.gif") no-repeat;
+}
+
 .ButtonContent{
     margin:2px 0 0 0;
     padding: 2px 4px 0 4px;
@@ -305,10 +312,14 @@ color:gray;
     background:url("../Images/screenbuttonhover.gif") repeat-x;
        -moz-user-select: none;
 }
-.Hover .ButtonContent, .Pressed .ButtonContent {
-    background:url("../Images/screenbuttonhover.gif") repeat-x;
+.Hover .ButtonContent{
     cursor:pointer;
 }
+
+.Pressed .ButtonContent {
+    background: url(../screenbuttonpressed.gif) repeat-x;
+    }
+    
 .disabled .ButtonContent{
     background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
 }
@@ -411,8 +422,7 @@ color:gray;
     background:none;
        -moz-user-select: none;
 }
-.FavHeader .Hover .ButtonContent, .Pressed .ButtonContent {
-    background:none;
+.FavHeader .Hover .ButtonContent{
     cursor:pointer;
 }
 .FavHeader .disabled .ButtonContent{
@@ -1292,11 +1302,6 @@ background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 	text-align:right;
 	vertical-align:top;
 }
-.TopPrompt {
-  -moz-user-select:none;
-   color:gray;
-   vertical-align:top;
-}
 /********   End Input  Form ***********/
 fieldSet {
     border:1px solid #b5b8c8;
@@ -1532,4 +1537,125 @@ font-weight:bold;
 .DropPositioner {
     background:green;
 }
+
+/**
+rich text css
+***/
+.GlassPanel{
+    background: url(../Images/trans.gif);
+}
+
+.ModalPanel{
+	    background: url(../Images/transgrey.png);
+	    filter:alpha(opacity=50),
+}
+
+.Italic {
+    width:20;
+    height:20;
+    background: url(../Images/italic.gif);
+}
+
+.Bold {
+    width:20;
+    height:20;
+    background: url(../Images/bold.gif);
+}
+
+.Underline{
+    width:20;
+    height:20;
+    background: url(../Images/underline.gif);
+}
+
+.Subscript{
+    width:20;
+    height:20;
+    background: url(../Images/subscript.gif);
+}
+
+.Superscript{
+    width:20;
+    height:20;
+    background: url(../Images/superscript.gif);
+}
+
+.JustifyLeft{
+    width:20;
+    height:20;
+    background: url(../Images/justifyLeft.gif);
+}
+
+.JustifyCenter{
+    width:20;
+    height:20;
+    background: url(../Images/justifyCenter.gif);
+}
+
+.JustifyRight{
+    width:20;
+    height:20;
+    background: url(../Images/justifyRight.gif);
+}
+
+.StrikeThrough{
+    width:20;
+    height:20;
+    background: url(../Images/strikeThrough.gif);
+}
+
+.Indent{
+    width:20;
+    height:20;
+    background: url(../Images/indent.gif);
+}
+
+.Outdent{
+    width:20;
+    height:20;
+    background: url(../Images/outdent.gif);
+}
+
+.HR{
+    width:20;
+    height:20;
+    background: url(../Images/hr.gif);
+}
+
+.OL{
+    width:20;
+    height:20;
+    background: url(../Images/ol.gif);
+}
+
+.UL{
+    width:20;
+    height:20;
+    background: url(../Images/ul.gif);
+}
+
+.InsertImage{
+    width:20;
+    height:20;
+    background: url(../Images/insertImage.gif);
+}
+
+.CreateLink{
+    width:20;
+    height:20;
+    background: url(../Images/createLink.gif);
+}
+
+.RemoveLink{
+    width:20;
+    height:20;
+    background: url(../Images/removeLink.gif);
+}
+
+.RemoveFormat{
+    width:20;
+    height:20;
+    background: url(../Images/removeFormat.gif);
+}
+
 
