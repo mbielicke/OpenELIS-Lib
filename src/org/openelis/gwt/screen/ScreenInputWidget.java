@@ -127,6 +127,16 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         setWidget(hp);
     }
 
+    @Override
+    public void setDefaults(Node node, ScreenBase screen) {
+        if (node.getAttributes().getNamedItem("panelWidth") != null)
+            hp.setWidth(node.getAttributes()
+                                     .getNamedItem("panelWidth")
+                                     .getNodeValue());
+        super.setDefaults(node, screen);
+    }
+    
+    
     public void onFocus(final Widget sender) {
         if(sender instanceof TextBoxBase){
             //((TextBoxBase)sender).setSelectionRange(0, 0);
