@@ -200,7 +200,7 @@ public class ScreenWidget extends SimplePanel implements
             getWidget().setWidth(node.getAttributes()
                                      .getNamedItem("width")
                                      .getNodeValue());
-        if (node.getAttributes().getNamedItem("width") != null)
+        if (node.getAttributes().getNamedItem("panelWidth") != null)
             setWidth(node.getAttributes()
                                      .getNamedItem("width")
                                      .getNodeValue());
