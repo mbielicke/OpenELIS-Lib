@@ -111,7 +111,6 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void initWidget(Widget widget){
         if(hp == null){
             hp = new HorizontalPanel();
-            hp.setWidth("100%");
             if(showError){
                 errorImg.setStyleName("ErrorPanelHidden");
                 errorImg.addMouseListener(this);
