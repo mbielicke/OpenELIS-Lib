@@ -251,7 +251,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(showError)
             return hp.getWidget(0);
         else
-            return getWidget();
+            return super.getWidget();
     }
     
     public Widget getQueryWidget() {
