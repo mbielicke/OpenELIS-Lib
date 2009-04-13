@@ -109,22 +109,22 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public void initWidget(Widget widget){
-        if(showError) {
-            if(hp == null){
-                hp = new HorizontalPanel();
-           // if(showError){
+        //if(showError) {
+        if(hp == null){
+            hp = new HorizontalPanel();
+            if(showError){
                 errorImg.setStyleName("ErrorPanelHidden");
                 errorImg.addMouseListener(this);
                 hp.add(errorImg);
-            //}
             }
-            if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
-                hp.remove(0);
-            }
-            hp.insert(widget,0);
-            setWidget(hp);
-        }else
-            setWidget(widget);
+        }
+        
+        if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
+            hp.remove(0);
+        }
+        hp.insert(widget,0);
+        hp.setCellWidth(widget, "100%");
+        setWidget(hp);
     }
 
     public void onFocus(final Widget sender) {
@@ -248,10 +248,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public Widget getWidget() {
-        if(showError)
+        //if(showError)
             return hp.getWidget(0);
-        else
-            return super.getWidget();
+        //else
+           // return super.getWidget();
     }
     
     public Widget getQueryWidget() {
