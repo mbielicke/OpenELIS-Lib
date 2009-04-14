@@ -25,9 +25,6 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
@@ -66,18 +63,26 @@ public class ScreenRichTextArea extends ScreenInputWidget {
         if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
             textarea = (RichTextWidget)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
-            textarea = new RichTextWidget();
+            textarea = new RichTextWidget(screen);
         boolean tools = true;
         if(node.getAttributes().getNamedItem("tools") != null){
             if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){
                 tools = false;
             }
         }
+       String width = "100%";
+        String height = "300px";
+        if(node.getAttributes().getNamedItem("width") != null){
+            width = node.getAttributes().getNamedItem("width").getNodeValue();
+        }
+        if(node.getAttributes().getNamedItem("height") != null) {
+            height = node.getAttributes().getNamedItem("height").getNodeValue();
+        }
         textarea.init(tools);
-        textarea.setSize("100%", "300px");
+        textarea.area.setSize(width, height);
         initWidget(textarea);
         displayWidget = textarea;
-        textarea.setStyleName("ScreenTextArea");
+        textarea.area.setStyleName("ScreenTextArea");
         setDefaults(node, screen);
     }
 
@@ -104,14 +109,10 @@ public class ScreenRichTextArea extends ScreenInputWidget {
     }
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
-            //textarea.setReadOnly(!enabled);
-            if(enabled)
-                textarea.addFocusListener(this);
-            else
-                textarea.removeFocusListener(this);
+            textarea.enable(enabled);
             super.enable(enabled);
         }
     }

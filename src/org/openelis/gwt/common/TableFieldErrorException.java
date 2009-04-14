@@ -25,10 +25,14 @@
 */
 package org.openelis.gwt.common;
 
+import java.util.List;
+
 public class TableFieldErrorException extends FieldErrorException{
 
 	private static final long serialVersionUID = 1L;
 	int rowIndex = -1;
+	private List<RPCException> childExceptionList = null; 
+	private String tableKey = null;
 
 	public TableFieldErrorException() {
         super();
@@ -48,7 +52,30 @@ public class TableFieldErrorException extends FieldErrorException{
         this.rowIndex = rowIndex;
     }
     
+    public TableFieldErrorException(String msg, int rowIndex, String fieldName,String tableKey) {
+        super(msg, fieldName);
+        
+        this.rowIndex = rowIndex;
+        this.tableKey = tableKey;
+    }
+    
     public int getRowIndex(){
     	return rowIndex;
+    }
+
+    public List<RPCException> getChildExceptionList() {
+        return childExceptionList;
+    }
+
+    public void setChildExceptionList(List<RPCException> childExceptionList) {
+        this.childExceptionList = childExceptionList;
+    }
+
+    public String getTableKey() {
+        return tableKey;
+    }
+
+    public void setTableKey(String tableKey) {
+        this.tableKey = tableKey;
     }
 }

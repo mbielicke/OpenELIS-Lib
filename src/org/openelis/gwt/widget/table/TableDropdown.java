@@ -149,7 +149,7 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
 
 	public void setEditor() {
         if(field instanceof DropDownField){
-            if(((DropDownField)field).getModel().size() > 0){
+            if(((DropDownField)field).getModel() != null && ((DropDownField)field).getModel().size() > 0){
                 editor.setModel(((DropDownField)field).getModel());
             }
             editor.activeCell = -1;

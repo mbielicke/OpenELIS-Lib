@@ -25,8 +25,14 @@
 */
 package org.openelis.gwt.screen;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -38,6 +44,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -51,7 +58,7 @@ import org.openelis.gwt.widget.WindowBrowser;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends Composite implements MouseListener, ClickListener {
+public class ScreenWindow extends Composite implements MouseListener, ClickListener, EventPreview {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -140,13 +147,22 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
      */
     public Widget content;
     private Label message = new Label("Loading...");
-    private Label winLabel = new Label(); 
+    private Label winLabel = new Label();
+    
+    private AbsolutePanel glass;
+    private AbsolutePanel modalPanel;
+    private PickupDragController dragController;
+    private AbsolutePositionDropController dropController;
     
     public ScreenWindow(Object container, String key, String cat, String loadingText){
-        this(container,key,cat,loadingText,true);
+        this(container,key,cat,loadingText,false,true);
     }
     
-    public ScreenWindow(Object container, String key, String cat, String loadingText, boolean showClose) {      
+    public ScreenWindow(Object container, String key, String cat, String loadingText, boolean modal){
+        this(container,key,cat,loadingText,modal,true);
+    }
+    
+    public ScreenWindow(Object container, String key, String cat, String loadingText, boolean modal, boolean showClose) {      
         initWidget(outer);
         setVisible(false);
         if(container instanceof PopupPanel)
@@ -238,10 +254,37 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         if(browser != null){
             browser.dragController.makeDraggable(this, cap);
         }
+        if(modal){
+            glass = new AbsolutePanel();
+            glass.setStyleName("GlassPanel");
+            glass.setHeight(Window.getClientHeight()+"px");
+            glass.setWidth(Window.getClientWidth()+"px");
+            RootPanel.get().add(glass, 0, 0);
+            modalPanel = new AbsolutePanel();
+            modalPanel.setStyleName("ModalPanel");
+            modalPanel.setHeight(Window.getClientHeight()+"px");
+            modalPanel.setWidth(Window.getClientWidth()+"px");
+            modalPanel.add(this,100,100);
+            RootPanel.get().add(modalPanel,0,0);
+            setVisible(true);
+            dragController = new PickupDragController(modalPanel,true);
+            dropController = new AbsolutePositionDropController(modalPanel);
+           // dragController.setBehaviorDragProxy(true);
+            dragController.registerDropController(dropController);
+            dragController.makeDraggable(this,cap);
+            DOM.addEventPreview(this);
+        }
     }
     
     public ScreenWindow(WindowBrowser brws, String key){
-        this(brws,key,"ScreenWindow","Loading...");
+        this(brws,key,"ScreenWindow","Loading...",false);
+    }
+    
+    public void setContent(Widget content, int x, int y) {
+        if(glass != null){
+            glass.setWidgetPosition(this, x, y);
+        }
+        setContent(content);
     }
     
     /**
@@ -301,11 +344,18 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         
     }
     
-    public void close() {
+    public void close() {        
         if(content instanceof AppScreenForm){
             if(((AppScreenForm)content).hasChanges()){
                 return;
             }
+        }
+        if(glass != null) {
+            DOM.removeEventPreview(this);
+            removeFromParent();
+            RootPanel.get().remove(glass);
+            RootPanel.get().remove(modalPanel);
+            return;
         }
         removeFromParent();
         if(browser != null){
@@ -439,5 +489,13 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     
     public void setError(String message) {
         setStatus(message,"ErrorPanel");
+    }
+
+    public boolean onEventPreview(Event event) {
+        DOM.eventPreventDefault(event);
+        //if(DOM.isOrHasChild((com.google.gwt.user.client.Element)event.getToElement(),(com.google.gwt.user.client.Element)this.getElement()))
+        //    return false;
+        //else
+            return true;
     }
 }

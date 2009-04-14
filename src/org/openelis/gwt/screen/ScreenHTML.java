@@ -32,13 +32,16 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.xml.client.Node;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 /**
  * ScreenHTML wraps a GWT HMTL widget for display HTML content on 
  * a Screen.
  * @author tschmidt
  *
  */
-public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
+public class ScreenHTML extends ScreenInputWidget implements SourcesClickEvents {
     
     private DelegatingClickListenerCollection clickListeners;
     /**
@@ -81,7 +84,10 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
             html = (HTML)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
         else
             html = new HTML();
-        html.setHTML(node.getFirstChild().getNodeValue());
+        
+        if(node.getFirstChild() != null)
+            html.setHTML(node.getFirstChild().getNodeValue());
+        
         if (node.getAttributes().getNamedItem("onclick") != null) {
         	String[] listeners = node.getAttributes().getNamedItem("onclick").getNodeValue().split(",");
             for(int i = 0; i < listeners.length; i++){
@@ -120,5 +126,18 @@ public class ScreenHTML extends ScreenWidget implements SourcesClickEvents {
          html = null;
          super.destroy();
      }
+     
+     public void load(AbstractField field) {
+         html.setHTML((String)field.getValue());
+     }
+     
+     
+    public void submit(AbstractField field) {
+        field.setValue(html.getHTML());
+    }
+    
+    public void setForm(State state) {
+
+    }
 
 }

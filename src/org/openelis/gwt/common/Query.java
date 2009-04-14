@@ -8,10 +8,16 @@ import java.util.ArrayList;
 
 public class Query<QRow extends TableDataRow> implements RPC {
     
-    public ArrayList<AbstractField> fields;
+	private static final long serialVersionUID = 1L;
+	
+	public ArrayList<AbstractField> fields;
     public TableDataModel<QRow> results; 
     
     public int page = 0;
+    
+    public Query(){
+    	
+    }
     
 
 }

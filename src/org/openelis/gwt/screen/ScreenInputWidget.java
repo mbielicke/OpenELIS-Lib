@@ -103,11 +103,13 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 field = queryField;
             }
         }else{
-           initWidget(displayWidget);
+           if(queryWidget != null)
+               initWidget(displayWidget);
         }
     }
     
     public void initWidget(Widget widget){
+        //if(showError) {
         if(hp == null){
             hp = new HorizontalPanel();
             if(showError){
@@ -116,13 +118,25 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 hp.add(errorImg);
             }
         }
+        
         if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
             hp.remove(0);
         }
         hp.insert(widget,0);
+        hp.setCellWidth(widget, "100%");
         setWidget(hp);
     }
 
+    @Override
+    public void setDefaults(Node node, ScreenBase screen) {
+        if (node.getAttributes().getNamedItem("panelWidth") != null)
+            hp.setWidth(node.getAttributes()
+                                     .getNamedItem("panelWidth")
+                                     .getNodeValue());
+        super.setDefaults(node, screen);
+    }
+    
+    
     public void onFocus(final Widget sender) {
         if(sender instanceof TextBoxBase){
             //((TextBoxBase)sender).setSelectionRange(0, 0);
@@ -244,7 +258,10 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public Widget getWidget() {
-        return hp.getWidget(0);
+        //if(showError)
+            return hp.getWidget(0);
+        //else
+           // return super.getWidget();
     }
     
     public Widget getQueryWidget() {

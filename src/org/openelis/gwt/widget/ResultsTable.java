@@ -95,6 +95,8 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
     public void performCommand(Enum action, Object obj) {
         if(action == AppScreenForm.Action.NEW_MODEL) {
             table.model.load(((Query)obj).results);
+            table.activeCell = -1;
+            table.activeRow = -1;
             table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);
             if(showNavPanel){
                 table.view.setNavPanel(((Query)obj).page, ((Query)obj).page+1, false);
@@ -113,6 +115,8 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
         else if(action == AppScreenForm.Action.NEW_PAGE){
             table.model.load(((Query)obj).results);
             table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);
+            table.activeCell = -1;
+            table.activeRow = -1;
             if(showNavPanel){
                 table.view.setNavPanel(((Query)obj).page, ((Query)obj).page+1, false);
                 table.view.prevNav.addClickListener(this);
@@ -140,7 +144,7 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
             if(table.activeRow > -1)
                 table.model.unselectRow(-1);
         }
-        if(obj != null && obj instanceof AppButton && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
+        if(obj != null && obj instanceof AppButton && bpanel != null && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
             if(selectedButton != null){
                 selectedButton.changeState(ButtonState.UNPRESSED);
             }

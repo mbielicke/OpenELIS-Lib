@@ -36,7 +36,9 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.DropDownField;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.QueryStringField;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.common.data.TableField;
@@ -45,6 +47,7 @@ import org.openelis.gwt.event.DropManager;
 import org.openelis.gwt.event.HasDragController;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.AppScreenForm.State;
+import org.openelis.gwt.widget.table.TableAutoComplete;
 import org.openelis.gwt.widget.table.TableCellInputWidget;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableColumn;
@@ -76,10 +79,11 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     /**
      * Widget wrapped by this class
      */
-    private TableWidget table;
+    public TableWidget table;
     private Vector<String> dropTargets;
     private boolean dropInited;
     private TableDataModel queryModel;
+    private boolean queryable = true;
     
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
@@ -176,6 +180,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             if(node.getAttributes().getNamedItem("enable") != null){
                 if(node.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
                     enable = true;
+            }
+            if(node.getAttributes().getNamedItem("query") != null){
+                if(node.getAttributes().getNamedItem("query").getNodeValue().equals("false"))
+                    queryable = false;
             }
             if(node.getAttributes().getNamedItem("showScroll") != null){
                 showScroll = VerticalScroll.valueOf((node.getAttributes().getNamedItem("showScroll").getNodeValue()));
@@ -433,15 +441,22 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     }
     
     public void setForm(State state) {
+        if(state == State.QUERY && !queryable){
+            table.model.clear();
+            return;
+        }
         if(queryWidget == null) {
             if(state == State.QUERY) {
                 if(queryModel == null) {
                     queryModel = new TableDataModel();
-                    //TableDataRow querySet = new TableDataRow();
-                    //for(FieldType field : table.model.getData().getDefaultSet().getFields()){
-                     //   querySet.add((FieldType)((AbstractField)field).getQueryField());
-                   // }
-                    //queryModel.setDefaultSet(querySet);
+                    TableDataRow querySet = new TableDataRow(table.model.getData().getDefaultSet().cells.length);
+                    for(int i = 0; i < table.model.getData().getDefaultSet().cells.length; i++){
+                       if(table.columns.get(i).getColumnWidget() instanceof TableAutoComplete)
+                           querySet.cells[i] = new QueryStringField(((AbstractField)table.model.getData().getDefaultSet().cells[i]).key);
+                       else
+                           querySet.cells[i] = (FieldType)((AbstractField)table.model.getData().getDefaultSet().cells[i]).getQueryField();
+                    }
+                    queryModel.setDefaultSet(querySet);
                     
                 }
                 for(TableColumnInt column : table.columns) {
@@ -466,10 +481,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     }
     
     public void submitQuery(ArrayList<AbstractField> qList) {
-        /*
+        
         if(queryModel != null) {
-            //DataSet<Object> querySet = queryModel.get(0);
-            for(FieldType field : querySet.getFields()){
+            TableDataRow<Object> querySet = queryModel.get(0);
+            for(FieldType field : querySet.getCells()){
                 if(field instanceof DropDownField) {
                     if(field != null && field.getValue() != null && ((ArrayList)field.getValue()).size() > 0 )
                         qList.add((AbstractField)field);
@@ -477,7 +492,7 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
                     qList.add((AbstractField)field);
             }
         }
-        */
+        
     }
     
     public static TableCellWidget createCellWidget(Node node, ScreenBase screen) {

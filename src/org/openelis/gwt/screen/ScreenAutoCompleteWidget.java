@@ -198,8 +198,11 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
     }
 
     public void load(AbstractField field) {
-    	if(queryMode && queryWidget != null){
-    		queryWidget.load(field);
+    	if(queryMode) {
+    	    if(queryWidget != null)
+    	  		queryWidget.load(field);
+    	    else
+    	        auto.lookUp.setText((String)field.getValue());
     	}else{
             if(((DropDownField)field).getModel() != null && ((DropDownField)field).getModel().size() > 0){
                 auto.activeRow = -1;
@@ -212,8 +215,11 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
     }
 
     public void submit(AbstractField field) {
-        if(queryMode && queryWidget != null){
-            queryWidget.submit(field);
+        if(queryMode) {
+            if(queryWidget != null)
+                queryWidget.submit(field);
+            else
+                field.setValue(auto.lookUp.getText());
         }else {
         	field.setValue(auto.getSelections());
         }
@@ -336,8 +342,11 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
    
    public void setForm(State state) {
        if(queryWidget == null){
-          if(state == State.QUERY)
+          if(state == State.QUERY){
               queryField = new QueryStringField(key);
+              auto.queryMode = true;
+          }else
+              auto.queryMode = false;
        }
        super.setForm(state);
    }

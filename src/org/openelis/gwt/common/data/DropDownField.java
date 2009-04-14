@@ -25,10 +25,10 @@
 */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.xml.client.Node;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.google.gwt.xml.client.Node;
 /**
  * DropDownField is an implementation of AbstractField that is 
  * used to send and recieve data for Dropdown and AutoComplete 
@@ -118,51 +118,27 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
     
     public void setValue(Object val) {
         if(val instanceof TableDataRow){
-            if(val == null){
-                value = null;
-                return;
-            }
             if(value == null)
                 value = new ArrayList<TableDataRow<Key>>(1);
             else
                 value.clear();
-            value.clear();
-            if(val != null){
-                //Selection<Key> sel = new Selection<Key>();
-                //sel.key = ((DataSet<Key>)val).key;
-                //if(((TableDataR<Key>)val).getFields().size() > 0) {
-                  //  sel.display = (String)((DataSet<Key>)val).get(0).getValue();
-                //}
-                value.add((TableDataRow<Key>)val);
-            }
+
+            value.add((TableDataRow<Key>)val);
         }else if(val instanceof ArrayList){
-            if(val != null){
-                if(value == null)
-                    value = new ArrayList<TableDataRow<Key>>(1);
-                
+            if(value == null)
+                value = new ArrayList<TableDataRow<Key>>(1);
+            else
                 value.clear();
-                if(((ArrayList)val).get(0) instanceof TableDataRow){
-                    //for(DataSet<Key> set : (ArrayList<DataSet<Key>>)val){
-                        //Selection<Key> sel = new Selection<Key>();
-                        //sel.key = set.key;
-                        //if(set.getFields().size() > 0) {
-                          //  sel.display = (String)set.get(0).getValue();
-                        //}
-                        for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
-                            value.add(sel);
-                        
-                }/*else{
-                    for(Selection<Key> sel : (ArrayList<Selection<Key>>)val)
-                        value.add(sel);
-                }
-                */
-                    
-            }else
-                value = null;
-        }else if(val == null){
-                value = null; 
-                return;
-        }
+            if(((ArrayList)val).size() > 0){
+ 			    if(((ArrayList)val).get(0) instanceof TableDataRow){
+		             for(TableDataRow<Key> sel : (ArrayList<TableDataRow<Key>>)val)
+        		        value.add(sel);
+				}                    
+            }
+       }else {
+            value = null; 
+            return;
+       }
     }
     
     /**
@@ -175,7 +151,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
             return null;
         
         if(value.size() == 1)
-            return value.get(0).cells[1].getValue();
+            return value.get(0).cells[0].getValue();
         else if(value.size() > 1)
             return value;
         else
@@ -242,9 +218,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
         
         //need to create a new selections array list by hand to avoid a shallow copy
         if(value != null){
-            ArrayList<Selection> cloneSelections = new ArrayList<Selection>();
+            ArrayList<TableDataRow<Key>> cloneSelections = new ArrayList<TableDataRow<Key>>();
             for(int i=0; i < value.size(); i++)
-                cloneSelections.add((Selection)value.get(i).clone());
+                cloneSelections.add((TableDataRow<Key>)value.get(i).clone());
             
             obj.setValue(cloneSelections);
         }else

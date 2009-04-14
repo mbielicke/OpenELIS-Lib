@@ -32,6 +32,8 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.ResultsTable;
+import org.openelis.gwt.widget.table.TableManager;
+import org.openelis.gwt.widget.table.TableModel;
 import org.openelis.gwt.widget.table.TableWidget;
 
 import java.util.ArrayList;
@@ -99,6 +101,7 @@ public class ScreenResultsTable extends ScreenInputWidget {
             }
         }
         displayWidget = results;
+        tableWidget.displayWidget = results;
 
         if(bpanel != null)
             results.setButtonPanel(ScreenWidget.loadWidget(bpanel, screen));
@@ -125,8 +128,14 @@ public class ScreenResultsTable extends ScreenInputWidget {
     }
     
     public void setForm(State state) {
-        if(queryable)
+        if(queryable){
+            TableManager man = null;
+            if(state == State.QUERY)
+                man = ((TableModel)tableWidget.table.model).manager;
             tableWidget.setForm(state);
+            if(state == State.QUERY)
+                tableWidget.table.model.setManager(man);
+        }
     }
     
     public void submitQuery(ArrayList<AbstractField> qList) {

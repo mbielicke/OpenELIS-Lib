@@ -81,14 +81,16 @@ public class AutoComplete extends DropdownWidget {
     }
     
     public void getMatches(final String text) {
-        if(screen != null && ((AppScreen)screen).window != null)
-            ((AppScreen)screen).window.setStatus("", "spinnerIcon");
-         try {
-            autoCall.callForMatches(this, model.getData(), text);
+        if(!queryMode) {
+            if(screen != null && ((AppScreen)screen).window != null)
+                ((AppScreen)screen).window.setStatus("", "spinnerIcon");
+            try {
+                autoCall.callForMatches(this, model.getData(), text);
 
-          } catch (Exception e) {
-            Window.alert(e.getMessage());
-         }
+            } catch (Exception e) {
+                Window.alert(e.getMessage());
+            }
+        }
     }
     
     public void showAutoMatches(TableDataModel data){

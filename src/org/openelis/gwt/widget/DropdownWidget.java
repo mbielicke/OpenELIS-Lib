@@ -323,6 +323,12 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             lookUp.setText("");
     }
     
+    public void setSelection(Object key) {
+        model.clearSelections();
+        model.selectRow(key);
+        lookUp.setText(getTextBoxDisplay());
+    }
+    
     public <T extends TableDataRow> ArrayList<T> getSelections() {
         return (ArrayList<T>)model.getSelections();
     }
@@ -355,7 +361,10 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                 lookUp.textbox.removeStyleName("TextboxSelected");
 
                 lookUp.icon.removeStyleName("Selected");
-
+                if(this instanceof AutoComplete){
+                    if(((AutoComplete)this).queryMode)
+                        return;
+                }
                 complete();
             }
         }

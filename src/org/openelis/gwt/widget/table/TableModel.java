@@ -92,6 +92,8 @@ public class TableModel implements TableModelInt {
     }
         
     public <T extends TableDataRow> T getRow(int row) {
+        if(data == null)
+            return null;
         if(row < numRows())
             return (T)data.get(row);
         if(autoAdd)
@@ -100,6 +102,8 @@ public class TableModel implements TableModelInt {
     }
 
     public int numRows() {
+        if(data == null)
+            return 0;
         return data.size();
     }
 
