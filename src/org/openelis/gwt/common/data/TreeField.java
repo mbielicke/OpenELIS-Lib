@@ -57,7 +57,7 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
         return true;
     }
 
-    public void setValue(TreeDataModel val) {
+    public void setValue(Object val) {
         // TODO Auto-generated method stub
         if(val == null){
             if(value != null)
