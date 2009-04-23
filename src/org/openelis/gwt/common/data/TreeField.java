@@ -63,7 +63,7 @@ public class TreeField extends AbstractField<TreeDataModel> implements FieldType
             if(value != null)
                 ((TreeDataModel)value).clear();
             else
-                value = null;
+                value = new TreeDataModel();
         }else
             value = (TreeDataModel)val;
     }
