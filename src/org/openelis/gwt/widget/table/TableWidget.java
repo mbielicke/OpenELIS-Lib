@@ -217,6 +217,7 @@ public class TableWidget extends FocusPanel implements
                         }
                     }
                     ((TableCheck)view.table.getWidget(row,col)).onFocus(this);
+                    editingCell = null;
                 }
             }else
                 activeCell = -1;
