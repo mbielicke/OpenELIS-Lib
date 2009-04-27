@@ -27,6 +27,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -41,7 +42,7 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  * @author tschmidt
  *
  */
-public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents{
+public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents,FocusListener{
     private DelegatingClickListenerCollection clickListeners;
     /**
      * Default Tag Name for XML Definition and WidgetMap
@@ -176,5 +177,19 @@ public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents
         }
         super.setForm(state);
     }
+    
+    public void onFocus(Widget sender) {
+        if(enabled){
+            super.hp.addStyleName("Focus");
+        }   
+        super.onFocus(sender);
+    }
+    public void onLostFocus(Widget sender) {
+        if(enabled){
+            super.hp.removeStyleName("Focus");
+        }
+        super.onLostFocus(sender);
+    }
+    
 
 }

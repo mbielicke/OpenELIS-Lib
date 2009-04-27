@@ -201,6 +201,11 @@ public class TableWidget extends FocusPanel implements
                 activeRow = row;
                 model.selectRow(modelIndexList[row]);
             }
+            if(activeCell > -1 && activeCell != col) {
+                if(columns.get(activeCell).getColumnWidget() instanceof TableCheck) {
+                    ((TableCheck)view.table.getWidget(activeRow,activeCell)).onLostFocus(this);
+                }
+            }
             if(model.canEdit(modelIndexList[row],col)){
                 activeCell = col;
                 tableWidgetListeners.fireStartedEditing(this, row, col);
@@ -210,8 +215,8 @@ public class TableWidget extends FocusPanel implements
                         if(finishEditing()){
                             view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
                         }
-                        ((TableCheck)view.table.getWidget(row,col)).onFocus(this);
                     }
+                    ((TableCheck)view.table.getWidget(row,col)).onFocus(this);
                 }
             }else
                 activeCell = -1;
@@ -231,11 +236,6 @@ public class TableWidget extends FocusPanel implements
                 }
             }
             tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
-        }
-        if(activeCell > -1){
-            if(columns.get(activeCell).getColumnWidget() instanceof TableCheck) {
-                ((TableCheck)view.table.getWidget(activeRow,activeCell)).onLostFocus(this);
-            }
         }
         return false;
         

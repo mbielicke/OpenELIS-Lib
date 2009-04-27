@@ -1169,7 +1169,7 @@ padding-bottom:0;
 
 }
 
-.Focus .ScreenTextArea, .Focus .ScreenTextBox, .Focus .ScreenMaskedBox{
+.Focus .ScreenTextArea, .Focus .ScreenTextBox, .Focus .ScreenMaskedBox, .Focus .ScreenCheck, .Focus .ScreenTable{
     border:1px solid #7eadd9;
 }
 

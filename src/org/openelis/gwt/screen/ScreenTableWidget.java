@@ -405,6 +405,10 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             dropInited = true;    
         }
         table.enabled(enabled);
+        if(enabled)
+            table.addFocusListener(this);
+        else
+            table.removeFocusListener(this);
         super.enable(enabled);
     }
     
@@ -498,6 +502,19 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     public static TableCellWidget createCellWidget(Node node, ScreenBase screen) {
         String widName = "table-" + node.getNodeName();
         return (TableCellWidget)ClassFactory.forName(widName,new Object[] {node, screen});
+    }
+    
+    public void onFocus(Widget sender) {
+        if(enabled){
+            super.hp.addStyleName("Focus");
+        }   
+        super.onFocus(sender);
+    }
+    public void onLostFocus(Widget sender) {
+        if(enabled){
+            super.hp.removeStyleName("Focus");
+        }
+        super.onLostFocus(sender);
     }
 }
         

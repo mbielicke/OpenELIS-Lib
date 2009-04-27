@@ -104,13 +104,13 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         if (KeyboardListener.KEY_ENTER == code) {
             if(controller.editingCell != null) {
                 if(controller.finishEditing()){
-                    if(controller.columns.get(controller.activeCell).getColumnWidget() instanceof TableCheck) {
+                    /*if(controller.columns.get(controller.activeCell).getColumnWidget() instanceof TableCheck) {
                             ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).check();
                             if(controller.finishEditing()){
                                 controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
                             }
                             ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).onFocus(null);
-                    }
+                    }*/
                     if(controller.model.numRows() >= controller.maxRows){
                         controller.view.scrollBar.scrollToBottom();
                         DeferredCommand.addCommand(new Command() {
