@@ -1,8 +1,14 @@
 .TreeNode {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
 	background : lightgray;
 	border : 1px solid black;
 }
 
-.TreeNode Hover {
+.NodeHover {
 	border :1px solid red;
 }    
+
+.NodeSelected {
+    border :1px solid blue;
+}

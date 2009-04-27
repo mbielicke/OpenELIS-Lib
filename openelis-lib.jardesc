@@ -11,6 +11,26 @@
 </sealing>
 </manifest>
 <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
-<javaElement handleIdentifier="=OpenELIS-Lib/src"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.interfaces"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.common.data"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.util"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.test"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.tree.event"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.richtext"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.server"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.tree"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.tablerpc"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.persistence"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.table"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.table.event"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.event"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.screen"/>
+<file path="/OpenELIS-Lib/src/LICENSE"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.widget.pagedtree"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.test"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.common"/>
+<javaElement handleIdentifier="=OpenELIS-Lib/src&lt;org.openelis.gwt.services"/>
 </selectedElements>
 </jardesc>

@@ -72,6 +72,7 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     public String objClass;
     public Object[] args;
     public String key;
+    public String label;
     
     @Override
     public void onBrowserEvent(Event event) {
@@ -100,6 +101,7 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     
     public MenuItem(String icon, String labelText, String description) {
         init(icon,labelText,description);
+        label = labelText;
     }
     
     public void init(String icon, String labelText, String description) {
@@ -108,6 +110,7 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
         label.addStyleName("locked");
         setWidget(create(icon,label,description));
         enable(true);
+        this.label = labelText;
     }
     
     public MenuItem(String icon, Widget wid, String description) {

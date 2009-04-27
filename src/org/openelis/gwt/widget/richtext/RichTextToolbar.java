@@ -45,6 +45,8 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.ScreenLabel;
+import org.openelis.gwt.screen.ScreenMenuItem;
 import org.openelis.gwt.screen.ScreenMenuPanel;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.Dropdown;
@@ -57,53 +59,6 @@ import org.openelis.gwt.widget.MenuPanel;
  * functionality.
  */
 public class RichTextToolbar extends Composite {
-
-  /**
-   * This {@link ImageBundle} is used for all the button icons. Using an image
-   * bundle allows all of these images to be packed into a single image, which
-   * saves a lot of HTTP requests, drastically improving startup time.
-   */
-    /*
-  public interface Images extends ImageBundle {
-
-    AbstractImagePrototype bold();
-
-    AbstractImagePrototype createLink();
-
-    AbstractImagePrototype hr();
-
-    AbstractImagePrototype indent();
-
-    AbstractImagePrototype insertImage();
-
-    AbstractImagePrototype italic();
-
-    AbstractImagePrototype justifyCenter();
-
-    AbstractImagePrototype justifyLeft();
-
-    AbstractImagePrototype justifyRight();
-
-    AbstractImagePrototype ol();
-
-    AbstractImagePrototype outdent();
-
-    AbstractImagePrototype removeFormat();
-
-    AbstractImagePrototype removeLink();
-
-    AbstractImagePrototype strikeThrough();
-
-    AbstractImagePrototype subscript();
-
-    AbstractImagePrototype superscript();
-
-    AbstractImagePrototype ul();
-
-    AbstractImagePrototype underline();
-  }
-
-*/
   /**
    * We use an inner EventListener class to avoid exposing event methods on the
    * RichTextToolbar itself.
@@ -125,7 +80,8 @@ public class RichTextToolbar extends Composite {
       } else if (sender == fontSizes) {
         basic.setFontSize(fontSizesConstants[Integer.parseInt((String)fontSizes.model.getSelection().cells[0].getValue())]);
         fontSizes.model.selectRow(0);
-      }
+      } 
+      
       
     }
 
@@ -177,6 +133,15 @@ public class RichTextToolbar extends Composite {
         // This will catch any cases where the user moves the cursur using the
         // keyboard, or uses one of the browser's built-in keyboard shortcuts.
         updateStatus();
+      } else if (sender instanceof MenuItem) {
+          String[] args = ((String)((StringObject)((MenuItem)sender).args[0]).getValue()).split(":");
+          if(args[0].equals("font")){
+              basic.setFontName(args[1]);
+              fontLabel.label.setText(((MenuItem)sender).label);
+          } else {
+              basic.setFontSize(fontSizesConstants[Integer.parseInt(args[1])]);
+              sizeLabel.label.setText(((MenuItem)sender).label);
+          }
       }
     }
 
@@ -236,6 +201,9 @@ public class RichTextToolbar extends Composite {
   private Dropdown fonts;
   private Dropdown fontSizes;
   
+  private ScreenLabel fontLabel;
+  private ScreenLabel sizeLabel;
+  
   private ScreenMenuPanel fontsMenu;
   private ScreenMenuPanel fontSizeMenu;
   
@@ -247,16 +215,17 @@ public class RichTextToolbar extends Composite {
       "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
           "<HorizontalPanel>"+
               "<AbsolutePanel style=\"FontSize\"/>"+
+              "<label key=\"fontLabel\">Times New Roman</label>" +
           "</HorizontalPanel>" +
       "</appButton>" +
   "</menuDisplay>" +
   "<menuPanel style=\"topMenuContainer\" layout=\"vertical\" position=\"below\">" +
-     "<menuItem key=\"FontTimes\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Times New Roman\" icon=\"\" description=\"\"/>"+  
-     "<menuItem key=\"FontArial\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Arial\" icon=\"\" description=\"\"/>"+
-     "<menuItem key=\"FontCourier\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Courier New\" icon=\"\" description=\"\"/>"+  
-     "<menuItem key=\"FontGeorgia\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Georgia\" icon=\"\" description=\"\"/>"+ 
-     "<menuItem key=\"FontTrebuchet\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Trebuchet\" icon=\"\" description=\"\"/>"+  
-     "<menuItem key=\"FontVerdana\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Verdana\" icon=\"\" description=\"\"/>"+  
+     "<menuItem key=\"FontTimes\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Times New Roman\" icon=\"\" description=\"\" enabled=\"true\" args=\"font:Times New Roman\"/>"+  
+     "<menuItem key=\"FontArial\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Arial\" icon=\"\" description=\"\" enabled=\"true\" args=\"font:Arial\"/>"+
+     "<menuItem key=\"FontCourier\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Courier New\" icon=\"\" description=\"\" enabled=\"true\" args=\"font:Courier New\"/>"+  
+     "<menuItem key=\"FontGeorgia\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Georgia\" icon=\"\" description=\"\" enabled=\"true\" args=\"font:Georgia\"/>"+ 
+     "<menuItem key=\"FontTrebuchet\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Trebuchet\" icon=\"\" description=\"\" enabled=\"true\" args=\"font:Trebuchet\"/>"+  
+     "<menuItem key=\"FontVerdana\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Verdana\" icon=\"\" description=\"\" enabled=\"true\" args=\"font:Verdana\"/>"+  
    "</menuPanel>" +
   "</menuItem>"+
 "</menuPanel>"; 
@@ -267,17 +236,18 @@ public class RichTextToolbar extends Composite {
       "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
           "<HorizontalPanel>"+
               "<AbsolutePanel style=\"FontSize\"/>"+
+              "<label key=\"sizeLabel\">Medium</label>"+
           "</HorizontalPanel>" +
       "</appButton>" +
   "</menuDisplay>" +
   "<menuPanel style=\"topMenuContainer\" layout=\"vertical\" position=\"below\">" +
-     "<menuItem key=\"FontXXSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"XX Small\" icon=\"\" description=\"\"/>"+  
-     "<menuItem key=\"FontXSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"X Small\" icon=\"\" description=\"\"/>"+
-     "<menuItem key=\"FontSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Small\" icon=\"\" description=\"\"/>"+  
-     "<menuItem key=\"FontMedium\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Medium\" icon=\"\" description=\"\"/>"+ 
-     "<menuItem key=\"FontLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Large\" icon=\"\" description=\"\"/>"+  
-     "<menuItem key=\"FontXLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"X Large\" icon=\"\" description=\"\"/>"+
-     "<menuItem key=\"FontXXLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"XX Large\" icon=\"\" description=\"\"/>"+
+     "<menuItem key=\"FontXXSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"XX Small\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:0\"/>"+  
+     "<menuItem key=\"FontXSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"X Small\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:1\"/>"+
+     "<menuItem key=\"FontSmall\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Small\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:2\"/>"+  
+     "<menuItem key=\"FontMedium\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Medium\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:3\"/>"+ 
+     "<menuItem key=\"FontLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"Large\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:4\"/>"+  
+     "<menuItem key=\"FontXLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"X Large\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:5\"/>"+
+     "<menuItem key=\"FontXXLarge\" style=\"TopMenuRowContainer\" hover=\"Hover\" label=\"XX Large\" icon=\"\" description=\"\" enabled=\"true\" args=\"size:6\"/>"+
    "</menuPanel>" +
   "</menuItem>"+
 "</menuPanel>"; 
@@ -297,7 +267,7 @@ public class RichTextToolbar extends Composite {
     outer.setWidget(1,0,bottomPanel);
     topPanel.setWidth("100%");
     bottomPanel.setWidth("100%");
-    outer.setHeight("75px");
+    //outer.setHeight("75px");
     initWidget(outer);
     setStyleName("gwt-RichTextToolbar");
     richText.addStyleName("hasRichTextToolbar");
@@ -382,6 +352,21 @@ public class RichTextToolbar extends Composite {
    */
         topPanel.add(new ScreenMenuPanel(XMLParser.parse(fontSizeMenuXMl).getDocumentElement(),screen));
         topPanel.add(new ScreenMenuPanel(XMLParser.parse(fontsMenuXMl).getDocumentElement(),screen));
+        ((ScreenMenuItem)screen.widgets.get("FontTimes")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontArial")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontCourier")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontGeorgia")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontTrebuchet")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontVerdana")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontXXSmall")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontXSmall")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontSmall")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontMedium")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontLarge")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontXLarge")).item.addClickListener(listener);
+        ((ScreenMenuItem)screen.widgets.get("FontXXLarge")).item.addClickListener(listener);
+        fontLabel = (ScreenLabel)screen.widgets.get("fontLabel");
+        sizeLabel = (ScreenLabel)screen.widgets.get("sizeLabel");
       // We only use these listeners for updating status, so don't hook them up
       // unless at least basic editing is supported.
       richText.addKeyboardListener(listener);

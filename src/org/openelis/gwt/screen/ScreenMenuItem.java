@@ -46,7 +46,7 @@ import org.openelis.gwt.widget.MenuPanel;
 
 public class ScreenMenuItem extends ScreenWidget {
     
-    private MenuItem item;
+    public MenuItem item;
     private Node popupNode;
     private Widget wid;
     public PopupPanel pop;

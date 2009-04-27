@@ -56,7 +56,7 @@ public class RichTextWidget extends Composite implements FocusListener{
         initWidget(vp);
         if(tools){
         	vp.setWidget(0,0,toolbar);
-            vp.getFlexCellFormatter().setHeight(0, 0,"75px");
+           // vp.getFlexCellFormatter().setHeight(0, 0,"75px");
             vp.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
             vp.setWidget(1,0,area);
         }else
