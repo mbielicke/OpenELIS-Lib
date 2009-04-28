@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.screen.ScreenWindow;
 
 import java.util.Date;
 
@@ -138,7 +139,9 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
         CalendarWidget cal = new CalendarWidget(textbox.getText());
         cal.addChangeListener(this);
+        //pop = new (null,"","","",true);
         pop = new PopupPanel(true, false);
+        
         pop.setWidth("150px");
         pop.setWidget(cal);
         pop.setPopupPosition(textbox.getAbsoluteLeft(),
@@ -181,6 +184,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         if (changeListeners != null){
             changeListeners.fireChange(this);
         }
+        setFocus(true);
     }
 
     public void addChangeListener(ChangeListener listener) {
