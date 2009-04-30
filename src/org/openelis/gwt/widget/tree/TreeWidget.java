@@ -43,6 +43,7 @@ import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.screen.ScreenTreeWidget;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.table.TableCellWidget;
+import org.openelis.gwt.widget.table.TableCheck;
 import org.openelis.gwt.widget.tree.TreeViewInt.VerticalScroll;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;
@@ -87,6 +88,7 @@ public class TreeWidget extends FocusPanel implements
     public ScreenTreeWidget screenWidget;
     public TreeDragController dragController;
     public TreeIndexDropController dropController;
+    public boolean selectedByClick;
     
     public TreeWidget() {
 
@@ -129,10 +131,11 @@ public class TreeWidget extends FocusPanel implements
      */
     public void onCellClicked(SourcesTableEvents sender, int row, int col) {
         focused = true;
-        if (activeRow == row && activeCell == col)
+        if(!(columns.get(col).getColumnWidget(model.getRow(row).leafType) instanceof TableCheck) && activeRow == row && activeCell == col)
             return;
+        selectedByClick = true;
         select(row, col);
-        
+        selectedByClick = false;
     }
 
     /**
@@ -171,15 +174,32 @@ public class TreeWidget extends FocusPanel implements
             }
         }
         if (model.canSelect(modelIndexList[row])) {
-            if (activeRow > -1 && !ctrlKey) {
-                model.unselectRow(-1);
-            }
             focused = true;
-            activeRow = row;
-            model.selectRow(modelIndexList[row]);
+            if(activeRow != row){
+                if(activeRow > -1 && !ctrlKey){
+                    model.unselectRow(-1);
+                }
+                activeRow = row;
+                model.selectRow(modelIndexList[row]);
+            }
+            if(activeCell > -1 && activeCell != col) {
+                if(columns.get(activeCell).getColumnWidget(model.getRow(row).leafType) instanceof TableCheck) {
+                    ((TableCheck)view.table.getWidget(activeRow,activeCell)).onLostFocus(this);
+                }
+            }
             if (model.canEdit(modelIndexList[row], col)) {
                 activeCell = col;
                 treeWidgetListeners.fireStartedEditing(this, row, col);
+                if(columns.get(col).getColumnWidget(model.getRow(row).leafType) instanceof TableCheck) {
+                    if(selectedByClick){
+                        ((TableCheck)view.table.getWidget(row,col)).check();
+                        if(finishEditing()){
+                            view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
+                        }
+                    }
+                    ((TableCheck)view.table.getWidget(row,col)).onFocus(this);
+                    editingCell = null;
+                }
             } else
                 activeCell = -1;
         } else {
