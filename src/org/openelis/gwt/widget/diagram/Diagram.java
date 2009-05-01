@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
 import org.openelis.gwt.common.data.TreeDataItem;
 import org.openelis.gwt.common.data.TreeDataModel;
@@ -28,15 +29,13 @@ import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.TextBox;
 
-import gwt.canvas.client.Canvas;
-
 import java.util.HashMap;
 
 public class Diagram extends Composite implements MouseListener,ClickListener,ClickHandler,DoubleClickHandler,SourcesCommandEvents{
     
     public enum Action {HOVER,LEAVE,CLICK};
     
-    public Canvas canvas = new Canvas();
+    public GWTCanvas canvas = new GWTCanvas();
     public AbsolutePanel panel = new AbsolutePanel();
     public ScrollPanel scroll = new ScrollPanel();
     public TreeDataModel model;
@@ -98,7 +97,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
         scroll.setSize("600px", "300px");
         panel.setWidgetPosition(canvas, 0, 0);
         canvas.setSize("1000px", "1000px");
-        canvas.addClickListener(this);
+        //canvas.addClickListener(this);
     }
     
     public void setModel(TreeDataModel model) {
@@ -115,6 +114,8 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
             panel.remove(node);
         }
         canvas.clear();
+        canvas.setLineWidth(1);
+        canvas.setCoordSize(1000, 1000);
         drawNodes(model.get(0));
         DeferredCommand.addCommand(new Command(){
             public void execute() {
@@ -160,7 +161,6 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
     }
     
     public void drawGraph(TreeDataItem item) {    
-        
         if(item.getItems().size() > 0){
             for(TreeDataItem child : item.getItems()){
                 TreeNode itemNode = mapping.get(item);
@@ -210,7 +210,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
                         cY = child.y;
                 }
                 canvas.lineTo(cX,cY);
-                canvas.save();
+                canvas.saveContext();
                 canvas.translate(cX,cY);
                 rise = (item.y+itemNode.getOffsetHeight()/2) - cY;
                 run  = cX - (item.x+itemNode.getOffsetWidth()/2); 
@@ -227,7 +227,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
                 canvas.lineTo(-7,-3);
                 canvas.moveTo(0,0);
                 canvas.lineTo(-7,3);
-                canvas.restore();
+                canvas.restoreContext();
                 if(child.getItems().size() > 0)
                     drawGraph(child);
             }

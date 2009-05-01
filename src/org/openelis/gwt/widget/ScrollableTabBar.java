@@ -25,28 +25,35 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.ScreenBase;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ScrollableTabBar extends Composite implements ClickListener{
+import org.openelis.gwt.common.RPC;
+import org.openelis.gwt.common.data.TabRPC;
+import org.openelis.gwt.screen.ScreenBase;
+
+import java.util.ArrayList;
+
+public class ScrollableTabBar extends Composite implements ClickListener, TabListener{
   private HorizontalPanel mainPanel = new HorizontalPanel();
   private AbsolutePanel scrollPanel = new AbsolutePanel();
   private TabBar tabBar = new TabBar();
+  private TabRPC tabRPC;
   private ScreenBase tablistener = null;
   private HTML next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
   private HTML previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
   private boolean noHTMLs = true;
   private boolean nextDisabled = false;   
   private boolean prevDisabled = false;
+  ArrayList<Widget> tabWidgets = new ArrayList<Widget>();
   //private int scrollWidth;
   //private int imageWidth;
   
@@ -54,10 +61,9 @@ public class ScrollableTabBar extends Composite implements ClickListener{
       initWidget(mainPanel);
       scrollPanel.add(tabBar);
       //mainPanel.setWidth("300px");
-      scrollPanel.setWidth("300px");
+      //scrollPanel.setWidth("300px");
       //imageWidth = next.getOffsetWidth()+previous.getOffsetWidth();
       //scrollWidth = mainPanel.getOffsetWidth()-imageWidth;
-      
       //scrollPanel.setWidth("\""+new Integer(scrollWidth).toString()+"px"+"\"");
       scrollPanel.setHeight("20px");
       scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-10 , 0);       
@@ -104,6 +110,24 @@ public class ScrollableTabBar extends Composite implements ClickListener{
       mainPanel.setWidth(width);         
   }
   
+  public void addTabWithContent(String text,Widget content) {
+      addTab(text);
+      tabWidgets.add(content);
+  }
+  
+  public void addTabWithContent(Widget widget,Widget content) {
+      addTab(widget);
+      tabWidgets.add(content);
+  }
+  
+  public void addRPC(RPC rpc) {
+      tabRPC.addTab(rpc);
+  }
+  
+  public void setRPC(int index,RPC rpc) {
+      tabRPC.setTab(index,rpc);
+  }
+  
   public void addTab(String text){           
       tabBar.addTab(text);     
       if(scrollPanel.getOffsetWidth() < tabBar.getOffsetWidth()){                   
@@ -123,6 +147,7 @@ public class ScrollableTabBar extends Composite implements ClickListener{
    }
   
   public void removeTab(int index){
+     tabWidgets.remove(index);
      tabBar.removeTab(index);
      if(scrollPanel.getOffsetWidth() > tabBar.getOffsetWidth()){          
              mainPanel.clear();                      
@@ -192,8 +217,28 @@ public class ScrollableTabBar extends Composite implements ClickListener{
           } 
          
         }
-       
-       
+   }
+  
+   public void sizeTabBar() {
+       scrollPanel.setWidth(mainPanel.getOffsetWidth()+"px");
+   }
+   
+   public void setTabRPC(TabRPC rpc) {
+       tabRPC = rpc;
+   }
+   
+   public TabRPC getTabRPC() {
+       return tabRPC;
+   }
+
+   public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
+       // TODO Auto-generated method stub
+       return true;
+   }
+
+   public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
+       // TODO Auto-generated method stub
+       tabRPC.selectTab(tabIndex);
    }
   
 }
