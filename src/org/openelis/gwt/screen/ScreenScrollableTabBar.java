@@ -30,13 +30,13 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.TabField;
-import org.openelis.gwt.common.data.TabRPC;
+//import org.openelis.gwt.common.data.TabField;
+//import org.openelis.gwt.common.data.TabRPC;
 import org.openelis.gwt.widget.ScrollableTabBar;
 
 public class ScreenScrollableTabBar extends ScreenInputWidget{
     public static String TAG_NAME = "ScrollTabBar";
-    public TabRPC tabRPC;
+    //public TabRPC tabRPC;
     private ScrollableTabBar scrollableTabBar;
     
     public ScreenScrollableTabBar(){
@@ -88,13 +88,13 @@ public class ScreenScrollableTabBar extends ScreenInputWidget{
     
     @Override
     public void load(AbstractField field) {
-        tabRPC = ((TabField)field).getValue();
-        scrollableTabBar.setTabRPC(tabRPC);
+       // tabRPC = ((TabField)field).getValue();
+      //  scrollableTabBar.setTabRPC(tabRPC);
     }
     
     @Override
     public void submit(AbstractField field) {
-        field.setValue(scrollableTabBar.getTabRPC());
+       // field.setValue(scrollableTabBar.getTabRPC());
     }
     
     

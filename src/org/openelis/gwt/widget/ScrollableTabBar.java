@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.data.TabRPC;
+//import org.openelis.gwt.common.data.TabRPC;
 import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
   private HorizontalPanel mainPanel = new HorizontalPanel();
   private AbsolutePanel scrollPanel = new AbsolutePanel();
   private TabBar tabBar = new TabBar();
-  private TabRPC tabRPC;
+  //private TabRPC tabRPC;
   private ScreenBase tablistener = null;
   private HTML next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
   private HTML previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
@@ -121,11 +121,11 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
   }
   
   public void addRPC(RPC rpc) {
-      tabRPC.addTab(rpc);
+      //tabRPC.addTab(rpc);
   }
   
   public void setRPC(int index,RPC rpc) {
-      tabRPC.setTab(index,rpc);
+      //tabRPC.setTab(index,rpc);
   }
   
   public void addTab(String text){           
@@ -222,7 +222,7 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
    public void sizeTabBar() {
        scrollPanel.setWidth(mainPanel.getOffsetWidth()+"px");
    }
-   
+   /*
    public void setTabRPC(TabRPC rpc) {
        tabRPC = rpc;
    }
@@ -230,7 +230,7 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
    public TabRPC getTabRPC() {
        return tabRPC;
    }
-
+*/
    public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
        // TODO Auto-generated method stub
        return true;
@@ -238,7 +238,7 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
 
    public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
        // TODO Auto-generated method stub
-       tabRPC.selectTab(tabIndex);
+      // tabRPC.selectTab(tabIndex);
    }
   
 }
