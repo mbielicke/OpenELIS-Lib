@@ -65,6 +65,8 @@ public class TableDataRow<Key> implements RPC,FieldType {
         clone.key = key;
         for(int i = 0; i < cells.length; i++)
             clone.cells[i] = (FieldType)cells[i].clone();
+        if(data!=null)
+            clone.data = (FieldType)data.clone();
         return clone;
     }
     
