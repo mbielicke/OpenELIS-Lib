@@ -19,7 +19,7 @@
 }
 
 .TableRow{
-    height:18px;
+    height:19px;
     background:white;
 }
 tr .AltTableRow{
@@ -41,7 +41,7 @@ cursor:pointer;
 font-family:Verdana,Arial,Helvetica,sans-serif;
 font-size:10px;
 height:18px;
-overflow:hidden;
+/*overflow:hidden;*/
 padding:1px 1px 0px;
 }
 
@@ -54,7 +54,7 @@ cursor:pointer;
 font-family:Verdana,Arial,Helvetica,sans-serif;
 font-size:10px;
 height:18px;
-overflow:hidden;
+/*overflow:hidden;*/
 padding:1px 1px 0px;
 }
 
@@ -67,28 +67,23 @@ padding:1px 1px 0px;
 }
 
 .Selected .TableCell{
-background:#DFE8F6 none repeat scroll 0 0 !important;
-border:1px dotted #A3BAE9;
+background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+border-color:#FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
 
 .Selected .TableCellLeft{
-background:#DFE8F6;
-border-left:1px dotted #A3BAE9;
-border-top:1px dotted #A3BAE9;
-border-bottom:1px dotted #A3BAE9;
+background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+border-color:#FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
 
 .Selected .TableCellMiddle{
-background:#DFE8F6;
-border-top:1px dotted #A3BAE9;
-border-bottom:1px dotted #A3BAE9;
+background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+border-color:#FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
 
 .Selected .TableCellRight{
-background:#DFE8F6;
-border-right:1px dotted #A3BAE9;
-border-top:1px dotted #A3BAE9;
-border-bottom:1px dotted #A3BAE9;
+background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+border-color:#FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
 
 .Enabled{
@@ -247,7 +242,7 @@ a.index:hover{
 
 tr .Highlighted{
     color:#000000;
-    background:#EFEFEF url('../Images/row-over.gif') repeat-x scroll left top;
+    background:#EFEFEF url('../Images/screenbuttonhover.gif') repeat-x scroll left top;
     border: 1px solid #DDDDDD;
 }
 

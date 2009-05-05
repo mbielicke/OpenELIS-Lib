@@ -4,8 +4,6 @@ html, body {
    height:100%;
 }
 
-
-
 td {outline:0px;}
 
 div{outline:0px;}
@@ -13,12 +11,19 @@ div{outline:0px;}
 .Disabled{
     cursor:default;
 }
+
+.DropdownPopup {
+border:1px solid #B5B8C8;
+background:white;
+}
+
 /****
 .ScreenPanel .ScreenWindowBrowser .unfocused *{
 background:#BAC8D9 none repeat scroll 0 0;
 color:gray;
 }
 ****/
+
 .unfocused .WindowTR {
     width:7px;
     height:29px;
@@ -700,7 +705,6 @@ border:0px;
     height:5px;
     background: transparent url("../Images/popuptr.gif") no-repeat right top;
 }
-
 .ErrorWindow .middleRight {
     width:5px;
     height:100%;
@@ -909,11 +913,19 @@ border:0px;
 
 /*******autodropdown css***********/
 .AutoDropdown{
-    height:19px;
+}
+.DropdownPopup .TableCell{
+    border:none;
 }
 .AutoDropdownButton{
     width:16px;
     height:19px;
+    border-bottom: 1px solid #d8d8d8;
+    background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.TableDropdown .AutoDropdownButton{
+    width:16px;
+    height:17px;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
@@ -940,7 +952,7 @@ border:0px;
     background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
-    font-size:11px;
+    font-size:10px;
     height:20px;
     cursor:default;
 }
@@ -952,6 +964,26 @@ border:0px;
     font-weight: normal;
     font-size:11px;
     height:20px;
+    cursor:default;
+}
+.TableDropdown .AutoDropdown .TextboxSelected{
+    border:1px solid #7eadd9;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    height:18px;
+    cursor:default;
+}
+.TableDropdown .AutoDropdown .TextboxUnselected{
+    border:1px solid #d8d8d8;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:18px;
     cursor:default;
 }
 
@@ -969,8 +1001,8 @@ border:0px;
 }
 
 .TableAutoDropdownButton{
-width:16px;
-height:15px;
+width:16;
+height:17;
 border-bottom: 1px solid #d8d8d8;
 background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
