@@ -32,6 +32,13 @@ tr .TableHighlighted{
     border: 1px solid #DDDDDD;
 }
 
+.TableCell div div.gwt-label{
+	padding:2px;
+}
+.TableCell div input.gwt-TextBox{
+	margin-top:1px;
+}
+
 .TableCell, .TableCellRight, .TableCellMiddle{  
 border-color:#FFFFFF #EDEDED #EDEDED;
 border-style:solid;

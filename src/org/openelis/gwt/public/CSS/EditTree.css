@@ -91,10 +91,10 @@ tr .TreeHighlighted .treeOpenImage{
     background:#D9E8FB;
 }
 
-
-.CellError div {
-    height:16px;
+.CellError{
+    height:18px;
 	border-bottom:1px dashed red;
+	margin-bottom:-1;
 }
 .Disabled .TableCell .gwt-Label {
 	color:grey;
