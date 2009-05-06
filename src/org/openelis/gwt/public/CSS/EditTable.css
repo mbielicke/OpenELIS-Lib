@@ -32,6 +32,11 @@ tr .TableHighlighted{
     border: 1px solid #DDDDDD;
 }
 
+.dropdowncell{	
+height:21px;
+cursor:pointer;
+}
+
 .TableCell div div.gwt-label{
 	padding:2px;
 }
