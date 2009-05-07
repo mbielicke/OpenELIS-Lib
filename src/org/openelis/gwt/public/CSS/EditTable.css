@@ -37,6 +37,11 @@ height:21px;
 cursor:pointer;
 }
 
+.Selected .dropdowncell{
+background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+border-color:#FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
+}
+
 .TableCell div div.gwt-label{
 	padding:2px;
 }
