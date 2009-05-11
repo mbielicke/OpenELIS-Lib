@@ -56,7 +56,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     protected Widget displayWidget;
     protected boolean queryMode;
     protected AbsolutePanel outer = new AbsolutePanel();
-    protected AbsolutePanel inner = new AbsolutePanel();
+    protected HorizontalPanel inner = new HorizontalPanel();
     protected FocusPanel errorImg = new FocusPanel();
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
