@@ -5,10 +5,16 @@ import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.FormErrorException;
 import org.openelis.gwt.common.TableFieldErrorException;
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.common.data.TableField;
+import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenBase;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class FormUtil {
     
@@ -16,12 +22,33 @@ public class FormUtil {
         HashMap<String,Node> nodeMap = createNodeMap(node);
         for (AbstractField field : form.getFields()){
             field.setAttributes(getAttributesMap(nodeMap.get(field.key)));
+            if(node.getNodeName().equals("table")){
+                NodeList fieldList = node.getChildNodes();
+                
+                TableDataRow<? extends Object> row = null;
+                if(node.getAttributes().getNamedItem("class") != null){
+                    String rowClass = node.getAttributes().getNamedItem("class").getNodeValue();
+                    row = (TableDataRow<? extends Object>)ClassFactory.forName(rowClass);
+                    
+                }else
+                    row = new TableDataRow<Integer>(fieldList.getLength());
+                List<FieldType> cells = row.getCells();
+                for (int i = 0; i < fieldList.getLength(); i++) {
+                    if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        if(cells.size() > i && cells.get(i) != null) {
+                            ((AbstractField)cells.get(i)).setAttributes(getAttributesMap(fieldList.item(i)));
+                        }
+                    }
+                }
+                ((TableField)field).defaultRow = row;
+            }
         }
         form.key = node.getAttributes().getNamedItem("key").getNodeValue();
         if(node.getAttributes().getNamedItem("load") != null){
             if(node.getAttributes().getNamedItem("load").getNodeValue().equals("true"))
                 form.load = true;
         }
+
     }
     
     public static HashMap<String,String> getAttributesMap(Node node) {

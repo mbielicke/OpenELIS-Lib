@@ -262,32 +262,35 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             for (int i = 0; i < editors.getLength(); i++) {
                 if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     columns.get(j).setColumnWidget((Widget)ScreenTableWidget.createCellWidget(editors.item(i),screen));
+                    if(editors.item(i).getAttributes().getNamedItem("key") != null)
+                    	columns.get(j).setKey(editors.item(i).getAttributes().getNamedItem("key").getNodeValue());
                     j++;
                 }
             }
-            NodeList fieldList = fieldsNode.getChildNodes();
-            
-            TableDataRow<? extends Object> set = null;
-            if(fieldsNode.getAttributes().getNamedItem("class") != null){
-                String rowClass = fieldsNode.getAttributes().getNamedItem("class").getNodeValue();
-                set = (TableDataRow<? extends Object>)ClassFactory.forName(rowClass);
-                
-            }else
-                set = new TableDataRow<Integer>(fieldList.getLength());
-            List<FieldType> cells = set.getCells();
-            for (int i = 0; i < fieldList.getLength(); i++) {
-                if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    if(cells.size() > i && cells.get(i) != null) {
-                        ((AbstractField)cells.get(i)).setAttributes(fieldList.item(i));
-                    }else{
-                        AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-                        cells.set(i,(FieldType)field);
-                    }
-                    if(fieldList.item(i).getAttributes().getNamedItem("key") != null)
-                        columns.get(i).setKey(fieldList.item(i).getAttributes().getNamedItem("key").getNodeValue());
-                }
+            if(fieldsNode != null){
+            	NodeList fieldList = fieldsNode.getChildNodes();
+            	TableDataRow<? extends Object> set = null;
+            	if(fieldsNode.getAttributes().getNamedItem("class") != null){
+            		String rowClass = fieldsNode.getAttributes().getNamedItem("class").getNodeValue();
+            		set = (TableDataRow<? extends Object>)ClassFactory.forName(rowClass);
+
+            	}else
+            		set = new TableDataRow<Integer>(fieldList.getLength());
+            	List<FieldType> cells = set.getCells();
+            	for (int i = 0; i < fieldList.getLength(); i++) {
+            		if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+            			if(cells.size() > i && cells.get(i) != null) {
+            				((AbstractField)cells.get(i)).setAttributes(fieldList.item(i));
+            			}else{
+            				AbstractField field = (ScreenBase.createField(fieldList.item(i)));
+            				cells.set(i,(FieldType)field);
+            			}
+            			if(fieldList.item(i).getAttributes().getNamedItem("key") != null)
+            				columns.get(i).setKey(fieldList.item(i).getAttributes().getNamedItem("key").getNodeValue());
+            		}
+            	}
+            	data.setDefaultSet(set);
             }
-            data.setDefaultSet(set);
             table.init(columns,maxRows,width,title,showHeader,showScroll);
             if(node.getAttributes().getNamedItem("multiSelect") != null){
                 if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))

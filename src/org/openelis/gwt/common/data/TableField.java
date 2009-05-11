@@ -26,10 +26,14 @@
 package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenBase;
 
 
 public class TableField<Key extends TableDataRow> extends AbstractField<TableDataModel<Key>> implements FieldType {
@@ -37,6 +41,7 @@ public class TableField<Key extends TableDataRow> extends AbstractField<TableDat
     private static final long serialVersionUID = 1L;
     public static final String TAG_NAME = "rpc-table";
     private ArrayList<String> fieldIndex = new ArrayList<String>();
+    public TableDataRow defaultRow;
     
     public TableField() {
         
@@ -44,6 +49,27 @@ public class TableField<Key extends TableDataRow> extends AbstractField<TableDat
     
     public TableField(Node node){
         setAttributes(node);
+        NodeList fieldList = node.getChildNodes();
+        
+        TableDataRow<? extends Object> row = null;
+        if(node.getAttributes().getNamedItem("class") != null){
+            String rowClass = node.getAttributes().getNamedItem("class").getNodeValue();
+            row = (TableDataRow<? extends Object>)ClassFactory.forName(rowClass);
+            
+        }else
+            row = new TableDataRow<Integer>(fieldList.getLength());
+        List<FieldType> cells = row.getCells();
+        for (int i = 0; i < fieldList.getLength(); i++) {
+            if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                if(cells.size() > i && cells.get(i) != null) {
+                    ((AbstractField)cells.get(i)).setAttributes(fieldList.item(i));
+                }else{
+                    AbstractField field = (ScreenBase.createField(fieldList.item(i)));
+                    cells.set(i,(FieldType)field);
+                }
+            }
+        }
+        defaultRow = row;
     }
     
     public TableField(String key) {
@@ -59,17 +85,20 @@ public class TableField<Key extends TableDataRow> extends AbstractField<TableDat
         return true;
     }
 
+    /*
     public void setValue(TableDataModel val) {
         // TODO Auto-generated method stub
         if(val == null){
-            if(value != null)
+            if(value != null){
                 ((TableDataModel)value).clear();
-            else
+            }else{
                 value = new TableDataModel();
+            }
         }else
             value = val;
+        ((TableDataModel)value).setDefaultSet(defaultRow);
     }
-    
+    */
     public void setValue(Object val) {
         if(val == null){
             if(value == null)
@@ -78,6 +107,8 @@ public class TableField<Key extends TableDataRow> extends AbstractField<TableDat
                 value.clear();
         }else
            value = (TableDataModel<Key>)val;
+        if(defaultRow != null)
+        	((TableDataModel)value).setDefaultSet(defaultRow);
     }
 
     public TableDataModel<Key> getValue() {
