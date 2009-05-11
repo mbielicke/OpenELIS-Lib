@@ -25,15 +25,11 @@
 */
 package org.openelis.gwt.common.data;
 
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenBase;
+import com.google.gwt.xml.client.Node;
 
 
 public class TableField<Key extends TableDataRow> extends AbstractField<TableDataModel<Key>> implements FieldType {
@@ -49,27 +45,6 @@ public class TableField<Key extends TableDataRow> extends AbstractField<TableDat
     
     public TableField(Node node){
         setAttributes(node);
-        NodeList fieldList = node.getChildNodes();
-        
-        TableDataRow<? extends Object> row = null;
-        if(node.getAttributes().getNamedItem("class") != null){
-            String rowClass = node.getAttributes().getNamedItem("class").getNodeValue();
-            row = (TableDataRow<? extends Object>)ClassFactory.forName(rowClass);
-            
-        }else
-            row = new TableDataRow<Integer>(fieldList.getLength());
-        List<FieldType> cells = row.getCells();
-        for (int i = 0; i < fieldList.getLength(); i++) {
-            if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                if(cells.size() > i && cells.get(i) != null) {
-                    ((AbstractField)cells.get(i)).setAttributes(fieldList.item(i));
-                }else{
-                    AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-                    cells.set(i,(FieldType)field);
-                }
-            }
-        }
-        defaultRow = row;
     }
     
     public TableField(String key) {

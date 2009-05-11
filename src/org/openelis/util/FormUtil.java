@@ -1,20 +1,16 @@
 package org.openelis.util;
 
-import org.openelis.gwt.common.FieldErrorException;
+import java.util.HashMap;
+import java.util.List;
+
 import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.FormErrorException;
-import org.openelis.gwt.common.TableFieldErrorException;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.common.data.TableField;
 import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenBase;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class FormUtil {
     
@@ -37,6 +33,10 @@ public class FormUtil {
                     if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         if(cells.size() > i && cells.get(i) != null) {
                             ((AbstractField)cells.get(i)).setAttributes(getAttributesMap(fieldList.item(i)));
+                        }else{
+                        	AbstractField cellField = FormUtil.createField(fieldList.item(i));
+                        	cellField.setAttributes(getAttributesMap(fieldList.item(i)));
+                        	cells.add((FieldType)cellField);
                         }
                     }
                 }
@@ -49,6 +49,13 @@ public class FormUtil {
                 form.load = true;
         }
 
+    }
+    
+    public static AbstractField createField(Node node) {
+        String fName = "rpc-" + node.getNodeName();
+        if(node.getAttributes().getNamedItem("class") != null)
+            fName = node.getAttributes().getNamedItem("class").getNodeValue();
+        return (AbstractField)ClassFactory.forName(fName);
     }
     
     public static HashMap<String,String> getAttributesMap(Node node) {
