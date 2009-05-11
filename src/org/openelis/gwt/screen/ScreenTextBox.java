@@ -220,7 +220,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     public void onFocus(Widget sender) {
         if(!textbox.isReadOnly()){
             if(sender == textbox){
-                super.hp.addStyleName("Focus");
+                super.inner.addStyleName("Focus");
             }
         }   
         super.onFocus(sender);
@@ -228,7 +228,7 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     public void onLostFocus(Widget sender) {
         if(!textbox.isReadOnly()){
             if(sender == textbox){
-                super.hp.removeStyleName("Focus");
+                super.inner.removeStyleName("Focus");
             }
         }
         super.onLostFocus(sender);

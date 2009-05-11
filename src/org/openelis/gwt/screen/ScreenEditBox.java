@@ -109,7 +109,7 @@ public class ScreenEditBox extends ScreenInputWidget {
 	public void onFocus(Widget sender) {
 		if(!editbox.isReadOnly()){
 			if(sender == editbox){
-				super.hp.addStyleName("Focus");
+				super.inner.addStyleName("Focus");
 			}
 		}	
         super.onFocus(sender);
@@ -117,7 +117,7 @@ public class ScreenEditBox extends ScreenInputWidget {
 	public void onLostFocus(Widget sender) {
 		if(!editbox.isReadOnly()){
 			if(sender == editbox){
-				super.hp.removeStyleName("Focus");
+				super.inner.removeStyleName("Focus");
 			}
 		}
         super.onLostFocus(sender);

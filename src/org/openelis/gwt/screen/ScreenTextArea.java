@@ -148,7 +148,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     public void onFocus(Widget sender) {
         if(!textarea.isReadOnly()){
             if(sender == textarea){
-                super.hp.addStyleName("Focus");
+                super.inner.addStyleName("Focus");
             }
         }
         super.onFocus(sender);
@@ -156,7 +156,7 @@ public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     public void onLostFocus(Widget sender) {
         if(!textarea.isReadOnly()){
             if(sender == textarea){
-                super.hp.removeStyleName("Focus");
+                super.inner.removeStyleName("Focus");
             }
         }
         super.onLostFocus(sender);

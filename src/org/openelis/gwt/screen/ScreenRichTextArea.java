@@ -132,7 +132,7 @@ public class ScreenRichTextArea extends ScreenInputWidget {
     public void onFocus(Widget sender) {
         if(!textarea.isEnabled()){
             if(sender == textarea){
-                super.hp.addStyleName("Focus");
+                super.inner.addStyleName("Focus");
             }
         }
         super.onFocus(sender);
@@ -140,7 +140,7 @@ public class ScreenRichTextArea extends ScreenInputWidget {
     public void onLostFocus(Widget sender) {
         if(!textarea.isEnabled()){
             if(sender == textarea){
-                super.hp.removeStyleName("Focus");
+                super.inner.removeStyleName("Focus");
             }
         }
         super.onLostFocus(sender);

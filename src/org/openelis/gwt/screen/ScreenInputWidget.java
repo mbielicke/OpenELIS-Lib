@@ -25,7 +25,9 @@
 */
 package org.openelis.gwt.screen;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -53,7 +55,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     protected AbstractField field;
     protected Widget displayWidget;
     protected boolean queryMode;
-    protected AbsolutePanel hp;
+    protected AbsolutePanel outer = new AbsolutePanel();
+    protected AbsolutePanel inner = new AbsolutePanel();
     protected FocusPanel errorImg = new FocusPanel();
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
@@ -111,7 +114,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         }
     }
     
-    public void initWidget(Widget widget){
+    public void initWidget(final Widget widget){
         //if(showError) {
     	/*
         if(hp == null){
@@ -127,16 +130,23 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         //if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
             //hp.remove(0);
         //}
-    	hp.clear();
-        hp.add(widget);
+    	outer.clear();
+    	inner.clear();
+        inner.add(widget);
+        outer.add(inner);
+        DeferredCommand.addCommand(new Command() {
+        	public void execute() {
+        		inner.setWidth(widget.getOffsetWidth()+"px");
+        	}
+        });
         //hp.setCellWidth(widget, "100%");
-        setWidget(hp);
+        setWidget(outer);
     }
 
     @Override
     public void setDefaults(Node node, ScreenBase screen) {
         if (node.getAttributes().getNamedItem("panelWidth") != null)
-            hp.setWidth(node.getAttributes()
+            inner.setWidth(node.getAttributes()
                                      .getNamedItem("panelWidth")
                                      .getNodeValue());
         super.setDefaults(node, screen);
@@ -180,7 +190,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(pop != null){
             pop.hide();
         }
-        hp.removeStyleName("CellError");
+        inner.removeStyleName("CellError");
         errorPanel.clear();
     }
     
@@ -200,9 +210,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             errorPanel.add(errorLabel);
         }
         if(errors.size() == 0){
-            hp.removeStyleName("CellError");
+            inner.removeStyleName("CellError");
         }else{
-            hp.setStyleName("CellError");
+            inner.setStyleName("CellError");
         }
     }
     
@@ -221,7 +231,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseEnter(Widget sender) {
         // TODO Auto-generated method stub
-        if(hp.getStyleName().indexOf("CellError") > -1){
+        if(inner.getStyleName().indexOf("CellError") > -1){
             if(pop == null){
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
@@ -241,7 +251,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseLeave(Widget sender) {
         // TODO Auto-generated method stub
-        if(hp.getStyleName().indexOf("CellError") > -1){
+        if(inner.getStyleName().indexOf("CellError") > -1){
             if(pop != null){
                 pop.hide();
             }
@@ -261,7 +271,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public Widget getWidget() {
         //if(showError)
-            return hp.getWidget(0);
+            return inner.getWidget(0);
         //else
            // return super.getWidget();
     }

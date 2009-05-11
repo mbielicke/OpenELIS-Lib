@@ -145,7 +145,7 @@ import org.openelis.gwt.widget.MaskedTextBox;
     public void onFocus(Widget sender) {
         if(!maskbox.isReadOnly()){
             if(sender == maskbox){
-                super.hp.addStyleName("Focus");
+                super.inner.addStyleName("Focus");
             }
         }   
         super.onFocus(sender);
@@ -153,7 +153,7 @@ import org.openelis.gwt.widget.MaskedTextBox;
     public void onLostFocus(Widget sender) {
         if(!maskbox.isReadOnly()){
             if(sender == maskbox){
-                super.hp.removeStyleName("Focus");
+                super.inner.removeStyleName("Focus");
             }
         }
         super.onLostFocus(sender);

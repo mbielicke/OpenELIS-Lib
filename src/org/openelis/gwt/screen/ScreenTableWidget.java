@@ -509,13 +509,13 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
     
     public void onFocus(Widget sender) {
         if(enabled){
-            super.hp.addStyleName("Focus");
+            super.inner.addStyleName("Focus");
         }   
         super.onFocus(sender);
     }
     public void onLostFocus(Widget sender) {
         if(enabled){
-            super.hp.removeStyleName("Focus");
+            super.inner.removeStyleName("Focus");
         }
         super.onLostFocus(sender);
     }
