@@ -83,7 +83,7 @@ public class LookUp extends Composite implements SourcesClickEvents, SourcesMous
     }
     
     public void setWidth(String width) {
-       textbox.setWidth(width);
+       hp.setWidth(width);
     }
 
     public void getHeight(String height) {

@@ -134,6 +134,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     	inner.clear();
         inner.add(widget);
         inner.setWidth("100%");
+        DOM.setStyleAttribute(inner.getElement(), "overflow", "show");
         outer.add(inner);
         //DeferredCommand.addCommand(new Command() {
         //	public void execute() {
@@ -191,7 +192,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         if(pop != null){
             pop.hide();
         }
-        inner.removeStyleName("CellError");
+        inner.removeStyleName("InputError");
         errorPanel.clear();
     }
     
@@ -211,9 +212,9 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             errorPanel.add(errorLabel);
         }
         if(errors.size() == 0){
-            inner.removeStyleName("CellError");
+            inner.removeStyleName("InputError");
         }else{
-            inner.setStyleName("CellError");
+            inner.setStyleName("InputError");
         }
     }
     
@@ -232,7 +233,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseEnter(Widget sender) {
         // TODO Auto-generated method stub
-        if(inner.getStyleName().indexOf("CellError") > -1){
+        if(inner.getStyleName().indexOf("InputError") > -1){
             if(pop == null){
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
@@ -252,7 +253,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseLeave(Widget sender) {
         // TODO Auto-generated method stub
-        if(inner.getStyleName().indexOf("CellError") > -1){
+        if(inner.getStyleName().indexOf("InputError") > -1){
             if(pop != null){
                 pop.hide();
             }

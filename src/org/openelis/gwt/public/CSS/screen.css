@@ -1695,4 +1695,10 @@ rich text css
     background: url(../Images/removeFormat.gif);
 }
 
+.InputError {
+    height:16px;
+	border-bottom:1px dashed red;
+	margin:0;
+}
+
 
