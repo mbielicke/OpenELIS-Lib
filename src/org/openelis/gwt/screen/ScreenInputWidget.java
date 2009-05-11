@@ -27,6 +27,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -52,7 +53,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     protected AbstractField field;
     protected Widget displayWidget;
     protected boolean queryMode;
-    protected HorizontalPanel hp;
+    protected AbsolutePanel hp;
     protected FocusPanel errorImg = new FocusPanel();
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
@@ -74,10 +75,12 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public ScreenInputWidget(Node node){
         super(node);
+        /*
         if(node.getAttributes().getNamedItem("showError") != null){
             if(node.getAttributes().getNamedItem("showError").getNodeValue().equals("false"))
                 showError = false;
         }
+        */
             
     }
     
@@ -110,6 +113,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     
     public void initWidget(Widget widget){
         //if(showError) {
+    	/*
         if(hp == null){
             hp = new HorizontalPanel();
             if(showError){
@@ -118,12 +122,14 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
                 hp.add(errorImg);
             }
         }
+        */
         
-        if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
-            hp.remove(0);
-        }
-        hp.insert(widget,0);
-        hp.setCellWidth(widget, "100%");
+        //if(hp.getWidgetCount() > 1 || (hp.getWidgetCount() == 1 && !showError)){
+            //hp.remove(0);
+        //}
+    	hp.clear();
+        hp.add(widget);
+        //hp.setCellWidth(widget, "100%");
         setWidget(hp);
     }
 
@@ -171,18 +177,14 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     }
     
     public void clearError() {
-        if(!showError)
-            return;
         if(pop != null){
             pop.hide();
         }
-        errorImg.setStyleName("ErrorPanelHidden");
+        hp.removeStyleName("CellError");
         errorPanel.clear();
     }
     
     public void drawError() {
-        if(!showError)
-            return;
         if(this instanceof ScreenTableWidget){
             //((EditTable)displayWidget).load(0);
             return;
@@ -198,18 +200,18 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             errorPanel.add(errorLabel);
         }
         if(errors.size() == 0){
-            errorImg.setStyleName("ErrorPanelHidden");
+            hp.removeStyleName("CellError");
         }else{
-            errorImg.setStyleName("ErrorPanel");
+            hp.setStyleName("CellError");
         }
     }
     
     public void drawBusyIcon(){
-        errorImg.setStyleName("BusyPanel");
+       // errorImg.setStyleName("BusyPanel");
     }
     
     public void clearBusyIcon(){
-        errorImg.setStyleName("ErrorPanelHidden");
+        //errorImg.setStyleName("ErrorPanelHidden");
     }
 
     public void onMouseDown(Widget sender, int x, int y) {
@@ -219,7 +221,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseEnter(Widget sender) {
         // TODO Auto-generated method stub
-        if(errorImg.getStyleName().equals("ErrorPanel")){
+        if(hp.getStyleName().indexOf("CellError") > -1){
             if(pop == null){
                 pop = new PopupPanel();
                 //pop.setStyleName("ErrorPopup");
@@ -239,7 +241,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     public void onMouseLeave(Widget sender) {
         // TODO Auto-generated method stub
-        if(errorImg.getStyleName().equals("ErrorPanel")){
+        if(hp.getStyleName().indexOf("CellError") > -1){
             if(pop != null){
                 pop.hide();
             }
