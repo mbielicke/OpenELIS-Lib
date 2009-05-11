@@ -31,9 +31,14 @@ import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.common.data.TableField;
+import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -72,6 +77,30 @@ public abstract class Form<EntityKey> extends AbstractField<String> implements F
         HashMap<String,Node> nodeMap = createNodeMap(node);
         for (AbstractField field : getFields()){
             field.setAttributes(nodeMap.get(field.key));
+            
+            if("table".equals(nodeMap.get(field.key).getNodeName())){
+                NodeList fieldList = nodeMap.get(field.key).getChildNodes();
+                
+                TableDataRow<? extends Object> row = null;
+                if(node.getAttributes().getNamedItem("class") != null){
+                    String rowClass = node.getAttributes().getNamedItem("class").getNodeValue();
+                    row = (TableDataRow<? extends Object>)ClassFactory.forName(rowClass);
+                    
+                }else
+                    row = new TableDataRow<Integer>(fieldList.getLength());
+                List<FieldType> cells = row.getCells();
+                for (int i = 0; i < fieldList.getLength(); i++) {
+                    if (fieldList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        if(cells.size() > i && cells.get(i) != null) {
+                            ((AbstractField)cells.get(i)).setAttributes(fieldList.item(i));
+                        }else{
+                            AbstractField cellField = (ScreenBase.createField(fieldList.item(i)));
+                            cells.set(i,(FieldType)cellField);
+                        }
+                    }
+                }
+                ((TableField)field).defaultRow = row;
+            }
         }
         key = node.getAttributes().getNamedItem("key").getNodeValue();
         if(node.getAttributes().getNamedItem("load") != null){
