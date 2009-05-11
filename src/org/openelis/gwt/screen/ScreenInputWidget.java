@@ -133,21 +133,22 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     	outer.clear();
     	inner.clear();
         inner.add(widget);
+        inner.setWidth("100%");
         outer.add(inner);
-        DeferredCommand.addCommand(new Command() {
-        	public void execute() {
-        		inner.setWidth(widget.getOffsetWidth()+"px");
-        	}
-        });
+        //DeferredCommand.addCommand(new Command() {
+        //	public void execute() {
+        //		inner.setWidth(widget.getOffsetWidth()+"px");
+        //	}
+        //});
         //hp.setCellWidth(widget, "100%");
         setWidget(outer);
     }
 
     @Override
     public void setDefaults(Node node, ScreenBase screen) {
-        if (node.getAttributes().getNamedItem("panelWidth") != null)
+        if (node.getAttributes().getNamedItem("width") != null)
             inner.setWidth(node.getAttributes()
-                                     .getNamedItem("panelWidth")
+                                     .getNamedItem("width")
                                      .getNodeValue());
         super.setDefaults(node, screen);
     }
