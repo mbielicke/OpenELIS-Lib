@@ -78,7 +78,8 @@ public abstract class Form<EntityKey> extends AbstractField<String> implements F
         for (AbstractField field : getFields()){
             field.setAttributes(nodeMap.get(field.key));
             
-            if("table".equals(nodeMap.get(field.key).getNodeName())){
+            if("table".equals(nodeMap.get(field.key).getNodeName()) &&
+                nodeMap.get(field.key).hasChildNodes()){
                 NodeList fieldList = nodeMap.get(field.key).getChildNodes();
                 
                 TableDataRow<? extends Object> row = null;
