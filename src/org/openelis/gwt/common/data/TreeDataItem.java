@@ -72,6 +72,7 @@ public class TreeDataItem extends TableDataRow<Integer> implements Serializable{
             clone.addItem((TreeDataItem)getItem(i).clone());
         }
         
+        clone.key = key;
         clone.parent = parent;
         clone.leafType = leafType;
         clone.selected = selected;
