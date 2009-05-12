@@ -271,6 +271,8 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
     
     public void afterDraw(boolean sucess) {
         super.afterDraw(sucess);
+        resetForm();
+        load();
         setState(State.DEFAULT);
     }
     
