@@ -88,7 +88,7 @@ public class Dropdown extends DropdownWidget {
         if(enabled)
             lookUp.textbox.addFocusListener(this);
         
-        this.showAltRowColors = false;
+        this.isDropdown = true;
     }
     
     public void init(boolean multi, 

@@ -60,7 +60,7 @@ public class AutoComplete extends DropdownWidget {
         lookUp.textbox.addKeyboardListener(listener);
         lookUp.setIconStyle("");
         
-        this.showAltRowColors = false;
+        this.isDropdown = true;
     }
     
     public void init(String cat, 

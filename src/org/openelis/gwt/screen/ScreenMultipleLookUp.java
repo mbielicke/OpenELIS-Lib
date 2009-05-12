@@ -62,7 +62,7 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
     }
     
     public void load(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.load(field);
         else{
             look.setText((String)field.getValue());
@@ -72,7 +72,7 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
     
     
     public void submit(AbstractField field) {
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.submit(field);
         else{
             field.setValue(look.getText());
@@ -82,7 +82,7 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
     
     
     public void enable(boolean enabled){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
             look.enable(enabled);
@@ -91,7 +91,7 @@ public class ScreenMultipleLookUp extends ScreenInputWidget {
     }
     
     public void setFocus(boolean focus){
-        if(queryMode)
+        if(queryMode && queryWidget != null)
             queryWidget.setFocus(focus);
         else
             look.setFocus(focus);

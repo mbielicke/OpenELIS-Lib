@@ -110,7 +110,8 @@ public class TableDropdown extends TableCellInputWidget implements ChangeListene
             editor.changeListeners = null;
             editor.addChangeListener(this);
         }
-        editor.lookUp.setIconHeight("18px");
+        //editor.lookUp.setIconHeight("18px");
+        editor.setStyleName("TableDropdown");
         textValue.setValue("");
 	}
 

@@ -91,7 +91,7 @@ public class TableWidget extends FocusPanel implements
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
     public ScreenTableWidget screenWidget;
-    public boolean showAltRowColors = true;
+    public boolean isDropdown = false;
     public TableDragController dragController;
     public TableIndexDropController dropController;
     public boolean selectedByClick;

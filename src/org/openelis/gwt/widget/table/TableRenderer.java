@@ -62,22 +62,14 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
                 ((TableCellInputWidget)wid).rowIndex = i;
             }
             
-            if(controller.columns.size() == 1)
+            if(controller.isDropdown)
                 controller.view.table.getFlexCellFormatter().addStyleName(i,
                                                                           j,
-                                                                          TableView.cellStyle); 
-            else if(j == 0)
-                controller.view.table.getFlexCellFormatter().addStyleName(i,
-                                                                          j,
-                                                                          TableView.cellStyleLeft);
-            else if(j == controller.columns.size()-1)
-                controller.view.table.getFlexCellFormatter().addStyleName(i,
-                                                                          j,
-                                                                          TableView.cellStyleRight);
+                                                                          TableView.dropdownCellStyle);
             else
                 controller.view.table.getFlexCellFormatter().addStyleName(i,
                                                                           j,
-                                                                          TableView.cellStyleMiddle);
+                                                                          TableView.cellStyle);
             
             controller.view.table.getFlexCellFormatter()
                           .setHorizontalAlignment(i, j, column.getAlign());
@@ -99,7 +91,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
         row.index = i;
-        if(i % 2 == 1 && controller.showAltRowColors){
+        if(i % 2 == 1 && !controller.isDropdown){
             row.addStyleName("AltTableRow");
         }
         rows.add(row);

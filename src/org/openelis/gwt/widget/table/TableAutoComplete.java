@@ -94,6 +94,7 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
         ScreenAutoCompleteWidget sAuto = new ScreenAutoCompleteWidget(node,screen);
         this.screen = screen;
         editor = (AutoComplete)sAuto.getWidget();
+        editor.setStyleName("TableDropdown");
         textValue.setValue("");
 	}
 

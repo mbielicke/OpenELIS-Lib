@@ -282,7 +282,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     
     public void setContent(Widget content, int x, int y) {
         if(glass != null){
-            glass.setWidgetPosition(this, x, y);
+            modalPanel.setWidgetPosition(this, x, y);
         }
         setContent(content);
     }

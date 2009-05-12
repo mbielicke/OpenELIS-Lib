@@ -168,6 +168,7 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         ((AppScreen)screen).addKeyboardListener(auto.keyboardHandler);
         ((AppScreen)screen).addClickListener(auto.mouseHandler);
         initWidget(auto);
+        auto.setStyleName("FormDropdown");
         displayWidget = auto;
         setDefaults(node, screen);
     }
@@ -206,18 +207,17 @@ public class ScreenDropDownWidget extends ScreenInputWidget implements FocusList
         if(queryMode && queryWidget != null)
             queryWidget.enable(enabled);
         else{
-            if(alwaysEnabled){
-                auto.enabled(true);
-                auto.removeFocusListener(this);
+            if(alwaysEnabled)
+                enabled = true;
+            if(alwaysDisabled)
+                enabled = false;
+            
+            auto.enabled(enabled);
+            auto.removeFocusListener(this);
+            if(enabled)
                 auto.addFocusListener(this);
-            }else{
-                auto.enabled(enabled);
-                auto.removeFocusListener(this);
-                if(enabled)
-                    auto.addFocusListener(this);
             }
             super.enable(enabled);
-        }
     }
     
     public void destroy() {

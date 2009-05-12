@@ -188,6 +188,7 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         ((AppScreen)screen).addKeyboardListener(auto.keyboardHandler);
         ((AppScreen)screen).addClickListener(auto.mouseHandler);
         initWidget(auto);
+        auto.setStyleName("FormDropdown");
         displayWidget = auto;
         setDefaults(node, screen);
     }
