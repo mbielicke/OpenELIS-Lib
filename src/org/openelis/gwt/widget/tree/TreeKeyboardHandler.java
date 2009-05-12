@@ -124,7 +124,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
                         controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
                     }
                 }else{
-                    controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
+                   // controller.model.selectRow(controller.modelIndexList[controller.activeRow]);
                 }
             }else if(controller.activeRow < 0) {
                 DeferredCommand.addCommand(new Command() {
