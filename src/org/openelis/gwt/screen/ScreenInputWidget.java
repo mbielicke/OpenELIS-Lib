@@ -134,7 +134,6 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     	inner.clear();
         inner.add(widget);
         inner.setWidth("100%");
-        DOM.setStyleAttribute(inner.getElement(), "overflow", "show");
         outer.add(inner);
         //DeferredCommand.addCommand(new Command() {
         //	public void execute() {

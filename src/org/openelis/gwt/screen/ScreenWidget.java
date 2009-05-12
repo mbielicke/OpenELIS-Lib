@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.screen;
 
+import java.util.EnumSet;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -41,6 +43,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.AppButton;
 /**
  * ScreenWidget wraps a widget so that it can be displayed on a 
@@ -82,6 +85,7 @@ public class ScreenWidget extends SimplePanel implements
     public boolean alwaysEnabled;
     public boolean alwaysDisabled;
     public boolean enabled;
+    public EnumSet<State> enabledStates;
    
     public ScreenWidget() {
     }
@@ -262,6 +266,17 @@ public class ScreenWidget extends SimplePanel implements
         if (node.getAttributes().getNamedItem("shortcut") != null){
             String key = node.getAttributes().getNamedItem("shortcut").getNodeValue();
             screen.shortcut.put(key, getWidget());
+        }
+        if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
+             enabledStates = EnumSet.noneOf(State.class);
+        	 String[] enabledStateString = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
+        	 for(int i = 0; i < enabledStateString.length; i++)
+        		 enabledStates.add(State.valueOf(enabledStateString[i].toUpperCase()));	
+        }else{
+            enabledStates = EnumSet.noneOf(State.class);
+            enabledStates.add(State.ADD);
+            enabledStates.add(State.QUERY);
+            enabledStates.add(State.UPDATE);
         }
     }
 
