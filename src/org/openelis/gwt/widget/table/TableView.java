@@ -340,7 +340,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         try {
             scrollBar.getWidget().setHeight(scrollHeight+"px");
             if(showScroll == showScroll.NEEDED){
-                if(scrollHeight > (this.height+1)){
+                if(scrollHeight > (this.height+1) && controller.model.numRows() > controller.maxRows){
                     DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
                     if(header != null)
                         ft.getFlexCellFormatter().addStyleName(0, 1, "Header");

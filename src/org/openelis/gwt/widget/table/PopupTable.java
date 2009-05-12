@@ -89,7 +89,7 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
     public final DropPopup popup = new DropPopup(true);
     
     public PopupTable(){
-        
+      
     }
     
     public PopupTable(ArrayList<TableColumnInt> columns,int maxRows,String width, String title, boolean showHeader, VerticalScroll showScroll) {
@@ -129,6 +129,9 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
             }
         });
         focused = true;
+        if(model.numRows() < maxRows){
+            view.setHeight((model.numRows()*cellHeight+(model.numRows()*cellSpacing)+(model.numRows()*2)+cellSpacing));
+        }
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;
@@ -153,7 +156,9 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
             }
         });
         focused = true;
-        
+        if(model.numRows() < maxRows){
+            view.setHeight((model.numRows()*cellHeight+(model.numRows()*cellSpacing)+(model.numRows()*2)+cellSpacing));
+        }
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;

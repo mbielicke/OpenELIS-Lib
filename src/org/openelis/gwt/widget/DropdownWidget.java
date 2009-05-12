@@ -86,7 +86,6 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     };
     
     public DropdownWidget(){
-        
     }
     
     public DropdownWidget(ArrayList<TableColumnInt> columns,int maxRows,String width, String title, boolean showHeader, VerticalScroll showScroll) {

@@ -69,7 +69,7 @@ public class Dropdown extends DropdownWidget {
         tc.cellWidget = new TableLabel();
         ArrayList<TableColumnInt> colList = new ArrayList<TableColumnInt>();
         colList.add(tc);
-        setup(colList,10,"100px","",false,VerticalScroll.NEEDED);
+        setup(colList,20,"100px","",false,VerticalScroll.NEEDED);
     }
     
     private boolean enabled;

@@ -283,7 +283,7 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             				((AbstractField)cells.get(i)).setAttributes(fieldList.item(i));
             			}else{
             				AbstractField field = (ScreenBase.createField(fieldList.item(i)));
-            				cells.set(i,(FieldType)field);
+            				set.cells[i] = (FieldType)field;
             			}
             			if(fieldList.item(i).getAttributes().getNamedItem("key") != null)
             				columns.get(i).setKey(fieldList.item(i).getAttributes().getNamedItem("key").getNodeValue());
