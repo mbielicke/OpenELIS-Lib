@@ -267,11 +267,13 @@ public class ScreenWidget extends SimplePanel implements
             String key = node.getAttributes().getNamedItem("shortcut").getNodeValue();
             screen.shortcut.put(key, getWidget());
         }
-        if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
+        if(node.getAttributes().getNamedItem("enabledStates") != null){
              enabledStates = EnumSet.noneOf(State.class);
-        	 String[] enabledStateString = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
-        	 for(int i = 0; i < enabledStateString.length; i++)
-        		 enabledStates.add(State.valueOf(enabledStateString[i].toUpperCase()));	
+             if(!"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
+            	 String[] enabledStateString = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
+            	 for(int i = 0; i < enabledStateString.length; i++)
+            		 enabledStates.add(State.valueOf(enabledStateString[i].toUpperCase()));
+             }
         }else{
             enabledStates = EnumSet.noneOf(State.class);
             enabledStates.add(State.ADD);
