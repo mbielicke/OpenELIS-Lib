@@ -286,10 +286,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             dp.add(errorPanel);
             dp.setVisible(true);
             pop.setWidget(dp);
-            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+16, ((Widget)event.getSource()).getAbsoluteTop());
+            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
             pop.show();
         }
-		
 	}
-
 }
