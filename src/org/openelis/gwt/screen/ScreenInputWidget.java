@@ -69,7 +69,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
 
     }
     
-    private class InnerPanel extends HorizontalPanel implements HasMouseOverHandlers,HasMouseOutHandlers {
+    public class InnerPanel extends HorizontalPanel implements HasMouseOverHandlers,HasMouseOutHandlers {
 
 		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
 			// TODO Auto-generated method stub
@@ -83,7 +83,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     	
     }
     
-    protected HorizontalPanel inner = new InnerPanel();
+    public InnerPanel inner = new InnerPanel();
     
     public void onBrowserEvent(Event event) {
         if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
@@ -154,6 +154,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         inner.add(widget);
         inner.setWidth("100%");
         outer.add(inner);
+        inner.addMouseOutHandler(this);
+        inner.addMouseOverHandler(this);
         //DeferredCommand.addCommand(new Command() {
         //	public void execute() {
         //		inner.setWidth(widget.getOffsetWidth()+"px");
