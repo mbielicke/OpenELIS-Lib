@@ -25,9 +25,20 @@
 */
 package org.openelis.gwt.screen;
 
-import com.google.gwt.user.client.Command;
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.screen.AppScreenForm.State;
+import org.openelis.gwt.widget.MenuLabel;
+
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -35,20 +46,13 @@ import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.screen.AppScreenForm.State;
-import org.openelis.gwt.widget.MenuLabel;
-
-import java.util.ArrayList;
-
-public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseListener {
+public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseOutHandler, MouseOverHandler {
     
     protected ScreenInputWidget queryWidget;
     protected AbstractField queryField;
@@ -56,7 +60,6 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     protected Widget displayWidget;
     protected boolean queryMode;
     protected AbsolutePanel outer = new AbsolutePanel();
-    protected HorizontalPanel inner = new HorizontalPanel();
     protected FocusPanel errorImg = new FocusPanel();
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
@@ -65,6 +68,22 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public ScreenInputWidget() {
 
     }
+    
+    private class InnerPanel extends HorizontalPanel implements HasMouseOverHandlers,HasMouseOutHandlers {
+
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+			// TODO Auto-generated method stub
+			return addDomHandler(handler, MouseOverEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+			// TODO Auto-generated method stub
+			return addDomHandler(handler,MouseOutEvent.getType());
+		}
+    	
+    }
+    
+    protected HorizontalPanel inner = new InnerPanel();
     
     public void onBrowserEvent(Event event) {
         if (DOM.eventGetType(event) == Event.ONKEYDOWN) {
@@ -225,50 +244,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         //errorImg.setStyleName("ErrorPanelHidden");
     }
 
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
-        if(inner.getStyleName().indexOf("InputError") > -1){
-            if(pop == null){
-                pop = new PopupPanel();
-                //pop.setStyleName("ErrorPopup");
-            }
-            DecoratorPanel dp = new DecoratorPanel();
-            
-            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
-            dp.setStyleName("ErrorWindow");
-            dp.add(errorPanel);
-            dp.setVisible(true);
-            pop.setWidget(dp);
-            pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
-            pop.show();
-        }
-        
-    }
-
-    public void onMouseLeave(Widget sender) {
-        // TODO Auto-generated method stub
-        if(inner.getStyleName().indexOf("InputError") > -1){
-            if(pop != null){
-                pop.hide();
-            }
-        }
-        
-    }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
     
     public Widget getWidget() {
         //if(showError)
@@ -286,5 +262,32 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             qList.add(queryField);
         }
     }
+
+	public void onMouseOut(MouseOutEvent event) {
+        if(inner.getStyleName().indexOf("InputError") > -1){
+            if(pop != null){
+                pop.hide();
+            }
+        }
+	}
+
+	public void onMouseOver(MouseOverEvent event) {
+        if(inner.getStyleName().indexOf("InputError") > -1){
+            if(pop == null){
+                pop = new PopupPanel();
+                //pop.setStyleName("ErrorPopup");
+            }
+            DecoratorPanel dp = new DecoratorPanel();
+            
+            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            dp.setStyleName("ErrorWindow");
+            dp.add(errorPanel);
+            dp.setVisible(true);
+            pop.setWidget(dp);
+            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+16, ((Widget)event.getSource()).getAbsoluteTop());
+            pop.show();
+        }
+		
+	}
 
 }
