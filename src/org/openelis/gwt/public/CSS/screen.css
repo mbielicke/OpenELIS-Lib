@@ -99,7 +99,7 @@ margin-left:-2px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
     background:#e5f5f9;
-    padding:0 7px 5px 0;
+    padding:0 4px 2px 0;
 }
 /*******TOP MENU BAR CSS***********/
 .topMenuBar { 
@@ -695,48 +695,46 @@ cursor:default;}
 }
 /*PopUP panel*/
 .ErrorWindow .middle{
-background:#e5f5f9;;
-padding:0px;
-border:0px;
+    padding:0px;
+    border:0px;
 }
-
 .ErrorWindow .topRight {
-    width:5px;
-    height:5px;
-    background: transparent url("../Images/popuptr.gif") no-repeat right top;
+    width:8px;
+    height:8px;
+    background: transparent url("../Images/popuptr.png") no-repeat right top;
 }
 .ErrorWindow .middleRight {
-    width:5px;
+    width:8px;
     height:100%;
-    background:url("../Images/popupright.gif") repeat-y right;
+    background: transparent url("../Images/popupright.png") top;
 }
 .ErrorWindow .bottomRight {
-    background:url("../Images/popupbr.gif") no-repeat right bottom;
-    width:5px;
-    height:5px;
+    background: transparent url("../Images/popupbr.png") no-repeat left bottom;
+    width:8px;
+    height:8px;
 }
 .ErrorWindow .bottomCenter {
-    background:url("../Images/popupbottom.gif") repeat-x bottom;
-    height:5px;
+    background:url("../Images/popupbottom.png") left;
+    height:8px;
 }
 .ErrorWindow .bottomLeft {
-    width:5px;
-    height:5px;
-    background:url("../Images/popupbl.gif") no-repeat left bottom;
+    width:8px;
+    height:8px;
+    background:url("../Images/popupbl.png") no-repeat left bottom;
 }
 .ErrorWindow .middleLeft {
-    width:5px;
+    width:8px;
     height:100%;
-    background: url("../Images/popupleft.gif") repeat-y left;
+    background: url("../Images/popupleft.png") repeat-y left;
 }
 .ErrorWindow .topLeft {
-    width:5px;
-    height:5px;
-    background: url("../Images/popuptl.gif") no-repeat left top;
+    width:8px;
+    height:8px;
+    background: url("../Images/popuptl.png") no-repeat left top;
 }
 .ErrorWindow .topCenter{
-    background:url("../Images/popuptop.gif") repeat-x top;
-    height:5px;
+    background:url("../Images/popuptop.png") repeat-x top;
+    height:8px;
 }
 /*ErrorWindow end*/
 
