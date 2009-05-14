@@ -262,8 +262,8 @@ public class ScreenTableWidget extends ScreenInputWidget implements HasDragContr
             for (int i = 0; i < editors.getLength(); i++) {
                 if (editors.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     columns.get(j).setColumnWidget((Widget)ScreenTableWidget.createCellWidget(editors.item(i),screen));
-                    if(editors.item(i).getAttributes().getNamedItem("key") != null)
-                    	columns.get(j).setKey(editors.item(i).getAttributes().getNamedItem("key").getNodeValue());
+                    if(editors.item(i).getAttributes().getNamedItem("cellKey") != null)
+                    	columns.get(j).setKey(editors.item(i).getAttributes().getNamedItem("cellKey").getNodeValue());
                     j++;
                 }
             }
