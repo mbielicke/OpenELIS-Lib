@@ -5,6 +5,8 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.HashMap;
 
+import org.openelis.gwt.screen.AppScreen;
+
 public class DoubleField extends AbstractField<Double> implements FieldType {
 
     private static final long  serialVersionUID = 1L;
@@ -93,12 +95,12 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
     public void validate() {
         if (invalid) {
             valid = false;
-            addError("Field must be numeric");
+            addError(AppScreen.consts.get("fieldNumericException"));
             return;
         }
         if (required) {
             if (value == null) {
-                addError("Field is required");
+                addError(AppScreen.consts.get("fieldRequiredException"));
                 valid = false;
                 return;
             }
@@ -115,11 +117,11 @@ public class DoubleField extends AbstractField<Double> implements FieldType {
         if (value == null)
             return true;
         if (max != null && value > max) {
-            addError("Field exceeded maximum value");
+            addError(AppScreen.consts.get("fieldMaxException"));
             return false;
         }
         if (min != null && value < min) {
-            addError("Field is below minimum value");
+            addError(AppScreen.consts.get("fieldMinException"));
             return false;
         }
         return true;

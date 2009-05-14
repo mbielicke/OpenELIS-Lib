@@ -29,6 +29,8 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.HashMap;
 
+import org.openelis.gwt.screen.AppScreen;
+
 /**
  * @author tschmidt
  * 
@@ -113,7 +115,7 @@ public class StringField extends AbstractField<String> implements FieldType {
     public void validate() {
         if (required) {
             if (value == null || value.length() == 0) {
-                addError("Field is required");
+                addError(AppScreen.consts.get("fieldRequiredException"));
                 valid = false;
                 return;
             }
@@ -129,12 +131,12 @@ public class StringField extends AbstractField<String> implements FieldType {
         if (value == null)
             return true;
         if (max != null && value.length() > ((Integer)max).intValue()) {
-            addError("Field exceeded maximum length");
+            addError(AppScreen.consts.get("fieldMaxLengthException"));
             return false;
         }
         if (min != null && value.length() < ((Integer)min).intValue() &&
             value.length() > 0) {
-            addError("Field is below minimum length");
+            addError(AppScreen.consts.get("fieldMinLengthException"));
             return false;
         }
         return true;

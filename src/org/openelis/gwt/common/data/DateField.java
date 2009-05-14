@@ -29,6 +29,8 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.screen.AppScreen;
+
 import java.util.Date;
 import java.util.HashMap;
 
@@ -196,7 +198,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
     public void validate() {
         if (required) {
             if (value == null) {
-                addError("Field is required");
+                addError(AppScreen.consts.get("fieldRequiredException"));
                 valid = false;
                 return;
             }
@@ -222,12 +224,12 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
         // TODO Auto-generated method stub
         if (min != null && value.before(DatetimeRPC.getInstance()
                                                    .add(-min.intValue()))) {
-            addError("Date is too far in the past");
+            addError(AppScreen.consts.get("fieldPastException"));
             return false;
         }
         if (max != null && value.after(DatetimeRPC.getInstance()
                                                   .add(max.intValue()))) {
-            addError("Date is too far in the future");
+            addError(AppScreen.consts.get("fieldFutureException"));
             return false;
         }
         return true;

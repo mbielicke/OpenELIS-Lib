@@ -28,6 +28,8 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.xml.client.Node;
 
 import java.util.HashMap;
+
+import org.openelis.gwt.screen.AppScreen;
 /**
  * @author tschmidt
  * 
@@ -100,7 +102,7 @@ public class CheckField extends AbstractField<String> implements FieldType {
     public void validate() {
         if (required) {
             if (value == null) {
-                addError("Field is required");
+                addError(AppScreen.consts.get("fieldRequiredException"));
                 valid =  false;
                 return;
             }
