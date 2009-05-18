@@ -107,5 +107,8 @@ public class AutoComplete extends DropdownWidget {
         this.autoCall = autoCall;
     }
     
-
+    public void setWidth(String width) {
+        lookUp.textbox.setWidth(width);
+        
+    }
 }

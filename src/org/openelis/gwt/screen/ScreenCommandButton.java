@@ -45,6 +45,7 @@ public class ScreenCommandButton extends ScreenWidget {
      * Widget wrapped by this class
      */
     private CommandButton button;
+    private boolean useDiv = false;
     /**
      * Default no-arg constructor used to create reference in the WidgetMap class
      */
@@ -66,10 +67,18 @@ public class ScreenCommandButton extends ScreenWidget {
     }
     
     public void init(Node node, ScreenBase screen) {
+        if(node.getAttributes().getNamedItem("useDiv") != null){
+            if(node.getAttributes().getNamedItem("useDiv").getNodeValue().equals("true"))
+                useDiv = true;
+        }
+            
         if(node.getAttributes().getNamedItem("key") != null && screen.wrappedWidgets.containsKey(node.getAttributes().getNamedItem("key").getNodeValue()))
             button = (CommandButton)screen.wrappedWidgets.get(node.getAttributes().getNamedItem("key").getNodeValue());
+        else if(useDiv)
+            button = new CommandButton(useDiv);
         else
             button = new CommandButton();
+        
         button.command = ClassFactory.getEnum(node.getAttributes().getNamedItem("command").getNodeValue());
         if(node.getAttributes().getNamedItem("value") != null){
             button.value = node.getAttributes().getNamedItem("value").getNodeValue();

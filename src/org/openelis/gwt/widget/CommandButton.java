@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -64,17 +65,28 @@ public class CommandButton extends Composite implements MouseListener, SourcesCo
     private AbsolutePanel left = new AbsolutePanel();
     private AbsolutePanel content = new AbsolutePanel();
     
+    public CommandButton(boolean useDiv) {
+        panel.add(classPanel);
+        initWidget(panel);
+        
+        panel.addMouseListener(this);
+        panel.addClickListener(this);
+    }
+    
     public CommandButton() {
         hp.add(left);
         hp.add(content);
         hp.add(right);
         classPanel.add(hp);
+ 
         panel.add(classPanel);
         initWidget(panel);
+        
         //panel.addStyleName("ScreenPanelButton");
         left.addStyleName("ButtonLeftSide");
         right.addStyleName("ButtonRightSide");
         content.addStyleName("ButtonContent");
+    
         panel.addMouseListener(this);
         panel.addClickListener(this);
     }
@@ -118,8 +130,7 @@ public class CommandButton extends Composite implements MouseListener, SourcesCo
     }
 
     public void onMouseEnter(Widget sender) {
-        if(state != ButtonState.DISABLED && state != ButtonState.LOCK_PRESSED && !locked)
-            panel.addStyleName("Hover");
+        panel.addStyleName("Hover");
         
     }
 
