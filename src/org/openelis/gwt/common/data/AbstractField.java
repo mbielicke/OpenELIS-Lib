@@ -45,7 +45,7 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Se
 
     private static final long serialVersionUID = 1L;
 
-    protected ArrayList<String> errors = new ArrayList<String>();
+    protected ArrayList<String> errors = null;
     protected boolean required;
     public String key;
     protected String tip;
@@ -81,6 +81,9 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Se
      * field as invalid.
      */
     public void addError(String err) {
+        if(errors == null) {
+            errors = new ArrayList<String>();
+        }
         errors.add(err);
         valid = false;
     }
@@ -89,6 +92,8 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Se
      * returns all error messages set for this field.
      */
     public ArrayList<String> getErrors() {
+        if(errors == null)
+            return new ArrayList<String>();
         return errors;
     }
 
@@ -140,7 +145,8 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Se
      * sets the valid flag back to true for the field.
      */
     public void clearErrors() {
-        errors = new ArrayList<String>();
+        errors = null;
+        //errors = new ArrayList<String>();
         valid = true;
     }
 
@@ -231,7 +237,8 @@ public abstract class AbstractField<Type> extends DataObject<Type> implements Se
      */
     public void removeErrors() {
         valid = true;
-        errors.clear();
+        errors = null;
+        //errors.clear();
     }
     
     /**
