@@ -444,12 +444,18 @@ border:1px solid #D8D8D8;
 .LookupButtonImage{
     background:url("../Images/fieldlookup.png") no-repeat center center;
 }
+.Hover .LookupButtonImage{
+    background:#d8d8d8 url("../Images/fieldlookup.png") no-repeat center center;
+}
 .disabled .LookupButtonImage{
     background:url("../Images/fieldlookupdisabled.png") no-repeat center center;
     cursor:default;
 }
 .CommentButtonImage{
     background:url("../Images/fieldcomment.png") no-repeat center center;
+}
+.Hover .CommentButtonImage{
+    background:#d8d8d8 url("../Images/fieldcomment.png") no-repeat center center;
 }
 .disabled .CommentButtonImage{
     background:url("../Images/fieldcommentdisabled.png") no-repeat center center;
@@ -458,16 +464,21 @@ border:1px solid #D8D8D8;
 .AdvancedButtonImage{
     background:url("../Images/fieldadvanced.png") no-repeat center center;
 }
+.Hover .AdvancedButtonImage{
+    background:#d8d8d8 url("../Images/fieldadvanced.png") no-repeat center center;
+}
 .disabled .AdvancedButtonImage{
     background:url("../Images/fieldadvanceddisabled.png") no-repeat center center;
     cursor:default;
 }
+
 .LookupButtonImage, .CommentButtonImage, .AdvancedButtonImage{
     width:16px;
     height:16px;
-    padding:2px;
+    padding:1px;
     cursor:pointer;
-    border-left:1px solid #D8D8D8;
+    border:1px solid #D8D8D8;
+    border-left:none;
 }
 .Screenlookup .Hover{
     background:#D8D8D8;
