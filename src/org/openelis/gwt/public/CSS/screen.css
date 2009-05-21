@@ -1704,10 +1704,19 @@ rich text css
     background: url(../Images/removeFormat.gif);
 }
 
-.InputError {
-    height:16px;
+.InputError .ScreenTextBox{
 	border-bottom:1px dashed red;
-	margin:0;
 }
+.InputError .TextboxUnselected{
+	border-bottom:1px dashed red;
+}
+.InputError .AutoDropDownButton{
+	border-bottom:1px dashed red;
+}
+.InputError .CalendarButton{
+	border-bottom:1px dashed red;
+}
+
+
 
 
