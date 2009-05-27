@@ -209,6 +209,8 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
     
     public int getSelectedIndex() {
+        if(selectedRows.size() == 0)
+            return -1;
         return selectedRows.get(0);
     }
 
