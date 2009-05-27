@@ -57,7 +57,6 @@ public abstract class Form<EntityKey> extends AbstractField<String> implements F
     
     public enum Status {valid,invalid}
     public Status status;
-    public ArrayList<String> errors;
     public boolean load;
 
     public Form() {
@@ -123,16 +122,6 @@ public abstract class Form<EntityKey> extends AbstractField<String> implements F
     	errors.add(err);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.uiowa.uhl.inmsp.interfaces.IForm#getError()
-     */
-    public ArrayList<String> getErrors() {
-        // TODO Auto-generated method stub
-        return errors;
-    }
-
     public void validate() {
         // TODO Auto-generated method stub
         boolean valid = true;
@@ -151,7 +140,7 @@ public abstract class Form<EntityKey> extends AbstractField<String> implements F
 
     public void removeErrors() {
         status = Status.valid;
-        errors = new ArrayList<String>();
+        errors = null;
         for (AbstractField field : getFields()) {
             field.clearErrors();
         }
