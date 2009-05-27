@@ -197,15 +197,11 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         screen.validate(field);
         if(!field.isValid())
             drawError();
-        else{
-            errorImg.setStyleName("ErrorPanelHidden");
-            if(pop != null){
-                pop.hide();
-            }
-        }
-        if(sender instanceof TextBoxBase){
+        else
+            clearError();
+        
+        if(sender instanceof TextBoxBase)
           ((TextBoxBase)sender).setText(field.format());
-        }
     }
     
     public void clearError() {
