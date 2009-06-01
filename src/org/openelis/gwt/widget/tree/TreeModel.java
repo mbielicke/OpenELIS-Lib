@@ -303,7 +303,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public void setCell(int row, int col,Object value) {
-        ((AbstractField)rows.get(row).cells[col]).setValue(value);
+        rows.get(row).cells[col].setValue(value);
         treeModelListeners.fireCellUpdated(this, row, col);
     }
 
@@ -319,7 +319,7 @@ public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     }
 
     public Object getCell(int row, int col) {
-        return ((AbstractField)rows.get(row).cells[col]).getValue();
+        return rows.get(row).cells[col].getValue();
     }
 
     public TreeDataItem setRow(int index, TreeDataItem row) {
