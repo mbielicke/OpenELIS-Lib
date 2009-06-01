@@ -25,9 +25,12 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -60,6 +63,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public ScreenBase screen;
     
     protected String textBoxDefault = "";
+    
+    protected String curValue = null;
     
     public boolean multiSelect;
     
@@ -236,7 +241,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         textValue = getTextBoxDisplay();
 
         lookUp.setText(textValue.trim());
-        textBoxDefault = textValue;
+       
 
         /**
          * This was commented out to fix a problem with IE.  
@@ -247,8 +252,12 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         
         hideTable();
 
-        if (changeListeners != null)
-            changeListeners.fireChange(this);
+        if (changeListeners != null){
+            if(!textBoxDefault.equals(textValue)){
+                textBoxDefault = textValue;
+                changeListeners.fireChange(this);
+            }
+        }
     }
 
     public void onKeyPress(Widget sender, char keyCode, int modifiers) {
@@ -411,6 +420,5 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public void setWidth(int width){
         setWidth(width+"px");
     }
-
     
 }

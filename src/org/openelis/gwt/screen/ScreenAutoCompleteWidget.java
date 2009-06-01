@@ -108,6 +108,8 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
         	textBoxDefault = node.getAttributes()
                                   .getNamedItem("text")
                                   .getNodeValue();
+        else
+            textBoxDefault = "";
         
         if (node.getAttributes().getNamedItem("width") != null)
         	width = node.getAttributes()
