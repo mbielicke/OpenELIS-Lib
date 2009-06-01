@@ -131,7 +131,8 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
         focused = true;
         if(model.numRows() < maxRows){
             view.setHeight((model.numRows()*cellHeight+(model.numRows()*cellSpacing)+(model.numRows()*2)+cellSpacing));
-        }
+        }else
+            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;
@@ -158,7 +159,8 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
         focused = true;
         if(model.numRows() < maxRows){
             view.setHeight((model.numRows()*cellHeight+(model.numRows()*cellSpacing)+(model.numRows()*2)+cellSpacing));
-        }
+        }else
+            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;
