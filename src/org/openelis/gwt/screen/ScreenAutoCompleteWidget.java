@@ -241,15 +241,15 @@ public class ScreenAutoCompleteWidget extends ScreenInputWidget implements Focus
             queryWidget.enable(enabled);
         else{
             if(alwaysEnabled){
-     //           auto.removeFocusListener(this);
-       //         auto.addFocusListener(this);
+                auto.removeFocusListener(this);
+                auto.addFocusListener(this);
             }else{
                 auto.lookUp.getTextBox().setReadOnly(!enabled);
                 auto.enabled = enabled;
-                //if(enabled)
-         //           auto.addFocusListener(this);
-             //   else
-           //         auto.removeFocusListener(this);
+                if(enabled)
+                    auto.addFocusListener(this);
+                else
+                    auto.removeFocusListener(this);
             }
             super.enable(enabled);
         }

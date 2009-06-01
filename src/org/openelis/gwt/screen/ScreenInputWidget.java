@@ -200,8 +200,8 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         else
             clearError();
         
-        if(sender instanceof TextBoxBase)
-          ((TextBoxBase)sender).setText(field.format());
+        if(sender instanceof TextBoxBase )
+         ((TextBoxBase)sender).setText(field.format());
     }
     
     public void clearError() {

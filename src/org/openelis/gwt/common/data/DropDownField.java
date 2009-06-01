@@ -30,6 +30,7 @@ import java.util.HashMap;
 
 import org.openelis.gwt.screen.AppScreen;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.Node;
 /**
  * DropDownField is an implementation of AbstractField that is 
@@ -247,6 +248,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
         if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
             if (value == null || value.size() == 0 || (value.size() == 1 && value.get(0).key == null)) {
+                
                 addError(AppScreen.consts.get("fieldRequiredException"));
                 valid = false;
                 return;
@@ -286,5 +288,9 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
         }
         return keys;
     
+    }
+    
+    public String format() {
+        return (String)getTextValue();
     }
 }
