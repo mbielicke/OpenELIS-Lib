@@ -54,13 +54,19 @@ public class RichTextWidget extends Composite implements FocusListener{
     public void init(boolean tools){
         this.tools = tools;
         initWidget(vp);
+        vp.setCellPadding(0);
+        vp.setCellSpacing(0);
+        
         if(tools){
         	vp.setWidget(0,0,toolbar);
            // vp.getFlexCellFormatter().setHeight(0, 0,"75px");
             vp.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
             vp.setWidget(1,0,area);
-        }else
+            vp.getFlexCellFormatter().addStyleName(1, 0, "WhiteContentPanel");
+        }else{
             vp.setWidget(0,0,area);
+            vp.getFlexCellFormatter().addStyleName(0, 0, "WhiteContentPanel");
+        }
         area.setSize("100%","100%");
         area.addFocusListener(this);
 

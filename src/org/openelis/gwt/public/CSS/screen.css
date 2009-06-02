@@ -938,6 +938,7 @@ cursor:default;}
 }
 .DropdownPopup .TableCell{
     border:none;
+    overflow:hidden;
 }
 .AutoDropdownButton{
     width:16px;

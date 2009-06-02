@@ -80,6 +80,7 @@ public class ScreenRichTextArea extends ScreenInputWidget {
         }
         textarea.init(tools);
         textarea.area.setSize(width, height);
+        
         initWidget(textarea);
         displayWidget = textarea;
         textarea.area.setStyleName("ScreenTextArea");

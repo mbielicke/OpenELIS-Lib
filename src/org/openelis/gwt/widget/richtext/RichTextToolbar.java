@@ -212,10 +212,11 @@ public class RichTextToolbar extends Composite {
   private static String fontsMenuXMl =  "<menuPanel key=\"fontsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
   "<menuItem>" +
   "<menuDisplay>"+
-      "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
+      "<appButton action=\"option\" style=\"fonttype\">"+
           "<HorizontalPanel>"+
               "<AbsolutePanel style=\"FontSize\"/>"+
               "<label key=\"fontLabel\">Times New Roman</label>" +
+              "<AbsolutePanel style=\"OptionsButtonImage\"/>" + 
           "</HorizontalPanel>" +
       "</appButton>" +
   "</menuDisplay>" +
@@ -233,10 +234,11 @@ public class RichTextToolbar extends Composite {
   private static String fontSizeMenuXMl =  "<menuPanel key=\"fontSizeMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
   "<menuItem>" +
   "<menuDisplay>"+
-      "<appButton action=\"option\" style=\"ButtonPanelButton\">"+
+      "<appButton action=\"option\" style=\"fontsize\">"+
           "<HorizontalPanel>"+
               "<AbsolutePanel style=\"FontSize\"/>"+
               "<label key=\"sizeLabel\">Medium</label>"+
+              "<AbsolutePanel style=\"OptionsButtonImage\"/>" +
           "</HorizontalPanel>" +
       "</appButton>" +
   "</menuDisplay>" +
@@ -266,9 +268,13 @@ public class RichTextToolbar extends Composite {
     outer.setWidget(0,0,topPanel);
     outer.setWidget(1,0,bottomPanel);
     topPanel.setWidth("100%");
+    //topPanel.setc
     bottomPanel.setWidth("100%");
     //outer.setHeight("75px");
     initWidget(outer);
+    outer.setCellPadding(0);
+    outer.setCellSpacing(0);
+    //setc
     setStyleName("gwt-RichTextToolbar");
     richText.addStyleName("hasRichTextToolbar");
 
