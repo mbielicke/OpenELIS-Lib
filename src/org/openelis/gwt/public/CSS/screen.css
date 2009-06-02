@@ -276,6 +276,13 @@ color:gray;
 
 
 /*******General Button Class***********/
+.RichTextContentPanel{
+background:white;
+}
+.gwt-RichTextToolbar{
+        height:26px;
+    background:url("../Images/buttonbarbg.gif") repeat-x
+}
 .Button{
     padding:2px;
 }
@@ -291,7 +298,7 @@ color:gray;
     background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
 }
 .pressed .ButtonRightSide{
-    background:url("../screenbuttonrspressed.gif") no-repeat;
+    background:url("../Images/screenbuttonrspressed.gif") no-repeat;
 }
 
 .ButtonLeftSide{
@@ -306,7 +313,7 @@ color:gray;
 }
 
 .pressed .ButtonLeftSide{
-    background:url("../screenbuttonlspressed.gif") no-repeat;
+    background:url("../Images/screenbuttonlspressed.gif") no-repeat;
 }
 
 .ButtonContent{
@@ -322,7 +329,7 @@ color:gray;
 }
 
 .Pressed .ButtonContent {
-    background: url(../screenbuttonpressed.gif) repeat-x;
+    background: url(../Images/screenbuttonpressed.gif) repeat-x;
     }
     
 .disabled .ButtonContent{
@@ -486,9 +493,15 @@ border:1px solid #D8D8D8;
 
 }
 /*******Button Panel***********/
+
 .ButtonPanelContainer{
     height:26px;
     background:url("../Images/buttonbarbg.gif") repeat-x;
+}
+
+.BottomButtonPanelContainer{
+    height:26px;
+    background:url("../Images/bottombuttonbarbg.gif") repeat-x;
 }
 
 .ButtonDivider{
