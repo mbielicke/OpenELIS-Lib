@@ -312,9 +312,16 @@ public class TableDataModel<Row extends TableDataRow> implements RPC,FieldType{
         TableDataModel<Row> clone = new TableDataModel<Row>();
         clone.page = page;
         clone.selected = selected;
-        clone.selectLast = selectLast;
+        clone.selectLast = selectLast;        
         if(defaultSet != null)
             clone.defaultSet = (Row)defaultSet.clone();
+        
+        if(deleted!=null) {
+            clone.deleted = new ArrayList<Row>();
+            for(int i = 0; i < deleted.size(); i++) {
+                clone.deleted.add((Row)deleted.get(i).clone());
+            }
+        }
         
         for(int i = 0; i < list.size(); i++){
             clone.add((Row)list.get(i).clone());
