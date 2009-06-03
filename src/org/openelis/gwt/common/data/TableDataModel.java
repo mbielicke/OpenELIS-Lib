@@ -130,11 +130,14 @@ public class TableDataModel<Row extends TableDataRow> implements RPC,FieldType{
         //keyMap.remove(list.get(index).key);
         if(deleted == null)
             deleted = new ArrayList<Row>(1);
-        deleted.add(list.remove(index));
+        if(index < deleted.size())
+            deleted.add(list.remove(index));
     }
     
     public Row set(int index, Row row) {
-        return list.set(index, row);
+        if(index < list.size())
+            return list.set(index, row);
+        return null;
     }
     
     /**
@@ -203,7 +206,7 @@ public class TableDataModel<Row extends TableDataRow> implements RPC,FieldType{
         if(index == -1){
             selections.clear();
             selected = -1;
-        }else{
+        }else if(index < selections.size()){
             selections.remove(new Integer(index));
             if(selected == index)
                 selected = -1;
@@ -343,7 +346,9 @@ public class TableDataModel<Row extends TableDataRow> implements RPC,FieldType{
     }
     
     public Row get(int index) {
-        return list.get(index);
+        if(index < list.size())
+            return list.get(index);
+        return null;
     }
     
     public int size() {
