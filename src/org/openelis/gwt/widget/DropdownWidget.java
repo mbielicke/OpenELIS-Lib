@@ -329,12 +329,15 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             lookUp.setText(getTextBoxDisplay());
         }else
             lookUp.setText("");
+        
+        textBoxDefault = lookUp.getText();
     }
     
     public void setSelection(Object key) {
         model.clearSelections();
         model.selectRow(key);
         lookUp.setText(getTextBoxDisplay());
+        textBoxDefault = lookUp.getText();
     }
     
     public <T extends TableDataRow> ArrayList<T> getSelections() {
@@ -420,5 +423,4 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public void setWidth(int width){
         setWidth(width+"px");
     }
-    
 }
