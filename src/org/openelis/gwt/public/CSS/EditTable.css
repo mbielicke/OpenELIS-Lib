@@ -35,6 +35,7 @@ tr .TableHighlighted{
 .dropdowncell{	
 height:21px;
 cursor:pointer;
+overflow:hidden;
 }
 
 .Selected .dropdowncell{
