@@ -130,8 +130,11 @@ public class TableDataModel<Row extends TableDataRow> implements RPC,FieldType{
         //keyMap.remove(list.get(index).key);
         if(deleted == null)
             deleted = new ArrayList<Row>(1);
-        if(index < deleted.size())
-            deleted.add(list.remove(index));
+        if(index < list.size()){
+            Row tmp = list.remove(index);
+            deleted.add(tmp);
+        }
+
     }
     
     public Row set(int index, Row row) {
