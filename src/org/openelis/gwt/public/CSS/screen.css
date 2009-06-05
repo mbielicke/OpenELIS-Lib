@@ -730,7 +730,12 @@ cursor:default;}
 .ErrorWindow .middleRight {
     width:8px;
     height:100%;
-    background: transparent url("../Images/popupright.png") top;
+    background: transparent url("../Images/popupright.png") top no-repeat;
+}
+.ErrorWindow .middleRightInner{
+    background: transparent url("../Images/popupright-y.png") top repeat-y;
+    height:100%;
+    margin-top:8px;
 }
 .ErrorWindow .bottomRight {
     background: transparent url("../Images/popupbr.png") no-repeat left bottom;
@@ -738,8 +743,13 @@ cursor:default;}
     height:8px;
 }
 .ErrorWindow .bottomCenter {
-    background:url("../Images/popupbottom.png") left;
+    background:url("../Images/popupbottom.png") left no-repeat;
     height:8px;
+}
+.ErrorWindow .bottomCenterInner {
+    background:url("../Images/popupbottom-x.png") left;
+    height:8px;
+    margin-left:8px;
 }
 .ErrorWindow .bottomLeft {
     width:8px;

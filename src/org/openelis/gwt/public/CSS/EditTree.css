@@ -94,7 +94,7 @@ tr .TreeHighlighted .treeOpenImage{
 .CellError{
     height:18px;
 	border-bottom:1px dashed red;
-	margin-bottom:-1;
+/*	margin-bottom:-1;*/
 }
 .Disabled .TableCell .gwt-Label {
 	color:grey;
