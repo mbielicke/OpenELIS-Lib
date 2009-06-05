@@ -156,8 +156,9 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
 
     public void load(AbstractField field) {
-        if(queryMode && queryWidget != null){
-            queryWidget.load(field);
+        if(queryMode){
+            if(queryWidget != null)
+                queryWidget.load(field);
         }else{
             textbox.setText(field.format().trim());
             super.load(field);
@@ -166,8 +167,9 @@ public class ScreenTextBox extends ScreenInputWidget implements ChangeListener,
     }
 
     public void submit(AbstractField field) {
-        if(queryMode && queryWidget != null){  
-            queryWidget.submit(field);
+        if(queryMode){
+            if(queryWidget != null)  
+                queryWidget.submit(field);
         }else
             field.setValue(textbox.getText());
             

@@ -151,14 +151,14 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
     
     public Object getTextValue(){
         if(value == null)
-            return null;
+            return "";
         
         if(value.size() == 1)
             return value.get(0).cells[0].getValue();
         else if(value.size() > 1)
             return value;
         else
-            return null;
+            return "";
     }
     
     /**
