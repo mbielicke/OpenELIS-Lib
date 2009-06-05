@@ -150,6 +150,7 @@ version="1.0">
 				    <xsl:with-param name="key">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="label">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="enabled">true</xsl:with-param>
+				      <xsl:with-param name="enabledStates">display</xsl:with-param>
 				      <xsl:with-param name="class">duplicateRecord</xsl:with-param>
 				      <xsl:with-param name="args"></xsl:with-param>
 				    </xsl:call-template>
@@ -209,6 +210,7 @@ version="1.0">
     <xsl:param name="class"/>
     <xsl:param name="args"/>
     <xsl:param name="enabled"/>
+    <xsl:param name="enabledStates"/>
     <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
   	<menuItem key="{$key}" style="TopMenuRowContainer" enabled="{$enabled}"  
 	          hover="Hover"
@@ -217,6 +219,7 @@ version="1.0">
 	          description="{resource:getString($constants,$descrip)}" 
 	          class="{$class}"
 			  args="{$args}"
+			  enabledStates="{$enabledStates}"
 	          onClick="this"/>
   </xsl:template>
 </xsl:stylesheet>
