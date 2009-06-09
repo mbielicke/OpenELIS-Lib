@@ -43,6 +43,7 @@ import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.widget.table.TableAutoComplete;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
     }
 
     public void saveValue() {
-        // TODO Auto-generated method stub
+       editor.saveValue();
         
     }
 
@@ -132,6 +133,7 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
         TreeDataItem item = (TreeDataItem)field;
         //editor = cells.get(item.leafCell).getNewInstance();
         editor.setField(item.cells[0]);
+        
         editor.enable(enabled);
         editor.setCellWidth(width - ((item.depth+1)*18));
         ((SimplePanel)editor).setWidth(width - ((item.depth+1)*18)+"px");
@@ -251,6 +253,13 @@ public class TableTree extends SimplePanel implements TableCellWidget , SourcesC
              commandListeners.remove(listener);
          
      }
-    
+   
+     /*
+     public void setFieldValue(Object val) {
+         field.setValue(val);
+         setField(field);
+          
+      }
+    */
 
 }
