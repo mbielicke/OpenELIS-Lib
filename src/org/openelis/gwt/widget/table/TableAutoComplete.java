@@ -37,6 +37,7 @@ import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.QueryStringField;
 import org.openelis.gwt.common.data.StringField;
 import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.TableDataRow;
 import org.openelis.gwt.screen.ScreenAutoCompleteWidget;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.AppScreenForm.State;
@@ -104,6 +105,7 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 	    }else{
 	        if(editor.model.getData().size() == 0)
 	            return;
+	       
 	        field.setValue(editor.getSelections());
 	        ((DropDownField)field).setModel(editor.model.getData());
 	        editor.hideTable();
@@ -121,11 +123,18 @@ public class TableAutoComplete extends TableCellInputWidget implements ChangeLis
 		    display.setText((String)field.getValue());
 		}else{
 		    if(((DropDownField)field).getModel() != null){
-		        editor.model.load(((DropDownField)field).getModel());
-		        editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+		    //    editor.model.load(((DropDownField)field).getModel());
+		    //    editor.setSelections(((DropDownField<Object>)field).getKeyValues());
+		        TableDataModel model = ((DropDownField)field).getModel();
+		        for(int i = 0; i < model.list.size(); i++) {
+		            if(((TableDataRow)model.list.get(i)).key.equals(((DropDownField<Object>)field).getSelectedKey())) {
+		                display.setText(((TableDataRow)model.list.get(i)).cells[0].getValue().toString());
+		                break;
+		            }
+		        }
 		    }else
-		        editor.model.load(new TableDataModel());
-		    display.setText(editor.getTextBoxDisplay());
+		        //editor.model.load(new TableDataModel());
+		        display.setText("");
 		}
 		setWidget(display);
         super.setDisplay();
