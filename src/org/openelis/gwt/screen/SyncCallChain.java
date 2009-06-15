@@ -25,10 +25,42 @@
 */
 package org.openelis.gwt.screen;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.SyncCallback;
 
-public class SyncCallChain extends AsyncCallChain implements SyncCallback {
+public class SyncCallChain<T> extends ArrayList<SyncCallback> implements SyncCallback<T> {
 
     private static final long serialVersionUID = 1L;
+    
+    public SyncCallChain() {
+        
+    }
+    
+    public SyncCallChain(SyncCallback[] callbacks){
+        for(SyncCallback callback: callbacks){
+            this.add(callback);
+        }
+    }
+
+    public void onSuccess(T result) {
+        for(SyncCallback<T> callback : this){
+            callback.onSuccess(result);
+        }
+    }
+    
+    public void onFailure(Throwable caught) {
+        for(SyncCallback<T> callback : this){
+            callback.onFailure(caught);
+        }
+    }
+    
+    public Object clone() {
+        SyncCallChain<T> chain = new SyncCallChain<T>();
+        for(SyncCallback<T> callback : this){
+            chain.add(callback);
+        }
+        return chain;
+    }
 
 }

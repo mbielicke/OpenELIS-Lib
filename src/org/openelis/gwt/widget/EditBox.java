@@ -68,6 +68,7 @@ public class EditBox extends Composite implements ClickListener{
 		public void afterDraw(boolean sucess) {
 			super.afterDraw(sucess);
 			((TextArea)getWidget("editor")).setText(text.getText());
+			
 		}
 		
 		public void onClick(Widget sender) {

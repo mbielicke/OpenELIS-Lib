@@ -191,6 +191,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
     public void onLostFocus(Widget sender) {
         if(!showError)
             return;
+        Object oldValue = getFieldValue();
         submit(field);
         field.clearErrors();
         field.validate();
@@ -202,6 +203,7 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
         
         if(sender instanceof TextBoxBase )
          ((TextBoxBase)sender).setText(field.format());
+
     }
     
     public void clearError() {
@@ -284,6 +286,36 @@ public class ScreenInputWidget extends ScreenWidget implements FocusListener, Mo
             pop.setWidget(dp);
             pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
             pop.show();
+        }
+	}
+	
+	public void setFieldValue(Object obj) {
+		
+	}
+	
+	public Object getFieldValue() {
+		return field.getValue();
+	}
+	
+	public void setField(AbstractField field) {
+		this.field = field;
+	}
+	
+	public void stateChanged(Screen.State state) {
+        if(state == Screen.State.QUERY)
+            this.queryMode = true;
+        else
+            this.queryMode = false;
+        if(queryMode){
+            if(queryWidget != null){
+                initWidget(queryWidget.displayWidget);
+            }
+            if(queryField != null){
+                field = queryField;
+            }
+        }else{
+           if(queryWidget != null)
+               initWidget(displayWidget);
         }
 	}
 }

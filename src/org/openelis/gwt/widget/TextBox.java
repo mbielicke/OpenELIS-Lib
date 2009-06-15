@@ -1,8 +1,8 @@
 package org.openelis.gwt.widget;
 
 public class TextBox extends com.google.gwt.user.client.ui.TextBox {
-    
-    public enum Case {MIXED,UPPER,LOWER};
+
+	public enum Case {MIXED,UPPER,LOWER};
     public Case textCase = Case.MIXED;
     
     public boolean enforceMask = true;
@@ -62,5 +62,4 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
         super.setTextAlignment(alignment);
     }
     
-
 }

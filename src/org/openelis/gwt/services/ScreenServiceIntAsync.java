@@ -25,19 +25,20 @@
 */
 package org.openelis.gwt.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.openelis.gwt.common.RPC;
 
-import org.openelis.gwt.common.Form;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 /**
  * ScreenServiceIntAsync is the Asynchronous version of
  * the ScreenServiceInt interface.
  * @author tschmidt
  *
  */
-@Deprecated public interface ScreenServiceIntAsync {
+public interface ScreenServiceIntAsync {
 
-    public void action(Form rpc, AsyncCallback callback);
+    public Request getScreen(AsyncCallback<String> callback);
     
-    public void query(Form rpc, AsyncCallback callback);
+    public <T extends RPC> Request callScreen(String method, T rpc, AsyncCallback<? extends RPC> callback);
 
 }

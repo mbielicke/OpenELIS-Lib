@@ -41,6 +41,7 @@ UIRF Software License are applicable instead of those above.
 -->
 <module>
 	<source path="common"/>
+	<source path="sw"/>
 	<source path="services"/>
     <public path="public"/>
     <stylesheet src="CSS/EditTable.css"/>

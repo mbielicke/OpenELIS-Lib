@@ -25,16 +25,20 @@
 */
 package org.openelis.gwt.widget.richtext;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.ScreenBase;
 
-public class RichTextWidget extends Composite implements FocusListener{
+public class RichTextWidget extends Composite implements FocusListener, HasValue<String>{
     
     private FlexTable vp = new FlexTable();
     public RichTextArea area;
@@ -128,5 +132,25 @@ public class RichTextWidget extends Composite implements FocusListener{
         // TODO Auto-generated method stub
         
     }
+
+	public String getValue() {
+		return area.getHTML();
+	}
+
+	public void setValue(String value) {
+		setValue(value,false);
+	}
+
+	public void setValue(String value, boolean fireEvents) {
+		String old = area.getHTML();
+		area.setHTML(value);
+		if(fireEvents)
+			ValueChangeEvent.fireIfNotEqual(this, old, value);
+	}
+
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return addHandler(handler,ValueChangeEvent.getType());
+	}
 
 }

@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.common.data.TreeDataItem;
-import org.openelis.gwt.widget.pagedtree.TreeView;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;

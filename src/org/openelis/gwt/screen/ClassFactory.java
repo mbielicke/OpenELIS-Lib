@@ -33,9 +33,15 @@ public class ClassFactory {
         public Object newInstance(Object[] args);
     }
     
+    public static interface ShowScreen {
+    	public void showScreen(Object[] args);
+    }
+    
     private static HashMap<String,Factory> classFactories = new HashMap<String,Factory>();
     
     private static HashMap<String,Class> classes = new HashMap<String,Class>();
+    
+    private static HashMap<String,ShowScreen> screens = new HashMap<String,ShowScreen>();
 
     public static void addClassFactory(String[] classKeys, Factory factory){
         for(int i = 0; i < classKeys.length;  i++){
@@ -47,6 +53,10 @@ public class ClassFactory {
         for(int i = 0; i < classKeys.length;  i++){
             classes.put(classKeys[i], classs);
         }
+    }
+    
+    public static void addScreen(String screenName, ShowScreen show) {
+    	screens.put(screenName,show);
     }
 
     public static Object forName(String name, Object[] args) {
@@ -71,6 +81,15 @@ public class ClassFactory {
         }
         return obj;
     } 
+    
+    public static void show(String name, Object[] args) {
+    	ShowScreen show = screens.get(name);
+    	show.showScreen(args);
+    }
+    
+    public static void show(String name) {
+    	show(name,null);
+    }
     
     public static Object forName(String name) {
         return forName(name,null);

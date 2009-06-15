@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -34,13 +37,14 @@ import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CheckBox extends Composite implements ClickListener, SourcesClickEvents{
+public class CheckBox extends Composite implements ClickListener, SourcesClickEvents, HasValue<String>{
     
     DelegatingKeyboardListenerCollection keyListeners;
     
@@ -206,4 +210,24 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
             clickListeners.remove(listener);
         
     }
+
+	public String getValue() {
+		return getState();
+	}
+
+	public void setValue(String value) {
+		setValue(value,false);
+	}
+
+	public void setValue(String value, boolean fireEvents) {
+		String old = getState();
+		setState(value);
+		if(fireEvents)
+			ValueChangeEvent.fireIfNotEqual(this, old, value);
+	}
+
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return addHandler(handler,ValueChangeEvent.getType());
+	}
 }

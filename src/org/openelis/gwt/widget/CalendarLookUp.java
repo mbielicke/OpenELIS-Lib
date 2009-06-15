@@ -1,10 +1,14 @@
 package org.openelis.gwt.widget;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -26,7 +30,9 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
                                                       SourcesFocusEvents, 
                                                       ChangeListener,
                                                       SourcesChangeEvents,
-                                                      MouseListener{
+                                                      MouseListener,
+                                                      HasValue<Date>,
+                                                      ValueChangeHandler<String>{
 
     protected byte begin;
     protected byte end;
@@ -44,6 +50,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         icon.addMouseListener(this);
         textbox.addStyleName("TextboxUnselected");
         hp.addStyleName("Calendar");
+        textbox.addValueChangeHandler(this);
     }
     
     public CalendarLookUp(byte begin,byte end,boolean week) {
@@ -149,18 +156,11 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         pop.show();
     }
     
-    public Object getValue() {
+    public Date getValue() {
         if (getText().equals(""))
             return null;
         Date date = new Date(getText().replaceAll("-", "/"));
-        return DatetimeRPC.getInstance(begin, end, date);
-    }
-
-    public void setValue(Object val) {
-        if (val != null)
-            setText(((DatetimeRPC)val).toString());
-        else
-            setText("");
+        return DatetimeRPC.getInstance(begin, end, date).getDate();
     }
 
     public Object getDisplay(String title) {
@@ -232,5 +232,35 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
             }
         }
     }
+
+	public void setValue(Date value) {
+		setValue(value,false);
+		
+	}
+
+	public void setValue(Date value, boolean fireEvents) {
+        if (value != null)
+            setText(DatetimeRPC.getInstance(begin, end, value).toString());
+        else
+            setText("");
+        if(fireEvents) {
+        	ValueChangeEvent.fire(this, value);
+        }
+		
+	}
+
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<Date> handler) {
+		return addHandler(handler, ValueChangeEvent.getType());
+	}
+
+	public void onValueChange(ValueChangeEvent<String> event) {
+        if (event.getValue().equals(""))
+            setValue(null,true);
+        else{
+        	Date date = new Date(getText().replaceAll("-", "/"));
+        	setValue(DatetimeRPC.getInstance(begin, end, date).getDate(),true);
+        }
+	}
     
 }

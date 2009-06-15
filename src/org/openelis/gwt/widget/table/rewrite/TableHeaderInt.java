@@ -23,17 +23,11 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.pagedtree;
+package org.openelis.gwt.widget.table.rewrite;
 
-import org.openelis.gwt.common.RPCException;
+public interface TableHeaderInt {
 
-
-import com.google.gwt.user.client.rpc.RemoteService;
-
-public interface TreeServiceInt extends RemoteService {
+    public void setHeaders(String[] headers);
     
-    public TreeModel getTreePage(int page, int selected) throws RPCException;
-    public TreeModel getTreeModel(TreeModel model) throws RPCException;
-    public TreeModel saveTreeModel(TreeModel model) throws RPCException;
-
+    public void sizeHeader();
 }

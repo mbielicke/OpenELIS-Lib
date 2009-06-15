@@ -25,11 +25,11 @@
 */
 package org.openelis.gwt.services;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-
-import org.openelis.gwt.common.Form;
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.rewrite.Query;
+
+import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
  * ScreenServiceInt is a GWT RemoteService interface for the Screen
@@ -39,10 +39,11 @@ import org.openelis.gwt.common.data.AbstractField;
  * @author tschmidt
  *
  */
-@Deprecated public interface ScreenServiceInt extends RemoteService {
+public interface ScreenServiceInt extends RemoteService {
 
-    public Form action(Form rpc) throws RPCException;
+    public String getScreen() throws RPCException; 
     
-    public AbstractField query(Form rpc) throws RPCException;
+    public <T extends RPC> T callScreen(String method, T rpc) throws Exception;
+  
     
 }

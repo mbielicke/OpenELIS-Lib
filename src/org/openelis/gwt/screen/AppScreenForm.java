@@ -72,7 +72,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
     public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,BROWSE,DELETE}
     public State state = State.DEFAULT;
     protected CommandListenerCollection commandListeners;
-    public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE};
+    public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE,LOAD,UNLOAD};
     public QueryRPC query;
 
     protected AsyncCallback<ScreenRPC> fetchCallback = new AsyncCallback<ScreenRPC>() {

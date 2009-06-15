@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 
 public class LookUp extends Composite implements SourcesClickEvents, SourcesMouseEvents {
     
-    protected TextBox textbox;
-    protected IconContainer icon;
+    public TextBox textbox;
+    public IconContainer icon;
     protected HorizontalPanel hp;
     protected DelegatingClickListenerCollection clickListeners;
     

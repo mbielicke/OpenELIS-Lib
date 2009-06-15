@@ -298,6 +298,13 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         if(content instanceof AppScreen){
             ((AppScreen)content).window = this;
         }
+        if(content instanceof org.openelis.gwt.screen.rewrite.Screen) {
+        	((org.openelis.gwt.screen.rewrite.Screen)content).window = this;
+        	setName("Organization");
+        	setVisible(true);
+            RootPanel.get().removeStyleName("ScreenLoad");
+            setStatus(AppScreen.consts.get("loadCompleteMessage"),"");
+        }
     }
     
     public void setName(String name) {

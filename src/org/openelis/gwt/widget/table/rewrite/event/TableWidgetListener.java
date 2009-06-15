@@ -23,15 +23,14 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.pagedtree;
+package org.openelis.gwt.widget.table.rewrite.event;
 
-import org.openelis.gwt.common.RPCException;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-public interface TreeServiceIntAsync {
+public interface TableWidgetListener {
     
-    public void getTreePage(int page, int selected, AsyncCallback callback) throws RPCException;
-    public void getTreeModel(TreeModel model, AsyncCallback callback) throws RPCException;
-    public void saveTreeModel(TreeModel model, AsyncCallback callback) throws RPCException;
+    public void startEditing(SourcesTableWidgetEvents sender, int row, int col);
+    
+    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col);
+    
+    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col);
+    
 }

@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.ScreenWindow;
+import org.openelis.gwt.screen.rewrite.Screen;
 
 import java.util.HashMap;
 
@@ -104,6 +105,26 @@ public class WindowBrowser extends Composite{
         }
     }
     
+    public void addScreen(final Screen screen, final String text, final String category, final String loadingText) {
+        if(windows.size() == limit){
+            Window.alert("Please close at least one window before opening another.");
+            return;
+        }
+        if (windows.containsKey(text)) {
+            return;
+        }
+        RootPanel.get().addStyleName("ScreenLoad");
+        final WindowBrowser brws = this;
+        index++;
+        ScreenWindow window = new ScreenWindow(brws, text, category, loadingText,false);
+        window.setContent(screen);
+        browser.add(window,(windows.size()*25),(windows.size()*25));
+        windows.put(text,window);
+//        if(screen instanceof AppScreen){
+  //          DOM.addEventPreview((AppScreen)screen);
+   //     }
+    }
+    
     public void addScreen(final ScreenBase screen, final String text, final String category, final String loadingText) {
         if(windows.size() == limit){
             Window.alert("Please close at least one window before opening another.");
@@ -128,7 +149,31 @@ public class WindowBrowser extends Composite{
         addScreen(screen,null);
     }
     
+    public void addScreen(Screen screen) {
+    	addScreen(screen,null);
+    }
+    
     public void addScreen(AppScreen screen, String key) {
+        if(key == null)
+           key = GWT.getTypeName(screen);
+        if(windows.size() == limit){
+            Window.alert("Please close at least one window before opening another.");
+            return;
+        }
+        if (windows.containsKey(key)) {
+            selectScreen(key);
+            return;
+        }
+        RootPanel.get().addStyleName("ScreenLoad");
+        index++;
+        ScreenWindow window = new ScreenWindow(this, key);
+        window.setContent(screen);
+        browser.add(window,(windows.size()*25),(windows.size()*25));
+        windows.put(key,window);
+        setFocusedWindow();
+    }
+    
+    public void addScreen(Screen screen, String key) {
         if(key == null)
            key = GWT.getTypeName(screen);
         if(windows.size() == limit){
