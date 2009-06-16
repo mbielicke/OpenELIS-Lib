@@ -32,7 +32,7 @@ import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.widget.ButtonPanel;
+import org.openelis.gwt.widget.rewrite.ButtonPanel;
 import org.openelis.gwt.widget.HandlesEvents;
 
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -67,7 +67,7 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
 		}
 	};
 	
-	ActionHandler<ButtonPanel.Action> buttonActions = new ActionHandler<ButtonPanel.Action>() {
+	public ActionHandler<ButtonPanel.Action> buttonActions = new ActionHandler<ButtonPanel.Action>() {
 
 		public void onAction(ActionEvent<ButtonPanel.Action> event) {
 	        if (event.getAction() == ButtonPanel.Action.NEXT) {
@@ -79,7 +79,7 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
 		
 	};
 	
-	ActionHandler<ResultsTable.Action> resultsActions = new ActionHandler<ResultsTable.Action>() {
+	public ActionHandler<ResultsTable.Action> resultsActions = new ActionHandler<ResultsTable.Action>() {
 
 		public void onAction(ActionEvent<ResultsTable.Action> event) {
 			if (event.getAction() == ResultsTable.Action.NEXT_PAGE) {

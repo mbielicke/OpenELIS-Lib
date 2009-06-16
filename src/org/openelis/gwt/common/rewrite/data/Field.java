@@ -1,7 +1,7 @@
 package org.openelis.gwt.common.rewrite.data;
 
+import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.widget.HandlesEvents;
-import org.openelis.util.ValidationException;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -18,10 +18,14 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>{
     }
     
     public String format() {
+        if(value == null)
+            return "";
     	return value.toString();
     }
     
     public String toString() {
+        if(value == null)
+            return "";
     	return value.toString();
     }
     
@@ -31,7 +35,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>{
 	}
 	
 	public void setValue(T value) {
-		setValue(value);
+	    this.value = value;
 	}
 	
 	public void onValueChange(ValueChangeEvent<T> event) {

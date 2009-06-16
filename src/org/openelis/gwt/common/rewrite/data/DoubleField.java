@@ -1,14 +1,9 @@
 package org.openelis.gwt.common.rewrite.data;
 
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.widget.HandlesEvents;
-import org.openelis.util.ValidationException;
-
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.ui.HasValue;
+
+import org.openelis.gwt.common.ValidationException;
+import org.openelis.gwt.screen.AppScreen;
 
 public class DoubleField extends Field<Double> {
 

@@ -25,11 +25,16 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
-import java.util.ArrayList;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.HasValue;
 
 import org.openelis.gwt.common.rewrite.data.TableDataRow;
 
-public class Dropdown extends DropdownWidget {
+import java.util.ArrayList;
+
+public class Dropdown<T> extends DropdownWidget implements HasValue<T> {
     
     private int startPos;
     boolean linear;
@@ -147,5 +152,27 @@ public class Dropdown extends DropdownWidget {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public T getValue() {
+        if(model.getSelectedIndex() > -1)
+            return (T)model.getRow(model.getSelectedIndex()).key;
+        else
+            return null;
+    }
+
+    public void setValue(T value) {
+        setValue(value,false);
+    }
+
+    public void setValue(T value, boolean fireEvents) {
+        T old = getValue();
+        setSelection(value);
+        if(fireEvents)
+            ValueChangeEvent.fireIfNotEqual(this, old, value);
+    }
+
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
+        return addHandler(handler,ValueChangeEvent.getType());
     }
 }

@@ -36,7 +36,7 @@ import java.util.Date;
  * functionality.
  */
 public class Datetime implements java.io.Serializable {
-    private static Category log = Category.getInstance(Datetime.class.getName());
+   // private static Category log = Category.getInstance(Datetime.class.getName());
     /**
      * Field numbers indicating start and end codes for datetime field.
      */

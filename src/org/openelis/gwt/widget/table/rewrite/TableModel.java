@@ -401,7 +401,7 @@ public class TableModel implements TableModelInt {
  
     public void selectRow(Object key) {
     	for(int i = 0; i < data.size(); i++) {
-    		if(data.get(i).key.equals(key)){
+    		if(data.get(i).key == key || key.equals(data.get(i).key)){
     			selectRow(i);
     			break;
     		}

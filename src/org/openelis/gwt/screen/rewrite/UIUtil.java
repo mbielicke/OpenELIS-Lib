@@ -19,14 +19,14 @@ import org.openelis.gwt.event.DragManager;
 import org.openelis.gwt.event.DropManager;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.screen.AppScreenForm.State;
+import org.openelis.gwt.screen.rewrite.Screen.State;
 import org.openelis.gwt.services.ScreenServiceInt;
 import org.openelis.gwt.services.ScreenServiceIntAsync;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.rewrite.AppButton;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
-import org.openelis.gwt.widget.CommandButton;
+import org.openelis.gwt.widget.rewrite.CommandButton;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
@@ -1143,8 +1143,10 @@ public class UIUtil {
                 	TableColumn column = new TableColumn();
                 	if(col.getAttributes().getNamedItem("name") != null)
                 		column.setName(col.getAttributes().getNamedItem("name").getNodeValue());
-                	if(col.getAttributes().getNamedItem("header") != null)
+                	if(col.getAttributes().getNamedItem("header") != null){
                 		column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
+                		table.showHeader = true;
+                	}
                 	if(col.getAttributes().getNamedItem("width") != null)
                 		column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
                 	if(col.getAttributes().getNamedItem("sort") != null)
@@ -1167,17 +1169,29 @@ public class UIUtil {
                 			break;
                 		}
                 	}
+                	column.controller = table;
                 	columns.add(column);
                 }
                 table.columns = columns;
                 table.init();
+                setDefaults(node,table);
     			return table;
     		}
     	});
     	factoryMap.put("dropdown", new Factory<Dropdown>(){
     		public Dropdown getNewInstance(Node node, ScreenDef def){
-    			Dropdown drop = new Dropdown();
-    	        drop.multiSelect = false;
+    		    Dropdown<?> drop = null;
+    		    if(node.getAttributes().getNamedItem("field") != null){
+    		        if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String")){
+    		            drop = new Dropdown<String>();
+    		        }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
+    		            drop = new Dropdown<Integer>();
+    		        }else
+    		            drop = new Dropdown();
+    		    }else
+    		        drop = new Dropdown();
+    	        
+    		    drop.multiSelect = false;
     	                
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
     	        	drop.multiSelect = true;
@@ -1239,7 +1253,16 @@ public class UIUtil {
     	});
     	factoryMap.put("autoComplete", new Factory<AutoComplete>() {
     		public AutoComplete getNewInstance(Node node, ScreenDef def) {
-    			AutoComplete auto = new AutoComplete();
+    			AutoComplete<?> auto = null;
+                if(node.getAttributes().getNamedItem("field") != null){
+                    if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String")){
+                        auto = new AutoComplete<String>();
+                    }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
+                        auto = new AutoComplete<Integer>();
+                    }else
+                        auto = new AutoComplete();
+                }else
+                    auto = new AutoComplete();
     	                
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
     	        	auto.multiSelect = true;

@@ -23,7 +23,7 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.util;
+package org.openelis.gwt.common;
 
 /**
  * Exception signalling that data is invalid. Classes throw this exception when

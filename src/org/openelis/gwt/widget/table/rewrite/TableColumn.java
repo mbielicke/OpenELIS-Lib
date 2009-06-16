@@ -64,8 +64,12 @@ public class TableColumn {
     		
     	}else {
     		((HasValue)colWidget).setValue(value,true);
-    		
-    		wid = new Label(((HasValue)colWidget).getValue().toString());
+    		Object val = ((HasValue)colWidget).getValue();
+    		if(val == null) {
+    		    wid = new Label("");
+    		}else
+    		    wid = new Label(((HasValue)colWidget).getValue().toString());
+    		((Label)wid).setWordWrap(false);
     	}
         wid.setWidth((currentWidth)+ "px");
         wid.setHeight((controller.cellHeight+"px"));

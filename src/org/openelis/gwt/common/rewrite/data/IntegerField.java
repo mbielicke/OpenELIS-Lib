@@ -1,7 +1,7 @@
 package org.openelis.gwt.common.rewrite.data;
 
+import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.screen.AppScreen;
-import org.openelis.util.ValidationException;
 
 import com.google.gwt.i18n.client.NumberFormat;
 

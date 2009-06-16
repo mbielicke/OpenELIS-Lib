@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.Query;
+import org.openelis.gwt.common.rewrite.Query;
 import org.openelis.gwt.widget.rewrite.ButtonPanel;
 import org.openelis.gwt.widget.rewrite.KeyListManager;
 import org.openelis.gwt.common.rewrite.data.TableDataRow;
@@ -24,9 +24,9 @@ import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.rewrite.AppButton;
 import org.openelis.gwt.widget.CollapsePanel;
-import org.openelis.gwt.widget.AppButton.ButtonState;
+import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
 import org.openelis.gwt.widget.table.rewrite.TableManager;
 import org.openelis.gwt.widget.table.rewrite.TableModel;
 import org.openelis.gwt.widget.table.rewrite.TableModelInt;
@@ -51,7 +51,7 @@ public class ResultsTable extends Composite implements ClickListener, HasActionH
 
 		public void onAction(ActionEvent<Screen.Action> event) {
 	        if(event.getAction() == Screen.Action.NEW_MODEL) {
-	            table.model.load((ArrayList<TableDataRow>)event.getData());
+	            table.model.load(((Query)event.getData()).model);
 	            table.activeCell = -1;
 	            table.activeRow = -1;
 	            table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);

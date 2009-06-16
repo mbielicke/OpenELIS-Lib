@@ -33,9 +33,9 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.screen.AppScreen;
 import org.openelis.gwt.widget.HandlesEvents;
-import org.openelis.util.ValidationException;
 
 import java.util.Date;
 import java.util.HashMap;

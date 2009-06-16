@@ -32,10 +32,8 @@ import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.HasActionHandlers;
-import org.openelis.gwt.screen.ScreenAppButton;
 import org.openelis.gwt.screen.rewrite.Screen.State;
-import org.openelis.gwt.widget.AppButton;
-import org.openelis.gwt.widget.AppButton.ButtonState;
+import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -74,9 +72,9 @@ public class ButtonPanel extends Composite implements ClickListener, ClickHandle
     
     public void addWidget(Widget wid){
         hp.add(wid);
-        if(wid instanceof ScreenAppButton){
-            buttons.add((AppButton)((ScreenAppButton)wid).getWidget());
-            ((AppButton)((ScreenAppButton)wid).getWidget()).addClickListener(this);
+        if(wid instanceof AppButton){
+            buttons.add((AppButton)wid);
+            ((AppButton)wid).addClickListener(this);
         }
     }
     

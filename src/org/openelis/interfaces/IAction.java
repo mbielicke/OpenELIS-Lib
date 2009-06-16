@@ -27,8 +27,8 @@ package org.openelis.interfaces;
 
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.util.ValidationException;
 
 import java.io.IOException;
 import java.sql.SQLException;

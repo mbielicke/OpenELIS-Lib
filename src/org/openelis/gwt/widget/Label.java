@@ -6,9 +6,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 
 public class Label extends com.google.gwt.user.client.ui.Label implements HasValue<String> {
+    
+    String value;
 
 	public String getValue() {
-		return getText();
+		return value;
 	}
 
 	public void setValue(String value) {
@@ -16,7 +18,8 @@ public class Label extends com.google.gwt.user.client.ui.Label implements HasVal
 	}
 
 	public void setValue(String value, boolean fireEvents) {
-		String old = getText();
+		String old = this.value;
+		this.value = value;
 		setText(value);
 		if(fireEvents)
 			ValueChangeEvent.fireIfNotEqual(this, old, value);
