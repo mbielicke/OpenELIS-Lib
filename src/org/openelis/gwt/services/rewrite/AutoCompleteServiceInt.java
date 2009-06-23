@@ -23,19 +23,24 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.services;
+package org.openelis.gwt.services.rewrite;
 
-import org.openelis.gwt.common.CalendarForm;
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
-public interface CalendarServiceInt extends RemoteService {
-    
-    public CalendarForm getMonth(CalendarForm form) throws RPCException;
-    
-    public CalendarForm getMonthSelect(CalendarForm form) throws RPCException;
-    
-    public CalendarForm getScreen(CalendarForm form)  throws RPCException;
+/**
+ * AutoCompleteServiceInt is a GWT RemoteService interface to be
+ * implemented by GWT RemoteServiceServlets for the AutoComplete 
+ * widget to make calls to the server for the matching options 
+ * for the text that the users have entered. 
+ * 
+ * @author tschmidt
+ *
+ */
+public interface AutoCompleteServiceInt<T extends RPC> extends RemoteService {
+
+    public T getMatches(T rpc) throws RPCException;
 
 }

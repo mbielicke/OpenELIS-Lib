@@ -42,7 +42,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T> {
     public DropDownListener listener = new DropDownListener(this);
     
     public Dropdown() {
-    
+    	super();
     }
     
     private boolean enabled;
@@ -137,7 +137,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T> {
     }
     
     public void setModel(ArrayList<TableDataRow> model){
-        this.model.load((ArrayList<TableDataRow>)model.clone());
+        this.model.load((ArrayList<TableDataRow>)model);
     }
     
     public void enabled(boolean enabled) {

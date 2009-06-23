@@ -51,7 +51,7 @@ public class AutoCompleteCall implements AutoCompleteCallInt {
     }
 
     
-    public void callForMatches(final AutoComplete widget, ArrayList<TableDataRow> model, String text) {
+    public void callForMatches(final AutoComplete widget, String text) {
     	/*
         try {
             autoService.getMatches(widget.cat, model, text, null, new AsyncCallback<ArrayList<>>() {

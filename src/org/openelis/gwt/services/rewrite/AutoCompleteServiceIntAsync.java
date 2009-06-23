@@ -23,19 +23,22 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.services;
+package org.openelis.gwt.services.rewrite;
 
-import org.openelis.gwt.common.CalendarForm;
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 
-import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface CalendarServiceInt extends RemoteService {
-    
-    public CalendarForm getMonth(CalendarForm form) throws RPCException;
-    
-    public CalendarForm getMonthSelect(CalendarForm form) throws RPCException;
-    
-    public CalendarForm getScreen(CalendarForm form)  throws RPCException;
+/**
+ * AutoCompleteServiceIntAsync is the Asynchronous version of
+ * the AutoCompleteServiceInt interface.
+ * @author tschmidt
+ *
+ */
+public interface AutoCompleteServiceIntAsync<T extends RPC> {
+
+    public Request getMatches(T rpc, AsyncCallback<T> callback) throws RPCException;
 
 }

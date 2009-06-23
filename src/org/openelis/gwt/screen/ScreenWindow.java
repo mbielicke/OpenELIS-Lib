@@ -28,6 +28,20 @@ package org.openelis.gwt.screen;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
@@ -49,6 +63,7 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.screen.rewrite.Screen;
 import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.WindowBrowser;
 
@@ -58,50 +73,42 @@ import org.openelis.gwt.widget.WindowBrowser;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends Composite implements MouseListener, ClickListener, EventPreview {
+public class ScreenWindow extends Composite implements MouseListener, ClickListener, EventPreview, MouseOverHandler, MouseOutHandler, MouseDownHandler {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
          *
          */
-        private class Caption extends HorizontalPanel implements SourcesMouseEvents { 
-        private MouseListenerCollection mouseListeners;
+        private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
 
         public String name;
         
-        public Caption() {
-            super();
-            sinkEvents(Event.MOUSEEVENTS);
-        }
-        
-        public void addMouseListener(MouseListener listener) {
-            if (mouseListeners == null) {
-                mouseListeners = new MouseListenerCollection();
-            }
-            mouseListeners.add(listener);
-        }
+		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+			return addDomHandler(handler, MouseDownEvent.getType());
+		}
 
-        public void onBrowserEvent(Event event) {
-            switch (DOM.eventGetType(event)) {
-                case Event.ONMOUSEDOWN:
-                case Event.ONMOUSEUP:
-                case Event.ONMOUSEMOVE:
-                case Event.ONMOUSEOVER:
-                case Event.ONMOUSEOUT:
-                    if (mouseListeners != null) {
-                        DOM.eventPreventDefault(event);
-                        mouseListeners.fireMouseEvent(this, event);
-                    }
-            }
-        }
-    
-        public void removeMouseListener(MouseListener listener) {
-            if (mouseListeners != null) {
-                mouseListeners.remove(listener);
-            }
-        }
+		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+			return addDomHandler(handler,MouseUpEvent.getType());
+		}
 
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+			return addDomHandler(handler,MouseOutEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+			return addDomHandler(handler,MouseOverEvent.getType());
+		}
+
+		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+			return addDomHandler(handler,MouseMoveEvent.getType());
+		}
+
+		public HandlerRegistration addMouseWheelHandler(
+				MouseWheelHandler handler) {
+			return addDomHandler(handler,MouseWheelEvent.getType());
+		}
     }
+        
     private Caption cap = new Caption();
     protected VerticalPanel messagePanel;
     protected PopupPanel pop;
@@ -194,7 +201,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         titleButtonsContainer.addStyleName("Caption");
         titleButtonsContainer.setWidth("100%");
         
-        cap.addMouseListener(this);
+        cap.addMouseDownHandler(this);
         winLabel.setStyleName("ScreenWindowLabel");
         cap.add(winLabel);
         cap.setWidth("100%");
@@ -212,6 +219,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             hp2.add(collapse);
             hp2.add(close);
             titleButtonsContainer.add(hp2);
+            titleButtonsContainer.setCellHorizontalAlignment(hp2, HasAlignment.ALIGN_RIGHT);
             hp.setCellWidth(hp2,"32px");
             hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
         }
@@ -298,12 +306,12 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         if(content instanceof AppScreen){
             ((AppScreen)content).window = this;
         }
-        if(content instanceof org.openelis.gwt.screen.rewrite.Screen) {
-        	((org.openelis.gwt.screen.rewrite.Screen)content).window = this;
-        	setName("Organization");
+        if(content instanceof Screen) {
+        	((Screen)content).window = this;
+        	setName(((Screen)content).def.name);
         	setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
-            setStatus(AppScreen.consts.get("loadCompleteMessage"),"");
+            setStatus(Screen.consts.get("loadCompleteMessage"),"");
         }
     }
     
@@ -478,24 +486,48 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         }
     }
     
+    public void lockWindow() {
+    	if(glass == null) {
+    		glass = new AbsolutePanel();
+    		glass.setStyleName("GlassPanel");
+    		glass.setHeight(getOffsetHeight()+"px");
+    		glass.setWidth(getOffsetWidth()+"px");
+    		RootPanel.get().add(glass, getAbsoluteLeft(), getAbsoluteTop());
+    	}
+    }
+    
+    public void unlockWindow() {
+    	if(glass != null) {
+    		RootPanel.get().remove(glass);
+    		glass = null;
+    	}
+    }
+    
     public void setBusy() {
         setStatus("","spinnerIcon");
+        lockWindow();
+
     }
     
     public void setBusy(String message) {
         setStatus(message,"spinnerIcon");
+        lockWindow();
     }
     
     public void clearStatus() {
         setStatus("","");
+        unlockWindow();
+        
     }
     
     public void setDone(String message) {
         setStatus(message,"");
+        unlockWindow();
     }
     
     public void setError(String message) {
         setStatus(message,"ErrorPanel");
+        unlockWindow();
     }
 
     public boolean onEventPreview(Event event) {
@@ -505,4 +537,56 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         //else
             return true;
     }
+
+	public void onMouseOver(MouseOverEvent event) {
+        if(event.getSource() == statusImg){
+            if(messagePanel == null){
+                return;
+            }
+            if(pop == null){
+                pop = new PopupPanel();
+                //pop.setStyleName("MessagePopup");
+            }
+            
+            ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            win.setStyleName("ErrorWindow");
+            win.setContent(messagePanel);
+            win.setVisible(true);
+            
+            pop.setWidget(win);
+            //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
+            final int left = ((Widget)event.getSource()).getAbsoluteLeft()+16;
+            final int top = ((Widget)event.getSource()).getAbsoluteTop();
+            pop.setPopupPositionAndShow(new PopupPanel.PositionCallback(){
+
+                public void setPosition(int offsetWidth, int offsetHeight) {
+                    pop.setPopupPosition(left, top-offsetHeight);
+                    pop.show();
+                }
+               
+            });
+            pop.show();
+        }
+		
+	}
+
+	public void onMouseOut(MouseOutEvent event) {
+	       if(event.getSource() == statusImg){
+	           if(pop != null){
+	               pop.hide();
+	           }
+	       }
+	}
+
+	public void onMouseDown(MouseDownEvent event) {
+        if(event.getSource() == cap){
+            if(browser != null) {
+                if(browser.index != zIndex){
+                    checkZ();
+                    return;
+                }
+            }
+        }
+		
+	}
 }

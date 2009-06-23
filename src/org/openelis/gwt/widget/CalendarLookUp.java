@@ -1,5 +1,8 @@
 package org.openelis.gwt.widget;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -33,6 +36,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
                                                       MouseListener,
                                                       HasValue<Date>,
                                                       ValueChangeHandler<String>{
+                                                
 
     protected byte begin;
     protected byte end;
@@ -145,7 +149,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
         CalendarWidget cal = new CalendarWidget(textbox.getText());
-        cal.addChangeListener(this);
+        cal.addValueChangeHandler(this);
         //pop = new (null,"","","",true);
         pop = new PopupPanel(true, false);
         
@@ -174,28 +178,6 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     
     public Date getWeekDate() {
         return weekDate;
-    }
-    
-    public void onChange(Widget sender) {
-        pop.hide();
-        Date date = new Date((String)((ScreenWidget)sender).getUserObject());
-        setDate(DatetimeRPC.getInstance(begin, end, date));
-        
-        if (changeListeners != null){
-            changeListeners.fireChange(this);
-        }
-        setFocus(true);
-    }
-
-    public void addChangeListener(ChangeListener listener) {
-        if (changeListeners == null)
-            changeListeners = new ChangeListenerCollection();
-        changeListeners.add(listener);
-    }
-    
-    public void removeChangeListener(ChangeListener listener) {
-        if(changeListeners != null)
-            changeListeners.remove(listener);
     }
     
     public void onMouseDown(Widget sender, int x, int y) {
@@ -240,9 +222,9 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 
 	public void setValue(Date value, boolean fireEvents) {
         if (value != null)
-            setText(DatetimeRPC.getInstance(begin, end, value).toString());
+            textbox.setValue(DatetimeRPC.getInstance(begin, end, value).toString(),false);
         else
-            setText("");
+           textbox.setValue("",false);
         if(fireEvents) {
         	ValueChangeEvent.fire(this, value);
         }
@@ -255,12 +237,41 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 	}
 
 	public void onValueChange(ValueChangeEvent<String> event) {
+		if(pop != null)
+			pop.hide();
         if (event.getValue().equals(""))
             setValue(null,true);
         else{
-        	Date date = new Date(getText().replaceAll("-", "/"));
+        	Date date = new Date(event.getValue().replaceAll("-", "/"));
         	setValue(DatetimeRPC.getInstance(begin, end, date).getDate(),true);
         }
+	}
+
+	public void onChange(Widget sender) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addChangeListener(ChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeChangeListener(ChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return textbox.addBlurHandler(handler);
+	}
+	
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return textbox.addMouseOutHandler(handler);
+	}
+	
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return textbox.addMouseOverHandler(handler);
 	}
     
 }

@@ -48,10 +48,10 @@ UIRF Software License are applicable instead of those above.
 
   <xsl:template match="doc"> 
 
-  <screen id="Calendar" name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
     <VerticalPanel width="100%" style="CalendarWidget">
-      <HorizontalPanel layout="horizontal" style="MonthBar">
+      <HorizontalPanel style="MonthBar">
         <appButton action="prevMonth" key="prevMonth" onclick="this">
           <AbsolutePanel style="PreviousMonth"/>
         </appButton>
@@ -91,139 +91,181 @@ UIRF Software License are applicable instead of those above.
           <row>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell1</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell2</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell3</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell4</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell5</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell6</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-          </row>
-          <row>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell7</xsl:with-param>
 		    </xsl:call-template>
           </row>
           <row>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell8</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell9</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell10</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell11</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell12</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell13</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-          </row>
-          <row>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
-		    </xsl:call-template>
-		    <xsl:call-template name="DateCell">
-		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell14</xsl:with-param>
 		    </xsl:call-template>
           </row>
           <row>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell15</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell16</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell17</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell18</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell19</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell20</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell21</xsl:with-param>
+		    </xsl:call-template>
+          </row>
+          <row>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell22</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell23</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell24</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell25</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell26</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell27</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell28</xsl:with-param>
+		    </xsl:call-template>
+          </row>
+          <row>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell29</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell30</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell31</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell32</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell33</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell34</xsl:with-param>
+		    </xsl:call-template>
+		    <xsl:call-template name="DateCell">
+		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell35</xsl:with-param>
 		    </xsl:call-template>
          </row>
          <row>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell36</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell37</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell38</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell39</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell40</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell41</xsl:with-param>
 		    </xsl:call-template>
 		    <xsl:call-template name="DateCell">
 		    	<xsl:with-param name="date"><xsl:value-of select="string(calUtils:getNextDay($calendar))"/></xsl:with-param>
+		    	<xsl:with-param name="key">Cell42</xsl:with-param>
 		    </xsl:call-template>
          </row>
       </TablePanel>
@@ -244,10 +286,11 @@ UIRF Software License are applicable instead of those above.
  </xsl:template>
  
      <xsl:template name="DateCell">
- <xsl:param name="date" />
-            <AbsolutePanel style="DateCell" hover="Hover" onPanelClick="this" value="{calUtils:getDateString($calendar)}">
+        <xsl:param name="date" />
+        <xsl:param name="key"/>
+            <icon style="DateCell">
               <widget>
-                <text>
+                <label key="{$key}">
                   <xsl:choose>
                     <xsl:when test="$month != cal:get($calendar,calUtils:getField('MONTH'))">
                       <xsl:attribute name="style">DateText,OffMonth</xsl:attribute>
@@ -260,9 +303,9 @@ UIRF Software License are applicable instead of those above.
                     </xsl:otherwise>
                   </xsl:choose>
                   <xsl:value-of select="$date"/>
-                </text>
+                </label>
               </widget>
-           </AbsolutePanel>
+           </icon>
   </xsl:template>
 
  

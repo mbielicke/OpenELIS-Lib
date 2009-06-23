@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.AppScreenForm.State;
+import org.openelis.gwt.screen.rewrite.Screen;
 import org.openelis.gwt.widget.MenuLabel;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;

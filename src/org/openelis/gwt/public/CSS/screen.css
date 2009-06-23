@@ -1741,6 +1741,10 @@ rich text css
 	border-bottom:1px dashed red;
 }
 
+.InputError {
+	border-bottom:1px dashed red;
+}
+
 
 
 

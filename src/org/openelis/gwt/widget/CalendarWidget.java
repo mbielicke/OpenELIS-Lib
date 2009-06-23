@@ -25,23 +25,25 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.CalendarForm;
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.ScreenAbsolute;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenWidget;
+import org.openelis.gwt.screen.rewrite.Screen;
+import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.gwt.services.CalendarServiceIntAsync;
+import org.openelis.gwt.widget.rewrite.AppButton;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.HasValue;
 /**
  * Calendar Widget will display a calendar and text boxes with the current time in
  * a popup panel.  A user can then select a date and time that will be returned back
@@ -49,87 +51,107 @@ import org.openelis.gwt.services.CalendarServiceIntAsync;
  * @author tschmidt
  *
  */
- public class CalendarWidget  extends AppScreen<CalendarForm> implements SourcesChangeEvents, ClickListener {
+ public class CalendarWidget extends Screen implements HasValue<String>, ClickHandler {
     
     protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
     .create(CalendarServiceInt.class);
     protected ServiceDefTarget target = (ServiceDefTarget) screenService;
-    
-    protected ChangeListenerCollection changeListeners;
    
-    protected AppButton prevMonth;
-    protected AppButton nextMonth;
-    protected AppButton monthSelect;
-    protected AppButton ok;
-    protected AppButton cancel;
-    protected ScreenAbsolute prevDecade;
-    protected ScreenAbsolute nextDecade;
-    protected AppButton today;
-    protected ScreenLabel[] months = new ScreenLabel[12];
-    protected ScreenLabel[] years = new ScreenLabel[10];
+    protected org.openelis.gwt.widget.rewrite.AppButton prevMonth;
+    protected org.openelis.gwt.widget.rewrite.AppButton nextMonth;
+    protected org.openelis.gwt.widget.rewrite.AppButton monthSelect;
+    protected org.openelis.gwt.widget.rewrite.AppButton ok;
+    protected org.openelis.gwt.widget.rewrite.AppButton cancel;
+    protected IconContainer prevDecade;
+    protected IconContainer nextDecade;
+    protected org.openelis.gwt.widget.rewrite.AppButton today;
+    protected ArrayList<Label> months = new ArrayList<Label>(12);
+    protected ArrayList<Label> years = new ArrayList<Label>(10);
+    
+    protected CalendarForm form;
     
     public CalendarWidget(String date) {
-        super();
+    	super();
         String base = GWT.getModuleBaseURL();
         base += "CalendarServlet";        
         target.setServiceEntryPoint(base);
-        service = screenService;
-        CalendarForm form = new CalendarForm();
+        form = new CalendarForm();
         form.date = date;
-        getScreen(form);
+        screenService.getScreen(form, new AsyncCallback<CalendarForm>() {
+        	public void onSuccess(CalendarForm result) {
+        		form = result;
+        		setDef(UIUtil.createWidgets(form.xml));
+        	}
+        	public void onFailure(Throwable caught) {
+        		Window.alert(caught.getMessage());
+        	}
+        });
     }
     
-    public void afterDraw(boolean success) {
-        super.afterDraw(success);
-        //year = (NumberField)form.getFieldMap().get("year");
-        //month = (NumberField)form.getFieldMap().get("month");
-        prevMonth = (AppButton)getWidget("prevMonth");
-        nextMonth = (AppButton)getWidget("nextMonth");
-        monthSelect = (AppButton)getWidget("monthSelect");
-        prevDecade = (ScreenAbsolute)widgets.get("prevDecade");
-        nextDecade = (ScreenAbsolute)widgets.get("nextDecade");
-        ok = (AppButton)getWidget("ok");
-        cancel = (AppButton)getWidget("cancel");
-        for(int i = 0; i < 12; i++) {
-            months[i] = (ScreenLabel)widgets.get("month:"+i+"Text"); 
+    public void afterDraw() {
+    	if(def.name.equals("Calendar")) {
+    		prevMonth = (org.openelis.gwt.widget.rewrite.AppButton)def.getWidget("prevMonth");
+    		prevMonth.addClickHandler(this);
+    		nextMonth = (AppButton)def.getWidget("nextMonth");
+    		nextMonth.addClickHandler(this);
+    		monthSelect = (AppButton)def.getWidget("monthSelect");
+    		monthSelect.addClickHandler(this);
+    		for(int i = 1; i <= 42; i++) {
+    			Label date = (Label)def.getWidget("Cell"+i);
+    			if(date.getText() != null && !date.getText().equals(""))
+    				((Label)def.getWidget("Cell"+i)).addClickHandler(this);
+    		}
+    	}else{
+        	months = new ArrayList<Label>();
+        	years = new ArrayList<Label>();
+            prevDecade = (IconContainer)def.getWidget("prevDecade");
+            prevDecade.addClickHandler(this);
+            nextDecade = (IconContainer)def.getWidget("nextDecade");
+            nextDecade.addClickHandler(this);
+    		ok = (AppButton)def.getWidget("ok");
+    		ok.addClickHandler(this);
+    		cancel = (AppButton)def.getWidget("cancel");
+    		cancel.addClickHandler(this);
+            for(int i = 0; i < 12; i++) {
+            	months.add((Label)def.getWidget("month:"+i+"Text")); 
+            	months.get(i).addClickHandler(this);
+            }
+            for(int i = 0; i < 10; i++) {
+            	years.add((Label)def.getWidget("year:"+i+"Text"));
+            	years.get(i).addClickHandler(this);
+            }
         }
-        for(int i = 0; i < 10; i++) {
-            years[i] = (ScreenLabel)widgets.get("year:"+i+"Text");
-         }
-         DOM.removeEventPreview(this);
     }
     
-    public void onClick(Widget sender){
+    public void onClick(ClickEvent event){
         
-        if(sender == prevMonth){
+        if(event.getSource() == prevMonth){
             form.month--;
             if(form.month < 0) {
                 form.month = 11;
                 form.year--;
             }
-            final AppScreen scr = this;
             screenService.getMonth(form, new AsyncCallback<CalendarForm>() {
                 public void onSuccess(CalendarForm result) {
-                    redrawScreen(result.xml);
-                    DOM.removeEventPreview(scr);
+                	form = result;
+            		setDef(UIUtil.createWidgets(form.xml));
                 }
                 public void onFailure(Throwable caught){
-                    
+                    Window.alert(caught.getMessage());
                 }
             });
             return;
         }
-        if(sender == nextMonth){
+        if(event.getSource() == nextMonth){
             form.month++;
             if(form.month > 11) {
                 form.month = 0;
                 form.year++;
             }
-            final AppScreen scr = this;
             screenService.getMonth(form, new AsyncCallback<CalendarForm>() {
                 public void onSuccess(CalendarForm result) {
-                    redrawScreen(result.xml);
-                    DOM.removeEventPreview(scr);
+                	form = result;
+            		setDef(UIUtil.createWidgets(form.xml));
                 }
                 public void onFailure(Throwable caught){
                     
@@ -137,12 +159,11 @@ import org.openelis.gwt.services.CalendarServiceIntAsync;
             });
             return;
         }
-        if(sender == monthSelect){
-            final AppScreen scr = this;
+        if(event.getSource() == monthSelect){
             screenService.getMonthSelect(form, new AsyncCallback<CalendarForm>() {
                 public void onSuccess(CalendarForm result) {
-                    redrawScreen(result.xml);
-                    DOM.removeEventPreview(scr);
+                	form = result;
+            		setDef(UIUtil.createWidgets(form.xml));
                 }
                 public void onFailure(Throwable caught){
                     
@@ -150,13 +171,12 @@ import org.openelis.gwt.services.CalendarServiceIntAsync;
             });
             return;
         }
-        if(sender == getWidget("ok") || 
-           sender == getWidget("cancel")){
-            final AppScreen scr = this;
+        if(event.getSource() == ok || 
+           event.getSource() == cancel){
             screenService.getMonth(form, new AsyncCallback<CalendarForm>() {
                 public void onSuccess(CalendarForm result) {
-                    redrawScreen(result.xml);
-                    DOM.removeEventPreview(scr);
+                	form = result;
+            		setDef(UIUtil.createWidgets(form.xml));
                 }
                 public void onFailure(Throwable caught){
                     
@@ -164,50 +184,83 @@ import org.openelis.gwt.services.CalendarServiceIntAsync;
             });
             return;
         }
-        if(sender == prevDecade){
-            years[form.year%10].label.removeStyleName("Current");
+        if(event.getSource() == prevDecade){
+            years.get(form.year%10).removeStyleName("Current");
             form.year = form.year/10*10 -10;
             for(int i = 0; i < 10; i++) 
-                years[i].label.setText(String.valueOf(form.year+i));
-            years[0].label.addStyleName("Current");
+                years.get(i).setText(String.valueOf(form.year+i));
+            years.get(0).addStyleName("Current");
             return;
         }
-        if(sender == nextDecade){
-            years[form.year%10].label.removeStyleName("Current");
+        if(event.getSource() == nextDecade){
+            years.get(form.year%10).removeStyleName("Current");
             form.year = form.year/10*10 +10;
             for(int i = 0; i < 10; i++) 
-                years[i].label.setText(String.valueOf(form.year+i));
-            years[0].label.addStyleName("Current");
+                years.get(i).setText(String.valueOf(form.year+i));
+            years.get(0).addStyleName("Current");
             return;
         }
-        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("month:")){
-            String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
-            months[form.month].label.removeStyleName("Current");
-            form.month = Integer.parseInt(value[1]);
-            ((ScreenLabel)sender).label.addStyleName("Current");
+        if(event.getSource() instanceof Label && months.contains(event.getSource()) ){
+            String value = ((Label)event.getSource()).getText();
+            for(int i = 0; i < 11; i++) {
+            	months.get(i).removeStyleName("Current");
+            }
+            if(value.equals("Jan"))
+            	form.month = 0;
+            else if (value.equals("Feb"))
+            	form.month = 1;
+            else if (value.equals("Mar"))
+            	form.month = 2;
+            else if (value.equals("Apr"))
+            	form.month = 3;
+            else if (value.equals("May"))
+            	form.month = 4;
+            else if (value.equals("Jun"))
+            	form.month = 5;
+            else if (value.equals("Jul"))
+            	form.month = 6;
+            else if (value.equals("Aug"))
+            	form.month = 7;
+            else if (value.equals("Sep"))
+            	form.month = 8;
+            else if (value.equals("Oct"))
+            	form.month = 9;
+            else if (value.equals("Nov"))
+            	form.month = 10;
+            else if (value.equals("Dec"))
+            	form.month = 12;
+            ((Label)event.getSource()).addStyleName("Current");
             return;
         }
-        if(sender instanceof ScreenLabel && ((ScreenLabel)sender).key.startsWith("year:")){
-            String[] value = ((String)((ScreenWidget)sender).getUserObject()).split(",");
-            years[form.year%10].label.removeStyleName("Current");
-            form.year = form.year/10*10+Integer.parseInt(value[1]);
-            ((ScreenLabel)sender).label.addStyleName("Current");
+        if(event.getSource() instanceof Label && years.contains(event.getSource()) ) {
+            String value = ((Label)event.getSource()).getText();
+            years.get(form.year%10).removeStyleName("Current");
+            form.year = form.year/10*10+Integer.parseInt(value);
+            ((Label)event.getSource()).addStyleName("Current");
             return;
         }
-        changeListeners.fireChange(sender);
-        
+        String date = ((Label)event.getSource()).getText();
+        setValue(form.year+"-"+(form.month+1)+"-"+date,true);
     }
 
-    public void addChangeListener(ChangeListener listener) {
-        if(changeListeners == null){
-            changeListeners = new ChangeListenerCollection();
-        }
-        changeListeners.add(listener);
-    }
+	public String getValue() {
+		return form.date;
+	}
 
-    public void removeChangeListener(ChangeListener listener) {
-        if(changeListeners != null){
-            changeListeners.remove(listener);
-        }
-    }
+	public void setValue(String value) {
+		setValue(value,false);
+	}
+
+	public void setValue(String value, boolean fireEvents) {
+		String old = form.date;
+		form.date = value;
+		if(fireEvents)
+			ValueChangeEvent.fireIfNotEqual(this, old, getValue());
+		
+	}
+
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return addHandler(handler,ValueChangeEvent.getType());
+	}
 }

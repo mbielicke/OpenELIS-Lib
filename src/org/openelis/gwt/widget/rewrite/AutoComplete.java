@@ -64,7 +64,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T> {
             //if(screen != null && ((AppScreen)screen).window != null)
             //    ((AppScreen)screen).window.setStatus("", "spinnerIcon");
             try {
-                autoCall.callForMatches(this, model.getData(), text);
+                autoCall.callForMatches(this, text);
 
             } catch (Exception e) {
                 Window.alert(e.getMessage());

@@ -31,6 +31,6 @@ import org.openelis.gwt.common.rewrite.data.TableDataRow;
 
 public interface AutoCompleteCallInt {
     
-    public void callForMatches(AutoComplete widget, ArrayList<TableDataRow> model, String text);
+    public void callForMatches(AutoComplete widget, String text);
 
 }

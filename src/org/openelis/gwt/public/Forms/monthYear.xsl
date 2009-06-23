@@ -45,7 +45,7 @@ UIRF Software License are applicable instead of those above.
 
   <xsl:template match="doc"> 
 
-  <screen id="Organization" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <screen name="MonthYear" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display>
 	  <VerticalPanel width="100%" style="CalendarWidget">
 	    <HorizontalPanel style="Calendar" width="100%">
@@ -114,10 +114,10 @@ UIRF Software License are applicable instead of those above.
 	    <TablePanel spacing="0" padding="0" width="100%">
 	      <row>
 	        <widget>
-    	        <AbsolutePanel key="prevDecade" onPanelClick="this" style="prevNavIndex"/>
+    	        <icon key="prevDecade" style="prevNavIndex"/>
     	    </widget>
     	    <widget>
-		        <AbsolutePanel key="nextDecade" onPanelClick="this" style="nextNavIndex"/>
+		        <icon key="nextDecade" style="nextNavIndex"/>
 		    </widget>
 	      </row>	      
 	      <row>
@@ -195,8 +195,8 @@ UIRF Software License are applicable instead of those above.
   <xsl:template name="MYCell">
    <xsl:param name="text"/>
    <xsl:param name="type"/>
-            <AbsolutePanel key="{$type}:{$text}" hover="Hover" style="MYCell">
-                <label key="{$type}:{$text}Text" onClick="this" wordwrap="true" value="{$type},{$text}">
+            <icon key="{$type}:{$text}" style="MYCell">
+                <label key="{$type}:{$text}Text" wordwrap="true">
                   <xsl:choose>
                     <xsl:when test="$type = 'month' and string($month) = string($text)">
                       <xsl:attribute name="style">Current</xsl:attribute>
@@ -214,7 +214,7 @@ UIRF Software License are applicable instead of those above.
 	                </xsl:otherwise>
 	              </xsl:choose>
                 </label>
-           </AbsolutePanel>
+           </icon>
   </xsl:template>
   
 </xsl:stylesheet>

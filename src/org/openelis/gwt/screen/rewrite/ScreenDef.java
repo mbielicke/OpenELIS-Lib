@@ -13,6 +13,7 @@ public class ScreenDef {
 	protected Widget panel;
 	protected HashMap<String,Widget> widgets;
 	private boolean keepDoc;
+	public String name;
 
 	public ScreenDef() {
 		xmlDef = null;

@@ -35,6 +35,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.HandlesEvents;
 
 import java.util.Date;
@@ -205,7 +206,7 @@ public class DateField extends Field<Date> {
             return "";
         if(pattern != null)
             return DateTimeFormat.getFormat(pattern).format(value);
-        return String.valueOf(value);
+        return DatetimeRPC.getInstance(begin,end,value).toString();
     }
     
     /**
@@ -229,5 +230,13 @@ public class DateField extends Field<Date> {
         }else
             setValue(DatetimeRPC.getInstance(begin, end, DateTimeFormat.getFormat(pattern).parse((String)val)).getDate());
     }
+    
+	public void onValueChange(ValueChangeEvent<Date> event) {
+		setValue(event.getValue());
+		if(event.getSource() instanceof CalendarLookUp)
+			((CalendarLookUp)event.getSource()).textbox.setValue(format(),false);
+		else
+			((HasValue<String>)event.getSource()).setValue(format(), false);
+	}
     
 }

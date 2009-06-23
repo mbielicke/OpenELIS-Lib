@@ -28,6 +28,7 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.rewrite.CommandButton;
 import org.openelis.gwt.widget.EditBox;
+import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.ScrollableTabBar;
@@ -40,7 +41,6 @@ import org.openelis.gwt.widget.rewrite.ButtonPanel;
 import org.openelis.gwt.widget.rewrite.Dropdown;
 import org.openelis.gwt.widget.rewrite.ResultsTable;
 import org.openelis.gwt.widget.richtext.RichTextWidget;
-import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableDragController;
 import org.openelis.gwt.widget.table.TableIndexDropController;
 import org.openelis.gwt.widget.table.rewrite.TableColumn;
@@ -83,26 +83,26 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 public class UIUtil {
-	
-	 public class Wait extends Timer {
-		 
-		Request req;
-		public Wait(Request req) {
-			 this.req = req;
-			 scheduleRepeating(100);
-		 }
-		
-		@Override
-		public void run() {
-			if(!req.isPending())
-				cancel();
-		}
-		 
-	 };
+	 
+	 public static ScreenDef createWidgets(String xml) {
+		 ScreenDef def = new ScreenDef();
+		 def.xmlDef = xml;
+		 return UIUtil.createWidgets(def, false);
+	 }
+	 
+	 public static ScreenDef createWidgets(ScreenDef def) {
+		 return createWidgets(def,true);
+	 }
      
-    public static ScreenDef createWidgets(ScreenDef def) {
-    	String xmlDef = getScreen(def.loadURL);
+    public static ScreenDef createWidgets(ScreenDef def, boolean call) {
+    	String xmlDef = def.xmlDef;
+    	if(call)
+    		xmlDef = getScreen(def.loadURL);
     	Document doc  = XMLParser.parse(xmlDef);
+    	Node screen = doc.getElementsByTagName("screen").item(0);
+    	if(screen.getAttributes().getNamedItem("name") != null) {
+    		def.name = screen.getAttributes().getNamedItem("name").getNodeValue();
+    	}
         Node display = doc.getElementsByTagName("display").item(0);
         NodeList widgets = display.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
@@ -215,11 +215,11 @@ public class UIUtil {
 	        
 				if (node.getAttributes().getNamedItem("textAlign") != null) {
 					String align = node.getAttributes().getNamedItem("textAlign").getNodeValue();
-					if(align.equals("center"))
+					if(align.equalsIgnoreCase("center"))
 						textbox.alignment = TextBox.ALIGN_CENTER;
-					if(align.equals("right"))
+					if(align.equalsIgnoreCase("right"))
 						textbox.alignment = TextBox.ALIGN_RIGHT;
-					if(align.equals("left"))   
+					if(align.equalsIgnoreCase("left"))   
 						textbox.alignment = TextBox.ALIGN_LEFT;
 					textbox.setTextAlignment(textbox.alignment);
 				}
@@ -235,10 +235,15 @@ public class UIUtil {
 					textbox.setMask(mask);
 				}
 				setDefaults(node,textbox);
+				Field field = null;
 				if (node.getAttributes().getNamedItem("field") != null) {
-					textbox.addValueChangeHandler((Field)factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, null));
+					field = (Field)factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, null);
 				}else
-					textbox.addValueChangeHandler((StringField)factoryMap.get("String").getNewInstance(node, null));
+					field = (StringField)factoryMap.get("String").getNewInstance(node, null);
+				textbox.addValueChangeHandler(field);
+				textbox.addBlurHandler(field);
+				textbox.addMouseOutHandler(field);
+				textbox.addMouseOverHandler(field);
 				return textbox;
 			}
     	});
@@ -478,7 +483,11 @@ public class UIUtil {
     				cal.init(begin, end, false);
     			cal.setStyleName("ScreenCalendar");
     			setDefaults(node,cal);
-    			cal.addValueChangeHandler((DateField)factoryMap.get("Date").getNewInstance(node, null));
+    			Field field = (DateField)factoryMap.get("Date").getNewInstance(node, null);
+    			cal.addValueChangeHandler(field);
+    		    cal.addMouseOutHandler(field);
+    		    cal.addMouseOverHandler(field);
+    		    cal.addBlurHandler(field);
     			return cal;
     		}
     	});
@@ -503,7 +512,11 @@ public class UIUtil {
     	        }
     	        check.setStyleName("ScreenCheck");
     	        setDefaults(node, check);
-    	        check.addValueChangeHandler((CheckField)factoryMap.get("Check").getNewInstance(node, null));
+    	        Field field = (CheckField)factoryMap.get("Check").getNewInstance(node, null);
+    	        check.addValueChangeHandler(field);
+    	        check.addMouseOutHandler(field);
+    	        check.addMouseOverHandler(field);
+    	        check.addBlurHandler(field);
     	        return check;
     		}
     	});
@@ -655,6 +668,8 @@ public class UIUtil {
     	factoryMap.put("editbox",new Factory<EditBox>() {
     		public EditBox getNewInstance(Node node, ScreenDef def) {
     			EditBox box = new EditBox();
+    			Field field = (StringField)factoryMap.get("String").getNewInstance(node, def);
+    			
     			setDefaults(node,box);
     			return box;
     		}
@@ -772,6 +787,7 @@ public class UIUtil {
     	            while(displayList.item(i).getNodeType() != Node.ELEMENT_NODE)
     	                i++;
     	            wid = loadWidget(displayList.item(i),def);
+    	            item.init(wid);
     	        }else if(node.getAttributes().getNamedItem("header") != null){
     	            wid = MenuItem.createTableHeader("", new Label(node.getAttributes().getNamedItem("label").getNodeValue()));
     	            item.init(wid);
@@ -793,27 +809,26 @@ public class UIUtil {
     	            }
     	        }
     	        
-    	        /*
-    	        popupNode = ((Element)node).getElementsByTagName("menuPanel").item(0);
+    	        
+    	        item.popupNode = ((Element)node).getElementsByTagName("menuPanel").item(0);
     	        if(node.getAttributes().getNamedItem("enabled") != null){
     	            if(node.getAttributes().getNamedItem("enabled").getNodeValue().equals("true"))
-    	                enable(true);
+    	                item.enable(true);
     	            else
-    	                enable(false);
+    	                item.enable(false);
     	        }else
-    	            enable(true);
+    	            item.enable(true);
     	        
-    	        if(popupNode != null){
-    	            item.menuItemsPanel = (MenuPanel)((ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen)).getWidget();
-    	            if(popupNode.getAttributes().getNamedItem("position") != null)
-    	                item.popPosition = MenuItem.PopPosition.valueOf(popupNode.getAttributes().getNamedItem("position").getNodeValue().toUpperCase());
+    	        if(item.popupNode != null){
+    	            item.menuItemsPanel = (MenuPanel)loadWidget(item.popupNode, def);
+    	            if(item.popupNode.getAttributes().getNamedItem("position") != null)
+    	                item.popPosition = MenuItem.PopPosition.valueOf(item.popupNode.getAttributes().getNamedItem("position").getNodeValue().toUpperCase());
     	        }
 
     	        if(node.getAttributes().getNamedItem("key") != null){
     	            item.key = node.getAttributes().getNamedItem("key").getNodeValue();
     	        }
     	        
-    	        */
     	        setDefaults(node,item);
     	        return item;
     		}
@@ -847,7 +862,11 @@ public class UIUtil {
     	                                     .charAt(0));
     	        textbox.setStyleName("ScreenPassword");
     	        setDefaults(node, textbox);
-    	        textbox.addValueChangeHandler((StringField)factoryMap.get("String").getNewInstance(node, null));
+    	        Field field = (StringField)factoryMap.get("String").getNewInstance(node, null);
+    	        textbox.addValueChangeHandler(field);
+    	        textbox.addBlurHandler(field);
+    	        textbox.addMouseOutHandler(field);
+    	        textbox.addMouseOverHandler(field);
     	        return textbox;
     		}
     	});
@@ -865,8 +884,11 @@ public class UIUtil {
                 
                 radio.setStyleName("ScreenRadio");
                 setDefaults(node, radio);
-                //ScreenWidget<RadioButton> sw = new ScreenWidget<RadioButton>(radio);
-                //sw.field = (CheckField)factoryMap.get("Check").getNewInstance(node);
+                Field field = (CheckField)factoryMap.get("Check").getNewInstance(node, def);
+                radio.addBlurHandler(field);
+                radio.addValueChangeHandler(field);
+                radio.addMouseOutHandler(field);
+                radio.addMouseOverHandler(field);
                 return radio;
     		}
     	});
@@ -1037,7 +1059,11 @@ public class UIUtil {
     	        
     	        textarea.setStyleName("ScreenTextArea");
     	        setDefaults(node, textarea);
-    	        textarea.addValueChangeHandler((StringField)factoryMap.get("String").getNewInstance(node, null));
+    	        Field field = (StringField)factoryMap.get("String").getNewInstance(node, null);
+    	        textarea.addValueChangeHandler(field);
+    	        textarea.addBlurHandler(field);
+    	        textarea.addMouseOutHandler(field);
+    	        textarea.addMouseOverHandler(field);
     	        return textarea;
     		}
     	});
@@ -1095,7 +1121,7 @@ public class UIUtil {
     	        return vp;
     		}
     	});
-    	factoryMap.put("browser", new Factory<WindowBrowser>(){
+    	factoryMap.put("winbrowser", new Factory<WindowBrowser>(){
     		public WindowBrowser getNewInstance(Node node, ScreenDef def) {
     			WindowBrowser browser = new WindowBrowser();
     	        int limit = 10;
@@ -1130,7 +1156,7 @@ public class UIUtil {
                 }
                 if(node.getAttributes().getNamedItem("showScroll") != null){
                 	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    table.showScroll.valueOf(showScroll);
+                    table.showScroll = VerticalScroll.valueOf(showScroll);
                 }
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
@@ -1181,9 +1207,11 @@ public class UIUtil {
     	factoryMap.put("dropdown", new Factory<Dropdown>(){
     		public Dropdown getNewInstance(Node node, ScreenDef def){
     		    Dropdown<?> drop = null;
+    		    Field field = (IntegerField)factoryMap.get("Integer").getNewInstance(node, null);
     		    if(node.getAttributes().getNamedItem("field") != null){
     		        if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String")){
     		            drop = new Dropdown<String>();
+    		            field = (StringField)factoryMap.get("String").getNewInstance(node,null);
     		        }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
     		            drop = new Dropdown<Integer>();
     		        }else
@@ -1191,6 +1219,11 @@ public class UIUtil {
     		    }else
     		        drop = new Dropdown();
     	        
+    		    //drop.addValueChangeHandler(field);
+    		    drop.addBlurHandler(field);
+    		    drop.addMouseOutHandler(field);
+    		    drop.addMouseOverHandler(field);
+    		    
     		    drop.multiSelect = false;
     	                
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
@@ -1207,11 +1240,11 @@ public class UIUtil {
     	                                  .getNodeValue();
     	        
     	        if (node.getAttributes().getNamedItem("popWidth") != null)
-    	            drop.popup.setWidth(node.getAttributes()
+    	            drop.setTableWidth(node.getAttributes()
     	                                  .getNamedItem("popWidth")
     	                                  .getNodeValue());
     	        else
-    	        	drop.popup.setWidth("auto");
+    	        	drop.setTableWidth("auto");
                 NodeList colList = ((Element)node).getElementsByTagName("col");
                 ArrayList<TableColumn> columns = new ArrayList<TableColumn>();
                 if(colList.getLength() > 0){
@@ -1220,8 +1253,10 @@ public class UIUtil {
                 		TableColumn column = new TableColumn();
                 		if(col.getAttributes().getNamedItem("name") != null)
                 			column.setName(col.getAttributes().getNamedItem("name").getNodeValue());
-                		if(col.getAttributes().getNamedItem("header") != null)
+                		if(col.getAttributes().getNamedItem("header") != null){
                 			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
+                			drop.showHeader = true;
+                		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
                 		if(col.getAttributes().getNamedItem("sort") != null)
@@ -1242,27 +1277,35 @@ public class UIUtil {
                 	}
                 }else{
                 	TableColumn column = new TableColumn();
+                	column.controller = drop;
                 	column.setCurrentWidth(100);
                 	column.setColumnWidget(new org.openelis.gwt.widget.Label());
                 	columns.add(column);
                 }
                 drop.columns = columns;
-                drop.init();
+                drop.setup();
+                setDefaults(node,drop);
     			return drop;
     		}
     	});
     	factoryMap.put("autoComplete", new Factory<AutoComplete>() {
     		public AutoComplete getNewInstance(Node node, ScreenDef def) {
     			AutoComplete<?> auto = null;
+    			Field field = (IntegerField)factoryMap.get("Integer").getNewInstance(node, null);
                 if(node.getAttributes().getNamedItem("field") != null){
                     if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String")){
                         auto = new AutoComplete<String>();
+                        field = (StringField)factoryMap.get("String").getNewInstance(node, null);
                     }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
                         auto = new AutoComplete<Integer>();
                     }else
                         auto = new AutoComplete();
                 }else
                     auto = new AutoComplete();
+               // auto.addValueChangeHandler(field);
+                auto.addBlurHandler(field);
+                auto.addMouseOutHandler(field);
+                auto.addMouseOverHandler(field);
     	                
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
     	        	auto.multiSelect = true;
@@ -1280,11 +1323,15 @@ public class UIUtil {
     	                                  .getNodeValue();
     	        
     	        if (node.getAttributes().getNamedItem("popWidth") != null)
-    	            auto.popup.setWidth(node.getAttributes()
+    	            auto.setTableWidth(node.getAttributes()
     	                                  .getNamedItem("popWidth")
     	                                  .getNodeValue());
     	        else
-    	        	auto.popup.setWidth("auto");
+    	        	auto.setTableWidth("auto");
+    	        if(node.getAttributes().getNamedItem("case") != null){
+    	            String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
+    	            auto.lookUp.getTextBox().setCase(TextBox.Case.valueOf(textCase));
+    	        }
                 NodeList colList = ((Element)node).getElementsByTagName("col");
                 ArrayList<TableColumn> columns = new ArrayList<TableColumn>();
                 if(colList.getLength() > 0){
@@ -1293,8 +1340,10 @@ public class UIUtil {
                 		TableColumn column = new TableColumn();
                 		if(col.getAttributes().getNamedItem("name") != null)
                 			column.setName(col.getAttributes().getNamedItem("name").getNodeValue());
-                		if(col.getAttributes().getNamedItem("header") != null)
+                		if(col.getAttributes().getNamedItem("header") != null) {
                 			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
+                			auto.showHeader = true;
+                		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
                 		if(col.getAttributes().getNamedItem("sort") != null)
@@ -1311,16 +1360,19 @@ public class UIUtil {
                 				column.setAlign(HasAlignment.ALIGN_RIGHT);
                 		}
                 		column.setColumnWidget(new org.openelis.gwt.widget.Label());
+                		column.controller = auto;
                 		columns.add(column);
+                		
                 	}
                 }else{
                 	TableColumn column = new TableColumn();
                 	column.setCurrentWidth(100);
                 	column.setColumnWidget(new org.openelis.gwt.widget.Label());
+                	column.controller = auto;
                 	columns.add(column);
                 }
                 auto.columns = columns;
-                auto.init();
+                auto.setup();
     			return auto;
     		}
     	});
@@ -1414,6 +1466,34 @@ public class UIUtil {
     	        return button;
     		}
     	});
+    	factoryMap.put("icon", new Factory<IconContainer>() {
+    		public IconContainer getNewInstance(Node node, ScreenDef def) {
+    			IconContainer icon = new IconContainer();
+    	        NodeList widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    	                Widget wid = loadWidget(widgets.item(k),def);
+    	                int x = -1;
+    	                if (widgets.item(k).getAttributes().getNamedItem("x") != null)
+    	                    x = Integer.parseInt(widgets.item(k)
+    	                                                .getAttributes()
+    	                                                .getNamedItem("x")
+    	                                                .getNodeValue());
+    	                int y = -1;
+    	                if (widgets.item(k).getAttributes().getNamedItem("y") != null)
+    	                    y = Integer.parseInt(widgets.item(k)
+    	                                                .getAttributes()
+    	                                                .getNamedItem("y")
+    	                                                .getNodeValue());
+    	                if(node.getAttributes().getNamedItem("align") != null)
+    	                    DOM.setElementProperty(icon.getElement(),"align",node.getAttributes().getNamedItem("align").getNodeValue());
+    	                icon.add(wid, x, y);
+    	            }
+    	        }
+    	        setDefaults(node,icon);
+    	        return icon;
+    		}
+    	});
     	factoryMap.put("String", new Factory<StringField>() {
     		public StringField getNewInstance(Node node, ScreenDef def) {
     			StringField field = new StringField();
@@ -1486,9 +1566,6 @@ public class UIUtil {
     				field.setMax(Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue()));
     			if(node.getAttributes().getNamedItem("min") != null)
     				field.setMin(Integer.parseInt(node.getAttributes().getNamedItem("min").getNodeValue()));
-    	        if (node.hasChildNodes()) {
-    	            field.setValue(new Integer(node.getFirstChild().getNodeValue()));
-    	        }
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            field.setFormat(node.getAttributes()
     	                          .getNamedItem("pattern")
@@ -1512,9 +1589,6 @@ public class UIUtil {
     	            field.setMin(new Double(node.getAttributes()
     	                                  .getNamedItem("min")
     	                                  .getNodeValue()));
-    	        if (node.hasChildNodes()) {
-    	            field.setValue(new Integer(node.getFirstChild().getNodeValue()).doubleValue());
-    	        }
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            field.setFormat(node.getAttributes()
     	                          .getNamedItem("pattern")

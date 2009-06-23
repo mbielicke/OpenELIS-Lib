@@ -25,14 +25,18 @@
 */
 package org.openelis.gwt.services;
 
+import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import org.openelis.gwt.common.CalendarForm;
+import org.openelis.gwt.common.RPC;
 
-public interface CalendarServiceIntAsync extends AppScreenServiceIntAsync {
+public interface CalendarServiceIntAsync {
     
-    public void getMonth(CalendarForm form, AsyncCallback<CalendarForm> callback);
+    public Request getMonth(CalendarForm form, AsyncCallback<CalendarForm> callback);
 
-    public void getMonthSelect(CalendarForm form, AsyncCallback<CalendarForm> callback);
+    public Request getMonthSelect(CalendarForm form, AsyncCallback<CalendarForm> callback);
+    
+    public Request getScreen(CalendarForm definition, AsyncCallback<? extends RPC> callback);
 
 }

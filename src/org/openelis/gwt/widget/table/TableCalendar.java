@@ -25,19 +25,19 @@
 */
 package org.openelis.gwt.widget.table;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.xml.client.Node;
-
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
 import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.widget.FormCalendarWidget;
+import org.openelis.gwt.widget.CalendarLookUp;
+
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.xml.client.Node;
 
 public class TableCalendar extends TableCellInputWidget {
 
-    private FormCalendarWidget editor;
+    private CalendarLookUp editor;
     private Label display;
     private byte begin = 0;
     private byte end = 2;
@@ -55,8 +55,8 @@ public class TableCalendar extends TableCellInputWidget {
         this.begin = begin;
         this.end = end;
         this.week = week;
-        editor = new FormCalendarWidget(begin,end,week);
-        editor.init();
+        editor = new CalendarLookUp(begin,end,week);
+        //editor.init();
         setStyleName("ScreenCalendar");
     }
 
@@ -83,8 +83,8 @@ public class TableCalendar extends TableCellInputWidget {
         if(!enabled)
             return;
         if(editor == null){
-            editor = new FormCalendarWidget(begin,end,week);
-            editor.init();
+            editor = new CalendarLookUp(begin,end,week);
+            //editor.init();
             editor.setWidth((width-15)+"px");
         }
         String val = "";
@@ -111,8 +111,8 @@ public class TableCalendar extends TableCellInputWidget {
            week = Boolean.valueOf(node.getAttributes().getNamedItem("week").getNodeValue()).booleanValue();
         else
            week = false;
-        editor = new FormCalendarWidget(begin,end,week);
-        editor.init();
+        editor = new CalendarLookUp(begin,end,week);
+        //editor.init();
         setStyleName("ScreenCalendar");
     }
 

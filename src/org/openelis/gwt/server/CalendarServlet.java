@@ -37,7 +37,7 @@ import java.util.Date;
 
 import javax.servlet.ServletException;
 
-public class CalendarServlet extends AppServlet implements CalendarServiceInt<CalendarForm>{
+public class CalendarServlet extends AppServlet implements CalendarServiceInt{
 
     private static final long serialVersionUID = 1L;
 

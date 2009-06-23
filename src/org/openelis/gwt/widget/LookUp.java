@@ -3,12 +3,13 @@ package org.openelis.gwt.widget;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DelegatingClickListenerCollection;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 
-public class LookUp extends Composite implements SourcesClickEvents, SourcesMouseEvents {
+public class LookUp extends Composite implements SourcesClickEvents, SourcesMouseEvents, Focusable {
     
     public TextBox textbox;
     public IconContainer icon;
@@ -83,7 +84,12 @@ public class LookUp extends Composite implements SourcesClickEvents, SourcesMous
     }
     
     public void setWidth(String width) {
-       int wid = Integer.parseInt(width.substring(0,width.indexOf("px")));
+       int index = width.indexOf("px");
+       int wid = 0;
+       if(index > -1)
+    	   wid = Integer.parseInt(width.substring(0,width.indexOf("px")));
+       else
+    	   wid = Integer.parseInt(width);
        textbox.setWidth((wid-16)+"px");
     }
 
@@ -114,6 +120,21 @@ public class LookUp extends Composite implements SourcesClickEvents, SourcesMous
     public TextBox getTextBox() {
         return textbox;
     }
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
     
     
 

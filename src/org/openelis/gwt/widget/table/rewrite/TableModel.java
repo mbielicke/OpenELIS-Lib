@@ -302,12 +302,12 @@ public class TableModel implements TableModelInt {
     }
     
     public void setCell(int row, int col, Object value) {
-        data.get(row).cells[col] = value;
+        getRow(row).cells[col] = value;
         tableModelListeners.fireCellUpdated(this, row, col);
     }
     
     public Object getCell(int row, int col) {
-        return data.get(row).cells[col];
+        return getRow(row).cells[col];
     }
     
     public void hideRow(int row) {

@@ -37,16 +37,20 @@ import org.openelis.gwt.widget.table.rewrite.event.TableModelListener;
 import org.openelis.gwt.widget.table.rewrite.event.TableWidgetListener;
 import org.openelis.gwt.widget.table.rewrite.event.TableWidgetListenerCollection;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 /**
  * This class is the main controller for the Table widget. It hooks the model to
@@ -57,12 +61,13 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class TableWidget extends FocusPanel implements
-                            TableListener,
                             SourcesChangeEvents,
                             SourcesTableWidgetEvents,
                             TableModelListener,
                             TableWidgetListener,
-                            FocusListener{
+                            FocusListener,
+                            ClickHandler
+                            {
     
 
     public ArrayList<TableColumn> columns;
@@ -93,7 +98,7 @@ public class TableWidget extends FocusPanel implements
     public TableDragController dragController;
     public TableIndexDropController dropController;
     public boolean selectedByClick;
-    public VerticalScroll showScroll;
+    public VerticalScroll showScroll = VerticalScroll.NEEDED;
     public String width;
     
     public TableWidget() {
@@ -122,12 +127,13 @@ public class TableWidget extends FocusPanel implements
     /**
      * This method handles all click events on the body of the table
      */
-    public void onCellClicked(SourcesTableEvents sender, int row, int col) {
+    public void onClick(ClickEvent event) {
+    	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
         focused = true;
-        if(!(columns.get(col).getColumnWidget() instanceof CheckBox) && activeRow == row && activeCell == col)
+        if(!(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox) && activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
             return;
         selectedByClick = true;
-        select(row, col);
+        select(cell.getRowIndex(), cell.getCellIndex());
         selectedByClick = false;
     }
 

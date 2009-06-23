@@ -37,7 +37,9 @@ import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 import org.openelis.gwt.widget.table.rewrite.event.TableWidgetListener;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -45,6 +47,7 @@ import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
     
@@ -63,6 +66,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public boolean itemSelected;
     
     int currentCursorPos;
+    
+    public String popWidth;
     
     public LookUp lookUp = new LookUp();
     
@@ -83,9 +88,12 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     };
     
     public DropdownWidget(){
+    	super();
     }
     
     public void init() {
+    	if(maxRows == 0)
+    		maxRows = 10;
         renderer = new TableRenderer(this);
         model = new TableModel(this);
         view = new TableView(this,showScroll);
@@ -106,7 +114,10 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
       
     }
     
-    public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
+    public void onClick(ClickEvent event) {
+    	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
+    	int row = cell.getRowIndex();
+    	int col = cell.getCellIndex();
         if(!model.canSelect(modelIndexList[row]))
             return;
         if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){

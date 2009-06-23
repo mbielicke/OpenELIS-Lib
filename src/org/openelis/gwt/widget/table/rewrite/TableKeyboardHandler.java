@@ -66,7 +66,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                     final int col = controller.activeCell;
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
-                            controller.onCellClicked(controller.view.table, row, col);
+                            controller.select(row, col);
                         }
                     });
                 }else{

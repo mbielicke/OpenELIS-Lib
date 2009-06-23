@@ -219,7 +219,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
         cellView.addMouseWheelListener(this);
-        table.addTableListener(controller);
+        table.addClickHandler(controller);
         scrollBar.setAlwaysShowScrollBars(true);
         DeferredCommand.addCommand(new Command() {
            public void execute() {

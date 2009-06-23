@@ -28,11 +28,14 @@ package org.openelis.gwt.widget.table.rewrite;
 import org.openelis.gwt.common.rewrite.DataFilterer;
 import org.openelis.gwt.common.rewrite.Filter;
 import org.openelis.gwt.screen.ScreenMenuItem;
+import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.rewrite.DropdownWidget;
 
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
@@ -65,11 +68,19 @@ public class TableColumn {
     	}else {
     		((HasValue)colWidget).setValue(value,true);
     		Object val = ((HasValue)colWidget).getValue();
-    		if(val == null) {
-    		    wid = new Label("");
-    		}else
-    		    wid = new Label(((HasValue)colWidget).getValue().toString());
-    		((Label)wid).setWordWrap(false);
+    		Label label = new Label("");
+    		if(val != null) {
+    			if(colWidget instanceof CalendarLookUp) {
+    				label.setText((((CalendarLookUp) colWidget).getText()));
+    			}else if(colWidget instanceof DropdownWidget) {
+    				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+    			}else if(colWidget instanceof TextBoxBase) {
+    				label.setText(((TextBoxBase)colWidget).getText());
+    			}else
+    				label.setText(val.toString());
+    		}
+    		label.setWordWrap(false);
+    		wid = label;
     	}
         wid.setWidth((currentWidth)+ "px");
         wid.setHeight((controller.cellHeight+"px"));
@@ -81,7 +92,14 @@ public class TableColumn {
     		
     	}else if(widget instanceof Label) {
     		((HasValue)colWidget).setValue(value,true);
-    		((Label)widget).setText(((HasValue)colWidget).getValue().toString());
+    		if(colWidget instanceof CalendarLookUp) {
+    			((Label)widget).setText(((CalendarLookUp)colWidget).getText());
+    		}else if(colWidget instanceof DropdownWidget) {
+				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+			}else if(colWidget instanceof TextBoxBase) {
+				((Label)widget).setText(((TextBoxBase)colWidget).getText());
+    		}else
+    			((Label)widget).setText(((HasValue)colWidget).getValue().toString());
     	}
     }
     
@@ -93,7 +111,13 @@ public class TableColumn {
     }
 
     public void enable(boolean enable) {
-        //colWidget.enable(enable);
+        if(colWidget instanceof CalendarLookUp) {
+        	((CalendarLookUp)colWidget).enable(enable);
+        }else if(colWidget instanceof DropdownWidget) {
+        	((DropdownWidget)colWidget).enabled(enable);
+        }else if(colWidget instanceof TextBoxBase) {
+        	((TextBoxBase)colWidget).setReadOnly(!enable);
+        }
     }
     
     public HorizontalAlignmentConstant getAlign() {

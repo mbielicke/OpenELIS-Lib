@@ -25,6 +25,10 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -39,7 +43,7 @@ import org.openelis.gwt.screen.rewrite.Screen.State;
 
 import java.util.EnumSet;
 
-public class AppButton extends Composite implements SourcesClickEvents, MouseListener {
+public class AppButton extends Composite implements SourcesClickEvents, MouseListener, HasClickHandlers{ //ClickHandler {
     
     private DelegatingClickListenerCollection listeners;
     
@@ -73,6 +77,7 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
         right.addStyleName("ButtonRightSide");
         content.addStyleName("ButtonContent");
         panel.addMouseListener(this);
+        //panel.addClickHandler(this);
     }
     
     public void addClickListener(ClickListener listener) {
@@ -191,4 +196,13 @@ public class AppButton extends Composite implements SourcesClickEvents, MouseLis
     public void fireClick() {
         listeners.fireClick(this);
     }
+
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addDomHandler(handler, ClickEvent.getType());
+	}
+
+	//public void onClick(ClickEvent event) {
+		//ClickEvent.fireNativeEvent(event.getNativeEvent(), this);
+		
+	//}
 }

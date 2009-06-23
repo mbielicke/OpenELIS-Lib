@@ -26,6 +26,8 @@
 package org.openelis.gwt.widget.table.rewrite;
 
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -228,6 +230,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     	
         controller.editingCell = (Widget)controller.columns.get(col).getWidgetEditor(controller.model.getCell(row,col));
         controller.view.table.setWidget(row, col, controller.editingCell);
+        ((Focusable)controller.editingCell).setFocus(true);
         //controller.editingCell.getWidget().addStyleName(controller.view.widgetStyle);
         //((SimplePanel)cell).getWidget().addStyleName("Enabled");
             
