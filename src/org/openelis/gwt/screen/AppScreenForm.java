@@ -483,6 +483,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
      */
     public void abort() {
         if (state == State.UPDATE) {
+            resetForm();
             clearErrors();   
             formService.abort(form, abortChain);
             setState(State.DISPLAY);
