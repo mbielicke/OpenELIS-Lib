@@ -151,5 +151,9 @@ public class ScreenTabPanel extends ScreenWidget implements ScreenPanel, TabList
     public String getSelectedTabKey() {
         return tabList.get(panel.getTabBar().getSelectedTab());
     }
+    
+    public int getSelectedIndex() {
+        return panel.getTabBar().getSelectedTab();
+    }
 
 }
