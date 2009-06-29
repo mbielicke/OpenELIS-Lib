@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -131,6 +133,15 @@ public class TableMouseHandler implements TableMouseHandlerInt {
        }
         
     }
+
+	public void onMouseOver(MouseOverEvent event) {
+		((Widget)event.getSource()).addStyleName("TableHighlighted");
+	}
+
+	public void onMouseOut(MouseOutEvent event) {
+		 ((Widget)event.getSource()).removeStyleName("TableHighlighted");
+	        
+	}
 
 
 

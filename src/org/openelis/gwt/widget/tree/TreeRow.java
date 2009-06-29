@@ -1,21 +1,26 @@
 package org.openelis.gwt.widget.tree;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
-import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.Widget;
-
 import org.openelis.gwt.common.data.TreeDataItem;
 
-public class TreeRow extends Widget implements SourcesMouseEvents {
-    
-    public MouseListenerCollection mouseListeners = new MouseListenerCollection();
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Widget;
+
+public class TreeRow extends Widget implements HasAllMouseHandlers {
     
     public int index;
     public int modelIndex;
@@ -35,32 +40,34 @@ public class TreeRow extends Widget implements SourcesMouseEvents {
         onAttach();
     }
     
-
-    public void addMouseListener(MouseListener listener) {
-        mouseListeners.add(listener);
-    }
-
-    public void removeMouseListener(MouseListener listener) {
-        mouseListeners.remove(listener);   
-    }
-    
-    @Override
-    public void onBrowserEvent(Event event) {
-        switch(DOM.eventGetType(event)){
-            case Event.ONMOUSEDOWN :
-            case Event.ONMOUSEMOVE :
-            case Event.ONMOUSEOUT :
-            case Event.ONMOUSEOVER :
-            case Event.ONMOUSEUP :
-                DOM.eventPreventDefault(event);
-                mouseListeners.fireMouseEvent(this, event);
-        }
-    }
-    
     public void setDragValues() {
         dragIndex = index;
         dragModelIndex = modelIndex;
         dragItem = (TreeDataItem)item.clone();
     }
+    
+	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+		return addDomHandler(handler, MouseDownEvent.getType());
+	}
+
+	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+		return addDomHandler(handler, MouseUpEvent.getType());
+	}
+
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler, MouseOutEvent.getType());
+	}
+
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler,MouseOverEvent.getType());
+	}
+
+	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+		return addDomHandler(handler, MouseMoveEvent.getType());
+	}
+
+	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+		return addDomHandler(handler,MouseWheelEvent.getType());
+	}
     
 }

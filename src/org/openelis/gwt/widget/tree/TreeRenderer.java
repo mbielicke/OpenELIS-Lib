@@ -59,7 +59,8 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         item.addCommandListener(controller);
         controller.view.table.setWidget(i, 0, item);
         TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseListener(controller.mouseHandler);
+        row.addMouseOverHandler(controller.mouseHandler);
+        row.addMouseOutHandler(controller.mouseHandler);
         row.index = i;
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);

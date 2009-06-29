@@ -25,9 +25,11 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.MouseListener;
 
-public interface TreeMouseHandlerInt extends ClickListener, MouseListener{
+public interface TreeMouseHandlerInt extends ClickListener, MouseListener, MouseOutHandler, MouseOverHandler{
 
 }

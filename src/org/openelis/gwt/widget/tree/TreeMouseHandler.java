@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -126,6 +128,16 @@ public class TreeMouseHandler implements TreeMouseHandlerInt {
        }
         
     }
+
+	public void onMouseOut(MouseOutEvent event) {
+		  ((Widget)event.getSource()).removeStyleName("TreeHighlighted");
+		
+	}
+
+	public void onMouseOver(MouseOverEvent event) {
+		 ((Widget)event.getSource()).addStyleName("TreeHighlighted");
+		
+	}
 
 
 
