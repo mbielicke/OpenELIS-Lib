@@ -87,7 +87,8 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             j++;
         }
         TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseListener(controller.mouseHandler);
+        row.addMouseOverHandler(controller.mouseHandler);
+        row.addMouseOutHandler(controller.mouseHandler);
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
         row.index = i;

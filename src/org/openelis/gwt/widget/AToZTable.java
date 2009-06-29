@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -351,5 +353,15 @@ public class AToZTable extends TableWidget implements
         // TODO Auto-generated method stub
         
     }
+
+	public void onMouseOver(MouseOverEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMouseOut(MouseOutEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

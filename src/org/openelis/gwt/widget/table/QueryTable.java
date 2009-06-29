@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusWidget;
@@ -265,6 +267,16 @@ public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, 
         //form.getFieldMap().get(rpcKey).setValue(value);
         renderer.setCellDisplay(0,col);
     }
+
+	public void onMouseOver(MouseOverEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMouseOut(MouseOutEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
  
     
 }
