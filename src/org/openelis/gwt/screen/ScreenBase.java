@@ -269,24 +269,6 @@ public class ScreenBase<ScreenRPC extends Form> extends Composite implements Foc
     }
     
     /**
-     * This method will enable or disable all input widgets on the screen depending on
-     * the value of the parameter enabled
-     * 
-     * @param enabled
-     */
-    protected void strikeThru(boolean enabled) {
-        for(String key : widgets.keySet()) {
-            //if (!form.getFields().contains(key) && !form.getFieldList().contains(key+"Id")) {
-              //  continue;
-           // }
-            if(enabled)
-                widgets.get(key).addStyleName("strike");
-            else
-                widgets.get(key).removeStyleName("strike");
-      }
-   }
-
-    /**
      * Implementation of the onFocus method from FocusListener. Any widget that adds
      * the Screen as a FocusListener will call this method when focused. May be overridden
      * by the extending class to change the default behavior.

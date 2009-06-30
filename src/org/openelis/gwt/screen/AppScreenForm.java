@@ -149,7 +149,6 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
                 }
             }else{
                 commandListeners.fireCommand(Action.REFRESH_PAGE,null);
-                strikeThru(false);
                 setState(State.DEFAULT);
             }
          }
@@ -195,7 +194,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
                     window.setError(consts.get("updateFailed"));
                 
             } else {
-                setState(State.DEFAULT);
+                setState(State.DISPLAY);
                 window.setDone(consts.get("updatingComplete"));
             }
         }
@@ -336,9 +335,6 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
     }
     
     public void delete() {
-    	//strikethru all the input widgets
-    	strikeThru(true);
-    	
     	//set the state to delete
         setState(State.DELETE);
 
@@ -503,7 +499,6 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             window.setDone(consts.get("queryAborted"));
         }
         else if(state == State.DELETE){
-        	strikeThru(false);
         	setState(State.DISPLAY);
         	window.setDone(consts.get("deleteAborted"));
         }
