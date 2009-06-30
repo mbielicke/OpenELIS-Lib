@@ -491,9 +491,9 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     	if(glass == null) {
     		glass = new AbsolutePanel();
     		glass.setStyleName("GlassPanel");
-    		glass.setHeight(getOffsetHeight()+"px");
-    		glass.setWidth(getOffsetWidth()+"px");
-    		RootPanel.get().add(glass, getAbsoluteLeft(), getAbsoluteTop());
+    		glass.setHeight(content.getOffsetHeight()+"px");
+    		glass.setWidth(content.getOffsetWidth()+"px");
+    		RootPanel.get().add(glass, content.getAbsoluteLeft(), content.getAbsoluteTop());
     	}
     }
     
