@@ -28,6 +28,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.SyncCallback;
 
 import org.openelis.gwt.common.Query;
 import org.openelis.gwt.event.CommandListener;
@@ -163,7 +164,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
             // }else
             // candidate = 0;
         } else if(selection > -1 && selection < query.results.size()) {
-            AsyncCallback callback = new AsyncCallback() {
+            SyncCallback callback = new SyncCallback() {
                 public void onSuccess(Object result) {
                     query.results.select(selection);
                     candidate = selection;
@@ -220,7 +221,7 @@ public class KeyListManager<Key> implements SourcesCommandEvents, CommandListene
             return;
         final int currPage = query.page;
         query.page = page;
-        AsyncCallback callback = new AsyncCallback<Query>() {
+        SyncCallback callback = new SyncCallback<Query>() {
             public void onSuccess(Query result) {
                 setQueryResults(result);
                 if (selectItem) {
