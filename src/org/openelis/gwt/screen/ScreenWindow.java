@@ -124,7 +124,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     /**
      * DisclosurePanel is used to hold the windows messages to users.
      */
-    public HorizontalPanel status = new HorizontalPanel();
+    private HorizontalPanel status = new HorizontalPanel();
     private FocusPanel fp = new FocusPanel();
     private FocusPanel close = new FocusPanel();
     private FocusPanel collapse = new FocusPanel();
@@ -484,6 +484,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             message.setText(text);
             statusImg.setStyleName(style);
         }
+        unlockWindow();
     }
     
     public void lockWindow() {
