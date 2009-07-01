@@ -158,6 +158,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     
     private AbsolutePanel glass;
     private AbsolutePanel modalPanel;
+    private AbsolutePanel modalGlass;
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
     
@@ -263,11 +264,11 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             browser.dragController.makeDraggable(this, cap);
         }
         if(modal){
-            glass = new AbsolutePanel();
-            glass.setStyleName("GlassPanel");
-            glass.setHeight(Window.getClientHeight()+"px");
-            glass.setWidth(Window.getClientWidth()+"px");
-            RootPanel.get().add(glass, 0, 0);
+            modalGlass = new AbsolutePanel();
+            modalGlass.setStyleName("GlassPanel");
+            modalGlass.setHeight(Window.getClientHeight()+"px");
+            modalGlass.setWidth(Window.getClientWidth()+"px");
+            RootPanel.get().add(modalGlass, 0, 0);
             modalPanel = new AbsolutePanel();
             modalPanel.setStyleName("ModalPanel");
             modalPanel.setHeight(Window.getClientHeight()+"px");
@@ -289,7 +290,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     }
     
     public void setContent(Widget content, int x, int y) {
-        if(glass != null){
+        if(modalGlass != null){
             modalPanel.setWidgetPosition(this, x, y);
         }
         setContent(content);
@@ -365,10 +366,10 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
                 return;
             }
         }
-        if(glass != null) {
+        if(modalGlass != null) {
             DOM.removeEventPreview(this);
             removeFromParent();
-            RootPanel.get().remove(glass);
+            RootPanel.get().remove(modalGlass);
             RootPanel.get().remove(modalPanel);
             return;
         }
