@@ -366,7 +366,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
                 commitUpdate();
             } else {
                 drawErrors();
-                window.setBusy(consts.get("correctErrors"));
+                window.setError(consts.get("correctErrors"));
             }
         }
         if (state == State.ADD) {
