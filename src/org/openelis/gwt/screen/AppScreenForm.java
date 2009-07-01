@@ -103,6 +103,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             window.setDone(consts.get("updateFields"));
         }
         public void onFailure(Throwable caught){
+        	window.clearStatus();
             handleError(caught);
             setState(State.DEFAULT);
         }            
@@ -153,6 +154,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             }
          }
          public void onFailure(Throwable caught){
+        	 window.clearStatus();
              handleError(caught);
          }
     };
@@ -176,6 +178,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             
         }
         public void onFailure(Throwable caught){
+        	window.clearStatus();
             handleError(caught);
         } 
     };
@@ -199,6 +202,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             }
         }
         public void onFailure(Throwable caught){
+        	window.clearStatus();
             handleError(caught);
         }
     };
@@ -219,6 +223,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
                 commandListeners.fireCommand(Action.NEW_MODEL, result);
         }
         public void onFailure(Throwable caught){
+        	window.clearStatus();
             handleError(caught);
         }
     };
