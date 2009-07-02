@@ -1,9 +1,7 @@
-package org.openelis.gwt.common.rewrite.data;
+package org.openelis.gwt.widget.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.ValidationException;
-import org.openelis.gwt.screen.ScreenTableWidget;
 import org.openelis.gwt.widget.HandlesEvents;
 import org.openelis.gwt.widget.MenuLabel;
 
@@ -21,15 +19,18 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>, MouseOutHandler, MouseOverHandler, BlurHandler{
+public class Field<T> extends HandlesEvents implements ValueChangeHandler<String>, MouseOutHandler, MouseOverHandler, BlurHandler{
 	
     public boolean required;
     public boolean valid = true;
     public T value;
     protected VerticalPanel errorPanel = new VerticalPanel();
     protected PopupPanel pop;
+    public ArrayList<String> errors;
+    public boolean queryMode;
+    public String queryString;
     
-    public void validate() throws ValidationException {
+    public void validate() {
     	
     }
     
@@ -37,6 +38,19 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>, Mo
         if(value == null)
             return "";
     	return value.toString();
+    }
+    
+    public String formatQuery() {
+    	return format();
+    }
+    
+    public void validateQuery() {
+    	
+    }
+    
+    public void setQueryMode(boolean query) {
+    	queryMode = query;
+    	queryString = null;
     }
     
     public String toString() {
@@ -54,15 +68,27 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>, Mo
 	    this.value = value;
 	}
 	
-	public void onValueChange(ValueChangeEvent<T> event) {
-		setValue(event.getValue());
-		((HasValue)event.getSource()).setValue(format(), false);
-	    try {
-	    	clearError((Widget)event.getSource());
-	    	validate();
-	    }catch(ValidationException e){
-	    	drawError((Widget)event.getSource(),e);
-	    }
+	public void setStringValue(String value) {
+		
+	}
+	
+	public void onValueChange(ValueChangeEvent<String> event) {
+		clearError((Widget)event.getSource());
+		if(queryMode) {
+			queryString = event.getValue();
+			validateQuery();
+		}else{
+			setStringValue(event.getValue());
+			if(!valid){
+				drawError((Widget)event.getSource());
+				return;
+			}
+			((HasValue)event.getSource()).setValue(format(), false);
+			validate();
+		}
+		if(!valid){
+			drawError((Widget)event.getSource());
+		}
 	}
 	
     public void clearError(Widget wid) {
@@ -71,17 +97,20 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>, Mo
         }
         wid.removeStyleName("InputError");
         errorPanel.clear();
+        errors = null;
     }
     
-    public void drawError(Widget wid, ValidationException e) {
-        ArrayList<String> errors = new ArrayList<String>();
-        errors.add(e.getMessage());
-        
+    public void addError(String error){
+    	if(errors == null)
+    		errors = new ArrayList<String>();
+    	errors.add(error);
+    }
+    
+    public void drawError(Widget wid) {        
         errorPanel.clear();
         for (String error : errors) {
             MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
             errorLabel.setStyleName("errorPopupLabel");
-            //errorPanel.add(new MenuLabel(error,"Images/bullet_red.png"));
             errorPanel.add(errorLabel);
         }
         if(errors.size() == 0){
@@ -119,13 +148,28 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<T>, Mo
 	}
 
 	public void onBlur(BlurEvent event) {
-		setValue((T)((HasValue)event.getSource()).getValue());
-	    try {
-	    	clearError((Widget)event.getSource());
-	    	validate();
-	    }catch(ValidationException e){
-	    	drawError((Widget)event.getSource(),e);
-	    }
+		checkValue((Widget)event.getSource());
+	}
+	
+	public void checkValue(Widget wid) {
+		clearError(wid);
+		if(queryMode){
+			if(((HasValue)wid).getValue() != null && !((HasValue)wid).getValue().equals("")){
+				queryString = ((HasValue)wid).getValue().toString();
+				validateQuery();
+			}else
+				queryString = null;
+		}else{
+			setStringValue(((HasValue)wid).getValue().toString());
+			if(!valid){
+				drawError(wid);
+				return;
+			}
+			validate();
+		}
+		if(!valid){
+			drawError(wid);
+		}
 	}
 
 }

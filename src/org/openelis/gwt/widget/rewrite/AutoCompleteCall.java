@@ -33,9 +33,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 public class AutoCompleteCall implements AutoCompleteCallInt {
     

@@ -28,6 +28,7 @@ package org.openelis.gwt.server;
 import org.openelis.gwt.common.CalendarForm;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.services.CalendarServiceInt;
+import org.openelis.util.Datetime;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -52,21 +53,20 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         try {
             Calendar cal = Calendar.getInstance();
             if(form.date != null && !form.date.equals("")){
-                form.date = form.date.replace('-','/');
-                cal.setTime(new Date(form.date));
+                cal.setTime(form.date);
             }else{
-                form.date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
+                form.date = cal.getTime();
             }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element monthEl = doc.createElement("month");
-            monthEl.appendChild(doc.createTextNode(String.valueOf(form.month)));
+            monthEl.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.MONTH))));
             root.appendChild(monthEl);
             Element yearEl = doc.createElement("year");
-            yearEl.appendChild(doc.createTextNode(String.valueOf(form.year)));
+            yearEl.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.YEAR))));
             root.appendChild(yearEl);
             Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(form.date));
+            day.appendChild(doc.createTextNode(new Datetime(Datetime.YEAR,Datetime.DAY,form.date).toString()));
             root.appendChild(day);
             form.xml = ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
             return form;
@@ -101,11 +101,10 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
     public CalendarForm getScreen(CalendarForm rpc) throws RPCException {
         try {
             Calendar cal = Calendar.getInstance();
-            if(!rpc.date.equals("")){
-                rpc.date = rpc.date.replace('-','/');
-                cal.setTime(new Date(rpc.date));
+            if(rpc.date != null){
+                cal.setTime(rpc.date);
             }else{
-                rpc.date = cal.get(Calendar.YEAR) +"/" +(cal.get(Calendar.MONTH)+1) + "/" +cal.get(Calendar.DATE);
+                rpc.date = cal.getTime();
             }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
@@ -118,7 +117,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
             year.appendChild(doc.createTextNode(String.valueOf(rpc.year)));
             root.appendChild(year);
             Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(rpc.date));
+            day.appendChild(doc.createTextNode(new Datetime(Datetime.YEAR,Datetime.DAY,rpc.date).toString()));
             root.appendChild(day);
             rpc.xml = ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
             return rpc;

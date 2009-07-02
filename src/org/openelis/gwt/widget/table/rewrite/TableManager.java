@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
 
 public interface TableManager {
     

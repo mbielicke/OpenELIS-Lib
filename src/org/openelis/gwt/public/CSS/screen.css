@@ -1743,6 +1743,10 @@ rich text css
 	border-bottom:1px dashed red;
 }
 
+.Focus {
+    border:1px solid #7eadd9;
+}
+
 
 
 

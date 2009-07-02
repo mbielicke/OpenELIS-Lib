@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
 import org.openelis.gwt.event.DropManager;
 
 /**
@@ -87,14 +86,14 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
          drop = (TableRow)context.draggable;
      TableDataRow row = drop.dragRow;
      int modelIndex = drop.dragModelIndex;
-     if(table.model.numRows() == 0 || table.model.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
-         table.model.addRow(row);
+     if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
+         table.addRow(row);
      else 
-         table.model.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
+         table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
      if(table.dragController == context.dragController){
          if(modelIndex > table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
              modelIndex++;
-         table.model.deleteRow(modelIndex);
+         table.deleteRow(modelIndex);
      }    
      dropping = false;
      super.onDrop(context);
@@ -122,7 +121,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
    targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
        context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
    Location tableLocation = new WidgetLocation(table, context.boundaryPanel);
-   if(table.model.numRows() > 0){
+   if(table.numRows() > 0){
        if(table.dragController == context.dragController){
            int checkIndex = targetRow;
            if(checkIndex < 0) 
@@ -151,13 +150,13 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  public Timer scroll;
 
  public boolean checkScroll(final int targetRow) {
-     if(table.model.numRows() < table.maxRows)
+     if(table.numRows() < table.maxRows)
          return false;
      TableRow dRow = table.renderer.getRows().get(targetRow);
      if((dRow.index == 0 && dRow.modelIndex > 0) || 
-        (dRow.index == table.maxRows -1 && dRow.modelIndex < table.model.shownRows() -1)){
+        (dRow.index == table.maxRows -1 && dRow.modelIndex < table.shownRows() -1)){
          if(dRow.index == table.maxRows -1){
-             if(dRow.modelIndex < table.model.shownRows() -1){
+             if(dRow.modelIndex < table.shownRows() -1){
                  
                  scroll = new Timer() {
                      public void run() {

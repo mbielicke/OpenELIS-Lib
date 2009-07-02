@@ -23,7 +23,7 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.common.rewrite.data;
+package org.openelis.gwt.widget.rewrite;
 
 import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.screen.AppScreen;
@@ -38,20 +38,24 @@ public class CheckField extends Field<String> {
     /**
      * This method will be used to validate the field for submission to the server.
      */
-    public void validate() throws ValidationException {
+    public void validate() {
         if (required) {
             if (value == null) {
             	valid =  false;
-                throw new ValidationException(AppScreen.consts.get("fieldRequiredException"));
+                addError(AppScreen.consts.get("fieldRequiredException"));
             }
         }
         valid = true;
+    }
+    
+    public void validateQuery() {
+    	queryString = value;
     }
 
     /**
      * Hard coded to reuturn true always for checkboxes
      */
-    public boolean isInRange() throws ValidationException {
+    public boolean isInRange() {
         // TODO Auto-generated method stub
         return true;
     }
@@ -91,5 +95,9 @@ public class CheckField extends Field<String> {
             return null;
         else
             return value;
+    }
+    
+    public void setStringValue(String value) {
+    	this.value = value;
     }
 }

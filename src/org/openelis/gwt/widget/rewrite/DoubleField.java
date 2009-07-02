@@ -1,4 +1,4 @@
-package org.openelis.gwt.common.rewrite.data;
+package org.openelis.gwt.widget.rewrite;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
@@ -22,15 +22,15 @@ public class DoubleField extends Field<Double> {
         this.min = min;
     }
 
-    public void validate() throws ValidationException {
+    public void validate() {
         if (invalid) {
             valid = false;
-            throw new ValidationException(AppScreen.consts.get("fieldNumericException"));
+            addError(AppScreen.consts.get("fieldNumericException"));
         }
         if (required) {
             if (value == null) {
             	valid = false;
-                throw new ValidationException(AppScreen.consts.get("fieldRequiredException"));
+                addError(AppScreen.consts.get("fieldRequiredException"));
             }
         }
         if (value != null && !isInRange()) {
@@ -39,18 +39,37 @@ public class DoubleField extends Field<Double> {
         }
         valid = true;
     }
-
-    public boolean isInRange() throws ValidationException{
+    
+    public void validateQuery() {
+    	valid = true;
+    	if(queryString == null || queryString.equals("")){
+    		queryString = null;
+    		return;
+    	}
+    	QueryFieldUtil qField = new QueryFieldUtil();
+    	qField.parse(queryString);
+        for(String param : qField.parameter){
+            try {
+                Double.parseDouble(param);
+            } catch (Exception e) {
+                addError("Param is not a valid double");
+                valid = false;
+                return;
+            }
+        }
+    }
+   
+    public boolean isInRange() {
         // TODO Auto-generated method stub
         if (value == null)
             return true;
         if (max != null && value > max) {
         	valid = false;
-            throw new ValidationException(AppScreen.consts.get("fieldMaxException"));
+            addError(AppScreen.consts.get("fieldMaxException"));
         }
         if (min != null && value < min) {
         	valid = false;
-            throw new ValidationException(AppScreen.consts.get("fieldMinException"));
+            addError(AppScreen.consts.get("fieldMinException"));
         }
         return true;
     }
@@ -81,8 +100,8 @@ public class DoubleField extends Field<Double> {
     }
     
 
-    public void setValue(String val) {
-        invalid = false;
+    public void setStringValue(String val) {
+        valid = true;
         if (pattern == null) {
             try {
                 if (val != null && !"".equals(val)) {
@@ -91,7 +110,8 @@ public class DoubleField extends Field<Double> {
                     value = null;
                 }
             } catch (Exception e) {
-                invalid = true;
+                valid = false;
+                addError("Field must a valid Double value");
             }
         } else {
             try {
@@ -100,7 +120,8 @@ public class DoubleField extends Field<Double> {
                                                        .parse(val.toString())));
 
             } catch (Exception e) {
-                invalid = true;
+                valid = false;
+                addError("Field must be a valid Double value");
             }
         }
     }

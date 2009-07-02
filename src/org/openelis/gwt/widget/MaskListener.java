@@ -78,7 +78,8 @@ public class MaskListener implements KeyboardListener, FocusListener{
 
     
     public String applyMask(String text, boolean end) {
-        
+    	if("".equals(text))
+        	return "";
         String retText = "";
         String input = String.valueOf(text.charAt(text.length() - 1));
         String maskChar = String.valueOf(mask.charAt(text.length() - 1));

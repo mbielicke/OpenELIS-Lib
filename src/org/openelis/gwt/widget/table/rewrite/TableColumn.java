@@ -30,12 +30,23 @@ import org.openelis.gwt.common.rewrite.Filter;
 import org.openelis.gwt.screen.ScreenMenuItem;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.MenuLabel;
 import org.openelis.gwt.widget.rewrite.DropdownWidget;
+import org.openelis.gwt.widget.rewrite.Field;
 
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
@@ -56,17 +67,19 @@ public class TableColumn {
     public DataFilterer dataFilterer = new DataFilterer();
     public int columnIndex;
     public Filter[] filters;
-    public String name;
+    public String key;
     public boolean filterDisplayed = false;
     public String query;
+    protected PopupPanel pop;
+    protected Field field;
     
     
-    public Widget getDisplayWidget(Object value) {
+    public Widget getDisplayWidget(TableDataCell cell) {
     	Widget wid = null;
     	if(colWidget instanceof CheckBox){
     		
     	}else {
-    		((HasValue)colWidget).setValue(value,true);
+    		((HasValue)colWidget).setValue(cell.value,true);
     		Object val = ((HasValue)colWidget).getValue();
     		Label label = new Label("");
     		if(val != null) {
@@ -84,29 +97,159 @@ public class TableColumn {
     	}
         wid.setWidth((currentWidth)+ "px");
         wid.setHeight((controller.cellHeight+"px"));
+        if(cell.errors != null) {
+        	final VerticalPanel errorPanel = new VerticalPanel();
+            for (String error : cell.errors) {
+                MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
+                errorLabel.setStyleName("errorPopupLabel");
+                errorPanel.add(errorLabel);
+            }
+        	wid.addStyleName("InputError");
+        	((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
+        		
+				public void onMouseOver(MouseOverEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop == null){
+			                pop = new PopupPanel();
+			                //pop.setStyleName("ErrorPopup");
+			            }
+			            DecoratorPanel dp = new DecoratorPanel();
+			            
+			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+			            dp.setStyleName("ErrorWindow");
+			            dp.add(errorPanel);
+			            dp.setVisible(true);
+			            pop.setWidget(dp);
+			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
+			            pop.show();
+			        }
+				}
+        		
+        	});
+        	((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
+
+				public void onMouseOut(MouseOutEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop != null){
+			                pop.hide();
+			            }
+			        }
+				}
+        		
+        	});
+        	
+        }
         return wid;
     }
     
-    public void loadWidget(Widget widget, Object value) {
+    public void loadWidget(Widget widget, TableDataCell cell) {
     	if(widget instanceof CheckBox){
     		
     	}else if(widget instanceof Label) {
-    		((HasValue)colWidget).setValue(value,true);
+    		((HasValue)colWidget).setValue(cell.value,true);
     		if(colWidget instanceof CalendarLookUp) {
     			((Label)widget).setText(((CalendarLookUp)colWidget).getText());
     		}else if(colWidget instanceof DropdownWidget) {
 				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
 			}else if(colWidget instanceof TextBoxBase) {
 				((Label)widget).setText(((TextBoxBase)colWidget).getText());
-    		}else
-    			((Label)widget).setText(((HasValue)colWidget).getValue().toString());
+    		}else{
+    			if(((HasValue)colWidget).getValue() != null)
+    				((Label)widget).setText(((HasValue)colWidget).getValue().toString());
+    			else
+    				((Label)widget).setText("");
+    		}
     	}
+        if(cell.errors != null) {
+        	final VerticalPanel errorPanel = new VerticalPanel();
+            for (String error : cell.errors) {
+                MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
+                errorLabel.setStyleName("errorPopupLabel");
+                errorPanel.add(errorLabel);
+            }
+        	widget.addStyleName("InputError");
+        	((HasMouseOverHandlers)widget).addMouseOverHandler(new MouseOverHandler() {
+        		
+				public void onMouseOver(MouseOverEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop == null){
+			                pop = new PopupPanel();
+			                //pop.setStyleName("ErrorPopup");
+			            }
+			            DecoratorPanel dp = new DecoratorPanel();
+			            
+			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+			            dp.setStyleName("ErrorWindow");
+			            dp.add(errorPanel);
+			            dp.setVisible(true);
+			            pop.setWidget(dp);
+			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
+			            pop.show();
+			        }
+				}
+        		
+        	});
+        	((HasMouseOutHandlers)widget).addMouseOutHandler(new MouseOutHandler() {
+
+				public void onMouseOut(MouseOutEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop != null){
+			                pop.hide();
+			            }
+			        }
+				}
+        		
+        	});
+        	
+        }
     }
     
-    public Widget getWidgetEditor(Object value) {
-        ((HasValue)colWidget).setValue(value,true);
+    public Widget getWidgetEditor(TableDataCell cell) {
+        ((HasValue)colWidget).setValue(cell.value,true);
         colWidget.setWidth((currentWidth)+ "px");
         colWidget.setHeight((controller.cellHeight+"px"));
+        if(cell.errors != null) {
+        	final VerticalPanel errorPanel = new VerticalPanel();
+            for (String error : cell.errors) {
+                MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
+                errorLabel.setStyleName("errorPopupLabel");
+                errorPanel.add(errorLabel);
+            }
+        	colWidget.addStyleName("InputError");
+        	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
+        		
+				public void onMouseOver(MouseOverEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop == null){
+			                pop = new PopupPanel();
+			                //pop.setStyleName("ErrorPopup");
+			            }
+			            DecoratorPanel dp = new DecoratorPanel();
+			            
+			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+			            dp.setStyleName("ErrorWindow");
+			            dp.add(errorPanel);
+			            dp.setVisible(true);
+			            pop.setWidget(dp);
+			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
+			            pop.show();
+			        }
+				}
+        		
+        	});
+        	((HasMouseOutHandlers)colWidget).addMouseOutHandler(new MouseOutHandler() {
+
+				public void onMouseOut(MouseOutEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop != null){
+			                pop.hide();
+			            }
+			        }
+				}
+        		
+        	});
+        	
+        }
         return colWidget;
     }
 
@@ -201,7 +344,7 @@ public class TableColumn {
     }
     
     public Filter[] getFilter() {
-        Filter[] filter = dataFilterer.getFilterValues(controller.model.getData(),controller.columns.indexOf(this));
+        Filter[] filter = dataFilterer.getFilterValues(controller.getData(),controller.columns.indexOf(this));
         if (filters != null) {
             for (int j = 0; j < filter.length; j++) {
                 for (int k = 0; k < filters.length; k++) {
@@ -220,11 +363,11 @@ public class TableColumn {
     }
     
     public void applyFilter() {
-        dataFilterer.applyFilter(controller.model.getData(), filters, controller.columns.indexOf(this));
+        dataFilterer.applyFilter(controller.getData(), filters, controller.columns.indexOf(this));
     }
     
     public void applyQueryFilter() {
-        dataFilterer.applyQueryFilter(controller.model.getData(),query,controller.columns.indexOf(this));
+        dataFilterer.applyQueryFilter(controller.getData(),query,controller.columns.indexOf(this));
     }
     
     public void setHeaderMenu(ScreenMenuItem menu) {
@@ -243,12 +386,12 @@ public class TableColumn {
         this.queryable = queryable;
     }
     
-    public void setName(String name) {
-    	this.name = name;
+    public void setKey(String key) {
+    	this.key = key;
     }
     
-    public String getName() {
-    	return name;
+    public String getKey() {
+    	return key;
     }
     
 }

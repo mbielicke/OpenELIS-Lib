@@ -25,6 +25,14 @@
 */
 package org.openelis.gwt.widget.richtext;
 
+import java.util.ArrayList;
+
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -36,15 +44,20 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.ScreenBase;
+import org.openelis.gwt.screen.rewrite.UIUtil;
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.rewrite.Field;
 
-public class RichTextWidget extends Composite implements FocusListener, HasValue<String>{
+public class RichTextWidget extends Composite implements FocusListener, HasValue<String>, HasField, HasFocusHandlers, HasBlurHandlers{
     
     private FlexTable vp = new FlexTable();
     public RichTextArea area;
     public RichTextToolbar toolbar;
     private boolean tools;
     private boolean enabled;
+    private Field field;
     
     public RichTextWidget(ScreenBase screen) {
         area = new RichTextArea();
@@ -153,4 +166,61 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
+	public void addTabHandler(UIUtil.TabHandler handler) {
+		addDomHandler(handler,KeyPressEvent.getType());
+	}
+
+	public void addError(String error) {
+		field.addError(error);
+		field.drawError(this);
+	}
+
+	public void clearErrors() {
+		field.clearError(this);
+	}
+
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+		addValueChangeHandler(field);
+		area.addBlurHandler(field);
+		area.addMouseOutHandler(field);
+		area.addMouseOverHandler(field);
+	}
+
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return area.addFocusHandler(handler);
+	}
+
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return area.addBlurHandler(handler);
+	}
+
+	public void setQueryMode(boolean query) {
+		field.setQueryMode(query);
+		
+	}
+
+	public void checkValue() {
+		field.checkValue(this);
+		
+	}
+
+	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(field.queryString != null) {
+			QueryData qd = new QueryData();
+			qd.query = field.queryString;
+			qd.key = key;
+			qd.type = QueryData.Type.STRING;
+			list.add(qd);
+		}
+		
+	}
+
+	public ArrayList<String> getErrors() {
+		return field.errors;
+	}
 }

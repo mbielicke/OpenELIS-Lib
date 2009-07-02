@@ -25,17 +25,18 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
+
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesPopupEvents;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
-import org.openelis.gwt.widget.table.rewrite.event.TableWidgetListener;
-
-import java.util.ArrayList;
 
 public class PopupTable extends TableWidget implements PopupListener, SourcesPopupEvents {
     
@@ -63,24 +64,6 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
             showing = false;
         }
         
-        public boolean onKeyDownPreview(char key, int modifiers) {
-            // TODO Auto-generated method stub
-            if(isShowing()){
-                keyboardHandler.onKeyDown(this, key, modifiers);      
-                return true;
-            }else
-                return true;
-        }
-        
-        @Override
-        public boolean onKeyUpPreview(char key, int modifiers) {
-            if(isShowing()){
-                keyboardHandler.onKeyUp(this,key,modifiers);
-                return true;
-            }else
-                return true;
-        }
-        
         public boolean isShowing() {
             return showing;
         }
@@ -102,19 +85,17 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
         this.title = title;
         this.showHeader = showHeader;
         renderer = new TableRenderer(this);
-        model = new TableModel(this);
         view = new TableView(this, showScroll);
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = new TableKeyboardHandler(this);
-        mouseHandler = new TableMouseHandler(this);
-        addTableWidgetListener((TableWidgetListener)renderer);
-        
+        mouseHandler = new TableMouseHandler(this);        
         setWidget(view);
-        
         popup.addStyleName("AutoCompletePopup");
         popup.setWidget(view);
         popup.addPopupListener(this);
+        addDomHandler(keyboardHandler,KeyDownEvent.getType());
+        addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
  
     public void showTable(final int active) {
@@ -129,8 +110,8 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
             }
         });
         focused = true;
-        if(model.numRows() < maxRows){
-            view.setHeight((model.numRows()*cellHeight+(model.numRows()*cellSpacing)+(model.numRows()*2)+cellSpacing));
+        if(numRows() < maxRows){
+            view.setHeight((numRows()*cellHeight+(numRows()*cellSpacing)+(numRows()*2)+cellSpacing));
         }else
             view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         view.scrollBar.setScrollPosition((active*cellHeight));
@@ -142,7 +123,7 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
                 activeRow = i;
             }
         if(view.table.getRowCount() > 0)
-            model.selectRow(active);
+            selectRow(active);
     }
     
     public void showTable(final int active,Widget wid) {
@@ -157,8 +138,8 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
             }
         });
         focused = true;
-        if(model.numRows() < maxRows){
-            view.setHeight((model.numRows()*cellHeight+(model.numRows()*cellSpacing)+(model.numRows()*2)+cellSpacing));
+        if(numRows() < maxRows){
+            view.setHeight((numRows()*cellHeight+(numRows()*cellSpacing)+(numRows()*2)+cellSpacing));
         }else
             view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         view.scrollBar.setScrollPosition((active*cellHeight));
@@ -170,7 +151,7 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
                 activeRow = i;
             }
         if(view.table.getRowCount() > 0)
-            model.selectRow(active);
+            selectRow(active);
     }
     
     public void hideTable() {

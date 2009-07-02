@@ -447,7 +447,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 ((MenuItem)obj).menuItemsPanel.add(item);
                 item.addClickListener(new ClickListener() {
                     public void onClick(Widget sender) {
-                        controller.model.sort(index, DataSorterInt.SortDirection.UP);
+                        controller.sort(index, DataSorterInt.SortDirection.UP);
                     }
                 });
                 item = new MenuItem("",new Label("Sort Down"),"");
@@ -455,7 +455,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 ((MenuItem)obj).menuItemsPanel.add(item);
                 item.addClickListener(new ClickListener() {
                     public void onClick(Widget sender) {
-                        controller.model.sort(index, DataSorterInt.SortDirection.DOWN);
+                        controller.sort(index, DataSorterInt.SortDirection.DOWN);
                     }
                 });
                 if(col.filterable){
@@ -540,7 +540,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 else
                     column.applyFilter();
             }
-            controller.model.refresh();
+            controller.refresh();
         }
         doFilter = false;
         doQuery = false; 

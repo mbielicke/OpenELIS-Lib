@@ -23,9 +23,10 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.common.rewrite.data;
+package org.openelis.gwt.widget.rewrite;
 
 import org.openelis.gwt.common.ValidationException;
+import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.screen.AppScreen;
 
 /**
@@ -45,35 +46,46 @@ public class StringField extends Field<String> {
         super();
     }
     
-    public void validate() throws ValidationException {
+    public void validate() {
+    	valid = true;
         if (required) {
             if (value == null || value.length() == 0) {
             	valid = false;
-                throw new ValidationException(AppScreen.consts.get("fieldRequiredException"));    
+                addError(AppScreen.consts.get("fieldRequiredException"));    
              }
         }
-        if (value != null) {
-        	try {
-        		isInRange();
-        	}catch(ValidationException e) {
-        		valid = false;
-        		throw e;
-        	}
-        }
-        valid = true;
+        if (value != null && !isInRange())
+        	valid = false;
+    }
+    
+    public void ValidateQuery() {
+    	QueryField qField = new QueryField();
+    	try {
+    		qField.parse(value);
+    		queryString = value;
+    	}catch(Exception e) {
+    		addError("Invalid Query format");
+    	}	
+    }
+    
+    public void setStringValue(String value) {
+    	this.value = value;
     }
 
-    public boolean isInRange() throws ValidationException {
-        if (value == null)
-            return true;
-        if (max != null && value.length() > ((Integer)max).intValue()) {
-            throw new ValidationException(AppScreen.consts.get("fieldMaxLengthException"));
+    public boolean isInRange() {
+    	boolean rangeVal = true;
+        if (value != null) {
+        	if (max != null && value.length() > ((Integer)max).intValue()) {
+        		rangeVal = false;
+        		addError(AppScreen.consts.get("fieldMaxLengthException"));
+        	}
+        	if (min != null && value.length() < ((Integer)min).intValue() &&
+        			value.length() > 0) {
+        		rangeVal = false;
+        		addError(AppScreen.consts.get("fieldMinLengthException"));
+        	}
         }
-        if (min != null && value.length() < ((Integer)min).intValue() &&
-            value.length() > 0) {
-            throw new ValidationException(AppScreen.consts.get("fieldMinLengthException"));
-        }
-        return true;
+        return rangeVal;
     }
 
     public void setMin(Integer min) {

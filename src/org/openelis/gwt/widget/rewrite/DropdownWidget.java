@@ -27,29 +27,24 @@ package org.openelis.gwt.widget.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
-import org.openelis.gwt.widget.LookUp;
+import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.rewrite.PopupTable;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableKeyboardHandlerInt;
-import org.openelis.gwt.widget.table.rewrite.TableModel;
-import org.openelis.gwt.widget.table.rewrite.TableMouseHandler;
-import org.openelis.gwt.widget.table.rewrite.TableRenderer;
-import org.openelis.gwt.widget.table.rewrite.TableView;
-import org.openelis.gwt.widget.table.rewrite.event.TableWidgetListener;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
+public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener {
     
     //public HorizontalPanel mainHP = new HorizontalPanel();
 
@@ -69,7 +64,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public String popWidth;
     
-    public LookUp lookUp = new LookUp();
+    public TextBox textbox = new TextBox();
     
     public class Delay extends Timer {
         public String text;
@@ -80,8 +75,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
 
         public void run() {
-            if (lookUp.getText().equals(text)) {
-                currentCursorPos = lookUp.getText().length();
+            if (textbox.getText().equals(text)) {
+                currentCursorPos = textbox.getText().length();
                 getMatches(text);
             }
         }
@@ -92,25 +87,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
     
     public void init() {
-    	if(maxRows == 0)
-    		maxRows = 10;
-        renderer = new TableRenderer(this);
-        model = new TableModel(this);
-        view = new TableView(this,showScroll);
-        view.setWidth(width);
-        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
-        keyboardHandler = this;
-        mouseHandler = new TableMouseHandler(this);
-        addTableWidgetListener((TableWidgetListener)renderer);
-        setWidget(lookUp);
-        lookUp.setStyleName("AutoDropDown");
-        lookUp.setIconStyle("AutoDropDownButton");
-        lookUp.textbox.setStyleName("TextboxUnselected");
-        lookUp.textbox.addFocusListener(this);
-        
-        popup.setStyleName("DropdownPopup");
-        popup.setWidget(view);
-        popup.addPopupListener(this);
+
       
     }
     
@@ -118,81 +95,24 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     	int row = cell.getRowIndex();
     	int col = cell.getCellIndex();
-        if(!model.canSelect(modelIndexList[row]))
+        if(!canSelect(modelIndexList[row]))
             return;
         if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
-            model.unselectRow(-1);
+            unselect(-1);
         }
-        if(multiSelect && ctrlKey && model.isSelected(modelIndexList[row])){
-            model.unselectRow(modelIndexList[row]);
+        if(multiSelect && ctrlKey && isSelected(modelIndexList[row])){
+            unselect(modelIndexList[row]);
         }else {
             activeRow = row;
-            model.selectRow(modelIndexList[row]);
+            selectRow(modelIndexList[row]);
         }
         if(!multiSelect || (!ctrlKey && multiSelect))
             complete();
     }
     
-    public void onKeyDown(Widget sender, char code, int modifiers) {
-        if(!popup.isShowing())
-            return;
-        if(code == KeyboardListener.KEY_CTRL)
-            ctrlKey = true;
-        if(code == KeyboardListener.KEY_SHIFT)
-            shiftKey = true;
-        if (KeyboardListener.KEY_DOWN == code) {
-            if(activeRow < 0){
-                activeRow = findNextActive(0);
-                model.selectRow(activeRow);    
-            }else{
-                if(activeRow == view.table.getRowCount() -1){
-                    if(modelIndexList[activeRow]+1 < model.numRows()){                        
-                        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-                        renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                        findNextActive(activeRow-1);
-                        model.unselectRow(activeRow);
-                        activeRow = view.table.getRowCount() -1;
-                        model.selectRow(modelIndexList[view.table.getRowCount() -1]);
-                    }
-                }else{
-                    int row = findNextActive(activeRow);
-                    model.unselectRow(activeRow);
-                    activeRow = row;
-                    model.selectRow(modelIndexList[activeRow]);
-                }
-            }
-        }
-        if (KeyboardListener.KEY_UP == code) {
-            if(activeRow == 0){
-                if(modelIndexList[activeRow] - 1 > -1){
-                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-                    renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                    findPrevActive(1);
-                    model.unselectRow(activeRow);
-                    activeRow = 0;
-                    model.selectRow(modelIndexList[0]);
-                }
-            }else if (activeRow > 0){
-                int row = findPrevActive(activeRow);
-                model.unselectRow(activeRow);
-                activeRow = row;
-                model.selectRow(modelIndexList[activeRow]);
-            }
-        }
-        if (KeyboardListener.KEY_ENTER == code || KeyboardListener.KEY_TAB == code) {
-            if(activeRow > -1){
-                itemSelected = true;
-                complete();
-            }
-        }
-        if (KeyboardListener.KEY_ESCAPE == code){
-            complete();
-        }
-    }
-    
     private int findNextActive(int current) {
         int next = current + 1;
-        while(next < modelIndexList.length && !model.isEnabled(modelIndexList[next]))
+        while(next < modelIndexList.length && !isEnabled(modelIndexList[next]))
             next++;
         if(next < modelIndexList.length)
             return next;
@@ -203,7 +123,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     private int findPrevActive(int current) {
         int prev = current - 1;
-        while(prev > -1 && !model.isEnabled(modelIndexList[prev]))
+        while(prev > -1 && !isEnabled(modelIndexList[prev]))
             prev--;
         if(prev >  -1)
             return prev;
@@ -217,7 +137,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
          
         textValue = getTextBoxDisplay();
 
-        lookUp.setText(textValue.trim());
+        textbox.setText(textValue.trim());
        
 
         /**
@@ -228,26 +148,15 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         //textBox.setFocus(true);
         
         hideTable();
-
+        
+        /**
         if (changeListeners != null){
             if(!textBoxDefault.equals(textValue)){
                 textBoxDefault = textValue;
                 changeListeners.fireChange(this);
             }
         }
-    }
-
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-        if(keyCode == KeyboardListener.KEY_CTRL)
-            ctrlKey = false;
-        if(keyCode == KeyboardListener.KEY_SHIFT)
-            shiftKey = false;
-        
+        **/
     }
 
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
@@ -258,7 +167,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public String getTextBoxDisplay(){
         String textValue = "";
-        ArrayList<TableDataRow> selected = model.getSelections();
+        ArrayList<TableDataRow> selected = getSelections();
         
         for(int i=0;i<selected.size();i++){
             if(selected.get(i) instanceof TableDataRow){
@@ -283,7 +192,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 
     public void setMultiSelect(boolean multiSelect) {
         this.multiSelect = multiSelect;
-        model.enableMultiSelect(multiSelect);
+        enableMultiSelect(multiSelect);
     }
     
     public void getMatches(String text) {
@@ -295,71 +204,36 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
     
     public void setSelections(ArrayList<Object> selections){
-        model.clearSelections();
+        clearSelections();
         if(selections != null) {
             for(Object key : selections)
-                model.selectRow(key);
-            lookUp.setText(getTextBoxDisplay());
+                selectRow(key);
+            textbox.setText(getTextBoxDisplay());
         }else
-            lookUp.setText("");
+            textbox.setText("");
         
-        textBoxDefault = lookUp.getText();
+        textBoxDefault = textbox.getText();
     }
     
     public void setSelection(Object key) {
-        model.clearSelections();
-        model.selectRow(key);
-        lookUp.setText(getTextBoxDisplay());
-        textBoxDefault = lookUp.getText();
-    }
-    
-    public <T extends TableDataRow> ArrayList<T> getSelections() {
-        return (ArrayList<T>)model.getSelections();
+        clearSelections();
+        selectRow(key);
+        textbox.setText(getTextBoxDisplay());
+        textBoxDefault = textbox.getText();
     }
     
     public void setFocus(boolean focus) {
-        lookUp.setFocus(focus);
+        textbox.setFocus(focus);
     }
     
-    public void onFocus(Widget sender) {
-        if (!lookUp.textbox.isReadOnly()) {
-            if (sender == lookUp.textbox) {
-                // we need to set the selected style name to the textbox
-                lookUp.textbox.addStyleName("TextboxSelected");
-                lookUp.textbox.removeStyleName("TextboxUnselected");
-                lookUp.textbox.setFocus(true);
 
-                lookUp.icon.addStyleName("Selected");
-
-                //setCurrentValues();
-                    
-            }
-        }
-    }
-
-    public void onLostFocus(Widget sender) {
-        if (!lookUp.textbox.isReadOnly()) {
-            if (sender == lookUp.textbox) {
-                // we need to set the unselected style name to the textbox
-                lookUp.textbox.addStyleName("TextboxUnselected");
-                lookUp.textbox.removeStyleName("TextboxSelected");
-
-                lookUp.icon.removeStyleName("Selected");
-                if(this instanceof AutoComplete){
-                    if(((AutoComplete)this).queryMode)
-                        return;
-                }
-                complete();
-            }
-        }
-    }
 
     public void addFocusListener(FocusListener listener) {
-        lookUp.textbox.addFocusListener(listener);
+        textbox.addFocusListener(listener);
     }
 
     public void removeFocusListener(FocusListener listener) {
-        lookUp.textbox.removeFocusListener(listener);
+        textbox.removeFocusListener(listener);
 
     }
 
@@ -389,11 +263,77 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
     
     public void setWidth(String width) {
-        lookUp.setWidth(width);
+        textbox.setWidth(width);
         
     }
     
     public void setWidth(int width){
         setWidth(width+"px");
     }
+
+	public void onKeyDown(KeyDownEvent event) {
+        if(!popup.isShowing())
+            return;
+        if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
+            ctrlKey = true;
+        if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
+            shiftKey = true;
+        if (event.getNativeKeyCode()== KeyboardHandler.KEY_DOWN) {
+            if(activeRow < 0){
+                activeRow = findNextActive(0);
+                selectRow(activeRow);    
+            }else{
+                if(activeRow == view.table.getRowCount() -1){
+                    if(modelIndexList[activeRow]+1 < numRows()){                        
+                        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
+                        renderer.scrollLoad(view.scrollBar.getScrollPosition());
+                        findNextActive(activeRow-1);
+                        unselect(activeRow);
+                        activeRow = view.table.getRowCount() -1;
+                        selectRow(modelIndexList[view.table.getRowCount() -1]);
+                    }
+                }else{
+                    int row = findNextActive(activeRow);
+                    unselect(activeRow);
+                    activeRow = row;
+                    selectRow(modelIndexList[activeRow]);
+                }
+            }
+        }
+        if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
+            if(activeRow == 0){
+                if(modelIndexList[activeRow] - 1 > -1){
+                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
+                    renderer.scrollLoad(view.scrollBar.getScrollPosition());
+                    findPrevActive(1);
+                    unselect(activeRow);
+                    activeRow = 0;
+                    selectRow(modelIndexList[0]);
+                }
+            }else if (activeRow > 0){
+                int row = findPrevActive(activeRow);
+                unselect(activeRow);
+                activeRow = row;
+                selectRow(modelIndexList[activeRow]);
+            }
+        }
+        if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
+            if(activeRow > -1){
+                itemSelected = true;
+                complete();
+            }
+        }
+        if (KeyboardHandler.KEY_ESCAPE == event.getNativeKeyCode()){
+            complete();
+        }
+		
+	}
+
+	public void onKeyUp(KeyUpEvent event) {
+        if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
+            ctrlKey = false;
+        if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
+            shiftKey = false;
+	}
+	
 }

@@ -27,8 +27,8 @@ package org.openelis.gwt.widget.table.rewrite.event;
 
 public interface SourcesTableWidgetEvents {
     
-    public void addTableWidgetListener(TableWidgetListener listener);
+    public void addTableWidgetListener(TableHandler listener);
     
-    public void removeTableWidgetListener(TableWidgetListener listener);
+    public void removeTableWidgetListener(TableHandler listener);
 
 }

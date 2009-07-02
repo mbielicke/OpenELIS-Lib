@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.common.rewrite;
 
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 import java.util.ArrayList;
 

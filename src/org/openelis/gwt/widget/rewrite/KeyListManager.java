@@ -26,13 +26,13 @@
 package org.openelis.gwt.widget.rewrite;
 
 import org.openelis.gwt.common.rewrite.Query;
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.screen.rewrite.Screen;
 import org.openelis.gwt.widget.rewrite.ButtonPanel;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.HandlesEvents;
 
 import com.google.gwt.event.shared.HandlerRegistration;

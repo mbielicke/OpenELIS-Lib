@@ -36,6 +36,7 @@ import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.common.data.QueryIntegerField;
 import org.openelis.gwt.common.data.QueryStringField;
 import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.common.rewrite.QueryData;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -417,6 +418,27 @@ public class QueryBuilder {
         }
     }
     
+    public void addNewWhere(ArrayList<QueryData> fields) throws Exception{
+    	//fieldsFromRPC = fields;
+//    	where clause
+    	for (QueryData field : fields){
+            boolean columnFound = meta.hasColumn(field.key);
+
+            if(!columnFound)
+                throw new Exception("column not found [" + field.key + "]");    	
+            
+            QueryField qField = new QueryField();
+            qField.parse(field.query);
+            String whereClause = getQueryNoOperand(qField, field.key);
+            if(!"".equals(whereClause)){
+                whereOperands.add(whereClause);
+		
+				//add the table name to the from hash map
+				addTable(meta);
+            }
+        }
+    }
+    
     /**
      * Adds a single where statement from a string.
      * @param whereStatement
@@ -444,6 +466,22 @@ public class QueryBuilder {
                 setParameters((QueryCheckField)field, field.key, query);
             else if(field instanceof QueryDateField)
                 setParameters((QueryDateField)field, field.key, query);
+        }
+    }
+    
+    public void setNewQueryParams(Query query, ArrayList<QueryData> fields){
+        for (QueryData field : fields) {//int i = 0; i < keys.length; i++) {
+        	QueryField qField = new QueryField();
+        	qField.parse(field.query);
+        	
+            if(field.type == QueryData.Type.DOUBLE)
+                setDoubleParameters(qField, field.key, query);
+			else if(field.type == QueryData.Type.STRING) 	
+			    setStringParameters(qField, field.key, query);
+			else if(field.type== QueryData.Type.INTEGER) 
+			    setIntegerParameters(qField, field.key, query);
+            else if(field.type == QueryData.Type.DATE)
+                setDateParameters(qField, field.key, query);
         }
     }
     
@@ -527,5 +565,135 @@ public class QueryBuilder {
      */
     public boolean hasTable(String tableName){
     	return fromTables.containsKey(tableName);
+    }
+    
+    public static void setStringParameters(QueryField field,
+    		String fieldName,
+    		Query query) {
+    	if(field.getParameter() == null)
+    		return;
+
+    	String paramName = getParamName(fieldName);
+
+    	Iterator fieldParamIt = field.getParameter().iterator();
+    	int i = 0;
+    	while (fieldParamIt.hasNext()) {
+    		String param = (String)fieldParamIt.next();
+    		if (param.indexOf("..") > -1) {
+    			String[] bparams = param.split("..");
+    			query.setParameter(paramName + i + "0", bparams[0]);
+    			query.setParameter(paramName + i + "1", bparams[1]);
+    		} else if (param.indexOf(",") > -1) {
+    			String[] params = param.split(",");
+    			for (int j = 0; j < params.length; j++) {
+    				query.setParameter(paramName + i + j, params[j]);
+    			}
+    		} else
+    			query.setParameter(paramName + i, param);
+    		System.out.println("#####"+paramName + " --- "+param);
+    		i++;
+    	}
+    }
+
+
+
+    public static void setIntegerParameters(QueryField field,
+    		String fieldName,
+    		Query query) {
+    	if(field.getParameter() == null)
+    		return;
+
+    	String paramName = getParamName(fieldName);
+    	Iterator fieldParamIt = field.getParameter().iterator();
+    	int i = 0;
+    	while (fieldParamIt.hasNext()) {
+    		String param = (String)fieldParamIt.next();
+
+    		if (param.indexOf("..") > -1) {
+    			String param1 = param.substring(0, param.indexOf(".."));
+    			String param2 = param.substring(param.indexOf("..") + 2,
+    					param.length());
+
+    			query.setParameter(paramName + i + "0",
+    					new Integer(param1.trim()));
+    			query.setParameter(paramName + i + "1",
+    					new Integer(param2.trim()));
+
+    		} else if (param.indexOf(",") > -1) {
+    			String[] params = param.split(",");
+    			for (int j = 0; j < params.length; j++) {
+    				query.setParameter(paramName + i + j,
+    						new Integer(params[j].trim()));
+
+    			}
+    		} else {
+    			query.setParameter(paramName + i, new Integer(param.trim()));
+    		}
+    		i++;
+    	}
+    }
+
+    public static void setDoubleParameters(QueryField field,
+    		String fieldName,
+    		Query query) {
+    	if(field.getParameter() == null)
+    		return;
+
+    	String paramName = getParamName(fieldName);
+    	Iterator fieldParamIt = field.getParameter().iterator();
+    	int i = 0;
+    	while (fieldParamIt.hasNext()) {
+    		String param = (String)fieldParamIt.next();
+
+    		if (param.indexOf("..") > -1) {
+    			String param1 = param.substring(0, param.indexOf(".."));
+    			String param2 = param.substring(param.indexOf("..") + 2,
+    					param.length());
+
+    			query.setParameter(paramName + i + "0",
+    					new Double(param1.trim()));
+    			query.setParameter(paramName + i + "1",
+    					new Double(param2.trim()));
+    		} else if (param.indexOf(",") > -1) {
+    			String[] params = param.split(",");
+    			for (int j = 0; j < params.length; j++) {
+    				query.setParameter(paramName + i + j,
+    						new Double(params[j].trim()));
+    			}
+    		} else {
+    			query.setParameter(paramName + i, new Double(param.trim()));
+    		}
+    		i++;
+    	}
+    }
+
+    public static void setDateParameters(QueryField field,
+    		String fieldName,
+    		Query query) {
+    	String paramName = getParamName(fieldName);
+    	Iterator fieldParamIt = field.getParameter().iterator();
+    	int i = 0;
+    	while (fieldParamIt.hasNext()) {
+    		String param = (String)fieldParamIt.next();
+    		if (param.indexOf("..") > -1) {
+    			String[] bparams = param.split("..");
+    			Date date = new Date(bparams[0]);
+    			query.setParameter(paramName + i + "0", date, TemporalType.DATE);
+    			date = new Date(bparams[1]);
+    			query.setParameter(paramName + i + "1", date, TemporalType.DATE);
+    		} else if (param.indexOf(",") > -1) {
+    			String[] params = param.split(",");
+    			for (int j = 0; j < params.length; j++) {
+    				Date date = new Date(params[j]);
+    				query.setParameter(paramName + i + j,
+    						date,
+    						TemporalType.DATE);
+    			}
+    		} else {
+    			Date date = new Date(param);
+    			query.setParameter(paramName + i, date, TemporalType.DATE);
+    		}
+    		i++;
+    	}
     }
 }

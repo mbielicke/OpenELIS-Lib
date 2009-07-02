@@ -25,12 +25,13 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class DropDownListener implements ClickListener, MouseListener, KeyboardListener {
+public class DropDownListener implements ClickHandler, KeyUpHandler {
     
     private Dropdown widget;
     
@@ -38,13 +39,13 @@ public class DropDownListener implements ClickListener, MouseListener, KeyboardL
         this.widget = widget;
     }
 
-    public void onClick(Widget sender) {
+    public void onClick(ClickEvent event) {
         if(!widget.isEnabled())
             return;
-        if(sender == widget.lookUp){
+        if(event.getSource() == widget.icon){
             if(widget.activeRow < 0)
-                if(widget.model.getSelections().size() > 0)
-                    widget.showTable((Integer)widget.model.getSelectedIndexes()[0]);
+                if(widget.getSelections().size() > 0)
+                    widget.showTable((Integer)widget.getSelectedIndexes()[0]);
                 else
                     widget.showTable(0);
             else
@@ -53,66 +54,32 @@ public class DropDownListener implements ClickListener, MouseListener, KeyboardL
 
     }
 
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseLeave(Widget sender) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+    public void onKeyUp(KeyUpEvent event) {
         if(!widget.isEnabled())
             return;
-        if (!widget.lookUp.textbox.isReadOnly()) {
-            if (keyCode == KEY_DOWN || keyCode == KEY_UP ||  keyCode == KEY_TAB 
-                    || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 
-                    keyCode == KEY_CTRL || keyCode == KEY_SHIFT || keyCode == KEY_ESCAPE)
+        if (!widget.textbox.isReadOnly()) {
+        	int keyCode = event.getNativeKeyCode();
+            if (keyCode == KeyboardHandler.KEY_DOWN || keyCode == KeyboardHandler.KEY_UP ||  keyCode == KeyboardHandler.KEY_TAB 
+                    || keyCode == KeyboardHandler.KEY_LEFT || keyCode == KeyboardHandler.KEY_RIGHT || keyCode == KeyboardHandler.KEY_ALT || 
+                    keyCode == KeyboardHandler.KEY_CTRL || keyCode == KeyboardHandler.KEY_SHIFT || keyCode == KeyboardHandler.KEY_ESCAPE)
                 return;
-            if(keyCode == KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
+            if(keyCode == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
                 if(widget.activeRow < 0)
                     widget.showTable(0);
                 else
                     widget.showTable(widget.modelIndexList[widget.activeRow]);
                 return;
             }
-            if(keyCode == KEY_ENTER && widget.itemSelected){
+            if(keyCode == KeyboardHandler.KEY_ENTER && widget.itemSelected){
                 widget.itemSelected = false;
                 return;
             }
-            String text = widget.lookUp.textbox.getText();
+            String text = widget.textbox.getText();
             if (text.length() > 0 && !text.endsWith("*")) {
                 widget.setDelay(text, 350);
             } else if(text.length() == 0){
                 widget.activeRow = 0;
-                widget.model.selectRow(0);
+                widget.selectRow(0);
                 widget.scrollToSelection();
             }else{
                 widget.hideTable();

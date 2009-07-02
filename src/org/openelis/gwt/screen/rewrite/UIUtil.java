@@ -4,29 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Vector;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.common.rewrite.data.CheckField;
-import org.openelis.gwt.common.rewrite.data.DateField;
-import org.openelis.gwt.common.rewrite.data.DoubleField;
-import org.openelis.gwt.common.rewrite.data.Field;
-import org.openelis.gwt.common.rewrite.data.IntegerField;
-import org.openelis.gwt.common.rewrite.data.StringField;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.DragManager;
-import org.openelis.gwt.event.DropManager;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenMenuItem;
 import org.openelis.gwt.screen.rewrite.Screen.State;
 import org.openelis.gwt.services.ScreenServiceInt;
 import org.openelis.gwt.services.ScreenServiceIntAsync;
-import org.openelis.gwt.widget.rewrite.AppButton;
 import org.openelis.gwt.widget.CalendarLookUp;
-import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
-import org.openelis.gwt.widget.rewrite.CommandButton;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.MenuItem;
@@ -36,46 +24,55 @@ import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.TitledPanel;
 import org.openelis.gwt.widget.WindowBrowser;
 import org.openelis.gwt.widget.diagram.Diagram;
+import org.openelis.gwt.widget.rewrite.AppButton;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.ButtonPanel;
+import org.openelis.gwt.widget.rewrite.CheckField;
+import org.openelis.gwt.widget.rewrite.CommandButton;
+import org.openelis.gwt.widget.rewrite.DateField;
+import org.openelis.gwt.widget.rewrite.DoubleField;
 import org.openelis.gwt.widget.rewrite.Dropdown;
+import org.openelis.gwt.widget.rewrite.Field;
+import org.openelis.gwt.widget.rewrite.IntegerField;
+import org.openelis.gwt.widget.rewrite.PassWordTextBox;
+import org.openelis.gwt.widget.rewrite.RadioButton;
 import org.openelis.gwt.widget.rewrite.ResultsTable;
+import org.openelis.gwt.widget.rewrite.StringField;
+import org.openelis.gwt.widget.rewrite.TextArea;
 import org.openelis.gwt.widget.richtext.RichTextWidget;
-import org.openelis.gwt.widget.table.TableDragController;
-import org.openelis.gwt.widget.table.TableIndexDropController;
 import org.openelis.gwt.widget.table.rewrite.TableColumn;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
 import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.SyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -191,11 +188,52 @@ public class UIUtil {
     	public T getNewInstance(Node node, ScreenDef def);
     }
     
+    public static class TabHandler implements KeyPressHandler {
+    	String next;
+    	String prev;
+    	ScreenDef def;
+    	
+    	public TabHandler(Node node, ScreenDef def) {
+    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+			String[] tabs = tab.split(",");
+    		next = tabs[0];
+    		prev = tabs[1];
+    		this.def = def;
+    	}
+    	
+		public void onKeyPress(KeyPressEvent event) {
+			if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
+				if(event.isShiftKeyDown())
+					((Focusable)def.getWidget(prev)).setFocus(true);
+				else
+					((Focusable)def.getWidget(next)).setFocus(true);
+				event.preventDefault();
+				event.stopPropagation();
+			}
+		}
+    }
+    
+    private static class UIFocusHandler implements FocusHandler,BlurHandler {
+
+		public void onFocus(FocusEvent event) {
+			((Widget)event.getSource()).addStyleName("Focus");
+		}
+
+		public void onBlur(BlurEvent event) {
+			((Widget)event.getSource()).removeStyleName("Focus");
+		}
+    	
+    }
+    
+    private static UIFocusHandler focusHandler = new UIFocusHandler();
+    
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
     static {
     	factoryMap.put("textbox",new Factory<TextBox>() {
 			public TextBox getNewInstance(Node node, ScreenDef def) {
 				TextBox textbox = new TextBox();
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					textbox.addTabHandler(new TabHandler(node,def));
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					textbox.setAccessKey(node.getAttributes()
 							.getNamedItem("shortcut")
@@ -235,15 +273,12 @@ public class UIUtil {
 					textbox.setMask(mask);
 				}
 				setDefaults(node,textbox);
-				Field field = null;
 				if (node.getAttributes().getNamedItem("field") != null) {
-					field = (Field)factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, null);
+					textbox.setField((Field)factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, null));
 				}else
-					field = (StringField)factoryMap.get("String").getNewInstance(node, null);
-				textbox.addValueChangeHandler(field);
-				textbox.addBlurHandler(field);
-				textbox.addMouseOutHandler(field);
-				textbox.addMouseOverHandler(field);
+					textbox.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
+				textbox.addBlurHandler(focusHandler);
+				textbox.addFocusHandler(focusHandler);
 				return textbox;
 			}
     	});
@@ -466,6 +501,8 @@ public class UIUtil {
     	factoryMap.put("calendar", new Factory<CalendarLookUp>() {
     		public CalendarLookUp getNewInstance(Node node, ScreenDef def) {
     			CalendarLookUp cal = new CalendarLookUp();
+    			if(node.getAttributes().getNamedItem("tab") != null) 
+    				cal.addTabHandler(new TabHandler(node,def));
     			byte begin = Byte.parseByte(node.getAttributes()
     					.getNamedItem("begin")
     					.getNodeValue());
@@ -483,17 +520,17 @@ public class UIUtil {
     				cal.init(begin, end, false);
     			cal.setStyleName("ScreenCalendar");
     			setDefaults(node,cal);
-    			Field field = (DateField)factoryMap.get("Date").getNewInstance(node, null);
-    			cal.addValueChangeHandler(field);
-    		    cal.addMouseOutHandler(field);
-    		    cal.addMouseOverHandler(field);
-    		    cal.addBlurHandler(field);
+    			cal.setField((DateField)factoryMap.get("Date").getNewInstance(node, null));
+    			cal.addBlurHandler(focusHandler);
+    			cal.addFocusHandler(focusHandler);
     			return cal;
     		}
     	});
     	factoryMap.put("check", new Factory<CheckBox>() {
     		public CheckBox getNewInstance(Node node, ScreenDef def) {
     			CheckBox check = new CheckBox();
+    			if(node.getAttributes().getNamedItem("tab") != null) 
+    				check.addTabHandler(new TabHandler(node,def));
     	        if(node.getAttributes().getNamedItem("threeState") != null){
     	            check.setType(CheckBox.CheckType.THREE_STATE);
     	            //defaultType = CheckBox.CheckType.THREE_STATE;
@@ -510,13 +547,11 @@ public class UIUtil {
     	                }
     	            }
     	        }
-    	        check.setStyleName("ScreenCheck");
+    	        //check.setStyleName("ScreenCheck");
     	        setDefaults(node, check);
-    	        Field field = (CheckField)factoryMap.get("Check").getNewInstance(node, null);
-    	        check.addValueChangeHandler(field);
-    	        check.addMouseOutHandler(field);
-    	        check.addMouseOverHandler(field);
-    	        check.addBlurHandler(field);
+    	        check.setField((CheckField)factoryMap.get("Check").getNewInstance(node, null));
+    	        check.addBlurHandler(focusHandler);
+    	        check.addFocusHandler(focusHandler);
     	        return check;
     		}
     	});
@@ -852,9 +887,11 @@ public class UIUtil {
     		        return panel;
     		}
     	});
-    	factoryMap.put("password", new Factory<PasswordTextBox>() {
-    		public PasswordTextBox getNewInstance(Node node, ScreenDef def) {
-    			PasswordTextBox textbox = new PasswordTextBox();
+    	factoryMap.put("password", new Factory<PassWordTextBox>() {
+    		public PassWordTextBox getNewInstance(Node node, ScreenDef def) {
+    			PassWordTextBox textbox = new PassWordTextBox();
+    			if (node.getAttributes().getNamedItem("tab") != null) 
+    				textbox.addTabHandler(new TabHandler(node,def));
     	        if (node.getAttributes().getNamedItem("shortcut") != null)
     	            textbox.setAccessKey(node.getAttributes()
     	                                     .getNamedItem("shortcut")
@@ -862,18 +899,17 @@ public class UIUtil {
     	                                     .charAt(0));
     	        textbox.setStyleName("ScreenPassword");
     	        setDefaults(node, textbox);
-    	        Field field = (StringField)factoryMap.get("String").getNewInstance(node, null);
-    	        textbox.addValueChangeHandler(field);
-    	        textbox.addBlurHandler(field);
-    	        textbox.addMouseOutHandler(field);
-    	        textbox.addMouseOverHandler(field);
+    	        textbox.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
+    	        textbox.addBlurHandler(focusHandler);
+    	        textbox.addFocusHandler(focusHandler);
     	        return textbox;
     		}
     	});
     	factoryMap.put("radio", new Factory<RadioButton>() {
     		public RadioButton getNewInstance(Node node, ScreenDef def) {
                 RadioButton radio = new RadioButton(node.getAttributes().getNamedItem("group").getNodeValue());
-
+                if(node.getAttributes().getNamedItem("tab") != null)
+                	radio.addTabHandler(new TabHandler(node,def));
                 if (node.getFirstChild() != null)
                 	radio.setText(node.getFirstChild().getNodeValue());
                 if (node.getAttributes().getNamedItem("shortcut") != null)
@@ -884,11 +920,9 @@ public class UIUtil {
                 
                 radio.setStyleName("ScreenRadio");
                 setDefaults(node, radio);
-                Field field = (CheckField)factoryMap.get("Check").getNewInstance(node, def);
-                radio.addBlurHandler(field);
-                radio.addValueChangeHandler(field);
-                radio.addMouseOutHandler(field);
-                radio.addMouseOverHandler(field);
+                radio.setField((CheckField)factoryMap.get("Check").getNewInstance(node, def));
+                radio.addBlurHandler(focusHandler);
+                radio.addFocusHandler(focusHandler);
                 return radio;
     		}
     	});
@@ -934,6 +968,8 @@ public class UIUtil {
     	            }
     	        }
     	        RichTextWidget textarea = new RichTextWidget(tools); 
+    	        if(node.getAttributes().getNamedItem("tab") != null) 
+    	        	textarea.addTabHandler(new TabHandler(node,def));
     	        String width = "100%";
     	        String height = "300px";
     	        if(node.getAttributes().getNamedItem("width") != null){
@@ -947,7 +983,10 @@ public class UIUtil {
     	        
     	        textarea.area.setStyleName("ScreenTextArea");
     	        setDefaults(node, textarea);
-    	        textarea.addValueChangeHandler((StringField)factoryMap.get("String").getNewInstance(node, null));
+    	        textarea.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
+    	        textarea.addFocusHandler(focusHandler);
+    	        textarea.addBlurHandler(focusHandler);
+    	
     	        return textarea;
     		}
     	});
@@ -1051,6 +1090,8 @@ public class UIUtil {
     	factoryMap.put("textarea", new Factory<TextArea>(){
     		public TextArea getNewInstance(Node node, ScreenDef def) {
     			TextArea textarea = new TextArea();
+    			if(node.getAttributes().getNamedItem("tab") != null) 
+    				textarea.addTabHandler(new TabHandler(node,def));
     	        if (node.getAttributes().getNamedItem("shortcut") != null)
     	            textarea.setAccessKey(node.getAttributes()
     	                                      .getNamedItem("shortcut")
@@ -1059,11 +1100,9 @@ public class UIUtil {
     	        
     	        textarea.setStyleName("ScreenTextArea");
     	        setDefaults(node, textarea);
-    	        Field field = (StringField)factoryMap.get("String").getNewInstance(node, null);
-    	        textarea.addValueChangeHandler(field);
-    	        textarea.addBlurHandler(field);
-    	        textarea.addMouseOutHandler(field);
-    	        textarea.addMouseOverHandler(field);
+    	        textarea.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
+    	        textarea.addBlurHandler(focusHandler);
+    	        textarea.addFocusHandler(focusHandler);
     	        return textarea;
     		}
     	});
@@ -1140,6 +1179,8 @@ public class UIUtil {
     	factoryMap.put("table", new Factory<TableWidget>() {
     		public TableWidget getNewInstance(Node node, ScreenDef def) {
     			TableWidget table = new TableWidget();
+    			if(node.getAttributes().getNamedItem("tab") != null) 
+    				table.addTabHandler(new TabHandler(node,def));
                 if(node.getAttributes().getNamedItem("cellHeight") != null){
                     table.cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
                 }
@@ -1160,15 +1201,15 @@ public class UIUtil {
                 }
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-                        table.model.enableMultiSelect(true);
+                        table.enableMultiSelect(true);
                 }
                 NodeList colList = ((Element)node).getElementsByTagName("col");
                 ArrayList<TableColumn> columns = new ArrayList<TableColumn>(colList.getLength());
                 for(int i = 0; i < colList.getLength(); i++) {
                 	Node col = colList.item(i);
                 	TableColumn column = new TableColumn();
-                	if(col.getAttributes().getNamedItem("name") != null)
-                		column.setName(col.getAttributes().getNamedItem("name").getNodeValue());
+                	if(col.getAttributes().getNamedItem("key") != null)
+                		column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
                 	if(col.getAttributes().getNamedItem("header") != null){
                 		column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
                 		table.showHeader = true;
@@ -1201,6 +1242,8 @@ public class UIUtil {
                 table.columns = columns;
                 table.init();
                 setDefaults(node,table);
+                table.addBlurHandler(focusHandler);
+                table.addFocusHandler(focusHandler);
     			return table;
     		}
     	});
@@ -1218,12 +1261,10 @@ public class UIUtil {
     		            drop = new Dropdown();
     		    }else
     		        drop = new Dropdown();
-    	        
-    		    //drop.addValueChangeHandler(field);
-    		    drop.addBlurHandler(field);
-    		    drop.addMouseOutHandler(field);
-    		    drop.addMouseOverHandler(field);
-    		    
+    	        if(node.getAttributes().getNamedItem("tab") != null) {
+    	        	drop.addTabHandler(new TabHandler(node,def));
+    	        }
+    		    drop.setField(field);
     		    drop.multiSelect = false;
     	                
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
@@ -1252,7 +1293,7 @@ public class UIUtil {
                 		Node col = colList.item(i);
                 		TableColumn column = new TableColumn();
                 		if(col.getAttributes().getNamedItem("name") != null)
-                			column.setName(col.getAttributes().getNamedItem("name").getNodeValue());
+                			column.setKey(col.getAttributes().getNamedItem("name").getNodeValue());
                 		if(col.getAttributes().getNamedItem("header") != null){
                 			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
                 			drop.showHeader = true;
@@ -1285,6 +1326,8 @@ public class UIUtil {
                 drop.columns = columns;
                 drop.setup();
                 setDefaults(node,drop);
+                //drop.textbox.addBlurHandler(focusHandler);
+                //drop.textbox.addFocusHandler(focusHandler);
     			return drop;
     		}
     	});
@@ -1302,11 +1345,11 @@ public class UIUtil {
                         auto = new AutoComplete();
                 }else
                     auto = new AutoComplete();
-               // auto.addValueChangeHandler(field);
-                auto.addBlurHandler(field);
-                auto.addMouseOutHandler(field);
-                auto.addMouseOverHandler(field);
-    	                
+                auto.setField(field);
+                
+    	        if(node.getAttributes().getNamedItem("tab") != null) {
+    	        	auto.addTabHandler(new TabHandler(node,def));
+    	        }
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
     	        	auto.multiSelect = true;
     	        
@@ -1318,9 +1361,9 @@ public class UIUtil {
     	            auto.textBoxDefault = "";
     	        
     	        if (node.getAttributes().getNamedItem("width") != null)
-    	        	auto.width = node.getAttributes()
+    	        	auto.setWidth(node.getAttributes()
     	                                  .getNamedItem("width")
-    	                                  .getNodeValue();
+    	                                  .getNodeValue());
     	        
     	        if (node.getAttributes().getNamedItem("popWidth") != null)
     	            auto.setTableWidth(node.getAttributes()
@@ -1330,7 +1373,7 @@ public class UIUtil {
     	        	auto.setTableWidth("auto");
     	        if(node.getAttributes().getNamedItem("case") != null){
     	            String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
-    	            auto.lookUp.getTextBox().setCase(TextBox.Case.valueOf(textCase));
+    	            auto.textbox.setCase(TextBox.Case.valueOf(textCase));
     	        }
                 NodeList colList = ((Element)node).getElementsByTagName("col");
                 ArrayList<TableColumn> columns = new ArrayList<TableColumn>();
@@ -1339,7 +1382,7 @@ public class UIUtil {
                 		Node col = colList.item(i);
                 		TableColumn column = new TableColumn();
                 		if(col.getAttributes().getNamedItem("name") != null)
-                			column.setName(col.getAttributes().getNamedItem("name").getNodeValue());
+                			column.setKey(col.getAttributes().getNamedItem("name").getNodeValue());
                 		if(col.getAttributes().getNamedItem("header") != null) {
                 			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
                 			auto.showHeader = true;
@@ -1379,6 +1422,9 @@ public class UIUtil {
     	factoryMap.put("appButton", new Factory<AppButton>() {
     		public AppButton getNewInstance(Node node, ScreenDef def) {
     			AppButton button = new AppButton();
+    			if(node.getAttributes().getNamedItem("tab") != null) {
+    				button.addTabHandler(new TabHandler(node,def));
+    			}
     	        button.action = node.getAttributes().getNamedItem("action").getNodeValue();
     	        if(node.getAttributes().getNamedItem("toggle") != null){
     	            if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
@@ -1422,7 +1468,9 @@ public class UIUtil {
     	factoryMap.put("comButton", new Factory<CommandButton>() {
     		public CommandButton getNewInstance(Node node, ScreenDef def){
     			CommandButton button = new CommandButton();
-    	                	        
+    	        if(node.getAttributes().getNamedItem("tab") != null) {
+    	        	button.addTabHandler(new TabHandler(node,def));
+    	        }
     	        button.command = ClassFactory.getEnum(node.getAttributes().getNamedItem("command").getNodeValue());
     	        if(node.getAttributes().getNamedItem("value") != null){
     	            button.value = node.getAttributes().getNamedItem("value").getNodeValue();
@@ -1469,6 +1517,9 @@ public class UIUtil {
     	factoryMap.put("icon", new Factory<IconContainer>() {
     		public IconContainer getNewInstance(Node node, ScreenDef def) {
     			IconContainer icon = new IconContainer();
+    			if(node.getAttributes().getNamedItem("tab") != null) {
+    				icon.addTabHandler(new TabHandler(node,def));
+    			}
     	        NodeList widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
     	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {

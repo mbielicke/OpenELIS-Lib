@@ -276,11 +276,11 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
 
         prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickListener(controller.mouseHandler);
+        prevNav.addClickHandler(controller.mouseHandler);
         
         nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickListener(controller.mouseHandler);
+        nextNav.addClickHandler(controller.mouseHandler);
         
         leftButtonPanel.add(prevNav);
         rightButtonPanel.add(nextNav);
@@ -302,7 +302,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
                                    + "'>"
                                    + i
                                    + "</a>");
-                    nav.addClickListener(controller.mouseHandler);
+                    nav.addClickHandler(controller.mouseHandler);
                 } else {
                     nav = new HTML("" + i);
                     nav.setStyleName("current");
@@ -340,7 +340,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
         try {
             scrollBar.getWidget().setHeight(scrollHeight+"px");
             if(showScroll == showScroll.NEEDED){
-                if(scrollHeight > (this.height+1) && controller.model.numRows() > controller.maxRows){
+                if(scrollHeight > (this.height+1) && controller.numRows() > controller.maxRows){
                     DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
                     if(header != null)
                         ft.getFlexCellFormatter().addStyleName(0, 1, "Header");

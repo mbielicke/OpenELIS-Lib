@@ -25,19 +25,10 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.screen.AppScreen;
-
-import java.util.Vector;
 
 public class TableMouseHandler implements TableMouseHandlerInt {
     
@@ -50,88 +41,18 @@ public class TableMouseHandler implements TableMouseHandlerInt {
     /**
      * This method is catches click events on page index for paged tables.
      */
-    public void onClick(Widget sender) {
-        if(controller.view.table.isAttached()){
-            if(sender instanceof AppScreen){
-                if(controller.focused && !DOM.isOrHasChild(controller.view.getElement(), ((AppScreen)sender).clickTarget)){
-                    controller.focused = false;
-                    if(controller.editingCell != null){
-                        controller.finishEditing();
-                        //controller.tableWidgetListeners.fireFinishedEditing(controller, controller.activeRow, controller.activeCell);
-                    }
-                    controller.activeCell = -1;
-                    //controller.setFocus(true);
-                }
-                return;
-            }
-        }
+    public void onClick(ClickEvent event) {
  
     }
-
-    Timer delay;
-
-    public void onMouseDown(final Widget sender, final int x, final int y) {
-    /*    if(controller.drag == null || !controller.model.canDrag(((TableRow)sender).modelIndex))
-            return;
-        if(delay != null)
-            delay.cancel();
-        delay = new Timer() {
-            public void run() {
-                final TableRow proxy = ((TableRow)sender).getProxy();
-                proxy.removeStyleName("TableHighlighted");
-                DOM.setStyleAttribute((Element)proxy.getElement(),"height",controller.cellHeight+"px");
-                AbsolutePanel dragIndicator = new AbsolutePanel();
-                dragIndicator.setStyleName("DragStatus");
-                dragIndicator.addStyleName("NoDrop");
-                HorizontalPanel hp = new HorizontalPanel();
-                hp.add(dragIndicator);
-                hp.add(proxy);
-                hp.setStyleName(sender.getStyleName());
-                proxy.addDragListener(controller.drag);
-                RootPanel.get().add(hp);
-                MouseDragGestureRecognizer mouse = MouseDragGestureRecognizer.getGestureMouse(proxy);
-                mouse.setDrag(hp);
-                Vector<DropListenerCollection> dropMap = controller.screenWidget.getDropMap();
-                MouseDragGestureRecognizer.setDropMap(dropMap);
-                MouseDragGestureRecognizer.setWidgetPosition(hp,
-                                                              sender.getAbsoluteLeft(),
-                                                              sender.getAbsoluteTop());
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        MouseDragGestureRecognizer.getGestureMouse(proxy)
-                                                  .onMouseDown(proxy, x, y);
-                    }
-                });
-            }
-            
-        };
-        delay.schedule(500);
-      */  
-    }
     
-    public void onMouseEnter(Widget sender) {
-       sender.addStyleName("TableHighlighted");
+    public void onMouseOver(MouseOverEvent event) {
+       ((Widget)event.getSource()).addStyleName("TableHighlighted");
         
     }
 
-    public void onMouseLeave(Widget sender) {
-        sender.removeStyleName("TableHighlighted");
+    public void onMouseOut(MouseOutEvent event) {
+        ((Widget)event.getSource()).removeStyleName("TableHighlighted");
         
     }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-       if(delay != null){
-           delay.cancel();
-           delay = null;
-       }
-        
-    }
-
-
 
 }

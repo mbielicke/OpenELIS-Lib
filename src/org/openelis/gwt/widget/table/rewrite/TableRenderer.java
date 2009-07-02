@@ -25,25 +25,16 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusWidget;
+import java.util.ArrayList;
+
+import org.openelis.gwt.widget.HasField;
+
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
-import org.openelis.gwt.widget.table.rewrite.event.SourcesTableModelEvents;
-import org.openelis.gwt.widget.table.rewrite.event.SourcesTableWidgetEvents;
-import org.openelis.gwt.widget.table.rewrite.event.TableModelListener;
-import org.openelis.gwt.widget.table.rewrite.event.TableWidgetListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener, ClickListener {
+public class TableRenderer  {
     
     private TableWidget controller;
     public ArrayList<TableRow> rows = new ArrayList<TableRow>();
@@ -55,7 +46,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     public void createRow(int i) {
         int j = 0;
         for(TableColumn column : controller.columns) {
-            Widget wid = column.getDisplayWidget(null);
+            Widget wid = column.getDisplayWidget(new TableDataCell(null));
             controller.view.table.setWidget(i,j,wid);            
             if(controller.isDropdown)
                 controller.view.table.getFlexCellFormatter().addStyleName(i,
@@ -82,7 +73,8 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             j++;
         }
         TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseListener(controller.mouseHandler);
+        row.addMouseOutHandler(controller.mouseHandler);
+        row.addMouseOverHandler(controller.mouseHandler);
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
         row.index = i;
@@ -94,28 +86,28 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
 
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+(controller.maxRows*2);
-        if(controller.model.isAutoAdd()){
+        int ScrollHeight = (controller.shownRows()*controller.cellHeight)+(controller.maxRows*2);
+        if(controller.isAutoAdd()){
             ScrollHeight += controller.cellHeight;
         }
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
-        if(testStart < controller.model.shownRows() - controller.maxRows)
+        if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
         controller.view.setScrollHeight(ScrollHeight);
         controller.view.scrollBar.setScrollPosition(pos);
         int tRows = controller.maxRows;
-        if(controller.model.shownRows() == 0){
+        if(controller.shownRows() == 0){
             int count = controller.view.table.getRowCount();
             for(int i = 0; i < count; i++){
                 controller.view.table.removeRow(0);
                 rows.remove(0);
             }
-            if(!controller.model.getAutoAdd())
+            if(!controller.getAutoAdd())
                 return;
         }
-        if(controller.model.shownRows() < controller.maxRows){
-            tRows = controller.model.shownRows();
-            if(controller.model.getAutoAdd()){
+        if(controller.shownRows() < controller.maxRows){
+            tRows = controller.shownRows();
+            if(controller.getAutoAdd()){
                 tRows++;
             }
         }
@@ -132,7 +124,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
                 createRow(i);
             }
         }
-        if(controller.model.getAutoAdd() && controller.view.table.getRowCount() == 0){
+        if(controller.getAutoAdd() && controller.view.table.getRowCount() == 0){
             createRow(0);
         }
         scrollLoad(pos);
@@ -147,34 +139,16 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
      */
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
-        TableDataRow row = controller.model.getRow(modelIndex);
+        TableDataRow row = controller.getRow(modelIndex);
         rows.get(index).modelIndex = modelIndex;
         rows.get(index).row = row;
-        List cells = row.getCells();
-        for (int i = 0; i < cells.size(); i++) {
-            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),cells.get(i));
-            
-            //if(tCell instanceof TableMultiple && manager != null){
-              //  manager.setMultiple(model.indexOf(row),i,this);
-            //}
-            /*if(tCell instanceof TableCheck){
-                if(controller.model.canEdit(index,i)){
-                    tCell.enable(true);
-                }else{
-                    tCell.enable(false);
-                }
-            }
-            */
-            //tCell.setField(row.getObject(i));
-           // setCellDisplay(index,i);
-            //if(controller.showRows){
-              //  ((Label)controller.view.rows.getWidget(index,0)).setText(String.valueOf(controller.model.indexOf(row)+1));
-           // }
-            if(controller.model.isSelected(modelIndex))
+        for (int i = 0; i < row.cells.size(); i++) {
+            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.cells.get(i));
+            if(controller.isSelected(modelIndex))
                 rows.get(index).addStyleName(controller.view.selectedStyle);
             else
                 rows.get(index).removeStyleName(controller.view.selectedStyle);
-            if(controller.model.isEnabled(modelIndex)) 
+            if(controller.isEnabled(modelIndex)) 
                 rows.get(index).removeStyleName(controller.view.disabledStyle);
             else
                 rows.get(index).addStyleName(controller.view.disabledStyle);
@@ -183,52 +157,54 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
         }
     }
     
+    public void loadRow(int index) {
+    	loadRow(index,controller.modelIndexList[index]);
+    }
+    
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
-            //controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-            stopEditing(null,controller.activeRow,controller.activeCell);
+            stopEditing();
         }
         int rowsPer = controller.maxRows;
-        if(controller.maxRows > controller.model.shownRows()){
-            rowsPer = controller.model.shownRows();
-            if(controller.model.getAutoAdd())
+        if(controller.maxRows > controller.shownRows()){
+            rowsPer = controller.shownRows();
+            if(controller.getAutoAdd())
                 rowsPer++;
         }
         int loadStart = new Double(Math.ceil(((double)scrollPos)/(controller.cellHeight))).intValue();
-        if(controller.model.numRows() != controller.model.shownRows()){
+        if(controller.numRows() != controller.shownRows()){
             int start = 0;
             int i = 0;
-            while(start < loadStart && i < controller.model.numRows() -1){
-                if(controller.model.getRow(i).shown)
+            while(start < loadStart && i < controller.numRows() -1){
+                if(controller.getRow(i).shown)
                     start++;
                 i++;
             }
              loadStart = i;   
         }
-        int numRows = controller.model.numRows();
-        if(controller.model.getAutoAdd())
+        int numRows = controller.numRows();
+        if(controller.getAutoAdd())
             numRows++;
         if(loadStart+rowsPer > numRows){
             loadStart = loadStart - ((loadStart+rowsPer) - numRows);
-            if(controller.model.getAutoAdd())
+            if(controller.getAutoAdd())
                 loadStart++;
         }
         for(int i = 0; i < rowsPer; i++){
-            while(loadStart+i < controller.model.numRows() && !controller.model.getRow(loadStart+i).shown)
+            while(loadStart+i < controller.numRows() && !controller.getRow(loadStart+i).shown)
                 loadStart++;
-            if(loadStart+i < controller.model.numRows())
+            if(loadStart+i < controller.numRows())
                 loadRow(i,loadStart+i);
             else{
-                controller.model.setAutoAddRow((TableDataRow)controller.model.createRow());
-                loadRow(i,controller.model.numRows());
+                controller.setAutoAddRow((TableDataRow)controller.createRow());
+                loadRow(i,controller.numRows());
             }
         }
 
     }
     
     public void setCellEditor(int row, int col) {
-    	
-        controller.editingCell = (Widget)controller.columns.get(col).getWidgetEditor(controller.model.getCell(row,col));
+        controller.editingCell = (Widget)controller.columns.get(col).getWidgetEditor((TableDataCell)controller.getCell(row,col));
         controller.view.table.setWidget(row, col, controller.editingCell);
         ((Focusable)controller.editingCell).setFocus(true);
         //controller.editingCell.getWidget().addStyleName(controller.view.widgetStyle);
@@ -237,48 +213,30 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
     }
     
     public void setCellDisplay(int row, int col) {
-    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget(controller.model.getCell(row,col)));
-        //controller.columns.get(col).getWidgetDisplay(controller.view.table.getWidget(row, col));        
+    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget((TableDataCell)controller.getCell(row,col)));
     }
 
-    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col) {
+    public void stopEditing() {
         if(controller.editingCell != null){
-        	controller.model.getRow(row).cells[col] = ((HasValue)controller.editingCell).getValue();
-            setCellDisplay(row,col);
+        	((Focusable)controller.editingCell).setFocus(false);
+        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
+        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getField().errors;
+            setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
         }
     }
 
-    public void hideRows(SourcesTableWidgetEvents sender, int[] rows) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    public void removeRows(SourcesTableWidgetEvents sender, int[] rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void selected(SourcesTableWidgetEvents sender, int[] rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void startEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        setCellEditor(row,col);
-    }
-
-    public void rowUnselected(SourcesTableModelEvents sender, int row) {
+    public void rowUnselected(int row) {
         if(row == -1){
             for(int i = 0; i < controller.view.table.getRowCount() ; i++) {
                 controller.view.table.getRowFormatter().removeStyleName(i,controller.view.selectedStyle);
             }
         }else
             controller.view.table.getRowFormatter().removeStyleName(row, controller.view.selectedStyle);
-        
     }
 
-    public void cellUpdated(SourcesTableModelEvents sender, int row, int cell) {
+    public void cellUpdated(int row, int cell) {
             for(TableRow trow : rows) {
                 if(trow.modelIndex == row){
                     setCellDisplay(trow.index,cell);
@@ -288,60 +246,25 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
            
     }
 
-    public void dataChanged(SourcesTableModelEvents sender) {
-        load(0);
+    public void dataChanged(boolean keepPosition) {
+    	if(keepPosition)
+    		load(controller.view.scrollBar.getScrollPosition());
+    	else
+    		load(0);
     }
 
-    public void rowDeleted(SourcesTableModelEvents sender, int row) {
-        load(controller.view.scrollBar.getScrollPosition());        
-    }
 
-    public void rowAdded(SourcesTableModelEvents sender, int row) {
-        load(controller.view.scrollBar.getScrollPosition());        
-    }
-
-    public void rowUpdated(SourcesTableModelEvents sender, int row) {
-        load(controller.view.scrollBar.getScrollPosition());
-    }
-
-    public void rowSelected(SourcesTableModelEvents sender, int row) {
-        if(controller.activeRow < 0)
-            return;
-        controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
-        for(int i = 0; i < controller.view.table.getCellCount(controller.activeRow); i++){
-            if(controller.view.table.getCellFormatter().getStyleName(controller.activeRow,i).indexOf("disabled") > -1){
-                controller.view.table.getWidget(controller.activeRow,i).addStyleName("disabled");
+    public void rowSelected(int row) {
+        controller.view.table.getRowFormatter().addStyleName(row, controller.view.selectedStyle);
+        for(int i = 0; i < controller.view.table.getCellCount(row); i++){
+            if(controller.view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
+                controller.view.table.getWidget(row,i).addStyleName("disabled");
             }
         }
-        
-    }
-
-    public void selected(SourcesTableWidgetEvents sender, int rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void unselected(SourcesTableWidgetEvents sender, int rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void unload(SourcesTableModelEvents sender) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        // TODO Auto-generated method stub
-        
     }
     
     public ArrayList<TableRow> getRows() {
         return rows;
-    }
-
-    public void onClick(Widget sender) {
-        controller.finishEditing();
     }
 
 }

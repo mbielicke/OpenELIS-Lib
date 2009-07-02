@@ -25,7 +25,9 @@
 */
 package org.openelis.gwt.widget.table.rewrite.event;
 
-public interface TableWidgetListener {
+import com.google.gwt.event.shared.EventHandler;
+
+public interface TableHandler extends EventHandler {
     
     public void startEditing(SourcesTableWidgetEvents sender, int row, int col);
     

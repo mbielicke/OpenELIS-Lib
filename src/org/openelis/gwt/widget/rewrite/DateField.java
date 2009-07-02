@@ -23,23 +23,14 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.common.rewrite.data;
-
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.xml.client.Node;
-
-import org.openelis.gwt.common.DatetimeRPC;
-import org.openelis.gwt.common.ValidationException;
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.widget.CalendarLookUp;
-import org.openelis.gwt.widget.HandlesEvents;
+package org.openelis.gwt.widget.rewrite;
 
 import java.util.Date;
-import java.util.HashMap;
+
+import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.screen.AppScreen;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 /**
  * DateField is an implementation of AbstractField that represents data
@@ -90,17 +81,40 @@ public class DateField extends Field<Date> {
     /**
      * This method is called by the FormRPC and will check to see if the value set is valid.
      */
-    public void validate() throws ValidationException {
+    public void validate() {
         if (required) {
             if (value == null) {
             	valid = false;
-                throw new ValidationException(AppScreen.consts.get("fieldRequiredException"));
+                addError(AppScreen.consts.get("fieldRequiredException"));
             }
         }
         if (value != null && !isInRange()) {
         	valid = false;
         }
         valid = true;
+    }
+    
+    public void validateQuery() {
+    	valid = true;
+    	if(queryString == null || queryString.equals("")){
+    		queryString = null;
+    		return;
+    	}
+    	QueryFieldUtil qField = new QueryFieldUtil();
+    	qField.parse(queryString);
+    	
+        for (String param : qField.parameter) {
+            try {
+                Date date = new Date(param.replaceAll("-", "/"));
+            } catch (Exception e) {
+                addError("Not a Valid Date");
+                valid = false;
+                return;
+            }
+        }
+        if (value != null && !isInRange()) {
+            valid = false;
+        }
     }
 
    /**
@@ -114,17 +128,17 @@ public class DateField extends Field<Date> {
    /**
     * This mehtod will determine if the date set is in the specified Date range for this field
     */
-    public boolean isInRange() throws ValidationException {
+    public boolean isInRange()  {
         // TODO Auto-generated method stub
     	Date today = new Date();
         if (min != null && value.before(DatetimeRPC.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
-            throw new ValidationException(AppScreen.consts.get("fieldPastException"));
+            addError(AppScreen.consts.get("fieldPastException"));
         }
         if (max != null && value.after(DatetimeRPC.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
-            throw new ValidationException(AppScreen.consts.get("fieldFutureException"));
+            addError(AppScreen.consts.get("fieldFutureException"));
         }
         return true;
     }
@@ -221,22 +235,30 @@ public class DateField extends Field<Date> {
      * Sets the value of the field from the passed string representation of this fields value.
      * If a pattern is set then the date must be passed in the pattern format to be valid.
      */
-    public void setValue(String val) {
+    public void setStringValue(String val) {
+        valid = true;
+        Date date = null;
         if(pattern == null) {
             if (val == null || val == "") 
                 value = null;
            else 
-                setValue(DatetimeRPC.getInstance(begin, end, val).getDate());
-        }else
-            setValue(DatetimeRPC.getInstance(begin, end, DateTimeFormat.getFormat(pattern).parse((String)val)).getDate());
+        	   try {
+        		   val = val.replaceAll("-", "/");
+        		   date = new Date(val);
+        	   }catch(Exception e) {
+        		   valid = false;
+        		   addError("Invalid Date format entered");
+        	   }
+        }else{
+        	try {
+        		date = DateTimeFormat.getFormat(pattern).parse(val);
+        	}catch(Exception e) {
+        		valid = false;
+        		addError("Invalid Date format entered");
+        	}
+        }
+        if(valid)
+        	setValue(DatetimeRPC.getInstance(begin, end, date).getDate());
     }
-    
-	public void onValueChange(ValueChangeEvent<Date> event) {
-		setValue(event.getValue());
-		if(event.getSource() instanceof CalendarLookUp)
-			((CalendarLookUp)event.getSource()).textbox.setValue(format(),false);
-		else
-			((HasValue<String>)event.getSource()).setValue(format(), false);
-	}
     
 }

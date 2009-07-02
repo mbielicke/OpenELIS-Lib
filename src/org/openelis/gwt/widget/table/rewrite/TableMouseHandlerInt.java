@@ -25,9 +25,10 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 
-public interface TableMouseHandlerInt extends ClickListener, MouseListener{
+public interface TableMouseHandlerInt extends ClickHandler, MouseOutHandler, MouseOverHandler{
 
 }

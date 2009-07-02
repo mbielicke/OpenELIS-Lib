@@ -14,6 +14,10 @@ import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.screen.ScreenWindow;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -31,6 +35,15 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     public ScreenWindow window;
     public static HashMap<String,String> consts;
     
+    /*
+    {
+    	addDomHandler(new KeyPressHandler() {
+    		public void onKeyPress(KeyPressEvent event) {
+    			event.preventDefault();
+    		}
+    	},KeyPressEvent.getType());
+    }
+    */
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
      */

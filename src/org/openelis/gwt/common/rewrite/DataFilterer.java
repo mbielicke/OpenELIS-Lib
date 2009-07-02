@@ -25,8 +25,8 @@
 */
 package org.openelis.gwt.common.rewrite;
 
-import org.openelis.gwt.common.rewrite.data.StringField;
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
+import org.openelis.gwt.widget.rewrite.StringField;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 import java.util.ArrayList;
 import java.util.HashSet;

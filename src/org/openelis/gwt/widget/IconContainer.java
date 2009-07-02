@@ -1,9 +1,12 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.screen.rewrite.UIUtil;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -59,6 +62,10 @@ public class IconContainer extends AbsolutePanel implements SourcesMouseEvents, 
     public IconContainer() {
         sinkEvents(Event.MOUSEEVENTS);
         sinkEvents(Event.ONCLICK);
+    }
+    
+    public void addTabHandler(UIUtil.TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
     }
     
     public IconContainer(String style) {

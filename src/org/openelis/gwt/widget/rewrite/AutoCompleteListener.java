@@ -43,12 +43,6 @@ public class AutoCompleteListener implements
     }
 
     public void onClick(Widget sender) {
-        if(sender == widget.lookUp.icon){
-            if(widget.activeRow < 0)
-                widget.showTable(0);
-            else
-                widget.showTable(widget.modelIndexList[widget.activeRow]);
-        }
 
     }
 
@@ -90,7 +84,7 @@ public class AutoCompleteListener implements
     public void onKeyUp(Widget sender, char keyCode, int modifiers) {
         if(widget.queryMode)
             return;
-        if (!widget.lookUp.textbox.isReadOnly()) {
+        if (!widget.textbox.isReadOnly()) {
             if (keyCode == KEY_DOWN || keyCode == KEY_UP ||  keyCode == KEY_TAB 
                     || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 
                     keyCode == KEY_CTRL || keyCode == KEY_SHIFT || keyCode == KEY_ESCAPE)
@@ -106,11 +100,11 @@ public class AutoCompleteListener implements
                 widget.itemSelected = false;
                 return;
             }
-            String text = widget.lookUp.textbox.getText();
+            String text = widget.textbox.getText();
             if (text.length() > 0 && !text.endsWith("*")) {
                 widget.setDelay(text, 350);
             } else if(text.length() == 0) {
-                widget.model.clear();
+                widget.clear();
             } else {
                 widget.hideTable();
             }

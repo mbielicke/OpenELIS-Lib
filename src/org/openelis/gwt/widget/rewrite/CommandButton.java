@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -37,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
+import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.screen.rewrite.Screen.State;
 
 import java.util.EnumSet;
@@ -89,6 +91,10 @@ public class CommandButton extends Composite implements MouseListener, SourcesCo
     
         panel.addMouseListener(this);
         panel.addClickListener(this);
+    }
+    
+    public void addTabHandler(UIUtil.TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
     }
     
     

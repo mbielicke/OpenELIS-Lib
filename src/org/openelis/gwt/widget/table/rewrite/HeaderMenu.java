@@ -129,7 +129,7 @@ public class HeaderMenu extends PopupPanel implements
             for(TableColumn column : (ArrayList<TableColumn>)controller.columns){
                 column.applyFilter();
             }
-            controller.model.refresh();
+            controller.refresh();
         }
     }
 
@@ -199,7 +199,7 @@ public class HeaderMenu extends PopupPanel implements
                 sortDirection = DataSorterInt.SortDirection.UP;
             if (row == 1)
                 sortDirection = DataSorterInt.SortDirection.DOWN;
-            controller.model.sort(col, sortDirection);
+            controller.sort(col, sortDirection);
             hide();
         }
     }

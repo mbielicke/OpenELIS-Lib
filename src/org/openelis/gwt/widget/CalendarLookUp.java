@@ -1,6 +1,10 @@
 package org.openelis.gwt.widget;
 
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -22,9 +26,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.screen.ScreenWindow;
+import org.openelis.gwt.screen.rewrite.UIUtil;
+import org.openelis.gwt.widget.rewrite.Field;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class CalendarLookUp extends LookUp implements KeyboardListener, 
@@ -35,7 +43,9 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
                                                       SourcesChangeEvents,
                                                       MouseListener,
                                                       HasValue<Date>,
-                                                      ValueChangeHandler<String>{
+                                                      ValueChangeHandler<Date>,
+                                                      HasFocusHandlers,
+                                                      HasField {
                                                 
 
     protected byte begin;
@@ -44,6 +54,8 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     protected Date weekDate;
     protected ChangeListenerCollection changeListeners;
     protected PopupPanel pop;
+    private Field field;
+    private boolean queryMode;
 
     public CalendarLookUp() {
         super();
@@ -54,12 +66,15 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         icon.addMouseListener(this);
         textbox.addStyleName("TextboxUnselected");
         hp.addStyleName("Calendar");
-        textbox.addValueChangeHandler(this);
     }
     
     public CalendarLookUp(byte begin,byte end,boolean week) {
         this();
         init(begin,end,week);
+    }
+    
+    public void addTabHandler(UIUtil.TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
     }
     
     public void init(byte begin,byte end,boolean week){
@@ -148,7 +163,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     }
     
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
-        CalendarWidget cal = new CalendarWidget(textbox.getText());
+        CalendarWidget cal = new CalendarWidget(getValue());
         cal.addValueChangeHandler(this);
         //pop = new (null,"","","",true);
         pop = new PopupPanel(true, false);
@@ -214,6 +229,13 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
             }
         }
     }
+    
+    public void onValueChange(ValueChangeEvent<Date> event) {
+    	setValue(event.getValue());
+    	if(pop != null){
+    		pop.hide();
+    	}
+    }
 
 	public void setValue(Date value) {
 		setValue(value,false);
@@ -234,17 +256,6 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 	public HandlerRegistration addValueChangeHandler(
 			ValueChangeHandler<Date> handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
-	}
-
-	public void onValueChange(ValueChangeEvent<String> event) {
-		if(pop != null)
-			pop.hide();
-        if (event.getValue().equals(""))
-            setValue(null,true);
-        else{
-        	Date date = new Date(event.getValue().replaceAll("-", "/"));
-        	setValue(DatetimeRPC.getInstance(begin, end, date).getDate(),true);
-        }
 	}
 
 	public void onChange(Widget sender) {
@@ -272,6 +283,56 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 	
 	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
 		return textbox.addMouseOverHandler(handler);
+	}
+
+	public void addError(String error) {
+		field.addError(error);
+		field.drawError(this);
+	}
+
+	public void clearErrors() {
+		field.clearError(this);
+	}
+
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+		textbox.addValueChangeHandler(field);
+		addBlurHandler(field);
+		addMouseOutHandler(field);
+		addMouseOverHandler(field);
+	}
+
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addDomHandler(handler,FocusEvent.getType());
+	}
+
+	public void setQueryMode(boolean query) {
+		field.setQueryMode(query);
+		
+	}
+
+	public void checkValue() {
+		field.checkValue(this);
+		
+	}
+
+	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(field.queryString != null) {
+			QueryData qd = new QueryData();
+			qd.query = field.queryString;
+			qd.key = key;
+			qd.type = QueryData.Type.DATE;
+			list.add(qd);
+		}
+		
+	}
+
+	public ArrayList<String> getErrors() {
+		return field.errors;
 	}
     
 }

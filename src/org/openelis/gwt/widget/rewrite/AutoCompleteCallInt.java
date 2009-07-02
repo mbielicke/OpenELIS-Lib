@@ -27,7 +27,7 @@ package org.openelis.gwt.widget.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 public interface AutoCompleteCallInt {
     

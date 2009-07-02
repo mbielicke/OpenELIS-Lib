@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.QueryField;
-import org.openelis.gwt.common.rewrite.data.TableDataRow;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 public class Query<T> implements RPC {
     
 	private static final long serialVersionUID = 1L;
 	
-	public ArrayList<AbstractField> fields;
+	public ArrayList<QueryData> fields;
     public ArrayList<T> results; 
     public transient ArrayList<TableDataRow> model;
     

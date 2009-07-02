@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.openelis.gwt.common.CalendarForm;
 import org.openelis.gwt.screen.rewrite.Screen;
@@ -51,7 +52,7 @@ import com.google.gwt.user.client.ui.HasValue;
  * @author tschmidt
  *
  */
- public class CalendarWidget extends Screen implements HasValue<String>, ClickHandler {
+ public class CalendarWidget extends Screen implements HasValue<Date>, ClickHandler {
     
     protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
     .create(CalendarServiceInt.class);
@@ -70,7 +71,7 @@ import com.google.gwt.user.client.ui.HasValue;
     
     protected CalendarForm form;
     
-    public CalendarWidget(String date) {
+    public CalendarWidget(Date date) {
     	super();
         String base = GWT.getModuleBaseURL();
         base += "CalendarServlet";        
@@ -240,19 +241,19 @@ import com.google.gwt.user.client.ui.HasValue;
             return;
         }
         String date = ((Label)event.getSource()).getText();
-        setValue(form.year+"-"+(form.month+1)+"-"+date,true);
+        setValue(new Date(form.year,form.month,Integer.parseInt(date)),true);
     }
 
-	public String getValue() {
+	public Date getValue() {
 		return form.date;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Date value) {
 		setValue(value,false);
 	}
 
-	public void setValue(String value, boolean fireEvents) {
-		String old = form.date;
+	public void setValue(Date value, boolean fireEvents) {
+		Date old = form.date;
 		form.date = value;
 		if(fireEvents)
 			ValueChangeEvent.fireIfNotEqual(this, old, getValue());
@@ -260,7 +261,7 @@ import com.google.gwt.user.client.ui.HasValue;
 	}
 
 	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<String> handler) {
+			ValueChangeHandler<Date> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 }
