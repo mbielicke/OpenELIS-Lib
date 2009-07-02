@@ -441,7 +441,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
     
     protected String messageText;
     
-    protected AsyncCallback<QueryRPC> pageCallback = new AsyncCallback<QueryRPC>() {
+    protected SyncCallback<QueryRPC> pageCallback = new SyncCallback<QueryRPC>() {
         public void onSuccess(QueryRPC result){
             if(messageText == null){
                 window.setDone(consts.get("queryingComplete"));
@@ -459,7 +459,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
         }
     };
     
-    public void getPage(final String messageText, final QueryRPC query, final AsyncCallback<QueryRPC> callback) {
+    public void getPage(final String messageText, final QueryRPC query, final SyncCallback<QueryRPC> callback) {
         this.messageText = messageText;
     	//if(model.getPage() < 0){
     	//	window.setError(consts.get("beginningQueryException"));
@@ -605,7 +605,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             callChain.add(call);
             fetch(callChain);
         }else if(action == KeyListManager.Action.GETPAGE)
-            getPage(null,(QueryRPC)((Object[])obj)[0],(AsyncCallback)((Object[])obj)[1]);
+            getPage(null,(QueryRPC)((Object[])obj)[0],(SyncCallback)((Object[])obj)[1]);
         else if (action == ButtonPanel.Action.QUERY) {
             query();
         }
