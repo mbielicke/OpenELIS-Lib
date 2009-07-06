@@ -149,8 +149,8 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
                         window.setError((String)form.getErrors().get(0));
                 }
             }else{
-                commandListeners.fireCommand(Action.REFRESH_PAGE,null);
                 setState(State.DEFAULT);
+                window.setDone(consts.get("deleteComplete"));
             }
          }
          public void onFailure(Throwable caught){
