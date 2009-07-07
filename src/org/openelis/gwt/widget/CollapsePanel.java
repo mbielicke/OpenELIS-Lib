@@ -63,13 +63,13 @@ public class CollapsePanel extends Composite implements ClickListener, MouseList
         panel.setWidget(0, 0, content);
         panel.setWidget(0,1,arrow);
         panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
-        /*
+        
         DeferredCommand.addCommand(new Command(){
            public void execute(){
                panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
            }
         });
-        */
+        
     }
     
     public void setContent(Widget wid){
