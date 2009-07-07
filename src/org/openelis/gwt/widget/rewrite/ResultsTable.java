@@ -1,18 +1,7 @@
 package org.openelis.gwt.widget.rewrite;
 
-import java.util.ArrayList;
-
-import org.openelis.gwt.common.rewrite.Query;
-import org.openelis.gwt.event.ActionEvent;
-import org.openelis.gwt.event.ActionHandler;
-import org.openelis.gwt.event.HasActionHandlers;
-import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.widget.CollapsePanel;
-import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
-import org.openelis.gwt.widget.table.rewrite.TableDataRow;
-import org.openelis.gwt.widget.table.rewrite.TableManager;
-import org.openelis.gwt.widget.table.rewrite.TableWidget;
-
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -23,7 +12,21 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ResultsTable extends Composite implements ClickListener, HasActionHandlers<ResultsTable.Action>, ChangeListener, TableManager{
+import org.openelis.gwt.common.rewrite.Query;
+import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.event.HasActionHandlers;
+import org.openelis.gwt.screen.rewrite.Screen;
+import org.openelis.gwt.widget.ButtonPanel;
+import org.openelis.gwt.widget.CollapsePanel;
+import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
+import org.openelis.gwt.widget.table.rewrite.TableManager;
+import org.openelis.gwt.widget.table.rewrite.TableWidget;
+
+import java.util.ArrayList;
+
+public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, TableManager{
     
     public TableWidget table;
     
@@ -35,7 +38,7 @@ public class ResultsTable extends Composite implements ClickListener, HasActionH
     protected boolean refreshedByLetter;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
     public boolean showNavPanel = true;
-    private ClickListener navListener = this;
+    private ClickHandler navListener = this;
     
     public ActionHandler<Screen.Action> screenActions = new ActionHandler<Screen.Action>() {
 
@@ -47,8 +50,8 @@ public class ResultsTable extends Composite implements ClickListener, HasActionH
 	            table.view.setScrollHeight((table.getData().size()*table.cellHeight)+(table.getData().size()*table.cellSpacing)+table.cellSpacing);
 	            if(showNavPanel){
 	                table.view.setNavPanel(((Query)event.getData()).page, ((Query)event.getData()).page+1, false);
-	                table.view.prevNav.addClickListener(navListener);
-	                table.view.nextNav.addClickListener(navListener);
+	                table.view.prevNav.addClickHandler(navListener);
+	                table.view.nextNav.addClickHandler(navListener);
 	            }
 	            if(!refreshedByLetter){
 	                if(selectedButton != null){
@@ -66,8 +69,8 @@ public class ResultsTable extends Composite implements ClickListener, HasActionH
 	            table.activeRow = -1;
 	            if(showNavPanel){
 	                table.view.setNavPanel(((Query)event.getData()).page, ((Query)event.getData()).page+1, false);
-	                table.view.prevNav.addClickListener(navListener);
-	                table.view.nextNav.addClickListener(navListener);
+	                table.view.prevNav.addClickHandler(navListener);
+	                table.view.nextNav.addClickHandler(navListener);
 	            }
 	            table.refresh();
 	            table.focused = true;
@@ -116,32 +119,24 @@ public class ResultsTable extends Composite implements ClickListener, HasActionH
         tablePanel.add(table);
     }
 
-    public void setButtonPanel(Widget wid) {
-        alphabetButtonVP.add(wid);
-        if(wid instanceof ButtonPanel){
-            bpanel = (ButtonPanel)wid;
-            bpanel.addActionHandler(new ActionHandler<ButtonPanel.Action>() {
-				public void onAction(ActionEvent<ButtonPanel.Action> event) {
-		            if(selectedButton != null){
-		                selectedButton.changeState(ButtonState.UNPRESSED);
-		            }
-		            selectedButton = (AppButton)event.getData();
-		            ((AppButton)event.getData()).changeState(ButtonState.PRESSED);
-		            refreshedByLetter = true;
-				}
-            	
-            });
-        }
+    public void setButtonGroup(ButtonGroup bg) {
+        alphabetButtonVP.add(bg);
+        
+        bg.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                refreshedByLetter = true;
+			}
+        });
     }
     
-    public void onClick(Widget sender) {
+    public void onClick(ClickEvent event) {
         if(table.view.table.isAttached()){
-            if(sender == table.view.nextNav){
+            if(event.getSource() == table.view.nextNav){
             	ActionEvent.fire(this, Action.NEXT_PAGE, table.getData());
                 refreshedByLetter = true;
                 return;
             }
-            if(sender == table.view.prevNav){
+            if(event.getSource() == table.view.prevNav){
                 ActionEvent.fire(this,Action.PREVIOUS_PAGE,table.getData());
                 refreshedByLetter = true;
                 return;
@@ -149,20 +144,6 @@ public class ResultsTable extends Composite implements ClickListener, HasActionH
         }
     }
     
-    public void onChange(Widget sender) {
-
-        if(sender instanceof CollapsePanel) {
-            if(((CollapsePanel)sender).isOpen){
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        if(table.view.header != null)
-                            table.view.header.sizeHeader();
-                    }
-                });
-            }
-        }
-    }
-
     public boolean canAdd(TableWidget widget, TableDataRow set, int row) {
         // TODO Auto-generated method stub
         return false;

@@ -45,7 +45,7 @@ version="1.0">
     
 <!-- query button template -->
 <xsl:template name="queryButton">
-	<appButton action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="q">	
+	<appButton key="query" action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="q">	
 		<HorizontalPanel>
 		  <AbsolutePanel style="QueryButtonImage"/>
           <text><xsl:value-of select='resource:getString($constants,"query")'/></text>
@@ -55,7 +55,7 @@ version="1.0">
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<appButton action="previous" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
+	<appButton key="previous" action="previous" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="p">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="PreviousButtonImage"/>
            	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
@@ -65,7 +65,7 @@ version="1.0">
 
 <!-- next button template -->
 <xsl:template name="nextButton">
-	<appButton action="next" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
+	<appButton key="next" action="next" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="n">
 		 <HorizontalPanel>
 	  		<AbsolutePanel style="NextButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
@@ -75,7 +75,7 @@ version="1.0">
 
 <!-- update button template -->
 <xsl:template name="updateButton">
-	<appButton action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
+	<appButton key="update" action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="u">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="UpdateButtonImage"/>
          	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>
@@ -85,7 +85,7 @@ version="1.0">
 
 <!-- add button template -->
 <xsl:template name="addButton">
-	<appButton action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add" shortcut="a">
+	<appButton key="add" action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add" shortcut="a">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AddButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
@@ -95,7 +95,7 @@ version="1.0">
 
 <!-- delete button template -->
 <xsl:template name="deleteButton">
-	<appButton action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete" shortcut="d">
+	<appButton key="delete" action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete" shortcut="d">
 		<HorizontalPanel>
 	     	<AbsolutePanel style="DeleteButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"delete")'/></text>
@@ -105,7 +105,7 @@ version="1.0">
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
-    <appButton action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="m">
+    <appButton key="commit" action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="m">
 		<HorizontalPanel>
 	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
@@ -115,7 +115,7 @@ version="1.0">
 
 <!-- process button template -->
 <xsl:template name="processButton">
-    <appButton action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="a">
+    <appButton key="process" action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="a">
 		<HorizontalPanel>
 	    	<AbsolutePanel xsi:type="Absolute" layout="absolute" style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
@@ -125,7 +125,7 @@ version="1.0">
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
-	<appButton action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="o">
+	<appButton key="abort" action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="o">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AbortButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
@@ -161,7 +161,7 @@ version="1.0">
 
 <!-- popup select button template -->
 <xsl:template name="popupSelectButton">
-<appButton action="commit" style="Button" enabledStates="default" lockedStates="">
+<appButton key="popupSelect" action="commit" style="Button" enabledStates="default" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
@@ -171,7 +171,7 @@ version="1.0">
 
 <!-- popup transfer button template -->
 <xsl:template name="popupTransferButton">
-<appButton action="commit" style="Button" enabledStates="default" lockedStates="">
+<appButton key="popupTransfer" action="commit" style="Button" enabledStates="default" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"transfer")'/></text>
@@ -181,7 +181,7 @@ version="1.0">
 
 <!-- popup cancel button template -->
 <xsl:template name="popupCancelButton">
-	<appButton action="abort" style="Button" enabledStates="default" lockedStates="">
+	<appButton key="popupCancel" action="abort" style="Button" enabledStates="default" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AbortButtonImage"/>
 	        <text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>

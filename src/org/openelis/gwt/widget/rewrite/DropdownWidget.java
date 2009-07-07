@@ -182,7 +182,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                 textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
             }
              */  
-        }   
+        }
+        if(textValue.equalsIgnoreCase("NULL"))
+            return "";
         return textValue;
     }
 

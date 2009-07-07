@@ -655,6 +655,7 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
 
 	public void onBlur(BlurEvent event) {
 		this.focused = false;
+		finishEditing();
 	}
 
 	public void addError(String Error) {

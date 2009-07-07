@@ -5,6 +5,8 @@ import java.util.HashMap;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
 
+import org.openelis.gwt.widget.HasField;
+
 public class ScreenDef {
 	
 	protected String loadURL;

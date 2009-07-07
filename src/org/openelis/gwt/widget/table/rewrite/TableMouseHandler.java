@@ -38,9 +38,6 @@ public class TableMouseHandler implements TableMouseHandlerInt {
         this.controller = controller;
     }
     
-    /**
-     * This method is catches click events on page index for paged tables.
-     */
     public void onClick(ClickEvent event) {
  
     }

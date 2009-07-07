@@ -25,19 +25,17 @@
  */
 package org.openelis.gwt.widget.rewrite;
 
-import org.openelis.gwt.common.rewrite.Query;
-import org.openelis.gwt.event.ActionEvent;
-import org.openelis.gwt.event.ActionHandler;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.HasActionHandlers;
-import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.widget.rewrite.ButtonPanel;
-import org.openelis.gwt.widget.table.rewrite.TableDataRow;
-import org.openelis.gwt.widget.HandlesEvents;
-
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import org.openelis.gwt.common.rewrite.Query;
+import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.event.HasActionHandlers;
+import org.openelis.gwt.screen.rewrite.Screen;
+import org.openelis.gwt.widget.HandlesEvents;
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 /**
  * KeyListManager is used by extending instances of AppScreenForm to manage primary key results from 
@@ -67,18 +65,6 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
 		}
 	};
 	
-	public ActionHandler<ButtonPanel.Action> buttonActions = new ActionHandler<ButtonPanel.Action>() {
-
-		public void onAction(ActionEvent<ButtonPanel.Action> event) {
-	        if (event.getAction() == ButtonPanel.Action.NEXT) {
-	            next();
-	        } else if (event.getAction() == ButtonPanel.Action.PREVIOUS) {
-	            previous();
-	        }
-		}
-		
-	};
-	
 	public ActionHandler<ResultsTable.Action> resultsActions = new ActionHandler<ResultsTable.Action>() {
 
 		public void onAction(ActionEvent<ResultsTable.Action> event) {
@@ -101,8 +87,6 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
     }
 
     public Action action;
-
-    private CommandListenerCollection commandListeners;
 
     /**
      * The model to store the list of keys from a query

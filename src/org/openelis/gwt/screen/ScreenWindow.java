@@ -308,8 +308,8 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             ((AppScreen)content).window = this;
         }
         if(content instanceof Screen) {
-        	((Screen)content).window = this;
-        	setName(((Screen)content).def.name);
+        	((Screen)content).setWindow(this);
+        	setName(((Screen)content).getDefinition().name);
         	setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
             setStatus(Screen.consts.get("loadCompleteMessage"),"");
@@ -381,7 +381,8 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         if(popupPanel != null){
             popupPanel.hide();
         }
-        ((ScreenBase)content).destroy();
+        if(content instanceof ScreenBase)
+            ((ScreenBase)content).destroy();
         destroy();
         if(browser != null){
             browser.index--;

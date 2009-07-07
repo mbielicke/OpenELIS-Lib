@@ -26,10 +26,12 @@ UIRF Software License are applicable instead of those above.
 -->
 <module>
   <source path="widget"/>
+    <!-- 
     <replace-with class="org.openelis.gwt.widget.table.TableHeaderMenuBarWebkitImpl">
     <when-type-is class="org.openelis.gwt.widget.table.TableHeaderMenuBar" />
     <any>
       <when-property-is name="user.agent" value="safari"/>
     </any>
   </replace-with>
+    -->
 </module>

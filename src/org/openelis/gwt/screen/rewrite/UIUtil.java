@@ -1,49 +1,5 @@
 package org.openelis.gwt.screen.rewrite;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-
-import org.openelis.gwt.common.DatetimeRPC;
-import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.screen.rewrite.Screen.State;
-import org.openelis.gwt.services.ScreenServiceInt;
-import org.openelis.gwt.services.ScreenServiceIntAsync;
-import org.openelis.gwt.widget.CalendarLookUp;
-import org.openelis.gwt.widget.rewrite.CheckBox;
-import org.openelis.gwt.widget.CollapsePanel;
-import org.openelis.gwt.widget.EditBox;
-import org.openelis.gwt.widget.IconContainer;
-import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
-import org.openelis.gwt.widget.ScrollableTabBar;
-import org.openelis.gwt.widget.TextBox;
-import org.openelis.gwt.widget.TitledPanel;
-import org.openelis.gwt.widget.WindowBrowser;
-import org.openelis.gwt.widget.diagram.Diagram;
-import org.openelis.gwt.widget.rewrite.AppButton;
-import org.openelis.gwt.widget.rewrite.AutoComplete;
-import org.openelis.gwt.widget.rewrite.ButtonPanel;
-import org.openelis.gwt.widget.rewrite.CheckField;
-import org.openelis.gwt.widget.rewrite.CommandButton;
-import org.openelis.gwt.widget.rewrite.DateField;
-import org.openelis.gwt.widget.rewrite.DoubleField;
-import org.openelis.gwt.widget.rewrite.Dropdown;
-import org.openelis.gwt.widget.rewrite.Field;
-import org.openelis.gwt.widget.rewrite.IntegerField;
-import org.openelis.gwt.widget.rewrite.PassWordTextBox;
-import org.openelis.gwt.widget.rewrite.RadioButton;
-import org.openelis.gwt.widget.rewrite.ResultsTable;
-import org.openelis.gwt.widget.rewrite.StringField;
-import org.openelis.gwt.widget.rewrite.TextArea;
-import org.openelis.gwt.widget.richtext.RichTextWidget;
-import org.openelis.gwt.widget.table.rewrite.TableColumn;
-import org.openelis.gwt.widget.table.rewrite.TableWidget;
-import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -66,6 +22,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -78,6 +35,50 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
+
+import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.data.StringObject;
+import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.screen.ScreenMenuItem;
+import org.openelis.gwt.screen.rewrite.Screen.State;
+import org.openelis.gwt.services.ScreenServiceInt;
+import org.openelis.gwt.services.ScreenServiceIntAsync;
+import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.CollapsePanel;
+import org.openelis.gwt.widget.EditBox;
+import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.MenuItem;
+import org.openelis.gwt.widget.MenuPanel;
+import org.openelis.gwt.widget.ScrollableTabBar;
+import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.TitledPanel;
+import org.openelis.gwt.widget.WindowBrowser;
+import org.openelis.gwt.widget.diagram.Diagram;
+import org.openelis.gwt.widget.rewrite.AppButton;
+import org.openelis.gwt.widget.rewrite.AutoComplete;
+import org.openelis.gwt.widget.rewrite.ButtonGroup;
+import org.openelis.gwt.widget.rewrite.CheckBox;
+import org.openelis.gwt.widget.rewrite.CheckField;
+import org.openelis.gwt.widget.rewrite.CommandButton;
+import org.openelis.gwt.widget.rewrite.DateField;
+import org.openelis.gwt.widget.rewrite.DoubleField;
+import org.openelis.gwt.widget.rewrite.Dropdown;
+import org.openelis.gwt.widget.rewrite.Field;
+import org.openelis.gwt.widget.rewrite.IntegerField;
+import org.openelis.gwt.widget.rewrite.PassWordTextBox;
+import org.openelis.gwt.widget.rewrite.RadioButton;
+import org.openelis.gwt.widget.rewrite.ResultsTable;
+import org.openelis.gwt.widget.rewrite.StringField;
+import org.openelis.gwt.widget.rewrite.TextArea;
+import org.openelis.gwt.widget.richtext.RichTextWidget;
+import org.openelis.gwt.widget.table.rewrite.TableColumn;
+import org.openelis.gwt.widget.table.rewrite.TableWidget;
+import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
 
 public class UIUtil {
 	 
@@ -478,24 +479,19 @@ public class UIUtil {
     	        return panel;
     		}
     	});
-    	factoryMap.put("buttonPanel", new Factory<ButtonPanel>() {
-    		public ButtonPanel getNewInstance(Node node, ScreenDef def) {
-    			ButtonPanel bPanel = new ButtonPanel();
-    	        NodeList buttons = node.getChildNodes();
-    	        for (int k = 0; k < buttons.getLength(); k++) {
-    	            if(buttons.item(k).getNodeType() == Node.ELEMENT_NODE){
-    	               Widget wid = loadWidget(buttons.item(k),def);
-    	               bPanel.addWidget(wid);
+    	factoryMap.put("buttonGroup", new Factory<ButtonGroup>() {
+    		public ButtonGroup getNewInstance(Node node, ScreenDef def) {
+    			ButtonGroup bgroup = new ButtonGroup();
+    	        NodeList widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	            if(widgets.item(k).getNodeType() == Node.ELEMENT_NODE){
+    	               Panel panel = (Panel)loadWidget(widgets.item(k),def);
+    	               bgroup.setButtons(panel);
+    	               break;
     	            }
     	        }
-    	        
-    	        //we only want to find buttons if we didnt have any button nodes above
-    	        if(bPanel.numberOfButtons() == 0)
-    	            bPanel.findButtons(bPanel.hp);
-    	        
-    	        bPanel.setStyleName("ScreenButtonPanel");
-    	        setDefaults(node,bPanel);
-    	        return bPanel;
+    	        setDefaults(node,bgroup);
+    	        return bgroup;
     		}
     	});
     	factoryMap.put("calendar", new Factory<CalendarLookUp>() {
@@ -930,13 +926,13 @@ public class UIUtil {
     		public ResultsTable getNewInstance(Node node, ScreenDef def) {
     			ResultsTable results = new ResultsTable();
     	        NodeList children = node.getChildNodes();
-    	        Node bpanel = null;
+    	        Node buttons = null;
     	        Node table = null;
     	        Node query = null;
     	        for(int i = 0; i < children.getLength(); i++){
     	            if(children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-    	                if(children.item(i).getNodeName().equals("buttonPanel"))
-    	                    bpanel = children.item(i);
+    	                if(children.item(i).getNodeName().equals("buttonGroup"))
+    	                    buttons = children.item(i);
     	                else if(children.item(i).getNodeName().equals("table"))
     	                    table = children.item(i);
     	                else if(children.item(i).getNodeName().equals("query"))
@@ -952,8 +948,8 @@ public class UIUtil {
     	            }
     	        }
 
-    	        if(bpanel != null)
-    	            results.setButtonPanel(loadWidget(bpanel,def));
+    	        if(buttons != null)
+    	            results.setButtonGroup((ButtonGroup)loadWidget(buttons,def));
     	        
     	        setDefaults(node, results);
     	        return results;
@@ -1437,7 +1433,7 @@ public class UIUtil {
     	                button.setWidget(wid);
     	            }
     	        }
-    	    
+    	        /*
     	        if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
     	            EnumSet<State> enabledStateSet = EnumSet.noneOf(State.class);
     	        	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
@@ -1457,7 +1453,7 @@ public class UIUtil {
     	        }else{
     	            button.setLockedStates(EnumSet.noneOf(State.class));
     	        }
-    	            
+    	        */    
     	        setDefaults(node, button);
     	        
     	        if (node.getAttributes().getNamedItem("style") != null)
