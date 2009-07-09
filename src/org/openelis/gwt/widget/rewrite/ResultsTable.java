@@ -59,7 +59,7 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
 	                }
 	            }else
 	                refreshedByLetter = false;
-	            table.enabled(true);
+	            table.enable(true);
 	            table.focused = true;
 	        }
 	        else if(event.getAction() == Screen.Action.NEW_PAGE){
@@ -74,7 +74,7 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
 	            }
 	            table.refresh();
 	            table.focused = true;
-	            table.enabled(true);
+	            table.enable(true);
 	        }
 		}
     };

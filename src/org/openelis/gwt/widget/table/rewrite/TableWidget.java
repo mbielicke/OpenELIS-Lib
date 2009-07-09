@@ -33,7 +33,7 @@ import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.DataSorterInt.SortDirection;
 import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.Field;
 import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
@@ -48,7 +48,12 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -63,7 +68,7 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
  * @author tschmidt
  * 
  */
-public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler, ClickHandler, HasField {
+public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler, ClickHandler, HasField, MouseOverHandler, MouseOutHandler {
                             
     public ArrayList<TableColumn> columns;
     public boolean enabled;
@@ -73,7 +78,6 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
     public TableView view;
     public TableRenderer renderer;
     public TableKeyboardHandlerInt keyboardHandler;
-    public TableMouseHandlerInt mouseHandler;
     public boolean shiftKey;
     public boolean ctrlKey;
     public int maxRows;
@@ -116,14 +120,14 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
     public void init(){
         renderer = new TableRenderer(this);
         keyboardHandler = new TableKeyboardHandler(this);
-        mouseHandler = new TableMouseHandler(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         setWidget(view);
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
-        
+        addFocusHandler(this);
+        addBlurHandler(this);
     }
     
     public void setTableWidth(String width) {
@@ -135,13 +139,29 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
      */
     public void onClick(ClickEvent event) {
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-        focused = true;
-        if(!(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox) && activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
+    	if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
+    		activeRow = cell.getRowIndex();
+    		activeCell = cell.getCellIndex();
+    		editingCell = view.table.getWidget(activeRow, activeCell);
+    		finishEditing();
+    		return;
+    	}
+        if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
             return;
         selectedByClick = true;
         select(cell.getRowIndex(), cell.getCellIndex());
         selectedByClick = false;
     }
+    
+    public void onMouseOver(MouseOverEvent event) {
+        ((Widget)event.getSource()).addStyleName("TableHighlighted");
+         
+     }
+
+     public void onMouseOut(MouseOutEvent event) {
+         ((Widget)event.getSource()).removeStyleName("TableHighlighted");
+         
+     }
 
     /**
      * This method will unselect the row specified. Unselecting will save any
@@ -207,15 +227,18 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
                 activeRow = row;
                 selectRow(modelIndexList[row]);
             }
+            /*
             if(activeCell > -1 && activeCell != col) {
                 if(columns.get(activeCell).getColumnWidget() instanceof CheckBox) {
-                    //((CheckBox)view.table.getWidget(activeRow,activeCell)).onLostFocus(this);
+                    ((CheckBox)view.table.getWidget(activeRow,activeCell)).setFocus(false);
                 }
             }
+            */
             if(canEdit(modelIndexList[row],col)){
                 activeCell = col;
                 renderer.setCellEditor(row, col);
                 //tableWidgetListeners.fireStartedEditing(this, row, col);
+                /*
                 if(columns.get(col).getColumnWidget() instanceof CheckBox) {
                     if(selectedByClick){
                         ((CheckBox)view.table.getWidget(row,col)).setState("CHECKED");
@@ -223,9 +246,10 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
                             view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
                         }
                     }
-                    //((Checkbox)view.table.getWidget(row,col)).onFocus(this);
+                    ((CheckBox)view.table.getWidget(row,col)).setFocus(true);
                     editingCell = null;
                 }
+                */
             }else
                 activeCell = -1;
         }else{
@@ -243,6 +267,7 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
                     return true;
                 }
             }
+            activeCell = -1;
             //tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
         }
         return false;
@@ -252,20 +277,6 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
     public void startEditing(int row, int col) {
     	if(isRowDrawn(row))
     		select(tableIndex(row),col);
-    }
-        
-    public void enabled(boolean enabled){
-        this.enabled = enabled;
-        if(dragController != null)
-            dragController.setEnable(enabled);
-        for(TableColumn column : columns) {
-            column.enable(enabled);
-        }
-    }
-    
-    public void setFocus(boolean focused) {
-        this.focused = focused;
-        super.setFocus(focused);
     }
 
     public void unload(SourcesTableModelEvents sender) {
@@ -654,8 +665,12 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
 
 
 	public void onBlur(BlurEvent event) {
-		this.focused = false;
-		finishEditing();
+		if(!DOM.isOrHasChild(this.getElement(), ((Widget)event.getSource()).getElement())){
+			finishEditing();
+			this.focused = false;
+		}else if(event.getSource() != this && editingCell != null && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
+			finishEditing();
+		}
 	}
 
 	public void addError(String Error) {
@@ -688,10 +703,6 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
 		}
 		load(qModel);
 	}
-	
-	public void checkValue() {
-		
-	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
 		for(TableColumn col : columns) {
@@ -702,6 +713,23 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
 	public ArrayList<String> getErrors() {
 		return null;
 	}
-    
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+        if(dragController != null)
+            dragController.setEnable(enabled);
+        for(TableColumn column : columns) {
+            column.enable(enabled);
+        }
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void checkValue() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

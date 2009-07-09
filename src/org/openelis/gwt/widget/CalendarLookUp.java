@@ -56,6 +56,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     protected PopupPanel pop;
     private Field field;
     private boolean queryMode;
+    private boolean enabled;
 
     public CalendarLookUp() {
         super();
@@ -333,6 +334,15 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		super.enable(enabled);
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
     
 }

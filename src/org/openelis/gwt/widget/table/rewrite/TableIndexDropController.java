@@ -55,7 +55,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  private int targetPosition = -1;
 
  public TableIndexDropController(TableWidget table) {
-   super(table);
+   super(table.view.cellView);
    this.table = table;
  }
 

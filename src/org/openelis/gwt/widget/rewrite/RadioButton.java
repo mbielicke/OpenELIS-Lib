@@ -9,6 +9,8 @@ import org.openelis.gwt.widget.HasField;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 
 public class RadioButton extends com.google.gwt.user.client.ui.RadioButton implements HasField{
+	
+	public boolean enabled;
 
 	public RadioButton(String name) {
 		super(name);
@@ -64,5 +66,14 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		super.setEnabled(enabled);
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 }

@@ -29,6 +29,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Ha
     public boolean queryMode;
     private HandlerRegistration changeReg;
     private ValueChangeHandler<String> handler;
+    private boolean enabled;
     
     public TextBox() {
         
@@ -140,6 +141,15 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Ha
 
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		setReadOnly(!enabled);
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 	
 }

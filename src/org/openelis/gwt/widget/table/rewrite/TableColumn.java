@@ -29,8 +29,11 @@ import org.openelis.gwt.common.rewrite.DataFilterer;
 import org.openelis.gwt.common.rewrite.Filter;
 import org.openelis.gwt.screen.ScreenMenuItem;
 import org.openelis.gwt.widget.CalendarLookUp;
-import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.rewrite.AutoComplete;
+import org.openelis.gwt.widget.rewrite.Dropdown;
 import org.openelis.gwt.widget.rewrite.DropdownWidget;
 import org.openelis.gwt.widget.rewrite.Field;
 
@@ -40,7 +43,9 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
@@ -77,7 +82,12 @@ public class TableColumn {
     public Widget getDisplayWidget(TableDataCell cell) {
     	Widget wid = null;
     	if(colWidget instanceof CheckBox){
-    		
+    		wid = new CheckBox();
+    		((CheckBox)wid).setType(((CheckBox)colWidget).getType());
+    		((CheckBox)wid).setValue((String)cell.value,true);
+    		((CheckBox)wid).setField(((CheckBox)colWidget).getField());
+    		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
+    		wid.setWidth("15px");
     	}else {
     		((HasValue)colWidget).setValue(cell.value,true);
     		Object val = ((HasValue)colWidget).getValue();
@@ -94,8 +104,9 @@ public class TableColumn {
     		}
     		label.setWordWrap(false);
     		wid = label;
+    		wid.setWidth((currentWidth)+ "px");
     	}
-        wid.setWidth((currentWidth)+ "px");
+        
         wid.setHeight((controller.cellHeight+"px"));
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
@@ -144,7 +155,7 @@ public class TableColumn {
     
     public void loadWidget(Widget widget, TableDataCell cell) {
     	if(widget instanceof CheckBox){
-    		
+//    		((HasValue)widget).setValue(cell.value,true);
     	}else if(widget instanceof Label) {
     		((HasValue)colWidget).setValue(cell.value,true);
     		if(colWidget instanceof CalendarLookUp) {
@@ -205,9 +216,17 @@ public class TableColumn {
     }
     
     public Widget getWidgetEditor(TableDataCell cell) {
-        ((HasValue)colWidget).setValue(cell.value,true);
-        colWidget.setWidth((currentWidth)+ "px");
-        colWidget.setHeight((controller.cellHeight+"px"));
+    	Widget editor = null;
+    	if(colWidget instanceof CheckBox){
+    		editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
+    		editor.setWidth("15px");
+    		return editor;
+    	}
+    	editor = colWidget;
+    	editor.setWidth((currentWidth)+ "px");
+        ((HasValue)editor).setValue(cell.value,true);
+       
+        editor.setHeight((controller.cellHeight+"px"));
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
@@ -215,7 +234,7 @@ public class TableColumn {
                 errorLabel.setStyleName("errorPopupLabel");
                 errorPanel.add(errorLabel);
             }
-        	colWidget.addStyleName("InputError");
+        	editor.addStyleName("InputError");
         	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {
@@ -237,7 +256,7 @@ public class TableColumn {
 				}
         		
         	});
-        	((HasMouseOutHandlers)colWidget).addMouseOutHandler(new MouseOutHandler() {
+        	((HasMouseOutHandlers)editor).addMouseOutHandler(new MouseOutHandler() {
 
 				public void onMouseOut(MouseOutEvent event) {
 			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
@@ -250,17 +269,22 @@ public class TableColumn {
         	});
         	
         }
-        return colWidget;
+        return editor;
     }
 
     public void enable(boolean enable) {
+    	((HasField)colWidget).enable(enable);
+    	/*
         if(colWidget instanceof CalendarLookUp) {
         	((CalendarLookUp)colWidget).enable(enable);
-        }else if(colWidget instanceof DropdownWidget) {
-        	((DropdownWidget)colWidget).enabled(enable);
+        }else if(colWidget instanceof Dropdown) {
+        	((Dropdown)colWidget).enable(enable);
+        }else if(colWidget instanceof AutoComplete){
+        	((AutoComplete)colWidget).enable(enable);
         }else if(colWidget instanceof TextBoxBase) {
         	((TextBoxBase)colWidget).setReadOnly(!enable);
         }
+        */
     }
     
     public HorizontalAlignmentConstant getAlign() {

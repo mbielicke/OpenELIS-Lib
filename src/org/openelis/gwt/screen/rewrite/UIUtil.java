@@ -1,40 +1,9 @@
 package org.openelis.gwt.screen.rewrite;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.rpc.SyncCallback;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.HorizontalSplitPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.StackPanel;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.VerticalSplitPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
-import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
-import com.google.gwt.xml.client.XMLParser;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
 
 import org.openelis.gwt.common.DatetimeRPC;
 import org.openelis.gwt.common.data.StringObject;
@@ -46,6 +15,7 @@ import org.openelis.gwt.services.ScreenServiceIntAsync;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.EditBox;
+import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
@@ -75,10 +45,43 @@ import org.openelis.gwt.widget.table.rewrite.TableColumn;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
 import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.rpc.SyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HorizontalSplitPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.VerticalSplitPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
+import com.google.gwt.xml.client.XMLParser;
 
 public class UIUtil {
 	 
@@ -204,10 +207,17 @@ public class UIUtil {
     	
 		public void onKeyPress(KeyPressEvent event) {
 			if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
-				if(event.isShiftKeyDown())
-					((Focusable)def.getWidget(prev)).setFocus(true);
-				else
-					((Focusable)def.getWidget(next)).setFocus(true);
+				if(event.isShiftKeyDown()){
+					if(((HasField)def.getWidget(prev)).isEnabled()) 
+						((Focusable)def.getWidget(prev)).setFocus(true);
+					else
+						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev));
+				}else{
+					if(((HasField)def.getWidget(next)).isEnabled()) 
+						((Focusable)def.getWidget(next)).setFocus(true);
+					else
+						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next));
+				}
 				event.preventDefault();
 				event.stopPropagation();
 			}
@@ -1228,7 +1238,10 @@ public class UIUtil {
                 	NodeList editor = col.getChildNodes();
                 	for(int j = 0; j < editor.getLength(); j++){
                 		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                			column.setColumnWidget(createWidget(editor.item(j),def));
+                			Widget wid = createWidget(editor.item(j),def);
+                			if(wid instanceof HasBlurHandlers)
+                				((HasBlurHandlers)wid).addBlurHandler(table);
+                			column.setColumnWidget(wid);
                 			break;
                 		}
                 	}
@@ -1322,8 +1335,8 @@ public class UIUtil {
                 drop.columns = columns;
                 drop.setup();
                 setDefaults(node,drop);
-                //drop.textbox.addBlurHandler(focusHandler);
-                //drop.textbox.addFocusHandler(focusHandler);
+                drop.textbox.addBlurHandler(focusHandler);
+                drop.textbox.addFocusHandler(focusHandler);
     			return drop;
     		}
     	});
@@ -1412,6 +1425,8 @@ public class UIUtil {
                 }
                 auto.columns = columns;
                 auto.setup();
+                auto.textbox.addBlurHandler(focusHandler);
+                auto.textbox.addFocusHandler(focusHandler);
     			return auto;
     		}
     	});
@@ -1422,10 +1437,12 @@ public class UIUtil {
     				button.addTabHandler(new TabHandler(node,def));
     			}
     	        button.action = node.getAttributes().getNamedItem("action").getNodeValue();
+    	        /*
     	        if(node.getAttributes().getNamedItem("toggle") != null){
     	            if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
     	                button.toggle = true;
     	        }
+    	        */
     	        NodeList widgets = node.getChildNodes();
     	        for (int l = 0; l < widgets.getLength(); l++) {
     	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {                       

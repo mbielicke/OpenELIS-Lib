@@ -11,7 +11,8 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 
 public class TextArea extends com.google.gwt.user.client.ui.TextArea implements HasField {
 
-	private Field field; 
+	private Field field;
+	private boolean enabled;
 	
 	public void addError(String error) {
 		field.addError(error);
@@ -61,6 +62,15 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		setReadOnly(!enabled);
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 }

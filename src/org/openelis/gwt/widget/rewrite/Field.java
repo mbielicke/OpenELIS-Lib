@@ -78,6 +78,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			queryString = event.getValue();
 			validateQuery();
 		}else{
+			valid = true;
 			setStringValue(event.getValue());
 			if(!valid){
 				drawError((Widget)event.getSource());
@@ -160,6 +161,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			}else
 				queryString = null;
 		}else{
+			valid = true;
 			setStringValue(((HasValue)wid).getValue().toString());
 			if(!valid){
 				drawError(wid);

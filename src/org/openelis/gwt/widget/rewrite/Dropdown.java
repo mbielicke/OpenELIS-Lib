@@ -31,8 +31,8 @@ import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.table.TableMouseHandler;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
-import org.openelis.gwt.widget.table.rewrite.TableMouseHandler;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
@@ -60,9 +60,6 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     	super();
     }
     
-    private boolean enabled;
-    
-    
     public void setup() {
     	if(maxRows == 0)
     		maxRows = 10;
@@ -71,7 +68,6 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = this;
-        mouseHandler = new TableMouseHandler(this);
         HorizontalPanel hp = new HorizontalPanel();
         setWidget(hp);
         hp.add(textbox);
@@ -177,11 +173,11 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         this.load((ArrayList<TableDataRow>)model);
     }
     
-    public void enabled(boolean enabled) {
+    public void enable(boolean enabled) {
         this.enabled = enabled;
         textbox.setReadOnly(!enabled);
         icon.enable(enabled);
-        super.enabled(enabled);
+        //super.enable(enabled);
     }
 
     public boolean isEnabled() {
@@ -227,17 +223,17 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
-		addMouseOutHandler(field);
-		addMouseOverHandler(field);
+		textbox.addMouseOutHandler(field);
+		textbox.addMouseOverHandler(field);
 	}
 	
     public void onFocus(FocusEvent event) {
         if (!textbox.isReadOnly()) {
                 // we need to set the selected style name to the textbox
-                textbox.addStyleName("TextboxSelected");
-                textbox.removeStyleName("TextboxUnselected");
-                textbox.setFocus(true);
-                textbox.addStyleName("Focus");
+                //textbox.addStyleName("TextboxSelected");
+                //textbox.removeStyleName("TextboxUnselected");
+                //textbox.setFocus(true);
+                //textbox.addStyleName("Focus");
                 icon.addStyleName("Selected");
 
                 //setCurrentValues();
@@ -248,9 +244,9 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     public void onBlur(BlurEvent event) {
         if (!textbox.isReadOnly()) {
                 // we need to set the unselected style name to the textbox
-                textbox.addStyleName("TextboxUnselected");
-                textbox.removeStyleName("TextboxSelected");
-                textbox.removeStyleName("Focus");
+                //textbox.addStyleName("TextboxUnselected");
+                //textbox.removeStyleName("TextboxSelected");
+                //textbox.removeStyleName("Focus");
                 icon.removeStyleName("Selected");
                 complete();
         }
@@ -289,6 +285,17 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 			}
 			list.add(qd);
 		}
+	}
+	
+	@Override
+	public void setWidth(String width) {
+		int index = width.indexOf("px");
+		int wid = 0;
+		if(index > 0)
+			wid = Integer.parseInt(width.substring(0,index)) - 15;
+		else
+			wid = Integer.parseInt(width) - 15;
+		super.setWidth(wid+"px");
 	}
 	
 	@Override

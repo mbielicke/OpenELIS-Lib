@@ -72,7 +72,7 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
     public final DropPopup popup = new DropPopup(true);
     
     public PopupTable(){
-    	 setWidget(view);
+    
     }
     
     public PopupTable(ArrayList<TableColumn> columns,int maxRows,String width, String title, boolean showHeader, VerticalScroll showScroll) {
@@ -89,7 +89,6 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = new TableKeyboardHandler(this);
-        mouseHandler = new TableMouseHandler(this);        
         setWidget(view);
         popup.addStyleName("AutoCompletePopup");
         popup.setWidget(view);

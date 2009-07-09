@@ -32,7 +32,6 @@ import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
-import org.openelis.gwt.widget.table.rewrite.TableMouseHandler;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
@@ -69,7 +68,6 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = this;
-        mouseHandler = new TableMouseHandler(this);
         setWidget(textbox);
         setStyleName("AutoDropDown");
         textbox.setStyleName("TextboxUnselected");
@@ -90,10 +88,14 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
     	addDomHandler(handler,KeyPressEvent.getType());
     }
     
-    public void enabled(boolean enabled) {
+    public void enable(boolean enabled) {
         this.enabled = enabled;
         textbox.setReadOnly(!enabled);
-        super.enabled(enabled);
+        super.enable(enabled);
+    }
+    
+    public boolean isEnabled() {
+    	return enabled;
     }
     
     public void getMatches(final String text) {
@@ -171,26 +173,24 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
-		addMouseOutHandler(field);
-		addMouseOverHandler(field);
+		textbox.addMouseOutHandler(field);
+		textbox.addMouseOverHandler(field);
 	}
 	
     public void onFocus(FocusEvent event) {
         if (!textbox.isReadOnly()) {
                 // we need to set the selected style name to the textbox
-                textbox.addStyleName("TextboxSelected");
-                textbox.removeStyleName("TextboxUnselected");
+                //textbox.addStyleName("TextboxSelected");
+                //textbox.removeStyleName("TextboxUnselected");
                 textbox.setFocus(true);
-                textbox.addStyleName("Focus");
         }
     }
 
     public void onBlur(BlurEvent event) {
         if (!textbox.isReadOnly() && !field.queryMode) {
                 // we need to set the unselected style name to the textbox
-                textbox.addStyleName("TextboxUnselected");
-                textbox.removeStyleName("TextboxSelected");
-                textbox.removeStyleName("Focus");
+                //textbox.addStyleName("TextboxUnselected");
+                //textbox.removeStyleName("TextboxSelected");
                 complete();
         }
     }

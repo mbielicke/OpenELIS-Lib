@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 public class PassWordTextBox extends PasswordTextBox implements HasField {
 
 	private Field field; 
+	private boolean enabled;
 	
 	public void addError(String error) {
 		field.addError(error);
@@ -60,6 +61,15 @@ public class PassWordTextBox extends PasswordTextBox implements HasField {
 
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		setReadOnly(!enabled);
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 }

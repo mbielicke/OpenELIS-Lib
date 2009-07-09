@@ -1,11 +1,6 @@
 package org.openelis.gwt.screen.rewrite;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.HashMap;
 
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
@@ -18,7 +13,13 @@ import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.screen.ScreenWindow;
 
-import java.util.HashMap;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Screen extends Composite implements HasStateChangeHandlers<Screen.State>, HasDataChangeHandlers, HasActionHandlers<Screen.Action> {
 	
@@ -92,6 +93,14 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 	public HandlerRegistration addActionHandler(
 			ActionHandler<org.openelis.gwt.screen.rewrite.Screen.Action> handler) {
 		return addHandler(handler,ActionEvent.getType());
+	}
+	
+	public void removeFocus() {
+		for(Widget wid : def.getWidgets().values()){
+			if(wid instanceof Focusable) {
+				((Focusable)wid).setFocus(false);
+			}
+		}
 	}
 
 }

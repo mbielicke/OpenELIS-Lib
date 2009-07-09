@@ -979,7 +979,8 @@ cursor:default;}
     background:#FFFFFF;
     border: 1px solid #7eadd9;
 }
-.AutoDropdown .TextboxSelected{
+/*
+.AutoDropdown .TextboxSelected {
     border:1px solid #7eadd9;
     color:#000000;
     background:#ffffff;
@@ -989,7 +990,7 @@ cursor:default;}
     height:20px;
     cursor:default;
 }
-.AutoDropdown .TextboxUnselected{
+.AutoDropdown .TextboxUnselected {
     border:1px solid #d8d8d8;
     color:#000000;
     background:#ffffff;
@@ -999,6 +1000,19 @@ cursor:default;}
     height:20px;
     cursor:default;
 }
+*/
+.AutoDropdown {}
+.TextboxUnselected {
+    border:1px solid #d8d8d8;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    height:20px;
+    cursor:default;
+}
+
 .TableDropdown .AutoDropdown .TextboxSelected{
     border:1px solid #7eadd9;
     color:#000000;

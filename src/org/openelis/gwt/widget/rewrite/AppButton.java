@@ -49,7 +49,6 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     
     public ButtonState state;
     public String action;
-    public boolean toggle;
     
     private FocusPanel panel = new FocusPanel();
     private FocusPanel classPanel = new FocusPanel();
@@ -57,6 +56,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     private AbsolutePanel right = new AbsolutePanel();
     private AbsolutePanel left = new AbsolutePanel();
     private AbsolutePanel content = new AbsolutePanel();
+    private boolean enabled;
     
     public AppButton() {
         hp.add(left);
@@ -132,7 +132,19 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 
     public void onMouseOver(MouseOverEvent event) {
         panel.addStyleName("Hover");
-        
     }
+    
+    public void enable(boolean enabled) {
+    	this.enabled = enabled;
+    	if(enabled)
+    		changeState(ButtonState.UNPRESSED);
+    	else
+    		changeState(ButtonState.DISABLED);
+    }
+    
+    public boolean isEnabled() {
+    	return enabled;
+    }
+    
 
 }

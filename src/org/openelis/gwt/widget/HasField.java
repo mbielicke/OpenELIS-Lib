@@ -22,5 +22,9 @@ public interface HasField {
 	public void getQuery(ArrayList<QueryData> list, String key);
 	
 	public ArrayList<String> getErrors();
+	
+	public void enable(boolean enabled);
+	
+	public boolean isEnabled();
 
 }

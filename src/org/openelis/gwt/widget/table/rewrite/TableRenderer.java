@@ -73,8 +73,8 @@ public class TableRenderer  {
             j++;
         }
         TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseOutHandler(controller.mouseHandler);
-        row.addMouseOverHandler(controller.mouseHandler);
+        row.addMouseOutHandler(controller);
+        row.addMouseOverHandler(controller);
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
         row.index = i;
@@ -220,7 +220,7 @@ public class TableRenderer  {
         if(controller.editingCell != null){
         	((Focusable)controller.editingCell).setFocus(false);
         	controller.getRow(controller.activeRow).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
-        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getField().errors;
+        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
         }

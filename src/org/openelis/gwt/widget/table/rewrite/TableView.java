@@ -276,11 +276,11 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
 
         prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickHandler(controller.mouseHandler);
+        prevNav.addClickHandler(controller);
         
         nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickHandler(controller.mouseHandler);
+        nextNav.addClickHandler(controller);
         
         leftButtonPanel.add(prevNav);
         rightButtonPanel.add(nextNav);
@@ -302,7 +302,7 @@ public class TableView extends Composite implements TableViewInt, ScrollListener
                                    + "'>"
                                    + i
                                    + "</a>");
-                    nav.addClickHandler(controller.mouseHandler);
+                    nav.addClickHandler(controller);
                 } else {
                     nav = new HTML("" + i);
                     nav.setStyleName("current");
