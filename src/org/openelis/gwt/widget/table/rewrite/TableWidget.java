@@ -55,8 +55,10 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
@@ -140,10 +142,14 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
     public void onClick(ClickEvent event) {
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     	if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
-    		activeRow = cell.getRowIndex();
-    		activeCell = cell.getCellIndex();
-    		editingCell = view.table.getWidget(activeRow, activeCell);
+    		select(cell.getRowIndex(),cell.getCellIndex());
+    		//activeRow = cell.getRowIndex();
+    		//activeCell = cell.getCellIndex();
+    		//editingCell = view.table.getWidget(activeRow, activeCell);
     		finishEditing();
+    		activeCell = cell.getCellIndex();
+            renderer.setCellEditor(cell.getRowIndex(), cell.getCellIndex());
+            unsinkEvents(Event.ONKEYPRESS);
     		return;
     	}
         if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
@@ -237,6 +243,7 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
             if(canEdit(modelIndexList[row],col)){
                 activeCell = col;
                 renderer.setCellEditor(row, col);
+                unsinkEvents(Event.ONKEYPRESS);
                 //tableWidgetListeners.fireStartedEditing(this, row, col);
                 /*
                 if(columns.get(col).getColumnWidget() instanceof CheckBox) {
@@ -250,8 +257,10 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
                     editingCell = null;
                 }
                 */
-            }else
+            }else{
                 activeCell = -1;
+                sinkEvents(Event.ONKEYPRESS);
+            }
         }else{
             return;
         }
@@ -268,6 +277,7 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
                 }
             }
             activeCell = -1;
+            sinkEvents(Event.KEYEVENTS);
             //tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
         }
         return false;
@@ -502,6 +512,7 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
         selections.add(index);
         if(isRowDrawn(index))
         	renderer.rowSelected(tableIndex(index));
+        setFocus(true);
     }
     
     public void clearSelections() {
@@ -660,7 +671,7 @@ public class TableWidget extends FocusPanel implements FocusHandler, BlurHandler
 
 
 	public void onFocus(FocusEvent event) {
-		this.focused = true;
+		//this.focused = true;
 	}
 
 

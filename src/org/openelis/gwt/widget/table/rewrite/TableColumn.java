@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table.rewrite;
 import org.openelis.gwt.common.rewrite.DataFilterer;
 import org.openelis.gwt.common.rewrite.Filter;
 import org.openelis.gwt.screen.ScreenMenuItem;
+import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -86,6 +87,8 @@ public class TableColumn {
     		((CheckBox)wid).setType(((CheckBox)colWidget).getType());
     		((CheckBox)wid).setValue((String)cell.value,true);
     		((CheckBox)wid).setField(((CheckBox)colWidget).getField());
+    		((CheckBox)wid).addFocusHandler(UIUtil.focusHandler);
+    		((CheckBox)wid).addBlurHandler(UIUtil.focusHandler);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
     		wid.setWidth("15px");
     	}else {
@@ -155,7 +158,7 @@ public class TableColumn {
     
     public void loadWidget(Widget widget, TableDataCell cell) {
     	if(widget instanceof CheckBox){
-//    		((HasValue)widget).setValue(cell.value,true);
+    		((HasValue)widget).setValue(cell.value,true);
     	}else if(widget instanceof Label) {
     		((HasValue)colWidget).setValue(cell.value,true);
     		if(colWidget instanceof CalendarLookUp) {
@@ -216,7 +219,7 @@ public class TableColumn {
     }
     
     public Widget getWidgetEditor(TableDataCell cell) {
-    	Widget editor = null;
+    	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
     		editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		editor.setWidth("15px");
@@ -224,7 +227,7 @@ public class TableColumn {
     	}
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");
-        ((HasValue)editor).setValue(cell.value,true);
+    	((HasValue)editor).setValue(cell.value,true);
        
         editor.setHeight((controller.cellHeight+"px"));
         if(cell.errors != null) {

@@ -236,7 +236,7 @@ public class UIUtil {
     	
     }
     
-    private static UIFocusHandler focusHandler = new UIFocusHandler();
+    public static UIFocusHandler focusHandler = new UIFocusHandler();
     
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
     static {

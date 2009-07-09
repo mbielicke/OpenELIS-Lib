@@ -26,7 +26,7 @@
 package org.openelis.gwt.widget.table.rewrite;
 
 import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.rewrite.CheckBox;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -101,9 +101,12 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     }
 
 	public void onKeyDown(KeyDownEvent event) {
-        if(!controller.focused)
-            return;
+        //if(!controller.focused)
+          //  return;
         
+        if(controller.editingCell instanceof CheckBox && KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()){
+        	return;
+        }
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
             controller.ctrlKey = true;
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
@@ -269,11 +272,11 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                     tabToPrevRow();
                 }else{
                     final int fCol = col;
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
+                    //DeferredCommand.addCommand(new Command() {
+                      //  public void execute() {
                             controller.select(controller.activeRow, fCol);
-                        }
-                    });
+                       // }
+                    //});
                 }
             }
         }
@@ -285,6 +288,5 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             controller.ctrlKey = false;
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
             controller.shiftKey = false;
-		
 	}
 }

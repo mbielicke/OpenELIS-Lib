@@ -40,9 +40,12 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.HasKeyUpHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -64,7 +67,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyUpHandlers, KeyUpHandler {
+public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyDownHandlers, KeyDownHandler {
         
     boolean enabled = true;
     
@@ -90,7 +93,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     public CheckBox() {
         setStyleName(UNCHECKED_STYLE);
         addDomHandler(this,ClickEvent.getType());
-        addDomHandler(this,KeyUpEvent.getType());
+        addDomHandler(this,KeyDownEvent.getType());
     }
     
     public CheckBox(CheckType type) {
@@ -248,11 +251,11 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	*/
 
 
-	public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-		return addDomHandler(handler,KeyUpEvent.getType());
+	public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+		return addDomHandler(handler,KeyDownEvent.getType());
 	}
 
-	public void onKeyUp(KeyUpEvent event) {
+	public void onKeyDown(KeyDownEvent event) {
 		if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER) {
 	    	if(!enabled)
 	    		return;
