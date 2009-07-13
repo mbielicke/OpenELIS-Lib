@@ -276,7 +276,8 @@ public class TableColumn {
     }
 
     public void enable(boolean enable) {
-    	((HasField)colWidget).enable(enable);
+    	if(colWidget instanceof HasField)
+    		((HasField)colWidget).enable(enable);
     	/*
         if(colWidget instanceof CalendarLookUp) {
         	((CalendarLookUp)colWidget).enable(enable);
