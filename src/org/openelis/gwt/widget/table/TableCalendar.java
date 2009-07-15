@@ -133,7 +133,7 @@ public class TableCalendar extends TableCellInputWidget {
         if(field instanceof QueryDateField)
             field.setValue(editor.getText());
         else
-            field.setValue(editor.getValue());
+            field.setValue(editor.getValue().toString());
         super.saveValue();
     }
 
