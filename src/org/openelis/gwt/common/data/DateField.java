@@ -347,6 +347,10 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
             setValue(DatetimeRPC.getInstance(begin, end, DateTimeFormat.getFormat(pattern).parse((String)val)));
     }
     
+    public void setValue(Date date) {
+    	 setValue(DatetimeRPC.getInstance(begin, end, date));
+    }
+    
     public DatetimeRPC getValue() {
         return value;
     }
