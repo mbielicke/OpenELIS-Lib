@@ -23,18 +23,22 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite;
+package org.openelis.gwt.widget.tree.rewrite;
 
+import java.util.ArrayList;
 
-public interface TableManager {
+public interface TreeRendererInt {
     
-    public boolean canSelect(TableWidget widget, TableDataRow set, int row);
-
-    public boolean canEdit(TableWidget widget, TableDataRow set, int row, int col);
-
-    public boolean canDelete(TableWidget widget, TableDataRow set, int row);
-
-    public boolean canAdd(TableWidget widget, TableDataRow set, int row);
+    public void createRow(int i);
     
-    public boolean canAutoAdd(TableWidget widget, TableDataRow addRow);
+    public void load(int pos);
+    
+    public void scrollLoad(int scrollPos);
+    
+    public void setCellDisplay(int row, int col);
+    
+    public void setCellEditor(int row, int col);
+    
+    public ArrayList<TreeRow> getRows();
+
 }

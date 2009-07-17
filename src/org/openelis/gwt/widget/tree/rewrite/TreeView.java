@@ -23,18 +23,12 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite;
+package org.openelis.gwt.widget.tree.rewrite;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -46,9 +40,16 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
+import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import org.openelis.gwt.widget.table.TableHeader;
 
 /**
  * This class represents the View of the table widget. It contains the logic for
@@ -57,24 +58,49 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class TableView extends Composite implements ScrollHandler, MouseWheelHandler {
+public class TreeView extends Composite implements TreeViewInt, ScrollListener, MouseWheelListener {
     
     public boolean loaded;
-    public enum VerticalScroll {NEVER,ALWAYS,NEEDED};
     
-    public class CellView extends ScrollPanel implements HasMouseWheelHandlers {
+    public class CellView extends ScrollPanel implements SourcesMouseWheelEvents {
 
         private AbsolutePanel ap = new AbsolutePanel();
         
         public CellView() {
             super.setWidget(ap);
+            sinkEvents(Event.ONMOUSEWHEEL);
+        }
+        
+        public void onBrowserEvent(Event event) {
+            // TODO Auto-generated method stu
+            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
+                listeners.fireMouseWheelEvent(this, event);
+                DOM.eventCancelBubble(event, true);
+                DOM.eventPreventDefault(event);
+            }
+            super.onBrowserEvent(event);
+        }
+        
+        private MouseWheelListenerCollection listeners;
+        
+        public void addMouseWheelListener(MouseWheelListener listener) {
+            if(listeners == null){
+                listeners = new MouseWheelListenerCollection();
+            }
+            listeners.add(listener);
+        }
+
+        public void removeMouseWheelListener(MouseWheelListener listener) {
+            if(listeners != null){
+                listeners.remove(listener);
+            }    
         }
         
         public void setScrollWidth(String width){
             ap.setWidth(width);
         }
         
-        public void setWidget(final Widget wid){
+        public void setWidget(Widget wid){
             ap.clear();
             ap.add(wid);
         }
@@ -83,11 +109,6 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             super.setHeight(height);
             ap.setHeight(height);
         }
-
-		public HandlerRegistration addMouseWheelHandler(
-				MouseWheelHandler handler) {
-			return addDomHandler(handler,MouseWheelEvent.getType());
-		}
         
     }
     public CellView cellView = new CellView();
@@ -99,20 +120,19 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     public final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
-    public TableHeaderMenuBar header = null;
+    public TreeHeader header = null;
     public FlexTable rows = new FlexTable();
     public int left = 0;
     public int top = 0;
     public String[] headers;
     public Label[] hLabels;
     private String title = "";
-    public static String widgetStyle = "TableWidget";
-    public static String cellStyle = "TableCell";
-    public static String dropdownCellStyle = "dropdowncell";
-    public static String rowStyle = "TableRow";
+    public static String widgetStyle = "TreeWidget";
+    public static String cellStyle = "TreeCell";
+    public static String rowStyle = "TreeRow";
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
-    public static String tableStyle = "Table";
+    public static String tableStyle = "Tree";
     public static String selectedStyle = "Selected";
     public static String navLinks = "NavLinks";
     public static String disabledStyle = "Disabled";
@@ -120,13 +140,13 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     private VerticalPanel vp = new VerticalPanel(); 
     public String width;
     public int height;
-    public TableWidget controller = null;
+    public TreeWidget controller = null;
     public HTML prevNav;
     public HTML nextNav;
     public VerticalScroll showScroll;
 
     
-    public TableView(TableWidget controller, VerticalScroll showScroll) {
+    public TreeView(TreeWidget controller, VerticalScroll showScroll) {
         this.controller = controller;
         this.showScroll = showScroll;
         initWidget(vp);
@@ -136,22 +156,21 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             titlePanel.addStyleName("TitlePanel");
         }
         if(controller.showHeader){
-            header = GWT.create(TableHeaderMenuBar.class);
-            header.init(controller);
+            header = new TreeHeader(controller);
             headerView.add(header);
         }
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
-        cellView.addScrollHandler(this);
+        cellView.addScrollListener(this);
         AbsolutePanel tspacer = new AbsolutePanel();
         tspacer.setStyleName("TableSpacer");
         if(controller.title != null && !controller.title.equals("")){
-            vp.add(titlePanel);
+        	vp.add(titlePanel);
             vp.setCellWidth(titlePanel, "100%");
         }
         if(controller.showRows) {
-            if(header != null)
-                ft.setWidget(0,1,headerView);
+        	if(header != null)
+        		ft.setWidget(0,1,headerView);
             ft.setWidget(1,0,rows);
             ft.getFlexCellFormatter().setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
             ft.setWidget(1,1,cellView);
@@ -161,8 +180,8 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             if(headers != null)
                 ft.getFlexCellFormatter().addStyleName(0,2, "Header");
         }else{
-            if(header != null){
-                ft.setWidget(0,0,headerView);
+        	if(header != null){
+        		ft.setWidget(0,0,headerView);
                 ft.setWidget(1,0,cellView);
                 if(showScroll != VerticalScroll.NEVER){
                     ft.setWidget(1,1,scrollBar);
@@ -186,19 +205,19 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         ft.setCellPadding(0);
         ft.setCellSpacing(0);
         table.setCellSpacing(0);
-        table.setCellPadding(0);
         table.addStyleName(tableStyle);
+        DOM.setStyleAttribute(table.getElement(), "background", "white");
         cellView.setWidget(table);
         ft.setCellSpacing(0);
         scrollBar.setWidth("18px");
-        scrollBar.addScrollHandler(this);
+        scrollBar.addScrollListener(this);
         AbsolutePanel ap = new AbsolutePanel();
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");
         if(showScroll == VerticalScroll.NEEDED)
             DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
         scrollBar.setWidget(ap);
-        cellView.addMouseWheelHandler(this);
+        cellView.addMouseWheelListener(this);
         table.addClickHandler(controller);
         scrollBar.setAlwaysShowScrollBars(true);
         DeferredCommand.addCommand(new Command() {
@@ -219,7 +238,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         }
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
-        headerView.setHeight("20px");
+        headerView.setHeight("18px");
 
     }
 
@@ -256,11 +275,11 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
 
         prevNav = new HTML("");
         prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickHandler(controller);
+        prevNav.addClickListener(controller.mouseHandler);
         
         nextNav = new HTML("");
         nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickHandler(controller);
+        nextNav.addClickListener(controller.mouseHandler);
         
         leftButtonPanel.add(prevNav);
         rightButtonPanel.add(nextNav);
@@ -271,7 +290,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             leftButtonPanel.removeStyleName("disabled");
         }
         else{          
-            leftButtonPanel.setStyleName("disabled");
+        	leftButtonPanel.setStyleName("disabled");
         }
         if(showIndex){
             for (int i = 1; i <= pages; i++) {
@@ -282,7 +301,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                                    + "'>"
                                    + i
                                    + "</a>");
-                    nav.addClickHandler(controller);
+                    nav.addClickListener(controller.mouseHandler);
                 } else {
                     nav = new HTML("" + i);
                     nav.setStyleName("current");
@@ -298,14 +317,29 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
 
     public void setScrollPosition(int scrollPos) {
         scrollBar.setScrollPosition(scrollPos);
-        onScroll(null);
+        onScroll(scrollBar,0,scrollPos);
+    }
+    
+    public void onScroll(Widget sender, int scrollLeft, final int scrollTop) {
+        if(sender == scrollBar ) {
+            if(top != scrollTop){
+                controller.renderer.scrollLoad(scrollTop);
+                top = scrollTop;
+            }
+        }
+        if(sender == cellView){
+            if(left != scrollLeft){
+                headerView.setWidgetPosition(header, -scrollLeft, 0);
+                left = scrollLeft;
+            }
+        }
     }
     
     public void setScrollHeight(int scrollHeight) {
         try {
             scrollBar.getWidget().setHeight(scrollHeight+"px");
             if(showScroll == showScroll.NEEDED){
-                if(scrollHeight > (this.height+1) && controller.numRows() > controller.maxRows){
+                if(scrollHeight > (this.height+1)){
                     DOM.setStyleAttribute(scrollBar.getElement(), "display", "block");
                     if(header != null)
                         ft.getFlexCellFormatter().addStyleName(0, 1, "Header");
@@ -320,30 +354,14 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         }
     }
 
-	public void onScroll(ScrollEvent event) {
-        if(event == null || event.getSource() == scrollBar ) {
-            if(top != scrollBar.getScrollPosition()){
-                controller.renderer.scrollLoad(scrollBar.getScrollPosition());
-                top = scrollBar.getScrollPosition();
-            }
-        }
-        if(event.getSource() == cellView){
-            if(left != cellView.getHorizontalScrollPosition()){
-                headerView.setWidgetPosition(header, -cellView.getHorizontalScrollPosition(), 0);
-                left = cellView.getHorizontalScrollPosition();
-            }
-        }		
-	}
-
-	public void onMouseWheel(MouseWheelEvent event) {
+    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
         int pos = scrollBar.getScrollPosition();
-        int delta = event.getDeltaY();
+        int delta = velocity.getDeltaY();
         if(delta < 0 && delta > - 18)
             delta = -18;
         if(delta > 0 && delta < 18)
             delta = 18;
         scrollBar.setScrollPosition(pos + delta);
-		
-	}
+    }
     
 }

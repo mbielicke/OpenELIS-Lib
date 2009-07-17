@@ -23,23 +23,16 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite;
+package org.openelis.gwt.widget.tree.rewrite;
 
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.screen.ScreenMenuItem;
 
-public interface TableColumnInt {
+public interface TreeColumnInt {
     
     public void  setHeader(String header);
-    
-    public void setHeaderMenu(ScreenMenuItem menu);
-    
-    public ScreenMenuItem getHeaderMenu();
     
     public String getHeader();
     
@@ -51,9 +44,9 @@ public interface TableColumnInt {
     
     public boolean getFilterable();
     
-    public void setColumnWidget(Widget widget);
+    public void setColumnWidget(Widget widget, String leafType);
     
-    public Widget getColumnWidget();
+    public Widget getColumnWidget(String leafType);
         
     public void setPreferredWidth(int width);
     
@@ -75,7 +68,7 @@ public interface TableColumnInt {
     
     public HasHorizontalAlignment.HorizontalAlignmentConstant getAlign();
     
-    public Widget getWidgetInstance();
+    public Widget getWidgetInstance(String leafType);
     
     public void loadWidget(Widget widget, FieldType object);
     
@@ -85,24 +78,14 @@ public interface TableColumnInt {
     
     public void setWidgetEditor(Widget widget);
     
-    public void setTableWidget(TableWidget controller);
+    public void setTreeWidget(TreeWidget controller);
     
-    public TableWidget getTableWidget();
+    public TreeWidget getTreeWidget();
     
     public void enable(boolean enable);
-    
-    public Filter[] getFilter();
-    
-    public void setFilter(Filter[] filter);
-    
-    public void applyFilter();
     
     public void setKey(String key);
     
     public String getKey();
-    
-    public boolean queryable();
-     
-    public void setQuerayable(boolean queryable);
     
 }

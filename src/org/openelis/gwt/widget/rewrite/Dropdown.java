@@ -79,7 +79,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
-        popup.addPopupListener(this);
+        popup.addCloseHandler(this);
         icon.addClickHandler(listener);
         textbox.addKeyUpHandler(listener);
         textbox.setReadOnly(!enabled);

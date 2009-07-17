@@ -43,6 +43,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -75,8 +76,8 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
         textbox.addBlurHandler(this);
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
-        popup.addPopupListener(this);
-        textbox.addKeyboardListener(listener);
+        popup.addCloseHandler(this);
+        textbox.addKeyUpHandler(listener);
         textbox.setReadOnly(!enabled);
         
         this.isDropdown = true;
@@ -203,9 +204,9 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
 	public void setQueryMode(boolean query) {
 		field.setQueryMode(query);	
 		if(query)
-			textbox.removeKeyboardListener(listener);
+			textbox.unsinkEvents(Event.ONKEYUP);
 		else
-			textbox.addKeyboardListener(listener);
+			textbox.sinkEvents(Event.ONKEYUP);
 			
 	}
 	

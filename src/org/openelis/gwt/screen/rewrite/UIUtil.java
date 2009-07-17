@@ -43,7 +43,7 @@ import org.openelis.gwt.widget.rewrite.TextArea;
 import org.openelis.gwt.widget.richtext.RichTextWidget;
 import org.openelis.gwt.widget.table.rewrite.TableColumn;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
-import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
+import org.openelis.gwt.widget.table.rewrite.TableView.VerticalScroll;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;

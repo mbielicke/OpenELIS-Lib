@@ -1,7 +1,4 @@
-package org.openelis.gwt.widget.table.rewrite;
-
-
-import org.openelis.gwt.widget.HasField;
+package org.openelis.gwt.widget.tree.rewrite;
 
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -21,24 +18,30 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TableRow extends Widget implements HasAllMouseHandlers {
+public class TreeRow extends Widget implements HasAllMouseHandlers {
     
     public int index;
     public int modelIndex;
-    public TableDataRow row;
+    public TreeDataItem item;
     
     public int dragIndex;
     public int dragModelIndex;
-    public TableDataRow dragRow;
+    public TreeDataItem dragItem;
     
-    public TableRow() {
+    public TreeRow() {
         
     }
     
-    public TableRow(Element elem) {
+    public TreeRow(Element elem) {
         setElement(elem);
         sinkEvents(Event.MOUSEEVENTS);
         onAttach();
+    }
+    
+    public void setDragValues() {
+        dragIndex = index;
+        dragModelIndex = modelIndex;
+        dragItem = (TreeDataItem)item.clone();
     }
     
 	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
@@ -65,9 +68,4 @@ public class TableRow extends Widget implements HasAllMouseHandlers {
 		return addDomHandler(handler,MouseWheelEvent.getType());
 	}
     
-    public void setDragValues() {
-        dragIndex = index;
-        dragModelIndex = modelIndex;
-        dragRow = (TableDataRow)row.clone();
-    }
 }

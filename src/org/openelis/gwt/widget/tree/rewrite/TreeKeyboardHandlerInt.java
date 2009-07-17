@@ -23,24 +23,11 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite.event;
+package org.openelis.gwt.widget.tree.rewrite;
 
-public interface TableModelListener {
-    
-    public void cellUpdated(SourcesTableModelEvents sender, int row , int cell);
-    
-    public void rowUpdated(SourcesTableModelEvents sender,  int row);
-    
-    public void rowDeleted(SourcesTableModelEvents sender,  int row);
-    
-    public void rowAdded(SourcesTableModelEvents sender, int rows);
-    
-    public void dataChanged(SourcesTableModelEvents sender);
-    
-    public void rowSelected(SourcesTableModelEvents sender, int row);
-    
-    public void rowUnselected(SourcesTableModelEvents sender, int row);
-    
-    public void unload(SourcesTableModelEvents sender);
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+
+public interface TreeKeyboardHandlerInt extends KeyDownHandler, KeyUpHandler{
 
 }

@@ -23,12 +23,23 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite.event;
+package org.openelis.gwt.widget.tree.rewrite;
 
-public interface SourcesTableModelEvents {
-    
-    public void addTableModelListener(TableModelListener listener);
-    
-    public void removeTableModelListener(TableModelListener listener);
+import com.google.gwt.user.client.ui.Widget;
 
+public interface TreeViewInt {
+    
+    public enum VerticalScroll {NEVER,ALWAYS,NEEDED};
+
+    public void setHeight(int height);
+    
+    public void setWidth(String width);
+    
+    public void setCell(Widget widget, int row, int col);
+    
+    public void setTitle(String title);
+    
+    public void setScrollHeight(int height);
+    
+    public void setScrollPosition(int pos);
 }

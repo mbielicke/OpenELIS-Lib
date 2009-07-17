@@ -35,22 +35,17 @@ import org.openelis.gwt.widget.table.rewrite.TableKeyboardHandlerInt;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener {
-    
-    //public HorizontalPanel mainHP = new HorizontalPanel();
-
-   // public TextBox textBox = new TextBox();
-
-    //public FocusPanel focusPanel = new FocusPanel();
+public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, CloseHandler<PopupPanel> {
     
     public String textBoxDefault = "";
     
@@ -95,7 +90,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     	int row = cell.getRowIndex();
     	int col = cell.getCellIndex();
-        if(!canSelect(modelIndexList[row]))
+    	BeforeSelectionEvent<Integer> be = BeforeSelectionEvent.fire(this, modelIndexList[row]); 
+        if(be != null && be.isCanceled())
             return;
         if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
             unselect(-1);
@@ -105,6 +101,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }else {
             activeRow = row;
             selectRow(modelIndexList[row]);
+            SelectionEvent.fire(this, modelIndexList[row]);
         }
         if(!multiSelect || (!ctrlKey && multiSelect))
             complete();
@@ -138,31 +135,14 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         textValue = getTextBoxDisplay();
 
         textbox.setText(textValue.trim());
-       
-
-        /**
-         * This was commented out to fix a problem with IE.  
-         * If you need this back than try commenting out complete() in onLostFocus
-         * and restest.
-         */
-        //textBox.setFocus(true);
         
         hideTable();
         
-        /**
-        if (changeListeners != null){
-            if(!textBoxDefault.equals(textValue)){
-                textBoxDefault = textValue;
-                changeListeners.fireChange(this);
-            }
-        }
-        **/
     }
 
-    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-        if(multiSelect && autoClosed){
-            complete();
-        }
+    
+    public void onClose(PopupPanel sender, boolean autoClosed) {
+
     }
     
     public String getTextBoxDisplay(){
@@ -226,42 +206,6 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public void setFocus(boolean focus) {
         textbox.setFocus(focus);
-    }
-    
-
-
-    public void addFocusListener(FocusListener listener) {
-        textbox.addFocusListener(listener);
-    }
-
-    public void removeFocusListener(FocusListener listener) {
-        textbox.removeFocusListener(listener);
-
-    }
-
-    public int getTabIndex() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public void setAccessKey(char key) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void setTabIndex(int index) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void addKeyboardListener(KeyboardListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void removeKeyboardListener(KeyboardListener listener) {
-        // TODO Auto-generated method stub
-        
     }
     
     public void setWidth(String width) {
@@ -336,6 +280,13 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             ctrlKey = false;
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
             shiftKey = false;
+	}
+
+	public void onClose(CloseEvent<PopupPanel> event) {
+        if(multiSelect && event.isAutoClosed()){
+            complete();
+        }
+		
 	}
 	
 }

@@ -3,6 +3,7 @@ package org.openelis.gwt.widget.table.rewrite.event;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class TableEvent extends GwtEvent<TableHandler>{
+	
 
 	@Override
 	protected void dispatch(TableHandler handler) {

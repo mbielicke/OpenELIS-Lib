@@ -23,22 +23,13 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite;
+package org.openelis.gwt.widget.tree.rewrite;
 
-import java.util.ArrayList;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.MouseListener;
 
-public interface TableRendererInt {
-    
-    public void createRow(int i);
-    
-    public void load(int pos);
-    
-    public void scrollLoad(int scrollPos);
-    
-    public void setCellDisplay(int row, int col);
-    
-    public void setCellEditor(int row, int col);
-    
-    public ArrayList<TableRow> getRows();
+public interface TreeMouseHandlerInt extends ClickListener, MouseListener, MouseOutHandler, MouseOverHandler{
 
 }

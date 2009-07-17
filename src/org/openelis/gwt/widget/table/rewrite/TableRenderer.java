@@ -219,7 +219,7 @@ public class TableRenderer  {
     public void stopEditing() {
         if(controller.editingCell != null){
         	((Focusable)controller.editingCell).setFocus(false);
-        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
+        	controller.setCell(controller.activeRow, controller.activeCell, ((HasValue)controller.editingCell).getValue());
         	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;

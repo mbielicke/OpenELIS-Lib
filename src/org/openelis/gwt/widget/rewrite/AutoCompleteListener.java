@@ -25,15 +25,15 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class AutoCompleteListener implements
-                                 ClickListener,
-                                 MouseListener,
-                                 KeyboardListener {
+                                 ClickHandler,
+                                 KeyUpHandler {
     
     private AutoComplete widget;
    
@@ -42,61 +42,26 @@ public class AutoCompleteListener implements
         this.widget = widget;
     }
 
-    public void onClick(Widget sender) {
+    public void onClick(ClickEvent event) {
 
     }
 
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseLeave(Widget sender) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+    public void onKeyUp(KeyUpEvent event) {
         if(widget.queryMode)
             return;
         if (!widget.textbox.isReadOnly()) {
-            if (keyCode == KEY_DOWN || keyCode == KEY_UP ||  keyCode == KEY_TAB 
-                    || keyCode == KEY_LEFT || keyCode == KEY_RIGHT || keyCode == KEY_ALT || 
-                    keyCode == KEY_CTRL || keyCode == KEY_SHIFT || keyCode == KEY_ESCAPE)
+            if (event.getNativeKeyCode() == KeyboardHandler.KEY_DOWN || event.getNativeKeyCode() == KeyboardHandler.KEY_UP ||  event.getNativeKeyCode() == KeyboardHandler.KEY_TAB 
+                    || event.getNativeKeyCode() == KeyboardHandler.KEY_LEFT || event.getNativeKeyCode() == KeyboardHandler.KEY_RIGHT || event.getNativeKeyCode() == KeyboardHandler.KEY_ALT || 
+                    event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL || event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT || event.getNativeKeyCode() == KeyboardHandler.KEY_ESCAPE)
                 return;
-            if(keyCode == KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
+            if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
                 if(widget.activeRow < 0)
                     widget.showTable(0);
                 else
                     widget.showTable(widget.modelIndexList[widget.activeRow]);
                 return;
             }
-            if(keyCode == KEY_ENTER && widget.itemSelected){
+            if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && widget.itemSelected){
                 widget.itemSelected = false;
                 return;
             }

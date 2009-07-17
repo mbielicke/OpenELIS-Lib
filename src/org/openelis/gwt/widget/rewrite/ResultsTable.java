@@ -1,16 +1,6 @@
 package org.openelis.gwt.widget.rewrite;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.rewrite.Query;
 import org.openelis.gwt.event.ActionEvent;
@@ -18,15 +8,22 @@ import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.screen.rewrite.Screen;
 import org.openelis.gwt.widget.ButtonPanel;
-import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
-import org.openelis.gwt.widget.table.rewrite.TableManager;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedHandler;
 
-import java.util.ArrayList;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, TableManager{
+public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, BeforeSelectionHandler<Integer>, BeforeCellEditedHandler {
     
     public TableWidget table;
     
@@ -114,9 +111,9 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
     
     public void setTable(TableWidget table) {
         this.table = table;
-        if(table.getManager() == null)
-            table.setManager(this);
         tablePanel.add(table);
+        table.addBeforeSelectionHandler(this);
+        table.addBeforeCellEditedHandler(this);
     }
 
     public void setButtonGroup(ButtonGroup bg) {
@@ -143,34 +140,18 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
             }
         }
     }
-    
-    public boolean canAdd(TableWidget widget, TableDataRow set, int row) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canAutoAdd(TableWidget widget, TableDataRow addRow) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canDelete(TableWidget widget, TableDataRow set, int row) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canEdit(TableWidget widget, TableDataRow set, int row, int col) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canSelect(TableWidget widget, TableDataRow set, int row) {
-        ActionEvent.fire(this,Action.ROW_SELECTED,new Integer(row));
-        return false;
-    }
 
 	public HandlerRegistration addActionHandler(ActionHandler<Action> handler) {
 		return addHandler(handler,ActionEvent.getType());
+	}
+
+	public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+		ActionEvent.fire(this,Action.ROW_SELECTED,event.getItem());
+		event.cancel();
+	}
+
+	public void onBeforeCellEdited(BeforeCellEditedEvent event) {
+		event.cancel();
 	}
 
 }

@@ -23,20 +23,7 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.table.rewrite;
-
-import org.openelis.gwt.common.rewrite.DataFilterer;
-import org.openelis.gwt.common.rewrite.Filter;
-import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.CalendarLookUp;
-import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.rewrite.CheckBox;
-import org.openelis.gwt.widget.MenuLabel;
-import org.openelis.gwt.widget.rewrite.AutoComplete;
-import org.openelis.gwt.widget.rewrite.Dropdown;
-import org.openelis.gwt.widget.rewrite.DropdownWidget;
-import org.openelis.gwt.widget.rewrite.Field;
+package org.openelis.gwt.widget.tree.rewrite;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
@@ -44,39 +31,52 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
-public class TableColumn {
+import org.openelis.gwt.common.DataFilterer;
+import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.common.data.Field;
+import org.openelis.gwt.common.data.FieldType;
+import org.openelis.gwt.screen.rewrite.UIUtil;
+import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.rewrite.CheckBox;
+import org.openelis.gwt.widget.rewrite.DropdownWidget;
+import org.openelis.gwt.widget.table.TableCellWidget;
+import org.openelis.gwt.widget.table.rewrite.TableDataCell;
+
+import java.util.HashMap;
+
+public class TreeColumn {
 
     public String header;
-    public ScreenMenuItem headerMenu;
     public boolean sortable;
     public boolean filterable;
-    public boolean queryable;
-    public Widget colWidget;
+    public HashMap<String,TableCellWidget> cellMap = new HashMap<String,TableCellWidget>();
     public int preferredWidth;
     public int currentWidth;
     public int minWidth;
     public boolean fixedWidth;
     public HasHorizontalAlignment.HorizontalAlignmentConstant alignment = HasHorizontalAlignment.ALIGN_LEFT;
-    public TableWidget controller;
+    public TreeWidget controller;
     public DataFilterer dataFilterer = new DataFilterer();
     public int columnIndex;
     public Filter[] filters;
     public String key;
-    public boolean filterDisplayed = false;
+    public Widget colWidget;
     public String query;
     protected PopupPanel pop;
+    protected Field field;
     
     
     public Widget getDisplayWidget(TableDataCell cell) {
@@ -331,7 +331,7 @@ public class TableColumn {
     }
 
     public void setColumnWidget(Widget widget) {
-        colWidget = widget;
+       colWidget = widget;
     }
 
     public void setCurrentWidth(int width) {
@@ -362,63 +362,38 @@ public class TableColumn {
         this.sortable = sortable;
     }
     
-    public void setTableWidget(TableWidget controller){
+    public void setTreeWidget(TreeWidget controller){
         this.controller = controller;
     }
     
-    public TableWidget getTableWidget() {
+    public TreeWidget getTreeWidget() {
         return controller;
     }
     
     public Filter[] getFilter() {
-        Filter[] filter = dataFilterer.getFilterValues(controller.getData(),controller.columns.indexOf(this));
-        if (filters != null) {
-            for (int j = 0; j < filter.length; j++) {
-                for (int k = 0; k < filters.length; k++) {
-                    if (filter[j].obj.equals(filters[k].obj)) {
-                        filter[j].filtered = filters[k].filtered;
-                        k = filters.length;
-                    }
-                }
-            }
-        }
-        return filter;
+        return null;
     }
     
     public void setFilter(Filter[] filter) {
-        filters = filter;
+        
     }
     
     public void applyFilter() {
-        dataFilterer.applyFilter(controller.getData(), filters, controller.columns.indexOf(this));
+        
     }
-    
+
     public void applyQueryFilter() {
-        dataFilterer.applyQueryFilter(controller.getData(),query,controller.columns.indexOf(this));
-    }
-    
-    public void setHeaderMenu(ScreenMenuItem menu) {
-        this.headerMenu = menu;
-    }
-
-    public ScreenMenuItem getHeaderMenu() {
-        return headerMenu;
-    }
-
-    public boolean queryable() {
-        return queryable;
-    }
-
-    public void setQuerayable(boolean queryable) {
-        this.queryable = queryable;
-    }
-    
-    public void setKey(String key) {
-    	this.key = key;
+       
     }
     
     public String getKey() {
-    	return key;
+        return key;
     }
+
+    public void setKey(String key) {
+        this.key = key;
+        
+    }
+
     
 }

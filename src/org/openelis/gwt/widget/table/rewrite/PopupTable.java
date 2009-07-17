@@ -27,18 +27,20 @@ package org.openelis.gwt.widget.table.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.widget.table.rewrite.TableViewInt.VerticalScroll;
+import org.openelis.gwt.widget.table.rewrite.TableView.VerticalScroll;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.HasCloseHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SourcesPopupEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class PopupTable extends TableWidget implements PopupListener, SourcesPopupEvents {
+public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> , HasCloseHandlers<PopupPanel> {
     
     
     public class DropPopup extends PopupPanel {
@@ -92,7 +94,7 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
         setWidget(view);
         popup.addStyleName("AutoCompletePopup");
         popup.setWidget(view);
-        popup.addPopupListener(this);
+        popup.addCloseHandler(this);
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
@@ -157,18 +159,13 @@ public class PopupTable extends TableWidget implements PopupListener, SourcesPop
         popup.hide();
     }
 
-    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-            
-    }
+	public void onClose(CloseEvent<PopupPanel> event) {
+		
+		
+	}
 
-    public void addPopupListener(PopupListener listener) {
-        popup.addPopupListener(listener);
-        
-    }
-
-    public void removePopupListener(PopupListener listener) {
-        popup.removePopupListener(listener);
-        
-    }
+	public HandlerRegistration addCloseHandler(CloseHandler<PopupPanel> handler) {
+		return addHandler(handler,CloseEvent.getType());
+	}
     
 }

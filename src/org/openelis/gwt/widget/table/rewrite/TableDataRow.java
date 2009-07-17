@@ -49,7 +49,7 @@ public class TableDataRow {
     public Object clone() {
         TableDataRow clone = new TableDataRow(cells.size());
         for(int i = 0; i < cells.size(); i++)
-            clone.cells.get(i).value = cells.get(i).value;
+            clone.cells.get(i).setValue(cells.get(i).getValue());
         return clone;
     }
     
@@ -60,7 +60,7 @@ public class TableDataRow {
     public ArrayList<Object> getCells() {
     	ArrayList<Object> list = new ArrayList<Object>();
     	for(TableDataCell tdc : cells) {
-    		list.add(tdc.value);
+    		list.add(tdc.getValue());
     	}
     	return list;
     }

@@ -2,7 +2,7 @@ package org.openelis.gwt.widget.table.rewrite;
 
 import java.util.ArrayList;
 
-public class TableDataCell {
+public class TableDataCell  {
 
 	public Object value;
 	public ArrayList<String> errors;
@@ -28,4 +28,16 @@ public class TableDataCell {
 	public ArrayList<String> getErrors() {
 		return errors;
 	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+		
+	}
+
+
+
 }
