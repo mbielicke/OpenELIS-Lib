@@ -130,10 +130,13 @@ public class TableCalendar extends TableCellInputWidget {
     public void saveValue() {
         if(!enabled)
             return;
-        if(field instanceof QueryDateField)
+        if(field instanceof QueryDateField) {
             field.setValue(editor.getText());
-        else
-            field.setValue(editor.getValue().toString());
+        } else if(editor.getValue()!=null) {
+                field.setValue(DatetimeRPC.getInstance(begin,
+                                                       end,
+                                                       editor.getValue()));            
+        }
         super.saveValue();
     }
 
