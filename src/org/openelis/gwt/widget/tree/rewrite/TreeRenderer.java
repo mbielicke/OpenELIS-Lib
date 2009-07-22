@@ -116,6 +116,7 @@ public class TreeRenderer {
         	Widget wid = columns.get(i).getDisplayWidget(row.cells.get(i));
         	if(i == 0){
         		ItemGrid ig =  createItem(row);
+        		ig.setWidth(columns.get(i).getCurrentWidth());
         		ig.setWidget(wid);
         		controller.view.table.setWidget(index, i, ig);
         	}else{
@@ -239,12 +240,14 @@ public class TreeRenderer {
         public int clickCell;
         public int rowIndex;
         public int widgetIndex;
+        public int width;
         
         public ItemGrid(int rows, int cols) {
             super(rows,cols);
             setCellPadding(0);
             setCellSpacing(0);
             addClickHandler(this);
+            DOM.setStyleAttribute(getElement(), "overflow", "hidden");
         }
 
         public void onClick(ClickEvent event) {
@@ -254,7 +257,14 @@ public class TreeRenderer {
         }
         
         public void setWidget(Widget wid){
+        	int widAdj = width - (widgetIndex)*18;
+        	wid.setWidth(widAdj+"px");
         	setWidget(0, widgetIndex, wid);
+        }
+        
+        public void setWidth(int width) {
+        	this.width = width;
+        	setWidth(width+"px");
         }
         
     }

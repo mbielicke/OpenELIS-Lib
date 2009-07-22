@@ -28,7 +28,7 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.openelis.gwt.common.CalendarForm;
+import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.screen.rewrite.Screen;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.services.CalendarServiceInt;
@@ -69,19 +69,23 @@ import com.google.gwt.user.client.ui.HasValue;
     protected ArrayList<Label> months = new ArrayList<Label>(12);
     protected ArrayList<Label> years = new ArrayList<Label>(10);
     
-    protected CalendarForm form;
+    protected CalendarRPC form;
     
     public CalendarWidget(Date date) {
     	super();
         String base = GWT.getModuleBaseURL();
         base += "CalendarServlet";        
         target.setServiceEntryPoint(base);
-        form = new CalendarForm();
+        form = new CalendarRPC();
         form.date = date;
-        screenService.getScreen(form, new AsyncCallback<CalendarForm>() {
-        	public void onSuccess(CalendarForm result) {
+        screenService.getScreen(form, new AsyncCallback<CalendarRPC>() {
+        	public void onSuccess(CalendarRPC result) {
         		form = result;
-        		setDef(UIUtil.createWidgets(form.xml));
+        		try {
+        			setDef(UIUtil.createWidgets(form.xml));
+        		}catch(Exception e) {
+        			
+        		}
         	}
         	public void onFailure(Throwable caught) {
         		Window.alert(caught.getMessage());
@@ -132,10 +136,14 @@ import com.google.gwt.user.client.ui.HasValue;
                 form.month = 11;
                 form.year--;
             }
-            screenService.getMonth(form, new AsyncCallback<CalendarForm>() {
-                public void onSuccess(CalendarForm result) {
+            screenService.getMonth(form, new AsyncCallback<CalendarRPC>() {
+                public void onSuccess(CalendarRPC result) {
                 	form = result;
-            		setDef(UIUtil.createWidgets(form.xml));
+                	try {
+                		setDef(UIUtil.createWidgets(form.xml));
+                	}catch(Exception e) {
+                		
+                	}
                 }
                 public void onFailure(Throwable caught){
                     Window.alert(caught.getMessage());
@@ -149,10 +157,14 @@ import com.google.gwt.user.client.ui.HasValue;
                 form.month = 0;
                 form.year++;
             }
-            screenService.getMonth(form, new AsyncCallback<CalendarForm>() {
-                public void onSuccess(CalendarForm result) {
+            screenService.getMonth(form, new AsyncCallback<CalendarRPC>() {
+                public void onSuccess(CalendarRPC result) {
                 	form = result;
-            		setDef(UIUtil.createWidgets(form.xml));
+                	try {
+                		setDef(UIUtil.createWidgets(form.xml));
+                	}catch(Exception e) {
+                		
+                	}
                 }
                 public void onFailure(Throwable caught){
                     
@@ -161,10 +173,14 @@ import com.google.gwt.user.client.ui.HasValue;
             return;
         }
         if(event.getSource() == monthSelect){
-            screenService.getMonthSelect(form, new AsyncCallback<CalendarForm>() {
-                public void onSuccess(CalendarForm result) {
+            screenService.getMonthSelect(form, new AsyncCallback<CalendarRPC>() {
+                public void onSuccess(CalendarRPC result) {
                 	form = result;
-            		setDef(UIUtil.createWidgets(form.xml));
+                	try {
+                		setDef(UIUtil.createWidgets(form.xml));
+                	}catch(Exception e) {
+                		
+                	}
                 }
                 public void onFailure(Throwable caught){
                     
@@ -174,10 +190,14 @@ import com.google.gwt.user.client.ui.HasValue;
         }
         if(event.getSource() == ok || 
            event.getSource() == cancel){
-            screenService.getMonth(form, new AsyncCallback<CalendarForm>() {
-                public void onSuccess(CalendarForm result) {
+            screenService.getMonth(form, new AsyncCallback<CalendarRPC>() {
+                public void onSuccess(CalendarRPC result) {
                 	form = result;
-            		setDef(UIUtil.createWidgets(form.xml));
+                	try {
+                		setDef(UIUtil.createWidgets(form.xml));
+                	}catch(Exception e) {
+                		
+                	}
                 }
                 public void onFailure(Throwable caught){
                     

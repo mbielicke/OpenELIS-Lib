@@ -39,9 +39,42 @@ import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.Field;
 import org.openelis.gwt.widget.table.rewrite.TableDataCell;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeAutoAddEvent;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeAutoAddHandler;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeRowAddedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeRowAddedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeRowDeletedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.CellEditedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.CellEditedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.HasBeforeAutoAddHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasBeforeCellEditedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasBeforeRowAddedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasCellEditedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasRowAddedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.RowAddedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.RowAddedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
+import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
 import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
 import org.openelis.gwt.widget.tree.rewrite.TreeViewInt.VerticalScroll;
+import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseEvent;
+import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseHandler;
+import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafOpenEvent;
+import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafOpenHandler;
+import org.openelis.gwt.widget.tree.rewrite.event.HasBeforeLeafCloseHandlers;
+import org.openelis.gwt.widget.tree.rewrite.event.HasBeforeLeafOpenHandlers;
+import org.openelis.gwt.widget.tree.rewrite.event.HasLeafClosedHandlers;
+import org.openelis.gwt.widget.tree.rewrite.event.HasLeafOpenedHandlers;
+import org.openelis.gwt.widget.tree.rewrite.event.LeafClosedEvent;
+import org.openelis.gwt.widget.tree.rewrite.event.LeafClosedHandler;
+import org.openelis.gwt.widget.tree.rewrite.event.LeafOpenedEvent;
+import org.openelis.gwt.widget.tree.rewrite.event.LeafOpenedHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -56,6 +89,13 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -66,7 +106,25 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
-public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler, ClickHandler, HasField, MouseOverHandler, MouseOutHandler {
+public class TreeWidget extends FocusPanel implements FocusHandler, 
+													  BlurHandler, 
+													  ClickHandler, 
+													  HasField, 
+													  MouseOverHandler, 
+													  MouseOutHandler,
+													  HasBeforeSelectionHandlers<Integer>,
+													  HasSelectionHandlers<Integer>,
+													  HasBeforeCellEditedHandlers,
+													  HasCellEditedHandlers, 
+													  HasBeforeRowAddedHandlers,
+													  HasRowAddedHandlers, 
+													  HasBeforeRowDeletedHandlers,
+													  HasRowDeletedHandlers,
+													  HasBeforeAutoAddHandlers,
+													  HasBeforeLeafOpenHandlers,
+													  HasBeforeLeafCloseHandlers,
+													  HasLeafOpenedHandlers,
+													  HasLeafClosedHandlers {
 
     public HashMap<String,ArrayList<TreeColumn>> columns;
     public ChangeListenerCollection changeListeners;
@@ -121,6 +179,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
     public void init() {
         renderer = new TreeRenderer(this);
         keyboardHandler = new TreeKeyboardHandler(this);
+        mouseHandler = new TreeMouseHandler(this);
         view = new TreeView(this, showScroll);
         view.setWidth(width);
         view.setHeight((maxRows * cellHeight
@@ -196,6 +255,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
+    	BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, modelIndexList[row]);
+    	if(event != null && event.isCanceled())
+    		return;
         if(finishEditing()){
             if(numRows() >= maxRows){
                 view.scrollBar.scrollToBottom();
@@ -208,25 +270,21 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
             }
             view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
         }
-        if(canSelect(modelIndexList[row])){
-            focused = true;
-            if(activeRow != row){
-                if(activeRow > -1 && !ctrlKey){
-                    unselect(-1);
-                }
-                activeRow = row;
-                selectRow(modelIndexList[row]);
+        if(activeRow != row){
+            if(activeRow > -1 && !ctrlKey){
+                unselect(-1);
             }
-            if(canEdit(modelIndexList[row],col)){
-                activeCell = col;
-                renderer.setCellEditor(row, col);
-                unsinkEvents(Event.ONKEYPRESS);
-            }else{
-                activeCell = -1;
-                sinkEvents(Event.ONKEYPRESS);
-            }
+            activeRow = row;
+            selectRow(modelIndexList[row]);
+        }
+        BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        if(bce != null && bce.isCancelled()){
+        	 activeCell = -1;
+             sinkEvents(Event.ONKEYPRESS);
         }else{
-            return;
+        	activeCell = col;
+        	renderer.setCellEditor(row, col);
+        	unsinkEvents(Event.ONKEYPRESS);
         }
     }
 
@@ -286,78 +344,23 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
     }
     
     public void addRow(TreeDataItem row) {
+    	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
+    	if(event != null && event.isCancelled())
+    		return;
         data.add(row);
+        RowAddedEvent.fire(this, data.size()-1, row);
+       	renderer.dataChanged(true);
     }
 
     public void addRow(int index, TreeDataItem row) {
+    	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
+    	if(event != null && event.isCancelled())
+    		return;
         data.add(index,row);
-    }
-
-    public boolean canDelete(int row) {
-        TreeDataItem item = rows.get(row);
-        if(manager != null)
-            return manager.canDelete(controller,item, row);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-
-    public boolean canEdit(int row, int col) {
-        TreeDataItem item = rows.get(row);
-        if(!item.enabled)
-            return false;
-        if(manager != null)
-            return manager.canEdit(controller, item, row, col);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-
-    public boolean canAdd(int row) {
-        if(!rows.get(row).enabled)
-            return false;
-        if(manager != null)
-            return manager.canAdd(controller,rows.get(row), row);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-
-    public boolean canSelect(int row) {
-        TreeDataItem item = rows.get(row);
-        if(!item.enabled)
-            return false;
-        if(manager != null)
-            return manager.canSelect(controller,item,row);
-        if(controller.enabled)
-            return true;
-        return false;
+        RowAddedEvent.fire(this, data.size()-1, row);
+       	renderer.dataChanged(true);
     }
     
-    public boolean canToggle(int row) {
-        if(rows.get(row).open)
-            return canClose(row);
-        return canOpen(row);
-    }
-    
-    public boolean canOpen(int row) {
-        if(manager != null)
-            return manager.canOpen(controller,rows.get(row),row);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-    
-    public boolean canClose(int row) {
-        if(manager != null)
-            return manager.canClose(controller,rows.get(row),row);
-        if(controller.enabled)
-            return true;
-        return false;
-    }
-    
-
-
     public void clear() {
         data.clear();
         rows.clear();
@@ -374,7 +377,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
 
 
     public void deleteRow(int row) {
-        if(selectedRows.contains(row)){
+    	BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
+    	if(event != null && event.isCancelled())
+    		return;
+    	if(selectedRows.contains(row)){
             unselectRow(row);
         }
         TreeDataItem item = rows.get(row);
@@ -385,7 +391,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
         }
         refresh();
         renderer.dataChanged(true);
-        //treeModelListeners.fireRowDeleted(this, row);
+        RowDeletedEvent.fire(this, row, item);
     }
     
     public void deleteRows(List<Integer> rowIndexes) {
@@ -478,6 +484,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
     }
 
     public void selectRow(int index){
+    	BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, index);
+    	if(event != null && event.isCanceled())
+    		return;
         if(index < numRows()){
            if(!multiSelect && selectedRows.size() > 0){
                rows.get(selectedRows.get(0)).selected = false;
@@ -488,7 +497,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
            rows.get(index).selected = true;
            selectedRows.add(index);
            renderer.rowSelected(index);
-           //treeModelListeners.fireRowSelected(this, index);
+           SelectionEvent.fire(this,index);
         }    
     }
 
@@ -543,12 +552,29 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
     }
     
     public void toggle(int row) {
+    	if(!rows.get(row).open) {
+    		BeforeLeafOpenEvent event = BeforeLeafOpenEvent.fire(this, row, rows.get(row));
+    		if(event != null && event.isCancelled())
+    			return;
+    		rows.get(row).open = true;
+    		refresh();
+    		LeafOpenedEvent.fire(this, row, rows.get(row));
+    	}else{
+    		BeforeLeafCloseEvent event = BeforeLeafCloseEvent.fire(this, row, rows.get(row));
+    		if(event != null && event.isCancelled())
+    			return;
+    		rows.get(row).close();
+    		refresh();
+    		LeafClosedEvent.fire(this, row, rows.get(row));
+    	}
+    	/*
         if(rows.get(row).lazy && !rows.get(row).loaded){
             //treeService.getChildNodes(this,row);
             return;
         }
         rows.get(row).toggle();
         refresh();
+        */
     }
     
     public int getSelectedRowIndex() {
@@ -605,8 +631,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
     }
     
     public TreeDataItem createTreeItem(String leafType) {
-        //return data.createTreeItem(leafType);
-    	return null;
+    	TreeDataItem td = new TreeDataItem(columns.get(leafType).size());
+    	td.leafType = leafType;
+    	return td;
     }
     
     public void setLeaves(HashMap<String,TreeDataItem> leaves){
@@ -692,6 +719,65 @@ public class TreeWidget extends FocusPanel implements FocusHandler, BlurHandler,
 	public void onMouseOut(MouseOutEvent event) {
 		// TODO Auto-generated method stub
 		
+	}
+	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
+		return addHandler(handler, CellEditedEvent.getType());
+	}
+	
+	public HandlerRegistration addRowAddedHandler(RowAddedHandler handler) {
+		return addHandler(handler, RowAddedEvent.getType());
+	}
+
+	public HandlerRegistration addRowDeletedHandler(RowDeletedHandler handler) {
+		return addHandler(handler, RowDeletedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeSelectionHandler(
+			BeforeSelectionHandler<Integer> handler) {
+		return addHandler(handler, BeforeSelectionEvent.getType());
+	}
+
+	public HandlerRegistration addSelectionHandler(
+			SelectionHandler<Integer> handler) {
+		return addHandler(handler, SelectionEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeCellEditedHandler(
+			BeforeCellEditedHandler handler) {
+		return addHandler(handler,BeforeCellEditedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeRowAddedHandler(
+			BeforeRowAddedHandler handler) {
+		return addHandler(handler, BeforeRowAddedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeRowDeletedHandler(
+			BeforeRowDeletedHandler handler) {
+		return addHandler(handler, BeforeRowDeletedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeAutoddHandler(
+			BeforeAutoAddHandler handler) {
+		return addHandler(handler, BeforeAutoAddEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeLeafOpenHandler(
+			BeforeLeafOpenHandler handler) {
+		return addHandler(handler, BeforeLeafOpenEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeLeafCloseHandler(
+			BeforeLeafCloseHandler handler) {
+		return addHandler(handler, BeforeLeafCloseEvent.getType());
+	}
+
+	public HandlerRegistration addLeafOpenedHandler(LeafOpenedHandler handler) {
+		return addHandler(handler,LeafOpenedEvent.getType());
+	}
+
+	public HandlerRegistration addLeafClosedHandler(LeafClosedHandler handler) {
+		return addHandler(handler,LeafClosedEvent.getType());
 	}
     
 }

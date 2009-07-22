@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.server;
 
-import org.openelis.gwt.common.CalendarForm;
+import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.util.Datetime;
@@ -49,7 +49,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         //appRoot = "/home/tschmidt/workspace/OpenELIS-KitchenSink/www/org.openelis.ks.KitchenSink/";
     }
     
-    public CalendarForm getMonth(CalendarForm form) throws RPCException {
+    public CalendarRPC getMonth(CalendarRPC form) throws RPCException {
         try {
             Calendar cal = Calendar.getInstance();
             if(form.date != null && !form.date.equals("")){
@@ -77,7 +77,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         
     }
 
-    public CalendarForm getMonthSelect(CalendarForm form) throws RPCException {
+    public CalendarRPC getMonthSelect(CalendarRPC form) throws RPCException {
         try {
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
@@ -98,7 +98,7 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         }
     }
 
-    public CalendarForm getScreen(CalendarForm rpc) throws RPCException {
+    public CalendarRPC getScreen(CalendarRPC rpc) throws RPCException {
         try {
             Calendar cal = Calendar.getInstance();
             if(rpc.date != null){

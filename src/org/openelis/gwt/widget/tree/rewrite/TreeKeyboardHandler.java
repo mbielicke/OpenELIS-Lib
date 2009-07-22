@@ -39,6 +39,7 @@ import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableLabel;
+import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedEvent;
 
 public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
     
@@ -192,7 +193,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
             } else {
                 int col = controller.activeCell + 1;
                 while (col < controller.columns.size() && (controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof Label ||
-                       (!controller.canEdit(controller.activeRow, col))))
+                       (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled())))
                     col++;
                 if(col == controller.columns.size()){
                     tabToNextRow();
@@ -228,7 +229,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
             } else {
                 int col = controller.activeCell - 1;
                 while (col > -1 && ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof Label) ||
-                                    (!controller.canEdit(controller.activeRow, col))))
+                                    (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled())))
                     col--;
                 if(col < 0){
                     tabToPrevRow();
@@ -278,7 +279,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         int row = findNextActive(controller.activeRow);
         int col = 0;
        
-        while ((controller.columns.get(controller.getRow(row).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEdit(row, col)))
+        while ((controller.columns.get(controller.getRow(row).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!BeforeCellEditedEvent.fire(controller, row, col, controller.getRow(row)).isCancelled()))
             col++;
         if(row < controller.view.table.getRowCount() - 1){
             final int fRow = row;
@@ -304,7 +305,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
     private void tabToPrevRow() {
         if(controller.activeRow == 0) {
                 int col = controller.getRow(controller.shownRows() -1).size() - 1;
-                while ((controller.columns.get(controller.getRow(0).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEdit(controller.activeRow,col)))
+                while ((controller.columns.get(controller.getRow(0).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled()))
                     col--;
                 final int fCol = col;
                 controller.view.scrollBar.setScrollPosition(controller.view.scrollBar.getScrollPosition()-18);
@@ -318,7 +319,7 @@ public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
         }else{
             final int row = findPrevActive(controller.activeRow);
             int col = controller.getRow(controller.shownRows() -1).size() - 1;
-            while ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEdit(row,col)))
+            while ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled()))
                 col--;
             final int fCol = col;
             DeferredCommand.addCommand(new Command() {

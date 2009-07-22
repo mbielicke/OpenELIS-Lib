@@ -25,11 +25,11 @@
 */
 package org.openelis.gwt.services;
 
+import java.util.Date;
+
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.RPCException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  * ScreenServiceInt is a GWT RemoteService interface for the Screen
@@ -39,15 +39,18 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * @author tschmidt
  *
  */
-@RemoteServiceRelativePath("OpenELISServlet")
 public interface ScreenServiceInt extends RemoteService {
 
-    public String getScreen() throws RPCException; 
-    
-    public <T extends RPC> T callScreen(String method, T rpc) throws Exception;
-    
+    public String            callString(String method) throws Exception;
+    public Integer           callInteger(String method) throws Exception;
+    public Boolean           callBoolean(String method) throws Exception;
+    public Date              callDate(String method) throws Exception;
+    public Double            callDouble(String method) throws Exception;
     public <T extends RPC> T call(String method, Integer param) throws Exception;
     public <T extends RPC> T call(String method, RPC param) throws Exception;
+    public <T extends RPC> T call(String method, Double param) throws Exception;
     public <T extends RPC> T call(String method, String param) throws Exception;
+    public <T extends RPC> T call(String method, Date param) throws Exception;
+
     
 }

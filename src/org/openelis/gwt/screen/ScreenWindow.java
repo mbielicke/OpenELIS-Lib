@@ -42,7 +42,9 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
@@ -161,6 +163,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     private AbsolutePanel modalGlass;
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
+    private HorizontalPanel titleButtonsContainer;
     
     public ScreenWindow(Object container, String key, String cat, String loadingText){
         this(container,key,cat,loadingText,false,true);
@@ -195,7 +198,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         
         HorizontalPanel hp = new HorizontalPanel();
         hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        HorizontalPanel titleButtonsContainer = new HorizontalPanel();
+        titleButtonsContainer = new HorizontalPanel();
         titleButtonsContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         
         hp.setWidth("100%");
@@ -314,6 +317,12 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
             RootPanel.get().removeStyleName("ScreenLoad");
             setStatus(Screen.consts.get("loadCompleteMessage"),"");
         }
+        DeferredCommand.addCommand(new Command() {
+        	public void execute() {
+        		if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
+        			body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
+        	}
+        });
     }
     
     public void setName(String name) {

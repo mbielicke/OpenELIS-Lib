@@ -10,8 +10,7 @@ import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenMenuItem;
 import org.openelis.gwt.screen.rewrite.Screen.State;
-import org.openelis.gwt.services.ScreenServiceInt;
-import org.openelis.gwt.services.ScreenServiceIntAsync;
+import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.EditBox;
@@ -44,8 +43,10 @@ import org.openelis.gwt.widget.richtext.RichTextWidget;
 import org.openelis.gwt.widget.table.rewrite.TableColumn;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
 import org.openelis.gwt.widget.table.rewrite.TableView.VerticalScroll;
+import org.openelis.gwt.widget.tree.rewrite.TreeColumn;
+import org.openelis.gwt.widget.tree.rewrite.TreeWidget;
+import org.openelis.gwt.widget.tree.rewrite.TreeView;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -55,8 +56,6 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.rpc.SyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -85,17 +84,17 @@ import com.google.gwt.xml.client.XMLParser;
 
 public class UIUtil {
 	 
-	 public static ScreenDef createWidgets(String xml) {
+	 public static ScreenDef createWidgets(String xml) throws Exception{
 		 ScreenDef def = new ScreenDef();
 		 def.xmlDef = xml;
 		 return UIUtil.createWidgets(def, false);
 	 }
 	 
-	 public static ScreenDef createWidgets(ScreenDef def) {
+	 public static ScreenDef createWidgets(ScreenDef def) throws Exception{
 		 return createWidgets(def,true);
 	 }
      
-    public static ScreenDef createWidgets(ScreenDef def, boolean call) {
+    public static ScreenDef createWidgets(ScreenDef def, boolean call) throws Exception{
     	String xmlDef = def.xmlDef;
     	if(call)
     		xmlDef = getScreen(def.loadURL);
@@ -120,20 +119,9 @@ public class UIUtil {
     
     static String xmlRet = null;
     
-    public static String getScreen(String loadURL) {
-        ScreenServiceIntAsync service = (ScreenServiceIntAsync)GWT.create(ScreenServiceInt.class);
-        ServiceDefTarget target = (ServiceDefTarget)service;
-        target.setServiceEntryPoint(GWT.getModuleBaseURL()+loadURL);
-        xmlRet = null;
-        com.google.gwt.http.client.Request req = service.getScreen(new SyncCallback<String>() {
-        	public void onSuccess(String result) {
-        		xmlRet = result;
-        	}
-        	public void onFailure(Throwable caught) {
-        		
-        	}
-        });
-        return xmlRet;
+    public static String getScreen(String loadURL) throws Exception{
+        ScreenService service = new ScreenService(loadURL);
+        return service.callString("getScreen");
     }
     
     public static Widget createWidget(Node node) {
@@ -1428,6 +1416,85 @@ public class UIUtil {
                 auto.textbox.addBlurHandler(focusHandler);
                 auto.textbox.addFocusHandler(focusHandler);
     			return auto;
+    		}
+    	});
+    	factoryMap.put("tree", new Factory<TreeWidget>() {
+    		public TreeWidget getNewInstance(Node node, ScreenDef def) {
+    			TreeWidget tree = new TreeWidget();
+    			if(node.getAttributes().getNamedItem("tab") != null) 
+    				tree.addTabHandler(new TabHandler(node,def));
+                if(node.getAttributes().getNamedItem("cellHeight") != null){
+                    tree.cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
+                }
+                
+                tree.setTreeWidth(node.getAttributes().getNamedItem("width").getNodeValue());
+                tree.maxRows = Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue());
+
+                if(node.getAttributes().getNamedItem("title") != null){
+                        tree.title =node.getAttributes().getNamedItem("title").getNodeValue();
+                }
+                if(node.getAttributes().getNamedItem("showRows") != null){
+                    if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
+                        tree.showRows = true;
+                }
+                if(node.getAttributes().getNamedItem("showScroll") != null){
+                	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
+                    tree.showScroll = TreeView.VerticalScroll.valueOf(showScroll);
+                }
+                if(node.getAttributes().getNamedItem("multiSelect") != null){
+                    if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
+                        tree.enableMultiSelect(true);
+                }
+                NodeList leafList = ((Element)node).getElementsByTagName("leaf");
+                HashMap<String, ArrayList<TreeColumn>> columns = new HashMap<String,ArrayList<TreeColumn>>(leafList.getLength());
+                for(int h = 0; h < leafList.getLength(); h++) {
+                	NodeList colList = ((Element)leafList.item(h)).getElementsByTagName("col");
+                	ArrayList<TreeColumn> cols = new ArrayList<TreeColumn>(colList.getLength());
+                	for(int i = 0; i < colList.getLength(); i++) {
+                		Node col = colList.item(i);
+                		TreeColumn column = new TreeColumn();
+                		if(col.getAttributes().getNamedItem("key") != null)
+                			column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
+                		if(col.getAttributes().getNamedItem("header") != null){
+                			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
+                			tree.showHeader = true;
+                		}
+                		if(col.getAttributes().getNamedItem("width") != null)
+                			column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
+                		if(col.getAttributes().getNamedItem("sort") != null)
+                			column.setSortable(Boolean.parseBoolean(col.getAttributes().getNamedItem("sort").getNodeValue()));
+                		if(col.getAttributes().getNamedItem("filter") != null)
+                			column.setFilterable(Boolean.parseBoolean(col.getAttributes().getNamedItem("filter").getNodeValue()));
+                		if(col.getAttributes().getNamedItem("align") != null){
+                			String align = col.getAttributes().getNamedItem("align").getNodeValue();
+                			if (align.equals("left"))
+                				column.setAlign(HasAlignment.ALIGN_LEFT);
+                			if (align.equals("center"))
+                				column.setAlign(HasAlignment.ALIGN_CENTER);
+                			if (align.equals("right"))
+                				column.setAlign(HasAlignment.ALIGN_RIGHT);
+                		}
+                		NodeList editor = col.getChildNodes();
+                		for(int j = 0; j < editor.getLength(); j++){
+                			if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                				Widget wid = createWidget(editor.item(j),def);
+                				if(wid instanceof HasBlurHandlers)
+                					((HasBlurHandlers)wid).addBlurHandler(tree);
+                				column.setColumnWidget(wid);
+                				break;
+                			}
+                		}
+                		column.controller = tree;
+                		cols.add(column);
+                	}
+                	columns.put(leafList.item(h).getAttributes().getNamedItem("key").getNodeValue(), cols);
+                }
+                tree.columns = columns;
+                tree.init();
+                setDefaults(node,tree);
+                tree.addBlurHandler(focusHandler);
+                tree.addFocusHandler(focusHandler);
+    			return tree;
     		}
     	});
     	factoryMap.put("appButton", new Factory<AppButton>() {

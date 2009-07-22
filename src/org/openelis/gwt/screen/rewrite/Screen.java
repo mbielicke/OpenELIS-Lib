@@ -39,7 +39,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         initWidget(panel);
     }
     
-    public Screen(String url) {
+    public Screen(String url) throws Exception {
     	initWidget(panel);
     	def = new ScreenDef();
     	def.loadURL = url;

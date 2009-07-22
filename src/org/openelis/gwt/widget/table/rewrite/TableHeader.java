@@ -25,6 +25,18 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.rewrite.Filter;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -36,18 +48,14 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.rewrite.Filter;
-
-import java.util.ArrayList;
-
-public class TableHeader extends FlexTable implements TableHeaderInt, TableListener, MouseListener{
+public class TableHeader extends FlexTable implements ClickHandler, 
+													  MouseDownHandler, 
+													  MouseMoveHandler,
+													  MouseUpHandler{
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
@@ -77,7 +85,9 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
                         super.onBrowserEvent(event);
                     }
                 };
-                bar.addMouseListener(this);
+                bar.addMouseUpHandler(this);
+                bar.addMouseDownHandler(this);
+                bar.addMouseMoveHandler(this);
                 HorizontalPanel hpBar = new HorizontalPanel();
                 AbsolutePanel ap1 = new AbsolutePanel();
                 ap1.addStyleName("HeaderBarPad");
@@ -122,7 +132,7 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
         }
         setStyleName(headerStyle);
         setHeight("18px");
-        addTableListener(this);
+        addClickHandler(this);
         sizeHeader();
     }
     
@@ -163,7 +173,9 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
         menu.show();
     }
 
-    public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
+    public void onClick(ClickEvent event) {
+    	int cell = getCellForEvent(event).getCellIndex();
+    	int row =  getCellForEvent(event).getRowIndex();
         if (columns.get(cell/2).getSortable() || columns.get(cell/2).getFilterable()) {
             Filter[] colFilters = null;
             if (controller.columns.get(cell/2).getFilterable())
@@ -175,8 +187,9 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
     /**
      * Catches mouses Events for resizing columns.
      */
-    public void onMouseDown(Widget sender, int x, int y) {
+    public void onMouseDown(MouseDownEvent event) {
         // TODO Auto-generated method stub
+    	Widget sender = (Widget)event.getSource();
         resizing = true;
         startx = sender.getAbsoluteLeft();
             for (int i = 0; i < getCellCount(0); i++) {
@@ -239,7 +252,9 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
                 return;
             }
             FocusPanel bar = new FocusPanel();
-            bar.addMouseListener(this);
+            bar.addMouseMoveHandler(this);
+            bar.addMouseUpHandler(this);
+            bar.addMouseDownHandler(this);
             bar.setHeight((controller.view.table.getOffsetHeight()+17)+"px");
             bar.setWidth("1px");
             DOM.setStyleAttribute(bar.getElement(), "background", "red");
@@ -253,34 +268,22 @@ public class TableHeader extends FlexTable implements TableHeaderInt, TableListe
     /**
      * Catches mouses Events for resizing columns.
      */
-    public void onMouseEnter(Widget sender) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     */
-    public void onMouseLeave(Widget sender) {
-
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     */
-    public void onMouseMove(Widget sender, int x, int y) {
+    public void onMouseMove(MouseMoveEvent event) {
+    	Widget sender = (Widget)event.getSource();
         if(resizing) {
             int colA =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
             int colB =  columns.get(tableCol2).getCurrentWidth() - (sender.getAbsoluteLeft() - startx);
-            if((x < 0 && colA <= 16) || (x > 0 && colB <= 16)) 
+            if((event.getX() < 0 && colA <= 16) || (event.getX() > 0 && colB <= 16)) 
                  return;
-            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x))+"px");
+            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(event.getX()))+"px");
         }
     }
 
     /**
      * Catches mouses Events for resizing columns.
      */
-    public void onMouseUp(Widget sender, int x, int y) {
+    public void onMouseUp(MouseUpEvent event) {
+    	Widget sender = (Widget)event.getSource();
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
                 columns.get(tableCol1).setCurrentWidth( columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx));

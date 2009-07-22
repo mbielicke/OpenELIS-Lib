@@ -25,17 +25,17 @@
 */
 package org.openelis.gwt.services;
 
-import org.openelis.gwt.common.CalendarForm;
+import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.RPCException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface CalendarServiceInt extends RemoteService {
     
-    public CalendarForm getMonth(CalendarForm form) throws RPCException;
+    public CalendarRPC getMonth(CalendarRPC form) throws RPCException;
     
-    public CalendarForm getMonthSelect(CalendarForm form) throws RPCException;
+    public CalendarRPC getMonthSelect(CalendarRPC form) throws RPCException;
     
-    public CalendarForm getScreen(CalendarForm form)  throws RPCException;
+    public CalendarRPC getScreen(CalendarRPC form)  throws RPCException;
 
 }

@@ -54,7 +54,6 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
     public static String headerStyle = "topHeaderBar";
     public static String headerCellStyle = "HeaderCell";
     public ArrayList<Label> hLabels = new ArrayList<Label>();
-    private ArrayList<TreeColumnInt> columns;
     private boolean resizing;
     private int startx;
     protected int resizeColumn1 = -1;
@@ -69,7 +68,7 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
         //this.columns = controller.columns;
         setCellSpacing(0);
         int j = 0;
-        for(TreeColumnInt column : columns) {
+        for(TreeColumn column : controller.columns.get(0)) {
             Label headerLabel = new Label(column.getHeader());
             hLabels.add(headerLabel);
             if (hLabels.size() > 1) {
@@ -170,18 +169,21 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
     }
 
     public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
-        if (columns.get(cell/2).getSortable() || columns.get(cell/2).getFilterable()) {
+    	/*
+        if (controller.columns.get(cell/2).getSortable() || columns.get(cell/2).getFilterable()) {
             Filter[] colFilters = null;
             if (controller.columns.get(controller.getRow(row).leafType).get(cell/2).getFilterable())
               //  colFilters = controller.columns.get(cell/2).getFilter();
             showMenu(row, cell, colFilters);
-        }   
+        } 
+        */  
     }
     
     /**
      * Catches mouses Events for resizing columns.
      */
     public void onMouseDown(Widget sender, int x, int y) {
+    	/*
         // TODO Auto-generated method stub
         resizing = true;
         startx = sender.getAbsoluteLeft();
@@ -254,6 +256,7 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
             DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
             RootPanel.get().add(bar);   
             DOM.setCapture(bar.getElement());
+            */
     }
 
     /**
@@ -274,6 +277,7 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
      * Catches mouses Events for resizing columns.
      */
     public void onMouseMove(Widget sender, int x, int y) {
+    	/*
         if(resizing) {
             int colA =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
             int colB =  columns.get(tableCol2).getCurrentWidth() - (sender.getAbsoluteLeft() - startx);
@@ -281,12 +285,14 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
                  return;
             DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x))+"px");
         }
+        */
     }
 
     /**
      * Catches mouses Events for resizing columns.
      */
     public void onMouseUp(Widget sender, int x, int y) {
+    	   /*
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
                 columns.get(tableCol1).setCurrentWidth( columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx));
@@ -297,11 +303,11 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
                     public void execute() {
                         int adj1 = 4;
                         int adj2 = 1;
-                        /*if(getAgent().indexOf("safari") > -1){
+                        if(getAgent().indexOf("safari") > -1){
                             adj1 = 6;
                             adj2 = 2;
                         }
-                        */
+                        
                         for(int i = 0; i < columns.size(); i++){
                             if( i > 0 && i < columns.size() - 1){
                                 getFlexCellFormatter().setWidth(0, i*2,(columns.get(i).getCurrentWidth()-adj1)+"px");
@@ -322,9 +328,11 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
                     }
                 });
             }
+            */
     }
     
     public void sizeHeader() {
+    	/*
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 int adj1 = 4;
@@ -351,6 +359,7 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
                 //view.cellView.setScrollWidth(displayWidth+"px");
             }
         });
+        */
     }
     
 
