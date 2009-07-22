@@ -429,11 +429,17 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         }
         renderer.dataChanged(false);
     }
+    
+    public void selectRow(final int index) throws IndexOutOfBoundsException {
+    	selectRow(index,true);
+    }
 
-    public void selectRow(final int index) throws IndexOutOfBoundsException{
-    	BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, index);
-    	if(event != null && event.isCanceled())
-    		return;
+    public void selectRow(final int index, boolean doEvent) throws IndexOutOfBoundsException{
+    	if(doEvent){
+    		BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, index);
+    		if(event != null && event.isCanceled())
+    			return;
+    	}
         if(index > data.size())
             throw new IndexOutOfBoundsException();
         selected = index;
@@ -443,7 +449,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         if(isRowDrawn(index))
         	renderer.rowSelected(tableIndex(index));
         setFocus(true);
-        SelectionEvent.fire(this, index);
+        if(doEvent)
+        	SelectionEvent.fire(this, index);
     }
     
     public void clearSelections() {

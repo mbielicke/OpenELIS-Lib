@@ -57,6 +57,7 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
 	            }else
 	                refreshedByLetter = false;
 	            table.enable(true);
+	            
 	            table.focused = true;
 	        }
 	        else if(event.getAction() == Screen.Action.NEW_PAGE){
@@ -79,23 +80,22 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
     public ActionHandler<KeyListManager.Action> keyListActions = new ActionHandler<KeyListManager.Action>() {
 
 		public void onAction(ActionEvent<KeyListManager.Action> event) {
-			 if(event.getAction() == KeyListManager.Action.SELECTION){  
-		            if(table.activeRow > -1){
-		                table.unselect(table.activeRow);
-		            }
-		            
-		            int select = ((Integer)event.getData()).intValue();
-		            for(int i = 0; i < table.shownRows(); i++){
-		                if(table.modelIndexList[i] == select){
-		                    table.activeRow = i;
-		                }
-		            }
-		            table.selectRow(table.modelIndexList[table.activeRow]);
-		        }
-		        else if(event.getAction() == KeyListManager.Action.UNSELECT){
-		            if(table.activeRow > -1)
-		                table.unselect(-1);
-		        }
+			if(event.getAction() == KeyListManager.Action.UNSELECT){
+				if(table.activeRow > -1)
+					table.unselect(-1);
+			}else if(event.getAction() == KeyListManager.Action.SELECTION) {
+				if(table.activeRow > -1){
+					table.unselect(table.activeRow);
+				}
+
+				int select = ((Integer)event.getData()).intValue();
+				for(int i = 0; i < table.shownRows(); i++){
+					if(table.modelIndexList[i] == select){
+						table.activeRow = i;
+					}
+				}
+		        table.selectRow(select,false);
+			}
 		}
     	
     };

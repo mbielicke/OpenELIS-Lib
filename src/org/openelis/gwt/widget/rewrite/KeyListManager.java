@@ -26,6 +26,8 @@
 package org.openelis.gwt.widget.rewrite;
 
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -57,10 +59,17 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
 				 //selectLast = false;
 			} else if (event.getAction() == Screen.Action.NEW_MODEL) {
 				setQuery((T)event.getData());
-				select(0);	
+				DeferredCommand.addCommand(new Command() {
+					public void execute() {
+						select(0);
+					}
+				});
 			} else if (event.getAction() == Screen.Action.REFRESH_PAGE) {
 				setPage(getPage());
 				ActionEvent.fire(keyManager,Action.GETPAGE,query);
+			} else if(event.getAction() == Screen.Action.SELECTION_FETCHED) {
+                selected = candidate;
+                ActionEvent.fire(keyManager,Action.SELECTION, new Integer(selected));
 			}
 		}
 	};
@@ -119,7 +128,7 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
      *
      */
     public void next() {
-        select(++candidate);
+    	select(++candidate);
     }
     
     /**
@@ -150,21 +159,8 @@ public class KeyListManager<T extends Query<? extends Object>> extends HandlesEv
             // }else
             // candidate = 0;
         } else if(selection > -1 && selection < query.model.size()) {
-            AsyncCallback callback = new AsyncCallback() {
-                public void onSuccess(Object result) {
-                    //query.results.select(selection);
-                    candidate = selection;
-                    selected = selection;
-                    ActionEvent.fire(keyManager,Action.SELECTION, new Integer(selection));
-                }
-
-                public void onFailure(Throwable caught) {
-                    Window.alert(caught.getMessage());
-
-                }
-
-            };
-            ActionEvent.fire(this,Action.FETCH, new Object[] {query.model.get(selection).key, callback});
+            candidate = selection;
+            ActionEvent.fire(this,Action.FETCH, query.model.get(selection).key);
         }
     }
 

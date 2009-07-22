@@ -26,7 +26,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 	public final AbsolutePanel panel = new AbsolutePanel();
     public String name;
     public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,BROWSE,DELETE};
-    public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE,LOAD,UNLOAD,SUBMIT_QUERY};
+    public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE,LOAD,UNLOAD,SUBMIT_QUERY,SELECTION_FETCHED};
     public State state = State.DEFAULT;
     protected ScreenDef def;
     protected ScreenWindow window;
