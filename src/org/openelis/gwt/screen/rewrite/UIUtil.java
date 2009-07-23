@@ -47,9 +47,12 @@ import org.openelis.gwt.widget.tree.rewrite.TreeColumn;
 import org.openelis.gwt.widget.tree.rewrite.TreeWidget;
 import org.openelis.gwt.widget.tree.rewrite.TreeView;
 
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
@@ -59,6 +62,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.impl.DOMImpl;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -229,11 +233,11 @@ public class UIUtil {
 		public void onKeyPress(KeyPressEvent event) {
 			if(event.isControlKeyDown() && event.getNativeEvent().getKeyCode() == key){
 				if(wid instanceof AppButton) {
-					ClickEvent.fireNativeEvent(event.getNativeEvent(), (AppButton)wid);
+					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, wid.getAbsoluteLeft(), wid.getAbsoluteTop(), -1, -1, event.isControlKeyDown(), event.isAltKeyDown(), event.isShiftKeyDown(), event.isMetaKeyDown());
+					ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
 					event.preventDefault();
 					event.stopPropagation();
-				}
-				if(((HasField)wid).isEnabled()){ 
+				}else if(((HasField)wid).isEnabled()){ 
 					((Focusable)wid).setFocus(true);
 					event.preventDefault();
 					event.stopPropagation();
