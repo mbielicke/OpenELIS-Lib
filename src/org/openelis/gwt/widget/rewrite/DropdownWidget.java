@@ -100,11 +100,11 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             unselect(modelIndexList[row]);
         }else {
             activeRow = row;
-            selectRow(modelIndexList[row]);
-            SelectionEvent.fire(this, modelIndexList[row]);
+            selectRow(modelIndexList[row],false);
         }
         if(!multiSelect || (!ctrlKey && multiSelect))
             complete();
+        SelectionEvent.fire(this, modelIndexList[row]);
     }
     
     private int findNextActive(int current) {

@@ -177,7 +177,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         this.enabled = enabled;
         textbox.setReadOnly(!enabled);
         icon.enable(enabled);
-        //super.enable(enabled);
+        super.enable(enabled);
     }
 
     public boolean isEnabled() {
@@ -242,7 +242,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     }
 
     public void onBlur(BlurEvent event) {
-        if (!textbox.isReadOnly()) {
+        if (!textbox.isReadOnly() && !popup.showing) {
                 // we need to set the unselected style name to the textbox
                 //textbox.addStyleName("TextboxUnselected");
                 //textbox.removeStyleName("TextboxSelected");

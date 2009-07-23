@@ -188,7 +188,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
     }
 
     public void onBlur(BlurEvent event) {
-        if (!textbox.isReadOnly() && !field.queryMode) {
+        if (!textbox.isReadOnly() && !field.queryMode && !popup.isShowing()) {
                 // we need to set the unselected style name to the textbox
                 //textbox.addStyleName("TextboxUnselected");
                 //textbox.removeStyleName("TextboxSelected");

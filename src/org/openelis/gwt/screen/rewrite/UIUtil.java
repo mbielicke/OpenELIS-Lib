@@ -49,13 +49,16 @@ import org.openelis.gwt.widget.tree.rewrite.TreeView;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -110,7 +113,7 @@ public class UIUtil {
                 Widget wid = createWidget(widgets.item(i),def);
                 if(widgets.item(i).getAttributes().getNamedItem("key") != null)
                 	def.setWidget(wid, widgets.item(i).getAttributes().getNamedItem("key").getNodeValue());
-                def.panel = wid;
+                def.panel.add(wid);
                 break;
             }
         }
@@ -212,6 +215,33 @@ public class UIUtil {
 		}
     }
     
+    public static class ShortcutHandler implements KeyPressHandler {
+    	
+    	char key;
+    	Widget wid;
+    	
+    	public ShortcutHandler(Node node, Widget wid) {
+    		String shortcut = node.getAttributes().getNamedItem("shortcut").getNodeValue();
+    		key = shortcut.charAt(0);
+    		this.wid = wid;
+    	}
+    	
+		public void onKeyPress(KeyPressEvent event) {
+			if(event.isControlKeyDown() && event.getNativeEvent().getKeyCode() == key){
+				if(wid instanceof AppButton) {
+					ClickEvent.fireNativeEvent(event.getNativeEvent(), (AppButton)wid);
+					event.preventDefault();
+					event.stopPropagation();
+				}
+				if(((HasField)wid).isEnabled()){ 
+					((Focusable)wid).setFocus(true);
+					event.preventDefault();
+					event.stopPropagation();
+				}
+			}
+		}
+    }
+    
     private static class UIFocusHandler implements FocusHandler,BlurHandler {
 
 		public void onFocus(FocusEvent event) {
@@ -234,10 +264,7 @@ public class UIUtil {
 				if(node.getAttributes().getNamedItem("tab") != null) 
 					textbox.addTabHandler(new TabHandler(node,def));
 				if (node.getAttributes().getNamedItem("shortcut") != null)
-					textbox.setAccessKey(node.getAttributes()
-							.getNamedItem("shortcut")
-							.getNodeValue()
-							.charAt(0));
+					def.panel.addShortcutHandler(new ShortcutHandler(node,textbox));
 				textbox.setStyleName("ScreenTextBox");
 				if (node.getAttributes().getNamedItem("case") != null){
 					String fieldCase = node.getAttributes().getNamedItem("case")
@@ -497,6 +524,8 @@ public class UIUtil {
     			CalendarLookUp cal = new CalendarLookUp();
     			if(node.getAttributes().getNamedItem("tab") != null) 
     				cal.addTabHandler(new TabHandler(node,def));
+    			if(node.getAttributes().getNamedItem("shortcut") != null)
+    				def.panel.addShortcutHandler(new ShortcutHandler(node,cal));
     			byte begin = Byte.parseByte(node.getAttributes()
     					.getNamedItem("begin")
     					.getNodeValue());
@@ -525,6 +554,8 @@ public class UIUtil {
     			CheckBox check = new CheckBox();
     			if(node.getAttributes().getNamedItem("tab") != null) 
     				check.addTabHandler(new TabHandler(node,def));
+    			if(node.getAttributes().getNamedItem("Shortcut") != null)
+    				def.panel.addShortcutHandler(new ShortcutHandler(node,check));
     	        if(node.getAttributes().getNamedItem("threeState") != null){
     	            check.setType(CheckBox.CheckType.THREE_STATE);
     	            //defaultType = CheckBox.CheckType.THREE_STATE;
@@ -858,6 +889,9 @@ public class UIUtil {
     	            item.key = node.getAttributes().getNamedItem("key").getNodeValue();
     	        }
     	        
+    	        if(node.getAttributes().getNamedItem("shortcut") != null) {
+    	        	def.panel.addShortcutHandler(new ShortcutHandler(node,item));
+    	        }
     	        setDefaults(node,item);
     	        return item;
     		}
@@ -887,10 +921,7 @@ public class UIUtil {
     			if (node.getAttributes().getNamedItem("tab") != null) 
     				textbox.addTabHandler(new TabHandler(node,def));
     	        if (node.getAttributes().getNamedItem("shortcut") != null)
-    	            textbox.setAccessKey(node.getAttributes()
-    	                                     .getNamedItem("shortcut")
-    	                                     .getNodeValue()
-    	                                     .charAt(0));
+    	            def.panel.addShortcutHandler(new ShortcutHandler(node,textbox));
     	        textbox.setStyleName("ScreenPassword");
     	        setDefaults(node, textbox);
     	        textbox.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
@@ -907,11 +938,7 @@ public class UIUtil {
                 if (node.getFirstChild() != null)
                 	radio.setText(node.getFirstChild().getNodeValue());
                 if (node.getAttributes().getNamedItem("shortcut") != null)
-                	radio.setAccessKey(node.getAttributes()
-                			.getNamedItem("shortcut")
-                			.getNodeValue()
-                			.charAt(0));
-                
+                	def.panel.addShortcutHandler(new ShortcutHandler(node,radio));
                 radio.setStyleName("ScreenRadio");
                 setDefaults(node, radio);
                 radio.setField((CheckField)factoryMap.get("Check").getNewInstance(node, def));
@@ -964,6 +991,9 @@ public class UIUtil {
     	        RichTextWidget textarea = new RichTextWidget(tools); 
     	        if(node.getAttributes().getNamedItem("tab") != null) 
     	        	textarea.addTabHandler(new TabHandler(node,def));
+    	        if(node.getAttributes().getNamedItem("shortcut") != null) {
+    	        	def.panel.addShortcutHandler(new ShortcutHandler(node,textarea));
+    	        }
     	        String width = "100%";
     	        String height = "300px";
     	        if(node.getAttributes().getNamedItem("width") != null){
@@ -1087,11 +1117,7 @@ public class UIUtil {
     			if(node.getAttributes().getNamedItem("tab") != null) 
     				textarea.addTabHandler(new TabHandler(node,def));
     	        if (node.getAttributes().getNamedItem("shortcut") != null)
-    	            textarea.setAccessKey(node.getAttributes()
-    	                                      .getNamedItem("shortcut")
-    	                                      .getNodeValue()
-    	                                      .charAt(0));
-    	        
+    	           def.panel.addShortcutHandler(new ShortcutHandler(node,textarea));
     	        textarea.setStyleName("ScreenTextArea");
     	        setDefaults(node, textarea);
     	        textarea.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
@@ -1261,6 +1287,9 @@ public class UIUtil {
     	        if(node.getAttributes().getNamedItem("tab") != null) {
     	        	drop.addTabHandler(new TabHandler(node,def));
     	        }
+    	        if(node.getAttributes().getNamedItem("shortcut") != null){
+    	        	def.panel.addShortcutHandler(new ShortcutHandler(node,drop));
+    	        }
     		    drop.setField(field);
     		    drop.multiSelect = false;
     	                
@@ -1346,6 +1375,9 @@ public class UIUtil {
                 
     	        if(node.getAttributes().getNamedItem("tab") != null) {
     	        	auto.addTabHandler(new TabHandler(node,def));
+    	        }
+    	        if(node.getAttributes().getNamedItem("shortcut") != null) {
+    	        	def.panel.addShortcutHandler(new ShortcutHandler(node,auto));
     	        }
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
     	        	auto.multiSelect = true;
@@ -1510,6 +1542,9 @@ public class UIUtil {
     	                button.toggle = true;
     	        }
     	        */
+    	        if(node.getAttributes().getNamedItem("shortcut") != null) {
+    	        	def.panel.addShortcutHandler(new ShortcutHandler(node,button));
+    	        }
     	        NodeList widgets = node.getChildNodes();
     	        for (int l = 0; l < widgets.getLength(); l++) {
     	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {                       
@@ -1599,6 +1634,9 @@ public class UIUtil {
     			IconContainer icon = new IconContainer();
     			if(node.getAttributes().getNamedItem("tab") != null) {
     				icon.addTabHandler(new TabHandler(node,def));
+    			}
+    			if(node.getAttributes().getNamedItem("shortcut") != null){
+    				def.panel.addShortcutHandler(new ShortcutHandler(node,icon));
     			}
     	        NodeList widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {

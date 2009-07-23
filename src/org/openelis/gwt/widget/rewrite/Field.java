@@ -162,7 +162,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 				queryString = null;
 		}else{
 			valid = true;
-			setStringValue(((HasValue)wid).getValue().toString());
+			Object value = ((HasValue)wid).getValue();
+			if(value == null)
+				value = "";
+			setStringValue(value.toString());
 			if(!valid){
 				drawError(wid);
 				return;

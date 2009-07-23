@@ -34,6 +34,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -57,6 +58,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     private AbsolutePanel left = new AbsolutePanel();
     private AbsolutePanel content = new AbsolutePanel();
     private boolean enabled;
+    private UIUtil.ShortcutHandler shortcut;
     
     public AppButton() {
         hp.add(left);
@@ -75,7 +77,6 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     public void addTabHandler(UIUtil.TabHandler handler) {
     	addDomHandler(handler,KeyPressEvent.getType());
     }
-    
     
     public void setWidget(Widget widget) {
         content.add(widget);
