@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.SourcesFocusEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.screen.ScreenWindow;
@@ -85,11 +85,11 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     }
     
     
-    public void setDate(DatetimeRPC date) {
+    public void setDate(Datetime date) {
         if (week) {
             date.add(-(date.getDate().getDay()));
-            DatetimeRPC endDate = DatetimeRPC.getInstance(DatetimeRPC.YEAR,
-                                                          DatetimeRPC.DAY,
+            Datetime endDate = Datetime.getInstance(Datetime.YEAR,
+                                                          Datetime.DAY,
                                                           date.getDate());
             endDate.add(6);
             String from = DateTimeFormat.getFormat("EEEE MMM d, yyyy")
@@ -180,7 +180,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         if (getText().equals(""))
             return null;
         Date date = new Date(getText().replaceAll("-", "/"));
-        return DatetimeRPC.getInstance(begin, end, date).getDate();
+        return Datetime.getInstance(begin, end, date).getDate();
     }
 
     public Object getDisplay(String title) {
@@ -245,7 +245,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 
 	public void setValue(Date value, boolean fireEvents) {
         if (value != null)
-            textbox.setValue(DatetimeRPC.getInstance(begin, end, value).toString(),false);
+            textbox.setValue(Datetime.getInstance(begin, end, value).toString(),false);
         else
            textbox.setValue("",false);
         if(fireEvents) {

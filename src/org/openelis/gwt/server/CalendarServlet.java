@@ -26,9 +26,9 @@
 package org.openelis.gwt.server;
 
 import org.openelis.gwt.common.CalendarRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.services.CalendarServiceInt;
-import org.openelis.util.Datetime;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

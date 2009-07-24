@@ -25,7 +25,7 @@
 */
 package org.openelis.interfaces;
 
-import org.openelis.util.Datetime;
+import org.openelis.gwt.common.Datetime;
 import org.apache.log4j.Category;
 import org.w3c.dom.Document;
 import java.io.StringWriter;

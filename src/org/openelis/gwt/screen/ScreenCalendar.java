@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
@@ -124,7 +124,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
         else{
             if (field instanceof DateField) {
                 if (field.getValue() != null)
-                    cal.setDate((DatetimeRPC)field.getValue());
+                    cal.setDate((Datetime)field.getValue());
                 else
                     cal.setText("");
             }
@@ -149,7 +149,7 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                     }
                 }
                 if (date != null) {
-                    field.setValue(DatetimeRPC.getInstance(((DateField)field).getBegin(),
+                    field.setValue(Datetime.getInstance(((DateField)field).getBegin(),
                                                            ((DateField)field).getEnd(),
                                                            date));
                 }

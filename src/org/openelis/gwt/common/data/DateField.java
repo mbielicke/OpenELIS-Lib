@@ -28,7 +28,7 @@ package org.openelis.gwt.common.data;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.AppScreen;
 
 import java.util.Date;
@@ -42,7 +42,7 @@ import java.util.HashMap;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
+public class DateField extends AbstractField<Datetime> implements FieldType{
     
     private static final long serialVersionUID = 1L;
     private byte begin;
@@ -87,7 +87,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param end
      * @param val
      */
-    public DateField(byte begin, byte end, DatetimeRPC val){
+    public DateField(byte begin, byte end, Datetime val){
         //super(DatetimeRPC.getInstance());
         setBegin(begin);
         setEnd(end);
@@ -105,7 +105,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
         //super(DatetimeRPC.getInstance());
         setBegin(begin);
         setEnd(end);
-        setValue(DatetimeRPC.getInstance(getBegin(),
+        setValue(Datetime.getInstance(getBegin(),
                                          getEnd(),
                                          val));
     }
@@ -115,7 +115,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
      * @param node
      */
     public DateField(Node node) {
-        super(DatetimeRPC.getInstance());
+        super(Datetime.getInstance());
         setAttributes(node);
     }
     
@@ -182,7 +182,7 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
                 dat = new Date();
             else
                 dat = new Date(def);
-            setValue(DatetimeRPC.getInstance(getBegin(),
+            setValue(Datetime.getInstance(getBegin(),
                                                   getEnd(),
                                                   dat));
         }
@@ -222,12 +222,12 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
     */
     public boolean isInRange() {
         // TODO Auto-generated method stub
-        if (min != null && value.before(DatetimeRPC.getInstance()
+        if (min != null && value.before(Datetime.getInstance()
                                                    .add(-min.intValue()))) {
             addError(AppScreen.consts.get("fieldPastException"));
             return false;
         }
-        if (max != null && value.after(DatetimeRPC.getInstance()
+        if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()))) {
             addError(AppScreen.consts.get("fieldFutureException"));
             return false;
@@ -342,12 +342,12 @@ public class DateField extends AbstractField<DatetimeRPC> implements FieldType{
             if (val == null || val == "") 
                 super.setValue(null);
            else 
-                setValue(DatetimeRPC.getInstance(begin, end, val));
+                setValue(Datetime.getInstance(begin, end, new Date(val)));
         }else
-            setValue(DatetimeRPC.getInstance(begin, end, DateTimeFormat.getFormat(pattern).parse((String)val)));
+            setValue(Datetime.getInstance(begin, end, DateTimeFormat.getFormat(pattern).parse((String)val)));
     }
     
-    public DatetimeRPC getValue() {
+    public Datetime getValue() {
         return value;
     }
     

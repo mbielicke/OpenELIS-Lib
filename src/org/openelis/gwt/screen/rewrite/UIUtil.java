@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenMenuItem;
@@ -1709,7 +1709,7 @@ public class UIUtil {
     	                dat = new Date();
     	            else
     	                dat = new Date(deflt);
-    	            field.setValue(DatetimeRPC.getInstance(field.getBegin(),field.getEnd(),dat).getDate());
+    	            field.setValue(Datetime.getInstance(field.getBegin(),field.getEnd(),dat).getDate());
     	        }
     	        if(node.getAttributes().getNamedItem("pattern") != null){
     	            field.setFormat(node.getAttributes().getNamedItem("pattern").getNodeValue());

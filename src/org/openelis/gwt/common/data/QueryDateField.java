@@ -27,7 +27,7 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 
 import java.util.Date;
 
@@ -107,13 +107,13 @@ public class QueryDateField extends QueryField {
             //String[] params = param.split("..");
             //for (int i = 0; i < params.length; i++) {
                 Date date = new Date(param.replaceAll("-", "/"));
-                DatetimeRPC dVal = DatetimeRPC.getInstance(begin, end, date);
-                if (min != null && dVal.before(DatetimeRPC.getInstance()
+                Datetime dVal = Datetime.getInstance(begin, end, date);
+                if (min != null && dVal.before(Datetime.getInstance()
                                                           .add(-min.intValue()))) {
                     addError("Date is too far in the past");
                     return false;
                 }
-                if (max != null && dVal.after(DatetimeRPC.getInstance()
+                if (max != null && dVal.after(Datetime.getInstance()
                                                          .add(max.intValue()))) {
                     addError("Date is too far in the future");
                     return false;

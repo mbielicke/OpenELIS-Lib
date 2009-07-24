@@ -27,7 +27,7 @@ package org.openelis.gwt.widget.rewrite;
 
 import java.util.Date;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.AppScreen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -131,11 +131,11 @@ public class DateField extends Field<Date> {
     public boolean isInRange()  {
         // TODO Auto-generated method stub
     	Date today = new Date();
-        if (min != null && value.before(DatetimeRPC.getInstance().add(-min.intValue()).getDate())) {
+        if (min != null && value.before(Datetime.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
             addError(AppScreen.consts.get("fieldPastException"));
         }
-        if (max != null && value.after(DatetimeRPC.getInstance()
+        if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
             addError(AppScreen.consts.get("fieldFutureException"));
@@ -220,7 +220,7 @@ public class DateField extends Field<Date> {
             return "";
         if(pattern != null)
             return DateTimeFormat.getFormat(pattern).format(value);
-        return DatetimeRPC.getInstance(begin,end,value).toString();
+        return Datetime.getInstance(begin,end,value).toString();
     }
     
     /**
@@ -258,7 +258,7 @@ public class DateField extends Field<Date> {
         	}
         }
         if(valid)
-        	setValue(DatetimeRPC.getInstance(begin, end, date).getDate());
+        	setValue(Datetime.getInstance(begin, end, date).getDate());
     }
     
 }

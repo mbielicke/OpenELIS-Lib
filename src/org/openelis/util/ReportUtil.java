@@ -25,7 +25,7 @@
 */
 package org.openelis.util;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DataObject;
@@ -214,7 +214,7 @@ public class ReportUtil {
             String key = field.key;
             if (field.getValue() != null) {
                 if(field instanceof DateField)
-                    value = DBDatetime.getInstance(DBDatetime.YEAR, DBDatetime.DAY, ((DatetimeRPC)field.getValue()).getDate()).toString();
+                    value = DBDatetime.getInstance(DBDatetime.YEAR, DBDatetime.DAY, ((Datetime)field.getValue()).getDate()).toString();
                 else if(field instanceof DropDownField){
                     if(field.getValue() instanceof ArrayList){
                         ArrayList<TableDataRow> list = (ArrayList<TableDataRow>)field.getValue();

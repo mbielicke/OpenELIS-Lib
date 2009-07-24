@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.DatetimeRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.DateField;
 import org.openelis.gwt.common.data.QueryDateField;
@@ -69,7 +69,7 @@ public class TableCalendar extends TableCellInputWidget {
         }
         String val = "";
         if(field instanceof DateField){
-            DatetimeRPC valDate = (DatetimeRPC)field.getValue();
+            Datetime valDate = (Datetime)field.getValue();
             if(valDate != null)
                 val = valDate.toString();
         }else
@@ -89,7 +89,7 @@ public class TableCalendar extends TableCellInputWidget {
         }
         String val = "";
         if(field instanceof DateField){
-            DatetimeRPC valDate = (DatetimeRPC)field.getValue();
+            Datetime valDate = (Datetime)field.getValue();
             if(valDate != null)
                 val = valDate.toString();
         }else
@@ -133,7 +133,7 @@ public class TableCalendar extends TableCellInputWidget {
         if(field instanceof QueryDateField) {
             field.setValue(editor.getText());
         } else if(editor.getValue()!=null) {
-                field.setValue(DatetimeRPC.getInstance(begin,
+                field.setValue(Datetime.getInstance(begin,
                                                        end,
                                                        editor.getValue()));            
         }
