@@ -141,6 +141,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     public int shownRows; 
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
+    private ArrayList<String> errors;
     
     public boolean autoAdd;
     
@@ -627,7 +628,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public void clearErrors() {
-		// TODO Auto-generated method stub
+		errors = null;
 		
 	}
 
@@ -659,7 +660,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	}
 	
 	public ArrayList<String> getErrors() {
-		return null;
+		return errors;
 	}
 
 	public void enable(boolean enabled) {
@@ -676,8 +677,17 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public void checkValue() {
-		// TODO Auto-generated method stub
-		
+		errors = null;
+		for(TableDataRow row : data) {
+			for(TableDataCell cell : row.cells){
+				if(cell.errors != null){
+					errors = cell.errors;
+					break;
+				}
+			}
+			if(errors != null)
+				break;
+		}
 	}
 	
 	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
