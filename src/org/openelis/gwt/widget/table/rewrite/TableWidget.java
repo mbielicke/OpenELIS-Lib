@@ -678,6 +678,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 
 	public void checkValue() {
 		errors = null;
+		if(data == null)
+			return;
 		for(TableDataRow row : data) {
 			for(TableDataCell cell : row.cells){
 				if(cell.errors != null){
