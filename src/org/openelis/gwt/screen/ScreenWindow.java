@@ -29,6 +29,9 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -75,7 +78,7 @@ import org.openelis.gwt.widget.WindowBrowser;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends Composite implements MouseListener, ClickListener, EventPreview, MouseOverHandler, MouseOutHandler, MouseDownHandler {
+public class ScreenWindow extends FocusPanel implements MouseListener, ClickListener, EventPreview, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -117,8 +120,10 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     private VerticalPanel outer = new VerticalPanel() {
        public void onBrowserEvent(Event event) {
            switch (DOM.eventGetType(event)) {
-               case Event.ONCLICK:
+               case Event.ONCLICK: {
                    checkZ();
+                   break;
+               }
            }
            super.onBrowserEvent(event);
        }
@@ -174,7 +179,7 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
     }
     
     public ScreenWindow(Object container, String key, String cat, String loadingText, boolean modal, boolean showClose) {      
-        initWidget(outer);
+        setWidget(outer);
         setVisible(false);
         if(container instanceof PopupPanel)
             this.popupPanel = (PopupPanel)container;
@@ -316,11 +321,13 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
         	setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
             setStatus(Screen.consts.get("loadCompleteMessage"),"");
+            addKeyPressHandler(this);
         }
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
         		if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
         			body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
+        		setFocus(true);
         	}
         });
     }
@@ -599,6 +606,15 @@ public class ScreenWindow extends Composite implements MouseListener, ClickListe
                 }
             }
         }
+		
+	}
+
+	public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+		return addDomHandler(handler,KeyPressEvent.getType());
+	}
+
+	public void onKeyPress(KeyPressEvent event) {
+		KeyPressEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());
 		
 	}
 }

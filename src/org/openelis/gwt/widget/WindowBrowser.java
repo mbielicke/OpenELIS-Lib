@@ -28,6 +28,10 @@ package org.openelis.gwt.widget;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -54,7 +58,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
-public class WindowBrowser extends Composite{
+public class WindowBrowser extends Composite implements HasKeyPressHandlers, KeyPressHandler {
     
     public AbsolutePanel browser = new AbsolutePanel();
     public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
@@ -62,6 +66,7 @@ public class WindowBrowser extends Composite{
     public int limit ;
     public PickupDragController dragController = new PickupDragController(browser,true);
     public AbsolutePositionDropController dropController = new AbsolutePositionDropController(browser);
+    public ScreenWindow focusedWindow;
     
     public static native void setIndex(Element elem, int index) /*-{
         elem.style.zIndex = index;
@@ -226,9 +231,19 @@ public class WindowBrowser extends Composite{
                     wind.addStyleName("unfocused");
             }else{
                 wind.removeStyleName("unfocused");
+                focusedWindow = wind;
             }
         }
     }
+
+	public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+		return addDomHandler(handler,KeyPressEvent.getType());
+	}
+
+	public void onKeyPress(KeyPressEvent event) {
+		KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+		
+	}
 
 
  
