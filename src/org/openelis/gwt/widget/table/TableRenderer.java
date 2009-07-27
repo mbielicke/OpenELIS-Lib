@@ -176,15 +176,17 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             //if(controller.showRows){
               //  ((Label)controller.view.rows.getWidget(index,0)).setText(String.valueOf(controller.model.indexOf(row)+1));
            // }
+            rows.get(index).setStyleName("");
+            if(i % 2 == 1 && !controller.isDropdown){
+                rows.get(index).addStyleName("AltTableRow");
+            }
             if(controller.model.isSelected(modelIndex))
                 rows.get(index).addStyleName(controller.view.selectedStyle);
-            else
-                rows.get(index).removeStyleName(controller.view.selectedStyle);
-            if(controller.model.isEnabled(modelIndex)) 
-                rows.get(index).removeStyleName(controller.view.disabledStyle);
-            else
+            if(!controller.model.isEnabled(modelIndex)) 
                 rows.get(index).addStyleName(controller.view.disabledStyle);
-                
+            if(row.style != null && row.style.equals("")){
+            	rows.get(index).addStyleName(row.style);
+            }
             
         }
     }

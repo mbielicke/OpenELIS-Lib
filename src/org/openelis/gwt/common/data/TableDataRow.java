@@ -13,6 +13,7 @@ public class TableDataRow<Key> implements RPC,FieldType {
     public Key key;
     public FieldType[] cells;
     public FieldType data;
+    public String style;
     
 
     /**
