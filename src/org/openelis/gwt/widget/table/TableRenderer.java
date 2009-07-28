@@ -185,7 +185,7 @@ public class TableRenderer implements TableRendererInt, TableModelListener, Tabl
             rows.get(index).addStyleName(controller.view.selectedStyle);
         if(!controller.model.isEnabled(modelIndex)) 
             rows.get(index).addStyleName(controller.view.disabledStyle);
-        if(row.style != null && row.style.equals("")){
+        if(row.style != null && !row.style.equals("")){
          	rows.get(index).addStyleName(row.style);
         }
             
