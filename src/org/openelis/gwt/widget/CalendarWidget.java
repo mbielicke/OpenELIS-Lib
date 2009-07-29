@@ -29,21 +29,18 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.openelis.gwt.common.CalendarRPC;
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.services.CalendarServiceInt;
-import org.openelis.gwt.services.CalendarServiceIntAsync;
+import org.openelis.gwt.screen.rewrite.ScreenDef;
+import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.rewrite.AppButton;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.HasValue;
 /**
  * Calendar Widget will display a calendar and text boxes with the current time in
@@ -52,11 +49,7 @@ import com.google.gwt.user.client.ui.HasValue;
  * @author tschmidt
  *
  */
- public class CalendarWidget extends Screen implements HasValue<Date>, ClickHandler {
-    
-    protected CalendarServiceIntAsync screenService = (CalendarServiceIntAsync) GWT
-    .create(CalendarServiceInt.class);
-    protected ServiceDefTarget target = (ServiceDefTarget) screenService;
+ public class CalendarWidget extends Screen implements HasValue<Datetime>, ClickHandler {
    
     protected org.openelis.gwt.widget.rewrite.AppButton prevMonth;
     protected org.openelis.gwt.widget.rewrite.AppButton nextMonth;
@@ -68,32 +61,21 @@ import com.google.gwt.user.client.ui.HasValue;
     protected org.openelis.gwt.widget.rewrite.AppButton today;
     protected ArrayList<Label> months = new ArrayList<Label>(12);
     protected ArrayList<Label> years = new ArrayList<Label>(10);
-    
+    protected ScreenService service; 
     protected CalendarRPC form;
     
-    public CalendarWidget(Date date) {
-    	super();
-        String base = GWT.getModuleBaseURL();
-        base += "CalendarServlet";        
-        target.setServiceEntryPoint(base);
+    public CalendarWidget(Datetime date) throws Exception {
+    	service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
         form = new CalendarRPC();
         form.date = date;
-        screenService.getScreen(form, new AsyncCallback<CalendarRPC>() {
-        	public void onSuccess(CalendarRPC result) {
-        		form = result;
-        		try {
-        			setDef(UIUtil.createWidgets(form.xml));
-        		}catch(Exception e) {
-        			
-        		}
-        	}
-        	public void onFailure(Throwable caught) {
-        		Window.alert(caught.getMessage());
-        	}
-        });
+        form = service.call("getScreen",form);
+        ScreenDef def = new ScreenDef();
+        def.setXMLString(form.xml);
+		drawScreen(def);
+		setHandlers();
     }
     
-    public void afterDraw() {
+    public void setHandlers() {
     	if(def.name.equals("Calendar")) {
     		prevMonth = (org.openelis.gwt.widget.rewrite.AppButton)def.getWidget("prevMonth");
     		prevMonth.addClickHandler(this);
@@ -128,7 +110,7 @@ import com.google.gwt.user.client.ui.HasValue;
         }
     }
     
-    public void onClick(ClickEvent event){
+    public void onClick(ClickEvent event) {
         
         if(event.getSource() == prevMonth){
             form.month--;
@@ -136,19 +118,16 @@ import com.google.gwt.user.client.ui.HasValue;
                 form.month = 11;
                 form.year--;
             }
-            screenService.getMonth(form, new AsyncCallback<CalendarRPC>() {
-                public void onSuccess(CalendarRPC result) {
-                	form = result;
-                	try {
-                		setDef(UIUtil.createWidgets(form.xml));
-                	}catch(Exception e) {
-                		
-                	}
-                }
-                public void onFailure(Throwable caught){
-                    Window.alert(caught.getMessage());
-                }
-            });
+            try {
+            	form = service.call("getMonth",form);
+            	ScreenDef newDef = new ScreenDef();
+            	newDef.setXMLString(form.xml);
+            	drawScreen(newDef);
+            	setHandlers();
+            }catch(Exception e) {
+            	e.printStackTrace();
+            	Window.alert(e.getMessage());
+            }
             return;
         }
         if(event.getSource() == nextMonth){
@@ -157,52 +136,43 @@ import com.google.gwt.user.client.ui.HasValue;
                 form.month = 0;
                 form.year++;
             }
-            screenService.getMonth(form, new AsyncCallback<CalendarRPC>() {
-                public void onSuccess(CalendarRPC result) {
-                	form = result;
-                	try {
-                		setDef(UIUtil.createWidgets(form.xml));
-                	}catch(Exception e) {
-                		
-                	}
-                }
-                public void onFailure(Throwable caught){
-                    
-                }
-            });
+            try {
+            	form = service.call("getMonth", form);
+            	ScreenDef newDef = new ScreenDef();
+            	newDef.setXMLString(form.xml);
+            	drawScreen(newDef);
+            	setHandlers();
+            }catch(Exception e) {
+            	e.printStackTrace();
+            	Window.alert(e.getMessage());
+            }
             return;
         }
         if(event.getSource() == monthSelect){
-            screenService.getMonthSelect(form, new AsyncCallback<CalendarRPC>() {
-                public void onSuccess(CalendarRPC result) {
-                	form = result;
-                	try {
-                		setDef(UIUtil.createWidgets(form.xml));
-                	}catch(Exception e) {
-                		
-                	}
-                }
-                public void onFailure(Throwable caught){
-                    
-                }
-            });
-            return;
+        	try {
+        		form = service.call("getMonthSelect",form);
+        		ScreenDef newDef = new ScreenDef();
+        		newDef.setXMLString(form.xml);
+        		drawScreen(newDef);
+        		setHandlers();
+        	}catch(Exception e) {
+        		e.printStackTrace();
+        		Window.alert(e.getMessage());
+        	}
+        	return;
         }
         if(event.getSource() == ok || 
            event.getSource() == cancel){
-            screenService.getMonth(form, new AsyncCallback<CalendarRPC>() {
-                public void onSuccess(CalendarRPC result) {
-                	form = result;
-                	try {
-                		setDef(UIUtil.createWidgets(form.xml));
-                	}catch(Exception e) {
-                		
-                	}
-                }
-                public void onFailure(Throwable caught){
-                    
-                }
-            });
+        	try {
+        		form = service.call("getMonth", form);
+        		ScreenDef newDef = new ScreenDef();
+        		newDef.setXMLString(form.xml);
+        		drawScreen(newDef);
+        		setHandlers();
+        	}catch(Exception e) {
+        		e.printStackTrace();
+        		Window.alert(e.getMessage());
+        	}
             return;
         }
         if(event.getSource() == prevDecade){
@@ -256,24 +226,24 @@ import com.google.gwt.user.client.ui.HasValue;
         if(event.getSource() instanceof Label && years.contains(event.getSource()) ) {
             String value = ((Label)event.getSource()).getText();
             years.get(form.year%10).removeStyleName("Current");
-            form.year = form.year/10*10+Integer.parseInt(value);
+            form.year = Integer.parseInt(value);
             ((Label)event.getSource()).addStyleName("Current");
             return;
         }
         String date = ((Label)event.getSource()).getText();
-        setValue(new Date(form.year,form.month,Integer.parseInt(date)),true);
+        setValue(Datetime.getInstance(Datetime.YEAR,Datetime.DAY,new Date(form.year-1900,form.month,Integer.parseInt(date))),true);
     }
 
-	public Date getValue() {
+	public Datetime getValue() {
 		return form.date;
 	}
 
-	public void setValue(Date value) {
+	public void setValue(Datetime value) {
 		setValue(value,false);
 	}
 
-	public void setValue(Date value, boolean fireEvents) {
-		Date old = form.date;
+	public void setValue(Datetime value, boolean fireEvents) {
+		Datetime old = form.date;
 		form.date = value;
 		if(fireEvents)
 			ValueChangeEvent.fireIfNotEqual(this, old, getValue());
@@ -281,7 +251,7 @@ import com.google.gwt.user.client.ui.HasValue;
 	}
 
 	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<Date> handler) {
+			ValueChangeHandler<Datetime> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 }

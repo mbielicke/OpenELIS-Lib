@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
@@ -106,6 +107,28 @@ public class ServiceUtils {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             StreamResult result = new StreamResult(bytes);
             XMLUtil.transformXML(doc, new File(url), result);
+            return new String(bytes.toByteArray(),"UTF-8");
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new RPCException(e.getMessage());
+        }
+    }
+    
+    public static String getXML(InputStream is, Document doc) throws RPCException {
+        try {
+            String loc = "en";
+            if(SessionManager.getSession().getAttribute("locale") != null)
+                loc = (String)SessionManager.getSession().getAttribute("locale");
+            Element root = doc.getDocumentElement();
+            Element locale = doc.createElement("locale");
+            locale.appendChild(doc.createTextNode(loc));
+            root.appendChild(locale);
+            Element propsEL = doc.createElement("props");
+            propsEL.appendChild(doc.createTextNode(props));
+            root.appendChild(propsEL);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            StreamResult result = new StreamResult(bytes);
+            XMLUtil.transformXML(doc, is, result);
             return new String(bytes.toByteArray(),"UTF-8");
         }catch(Exception e){
             e.printStackTrace();

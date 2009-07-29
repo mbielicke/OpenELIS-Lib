@@ -56,9 +56,9 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
             this.result = result;
         }
 
-        public T getResult() throws RPCException {
+        public T getResult() throws Exception {
             if (caught != null)
-                throw (RPCException)caught;
+                throw (Exception)caught;
             return result;
         }
     }

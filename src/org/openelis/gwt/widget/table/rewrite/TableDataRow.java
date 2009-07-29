@@ -10,6 +10,7 @@ public class TableDataRow {
     public ArrayList<TableDataCell> cells;
     public Object key;
     public Object data;
+    public String style;
     
 
     /**

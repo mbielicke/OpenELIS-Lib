@@ -136,9 +136,14 @@ public class CalendarUtils {
     }
     
     public static boolean isSelected(Calendar cal, String date){
-        Calendar dcal = Calendar.getInstance();
-        dcal.setTime(new Date(date));
-        return getDateString(cal).equals(getDateString(dcal));
+    	try {
+    		Calendar dcal = Calendar.getInstance();
+    		dcal.setTime(new Date(date.replaceAll("-","/")));
+    		return getDateString(cal).equals(getDateString(dcal));
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
     }
     
     

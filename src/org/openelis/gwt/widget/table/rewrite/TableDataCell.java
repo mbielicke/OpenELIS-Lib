@@ -6,6 +6,7 @@ public class TableDataCell  {
 
 	public Object value;
 	public ArrayList<String> errors;
+	public String style;
 	
 	public TableDataCell() {
 		value = null;

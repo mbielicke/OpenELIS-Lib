@@ -11,6 +11,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -42,8 +43,8 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
                                                       ChangeListener,
                                                       SourcesChangeEvents,
                                                       MouseListener,
-                                                      HasValue<Date>,
-                                                      ValueChangeHandler<Date>,
+                                                      HasValue<Datetime>,
+                                                      ValueChangeHandler<Datetime>,
                                                       HasFocusHandlers,
                                                       HasField {
                                                 
@@ -164,23 +165,28 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     }
     
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
-        CalendarWidget cal = new CalendarWidget(getValue());
-        cal.addValueChangeHandler(this);
-        //pop = new (null,"","","",true);
-        pop = new PopupPanel(true, false);
+    	try  {
+    		CalendarWidget cal = new CalendarWidget(getValue());
+    		cal.addValueChangeHandler(this);
+        //	pop = new (null,"","","",true);
+    		pop = new PopupPanel(true, false);
         
-        pop.setWidth("150px");
-        pop.setWidget(cal);
-        pop.setPopupPosition(textbox.getAbsoluteLeft(),
-                             textbox.getAbsoluteTop() + textbox.getOffsetHeight());
-        pop.show();
+    		pop.setWidth("150px");
+    		pop.setWidget(cal);
+    		pop.setPopupPosition(textbox.getAbsoluteLeft(),
+    				textbox.getAbsoluteTop() + textbox.getOffsetHeight());
+    		pop.show();
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		Window.alert(e.getMessage());
+    	}
     }
     
-    public Date getValue() {
+    public Datetime getValue() {
         if (getText().equals(""))
             return null;
         Date date = new Date(getText().replaceAll("-", "/"));
-        return Datetime.getInstance(begin, end, date).getDate();
+        return Datetime.getInstance(begin, end, date);
     }
 
     public Object getDisplay(String title) {
@@ -231,23 +237,23 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         }
     }
     
-    public void onValueChange(ValueChangeEvent<Date> event) {
-    	setValue(event.getValue());
+    public void onValueChange(ValueChangeEvent<Datetime> event) {
+    	setValue(event.getValue(),true);
     	if(pop != null){
     		pop.hide();
     	}
     }
 
-	public void setValue(Date value) {
+	public void setValue(Datetime value) {
 		setValue(value,false);
 		
 	}
 
-	public void setValue(Date value, boolean fireEvents) {
+	public void setValue(Datetime value, boolean fireEvents) {
         if (value != null)
-            textbox.setValue(Datetime.getInstance(begin, end, value).toString(),false);
+            textbox.setValue(value.toString(),fireEvents);
         else
-           textbox.setValue("",false);
+           textbox.setValue("",fireEvents);
         if(fireEvents) {
         	ValueChangeEvent.fire(this, value);
         }
@@ -255,7 +261,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 	}
 
 	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<Date> handler) {
+			ValueChangeHandler<Datetime> handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
 

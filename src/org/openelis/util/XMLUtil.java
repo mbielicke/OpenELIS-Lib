@@ -29,11 +29,17 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -111,11 +117,19 @@ public class XMLUtil {
      * @throws TransformerException
      */
     public static void transformXML(Document doc, File xsl, StreamResult result) throws TransformerConfigurationException,
-                                                                                TransformerException {
+                                                                                TransformerException, FileNotFoundException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer(new StreamSource(xsl));
         DOMSource document = new DOMSource(doc);
         transformer.transform(document, result);
+    }
+    
+    public static void transformXML(Document doc, InputStream xsl, StreamResult result) throws TransformerConfigurationException,
+    																			TransformerException, FileNotFoundException {
+    	TransformerFactory tf = TransformerFactory.newInstance();
+    	Transformer transformer = tf.newTransformer(new StreamSource(xsl));
+    	DOMSource document = new DOMSource(doc);
+    	transformer.transform(document, result);
     }
 
     /**

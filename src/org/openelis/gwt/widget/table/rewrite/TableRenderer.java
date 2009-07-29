@@ -144,17 +144,17 @@ public class TableRenderer  {
         rows.get(index).row = row;
         for (int i = 0; i < row.cells.size(); i++) {
             controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.cells.get(i));
-            if(controller.isSelected(modelIndex))
-                rows.get(index).addStyleName(controller.view.selectedStyle);
-            else
-                rows.get(index).removeStyleName(controller.view.selectedStyle);
-            if(controller.isEnabled(modelIndex)) 
-                rows.get(index).removeStyleName(controller.view.disabledStyle);
-            else
-                rows.get(index).addStyleName(controller.view.disabledStyle);
-                
-            
         }
+        rows.get(index).setStyleName("");
+        if(index % 2 == 1 && !controller.isDropdown){
+            rows.get(index).addStyleName("AltTableRow");
+        }
+        if(controller.isSelected(modelIndex))
+            rows.get(index).addStyleName(controller.view.selectedStyle);
+        if(!controller.isEnabled(modelIndex)) 
+            rows.get(index).addStyleName(controller.view.disabledStyle);
+        if(row.style != null && !row.style.equals(""))
+        	rows.get(index).addStyleName(row.style);
     }
     
     public void loadRow(int index) {

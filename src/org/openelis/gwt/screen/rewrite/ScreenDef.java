@@ -64,8 +64,7 @@ public class  ScreenDef  {
 	}
 	
 	public void setXMLString(String xml) {
-		if(keepDoc)
-			xmlDef = xml;
+	    xmlDef = xml;
 	}
 	
 	public String getXMLString() {

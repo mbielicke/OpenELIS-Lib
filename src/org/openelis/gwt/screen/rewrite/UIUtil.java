@@ -44,25 +44,20 @@ import org.openelis.gwt.widget.table.rewrite.TableColumn;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
 import org.openelis.gwt.widget.table.rewrite.TableView.VerticalScroll;
 import org.openelis.gwt.widget.tree.rewrite.TreeColumn;
-import org.openelis.gwt.widget.tree.rewrite.TreeWidget;
 import org.openelis.gwt.widget.tree.rewrite.TreeView;
+import org.openelis.gwt.widget.tree.rewrite.TreeWidget;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.impl.DOMImpl;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -1709,7 +1704,7 @@ public class UIUtil {
     	                dat = new Date();
     	            else
     	                dat = new Date(deflt);
-    	            field.setValue(Datetime.getInstance(field.getBegin(),field.getEnd(),dat).getDate());
+    	            field.setValue(Datetime.getInstance(field.getBegin(),field.getEnd(),dat));
     	        }
     	        if(node.getAttributes().getNamedItem("pattern") != null){
     	            field.setFormat(node.getAttributes().getNamedItem("pattern").getNodeValue());

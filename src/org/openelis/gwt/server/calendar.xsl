@@ -43,7 +43,7 @@ UIRF Software License are applicable instead of those above.
   <xsl:variable name="monthDisplay" select="calUtils:getMonthYear(string($month),string($year))"/>
   <xsl:variable name="calendar" select="calUtils:getCalforMonth(string($month),string($year))"/>
   <xsl:variable name="selected"><xsl:value-of select="doc/date"/></xsl:variable>
-  <xsl:variable name="today" select="cal:getInstance()"/>;
+  <xsl:variable name="today" select="cal:getInstance()"/>
 
 
   <xsl:template match="doc"> 

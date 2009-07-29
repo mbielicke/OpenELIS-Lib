@@ -25,50 +25,44 @@
 */
 package org.openelis.gwt.server;
 
+import java.io.InputStream;
+import java.util.Calendar;
+
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.servlet.ServletException;
-
-public class CalendarServlet extends AppServlet implements CalendarServiceInt{
+public class CalendarService {
 
     private static final long serialVersionUID = 1L;
 
     private static String appRoot ;
     
-    public void init() throws ServletException {
-        appRoot = getServletConfig().getInitParameter("app.root");
-        //appRoot = "/home/tschmidt/workspace/OpenELIS-KitchenSink/www/org.openelis.ks.KitchenSink/";
-    }
-    
     public CalendarRPC getMonth(CalendarRPC form) throws RPCException {
         try {
             Calendar cal = Calendar.getInstance();
             if(form.date != null && !form.date.equals("")){
-                cal.setTime(form.date);
+                cal.setTime(form.date.getDate());
             }else{
-                form.date = cal.getTime();
+                form.date = Datetime.getInstance(Datetime.YEAR,Datetime.DAY,cal.getTime());
             }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
             Element monthEl = doc.createElement("month");
-            monthEl.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.MONTH))));
+            monthEl.appendChild(doc.createTextNode(String.valueOf(form.month)));
             root.appendChild(monthEl);
             Element yearEl = doc.createElement("year");
-            yearEl.appendChild(doc.createTextNode(String.valueOf(cal.get(Calendar.YEAR))));
+            System.out.println("Year is "+form.year);
+            yearEl.appendChild(doc.createTextNode(String.valueOf(form.year)));
             root.appendChild(yearEl);
             Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(new Datetime(Datetime.YEAR,Datetime.DAY,form.date).toString()));
+            day.appendChild(doc.createTextNode(form.date.toString()));
             root.appendChild(day);
-            form.xml = ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
+            InputStream is = CalendarService.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/calendar.xsl");
+            form.xml = ServiceUtils.getXML(is,doc);
             return form;
         }catch(Exception e){
             e.printStackTrace();
@@ -90,7 +84,8 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
             Element yearCellEl = doc.createElement("yearCell");
             yearCellEl.appendChild(doc.createTextNode(String.valueOf(form.year%10)));
             root.appendChild(yearCellEl);
-            form.xml = ServiceUtils.getXML(appRoot+"Forms/monthYear.xsl",doc);
+            InputStream is = CalendarService.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/monthYear.xsl");
+            form.xml = ServiceUtils.getXML(is,doc);
             return form;
         }catch(Exception e){
             e.printStackTrace();
@@ -102,9 +97,9 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
         try {
             Calendar cal = Calendar.getInstance();
             if(rpc.date != null){
-                cal.setTime(rpc.date);
+                cal.setTime(rpc.date.getDate());
             }else{
-                rpc.date = cal.getTime();
+                rpc.date = Datetime.getInstance(Datetime.YEAR,Datetime.DAY,cal.getTime());
             }
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
@@ -114,12 +109,15 @@ public class CalendarServlet extends AppServlet implements CalendarServiceInt{
             root.appendChild(month);
             Element year = doc.createElement("year");
             rpc.year = cal.get(Calendar.YEAR);
+            System.out.println("year is "+rpc.year);
             year.appendChild(doc.createTextNode(String.valueOf(rpc.year)));
             root.appendChild(year);
             Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(new Datetime(Datetime.YEAR,Datetime.DAY,rpc.date).toString()));
+            System.out.println("date = "+rpc.date.toString());
+            day.appendChild(doc.createTextNode(rpc.date.toString()));
             root.appendChild(day);
-            rpc.xml = ServiceUtils.getXML(appRoot+"Forms/calendar.xsl",doc);
+            InputStream is = CalendarService.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/calendar.xsl");
+            rpc.xml = ServiceUtils.getXML(is,doc);
             return rpc;
         }catch(Exception e){
             e.printStackTrace();

@@ -53,6 +53,13 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     	panel.add(def.panel);
     }
     
+    public void drawScreen(ScreenDef def) throws Exception {
+    	this.def = def;
+    	UIUtil.createWidgets(def,false);
+    	panel.clear();
+    	panel.add(def.panel);
+    }
+    
     public void setWindow(ScreenWindow window) {
         this.window = window;
     }
@@ -68,8 +75,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         
     public void setDef(ScreenDef def) {
     	this.def = def;
-    	panel.clear();
-    	panel.add(def.panel);
     }
     
     public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {

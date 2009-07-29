@@ -40,7 +40,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class DateField extends Field<Date> {
+public class DateField extends Field<Datetime> {
     
     private byte begin;
     private byte end;
@@ -75,7 +75,7 @@ public class DateField extends Field<Date> {
     public DateField(byte begin, byte end, Date val){
         setBegin(begin);
         setEnd(end);
-        setValue(val);
+        setValue(Datetime.getInstance(begin,end,val));
     }
     
     /**
@@ -219,8 +219,8 @@ public class DateField extends Field<Date> {
         if(value == null)
             return "";
         if(pattern != null)
-            return DateTimeFormat.getFormat(pattern).format(value);
-        return Datetime.getInstance(begin,end,value).toString();
+            return DateTimeFormat.getFormat(pattern).format(value.getDate());
+        return value.toString();
     }
     
     /**
@@ -238,10 +238,11 @@ public class DateField extends Field<Date> {
     public void setStringValue(String val) {
         valid = true;
         Date date = null;
+        if (val == null || val.equals("")){ 
+            value = null;
+            return;
+        }
         if(pattern == null) {
-            if (val == null || val == "") 
-                value = null;
-           else 
         	   try {
         		   val = val.replaceAll("-", "/");
         		   date = new Date(val);
@@ -258,7 +259,7 @@ public class DateField extends Field<Date> {
         	}
         }
         if(valid)
-        	setValue(Datetime.getInstance(begin, end, date).getDate());
+        	setValue(Datetime.getInstance(begin, end, date));
     }
     
 }
