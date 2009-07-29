@@ -167,6 +167,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public ArrayList<TreeDataItem> deleted;// = new ArrayList<DataSet<Key>>();
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
+    public String[] headers;
+    
     
     public TreeWidget() {
 

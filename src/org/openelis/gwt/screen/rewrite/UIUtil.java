@@ -1476,6 +1476,11 @@ public class UIUtil {
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
                         tree.enableMultiSelect(true);
                 }
+                Node headers  = ((Element)node).getElementsByTagName("headers").item(0);
+                if(headers != null){
+                    tree.showHeader = true;
+                    tree.headers = headers.getFirstChild().getNodeValue().split(",");
+                }
                 NodeList leafList = ((Element)node).getElementsByTagName("leaf");
                 HashMap<String, ArrayList<TreeColumn>> columns = new HashMap<String,ArrayList<TreeColumn>>(leafList.getLength());
                 for(int h = 0; h < leafList.getLength(); h++) {

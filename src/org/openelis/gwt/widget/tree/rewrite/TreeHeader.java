@@ -68,8 +68,8 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
         //this.columns = controller.columns;
         setCellSpacing(0);
         int j = 0;
-        for(TreeColumn column : controller.columns.get(0)) {
-            Label headerLabel = new Label(column.getHeader());
+        for(String header : controller.headers) {
+            Label headerLabel = new Label(header);
             hLabels.add(headerLabel);
             if (hLabels.size() > 1) {
                 FocusPanel bar = new FocusPanel() {
@@ -100,20 +100,11 @@ public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListene
             DOM.setStyleAttribute(hp0.getElement(), "overflowX", "hidden");
             HorizontalPanel hp = new HorizontalPanel();
             headerLabel.addStyleName("HeaderLabel");
-            Image img = new Image("Images/unapply.png");
-            img.setHeight("10px");
-            img.setWidth("10px");
             DOM.setStyleAttribute(headerLabel.getElement(),"overflowX","hidden");
-            img.addStyleName("HeaderIMG");
-            if (!column.getSortable() && !column.getFilterable())
-                img.addStyleName("hide");
             hp.add(headerLabel);
             headerLabel.setWordWrap(false);
-            hp.add(img);
             hp.setCellHorizontalAlignment(headerLabel,
                                           HasHorizontalAlignment.ALIGN_RIGHT);
-            hp.setCellHorizontalAlignment(img,
-                                          HasHorizontalAlignment.ALIGN_LEFT);
             hp0.setWidget(hp);
             DOM.setElementProperty(hp0.getElement(),"align","center");              
             setWidget(0, j, hp0);
