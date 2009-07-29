@@ -511,13 +511,16 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
     		glass.setStyleName("GlassPanel");
     		glass.setHeight(content.getOffsetHeight()+"px");
     		glass.setWidth(content.getOffsetWidth()+"px");
-    		browser.browser.add(glass, content.getAbsoluteLeft() - browser.getAbsoluteLeft(), content.getAbsoluteTop() - browser.getAbsoluteTop());
+    		if(browser != null)
+    			browser.browser.add(glass, content.getAbsoluteLeft() - browser.getAbsoluteLeft(), content.getAbsoluteTop() - browser.getAbsoluteTop());
+    		else
+    			RootPanel.get().add(glass, content.getAbsoluteLeft(),content.getAbsoluteTop());
     	}
     }
     
     public void unlockWindow() {
     	if(glass != null) {
-    		browser.browser.remove(glass);
+    		glass.removeFromParent();
     		glass = null;
     	}
     }
