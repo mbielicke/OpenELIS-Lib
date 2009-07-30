@@ -62,7 +62,7 @@ import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
 import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
 import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
-import org.openelis.gwt.widget.tree.rewrite.TreeViewInt.VerticalScroll;
+import org.openelis.gwt.widget.tree.rewrite.TreeView.VerticalScroll;
 import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseEvent;
 import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseHandler;
 import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafOpenEvent;
@@ -135,8 +135,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public int activeCell = -1;
     public TreeView view;
     public TreeRenderer renderer;
-    public TreeKeyboardHandlerInt keyboardHandler;
-    public TreeMouseHandlerInt mouseHandler;
+    public TreeKeyboardHandler keyboardHandler;
     public boolean shiftKey;
     public boolean ctrlKey;
     public int maxRows;
@@ -160,8 +159,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public boolean multiSelect;
     public VerticalScroll showScroll;
     public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
-    public TreeServiceCallInt treeService;
-    protected TreeManager manager;
     protected HashMap<String,TreeDataItem> leaves;
     public String width;
     public ArrayList<TreeDataItem> deleted;// = new ArrayList<DataSet<Key>>();
@@ -181,7 +178,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public void init() {
         renderer = new TreeRenderer(this);
         keyboardHandler = new TreeKeyboardHandler(this);
-        mouseHandler = new TreeMouseHandler(this);
         view = new TreeView(this, showScroll);
         view.setWidth(width);
         view.setHeight((maxRows * cellHeight
@@ -503,11 +499,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }    
     }
 
-
-    public void setManager(TreeManager manager){
-        this.manager = manager;
-    }
-
     public void setModel(ArrayList<TreeDataItem> data) {
         this.data = data;
         
@@ -713,15 +704,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		
 	}
 
-	public void onMouseOver(MouseOverEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void onMouseOver(MouseOverEvent event) {
+        ((Widget)event.getSource()).addStyleName("TreeHighlighted");
+     }
 
-	public void onMouseOut(MouseOutEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+     public void onMouseOut(MouseOutEvent event) {
+         ((Widget)event.getSource()).removeStyleName("TreeHighlighted");
+     }
+
 	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
 		return addHandler(handler, CellEditedEvent.getType());
 	}

@@ -43,7 +43,7 @@ public class TreeDataItem extends TableDataRow {
     
     protected boolean loaded = true;
     
-    protected boolean open;
+    public boolean open;
     
     protected int depth;
         
@@ -137,6 +137,7 @@ public class TreeDataItem extends TableDataRow {
     }
     
     public void close() {
+    	open = false;
         Iterator<TreeDataItem> it = items.iterator();
         while(it.hasNext()){
             TreeDataItem item = it.next();

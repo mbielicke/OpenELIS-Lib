@@ -26,7 +26,9 @@
 package org.openelis.gwt.widget.tree.rewrite;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusWidget;
@@ -41,7 +43,7 @@ import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedEvent;
 
-public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
+public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
     
     private TreeWidget controller;
     private ScreenWidget screen;

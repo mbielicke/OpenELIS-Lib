@@ -54,8 +54,8 @@ public class TreeRenderer {
         controller.view.table.setWidget(i, 0, new Label());
         controller.view.table.getFlexCellFormatter().setHeight(i, 0, controller.cellHeight+"px");
         TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseOverHandler(controller.mouseHandler);
-        row.addMouseOutHandler(controller.mouseHandler);
+        row.addMouseOverHandler(controller);
+        row.addMouseOutHandler(controller);
         row.index = i;
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
@@ -253,6 +253,7 @@ public class TreeRenderer {
         public void onClick(ClickEvent event) {
             if(((Grid)event.getSource()).getCellForEvent(event).getCellIndex() == clickCell){
                 controller.toggle(rowIndex);
+                event.stopPropagation();
             }
         }
         
