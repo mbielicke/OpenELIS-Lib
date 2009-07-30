@@ -190,9 +190,11 @@ public class TreeRenderer {
 
     public void stopEditing() {
         if(controller.editingCell != null){
-        	((Focusable)controller.editingCell).setFocus(false);
+            if(controller.editingCell instanceof Focusable)
+                ((Focusable)controller.editingCell).setFocus(false);
         	controller.getRow(controller.activeRow).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
-        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
+        	if(controller.editingCell instanceof HasField)
+        	    controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
         }
