@@ -15,9 +15,11 @@
 */
 package org.openelis.gwt.server;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import org.openelis.gwt.common.RPC;
+import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.server.AppServlet;
 import org.openelis.gwt.services.ScreenServiceInt;
 
@@ -32,7 +34,16 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     @SuppressWarnings("unchecked")
 	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception{
 		Object serviceInst = Class.forName(getThreadLocalRequest().getParameter("service")).newInstance();
-		return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
+		try{
+		    return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
+		
+		}catch(InvocationTargetException e){
+		    throw (Exception)e.getCause();
+		    
+		}catch(Exception e){
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
     }
 
     @SuppressWarnings(value = "unchecked")
