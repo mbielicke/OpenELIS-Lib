@@ -163,6 +163,10 @@ public class TreeDataItem extends TableDataRow {
         return items.size() > 0;
     }
     
+    protected boolean mightHaveChildren() {
+        return hasChildren() || !isLoaded();
+    }
+    
     public void checkForChildren(boolean check){
         loaded = !check;
     }

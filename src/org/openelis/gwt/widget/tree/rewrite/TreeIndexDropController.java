@@ -99,7 +99,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
      if(tree.numRows() == 0 || (tree.numRows() -1 != 0 && tree.numRows() -1 == tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex && targetItem.depth == 0)){
          tree.addRow(item);
          advanceScroll = true;
-     }else if(targetItem.open && targetItem.hasChildren() && targetRow > -1)
+     }else if(targetItem.open && targetItem.mightHaveChildren() && targetRow > -1)
          targetItem.addItem(0,item);
      else if(targetRow < 0)
          tree.addRow(0,item);
@@ -177,7 +177,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
    if(targetRow > -1 && targetRow < tree.maxRows){
        final TreeRow targetItem = tree.renderer.getRows().get(targetRow);
        final DragContext ctx = context;
-       if(targetItem.item.hasChildren() && !targetItem.item.open){
+       if(targetItem.item.mightHaveChildren() && !targetItem.item.open){
            open = new Timer() {
                public void run() {
                    targetItem.item.toggle();
