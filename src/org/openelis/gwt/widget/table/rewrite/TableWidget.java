@@ -102,8 +102,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 													   HasField, 
 													   MouseOverHandler, 
 													   MouseOutHandler,
-													   HasBeforeSelectionHandlers<Integer>,
-													   HasSelectionHandlers<Integer>,
+													   HasBeforeSelectionHandlers<TableRow>,
+													   HasSelectionHandlers<TableRow>,
 													   HasBeforeCellEditedHandlers,
 													   HasCellEditedHandlers, 
 													   HasBeforeRowAddedHandlers,
@@ -181,7 +181,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     	if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
     			select(cell.getRowIndex(),cell.getCellIndex());
-    			SelectionEvent.fire(this, cell.getRowIndex());
+    			SelectionEvent.fire(this, renderer.rows.get(cell.getRowIndex()));
     			finishEditing();
     			activeCell = cell.getCellIndex();
     			renderer.setCellEditor(cell.getRowIndex(), cell.getCellIndex());
@@ -248,7 +248,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
-    	BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, modelIndexList[row]);
+    	BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
     	if(event != null && event.isCanceled())
     		return;
         if(finishEditing()){
@@ -437,7 +437,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 
     public void selectRow(final int index, boolean doEvent) throws IndexOutOfBoundsException{
     	if(doEvent){
-    		BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, index);
+    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(index));
     		if(event != null && event.isCanceled())
     			return;
     	}
@@ -451,7 +451,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         	renderer.rowSelected(tableIndex(index));
         setFocus(true);
         if(doEvent)
-        	SelectionEvent.fire(this, index);
+        	SelectionEvent.fire(this, renderer.rows.get(index));
     }
     
     public void clearSelections() {
@@ -590,20 +590,20 @@ public class TableWidget extends FocusPanel implements FocusHandler,
  
     public void selectRow(Object key) {
     	if(data == null && autoAdd){
-    		BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, 0);
+    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(0));
     		if(event != null && event.isCanceled())
     			return;
     		selectRow(0);
-    		SelectionEvent.fire(this, 0);
+    		SelectionEvent.fire(this, renderer.rows.get(0));
     		return;
     	}
     	for(int i = 0; i < data.size(); i++) {
     		if(data.get(i).key == key || key.equals(data.get(i).key)){
-        		BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, i);
+        		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(i));
         		if(event != null && event.isCanceled())
         			return;
     			selectRow(i);
-    			SelectionEvent.fire(this,i);
+    			SelectionEvent.fire(this,renderer.rows.get(i));
     			break;
     		}
     	}
@@ -705,12 +705,12 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public HandlerRegistration addBeforeSelectionHandler(
-			BeforeSelectionHandler<Integer> handler) {
+			BeforeSelectionHandler<TableRow> handler) {
 		return addHandler(handler, BeforeSelectionEvent.getType());
 	}
 
 	public HandlerRegistration addSelectionHandler(
-			SelectionHandler<Integer> handler) {
+			SelectionHandler<TableRow> handler) {
 		return addHandler(handler, SelectionEvent.getType());
 	}
 

@@ -10,6 +10,7 @@ import org.openelis.gwt.screen.rewrite.Screen;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
+import org.openelis.gwt.widget.table.rewrite.TableRow;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
 import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedHandler;
@@ -23,7 +24,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, BeforeSelectionHandler<Integer>, BeforeCellEditedHandler {
+public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, BeforeSelectionHandler<TableRow>, BeforeCellEditedHandler {
     
     public TableWidget table;
     
@@ -145,8 +146,8 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
 		return addHandler(handler,ActionEvent.getType());
 	}
 
-	public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-		ActionEvent.fire(this,Action.ROW_SELECTED,event.getItem());
+	public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+		ActionEvent.fire(this,Action.ROW_SELECTED,event.getItem().index);
 		event.cancel();
 	}
 

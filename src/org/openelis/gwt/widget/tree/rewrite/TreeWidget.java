@@ -112,8 +112,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasField, 
 													  MouseOverHandler, 
 													  MouseOutHandler,
-													  HasBeforeSelectionHandlers<Integer>,
-													  HasSelectionHandlers<Integer>,
+													  HasBeforeSelectionHandlers<TreeRow>,
+													  HasSelectionHandlers<TreeRow>,
 													  HasBeforeCellEditedHandlers,
 													  HasCellEditedHandlers, 
 													  HasBeforeRowAddedHandlers,
@@ -253,7 +253,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
-    	BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, modelIndexList[row]);
+    	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
     	if(event != null && event.isCanceled())
     		return;
         if(finishEditing()){
@@ -482,7 +482,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void selectRow(int index){
-    	BeforeSelectionEvent<Integer> event = BeforeSelectionEvent.fire(this, index);
+    	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(index));
     	if(event != null && event.isCanceled())
     		return;
         if(index < numRows()){
@@ -495,7 +495,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
            rows.get(index).selected = true;
            selectedRows.add(index);
            renderer.rowSelected(index);
-           SelectionEvent.fire(this,index);
+           SelectionEvent.fire(this,renderer.rows.get(index));
         }    
     }
 
@@ -725,12 +725,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public HandlerRegistration addBeforeSelectionHandler(
-			BeforeSelectionHandler<Integer> handler) {
+			BeforeSelectionHandler<TreeRow> handler) {
 		return addHandler(handler, BeforeSelectionEvent.getType());
 	}
 
 	public HandlerRegistration addSelectionHandler(
-			SelectionHandler<Integer> handler) {
+			SelectionHandler<TreeRow> handler) {
 		return addHandler(handler, SelectionEvent.getType());
 	}
 

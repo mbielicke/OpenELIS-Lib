@@ -31,6 +31,7 @@ import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.rewrite.PopupTable;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableKeyboardHandlerInt;
+import org.openelis.gwt.widget.table.rewrite.TableRow;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -90,7 +91,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     	int row = cell.getRowIndex();
     	int col = cell.getCellIndex();
-    	BeforeSelectionEvent<Integer> be = BeforeSelectionEvent.fire(this, modelIndexList[row]); 
+    	BeforeSelectionEvent<TableRow> be = BeforeSelectionEvent.fire(this, renderer.rows.get(row)); 
         if(be != null && be.isCanceled())
             return;
         if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
@@ -104,7 +105,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
         if(!multiSelect || (!ctrlKey && multiSelect))
             complete();
-        SelectionEvent.fire(this, modelIndexList[row]);
+        SelectionEvent.fire(this, renderer.rows.get(row));
     }
     
     private int findNextActive(int current) {
