@@ -482,7 +482,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void selectRow(int index){
-    	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(index));
+    	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(treeIndex(index)));
     	if(event != null && event.isCanceled())
     		return;
         if(index < numRows()){
