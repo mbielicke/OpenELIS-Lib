@@ -118,6 +118,7 @@ public class TreeRenderer {
         		ItemGrid ig =  createItem(row);
         		ig.setWidth(columns.get(i).getCurrentWidth());
         		ig.setWidget(wid);
+        		ig.rowIndex = index;
         		controller.view.table.setWidget(index, i, ig);
         	}else{
         		controller.view.table.setWidget(index, i, wid);
