@@ -541,7 +541,7 @@ public class TreeHeaderMenuBar extends MenuPanel implements MouseListener, Comma
                 else
                     column.applyFilter();
             }
-            controller.refresh();
+            controller.refresh(false);
         }
         doFilter = false;
         doQuery = false; 

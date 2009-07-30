@@ -112,7 +112,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
            //  modelIndex++;
          //tree.model.deleteRow(modelIndex);
      }    
-     tree.refresh();
+     tree.refresh(true);
      if(advanceScroll){
          DeferredCommand.addCommand(new Command() {
              public void execute() {
@@ -181,7 +181,7 @@ public final class TreeIndexDropController extends AbstractPositioningDropContro
            open = new Timer() {
                public void run() {
                    targetItem.item.toggle();
-                   tree.refresh();
+                   tree.refresh(true);
                    if(ctx.dragController == tree.dragController) {
                        if(((TreeRow)ctx.draggable).dragModelIndex > targetItem.modelIndex) {
                            ((TreeRow)ctx.draggable).dragItem  = tree.getRow(((TreeRow)ctx.draggable).dragModelIndex+targetItem.item.getItems().size());

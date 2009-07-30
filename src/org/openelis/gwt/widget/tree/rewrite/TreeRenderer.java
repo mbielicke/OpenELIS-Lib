@@ -170,8 +170,8 @@ public class TreeRenderer {
     }
     
     public void setCellEditor(int row, int col) {
-    	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
-        controller.editingCell = (Widget)column.getWidgetEditor((TableDataCell)controller.getCell(row,col));
+    	TreeColumn column = controller.columns.get(controller.getRow(controller.modelIndexList[row]).leafType).get(col);
+        controller.editingCell = (Widget)column.getWidgetEditor((TableDataCell)controller.getCell(controller.modelIndexList[row],col));
         if(col == 0)
         	((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(controller.editingCell);
         else
@@ -181,20 +181,20 @@ public class TreeRenderer {
     }
     
     public void setCellDisplay(int row, int col) {
-    	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
+    	TreeColumn column = controller.columns.get(controller.getRow(controller.modelIndexList[row]).leafType).get(col);
     	if(col == 0)
-    		((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(row,col))));
+    		((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(controller.modelIndexList[row],col))));
     	else
     		controller.view.table.setWidget(row, col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
     }
 
     public void stopEditing() {
         if(controller.editingCell != null){
-            if(controller.editingCell instanceof Focusable)
-                ((Focusable)controller.editingCell).setFocus(false);
-        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
+	        if(controller.editingCell instanceof Focusable)
+    	    	((Focusable)controller.editingCell).setFocus(false);
+        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
         	if(controller.editingCell instanceof HasField)
-        	    controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
+	        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
         }
@@ -227,12 +227,7 @@ public class TreeRenderer {
     }
 
     public void rowSelected(int row) {
-        controller.view.table.getRowFormatter().addStyleName(row, controller.view.selectedStyle);
-        for(int i = 0; i < controller.view.table.getCellCount(row); i++){
-            if(controller.view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
-                controller.view.table.getWidget(row,i).addStyleName("disabled");
-            }
-        }
+    	rows.get(row).addStyleName(controller.view.selectedStyle);
     }
 
     public ArrayList<TreeRow> getRows() {
@@ -256,7 +251,7 @@ public class TreeRenderer {
 
         public void onClick(ClickEvent event) {
             if(((Grid)event.getSource()).getCellForEvent(event).getCellIndex() == clickCell){
-                controller.toggle(rowIndex);
+                controller.toggle(controller.modelIndexList[rowIndex]);
                 event.stopPropagation();
             }
         }
