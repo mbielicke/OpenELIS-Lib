@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.tree.rewrite;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
@@ -40,21 +41,19 @@ public class TreeDataItem extends TableDataRow {
     
     public TreeDataItem parent = null;
     
-    public boolean loaded;
+    protected boolean loaded = true;
     
-    public boolean open;
+    protected boolean open;
     
-    public boolean lazy;
-    
-    public int depth;
+    protected int depth;
         
     public int y;
     
     public int x;
     
-    public int childIndex = -1;
+    protected int childIndex = -1;
   
-    public boolean selected; 
+    protected boolean selected; 
   
     public TreeDataItem() {
         
@@ -161,7 +160,15 @@ public class TreeDataItem extends TableDataRow {
     }
 
     public boolean hasChildren() {
-        return items.size() > 0 || (lazy && !loaded);
+        return items.size() > 0;
+    }
+    
+    public void checkForChildren(boolean check){
+        loaded = !check;
+    }
+    
+    public boolean isLoaded(){
+        return loaded;
     }
     
     public TreeDataItem getLastChild() {
