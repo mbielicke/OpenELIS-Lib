@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.tree.rewrite;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -50,6 +51,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.widget.table.TableHeader;
+import org.openelis.gwt.widget.table.rewrite.TableHeaderMenuBar;
 
 /**
  * This class represents the View of the table widget. It contains the logic for
@@ -120,7 +122,7 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
     public final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
-    public TreeHeader header = null;
+    public TreeHeaderMenuBar header = null;
     public FlexTable rows = new FlexTable();
     public int left = 0;
     public int top = 0;
@@ -156,7 +158,8 @@ public class TreeView extends Composite implements TreeViewInt, ScrollListener, 
             titlePanel.addStyleName("TitlePanel");
         }
         if(controller.showHeader){
-            header = new TreeHeader(controller);
+            header = GWT.create(TreeHeaderMenuBar.class);
+            header.init(controller);
             headerView.add(header);
         }
         cellView.setWidget(table);

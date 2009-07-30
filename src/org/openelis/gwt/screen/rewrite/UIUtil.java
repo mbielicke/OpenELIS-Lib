@@ -1476,10 +1476,21 @@ public class UIUtil {
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
                         tree.enableMultiSelect(true);
                 }
-                Node headers  = ((Element)node).getElementsByTagName("headers").item(0);
-                if(headers != null){
+                Node header  = ((Element)node).getElementsByTagName("header").item(0);
+                if(header != null){
                     tree.showHeader = true;
-                    tree.headers = headers.getFirstChild().getNodeValue().split(",");
+                    NodeList colList = ((Element)header).getElementsByTagName("col");
+                    tree.headers = new ArrayList<TreeColumn>(colList.getLength());
+                    for(int i = 0; i < colList.getLength(); i++) {
+                    	TreeColumn col = new TreeColumn();
+                		if(colList.item(i).getAttributes().getNamedItem("header") != null){
+                			col.setHeader(colList.item(i).getAttributes().getNamedItem("header").getNodeValue());
+                			tree.showHeader = true;
+                		}
+                		if(colList.item(i).getAttributes().getNamedItem("width") != null)
+                			col.setCurrentWidth(Integer.parseInt(colList.item(i).getAttributes().getNamedItem("width").getNodeValue()));
+                		tree.headers.add(col);
+                    }
                 }
                 NodeList leafList = ((Element)node).getElementsByTagName("leaf");
                 HashMap<String, ArrayList<TreeColumn>> columns = new HashMap<String,ArrayList<TreeColumn>>(leafList.getLength());
@@ -1497,6 +1508,9 @@ public class UIUtil {
                 		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
+                		else if(tree.headers != null) {
+                			column.setCurrentWidth(tree.headers.get(i).currentWidth);
+                		}
                 		if(col.getAttributes().getNamedItem("sort") != null)
                 			column.setSortable(Boolean.parseBoolean(col.getAttributes().getNamedItem("sort").getNodeValue()));
                 		if(col.getAttributes().getNamedItem("filter") != null)
