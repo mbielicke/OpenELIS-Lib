@@ -599,11 +599,11 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     	}
     	for(int i = 0; i < data.size(); i++) {
     		if(data.get(i).key == key || key.equals(data.get(i).key)){
-        		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(i));
+        		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(tableIndex(i)));
         		if(event != null && event.isCanceled())
         			return;
-    			selectRow(i);
-    			SelectionEvent.fire(this,renderer.rows.get(i));
+    			selectRow(tableIndex(i));
+    			SelectionEvent.fire(this,renderer.rows.get(tableIndex(i)));
     			break;
     		}
     	}

@@ -494,8 +494,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
            }
            rows.get(index).selected = true;
            selectedRows.add(index);
-           renderer.rowSelected(index);
-           SelectionEvent.fire(this,renderer.rows.get(index));
+           renderer.rowSelected(treeIndex(index));
+           SelectionEvent.fire(this,renderer.rows.get(treeIndex(index)));
         }    
     }
 
