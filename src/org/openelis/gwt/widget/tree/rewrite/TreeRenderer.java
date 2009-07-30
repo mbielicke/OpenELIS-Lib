@@ -176,7 +176,8 @@ public class TreeRenderer {
         	((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(controller.editingCell);
         else
         	controller.view.table.setWidget(row, col, controller.editingCell);
-        ((Focusable)controller.editingCell).setFocus(true);
+        if(controller.editingCell instanceof Focusable)
+        	((Focusable)controller.editingCell).setFocus(true);
     }
     
     public void setCellDisplay(int row, int col) {
