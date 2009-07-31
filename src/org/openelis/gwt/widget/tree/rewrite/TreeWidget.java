@@ -346,8 +346,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(event != null && event.isCancelled())
     		return;
         data.add(row);
-        RowAddedEvent.fire(this, data.size()-1, row);
-       	renderer.dataChanged(true);
+        refresh(true);
+       	RowAddedEvent.fire(this, data.size()-1, row);
     }
 
     public void addRow(int index, TreeDataItem row) {
@@ -355,8 +355,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(event != null && event.isCancelled())
     		return;
         data.add(index,row);
+        refresh(true);
         RowAddedEvent.fire(this, data.size()-1, row);
-       	renderer.dataChanged(true);
+       	
     }
     
     public void clear() {
@@ -388,7 +389,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             data.remove(rows.get(row).childIndex);
         }
         refresh(true);
-        renderer.dataChanged(true);
         RowDeletedEvent.fire(this, row, item);
     }
     
