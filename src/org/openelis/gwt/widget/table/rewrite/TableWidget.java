@@ -653,7 +653,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 		load(qModel);
 	}
 
-	public void getQuery(ArrayList<QueryData> list, String key) {
+	public void getQuery(ArrayList list, String key) {
 		for(TableColumn col : columns) {
 			((HasField)col.getColumnWidget()).getQuery(list, col.key);
 		}	
@@ -732,6 +732,11 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	public HandlerRegistration addBeforeAutoddHandler(
 			BeforeAutoAddHandler handler) {
 		return addHandler(handler, BeforeAutoAddEvent.getType());
+	}
+
+	public Object getFieldValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -47,11 +47,11 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 
-public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasField {
+public class AutoComplete<T> extends DropdownWidget implements HasValue<T> {
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;
-    private Field field;
+    private Field<T> field;
     
 
     AutoCompleteCallInt autoCall;
@@ -216,7 +216,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
 			field.checkValue(this);
 	}
 	
-	public void getQuery(ArrayList<QueryData> list, String key) {
+	public void getQuery(ArrayList list, String key) {
 		if(textbox.getText() != null && !textbox.getText().equals("")){
 			QueryData qd = new QueryData();
 			qd.key = key;
@@ -235,5 +235,8 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasF
 		return field.errors;
 	}
     
+	public Object getFieldValue() {
+		return field.getValue();
+	}
 	
 }

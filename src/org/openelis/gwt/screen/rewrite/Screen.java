@@ -12,6 +12,7 @@ import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.screen.ScreenWindow;
+import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;

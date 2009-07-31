@@ -9,9 +9,9 @@ import org.openelis.gwt.widget.HasField;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 
-public class PassWordTextBox extends PasswordTextBox implements HasField {
+public class PassWordTextBox extends PasswordTextBox implements HasField<String> {
 
-	private Field field; 
+	private Field<String> field; 
 	private boolean enabled;
 	
 	public void addError(String error) {
@@ -27,12 +27,16 @@ public class PassWordTextBox extends PasswordTextBox implements HasField {
 		return field;
 	}
 
-	public void setField(Field field) {
+	public void setField(Field<String> field) {
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
 		addMouseOutHandler(field);
 		addMouseOverHandler(field);
+	}
+	
+	public String getFieldValue() {
+		return field.getValue();
 	}
 	
 	public void addTabHandler(UIUtil.TabHandler handler) {

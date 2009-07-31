@@ -61,7 +61,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CheckBox extends Composite implements ClickListener, SourcesClickEvents, HasValue<String>, Focusable, HasBlurHandlers, HasMouseOutHandlers, HasMouseOverHandlers, HasField{
+public class CheckBox extends Composite implements ClickListener, SourcesClickEvents, HasValue<String>, Focusable, HasBlurHandlers, HasMouseOutHandlers, HasMouseOverHandlers, HasField<String>{
     
     DelegatingKeyboardListenerCollection keyListeners;
     
@@ -69,7 +69,7 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
     
     boolean enabled = true;
     
-    private Field field;
+    private Field<String> field;
     
     public enum CheckType {TWO_STATE,THREE_STATE};
     
@@ -294,7 +294,7 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 		return field;
 	}
 
-	public void setField(Field field) {
+	public void setField(Field<String> field) {
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
@@ -326,4 +326,10 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 	public ArrayList<String> getErrors() {
 		return field.errors;
 	}
+
+	public String getFieldValue() {
+		// TODO Auto-generated method stub
+		return field.getValue();
+	}
+
 }

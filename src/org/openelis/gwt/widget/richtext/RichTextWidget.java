@@ -50,14 +50,14 @@ import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.Field;
 
-public class RichTextWidget extends Composite implements FocusListener, HasValue<String>, HasField, HasFocusHandlers, HasBlurHandlers{
+public class RichTextWidget extends Composite implements FocusListener, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
     
     private FlexTable vp = new FlexTable();
     public RichTextArea area;
     public RichTextToolbar toolbar;
     private boolean tools;
     private boolean enabled;
-    private Field field;
+    private Field<String> field;
     
     public RichTextWidget(ScreenBase screen) {
         area = new RichTextArea();
@@ -179,11 +179,11 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		field.clearError(this);
 	}
 
-	public Field getField() {
+	public Field<String> getField() {
 		return field;
 	}
 
-	public void setField(Field field) {
+	public void setField(Field<String> field) {
 		this.field = field;
 		addValueChangeHandler(field);
 		area.addBlurHandler(field);
@@ -191,6 +191,10 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		area.addMouseOverHandler(field);
 	}
 
+	public String getFieldValue() {
+		return field.getValue();
+	}
+	
 	public HandlerRegistration addFocusHandler(FocusHandler handler) {
 		return area.addFocusHandler(handler);
 	}
@@ -209,7 +213,7 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		
 	}
 
-	public void getQuery(ArrayList<QueryData> list, String key) {
+	public void getQuery(ArrayList list, String key) {
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;

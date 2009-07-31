@@ -689,7 +689,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		return null;
 	}
 
-	public void getQuery(ArrayList<QueryData> list, String key) {
+	public void getQuery(ArrayList list, String key) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -699,6 +699,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		
 	}
 
+	public Object getFieldValue() {
+		return null;
+	}
+	
 	public void setQueryMode(boolean query) {
 		// TODO Auto-generated method stub
 		

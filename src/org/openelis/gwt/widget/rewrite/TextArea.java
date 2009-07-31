@@ -9,9 +9,9 @@ import org.openelis.gwt.widget.HasField;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 
 
-public class TextArea extends com.google.gwt.user.client.ui.TextArea implements HasField {
+public class TextArea extends com.google.gwt.user.client.ui.TextArea implements HasField<String> {
 
-	private Field field;
+	private Field<String> field;
 	private boolean enabled;
 	
 	public void addError(String error) {
@@ -27,7 +27,7 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 		return field;
 	}
 
-	public void setField(Field field) {
+	public void setField(Field<String> field) {
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
@@ -71,6 +71,10 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 	
 	public boolean isEnabled() {
 		return enabled;
+	}
+	
+	public String getFieldValue() {
+		return field.getValue();
 	}
 
 }

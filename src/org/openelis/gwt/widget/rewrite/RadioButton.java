@@ -53,7 +53,7 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 		
 	}
 
-	public void getQuery(ArrayList<QueryData> list, String key) {
+	public void getQuery(ArrayList list, String key) {
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;
@@ -75,5 +75,9 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 	
 	public boolean isEnabled() {
 		return enabled;
+	}
+	
+	public Object getFieldValue() {
+		return getFieldValue();
 	}
 }

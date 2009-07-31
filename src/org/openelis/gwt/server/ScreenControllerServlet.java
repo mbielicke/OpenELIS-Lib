@@ -27,12 +27,12 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 
     private static final long serialVersionUID = 1L;
     
-    private Object invoke(String service, String method) throws Exception {
+    private Object invoke(String service, String method) throws Throwable {
     	return invoke(service,method,new Class[]{},new Object[]{});
     }
     
     @SuppressWarnings("unchecked")
-	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception{
+	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Throwable {
 		Object serviceInst = Class.forName(getThreadLocalRequest().getParameter("service")).newInstance();
 		try{
 		    return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
@@ -47,47 +47,47 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     }
 
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Integer param)	throws Exception {
+	public <T extends RPC> T call(String method, Integer param)	throws Throwable {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
     
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, RPC param) throws Exception {
+	public <T extends RPC> T call(String method, RPC param) throws Throwable {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
     
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Double param) throws Exception {
+	public <T extends RPC> T call(String method, Double param) throws Throwable {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
     
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, String param) throws Exception {
+	public <T extends RPC> T call(String method, String param) throws Throwable {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
     }
 
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Date param) throws Exception {
+	public <T extends RPC> T call(String method, Date param) throws Throwable {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
  
-	public Boolean callBoolean(String method) throws Exception {
+	public Boolean callBoolean(String method) throws Throwable {
     	return (Boolean)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
  
-	public Date callDate(String method) throws Exception {
+	public Date callDate(String method) throws Throwable {
     	return (Date)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
-	public Double callDouble(String method) throws Exception {
+	public Double callDouble(String method) throws Throwable {
     	return (Double)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
-	public Integer callInteger(String method) throws Exception {
+	public Integer callInteger(String method) throws Throwable {
     	return (Integer)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
-	public String callString(String method) throws Exception {
+	public String callString(String method) throws Throwable {
     	return (String)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 

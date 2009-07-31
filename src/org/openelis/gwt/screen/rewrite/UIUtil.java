@@ -259,7 +259,16 @@ public class UIUtil {
     static {
     	factoryMap.put("textbox",new Factory<TextBox>() {
 			public TextBox getNewInstance(Node node, ScreenDef def) {
-				TextBox textbox = new TextBox();
+				TextBox<?> textbox = null;
+				if(node.getAttributes().getNamedItem("field") != null){
+					if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer"))
+						textbox = new TextBox<Integer>();
+					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Double"))
+						textbox = new TextBox<Double>();
+				}
+				if(textbox == null){
+					textbox = new TextBox<String>();
+				}
 				if(node.getAttributes().getNamedItem("tab") != null) 
 					textbox.addTabHandler(new TabHandler(node,def));
 				if (node.getAttributes().getNamedItem("shortcut") != null)
@@ -301,7 +310,7 @@ public class UIUtil {
 				if (node.getAttributes().getNamedItem("field") != null) {
 					textbox.setField((Field)factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, null));
 				}else
-					textbox.setField((StringField)factoryMap.get("String").getNewInstance(node, null));
+					textbox.setField((Field)factoryMap.get("String").getNewInstance(node, null));
 				textbox.addBlurHandler(focusHandler);
 				textbox.addFocusHandler(focusHandler);
 				return textbox;

@@ -67,11 +67,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyDownHandlers, KeyDownHandler {
+public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField<String>, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyDownHandlers, KeyDownHandler {
         
     boolean enabled = true;
     
-    private Field field;
+    private Field<String> field;
     
     public enum CheckType {TWO_STATE,THREE_STATE};
     
@@ -231,7 +231,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 		return field;
 	}
 
-	public void setField(Field field) {
+	public void setField(Field<String> field) {
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
@@ -298,6 +298,10 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+
+	public String getFieldValue() {
+		return getFieldValue();
 	}
 
 }

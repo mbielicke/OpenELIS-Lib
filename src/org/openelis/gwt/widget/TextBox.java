@@ -14,7 +14,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class TextBox extends com.google.gwt.user.client.ui.TextBox implements HasField {
+public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements HasField<T> {
 
 	public enum Case {MIXED,UPPER,LOWER};
     public Case textCase = Case.MIXED;
@@ -25,7 +25,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Ha
     public int length = 255;
     public String mask;
     public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
-    private Field field;
+    private Field<T> field;
     public boolean queryMode;
     private HandlerRegistration changeReg;
     private ValueChangeHandler<String> handler;
@@ -85,7 +85,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Ha
 		return field;
 	}
 
-	public void setField(Field field) {
+	public void setField(Field<T> field) {
 		this.field = field;
 		addValueChangeHandler(field);
 		addBlurHandler(field);
@@ -150,6 +150,11 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Ha
 	
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public T getFieldValue() {
+		// TODO Auto-generated method stub
+		return field.getValue();
 	}
 	
 }

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.widget.rewrite.Field;
 
-public interface HasField {
+public interface HasField<T> {
 	
-	public Field getField();
+	public Field<T> getField();
 	
-	public void setField(Field field);
+	public void setField(Field<T> field);
 	
 	public void addError(String Error);
 	
@@ -26,5 +26,7 @@ public interface HasField {
 	public void enable(boolean enabled);
 	
 	public boolean isEnabled();
+	
+	public T getFieldValue();
 
 }

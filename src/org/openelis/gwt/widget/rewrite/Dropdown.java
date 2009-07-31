@@ -266,7 +266,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		field.checkValue(this);
 	}
 	
-	public void getQuery(ArrayList<QueryData> list, String key) {
+	public void getQuery(ArrayList list, String key) {
 		ArrayList<TableDataRow> selections = getSelections();
 		if(selections.size() == 1 && selections.get(0).key ==  null)
 			return;

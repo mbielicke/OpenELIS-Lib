@@ -46,7 +46,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
                                                       HasValue<Datetime>,
                                                       ValueChangeHandler<Datetime>,
                                                       HasFocusHandlers,
-                                                      HasField {
+                                                      HasField<Datetime> {
                                                 
 
     protected byte begin;
@@ -55,7 +55,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     protected Date weekDate;
     protected ChangeListenerCollection changeListeners;
     protected PopupPanel pop;
-    private Field field;
+    private Field<Datetime> field;
     private boolean queryMode;
     private boolean enabled;
 
@@ -349,6 +349,11 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 	
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public Datetime getFieldValue() {
+		// TODO Auto-generated method stub
+		return field.getValue();
 	}
     
 }
