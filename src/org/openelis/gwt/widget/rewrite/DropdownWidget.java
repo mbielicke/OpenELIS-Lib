@@ -155,14 +155,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                  TableDataRow select = selected.get(i);
                  textValue = (String)select.getCells().get(0)
                                 + (!"".equals(textValue) ? "|" : "") + textValue;
-            }/*else{
-                Object select = ((AbstractField)selected.get(i).getCells().get(i)).getValue();
-                
-                String tempTextValue = (String)((TableDataModel<TableDataRow<? extends Object>>)model.getData()).getByKey(select).get(0).getValue();
-                
-                textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
             }
-             */  
         }
         if(textValue.equalsIgnoreCase("NULL"))
             return "";

@@ -23,7 +23,7 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 		field.clearError(this);
 	}
 
-	public Field getField() {
+	public Field<String> getField() {
 		return field;
 	}
 

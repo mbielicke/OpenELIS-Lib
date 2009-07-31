@@ -31,7 +31,6 @@ import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
-import org.openelis.gwt.widget.table.TableMouseHandler;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
@@ -51,7 +50,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     
     private int startPos;
     boolean linear;
-    private Field field;
+    private Field<T> field;
     IconContainer icon = new IconContainer();
 
     public DropDownListener listener = new DropDownListener(this);

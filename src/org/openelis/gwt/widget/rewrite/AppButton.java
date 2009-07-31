@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
+import org.openelis.gwt.screen.rewrite.UIUtil;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -34,15 +36,12 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.screen.rewrite.UIUtil;
 
 public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers {     
     

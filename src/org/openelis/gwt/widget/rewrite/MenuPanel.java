@@ -25,6 +25,10 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.screen.ScreenMenuItem;
+
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -34,7 +38,6 @@ import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -42,18 +45,8 @@ import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseWheelListener;
-import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
-import com.google.gwt.user.client.ui.MouseWheelVelocity;
-import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.screen.ScreenMenuItem;
-
-
-import java.util.ArrayList;
 
 public class MenuPanel extends Composite implements MouseWheelHandler, MouseOverHandler, MouseOutHandler{
     

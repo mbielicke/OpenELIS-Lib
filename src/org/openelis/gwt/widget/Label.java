@@ -8,6 +8,14 @@ import com.google.gwt.user.client.ui.HasValue;
 public class Label extends com.google.gwt.user.client.ui.Label implements HasValue<String> {
     
     String value;
+    
+    public Label() {
+    	super();
+    }
+    
+    public Label(String text) {
+    	super(text);
+    }
 
 	public String getValue() {
 		return value;
@@ -16,6 +24,7 @@ public class Label extends com.google.gwt.user.client.ui.Label implements HasVal
 	public void setValue(String value) {
 		setValue(value,false);
 	}
+	
 
 	public void setValue(String value, boolean fireEvents) {
 		String old = this.value;

@@ -2,22 +2,19 @@ package org.openelis.gwt.screen.rewrite;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashMap;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.screen.rewrite.Screen.State;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
-import org.openelis.gwt.widget.rewrite.MenuItem;
-import org.openelis.gwt.widget.rewrite.MenuPanel;
+import org.openelis.gwt.widget.NotesPanel;
 import org.openelis.gwt.widget.ScrollableTabBar;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.TitledPanel;
@@ -28,12 +25,13 @@ import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.ButtonGroup;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.CheckField;
-import org.openelis.gwt.widget.rewrite.CommandButton;
 import org.openelis.gwt.widget.rewrite.DateField;
 import org.openelis.gwt.widget.rewrite.DoubleField;
 import org.openelis.gwt.widget.rewrite.Dropdown;
 import org.openelis.gwt.widget.rewrite.Field;
 import org.openelis.gwt.widget.rewrite.IntegerField;
+import org.openelis.gwt.widget.rewrite.MenuItem;
+import org.openelis.gwt.widget.rewrite.MenuPanel;
 import org.openelis.gwt.widget.rewrite.PassWordTextBox;
 import org.openelis.gwt.widget.rewrite.RadioButton;
 import org.openelis.gwt.widget.rewrite.ResultsTable;
@@ -228,7 +226,15 @@ public class UIUtil {
 		public void onKeyPress(KeyPressEvent event) {
 			if(event.isControlKeyDown() && event.getNativeEvent().getKeyCode() == key){
 				if(wid instanceof AppButton) {
-					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, wid.getAbsoluteLeft(), wid.getAbsoluteTop(), -1, -1, event.isControlKeyDown(), event.isAltKeyDown(), event.isShiftKeyDown(), event.isMetaKeyDown());
+					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
+																									   wid.getAbsoluteLeft(), 
+																									   wid.getAbsoluteTop(), 
+																									   -1, 
+																									   -1, 
+																									   event.isControlKeyDown(), 
+																									   event.isAltKeyDown(), 
+																									   event.isShiftKeyDown(), 
+																									   event.isMetaKeyDown());
 					ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
 					event.preventDefault();
 					event.stopPropagation();
@@ -256,6 +262,7 @@ public class UIUtil {
     public static UIFocusHandler focusHandler = new UIFocusHandler();
     
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
+    
     static {
     	factoryMap.put("textbox",new Factory<TextBox>() {
 			public TextBox getNewInstance(Node node, ScreenDef def) {
@@ -1579,76 +1586,7 @@ public class UIUtil {
     	                button.setWidget(wid);
     	            }
     	        }
-    	        /*
-    	        if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
-    	            EnumSet<State> enabledStateSet = EnumSet.noneOf(State.class);
-    	        	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
-    	        	 for(int i = 0; i < enabledStates.length; i++)
-    	        		 enabledStateSet.add(State.valueOf(enabledStates[i].toUpperCase()));
-    	        	 button.setEnabledStates(enabledStateSet);
-    	        }else{
-    	            button.setEnabledStates(EnumSet.noneOf(State.class));
-    	        }
-    	        
-    	        if(node.getAttributes().getNamedItem("lockedStates") != null && !"".equals(node.getAttributes().getNamedItem("lockedStates").getNodeValue())){
-    	        	 EnumSet<State> lockedStateSet = EnumSet.noneOf(State.class);
-    	        	 String[] lockedStates = node.getAttributes().getNamedItem("lockedStates").getNodeValue().split(",");
-    	        	 for(int i = 0; i < lockedStates.length; i++)
-    	        		 lockedStateSet.add(State.valueOf(lockedStates[i].toUpperCase()));
-    	        	 button.setLockedStates(lockedStateSet);
-    	        }else{
-    	            button.setLockedStates(EnumSet.noneOf(State.class));
-    	        }
-    	        */    
-    	        setDefaults(node, button);
-    	        
-    	        if (node.getAttributes().getNamedItem("style") != null)
-    	        	button.setStyleName(node.getAttributes().getNamedItem("style").getNodeValue());
-    	        return button;
-    		}
-    	});
-    	factoryMap.put("comButton", new Factory<CommandButton>() {
-    		public CommandButton getNewInstance(Node node, ScreenDef def){
-    			CommandButton button = new CommandButton();
-    	        if(node.getAttributes().getNamedItem("tab") != null) {
-    	        	button.addTabHandler(new TabHandler(node,def));
-    	        }
-    	        button.command = ClassFactory.getEnum(node.getAttributes().getNamedItem("command").getNodeValue());
-    	        if(node.getAttributes().getNamedItem("value") != null){
-    	            button.value = node.getAttributes().getNamedItem("value").getNodeValue();
-    	        }
-    	        if(node.getAttributes().getNamedItem("toggle") != null){
-    	            if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
-    	                button.toggle = true;
-    	        }
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int l = 0; l < widgets.getLength(); l++) {
-    	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {                       
-    	                Widget wid = loadWidget(widgets.item(l),def);
-    	                button.setWidget(wid);
-    	            }
-    	        }
-    	    
-    	        if(node.getAttributes().getNamedItem("enabledStates") != null && !"".equals(node.getAttributes().getNamedItem("enabledStates").getNodeValue())){
-    	            EnumSet<State> enabledStateSet = EnumSet.noneOf(State.class);
-    	        	 String[] enabledStates = node.getAttributes().getNamedItem("enabledStates").getNodeValue().split(",");
-    	        	 for(int i = 0; i < enabledStates.length; i++)
-    	        		 enabledStateSet.add(State.valueOf(enabledStates[i].toUpperCase()));
-    	        	 button.setEnabledStates(enabledStateSet);
-    	        }else{
-    	            button.setEnabledStates(EnumSet.noneOf(State.class));
-    	        }
-    	        
-    	        if(node.getAttributes().getNamedItem("lockedStates") != null && !"".equals(node.getAttributes().getNamedItem("lockedStates").getNodeValue())){
-    	        	 EnumSet<State> lockedStateSet = EnumSet.noneOf(State.class);
-    	        	 String[] lockedStates = node.getAttributes().getNamedItem("lockedStates").getNodeValue().split(",");
-    	        	 for(int i = 0; i < lockedStates.length; i++)
-    	        		 lockedStateSet.add(State.valueOf(lockedStates[i].toUpperCase()));
-    	        	 button.setLockedStates(lockedStateSet);
-    	        }else{
-    	            button.setLockedStates(EnumSet.noneOf(State.class));
-    	        }
-    	            
+
     	        setDefaults(node, button);
     	        
     	        if (node.getAttributes().getNamedItem("style") != null)
@@ -1688,6 +1626,13 @@ public class UIUtil {
     	        }
     	        setDefaults(node,icon);
     	        return icon;
+    		}
+    	});
+    	factoryMap.put("notes", new Factory<NotesPanel>() {
+    		public NotesPanel getNewInstance(Node node, ScreenDef def) {
+    			NotesPanel notes = new NotesPanel();
+    			setDefaults(node,notes);
+    			return notes;
     		}
     	});
     	factoryMap.put("String", new Factory<StringField>() {
