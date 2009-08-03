@@ -62,14 +62,16 @@ public class QueryField extends AbstractField<String> implements FieldType{
     }
 
     public void setValue(String val) {
+        // TODO Auto-generated method stub
         value = val;
-        parse(val);
+        parse((String)val);
     }
     
     public void setValue(Object val) {
         value = (String)val;
-        parse(val.toString());
+        parse((String)val);
     }
+    
     
     public void parse(String value) {
         comparator = new ArrayList<String>();
