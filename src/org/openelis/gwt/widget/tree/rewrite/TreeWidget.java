@@ -253,7 +253,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      */
     protected void select(final int row, final int col) {
     	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
-    	if(event != null && event.isCanceled())
+    	if((event != null && event.isCanceled()) || (event == null && !isEnabled()))
     		return;
         if(finishEditing()){
             if(numRows() >= maxRows){
@@ -276,7 +276,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             SelectionEvent.fire(this,renderer.rows.get(row));
         }
         BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
-        if(bce != null && bce.isCancelled()){
+        if((bce != null && bce.isCancelled()) || (bce == null && !isEnabled())){
         	 activeCell = -1;
              sinkEvents(Event.ONKEYPRESS);
         }else{
