@@ -274,6 +274,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             }
             activeRow = row;
             selectRow(modelIndexList[row]);
+            SelectionEvent.fire(this,renderer.rows.get(row));
         }
         BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
         if(bce != null && bce.isCancelled()){
@@ -361,9 +362,15 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void clear() {
-        data.clear();
-        rows.clear();
-        selectedRows.clear();
+    	if(data != null)
+    		data.clear();
+    	if(rows != null)
+    		rows.clear();
+    	if(selectedRows != null)
+    		selectedRows.clear();
+    	controller.activeRow = -1;
+    	controller.activeCell = -1;
+    	controller.editingCell = null;
         refresh(false);
     }
 
@@ -467,7 +474,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return rows.size();
     }
 
-    public void refresh(boolean keepPosition) {
+    public void refresh(boolean keepPosition) {	
         shownRows = 0;
         getVisibleRows();
         selectedRows.clear();
@@ -482,9 +489,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void selectRow(int index){
-    	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(treeIndex(index)));
-    	if(event != null && event.isCanceled())
-    		return;
         if(index < numRows()){
            if(!multiSelect && selectedRows.size() > 0){
                rows.get(selectedRows.get(0)).selected = false;
@@ -495,7 +499,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
            rows.get(index).selected = true;
            selectedRows.add(index);
            renderer.rowSelected(treeIndex(index));
-           SelectionEvent.fire(this,renderer.rows.get(treeIndex(index)));
         }    
     }
 
@@ -650,6 +653,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     
     private void getVisibleRows() {
         rows = new ArrayList<TreeDataItem>();
+        if(data == null)
+        	return;
         Iterator<TreeDataItem> it = data.iterator();
         while(it.hasNext())
             checkChildItems(it.next());

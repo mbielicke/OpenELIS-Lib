@@ -101,7 +101,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             unselect(modelIndexList[row]);
         }else {
             activeRow = row;
-            selectRow(modelIndexList[row],false);
+            selectRow(modelIndexList[row]);
         }
         if(!multiSelect || (!ctrlKey && multiSelect))
             complete();

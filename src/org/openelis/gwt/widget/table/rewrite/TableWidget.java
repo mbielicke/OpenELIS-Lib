@@ -269,6 +269,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
             }
             activeRow = row;
             selectRow(modelIndexList[row]);
+            SelectionEvent.fire(this, renderer.rows.get(row));
         }
         BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
         if(bce != null && bce.isCancelled()){
@@ -431,16 +432,14 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         renderer.dataChanged(false);
     }
     
-    public void selectRow(final int index) throws IndexOutOfBoundsException {
-    	selectRow(index,true);
+    /* Remove method when ResultsTable can be committed
+     * 
+     */
+    public void selectRow(int index, boolean dummy) {
+    	selectRow(index);
     }
 
-    public void selectRow(final int index, boolean doEvent) throws IndexOutOfBoundsException{
-    	if(doEvent){
-    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(index));
-    		if(event != null && event.isCanceled())
-    			return;
-    	}
+    public void selectRow(final int index) throws IndexOutOfBoundsException{
         if(index > data.size())
             throw new IndexOutOfBoundsException();
         selected = index;
@@ -450,8 +449,6 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         if(isRowDrawn(index))
         	renderer.rowSelected(tableIndex(index));
         setFocus(true);
-        if(doEvent)
-        	SelectionEvent.fire(this, renderer.rows.get(index));
     }
     
     public void clearSelections() {
@@ -587,23 +584,17 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     	 if(isRowDrawn(row))
     		 renderer.cellUpdated(tableIndex(row), col);
     }
+    
+    
  
     public void selectRow(Object key) {
     	if(data == null && autoAdd){
-    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(0));
-    		if(event != null && event.isCanceled())
-    			return;
     		selectRow(0);
-    		SelectionEvent.fire(this, renderer.rows.get(0));
     		return;
     	}
     	for(int i = 0; i < data.size(); i++) {
     		if(data.get(i).key == key || key.equals(data.get(i).key)){
-        		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(tableIndex(i)));
-        		if(event != null && event.isCanceled())
-        			return;
-    			selectRow(tableIndex(i));
-    			SelectionEvent.fire(this,renderer.rows.get(tableIndex(i)));
+        		selectRow(i);
     			break;
     		}
     	}

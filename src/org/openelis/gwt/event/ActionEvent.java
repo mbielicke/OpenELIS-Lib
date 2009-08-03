@@ -7,12 +7,15 @@ public class ActionEvent<I> extends GwtEvent<ActionHandler<I>>{
 	private static Type<ActionHandler<?>> TYPE;
 	private I action;
 	private Object data;
+	private boolean failed;
 	
-    public static <I> void fire(HasActionHandlers<I> source, I action, Object data) {
+    public static <I> ActionEvent<I> fire(HasActionHandlers<I> source, I action, Object data) {
 	    if (TYPE != null) {
 	      ActionEvent<I> event = new ActionEvent<I>(action,data);
 	      source.fireEvent(event);
+	      return event;
 	    }
+	    return null;
     }
 
     protected ActionEvent(I state,Object data) {
@@ -44,5 +47,13 @@ public class ActionEvent<I> extends GwtEvent<ActionHandler<I>>{
 	
 	public Object getData() {
 		return data;
+	}
+	
+	public void fail() {
+		failed = true;
+	}
+	
+	public boolean failed() {
+		return failed;
 	}
 }
