@@ -323,14 +323,14 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
             setStatus(Screen.consts.get("loadCompleteMessage"),"");
             addKeyPressHandler(this);
         }
-        /*
+        
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
         		if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
         			body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
         		setFocus(true);
         	}
-        });*/
+        });
     }
     
     public void setName(String name) {
