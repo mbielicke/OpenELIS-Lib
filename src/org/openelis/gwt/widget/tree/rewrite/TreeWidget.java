@@ -155,7 +155,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
     private TreeModelListenerCollection treeModelListeners;
     public int shownRows; 
-    public TreeWidget controller;
     public boolean multiSelect;
     public VerticalScroll showScroll;
     public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
@@ -368,9 +367,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		rows.clear();
     	if(selectedRows != null)
     		selectedRows.clear();
-    	controller.activeRow = -1;
-    	controller.activeCell = -1;
-    	controller.editingCell = null;
+    	activeRow = -1;
+    	activeCell = -1;
+    	editingCell = null;
         refresh(false);
     }
 

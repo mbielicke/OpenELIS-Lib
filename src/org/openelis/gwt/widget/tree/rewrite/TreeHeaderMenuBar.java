@@ -552,7 +552,7 @@ public class TreeHeaderMenuBar extends MenuPanel implements MouseListener, Comma
         if(sender instanceof MenuItem) {
             doFilter = true;
             Filter filter = (Filter)((MenuItem)sender).args[0];
-            TreeColumn col = (TreeColumn)controller.controller.headers.get((((IntegerObject)((MenuItem)sender).args[1]).getValue()));
+            TreeColumn col = (TreeColumn)controller.headers.get((((IntegerObject)((MenuItem)sender).args[1]).getValue()));
             filter.filtered = !filter.filtered;
             if(filter.filtered)
                 ((MenuItem)sender).iconPanel.setStyleName("Checked");
