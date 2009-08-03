@@ -282,14 +282,14 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
             modalPanel.setHeight(Window.getClientHeight()+"px");
             modalPanel.setWidth(Window.getClientWidth()+"px");
             modalPanel.add(this,100,100);
-            RootPanel.get().add(modalPanel,0,0);
+            RootPanel.get().add(modalPanel,0,0); 
             setVisible(true);
             dragController = new PickupDragController(modalPanel,true);
             dropController = new AbsolutePositionDropController(modalPanel);
            // dragController.setBehaviorDragProxy(true);
             dragController.registerDropController(dropController);
             dragController.makeDraggable(this,cap);
-            DOM.addEventPreview(this);
+          //  DOM.addEventPreview(this);
         }
     }
     
@@ -323,13 +323,14 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
             setStatus(Screen.consts.get("loadCompleteMessage"),"");
             addKeyPressHandler(this);
         }
+        /*
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
         		if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
         			body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
         		setFocus(true);
         	}
-        });
+        });*/
     }
     
     public void setName(String name) {
