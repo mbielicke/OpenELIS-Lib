@@ -178,8 +178,9 @@ public class TableWidget extends FocusPanel implements FocusHandler,
      * This method handles all click events on the body of the table
      */
     public void onClick(ClickEvent event) {
-    	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-    	if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
+    	if(event.getSource() == view.table){
+    		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
+    		if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
     			select(cell.getRowIndex(),cell.getCellIndex());
     			SelectionEvent.fire(this, renderer.rows.get(cell.getRowIndex()));
     			finishEditing();
@@ -187,12 +188,13 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     			renderer.setCellEditor(cell.getRowIndex(), cell.getCellIndex());
     			unsinkEvents(Event.ONKEYPRESS);
     			return;
+    		}
+    		if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
+    			return;
+    		selectedByClick = true;
+    		select(cell.getRowIndex(), cell.getCellIndex());
+    		selectedByClick = false;
     	}
-        if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
-            return;
-        selectedByClick = true;
-        select(cell.getRowIndex(), cell.getCellIndex());
-        selectedByClick = false;
     }
     
     public void onMouseOver(MouseOverEvent event) {
@@ -248,8 +250,11 @@ public class TableWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
-    	BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
-    	if((event != null && event.isCanceled()) || (event == null && !isEnabled()))
+    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
+    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		if(event.isCanceled())
+    			return;
+    	}else if(!isEnabled()) 
     		return;
         if(finishEditing()){
             if(numRows() >= maxRows){
@@ -271,15 +276,22 @@ public class TableWidget extends FocusPanel implements FocusHandler,
             selectRow(modelIndexList[row]);
             SelectionEvent.fire(this, renderer.rows.get(row));
         }
-        BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
-        if((bce != null && bce.isCancelled()) || (bce == null && !isEnabled())){
-        	 activeCell = -1;
-             sinkEvents(Event.ONKEYPRESS);
-        }else{
-        	activeCell = col;
-        	renderer.setCellEditor(row, col);
-        	unsinkEvents(Event.ONKEYPRESS);
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        	if(bce.isCancelled()){
+        		activeCell = -1;
+        		sinkEvents(Event.ONKEYPRESS);
+        		return;
+        	}
+        }else if(!isEnabled()){
+       		activeCell = -1;
+    		sinkEvents(Event.ONKEYPRESS);
+    		return;
         }
+        activeCell = col;
+        renderer.setCellEditor(row, col);
+        unsinkEvents(Event.ONKEYPRESS);
+       
     }
     
     public boolean finishEditing() {
@@ -385,7 +397,10 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
 
     public void clear() {
-        data.clear();
+    	if(data != null)
+    		data.clear();
+    	activeRow = -1;
+    	activeCell = -1;
         shownRows = 0;
         renderer.dataChanged(false);
     }
@@ -429,6 +444,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
             if(((TableDataRow)data.get(i)).shown)
                 shownRows++;
         }
+        activeRow = -1;
+        activeCell = -1;
         renderer.dataChanged(false);
     }
     

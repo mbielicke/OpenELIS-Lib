@@ -2,11 +2,13 @@ package org.openelis.gwt.widget.rewrite;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.rewrite.Query;
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.screen.rewrite.Screen;
+import org.openelis.gwt.screen.rewrite.ScreenNavigator;
 import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.rewrite.AppButton.ButtonState;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
@@ -23,6 +25,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, BeforeSelectionHandler<TableRow>, BeforeCellEditedHandler {
     
@@ -36,71 +39,25 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
     protected boolean refreshedByLetter;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
     public boolean showNavPanel = true;
-    private ClickHandler navListener = this;
+    private ClickHandler navListener;
+    public Widget nextPage;
+    public Widget prevPage;
     
+
     
-    public ActionHandler<Screen.Action> screenActions = new ActionHandler<Screen.Action>() {
-
-		public void onAction(ActionEvent<Screen.Action> event) {
-	        if(event.getAction() == Screen.Action.NEW_MODEL) {
-	            table.load(((Query)event.getData()).model);
-	            table.activeCell = -1;
-	            table.activeRow = -1;
-	            table.view.setScrollHeight((table.getData().size()*table.cellHeight)+(table.getData().size()*table.cellSpacing)+table.cellSpacing);
-	            if(showNavPanel){
-	                table.view.setNavPanel(((Query)event.getData()).page, ((Query)event.getData()).page+1, false);
-	                table.view.prevNav.addClickHandler(navListener);
-	                table.view.nextNav.addClickHandler(navListener);
-	            }
-	            if(!refreshedByLetter){
-	                if(selectedButton != null){
-	                    selectedButton.changeState(ButtonState.UNPRESSED);
-	                }
-	            }else
-	                refreshedByLetter = false;
-	            table.enable(true);
-	            
-	            table.focused = true;
-	        }
-	        else if(event.getAction() == Screen.Action.NEW_PAGE){
-	            table.load((ArrayList<TableDataRow>)event.getData());
-	            table.view.setScrollHeight((table.getData().size()*table.cellHeight)+(table.getData().size()*table.cellSpacing)+table.cellSpacing);
-	            table.activeCell = -1;
-	            table.activeRow = -1;
-	            if(showNavPanel){
-	                table.view.setNavPanel(((Query)event.getData()).page, ((Query)event.getData()).page+1, false);
-	                table.view.prevNav.addClickHandler(navListener);
-	                table.view.nextNav.addClickHandler(navListener);
-	            }
-	            table.refresh();
-	            table.focused = true;
-	            table.enable(true);
-	        }
-		}
-    };
-    
-    public ActionHandler<KeyListManager.Action> keyListActions = new ActionHandler<KeyListManager.Action>() {
-
-		public void onAction(ActionEvent<KeyListManager.Action> event) {
-			if(event.getAction() == KeyListManager.Action.UNSELECT){
-				if(table.activeRow > -1)
-					table.unselect(-1);
-			}else if(event.getAction() == KeyListManager.Action.SELECTION) {
-				if(table.activeRow > -1){
-					table.unselect(table.activeRow);
-				}
-
-				int select = ((Integer)event.getData()).intValue();
-				for(int i = 0; i < table.shownRows(); i++){
-					if(table.modelIndexList[i] == select){
-						table.activeRow = i;
-					}
-				}
-		        table.selectRow(select,false);
+    public void select(int select) {
+		table.unselect(-1);
+		for(int i = 0; i < table.shownRows(); i++){
+			if(table.modelIndexList[i] == select){
+				table.activeRow = i;
 			}
 		}
-    	
-    };
+        table.selectRow(select);
+    }
+    
+    public void unselect() {
+		table.unselect(-1);
+    }
     
     public ResultsTable() {
         mainHP.setHeight("100%");
@@ -109,6 +66,29 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
         mainHP.add(alphabetButtonVP);
         mainHP.add(tablePanel);
         initWidget(mainHP);     
+    }
+    
+    public void setQuery(Query query) {
+        table.load(query.model);
+        table.activeCell = -1;
+        table.activeRow = -1;
+        table.view.setScrollHeight((table.getData().size()*table.cellHeight)+(table.getData().size()*table.cellSpacing)+table.cellSpacing);
+        if(showNavPanel){
+            table.view.setNavPanel(query.page, query.page+1, false);
+            table.view.prevNav.addClickHandler(navListener);
+            table.view.nextNav.addClickHandler(navListener);
+        	nextPage = table.view.nextNav;
+        	prevPage = table.view.prevNav;
+        }
+        if(!refreshedByLetter){
+            if(selectedButton != null){
+                selectedButton.changeState(ButtonState.UNPRESSED);
+            }
+        }else
+            refreshedByLetter = false;
+        table.enable(true);
+        
+        table.focused = true;
     }
     
     public void setTable(TableWidget table) {
@@ -141,6 +121,10 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
                 return;
             }
         }
+    }
+    
+    public void addPageHandler(ClickHandler handler) {
+    	navListener = handler;
     }
 
 	public HandlerRegistration addActionHandler(ActionHandler<Action> handler) {

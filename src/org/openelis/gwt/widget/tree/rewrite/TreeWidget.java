@@ -252,8 +252,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
-    	BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
-    	if((event != null && event.isCanceled()) || (event == null && !isEnabled()))
+    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
+    		BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		if(event.isCanceled())
+    			return;
+    	}else if(!isEnabled())
     		return;
         if(finishEditing()){
             if(numRows() >= maxRows){
@@ -275,15 +278,21 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             selectRow(modelIndexList[row]);
             SelectionEvent.fire(this,renderer.rows.get(row));
         }
-        BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
-        if((bce != null && bce.isCancelled()) || (bce == null && !isEnabled())){
-        	 activeCell = -1;
-             sinkEvents(Event.ONKEYPRESS);
-        }else{
-        	activeCell = col;
-        	renderer.setCellEditor(row, col);
-        	unsinkEvents(Event.ONKEYPRESS);
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        	if(bce.isCancelled()){
+        		activeCell = -1;
+        		sinkEvents(Event.ONKEYPRESS);
+        		return;
+        	}
+        }else if(!isEnabled()){
+    		activeCell = -1;
+    		sinkEvents(Event.ONKEYPRESS);
+    		return;
         }
+        activeCell = col;
+        renderer.setCellEditor(row, col);
+        unsinkEvents(Event.ONKEYPRESS);
     }
 
     public boolean finishEditing() {

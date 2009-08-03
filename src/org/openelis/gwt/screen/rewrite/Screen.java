@@ -2,16 +2,14 @@ package org.openelis.gwt.screen.rewrite;
 
 import java.util.HashMap;
 
-import org.openelis.gwt.event.ActionEvent;
-import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
-import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.event.HasDataChangeHandlers;
 import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.screen.ScreenWindow;
+import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -27,11 +25,11 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 	public final AbsolutePanel panel = new AbsolutePanel();
     public String name;
     public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,DELETE};
-    public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE,LOAD,UNLOAD,SUBMIT_QUERY,SELECTION_FETCHED};
     public State state = State.DEFAULT;
     protected ScreenDef def;
     protected ScreenWindow window;
     public static HashMap<String,String> consts;
+    protected ScreenService service;
     
     /**
      * No arg constructor will initiate a blank panel and new FormRPC 
@@ -42,6 +40,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     
     public Screen(String url) throws Exception {
     	initWidget(panel);
+    	service = new ScreenService(url);
     	def = new ScreenDef();
     	def.loadURL = url;
     	UIUtil.createWidgets(def);
@@ -95,13 +94,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 			StateChangeHandler<org.openelis.gwt.screen.rewrite.Screen.State> handler) {
 		return addHandler(handler, StateChangeEvent.getType());
 	}
-
-	/*
-	public HandlerRegistration addActionHandler(
-			ActionHandler<org.openelis.gwt.screen.rewrite.Screen.Action> handler) {
-		return addHandler(handler,ActionEvent.getType());
-	}
-	*/
 	
 	public void removeFocus() {
 		for(Widget wid : def.getWidgets().values()){
