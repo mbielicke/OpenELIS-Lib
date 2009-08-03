@@ -22,11 +22,11 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Screen extends Composite implements HasStateChangeHandlers<Screen.State>, HasDataChangeHandlers, HasActionHandlers<Screen.Action> {
+public class Screen extends Composite implements HasStateChangeHandlers<Screen.State>, HasDataChangeHandlers {
 	
 	public final AbsolutePanel panel = new AbsolutePanel();
     public String name;
-    public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,BROWSE,DELETE};
+    public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,DELETE};
     public enum Action {NEW_MODEL,REFRESH_PAGE,NEW_PAGE,LOAD,UNLOAD,SUBMIT_QUERY,SELECTION_FETCHED};
     public State state = State.DEFAULT;
     protected ScreenDef def;
@@ -96,10 +96,12 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 		return addHandler(handler, StateChangeEvent.getType());
 	}
 
+	/*
 	public HandlerRegistration addActionHandler(
 			ActionHandler<org.openelis.gwt.screen.rewrite.Screen.Action> handler) {
 		return addHandler(handler,ActionEvent.getType());
 	}
+	*/
 	
 	public void removeFocus() {
 		for(Widget wid : def.getWidgets().values()){
@@ -108,5 +110,29 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 			}
 		}
 	}
-
+	
+	protected void setState(Screen.State state){
+        this.state = state;
+        StateChangeEvent.fire(this, state);
+    }
+	
+	protected boolean validate() {
+        boolean valid = true;
+        for (Widget wid : def.getWidgets().values()) {
+            if (wid instanceof HasField) {
+                ((HasField)wid).checkValue();
+                if (((HasField)wid).getErrors() != null) {
+                    valid = false;
+                }
+            }
+        }
+        return valid;
+    }
+    
+    protected void clearErrors() {
+        for (Widget wid : def.getWidgets().values()) {
+            if (wid instanceof HasField)
+                ((HasField)wid).clearErrors();
+        }
+    }
 }

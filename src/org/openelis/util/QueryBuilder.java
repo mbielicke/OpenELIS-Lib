@@ -412,7 +412,7 @@ public class QueryBuilder {
                     whereOperands.add(whereClause);
 		
 				//add the table name to the from hash map
-				addTable(meta);
+				//addTable(meta);
                 }
             }
         }
@@ -434,7 +434,7 @@ public class QueryBuilder {
                 whereOperands.add(whereClause);
 		
 				//add the table name to the from hash map
-				addTable(meta);
+			//	addTable(meta);
             }
         }
     }
@@ -447,6 +447,9 @@ public class QueryBuilder {
     	whereOperands.add(whereStatement);
     }
     
+    public void clearWhereClause(){
+        whereOperands.clear();
+    }
     /**
      * Sets the values of the parameters in the query and then returns it.
      * @param query
@@ -489,6 +492,7 @@ public class QueryBuilder {
      * This method adds a table to the from statement in the query.
      * @param meta
      */
+    /*
     public void addTable(Meta meta){
     	boolean addTableToOrderedArray = false;
     	addTableToOrderedArray = !fromTables.containsKey(meta.getEntity());
@@ -503,7 +507,7 @@ public class QueryBuilder {
     	return null;
     	//TODO do this
     }
-    
+    */
     /**
      * Takes the different pieces of the query and put thems together.  It will return the query as a string.
      * @return
@@ -590,7 +594,6 @@ public class QueryBuilder {
     			}
     		} else
     			query.setParameter(paramName + i, param);
-    		System.out.println("#####"+paramName + " --- "+param);
     		i++;
     	}
     }

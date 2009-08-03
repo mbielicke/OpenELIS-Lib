@@ -62,14 +62,13 @@ public class QueryField extends AbstractField<String> implements FieldType{
     }
 
     public void setValue(String val) {
-        // TODO Auto-generated method stub
         value = val;
-        parse((String)val);
+        parse(val);
     }
     
     public void setValue(Object val) {
         value = (String)val;
-        parse((String)val);
+        parse(val.toString());
     }
     
     public void parse(String value) {

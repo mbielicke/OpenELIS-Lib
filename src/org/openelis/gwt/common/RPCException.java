@@ -25,9 +25,9 @@
 */
 package org.openelis.gwt.common;
 
-import java.io.Serializable;
 
-public class RPCException extends Exception implements Serializable {
+public class RPCException extends Exception {
+    
     private static final long serialVersionUID = 1L;
     private String msg;
     public String appMsg;
