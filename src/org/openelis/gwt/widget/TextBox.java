@@ -13,6 +13,7 @@ import org.openelis.gwt.widget.rewrite.StringField;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
 
 public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements HasField<T> {
 
@@ -27,8 +28,6 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
     private Field<T> field;
     public boolean queryMode;
-    private HandlerRegistration changeReg;
-    private ValueChangeHandler<String> handler;
     private boolean enabled;
     
     public TextBox() {

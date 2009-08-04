@@ -38,6 +38,7 @@ import org.openelis.gwt.widget.rewrite.Dropdown;
 import org.openelis.gwt.widget.rewrite.DropdownWidget;
 import org.openelis.gwt.widget.rewrite.Field;
 
+import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -275,8 +276,11 @@ public class TableColumn {
     }
 
     public void enable(boolean enable) {
-    	if(colWidget instanceof HasField)
+    	if(colWidget instanceof HasField){
     		((HasField)colWidget).enable(enable);
+    		
+    	}
+    	
     	/*
         if(colWidget instanceof CalendarLookUp) {
         	((CalendarLookUp)colWidget).enable(enable);

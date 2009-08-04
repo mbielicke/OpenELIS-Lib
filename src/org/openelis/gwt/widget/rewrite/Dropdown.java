@@ -36,6 +36,7 @@ import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
 import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -43,6 +44,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
@@ -241,6 +243,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     }
 
     public void onBlur(BlurEvent event) {
+
         if (!textbox.isReadOnly() && !popup.showing) {
                 // we need to set the unselected style name to the textbox
                 //textbox.addStyleName("TextboxUnselected");
@@ -300,5 +303,9 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 	@Override
 	public ArrayList<String> getErrors() {
 		return field.errors;
+	}
+	
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return textbox.addBlurHandler(handler);
 	}
 }

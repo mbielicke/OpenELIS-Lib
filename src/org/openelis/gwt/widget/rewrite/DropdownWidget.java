@@ -80,6 +80,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public DropdownWidget(){
     	super();
+    	
     }
     
     public void init() {

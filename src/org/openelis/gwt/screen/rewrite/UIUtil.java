@@ -195,16 +195,18 @@ public class UIUtil {
     	
 		public void onKeyPress(KeyPressEvent event) {
 			if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
-				if(event.isShiftKeyDown()){
-					if(((HasField)def.getWidget(prev)).isEnabled()) 
-						((Focusable)def.getWidget(prev)).setFocus(true);
-					else
-						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev));
-				}else{
-					if(((HasField)def.getWidget(next)).isEnabled()) 
-						((Focusable)def.getWidget(next)).setFocus(true);
-					else
-						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next));
+				if(((HasField)event.getSource()).isEnabled()){
+					if(event.isShiftKeyDown()){
+						if(((HasField)def.getWidget(prev)).isEnabled()) 
+							((Focusable)def.getWidget(prev)).setFocus(true);
+						else
+							KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev));
+					}else{
+						if(((HasField)def.getWidget(next)).isEnabled()) 
+							((Focusable)def.getWidget(next)).setFocus(true);
+						else
+							KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next));
+					}
 				}
 				event.preventDefault();
 				event.stopPropagation();
@@ -250,11 +252,13 @@ public class UIUtil {
     private static class UIFocusHandler implements FocusHandler,BlurHandler {
 
 		public void onFocus(FocusEvent event) {
-			((Widget)event.getSource()).addStyleName("Focus");
+			if(((HasField)event.getSource()).isEnabled())
+				((Widget)event.getSource()).addStyleName("Focus");
 		}
 
 		public void onBlur(BlurEvent event) {
-			((Widget)event.getSource()).removeStyleName("Focus");
+			if(((HasField)event.getSource()).isEnabled())
+				((Widget)event.getSource()).removeStyleName("Focus");
 		}
     	
     }
@@ -1243,6 +1247,7 @@ public class UIUtil {
                 for(int i = 0; i < colList.getLength(); i++) {
                 	Node col = colList.item(i);
                 	TableColumn column = new TableColumn();
+                	column.controller = table;
                 	if(col.getAttributes().getNamedItem("key") != null)
                 		column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
                 	if(col.getAttributes().getNamedItem("header") != null){
@@ -1274,7 +1279,6 @@ public class UIUtil {
                 			break;
                 		}
                 	}
-                	column.controller = table;
                 	columns.add(column);
                 }
                 table.columns = columns;
@@ -1333,6 +1337,7 @@ public class UIUtil {
                 	for(int i = 0; i < colList.getLength(); i++) {
                 		Node col = colList.item(i);
                 		TableColumn column = new TableColumn();
+                		column.controller = drop;
                 		if(col.getAttributes().getNamedItem("name") != null)
                 			column.setKey(col.getAttributes().getNamedItem("name").getNodeValue());
                 		if(col.getAttributes().getNamedItem("header") != null){
@@ -1425,6 +1430,7 @@ public class UIUtil {
                 	for(int i = 0; i < colList.getLength(); i++) {
                 		Node col = colList.item(i);
                 		TableColumn column = new TableColumn();
+                		column.controller = auto;
                 		if(col.getAttributes().getNamedItem("name") != null)
                 			column.setKey(col.getAttributes().getNamedItem("name").getNodeValue());
                 		if(col.getAttributes().getNamedItem("header") != null) {
@@ -1447,7 +1453,6 @@ public class UIUtil {
                 				column.setAlign(HasAlignment.ALIGN_RIGHT);
                 		}
                 		column.setColumnWidget(new org.openelis.gwt.widget.Label());
-                		column.controller = auto;
                 		columns.add(column);
                 		
                 	}

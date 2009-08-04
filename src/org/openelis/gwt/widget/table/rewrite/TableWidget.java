@@ -619,13 +619,14 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 
 
 	public void onFocus(FocusEvent event) {
+	
 	}
 
 
 	public void onBlur(BlurEvent event) {
 		if(!DOM.isOrHasChild(this.getElement(), ((Widget)event.getSource()).getElement())){
 			finishEditing();
-		}else if(event.getSource() != this && editingCell != null && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
+		}else if(event.getSource() != this && editingCell != null){// && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
 			finishEditing();
 		}
 	}

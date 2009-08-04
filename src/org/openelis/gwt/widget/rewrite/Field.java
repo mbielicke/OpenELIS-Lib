@@ -3,6 +3,7 @@ package org.openelis.gwt.widget.rewrite;
 import java.util.ArrayList;
 
 import org.openelis.gwt.widget.HandlesEvents;
+import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.MenuLabel;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -150,7 +151,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 
 	public void onBlur(BlurEvent event) {
-		checkValue((Widget)event.getSource());
+		if(((HasField)event.getSource()).isEnabled())
+			checkValue((Widget)event.getSource());
 	}
 	
 	public void checkValue(Widget wid) {
