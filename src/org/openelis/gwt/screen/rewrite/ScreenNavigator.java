@@ -12,11 +12,11 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.Window;
 
-public class ScreenNavigator implements BeforeSelectionHandler<TableRow>, ClickHandler {
+public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSelectionHandler<TableRow>, ClickHandler {
 	
 	public boolean selectItem = true;
 	public boolean selectLast;
-	public Query<? extends RPC> query;
+	public T query;
 	public ResultsTable resultsTable;
 	public int selection;
 	private Screen screen;
@@ -29,9 +29,11 @@ public class ScreenNavigator implements BeforeSelectionHandler<TableRow>, ClickH
 		resultsTable.addPageHandler(this);
 	}
 	
-	public void setQuery(Query<? extends RPC> query) {
+	public void setQuery(T query) {
 		this.query = query;
 		resultsTable.setQuery(query);
+		if(query.results.size() == 0)
+			return;
 		try {
             if (selectItem) {
                 if (selectLast)
@@ -123,7 +125,7 @@ public class ScreenNavigator implements BeforeSelectionHandler<TableRow>, ClickH
         }
 	}
 	
-	public void loadPage(Query<? extends RPC> query) {
+	public void loadPage(T query) {
 		
 	}
 	
