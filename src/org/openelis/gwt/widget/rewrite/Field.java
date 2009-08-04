@@ -99,6 +99,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         wid.removeStyleName("InputError");
         errorPanel.clear();
         errors = null;
+        valid = true;
     }
     
     public void addError(String error){
@@ -161,7 +162,6 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			}else
 				queryString = null;
 		}else{
-			valid = true;
 			Object value = ((HasValue)wid).getValue();
 			if(value == null)
 				value = "";
