@@ -29,8 +29,13 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.common.rewrite.QueryData;
+import org.openelis.gwt.event.BeforeGetMatchesEvent;
+import org.openelis.gwt.event.BeforeGetMatchesHandler;
+import org.openelis.gwt.event.GetMatchesEvent;
+import org.openelis.gwt.event.GetMatchesHandler;
+import org.openelis.gwt.event.HasBeforeGetMatchesHandlers;
+import org.openelis.gwt.event.HasGetMatchesHandlers;
 import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
@@ -47,14 +52,12 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 
-public class AutoComplete<T> extends DropdownWidget implements HasValue<T> {
+public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasBeforeGetMatchesHandlers, HasGetMatchesHandlers{
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;
     private Field<T> field;
-    
-
-    AutoCompleteCallInt autoCall;
+   
     public String cat;
     
     public AutoComplete() {
@@ -104,7 +107,15 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T> {
             //if(screen != null && ((AppScreen)screen).window != null)
             //    ((AppScreen)screen).window.setStatus("", "spinnerIcon");
             try {
-                autoCall.callForMatches(this, text);
+            	if(getHandlerCount(BeforeGetMatchesEvent.getType()) > 0) {
+            		BeforeGetMatchesEvent event = BeforeGetMatchesEvent.fire(this, text);
+            		if(event.isCancelled())
+            			return;
+            	}
+            	if(getHandlerCount(GetMatchesEvent.getType()) > 0)
+            		GetMatchesEvent.fire(this, text);
+            	else
+            		throw new Exception("No GetMatchesHandler registered to AutoComplete Widget");
 
             } catch (Exception e) {
                 Window.alert(e.getMessage());
@@ -119,10 +130,6 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T> {
         showTable(0);
         //if(screen != null && ((AppScreen)screen).window != null)
         //    ((AppScreen)screen).window.setStatus("", "");
-    }
-    
-    public void setAutoCall(AutoCompleteCallInt autoCall) {
-        this.autoCall = autoCall;
     }
     
     /*
@@ -237,6 +244,14 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T> {
     
 	public Object getFieldValue() {
 		return field.getValue();
+	}
+	
+	public HandlerRegistration addBeforeGetMatchesHandler(BeforeGetMatchesHandler handler) {
+		return addHandler(handler, BeforeGetMatchesEvent.getType());
+	}
+	
+	public HandlerRegistration addGetMatchesHandler(GetMatchesHandler handler) {
+		return addHandler(handler,GetMatchesEvent.getType());
 	}
 	
 }
