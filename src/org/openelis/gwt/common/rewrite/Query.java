@@ -3,11 +3,9 @@ package org.openelis.gwt.common.rewrite;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
-public class Query<T> implements RPC {
+public class Query<T extends RPC> implements RPC {
     
 	private static final long serialVersionUID = 1L;
 	
