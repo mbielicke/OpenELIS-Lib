@@ -25,10 +25,10 @@
 */
 package org.openelis.gwt.common;
 
+import java.util.HashMap;
+
 import org.openelis.gwt.common.SecurityModule.ModuleFlags;
 import org.openelis.gwt.common.SecuritySection.SectionFlags;
-
-import java.util.HashMap;
 
 public class SecurityUtil implements RPC {
 
@@ -37,18 +37,28 @@ public class SecurityUtil implements RPC {
     protected HashMap<String,SecuritySection> sections = new HashMap<String,SecuritySection>();
     protected HashMap<String,SecurityModule> modules = new HashMap<String,SecurityModule>();
     
-    private Integer system_user_id;
+    private String systemUserName, firstName, lastName, initials;
+    private Integer systemUserId;
+    
     
     public SecurityUtil() {
         
     }
     
-    public void setSystemUserId(Integer id){
-        this.system_user_id = id;
+    public void setSystemUserId(Integer userId){
+        systemUserId = userId;
+    }
+    
+    public void setSystemUserName(String userName){
+        systemUserName = userName;
     }
    
+    public String getSystemUserName() {
+        return systemUserName;
+    }
+    
     public Integer getSystemUserId() {
-        return this.system_user_id;
+        return systemUserId;
     }
     
     public void add(SecurityModule sm){
@@ -98,6 +108,30 @@ public class SecurityUtil implements RPC {
     public Object clone() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
     }
 
    
