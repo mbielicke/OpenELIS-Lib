@@ -693,6 +693,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public void checkValue() {
+		finishEditing();
 		errors = null;
 		if(data == null)
 			return;

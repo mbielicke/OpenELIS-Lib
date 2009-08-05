@@ -690,6 +690,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	ArrayList<String> errors;
 	
 	public void checkValue() {
+		finishEditing();
 		errors = null;
 		if(data == null)
 			return;

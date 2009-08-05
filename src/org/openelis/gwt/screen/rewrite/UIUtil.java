@@ -1289,6 +1289,7 @@ public class UIUtil {
                 }
                 table.columns = columns;
                 table.init();
+                table.setStyleName("ScreenTable");
                 setDefaults(node,table);
                 table.addBlurHandler(focusHandler);
                 table.addFocusHandler(focusHandler);
