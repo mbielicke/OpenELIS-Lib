@@ -687,9 +687,26 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		
 	}
 
+	ArrayList<String> errors;
+	
 	public void checkValue() {
-		// TODO Auto-generated method stub
-		
+		errors = null;
+		if(data == null)
+			return;
+		for(int i = 0; i < numRows(); i++) {
+			for(int j = 0; j < data.get(i).cells.size(); j++){
+				Widget wid = columns.get(data.get(i).leafType).get(j).getWidgetEditor(data.get(i).cells.get(j));
+				if(wid instanceof HasField){
+					((HasField)wid).checkValue();
+					data.get(i).cells.get(j).errors = ((HasField)wid).getErrors();
+					if(data.get(i).cells.get(j).errors != null){
+						errors = data.get(i).cells.get(j).errors;
+					}
+				}
+			}
+		}
+		if(errors != null)
+			refresh(false);
 	}
 
 	public void clearErrors() {
@@ -699,7 +716,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
 	public ArrayList<String> getErrors() {
 		// TODO Auto-generated method stub
-		return null;
+		return errors;
 	}
 
 	public Field getField() {

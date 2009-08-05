@@ -696,16 +696,20 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 		errors = null;
 		if(data == null)
 			return;
-		for(TableDataRow row : data) {
-			for(TableDataCell cell : row.cells){
-				if(cell.errors != null){
-					errors = cell.errors;
-					break;
+		for(int i = 0; i < numRows(); i++) {
+			for(int j = 0; j < data.get(i).cells.size(); j++){
+				Widget wid = columns.get(j).getWidgetEditor(data.get(i).cells.get(j));
+				if(wid instanceof HasField){
+					((HasField)wid).checkValue();
+					data.get(i).cells.get(j).errors = ((HasField)wid).getErrors();
+					if(data.get(i).cells.get(j).errors != null){
+						errors = data.get(i).cells.get(j).errors;
+					}
 				}
 			}
-			if(errors != null)
-				break;
 		}
+		if(errors != null)
+			refresh();
 	}
 	
 	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
