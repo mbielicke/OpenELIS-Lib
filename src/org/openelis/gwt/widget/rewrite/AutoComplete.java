@@ -160,6 +160,13 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
            // ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
 
+    public void setSelection(T key, String display) {
+    	ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
+    	model.add(new TableDataRow(key,display));
+    	setModel(model);
+    	setValue(key);
+    }
+    
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
         return addHandler(handler,ValueChangeEvent.getType());
     }
