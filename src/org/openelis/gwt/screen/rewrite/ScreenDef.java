@@ -2,7 +2,11 @@ package org.openelis.gwt.screen.rewrite;
 
 import java.util.HashMap;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
@@ -17,10 +21,14 @@ public class  ScreenDef  {
 	private boolean keepDoc;
 	public String name;
 	
-	protected class ScreenPanel extends AbsolutePanel  {
+	protected class ScreenPanel extends AbsolutePanel implements HasClickHandlers {
 		
 		public void addShortcutHandler(UIUtil.ShortcutHandler handler) {
 			addDomHandler(handler,KeyPressEvent.getType());
+		}
+
+		public HandlerRegistration addClickHandler(ClickHandler handler) {
+			return addDomHandler(handler, ClickEvent.getType());
 		}
 
 	}

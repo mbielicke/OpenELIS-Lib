@@ -40,9 +40,11 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
@@ -60,7 +62,13 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public String popWidth;
     
-    public TextBox textbox = new TextBox();
+    public TextBox textbox = new TextBox() {
+    	@Override
+    	protected void delegateEvent(Widget target, GwtEvent<?> event) {
+    		// TODO Auto-generated method stub
+    		super.delegateEvent(getParent(), event);
+    	}
+    };
     
     public class Delay extends Timer {
         public String text;

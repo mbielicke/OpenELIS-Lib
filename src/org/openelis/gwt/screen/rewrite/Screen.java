@@ -13,7 +13,12 @@ import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
@@ -36,6 +41,14 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
      */
     public Screen() {
         initWidget(panel);
+        sinkEvents(Event.ONKEYPRESS);
+    }
+    
+    @Override
+    public void onBrowserEvent(Event event) {
+    	if(DOM.eventGetType(event) == Event.ONKEYPRESS)
+    		event.preventDefault();
+    	super.onBrowserEvent(event);
     }
     
     public Screen(String url) throws Exception {
@@ -127,4 +140,5 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 ((HasField)wid).clearErrors();
         }
     }
+
 }

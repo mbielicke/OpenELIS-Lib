@@ -300,7 +300,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
         TextBox box = new TextBox();
         box.setWidth(editNode.getOffsetWidth()+"px");
         box.setValue((String)editNode.item.cells[0].getValue());
-        editNode.remove(0);
+     //   editNode.remove(0);
         editNode.add(box);
         box.setFocus(true);
         selectNode = editNode;
@@ -308,8 +308,8 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
     }
     
     private void saveEditNode() {
-        editNode.item.cells[0].setValue(((TextBox)editNode.getWidget(0)).getValue());
-        editNode.remove(0);
+        //editNode.item.cells[0].setValue(((TextBox)editNode.getWidget(0)).getValue());
+        //editNode.remove(0);
         Label label = new Label((String)editNode.item.cells[0].getValue());
         editNode.add(label);
         selectNode.removeStyleName("NodeSelected");

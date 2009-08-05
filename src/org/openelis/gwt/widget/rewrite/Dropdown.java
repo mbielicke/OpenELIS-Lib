@@ -35,25 +35,41 @@ import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField{
+public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField, BlurHandler{
     
     private int startPos;
     boolean linear;
     private Field<T> field;
     IconContainer icon = new IconContainer();
+    Dropdown dd = this;
+    Timer timer = new Timer() {
+    	public void run() {
+    		if(!clickedIcon)
+    			BlurEvent .fireNativeEvent(Document.get().createBlurEvent(), dd);
+    	}
+    };
+  
 
     public DropDownListener listener = new DropDownListener(this);
     
@@ -70,22 +86,23 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = this;
         HorizontalPanel hp = new HorizontalPanel();
-        setWidget(hp);
         hp.add(textbox);
         hp.add(icon);
+        setWidget(hp);
         setStyleName("AutoDropDown");
         icon.setStyleName("AutoDropDownButton");
         textbox.setStyleName("TextboxUnselected");
-        textbox.addFocusHandler(this);
+        
         
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
         popup.addCloseHandler(this);
         icon.addClickHandler(listener);
+        icon.addClickHandler(this);
+        icon.addFocusHandler(this);
         textbox.addKeyUpHandler(listener);
         textbox.setReadOnly(!enabled);
-        textbox.addBlurHandler(this);
- 
+       
         this.isDropdown = true;
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
@@ -228,31 +245,18 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		textbox.addMouseOverHandler(field);
 	}
 	
+	boolean clickedIcon = false;
+	
     public void onFocus(FocusEvent event) {
-        if (!textbox.isReadOnly()) {
-                // we need to set the selected style name to the textbox
-                //textbox.addStyleName("TextboxSelected");
-                //textbox.removeStyleName("TextboxUnselected");
-                //textbox.setFocus(true);
-                //textbox.addStyleName("Focus");
-                icon.addStyleName("Selected");
+    	System.out.println("fp focus");
 
-                //setCurrentValues();
-                    
-        }
     }
-
+    
     public void onBlur(BlurEvent event) {
-
-        if (!textbox.isReadOnly() && !popup.showing) {
-                // we need to set the unselected style name to the textbox
-                //textbox.addStyleName("TextboxUnselected");
-                //textbox.removeStyleName("TextboxSelected");
-                //textbox.removeStyleName("Focus");
-                icon.removeStyleName("Selected");
-                complete();
-        }
+    	System.out.println("fp blur");
     }
+
+
     
     @Override
     public void setFocus(boolean focus) {
@@ -305,7 +309,21 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		return field.errors;
 	}
 	
-	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return textbox.addBlurHandler(handler);
+	
+
+	@Override
+	public void onClick(ClickEvent event) {
+		if(event.getSource() == icon) {
+			System.out.println("Click icon");
+			clickedIcon = true;
+			return;
+		}
+		super.onClick(event);
+	}
+	
+	@Override
+	public void complete() {
+		super.complete();
+		textbox.setFocus(true);
 	}
 }

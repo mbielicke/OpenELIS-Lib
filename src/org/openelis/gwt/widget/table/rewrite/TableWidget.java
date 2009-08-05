@@ -59,6 +59,7 @@ import org.openelis.gwt.widget.table.rewrite.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -68,6 +69,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -79,12 +81,19 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.gen2.event.shared.EventHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
@@ -110,7 +119,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 													   HasRowAddedHandlers, 
 													   HasBeforeRowDeletedHandlers,
 													   HasRowDeletedHandlers,
-													   HasBeforeAutoAddHandlers {
+													   HasBeforeAutoAddHandlers
+													   {
                             
     public ArrayList<TableColumn> columns;
     public boolean enabled;
@@ -168,8 +178,11 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addFocusHandler(this);
         addBlurHandler(this);
+        Event.setEventListener(Document.get().getDocumentElement(), this);
+        DOM.sinkEvents((Element)Document.get().getDocumentElement(), Event.ONCLICK);
+        
     }
-    
+        
     public void setTableWidth(String width) {
     	this.width = width;
     }
@@ -465,7 +478,6 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         selections.add(index);
         if(isRowDrawn(index))
         	renderer.rowSelected(tableIndex(index));
-        setFocus(true);
     }
     
     public void clearSelections() {
@@ -624,11 +636,13 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 
 
 	public void onBlur(BlurEvent event) {
-		if(!DOM.isOrHasChild(this.getElement(), ((Widget)event.getSource()).getElement())){
-			finishEditing();
-		}else if(event.getSource() != this && editingCell != null){// && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
-			finishEditing();
-		}
+		//System.out.println("Blur Table");
+		//if(!DOM.isOrHasChild(this.getElement(), ((Widget)event.getSource()).getElement())){
+			//finishEditing();
+		//if(event.getSource() != this && editingCell != null){// && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
+			//finishEditing();
+	//	}
+		
 	}
 
 	public void addError(String Error) {

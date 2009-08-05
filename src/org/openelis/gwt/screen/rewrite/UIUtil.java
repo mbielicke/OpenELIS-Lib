@@ -61,6 +61,7 @@ import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -184,28 +185,33 @@ public class UIUtil {
     	String next;
     	String prev;
     	ScreenDef def;
+    	String wid;
     	
     	public TabHandler(Node node, ScreenDef def) {
     		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
 			String[] tabs = tab.split(",");
     		next = tabs[0];
     		prev = tabs[1];
+    		wid = node.getAttributes().getNamedItem("key").getNodeValue();
     		this.def = def;
+    		
     	}
     	
 		public void onKeyPress(KeyPressEvent event) {
 			if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
-				if(((HasField)event.getSource()).isEnabled()){
+				if(((HasField)event.getSource()).isEnabled() ||  !def.getWidget(wid).getElement().equals(event.getRelativeElement())){
 					if(event.isShiftKeyDown()){
 						if(((HasField)def.getWidget(prev)).isEnabled()) 
 							((Focusable)def.getWidget(prev)).setFocus(true);
-						else
-							KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev));
+						else{
+							KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev), def.getWidget(wid).getElement());
+						}
 					}else{
 						if(((HasField)def.getWidget(next)).isEnabled()) 
 							((Focusable)def.getWidget(next)).setFocus(true);
-						else
-							KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next));
+						else{
+							KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next), def.getWidget(wid).getElement());
+						}							
 					}
 				}
 				event.preventDefault();
@@ -1273,8 +1279,8 @@ public class UIUtil {
                 	for(int j = 0; j < editor.getLength(); j++){
                 		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
                 			Widget wid = createWidget(editor.item(j),def);
-                			if(wid instanceof HasBlurHandlers)
-                				((HasBlurHandlers)wid).addBlurHandler(table);
+                			//if(wid instanceof HasBlurHandlers)
+                			//	((HasBlurHandlers)wid).addBlurHandler(table);
                 			column.setColumnWidget(wid);
                 			break;
                 		}
@@ -1286,6 +1292,8 @@ public class UIUtil {
                 setDefaults(node,table);
                 table.addBlurHandler(focusHandler);
                 table.addFocusHandler(focusHandler);
+                //if(def != null)
+                	//def.panel.addClickHandler(table);
     			return table;
     		}
     	});
@@ -1626,7 +1634,7 @@ public class UIUtil {
     	                                                .getNodeValue());
     	                if(node.getAttributes().getNamedItem("align") != null)
     	                    DOM.setElementProperty(icon.getElement(),"align",node.getAttributes().getNamedItem("align").getNodeValue());
-    	                icon.add(wid, x, y);
+    	                icon.setWidget(wid);
     	            }
     	        }
     	        setDefaults(node,icon);

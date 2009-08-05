@@ -145,6 +145,10 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
 		setReadOnly(!enabled);
+		if(!enabled){
+			unsinkEvents(Event.KEYEVENTS);
+		}else
+			sinkEvents(Event.KEYEVENTS);
 	}
 	
 	public boolean isEnabled() {

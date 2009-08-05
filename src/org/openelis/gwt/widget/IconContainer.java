@@ -25,12 +25,13 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 
-public class IconContainer extends AbsolutePanel implements SourcesMouseEvents, SourcesClickEvents, HasAllMouseHandlers, HasClickHandlers {
+public class IconContainer extends FocusPanel implements SourcesMouseEvents, SourcesClickEvents, HasAllMouseHandlers, HasClickHandlers {
     
     MouseListenerCollection mouseListeners;
     ClickListenerCollection clickListeners;
