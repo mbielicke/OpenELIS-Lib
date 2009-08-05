@@ -278,21 +278,15 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             selectRow(modelIndexList[row]);
             SelectionEvent.fire(this,renderer.rows.get(row));
         }
-        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
-        	if(bce.isCancelled()){
-        		activeCell = -1;
-        		sinkEvents(Event.ONKEYPRESS);
-        		return;
-        	}
-        }else if(!isEnabled()){
-    		activeCell = -1;
-    		sinkEvents(Event.ONKEYPRESS);
-    		return;
-        }
-        activeCell = col;
-        renderer.setCellEditor(row, col);
-        unsinkEvents(Event.ONKEYPRESS);
+        if(canEditCell(row,col)){
+            activeCell = col;
+            renderer.setCellEditor(row, col);
+            unsinkEvents(Event.ONKEYPRESS);
+        }else{
+      		activeCell = -1;
+       		sinkEvents(Event.ONKEYPRESS);
+       	}
+
     }
 
     public boolean finishEditing() {
@@ -677,6 +671,17 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
     }
 
+    protected boolean canEditCell(int row, int col) {
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        	if(bce.isCancelled()){
+        		return false;
+        	}else
+        		return true;
+        }
+        return isEnabled();
+    }
+    
 	public void addError(String Error) {
 		// TODO Auto-generated method stub
 		

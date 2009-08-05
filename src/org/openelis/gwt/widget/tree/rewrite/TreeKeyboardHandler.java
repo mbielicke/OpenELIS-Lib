@@ -175,27 +175,19 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
                 controller.activeRow = 0;
                 controller.activeCell = -1;
             }
-            if((controller.modelIndexList[controller.activeRow] > controller.shownRows() || controller.modelIndexList[controller.activeRow] >= controller.numRows()) &&
+            if((controller.modelIndexList[controller.activeRow] >= controller.shownRows()-1 || controller.modelIndexList[controller.activeRow] >= controller.numRows()-1) &&
                 controller.activeCell + 1 >= controller.columns.size()) {
-                if(screen != null){
-                    if(!controller.finishEditing()){
-                        controller.activeCell = -1;
-                        controller.setFocus(true);
-                        DeferredCommand.addCommand(new Command() {
-                            public void execute() {
-                                //screen.screen.doTab(false, screen);
-                            }
-                        });
-                        return;
-                    }
-                }
+                  controller.finishEditing();
+                  controller.activeCell = -1;
+                  controller.setFocus(true);
+                  return;
             }
             if (controller.activeCell + 1 >= controller.columns.size()) {
                 tabToNextRow();
             } else {
                 int col = controller.activeCell + 1;
                 while (col < controller.columns.size() && (controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof Label ||
-                       (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled())))
+                       (!controller.canEditCell(controller.activeRow,col))))
                     col++;
                 if(col == controller.columns.size()){
                     tabToNextRow();
@@ -215,23 +207,18 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.activeCell > -1 && shift) {
             if (controller.activeCell == 0 && controller.modelIndexList[controller.activeRow] == 0){
-                if(screen != null){
                     controller.finishEditing();
                     controller.setFocus(true);
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
-                            //screen.screen.doTab(true, screen);
-                        }
-                    });
+                    controller.activeCell = -1;
                     return;
-                }
+
             }
             if (controller.activeCell - 1 < 0) {
                 tabToPrevRow();
             } else {
                 int col = controller.activeCell - 1;
                 while (col > -1 && ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof Label) ||
-                                    (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled())))
+                                    (!controller.canEditCell(controller.activeRow, col))))
                     col--;
                 if(col < 0){
                     tabToPrevRow();
@@ -281,7 +268,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
         int row = findNextActive(controller.activeRow);
         int col = 0;
        
-        while ((controller.columns.get(controller.getRow(row).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!BeforeCellEditedEvent.fire(controller, row, col, controller.getRow(row)).isCancelled()))
+        while ((controller.columns.get(controller.getRow(row).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEditCell(row, col)))
             col++;
         if(row < controller.view.table.getRowCount() - 1){
             final int fRow = row;
@@ -307,7 +294,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
     private void tabToPrevRow() {
         if(controller.activeRow == 0) {
                 int col = controller.getRow(controller.shownRows() -1).size() - 1;
-                while ((controller.columns.get(controller.getRow(0).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled()))
+                while ((controller.columns.get(controller.getRow(0).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEditCell(controller.activeRow, col)))
                     col--;
                 final int fCol = col;
                 controller.view.scrollBar.setScrollPosition(controller.view.scrollBar.getScrollPosition()-18);
@@ -321,7 +308,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
         }else{
             final int row = findPrevActive(controller.activeRow);
             int col = controller.getRow(controller.shownRows() -1).size() - 1;
-            while ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow)).isCancelled()))
+            while ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEditCell(controller.activeRow, col)))
                 col--;
             final int fCol = col;
             DeferredCommand.addCommand(new Command() {

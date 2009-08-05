@@ -62,14 +62,6 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     boolean linear;
     private Field<T> field;
     IconContainer icon = new IconContainer();
-    Dropdown dd = this;
-    Timer timer = new Timer() {
-    	public void run() {
-    		if(!clickedIcon)
-    			BlurEvent .fireNativeEvent(Document.get().createBlurEvent(), dd);
-    	}
-    };
-  
 
     public DropDownListener listener = new DropDownListener(this);
     

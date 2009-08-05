@@ -75,7 +75,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         int row = findNextActive(controller.activeRow);
         int col = 0;
        
-        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!BeforeCellEditedEvent.fire(controller, row, col, controller.getRow(row).cells.get(col).value).isCancelled()))
+        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
             col++;
         if(row < controller.view.table.getRowCount()){
             final int fRow = row;
@@ -91,7 +91,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     private void tabToPrevRow() {
         final int row = findPrevActive(controller.activeRow);
         int col = controller.columns.size() - 1;
-        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!BeforeCellEditedEvent.fire(controller, row, col, controller.getRow(row).cells.get(col).value).isCancelled()))
+        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
             col--;
         final int fCol = col;
         DeferredCommand.addCommand(new Command() {
@@ -211,27 +211,19 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 controller.activeRow = 0;
                 controller.activeCell = -1;
             }
-            if((controller.modelIndexList[controller.activeRow] > controller.shownRows() || controller.modelIndexList[controller.activeRow] >= controller.numRows()) &&
+            if((controller.modelIndexList[controller.activeRow] >= controller.shownRows()-1 || controller.modelIndexList[controller.activeRow] >= controller.numRows()-1) &&
                 controller.activeCell + 1 >= controller.columns.size()) {
-                if(screen != null){
-                    if(!controller.finishEditing()){
-                        controller.activeCell = -1;
-                        controller.setFocus(true);
-                        DeferredCommand.addCommand(new Command() {
-                            public void execute() {
-                                //screen.screen.doTab(false, screen);
-                            }
-                        });
-                        return;
-                    }
-                }
+            	  controller.finishEditing();
+                  controller.activeCell = -1;
+                  controller.setFocus(true);
+                  return;
             }
             if (controller.activeCell + 1 >= controller.columns.size()) {
                 tabToNextRow();
             } else {
                 int col = controller.activeCell + 1;
                 while (col < controller.columns.size() && (controller.columns.get(col).getColumnWidget() instanceof Label ||
-                       (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow).cells.get(col).value).isCancelled()))) 
+                       (!controller.canEditCell(controller.activeRow, col)))) 
                     col++;
                 if(col == controller.columns.size()){
                     tabToNextRow();
@@ -251,23 +243,17 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.activeCell > -1 && shift) {
             if (controller.activeCell == 0 && controller.modelIndexList[controller.activeRow] == 0){
-                if(screen != null){
-                    controller.finishEditing();
-                    controller.setFocus(true);
-                    DeferredCommand.addCommand(new Command() {
-                        public void execute() {
-                            //screen.screen.doTab(true, screen);
-                        }
-                    });
-                    return;
-                }
+               controller.finishEditing();
+               controller.activeCell = -1;
+               controller.setFocus(true);
+               return;
             }
             if (controller.activeCell - 1 < 0) {
                 tabToPrevRow();
             } else {
                 int col = controller.activeCell - 1;
                 while (col > -1 && ((controller.columns.get(col).getColumnWidget() instanceof Label) ||
-                                    (!BeforeCellEditedEvent.fire(controller, controller.activeRow, col, controller.getRow(controller.activeRow).cells.get(col).value).isCancelled())))
+                                    (!controller.canEditCell(controller.activeRow,col))))
                     col--;
                 if(col < 0){
                     tabToPrevRow();

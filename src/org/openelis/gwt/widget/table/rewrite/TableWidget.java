@@ -289,21 +289,14 @@ public class TableWidget extends FocusPanel implements FocusHandler,
             selectRow(modelIndexList[row]);
             SelectionEvent.fire(this, renderer.rows.get(row));
         }
-        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
-        	if(bce.isCancelled()){
-        		activeCell = -1;
-        		sinkEvents(Event.ONKEYPRESS);
-        		return;
-        	}
-        }else if(!isEnabled()){
+        if(canEditCell(row,col)){
+            activeCell = col;
+            renderer.setCellEditor(row, col);
+            unsinkEvents(Event.ONKEYPRESS);
+        }else{
        		activeCell = -1;
-    		sinkEvents(Event.ONKEYPRESS);
-    		return;
-        }
-        activeCell = col;
-        renderer.setCellEditor(row, col);
-        unsinkEvents(Event.ONKEYPRESS);
+       		sinkEvents(Event.ONKEYPRESS);
+       	}
        
     }
     
@@ -760,6 +753,16 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	public Object getFieldValue() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	protected boolean canEditCell(int row, int col) {
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        	if(bce.isCancelled()){
+        		return false;
+        	}
+        }
+        return (isEnabled());
 	}
 	
 }
