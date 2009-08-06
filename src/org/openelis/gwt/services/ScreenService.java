@@ -168,4 +168,24 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	public Request callString(String method, AsyncCallback<String> callback) {
 		return service.callString(method, callback);
 	}
+
+	public <T extends RPC> T call(String method) throws Throwable {
+        Callback<RPC> callback = new Callback<RPC>();
+        service.call(method, callback);
+        return (T)callback.getResult();
+	}
+
+	public void callVoid(String method) throws Throwable {
+        Callback<RPC> callback = new Callback<RPC>();
+        service.callVoid(method, callback);
+        callback.getResult();
+	}
+
+	public Request call(String method, AsyncCallback<? extends RPC> callback) {
+		return service.call(method,callback);
+	}
+
+	public Request callVoid(String method, AsyncCallback<? extends RPC> callback) {
+		return service.callVoid(method,callback);
+	}
 }

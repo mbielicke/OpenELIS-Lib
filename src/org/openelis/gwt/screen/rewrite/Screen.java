@@ -2,6 +2,10 @@ package org.openelis.gwt.screen.rewrite;
 
 import java.util.HashMap;
 
+import org.openelis.gwt.common.FieldErrorException;
+import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.TableFieldErrorException;
+import org.openelis.gwt.common.ValidationErrorsList;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
 import org.openelis.gwt.event.HasDataChangeHandlers;
@@ -11,6 +15,7 @@ import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.table.rewrite.TableWidget;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
@@ -139,6 +144,21 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             if (wid instanceof HasField)
                 ((HasField)wid).clearErrors();
         }
+    }
+    
+    protected void showErrors(ValidationErrorsList errors) {
+        for (RPCException ex : errors.getErrorList()) {
+            if (ex instanceof TableFieldErrorException) {
+                TableFieldErrorException tfe = (TableFieldErrorException)ex;
+                ((TableWidget)def.getWidget(tfe.getTableKey())).setCellError(tfe.getRowIndex(),
+                                                                             tfe.getFieldName(),
+                                                                             consts.get(tfe.getMessage()));
+            } else {
+                FieldErrorException fe = (FieldErrorException)ex;
+                ((HasField)def.getWidget(fe.getFieldName())).addError(consts.get(fe.getMessage()));
+            }
+        }
+        window.setError(consts.get("correctErrors"));
     }
 
 }

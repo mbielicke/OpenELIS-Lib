@@ -56,7 +56,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField, BlurHandler{
+public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField {
     
     private int startPos;
     boolean linear;
@@ -85,7 +85,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         icon.setStyleName("AutoDropDownButton");
         textbox.setStyleName("TextboxUnselected");
         
-        
+        addBlurHandler(this);
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
         popup.addCloseHandler(this);
@@ -206,10 +206,10 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     }
 
     public void setValue(T value, boolean fireEvents) {
-       // T old = getValue();
+        T old = getValue();
         setSelection(value);
-       // if(fireEvents)
-         //   ValueChangeEvent.fireIfNotEqual(this, old, value);
+        if(fireEvents)
+            ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
 
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
@@ -237,19 +237,6 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		textbox.addMouseOverHandler(field);
 	}
 	
-	boolean clickedIcon = false;
-	
-    public void onFocus(FocusEvent event) {
-    	System.out.println("fp focus");
-
-    }
-    
-    public void onBlur(BlurEvent event) {
-    	System.out.println("fp blur");
-    }
-
-
-    
     @Override
     public void setFocus(boolean focus) {
     	textbox.setFocus(focus);
@@ -301,21 +288,10 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		return field.errors;
 	}
 	
-	
-
-	@Override
-	public void onClick(ClickEvent event) {
-		if(event.getSource() == icon) {
-			System.out.println("Click icon");
-			clickedIcon = true;
-			return;
-		}
-		super.onClick(event);
-	}
-	
 	@Override
 	public void complete() {
 		super.complete();
+		ValueChangeEvent.fire(this, getValue());
 		textbox.setFocus(true);
 	}
 }

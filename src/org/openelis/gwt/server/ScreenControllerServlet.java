@@ -91,4 +91,13 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     	return (String)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
+	public <T extends RPC> T call(String method) throws Throwable {
+		return (T)invoke(getThreadLocalRequest().getParameter("servce"),method);
+	}
+
+	public void callVoid(String method) throws Throwable {
+		invoke(getThreadLocalRequest().getParameter("service"),method);
+		
+	}
+
 }

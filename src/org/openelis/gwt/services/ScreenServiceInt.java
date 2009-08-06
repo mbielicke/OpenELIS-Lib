@@ -46,6 +46,8 @@ public interface ScreenServiceInt extends RemoteService {
     public Boolean           callBoolean(String method) throws Throwable;
     public Date              callDate(String method) throws Throwable;
     public Double            callDouble(String method) throws Throwable;
+    public <T extends RPC>  T call(String method) throws Throwable;
+    public void callVoid(String method) throws Throwable;
     public <T extends RPC> T call(String method, Integer param) throws Throwable;
     public <T extends RPC> T call(String method, RPC param) throws Throwable;
     public <T extends RPC> T call(String method, Double param) throws Throwable;

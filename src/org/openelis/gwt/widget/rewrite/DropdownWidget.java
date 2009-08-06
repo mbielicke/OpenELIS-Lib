@@ -100,9 +100,13 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     	int row = cell.getRowIndex();
     	int col = cell.getCellIndex();
-    	BeforeSelectionEvent<TableRow> be = BeforeSelectionEvent.fire(this, renderer.rows.get(row)); 
-        if(be != null && be.isCanceled())
-            return;
+    	if(getHandlerCount(BeforeSelectionEvent.getType())> 0){
+    		BeforeSelectionEvent<TableRow> be = BeforeSelectionEvent.fire(this, renderer.rows.get(row)); 
+    		if(be.isCanceled())
+    			return;
+    	}else if(!isEnabled()){
+    		return;
+    	}
         if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
             unselect(-1);
         }
