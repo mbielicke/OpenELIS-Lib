@@ -1583,7 +1583,9 @@ public class UIUtil {
     			if(node.getAttributes().getNamedItem("tab") != null) {
     				button.addTabHandler(new TabHandler(node,def));
     			}
-    	        button.action = node.getAttributes().getNamedItem("action").getNodeValue();
+    			if(node.getAttributes().getNamedItem("action") != null) {
+    				button.action = node.getAttributes().getNamedItem("action").getNodeValue();
+    			}
     	        /*
     	        if(node.getAttributes().getNamedItem("toggle") != null){
     	            if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
