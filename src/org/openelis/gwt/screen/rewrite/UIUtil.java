@@ -1247,11 +1247,11 @@ public class UIUtil {
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
                         table.enableMultiSelect(true);
                 }
-                NodeList colList = ((Element)node).getElementsByTagName("col");
+                NodeList colList = node.getChildNodes();
                 ArrayList<TableColumn> columns = new ArrayList<TableColumn>();
                 for(int i = 0; i < colList.getLength(); i++) {
                 	Node col = colList.item(i);
-                	if(col.getParentNode() != node)
+                	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                 		continue;
                 	TableColumn column = new TableColumn();
                 	column.controller = table;
