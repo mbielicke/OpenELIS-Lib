@@ -35,25 +35,14 @@ import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
@@ -94,7 +83,6 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         popup.setWidget(view);
         popup.addCloseHandler(this);
         icon.addClickHandler(listener);
-        icon.addClickHandler(this);
         icon.addFocusHandler(this);
         textbox.addKeyUpHandler(listener);
         textbox.setReadOnly(!enabled);
@@ -235,7 +223,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 
 	public void setField(Field field) {
 		this.field = field;
-		addValueChangeHandler(field);
+		//addValueChangeHandler(field);
 		addBlurHandler(field);
 		textbox.addMouseOutHandler(field);
 		textbox.addMouseOverHandler(field);

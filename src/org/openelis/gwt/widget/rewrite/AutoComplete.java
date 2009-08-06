@@ -155,10 +155,10 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
     }
 
     public void setValue(T value, boolean fireEvents) {
-        //T old = getValue();
+        T old = getValue();
         setSelection(value);
-        //if(fireEvents)
-           // ValueChangeEvent.fireIfNotEqual(this, old, value);
+        if(fireEvents)
+           ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
 
     public void setSelection(T key, String display) {

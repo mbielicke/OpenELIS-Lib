@@ -76,9 +76,16 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public Object[] args;
     public String key;
     public String label;
+    public String icon;
+    public String labelText;
+    public String description;
    
     public MenuItem() {
         
+    }
+    
+    public MenuItem clone() {
+    	return new MenuItem(icon,labelText,description);
     }
     
     public MenuItem(String icon, String labelText, String description) {
@@ -87,6 +94,9 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     }
     
     public void init(String icon, String labelText, String description) {
+    	this.icon = icon;
+    	this.labelText = labelText;
+    	this.description = description;
         Label label = new Label(labelText);
         label.setStyleName("topMenuItemTitle");
         label.addStyleName("locked");
