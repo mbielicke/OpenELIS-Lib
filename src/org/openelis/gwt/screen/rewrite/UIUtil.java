@@ -61,7 +61,6 @@ import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -1249,9 +1248,11 @@ public class UIUtil {
                         table.enableMultiSelect(true);
                 }
                 NodeList colList = ((Element)node).getElementsByTagName("col");
-                ArrayList<TableColumn> columns = new ArrayList<TableColumn>(colList.getLength());
+                ArrayList<TableColumn> columns = new ArrayList<TableColumn>();
                 for(int i = 0; i < colList.getLength(); i++) {
                 	Node col = colList.item(i);
+                	if(col.getParentNode() != node)
+                		continue;
                 	TableColumn column = new TableColumn();
                 	column.controller = table;
                 	if(col.getAttributes().getNamedItem("key") != null)
@@ -1330,7 +1331,7 @@ public class UIUtil {
     	                                  .getNodeValue();
     	        
     	        if (node.getAttributes().getNamedItem("width") != null)
-    	        	drop.width = node.getAttributes()
+    	        	drop.dropwidth = node.getAttributes()
     	                                  .getNamedItem("width")
     	                                  .getNodeValue();
     	        
@@ -1381,8 +1382,8 @@ public class UIUtil {
                 drop.columns = columns;
                 drop.setup();
                 setDefaults(node,drop);
-                drop.textbox.addBlurHandler(focusHandler);
-                drop.textbox.addFocusHandler(focusHandler);
+                drop.addBlurHandler(focusHandler);
+                drop.addFocusHandler(focusHandler);
     			return drop;
     		}
     	});
@@ -1474,8 +1475,8 @@ public class UIUtil {
                 }
                 auto.columns = columns;
                 auto.setup();
-                auto.textbox.addBlurHandler(focusHandler);
-                auto.textbox.addFocusHandler(focusHandler);
+                auto.addBlurHandler(focusHandler);
+                auto.addFocusHandler(focusHandler);
     			return auto;
     		}
     	});
