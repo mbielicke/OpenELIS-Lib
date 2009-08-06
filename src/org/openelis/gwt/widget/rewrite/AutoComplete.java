@@ -40,6 +40,7 @@ import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -193,21 +194,12 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 	}
 	
     public void onFocus(FocusEvent event) {
-        if (!textbox.isReadOnly()) {
-                // we need to set the selected style name to the textbox
-                //textbox.addStyleName("TextboxSelected");
-                //textbox.removeStyleName("TextboxUnselected");
-                textbox.setFocus(true);
-        }
+    	if(isEnabled())
+    		textbox.addStyleName("Focus");
     }
 
     public void onBlur(BlurEvent event) {
-        if (!textbox.isReadOnly() && !field.queryMode && !popup.isShowing()) {
-                // we need to set the unselected style name to the textbox
-                //textbox.addStyleName("TextboxUnselected");
-                //textbox.removeStyleName("TextboxSelected");
-                complete();
-        }
+    	textbox.removeStyleName("Focus");
     }
     
     @Override
@@ -251,6 +243,14 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
     
 	public Object getFieldValue() {
 		return field.getValue();
+	}
+	
+	@Override
+	public void complete() {
+		super.complete();
+		ValueChangeEvent.fire(this, getValue());
+		textbox.setFocus(true);
+		
 	}
 	
 	public HandlerRegistration addBeforeGetMatchesHandler(BeforeGetMatchesHandler handler) {

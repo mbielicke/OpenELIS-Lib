@@ -1382,8 +1382,6 @@ public class UIUtil {
                 drop.columns = columns;
                 drop.setup();
                 setDefaults(node,drop);
-                drop.addBlurHandler(focusHandler);
-                drop.addFocusHandler(focusHandler);
     			return drop;
     		}
     	});
@@ -1475,8 +1473,6 @@ public class UIUtil {
                 }
                 auto.columns = columns;
                 auto.setup();
-                auto.addBlurHandler(focusHandler);
-                auto.addFocusHandler(focusHandler);
     			return auto;
     		}
     	});

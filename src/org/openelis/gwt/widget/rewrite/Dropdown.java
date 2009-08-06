@@ -46,6 +46,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.Command;
@@ -62,6 +63,7 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
     boolean linear;
     private Field<T> field;
     IconContainer icon = new IconContainer();
+    public String dropwidth;
 
     public DropDownListener listener = new DropDownListener(this);
     
@@ -75,17 +77,19 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
         renderer = new TableRenderer(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
+        setWidth(dropwidth);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = this;
         HorizontalPanel hp = new HorizontalPanel();
         hp.add(textbox);
         hp.add(icon);
         setWidget(hp);
+        hp.setWidth(dropwidth);
         setStyleName("AutoDropDown");
         icon.setStyleName("AutoDropDownButton");
         textbox.setStyleName("TextboxUnselected");
-        
-        addBlurHandler(this);
+        textbox.addFocusHandler(this);
+        textbox.addBlurHandler(this);
         popup.setStyleName("DropdownPopup");
         popup.setWidget(view);
         popup.addCloseHandler(this);
@@ -270,6 +274,17 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 			}
 			list.add(qd);
 		}
+	}
+	
+	@Override
+	public void onBlur(BlurEvent event) {
+		textbox.removeStyleName("Focus");
+	}
+	
+	@Override
+	public void onFocus(FocusEvent event) {
+		if(isEnabled())
+			textbox.addStyleName("Focus");
 	}
 	
 	@Override
