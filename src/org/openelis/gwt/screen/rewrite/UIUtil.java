@@ -1644,6 +1644,7 @@ public class UIUtil {
     	factoryMap.put("notes", new Factory<NotesPanel>() {
     		public NotesPanel getNewInstance(Node node, ScreenDef def) {
     			NotesPanel notes = new NotesPanel();
+    			notes.setStyleName("ScreenTable");
     			setDefaults(node,notes);
     			return notes;
     		}

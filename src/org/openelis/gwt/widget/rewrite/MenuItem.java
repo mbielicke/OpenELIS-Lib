@@ -79,7 +79,8 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public String icon;
     public String labelText;
     public String description;
-   
+    private boolean enabled;
+    
     public MenuItem() {
         
     }
@@ -312,6 +313,7 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     }
     
     public void enable(boolean enabled){
+    	this.enabled = enabled;
         if(enabled){
            // removeClickListener(this);
             addClickHandler(this);
@@ -328,6 +330,10 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
             unsinkEvents(Event.MOUSEEVENTS);
             getWidget().addStyleName("disabled");
         }
+    }
+    
+    public boolean isEnabled() {
+    	return enabled;
     }
 
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
