@@ -136,7 +136,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
             if(pop == null){
                 pop = new PopupPanel();
-                //pop.setStyleName("ErrorPopup");
+                pop.setStyleName("");
             }
             DecoratorPanel dp = new DecoratorPanel();
             
