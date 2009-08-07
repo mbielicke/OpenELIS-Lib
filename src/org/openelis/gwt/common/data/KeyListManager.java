@@ -46,6 +46,7 @@ import org.openelis.gwt.widget.ResultsTable;
  * @author tschmidt
  *
  */
+@Deprecated
 public class KeyListManager<Key> implements SourcesCommandEvents, CommandListener {
 
     public enum Action {

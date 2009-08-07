@@ -48,6 +48,7 @@ import java.util.ArrayList;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class QueryTable extends TableWidget implements TableKeyboardHandlerInt, TableMouseHandlerInt{
     
     public Form form;

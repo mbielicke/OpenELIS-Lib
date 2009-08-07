@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.FieldType;
 
+@Deprecated
 public interface TreeColumnInt {
     
     public void  setHeader(String header);

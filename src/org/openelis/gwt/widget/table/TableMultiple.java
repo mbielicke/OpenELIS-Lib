@@ -36,6 +36,7 @@ import org.openelis.gwt.screen.ScreenBase;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TableMultiple extends SimplePanel implements TableCellWidget {
     
     public ArrayList<TableCellWidget> cells = new ArrayList<TableCellWidget>();

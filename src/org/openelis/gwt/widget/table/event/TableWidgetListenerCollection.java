@@ -26,7 +26,7 @@
 package org.openelis.gwt.widget.table.event;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class TableWidgetListenerCollection extends ArrayList<TableWidgetListener>{
     
    public void fireStartedEditing(SourcesTableWidgetEvents sender, int row, int col){

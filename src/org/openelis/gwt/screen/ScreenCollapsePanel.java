@@ -31,7 +31,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
 import org.openelis.gwt.widget.CollapsePanel;
-
+@Deprecated
 public class ScreenCollapsePanel extends ScreenWidget {
     
    protected CollapsePanel panel;

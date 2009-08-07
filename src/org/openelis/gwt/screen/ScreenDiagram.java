@@ -7,6 +7,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.common.data.TreeDataModel;
 import org.openelis.gwt.widget.diagram.Diagram;
 
+@Deprecated
 public class ScreenDiagram extends ScreenInputWidget {
     
     /**

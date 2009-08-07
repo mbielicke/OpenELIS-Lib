@@ -37,6 +37,7 @@ import com.google.gwt.xml.client.NodeList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenAbsolute extends ScreenWidget {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap

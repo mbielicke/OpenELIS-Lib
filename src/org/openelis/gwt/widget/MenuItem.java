@@ -50,7 +50,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
-
+@Deprecated
 public class MenuItem extends SimplePanel implements MouseListener, ClickListener, PopupListener, SourcesClickEvents, SourcesMouseEvents, SourcesCommandEvents {
     
     public MenuPanel parent;

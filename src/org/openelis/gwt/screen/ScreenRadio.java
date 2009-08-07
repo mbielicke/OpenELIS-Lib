@@ -37,6 +37,7 @@ import org.openelis.gwt.screen.AppScreenForm.State;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenRadio extends ScreenInputWidget {
     /**
      * Default XML Tag Name for XML definition and WidgetMap

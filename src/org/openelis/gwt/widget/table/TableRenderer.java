@@ -41,6 +41,7 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class TableRenderer implements TableRendererInt, TableModelListener, TableWidgetListener, ClickListener {
     
     private TableWidget controller;

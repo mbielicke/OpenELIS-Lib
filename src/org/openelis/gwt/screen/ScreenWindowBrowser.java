@@ -35,6 +35,7 @@ import org.openelis.gwt.widget.WindowBrowser;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenWindowBrowser extends ScreenWidget {
 	/** 
 	 * Default XML Tag used in XML Definition 

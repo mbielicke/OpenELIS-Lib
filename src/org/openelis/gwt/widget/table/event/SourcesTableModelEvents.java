@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.table.event;
 
+@Deprecated
 public interface SourcesTableModelEvents {
     
     public void addTableModelListener(TableModelListener listener);

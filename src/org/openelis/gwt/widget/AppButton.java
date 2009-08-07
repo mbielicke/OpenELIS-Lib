@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.openelis.gwt.screen.AppScreenForm.State;
 
 import java.util.EnumSet;
-
+@Deprecated
 public class AppButton extends Composite implements SourcesClickEvents, MouseListener {
     
     private DelegatingClickListenerCollection listeners;

@@ -42,6 +42,7 @@ import java.util.HashMap;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
+@Deprecated
 public class DateField extends AbstractField<Datetime> implements FieldType{
     
     private static final long serialVersionUID = 1L;

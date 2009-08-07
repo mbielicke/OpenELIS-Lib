@@ -24,7 +24,7 @@
 * UIRF Software License are applicable instead of those above. 
 */
 package org.openelis.gwt.widget.table.event;
-
+@Deprecated
 public interface TableModelListener {
     
     public void cellUpdated(SourcesTableModelEvents sender, int row , int cell);

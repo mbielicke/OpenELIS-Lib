@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.table;
 
+@Deprecated
 public class QueryColumn extends TableColumn {
 
 }

@@ -49,7 +49,7 @@ import org.openelis.gwt.common.data.AbstractField;
  * @author tschmidt
  *
  */
-
+@Deprecated
 public class ScreenVertical extends ScreenWidget implements ScreenPanel {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap

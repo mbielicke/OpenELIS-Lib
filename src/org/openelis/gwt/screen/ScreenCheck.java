@@ -42,6 +42,7 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenCheck extends ScreenInputWidget implements SourcesClickEvents,FocusListener{
     private DelegatingClickListenerCollection clickListeners;
     /**

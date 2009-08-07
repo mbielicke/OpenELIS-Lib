@@ -24,7 +24,7 @@
 * UIRF Software License are applicable instead of those above. 
 */
 package org.openelis.gwt.event;
-
+@Deprecated
 public interface SourcesCommandEvents {
     
     public void addCommandListener(CommandListener listener);

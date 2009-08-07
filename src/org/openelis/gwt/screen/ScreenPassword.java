@@ -38,6 +38,7 @@ import org.openelis.gwt.common.data.AbstractField;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenPassword extends ScreenInputWidget {
     /**
      * Default XML Tag Name for XML definition and WidgetMap

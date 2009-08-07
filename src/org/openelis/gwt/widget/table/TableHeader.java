@@ -47,6 +47,7 @@ import org.openelis.gwt.common.Filter;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TableHeader extends FlexTable implements TableHeaderInt, TableListener, MouseListener{
     
     public static String headerStyle = "Header";

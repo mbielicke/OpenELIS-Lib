@@ -1,5 +1,6 @@
 package org.openelis.gwt.common.data;
 
+@Deprecated
 public class IntegerObject extends DataObject<Integer> implements FieldType{
     
     private static final long serialVersionUID = 1L;

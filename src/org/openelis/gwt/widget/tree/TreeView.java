@@ -58,6 +58,7 @@ import org.openelis.gwt.widget.table.TableHeader;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TreeView extends Composite implements TreeViewInt, ScrollListener, MouseWheelListener {
     
     public boolean loaded;

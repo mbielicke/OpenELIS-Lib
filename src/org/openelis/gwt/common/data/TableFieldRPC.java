@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+@Deprecated
 public class TableFieldRPC<Key extends TableDataRow> extends AbstractField<TableDataModel<Key>> implements FieldType {
 
     private static final long serialVersionUID = 1L;

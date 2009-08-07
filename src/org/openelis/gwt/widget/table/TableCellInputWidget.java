@@ -48,7 +48,7 @@ import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.MenuLabel;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class TableCellInputWidget extends SimplePanel implements TableCellWidget, MouseListener, SourcesMouseEvents, FocusListener {
 
     protected AbstractField field;

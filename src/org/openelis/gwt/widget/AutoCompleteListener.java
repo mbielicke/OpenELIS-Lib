@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
-
+@Deprecated
 public class AutoCompleteListener implements
                                  ClickListener,
                                  MouseListener,

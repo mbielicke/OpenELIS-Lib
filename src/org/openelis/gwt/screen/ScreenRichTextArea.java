@@ -31,6 +31,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.richtext.RichTextWidget;
 
+@Deprecated
 public class ScreenRichTextArea extends ScreenInputWidget {
     /**
      * Default XML Tag Name in XML Definition

@@ -6,6 +6,7 @@ import com.allen_sauer.gwt.dnd.client.drop.AbstractIndexedDropController;
 import com.allen_sauer.gwt.dnd.client.drop.SimpleDropController;
 import com.google.gwt.user.client.Window;
 
+@Deprecated
 public class TableDropController extends SimpleDropController {
     private TableWidget target;
     public TableDropController(TableWidget dropTarget) {

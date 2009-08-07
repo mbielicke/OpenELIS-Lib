@@ -35,7 +35,7 @@ import org.openelis.gwt.widget.table.TableLabel;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class Dropdown extends DropdownWidget {
     
     private int startPos;

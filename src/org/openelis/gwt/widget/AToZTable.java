@@ -62,6 +62,7 @@ import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class AToZTable extends TableWidget implements
                                               ClickListener, ChangeListener, CommandListener, TableKeyboardHandlerInt, TableMouseHandlerInt, SourcesCommandEvents {
     

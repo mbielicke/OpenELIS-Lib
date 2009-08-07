@@ -39,6 +39,7 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenImage extends ScreenWidget implements SourcesClickEvents {
 	/**
 	 * Widget wrapped by this class

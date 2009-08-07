@@ -4,6 +4,7 @@ import org.openelis.gwt.common.RPC;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TableDataModel<Row extends TableDataRow> implements RPC,FieldType{
     
     private static final long serialVersionUID = 1L;

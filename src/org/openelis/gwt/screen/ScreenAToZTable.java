@@ -54,6 +54,7 @@ import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import java.util.ArrayList;
 import java.util.Vector;
 
+@Deprecated
 public class ScreenAToZTable extends ScreenInputWidget {
     public AToZTable azTable;
     public static final String TAG_NAME = "azTable";

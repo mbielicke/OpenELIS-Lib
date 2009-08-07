@@ -28,7 +28,7 @@ import org.openelis.gwt.widget.table.TableManager;
 import org.openelis.gwt.widget.table.TableModel;
 import org.openelis.gwt.widget.table.TableModelInt;
 import org.openelis.gwt.widget.table.TableWidget;
-
+@Deprecated
 public class ResultsTable extends Composite implements ClickListener, CommandListener, SourcesCommandEvents, ChangeListener, TableManager{
     
     private CommandListenerCollection commandListeners;

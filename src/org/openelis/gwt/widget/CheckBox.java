@@ -60,7 +60,7 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
-
+@Deprecated
 public class CheckBox extends Composite implements ClickListener, SourcesClickEvents, HasValue<String>, Focusable, HasBlurHandlers, HasMouseOutHandlers, HasMouseOverHandlers, HasField<String>{
     
     DelegatingKeyboardListenerCollection keyListeners;

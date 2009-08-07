@@ -45,6 +45,7 @@ import org.openelis.gwt.screen.ScreenImage;
  * @author tschmidt
  *
  */
+@Deprecated
 public class PopupWindow extends PopupPanel {
     private DockPanel inner = new DockPanel();
     private DragListener dragListener = new DragListener();

@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import org.openelis.gwt.common.Preferences;
 
+@Deprecated
 public interface PreferencesServiceIntAsync {
     
     public void getPreferences(String key, AsyncCallback<Preferences> callback);

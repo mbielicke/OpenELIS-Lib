@@ -42,7 +42,7 @@ import org.openelis.gwt.screen.ScreenAutoCompleteWidget;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.AutoComplete;
-
+@Deprecated
 public class TableAutoComplete extends TableCellInputWidget implements ChangeListener {
 
 	public AutoComplete editor;

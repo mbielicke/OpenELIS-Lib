@@ -40,6 +40,7 @@ import org.openelis.gwt.screen.AppScreenForm.State;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenTextArea extends ScreenInputWidget implements FocusListener{
     /**
      * Default XML Tag Name in XML Definition

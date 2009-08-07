@@ -36,7 +36,7 @@ import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class PopupTable extends TableWidget implements PopupListener, SourcesPopupEvents {
     
     

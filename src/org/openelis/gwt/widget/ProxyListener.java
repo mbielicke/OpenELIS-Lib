@@ -45,6 +45,7 @@ import java.util.Vector;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ProxyListener extends MouseListenerAdapter {
 
     Vector dropMap;

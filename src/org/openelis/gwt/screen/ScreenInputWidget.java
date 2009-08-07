@@ -53,6 +53,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
+@Deprecated
 public class ScreenInputWidget extends ScreenWidget implements FocusListener, MouseOutHandler, MouseOverHandler {
     
     protected ScreenInputWidget queryWidget;

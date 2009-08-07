@@ -28,7 +28,7 @@ package org.openelis.gwt.screen;
 import com.google.gwt.user.client.ui.Panel;
 
 import org.openelis.gwt.common.data.AbstractField;
-
+@Deprecated
 public interface ScreenPanel {
     
     public void load(AbstractField field);

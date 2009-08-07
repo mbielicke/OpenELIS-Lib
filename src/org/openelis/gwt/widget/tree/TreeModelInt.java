@@ -33,6 +33,7 @@ import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Deprecated
 public interface TreeModelInt extends SourcesTreeModelEvents {
     
     public void addRow(TreeDataItem row);

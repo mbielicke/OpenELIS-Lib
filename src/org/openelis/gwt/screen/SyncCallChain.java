@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.SyncCallback;
 
+@Deprecated
 public class SyncCallChain<T> extends ArrayList<SyncCallback> implements SyncCallback<T> {
 
     private static final long serialVersionUID = 1L;

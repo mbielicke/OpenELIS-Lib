@@ -6,7 +6,7 @@ import com.google.gwt.xml.client.Node;
 import java.util.HashMap;
 
 import org.openelis.gwt.screen.AppScreen;
-
+@Deprecated
 public class DoubleField extends AbstractField<Double> implements FieldType {
 
     private static final long  serialVersionUID = 1L;

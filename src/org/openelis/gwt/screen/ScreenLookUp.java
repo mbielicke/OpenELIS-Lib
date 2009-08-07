@@ -7,6 +7,7 @@ import com.google.gwt.xml.client.Node;
 import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.widget.LookUp;
 
+@Deprecated
 public class ScreenLookUp extends ScreenInputWidget {
     
     protected LookUp look;

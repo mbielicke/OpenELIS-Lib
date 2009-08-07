@@ -30,6 +30,7 @@ import com.google.gwt.xml.client.Node;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class QueryField extends AbstractField<String> implements FieldType{
 
     private static final long serialVersionUID = 1L;

@@ -41,6 +41,7 @@ import org.openelis.gwt.screen.AppScreenForm.State;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenHTML extends ScreenInputWidget implements SourcesClickEvents {
     
     private DelegatingClickListenerCollection clickListeners;

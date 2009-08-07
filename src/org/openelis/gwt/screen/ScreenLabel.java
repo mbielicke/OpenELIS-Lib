@@ -37,6 +37,7 @@ import org.openelis.gwt.common.data.AbstractField;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenLabel extends ScreenWidget implements SourcesClickEvents{
 
     private DelegatingClickListenerCollection clickListeners;

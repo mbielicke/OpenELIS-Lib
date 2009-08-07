@@ -37,6 +37,7 @@ import com.google.gwt.xml.client.NodeList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenTablePanel extends ScreenWidget {
 	/**
 	 * Reference String for Widget Map

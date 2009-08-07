@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.tree.event;
 
 import org.openelis.gwt.common.data.TreeDataItem;
 
+@Deprecated
 public interface TreeModelListener {
     
     public void cellUpdated(SourcesTreeModelEvents sender, int row , int cell);

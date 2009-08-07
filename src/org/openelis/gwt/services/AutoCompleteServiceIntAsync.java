@@ -40,6 +40,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
+@Deprecated
 public interface AutoCompleteServiceIntAsync {
 
     public Request getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params, AsyncCallback<TableDataModel> callback) throws RPCException;

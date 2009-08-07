@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import org.openelis.gwt.common.RPC;
 
+@Deprecated
 public interface AppScreenServiceIntAsync<ScreenRPC extends RPC> {
     
     public void getScreen(ScreenRPC definition, AsyncCallback<? extends RPC> callback);

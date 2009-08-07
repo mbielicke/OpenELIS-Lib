@@ -11,6 +11,7 @@ import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
 
+@Deprecated
 public class MultipleLookUp extends Composite implements SourcesCommandEvents {
     
     protected TextBox textbox;

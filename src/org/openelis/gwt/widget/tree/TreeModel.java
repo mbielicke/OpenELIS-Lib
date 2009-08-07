@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+@Deprecated
 public class TreeModel implements SourcesTreeModelEvents, TreeModelInt {
     
     private TreeDataModel data;

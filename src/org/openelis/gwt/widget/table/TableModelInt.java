@@ -33,6 +33,7 @@ import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
 
 import java.util.ArrayList;
 
+@Deprecated
 public interface TableModelInt extends SourcesTableModelEvents {
 
     public void addRow();

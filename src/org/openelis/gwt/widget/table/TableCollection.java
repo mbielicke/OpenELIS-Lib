@@ -44,6 +44,7 @@ import java.util.ArrayList;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableCollection extends SimplePanel implements TableCellWidget {
     
     private VerticalPanel editor;

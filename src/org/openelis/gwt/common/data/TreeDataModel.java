@@ -30,6 +30,7 @@ import org.openelis.gwt.common.RPC;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Deprecated
 public class TreeDataModel implements RPC,FieldType {
     
     private static final long serialVersionUID = 1L;

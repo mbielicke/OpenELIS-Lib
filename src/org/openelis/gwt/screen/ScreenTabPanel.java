@@ -44,6 +44,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenTabPanel extends ScreenWidget implements ScreenPanel, TabListener {
     
     private ArrayList<String> tabList = new ArrayList<String>();

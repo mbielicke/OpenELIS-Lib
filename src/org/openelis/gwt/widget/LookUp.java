@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
-
+@Deprecated
 public class LookUp extends Composite implements SourcesClickEvents, SourcesMouseEvents, Focusable {
     
     public TextBox textbox;

@@ -31,6 +31,7 @@ import org.openelis.gwt.common.Datetime;
 
 import java.util.Date;
 
+@Deprecated
 public class QueryDateField extends QueryField {
 
 

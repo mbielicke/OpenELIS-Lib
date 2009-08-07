@@ -44,6 +44,7 @@ import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 
+@Deprecated
 public class ScreenMenuItem extends ScreenWidget {
     
     public MenuItem item;

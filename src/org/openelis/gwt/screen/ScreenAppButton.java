@@ -36,6 +36,7 @@ import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import java.util.EnumSet;
 
+@Deprecated
 public class ScreenAppButton extends ScreenWidget {
     
     /**

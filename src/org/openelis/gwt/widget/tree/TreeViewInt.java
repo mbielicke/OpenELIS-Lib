@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.tree;
 
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public interface TreeViewInt {
     
     public enum VerticalScroll {NEVER,ALWAYS,NEEDED};

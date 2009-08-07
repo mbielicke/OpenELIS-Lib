@@ -24,7 +24,7 @@
 * UIRF Software License are applicable instead of those above. 
 */
 package org.openelis.gwt.common.data;
-
+@Deprecated
 public class BooleanObject extends DataObject<Boolean> implements FieldType {
 
     private static final long serialVersionUID = 1L;

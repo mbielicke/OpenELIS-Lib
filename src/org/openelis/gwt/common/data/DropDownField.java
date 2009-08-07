@@ -39,6 +39,7 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  *
  */
+@Deprecated
 public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key>>> implements FieldType {
     
 

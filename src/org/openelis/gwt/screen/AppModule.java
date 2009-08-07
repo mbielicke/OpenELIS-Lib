@@ -27,6 +27,7 @@ package org.openelis.gwt.screen;
 
 import com.google.gwt.core.client.EntryPoint;
 
+@Deprecated
 public interface AppModule extends EntryPoint {
     
     public String getModuleName();

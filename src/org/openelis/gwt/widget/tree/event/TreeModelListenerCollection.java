@@ -28,7 +28,7 @@ package org.openelis.gwt.widget.tree.event;
 import org.openelis.gwt.common.data.TreeDataItem;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class TreeModelListenerCollection extends ArrayList<TreeModelListener> {
     
     public void fireCellUpdated(SourcesTreeModelEvents sender, int row, int col){

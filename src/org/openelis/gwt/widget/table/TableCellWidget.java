@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
 import org.openelis.gwt.common.data.FieldType;
-
+@Deprecated
 public interface TableCellWidget {
     public void clear();
 

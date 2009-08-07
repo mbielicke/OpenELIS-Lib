@@ -53,7 +53,7 @@ import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+@Deprecated
 public class TreeWidget extends FocusPanel implements
                                           TableListener,
                                           SourcesChangeEvents,

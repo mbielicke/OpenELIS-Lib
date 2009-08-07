@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.tree;
 
 import java.util.ArrayList;
 
+@Deprecated
 public interface TreeRendererInt {
     
     public void createRow(int i);

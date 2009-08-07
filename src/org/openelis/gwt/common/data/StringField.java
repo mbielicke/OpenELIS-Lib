@@ -37,6 +37,7 @@ import org.openelis.gwt.screen.AppScreen;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
+@Deprecated
 public class StringField extends AbstractField<String> implements FieldType {
     
     private static final long serialVersionUID = 1L;

@@ -31,6 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.RPC;
 
+@Deprecated
 public interface CalendarServiceIntAsync {
     
     public Request getMonth(CalendarRPC form, AsyncCallback<CalendarRPC> callback);

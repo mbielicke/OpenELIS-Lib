@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.tree;
 
+@Deprecated
 public interface TreeHeaderInt {
 
     public void setHeaders(String[] headers);

@@ -34,7 +34,7 @@ import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.services.AutoCompleteServiceInt;
 import org.openelis.gwt.services.AutoCompleteServiceIntAsync;
-
+@Deprecated
 public class AutoCompleteCall implements AutoCompleteCallInt {
     
     private AutoCompleteServiceIntAsync autoService = (AutoCompleteServiceIntAsync) GWT

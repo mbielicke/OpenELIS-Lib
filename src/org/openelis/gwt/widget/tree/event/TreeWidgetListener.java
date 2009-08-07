@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.tree.event;
 
+@Deprecated
 public interface TreeWidgetListener {
     
     public void startedEditing(SourcesTreeWidgetEvents sender, int row, int col);

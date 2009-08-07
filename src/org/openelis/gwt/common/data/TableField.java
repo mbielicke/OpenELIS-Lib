@@ -31,7 +31,7 @@ import java.util.List;
 
 import com.google.gwt.xml.client.Node;
 
-
+@Deprecated
 public class TableField<Key extends TableDataRow> extends AbstractField<TableDataModel<Key>> implements FieldType {
 
     private static final long serialVersionUID = 1L;

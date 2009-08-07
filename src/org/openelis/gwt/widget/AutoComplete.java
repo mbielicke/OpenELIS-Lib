@@ -33,7 +33,7 @@ import org.openelis.gwt.widget.table.TableColumnInt;
 import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class AutoComplete extends DropdownWidget {
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);

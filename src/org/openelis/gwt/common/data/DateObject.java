@@ -28,7 +28,7 @@ package org.openelis.gwt.common.data;
 import org.openelis.gwt.common.Datetime;
 
 import java.util.Date;
-
+@Deprecated
 public class DateObject extends DataObject<Datetime> implements FieldType {
     
     private static final long serialVersionUID = 1L;

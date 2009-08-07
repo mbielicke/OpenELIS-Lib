@@ -27,6 +27,7 @@ package org.openelis.gwt.common.data;
 
 import com.google.gwt.xml.client.Node;
 
+@Deprecated
 public class QueryStringField extends QueryField {
 
 

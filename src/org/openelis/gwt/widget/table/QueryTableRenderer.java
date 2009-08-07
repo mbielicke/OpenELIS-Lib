@@ -33,7 +33,7 @@ import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class QueryTableRenderer implements TableRendererInt, TableWidgetListener {
     
     private QueryTable controller;

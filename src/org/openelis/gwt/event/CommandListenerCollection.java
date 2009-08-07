@@ -28,7 +28,7 @@ package org.openelis.gwt.event;
 import com.google.gwt.user.client.Window;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class CommandListenerCollection extends ArrayList<CommandListener> {
     
     private static final long serialVersionUID = 1L;

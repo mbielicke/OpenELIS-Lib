@@ -40,6 +40,7 @@ import org.openelis.gwt.screen.AppScreen;
 
 import java.util.Vector;
 
+@Deprecated
 public class TreeMouseHandler implements TreeMouseHandlerInt {
     
     private TreeWidget controller;

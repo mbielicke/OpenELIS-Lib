@@ -34,7 +34,7 @@ import org.openelis.gwt.widget.CalendarLookUp;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Node;
-
+@Deprecated
 public class TableCalendar extends TableCellInputWidget {
 
     private CalendarLookUp editor;

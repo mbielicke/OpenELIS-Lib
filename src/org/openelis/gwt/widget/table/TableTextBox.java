@@ -41,6 +41,7 @@ import org.openelis.gwt.widget.TextBox;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableTextBox extends TableCellInputWidget {
     
     public TextBox editor;

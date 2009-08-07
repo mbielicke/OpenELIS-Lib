@@ -49,6 +49,7 @@ import org.openelis.gwt.widget.table.TableCellWidget;
 import java.util.ArrayList;
 import java.util.Stack;
 
+@Deprecated
 public class TableTree extends SimplePanel implements TableCellWidget , SourcesCommandEvents {
     
     public class ItemGrid extends Grid implements TableListener{

@@ -41,6 +41,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
+@Deprecated
 public abstract class AbstractField<Type> extends DataObject<Type> implements Serializable {
 
     private static final long serialVersionUID = 1L;

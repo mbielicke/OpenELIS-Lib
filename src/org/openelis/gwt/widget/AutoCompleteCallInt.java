@@ -26,7 +26,7 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.data.TableDataModel;
-
+@Deprecated
 public interface AutoCompleteCallInt {
     
     public void callForMatches(AutoComplete widget, TableDataModel model, String text);

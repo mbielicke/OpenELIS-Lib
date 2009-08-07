@@ -35,6 +35,7 @@ import com.google.gwt.xml.client.Node;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenText extends ScreenWidget {
 	/**
 	 * Default XML Tag Name in XML Definition

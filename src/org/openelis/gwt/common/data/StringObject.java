@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.common.data;
 
+@Deprecated
 public class StringObject extends DataObject<String> implements FieldType {
 
     private static final long serialVersionUID = 1L;

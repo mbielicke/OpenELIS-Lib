@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.common;
 
+@Deprecated
 public class FormErrorException extends RPCException{
 
 	private static final long serialVersionUID = 1L;

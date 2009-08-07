@@ -61,6 +61,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
+@Deprecated
 public class AppScreen<ScreenRPC extends Form> extends ScreenBase<ScreenRPC> implements EventPreview, SourcesKeyboardEvents, SourcesClickEvents {
 
     public AppScreenServiceIntAsync<ScreenRPC> service;

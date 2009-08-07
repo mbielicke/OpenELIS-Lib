@@ -44,6 +44,7 @@ import org.openelis.gwt.widget.MenuPanel;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenMenuPanel extends ScreenWidget {
 	/**
 	 * Default XML Tag Name in XML Definition

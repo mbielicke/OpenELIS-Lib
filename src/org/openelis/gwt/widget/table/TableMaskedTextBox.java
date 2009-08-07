@@ -39,6 +39,7 @@ import org.openelis.gwt.widget.MaskedTextBox;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableMaskedTextBox extends TableCellInputWidget {
     
     private MaskedTextBox editor;

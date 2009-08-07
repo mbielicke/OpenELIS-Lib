@@ -51,7 +51,7 @@ import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 import org.openelis.gwt.widget.table.event.TableWidgetListener;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, PopupListener, FocusListener, HasFocus {
     
     //public HorizontalPanel mainHP = new HorizontalPanel();

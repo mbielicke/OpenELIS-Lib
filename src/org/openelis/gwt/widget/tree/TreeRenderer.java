@@ -38,6 +38,7 @@ import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener {
     
     private TreeWidget controller;

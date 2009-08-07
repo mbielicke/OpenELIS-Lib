@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 import org.openelis.gwt.common.Preferences;
 
+@Deprecated
 public interface PreferencesServiceInt extends RemoteService {
     
     public Preferences getPreferences(String key);

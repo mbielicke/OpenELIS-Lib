@@ -13,6 +13,7 @@ import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ClassFactory;
 
+@Deprecated
 public class TableDate extends SimplePanel implements TableCellWidget {
     
     public int rowIndex;

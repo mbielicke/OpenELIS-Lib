@@ -47,6 +47,7 @@ import org.openelis.gwt.screen.ScreenMenuItem;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class MenuPanel extends Composite implements MouseWheelListener, MouseListener{
     
     String layout;

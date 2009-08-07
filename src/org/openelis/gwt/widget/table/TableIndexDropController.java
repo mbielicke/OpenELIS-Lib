@@ -19,6 +19,7 @@ import org.openelis.gwt.event.DropManager;
 /**
 * Allows one or more table rows to be dropped into an existing table.
 */
+@Deprecated
 public final class TableIndexDropController extends AbstractPositioningDropController {
 
  private static final String CSS_DROP_POSITIONER = "DropPositioner";

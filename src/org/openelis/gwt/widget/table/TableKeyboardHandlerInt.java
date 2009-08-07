@@ -26,7 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.ui.KeyboardListener;
-
+@Deprecated
 public interface TableKeyboardHandlerInt extends KeyboardListener{
 
 }

@@ -42,6 +42,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenTree extends ScreenWidget {
 	/**
 	 * Default XML Tag Name used in XML Definition

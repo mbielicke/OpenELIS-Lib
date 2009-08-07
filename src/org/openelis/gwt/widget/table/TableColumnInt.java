@@ -33,6 +33,7 @@ import org.openelis.gwt.common.data.Field;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenMenuItem;
 
+@Deprecated
 public interface TableColumnInt {
     
     public void  setHeader(String header);

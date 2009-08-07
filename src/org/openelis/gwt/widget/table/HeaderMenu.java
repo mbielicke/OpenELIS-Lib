@@ -51,6 +51,7 @@ import java.util.ArrayList;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class HeaderMenu extends PopupPanel implements
                                           PopupListener,
                                           MouseListener,

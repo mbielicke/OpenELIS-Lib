@@ -42,6 +42,7 @@ import com.google.gwt.xml.client.NodeList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenVerticalSplit extends ScreenWidget{
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap

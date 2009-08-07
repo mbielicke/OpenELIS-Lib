@@ -8,6 +8,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.widget.MultipleLookUp;
 
+@Deprecated
 public class ScreenMultipleLookUp extends ScreenInputWidget {
     
     protected MultipleLookUp look;

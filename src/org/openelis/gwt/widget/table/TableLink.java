@@ -41,6 +41,7 @@ import org.openelis.gwt.common.data.FieldType;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableLink extends SimplePanel implements TableCellWidget {
     
     private HTML editor;

@@ -28,6 +28,7 @@ package org.openelis.gwt.services;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
+@Deprecated
 public class PreferencesService {
     
     protected static PreferencesServiceIntAsync prefService = (PreferencesServiceIntAsync) GWT

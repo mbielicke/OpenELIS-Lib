@@ -36,6 +36,7 @@ import org.openelis.gwt.widget.ButtonPanel;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenButtonPanel extends ScreenWidget {
 	/**
 	 * Default Tag Name for XML Definition and WidgetMap

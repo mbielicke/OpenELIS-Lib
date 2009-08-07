@@ -40,7 +40,7 @@ import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+@Deprecated
 public class ButtonPanel extends Composite implements ClickListener, SourcesCommandEvents, CommandListener {
 
     public enum ButtonPanelState {ENABLED,LOCKED}

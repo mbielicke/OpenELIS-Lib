@@ -32,6 +32,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.ScreenBase;
 import org.openelis.gwt.widget.EditBox;
 
+@Deprecated
 public class TableEditBox extends TableCellInputWidget {
     
     protected EditBox editor;

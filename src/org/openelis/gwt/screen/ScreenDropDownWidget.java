@@ -45,6 +45,7 @@ import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class ScreenDropDownWidget extends ScreenInputWidget implements FocusListener {
 	/**
 	 * Default XML Tag Name for XML definition and WidgetMap

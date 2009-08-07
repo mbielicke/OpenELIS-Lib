@@ -29,7 +29,7 @@ import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
 
 import java.util.ArrayList;
-
+@Deprecated
 public interface DataFiltererInt {
     
     public <T extends TableDataRow> Filter[] getFilterValues(TableDataModel<T> data,int col);

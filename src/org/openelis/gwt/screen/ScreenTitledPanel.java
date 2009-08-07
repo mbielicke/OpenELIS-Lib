@@ -36,6 +36,7 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+@Deprecated
 public class ScreenTitledPanel extends ScreenWidget{
 
 	/**

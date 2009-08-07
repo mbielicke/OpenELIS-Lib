@@ -49,6 +49,7 @@ import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TreeHeader extends FlexTable implements TreeHeaderInt, TableListener, MouseListener{
     
     public static String headerStyle = "topHeaderBar";

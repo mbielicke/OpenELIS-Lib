@@ -18,7 +18,6 @@ package org.openelis.gwt.services;
 import java.util.Date;
 
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.RPCException;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;

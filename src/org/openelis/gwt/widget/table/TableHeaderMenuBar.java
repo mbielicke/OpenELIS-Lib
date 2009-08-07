@@ -58,6 +58,7 @@ import org.openelis.gwt.widget.TextBox;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, MouseListener, CommandListener, PopupListener, ClickListener{
     
     public static String headerStyle = "Header";

@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.data.TableDataRow;
 
+@Deprecated
 public interface TableManager {
     
     public <T> boolean canSelect(TableWidget widget, TableDataRow<T> set, int row);

@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.ScreenAppButton;
 import org.openelis.gwt.widget.table.PopupTable;
-
+@Deprecated
 public class CalendarPopup extends PopupTable implements ClickListener {
     
     private VerticalPanel vp = new VerticalPanel();

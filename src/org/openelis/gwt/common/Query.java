@@ -6,6 +6,7 @@ import org.openelis.gwt.common.data.TableDataRow;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class Query<QRow extends TableDataRow> implements RPC {
     
 	private static final long serialVersionUID = 1L;

@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.ScreenWidget;
 
+@Deprecated
 public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     
     private TableWidget controller;

@@ -58,6 +58,7 @@ import java.util.Iterator;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableWidget extends FocusPanel implements
                             TableListener,
                             SourcesChangeEvents,

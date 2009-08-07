@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.MouseListener;
 
+@Deprecated
 public interface TableMouseHandlerInt extends ClickListener, MouseListener, MouseOverHandler, MouseOutHandler{
 
 }

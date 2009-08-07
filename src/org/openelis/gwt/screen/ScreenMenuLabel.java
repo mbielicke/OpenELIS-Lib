@@ -38,6 +38,7 @@ import org.openelis.gwt.widget.MenuLabel;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenMenuLabel extends ScreenWidget implements SourcesClickEvents{
 	/**
 	 * Default XML Tag Name for XML Definition and WidgetMap

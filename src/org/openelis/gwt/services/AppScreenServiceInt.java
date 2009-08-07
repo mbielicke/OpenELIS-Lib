@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.RPCException;
 
+@Deprecated
 public interface AppScreenServiceInt<ScreenRPC extends RPC> extends RemoteService {
     
     public ScreenRPC getScreen(ScreenRPC defintiion) throws RPCException;

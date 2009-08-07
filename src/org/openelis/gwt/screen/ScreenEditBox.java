@@ -32,6 +32,7 @@ import org.openelis.gwt.common.data.AbstractField;
 import org.openelis.gwt.screen.AppScreenForm.State;
 import org.openelis.gwt.widget.EditBox;
 
+@Deprecated
 public class ScreenEditBox extends ScreenInputWidget {
 	
 	public static final String TAG_NAME = "editbox";

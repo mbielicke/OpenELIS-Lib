@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class AsyncCallChain<T> extends ArrayList<AsyncCallback> implements AsyncCallback<T>{
     
     private static final long serialVersionUID = 1L;

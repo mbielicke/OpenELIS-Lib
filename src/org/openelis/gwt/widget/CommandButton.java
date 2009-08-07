@@ -40,7 +40,7 @@ import org.openelis.gwt.event.SourcesCommandEvents;
 import org.openelis.gwt.screen.AppScreenForm.State;
 
 import java.util.EnumSet;
-
+@Deprecated
 public class CommandButton extends Composite implements MouseListener, SourcesCommandEvents, ClickListener {
     
 

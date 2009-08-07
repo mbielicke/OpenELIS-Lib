@@ -46,6 +46,7 @@ import org.openelis.gwt.widget.Dropdown;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TableDropdown extends TableCellInputWidget implements ChangeListener, SourcesChangeEvents {
 
 	public Dropdown editor;

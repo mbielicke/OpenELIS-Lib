@@ -41,6 +41,7 @@ import org.openelis.gwt.common.data.FieldType;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableLabel extends SimplePanel implements TableCellWidget {
     
     private Label editor;

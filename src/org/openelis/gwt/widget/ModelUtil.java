@@ -4,7 +4,7 @@ import org.openelis.gwt.common.data.TableDataModel;
 import org.openelis.gwt.common.data.TableDataRow;
 
 import java.util.HashMap;
-
+@Deprecated
 public class ModelUtil {
 
     public static <T> HashMap<T,TableDataRow<T>> getModelMap(TableDataModel<TableDataRow<T>> model, HashMap<T,TableDataRow<T>> map) {

@@ -46,6 +46,7 @@ import java.util.ArrayList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenQueryTable extends ScreenInputWidget {
     
 

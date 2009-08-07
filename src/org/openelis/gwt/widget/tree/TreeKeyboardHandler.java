@@ -35,6 +35,7 @@ import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.widget.table.TableCellWidget;
 import org.openelis.gwt.widget.table.TableLabel;
 
+@Deprecated
 public class TreeKeyboardHandler implements TreeKeyboardHandlerInt {
     
     private TreeWidget controller;

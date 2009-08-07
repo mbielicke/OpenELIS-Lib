@@ -34,6 +34,7 @@ import org.openelis.gwt.common.data.AbstractField;
 //import org.openelis.gwt.common.data.TabRPC;
 import org.openelis.gwt.widget.ScrollableTabBar;
 
+@Deprecated
 public class ScreenScrollableTabBar extends ScreenInputWidget{
     public static String TAG_NAME = "ScrollTabBar";
     //public TabRPC tabRPC;

@@ -57,6 +57,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableView extends Composite implements TableViewInt, ScrollListener, MouseWheelListener {
     
     public boolean loaded;

@@ -35,6 +35,7 @@ import org.openelis.gwt.widget.CommandButton;
 
 import java.util.EnumSet;
 
+@Deprecated
 public class ScreenCommandButton extends ScreenWidget {
     
     /**

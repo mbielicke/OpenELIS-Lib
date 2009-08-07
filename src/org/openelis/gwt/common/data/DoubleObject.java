@@ -1,5 +1,5 @@
 package org.openelis.gwt.common.data;
-
+@Deprecated
 public class DoubleObject extends DataObject<Double> implements FieldType {
     
     private static final long serialVersionUID = 1L;

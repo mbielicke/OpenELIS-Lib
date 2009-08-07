@@ -8,6 +8,7 @@ import com.google.gwt.xml.client.NodeList;
 import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.data.AbstractField;
 
+@Deprecated
 public class ScreenTab extends ScreenInputWidget {
     
     public static final String TAG_NAME = "tab";

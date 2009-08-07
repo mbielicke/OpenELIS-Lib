@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.Label;
  * @author tschmidt
  *
  */
+@Deprecated
 public class MenuLabel extends Composite {
 
     private HorizontalPanel hp = new HorizontalPanel();

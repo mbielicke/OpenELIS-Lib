@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.data.TreeDataItem;
 
-
+@Deprecated
 public interface TreeManager {
     
     public boolean canSelect(TreeWidget widget, TreeDataItem set, int row);

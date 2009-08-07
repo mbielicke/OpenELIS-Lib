@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.tree.event;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TreeWidgetListenerCollection extends ArrayList<TreeWidgetListener>{
     
    public void fireStartedEditing(SourcesTreeWidgetEvents sender, int row, int col){

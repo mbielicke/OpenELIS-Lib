@@ -61,6 +61,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
+@Deprecated
 public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends AppScreen<ScreenRPC> implements SourcesCommandEvents, CommandListener {
    
     //public Key key;

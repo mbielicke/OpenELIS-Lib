@@ -29,6 +29,7 @@ import org.openelis.gwt.event.CommandListener;
 import org.openelis.gwt.event.CommandListenerCollection;
 import org.openelis.gwt.event.SourcesCommandEvents;
 
+@Deprecated
 public class CommandChain implements CommandListener {
     
     private CommandListenerCollection listeners = new CommandListenerCollection();

@@ -37,7 +37,7 @@ import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.widget.table.TableCellWidget;
 
 import java.util.HashMap;
-
+@Deprecated
 public class TreeColumn implements TreeColumnInt {
 
     public String header;

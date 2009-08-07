@@ -52,6 +52,7 @@ import org.openelis.gwt.widget.CheckBox.CheckType;
  * @author tschmidt
  * 
  */
+@Deprecated
 public class TableCheck extends TableCellInputWidget implements FocusListener {
 
     private CheckBox editor;

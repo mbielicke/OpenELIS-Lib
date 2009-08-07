@@ -39,6 +39,7 @@ import org.openelis.gwt.widget.table.TableWidget;
 import java.util.ArrayList;
 import java.util.Vector;
 
+@Deprecated
 public class ScreenResultsTable extends ScreenInputWidget {
     public ResultsTable results;
     public ScreenTableWidget tableWidget;

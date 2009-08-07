@@ -50,6 +50,7 @@ import java.util.Iterator;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenBase<ScreenRPC extends Form> extends Composite implements FocusListener{
     /**
      * All drawn widgets will be held in this panel.

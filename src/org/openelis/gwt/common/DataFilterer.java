@@ -35,6 +35,7 @@ import org.openelis.gwt.common.data.TableDataRow;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+@Deprecated
 public class DataFilterer implements DataFiltererInt {
     
     public <T extends TableDataRow> Filter[] getFilterValues(TableDataModel<T> data,int col) {

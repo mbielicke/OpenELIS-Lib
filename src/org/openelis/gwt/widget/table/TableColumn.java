@@ -35,6 +35,7 @@ import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.common.data.FieldType;
 import org.openelis.gwt.screen.ScreenMenuItem;
 
+@Deprecated
 public class TableColumn implements TableColumnInt {
 
     public String header;

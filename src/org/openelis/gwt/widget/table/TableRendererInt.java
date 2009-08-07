@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+@Deprecated
 public interface TableRendererInt {
     
     public void createRow(int i);

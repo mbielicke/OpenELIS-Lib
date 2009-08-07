@@ -65,6 +65,7 @@ import org.openelis.gwt.widget.AppButton;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenWidget extends SimplePanel implements
                                              SourcesMouseEvents,
                                              SourcesClickEvents {

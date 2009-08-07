@@ -40,6 +40,7 @@ import org.openelis.gwt.widget.MenuCommands;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenMenuBar extends ScreenWidget {
     /**
      * Default XML Tag Name for XML Definition and WidgetMap

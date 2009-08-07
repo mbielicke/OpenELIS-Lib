@@ -43,6 +43,7 @@ import java.util.Date;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
     
     /**

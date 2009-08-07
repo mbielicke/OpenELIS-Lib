@@ -69,6 +69,7 @@ import java.util.Vector;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenTableWidget extends ScreenInputWidget implements HasDragController, HasDropController {
     
 

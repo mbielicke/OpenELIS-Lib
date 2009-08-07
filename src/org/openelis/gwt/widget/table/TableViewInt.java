@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public interface TableViewInt {
     
     public enum VerticalScroll {NEVER,ALWAYS,NEEDED};

@@ -41,6 +41,7 @@ import org.openelis.gwt.screen.AppScreen;
 
 import java.util.Vector;
 
+@Deprecated
 public class TableMouseHandler implements TableMouseHandlerInt {
     
     private TableWidget controller;

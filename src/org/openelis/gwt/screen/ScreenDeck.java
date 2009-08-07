@@ -35,6 +35,7 @@ import com.google.gwt.xml.client.NodeList;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenDeck extends ScreenWidget {
 	/**
 	 * Default XML Tag Name in XML Definition and WidgetMap

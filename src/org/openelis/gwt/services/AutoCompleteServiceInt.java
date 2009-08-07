@@ -42,6 +42,7 @@ import java.util.HashMap;
  * @author tschmidt
  *
  */
+@Deprecated
 public interface AutoCompleteServiceInt extends RemoteService {
 
     public TableDataModel getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params) throws RPCException;

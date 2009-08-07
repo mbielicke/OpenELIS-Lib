@@ -30,6 +30,7 @@ import com.google.gwt.xml.client.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Deprecated
 public class TreeField extends AbstractField<TreeDataModel> implements FieldType {
 
     private static final long serialVersionUID = 1L;

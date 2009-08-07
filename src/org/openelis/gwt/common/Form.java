@@ -47,6 +47,7 @@ import java.util.List;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
+@Deprecated
 public abstract class Form<EntityKey> extends AbstractField<String> implements FieldType,RPC {
 
     private static final long serialVersionUID = 1L;

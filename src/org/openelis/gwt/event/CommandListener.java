@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.event;
 
+@Deprecated
 public interface CommandListener {
     
     public void performCommand(Enum action, Object obj);

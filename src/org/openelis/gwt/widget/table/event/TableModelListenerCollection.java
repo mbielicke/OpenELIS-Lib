@@ -26,7 +26,7 @@
 package org.openelis.gwt.widget.table.event;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class TableModelListenerCollection extends ArrayList<TableModelListener> {
     
     public void fireCellUpdated(SourcesTableModelEvents sender, int row, int col){

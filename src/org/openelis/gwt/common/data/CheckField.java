@@ -36,6 +36,7 @@ import org.openelis.gwt.screen.AppScreen;
  * CheckField is an implementation of AbstractField that represents
  * data used for Checkboxes.
  */
+@Deprecated
 public class CheckField extends AbstractField<String> implements FieldType {
 
     private static final long serialVersionUID = 1L;

@@ -38,7 +38,7 @@ import org.openelis.gwt.widget.table.event.TableModelListenerCollection;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Deprecated
 public class TableModel implements TableModelInt {
 
     private static final long serialVersionUID = 1L;
