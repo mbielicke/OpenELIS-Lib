@@ -25,19 +25,15 @@
 */
 package org.openelis.util;
 
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DateField;
-import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.TableDataRow;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.widget.DateField;
+import org.openelis.gwt.widget.table.TableDataRow;
 
 public class ReportUtil {
     
@@ -203,7 +199,7 @@ public class ReportUtil {
 
         return decodeType;
     }
-
+    /*
     public String encodeURLParameters(Form<Object> form, String user) {
         String       value ="";
         StringBuffer buffer = new StringBuffer(256);
@@ -237,5 +233,6 @@ public class ReportUtil {
         }
         return buffer.toString();
     }
+    */
 
 }

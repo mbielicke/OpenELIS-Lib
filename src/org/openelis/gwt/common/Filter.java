@@ -25,13 +25,9 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.FieldType;
+public class Filter {
 
-@Deprecated
-public class Filter implements RPC {
-
-    private static final long serialVersionUID = 1L;
-    public FieldType obj;
+    public Object obj;
     public boolean filtered;
     public String display;
     public String splitOn;

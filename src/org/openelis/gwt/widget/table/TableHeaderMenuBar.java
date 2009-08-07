@@ -25,10 +25,35 @@
 */
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.DataSorterInt;
+import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.widget.MenuItem;
+import org.openelis.gwt.widget.MenuPanel;
+import org.openelis.gwt.widget.TextBox;
+
+import com.google.gwt.event.dom.client.HasMouseDownHandlers;
+import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.HasMouseUpHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -38,34 +63,22 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.IntegerObject;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
-import org.openelis.gwt.widget.TextBox;
-
-import java.util.ArrayList;
-
-@Deprecated
-public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, MouseListener, CommandListener, PopupListener, ClickListener{
+public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler, 
+															 MouseDownHandler, 
+															 MouseUpHandler, 
+															 CloseHandler<PopupPanel>, 
+															 ClickListener{
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
     public ArrayList<Label> hLabels = new ArrayList<Label>();
     public ArrayList<MenuItem> hMenus = new ArrayList<MenuItem>();
-    protected ArrayList<TableColumnInt> columns;
+    protected ArrayList<TableColumn> columns;
     protected boolean resizing;
     protected int startx;
     protected int resizeColumn1 = -1;
@@ -80,102 +93,54 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         super("horizontal");
     }
     
-    public class BarContainer extends AbsolutePanel implements SourcesMouseEvents {
-        MouseListenerCollection mouseListeners = new MouseListenerCollection();
-        
-        public BarContainer() {
-            sinkEvents(Event.MOUSEEVENTS);
-        }
-        
-        @Override
-        public void onBrowserEvent(Event event) {
-            switch (DOM.eventGetType(event)) {
-                case Event.ONMOUSEDOWN:
-                case Event.ONMOUSEUP:
-                case Event.ONMOUSEMOVE:
-                case Event.ONMOUSEOVER:
-                case Event.ONMOUSEOUT:
-                    if (mouseListeners != null) {
-                        mouseListeners.fireMouseEvent(this, event);
-                    }
-                    break;
-            }
-            super.onBrowserEvent(event);
-        }
+    public class BarContainer extends AbsolutePanel implements HasMouseDownHandlers,
+    														   HasMouseUpHandlers, 
+    														   HasMouseMoveHandlers {
 
-        public void addMouseListener(MouseListener listener) {
-           mouseListeners.add(listener);
-        }
+		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+			return addDomHandler(handler,MouseDownEvent.getType());
+		}
 
-        public void removeMouseListener(MouseListener listener) {
-           mouseListeners.remove(listener); 
-        }
+		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+			return addDomHandler(handler, MouseUpEvent.getType());
+		}
+
+		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+			return addDomHandler(handler, MouseMoveEvent.getType());
+		}
+
     }
     
-    public class ListenContainer extends HorizontalPanel implements SourcesMouseEvents,MouseListener, PopupListener {
+    public class ListenContainer extends HorizontalPanel implements HasMouseOverHandlers,
+    																HasMouseOutHandlers,
+    																MouseOverHandler,
+    																MouseOutHandler,
+    																CloseHandler<PopupPanel> {
         
-        MouseListenerCollection mouseListeners = new MouseListenerCollection();
-        
-        public ListenContainer() {
-            sinkEvents(Event.MOUSEEVENTS);
-        }
-        
-        @Override
-        public void onBrowserEvent(Event event) {
-            switch (DOM.eventGetType(event)) {
-                case Event.ONMOUSEDOWN:
-                case Event.ONMOUSEUP:
-                case Event.ONMOUSEMOVE:
-                case Event.ONMOUSEOVER:
-                case Event.ONMOUSEOUT:
-                    if (mouseListeners != null) {
-                        mouseListeners.fireMouseEvent(this, event);
-                    }
-                    break;
-            }
-            super.onBrowserEvent(event);
-        }
 
-        public void addMouseListener(MouseListener listener) {
-           mouseListeners.add(listener);
-        }
-
-        public void removeMouseListener(MouseListener listener) {
-           mouseListeners.remove(listener); 
-        }
-        public void onMouseEnter(Widget sender) {
+        public void onMouseOver(MouseOverEvent event) {
             getWidget(1).setStyleName("HeaderDropdownButton");
         }
 
         /**
          * Catches mouses Events for resizing columns.
          */
-        public void onMouseLeave(Widget sender) {
+        public void onMouseOut(MouseOutEvent event) {
             if(!((MenuItem)getWidget(1)).popShowing)
                 getWidget(1).removeStyleName("HeaderDropdownButton");
         }
 
-        public void onMouseDown(Widget sender, int x, int y) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        public void onMouseMove(Widget sender, int x, int y) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        public void onMouseUp(Widget sender, int x, int y) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
+        public void onClose(CloseEvent<PopupPanel> event) {
             getWidget(1).removeStyleName("HeaderDropdownButton");
-
-            
         }
-        
+
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+			return addDomHandler(handler, MouseOverEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+			return addDomHandler(handler, MouseOutEvent.getType());
+		}
     }
     
     
@@ -186,7 +151,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         this.columns = controller.columns;
         panel.setSpacing(0);
         int j = 0;
-        for(TableColumnInt column : columns) {
+        for(TableColumn column : columns) {
             Label headerLabel = new Label(column.getHeader());
             hLabels.add(headerLabel);
             MenuItem menuItem = null;
@@ -195,16 +160,18 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 wid.setHeight("18px");
                 wid.setWidth("16px");
                 menuItem = new MenuItem(wid);
-                menuItem.addMouseListener(this);
+                //menuItem.addMouseListener(this);
                 menuItem.menuItemsPanel = new MenuPanel("vertical");
                 menuItem.menuItemsPanel.setStyleName("topHeaderContainer");
-                menuItem.addCommandListener(this);
+                //menuItem.addCommandListener(this);
             }
             menuItems.add(menuItem);
             hMenus.add(menuItem);
             if (hLabels.size() > 1) {
                 BarContainer bar = new BarContainer(); 
-                bar.addMouseListener(this);
+                bar.addMouseDownHandler(this);
+                bar.addMouseUpHandler(this);
+                bar.addMouseMoveHandler(this);
                 HorizontalPanel hpBar = new HorizontalPanel();
                 AbsolutePanel ap1 = new AbsolutePanel();
                 ap1.addStyleName("HeaderBarPad");
@@ -233,8 +200,9 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
             if(menuItem != null){
                 hp0.add(menuItem);
                 hp0.setCellHorizontalAlignment(menuItem, HasAlignment.ALIGN_RIGHT);
-                hp0.addMouseListener(hp0);
-                menuItem.pop.addPopupListener(hp0);
+                hp0.addMouseOverHandler(hp0);
+                hp0.addMouseOutHandler(hp0);
+                menuItem.pop.addCloseHandler(hp0);
             }
             hp0.setWidth("100%");
             add(hp0);            
@@ -253,8 +221,8 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     /**
      * Catches mouses Events for resizing columns.
      */
-    public void onMouseDown(Widget sender, int x, int y) {
-        
+    public void onMouseDown(MouseDownEvent event) {
+        Widget sender = (Widget)event.getSource();
         // TODO Auto-generated method stub
         resizing = true;
         startx = sender.getAbsoluteLeft();
@@ -318,7 +286,9 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 return;
             }
             FocusPanel bar = new FocusPanel();
-            bar.addMouseListener(this);
+            bar.addMouseUpHandler(this);
+            bar.addMouseDownHandler(this);
+            bar.addMouseMoveHandler(this);
             bar.setHeight((controller.view.table.getOffsetHeight()+17)+"px");
             bar.setWidth("1px");
             DOM.setStyleAttribute(bar.getElement(), "background", "red");
@@ -333,35 +303,22 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
     /**
      * Catches mouses Events for resizing columns.
      */
-    public void onMouseEnter(Widget sender) {
-      
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     */
-    public void onMouseLeave(Widget sender) {
-      
-    }
-
-    /**
-     * Catches mouses Events for resizing columns.
-     */
-    public void onMouseMove(Widget sender, int x, int y) {
+    public void onMouseMove(MouseMoveEvent event) {
+    	Widget sender = (Widget)event.getSource();
         if(resizing) {
             int colA =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
             int colB =  columns.get(tableCol2).getCurrentWidth() - (sender.getAbsoluteLeft() - startx);
-            if((x < 0 && colA <= 16) || (x > 0 && colB <= 16)) 
+            if((event.getX() < 0 && colA <= 16) || (event.getX() > 0 && colB <= 16)) 
                  return;
-            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(x))+"px");
+            DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(event.getX()))+"px");
         }
     }
 
     /**
      * Catches mouses Events for resizing columns.
      */
-    public void onMouseUp(Widget sender, int x, int y) {
-        
+    public void onMouseUp(MouseUpEvent event) {
+        	Widget sender = (Widget)event.getSource();
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
                 columns.get(tableCol1).setCurrentWidth( columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx));
@@ -390,7 +347,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
-                                ((TableCellWidget)controller.view.table.getWidget(j,i)).setCellWidth(columns.get(i).getCurrentWidth());
+                                //((TableCellWidget)controller.view.table.getWidget(j,i)).setCellWidth(columns.get(i).getCurrentWidth());
                                 ((SimplePanel)controller.view.table.getWidget(j, i)).setWidth((columns.get(i).getCurrentWidth()) + "px");
                                 //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
                             }
@@ -411,7 +368,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                     adj2 = 2;
                 }
                 int width = 0;
-                for(TableColumnInt column : columns)
+                for(TableColumn column : columns)
                     width += column.getCurrentWidth();
                 int displayWidth = width + (columns.size()*4) - (columns.size() -1);
                 setWidth(displayWidth+"px");  
@@ -448,19 +405,22 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                 MenuItem item = new MenuItem("",new Label("Sort Up"),"");
                 item.setStyleName("topHeaderRowContainer");
                 ((MenuItem)obj).menuItemsPanel.add(item);
-                item.addClickListener(new ClickListener() {
+                /*item.addClickListener(new ClickListener() {
                     public void onClick(Widget sender) {
-                        controller.model.sort(index, DataSorterInt.SortDirection.UP);
+                        controller.sort(index, DataSorterInt.SortDirection.UP);
                     }
                 });
+                */
                 item = new MenuItem("",new Label("Sort Down"),"");
                 item.setStyleName("topHeaderRowContainer");
                 ((MenuItem)obj).menuItemsPanel.add(item);
+                /*
                 item.addClickListener(new ClickListener() {
                     public void onClick(Widget sender) {
-                        controller.model.sort(index, DataSorterInt.SortDirection.DOWN);
+                        controller.sort(index, DataSorterInt.SortDirection.DOWN);
                     }
-                });
+                })
+                */;
                 if(col.filterable){
                     ((MenuItem)obj).menuItemsPanel.add(new HTML("<hr/>"));
                 }
@@ -475,7 +435,7 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                      col.setFilter(filters);
                 for (int i = 0; i < filters.length; i++) {
                     final Filter filter = filters[i];
-                    String theText = ((AbstractField)filter.obj).getValue().toString();
+                    String theText = filter.obj.toString();
                     if (filter.display != null)
                         theText = filter.display;
                     String filtered = "Unchecked";
@@ -485,12 +445,12 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                     item.setStyleName("topHeaderRowContainer");
                     //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
                     filterMenu.menuItemsPanel.add(item);
-                    item.args = new Object[] {filter,new IntegerObject(index)};
-                    item.removeClickListener(item);
-                    item.addClickListener(this);
+                    item.args = new Object[] {filter,index};
+                    //item.removeClickListener(item);
+                    //item.addClickListener(this);
                     
                 } 
-                filterMenu.pop.addPopupListener(this);
+                filterMenu.pop.addCloseHandler(this);
                 ((MenuItem)obj).menuItemsPanel.add(filterMenu);
             }
             if(col.queryable) {
@@ -520,30 +480,30 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
                             col.query = null;
                         }
                         if(keyCode == KeyboardListener.KEY_ENTER){
-                            item.onClick(item);
+                          //  item.onClick(item);
                         }
                         
                     }
                     
                 });
-                item.removeClickListener(item);
+                //item.removeClickListener(item);
                 ((MenuItem)obj).menuItemsPanel.add(item);
-                ((MenuItem)obj).pop.addPopupListener(this);
+                ((MenuItem)obj).pop.addCloseHandler(this);
             }
             col.filterDisplayed = true;
         }
         
     }
 
-    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
+    public void onClose(CloseEvent<PopupPanel> event) {
         if (doFilter || doQuery) {
-            for(TableColumnInt column : controller.columns){
+            for(TableColumn column : controller.columns){
                 if(((TableColumn)column).query != null )
                     ((TableColumn)column).applyQueryFilter();
                 else
                     column.applyFilter();
             }
-            controller.model.refresh();
+            controller.refresh();
         }
         doFilter = false;
         doQuery = false; 
@@ -553,14 +513,14 @@ public class TableHeaderMenuBar extends MenuPanel implements TableHeaderInt, Mou
         if(sender instanceof MenuItem) {
             doFilter = true;
             Filter filter = (Filter)((MenuItem)sender).args[0];
-            TableColumn col = (TableColumn)controller.columns.get((((IntegerObject)((MenuItem)sender).args[1]).getValue()));
+            TableColumn col = (TableColumn)controller.columns.get((((Integer)((MenuItem)sender).args[1])));
             filter.filtered = !filter.filtered;
             if(filter.filtered)
                 ((MenuItem)sender).iconPanel.setStyleName("Checked");
             else
                 ((MenuItem)sender).iconPanel.setStyleName("Unchecked");
             Filter[] filters = col.filters;
-            if(((AbstractField)filter.obj).getValue().equals("All")){
+            if(filter.obj.equals("All")){
                 for (int i = 1; i < filters.length; i++) {
                     if (filters[i].filtered) {
                         filters[i].filtered = false;

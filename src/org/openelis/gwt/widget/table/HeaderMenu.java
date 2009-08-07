@@ -25,6 +25,11 @@
 */
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.DataSorterInt;
+import org.openelis.gwt.common.Filter;
+
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -38,12 +43,6 @@ import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.Field;
-
-import java.util.ArrayList;
-
 /**
  * This class displays the PopupMenu for the Table Header columns Displays
  * options for sorting and filtering the table.
@@ -51,7 +50,6 @@ import java.util.ArrayList;
  * @author tschmidt
  * 
  */
-@Deprecated
 public class HeaderMenu extends PopupPanel implements
                                           PopupListener,
                                           MouseListener,
@@ -106,7 +104,7 @@ public class HeaderMenu extends PopupPanel implements
                 CheckBox check = new CheckBox();
                 filterMenu.setWidget(i, 0, check);
                 check.setChecked(filter[i].filtered);
-                String theText = ((Field)filter[i].obj).getValue().toString();
+                String theText = (filter[i].obj).toString();
                 if (filter[i].display != null)
                     theText = filter[i].display;
                 check.setText(theText);
@@ -126,11 +124,11 @@ public class HeaderMenu extends PopupPanel implements
      */
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
         if (doFilter) {
-            ((TableColumnInt)controller.columns.get(col)).setFilter(filter);
-            for(TableColumnInt column : (ArrayList<TableColumnInt>)controller.columns){
+            ((TableColumn)controller.columns.get(col)).setFilter(filter);
+            for(TableColumn column : (ArrayList<TableColumn>)controller.columns){
                 column.applyFilter();
             }
-            controller.model.refresh();
+            controller.refresh();
         }
     }
 
@@ -200,7 +198,7 @@ public class HeaderMenu extends PopupPanel implements
                 sortDirection = DataSorterInt.SortDirection.UP;
             if (row == 1)
                 sortDirection = DataSorterInt.SortDirection.DOWN;
-            controller.model.sort(col, sortDirection);
+            controller.sort(col, sortDirection);
             hide();
         }
     }

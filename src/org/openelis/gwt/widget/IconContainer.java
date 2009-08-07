@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.rewrite.UIUtil;
+import org.openelis.gwt.screen.UIUtil;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

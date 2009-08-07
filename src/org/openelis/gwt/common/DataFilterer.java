@@ -25,23 +25,18 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.common.data.StringField;
-import org.openelis.gwt.common.data.TableDataModel;
-import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.widget.StringField;
+import org.openelis.gwt.widget.table.TableDataRow;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-@Deprecated
 public class DataFilterer implements DataFiltererInt {
     
-    public <T extends TableDataRow> Filter[] getFilterValues(TableDataModel<T> data,int col) {
-        ArrayList<FieldType> filterVals = new ArrayList<FieldType>();
+    public Filter[] getFilterValues(ArrayList<TableDataRow> data,int col) {
+        ArrayList filterVals = new ArrayList();
         for (int i = 0; i < data.size(); i++) {
-            FieldType val = (FieldType)data.get(i).getCells().get(col);
+            Object val = data.get(i).getCells().get(col);
             if (val != null && !filterVals.contains(val))
                 filterVals.add(val);
         }
@@ -49,7 +44,7 @@ public class DataFilterer implements DataFiltererInt {
         Filter[] filters = new Filter[filterVals.size() + 1];
         Filter filter = new Filter();
         filter.filtered = true;
-        filter.obj = new StringField("All");
+        filter.obj = "All";
         filters[0] = filter;
         for (int i = 1; i < filters.length; i++) {
             filter = new Filter();
@@ -60,7 +55,7 @@ public class DataFilterer implements DataFiltererInt {
         return filters;
     }
     
-    public <T extends TableDataRow> void applyFilters(TableDataModel<T> data, ArrayList<Filter[]> filters) {
+    public void applyFilters(ArrayList<TableDataRow> data, ArrayList<Filter[]> filters) {
         ArrayList<HashSet> filterSets = new ArrayList<HashSet>();
         for (int i = 0; i < filters.size(); i++) {
             if (filters.get(i) == null) {
@@ -79,7 +74,7 @@ public class DataFilterer implements DataFiltererInt {
             filterSets.add(filterSet);
         }
         for (int i = 0; i < data.size(); i++) {
-            TableDataRow<? extends Object> row = data.get(i);
+            TableDataRow row = data.get(i);
             row.shown = true;
             for (int j = 0; j < filterSets.size(); j++) {
                 if (filterSets.get(j) == null)
@@ -88,15 +83,15 @@ public class DataFilterer implements DataFiltererInt {
                 if (filterSet.contains("All"))
                     continue;
                 String val = null;
-                if (((Field)row.getCells().get(j)).getValue() != null)
-                    val = ((Field)row.getCells().get(j)).getValue().toString();
+                if (row.getCells().get(j) != null)
+                    val = row.getCells().get(j).toString();
                 if (!filterSet.contains(val))
                   data.get(i).shown = false;  
             }
         }
     }
     
-    public <T extends TableDataRow> void applyFilter(TableDataModel<T> data, Filter[] filters, int col) {
+    public void applyFilter(ArrayList<TableDataRow> data, Filter[] filters, int col) {
         if(filters == null){
             if(col == 0){
                 for (int i = 0; i < data.size(); i++) 
@@ -104,7 +99,7 @@ public class DataFilterer implements DataFiltererInt {
             }
             return;
         }
-        ArrayList<FieldType> filterSet = new ArrayList<FieldType>();
+        ArrayList filterSet = new ArrayList();
         //filterSet.add("");
         //filterSet.add(null);
         for (int j = 0; j < filters.length; j++) {
@@ -113,17 +108,17 @@ public class DataFilterer implements DataFiltererInt {
             }
         }
         for (int i = 0; i < data.size(); i++) {
-            TableDataRow<? extends Object> row = data.get(i);
+            TableDataRow row = data.get(i);
             if(col == 0)
                 row.shown = true;
-            if (filterSet.contains(new DataObject<String>("All")))
+            if (filterSet.contains("All"))
                 continue;
-            if (((Field)row.getCells().get(col)).getValue() != null && !filterSet.contains(row.getCells().get(col)))
+            if (row.getCells().get(col) != null && !filterSet.contains(row.getCells().get(col)))
               row.shown = false;  
         }
     }
     
-    public <T extends TableDataRow> void applyQueryFilter(TableDataModel<T> data, String query, int col) {
+    public void applyQueryFilter(ArrayList<TableDataRow> data, String query, int col) {
         if(query == null){
             if(col == 0){
                 for (int i = 0; i < data.size(); i++) 
@@ -132,10 +127,10 @@ public class DataFilterer implements DataFiltererInt {
             return;
         }
         for (int i = 0; i < data.size(); i++) {
-            TableDataRow<? extends Object> row = data.get(i);
+            TableDataRow row = data.get(i);
             if(col == 0)
                 row.shown = true;
-            if (((Field)row.getCells().get(col)).getValue() != null && !((String)((Field)row.getCells().get(col)).getValue()).toLowerCase().startsWith(query.toLowerCase()))
+            if (row.getCells().get(col) != null && !((String)row.getCells().get(col)).toLowerCase().startsWith(query.toLowerCase()))
               row.shown = false;  
         }
     }

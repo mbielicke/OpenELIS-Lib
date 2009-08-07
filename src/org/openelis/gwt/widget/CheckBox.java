@@ -27,15 +27,16 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.rewrite.Field;
+import org.openelis.gwt.common.QueryData;
+import org.openelis.gwt.screen.UIUtil;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -44,29 +45,15 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DelegatingKeyboardListenerCollection;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
-@Deprecated
-public class CheckBox extends Composite implements ClickListener, SourcesClickEvents, HasValue<String>, Focusable, HasBlurHandlers, HasMouseOutHandlers, HasMouseOverHandlers, HasField<String>{
-    
-    DelegatingKeyboardListenerCollection keyListeners;
-    
-    private ClickListenerCollection clickListeners;
-    
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+
+public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField<String>, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyDownHandlers, KeyDownHandler {
+        
     boolean enabled = true;
     
     private Field<String> field;
@@ -87,23 +74,11 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
     
     private HorizontalPanel hp = new HorizontalPanel();
     private final CheckBox check = this;
-    
-    public FocusPanel panel = new FocusPanel() {
-        public void onBrowserEvent(Event event) {
-            if (DOM.eventGetKeyCode(event) == KeyboardListener.KEY_ENTER) {
-                check.onClick(check);
-            }
-            check.onBrowserEvent(event);
-            super.onBrowserEvent(event);
-        }
-    };
-    
+        
     public CheckBox() {
-        initWidget(hp);
-        hp.setVerticalAlignment(HasAlignment.ALIGN_MIDDLE);
-        hp.add(panel);
-        panel.setStyleName(UNCHECKED_STYLE);
-        sinkEvents(Event.KEYEVENTS);
+        setStyleName(UNCHECKED_STYLE);
+        addDomHandler(this,ClickEvent.getType());
+        addDomHandler(this,KeyDownEvent.getType());
     }
     
     public CheckBox(CheckType type) {
@@ -162,18 +137,20 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
     public void setState(String state) {
         this.state = state;
         if(state == CHECKED)
-            panel.setStyleName(CHECKED_STYLE);
+            setStyleName(CHECKED_STYLE);
         else if(state == UNCHECKED) 
-            panel.setStyleName(UNCHECKED_STYLE);
+            setStyleName(UNCHECKED_STYLE);
         else if(state == UNKNOWN && type == CheckType.THREE_STATE)
-            panel.setStyleName(UNKNOWN_STYLE);
+            setStyleName(UNKNOWN_STYLE);
         else{
-            panel.setStyleName(UNCHECKED_STYLE);
+            setStyleName(UNCHECKED_STYLE);
             this.state = UNCHECKED;
         }
     }
 
-    public void onClick(Widget sender) {
+    public void onClick(ClickEvent event) {
+    	if(!enabled)
+    		return;
        if(type == CheckType.TWO_STATE){
            if(state == CHECKED)
                setState(UNCHECKED);
@@ -187,51 +164,15 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
            else
                setState(CHECKED);
        }
-       
-       if(clickListeners != null)
-           clickListeners.fireClick(sender);
+       addStyleName("Focus");
     }
     
     public void enable(boolean enabled){
-        if(enabled){
-            panel.removeClickListener(this);
-            panel.addClickListener(this);
-            panel.sinkEvents(Event.KEYEVENTS);
-            enabled = true;
-        }else{
-            panel.removeClickListener(this);
-            panel.unsinkEvents(Event.KEYEVENTS);
-            enabled = false;
-        }
-    }
-    
-    public void addFocusListener(FocusListener listener){
-        panel.addFocusListener(listener);
-    }
-    
-    public void removeFocusListener(FocusListener listener){
-        panel.removeFocusListener(listener);
-    }
-    
-    public void setFocus(boolean focus){
-        panel.setFocus(focus);
+       this.enabled = enabled;
     }
     
     public boolean isEnabled(){
         return enabled;
-    }
-
-    public void addClickListener(ClickListener listener) {
-        if(clickListeners == null)
-            clickListeners = new ClickListenerCollection();
-        clickListeners.add(listener);
-        
-    }
-
-    public void removeClickListener(ClickListener listener) {
-        if(clickListeners != null)
-            clickListeners.remove(listener);
-        
     }
 
 	public String getValue() {
@@ -252,25 +193,6 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 	public HandlerRegistration addValueChangeHandler(
 			ValueChangeHandler<String> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
-	}
-
-	public int getTabIndex() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public void setAccessKey(char key) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setTabIndex(int index) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return addDomHandler(handler,BlurEvent.getType());
 	}
 
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
@@ -302,14 +224,50 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 		addMouseOverHandler(field);
 	}
 
+	/*
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return addDomHandler(handler, BlurEvent.getType());
+	}
+	
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addDomHandler(handler, FocusEvent.getType());
+	}
+
+	*/
+
+
+	public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+		return addDomHandler(handler,KeyDownEvent.getType());
+	}
+
+	public void onKeyDown(KeyDownEvent event) {
+		if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER) {
+	    	if(!enabled)
+	    		return;
+	       if(type == CheckType.TWO_STATE){
+	           if(state == CHECKED)
+	               setState(UNCHECKED);
+	           else
+	               setState(CHECKED);
+	       }else{
+	           if(state == CHECKED) 
+	               setState(UNCHECKED);
+	           else if (state == UNCHECKED)
+	               setState(UNKNOWN);
+	           else
+	               setState(CHECKED);
+	       }
+	       addStyleName("Focus");
+		}
+	}
+
 	public void setQueryMode(boolean query) {
-		field.setQueryMode(query);
+		// TODO Auto-generated method stub
 		
 	}
 
 	public void checkValue() {
 		field.checkValue(this);
-		
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
@@ -328,8 +286,7 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 	}
 
 	public String getFieldValue() {
-		// TODO Auto-generated method stub
-		return field.getValue();
+		return getFieldValue();
 	}
 
 }

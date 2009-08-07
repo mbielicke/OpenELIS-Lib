@@ -25,13 +25,13 @@
 */
 package org.openelis.interfaces;
 
-import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.ValidationException;
-import org.openelis.gwt.common.data.AbstractField;
-
 import java.io.IOException;
 import java.sql.SQLException;
+
+import org.openelis.gwt.common.RPCException;
+import org.openelis.gwt.common.ValidationException;
+
+import sun.misc.FormattedFloatingDecimal.Form;
 
 /**
  * The parent class for all Action subclass.
@@ -48,7 +48,7 @@ import java.sql.SQLException;
                                               IOException,
                                               ValidationException;
 
-    public AbstractField query(Form form) throws SQLException,
+    public Object query(Form form) throws SQLException,
                                      IOException,
                                      ValidationException,
                                      RPCException;

@@ -27,11 +27,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.rewrite.QueryData;
+import org.openelis.gwt.common.QueryData;
 import org.openelis.gwt.screen.ScreenWidget;
 import org.openelis.gwt.screen.ScreenWindow;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.rewrite.Field;
+import org.openelis.gwt.screen.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Date;

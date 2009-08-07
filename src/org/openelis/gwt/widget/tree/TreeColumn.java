@@ -25,25 +25,38 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.common.DataFilterer;
+import org.openelis.gwt.common.Filter;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.DropdownWidget;
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.table.TableDataCell;
+
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBoxBase;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
-import org.openelis.gwt.common.DataFilterer;
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.widget.table.TableCellWidget;
-
-import java.util.HashMap;
-@Deprecated
-public class TreeColumn implements TreeColumnInt {
+public class TreeColumn {
 
     public String header;
     public boolean sortable;
     public boolean filterable;
-    public HashMap<String,TableCellWidget> cellMap = new HashMap<String,TableCellWidget>();
     public int preferredWidth;
     public int currentWidth;
     public int minWidth;
@@ -54,45 +67,234 @@ public class TreeColumn implements TreeColumnInt {
     public int columnIndex;
     public Filter[] filters;
     public String key;
+    public Widget colWidget;
+    public String query;
+    protected PopupPanel pop;
     
     
-    public Widget getWidgetInstance(String leafType) {
-        TableCellWidget tcell = cellMap.get(leafType).getNewInstance();
-        tcell.setCellWidth(currentWidth);
-        ((SimplePanel)tcell).setWidth((currentWidth)+ "px");
-        ((SimplePanel)tcell).setHeight((controller.cellHeight+"px"));
-        return (Widget)tcell;
+    public Widget getDisplayWidget(TableDataCell cell) {
+    	Widget wid = null;
+    	if(colWidget instanceof CheckBox){
+    		wid = new CheckBox();
+    		((CheckBox)wid).setType(((CheckBox)colWidget).getType());
+    		((CheckBox)wid).setValue((String)cell.getValue(),true);
+    		((CheckBox)wid).setField(((CheckBox)colWidget).getField());
+    		((CheckBox)wid).addFocusHandler(UIUtil.focusHandler);
+    		((CheckBox)wid).addBlurHandler(UIUtil.focusHandler);
+    		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
+    		wid.setWidth("15px");
+    	}else {
+    		((HasValue)colWidget).setValue(cell.getValue(),true);
+    		Object val = ((HasValue)colWidget).getValue();
+    		Label label = new Label("");
+    		if(val != null) {
+    			if(colWidget instanceof CalendarLookUp) {
+    				label.setText((((CalendarLookUp) colWidget).getText()));
+    			}else if(colWidget instanceof DropdownWidget) {
+    				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+    			}else if(colWidget instanceof TextBoxBase) {
+    				label.setText(((TextBoxBase)colWidget).getText());
+    			}else
+    				label.setText(val.toString());
+    		}
+    		label.setWordWrap(false);
+    		wid = label;
+    		wid.setWidth((currentWidth)+ "px");
+    	}
+        
+        wid.setHeight((controller.cellHeight+"px"));
+        if(cell.errors != null) {
+        	final VerticalPanel errorPanel = new VerticalPanel();
+            for (String error : cell.errors) {
+            	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Label(error));
+            	hp.add(new Image("Images/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                errorPanel.add(hp);
+            }
+        	wid.addStyleName("InputError");
+        	((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
+        		
+				public void onMouseOver(MouseOverEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop == null){
+			                pop = new PopupPanel();
+			                //pop.setStyleName("ErrorPopup");
+			            }
+			            DecoratorPanel dp = new DecoratorPanel();
+			            
+			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+			            dp.setStyleName("ErrorWindow");
+			            dp.add(errorPanel);
+			            dp.setVisible(true);
+			            pop.setWidget(dp);
+			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
+			            pop.show();
+			        }
+				}
+        		
+        	});
+        	((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
+
+				public void onMouseOut(MouseOutEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop != null){
+			                pop.hide();
+			            }
+			        }
+				}
+        		
+        	});
+        	
+        }
+        return wid;
     }
     
-    public void loadWidget(Widget widget, FieldType object) {
-        ((TableCellWidget)widget).setField(object);
-        ((TableCellWidget)widget).setDisplay();
+    public void loadWidget(Widget widget, TableDataCell cell) {
+    	if(widget instanceof CheckBox){
+    		((HasValue)widget).setValue(cell.getValue(),true);
+    	}else if(widget instanceof Label) {
+    		((HasValue)colWidget).setValue(cell.getValue(),true);
+    		if(colWidget instanceof CalendarLookUp) {
+    			((Label)widget).setText(((CalendarLookUp)colWidget).getText());
+    		}else if(colWidget instanceof DropdownWidget) {
+				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+			}else if(colWidget instanceof TextBoxBase) {
+				((Label)widget).setText(((TextBoxBase)colWidget).getText());
+    		}else{
+    			if(((HasValue)colWidget).getValue() != null)
+    				((Label)widget).setText(((HasValue)colWidget).getValue().toString());
+    			else
+    				((Label)widget).setText("");
+    		}
+    	}
+        if(cell.errors != null) {
+        	final VerticalPanel errorPanel = new VerticalPanel();
+            for (String error : cell.errors) {
+            	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Label(error));
+            	hp.add(new Image("Iamges/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                errorPanel.add(hp);
+            }
+        	widget.addStyleName("InputError");
+        	((HasMouseOverHandlers)widget).addMouseOverHandler(new MouseOverHandler() {
+        		
+				public void onMouseOver(MouseOverEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop == null){
+			                pop = new PopupPanel();
+			                //pop.setStyleName("ErrorPopup");
+			            }
+			            DecoratorPanel dp = new DecoratorPanel();
+			            
+			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+			            dp.setStyleName("ErrorWindow");
+			            dp.add(errorPanel);
+			            dp.setVisible(true);
+			            pop.setWidget(dp);
+			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
+			            pop.show();
+			        }
+				}
+        		
+        	});
+        	((HasMouseOutHandlers)widget).addMouseOutHandler(new MouseOutHandler() {
+
+				public void onMouseOut(MouseOutEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop != null){
+			                pop.hide();
+			            }
+			        }
+				}
+        		
+        	});
+        	
+        }
     }
     
-    public void setWidgetDisplay(Widget widget) {
-        ((TableCellWidget)widget).setDisplay();
-    }
-    
-    public void saveValue(Widget widget) {
-        ((TableCellWidget)widget).saveValue();
-    }
-    
-    public void setWidgetEditor(Widget widget) {
-        ((TableCellWidget)widget).setEditor();
-        ((TableCellWidget)widget).setFocus(true);
+    public Widget getWidgetEditor(TableDataCell cell) {
+    	Widget editor = colWidget;
+    	if(colWidget instanceof CheckBox){
+    		editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
+    		editor.setWidth("15px");
+    		return editor;
+    	}
+    	editor = colWidget;
+    	editor.setWidth((currentWidth)+ "px");
+    	((HasValue)editor).setValue(cell.getValue(),true);
+       
+        editor.setHeight((controller.cellHeight+"px"));
+        if(cell.errors != null) {
+        	final VerticalPanel errorPanel = new VerticalPanel();
+            for (String error : cell.errors) {
+            	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Label(error));
+            	hp.add(new Image("Iamges/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                errorPanel.add(hp);
+            }
+        	editor.addStyleName("InputError");
+        	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
+        		
+				public void onMouseOver(MouseOverEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop == null){
+			                pop = new PopupPanel();
+			                //pop.setStyleName("ErrorPopup");
+			            }
+			            DecoratorPanel dp = new DecoratorPanel();
+			            
+			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+			            dp.setStyleName("ErrorWindow");
+			            dp.add(errorPanel);
+			            dp.setVisible(true);
+			            pop.setWidget(dp);
+			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
+			            pop.show();
+			        }
+				}
+        		
+        	});
+        	((HasMouseOutHandlers)editor).addMouseOutHandler(new MouseOutHandler() {
+
+				public void onMouseOut(MouseOutEvent event) {
+			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+			            if(pop != null){
+			                pop.hide();
+			            }
+			        }
+				}
+        		
+        	});
+        	
+        }
+        return editor;
     }
 
     public void enable(boolean enable) {
-        for(TableCellWidget cellWidget : cellMap.values())
-            cellWidget.enable(enable);
+    	if(colWidget instanceof HasField)
+    		((HasField)colWidget).enable(enable);
+    	/*
+        if(colWidget instanceof CalendarLookUp) {
+        	((CalendarLookUp)colWidget).enable(enable);
+        }else if(colWidget instanceof Dropdown) {
+        	((Dropdown)colWidget).enable(enable);
+        }else if(colWidget instanceof AutoComplete){
+        	((AutoComplete)colWidget).enable(enable);
+        }else if(colWidget instanceof TextBoxBase) {
+        	((TextBoxBase)colWidget).setReadOnly(!enable);
+        }
+        */
     }
     
     public HorizontalAlignmentConstant getAlign() {
         return alignment;
     }
 
-    public Widget getColumnWidget(String leafType) {
-        return (Widget)cellMap.get(leafType);
+    public Widget getColumnWidget() {
+        return colWidget;
     }
 
     public int getCurrentWidth() {
@@ -127,8 +329,8 @@ public class TreeColumn implements TreeColumnInt {
         alignment = align;
     }
 
-    public void setColumnWidget(Widget widget, String leafType) {
-        cellMap.put(leafType,(TableCellWidget)widget);
+    public void setColumnWidget(Widget widget) {
+       colWidget = widget;
     }
 
     public void setCurrentWidth(int width) {
@@ -161,10 +363,6 @@ public class TreeColumn implements TreeColumnInt {
     
     public void setTreeWidget(TreeWidget controller){
         this.controller = controller;
-        for(TableCellWidget cellWidget : cellMap.values()){
-            if(cellWidget instanceof TableTree)
-                ((TableTree)cellWidget).addCommandListener(controller);
-        }
     }
     
     public TreeWidget getTreeWidget() {

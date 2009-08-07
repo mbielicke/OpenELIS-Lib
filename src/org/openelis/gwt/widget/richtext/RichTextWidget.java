@@ -27,8 +27,12 @@ package org.openelis.gwt.widget.richtext;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.QueryData;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.Field;
+import org.openelis.gwt.widget.HasField;
+
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
@@ -43,12 +47,6 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.rewrite.Field;
 
 public class RichTextWidget extends Composite implements FocusListener, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
     

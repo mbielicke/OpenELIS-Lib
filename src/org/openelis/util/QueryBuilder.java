@@ -25,19 +25,6 @@
 */
 package org.openelis.util;
 
-import org.openelis.gwt.common.Meta;
-import org.openelis.gwt.common.MetaMap;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.QueryCheckField;
-import org.openelis.gwt.common.data.QueryDateField;
-import org.openelis.gwt.common.data.QueryDoubleField;
-import org.openelis.gwt.common.data.QueryField;
-import org.openelis.gwt.common.data.QueryIntegerField;
-import org.openelis.gwt.common.data.QueryStringField;
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.common.rewrite.QueryData;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,12 +33,15 @@ import java.util.Iterator;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
+import org.openelis.gwt.common.Meta;
+import org.openelis.gwt.common.MetaMap;
+import org.openelis.gwt.common.QueryData;
+import org.openelis.gwt.widget.QueryFieldUtil;
+
 public class QueryBuilder {
 	
 	private String selectStatement = "";
     private HashMap<String, Meta> fromTables = new HashMap<String, Meta>();
-	private ArrayList orderedFromTableKeys = new ArrayList();
-	private ArrayList<AbstractField> fieldsFromRPC = new ArrayList<AbstractField>();
 	private ArrayList whereOperands = new ArrayList();
 	private String orderByStatement = "";
     private MetaMap meta;
@@ -61,7 +51,7 @@ public class QueryBuilder {
         this.meta = meta;
     }
     
-    public static String getQuery(QueryField field, String fieldName) {
+    public static String getQuery(QueryFieldUtil field, String fieldName) {
         if (field.getParameter() == null || field.getParameter().size() == 0)
             return "";
         
@@ -75,7 +65,7 @@ public class QueryBuilder {
         return sb.toString();
     }
     
-    public static String getQueryNoOperand(QueryField field, String fieldName) {
+    public static String getQueryNoOperand(QueryFieldUtil field, String fieldName) {
 
     	if (field.getParameter() == null || field.getParameter().size() == 0)
             return "";
@@ -126,244 +116,7 @@ public class QueryBuilder {
         return sb.toString();
     }
     
-    public static String getQuery(DropDownField field, String fieldName) {
-    	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getValue();
-        if (list == null || list.size() == 0)
-            return "";
-        StringBuffer sb = new StringBuffer();
-        
-        if (list.size() == 0)
-            return "";
 
-        sb.append(" and (");
-       
-        getQueryNoOperand(field, fieldName);
-        
-        sb.append(") ");
-
-        return sb.toString();
-    }
-    
-    public static String getQueryNoOperand(DropDownField field, String fieldName) {
-    	//this should always be an arraylist of datasets
-        ArrayList list = (ArrayList) field.getValue();
-        if (list == null || list.size() == 0)
-            return "";
-        String paramName = getParamName(fieldName);
-
-        StringBuffer sb = new StringBuffer();
-        sb.append(fieldName + " in (");
-        for (int i = 0; i < list.size(); i++) {
-            if (i > 0)
-                sb.append(",");
-            sb.append(":" + paramName + i);
-        }
-        sb.append(") ");
-
-        return sb.toString();
-    }
-    
-    public static String getQuery(QueryCheckField field, String fieldName) {
-        if(field.getValue() == null)
-            return "";
-        
-        StringBuffer sb = new StringBuffer();
- 
-        sb.append(" and (");
-        
-        getQueryNoOperand(field, fieldName);
-        
-        sb.append(") ");
-        
-        return sb.toString();
-    }   
-    
-    public static String getQueryNoOperand(QueryCheckField field, String fieldName) {
-        if(field.getValue() == null)
-            return "";
-        
-        StringBuffer sb = new StringBuffer();
-        String paramName = getParamName(fieldName);
-        sb.append(fieldName + " =  :" + paramName);
-
-        return sb.toString();
-    }   
-
-    public static void setParameters(QueryStringField field,
-                                     String fieldName,
-                                     Query query) {
-    	if(field.getParameter() == null)
-    		return;
-    	
-        String paramName = getParamName(fieldName);
-
-        Iterator fieldParamIt = field.getParameter().iterator();
-        int i = 0;
-        while (fieldParamIt.hasNext()) {
-            String param = (String)fieldParamIt.next();
-            if (param.indexOf("..") > -1) {
-                String[] bparams = param.split("..");
-                query.setParameter(paramName + i + "0", bparams[0]);
-                query.setParameter(paramName + i + "1", bparams[1]);
-            } else if (param.indexOf(",") > -1) {
-                String[] params = param.split(",");
-                for (int j = 0; j < params.length; j++) {
-                    query.setParameter(paramName + i + j, params[j]);
-                }
-            } else
-                query.setParameter(paramName + i, param);
-            i++;
-        }
-    }
-
-
-    
-    public static void setParameters(QueryIntegerField field,
-                                     String fieldName,
-                                     Query query) {
-        if(field.getParameter() == null)
-            return;
-        
-        String paramName = getParamName(fieldName);
-        Iterator fieldParamIt = field.getParameter().iterator();
-        int i = 0;
-        while (fieldParamIt.hasNext()) {
-            String param = (String)fieldParamIt.next();
-
-            if (param.indexOf("..") > -1) {
-                String param1 = param.substring(0, param.indexOf(".."));
-                String param2 = param.substring(param.indexOf("..") + 2,
-                                                param.length());
-
-                query.setParameter(paramName + i + "0",
-                                   new Integer(param1.trim()));
-                query.setParameter(paramName + i + "1",
-                                       new Integer(param2.trim()));
-
-            } else if (param.indexOf(",") > -1) {
-                String[] params = param.split(",");
-                for (int j = 0; j < params.length; j++) {
-                    query.setParameter(paramName + i + j,
-                                       new Integer(params[j].trim()));
-
-                }
-            } else {
-                query.setParameter(paramName + i, new Integer(param.trim()));
-            }
-            i++;
-        }
-    }
-    
-    public static void setParameters(QueryDoubleField field,
-                                     String fieldName,
-                                     Query query) {
-        if(field.getParameter() == null)
-            return;
-        
-        String paramName = getParamName(fieldName);
-        Iterator fieldParamIt = field.getParameter().iterator();
-        int i = 0;
-        while (fieldParamIt.hasNext()) {
-            String param = (String)fieldParamIt.next();
-
-            if (param.indexOf("..") > -1) {
-                String param1 = param.substring(0, param.indexOf(".."));
-                String param2 = param.substring(param.indexOf("..") + 2,
-                                                param.length());
-
-                query.setParameter(paramName + i + "0",
-                                   new Double(param1.trim()));
-                query.setParameter(paramName + i + "1",
-                                   new Double(param2.trim()));
-            } else if (param.indexOf(",") > -1) {
-                String[] params = param.split(",");
-                for (int j = 0; j < params.length; j++) {
-                    query.setParameter(paramName + i + j,
-                                       new Double(params[j].trim()));
-                }
-            } else {
-                query.setParameter(paramName + i, new Double(param.trim()));
-            }
-            i++;
-        }
-    }
-
-    public static void setParameters(QueryDateField field,
-                                     String fieldName,
-                                     Query query) {
-        String paramName = getParamName(fieldName);
-        Iterator fieldParamIt = field.getParameter().iterator();
-        int i = 0;
-        while (fieldParamIt.hasNext()) {
-            String param = (String)fieldParamIt.next();
-            if (param.indexOf("..") > -1) {
-                String[] bparams = param.split("..");
-                Date date = new Date(bparams[0]);
-                query.setParameter(paramName + i + "0", date, TemporalType.DATE);
-                date = new Date(bparams[1]);
-                query.setParameter(paramName + i + "1", date, TemporalType.DATE);
-            } else if (param.indexOf(",") > -1) {
-                String[] params = param.split(",");
-                for (int j = 0; j < params.length; j++) {
-                    Date date = new Date(params[j]);
-                    query.setParameter(paramName + i + j,
-                                       date,
-                                       TemporalType.DATE);
-                }
-            } else {
-                Date date = new Date(param);
-                query.setParameter(paramName + i, date, TemporalType.DATE);
-            }
-            i++;
-        }
-    }
-    
-    public static void setParameters(DropDownField field, String fieldName, Query query) {
-    	ArrayList list = (ArrayList) field.getValue();
-        if(list == null)
-            return;
-    	String paramName = getParamName(fieldName);
-    
-    	for(int i = 0;i<list.size();i++){
-    		Object o = ((TableDataRow)list.get(i)).key;
-            query.setParameter(paramName+i, o);
-            /*
-    		if(o instanceof NumberObject){
-				NumberObject number = (NumberObject)o;
-				if(number.getType() == NumberObject.Type.INTEGER){
-					Integer param = number.getIntegerValue();
-					query.setParameter(paramName + i, param);	
-				}else if(number.getType() == NumberObject.Type.DOUBLE){
-					Double param = (Double)number.getValue();
-					query.setParameter(paramName + i, param);	
-				}
-			}else if(o instanceof StringObject){
-				String param = (String)((StringObject)o).getValue(); 
-				query.setParameter(paramName + i, param.trim());
-			}
-            */
-    	}	
-    }
-    
-    public static void setParameters(QueryCheckField field,
-                                     String fieldName,
-                                     Query query) {
-        
-        if(field.getValue() == null)
-            return;
-        
-        String paramName = getParamName(fieldName);
-       
-        query.setParameter(paramName, (String)field.getValue());
-    }
-    
-    private static String getParamName(String name){
-        while(name.indexOf(".") > -1){
-            name = name.substring(0,name.indexOf(".")) + name.substring(name.indexOf(".")+1,name.length());
-        }
-        return name;
-    }
     /**
      * Sets the select statement that will be used in the query. 
      * Leave off the word select as it will be added automatically.
@@ -377,48 +130,8 @@ public class QueryBuilder {
     	return selectStatement;
     }
     
-    /**
-     * Creates the where statement from a hashmap of Query fields.  This method will throw an exception
-     * if the column value doesnt match the database.
-     * @param fields
-     * @throws Exception
-     */
-    public void addWhere(ArrayList<AbstractField> fields) throws Exception{
-    	fieldsFromRPC = fields;
-//    	where clause
-    	for (AbstractField field : fields){
-       		String key = (String)field.getKey();
-            if(field.getValue() != null) {
-                boolean columnFound = meta.hasColumn(key);
-
-                if(!columnFound)
-                    throw new Exception("column not found [" + key + "]");    	
-
-//   		set the where param            	            	
-                String whereClause = "";
-                if(field instanceof QueryStringField)
-                    whereClause = getQueryNoOperand((QueryStringField)field, key);
-                else if(field instanceof DropDownField)
-                    whereClause = getQueryNoOperand((DropDownField)field, key);	
-                else if(field instanceof QueryCheckField)
-                    whereClause = getQueryNoOperand((QueryCheckField)field, key);
-                else if(field instanceof QueryDateField)
-                    whereClause = getQueryNoOperand((QueryDateField)field, key);            
-                else if(field instanceof QueryIntegerField)
-                    whereClause = getQueryNoOperand((QueryIntegerField)field, key);      
-                else if(field instanceof QueryDoubleField)
-                    whereClause = getQueryNoOperand((QueryDoubleField)field, key);      
-                if(!"".equals(whereClause)){
-                    whereOperands.add(whereClause);
-		
-				//add the table name to the from hash map
-				//addTable(meta);
-                }
-            }
-        }
-    }
     
-    public void addNewWhere(ArrayList<QueryData> fields) throws Exception{
+    public void addWhere(ArrayList<QueryData> fields) throws Exception{
     	//fieldsFromRPC = fields;
 //    	where clause
     	for (QueryData field : fields){
@@ -427,7 +140,7 @@ public class QueryBuilder {
             if(!columnFound)
                 throw new Exception("column not found [" + field.key + "]");    	
             
-            QueryField qField = new QueryField();
+            QueryFieldUtil qField = new QueryFieldUtil();
             qField.parse(field.query);
             String whereClause = getQueryNoOperand(qField, field.key);
             if(!"".equals(whereClause)){
@@ -450,31 +163,10 @@ public class QueryBuilder {
     public void clearWhereClause(){
         whereOperands.clear();
     }
-    /**
-     * Sets the values of the parameters in the query and then returns it.
-     * @param query
-     * @return
-     */
-    public void setQueryParams(Query query){
-        for (AbstractField field : fieldsFromRPC) {//int i = 0; i < keys.length; i++) {
-            if(field instanceof QueryIntegerField)
-                setParameters((QueryIntegerField)field, field.key, query);
-            else if(field instanceof QueryDoubleField)
-                setParameters((QueryDoubleField)field, field.key, query);
-			else if(field instanceof QueryStringField) 	
-			    setParameters((QueryStringField)field, field.key, query);
-			else if(field instanceof DropDownField) 
-			    setParameters((DropDownField)field, field.key, query);
-            else if(field instanceof QueryCheckField)
-                setParameters((QueryCheckField)field, field.key, query);
-            else if(field instanceof QueryDateField)
-                setParameters((QueryDateField)field, field.key, query);
-        }
-    }
     
-    public void setNewQueryParams(Query query, ArrayList<QueryData> fields){
+    public void setQueryParams(Query query, ArrayList<QueryData> fields){
         for (QueryData field : fields) {//int i = 0; i < keys.length; i++) {
-        	QueryField qField = new QueryField();
+        	QueryFieldUtil qField = new QueryFieldUtil();
         	qField.parse(field.query);
         	
             if(field.type == QueryData.Type.DOUBLE)
@@ -571,7 +263,7 @@ public class QueryBuilder {
     	return fromTables.containsKey(tableName);
     }
     
-    public static void setStringParameters(QueryField field,
+    public static void setStringParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	if(field.getParameter() == null)
@@ -600,7 +292,7 @@ public class QueryBuilder {
 
 
 
-    public static void setIntegerParameters(QueryField field,
+    public static void setIntegerParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	if(field.getParameter() == null)
@@ -636,7 +328,7 @@ public class QueryBuilder {
     	}
     }
 
-    public static void setDoubleParameters(QueryField field,
+    public static void setDoubleParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	if(field.getParameter() == null)
@@ -669,8 +361,15 @@ public class QueryBuilder {
     		i++;
     	}
     }
+    
+    private static String getParamName(String name){
+        while(name.indexOf(".") > -1){
+            name = name.substring(0,name.indexOf(".")) + name.substring(name.indexOf(".")+1,name.length());
+        }
+        return name;
+    }
 
-    public static void setDateParameters(QueryField field,
+    public static void setDateParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	String paramName = getParamName(fieldName);

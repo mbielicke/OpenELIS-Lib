@@ -2,13 +2,8 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.rewrite.DateField;
-import org.openelis.gwt.widget.rewrite.DoubleField;
-import org.openelis.gwt.widget.rewrite.Field;
-import org.openelis.gwt.widget.rewrite.IntegerField;
-import org.openelis.gwt.widget.rewrite.StringField;
+import org.openelis.gwt.common.QueryData;
+import org.openelis.gwt.screen.UIUtil;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;

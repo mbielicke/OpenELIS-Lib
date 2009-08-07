@@ -25,21 +25,23 @@
 */
 package org.openelis.gwt.widget.tree;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.common.data.TreeDataItem;
-import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.tree.event.SourcesTreeModelEvents;
-import org.openelis.gwt.widget.tree.event.SourcesTreeWidgetEvents;
-import org.openelis.gwt.widget.tree.event.TreeModelListener;
-import org.openelis.gwt.widget.tree.event.TreeWidgetListener;
-
 import java.util.ArrayList;
+import java.util.Stack;
 
-@Deprecated
-public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWidgetListener {
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.Label;
+import org.openelis.gwt.widget.table.TableDataCell;
+
+public class TreeRenderer {
     
     private TreeWidget controller;
     public ArrayList<TreeRow> rows = new ArrayList<TreeRow>();
@@ -49,19 +51,11 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     }
     
     public void createRow(int i) {
-        TreeColumnInt column = controller.columns.get(0);
-        TableTree item = new TableTree();
-        //item.addDropListener(controller.drag);
-        item.enabled = controller.enabled;
-        ((SimplePanel)item).setWidth((column.getCurrentWidth())+ "px");
-        ((SimplePanel)item).setHeight((controller.cellHeight+"px"));
-        item.setCellWidth(column.getCurrentWidth());
-        item.setRowIndex(i);
-        item.addCommandListener(controller);
-        controller.view.table.setWidget(i, 0, item);
+        controller.view.table.setWidget(i, 0, new Label());
+        controller.view.table.getFlexCellFormatter().setHeight(i, 0, controller.cellHeight+"px");
         TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseOverHandler(controller.mouseHandler);
-        row.addMouseOutHandler(controller.mouseHandler);
+        row.addMouseOverHandler(controller);
+        row.addMouseOutHandler(controller);
         row.index = i;
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
@@ -70,22 +64,22 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.model.shownRows()*controller.cellHeight)+controller.maxRows*3;
+        int ScrollHeight = (controller.shownRows()*controller.cellHeight)+controller.maxRows*3;
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*3)+controller.cellSpacing))/(controller.cellHeight))).intValue();
-        if(testStart < controller.model.shownRows() - controller.maxRows)
+        if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
         controller.view.setScrollHeight(ScrollHeight);
         controller.view.scrollBar.setScrollPosition(pos);
         int tRows = controller.maxRows;
-        if(controller.model.shownRows() == 0){
+        if(controller.shownRows() == 0){
             int count = controller.view.table.getRowCount();
             for(int i = 0; i < count; i++){
                 controller.view.table.removeRow(0);
                 rows.remove(0);
             }
         }
-        if(controller.model.shownRows() < controller.maxRows){
-            tRows = controller.model.shownRows();
+        if(controller.shownRows() < controller.maxRows){
+            tRows = controller.shownRows();
         }
         if(controller.view.table.getRowCount() > tRows){
             int count = controller.view.table.getRowCount();
@@ -100,7 +94,6 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
             }
         }
         scrollLoad(pos);
-
     }
     
     /**
@@ -111,80 +104,65 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
      */
     private void loadRow(int index, int modelIndex) {
         controller.modelIndexList[index] = modelIndex;     
-        TreeDataItem row = controller.model.getRow(modelIndex);
-        rows.get(index).item = row;
+        TreeDataItem row = controller.getRow(modelIndex);
         rows.get(index).modelIndex = modelIndex;
+        rows.get(index).item = row;
         if(controller.view.table.getRowCount() -1 >= index){
             int numCells = controller.view.table.getCellCount(index);
             controller.view.table.removeCells(index, 1, numCells - 1);
         }
-        for (int i = 0; i < row.size(); i++) {
-            TreeColumnInt column = controller.columns.get(i);
-            if(i == 0){
-                TableTree item = (TableTree)controller.view.table.getWidget(index, i);
-                item.editor = (TableCellWidget)column.getWidgetInstance(row.leafType);
-                
-                item.setField((FieldType)row);
-                item.setDisplay();
-            }else{
-                TableCellWidget wid = (TableCellWidget)column.getWidgetInstance(row.leafType);
-                controller.view.table.setWidget(index,i,(Widget)wid);
-                controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.cells[i]);
-                controller.view.table.getFlexCellFormatter().addStyleName(index,
-                                                                          i,
-                                                                          TreeView.cellStyle);
-            }
-            controller.view.table.getFlexCellFormatter().addStyleName(index,
-                                                  i,
-                                                  TreeView.cellStyle);
-            controller.view.table.getFlexCellFormatter()
-                          .setHorizontalAlignment(index, i, column.getAlign());
-
-            controller.view.table.getFlexCellFormatter().setWidth(index, i, column.getCurrentWidth() + "px");
-            controller.view.table.getFlexCellFormatter().setHeight(index, i, controller.cellHeight+"px");
-            
+        ArrayList<TreeColumn> columns = controller.columns.get(controller.getRow(index).leafType);
+        for (int i = 0; i < row.cells.size(); i++) {
+        	Widget wid = columns.get(i).getDisplayWidget(row.cells.get(i));
+        	if(i == 0){
+        		ItemGrid ig =  createItem(row);
+        		ig.setWidth(columns.get(i).getCurrentWidth());
+        		ig.setWidget(wid);
+        		ig.rowIndex = index;
+        		controller.view.table.setWidget(index, i, ig);
+        	}else{
+        		controller.view.table.setWidget(index, i, wid);
+        	}
+            if(controller.isSelected(modelIndex))
+                rows.get(index).addStyleName(controller.view.selectedStyle);
+            else
+                rows.get(index).removeStyleName(controller.view.selectedStyle);
+            if(controller.isEnabled(modelIndex)) 
+                rows.get(index).removeStyleName(controller.view.disabledStyle);
+            else
+                rows.get(index).addStyleName(controller.view.disabledStyle);
         }
-        if(controller.model.isSelected(modelIndex))
-            controller.view.table.getRowFormatter().addStyleName(index, controller.view.selectedStyle);
-        else
-            controller.view.table.getRowFormatter().removeStyleName(index,controller.view.selectedStyle);
-        if(controller.model.isEnabled(modelIndex)) 
-            controller.view.table.getRowFormatter().removeStyleName(index, controller.view.disabledStyle);
-        else
-            controller.view.table.getRowFormatter().addStyleName(index,controller.view.disabledStyle);
-                
     }
     
 
     
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
-            controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-            stopEditing(null,controller.activeRow,controller.activeCell);
+            stopEditing();
         }
         int rowsPer = controller.maxRows;
-        if(controller.maxRows > controller.model.shownRows()){
-            rowsPer = controller.model.shownRows();
+        if(controller.maxRows > controller.shownRows()){
+            rowsPer = controller.shownRows();
         }
         int loadStart = new Double(Math.ceil(((double)scrollPos)/(controller.cellHeight))).intValue();
-        if(controller.model.numRows() != controller.model.shownRows()){
+        if(controller.numRows() != controller.shownRows()){
             int start = 0;
             int i = 0;
-            while(start < loadStart && i < controller.model.numRows() -1){
-                if(controller.model.getRow(i).shown)
+            while(start < loadStart && i < controller.numRows() -1){
+                if(controller.getRow(i).shown)
                     start++;
                 i++;
             }
              loadStart = i;   
         }
-        int numRows = controller.model.numRows();
+        int numRows = controller.numRows();
         if(loadStart+rowsPer > numRows){
             loadStart = loadStart - ((loadStart+rowsPer) - numRows);
         }
         for(int i = 0; i < rowsPer; i++){
-            while(loadStart+i < controller.model.numRows() && !controller.model.getRow(loadStart+i).shown)
+            while(loadStart+i < controller.numRows() && !controller.getRow(loadStart+i).shown)
                 loadStart++;
-            if(loadStart+i < controller.model.numRows()){
+            if(loadStart+i < controller.numRows()){
                 loadRow(i,loadStart+i);
             }
         }
@@ -192,59 +170,41 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
     }
     
     public void setCellEditor(int row, int col) {
-            TableCellWidget cell =  (TableCellWidget)controller.view.table.getWidget(row, col);
-            if(col > 0){
-                controller.columns.get(col).setWidgetEditor((Widget)cell);
-                ((SimplePanel)cell).getWidget().addStyleName(controller.view.widgetStyle);
-                ((SimplePanel)cell).getWidget().addStyleName("Enabled");
-                controller.editingCell = cell;
-            }else{
-                ((TableTree)cell).editor.setEditor();
-                ((TableTree)cell).editor.setFocus(true);
-                ((SimplePanel)((TableTree)cell).editor).getWidget().addStyleName(controller.view.widgetStyle);
-                ((SimplePanel)((TableTree)cell).editor).getWidget().addStyleName("Enabled");
-                controller.editingCell = ((TableTree)cell).editor;
-            }
+    	TreeColumn column = controller.columns.get(controller.getRow(controller.modelIndexList[row]).leafType).get(col);
+        controller.editingCell = (Widget)column.getWidgetEditor((TableDataCell)controller.getCell(controller.modelIndexList[row],col));
+        if(col == 0)
+        	((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(controller.editingCell);
+        else
+        	controller.view.table.setWidget(row, col, controller.editingCell);
+        if(controller.editingCell instanceof Focusable)
+        	((Focusable)controller.editingCell).setFocus(true);
     }
     
     public void setCellDisplay(int row, int col) {
-        if(col > 0)
-            controller.columns.get(col).setWidgetDisplay(controller.view.table.getWidget(row, col));
-        else
-            ((TableTree)controller.view.table.getWidget(row, col)).editor.setDisplay();
+    	TreeColumn column = controller.columns.get(controller.getRow(controller.modelIndexList[row]).leafType).get(col);
+    	if(col == 0)
+    		((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(controller.modelIndexList[row],col))));
+    	else
+    		controller.view.table.setWidget(row, col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
     }
 
-    public void stopEditing(SourcesTreeWidgetEvents sender, int row, int col) {
+    public void stopEditing() {
         if(controller.editingCell != null){
-            if(col > 0)
-                controller.columns.get(controller.activeCell).saveValue((Widget)controller.editingCell);
-            else
-                controller.editingCell.saveValue();
-            setCellDisplay(row,col);
+	        if(controller.editingCell instanceof Focusable)
+    	    	((Focusable)controller.editingCell).setFocus(false);
+        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
+        	if(controller.editingCell instanceof HasField)
+	        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
+            setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
         }
     }
 
-    public void hideRows(SourcesTreeWidgetEvents sender, int[] rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void removeRows(SourcesTreeWidgetEvents sender, int[] rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void selected(SourcesTreeWidgetEvents sender, int[] rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void startedEditing(SourcesTreeWidgetEvents sender, int row, int col) {
+    public void startedEditing(int row, int col) {
         setCellEditor(row,col);
     }
 
-    public void rowUnselected(SourcesTreeModelEvents sender, int row) {
+    public void rowUnselected(int row) {
         if(row == -1){
             for(int i = 0; i < controller.view.table.getRowCount() ; i++) {
                 controller.view.table.getRowFormatter().removeStyleName(i,controller.view.selectedStyle);
@@ -254,71 +214,115 @@ public class TreeRenderer implements TreeRendererInt, TreeModelListener, TreeWid
         
     }
 
-    public void cellUpdated(SourcesTreeModelEvents sender, int row, int cell) {
+    public void cellUpdated(int row, int cell) {
         setCellDisplay(row,cell);
     }
 
-    public void dataChanged(SourcesTreeModelEvents sender) {
-        load(controller.view.scrollBar.getScrollPosition());
+    public void dataChanged(boolean keepPosition) {
+    	if(keepPosition)
+    		load(controller.view.scrollBar.getScrollPosition());
+    	else
+    		load(0);
+    	
     }
 
-    public void rowDeleted(SourcesTreeModelEvents sender, int row) {
-        load(0);        
-    }
-
-    public void rowAdded(SourcesTreeModelEvents sender, int row) {
-        load(0);        
-    }
-
-    public void rowUpdated(SourcesTreeModelEvents sender, int row) {
-        load(0);
-    }
-
-    public void rowSelectd(SourcesTreeModelEvents sender, int row) {
-        if(controller.activeRow < 0)
-            return;
-        controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
-        for(int i = 0; i < controller.view.table.getCellCount(controller.activeRow); i++){
-            if(controller.view.table.getCellFormatter().getStyleName(controller.activeRow,i).indexOf("disabled") > -1){
-                controller.view.table.getWidget(controller.activeRow,i).addStyleName("disabled");
-            }
-        }
-        
-    }
-
-    public void selected(SourcesTreeWidgetEvents sender, int rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void unselected(SourcesTreeWidgetEvents sender, int rows) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void unload(SourcesTreeModelEvents sender) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void rowClosed(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void rowOpened(SourcesTreeModelEvents sender, int row, TreeDataItem item) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void finishedEditing(SourcesTreeWidgetEvents sender, int row, int col) {
-        // TODO Auto-generated method stub
-        
+    public void rowSelected(int row) {
+    	rows.get(row).addStyleName(controller.view.selectedStyle);
     }
 
     public ArrayList<TreeRow> getRows() {
         return rows;
     }
 
+    public class ItemGrid extends Grid implements ClickHandler {
+        
+        public int clickCell;
+        public int rowIndex;
+        public int widgetIndex;
+        public int width;
+        
+        public ItemGrid(int rows, int cols) {
+            super(rows,cols);
+            setCellPadding(0);
+            setCellSpacing(0);
+            addClickHandler(this);
+            DOM.setStyleAttribute(getElement(), "overflow", "hidden");
+        }
+
+        public void onClick(ClickEvent event) {
+            if(((Grid)event.getSource()).getCellForEvent(event).getCellIndex() == clickCell){
+                controller.toggle(controller.modelIndexList[rowIndex]);
+                event.stopPropagation();
+            }
+        }
+        
+        public void setWidget(Widget wid){
+        	int widAdj = width - (widgetIndex)*18;
+        	wid.setWidth(widAdj+"px");
+        	setWidget(0, widgetIndex, wid);
+        }
+        
+        public void setWidth(int width) {
+        	this.width = width;
+        	setWidth(width+"px");
+        }
+        
+    }
+    
+    public ItemGrid createItem(final TreeDataItem drow) {
+    	ItemGrid editorGrid = new ItemGrid(1,2+drow.depth);    
+    	try {
+    		for(int j = 0; j < editorGrid.getColumnCount(); j++) {
+    			if(j < editorGrid.getColumnCount() -1)
+    				editorGrid.getCellFormatter().setWidth(0,j,"18px");
+    			if(j == 0)
+    				editorGrid.getCellFormatter().setHeight(0,j,"18px");
+    			editorGrid.getCellFormatter().setStyleName(0,j,"treeungrouped");
+    			if(j == editorGrid.getColumnCount() -2){
+    				if(!drow.mightHaveChildren()) {
+    					editorGrid.getCellFormatter().setStyleName(0,j,"");
+    					editorGrid.clickCell = -1;
+    				}
+    				if(drow.open && drow.mightHaveChildren())
+    					editorGrid.getCellFormatter().setStyleName(0,j,"treeOpenImage");
+    				else if(drow.mightHaveChildren())
+    					editorGrid.getCellFormatter().setStyleName(0,j,"treeClosedImage");
+    				else if(j > 0){
+
+    					if(drow.childIndex == drow.parent.getItems().size()-1)
+    						editorGrid.getCellFormatter().setStyleName(0,j,"treeLImage");
+    					else
+    						editorGrid.getCellFormatter().setStyleName(0,j,"treeTImage");
+    				}
+    				if(drow.mightHaveChildren()){
+    					editorGrid.clickCell = j;
+    				}
+    			}
+    		}
+    	}catch(Exception e){
+    		Window.alert(e.getMessage());
+    	}
+    	try {
+    		if(drow.depth > 1) {
+    			Stack<TreeDataItem> levels = new Stack<TreeDataItem>();
+    			levels.push(drow.parent);
+    			while(levels.peek().depth > 1){
+    				levels.push(levels.peek().parent);
+    			}
+    			for(TreeDataItem item : levels){
+    				if(item.childIndex < item.parent.getItems().size() -1){//item.parent.getItems().indexOf(item) < item.parent.getItems().size() -1){
+    					editorGrid.getCellFormatter().setStyleName(0,item.depth,"treeIImage");
+    				}
+    			}
+
+    		}
+    	}catch(Exception  e){
+    		Window.alert("parent stack "+e.getMessage());
+    	}
+    	editorGrid.widgetIndex = editorGrid.getColumnCount() - 1;
+    	editorGrid.addStyleName("TreeTableLeftTree");
+    	DOM.setStyleAttribute(editorGrid.getRowFormatter().getElement(0), "background", "none");
+    	return editorGrid;
+    }
 
 }

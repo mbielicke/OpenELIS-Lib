@@ -16,7 +16,7 @@ import org.openelis.gwt.event.DragManager;
 
 import java.util.HashMap;
 
-@Deprecated
+
 public class TableDragController extends PickupDragController {
     
     public DragManager manager;

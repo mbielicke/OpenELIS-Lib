@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenWindow;
 
 import com.google.gwt.user.client.ui.ClickListener;
@@ -57,30 +57,29 @@ public class EditBox extends Composite implements ClickListener{
 	                                    "</screen>";
 	private String formattedText;
 	
-	private class Editor extends AppScreen implements ClickListener {
+	private class Editor extends Screen implements ClickListener {
 	    
 		public Editor(){
-			drawScreen(editorScreen);
+			//drawScreen(editorScreen);
 			afterDraw(true);
 		}
-		
-		@Override
+	
 		public void afterDraw(boolean sucess) {
-			super.afterDraw(sucess);
-			((TextArea)getWidget("editor")).setText(text.getText());
+			//super.afterDraw(sucess);
+			//((TextArea)getWidget("editor")).setText(text.getText());
 			
 		}
 		
 		public void onClick(Widget sender) {
 			// TODO Auto-generated method stub
-			if(sender == getWidget("ok")){
-				text.setText(((TextArea)getWidget("editor")).getText());
+			//if(sender == getWidget("ok")){
+			//	text.setText(((TextArea)getWidget("editor")).getText());
 				//formattedText = ((RichTextWidget)getWidget("editor")).getText();
 				pop.hide();
-			}
-			if(sender == getWidget("cancel")){
+		//	}
+			//if(sender == getWidget("cancel")){
 				pop.hide();
-			}
+		//	}
 			
 		}
 		

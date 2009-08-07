@@ -25,33 +25,22 @@
 */
 package org.openelis.gwt.widget.richtext;
 
-import com.google.gwt.core.client.GWT;
+import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.MenuItem;
+import org.openelis.gwt.widget.table.TableDataRow;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.XMLParser;
-
-import org.openelis.gwt.common.data.StringObject;
-import org.openelis.gwt.common.data.TableDataModel;
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenLabel;
-import org.openelis.gwt.screen.ScreenMenuItem;
-import org.openelis.gwt.screen.ScreenMenuPanel;
-import org.openelis.gwt.widget.AppButton;
-import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI

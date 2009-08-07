@@ -1,18 +1,16 @@
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.TableDataModel;
-import org.openelis.gwt.common.data.TableDataRow;
-
 import java.util.ArrayList;
 
-@Deprecated
-public class Query<QRow extends TableDataRow> implements RPC {
+import org.openelis.gwt.widget.table.TableDataRow;
+
+public class Query<T extends RPC> implements RPC {
     
 	private static final long serialVersionUID = 1L;
 	
-	public ArrayList<AbstractField> fields;
-    public TableDataModel<QRow> results; 
+	public ArrayList<QueryData> fields;
+    public ArrayList<T> results; 
+    public transient ArrayList<TableDataRow> model;
     
     public int page = 0;
     

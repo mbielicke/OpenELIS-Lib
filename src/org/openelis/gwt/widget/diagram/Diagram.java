@@ -1,12 +1,20 @@
 package org.openelis.gwt.widget.diagram;
 
+import java.util.HashMap;
+
+import javax.swing.tree.TreeNode;
+
+import org.openelis.gwt.screen.ScreenWindow;
+import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.tree.TreeDataItem;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
@@ -19,17 +27,6 @@ import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
-
-import org.openelis.gwt.common.data.TreeDataItem;
-import org.openelis.gwt.common.data.TreeDataModel;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
-import org.openelis.gwt.screen.ScreenWindow;
-import org.openelis.gwt.widget.IconContainer;
-import org.openelis.gwt.widget.TextBox;
-
-import java.util.HashMap;
 
 public class Diagram extends Composite implements MouseListener,ClickListener,ClickHandler,DoubleClickHandler,SourcesCommandEvents{
     
