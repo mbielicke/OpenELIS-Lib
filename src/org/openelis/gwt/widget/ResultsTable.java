@@ -1,17 +1,10 @@
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
-
 import org.openelis.gwt.common.Query;
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.HasActionHandlers;
-import org.openelis.gwt.screen.Screen;
-import org.openelis.gwt.screen.ScreenNavigator;
-import org.openelis.gwt.widget.ButtonPanel;
 import org.openelis.gwt.widget.AppButton.ButtonState;
-import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
@@ -34,7 +27,6 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
     private HorizontalPanel mainHP = new HorizontalPanel();
     private VerticalPanel alphabetButtonVP = new VerticalPanel();
     private VerticalPanel tablePanel = new VerticalPanel();
-    protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean refreshedByLetter;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};

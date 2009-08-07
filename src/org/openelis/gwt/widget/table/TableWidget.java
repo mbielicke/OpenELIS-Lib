@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.openelis.gwt.common.DataSorter;
 import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.DataSorterInt.SortDirection;
+//import org.openelis.gwt.common.DataSorteInt.SortDirection;
 import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
@@ -518,11 +518,12 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         shownRows++;
         renderer.dataChanged(true);
     }
-
+   /*
     public void sort(int col, SortDirection direction) {
       // sorter.sort(data, col, direction);
     	renderer.dataChanged(false);
     }
+    */
     
     public void refresh() {
         shownRows = 0;

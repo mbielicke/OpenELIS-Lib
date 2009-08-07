@@ -1,5 +1,12 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.QueryData;
+import org.openelis.gwt.screen.UIUtil;
+
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -25,15 +32,6 @@ import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesFocusEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.QueryData;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.screen.ScreenWindow;
-import org.openelis.gwt.screen.UIUtil;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class CalendarLookUp extends LookUp implements KeyboardListener, 
                                                       FocusListener, 

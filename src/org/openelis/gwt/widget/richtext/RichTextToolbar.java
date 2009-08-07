@@ -25,9 +25,12 @@
 */
 package org.openelis.gwt.widget.richtext;
 
+import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.MenuItem;
+import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.table.TableDataRow;
 
 import com.google.gwt.user.client.Window;
@@ -48,10 +51,13 @@ import com.google.gwt.xml.client.XMLParser;
  * functionality.
  */
 public class RichTextToolbar extends Composite {
+	
   /**
    * We use an inner EventListener class to avoid exposing event methods on the
    * RichTextToolbar itself.
    */
+	
+  /*	
   private class EventListener implements ClickListener, ChangeListener,
       KeyboardListener {
 
@@ -190,13 +196,13 @@ public class RichTextToolbar extends Composite {
   private Dropdown fonts;
   private Dropdown fontSizes;
   
-  private ScreenLabel fontLabel;
-  private ScreenLabel sizeLabel;
+  private Label fontLabel;
+  private Label sizeLabel;
   
-  private ScreenMenuPanel fontsMenu;
-  private ScreenMenuPanel fontSizeMenu;
+  private MenuPanel fontsMenu;
+  private MenuPanel fontSizeMenu;
   
-  private ScreenBase screen;
+  private Screen screen;
   
   private static String fontsMenuXMl =  "<menuPanel key=\"fontsMenu\" layout=\"vertical\" style=\"topBarItemHolder\">"+
   "<menuItem>" +
@@ -247,8 +253,8 @@ public class RichTextToolbar extends Composite {
    * Creates a new toolbar that drives the given rich text area.
    * 
    * @param richText the rich text area to be controlled
-   */
-  public RichTextToolbar(RichTextArea richText, ScreenBase screen) {
+   
+  public RichTextToolbar(RichTextArea richText, Screen screen) {
     this.screen = screen;
     this.richText = richText;
     this.basic = richText.getBasicFormatter();
@@ -298,7 +304,7 @@ public class RichTextToolbar extends Composite {
           "Create Link"));
       topPanel.add(removeLink = createPushButton("RemoveLink",
           "Remove Link"));
-          */
+          
       topPanel.add(removeFormat = createPushButton("RemoveFormat",
           "Remove Format"));
     }
@@ -344,7 +350,7 @@ public class RichTextToolbar extends Composite {
         fontSizeItem.menuItemsPanel = fontSizePanel;
         topPanel.add(fontSizeItem);
         fontSizeItem.enable(true);
-   */
+   
         topPanel.add(new ScreenMenuPanel(XMLParser.parse(fontSizeMenuXMl).getDocumentElement(),screen));
         topPanel.add(new ScreenMenuPanel(XMLParser.parse(fontsMenuXMl).getDocumentElement(),screen));
         ((ScreenMenuItem)screen.widgets.get("FontTimes")).item.addClickListener(listener);
@@ -435,7 +441,7 @@ public class RichTextToolbar extends Composite {
     PushButton pb = new PushButton(img.createImage());
     pb.addClickListener(listener);
     pb.setTitle(tip);
-    */
+    
     return ab;
   }
 
@@ -449,13 +455,13 @@ public class RichTextToolbar extends Composite {
     ab.addClickListener(listener);
       /*ToggleButton tb = new ToggleButton(img.createImage());
     tb.addClickListener(listener);
-    tb.setTitle(tip);*/
+    tb.setTitle(tip);
     return ab;
   }
 
   /**
    * Updates the status of all the stateful buttons.
-   */
+   
   private void updateStatus() {
     if (basic != null) {
       //bold.setDown(basic.isBold());
@@ -476,5 +482,6 @@ public class RichTextToolbar extends Composite {
       //fonts.enabled(enabled);
       //fontSizes.enabled(enabled);
   }
+  */
 }
 

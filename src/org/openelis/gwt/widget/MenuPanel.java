@@ -27,8 +27,6 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.screen.ScreenMenuItem;
-
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -110,14 +108,8 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
         if(wid instanceof MenuItem){
             ((MenuItem)wid).parent = this;
             menuItems.add((MenuItem)wid);
-        }
-        if(wid instanceof ScreenMenuItem) {
-            ((MenuItem)((ScreenMenuItem)wid).getWidget()).parent = this;
-            menuItems.add((MenuItem)((ScreenMenuItem)wid).getWidget());
-            panel.add(((ScreenMenuItem)wid).getWidget());
         }else
             panel.add(wid);
-        
         
     }
     

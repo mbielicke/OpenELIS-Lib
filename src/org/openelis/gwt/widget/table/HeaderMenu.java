@@ -59,7 +59,7 @@ public class HeaderMenu extends PopupPanel implements
     private VerticalPanel menuPanel = new VerticalPanel();
     public int col;
     public Filter[] filter;
-    public DataSorterInt.SortDirection sortDirection;
+    //public DataSorterInt.SortDirection sortDirection;
     private boolean doFilter;
     private TableWidget controller;
 
@@ -194,12 +194,14 @@ public class HeaderMenu extends PopupPanel implements
                 ((CheckBox)filterMenu.getWidget(0, 0)).setChecked(true);
             }
         } else {
+        	/*
             if (row == 0)
                 sortDirection = DataSorterInt.SortDirection.UP;
             if (row == 1)
                 sortDirection = DataSorterInt.SortDirection.DOWN;
             controller.sort(col, sortDirection);
             hide();
+            */
         }
     }
 }

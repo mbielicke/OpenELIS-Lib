@@ -25,9 +25,10 @@
 */
 package org.openelis.gwt.screen;
 
+import org.openelis.gwt.widget.WindowBrowser;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -53,23 +54,18 @@ import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.widget.MenuLabel;
-import org.openelis.gwt.widget.WindowBrowser;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -311,9 +307,6 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
     public void setContent(final Widget content){
         this.content = content;
         body.insert(content, 0);
-        if(content instanceof AppScreen){
-            ((AppScreen)content).window = this;
-        }
         if(content instanceof Screen) {
         	((Screen)content).setWindow(this);
         	setName(((Screen)content).getDefinition().name);
@@ -341,15 +334,9 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         if(browser != null && browser.index != zIndex){
            browser.index++;
            zIndex = browser.index;
-           setKeep(true);
            int top = browser.browser.getWidgetTop(this);
            int left = browser.browser.getWidgetLeft(this);
            browser.browser.add((Widget)this,left,top);
-           setKeep(false);
-           if(content instanceof AppScreen){
-               DOM.removeEventPreview((AppScreen)content);
-               DOM.addEventPreview((AppScreen)content);
-           }
            browser.setFocusedWindow();
         }
     }
@@ -377,11 +364,6 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
     }
     
     public void close() {        
-        if(content instanceof AppScreenForm){
-            if(((AppScreenForm)content).hasChanges()){
-                return;
-            }
-        }
         if(modalGlass != null) {
             DOM.removeEventPreview(this);
             removeFromParent();
@@ -397,8 +379,6 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         if(popupPanel != null){
             popupPanel.hide();
         }
-        if(content instanceof ScreenBase)
-            ((ScreenBase)content).destroy();
         destroy();
         if(browser != null){
             browser.index--;
@@ -475,20 +455,18 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         message = null;
 
     }
-    
-    public void setKeep(boolean keep){
-        ((ScreenBase)content).keep = keep;
-    }
-    
+        
     public void setMessagePopup(String[] messages, String style) {
         statusImg.setStyleName(style);
         statusImg.removeMouseListener(this);
         statusImg.addMouseListener(this);
         messagePanel = new VerticalPanel();
         for(int i = 0; i < messages.length; i++){
-            MenuLabel errorLabel = new MenuLabel(messages[i],"Images/bullet_red.png");
-            errorLabel.setStyleName("errorPopupLabel");
-            messagePanel.add(errorLabel);
+        	HorizontalPanel hp = new HorizontalPanel();
+        	hp.add(new Label(messages[i]));
+        	hp.add(new Image("Iamges/bullet_red.png"));
+            hp.setStyleName("errorPopupLabel");
+            messagePanel.add(hp);
         }
     }
     

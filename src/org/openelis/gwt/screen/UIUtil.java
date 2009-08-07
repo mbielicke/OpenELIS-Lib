@@ -916,10 +916,7 @@ public class UIUtil {
     		        for (int i = 0; i < items.getLength(); i++) {
     		            if (items.item(i).getNodeType() == Node.ELEMENT_NODE) {
     		                Widget wid = loadWidget(items.item(i),def);
-    		                if(wid instanceof ScreenMenuItem)
-    		                    panel.add(((ScreenMenuItem)wid).getWidget());
-    		                else
-    		                    panel.add(wid);
+   		                    panel.add(wid);
     		            }
     		        }
     		        setDefaults(node, panel);

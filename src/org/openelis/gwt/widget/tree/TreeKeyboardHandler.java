@@ -25,37 +25,25 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.widget.CheckBox;
+
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
-
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.table.TableLabel;
-import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 
 public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
     
     private TreeWidget controller;
-    private ScreenWidget screen;
     
     public TreeKeyboardHandler(TreeWidget controller) {
         this.controller = controller;
     }
-    
-    public void setScreen(ScreenWidget screen) {
-        this.screen = screen;
-    }
-    
+        
     public void onKeyDown(KeyDownEvent event) {
 
         //if(!controller.focused)
@@ -268,7 +256,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
         int row = findNextActive(controller.activeRow);
         int col = 0;
        
-        while ((controller.columns.get(controller.getRow(row).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEditCell(row, col)))
+        while ((controller.columns.get(controller.getRow(row).leafType).get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row, col)))
             col++;
         if(row < controller.view.table.getRowCount() - 1){
             final int fRow = row;
@@ -294,7 +282,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
     private void tabToPrevRow() {
         if(controller.activeRow == 0) {
                 int col = controller.getRow(controller.shownRows() -1).size() - 1;
-                while ((controller.columns.get(controller.getRow(0).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEditCell(controller.activeRow, col)))
+                while ((controller.columns.get(controller.getRow(0).leafType).get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(controller.activeRow, col)))
                     col--;
                 final int fCol = col;
                 controller.view.scrollBar.setScrollPosition(controller.view.scrollBar.getScrollPosition()-18);
@@ -308,7 +296,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
         }else{
             final int row = findPrevActive(controller.activeRow);
             int col = controller.getRow(controller.shownRows() -1).size() - 1;
-            while ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof TableLabel) || (!controller.canEditCell(controller.activeRow, col)))
+            while ((controller.columns.get(controller.getRow(controller.activeRow).leafType).get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(controller.activeRow, col)))
                 col--;
             final int fCol = col;
             DeferredCommand.addCommand(new Command() {

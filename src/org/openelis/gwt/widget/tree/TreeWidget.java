@@ -32,8 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.QueryData;
-import org.openelis.gwt.screen.ScreenTreeWidget;
 import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
@@ -73,8 +71,6 @@ import org.openelis.gwt.widget.tree.event.LeafClosedEvent;
 import org.openelis.gwt.widget.tree.event.LeafClosedHandler;
 import org.openelis.gwt.widget.tree.event.LeafOpenedEvent;
 import org.openelis.gwt.widget.tree.event.LeafOpenedHandler;
-import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
-import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -128,7 +124,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public HashMap<String,ArrayList<TreeColumn>> columns;
     public ChangeListenerCollection changeListeners;
-    public TreeWidgetListenerCollection treeWidgetListeners;
     public boolean enabled;
     public boolean focused;
     public int activeRow = -1;
@@ -147,13 +142,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public String title;
     public boolean showHeader;
     public ArrayList<Filter[]> filters;
-    public ScreenTreeWidget screenWidget;
     public TreeDragController dragController;
     public TreeIndexDropController dropController;
     public boolean selectedByClick;
     private ArrayList<TreeDataItem> data;
     public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
-    private TreeModelListenerCollection treeModelListeners;
     public int shownRows; 
     public boolean multiSelect;
     public VerticalScroll showScroll;

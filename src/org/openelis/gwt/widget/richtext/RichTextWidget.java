@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.richtext;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.QueryData;
+import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
@@ -57,9 +58,9 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
     private boolean enabled;
     private Field<String> field;
     
-    public RichTextWidget(ScreenBase screen) {
+    public RichTextWidget(Screen screen) {
         area = new RichTextArea();
-        toolbar = new RichTextToolbar(area,screen);
+        //toolbar = new RichTextToolbar(area,screen);
     }
     
     public RichTextWidget(boolean tools) {
@@ -129,7 +130,7 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
     public void enable(boolean enabled) {
         this.enabled = enabled;
         if(tools) {
-            toolbar.enable(enabled);
+           // toolbar.enable(enabled);
         }
         area.setEnabled(enabled);
     }

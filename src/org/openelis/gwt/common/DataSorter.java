@@ -25,12 +25,9 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.data.TableDataModel;
-import org.openelis.gwt.common.data.Field;
-import org.openelis.gwt.common.data.FieldType;
 
 public class DataSorter implements DataSorterInt {
-    
+/*    
     TableDataModel data;
     SortDirection direction;
     
@@ -71,5 +68,5 @@ public class DataSorter implements DataSorterInt {
             }
         }
     }
-
+  */
 }

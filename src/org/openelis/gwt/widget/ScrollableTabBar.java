@@ -25,6 +25,10 @@
 */
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.RPC;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -36,18 +40,12 @@ import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.RPC;
-//import org.openelis.gwt.common.data.TabRPC;
-import org.openelis.gwt.screen.ScreenBase;
-
-import java.util.ArrayList;
-
 public class ScrollableTabBar extends Composite implements ClickListener, TabListener{
   private HorizontalPanel mainPanel = new HorizontalPanel();
   private AbsolutePanel scrollPanel = new AbsolutePanel();
   private TabBar tabBar = new TabBar();
   //private TabRPC tabRPC;
-  private ScreenBase tablistener = null;
+  //private ScreenBase tablistener = null;
   private HTML next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
   private HTML previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
   private boolean noHTMLs = true;
@@ -101,10 +99,6 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
      tabBar.selectTab(index); 
   }
   
-  public void addTabListener(ScreenBase screen){
-     tablistener = screen;
-     tabBar.addTabListener((TabListener)screen);
-  }
   
   public void setWidth(String width){
       mainPanel.setWidth(width);         
@@ -157,9 +151,6 @@ public class ScrollableTabBar extends Composite implements ClickListener, TabLis
   
   public void clearTabs(){      
      tabBar = new TabBar(); 
-     if(tablistener != null) {
-        tabBar.addTabListener((TabListener)tablistener); 
-     }  
      scrollPanel.clear();
      scrollPanel.add(tabBar);
      mainPanel.clear();  

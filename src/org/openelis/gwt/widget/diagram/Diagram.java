@@ -1,8 +1,7 @@
 package org.openelis.gwt.widget.diagram;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.tree.TreeNode;
 
 import org.openelis.gwt.screen.ScreenWindow;
 import org.openelis.gwt.widget.IconContainer;
@@ -28,17 +27,16 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
-public class Diagram extends Composite implements MouseListener,ClickListener,ClickHandler,DoubleClickHandler,SourcesCommandEvents{
+public class Diagram extends Composite implements MouseListener,ClickListener,ClickHandler,DoubleClickHandler {
     
     public enum Action {HOVER,LEAVE,CLICK};
     
     public GWTCanvas canvas = new GWTCanvas();
     public AbsolutePanel panel = new AbsolutePanel();
     public ScrollPanel scroll = new ScrollPanel();
-    public TreeDataModel model;
+    public ArrayList<TreeDataItem> model;
     public HashMap<TreeDataItem,TreeNode> mapping = new HashMap<TreeDataItem,TreeNode>();
     public ScreenWindow window;
-    public CommandListenerCollection commandListeners;
     private TreeNode editNode;
     public TreeNode selectNode;
     
@@ -59,7 +57,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
       @Override
         public void dragStart() {
             super.dragStart();
-            commandListeners.fireCommand(Action.LEAVE, this.context.draggable);
+            //commandListeners.fireCommand(Action.LEAVE, this.context.draggable);
         }
     };
     public AbsolutePositionDropController dropController = new AbsolutePositionDropController(panel);
@@ -97,11 +95,11 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
         //canvas.addClickListener(this);
     }
     
-    public void setModel(TreeDataModel model) {
+    public void setModel(ArrayList<TreeDataItem> model) {
         this.model = model;
     }
     
-    public void draw(TreeDataModel model) {
+    public void draw(ArrayList<TreeDataItem> model) {
         setModel(model);
         draw();
     }
@@ -150,7 +148,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
         TreeNode node = new TreeNode("",this,item);
         node.setWidth("100px");
         dragController.makeDraggable(node);
-        node.add(new Label((String)item.cells[0].getValue()));
+        node.add(new Label((String)item.cells.get(0).getValue()));
         node.addDoubleClickHandler(this);
         panel.add(node,item.x,item.y);
         mapping.put(item,node);
@@ -239,12 +237,12 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
     
     public void onMouseEnter(Widget sender) {
         sender.addStyleName("NodeHover");
-        commandListeners.fireCommand(Action.HOVER, sender);        
+        //commandListeners.fireCommand(Action.HOVER, sender);        
     }
 
     public void onMouseLeave(Widget sender) {
         sender.removeStyleName("NodeHover");
-        commandListeners.fireCommand(Action.LEAVE, sender);
+        //commandListeners.fireCommand(Action.LEAVE, sender);
     }
 
     public void onMouseMove(Widget sender, int x, int y) {
@@ -268,24 +266,10 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
         if(selectNode == null && sender instanceof TreeNode){
             selectNode = (TreeNode)sender;
             selectNode.addStyleName("NodeSelected");
-            commandListeners.fireCommand(Action.CLICK, sender);
+            //commandListeners.fireCommand(Action.CLICK, sender);
         }
     }
-
-    public void addCommandListener(CommandListener listener) {
-       if(commandListeners == null){
-           commandListeners = new CommandListenerCollection();
-       }
-       commandListeners.add(listener);
-    }
-
-    public void removeCommandListener(CommandListener listener) {
-       if(commandListeners != null) {
-          commandListeners.remove(listener);
-       }
-        
-    }
-
+    
     public void onClick(ClickEvent event) {
         
     }
@@ -296,7 +280,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
         editNode = (TreeNode)event.getSource();
         TextBox box = new TextBox();
         box.setWidth(editNode.getOffsetWidth()+"px");
-        box.setValue((String)editNode.item.cells[0].getValue());
+        box.setValue((String)editNode.item.cells.get(0).getValue());
      //   editNode.remove(0);
         editNode.add(box);
         box.setFocus(true);
@@ -307,7 +291,7 @@ public class Diagram extends Composite implements MouseListener,ClickListener,Cl
     private void saveEditNode() {
         //editNode.item.cells[0].setValue(((TextBox)editNode.getWidget(0)).getValue());
         //editNode.remove(0);
-        Label label = new Label((String)editNode.item.cells[0].getValue());
+        Label label = new Label((String)editNode.item.cells.get(0).getValue());
         editNode.add(label);
         selectNode.removeStyleName("NodeSelected");
         editNode = null;

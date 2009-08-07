@@ -25,7 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.Screen;
+
 /**
  * @author tschmidt
  * 
@@ -41,7 +42,7 @@ public class CheckField extends Field<String> {
         if (required) {
             if (value == null) {
             	valid =  false;
-                addError(AppScreen.consts.get("fieldRequiredException"));
+                addError(Screen.consts.get("fieldRequiredException"));
             }
         }
         valid = true;

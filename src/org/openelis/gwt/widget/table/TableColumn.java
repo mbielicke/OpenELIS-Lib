@@ -27,29 +27,23 @@ package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.screen.ScreenMenuItem;
 import org.openelis.gwt.screen.UIUtil;
-import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.DropdownWidget;
-import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.MenuLabel;
 
-import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -60,7 +54,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 public class TableColumn {
 
     public String header;
-    public ScreenMenuItem headerMenu;
     public boolean sortable;
     public boolean filterable;
     public boolean queryable;
@@ -114,9 +107,11 @@ public class TableColumn {
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
-                MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
-                errorLabel.setStyleName("errorPopupLabel");
-                errorPanel.add(errorLabel);
+            	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Label(error));
+            	hp.add(new Image("Iamges/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                errorPanel.add(hp);
             }
         	wid.addStyleName("InputError");
         	((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
@@ -177,9 +172,11 @@ public class TableColumn {
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
-                MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
-                errorLabel.setStyleName("errorPopupLabel");
-                errorPanel.add(errorLabel);
+            	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Label(error));
+            	hp.add(new Image("Iamges/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                errorPanel.add(hp);
             }
         	widget.addStyleName("InputError");
         	((HasMouseOverHandlers)widget).addMouseOverHandler(new MouseOverHandler() {
@@ -233,9 +230,11 @@ public class TableColumn {
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
-                MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
-                errorLabel.setStyleName("errorPopupLabel");
-                errorPanel.add(errorLabel);
+            	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Label(error));
+            	hp.add(new Image("Iamges/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                errorPanel.add(hp);
             }
         	editor.addStyleName("InputError");
         	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
@@ -399,14 +398,6 @@ public class TableColumn {
     
     public void applyQueryFilter() {
         dataFilterer.applyQueryFilter(controller.getData(),query,controller.columns.indexOf(this));
-    }
-    
-    public void setHeaderMenu(ScreenMenuItem menu) {
-        this.headerMenu = menu;
-    }
-
-    public ScreenMenuItem getHeaderMenu() {
-        return headerMenu;
     }
 
     public boolean queryable() {
