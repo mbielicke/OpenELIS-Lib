@@ -41,6 +41,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
  */
 public interface ScreenServiceInt extends RemoteService {
 
+
     public String            callString(String method) throws Throwable;
     public Integer           callInteger(String method) throws Throwable;
     public Boolean           callBoolean(String method) throws Throwable;
@@ -53,6 +54,7 @@ public interface ScreenServiceInt extends RemoteService {
     public <T extends RPC> T call(String method, Double param) throws Throwable;
     public <T extends RPC> T call(String method, String param) throws Throwable;
     public <T extends RPC> T call(String method, Date param) throws Throwable;
+    public <T extends RPC> T call(String method, Long param) throws Throwable;
 
     
 }

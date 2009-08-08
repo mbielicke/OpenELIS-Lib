@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.data.QueryField;
 import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.event.BeforeGetMatchesEvent;
 import org.openelis.gwt.event.BeforeGetMatchesHandler;
@@ -40,7 +39,6 @@ import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -187,7 +185,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 
 	public void setField(Field field) {
 		this.field = field;
-		addValueChangeHandler(field);
+		//addValueChangeHandler(field);
 		addBlurHandler(field);
 		textbox.addMouseOutHandler(field);
 		textbox.addMouseOverHandler(field);
@@ -229,7 +227,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 			qd.query = textbox.getText();
 			qd.type = QueryData.Type.STRING;
 			list.add(qd);
-			QueryField qField = new QueryField();
+			QueryFieldUtil qField = new QueryFieldUtil();
 			qField.parse(qd.query);
 			int nothing = 0;
 			
@@ -260,5 +258,6 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 	public HandlerRegistration addGetMatchesHandler(GetMatchesHandler handler) {
 		return addHandler(handler,GetMatchesEvent.getType());
 	}
+	
 	
 }

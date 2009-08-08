@@ -5,15 +5,15 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.data.StringObject;
 import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.ScreenMenuItem;
+import org.openelis.gwt.screen.rewrite.ScreenDef;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.LongField;
 import org.openelis.gwt.widget.NotesPanel;
 import org.openelis.gwt.widget.ScrollableTabBar;
 import org.openelis.gwt.widget.TextBox;
@@ -83,7 +83,6 @@ import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
 public class UIUtil {
-	 
 	 public static ScreenDef createWidgets(String xml) throws Exception{
 		 ScreenDef def = new ScreenDef();
 		 def.xmlDef = xml;
@@ -103,8 +102,8 @@ public class UIUtil {
     	if(screen.getAttributes().getNamedItem("name") != null) {
     		def.name = screen.getAttributes().getNamedItem("name").getNodeValue();
     	}
-        Node display = doc.getElementsByTagName("display").item(0);
-        NodeList widgets = display.getChildNodes();
+        //Node display = doc.getElementsByTagName("display").item(0);
+        NodeList widgets = screen.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
             if (widgets.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 Widget wid = createWidget(widgets.item(i),def);
@@ -882,17 +881,7 @@ public class UIUtil {
     	            label = node.getAttributes().getNamedItem("label").getNodeValue();
     	        }
 
-    	        if (node.getAttributes().getNamedItem("class") != null){
-    	            item.objClass = node.getAttributes().getNamedItem("class").getNodeValue();
-    	        }
-    	        if (node.getAttributes().getNamedItem("args") != null && !"".equals(node.getAttributes().getNamedItem("args").getNodeValue())){
-    	            String[] argStrings = node.getAttributes().getNamedItem("args").getNodeValue().split(",");
-    	            item.args = new Object[argStrings.length];
-    	            for(int i = 0; i < argStrings.length; i++){
-    	                item.args[i] = new StringObject(argStrings[i]);
-    	            }
-    	        }
-    	        
+    	      
     	        
     	        item.popupNode = ((Element)node).getElementsByTagName("menuPanel").item(0);
     	        if(node.getAttributes().getNamedItem("enabled") != null){
@@ -929,10 +918,7 @@ public class UIUtil {
     		        for (int i = 0; i < items.getLength(); i++) {
     		            if (items.item(i).getNodeType() == Node.ELEMENT_NODE) {
     		                Widget wid = loadWidget(items.item(i),def);
-    		                if(wid instanceof ScreenMenuItem)
-    		                    panel.add(((ScreenMenuItem)wid).getWidget());
-    		                else
-    		                    panel.add(wid);
+   		                    panel.add(wid);
     		            }
     		        }
     		        setDefaults(node, panel);
@@ -1395,7 +1381,10 @@ public class UIUtil {
                         field = (StringField)factoryMap.get("String").getNewInstance(node, null);
                     }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
                         auto = new AutoComplete<Integer>();
-                    }else
+                    }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long")){
+    					auto = new AutoComplete<Long>();
+    					field = (LongField)factoryMap.get("Long").getNewInstance(node,null);
+    				}else
                         auto = new AutoComplete();
                 }else
                     auto = new AutoComplete();
@@ -1721,6 +1710,23 @@ public class UIUtil {
     				field.setMax(Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue()));
     			if(node.getAttributes().getNamedItem("min") != null)
     				field.setMin(Integer.parseInt(node.getAttributes().getNamedItem("min").getNodeValue()));
+    	        if (node.getAttributes().getNamedItem("pattern") != null) {
+    	            field.setFormat(node.getAttributes()
+    	                          .getNamedItem("pattern")
+    	                          .getNodeValue());
+    	        }
+    			return field;
+    		}
+    	});
+    	factoryMap.put("Long", new Factory<LongField>(){
+    		public LongField getNewInstance(Node node, ScreenDef def) {
+    			LongField field = new LongField();
+    			if(node.getAttributes().getNamedItem("required") != null)
+    				field.required = Boolean.parseBoolean(node.getAttributes().getNamedItem("required").getNodeValue());
+    			if(node.getAttributes().getNamedItem("max") != null)
+    				field.setMax(Long.parseLong(node.getAttributes().getNamedItem("max").getNodeValue()));
+    			if(node.getAttributes().getNamedItem("min") != null)
+    				field.setMin(Long.parseLong(node.getAttributes().getNamedItem("min").getNodeValue()));
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            field.setFormat(node.getAttributes()
     	                          .getNamedItem("pattern")

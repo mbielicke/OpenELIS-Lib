@@ -51,5 +51,6 @@ public interface ScreenServiceIntAsync {
     public Request call(String method, Double param, AsyncCallback<? extends RPC> callback);
     public Request call(String method, String param, AsyncCallback<? extends RPC> callback);
     public Request call(String method, Date param, AsyncCallback<? extends RPC> callback);
+    public Request call(String method, Long param, AsyncCallback<? extends RPC> callback);
 
 }

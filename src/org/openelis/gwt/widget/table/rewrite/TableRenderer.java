@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table.rewrite;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.user.client.ui.Focusable;
@@ -219,7 +220,13 @@ public class TableRenderer  {
     public void stopEditing() {
         if(controller.editingCell != null){
         	((Focusable)controller.editingCell).setFocus(false);
-        	controller.setCell(controller.activeRow, controller.activeCell, ((HasValue)controller.editingCell).getValue());
+        	if(controller.editingCell instanceof AutoComplete){
+        		Object[] idName = new Object[2];
+        		idName[0] = ((AutoComplete)controller.editingCell).getValue();
+        		idName[1] = ((AutoComplete)controller.editingCell).getTextBoxDisplay();
+        		controller.setCell(controller.activeRow, controller.activeCell, idName);
+        	}else
+        		controller.setCell(controller.activeRow, controller.activeCell, ((HasValue)controller.editingCell).getValue());
         	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;

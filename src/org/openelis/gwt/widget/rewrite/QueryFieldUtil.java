@@ -33,7 +33,7 @@ public class QueryFieldUtil {
 
     protected ArrayList<String> comparator;
 
-    protected ArrayList<String> parameter;
+    public ArrayList<String> parameter;
 
     protected ArrayList<String> logical;
 

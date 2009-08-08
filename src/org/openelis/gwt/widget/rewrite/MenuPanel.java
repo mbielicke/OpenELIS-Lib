@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.screen.ScreenMenuItem;
 
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -111,13 +110,7 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
             ((MenuItem)wid).parent = this;
             menuItems.add((MenuItem)wid);
         }
-        if(wid instanceof ScreenMenuItem) {
-            ((MenuItem)((ScreenMenuItem)wid).getWidget()).parent = this;
-            menuItems.add((MenuItem)((ScreenMenuItem)wid).getWidget());
-            panel.add(((ScreenMenuItem)wid).getWidget());
-        }else
-            panel.add(wid);
-        
+        panel.add(wid);
         
     }
     
@@ -216,5 +209,6 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
         }
         
     }    
+
 
 }

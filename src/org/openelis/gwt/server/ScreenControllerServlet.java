@@ -33,8 +33,9 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     
     @SuppressWarnings("unchecked")
 	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Throwable {
-		Object serviceInst = Class.forName(getThreadLocalRequest().getParameter("service")).newInstance();
+
 		try{
+			Object serviceInst = Class.forName(service).newInstance();
 		    return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
 		
 		}catch(InvocationTargetException e){
@@ -91,6 +92,7 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     	return (String)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends RPC> T call(String method) throws Throwable {
 		return (T)invoke(getThreadLocalRequest().getParameter("servce"),method);
 	}
@@ -98,6 +100,11 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 	public void callVoid(String method) throws Throwable {
 		invoke(getThreadLocalRequest().getParameter("service"),method);
 		
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends RPC> T call(String method, Long param) throws Throwable {
+		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
 }
