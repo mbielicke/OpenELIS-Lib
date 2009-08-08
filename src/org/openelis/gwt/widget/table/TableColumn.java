@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import org.openelis.gwt.common.DataFilterer;
 import org.openelis.gwt.common.Filter;
 import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.DropdownWidget;
@@ -84,8 +85,16 @@ public class TableColumn {
     		((CheckBox)wid).addBlurHandler(UIUtil.focusHandler);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
     		wid.setWidth("15px");
-    	}else {
-    		((HasValue)colWidget).setValue(cell.getValue(),true);
+    	}else{
+    		if(colWidget instanceof AutoComplete) {
+    			Object[] idName = (Object[])cell.getValue();
+    			if(idName != null)
+    				((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    			else
+    				((AutoComplete)colWidget).setSelection(null,"");
+    		}else {
+    			((HasValue)colWidget).setValue(cell.getValue(),true);
+    		}
     		Object val = ((HasValue)colWidget).getValue();
     		Label label = new Label("");
     		if(val != null) {
@@ -224,7 +233,14 @@ public class TableColumn {
     	}
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");
-    	((HasValue)editor).setValue(cell.getValue(),true);
+    	if(colWidget instanceof AutoComplete){
+    		Object[] idName = (Object[])cell.getValue();
+    		if(idName != null)
+    			((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    		else
+    			((AutoComplete)colWidget).setSelection(null,"");
+    	}else
+    		((HasValue)editor).setValue(cell.getValue(),true);
        
         editor.setHeight((controller.cellHeight+"px"));
         if(cell.errors != null) {

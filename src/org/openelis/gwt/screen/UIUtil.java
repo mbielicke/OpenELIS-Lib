@@ -21,6 +21,7 @@ import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.IntegerField;
+import org.openelis.gwt.widget.LongField;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.NotesPanel;
@@ -100,8 +101,8 @@ public class UIUtil {
     	if(screen.getAttributes().getNamedItem("name") != null) {
     		def.name = screen.getAttributes().getNamedItem("name").getNodeValue();
     	}
-        Node display = doc.getElementsByTagName("display").item(0);
-        NodeList widgets = display.getChildNodes();
+        //Node display = doc.getElementsByTagName("display").item(0);
+        NodeList widgets = screen.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
             if (widgets.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 Widget wid = createWidget(widgets.item(i),def);
@@ -1379,7 +1380,10 @@ public class UIUtil {
                         field = (StringField)factoryMap.get("String").getNewInstance(node, null);
                     }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
                         auto = new AutoComplete<Integer>();
-                    }else
+                    }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long")){
+    					auto = new AutoComplete<Long>();
+    					field = (LongField)factoryMap.get("Long").getNewInstance(node,null);
+    				}else
                         auto = new AutoComplete();
                 }else
                     auto = new AutoComplete();
@@ -1705,6 +1709,23 @@ public class UIUtil {
     				field.setMax(Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue()));
     			if(node.getAttributes().getNamedItem("min") != null)
     				field.setMin(Integer.parseInt(node.getAttributes().getNamedItem("min").getNodeValue()));
+    	        if (node.getAttributes().getNamedItem("pattern") != null) {
+    	            field.setFormat(node.getAttributes()
+    	                          .getNamedItem("pattern")
+    	                          .getNodeValue());
+    	        }
+    			return field;
+    		}
+    	});
+    	factoryMap.put("Long", new Factory<LongField>(){
+    		public LongField getNewInstance(Node node, ScreenDef def) {
+    			LongField field = new LongField();
+    			if(node.getAttributes().getNamedItem("required") != null)
+    				field.required = Boolean.parseBoolean(node.getAttributes().getNamedItem("required").getNodeValue());
+    			if(node.getAttributes().getNamedItem("max") != null)
+    				field.setMax(Long.parseLong(node.getAttributes().getNamedItem("max").getNodeValue()));
+    			if(node.getAttributes().getNamedItem("min") != null)
+    				field.setMin(Long.parseLong(node.getAttributes().getNamedItem("min").getNodeValue()));
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            field.setFormat(node.getAttributes()
     	                          .getNamedItem("pattern")

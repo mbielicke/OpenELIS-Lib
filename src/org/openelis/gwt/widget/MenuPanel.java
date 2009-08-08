@@ -108,8 +108,8 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
         if(wid instanceof MenuItem){
             ((MenuItem)wid).parent = this;
             menuItems.add((MenuItem)wid);
-        }else
-            panel.add(wid);
+        }
+        panel.add(wid);
         
     }
     

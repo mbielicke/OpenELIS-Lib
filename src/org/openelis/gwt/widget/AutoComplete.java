@@ -185,7 +185,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 
 	public void setField(Field field) {
 		this.field = field;
-		addValueChangeHandler(field);
+		//addValueChangeHandler(field);
 		addBlurHandler(field);
 		textbox.addMouseOutHandler(field);
 		textbox.addMouseOverHandler(field);
