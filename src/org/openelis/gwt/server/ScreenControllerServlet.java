@@ -94,7 +94,7 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 
 	@SuppressWarnings("unchecked")
 	public <T extends RPC> T call(String method) throws Throwable {
-		return (T)invoke(getThreadLocalRequest().getParameter("servce"),method);
+		return (T)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
 	public void callVoid(String method) throws Throwable {
