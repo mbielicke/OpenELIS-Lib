@@ -1305,6 +1305,11 @@ public class UIUtil {
     	        if(node.getAttributes().getNamedItem("shortcut") != null){
     	        	def.panel.addShortcutHandler(new ShortcutHandler(node,drop));
     	        }
+				if (node.getAttributes().getNamedItem("case") != null){
+					String fieldCase = node.getAttributes().getNamedItem("case")
+					.getNodeValue().toUpperCase();
+					drop.textbox.setCase(TextBox.Case.valueOf(fieldCase));
+	        	}
     		    drop.setField(field);
     		    drop.multiSelect = false;
     	                
@@ -1396,6 +1401,11 @@ public class UIUtil {
     	        if(node.getAttributes().getNamedItem("shortcut") != null) {
     	        	def.panel.addShortcutHandler(new ShortcutHandler(node,auto));
     	        }
+				if (node.getAttributes().getNamedItem("case") != null){
+					String fieldCase = node.getAttributes().getNamedItem("case")
+					.getNodeValue().toUpperCase();
+					auto.textbox.setCase(TextBox.Case.valueOf(fieldCase));
+	        	}
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
     	        	auto.multiSelect = true;
     	        
