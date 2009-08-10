@@ -18,7 +18,7 @@ public class CellEditedEvent extends GwtEvent<CellEditedHandler> {
 	
 	protected CellEditedEvent(int row, int col, Object value) {
 		this.row = row;
-		this.cell = cell;
+		this.cell = col;
 		this.value = value;
 	}
 
