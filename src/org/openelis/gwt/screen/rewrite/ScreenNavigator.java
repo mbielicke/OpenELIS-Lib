@@ -24,14 +24,17 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
 	
 	public ScreenNavigator(Screen screen) {
 		this.screen = screen;
-		resultsTable = (ResultsTable)screen.def.getWidget("azTable");
-		resultsTable.table.addBeforeSelectionHandler(this);
-		resultsTable.addPageHandler(this);
+		if(screen.def.getWidgets().containsKey("azTable")){
+			resultsTable = (ResultsTable)screen.def.getWidget("azTable");
+			resultsTable.table.addBeforeSelectionHandler(this);
+			resultsTable.addPageHandler(this);
+		}
 	}
 	
 	public void setQuery(T query) {
 		this.query = query;
-		resultsTable.setQuery(query);
+		if(resultsTable != null)
+			resultsTable.setQuery(query);
 		if(query.results.size() == 0)
 			return;
 		try {
@@ -41,7 +44,8 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
                 else
                     select(0);
             }else{
-            	resultsTable.unselect();
+            	if(resultsTable != null)
+            		resultsTable.unselect();
             }
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -60,7 +64,8 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
         } else if(selection > -1 && selection < query.model.size()) {
         	getSelection(query.results.get(selection));
         	this.selection = selection; 
-        	resultsTable.select(selection);
+        	if(resultsTable != null)
+        		resultsTable.select(selection);
         }
     }
     
@@ -73,7 +78,8 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
         	screen.window.setBusy(screen.consts.get("querying"));
         	query = screen.service.call("query", query);
         	loadPage(query);
-            resultsTable.setQuery(query);
+        	if(resultsTable != null)
+        		resultsTable.setQuery(query);
             selectItem = true;
             selectLast = false;
         }catch(Throwable caught) {
@@ -111,18 +117,20 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
 	}
 
 	public void onClick(ClickEvent event) {
-        if(resultsTable.isAttached()){
-            if(event.getSource() == resultsTable.nextPage){
-            	selectItem = false;
-            	setPage(query.page+1);
-                return;
-            }
-            if(event.getSource() == resultsTable.prevPage){
-            	selectItem = false;
-            	setPage(query.page-1);
-                return;
-            }
-        }
+		if(resultsTable != null){
+			if(resultsTable.isAttached()){
+				if(event.getSource() == resultsTable.nextPage){
+					selectItem = false;
+					setPage(query.page+1);
+					return;
+				}
+				if(event.getSource() == resultsTable.prevPage){
+					selectItem = false;
+					setPage(query.page-1);
+					return;
+				}
+			}
+		}
 	}
 	
 	public void loadPage(T query) {
