@@ -355,5 +355,10 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 		// TODO Auto-generated method stub
 		return field.getValue();
 	}
+	
+	public void setFieldValue(Datetime value){
+		field.setValue(value);
+		setValue(value);
+	}
     
 }

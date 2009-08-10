@@ -331,5 +331,10 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 		// TODO Auto-generated method stub
 		return field.getValue();
 	}
+	
+	public void setFieldValue(String value) {
+		field.setValue(value);
+		setValue(value);
+	}
 
 }

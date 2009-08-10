@@ -811,5 +811,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	public HandlerRegistration addLeafClosedHandler(LeafClosedHandler handler) {
 		return addHandler(handler,LeafClosedEvent.getType());
 	}
+
+	public void setFieldValue(Object value) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

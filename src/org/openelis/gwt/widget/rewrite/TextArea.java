@@ -77,4 +77,10 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 		return field.getValue();
 	}
 
+	public void setFieldValue(String value) {
+		field.setValue(value);
+		setText(value);
+		
+	}
+
 }

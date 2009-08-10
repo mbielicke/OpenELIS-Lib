@@ -80,4 +80,10 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 	public Object getFieldValue() {
 		return getFieldValue();
 	}
+
+	public void setFieldValue(Object value) {
+		field.setValue(value);
+		
+		
+	}
 }

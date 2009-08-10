@@ -76,4 +76,10 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 		return enabled;
 	}
 
+	public void setFieldValue(String value) {
+		field.setValue(value);
+		setText(value);
+		
+	}
+
 }

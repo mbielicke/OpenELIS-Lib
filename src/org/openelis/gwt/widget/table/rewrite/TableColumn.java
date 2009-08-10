@@ -93,9 +93,9 @@ public class TableColumn {
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
     		}else {
-    			((HasValue)colWidget).setValue(cell.getValue(),true);
+    			((HasField)colWidget).setFieldValue(cell.getValue());
     		}
-    		Object val = ((HasValue)colWidget).getValue();
+    		Object val = ((HasField)colWidget).getFieldValue();
     		Label label = new Label("");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
@@ -162,9 +162,9 @@ public class TableColumn {
     
     public void loadWidget(Widget widget, TableDataCell cell) {
     	if(widget instanceof CheckBox){
-    		((HasValue)widget).setValue(cell.getValue(),true);
+    		((HasField)widget).setFieldValue(cell.getValue());
     	}else if(widget instanceof Label) {
-    		((HasValue)colWidget).setValue(cell.getValue(),true);
+    		((HasField)colWidget).setFieldValue(cell.getValue());
     		if(colWidget instanceof CalendarLookUp) {
     			((Label)widget).setText(((CalendarLookUp)colWidget).getText());
     		}else if(colWidget instanceof DropdownWidget) {
@@ -172,8 +172,8 @@ public class TableColumn {
 			}else if(colWidget instanceof TextBoxBase) {
 				((Label)widget).setText(((TextBoxBase)colWidget).getText());
     		}else{
-    			if(((HasValue)colWidget).getValue() != null)
-    				((Label)widget).setText(((HasValue)colWidget).getValue().toString());
+    			if(((HasField)colWidget).getFieldValue() != null)
+    				((Label)widget).setText(((HasField)colWidget).getFieldValue().toString());
     			else
     				((Label)widget).setText("");
     		}
@@ -240,7 +240,7 @@ public class TableColumn {
     		else
     			((AutoComplete)colWidget).setSelection(null,"");
     	}else
-    		((HasValue)editor).setValue(cell.getValue(),true);
+    		((HasField)editor).setFieldValue(cell.getValue());
        
         editor.setHeight((controller.cellHeight+"px"));
         if(cell.errors != null) {
@@ -391,7 +391,9 @@ public class TableColumn {
     
     public Filter[] getFilter() {
         Filter[] filter = dataFilterer.getFilterValues(controller.getData(),controller.columns.indexOf(this));
-        if (filters != null) {
+        if(filters == null)
+        	return filter;
+        else{
             for (int j = 0; j < filter.length; j++) {
                 for (int k = 0; k < filters.length; k++) {
                     if (filter[j].obj.equals(filters[k].obj)) {

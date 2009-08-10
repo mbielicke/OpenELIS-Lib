@@ -25,18 +25,17 @@
 */
 package org.openelis.gwt.common.rewrite;
 
-import org.openelis.gwt.widget.rewrite.StringField;
-import org.openelis.gwt.widget.table.rewrite.TableDataRow;
-
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import org.openelis.gwt.widget.table.rewrite.TableDataRow;
 
 public class DataFilterer implements DataFiltererInt {
     
     public Filter[] getFilterValues(ArrayList<TableDataRow> data,int col) {
         ArrayList filterVals = new ArrayList();
         for (int i = 0; i < data.size(); i++) {
-            Object val = data.get(i).getCells().get(col);
+            Object val = data.get(i).cells.get(col).getValue();
             if (val != null && !filterVals.contains(val))
                 filterVals.add(val);
         }
@@ -83,8 +82,8 @@ public class DataFilterer implements DataFiltererInt {
                 if (filterSet.contains("All"))
                     continue;
                 String val = null;
-                if (row.getCells().get(j) != null)
-                    val = row.getCells().get(j).toString();
+                if (row.cells.get(j).getValue() != null)
+                    val = row.cells.get(j).getValue().toString();
                 if (!filterSet.contains(val))
                   data.get(i).shown = false;  
             }
@@ -113,7 +112,7 @@ public class DataFilterer implements DataFiltererInt {
                 row.shown = true;
             if (filterSet.contains("All"))
                 continue;
-            if (row.getCells().get(col) != null && !filterSet.contains(row.getCells().get(col)))
+            if (row.cells.get(col).getValue() != null && !filterSet.contains(row.cells.get(col).getValue()))
               row.shown = false;  
         }
     }
@@ -130,7 +129,7 @@ public class DataFilterer implements DataFiltererInt {
             TableDataRow row = data.get(i);
             if(col == 0)
                 row.shown = true;
-            if (row.getCells().get(col) != null && !((String)row.getCells().get(col)).toLowerCase().startsWith(query.toLowerCase()))
+            if (row.cells.get(col).getValue() != null && !((String)row.cells.get(col).getValue()).toLowerCase().startsWith(query.toLowerCase()))
               row.shown = false;  
         }
     }

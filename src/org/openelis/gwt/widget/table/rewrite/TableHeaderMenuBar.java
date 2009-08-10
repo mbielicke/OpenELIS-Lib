@@ -27,19 +27,23 @@ package org.openelis.gwt.widget.table.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.DataSorterInt;
 import org.openelis.gwt.common.rewrite.Filter;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
+import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.rewrite.MenuItem;
+import org.openelis.gwt.widget.rewrite.MenuPanel;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -56,26 +60,26 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler, 
 															 MouseDownHandler, 
-															 MouseUpHandler, 
-															 CommandListener, 
+															 MouseUpHandler,  
 															 CloseHandler<PopupPanel>, 
-															 ClickListener{
+															 ActionHandler<MenuItem.Action>,
+															 ClickHandler {
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
@@ -163,10 +167,11 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 wid.setHeight("18px");
                 wid.setWidth("16px");
                 menuItem = new MenuItem(wid);
-                menuItem.addMouseListener(this);
+                menuItem.addMouseOverHandler(this);
+                menuItem.addMouseOutHandler(this);
                 menuItem.menuItemsPanel = new MenuPanel("vertical");
                 menuItem.menuItemsPanel.setStyleName("topHeaderContainer");
-                menuItem.addCommandListener(this);
+                menuItem.addActionHandler(this);
             }
             menuItems.add(menuItem);
             hMenus.add(menuItem);
@@ -350,9 +355,7 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
-                                //((TableCellWidget)controller.view.table.getWidget(j,i)).setCellWidth(columns.get(i).getCurrentWidth());
-                                ((SimplePanel)controller.view.table.getWidget(j, i)).setWidth((columns.get(i).getCurrentWidth()) + "px");
-                                //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
+                                controller.view.table.getWidget(j, i).setWidth((columns.get(i).getCurrentWidth()) + "px");
                             }
                         }
                     }
@@ -392,47 +395,41 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
     }
 
 
-    public boolean canPerformCommand(Enum action, Object obj) {
-        // TODO Auto-generated method stub
-        return true;
-    }
 
-
-    public void performCommand(Enum action, Object obj) {
-        if(action == MenuItem.Action.OPENING) {         
-            final int index = hMenus.indexOf((MenuItem)obj);
+    public void onAction(ActionEvent<MenuItem.Action> event) {
+        if(event.getAction() == MenuItem.Action.OPENING) {         
+            final int index = hMenus.indexOf((MenuItem)event.getData());
             final TableColumn col = (TableColumn)controller.columns.get(index);
-            if(col.filterDisplayed)
-                return;
+            if(col.filterDisplayed) 
+                ((MenuItem)event.getSource()).menuItemsPanel.clear();
             if(col.getSortable()) {
                 MenuItem item = new MenuItem("",new Label("Sort Up"),"");
                 item.setStyleName("topHeaderRowContainer");
-                ((MenuItem)obj).menuItemsPanel.add(item);
-                item.addClickListener(new ClickListener() {
-                    public void onClick(Widget sender) {
-                        controller.sort(index, DataSorterInt.SortDirection.UP);
+                ((MenuItem)event.getData()).menuItemsPanel.add(item);
+                item.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+                        controller.sort(index, TableSorterInt.SortDirection.UP);
                     }
                 });
                 item = new MenuItem("",new Label("Sort Down"),"");
                 item.setStyleName("topHeaderRowContainer");
-                ((MenuItem)obj).menuItemsPanel.add(item);
-                item.addClickListener(new ClickListener() {
-                    public void onClick(Widget sender) {
-                        controller.sort(index, DataSorterInt.SortDirection.DOWN);
+                ((MenuItem)event.getData()).menuItemsPanel.add(item);
+                item.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+                        controller.sort(index, TableSorterInt.SortDirection.DOWN);
                     }
                 });
                 if(col.filterable){
-                    ((MenuItem)obj).menuItemsPanel.add(new HTML("<hr/>"));
+                    ((MenuItem)event.getData()).menuItemsPanel.add(new HTML("<hr/>"));
                 }
             }
-            if (!col.filterDisplayed && col.filterable  && col.getFilter() != null) {
+            if (col.filterable) {
                 MenuItem filterMenu = new MenuItem("",new Label("Filters"),"");
                 filterMenu.popPosition = MenuItem.PopPosition.SIDE;
                 filterMenu.menuItemsPanel = new MenuPanel("vertical");
                 filterMenu.menuItemsPanel.setStyleName("topHeaderContainer");
                 final Filter[] filters = col.getFilter();
-                if(col.filters == null)
-                     col.setFilter(filters);
+                col.setFilter(filters);
                 for (int i = 0; i < filters.length; i++) {
                     final Filter filter = filters[i];
                     String theText = filter.obj.toString();
@@ -442,53 +439,51 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                     if(filter.filtered)
                         filtered = "Checked";
                     MenuItem item = new MenuItem(filtered,new Label(theText),"");
+                    item.addClickHandler(this);
                     item.setStyleName("topHeaderRowContainer");
                     //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
                     filterMenu.menuItemsPanel.add(item);
                     item.args = new Object[] {filter,index};
-                    item.removeClickListener(item);
-                    item.addClickListener(this);
-                    
+                   
+                                        
                 } 
                 filterMenu.pop.addCloseHandler(this);
-                ((MenuItem)obj).menuItemsPanel.add(filterMenu);
+                ((MenuItem)event.getData()).menuItemsPanel.add(filterMenu);
             }
             if(col.queryable) {
                 TextBox entryText = new TextBox();
                 final MenuItem item = new MenuItem("Unchecked",entryText,"");
-                entryText.addKeyboardListener(new KeyboardListener() {
+                entryText.addKeyUpHandler(new KeyUpHandler() {
 
-                    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-                        // TODO Auto-generated method stub
-                        
-                    }
-
-                    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-                        // TODO Auto-generated method stub
-                        
-                    }
-
-                    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-                        if(((TextBox)sender).getText().length() > 0){
+                    public void onKeyUp(KeyUpEvent event) {
+                        if(((TextBox)event.getSource()).getText().length() > 0){
                             doQuery = true;
                             item.iconPanel.setStyleName("Checked");
-                            col.query = ((TextBox)sender).getText();
+                            col.query = ((TextBox)event.getSource()).getText();
                         }else{
                             doQuery = false;
                             doFilter = true;
                             item.iconPanel.setStyleName("Unchecked");
                             col.query = null;
                         }
-                        if(keyCode == KeyboardListener.KEY_ENTER){
-                            item.onClick(item);
+                        if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER){
+                        	ClickEvent.fireNativeEvent(Document.get().createClickEvent(0, 
+                        															   event.getNativeEvent().getScreenX(), 
+                        															   event.getNativeEvent().getScreenY(), 
+                        															   event.getNativeEvent().getClientX(), 
+                        															   event.getNativeEvent().getClientY(), 
+                        															   event.getNativeEvent().getCtrlKey(), 
+                        															   event.getNativeEvent().getAltKey(), 
+                        															   event.getNativeEvent().getShiftKey(), 
+                        															   event.getNativeEvent().getMetaKey()), item);
                         }
                         
                     }
                     
                 });
-                item.removeClickListener(item);
-                ((MenuItem)obj).menuItemsPanel.add(item);
-                ((MenuItem)obj).pop.addCloseHandler(this);
+                item.unsinkEvents(Event.ONCLICK);
+                ((MenuItem)event.getData()).menuItemsPanel.add(item);
+                ((MenuItem)event.getData()).pop.addCloseHandler(this);
             }
             col.filterDisplayed = true;
         }
@@ -509,7 +504,8 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
         doQuery = false; 
     }
 
-    public void onClick(Widget sender) {
+    public void onClick(ClickEvent event) {
+    	Widget sender = (Widget)event.getSource();
         if(sender instanceof MenuItem) {
             doFilter = true;
             Filter filter = (Filter)((MenuItem)sender).args[0];

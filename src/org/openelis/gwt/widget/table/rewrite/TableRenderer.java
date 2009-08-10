@@ -165,6 +165,8 @@ public class TableRenderer  {
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
             stopEditing();
+            controller.activeCell = -1;
+            controller.activeRow--;
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){
@@ -205,16 +207,17 @@ public class TableRenderer  {
     }
     
     public void setCellEditor(int row, int col) {
-        controller.editingCell = (Widget)controller.columns.get(col).getWidgetEditor((TableDataCell)controller.getCell(row,col));
+        controller.editingCell = (Widget)controller.columns.get(col).getWidgetEditor((TableDataCell)controller.getCell(controller.modelIndexList[row],col));
         controller.view.table.setWidget(row, col, controller.editingCell);
-        ((Focusable)controller.editingCell).setFocus(true);
+        if(controller.editingCell instanceof Focusable)
+        	((Focusable)controller.editingCell).setFocus(true);
         //controller.editingCell.getWidget().addStyleName(controller.view.widgetStyle);
         //((SimplePanel)cell).getWidget().addStyleName("Enabled");
             
     }
     
     public void setCellDisplay(int row, int col) {
-    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget((TableDataCell)controller.getCell(row,col)));
+    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget((TableDataCell)controller.getCell(controller.modelIndexList[row],col)));
     }
 
     public void stopEditing() {
@@ -224,12 +227,13 @@ public class TableRenderer  {
         		Object[] idName = new Object[2];
         		idName[0] = ((AutoComplete)controller.editingCell).getValue();
         		idName[1] = ((AutoComplete)controller.editingCell).getTextBoxDisplay();
-        		controller.setCell(controller.activeRow, controller.activeCell, idName);
+        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, idName);
         	}else
-        		controller.setCell(controller.activeRow, controller.activeCell, ((HasValue)controller.editingCell).getValue());
-        	controller.getRow(controller.activeRow).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
+        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, ((HasField)controller.editingCell).getFieldValue());
+        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
+            
         }
     }
 

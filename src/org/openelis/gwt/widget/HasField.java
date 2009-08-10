@@ -28,5 +28,7 @@ public interface HasField<T> {
 	public boolean isEnabled();
 	
 	public T getFieldValue();
+	
+	public void setFieldValue(T value);
 
 }

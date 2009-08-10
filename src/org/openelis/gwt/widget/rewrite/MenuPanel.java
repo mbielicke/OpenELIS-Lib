@@ -145,34 +145,37 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
     }
 
     public void onMouseOver(final MouseOverEvent event) {
-        timer = new Timer() {
-            public void run() {
-                if(event.getSource() == down){
-                    if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
-                        down.addStyleName("MenuDisabled");
-                        cancel();
-                    }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
-                        up.removeStyleName("MenuDisabled");
-                    }
-                }
-                if(event.getSource() == up){
-                    if(ap.getWidgetTop(panel) >= 0){
-                        up.addStyleName("MenuDisabled");
-                        cancel();
-                    }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
-                        down.removeStyleName("MenuDisabled");
-                    }
-                }
-            }
-        };
-        timer.scheduleRepeating(50);
+    	if(event.getSource() == down || event.getSource() == up) {
+    		timer = new Timer() {
+    			public void run() {
+    				if(event.getSource() == down){
+    					if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
+    						down.addStyleName("MenuDisabled");
+    						cancel();
+    					}else{
+    						ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
+    						up.removeStyleName("MenuDisabled");
+    					}
+    				}
+    				if(event.getSource() == up){
+    					if(ap.getWidgetTop(panel) >= 0){
+    						up.addStyleName("MenuDisabled");
+    						cancel();
+    					}else{
+    						ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
+    						down.removeStyleName("MenuDisabled");
+    					}
+    				}
+    			}
+            };
+            timer.scheduleRepeating(50);
+    	}
     }
     
     public void onMouseOut(MouseOutEvent event) {
         if(timer != null)
             timer.cancel();
+        timer = null;
     }
     
     public void setSize(int top) {

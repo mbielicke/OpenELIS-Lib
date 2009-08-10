@@ -32,8 +32,8 @@ import java.util.ArrayList;
 
 public interface TableFiltererInt {
     
-    public Filter[] getFilterValues(TableDataModel data,int col);
+    public Filter[] getFilterValues(ArrayList<TableDataRow> data,int col);
     
-    public void applyFilters(TableDataModel data, ArrayList filters);
+    public void applyFilters(ArrayList<TableDataRow> data, ArrayList filters);
 
 }

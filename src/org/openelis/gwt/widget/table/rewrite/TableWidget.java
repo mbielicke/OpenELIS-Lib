@@ -28,13 +28,11 @@ package org.openelis.gwt.widget.table.rewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openelis.gwt.common.DataSorter;
-import org.openelis.gwt.common.DataSorterInt;
-import org.openelis.gwt.common.DataSorterInt.SortDirection;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.Field;
+import org.openelis.gwt.widget.table.rewrite.TableSorterInt.SortDirection;
 import org.openelis.gwt.widget.table.rewrite.TableView.VerticalScroll;
 import org.openelis.gwt.widget.table.rewrite.event.BeforeAutoAddEvent;
 import org.openelis.gwt.widget.table.rewrite.event.BeforeAutoAddHandler;
@@ -139,7 +137,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     public VerticalScroll showScroll = VerticalScroll.NEEDED;
     public String width;
     private ArrayList<TableDataRow> data;
-    public DataSorterInt sorter = new DataSorter();
+    public TableSorterInt sorter = new TableSorter();
     public int shownRows; 
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
@@ -520,7 +518,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
 
     public void sort(int col, SortDirection direction) {
-      // sorter.sort(data, col, direction);
+    	unselect(-1);
+        sorter.sort(data, col, direction);
     	renderer.dataChanged(false);
     }
     
@@ -760,6 +759,11 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         	}
         }
         return (isEnabled());
+	}
+
+	public void setFieldValue(Object value) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

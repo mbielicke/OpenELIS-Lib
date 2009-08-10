@@ -227,4 +227,12 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 	public ArrayList<String> getErrors() {
 		return field.errors;
 	}
+
+
+	public void setFieldValue(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

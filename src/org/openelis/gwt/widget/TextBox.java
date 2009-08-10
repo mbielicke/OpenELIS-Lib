@@ -160,4 +160,12 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		return field.getValue();
 	}
 	
+	public void setFieldValue(T value) {
+		field.setValue(value);
+		if(value != null)
+			setText(value.toString());
+		else 
+			setText("");
+	}
+	
 }
