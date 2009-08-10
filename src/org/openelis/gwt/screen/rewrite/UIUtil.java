@@ -840,7 +840,26 @@ public class UIUtil {
     	});
     	factoryMap.put("label", new Factory<org.openelis.gwt.widget.Label>() {
     		public org.openelis.gwt.widget.Label getNewInstance(Node node, ScreenDef def) {
-    			org.openelis.gwt.widget.Label label = new org.openelis.gwt.widget.Label();
+    			
+    			org.openelis.gwt.widget.Label<?> label = null;
+    			if(node.getAttributes().getNamedItem("field") != null){
+    				Field field = (Field)factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, null);
+    				if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer"))
+    					label = new org.openelis.gwt.widget.Label<Integer>();
+    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Double"))
+    					label = new org.openelis.gwt.widget.Label<Double>();
+    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long"))
+    					label = new org.openelis.gwt.widget.Label<Long>();
+    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Date"))
+    					label = new org.openelis.gwt.widget.Label<Date>();
+    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String"))
+    					label = new org.openelis.gwt.widget.Label<String>();
+    				label.setField(field);
+    			}else{
+    				label = new org.openelis.gwt.widget.Label<String>();
+    				label.setField((Field)factoryMap.get("String").getNewInstance(node, null));
+    			}
+    				
     	        if (node.getAttributes().getNamedItem("text") != null){
     	            label.setText(node.getAttributes().getNamedItem("text").getNodeValue());
     	        } 

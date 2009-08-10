@@ -1,13 +1,19 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.rewrite.QueryData;
+import org.openelis.gwt.widget.rewrite.Field;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 
-public class Label extends com.google.gwt.user.client.ui.Label implements HasValue<String> {
+public class Label<T> extends com.google.gwt.user.client.ui.Label implements HasValue<String>, HasField<T> {
     
     String value;
+    Field<T> field;
     
     public Label() {
     	super();
@@ -38,6 +44,64 @@ public class Label extends com.google.gwt.user.client.ui.Label implements HasVal
 	public HandlerRegistration addValueChangeHandler(
 			ValueChangeHandler<String> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
+	}
+
+	public void addError(String Error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void checkValue() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clearErrors() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void enable(boolean enabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<String> getErrors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Field<T> getField() {
+		// TODO Auto-generated method stub
+		return field;
+	}
+
+	public T getFieldValue() {
+		return field.getValue();
+	}
+
+	public void getQuery(ArrayList<QueryData> list, String key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setField(Field<T> field) {
+		this.field = field;
+		
+	}
+
+	public void setFieldValue(T value) {
+		field.setValue(value);
+		setValue(field.format());
+	}
+
+	public void setQueryMode(boolean query) {
+		
 	}
 
 }
