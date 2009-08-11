@@ -72,6 +72,8 @@ public class Datetime implements java.io.Serializable {
      * Constructs a Datetime with specified range (start to end) and object.
      */
     public static Datetime getInstance(byte startCode, byte endCode, Date date) {
+    	if(date == null)
+    		return null;
         return new Datetime(startCode, endCode, date);
     }
 
