@@ -244,6 +244,11 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 	}
 	
 	@Override
+	public void setFieldValue(Object value) {
+		setValue((T)value);
+	}
+	
+	@Override
 	public void complete() {
 		super.complete();
 		ValueChangeEvent.fire(this, getValue());

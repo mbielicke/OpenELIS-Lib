@@ -297,4 +297,8 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 		ValueChangeEvent.fire(this, getValue());
 		textbox.setFocus(true);
 	}
+	@Override
+	public void setFieldValue(Object value) {
+		setValue((T)value);
+	}
 }
