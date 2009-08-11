@@ -49,7 +49,6 @@ UIRF Software License are applicable instead of those above.
   <xsl:template match="doc"> 
 
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<display>
     <VerticalPanel width="100%" style="CalendarWidget">
       <HorizontalPanel style="MonthBar">
         <appButton action="prevMonth" key="prevMonth" onclick="this">
@@ -276,12 +275,6 @@ UIRF Software License are applicable instead of those above.
      </appButton>
    </AbsolutePanel>
    </VerticalPanel>
-   </display>
-   <rpc key="display">
-     <integer key="month" required="false"><xsl:value-of select="$month"/></integer>
-     <integer key="year" required="false"><xsl:value-of select="$year"/></integer>
-     <string key="date" required="false"><xsl:value-of select="$selected"/></string>
-   </rpc>
    </screen>
  </xsl:template>
  

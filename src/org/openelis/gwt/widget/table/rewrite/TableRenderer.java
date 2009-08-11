@@ -231,7 +231,8 @@ public class TableRenderer  {
         		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, idName);
         	}else
         		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, ((HasField)controller.editingCell).getFieldValue());
-        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
+        	if(controller.editingCell instanceof HasField)
+        		controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
             
@@ -249,12 +250,7 @@ public class TableRenderer  {
     }
 
     public void cellUpdated(int row, int cell) {
-            for(TableRow trow : rows) {
-                if(trow.modelIndex == row){
-                    setCellDisplay(trow.index,cell);
-                    break;
-                }
-            }
+    	 setCellDisplay(row,cell);
            
     }
 
@@ -267,12 +263,7 @@ public class TableRenderer  {
 
 
     public void rowSelected(int row) {
-        controller.view.table.getRowFormatter().addStyleName(row, controller.view.selectedStyle);
-        for(int i = 0; i < controller.view.table.getCellCount(row); i++){
-            if(controller.view.table.getCellFormatter().getStyleName(row,i).indexOf("disabled") > -1){
-                controller.view.table.getWidget(row,i).addStyleName("disabled");
-            }
-        }
+    	rows.get(row).addStyleName(controller.view.selectedStyle);
     }
     
     public ArrayList<TableRow> getRows() {

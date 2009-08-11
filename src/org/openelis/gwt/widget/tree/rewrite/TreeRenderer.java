@@ -39,6 +39,7 @@ import java.util.Stack;
 
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.Label;
+import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.table.rewrite.TableDataCell;
 
 public class TreeRenderer {
@@ -139,6 +140,8 @@ public class TreeRenderer {
     public void scrollLoad(int scrollPos){
         if(controller.editingCell != null){
             stopEditing();
+            controller.activeCell = -1;
+            controller.activeRow--;
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){
@@ -192,16 +195,18 @@ public class TreeRenderer {
         if(controller.editingCell != null){
 	        if(controller.editingCell instanceof Focusable)
     	    	((Focusable)controller.editingCell).setFocus(false);
-        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).value = ((HasValue)controller.editingCell).getValue();
+        	if(controller.editingCell instanceof AutoComplete){
+        		Object[] idName = new Object[2];
+        		idName[0] = ((AutoComplete)controller.editingCell).getValue();
+        		idName[1] = ((AutoComplete)controller.editingCell).getTextBoxDisplay();
+        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, idName);
+        	}else
+        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, ((HasField)controller.editingCell).getFieldValue());
         	if(controller.editingCell instanceof HasField)
 	        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
             controller.editingCell = null;
         }
-    }
-
-    public void startedEditing(int row, int col) {
-        setCellEditor(row,col);
     }
 
     public void rowUnselected(int row) {

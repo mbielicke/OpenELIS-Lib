@@ -46,7 +46,6 @@ UIRF Software License are applicable instead of those above.
   <xsl:template match="doc"> 
 
   <screen name="MonthYear" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<display>
 	  <VerticalPanel width="100%" style="CalendarWidget">
 	    <HorizontalPanel style="Calendar" width="100%">
 	      <TablePanel spacing="0" padding="0" width="100%">
@@ -183,11 +182,6 @@ UIRF Software License are applicable instead of those above.
 	    </HorizontalPanel>
 	   </AbsolutePanel>
 	  </VerticalPanel>
-	</display>
-   <rpc key="display">
-     <integer key="month" required="false"><xsl:value-of select="$month"/></integer>
-     <integer key="year" required="false"><xsl:value-of select="number($year)+number($yearCell)"/></integer>
-   </rpc> 
   </screen>
   
   </xsl:template>

@@ -8,7 +8,7 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.ClassFactory;
 import org.openelis.gwt.screen.rewrite.ScreenDef;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.HasField;
