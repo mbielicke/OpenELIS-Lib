@@ -77,10 +77,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 	}
 
 	public T getFieldValue() {
-	    if(field != null)
-	        return field.getValue();
-	    
-	    return null;
+	    return field.getValue();    
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
@@ -99,10 +96,8 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 	}
 
 	public void setFieldValue(T value) {
-	    if(field != null){
-    		field.setValue(value);
-    		setValue(field.format());
-	    }
+  		field.setValue(value);
+   		setValue(field.format());
 	}
 
 	public void setQueryMode(boolean query) {

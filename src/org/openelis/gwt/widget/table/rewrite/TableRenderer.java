@@ -222,7 +222,8 @@ public class TableRenderer  {
 
     public void stopEditing() {
         if(controller.editingCell != null){
-        	((Focusable)controller.editingCell).setFocus(false);
+        	if(controller.editingCell instanceof Focusable)
+        		((Focusable)controller.editingCell).setFocus(false);
         	if(controller.editingCell instanceof AutoComplete){
         		Object[] idName = new Object[2];
         		idName[0] = ((AutoComplete)controller.editingCell).getValue();

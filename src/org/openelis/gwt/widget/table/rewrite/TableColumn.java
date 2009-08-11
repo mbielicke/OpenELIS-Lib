@@ -104,8 +104,8 @@ public class TableColumn {
     				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
     				label.setText(((TextBoxBase)colWidget).getText());
-    			}else
-    				label.setText(val.toString());
+    			}else if(colWidget instanceof Label)
+    				label.setText(((Label)colWidget).getText());
     		}
     		label.setWordWrap(false);
     		wid = label;
@@ -173,7 +173,7 @@ public class TableColumn {
 				((Label)widget).setText(((TextBoxBase)colWidget).getText());
     		}else{
     			if(((HasField)colWidget).getFieldValue() != null)
-    				((Label)widget).setText(((HasField)colWidget).getFieldValue().toString());
+    				((Label)widget).setText(((HasField)colWidget).getField().format());
     			else
     				((Label)widget).setText("");
     		}
