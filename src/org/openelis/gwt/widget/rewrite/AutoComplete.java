@@ -138,7 +138,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
     */
     
     public void setModel(ArrayList<TableDataRow> model){
-        this.load((ArrayList<TableDataRow>)model.clone());
+        this.load(model);
     }
     
     public T getValue() {

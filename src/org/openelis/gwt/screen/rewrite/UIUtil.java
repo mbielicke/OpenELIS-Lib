@@ -1379,14 +1379,16 @@ public class UIUtil {
                 			if (align.equals("right"))
                 				column.setAlign(HasAlignment.ALIGN_RIGHT);
                 		}
-                		column.setColumnWidget(new org.openelis.gwt.widget.Label());
+                		column.setColumnWidget((org.openelis.gwt.widget.Label)factoryMap.get("label").getNewInstance(colList.item(i),null));
                 		columns.add(column);
                 	}
                 }else{
                 	TableColumn column = new TableColumn();
                 	column.controller = drop;
                 	column.setCurrentWidth(100);
-                	column.setColumnWidget(new org.openelis.gwt.widget.Label());
+                	org.openelis.gwt.widget.Label label = new org.openelis.gwt.widget.Label();
+                	label.setField(new StringField());
+                	column.setColumnWidget(label);
                 	columns.add(column);
                 }
                 drop.columns = columns;
@@ -1478,14 +1480,16 @@ public class UIUtil {
                 			if (align.equals("right"))
                 				column.setAlign(HasAlignment.ALIGN_RIGHT);
                 		}
-                		column.setColumnWidget(new org.openelis.gwt.widget.Label());
+                		column.setColumnWidget((org.openelis.gwt.widget.Label)factoryMap.get("label").getNewInstance(colList.item(i),null));
                 		columns.add(column);
                 		
                 	}
                 }else{
                 	TableColumn column = new TableColumn();
                 	column.setCurrentWidth(100);
-                	column.setColumnWidget(new org.openelis.gwt.widget.Label());
+                	org.openelis.gwt.widget.Label label = new org.openelis.gwt.widget.Label();
+                	label.setField(new StringField());
+                	column.setColumnWidget(label);
                 	column.controller = auto;
                 	columns.add(column);
                 }
