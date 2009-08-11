@@ -25,13 +25,15 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
-import org.openelis.gwt.common.rewrite.DataFilterer;
-import org.openelis.gwt.common.rewrite.Filter;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.CheckBox;
+import org.openelis.gwt.widget.rewrite.Dropdown;
 import org.openelis.gwt.widget.rewrite.DropdownWidget;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
@@ -65,13 +67,14 @@ public class TableColumn {
     public boolean fixedWidth;
     public HasHorizontalAlignment.HorizontalAlignmentConstant alignment = HasHorizontalAlignment.ALIGN_LEFT;
     public TableWidget controller;
-    public DataFilterer dataFilterer = new DataFilterer();
     public int columnIndex;
-    public Filter[] filters;
     public String key;
     public boolean filterDisplayed = false;
     public String query;
     protected PopupPanel pop;
+    public boolean filtered;
+    protected HashSet<Object> filtersInForce;
+    protected ArrayList<Filter> filterList;
     
     
     public Widget getDisplayWidget(TableDataCell cell) {
@@ -92,7 +95,9 @@ public class TableColumn {
     				((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
-    		}else {
+    		}else if(colWidget instanceof Dropdown){
+    			((Dropdown)colWidget).setSelection(cell.getValue());
+    		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
     		}
     		Object val = ((HasField)colWidget).getFieldValue();
@@ -239,6 +244,8 @@ public class TableColumn {
     			((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
     		else
     			((AutoComplete)colWidget).setSelection(null,"");
+		}else if(colWidget instanceof Dropdown){
+			((Dropdown)colWidget).setSelection(cell.getValue());
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
        
@@ -389,33 +396,63 @@ public class TableColumn {
         return controller;
     }
     
-    public Filter[] getFilter() {
-        Filter[] filter = dataFilterer.getFilterValues(controller.getData(),controller.columns.indexOf(this));
-        if(filters == null)
-        	return filter;
-        else{
-            for (int j = 0; j < filter.length; j++) {
-                for (int k = 0; k < filters.length; k++) {
-                    if (filter[j].obj.equals(filters[k].obj)) {
-                        filter[j].filtered = filters[k].filtered;
-                        k = filters.length;
-                    }
-                }
-            }
-        }
-        return filter;
+    public ArrayList<Filter> getFilters() {
+    	Filter all = new Filter(null,new Label("All"),true);
+    	if(filtered)
+    		all.filtered = false;
+    	filterList = new ArrayList<Filter>();
+    	filterList.add(all);
+    	int col = controller.columns.indexOf(this);
+    	ArrayList<Object> checkList = new ArrayList<Object>();
+    	checkList.add(null);
+    	for(TableDataRow row : controller.getData()){
+    		if(checkList.contains(row.cells.get(col).getValue()))
+    			continue;
+    		Filter filter = new Filter(row.cells.get(col).getValue(),getDisplayWidget(row.cells.get(col)),false);
+    		if(filtered){
+    			if(filtersInForce.contains(row.cells.get(col).getValue())){
+    				filter.filtered = true;
+    			}
+    		}
+    		filterList.add(filter);
+    		checkList.add(row.cells.get(col).getValue());
+    	}
+    	return filterList;
     }
     
-    public void setFilter(Filter[] filter) {
-        filters = filter;
+    public ArrayList<Filter> getFilterList() {
+    	return filterList; 
+    }
+    
+    public void setFilter(ArrayList<Filter> filters) {
+    	filtersInForce = new HashSet<Object>();
+    	if(filters.get(0).filtered){
+    		filtered = false;
+    		return;
+    	}
+    	filtered = false;
+    	for(Filter filt : filters) {
+    		if(filt.filtered){
+    			filtered = true;
+    			filtersInForce.add(filt.obj);
+    		}
+    	}
     }
     
     public void applyFilter() {
-        dataFilterer.applyFilter(controller.getData(), filters, controller.columns.indexOf(this));
+    	if(!filtered)
+    		return;
+    	int col = controller.columns.indexOf(this);
+    	for(TableDataRow row : controller.getData()) {
+    		if(!row.shown)
+    			continue;
+    		if(!filtersInForce.contains(row.cells.get(col).getValue()))
+    			row.shown = false;
+    	}
     }
     
     public void applyQueryFilter() {
-        dataFilterer.applyQueryFilter(controller.getData(),query,controller.columns.indexOf(this));
+        //dataFilterer.applyQueryFilter(controller.getData(),query,controller.columns.indexOf(this));
     }
 
     public boolean queryable() {

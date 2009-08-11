@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.table.rewrite;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.Filter;
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.TextBox;
@@ -428,24 +427,17 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 filterMenu.popPosition = MenuItem.PopPosition.SIDE;
                 filterMenu.menuItemsPanel = new MenuPanel("vertical");
                 filterMenu.menuItemsPanel.setStyleName("topHeaderContainer");
-                final Filter[] filters = col.getFilter();
-                col.setFilter(filters);
-                for (int i = 0; i < filters.length; i++) {
-                    final Filter filter = filters[i];
-                    String theText = filter.obj.toString();
-                    if (filter.display != null)
-                        theText = filter.display;
+                ArrayList<Filter> filters = col.getFilters();
+                for (Filter filter : filters) {
                     String filtered = "Unchecked";
                     if(filter.filtered)
                         filtered = "Checked";
-                    MenuItem item = new MenuItem(filtered,new Label(theText),"");
+                    MenuItem item = new MenuItem(filtered,filter.display,"");
                     item.addClickHandler(this);
                     item.setStyleName("topHeaderRowContainer");
                     //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
                     filterMenu.menuItemsPanel.add(item);
                     item.args = new Object[] {filter,index};
-                   
-                                        
                 } 
                 filterMenu.pop.addCloseHandler(this);
                 ((MenuItem)event.getData()).menuItemsPanel.add(filterMenu);
@@ -491,17 +483,7 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
     }
 
     public void onClose(CloseEvent<PopupPanel> event) {
-        if (doFilter || doQuery) {
-            for(TableColumn column : controller.columns){
-                if(((TableColumn)column).query != null )
-                    ((TableColumn)column).applyQueryFilter();
-                else
-                    column.applyFilter();
-            }
-            controller.refresh();
-        }
-        doFilter = false;
-        doQuery = false; 
+
     }
 
     public void onClick(ClickEvent event) {
@@ -515,28 +497,38 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 ((MenuItem)sender).iconPanel.setStyleName("Checked");
             else
                 ((MenuItem)sender).iconPanel.setStyleName("Unchecked");
-            Filter[] filters = col.filters;
-            if(filter.obj.equals("All")){
-                for (int i = 1; i < filters.length; i++) {
-                    if (filters[i].filtered) {
-                        filters[i].filtered = false;
+            ArrayList<Filter> filters = col.getFilterList();
+            if(filter.obj == null){
+                for (Filter filt : filters) {
+                    if (filt.filtered) {
+                        filt.filtered = false;
                     }
                 }
                 for(int i = 1; i < ((MenuItem)sender).parent.menuItems.size(); i++)
                     ((MenuItem)sender).parent.menuItems.get(i).iconPanel.setStyleName("Unchecked");
-                filters[0].filtered = true;
+                filters.get(0).filtered = true;
                 ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
             }else if(filter.filtered){
-                    filters[0].filtered = false;
+                    filters.get(0).filtered = false;
                     ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Unchecked");
             }else {
-                for(int i = 1; i < filters.length; i++) {
-                    if(filters[0].filtered)
+                for(Filter filt : filters) {
+                    if(filt.filtered)
                         return;
                 }
-                filters[0].filtered = true;
+                filters.get(0).filtered = true;
                 ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
             }
+            col.setFilter(filters);
+            for(TableDataRow row : controller.getData())
+            	row.shown = true;
+            for(TableColumn column : controller.columns){
+                if(((TableColumn)column).query != null )
+                    ((TableColumn)column).applyQueryFilter();
+                else
+                    column.applyFilter();
+            }
+            controller.refresh();
             //((MenuItem)sender).onMouseLeave(sender);
         }
         

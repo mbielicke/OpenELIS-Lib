@@ -301,4 +301,9 @@ public class Dropdown<T> extends DropdownWidget implements HasValue<T>, HasField
 	public void setFieldValue(Object value) {
 		setValue((T)value);
 	}
+	
+	@Override
+	public Object getFieldValue() {
+		return getValue();
+	}
 }
