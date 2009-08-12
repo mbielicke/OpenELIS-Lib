@@ -327,5 +327,9 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 		field.setValue(value);
 		setValue(value);
 	}
+	
+	public void setWidth(String width) {
+		textbox.setWidth(width);
+	}
     
 }
