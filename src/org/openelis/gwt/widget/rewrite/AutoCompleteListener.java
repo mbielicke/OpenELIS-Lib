@@ -68,8 +68,6 @@ public class AutoCompleteListener implements
             String text = widget.textbox.getText();
             if (text.length() > 0 && !text.endsWith("*")) {
                 widget.setDelay(text, 350);
-            } else if(text.length() == 0) {
-                widget.clear();
             } else {
                 widget.hideTable();
             }
