@@ -36,6 +36,8 @@ public class QueryFieldUtil {
     public ArrayList<String> parameter;
 
     protected ArrayList<String> logical;
+    
+    public String queryString;
 
     private static ArrayList<String> operators = new ArrayList<String>();
     {
@@ -50,6 +52,7 @@ public class QueryFieldUtil {
     }
     
     public void parse(String value) {
+    	this.queryString = value;
         comparator = new ArrayList<String>();
         parameter = new ArrayList<String>();
         logical = new ArrayList<String>();

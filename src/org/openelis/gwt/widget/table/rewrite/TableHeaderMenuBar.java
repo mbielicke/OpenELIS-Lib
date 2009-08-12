@@ -32,6 +32,7 @@ import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.rewrite.MenuItem;
 import org.openelis.gwt.widget.rewrite.MenuPanel;
+import org.openelis.gwt.widget.rewrite.QueryFieldUtil;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -443,15 +444,25 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(filterMenu);
             }
             if(col.queryable) {
-                TextBox entryText = new TextBox();
-                final MenuItem item = new MenuItem("Unchecked",entryText,"");
-                entryText.addKeyUpHandler(new KeyUpHandler() {
+                final TextBox entryText = new TextBox();
+                String checkState = "Unchecked";
+                if(col.query != null){
+                	checkState = "Checked";
+                	entryText.setText(col.query.queryString);
+                }	 
+                final MenuItem item = new MenuItem(checkState,entryText,"");
 
+                ((MenuItem)event.getData()).menuItemsPanel.add(item);
+                ((MenuItem)event.getData()).pop.addCloseHandler(this);
+              	item.clickHandler.removeHandler();
+              	final TableColumn column = col;
+                entryText.addKeyUpHandler(new KeyUpHandler() {
+                	
                     public void onKeyUp(KeyUpEvent event) {
                         if(((TextBox)event.getSource()).getText().length() > 0){
                             doQuery = true;
                             item.iconPanel.setStyleName("Checked");
-                            col.query = ((TextBox)event.getSource()).getText();
+                            //col.query = ((TextBox)event.getSource()).getText();
                         }else{
                             doQuery = false;
                             doFilter = true;
@@ -459,23 +470,22 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                             col.query = null;
                         }
                         if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER){
-                        	ClickEvent.fireNativeEvent(Document.get().createClickEvent(0, 
-                        															   event.getNativeEvent().getScreenX(), 
-                        															   event.getNativeEvent().getScreenY(), 
-                        															   event.getNativeEvent().getClientX(), 
-                        															   event.getNativeEvent().getClientY(), 
-                        															   event.getNativeEvent().getCtrlKey(), 
-                        															   event.getNativeEvent().getAltKey(), 
-                        															   event.getNativeEvent().getShiftKey(), 
-                        															   event.getNativeEvent().getMetaKey()), item);
+                        	if(doQuery) {
+                        		query(col,entryText.getText());
+                        	}else{
+                        		col.query = null;
+                        		applyQueryFilter();
+                        	}
+                        	 if(item.parent != null && item.parent.getParent() instanceof PopupPanel)
+                                 ((PopupPanel)item.parent.getParent()).hide();
+                        		
                         }
                         
                     }
                     
                 });
-                item.unsinkEvents(Event.ONCLICK);
-                ((MenuItem)event.getData()).menuItemsPanel.add(item);
-                ((MenuItem)event.getData()).pop.addCloseHandler(this);
+              
+ 
             }
             col.filterDisplayed = true;
         }
@@ -483,7 +493,7 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
     }
 
     public void onClose(CloseEvent<PopupPanel> event) {
-
+    	
     }
 
     public void onClick(ClickEvent event) {
@@ -520,18 +530,29 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
             }
             col.setFilter(filters);
-            for(TableDataRow row : controller.getData())
-            	row.shown = true;
-            for(TableColumn column : controller.columns){
-                if(((TableColumn)column).query != null )
-                    ((TableColumn)column).applyQueryFilter();
-                else
-                    column.applyFilter();
-            }
-            controller.refresh();
+            applyQueryFilter();
             //((MenuItem)sender).onMouseLeave(sender);
         }
         
+    }
+    
+    private void applyQueryFilter() {
+        for(TableDataRow row : controller.getData())
+        	row.shown = true;
+        for(TableColumn column : controller.columns){
+            if(((TableColumn)column).query != null )
+                ((TableColumn)column).applyQueryFilter();
+            else
+                column.applyFilter();
+        }
+        controller.refresh();
+    }
+    
+    public void query(TableColumn col, String query) {
+    	QueryFieldUtil qField = new QueryFieldUtil();
+    	qField.parse(query);
+    	col.query = qField;
+    	applyQueryFilter();
     }
     
     public static native String getUserAgent() /*-{

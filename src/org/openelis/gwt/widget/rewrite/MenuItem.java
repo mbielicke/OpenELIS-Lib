@@ -46,6 +46,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -80,9 +81,12 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public String labelText;
     public String description;
     private boolean enabled;
+    public HandlerRegistration clickHandler;
+    public HandlerRegistration mouseOutHandler;
+    public HandlerRegistration mouseOverHandler;
     
     public MenuItem() {
-        
+
     }
     
     public MenuItem clone() {
@@ -315,21 +319,22 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public void enable(boolean enabled){
     	this.enabled = enabled;
         if(enabled){
-           // removeClickListener(this);
-            addClickHandler(this);
-            sinkEvents(Event.ONCLICK);
-            //removeMouseListener(this);
-            addMouseOverHandler(this);
-            addMouseOutHandler(this);
-            sinkEvents(Event.MOUSEEVENTS);
-            getWidget().removeStyleName("disabled");
+        	if(clickHandler == null) {
+        		clickHandler = addClickHandler(this);
+        		mouseOverHandler = addMouseOverHandler(this);
+        		mouseOutHandler = addMouseOutHandler(this);
+        		getWidget().removeStyleName("disabled");
+        	}
         }else{
-           // removeClickListener(this);
-           // removeMouseListener(this);
-            unsinkEvents(Event.ONCLICK);
-            unsinkEvents(Event.MOUSEEVENTS);
+        	clickHandler.removeHandler();
+        	mouseOverHandler.removeHandler();
+        	mouseOutHandler.removeHandler();
+        	clickHandler = null;
+        	mouseOverHandler = null;
+        	mouseOutHandler = null;
             getWidget().addStyleName("disabled");
         }
+        
     }
     
     public boolean isEnabled() {

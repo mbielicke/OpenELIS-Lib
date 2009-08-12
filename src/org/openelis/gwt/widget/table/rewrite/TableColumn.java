@@ -26,15 +26,18 @@
 package org.openelis.gwt.widget.table.rewrite;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.Dropdown;
 import org.openelis.gwt.widget.rewrite.DropdownWidget;
+import org.openelis.gwt.widget.rewrite.QueryFieldUtil;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
@@ -70,7 +73,7 @@ public class TableColumn {
     public int columnIndex;
     public String key;
     public boolean filterDisplayed = false;
-    public String query;
+    public QueryFieldUtil query;
     protected PopupPanel pop;
     public boolean filtered;
     protected HashSet<Object> filtersInForce;
@@ -104,7 +107,7 @@ public class TableColumn {
     		Label label = new Label("");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
-    				label.setText((((CalendarLookUp) colWidget).getText()));
+    				label.setText((((CalendarLookUp) colWidget).getField().format()));
     			}else if(colWidget instanceof DropdownWidget) {
     				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
@@ -171,7 +174,7 @@ public class TableColumn {
     	}else if(widget instanceof Label) {
     		((HasField)colWidget).setFieldValue(cell.getValue());
     		if(colWidget instanceof CalendarLookUp) {
-    			((Label)widget).setText(((CalendarLookUp)colWidget).getText());
+    			((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
     		}else if(colWidget instanceof DropdownWidget) {
 				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
 			}else if(colWidget instanceof TextBoxBase) {
@@ -452,7 +455,101 @@ public class TableColumn {
     }
     
     public void applyQueryFilter() {
-        //dataFilterer.applyQueryFilter(controller.getData(),query,controller.columns.indexOf(this));
+    	int col = controller.columns.indexOf(this);
+        for(TableDataRow row : controller.getData()) {
+        	if(!row.shown)
+        		continue;
+        	Object cellValue = row.cells.get(col).getValue();
+        	if(cellValue == null) {
+        		row.shown = false;
+        		continue;
+        	}
+        	for(int i = 0; i < query.parameter.size(); i++) {
+        		String params[] = query.parameter.get(i).split("\\.\\.");
+        		Object[] parameter = new Object[params.length];
+        		Object comparator = query.getComparator().get(i);
+        		if(cellValue instanceof Double) {
+        			parameter[0] = new Double((String)params[0]);
+        			if(parameter.length > 1)
+        				parameter[1] = new Double((String)params[1]);
+        		}else if(cellValue instanceof Integer) {
+        			parameter[0] = new Integer((String)params[0]);
+        			if(parameter.length > 1)
+        				parameter[1] = new Integer((String)params[1]);
+        		}else if(cellValue instanceof Long){
+        			parameter[0] = new Long((String)params[0]);
+        			if(parameter.length > 1)
+        				parameter[1] = new Long((String)params[1]);
+        		}else if(cellValue instanceof Datetime) {
+        			parameter[0] = Datetime.getInstance(((Datetime)cellValue).startCode,((Datetime)cellValue).endCode,new Date(((String)params[0]).replaceAll("-","/")));
+        			if(parameter.length > 1)
+        				parameter[1] = Datetime.getInstance(((Datetime)cellValue).startCode,((Datetime)cellValue).endCode,new Date(((String)params[1]).replaceAll("-","/")));
+        		}else{
+        			parameter[0] = params[0];
+        			if(parameter.length > 1)
+        				parameter[1] = params[1];
+        		}
+        		if(comparator.equals("=")) {
+        			if(!cellValue.equals(parameter[0])){
+        				row.shown = false;
+        			}else {
+        				row.shown = true;
+        				break;
+        			}
+        		}else if(comparator.equals(">")) {
+        			if(((Comparable)cellValue).compareTo(parameter[0]) <= 0){
+        				row.shown = false;
+        			}else {
+        				row.shown = true;
+        				break;
+        			}
+        		}else if(comparator.equals("<")) {
+        			if(((Comparable)cellValue).compareTo(parameter[0]) >= 0) {
+        				row.shown = false;
+        			}else {
+        				row.shown = true;
+        				break;
+        			}
+        		}else if(comparator.equals("between ")){
+        			if(((Comparable)cellValue).compareTo(parameter[0]) < 0) 
+        				row.shown = false;
+        			else if(((Comparable)cellValue).compareTo(parameter[1]) > 0)
+        				row.shown = false;
+        			else{
+        				row.shown = true;
+        				break;
+        			}
+        		}else if(comparator.equals("like ")){
+        			if(((String)parameter[0]).startsWith("%")){
+        				String p = ((String)parameter[0]).substring(1);
+        				if(p.endsWith("%")) {
+        					p = p.substring(0, p.length()-1);
+        					if( ((String)cellValue).toUpperCase().indexOf(p.toUpperCase()) < 0)
+        						row.shown = false;
+        					else{
+        						row.shown = true;
+        						break;
+        					}
+        				}else {
+            				if(!((String)cellValue).toUpperCase().endsWith(p.toUpperCase())) {
+            					row.shown = false;
+            				}else{
+            					row.shown = true;
+            					break;
+            				}
+        				}
+        			}else{
+        				String p = ((String)parameter[0]).substring(0, ((String)parameter[0]).length()-1);
+        				if(!((String)cellValue).toUpperCase().startsWith(p.toUpperCase())) {
+        					row.shown = false;
+        				}else{
+        					row.shown = true;
+        					break;
+        				}
+        			}
+        		}
+        	}
+        }
     }
 
     public boolean queryable() {

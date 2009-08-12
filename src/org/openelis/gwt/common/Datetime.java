@@ -28,7 +28,7 @@ package org.openelis.gwt.common;
 import java.util.Date;
 
 
-public class Datetime implements java.io.Serializable {
+public class Datetime implements java.io.Serializable, Comparable<Datetime> {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -211,4 +211,12 @@ public class Datetime implements java.io.Serializable {
     	
     	return timestamp.toString();
     }
+
+	public int compareTo(Datetime o) {
+		if(after(o))
+			return 1;
+		if(before(o))
+			return -1;
+		return 0;
+	}
 }

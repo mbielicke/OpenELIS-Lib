@@ -1272,6 +1272,8 @@ public class UIUtil {
                 		column.setSortable(Boolean.parseBoolean(col.getAttributes().getNamedItem("sort").getNodeValue()));
                 	if(col.getAttributes().getNamedItem("filter") != null)
                 		column.setFilterable(Boolean.parseBoolean(col.getAttributes().getNamedItem("filter").getNodeValue()));
+                	if(col.getAttributes().getNamedItem("query") != null)
+                		column.setQuerayable(Boolean.parseBoolean(col.getAttributes().getNamedItem("query").getNodeValue()));
                 	if(col.getAttributes().getNamedItem("align") != null){
                 		String align = col.getAttributes().getNamedItem("align").getNodeValue();
                         if (align.equals("left"))

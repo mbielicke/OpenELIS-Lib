@@ -228,9 +228,9 @@ public class TableRenderer  {
         		Object[] idName = new Object[2];
         		idName[0] = ((AutoComplete)controller.editingCell).getValue();
         		idName[1] = ((AutoComplete)controller.editingCell).getTextBoxDisplay();
-        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, idName);
+        		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(idName);
         	}else
-        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, ((HasField)controller.editingCell).getFieldValue());
+        		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(((HasField)controller.editingCell).getFieldValue());
         	if(controller.editingCell instanceof HasField)
         		controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
             setCellDisplay(controller.activeRow,controller.activeCell);
