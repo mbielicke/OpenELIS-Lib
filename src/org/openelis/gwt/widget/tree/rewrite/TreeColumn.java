@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.CalendarLookUp;
+import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -76,6 +76,7 @@ public class TreeColumn {
     protected HashSet<Object> filtersInForce;
     protected ArrayList<Filter> filterList;
     public String leafType;
+    public ArrayList<String> sortLeaves;
     
     
     public Widget getDisplayWidget(TableDataCell cell) {
@@ -105,7 +106,7 @@ public class TreeColumn {
     		Label label = new Label("");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
-    				label.setText((((CalendarLookUp) colWidget).getText()));
+    				label.setText((((CalendarLookUp) colWidget).getField().format()));
     			}else if(colWidget instanceof DropdownWidget) {
     				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
@@ -172,7 +173,7 @@ public class TreeColumn {
     	}else if(widget instanceof Label) {
     		((HasField)colWidget).setFieldValue(cell.getValue());
     		if(colWidget instanceof CalendarLookUp) {
-    			((Label)widget).setText(((CalendarLookUp)colWidget).getText());
+    			((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
     		}else if(colWidget instanceof DropdownWidget) {
 				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
 			}else if(colWidget instanceof TextBoxBase) {
@@ -301,17 +302,6 @@ public class TreeColumn {
     public void enable(boolean enable) {
     	if(colWidget instanceof HasField)
     		((HasField)colWidget).enable(enable);
-    	/*
-        if(colWidget instanceof CalendarLookUp) {
-        	((CalendarLookUp)colWidget).enable(enable);
-        }else if(colWidget instanceof Dropdown) {
-        	((Dropdown)colWidget).enable(enable);
-        }else if(colWidget instanceof AutoComplete){
-        	((AutoComplete)colWidget).enable(enable);
-        }else if(colWidget instanceof TextBoxBase) {
-        	((TextBoxBase)colWidget).setReadOnly(!enable);
-        }
-        */
     }
     
     public HorizontalAlignmentConstant getAlign() {

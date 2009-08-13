@@ -387,19 +387,17 @@ public class TreeHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
 
 
     public void onAction(ActionEvent<MenuItem.Action> event) {
-    	/*
         if(event.getAction() == MenuItem.Action.OPENING) {         
             final int index = hMenus.indexOf((MenuItem)event.getData());
-            final TableColumn col = (TreeColumn)controller.columns.get(index);
-            if(col.filterDisplayed) 
-                ((MenuItem)event.getSource()).menuItemsPanel.clear();
+            final TreeColumn col = (TreeColumn)controller.headers.get(index);
+            ((MenuItem)event.getSource()).menuItemsPanel.clear();
             if(col.getSortable()) {
                 MenuItem item = new MenuItem("",new Label("Sort Up"),"");
                 item.setStyleName("topHeaderRowContainer");
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorterInt.SortDirection.UP);
+                        controller.sort(index, TreeSorterInt.SortDirection.UP);
                     }
                 });
                 item = new MenuItem("",new Label("Sort Down"),"");
@@ -407,135 +405,19 @@ public class TreeHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorterInt.SortDirection.DOWN);
+                        controller.sort(index, TreeSorterInt.SortDirection.DOWN);
                     }
                 });
-                if(col.filterable){
-                    ((MenuItem)event.getData()).menuItemsPanel.add(new HTML("<hr/>"));
-                }
             }
-            if (col.filterable) {
-                MenuItem filterMenu = new MenuItem("",new Label("Filters"),"");
-                filterMenu.popPosition = MenuItem.PopPosition.SIDE;
-                filterMenu.menuItemsPanel = new MenuPanel("vertical");
-                filterMenu.menuItemsPanel.setStyleName("topHeaderContainer");
-                ArrayList<Filter> filters = col.getFilters();
-                for (Filter filter : filters) {
-                    String filtered = "Unchecked";
-                    if(filter.filtered)
-                        filtered = "Checked";
-                    MenuItem item = new MenuItem(filtered,filter.display,"");
-                    item.addClickHandler(this);
-                    item.setStyleName("topHeaderRowContainer");
-                    //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
-                    filterMenu.menuItemsPanel.add(item);
-                    item.args = new Object[] {filter,index};
-                } 
-                filterMenu.pop.addCloseHandler(this);
-                ((MenuItem)event.getData()).menuItemsPanel.add(filterMenu);
-            }
-            if(col.queryable) {
-                TextBox entryText = new TextBox();
-                final MenuItem item = new MenuItem("Unchecked",entryText,"");
-                entryText.addKeyUpHandler(new KeyUpHandler() {
-
-                    public void onKeyUp(KeyUpEvent event) {
-                        if(((TextBox)event.getSource()).getText().length() > 0){
-                            doQuery = true;
-                            item.iconPanel.setStyleName("Checked");
-                            col.query = ((TextBox)event.getSource()).getText();
-                        }else{
-                            doQuery = false;
-                            doFilter = true;
-                            item.iconPanel.setStyleName("Unchecked");
-                            col.query = null;
-                        }
-                        if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER){
-                        	ClickEvent.fireNativeEvent(Document.get().createClickEvent(0, 
-                        															   event.getNativeEvent().getScreenX(), 
-                        															   event.getNativeEvent().getScreenY(), 
-                        															   event.getNativeEvent().getClientX(), 
-                        															   event.getNativeEvent().getClientY(), 
-                        															   event.getNativeEvent().getCtrlKey(), 
-                        															   event.getNativeEvent().getAltKey(), 
-                        															   event.getNativeEvent().getShiftKey(), 
-                        															   event.getNativeEvent().getMetaKey()), item);
-                        }
-                        
-                    }
-                    
-                });
-                item.unsinkEvents(Event.ONCLICK);
-                ((MenuItem)event.getData()).menuItemsPanel.add(item);
-                ((MenuItem)event.getData()).pop.addCloseHandler(this);
-            }
-            col.filterDisplayed = true;
         }
-        */
     }
 
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-        if (doFilter || doQuery) {
-            for(TreeColumn column : controller.headers){
-                if(((TreeColumn)column).query != null )
-                    ((TreeColumn)column).applyQueryFilter();
-                else
-                    column.applyFilter();
-            }
-            controller.refresh(false);
-        }
-        doFilter = false;
-        doQuery = false; 
         
     }
 
     public void onClick(ClickEvent event) {
-    	/*
-    	Widget sender = (Widget)event.getSource();
-        if(sender instanceof MenuItem) {
-            doFilter = true;
-            Filter filter = (Filter)((MenuItem)sender).args[0];
-            TableColumn col = (TableColumn)controller.columns.get((((Integer)((MenuItem)sender).args[1])));
-            filter.filtered = !filter.filtered;
-            if(filter.filtered)
-                ((MenuItem)sender).iconPanel.setStyleName("Checked");
-            else
-                ((MenuItem)sender).iconPanel.setStyleName("Unchecked");
-            ArrayList<Filter> filters = col.getFilterList();
-            if(filter.obj == null){
-                for (Filter filt : filters) {
-                    if (filt.filtered) {
-                        filt.filtered = false;
-                    }
-                }
-                for(int i = 1; i < ((MenuItem)sender).parent.menuItems.size(); i++)
-                    ((MenuItem)sender).parent.menuItems.get(i).iconPanel.setStyleName("Unchecked");
-                filters.get(0).filtered = true;
-                ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
-            }else if(filter.filtered){
-                    filters.get(0).filtered = false;
-                    ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Unchecked");
-            }else {
-                for(Filter filt : filters) {
-                    if(filt.filtered)
-                        return;
-                }
-                filters.get(0).filtered = true;
-                ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
-            }
-            col.setFilter(filters);
-            for(TableDataRow row : controller.getData())
-            	row.shown = true;
-            for(TableColumn column : controller.columns){
-                if(((TableColumn)column).query != null )
-                    ((TableColumn)column).applyQueryFilter();
-                else
-                    column.applyFilter();
-            }
-            controller.refresh();
-            //((MenuItem)sender).onMouseLeave(sender);
-        }
-        */
+
     }
     
     public static native String getUserAgent() /*-{

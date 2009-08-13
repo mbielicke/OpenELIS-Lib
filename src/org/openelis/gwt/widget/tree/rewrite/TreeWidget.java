@@ -31,9 +31,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.ScreenTreeWidget;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -60,8 +57,7 @@ import org.openelis.gwt.widget.table.rewrite.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
-import org.openelis.gwt.widget.tree.event.TreeModelListenerCollection;
-import org.openelis.gwt.widget.tree.event.TreeWidgetListenerCollection;
+import org.openelis.gwt.widget.tree.rewrite.TreeSorterInt.SortDirection;
 import org.openelis.gwt.widget.tree.rewrite.TreeView.VerticalScroll;
 import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseEvent;
 import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseHandler;
@@ -100,7 +96,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -127,8 +122,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasLeafClosedHandlers {
 
     public HashMap<String,ArrayList<TreeColumn>> columns;
-    public ChangeListenerCollection changeListeners;
-    public TreeWidgetListenerCollection treeWidgetListeners;
     public boolean enabled;
     public boolean focused;
     public int activeRow = -1;
@@ -146,14 +139,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public boolean showRows;
     public String title;
     public boolean showHeader;
-    public ArrayList<Filter[]> filters;
-    public ScreenTreeWidget screenWidget;
     public TreeDragController dragController;
     public TreeIndexDropController dropController;
     public boolean selectedByClick;
     private ArrayList<TreeDataItem> data;
     public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
-    private TreeModelListenerCollection treeModelListeners;
     public int shownRows; 
     public boolean multiSelect;
     public VerticalScroll showScroll;
@@ -164,6 +154,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
     public ArrayList<TreeColumn> headers;
+    public TreeSorterInt sorter = new TreeSorter();
     
     
     public TreeWidget() {
@@ -816,5 +807,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		// TODO Auto-generated method stub
 		
 	}
+	
+    public void sort(int col, SortDirection direction) {
+    	unselect(-1);
+        sorter.sort(data,headers.get(col).sortLeaves, col,direction);
+    	refresh(false);
+    }
     
 }

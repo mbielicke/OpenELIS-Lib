@@ -1540,6 +1540,13 @@ public class UIUtil {
                 		}
                 		if(colList.item(i).getAttributes().getNamedItem("width") != null)
                 			col.setCurrentWidth(Integer.parseInt(colList.item(i).getAttributes().getNamedItem("width").getNodeValue()));
+                		if(colList.item(i).getAttributes().getNamedItem("sort") != null){
+                			col.setSortable(true);
+                			String[] sortLeaves = colList.item(i).getAttributes().getNamedItem("sort").getNodeValue().split(",");
+                			col.sortLeaves = new ArrayList<String>();
+                			for(String leaf : sortLeaves) 
+                				col.sortLeaves.add(leaf);
+                		}
                 		tree.headers.add(col);
                     }
                 }
@@ -1562,8 +1569,7 @@ public class UIUtil {
                 		else if(tree.headers != null) {
                 			column.setCurrentWidth(tree.headers.get(i).currentWidth);
                 		}
-                		if(col.getAttributes().getNamedItem("sort") != null)
-                			column.setSortable(Boolean.parseBoolean(col.getAttributes().getNamedItem("sort").getNodeValue()));
+
                 		if(col.getAttributes().getNamedItem("filter") != null)
                 			column.setFilterable(Boolean.parseBoolean(col.getAttributes().getNamedItem("filter").getNodeValue()));
                 		if(col.getAttributes().getNamedItem("align") != null){

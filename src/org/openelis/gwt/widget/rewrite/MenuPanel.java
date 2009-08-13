@@ -144,11 +144,13 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
         
     }
 
-    public void onMouseOver(final MouseOverEvent event) {
+    public void onMouseOver(MouseOverEvent event) {
+    	try {
     	if(event.getSource() == down || event.getSource() == up) {
+    		final Widget source = (Widget)event.getSource(); 
     		timer = new Timer() {
     			public void run() {
-    				if(event.getSource() == down){
+    				if(source == down){
     					if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
     						down.addStyleName("MenuDisabled");
     						cancel();
@@ -157,7 +159,7 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
     						up.removeStyleName("MenuDisabled");
     					}
     				}
-    				if(event.getSource() == up){
+    				if(source == up){
     					if(ap.getWidgetTop(panel) >= 0){
     						up.addStyleName("MenuDisabled");
     						cancel();
@@ -167,8 +169,11 @@ public class MenuPanel extends Composite implements MouseWheelHandler, MouseOver
     					}
     				}
     			}
-            };
+    	    };
             timer.scheduleRepeating(50);
+    	}
+    	}catch(Exception e){
+    		Window.alert(e.getMessage());
     	}
     }
     
