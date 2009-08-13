@@ -395,6 +395,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     public void clear() {
     	if(data != null)
     		data.clear();
+    	clearSelections();
     	activeRow = -1;
     	activeCell = -1;
         shownRows = 0;
@@ -465,6 +466,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     
     public void clearSelections() {
         selections.clear();
+        selected = -1;
     }
     
     public ArrayList<TableDataRow> getSelections() {

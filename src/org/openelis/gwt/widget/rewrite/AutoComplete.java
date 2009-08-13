@@ -163,7 +163,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
     	ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
     	model.add(new TableDataRow(key,display));
     	setModel(model);
-    	setValue(key);
+    	setSelection(key);
     }
     
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
