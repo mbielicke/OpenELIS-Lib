@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.shared.DefaultHandlerRegistration;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -96,6 +97,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     }
     
     public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
+    	screenHandler.target = wid;
     	addDataChangeHandler(screenHandler);
     	addStateChangeHandler(screenHandler);
     	if(wid instanceof HasValue)
