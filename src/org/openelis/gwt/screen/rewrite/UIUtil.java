@@ -5,17 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.screen.ClassFactory;
-import org.openelis.gwt.screen.rewrite.ScreenDef;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.LongField;
 import org.openelis.gwt.widget.NotesPanel;
-import org.openelis.gwt.widget.ScrollableTabBar;
+import org.openelis.gwt.widget.rewrite.ScrollableTabBar;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.TitledPanel;
 import org.openelis.gwt.widget.WindowBrowser;
@@ -23,6 +20,7 @@ import org.openelis.gwt.widget.diagram.Diagram;
 import org.openelis.gwt.widget.rewrite.AppButton;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.ButtonGroup;
+import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.CheckField;
 import org.openelis.gwt.widget.rewrite.DateField;
@@ -67,7 +65,6 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.StackPanel;
@@ -1125,12 +1122,6 @@ public class UIUtil {
     	                                    .booleanValue());
     	        else
     	            text.setWordWrap(false);
-    	        if (node.getAttributes().getNamedItem("mouse") != null) {
-    	            String mouse = node.getAttributes()
-    	                               .getNamedItem("mouse")
-    	                               .getNodeValue();
-    	            text.addMouseListener((MouseListener)ClassFactory.forName(mouse));
-    	        }
     	        if (node.hasChildNodes())
     	            text.setText(node.getFirstChild().getNodeValue());
     	        else

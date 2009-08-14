@@ -436,12 +436,16 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
     
     public void load(ArrayList<TableDataRow> data) {
+        selections.clear();
+        selected = -1;
+        renderer.rowUnselected(-1);
         this.data = data;
         shownRows = 0;
         for(int i = 0; i < data.size(); i++){
             if(((TableDataRow)data.get(i)).shown)
                 shownRows++;
         }
+        editingCell = null;
         activeRow = -1;
         activeCell = -1;
         renderer.dataChanged(false);
