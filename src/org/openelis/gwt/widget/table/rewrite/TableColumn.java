@@ -172,18 +172,27 @@ public class TableColumn {
     	if(widget instanceof CheckBox){
     		((HasField)widget).setFieldValue(cell.getValue());
     	}else if(widget instanceof Label) {
-    		((HasField)colWidget).setFieldValue(cell.getValue());
-    		if(colWidget instanceof CalendarLookUp) {
-    			((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
-    		}else if(colWidget instanceof DropdownWidget) {
-				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
-			}else if(colWidget instanceof TextBoxBase) {
-				((Label)widget).setText(((TextBoxBase)colWidget).getText());
-    		}else{
-    			if(((HasField)colWidget).getFieldValue() != null)
-    				((Label)widget).setText(((HasField)colWidget).getField().format());
+    		if(colWidget instanceof AutoComplete) {
+    			Object[] idName = (Object[])cell.getValue();
+    			if(idName != null)
+    				((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
     			else
-    				((Label)widget).setText("");
+    				((AutoComplete)colWidget).setSelection(null,"");
+    			((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
+    		}else{
+    			((HasField)colWidget).setFieldValue(cell.getValue());
+    			if(colWidget instanceof CalendarLookUp) {
+    				((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
+    			}else if(colWidget instanceof DropdownWidget) {
+    				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+    			}else if(colWidget instanceof TextBoxBase) {
+    				((Label)widget).setText(((TextBoxBase)colWidget).getText());
+    			}else{
+    				if(((HasField)colWidget).getFieldValue() != null)
+    					((Label)widget).setText(((HasField)colWidget).getField().format());
+    				else
+    					((Label)widget).setText("");
+    			}
     		}
     	}
         if(cell.errors != null) {
