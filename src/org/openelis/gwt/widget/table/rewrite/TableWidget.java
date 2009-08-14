@@ -142,6 +142,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
     private ArrayList<String> errors;
+    private boolean queryMode;
     
     public boolean autoAdd;
     
@@ -652,6 +653,9 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public void setQueryMode(boolean query) {
+		if(query == queryMode)
+			return;
+		queryMode = query;
 		for(TableColumn col : columns) {
 			((HasField)col.getColumnWidget()).setQueryMode(query);
 		}
