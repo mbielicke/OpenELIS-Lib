@@ -246,7 +246,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 	}
     
 	public Object getFieldValue() {
-		return field.getValue();
+		return getValue();
 	}
 	
 	@Override
