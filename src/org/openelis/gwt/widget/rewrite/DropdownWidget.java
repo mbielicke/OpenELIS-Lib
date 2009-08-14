@@ -228,6 +228,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 	public void onKeyDown(KeyDownEvent event) {
         if(!popup.isShowing())
             return;
+        event.stopPropagation();
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
             ctrlKey = true;
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)

@@ -55,9 +55,7 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;
-    private Field<T> field;
-   
-    public String cat;
+    public Field<T> field;
     
     public AutoComplete() {
     
@@ -103,8 +101,6 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
     
     public void getMatches(final String text) {
         if(!queryMode) {
-            //if(screen != null && ((AppScreen)screen).window != null)
-            //    ((AppScreen)screen).window.setStatus("", "spinnerIcon");
             try {
             	if(getHandlerCount(BeforeGetMatchesEvent.getType()) > 0) {
             		BeforeGetMatchesEvent event = BeforeGetMatchesEvent.fire(this, text);
@@ -127,16 +123,8 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
         activeCell = -1;
         load(data);
         showTable(0);
-        //if(screen != null && ((AppScreen)screen).window != null)
-        //    ((AppScreen)screen).window.setStatus("", "");
     }
-    
-    /*
-    public void setWidth(String width) {
-        setWidth(width);
-    }
-    */
-    
+        
     public void setModel(ArrayList<TableDataRow> model){
         this.load(model);
     }
@@ -185,7 +173,6 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 
 	public void setField(Field field) {
 		this.field = field;
-		//addValueChangeHandler(field);
 		addBlurHandler(field);
 		textbox.addMouseOutHandler(field);
 		textbox.addMouseOverHandler(field);
@@ -249,7 +236,6 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 		return getValue();
 	}
 	
-	@Override
 	public void setFieldValue(Object value) {
 		setValue((T)value);
 	}
