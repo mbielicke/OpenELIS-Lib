@@ -185,8 +185,8 @@ public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasB
 
     public void onBlur(BlurEvent event) {
     	textbox.removeStyleName("Focus");
-    	if(textbox.equals("")){
-    		if(getValue() != null){
+    	if("".equals(textbox.getValue())){
+	    	if(getValue() != null){
     			setSelection(null,"");
     			ValueChangeEvent.fire(this, null);
     		}

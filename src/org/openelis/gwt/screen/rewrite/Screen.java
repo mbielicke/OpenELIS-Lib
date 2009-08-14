@@ -162,5 +162,11 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         }
         window.setError(consts.get("correctErrors"));
     }
+    
+    public String getString(Object obj) {
+        if (obj == null)
+            return "";
 
+        return obj.toString();
+    }
 }
