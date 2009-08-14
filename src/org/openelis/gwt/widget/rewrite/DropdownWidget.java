@@ -275,6 +275,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
             if(activeRow > -1){
                 itemSelected = true;
+                SelectionEvent.fire(this, renderer.rows.get(activeRow));
                 complete();
             }
         }
