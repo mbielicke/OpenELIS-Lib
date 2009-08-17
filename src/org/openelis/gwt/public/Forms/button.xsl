@@ -159,32 +159,12 @@ version="1.0">
 	</menuPanel>
 </xsl:template>
 
-<!-- popup select button template -->
-<xsl:template name="popupSelectButton">
-<appButton key="popupSelect" action="commit" style="Button" enabledStates="default" lockedStates="">
-		<HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage"/>
-        	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
-	  	</HorizontalPanel>
-	</appButton>
-</xsl:template>
-
 <!-- popup transfer button template -->
 <xsl:template name="popupTransferButton">
 <appButton key="popupTransfer" action="commit" style="Button" enabledStates="default" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage"/>
         	<text><xsl:value-of select='resource:getString($constants,"transfer")'/></text>
-	  	</HorizontalPanel>
-	</appButton>
-</xsl:template>
-
-<!-- popup cancel button template -->
-<xsl:template name="popupCancelButton">
-	<appButton key="popupCancel" action="abort" style="Button" enabledStates="default" lockedStates="">
-		<HorizontalPanel>
-	    	<AbsolutePanel style="AbortButtonImage"/>
-	        <text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>
 	  	</HorizontalPanel>
 	</appButton>
 </xsl:template>
