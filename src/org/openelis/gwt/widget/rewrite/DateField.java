@@ -28,7 +28,7 @@ package org.openelis.gwt.widget.rewrite;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.rewrite.Screen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
@@ -85,7 +85,7 @@ public class DateField extends Field<Datetime> {
         if (required) {
             if (value == null) {
             	valid = false;
-                addError(AppScreen.consts.get("fieldRequiredException"));
+                addError(Screen.consts.get("fieldRequiredException"));
             }
         }
         if (value != null && !isInRange()) {
@@ -133,12 +133,12 @@ public class DateField extends Field<Datetime> {
     	Date today = new Date();
         if (min != null && value.before(Datetime.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
-            addError(AppScreen.consts.get("fieldPastException"));
+            addError(Screen.consts.get("fieldPastException"));
         }
         if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
-            addError(AppScreen.consts.get("fieldFutureException"));
+            addError(Screen.consts.get("fieldFutureException"));
         }
         return true;
     }

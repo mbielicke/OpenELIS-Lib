@@ -51,10 +51,13 @@ import org.openelis.gwt.widget.table.rewrite.event.HasBeforeRowDeletedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasTableValueChangeHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.TableValueChangeEvent;
+import org.openelis.gwt.widget.table.rewrite.event.TableValueChangeHandler;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -74,8 +77,11 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -99,6 +105,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 													   BlurHandler, 
 													   ClickHandler, 
 													   HasField, 
+													   HasTableValueChangeHandlers,
 													   MouseOverHandler, 
 													   MouseOutHandler,
 													   HasBeforeSelectionHandlers<TableRow>,
@@ -374,8 +381,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
         
     public TableDataRow getRow(int row) {
-        if(data == null)
-            return null;
+        //if(data == null)
+          //  return null;
         if(row < numRows())
             return data.get(row);
         if(autoAdd)
@@ -712,6 +719,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 		}
 		if(errors != null)
 			refresh();
+		else
+			TableValueChangeEvent.fire(this, data);
 	}
 	
 	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
@@ -775,5 +784,11 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 		// TODO Auto-generated method stub
 		
 	}
+
+	public HandlerRegistration addTableValueChangeHandler(
+			TableValueChangeHandler handler) {
+		return addHandler(handler, TableValueChangeEvent.getType());
+	}
+
 	
 }

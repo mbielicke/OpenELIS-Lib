@@ -25,8 +25,10 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
-import org.openelis.gwt.common.data.QueryField;
-import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.rewrite.Screen;
+
+
+
 
 /**
  * @author tschmidt
@@ -50,7 +52,7 @@ public class StringField extends Field<String> {
         if (required) {
             if (value == null || value.length() == 0) {
             	valid = false;
-                addError(AppScreen.consts.get("fieldRequiredException"));    
+                addError(Screen.consts.get("fieldRequiredException"));    
              }
         }
         if (value != null && !isInRange())
@@ -58,7 +60,7 @@ public class StringField extends Field<String> {
     }
     
     public void ValidateQuery() {
-    	QueryField qField = new QueryField();
+    	QueryFieldUtil qField = new QueryFieldUtil();
     	try {
     		qField.parse(value);
     		queryString = value;
@@ -76,12 +78,12 @@ public class StringField extends Field<String> {
         if (value != null) {
         	if (max != null && value.length() > ((Integer)max).intValue()) {
         		rangeVal = false;
-        		addError(AppScreen.consts.get("fieldMaxLengthException"));
+        		addError(Screen.consts.get("fieldMaxLengthException"));
         	}
         	if (min != null && value.length() < ((Integer)min).intValue() &&
         			value.length() > 0) {
         		rangeVal = false;
-        		addError(AppScreen.consts.get("fieldMinLengthException"));
+        		addError(Screen.consts.get("fieldMinLengthException"));
         	}
         }
         return rangeVal;

@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget.rewrite;
 
-import org.openelis.gwt.screen.AppScreen;
+import org.openelis.gwt.screen.rewrite.Screen;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
@@ -25,12 +25,12 @@ public class IntegerField extends Field<Integer> {
     public void validate() {
         if (invalid) {
             valid = false;
-            addError(AppScreen.consts.get("fieldNumericException"));
+            addError(Screen.consts.get("fieldNumericException"));
         }
         if (required) {
             if (value == null) {
             	valid = false;
-                addError(AppScreen.consts.get("fieldRequiredException"));
+                addError(Screen.consts.get("fieldRequiredException"));
             }
         }
         if (value != null && !isInRange()) {
@@ -65,11 +65,11 @@ public class IntegerField extends Field<Integer> {
             return true;
         if (max != null && value > max) {
         	valid = false;
-            addError(AppScreen.consts.get("fieldMaxException"));
+            addError(Screen.consts.get("fieldMaxException"));
         }
         if (min != null && value < min) {
         	valid = false;
-            addError(AppScreen.consts.get("fieldMinException"));
+            addError(Screen.consts.get("fieldMinException"));
         }
         return true;
     }
