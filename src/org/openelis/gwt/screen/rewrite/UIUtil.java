@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.CollapsePanel;
-import org.openelis.gwt.widget.EditBox;
+import org.openelis.gwt.widget.rewrite.EditBox;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.LongField;

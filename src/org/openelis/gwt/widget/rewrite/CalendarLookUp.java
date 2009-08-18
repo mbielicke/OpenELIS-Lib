@@ -317,6 +317,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
+		textbox.setReadOnly(!enabled);
 	}
 	
 	public boolean isEnabled() {

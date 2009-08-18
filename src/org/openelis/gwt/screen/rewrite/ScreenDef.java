@@ -21,7 +21,7 @@ public class  ScreenDef  {
 	private boolean keepDoc;
 	public String name;
 	
-	protected class ScreenPanel extends AbsolutePanel implements HasClickHandlers {
+	public class ScreenPanel extends AbsolutePanel implements HasClickHandlers {
 		
 		public void addShortcutHandler(UIUtil.ShortcutHandler handler) {
 			addDomHandler(handler,KeyPressEvent.getType());
