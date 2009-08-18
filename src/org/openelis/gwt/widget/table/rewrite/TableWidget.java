@@ -150,6 +150,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     private int selected = -1;
     private ArrayList<String> errors;
     private boolean queryMode;
+    public boolean addIcon;
+    public boolean deleteIcon;
     
     public boolean autoAdd;
     
@@ -174,10 +176,10 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         setWidget(view);
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
-        addFocusHandler(this);
-        addBlurHandler(this);
-        Event.setEventListener(Document.get().getDocumentElement(), this);
-        DOM.sinkEvents((Element)Document.get().getDocumentElement(), Event.ONCLICK);
+       // addFocusHandler(this);
+       // addBlurHandler(this);
+        //Event.setEventListener(Document.get().getDocumentElement(), this);
+        //DOM.sinkEvents((Element)Document.get().getDocumentElement(), Event.ONCLICK);
         
     }
         
@@ -192,13 +194,10 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     	if(event.getSource() == view.table){
     		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     		if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
-    			select(cell.getRowIndex(),cell.getCellIndex());
-    			SelectionEvent.fire(this, renderer.rows.get(cell.getRowIndex()));
-    			finishEditing();
-    			activeCell = cell.getCellIndex();
-    			renderer.setCellEditor(cell.getRowIndex(), cell.getCellIndex());
-    			unsinkEvents(Event.ONKEYPRESS);
-    			return;
+    			if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue()))
+        			setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
+        		else
+        			setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
     		}
     		if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
     			return;
@@ -367,6 +366,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
 
     public void deleteRow(int row) {
+    	finishEditing();
     	BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
     	if(event != null && event.isCancelled())
     		return;

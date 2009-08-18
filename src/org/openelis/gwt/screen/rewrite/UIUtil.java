@@ -253,13 +253,15 @@ public class UIUtil {
     private static class UIFocusHandler implements FocusHandler,BlurHandler {
 
 		public void onFocus(FocusEvent event) {
-			if(((HasField)event.getSource()).isEnabled())
+			if(((HasField)event.getSource()).isEnabled()) {
 				((Widget)event.getSource()).addStyleName("Focus");
+			}
 		}
 
 		public void onBlur(BlurEvent event) {
-			if(((HasField)event.getSource()).isEnabled())
+			if(((HasField)event.getSource()).isEnabled()){
 				((Widget)event.getSource()).removeStyleName("Focus");
+			}
 		}
     	
     }
@@ -1238,6 +1240,12 @@ public class UIUtil {
                 if(node.getAttributes().getNamedItem("showScroll") != null){
                 	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
                     table.showScroll = VerticalScroll.valueOf(showScroll);
+                }
+                if(node.getAttributes().getNamedItem("add")!= null) {
+                	table.addIcon = Boolean.parseBoolean(node.getAttributes().getNamedItem("add").getNodeValue());
+                }
+                if(node.getAttributes().getNamedItem("delete") != null) {
+                	table.deleteIcon = Boolean.parseBoolean(node.getAttributes().getNamedItem("delete").getNodeValue());
                 }
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))

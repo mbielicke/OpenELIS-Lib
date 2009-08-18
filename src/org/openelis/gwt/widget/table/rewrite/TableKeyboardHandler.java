@@ -104,7 +104,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
 	public void onKeyDown(KeyDownEvent event) {
         //if(!controller.focused)
           //  return;
-        
+        event.preventDefault();
         if(controller.editingCell instanceof CheckBox && KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()){
         	return;
         }

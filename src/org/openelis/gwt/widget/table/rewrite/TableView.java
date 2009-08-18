@@ -25,7 +25,12 @@
 */
 package org.openelis.gwt.widget.table.rewrite;
 
+import org.openelis.gwt.screen.rewrite.UIUtil;
+import org.openelis.gwt.widget.IconContainer;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
@@ -49,6 +54,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.XMLParser;
 
 /**
  * This class represents the View of the table widget. It contains the logic for
@@ -126,14 +132,36 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     public VerticalScroll showScroll;
 
     
-    public TableView(TableWidget controller, VerticalScroll showScroll) {
-        this.controller = controller;
+    public TableView(TableWidget control, VerticalScroll showScroll) {
+        this.controller = control;
         this.showScroll = showScroll;
         initWidget(vp);
         if(controller.title != null && !controller.title.equals("")){
             titleLabel.setText(controller.title);
             titlePanel.add(titleLabel);
             titlePanel.addStyleName("TitlePanel");
+            if(controller.addIcon) {
+            	IconContainer add = (IconContainer)UIUtil.createWidget(XMLParser.parse("<icon style='AddRowIcon'/>").getDocumentElement());
+            	add.addClickHandler(new ClickHandler() {
+            		public void onClick(ClickEvent event) {
+            			controller.addRow();
+            		}
+            	});
+            	titlePanel.add(add);
+            	titlePanel.setCellWidth(add, "16px");
+            }
+            if(controller.deleteIcon) {
+            	IconContainer delete = (IconContainer)UIUtil.createWidget(XMLParser.parse("<icon style='DeleteRowIcon'/>").getDocumentElement());
+            	delete.addClickHandler(new ClickHandler() {
+            		public void onClick(ClickEvent event) {
+            			if(controller.activeRow > -1) {
+            				controller.deleteRow(controller.activeRow);
+            			}
+            		}
+            	});
+            	titlePanel.add(delete);
+            	titlePanel.setCellWidth(delete, "16px");
+            }
         }
         if(controller.showHeader){
             header = GWT.create(TableHeaderMenuBar.class);

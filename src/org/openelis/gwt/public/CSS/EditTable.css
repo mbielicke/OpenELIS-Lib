@@ -369,3 +369,14 @@ tr .Highlighted {
 	background: url('../Images/white-top-bottom.gif') repeat-x;
 	border: 1px solid #8db2e3;
 }
+
+.AddRowIcon{
+	height:16px;
+	width:16px;
+	background:url(../Images/addButtonIcon.png);
+}
+.DeleteRowIcon{
+	height:16px;
+	width:16px;
+	background:url(../Images/deleteButtonIcon.png);
+}

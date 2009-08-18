@@ -33,6 +33,7 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.Dropdown;
@@ -83,12 +84,11 @@ public class TableColumn {
     public Widget getDisplayWidget(TableDataCell cell) {
     	Widget wid = null;
     	if(colWidget instanceof CheckBox){
-    		wid = new CheckBox();
-    		((CheckBox)wid).setType(((CheckBox)colWidget).getType());
-    		((CheckBox)wid).setValue((String)cell.getValue(),true);
-    		((CheckBox)wid).setField(((CheckBox)colWidget).getField());
-    		((CheckBox)wid).addFocusHandler(UIUtil.focusHandler);
-    		((CheckBox)wid).addBlurHandler(UIUtil.focusHandler);
+    		wid = new IconContainer();
+    		if(CheckBox.CHECKED.equals(cell.getValue()))
+    			wid.setStyleName(CheckBox.CHECKED_STYLE);
+    		else
+    			wid.setStyleName(CheckBox.UNCHECKED_STYLE);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
     		wid.setWidth("15px");
     	}else{
@@ -169,8 +169,11 @@ public class TableColumn {
     }
     
     public void loadWidget(Widget widget, TableDataCell cell) {
-    	if(widget instanceof CheckBox){
-    		((HasField)widget).setFieldValue(cell.getValue());
+    	if(colWidget instanceof CheckBox){
+    		if(CheckBox.CHECKED.equals(cell.getValue()))
+    			widget.setStyleName(CheckBox.CHECKED_STYLE);
+    	    else
+    	    	widget.setStyleName(CheckBox.UNCHECKED_STYLE);
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
     			Object[] idName = (Object[])cell.getValue();
@@ -244,7 +247,8 @@ public class TableColumn {
     public Widget getWidgetEditor(TableDataCell cell) {
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
-    		editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
+    		((CheckBox)editor).setValue((String)cell.getValue());
+    		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		editor.setWidth("15px");
     		return editor;
     	}

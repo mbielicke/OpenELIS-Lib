@@ -35,6 +35,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -48,7 +49,8 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 														 BlurHandler,
 														 ClickHandler,
 														 KeyUpHandler,
-														 ValueChangeHandler<Datetime> {
+														 ValueChangeHandler<Datetime>,
+														 Focusable {
 
                                                 
 
@@ -102,6 +104,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
         icon.addMouseOverHandler(iconHandler);
         icon.addMouseDownHandler(iconHandler);
         icon.addMouseUpHandler(iconHandler);
+        icon.setTabIndex(-1);
         textbox.addStyleName("TextboxUnselected");
     }
     
@@ -158,6 +161,8 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
         }
         
     }
+    
+    
 
     public void onBlur(BlurEvent event) {
         if (!textbox.isReadOnly()) {
@@ -335,6 +340,26 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 		else
 			wid = Integer.parseInt(width) - 18;
 		textbox.setWidth(wid+"px");
+	}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setFocus(boolean focused) {
+		textbox.setFocus(focused);
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
 	}
     
 }
