@@ -102,9 +102,6 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     }
 
 	public void onKeyDown(KeyDownEvent event) {
-        //if(!controller.focused)
-          //  return;
-        event.preventDefault();
         if(controller.editingCell instanceof CheckBox && KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()){
         	return;
         }
@@ -207,6 +204,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             }
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.activeCell > -1 && !shift) {
+        	event.preventDefault();
             if(controller.activeRow < 0){
                 controller.activeRow = 0;
                 controller.activeCell = -1;
@@ -242,6 +240,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             }
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.activeCell > -1 && shift) {
+        	event.preventDefault();
             if (controller.activeCell == 0 && controller.modelIndexList[controller.activeRow] == 0){
                controller.finishEditing();
                controller.activeCell = -1;

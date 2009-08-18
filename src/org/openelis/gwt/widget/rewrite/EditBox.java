@@ -34,20 +34,41 @@ import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.xml.client.XMLParser;
 
-public class EditBox extends Composite implements ClickHandler, HasValue<String>, HasField<String>{
+public class EditBox extends Composite implements ClickHandler, 
+												  HasValue<String>, 
+												  HasField<String>, 
+												  HasBlurHandlers, 
+												  HasMouseOverHandlers, 
+												  HasMouseOutHandlers,
+												  HasFocusHandlers,
+												  Focusable{
 	
-	private TextArea text = new TextArea();
+	private TextBox text = new TextBox();
 	private IconContainer fp = new IconContainer();
 	private HorizontalPanel hp = new HorizontalPanel();
 	private static String editorScreen = "<VerticalPanel><textarea key='editor' tools='false' width='300px' height='200px' showError='false'/><HorizontalPanel halign='center'>"+
@@ -63,11 +84,42 @@ public class EditBox extends Composite implements ClickHandler, HasValue<String>
 	private ScreenDef editorDef;
 	private boolean enabled;
 	private Field<String> field;
+	
+	private class EditHandler implements FocusHandler,BlurHandler,MouseOutHandler,MouseOverHandler {
+
+		private EditBox source;
+		
+		public EditHandler(EditBox source) {
+			this.source = source;
+		}
+		
+		public void onFocus(FocusEvent event) {
+			//FocusEvent.fireNativeEvent(event.getNativeEvent(),source);
+		}
+
+		public void onBlur(BlurEvent event) {
+			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onMouseOut(MouseOutEvent event) {
+			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onMouseOver(MouseOverEvent event) {
+			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+		
+	}
 
 	public EditBox() {
 		initWidget(hp);
 		text.setStyleName("ScreenTextBox");
 		text.setHeight("18px");
+		EditHandler handler = new EditHandler(this);
+		text.addFocusHandler(handler);
+		text.addBlurHandler(handler);
+		text.addMouseOutHandler(handler);
+		text.addMouseOverHandler(handler);
 		hp.add(text);
 		hp.add(fp);
 		fp.setStyleName("DotsButton");
@@ -131,6 +183,30 @@ public class EditBox extends Composite implements ClickHandler, HasValue<String>
 		
 	}
 
+    public void onFocus(FocusEvent event) {
+        if (!text.isReadOnly()) {
+            if (event.getSource() == text) {
+                // we need to set the selected style name to the textbox
+                text.addStyleName("TextboxSelected");
+                text.removeStyleName("TextboxUnselected");
+
+            }
+        }
+        
+    }
+    
+    
+
+    public void onBlur(BlurEvent event) {
+        if (!text.isReadOnly()) {
+            if (event.getSource() == text) {
+                // we need to set the unselected style name to the textbox
+                text.addStyleName("TextboxUnselected");
+                text.removeStyleName("TextboxSelected");
+            }
+        }
+    }
+    
 	public void setValue(String value, boolean fireEvents) {
 		String old = getValue();
 		text.setText(value);
@@ -192,9 +268,9 @@ public class EditBox extends Composite implements ClickHandler, HasValue<String>
 	public void setField(Field<String> field) {
 		this.field = field;
 		text.addValueChangeHandler(field);
-		text.addBlurHandler(field);
-		text.addMouseOutHandler(field);
-		text.addMouseOverHandler(field);
+		addBlurHandler(field);
+		addMouseOutHandler(field);
+		addMouseOverHandler(field);
 		
 	}
 
@@ -207,6 +283,37 @@ public class EditBox extends Composite implements ClickHandler, HasValue<String>
 	public void setQueryMode(boolean query) {
 		field.setQueryMode(query);
 		
+	}
+
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return addDomHandler(handler,BlurEvent.getType());
+	}
+
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler,MouseOverEvent.getType());
+	}
+
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler,MouseOutEvent.getType());
+	}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	public void setAccessKey(char key) {
+		
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addDomHandler(handler,FocusEvent.getType());
 	}
 
 }

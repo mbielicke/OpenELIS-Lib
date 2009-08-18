@@ -751,8 +751,10 @@ public class UIUtil {
     		public EditBox getNewInstance(Node node, ScreenDef def) {
     			EditBox box = new EditBox();
     			Field field = (StringField)factoryMap.get("String").getNewInstance(node, def);
-    			
+    			box.setField(field);
     			setDefaults(node,box);
+    			box.addBlurHandler(focusHandler);
+    			box.addFocusHandler(focusHandler);
     			return box;
     		}
     	});

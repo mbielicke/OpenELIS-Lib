@@ -86,6 +86,32 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
             icon.removeStyleName("Pressed");
         }
     }
+    
+    private class CalendarHandler implements FocusHandler,BlurHandler,MouseOverHandler,MouseOutHandler {
+
+    	private CalendarLookUp source;
+    	
+    	public CalendarHandler(CalendarLookUp source) {
+    		this.source = source;
+    	}
+    	
+		public void onFocus(FocusEvent event) {
+			//FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onBlur(BlurEvent event) {
+			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onMouseOver(MouseOverEvent event) {
+			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);	
+		}
+
+		public void onMouseOut(MouseOutEvent event) {
+			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+    	
+    }
 
     public CalendarLookUp() {
         HorizontalPanel hp = new HorizontalPanel();
@@ -93,6 +119,11 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
         hp.add(textbox);
         hp.add(icon);
         initWidget(hp);
+        CalendarHandler handler = new CalendarHandler(this);
+        textbox.addFocusHandler(handler);
+        textbox.addBlurHandler(handler);
+        textbox.addMouseOutHandler(handler);
+        textbox.addMouseOverHandler(handler);
         icon.setStyleName("CalendarButton");
         textbox.setStyleName("TextboxUnselected");
         textbox.addFocusHandler(this);
@@ -254,15 +285,15 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 
 	
 	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return textbox.addBlurHandler(handler);
+		return addDomHandler(handler,BlurEvent.getType());
 	}
 	
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-		return textbox.addMouseOutHandler(handler);
+		return addDomHandler(handler,MouseOutEvent.getType());
 	}
 	
 	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-		return textbox.addMouseOverHandler(handler);
+		return addDomHandler(handler,MouseOverEvent.getType());
 	}
 
 	public void addError(String error) {
