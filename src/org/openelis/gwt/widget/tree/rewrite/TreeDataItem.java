@@ -45,13 +45,13 @@ public class TreeDataItem extends TableDataRow {
     
     public boolean open;
     
-    protected int depth;
+    public int depth;
         
     public int y;
     
     public int x;
     
-    protected int childIndex = -1;
+    public int childIndex = -1;
   
     protected boolean selected; 
   

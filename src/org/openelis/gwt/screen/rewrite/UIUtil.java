@@ -16,7 +16,7 @@ import org.openelis.gwt.widget.rewrite.ScrollableTabBar;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.TitledPanel;
 import org.openelis.gwt.widget.WindowBrowser;
-import org.openelis.gwt.widget.diagram.Diagram;
+import org.openelis.gwt.widget.rewrite.Diagram;
 import org.openelis.gwt.widget.rewrite.AppButton;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.ButtonGroup;
@@ -1047,24 +1047,7 @@ public class UIUtil {
     	factoryMap.put("ScrollTabBar", new Factory<ScrollableTabBar>(){
     		public ScrollableTabBar getNewInstance(Node node, ScreenDef def) {
     			ScrollableTabBar scrollableTabBar = new ScrollableTabBar();
-    	        scrollableTabBar.setStyleName("ScreenTab");        
-    	        String width = "";
-    	        if (node.getAttributes().getNamedItem("width") != null){
-    	            width = node.getAttributes()
-    	                                  .getNamedItem("width")
-    	                                  .getNodeValue();
-    	            scrollableTabBar.setWidth(width);
-    	        }
-    	        NodeList tabs = ((Element)node).getElementsByTagName("tab");           
-    	        if(tabs.getLength()>0){
-    	         for (int k = 0; k < tabs.getLength(); k++) {                       
-    	            scrollableTabBar.addTab(tabs.item(k).getAttributes()
-    	                                    .getNamedItem("text")
-    	                                    .getNodeValue());             
-    	         }
-    	         scrollableTabBar.selectTab(0);
-    	        }        
-    	        
+    	        //scrollableTabBar.setStyleName("ScreenTab");        
     	        setDefaults(node, scrollableTabBar);
     	        return scrollableTabBar;
     		}
