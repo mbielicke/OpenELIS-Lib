@@ -21,7 +21,7 @@ public class BeforeCellEditedEvent extends GwtEvent<BeforeCellEditedHandler> {
 	
 	protected BeforeCellEditedEvent(int row, int col, Object value) {
 		this.row = row;
-		this.cell = cell;
+		this.cell = col;
 		this.value = value;
 	}
 
