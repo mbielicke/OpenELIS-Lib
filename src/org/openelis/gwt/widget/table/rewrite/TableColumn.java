@@ -93,9 +93,9 @@ public class TableColumn {
     		wid.setWidth("15px");
     	}else{
     		if(colWidget instanceof AutoComplete) {
-    			Object[] idName = (Object[])cell.getValue();
-    			if(idName != null)
-    				((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    			TableDataRow row = (TableDataRow)cell.getValue();
+    			if(row  != null)
+    				((AutoComplete)colWidget).setSelection(row);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
     		}else if(colWidget instanceof Dropdown){
@@ -176,9 +176,9 @@ public class TableColumn {
     	    	widget.setStyleName(CheckBox.UNCHECKED_STYLE);
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
-    			Object[] idName = (Object[])cell.getValue();
-    			if(idName != null)
-    				((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    			TableDataRow row = (TableDataRow)cell.getValue();
+    			if(row != null)
+    				((AutoComplete)colWidget).setSelection(row);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
     			((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
@@ -255,9 +255,9 @@ public class TableColumn {
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");
     	if(colWidget instanceof AutoComplete){
-    		Object[] idName = (Object[])cell.getValue();
-    		if(idName != null)
-    			((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    		TableDataRow row =  (TableDataRow)cell.getValue();
+    		if(row != null)
+    			((AutoComplete)colWidget).setSelection(row);
     		else
     			((AutoComplete)colWidget).setSelection(null,"");
 		}else if(colWidget instanceof Dropdown){

@@ -225,10 +225,8 @@ public class TableRenderer  {
         	if(controller.editingCell instanceof Focusable)
         		((Focusable)controller.editingCell).setFocus(false);
         	if(controller.editingCell instanceof AutoComplete){
-        		Object[] idName = new Object[2];
-        		idName[0] = ((AutoComplete)controller.editingCell).getValue();
-        		idName[1] = ((AutoComplete)controller.editingCell).getTextBoxDisplay();
-        		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(idName);
+        		TableDataRow row = ((AutoComplete)controller.editingCell).getSelection();
+        		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(row);
         	}else
         		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(((HasField)controller.editingCell).getFieldValue());
         	if(controller.editingCell instanceof HasField)
