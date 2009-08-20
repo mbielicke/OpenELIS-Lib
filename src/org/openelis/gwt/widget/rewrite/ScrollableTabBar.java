@@ -85,8 +85,9 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
       previous.addMouseDownHandler(this);
       next.addMouseUpHandler(this);
       previous.addMouseUpHandler(this);
-      previous.setStyleName("DotsButton");
-      next.setStyleName("DotsButton");
+      previous.setStyleName("MoveLeft");
+      next.setStyleName("MoveRight");
+      tabBar.setVisible(false);
  
       barPanel.add(previous);
       barPanel.add(scrollPanel);
@@ -131,32 +132,39 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   public void addTabWithContent(String text,Widget content) {
       addTab(text);
       tabWidgets.add(content);
+      tabBar.setVisible(true);
   }
   
   public void addTabWithContent(Widget widget,Widget content) {
       addTab(widget);
       tabWidgets.add(content);
+      tabBar.setVisible(true);
   }
     
   public void addTab(String text){           
       tabBar.addTab(text); 
       selectTab(tabBar.getTabCount()-1);
+      tabBar.setVisible(true);
    }
   
   public void addTab(Widget widget){
       tabBar.addTab(widget);
       selectTab(tabBar.getTabCount()-1);
+      tabBar.setVisible(true);
    }
   
   public void removeTab(int index){
      tabWidgets.remove(index);
      tabBar.removeTab(index);
+     if(tabBar.getTabCount() == 0)
+    	 tabBar.setVisible(false);
   }
   
   public void clearTabs(){      
      tabBar = new TabBar(); 
      scrollPanel.clear();
      scrollPanel.add(tabBar);
+     tabBar.setVisible(false);
   }
   
   public TabBar getTabBar(){

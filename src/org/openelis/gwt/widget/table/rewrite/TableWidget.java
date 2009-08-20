@@ -325,6 +325,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
     
     public void scrollToSelection(){
+    	finishEditing();
         if(numRows() == shownRows()){
             view.scrollBar.setScrollPosition(cellHeight*getSelectedIndex());
         }else{
@@ -338,14 +339,17 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
 
     public void addRow() {
+    	finishEditing();
         addRow(createRow());
     }
     
     public void addRow(int index) {
+    	finishEditing();
         addRow(index,createRow());
     }
     
     public void addRow(TableDataRow row) {
+    	finishEditing();
     	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
     	if(event != null && event.isCancelled())
     		return;
@@ -357,6 +361,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
     
     public void addRow(int index, TableDataRow row) {
+    	finishEditing();
     	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, row);
     	if(event != null && event.isCancelled())
     		return;
@@ -413,6 +418,7 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     }
     
     public TableDataRow setRow(int index, TableDataRow row){
+    	finishEditing();
         TableDataRow set =  data.set(index, row);
         if(isRowDrawn(index))
         	renderer.loadRow(index);

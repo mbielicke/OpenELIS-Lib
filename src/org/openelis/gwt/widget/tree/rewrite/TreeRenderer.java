@@ -112,7 +112,7 @@ public class TreeRenderer {
             int numCells = controller.view.table.getCellCount(index);
             controller.view.table.removeCells(index, 1, numCells - 1);
         }
-        ArrayList<TreeColumn> columns = controller.columns.get(controller.getRow(index).leafType);
+        ArrayList<TreeColumn> columns = controller.columns.get(controller.getRow(modelIndex).leafType);
         for (int i = 0; i < row.cells.size(); i++) {
         	Widget wid = columns.get(i).getDisplayWidget(row.cells.get(i));
         	if(i == 0){
