@@ -191,22 +191,25 @@ public class TreeRenderer {
     		controller.view.table.setWidget(row, col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
     }
 
-    public void stopEditing() {
+    public boolean stopEditing() {
         if(controller.editingCell != null){
+        	Object currVal = controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).getValue();
 	        if(controller.editingCell instanceof Focusable)
     	    	((Focusable)controller.editingCell).setFocus(false);
+	        Object newVal = null;
         	if(controller.editingCell instanceof AutoComplete){
-        		Object[] idName = new Object[2];
-        		idName[0] = ((AutoComplete)controller.editingCell).getValue();
-        		idName[1] = ((AutoComplete)controller.editingCell).getTextBoxDisplay();
-        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, idName);
+        		newVal = ((AutoComplete)controller.editingCell).getSelection();
         	}else
-        		controller.setCell(controller.modelIndexList[controller.activeRow], controller.activeCell, ((HasField)controller.editingCell).getFieldValue());
+        		newVal = ((HasField)controller.editingCell).getFieldValue();
+
         	if(controller.editingCell instanceof HasField)
 	        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
-            setCellDisplay(controller.activeRow,controller.activeCell);
-            controller.editingCell = null;
+        	controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(newVal);
+        	setCellDisplay(controller.activeRow,controller.activeCell);
+        	controller.editingCell = null;
+            return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         }
+        return false;
     }
 
     public void rowUnselected(int row) {

@@ -318,18 +318,6 @@ public class TableColumn {
     		((HasField)colWidget).enable(enable);
     		
     	}
-    	
-    	/*
-        if(colWidget instanceof CalendarLookUp) {
-        	((CalendarLookUp)colWidget).enable(enable);
-        }else if(colWidget instanceof Dropdown) {
-        	((Dropdown)colWidget).enable(enable);
-        }else if(colWidget instanceof AutoComplete){
-        	((AutoComplete)colWidget).enable(enable);
-        }else if(colWidget instanceof TextBoxBase) {
-        	((TextBoxBase)colWidget).setReadOnly(!enable);
-        }
-        */
     }
     
     public HorizontalAlignmentConstant getAlign() {

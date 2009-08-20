@@ -220,21 +220,24 @@ public class TableRenderer  {
     	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget((TableDataCell)controller.getCell(controller.modelIndexList[row],col)));
     }
 
-    public void stopEditing() {
+    public boolean stopEditing() {
         if(controller.editingCell != null){
+        	Object currVal = controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).getValue();
         	if(controller.editingCell instanceof Focusable)
         		((Focusable)controller.editingCell).setFocus(false);
+        	Object newVal = null;
         	if(controller.editingCell instanceof AutoComplete){
-        		TableDataRow row = ((AutoComplete)controller.editingCell).getSelection();
-        		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(row);
+        		newVal = ((AutoComplete)controller.editingCell).getSelection();
         	}else
-        		controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(((HasField)controller.editingCell).getFieldValue());
+        		newVal = ((HasField)controller.editingCell).getFieldValue();
         	if(controller.editingCell instanceof HasField)
         		controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
-            setCellDisplay(controller.activeRow,controller.activeCell);
-            controller.editingCell = null;
-            
+        	controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(newVal);
+        	setCellDisplay(controller.activeRow,controller.activeCell);
+        	controller.editingCell = null;
+            return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         }
+        return false;
     }
 
 

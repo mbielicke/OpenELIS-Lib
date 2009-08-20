@@ -301,8 +301,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     
     public boolean finishEditing() {
         if(editingCell != null) {
-        	renderer.stopEditing();
-        	CellEditedEvent.fire(this, activeRow, activeCell, getRow(activeRow).cells.get(activeCell).value);
+        	if(renderer.stopEditing())
+        		CellEditedEvent.fire(this, activeRow, activeCell, getRow(activeRow).cells.get(activeCell).value);
             if(isAutoAdd() && modelIndexList[activeRow] == numRows()){
             	BeforeAutoAddEvent event = BeforeAutoAddEvent.fire(this, getAutoAddRow());
                 if(event != null && !event.isCancelled()){

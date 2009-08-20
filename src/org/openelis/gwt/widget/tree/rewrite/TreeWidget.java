@@ -282,7 +282,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public boolean finishEditing() {
         if (editingCell != null) {
-        	renderer.stopEditing();
+        	if(renderer.stopEditing())
+        		CellEditedEvent.fire(this, activeRow, activeCell, getRow(activeRow).cells.get(activeCell).value);
         	activeCell = -1;
             sinkEvents(Event.KEYEVENTS);
         }

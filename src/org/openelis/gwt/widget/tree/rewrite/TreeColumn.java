@@ -31,6 +31,7 @@ import java.util.HashSet;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.rewrite.CalendarLookUp;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.rewrite.AutoComplete;
 import org.openelis.gwt.widget.rewrite.CheckBox;
 import org.openelis.gwt.widget.rewrite.Dropdown;
@@ -82,19 +83,18 @@ public class TreeColumn {
     public Widget getDisplayWidget(TableDataCell cell) {
     	Widget wid = null;
     	if(colWidget instanceof CheckBox){
-    		wid = new CheckBox();
-    		((CheckBox)wid).setType(((CheckBox)colWidget).getType());
-    		((CheckBox)wid).setValue((String)cell.getValue(),true);
-    		((CheckBox)wid).setField(((CheckBox)colWidget).getField());
-    		((CheckBox)wid).addFocusHandler(UIUtil.focusHandler);
-    		((CheckBox)wid).addBlurHandler(UIUtil.focusHandler);
+    		wid = new IconContainer();
+    		if(CheckBox.CHECKED.equals(cell.getValue()))
+    			wid.setStyleName(CheckBox.CHECKED_STYLE);
+    		else
+    			wid.setStyleName(CheckBox.UNCHECKED_STYLE);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
     		wid.setWidth("15px");
        	}else{
     		if(colWidget instanceof AutoComplete) {
-    			Object[] idName = (Object[])cell.getValue();
-    			if(idName != null)
-    				((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    			TableDataRow row = (TableDataRow)cell.getValue();
+    			if(row  != null)
+    				((AutoComplete)colWidget).setSelection(row);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
     		}else if(colWidget instanceof Dropdown){
@@ -168,21 +168,33 @@ public class TreeColumn {
     }
     
     public void loadWidget(Widget widget, TableDataCell cell) {
-    	if(widget instanceof CheckBox){
-    		((HasField)widget).setFieldValue(cell.getValue());
+    	if(colWidget instanceof CheckBox){
+    		if(CheckBox.CHECKED.equals(cell.getValue()))
+    			widget.setStyleName(CheckBox.CHECKED_STYLE);
+    	    else
+    	    	widget.setStyleName(CheckBox.UNCHECKED_STYLE);
     	}else if(widget instanceof Label) {
-    		((HasField)colWidget).setFieldValue(cell.getValue());
-    		if(colWidget instanceof CalendarLookUp) {
-    			((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
-    		}else if(colWidget instanceof DropdownWidget) {
-				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
-			}else if(colWidget instanceof TextBoxBase) {
-				((Label)widget).setText(((TextBoxBase)colWidget).getText());
-    		}else{
-    			if(((HasField)colWidget).getFieldValue() != null)
-    				((Label)widget).setText(((HasField)colWidget).getField().format());
+    		if(colWidget instanceof AutoComplete) {
+    			TableDataRow row = (TableDataRow)cell.getValue();
+    			if(row != null)
+    				((AutoComplete)colWidget).setSelection(row);
     			else
-    				((Label)widget).setText("");
+    				((AutoComplete)colWidget).setSelection(null,"");
+    			((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
+    		}else{
+    			((HasField)colWidget).setFieldValue(cell.getValue());
+    			if(colWidget instanceof CalendarLookUp) {
+    				((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
+    			}else if(colWidget instanceof DropdownWidget) {
+    				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+    			}else if(colWidget instanceof TextBoxBase) {
+    				((Label)widget).setText(((TextBoxBase)colWidget).getText());
+    			}else{
+    				if(((HasField)colWidget).getFieldValue() != null)
+    					((Label)widget).setText(((HasField)colWidget).getField().format());
+    				else
+    					((Label)widget).setText("");
+    			}
     		}
     	}
         if(cell.errors != null) {
@@ -234,16 +246,17 @@ public class TreeColumn {
     public Widget getWidgetEditor(TableDataCell cell) {
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
-    		editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
+    		((CheckBox)editor).setValue((String)cell.getValue());
+    		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		editor.setWidth("15px");
     		return editor;
     	}
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");
     	if(colWidget instanceof AutoComplete){
-    		Object[] idName = (Object[])cell.getValue();
-    		if(idName != null)
-    			((AutoComplete)colWidget).setSelection(idName[0],(String)idName[1]);
+    		TableDataRow row =  (TableDataRow)cell.getValue();
+    		if(row != null)
+    			((AutoComplete)colWidget).setSelection(row);
     		else
     			((AutoComplete)colWidget).setSelection(null,"");
 		}else if(colWidget instanceof Dropdown){

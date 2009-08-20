@@ -65,5 +65,13 @@ public class TableDataRow {
     	}
     	return list;
     }
+    
+    public boolean equals(Object obj) {
+    	if(!(obj instanceof TableDataRow))
+    		return false;
+    	if(key == null && ((TableDataRow)obj).key != null)
+    		return false;
+    	return key.equals(((TableDataRow)obj).key);
+    }
 
 }
