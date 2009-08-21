@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -72,6 +73,7 @@ import org.openelis.gwt.widget.tree.rewrite.event.LeafClosedHandler;
 import org.openelis.gwt.widget.tree.rewrite.event.LeafOpenedEvent;
 import org.openelis.gwt.widget.tree.rewrite.event.LeafOpenedHandler;
 
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -98,6 +100,7 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
@@ -119,7 +122,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasBeforeLeafOpenHandlers,
 													  HasBeforeLeafCloseHandlers,
 													  HasLeafOpenedHandlers,
-													  HasLeafClosedHandlers {
+													  HasLeafClosedHandlers,
+													  HasDropController{
 
     public HashMap<String,ArrayList<TreeColumn>> columns;
     public boolean enabled;
@@ -316,11 +320,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
 
 	public void onBlur(BlurEvent event) {
-		if(!DOM.isOrHasChild(this.getElement(), ((Widget)event.getSource()).getElement())){
-			finishEditing();
-		}else if(event.getSource() != this && editingCell != null && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
-			finishEditing();
-		}
+
 	}
 
     public void scrollToSelection() {
@@ -337,6 +337,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void addRow(TreeDataItem row) {
+    	finishEditing();
     	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
     	if(event != null && event.isCancelled())
     		return;
@@ -346,6 +347,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void addRow(int index, TreeDataItem row) {
+    	finishEditing();
     	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
     	if(event != null && event.isCancelled())
     		return;
@@ -377,6 +379,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
 
     public void deleteRow(int row) {
+    	finishEditing();
     	BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
     	if(event != null && event.isCancelled())
     		return;
@@ -394,6 +397,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void deleteRows(List<Integer> rowIndexes) {
+    	finishEditing();
         Collections.sort(rowIndexes);
         Collections.reverse(rowIndexes);
         for(int row : rowIndexes) {
@@ -446,7 +450,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         rows.get(row).shown = false;
         shownRows--;
         renderer.dataChanged(true);
-        //treeModelListeners.fireDataChanged(this);
     }
 
     public boolean isEnabled(int index) {
@@ -479,7 +482,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
                 selectedRows.add(i);
         }
         renderer.dataChanged(keepPosition);
-        //treeModelListeners.fireDataChanged(this);
     }
 
     public void selectRow(int index){
@@ -487,7 +489,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
            if(!multiSelect && selectedRows.size() > 0){
                rows.get(selectedRows.get(0)).selected = false;
                renderer.rowUnselected(-1);
-               //treeModelListeners.fireRowUnselected(this,-1);
                selectedRows.clear();
            }
            rows.get(index).selected = true;
@@ -505,7 +506,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         rows.get(row).shown = true;
         shownRows++;
         renderer.dataChanged(true);
-        //treeModelListeners.fireDataChanged(this);
     }
 
     public int shownRows() {
@@ -525,7 +525,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             selectedRows.remove(new Integer(index));
         }
         renderer.rowUnselected(-1);
-        //treeModelListeners.fireRowUnselected(this, -1);        
     }
 
     public void setCell(int row, int col,Object value) {
@@ -537,8 +536,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return rows.get(row).cells.get(col);
     }
 
-    public TreeDataItem setRow(int index, TreeDataItem row) {
-        return null;
+    public void setRow(int index, TreeDataItem row) {
+        data.add(index, row);
+        refresh(true);
     }
     
     public void toggle(int row) {
@@ -814,5 +814,42 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         sorter.sort(data,headers.get(col).sortLeaves, col,direction);
     	refresh(false);
     }
+    
+    public void enableDrag(boolean drag) {
+    	if(drag) {
+    		dragController = new TreeDragController(RootPanel.get());
+    		for(TreeRow row : renderer.rows)
+    			dragController.makeDraggable(row);
+    	}else{
+    		for(TreeRow row : renderer.rows) 
+    			dragController.makeNotDraggable(row);
+    		dragController = null;
+    	}
+    }
+    
+    public void enableDrop(boolean drop) {
+    	if(drop){
+    		dropController = new TreeIndexDropController(this);
+    	}else
+    		dropController = null;
+    }
+    
+    public void addTarget(HasDropController drop) {
+    	assert dragController != null;
+    	dragController.registerDropController(drop.getDropController());
+    }
+    
+    public void removeTarget(HasDropController drop){
+    	assert dragController != null;
+    	dragController.registerDropController(drop.getDropController());
+    }
+
+	public DropController getDropController() {
+		return dropController;
+	}
+
+	public void setDropController(DropController controller) {
+		// TODO Auto-generated method stub
+	}
     
 }

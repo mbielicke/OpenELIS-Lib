@@ -315,6 +315,7 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
                 controller.renderer.scrollLoad(scrollBar.getScrollPosition());
                 top = scrollBar.getScrollPosition();
             }
+            return;
         }
         if(event.getSource() == cellView){
             if(left != cellView.getHorizontalScrollPosition()){

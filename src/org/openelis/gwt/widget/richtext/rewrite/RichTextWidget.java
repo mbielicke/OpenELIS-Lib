@@ -63,6 +63,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
     }
     
     public RichTextWidget(boolean tools) {
+    	this();
         init(tools);
     }
     
@@ -122,7 +123,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
     public void enable(boolean enabled) {
         this.enabled = enabled;
         if(tools) {
-            //toolbar.enable(enabled);
+            toolbar.enable(enabled);
         }
         area.setEnabled(enabled);
     }

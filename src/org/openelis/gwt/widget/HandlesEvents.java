@@ -33,4 +33,11 @@ public class HandlesEvents {
 	      handlerManager.fireEvent(event);
 	    }
 	  }
+	  
+	  public int getHandlerCount(GwtEvent.Type<?> type){
+		  if(handlerManager == null)
+			  return 0;
+		  return handlerManager.getHandlerCount(type);
+			  
+	  }
 }

@@ -35,7 +35,7 @@ import org.openelis.gwt.widget.rewrite.RadioButton;
 import org.openelis.gwt.widget.rewrite.ResultsTable;
 import org.openelis.gwt.widget.rewrite.StringField;
 import org.openelis.gwt.widget.rewrite.TextArea;
-import org.openelis.gwt.widget.richtext.RichTextWidget;
+import org.openelis.gwt.widget.richtext.rewrite.RichTextWidget;
 import org.openelis.gwt.widget.table.rewrite.TableColumn;
 import org.openelis.gwt.widget.table.rewrite.TableWidget;
 import org.openelis.gwt.widget.table.rewrite.TableView.VerticalScroll;
@@ -1012,13 +1012,13 @@ public class UIUtil {
     	});
     	factoryMap.put("richtext", new Factory<RichTextWidget>() {
     		public RichTextWidget getNewInstance(Node node, ScreenDef def) {
+    			RichTextWidget textarea = new RichTextWidget(); 
     			boolean tools = true;
     	        if(node.getAttributes().getNamedItem("tools") != null){
     	            if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){
     	                tools = false;
     	            }
     	        }
-    	        RichTextWidget textarea = new RichTextWidget(tools); 
     	        if(node.getAttributes().getNamedItem("tab") != null) 
     	        	textarea.addTabHandler(new TabHandler(node,def));
     	        if(node.getAttributes().getNamedItem("shortcut") != null) {

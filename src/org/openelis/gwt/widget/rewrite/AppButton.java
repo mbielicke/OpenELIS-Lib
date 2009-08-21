@@ -43,13 +43,13 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers {     
+public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler {     
     
     public enum ButtonState {UNPRESSED,PRESSED,DISABLED,LOCK_PRESSED}
     
-    public ButtonState state;
+    public ButtonState state = ButtonState.UNPRESSED;
     public String action;
-    
+    public boolean toggle;
     private FocusPanel panel = new FocusPanel();
     private FocusPanel classPanel = new FocusPanel();
     private HorizontalPanel hp = new HorizontalPanel();
@@ -71,6 +71,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
         content.addStyleName("ButtonContent");
         panel.addMouseOutHandler(this);
         panel.addMouseOverHandler(this);
+        addClickHandler(this);
     }
     
     public void addTabHandler(UIUtil.TabHandler handler) {
@@ -144,6 +145,15 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     
     public boolean isEnabled() {
     	return enabled;
+    }
+    
+    public void onClick(ClickEvent event) {
+    	if(toggle) {
+    		if(state == ButtonState.UNPRESSED)
+    			changeState(ButtonState.PRESSED);
+    		else if(state == ButtonState.PRESSED)
+    			changeState(ButtonState.UNPRESSED);
+    	}
     }
     
 

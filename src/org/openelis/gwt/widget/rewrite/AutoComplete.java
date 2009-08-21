@@ -40,7 +40,9 @@ import org.openelis.gwt.widget.table.rewrite.TableRenderer;
 import org.openelis.gwt.widget.table.rewrite.TableView;
 
 import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -51,7 +53,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 
-public class AutoComplete<T> extends DropdownWidget implements HasValue<T>, HasBeforeGetMatchesHandlers, HasGetMatchesHandlers{
+public class AutoComplete<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasBeforeGetMatchesHandlers, HasGetMatchesHandlers{
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;

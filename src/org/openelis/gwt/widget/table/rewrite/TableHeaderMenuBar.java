@@ -522,12 +522,17 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                     filters.get(0).filtered = false;
                     ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Unchecked");
             }else {
+            	boolean setAll = true;
                 for(Filter filt : filters) {
-                    if(filt.filtered)
-                        return;
+                    if(filt.filtered){
+                        setAll = false;
+                        break;
+                    }
                 }
-                filters.get(0).filtered = true;
-                ((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
+                if(setAll){
+                	filters.get(0).filtered = true;
+                	((MenuItem)sender).parent.menuItems.get(0).iconPanel.setStyleName("Checked");
+                }
             }
             col.setFilter(filters);
             applyQueryFilter();

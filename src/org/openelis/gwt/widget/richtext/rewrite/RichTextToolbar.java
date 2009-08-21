@@ -141,8 +141,8 @@ public class RichTextToolbar extends Composite {
   private EventListener listener = new EventListener();
 
   private RichTextArea richText;
-  private RichTextArea.BasicFormatter basic;
-  private RichTextArea.ExtendedFormatter extended;
+  private RichTextArea.Formatter basic;
+  private RichTextArea.Formatter extended;
 
   private Grid outer = new Grid(2,1);
   private HorizontalPanel topPanel = new HorizontalPanel();
@@ -280,19 +280,84 @@ public class RichTextToolbar extends Composite {
     	ScreenDef def = new ScreenDef();
         topPanel.add(UIUtil.createWidget(XMLParser.parse(fontSizeMenuXMl).getDocumentElement(),def));
         topPanel.add(UIUtil.createWidget(XMLParser.parse(fontsMenuXMl).getDocumentElement(),def));
-        ((MenuItem)def.getWidget("FontTimes")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontArial")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontCourier")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontGeorgia")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontTrebuchet")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontVerdana")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontXXSmall")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontXSmall")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontSmall")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontMedium")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontLarge")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontXLarge")).addClickHandler(listener);
-        ((MenuItem)def.getWidget("FontXXLarge")).addClickHandler(listener);
+        ((MenuItem)def.getWidget("FontTimes")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		basic.setFontName("Times New Roman");
+        		fontLabel.setText("Times New Roman");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontArial")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		basic.setFontName("Arial");
+        		fontLabel.setText("Arial");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontCourier")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		basic.setFontName("Courier New");
+        		fontLabel.setText("Courier New");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontGeorgia")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		basic.setFontName("Georgia");
+        		fontLabel.setText("Georgia");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontTrebuchet")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		basic.setFontName("Trebuchet");
+        		fontLabel.setText("Trebuchet");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontVerdana")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		basic.setFontName("Verdana");
+        		fontLabel.setText("Verdana");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontXXSmall")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		 basic.setFontSize(fontSizesConstants[0]);
+        		 sizeLabel.setText("XX Small");
+        	}
+        });
+        ((MenuItem)def.getWidget("FontXSmall")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+       		 basic.setFontSize(fontSizesConstants[1]);
+       		 sizeLabel.setText("X Small");
+        	}
+       });
+        ((MenuItem)def.getWidget("FontSmall")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+       		 basic.setFontSize(fontSizesConstants[2]);
+       		sizeLabel.setText("Small");
+        	}
+       });
+        ((MenuItem)def.getWidget("FontMedium")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+       		 basic.setFontSize(fontSizesConstants[3]);
+       		sizeLabel.setText("Medium");
+        	}
+       });
+        ((MenuItem)def.getWidget("FontLarge")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+       		 basic.setFontSize(fontSizesConstants[4]);
+       		sizeLabel.setText("Large");
+       	}
+       });
+        ((MenuItem)def.getWidget("FontXLarge")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+       		 basic.setFontSize(fontSizesConstants[5]);
+       		sizeLabel.setText("X Large");
+       	}
+       });
+        ((MenuItem)def.getWidget("FontXXLarge")).addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+       		 basic.setFontSize(fontSizesConstants[6]);
+       		sizeLabel.setText("XX Large");
+       	}
+       });
         fontLabel = (Label)def.getWidget("fontLabel");
         sizeLabel = (Label)def.getWidget("sizeLabel");
       // We only use these listeners for updating status, so don't hook them up
@@ -373,8 +438,12 @@ public class RichTextToolbar extends Composite {
     ap.setStyleName(img);
     ab.setWidget(ap);
     ab.addClickHandler(listener);
+    ab.toggle = true;
     return ab;
   }
   
+  public void enable(boolean enabled) {
+	  
+  }
 }
 

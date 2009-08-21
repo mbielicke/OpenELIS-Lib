@@ -1,12 +1,22 @@
 package org.openelis.gwt.widget.rewrite;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.event.HasActionHandlers;
+import org.openelis.gwt.screen.ScreenWindow;
+import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.tree.rewrite.TreeDataItem;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -25,17 +35,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
-
-import org.openelis.gwt.event.ActionEvent;
-import org.openelis.gwt.event.ActionHandler;
-import org.openelis.gwt.event.HasActionHandlers;
-import org.openelis.gwt.screen.ScreenWindow;
-import org.openelis.gwt.widget.IconContainer;
-import org.openelis.gwt.widget.TextBox;
-import org.openelis.gwt.widget.tree.rewrite.TreeDataItem;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Diagram extends Composite implements MouseDownHandler,MouseUpHandler,MouseOverHandler,MouseOutHandler,ClickHandler,DoubleClickHandler,HasActionHandlers<Diagram.Action>{
     

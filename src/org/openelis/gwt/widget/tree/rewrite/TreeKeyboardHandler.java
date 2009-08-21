@@ -25,42 +25,28 @@
 */
 package org.openelis.gwt.widget.tree.rewrite;
 
+import org.openelis.gwt.widget.rewrite.CheckBox;
+import org.openelis.gwt.widget.table.TableLabel;
+
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
-
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.rewrite.CheckBox;
-import org.openelis.gwt.widget.table.TableCellWidget;
-import org.openelis.gwt.widget.table.TableLabel;
-import org.openelis.gwt.widget.table.rewrite.event.BeforeCellEditedEvent;
 
 public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
     
     private TreeWidget controller;
-    private ScreenWidget screen;
     
     public TreeKeyboardHandler(TreeWidget controller) {
         this.controller = controller;
     }
-    
-    public void setScreen(ScreenWidget screen) {
-        this.screen = screen;
-    }
-    
+        
     public void onKeyDown(KeyDownEvent event) {
 
-        //if(!controller.focused)
-         //   return;
-        
         if(controller.editingCell instanceof CheckBox && KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()){
         	return;
         }
@@ -73,8 +59,6 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
         boolean shift = event.isShiftKeyDown();
         if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
             if (controller.activeRow >= 0 && controller.activeRow < controller.shownRows() - 1) {
-                //if(rowList[selected] == autoAddRow)
-                //    return;
                 if(controller.activeRow < controller.view.table.getRowCount() -1){
                     final int row = findNextActive(controller.activeRow);
                     final int col = controller.activeCell;
@@ -101,7 +85,6 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
             if (controller.activeRow >= 0 && controller.activeRow != 0) {
                 final int row = findPrevActive(controller.activeRow);
                 final int col = controller.activeCell;
-                //unselect(selected);
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                         controller.select(row, col);
@@ -160,17 +143,8 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
                 });
             }
         }
-        /*
-        if (KeyboardListener.KEY_RIGHT == code && model.paged) {
-            if (model.pageIndex != model.totalPages - 1)
-                manager.getNextPage(this);
-        }
-        if (KeyboardListener.KEY_LEFT == code && model.paged) {
-            if (model.pageIndex != 0)
-                manager.getPreviousPage(this);
-        }
-        */
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.activeCell > -1 && !shift) {
+        	event.preventDefault();
             if(controller.activeRow < 0){
                 controller.activeRow = 0;
                 controller.activeCell = -1;
@@ -196,16 +170,13 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
                             controller.select(controller.activeRow, fCol);
-                            /*controller.onCellClicked(controller.view.table, controller.activeRow, fCol);
-                            if(((TableCellWidget)controller.view.table.getWidget(controller.activeRow, fCol)).getWidget() instanceof FocusWidget)
-                                ((FocusWidget)((TableCellWidget)controller.view.table.getWidget(controller.activeRow, fCol)).getWidget()).setFocus(true);
-                            */
                         }
                     });
                 }
             }
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.activeCell > -1 && shift) {
+        	event.preventDefault();
             if (controller.activeCell == 0 && controller.modelIndexList[controller.activeRow] == 0){
                     controller.finishEditing();
                     controller.setFocus(true);
@@ -224,11 +195,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
                     tabToPrevRow();
                 }else{
                     final int fCol = col;
-                    //DeferredCommand.addCommand(new Command() {
-                      //  public void execute() {
-                            controller.select(controller.activeRow, fCol);
-                       // }
-                    //});
+                    controller.select(controller.activeRow, fCol);
                 }
             }
         }

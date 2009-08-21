@@ -13,8 +13,6 @@ import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.event.DropManager;
-
 /**
 * Allows one or more table rows to be dropped into an existing table.
 */
@@ -29,9 +27,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  private boolean validDrop;
  
  private Widget positioner;
- 
- public DropManager manager;
- 
+  
  private IndexedPanel flexTableRowsAsIndexPanel = new IndexedPanel() {
 
    public Widget getWidget(int index) {
@@ -63,8 +59,6 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  public void onPreviewDrop(DragContext context) throws VetoDragException {
      if(!validDrop) 
          throw new VetoDragException();
-    if(manager != null)
-        manager.previewDrop(context);
     super.onPreviewDrop(context);
  }
  
@@ -73,17 +67,12 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  public void onEnter(DragContext context) {
      super.onEnter(context);
      positioner = newPositioner(context); 
-     if(manager != null)
-         manager.onEnter(context);
  }
  
  @Override
  public void onDrop(DragContext context) {
      TableRow drop = null;
-     if(manager != null)
-         drop = (TableRow)manager.getDropWidget(context);
-     else
-         drop = (TableRow)context.draggable;
+     drop = (TableRow)context.draggable;
      TableDataRow row = drop.dragRow;
      int modelIndex = drop.dragModelIndex;
      if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
@@ -97,8 +86,6 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
      }    
      dropping = false;
      super.onDrop(context);
-     if(manager != null)
-         manager.dropEnded(context);
  }
 
  @Override
@@ -106,8 +93,6 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
      positioner.removeFromParent();
      positioner = null;
      super.onLeave(context);
-     if(manager != null)
-         manager.onLeave(context);
  }
  
  

@@ -28,6 +28,11 @@ package org.openelis.gwt.widget.table.rewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openelis.gwt.event.BeforeDragStartEvent;
+import org.openelis.gwt.event.BeforeDragStartHandler;
+import org.openelis.gwt.event.HasBeforeDragStartHandlers;
+import org.openelis.gwt.event.HasDragController;
+import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -59,6 +64,10 @@ import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.TableValueChangeEvent;
 import org.openelis.gwt.widget.table.rewrite.event.TableValueChangeHandler;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -90,6 +99,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
@@ -101,9 +111,7 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
  * @author tschmidt
  * 
  */
-public class TableWidget extends FocusPanel implements FocusHandler, 
-													   BlurHandler, 
-													   ClickHandler, 
+public class TableWidget extends FocusPanel implements ClickHandler, 
 													   HasField, 
 													   HasTableValueChangeHandlers,
 													   MouseOverHandler, 
@@ -116,7 +124,8 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 													   HasRowAddedHandlers, 
 													   HasBeforeRowDeletedHandlers,
 													   HasRowDeletedHandlers,
-													   HasBeforeAutoAddHandlers
+													   HasBeforeAutoAddHandlers,
+													   HasDropController
 													   {
                             
     public ArrayList<TableColumn> columns;
@@ -176,10 +185,6 @@ public class TableWidget extends FocusPanel implements FocusHandler,
         setWidget(view);
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
-       // addFocusHandler(this);
-       // addBlurHandler(this);
-        //Event.setEventListener(Document.get().getDocumentElement(), this);
-        //DOM.sinkEvents((Element)Document.get().getDocumentElement(), Event.ONCLICK);
         
     }
         
@@ -635,22 +640,6 @@ public class TableWidget extends FocusPanel implements FocusHandler,
     	}
     }
 
-
-	public void onFocus(FocusEvent event) {
-	
-	}
-
-
-	public void onBlur(BlurEvent event) {
-		//System.out.println("Blur Table");
-		//if(!DOM.isOrHasChild(this.getElement(), ((Widget)event.getSource()).getElement())){
-			//finishEditing();
-		//if(event.getSource() != this && editingCell != null){// && editingCell.getElement() != ((Widget)event.getSource()).getElement()){
-			//finishEditing();
-	//	}
-		
-	}
-
 	public void addError(String Error) {
 		// TODO Auto-generated method stub
 		
@@ -798,5 +787,48 @@ public class TableWidget extends FocusPanel implements FocusHandler,
 		return addHandler(handler, TableValueChangeEvent.getType());
 	}
 
+    public void enableDrag(boolean drag) {
+    	if(drag){
+    		dragController = new TableDragController(RootPanel.get());  		
+      		for(TableRow row : renderer.rows) 
+    			dragController.makeDraggable(row);
+    		dragController.setEnable(true);
+    	}else{
+    		for(TableRow row : renderer.rows)
+    			dragController.makeNotDraggable(row);
+    		dragController = null;
+    	}
+    	
+    }
+    
+    public void enableDrop(boolean drop) {
+    	if(drop)
+    		dropController = new TableIndexDropController(this);
+    	else
+    		dropController = null;
+    }
+    
+    public void addTarget(HasDropController drop){
+    	assert(dragController != null);
+    	dragController.registerDropController(drop.getDropController());
+    }
+    
+    public void removeTarget(HasDropController drop) {
+    	assert(dragController != null);
+    	dragController.unregisterDropController(drop.getDropController());
+    }
+
+	public DropController getDropController() {
+		return dropController;
+	}
+
+	public void setDropController(DropController controller) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void addDragHandler(DragHandler handler) {
+		dragController.addDragHandler(handler);
+	}
 	
 }

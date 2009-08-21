@@ -87,12 +87,15 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
       previous.addMouseUpHandler(this);
       previous.setStyleName("MoveLeft");
       next.setStyleName("MoveRight");
+      previous.addStyleName("inactive");
+      next.addStyleName("inactive");
       tabBar.setVisible(false);
  
       barPanel.add(previous);
       barPanel.add(scrollPanel);
       barPanel.add(next);
       barPanel.setCellHeight(previous, "20px");
+      barPanel.setStyleName("tabbar");
 
       final HasSelectionHandlers<Integer>  source = this;
       tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
@@ -105,12 +108,13 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   }
   
   public void onClick(ClickEvent event) {   
-    if(event.getSource() == next && scrollPanel.getWidgetLeft(tabBar) < 0){                 
+    if(event.getSource() == previous && scrollPanel.getWidgetLeft(tabBar) < 0){                 
        scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);      
     }
-    if(event.getSource() == previous && scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){               
+    if(event.getSource() == next && scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){               
        scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
-    }   
+    }  
+    checkScroll();
   }
   
   public void selectTab(int index){
@@ -170,16 +174,6 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   public TabBar getTabBar(){
       return tabBar;
   }
-     
-  
-  
-  private void manageScrolling(int left){ 
-	  
-   }
-  
-   //public void sizeTabBar() {
-     //  scrollPanel.setWidth(barPanel.getOffsetWidth()+"px");
-   //}
 
    public void onSelection(SelectionEvent<Integer> event) {
 	   selectTab(event.getSelectedItem());
@@ -217,6 +211,7 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
 			    }
 			}
 		};
+		checkScroll();
 	}
 	timer.scheduleRepeating(100);
 	
@@ -226,6 +221,19 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
 	if(timer != null)
 		timer.cancel();
 	timer = null;
+  }
+  
+  private void checkScroll() {
+	  if(scrollPanel.getWidgetLeft(tabBar) >= 0){
+		  if(previous.getStyleName().indexOf("inactive") == -1 )
+			  previous.addStyleName("inactive");
+	  }else
+		  previous.removeStyleName("inactive");
+	  if(scrollPanel.getWidgetLeft(tabBar) <= -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){
+		  if(next.getStyleName().indexOf("inactive") == -1)
+			  next.addStyleName("inactive");
+	  }else
+		  next.removeStyleName("inactive");
   }
   
   
@@ -240,5 +248,6 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
 	  }else if(left < barLeft){
 		  scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+(barLeft-left) , 0);
 	  }
+	  checkScroll();
   }
 }
