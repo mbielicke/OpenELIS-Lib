@@ -33,6 +33,7 @@ import org.openelis.gwt.widget.rewrite.MenuPanel;
 import org.openelis.gwt.widget.rewrite.PassWordTextBox;
 import org.openelis.gwt.widget.rewrite.RadioButton;
 import org.openelis.gwt.widget.rewrite.ResultsTable;
+import org.openelis.gwt.widget.rewrite.SlideOutPanel;
 import org.openelis.gwt.widget.rewrite.StringField;
 import org.openelis.gwt.widget.rewrite.TextArea;
 import org.openelis.gwt.widget.richtext.rewrite.RichTextWidget;
@@ -605,6 +606,27 @@ public class UIUtil {
     	factoryMap.put("CollapsePanel", new Factory<CollapsePanel>() {
     		public CollapsePanel getNewInstance(Node node, ScreenDef def) {
     			CollapsePanel panel = new CollapsePanel();
+    		    if (node.getChildNodes().getLength() > 0){
+    		       NodeList widgets = node.getChildNodes();
+    		       for (int k = 0; k < widgets.getLength(); k++) {
+    		           if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    		               Widget wid = loadWidget(widgets.item(k),def);
+    		               wid.setHeight("100%");
+    		               wid.setWidth("auto");
+    		               panel.setContent(wid);
+    		           }
+    		       }
+    		    }
+    		    if(node.getAttributes().getNamedItem("height") != null)
+    		       panel.setHeight(node.getAttributes().getNamedItem("height").getNodeValue());
+    		       
+    		    setDefaults(node, panel);
+    		    return panel;
+    		}
+    	});
+    	factoryMap.put("SlidePanel", new Factory<SlideOutPanel>() {
+    		public SlideOutPanel getNewInstance(Node node, ScreenDef def) {
+    			SlideOutPanel panel = new SlideOutPanel();
     		    if (node.getChildNodes().getLength() > 0){
     		       NodeList widgets = node.getChildNodes();
     		       for (int k = 0; k < widgets.getLength(); k++) {

@@ -803,6 +803,21 @@ cursor:default;}
     background:url("../Images/closeleftbar.gif") no-repeat center;
 }
 
+.SlideOpen {
+	width:6px;
+	height:116px;
+	position:relative;
+	left:-3;
+    background:url("../Images/openleftbar.gif") no-repeat center;
+}
+.SlideClose {
+	width:6px;
+	height:116px;
+    left:-3px;
+    background:url("../Images/closeleftbar.gif") no-repeat center;
+    position : relative;
+}
+
 .StatusImage {
     background-image:url("../Images/exclamation.png");
     height:16px;
