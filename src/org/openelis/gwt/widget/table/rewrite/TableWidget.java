@@ -753,7 +753,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	
 	protected boolean canEditCell(int row, int col) {
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(modelIndexList[row]).cells.get(col).value);
         	if(bce.isCancelled()){
         		return false;
         	}
