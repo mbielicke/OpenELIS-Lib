@@ -679,7 +679,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
     }
     
-    private void refreshRow(int index) {
+    public void refreshRow(int index) {
     	TreeDataItem row = rows.get(index);
     	while(index+1 < rows.size() && row.isDecendant(rows.get(index+1))){
     		TreeDataItem item = rows.get(index+1);
@@ -694,7 +694,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	checkChildItems(row,middle);
     	rows.addAll(index,middle);
         renderer.dataChanged(true);
-     }
+    }
+    
+    public void refreshRow(TreeDataItem item) {
+    	refreshRow(rows.indexOf(item));
+    }
 
     protected boolean canEditCell(int row, int col) {
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
