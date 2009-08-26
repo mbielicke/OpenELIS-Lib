@@ -123,7 +123,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 		}
 	}
 	
-	protected void setState(Screen.State state){
+	public void setState(Screen.State state){
         this.state = state;
         StateChangeEvent.fire(this, state);
     }
@@ -163,7 +163,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         window.setError(consts.get("correctErrors"));
     }
     
-    public String getString(Object obj) {
+    protected String getString(Object obj) {
         if (obj == null)
             return "";
 
