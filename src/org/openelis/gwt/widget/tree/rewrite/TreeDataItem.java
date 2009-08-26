@@ -188,5 +188,19 @@ public class TreeDataItem extends TableDataRow {
         return null;
     }
     
+    public boolean isDecendant(TreeDataItem child) {
+    	if(items.contains(child)){
+    		return true;
+    	}
+    	Iterator<TreeDataItem> it = items.iterator();
+    	while(it.hasNext()){
+    		return it.next().isDecendant(child);
+    	}
+    	return false;
+    }
+    
+    public boolean equals(Object obj) {
+    	return this == obj;
+    }
     
 }

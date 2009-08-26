@@ -114,7 +114,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 		if(tree.dragController == context.dragController){
 			if(modelIndex < tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
 				targetRow--;
-			tree.unlink(modelIndex);
+			//tree.unlink(modelIndex);
 		}   
 		boolean advanceScroll = false;
 		TreeDataItem targetItem = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).item;
@@ -134,7 +134,6 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 				//  modelIndex++;
 			//tree.model.deleteRow(modelIndex);
 		}    
-		tree.refresh(true);
 		if(advanceScroll){
 			DeferredCommand.addCommand(new Command() {
 				public void execute() {
@@ -200,7 +199,6 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 				open = new Timer() {
 					public void run() {
 						targetItem.item.toggle();
-						tree.refresh(true);
 						if(ctx.dragController == tree.dragController) {
 							if(((TreeRow)ctx.draggable).dragModelIndex > targetItem.modelIndex) {
 								((TreeRow)ctx.draggable).dragItem  = tree.getRow(((TreeRow)ctx.draggable).dragModelIndex+targetItem.item.getItems().size());
