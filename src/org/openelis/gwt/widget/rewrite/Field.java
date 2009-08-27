@@ -95,7 +95,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		if(!valid){
 			drawError((Widget)event.getSource());
 		}
-		ValueChangeEvent.fire(this, value);
+		if(!queryMode)
+			ValueChangeEvent.fire(this, value);
 	}
 	
     public void clearError(Widget wid) {

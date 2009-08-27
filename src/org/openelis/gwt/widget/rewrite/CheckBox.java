@@ -122,9 +122,9 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     public void setType(CheckType type){
         this.type = type;
         if(type == CheckType.THREE_STATE)
-            setState(UNKNOWN);
+            setValue(UNKNOWN);
         else
-            setState(UNCHECKED);
+            setValue(UNCHECKED);
     }
     
     public CheckType getType() {
@@ -148,7 +148,8 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
             setStyleName(UNCHECKED_STYLE);
             this.state = UNCHECKED;
         }
-        ValueChangeEvent.fireIfNotEqual(this, old, this.state);
+        
+        //ValueChangeEvent.fireIfNotEqual(this, old, this.state);
     }
 
     public void onClick(ClickEvent event) {
@@ -156,18 +157,19 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     		return;
        if(type == CheckType.TWO_STATE){
            if(state == CHECKED)
-               setState(UNCHECKED);
+               setValue(UNCHECKED,true);
            else
-               setState(CHECKED);
+               setValue(CHECKED,true);
        }else{
            if(state == CHECKED) 
-               setState(UNCHECKED);
+               setValue(UNCHECKED,true);
            else if (state == UNCHECKED)
-               setState(UNKNOWN);
+               setValue(UNKNOWN,true);
            else
-               setState(CHECKED);
+               setValue(CHECKED,true);
        }
        addStyleName("Focus");
+       //field.setValue(state);
     }
     
     public void enable(boolean enabled){
@@ -249,23 +251,29 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	    		return;
 	       if(type == CheckType.TWO_STATE){
 	           if(state == CHECKED)
-	               setState(UNCHECKED);
+	               setValue(UNCHECKED,true);
 	           else
-	               setState(CHECKED);
+	               setValue(CHECKED,true);
 	       }else{
 	           if(state == CHECKED) 
-	               setState(UNCHECKED);
+	               setValue(UNCHECKED,true);
 	           else if (state == UNCHECKED)
-	               setState(UNKNOWN);
+	               setValue(UNKNOWN,true);
 	           else
-	               setState(CHECKED);
+	               setValue(CHECKED,true);
 	       }
 	       addStyleName("Focus");
 		}
 	}
 
 	public void setQueryMode(boolean query) {
-		// TODO Auto-generated method stub
+		if(query)
+			setType(CheckType.THREE_STATE);
+		else
+			setType(CheckType.TWO_STATE);
+		field.setQueryMode(query);
+		
+			
 		
 	}
 
@@ -274,7 +282,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
-		if(field.queryString != null) {
+		if(field.queryString != null){
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;
 			qd.key = key;
