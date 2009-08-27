@@ -360,5 +360,10 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 		field.setValue(value);
 		setValue(value);
 	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<Datetime> handler) {
+		return field.addValueChangeHandler(handler);
+	}
     
 }

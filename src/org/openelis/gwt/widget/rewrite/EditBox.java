@@ -315,5 +315,10 @@ public class EditBox extends Composite implements ClickHandler,
 	public HandlerRegistration addFocusHandler(FocusHandler handler) {
 		return addDomHandler(handler,FocusEvent.getType());
 	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
+	}
 
 }

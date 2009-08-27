@@ -233,6 +233,11 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
+	}
 
 
 }

@@ -93,6 +93,7 @@ import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -889,6 +890,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	
 	public void refresh(int row, int col) {
 		renderer.cellUpdated(row, col);
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return null;
 	}
     
 }

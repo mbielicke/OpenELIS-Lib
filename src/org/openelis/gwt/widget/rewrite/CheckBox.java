@@ -295,7 +295,11 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	public void setFieldValue(String value) {
 		field.setValue(value);
 		setValue(value);
-		
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
 	}
 
 }

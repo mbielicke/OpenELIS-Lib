@@ -84,6 +84,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		return field;
 	}
 
+	
 	public void setField(Field<T> field) {
 		this.field = field;
 		addValueChangeHandler(field);
@@ -167,5 +168,12 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		else 
 			setText("");
 	}
+
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<T> handler) {
+		return field.addValueChangeHandler(handler);
+	}
+	
+	
 	
 }

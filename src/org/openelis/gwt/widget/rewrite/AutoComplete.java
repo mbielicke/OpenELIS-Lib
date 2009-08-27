@@ -166,6 +166,11 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
         return addHandler(handler,ValueChangeEvent.getType());
     }
+    
+    public HandlerRegistration addFieldValueChangeHandler(
+    		ValueChangeHandler handler) {
+    	return addValueChangeHandler(handler);
+    }
 
 	public void addError(String error) {
 		field.addError(error);

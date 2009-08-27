@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.widget.HandlesEvents;
 import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.MenuLabel;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -12,15 +11,20 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Field<T> extends HandlesEvents implements ValueChangeHandler<String>, MouseOutHandler, MouseOverHandler, BlurHandler{
+public class Field<T> extends HandlesEvents implements ValueChangeHandler<String>, MouseOutHandler, MouseOverHandler, BlurHandler, HasValueChangeHandlers<T> {
 	
     public boolean required;
     public boolean valid = true;
@@ -91,6 +95,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		if(!valid){
 			drawError((Widget)event.getSource());
 		}
+		ValueChangeEvent.fire(this, value);
 	}
 	
     public void clearError(Widget wid) {
@@ -112,9 +117,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     public void drawError(Widget wid) {        
         errorPanel.clear();
         for (String error : errors) {
-            MenuLabel errorLabel = new MenuLabel(error,"Images/bullet_red.png");
-            errorLabel.setStyleName("errorPopupLabel");
-            errorPanel.add(errorLabel);
+        	HorizontalPanel hp = new HorizontalPanel();
+        	hp.add(new Label(error));
+        	hp.add(new Image("Iamges/bullet_red.png"));
+            hp.setStyleName("errorPopupLabel");
+            errorPanel.add(hp);
         }
         if(errors.size() == 0){
             wid.removeStyleName("InputError");
@@ -177,6 +184,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		if(!valid){
 			drawError(wid);
 		}
+	}
+
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<T> handler) {
+		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
 }

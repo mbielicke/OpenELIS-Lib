@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.rewrite.QueryData;
 import org.openelis.gwt.widget.rewrite.Field;
 
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+
 public interface HasField<T> {
 	
 	public Field<T> getField();
@@ -30,5 +33,7 @@ public interface HasField<T> {
 	public T getFieldValue();
 	
 	public void setFieldValue(T value);
+	
+	public HandlerRegistration addFieldValueChangeHandler(ValueChangeHandler<T> handler);
 
 }

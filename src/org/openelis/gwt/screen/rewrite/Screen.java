@@ -100,8 +100,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     	screenHandler.target = wid;
     	addDataChangeHandler(screenHandler);
     	addStateChangeHandler(screenHandler);
-    	if(wid instanceof HasValue)
-    		((HasValue)wid).addValueChangeHandler(screenHandler);
+    	if(wid instanceof HasField)
+    		((HasField)wid).addFieldValueChangeHandler(screenHandler);
     	if(wid instanceof HasClickHandlers) 
     		((HasClickHandlers)wid).addClickHandler(screenHandler);
     }

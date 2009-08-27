@@ -336,5 +336,10 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 		field.setValue(value);
 		setValue(value);
 	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
+	}
 
 }

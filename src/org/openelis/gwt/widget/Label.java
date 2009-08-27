@@ -103,5 +103,10 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 	public void setQueryMode(boolean query) {
 		
 	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return field.addValueChangeHandler(handler);
+	}
 
 }

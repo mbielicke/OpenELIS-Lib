@@ -77,6 +77,7 @@ import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -813,6 +814,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	
 	public void addDragHandler(DragHandler handler) {
 		dragController.addDragHandler(handler);
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return null;
 	}
 	
 }

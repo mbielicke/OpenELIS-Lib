@@ -32,23 +32,25 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class SlideOutPanel extends Composite implements ClickHandler, MouseOverHandler, MouseOutHandler{
     
-    private AbsolutePanel content = new AbsolutePanel();
+    private Widget content = new Widget();
     private VerticalPanel middle = new VerticalPanel();
     private FocusPanel arrow = new FocusPanel();
     public boolean isOpen;
-    private AbsolutePanel slide;
+    private DecoratorPanel slide;
     
     public SlideOutPanel(){
         initWidget(middle);
@@ -70,9 +72,7 @@ public class SlideOutPanel extends Composite implements ClickHandler, MouseOverH
     }
     
     public void setContent(Widget wid){
-        if(content.getWidgetCount() > 0)
-            content.remove(0);
-        content.add(wid);
+        this.content = wid;
     }
     
     public void open() {
@@ -82,12 +82,17 @@ public class SlideOutPanel extends Composite implements ClickHandler, MouseOverH
             arrow.clear();
             arrow.setStyleName("SlideClose");
             isOpen = true;
-            slide = new AbsolutePanel();
-            slide.setStyleName("SlideMenu");
-            slide.add(content);
+            if(slide == null){
+            	slide = new DecoratorPanel();
+            	slide.setStyleName("SlideOut");
+            	slide.add(content);
+            }
             slide.setHeight(middle.getOffsetHeight()+"px");
-          
-            RootPanel.get().add(slide, getAbsoluteLeft()+middle.getOffsetWidth(), getAbsoluteTop());
+            content.setHeight(middle.getOffsetHeight()+"px");
+            //slide.setPopupPosition(getAbsoluteLeft()+middle.getOffsetWidth(), getAbsoluteTop());
+            //slide.show();
+            RootPanel.get().add(slide, getAbsoluteLeft()+middle.getOffsetWidth()-2, getAbsoluteTop());
+           
         }
     }
     
@@ -99,7 +104,7 @@ public class SlideOutPanel extends Composite implements ClickHandler, MouseOverH
             arrow.setStyleName("SlideOpen");
             isOpen = false;
             RootPanel.get().remove(slide);
-            slide = null;
+            //slide.hide();
         }
     }
 

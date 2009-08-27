@@ -7,6 +7,8 @@ import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
 public class RadioButton extends com.google.gwt.user.client.ui.RadioButton implements HasField{
 	
@@ -83,7 +85,10 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 
 	public void setFieldValue(Object value) {
 		field.setValue(value);
-		
-		
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return field.addValueChangeHandler(handler);
 	}
 }

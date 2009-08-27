@@ -393,5 +393,10 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<Datetime> handler) {
+		return field.addValueChangeHandler(handler);
+	}
     
 }

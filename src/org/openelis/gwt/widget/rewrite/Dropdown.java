@@ -209,6 +209,13 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
         return addHandler(handler,ValueChangeEvent.getType());
     }
+    
+	@Override
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return addValueChangeHandler(handler);
+	}
+
 
 	public void addError(String error) {
 		field.addError(error);

@@ -7,6 +7,8 @@ import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 
 public class PassWordTextBox extends PasswordTextBox implements HasField<String> {
@@ -78,8 +80,12 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 
 	public void setFieldValue(String value) {
 		field.setValue(value);
-		setText(value);
-		
+		setText(value);	
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
 	}
 
 }

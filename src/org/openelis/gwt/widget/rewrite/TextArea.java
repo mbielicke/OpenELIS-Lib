@@ -7,6 +7,8 @@ import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
 
 public class TextArea extends com.google.gwt.user.client.ui.TextArea implements HasField<String> {
@@ -80,7 +82,11 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 	public void setFieldValue(String value) {
 		field.setValue(value);
 		setText(value);
-		
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
 	}
 
 }
