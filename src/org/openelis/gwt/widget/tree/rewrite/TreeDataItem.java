@@ -114,6 +114,10 @@ public class TreeDataItem extends TableDataRow {
             items.get(i).childIndex = i;
     }
     
+    public void removeItem(TreeDataItem child) {
+    	removeItem(items.indexOf(child));
+    }
+    
     public int shownItems() {
         int shown = 0;
         if(open){

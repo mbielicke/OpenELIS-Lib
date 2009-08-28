@@ -359,8 +359,25 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         checkChildItems(row,added);
        	rows.addAll(rowindex, added);
        	renderer.dataChanged(true);
-        RowAddedEvent.fire(this, data.size()-1, row);
-       	
+        RowAddedEvent.fire(this, data.size()-1, row);  	
+    }
+    
+    public void addChildItem(TreeDataItem parent, TreeDataItem child) {
+    	parent.addItem(child);
+    	if(parent.open)
+    		refreshRow(parent);
+    }
+    
+    public void addChildItem(TreeDataItem parent, TreeDataItem child, int index) {
+    	parent.addItem(index, child);
+    	if(parent.open)
+    		refreshRow(parent);
+    }
+    
+    public void removeChild(TreeDataItem parent, TreeDataItem child) {
+    	parent.removeItem(parent.getItems().indexOf(child));
+    	if(parent.open)
+    		refreshRow(parent);
     }
     
     public void clear() {
@@ -674,7 +691,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
     }
     
-    public void refreshRow(int index) {
+    private void refreshRow(int index) {
     	TreeDataItem row = rows.get(index);
     	while(index+1 < rows.size() && row.isDecendant(rows.get(index+1))){
     		TreeDataItem item = rows.get(index+1);
@@ -691,7 +708,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         renderer.dataChanged(true);
     }
     
-    public void refreshRow(TreeDataItem item) {
+    private void refreshRow(TreeDataItem item) {
     	refreshRow(rows.indexOf(item));
     }
 
