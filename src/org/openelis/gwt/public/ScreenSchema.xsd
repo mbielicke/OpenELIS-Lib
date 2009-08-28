@@ -353,7 +353,7 @@
 	<xsd:element name="text" substitutionGroup="widgets">
 		<xsd:complexType mixed="true">
 			<xsd:sequence>
-				<xsd:element ref="xsl:value-of" minOccurs="0" maxOccurs="0"/>
+				<xsd:element ref="xsl:value-of" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 			<xsd:attribute name="wordwrap" type="xsd:boolean" />
 			<xsd:attributeGroup ref="ScreenWidget" />
@@ -457,6 +457,7 @@
 			<xsd:attribute name="showRows" type="xsd:boolean" />
 			<xsd:attributeGroup ref="scroll" />
 			<xsd:attribute name="multiSelect" type="xsd:boolean" />
+			<xsd:attribute name="maxRows" type="xsd:integer"/>
 		</xsd:complexType>
 	</xsd:element>
 
