@@ -420,10 +420,6 @@
 						<xsd:sequence>
 							<xsd:element name="col" minOccurs="1" maxOccurs="unbounded">
 								<xsd:complexType>
-									<xsd:sequence>
-										<xsd:element ref="widgets" minOccurs="1"
-											maxOccurs="1" />
-									</xsd:sequence>
 									<xsd:attribute name="header" type="xsd:string" />
 									<xsd:attribute name="width" type="xsd:integer"
 										use="required" />
@@ -447,6 +443,7 @@
 								</xsd:complexType>
 							</xsd:element>
 						</xsd:sequence>
+						<xsd:attribute name="key" type="xsd:string"/>
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>
