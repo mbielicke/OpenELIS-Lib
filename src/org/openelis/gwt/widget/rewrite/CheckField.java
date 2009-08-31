@@ -40,13 +40,13 @@ public class CheckField extends Field<String> {
      * This method will be used to validate the field for submission to the server.
      */
     public void validate() {
+        valid = true;
         if (required) {
             if (value == null) {
             	valid =  false;
                 addError(Screen.consts.get("fieldRequiredException"));
             }
         }
-        valid = true;
     }
     
     public void validateQuery() {

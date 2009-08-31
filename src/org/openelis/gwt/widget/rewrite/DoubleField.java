@@ -22,6 +22,8 @@ public class DoubleField extends Field<Double> {
     }
 
     public void validate() {
+        valid = true;
+        
         if (invalid) {
             valid = false;
             addError(Screen.consts.get("fieldNumericException"));
@@ -36,7 +38,6 @@ public class DoubleField extends Field<Double> {
             valid = false;
             return;
         }
-        valid = true;
     }
     
     public void validateQuery() {

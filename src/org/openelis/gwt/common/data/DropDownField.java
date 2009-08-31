@@ -246,6 +246,7 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
      * Method will validate the the field's values when called.
      */
     public void validate() {
+        valid = true;
         if (required) {
             //if there are no selections or there is one selection but it is "" then it is empty and we need to throw an error
             if (value == null || value.size() == 0 || (value.size() == 1 && value.get(0).key == null)) {
@@ -255,7 +256,6 @@ public class DropDownField<Key> extends AbstractField<ArrayList<TableDataRow<Key
                 return;
             }
         }
-        valid = true;
     }
 
     /**

@@ -176,10 +176,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			if(value == null)
 				value = "";
 			setStringValue(value.toString());
-			if(!valid){
-				drawError(wid);
-				return;
-			}
+			
 			validate();
 		}
 		if(!valid){

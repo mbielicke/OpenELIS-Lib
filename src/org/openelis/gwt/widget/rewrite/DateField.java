@@ -82,6 +82,7 @@ public class DateField extends Field<Datetime> {
      * This method is called by the FormRPC and will check to see if the value set is valid.
      */
     public void validate() {
+        valid = true;
         if (required) {
             if (value == null) {
             	valid = false;
@@ -91,7 +92,6 @@ public class DateField extends Field<Datetime> {
         if (value != null && !isInRange()) {
         	valid = false;
         }
-        valid = true;
     }
     
     public void validateQuery() {
