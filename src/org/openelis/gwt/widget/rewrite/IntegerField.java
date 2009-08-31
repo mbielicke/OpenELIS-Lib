@@ -23,7 +23,6 @@ public class IntegerField extends Field<Integer> {
     }
 
     public void validate() {
-        valid = true;
         if (invalid) {
             valid = false;
             addError(Screen.consts.get("fieldNumericException"));

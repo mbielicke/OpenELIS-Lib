@@ -138,11 +138,11 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     public void setState(String state) {
     	String old = this.state;
         this.state = state;
-        if(state == CHECKED)
+        if(CHECKED.equals(CHECKED))
             setStyleName(CHECKED_STYLE);
-        else if(state == UNCHECKED) 
+        else if(UNCHECKED.equals(state)) 
             setStyleName(UNCHECKED_STYLE);
-        else if(state == UNKNOWN && type == CheckType.THREE_STATE)
+        else if(UNKNOWN.equals(state) && type == CheckType.THREE_STATE)
             setStyleName(UNKNOWN_STYLE);
         else{
             setStyleName(UNCHECKED_STYLE);
