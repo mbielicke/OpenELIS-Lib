@@ -242,14 +242,13 @@ public class DateField extends Field<Datetime> {
             value = null;
             return;
         }
-        if(pattern == null) {
-        	   try {
-        		   val = val.replaceAll("-", "/");
-        		   date = new Date(val);
-        	   }catch(Exception e) {
-        		   valid = false;
-        		   addError("Invalid Date format entered");
-        	   }
+   	   try {
+   		   val = val.replaceAll("-", "/");
+   		   date = new Date(val);
+   	   }catch(Exception e) {
+   		   valid = false;
+  		   addError("Invalid Date format entered");
+   	   }/*
         }else{
         	try {
         		date = DateTimeFormat.getFormat(pattern).parse(val);
@@ -258,6 +257,7 @@ public class DateField extends Field<Datetime> {
         		addError("Invalid Date format entered");
         	}
         }
+        */
         if(valid)
         	setValue(Datetime.getInstance(begin, end, date));
     }
