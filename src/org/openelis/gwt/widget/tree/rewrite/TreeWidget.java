@@ -195,14 +195,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      */
     public void onClick(ClickEvent event) {
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-    	if(columns.get(getRow(cell.getRowIndex()).leafType).get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
-    		select(cell.getRowIndex(),cell.getCellIndex());
-    		finishEditing();
-    		activeCell = cell.getCellIndex();
-            renderer.setCellEditor(cell.getRowIndex(), cell.getCellIndex());
-            unsinkEvents(Event.ONKEYPRESS);
-    		return;
-    	}
+		if(isEnabled()){
+			if(columns.get(rows.get(modelIndexList[cell.getRowIndex()]).leafType).get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
+				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue()))
+					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
+				else
+					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
+			}
+		}
         if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
             return;
         selectedByClick = true;

@@ -124,6 +124,7 @@ public class TreeRenderer {
         	}else{
         		controller.view.table.setWidget(index, i, wid);
         	}
+        	controller.view.table.getCellFormatter().setStyleName(index,i, "TreeCell");
             if(controller.isSelected(modelIndex))
                 rows.get(index).addStyleName(controller.view.selectedStyle);
             else
@@ -193,7 +194,7 @@ public class TreeRenderer {
 
     public boolean stopEditing() {
         if(controller.editingCell != null){
-        	Object currVal = controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).getValue();
+        	Object currVal = controller.rows.get(controller.activeRow).cells.get(controller.activeCell).getValue();
 	        if(controller.editingCell instanceof Focusable)
     	    	((Focusable)controller.editingCell).setFocus(false);
 	        Object newVal = null;
@@ -204,7 +205,7 @@ public class TreeRenderer {
 
         	if(controller.editingCell instanceof HasField)
 	        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
-        	controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(newVal);
+        	controller.rows.get(controller.activeRow).cells.get(controller.activeCell).setValue(newVal);
         	setCellDisplay(controller.activeRow,controller.activeCell);
         	controller.editingCell = null;
             return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
@@ -285,7 +286,8 @@ public class TreeRenderer {
     				editorGrid.getCellFormatter().setWidth(0,j,"18px");
     			if(j == 0)
     				editorGrid.getCellFormatter().setHeight(0,j,"18px");
-    			editorGrid.getCellFormatter().setStyleName(0,j,"treeungrouped");
+    			editorGrid.getCellFormatter().setStyleName(0,j,"TreeCell");
+    			editorGrid.getCellFormatter().addStyleName(0,j,"treeungrouped");
     			if(j == editorGrid.getColumnCount() -2){
     				if(!drow.mightHaveChildren()) {
     					editorGrid.getCellFormatter().setStyleName(0,j,"");
