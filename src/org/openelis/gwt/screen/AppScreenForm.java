@@ -141,7 +141,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             
                 if(form.getErrors().size() > 0){
                     if(form.getErrors().size() > 1){
-                        window.setMessagePopup((String[])form.getErrors().toArray(new String[form.getErrors().size()]), "ErrorPanel");
+                        window.setMessagePopup(form.getErrors(), "ErrorPanel");
                         window.setError("(Error 1 of "+form.getErrors().size()+") "+(String)form.getErrors().get(0));
                     }else
                         window.setError((String)form.getErrors().get(0));
@@ -238,7 +238,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
             Window.alert(caught.getMessage());
         if(form.getErrors().size() > 0){
             if(form.getErrors().size() > 1){
-                window.setMessagePopup((String[])form.getErrors().toArray(new String[form.getErrors().size()]), "ErrorPanel");
+                window.setMessagePopup(form.getErrors(), "ErrorPanel");
                 window.setError("(Error 1 of "+form.getErrors().size()+") "+(String)form.getErrors().get(0));
             }else
                 window.setError((String)form.getErrors().get(0));
@@ -253,7 +253,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
         }
         if(form.getErrors() != null && form.getErrors().size() > 0){
             if(form.getErrors().size() > 1){
-                window.setMessagePopup((String[])form.getErrors().toArray(new String[form.getErrors().size()]), "ErrorPanel");
+                window.setMessagePopup(form.getErrors(), "ErrorPanel");
                 window.setError("(Error 1 of "+form.getErrors().size()+") "+(String)form.getErrors().get(0));
             }else
                 window.setError((String)form.getErrors().get(0));

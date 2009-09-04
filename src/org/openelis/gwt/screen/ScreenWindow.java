@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.screen;
 
+import java.util.ArrayList;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.dom.client.Element;
@@ -317,7 +319,7 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         }
         if(content instanceof Screen) {
         	((Screen)content).setWindow(this);
-        	setName(((Screen)content).getDefinition().name);
+        	setName(((Screen)content).getDefinition().getName());
         	setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
             setStatus(Screen.consts.get("loadCompleteMessage"),"");
@@ -481,13 +483,13 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         ((ScreenBase)content).keep = keep;
     }
     
-    public void setMessagePopup(String[] messages, String style) {
+    public void setMessagePopup(ArrayList<String> messages, String style) {
         statusImg.setStyleName(style);
         statusImg.removeMouseListener(this);
         statusImg.addMouseListener(this);
         messagePanel = new VerticalPanel();
-        for(int i = 0; i < messages.length; i++){
-            MenuLabel errorLabel = new MenuLabel(messages[i],"Images/bullet_red.png");
+        for(int i = 0; i < messages.size(); i++){
+            MenuLabel errorLabel = new MenuLabel(messages.get(i),"Images/bullet_red.png");
             errorLabel.setStyleName("errorPopupLabel");
             messagePanel.add(errorLabel);
         }
