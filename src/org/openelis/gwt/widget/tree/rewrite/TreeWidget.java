@@ -366,12 +366,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	parent.addItem(child);
     	if(parent.open)
     		refreshRow(parent);
+    	RowAddedEvent.fire(this,-1, child);
     }
     
     public void addChildItem(TreeDataItem parent, TreeDataItem child, int index) {
     	parent.addItem(index, child);
     	if(parent.open)
     		refreshRow(parent);
+    	RowAddedEvent.fire(this, -1, child);
     }
     
     public void removeChild(TreeDataItem parent, TreeDataItem child) {
