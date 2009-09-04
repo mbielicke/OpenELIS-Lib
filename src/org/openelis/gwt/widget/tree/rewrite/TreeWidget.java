@@ -739,7 +739,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 			return;
 		for(int i = 0; i < rows.size(); i++) {
 			for(int j = 0; j < rows.get(i).cells.size(); j++){
-				Widget wid = columns.get(data.get(i).leafType).get(j).getWidgetEditor(rows.get(i).cells.get(j));
+				Widget wid = columns.get(rows.get(i).leafType).get(j).getWidgetEditor(rows.get(i).cells.get(j));
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
 					rows.get(i).cells.get(j).errors = ((HasField)wid).getErrors();
