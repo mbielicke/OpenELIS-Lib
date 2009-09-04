@@ -2,10 +2,10 @@ package org.openelis.gwt.common;
 
 import java.util.ArrayList;
 
-public class ValidationErrorsList extends RPCException{
+public class ValidationErrorsList extends Exception {
     
     private static final long serialVersionUID = 1L;
-    private ArrayList<RPCException> errors = new ArrayList<RPCException>();
+    private ArrayList<Exception> errors = new ArrayList<Exception>();
     
     public ValidationErrorsList() {
         super();
@@ -24,7 +24,7 @@ public class ValidationErrorsList extends RPCException{
         return errors.size();
     }
     
-    public ArrayList<RPCException> getErrorList(){
+    public ArrayList<Exception> getErrorList(){
         return errors;
     }
     

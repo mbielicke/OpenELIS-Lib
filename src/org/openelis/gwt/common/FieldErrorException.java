@@ -26,7 +26,7 @@
 package org.openelis.gwt.common;
 
 
-public class FieldErrorException extends RPCException{
+public class FieldErrorException extends RPCException {
 
 	private static final long serialVersionUID = 1L;
 

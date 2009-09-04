@@ -1,8 +1,10 @@
 package org.openelis.gwt.screen.rewrite;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.openelis.gwt.common.FieldErrorException;
+import org.openelis.gwt.common.FormErrorException;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.TableFieldErrorException;
 import org.openelis.gwt.common.ValidationErrorsList;
@@ -38,7 +40,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     public enum State {DEFAULT,DISPLAY,UPDATE,ADD,QUERY,DELETE};
     public State state = State.DEFAULT;
     protected ScreenDef def;
-    protected ScreenWindow window;
+    public ScreenWindow window;
     public static HashMap<String,String> consts;
     protected ScreenService service;
     
@@ -149,18 +151,32 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     }
     
     protected void showErrors(ValidationErrorsList errors) {
-        for (RPCException ex : errors.getErrorList()) {
+        ArrayList<String> formErrors = new ArrayList<String>();
+        
+        for (Exception ex : errors.getErrorList()) {
             if (ex instanceof TableFieldErrorException) {
                 TableFieldErrorException tfe = (TableFieldErrorException)ex;
                 ((TableWidget)def.getWidget(tfe.getTableKey())).setCellError(tfe.getRowIndex(),
                                                                              tfe.getFieldName(),
                                                                              consts.get(tfe.getMessage()));
+            } else if(ex instanceof FormErrorException){
+                FormErrorException fe = (FormErrorException)ex;
+                formErrors.add(consts.get(fe.getMessage()));
+                
             } else {
                 FieldErrorException fe = (FieldErrorException)ex;
                 ((HasField)def.getWidget(fe.getFieldName())).addError(consts.get(fe.getMessage()));
             }
         }
-        window.setError(consts.get("correctErrors"));
+        
+        if(formErrors.size() == 0)
+            window.setError(consts.get("correctErrors"));
+        else if(formErrors.size() == 1)
+            window.setError(formErrors.get(0));
+        else{
+            window.setError("(Error 1 of "+formErrors.size()+") " + formErrors.get(0));
+            window.setMessagePopup((String[])formErrors.toArray(), "ErrorPanel");
+        }
     }
     
     protected String getString(Object obj) {
