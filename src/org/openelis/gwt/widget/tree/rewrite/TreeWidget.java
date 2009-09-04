@@ -512,6 +512,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         shownRows = 0;
         getVisibleRows();
         selectedRows.clear();
+        activeRow = -1;
+        activeCell = -1;
         renderer.dataChanged(false);
     }
 
