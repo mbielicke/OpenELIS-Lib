@@ -39,8 +39,10 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 		    return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
 		
 		}catch(InvocationTargetException e){
-		    throw (Exception)e.getCause();
-		    
+			if(e.getCause() != null)
+				throw (Exception)e.getCause();
+			else
+				throw (Exception)e.getTargetException();
 		}catch(Exception e){
             e.printStackTrace();
             throw new Exception(e.getMessage());
