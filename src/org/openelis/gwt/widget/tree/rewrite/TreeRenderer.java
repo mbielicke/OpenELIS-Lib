@@ -286,7 +286,7 @@ public class TreeRenderer {
     				editorGrid.getCellFormatter().setWidth(0,j,"18px");
     			if(j == 0)
     				editorGrid.getCellFormatter().setHeight(0,j,"18px");
-    			editorGrid.getCellFormatter().setStyleName(0,j,"TreeCell");
+
     			editorGrid.getCellFormatter().addStyleName(0,j,"treeungrouped");
     			if(j == editorGrid.getColumnCount() -2){
     				if(!drow.mightHaveChildren()) {

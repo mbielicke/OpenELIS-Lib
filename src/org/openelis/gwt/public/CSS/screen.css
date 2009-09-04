@@ -489,8 +489,6 @@ border:1px solid #D8D8D8;
     height:16px;
     padding:1px;
     cursor:pointer;
-    border:1px solid #D8D8D8;
-    border-left:none;
 }
 .Screenlookup .Hover{
     background:#D8D8D8;
@@ -1465,6 +1463,7 @@ legend {
 }
 
 .ScreenTree {
+	border:1px solid #D8D8D8;
     width:100%;
 }
 .ScreenTree .gwt-TreeItem{

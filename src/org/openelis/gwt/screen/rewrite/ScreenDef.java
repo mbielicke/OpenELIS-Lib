@@ -71,6 +71,10 @@ public class  ScreenDef  {
 		return xmlDef;
 	}
 	
+	public String getName(){
+	    return name;
+	}
+	
 	public void setWidgets(HashMap<String,Widget> widgets) {
 		this.widgets = widgets;
 	}

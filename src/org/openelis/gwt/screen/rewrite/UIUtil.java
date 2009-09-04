@@ -1607,6 +1607,7 @@ public class UIUtil {
                 setDefaults(node,tree);
                 tree.addBlurHandler(focusHandler);
                 tree.addFocusHandler(focusHandler);
+                tree.setStyleName("ScreenTree");
     			return tree;
     		}
     	});

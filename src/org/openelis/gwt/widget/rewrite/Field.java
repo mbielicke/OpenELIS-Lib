@@ -119,8 +119,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         errorPanel.clear();
         for (String error : errors) {
         	HorizontalPanel hp = new HorizontalPanel();
+        	hp.add(new Image("Images/bullet_red.png"));
         	hp.add(new Label(error));
-        	hp.add(new Image("Iamges/bullet_red.png"));
             hp.setStyleName("errorPopupLabel");
             errorPanel.add(hp);
         }

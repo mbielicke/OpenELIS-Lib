@@ -175,7 +175,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             window.setError(formErrors.get(0));
         else{
             window.setError("(Error 1 of "+formErrors.size()+") " + formErrors.get(0));
-            window.setMessagePopup((String[])formErrors.toArray(), "ErrorPanel");
+            window.setMessagePopup(formErrors, "ErrorPanel");
         }
     }
     

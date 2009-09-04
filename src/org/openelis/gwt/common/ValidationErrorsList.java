@@ -15,7 +15,7 @@ public class ValidationErrorsList extends Exception {
         super(msg);
     }
     
-    public void add(RPCException ex){
+    public void add(Exception ex){
         errors.add(ex);
         
     }
