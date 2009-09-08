@@ -12,6 +12,18 @@ div{outline:0px;}
     cursor:default;
 }
 
+.MoveRight{
+height:16px;
+width:16px;
+background:url("../images/moveright.gif");
+}
+
+.MoveLeft{
+height:16px;
+width:16px;
+background:url("../images/moveleft.gif");
+}
+
 .DropdownPopup {
 border:1px solid #B5B8C8;
 background:white;
