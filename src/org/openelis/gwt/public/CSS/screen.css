@@ -15,14 +15,14 @@ div{outline:0px;}
 .MoveRight{
 height:16px;
 width:16px;
-background:url("../Images/moveright.gif");
+background:url("../Images/moveright.gif") no-repeat;
 border-left:1px solid gray;
 }
 
 .MoveLeft{
 height:16px;
 width:16px;
-background:url("../Images/moveleft.gif");
+background:url("../Images/moveleft.gif") no-repeat;
 border-right:1px solid gray;
 }
 
