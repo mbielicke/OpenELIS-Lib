@@ -530,9 +530,9 @@ border:1px solid #D8D8D8;
     background:url("../Images/buttondivider.gif") no-repeat;
 }
 
-.ButtonPanelButton .ButtonContent {
+/*.ButtonPanelButton .ButtonContent {
     background:none;
-}
+}*/
 .Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
     background:url("../Images/screenbuttonhover.gif") repeat-x;
     cursor:pointer;
@@ -552,7 +552,7 @@ border:1px solid #D8D8D8;
 
 .ButtonPanelButton .ButtonRightSide{
      width:2px;
-     background:none;
+/*     background:none;*/
 }
 .Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{
     background:url("../Images/screenbuttonrs.gif") no-repeat;
@@ -561,9 +561,9 @@ border:1px solid #D8D8D8;
     background:none;
     cursor:default;
 }
-.ButtonPanelButton .ButtonLeftSide{
+/*.ButtonPanelButton .ButtonLeftSide{
     background:none;
-}
+}*/
 .Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
     background:url("../Images/screenbuttonls.gif") no-repeat;
 }

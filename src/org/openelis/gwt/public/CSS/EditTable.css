@@ -147,8 +147,9 @@ tr .TableHighlighted {
 }
 
 .Header {
-	height: 17px;
+/*	height: 17px;
 	background: #eeeff1 url("../Images/headersprite.gif") repeat-x;
+	*/
 	overflow: hidden; //
 	border: 1px solid #B5B8C8;
 }
