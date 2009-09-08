@@ -15,13 +15,15 @@ div{outline:0px;}
 .MoveRight{
 height:16px;
 width:16px;
-background:url("../images/moveright.gif");
+background:url("../Images/moveright.gif") repeat-no;
+border-left:1px solid gray;
 }
 
 .MoveLeft{
 height:16px;
 width:16px;
-background:url("../images/moveleft.gif");
+background:url("../Images/moveleft.gif") repeat-no;
+border-right:1px solid gray;
 }
 
 .DropdownPopup {
@@ -333,7 +335,7 @@ background:white;
     background:url("../Images/screenbuttonlspressed.gif") no-repeat;
 }
 
-.ButtonContent{
+.button .ButtonContent{
     margin:2px 0 0 0;
     padding: 2px 4px 0 4px;
     height:21px;
@@ -934,7 +936,6 @@ cursor:default;}
 }
 
 .gwt-TabBarFirst{
-    margin-left:10px;
     background:url('../Images/tabfirst.gif') no-repeat;
 }   
 
