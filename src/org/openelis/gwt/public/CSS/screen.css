@@ -922,6 +922,7 @@ cursor:default;}
 }
 
 .gwt-TabBarFirst{
+    margin-left:10px;
     background:url('../Images/tabfirst.gif') no-repeat;
 }   
 
