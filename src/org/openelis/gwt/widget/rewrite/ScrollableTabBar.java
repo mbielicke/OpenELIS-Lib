@@ -75,7 +75,7 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
       outer.setCellWidth(content,"100%");
       content.setHeight("100%");
       content.setWidth("100%");
-      DOM.setStyleAttribute(content.getElement(), "border", "1px solid black");
+      //DOM.setStyleAttribute(content.getElement(), "border", "1px solid black");
       scrollPanel.add(tabBar);
       scrollPanel.setHeight("20px");
       DOM.setStyleAttribute(scrollPanel.getElement(), "overflow", "hidden"); 
