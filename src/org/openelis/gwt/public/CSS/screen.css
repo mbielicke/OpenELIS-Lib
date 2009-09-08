@@ -335,7 +335,7 @@ background:white;
     background:url("../Images/screenbuttonlspressed.gif") no-repeat;
 }
 
-.button .ButtonContent{
+.ButtonContent{
     margin:2px 0 0 0;
     padding: 2px 4px 0 4px;
     height:21px;
@@ -1796,6 +1796,20 @@ rich text css
     border:1px solid #7eadd9;
 }
 
+.noteSubjectText{
+	color:black;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:12px;
+}
+	
+.noteAuthorText{
+	color:gray;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:9px;
+}
 
-
-
+.noteBodyText{
+	color:black;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+}
