@@ -20,10 +20,20 @@
 .TableRow {
 	height: 19px;
 	background: white;
+
 }
 
+.noteTableRow {
+	border-bottom:1px solid gray;
+	}
+	
 tr .AltTableRow {
 	background: #f8f8f9;
+}
+
+.noteAltTableRow{
+		background: #f8f8f9;
+border-bottom:1px solid gray;
 }
 
 tr .TableHighlighted {
