@@ -1408,6 +1408,13 @@ background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 	text-align:right;
 	vertical-align:top;
 }
+
+.LeftCondensedPrompt {
+   -moz-user-select: none;
+	color:gray;
+	text-align:left;
+	vertical-align:top;
+}
 .CheckboxPrompt {
    -moz-user-select: none;
 	color:gray;
