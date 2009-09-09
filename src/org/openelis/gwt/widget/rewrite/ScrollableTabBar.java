@@ -195,26 +195,26 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   }
 
   public void onMouseDown(MouseDownEvent event) {
-	if(event.getSource() == previous) {
-		timer = new Timer() {
-			public void run() {
-				if(scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){               
-					scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
-				}   
-			}
-		};
-	}else {
-		timer = new Timer() {
-			public void run() {
-			    if(scrollPanel.getWidgetLeft(tabBar) < 0){                 
-			        scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);      
-			    }
-			}
-		};
-		checkScroll();
-	}
-	timer.scheduleRepeating(100);
-	
+	  if(event.getSource() == previous){
+	   	timer = new Timer() {
+	   		public void run() {
+	   			if(scrollPanel.getWidgetLeft(tabBar) < 0){       
+	   				scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);
+	   			}
+	   			checkScroll();
+	   		}
+	   	};
+	  }else {
+    	timer = new Timer() {
+    		public void run() {
+    			if(scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){   
+    				scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
+    			}
+    			checkScroll();
+    		}	    			
+	    };
+	  }
+	  timer.scheduleRepeating(100);
   }
 
   public void onMouseUp(MouseUpEvent event) {
