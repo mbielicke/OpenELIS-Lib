@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.screen.rewrite.TabHandler;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -166,7 +167,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     }
     
-    public void addTabHandler(UIUtil.TabHandler handler) {
+    public void addTabHandler(TabHandler handler) {
     	addDomHandler(handler,KeyPressEvent.getType());
     }
     
@@ -595,6 +596,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void toggle(int row) {
+    	selectRow(row);
     	if(!rows.get(row).open) {
     		BeforeLeafOpenEvent event = BeforeLeafOpenEvent.fire(this, row, rows.get(row));
     		if(event != null && event.isCancelled())
