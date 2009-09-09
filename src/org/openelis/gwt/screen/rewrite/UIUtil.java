@@ -564,6 +564,10 @@ public class UIUtil {
     								.booleanValue());
     			else
     				cal.init(begin, end, false);
+    			
+    			if(node.getAttributes().getNamedItem("width") != null)
+    			    cal.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
+    			
     			cal.setStyleName("ScreenCalendar");
     			setDefaults(node,cal);
     			cal.setField((DateField)factoryMap.get("Date").getNewInstance(node, null));
