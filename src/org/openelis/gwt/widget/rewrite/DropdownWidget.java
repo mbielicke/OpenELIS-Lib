@@ -207,8 +207,12 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public void setSelection(Object key) {
         clearSelections();
-        selectRow(key);
-        textbox.setText(getTextBoxDisplay());
+        if(key != null){
+            selectRow(key);
+            textbox.setText(getTextBoxDisplay());
+        }else
+            textbox.setText("");
+        
         textBoxDefault = textbox.getText();
     }
     
