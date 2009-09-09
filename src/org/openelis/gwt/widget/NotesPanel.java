@@ -45,7 +45,7 @@ public class NotesPanel extends Composite {
 		
 		notes.add(note);
 		
-		if(notes.getWidgetCount() % 2 == 1)
+		if(notes.getWidgetCount() % 2 == 0)
 			note.addStyleName("noteAltTableRow");
 		else
 			note.addStyleName("noteTableRow");
