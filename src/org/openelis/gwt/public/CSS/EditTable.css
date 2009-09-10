@@ -21,11 +21,14 @@
 	height: 19px;
 	background: white;
 
-}
-
+}/*
+.noteSubjectText{padding-left:4px;}
+.noteAuthorText{}
+.noteBodyText{}
+*/
 .noteTableRow {
-	border-bottom:1px solid gray;
-	background:white;
+padding:0px 0px 4px 4px;
+	border-bottom:1px solid #B5B8C8;
 	}
 	
 tr .AltTableRow {
@@ -33,8 +36,9 @@ tr .AltTableRow {
 }
 
 .noteAltTableRow{
-		background: #f8f8f9;
-border-bottom:1px solid gray;
+padding:0px 0px 4px 4px;
+	background: #f8f8f9;
+    border-bottom:1px solid #B5B8C8;
 }
 
 tr .TableHighlighted {

@@ -98,9 +98,16 @@ color:gray;
     border-right:1px solid #8DB2E3;
 }
 ******************/
+
 .TableButtonFooter{
-margin-left:-2px;
+/*margin-left:-4px;*/
+background:#FBFBFB;
+width:100%;
+border:1px solid #D8D8D8;
+border-top:0;
 }
+
+
 .ScreenLeftPanel{
     padding:2px;
     background:white;
@@ -294,7 +301,28 @@ color:gray;
 }
 
 
+/*******lookupbutton Button Class***********/
+
+.LookupButton .ButtonContent{
+    margin:0;
+    padding:0;
+    height:20px;
+}
+
+.LookupButton .ButtonLeftSide{
+margin:0;
+width:0;
+}
+
+.LookupButton .ButtonRightSide{
+margin:0;
+width:0;
+}
 /*******General Button Class***********/
+
+.TableButtonFooter .Button{
+padding:0;
+}
 .RichTextContentPanel{
 background:white;
 }
@@ -339,10 +367,16 @@ background:white;
     margin:2px 0 0 0;
     padding: 2px 4px 0 4px;
     height:21px;
-    cursor:default;
-    background:url("../Images/screenbuttonhover.gif") repeat-x;
+/*    cursor:default;
+    background:url("../Images/screenbuttonhover.gif") repeat-x;*/
        -moz-user-select: none;
 }
+
+.disabled .ButtonContent{
+    cursor:default;
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+}
+
 .Hover .ButtonContent{
     cursor:pointer;
 }
@@ -351,9 +385,7 @@ background:white;
     background: url(../Images/screenbuttonpressed.gif) repeat-x;
     }
     
-.disabled .ButtonContent{
-    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
-}
+
 
 .disabled .ScreenLabel{
 color:gray;
@@ -508,8 +540,7 @@ border:1px solid #D8D8D8;
 }
 .Screenlookup .Hover{
     background:#D8D8D8;
-  //   background:black;
-
+  /*   background:black;*/
 }
 /*******Button Panel***********/
 
@@ -533,42 +564,57 @@ border:1px solid #D8D8D8;
 /*.ButtonPanelButton .ButtonContent {
     background:none;
 }*/
-.Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {
+
+/*.disabled .ButtonPanelButton .ButtonContent{*/
+
+
+/*.Hover .ButtonPanelButton .ButtonContent, .Pressed .ButtonPanelButton .ButtonContent {*/
+.Hover .ButtonContent, .Pressed .ButtonContent {
     background:url("../Images/screenbuttonhover.gif") repeat-x;
     cursor:pointer;
 }
-.disabled .ButtonPanelButton .ButtonContent{
+.disabled .ButtonContent{
     background:none;
+    cursor:default
 }
 .ButtonPanelButton .ButtonContent .ScreenLabel{
     color:black;
     background:none;
 }
-.disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
+
+/*.disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{*/
+.disabled .ButtonContent .ScreenLabel{
     cursor:default;
     color:gray;
     background:none;
 }
 
-.ButtonPanelButton .ButtonRightSide{
-     width:2px;
-/*     background:none;*/
+/*.ButtonPanelButton .ButtonRightSide{*/
+.ButtonRightSide{
+width:2px;
+     background:none;
 }
-.Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{
-    background:url("../Images/screenbuttonrs.gif") no-repeat;
+/*.Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{*/
+.Hover .ButtonRightSide, .Pressed .ButtonRightSide{
+background:url("../Images/screenbuttonrs.gif") no-repeat;
 }
-.Disabled .ButtonPanelButton .ButtonRightSide{
-    background:none;
+
+/*.Disabled .ButtonPanelButton .ButtonRightSide{*/
+.Disabled .ButtonRightSide{
+background:none;
     cursor:default;
 }
-/*.ButtonPanelButton .ButtonLeftSide{
+.ButtonLeftSide{
     background:none;
-}*/
-.Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
-    background:url("../Images/screenbuttonls.gif") no-repeat;
 }
-.Disabled .ButtonPanelButton .ButtonLeftSide{
-    background:none;
+/*.Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{*/
+.Hover  .ButtonLeftSide, .Pressed  .ButtonLeftSide{
+background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+
+/*.Disabled .ButtonPanelButton .ButtonLeftSide{*/
+.Disabled .ButtonLeftSide{
+background:none;
     cursor:default;
 }
 .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .UpdateButtonImage, .DeleteButtonImage, .CommitButtonImage, .AbortButtonImage{
@@ -1048,7 +1094,7 @@ cursor:default;}
 }
 
 .TableDropdown .AutoDropdown .TextboxSelected{
-    border:1px solid #7eadd9;
+    border:1px solid #1177ea;
     color:#000000;
     background:#ffffff;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -1156,7 +1202,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
 }
 
 .ScreenCalendar .TextboxSelected{
-    border:1px solid #7eadd9;
+    border:1px solid #1177ea;
     color:#000000;
     background:#ffffff none;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -1283,7 +1329,7 @@ padding-bottom:0;
 }
 
 .Focus .ScreenTextArea, .Focus .ScreenTextBox, .Focus .ScreenMaskedBox, .Focus .ScreenCheck, .Focus .ScreenTable{
-    border:1px solid #7eadd9;
+    border:1px solid #1177ea;
 }
 
 .ScreenTextArea{
@@ -1406,13 +1452,6 @@ background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
    -moz-user-select: none;
 	color:gray;
 	text-align:right;
-	vertical-align:top;
-}
-
-.LeftCondensedPrompt {
-   -moz-user-select: none;
-	color:gray;
-	text-align:left;
 	vertical-align:top;
 }
 .CheckboxPrompt {
@@ -1799,8 +1838,15 @@ rich text css
 	border-bottom:1px dashed red;
 }
 
+.TableVertScroll{
+width:16px;
+margin-left:-18px;
+}
+
 .Focus {
-    border:1px solid #7eadd9;
+    border:1px solid #1177ea;/*
+    border-right:1px solid #D8D8D8;
+    border-bottom:1px solid #D8D8D8;*/
 }
 
 .noteSubjectText{
