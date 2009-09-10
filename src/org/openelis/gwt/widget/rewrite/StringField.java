@@ -50,7 +50,7 @@ public class StringField extends Field<String> {
     public void validate() {
     	valid = true;
         if (required) {
-            if (value == null || value.length() == 0) {
+            if (value == null || value.trim().length() == 0) {
             	valid = false;
                 addError(Screen.consts.get("fieldRequiredException"));    
              }

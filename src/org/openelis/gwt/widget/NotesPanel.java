@@ -36,8 +36,10 @@ public class NotesPanel extends Composite {
 		bodyText.setWordWrap(true);
 		note.setWidth(width);
 		topRow.setWidth(width);
-		note.add(titleText);
-		note.add(userDateText);
+		if(subject != null){
+		    note.add(titleText);
+		    note.add(userDateText);
+		}
 		note.add(bodyText);
 		titleText.setStyleName("noteSubjectText");
 		userDateText.setStyleName("noteAuthorText");

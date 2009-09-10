@@ -219,6 +219,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         cellView.setWidget(table);
         ft.setCellSpacing(0);
         scrollBar.setWidth("18px");
+        scrollBar.setStyleName("TableVertScroll");
         scrollBar.addScrollHandler(this);
         AbsolutePanel ap = new AbsolutePanel();
         DOM.setStyleAttribute(scrollBar.getElement(), "overflowX", "hidden");

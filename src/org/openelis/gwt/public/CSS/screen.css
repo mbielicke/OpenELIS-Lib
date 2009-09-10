@@ -107,6 +107,14 @@ border:1px solid #D8D8D8;
 border-top:0;
 }
 
+.TreeButtonFooter{
+/*margin-left:-4px;*/
+background:#FBFBFB;
+width:100%;
+border:1px solid #D8D8D8;
+border-top:0;
+}
+
 
 .ScreenLeftPanel{
     padding:2px;
