@@ -55,10 +55,13 @@ import org.openelis.gwt.widget.table.rewrite.event.HasBeforeRowDeletedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
+import org.openelis.gwt.widget.table.rewrite.event.UnselectionEvent;
+import org.openelis.gwt.widget.table.rewrite.event.UnselectionHandler;
 import org.openelis.gwt.widget.tree.rewrite.TreeSorterInt.SortDirection;
 import org.openelis.gwt.widget.tree.rewrite.TreeView.VerticalScroll;
 import org.openelis.gwt.widget.tree.rewrite.event.BeforeLeafCloseEvent;
@@ -97,7 +100,6 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -114,6 +116,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  MouseOutHandler,
 													  HasBeforeSelectionHandlers<TreeRow>,
 													  HasSelectionHandlers<TreeRow>,
+													  HasUnselectionHandlers<TreeDataItem>,
 													  HasBeforeCellEditedHandlers,
 													  HasCellEditedHandlers, 
 													  HasBeforeRowAddedHandlers,
@@ -269,6 +272,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
         if(activeRow != row){
             if(activeRow > -1 && !ctrlKey){
+            	UnselectionEvent.fire(this, rows.get(activeRow));
                 unselect(-1);
             }
             activeRow = row;
@@ -413,6 +417,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		return;
     	if(selectedRows.contains(row)){
             unselectRow(row);
+            UnselectionEvent.fire(this, getRow(row));
         }
         TreeDataItem item = rows.get(row);
         if(item.parent != null){
@@ -527,6 +532,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public void selectRow(int index){
         if(index < numRows()){
            if(!multiSelect && selectedRows.size() > 0){
+        	   UnselectionEvent.fire(this, rows.get(selectedRows.get(0)));
                rows.get(selectedRows.get(0)).selected = false;
                renderer.rowUnselected(-1);
                selectedRows.clear();
@@ -596,7 +602,16 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void toggle(int row) {
-    	selectRow(row);
+    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
+    		BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		if(!event.isCanceled()){
+    			selectRow(row);
+    			SelectionEvent.fire(this,  renderer.rows.get(row));
+    		}
+    	}else if(isEnabled()){
+    		selectRow(row);
+    		SelectionEvent.fire(this,  renderer.rows.get(row));
+    	}
     	if(!rows.get(row).open) {
     		BeforeLeafOpenEvent event = BeforeLeafOpenEvent.fire(this, row, rows.get(row));
     		if(event != null && event.isCancelled())
@@ -918,6 +933,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	public HandlerRegistration addFieldValueChangeHandler(
 			ValueChangeHandler handler) {
 		return null;
+	}
+
+	public HandlerRegistration addUnselectionHandler(
+			UnselectionHandler<TreeDataItem> handler) {
+		return addHandler(handler,UnselectionEvent.getType());
 	}
     
 }

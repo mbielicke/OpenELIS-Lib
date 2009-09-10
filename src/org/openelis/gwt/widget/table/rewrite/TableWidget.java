@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.screen.rewrite.TabHandler;
 import org.openelis.gwt.screen.rewrite.UIUtil;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.rewrite.CheckBox;
@@ -53,12 +54,15 @@ import org.openelis.gwt.widget.table.rewrite.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasRowDeletedHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.HasTableValueChangeHandlers;
+import org.openelis.gwt.widget.table.rewrite.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.rewrite.event.RowDeletedHandler;
 import org.openelis.gwt.widget.table.rewrite.event.TableValueChangeEvent;
 import org.openelis.gwt.widget.table.rewrite.event.TableValueChangeHandler;
+import org.openelis.gwt.widget.table.rewrite.event.UnselectionEvent;
+import org.openelis.gwt.widget.table.rewrite.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
@@ -103,6 +107,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   MouseOutHandler,
 													   HasBeforeSelectionHandlers<TableRow>,
 													   HasSelectionHandlers<TableRow>,
+													   HasUnselectionHandlers<TableDataRow>,
 													   HasBeforeCellEditedHandlers,
 													   HasCellEditedHandlers, 
 													   HasBeforeRowAddedHandlers,
@@ -272,7 +277,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         }
         if(activeRow != row){
             if(activeRow > -1 && !ctrlKey){
+            	UnselectionEvent.fire(this,data.get(selected));
                 unselect(-1);
+                
             }
             activeRow = row;
             selectRow(modelIndexList[row]);
@@ -370,6 +377,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(data.get(row).shown)
             shownRows--;
         if(row < data.size()){
+        	UnselectionEvent.fire(this, data.get(row));
             TableDataRow tmp = data.remove(row);
             RowDeletedEvent.fire(this, row, tmp);
         }
@@ -819,6 +827,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	public HandlerRegistration addFieldValueChangeHandler(
 			ValueChangeHandler handler) {
 		return null;
+	}
+
+	public HandlerRegistration addUnselectionHandler(
+			UnselectionHandler<TableDataRow> handler) {
+		return addHandler(handler,UnselectionEvent.getType());
 	}
 	
 }
