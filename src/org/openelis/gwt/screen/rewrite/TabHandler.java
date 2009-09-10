@@ -12,10 +12,10 @@ import com.google.gwt.xml.client.Node;
 public class TabHandler implements KeyPressHandler {
 	String next;
 	String prev;
-	ScreenDefInt def;
+	ScreenDef def;
 	String wid;
 	
-	public TabHandler(Node node, ScreenDefInt def) {
+	public TabHandler(Node node, ScreenDef def) {
 		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
 		String[] tabs = tab.split(",");
 		next = tabs[0];
@@ -25,7 +25,7 @@ public class TabHandler implements KeyPressHandler {
 		
 	}
 	
-	public TabHandler(String next, String prev, ScreenDefInt def, String wid){
+	public TabHandler(String next, String prev, ScreenDef def, String wid){
 		this.next = next;
 		this.prev = prev;
 		this.def = def;
