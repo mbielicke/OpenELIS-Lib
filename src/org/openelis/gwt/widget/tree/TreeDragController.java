@@ -1,5 +1,9 @@
 package org.openelis.gwt.widget.tree;
 
+import java.util.HashMap;
+
+import org.openelis.gwt.widget.HandlesEvents;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.util.Location;
@@ -7,18 +11,13 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.TreeDataItem;
-import org.openelis.gwt.event.DragManager;
 
-import java.util.HashMap;
-
-@Deprecated
-public class TreeDragController extends PickupDragController {
-    
-    
-    public DragManager manager;
+public class TreeDragController extends PickupDragController  {
+        
+    private HandlesEvents events = new HandlesEvents();
     
     private boolean enabled;
+   
     
     private HashMap<Widget, SavedWidgetInfo> savedWidgetInfoMap;
     private static class SavedWidgetInfo {
@@ -52,26 +51,18 @@ public class TreeDragController extends PickupDragController {
     
     @Override
     public void previewDragStart() throws VetoDragException {
-        if(!enabled)
-            throw new VetoDragException();
-        ((TreeRow)context.draggable).setDragValues();
-        if(manager != null)
-            manager.dragStarted(context);
+    	((TreeRow)context.draggable).setDragValues();
         super.previewDragStart();
     }
     
     @Override
     public void previewDragEnd() throws VetoDragException {
-        if(manager != null)
-            manager.dragEnded(context);
         super.previewDragEnd();
     }
     
     @Override
     public void dragStart() {
         context.draggable.addStyleName("disabled");
-        if(manager != null)
-            manager.dragStarted(context);
         super.dragStart();
     }
    
@@ -86,8 +77,6 @@ public class TreeDragController extends PickupDragController {
     public void dragEnd() {
         context.draggable.removeStyleName("TreeHighlighted");
         context.draggable.removeStyleName("disabled");
-        if(manager != null)
-            manager.dragEnded(context);
         super.dragEnd();
     }
     

@@ -25,25 +25,52 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.ScreenWindow;
+import java.util.ArrayList;
 
-import com.google.gwt.user.client.ui.ClickListener;
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.ScreenDef;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.screen.deprecated.ScreenWindow;
+import org.openelis.gwt.widget.deprecated.IconContainer;
+
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.xml.client.XMLParser;
 
-public class EditBox extends Composite implements ClickListener{
+public class EditBox extends Composite implements ClickHandler, 
+												  HasValue<String>, 
+												  HasField<String>, 
+												  HasBlurHandlers, 
+												  HasMouseOverHandlers, 
+												  HasMouseOutHandlers,
+												  HasFocusHandlers,
+												  Focusable{
 	
-	private TextArea text = new TextArea();
-	private FocusPanel fp = new FocusPanel();
+	private TextBox text = new TextBox();
+	private IconContainer fp = new IconContainer();
 	private HorizontalPanel hp = new HorizontalPanel();
-	private PopupPanel pop;
-	private static String editorScreen = "<screen><display><VerticalPanel><textarea key='editor' tools='false' width='300px' height='200px' showError='false'/><HorizontalPanel halign='center'>"+
+	private static String editorScreen = "<VerticalPanel><textarea key='editor' tools='false' width='300px' height='200px' showError='false'/><HorizontalPanel halign='center'>"+
 										"<appButton action='ok' key='ok' onclick='this' style='Button'>"+
 									   		"<text>OK</text>"+
 									    "</appButton>" +
@@ -51,66 +78,77 @@ public class EditBox extends Composite implements ClickListener{
 									       "<text>Cancel</text>" +
 	                                    "</appButton>" +
 	                                    "</HorizontalPanel>" +
-	                                    "</VerticalPanel>"+
-	                                    "</display>"+
-	                                    "<rpc key='display'/>"+
-	                                    "</screen>";
-	private String formattedText;
+	                                    "</VerticalPanel>";
+	private ScreenWindow win;
+	private ScreenDef editorDef;
+	private boolean enabled;
+	private Field<String> field;
 	
-	private class Editor extends AppScreen implements ClickListener {
-	    
-		public Editor(){
-			drawScreen(editorScreen);
-			afterDraw(true);
+	private class EditHandler implements FocusHandler,BlurHandler,MouseOutHandler,MouseOverHandler {
+
+		private EditBox source;
+		
+		public EditHandler(EditBox source) {
+			this.source = source;
 		}
 		
-		@Override
-		public void afterDraw(boolean sucess) {
-			super.afterDraw(sucess);
-			((TextArea)getWidget("editor")).setText(text.getText());
-			
+		public void onFocus(FocusEvent event) {
+			//FocusEvent.fireNativeEvent(event.getNativeEvent(),source);
 		}
-		
-		public void onClick(Widget sender) {
-			// TODO Auto-generated method stub
-			if(sender == getWidget("ok")){
-				text.setText(((TextArea)getWidget("editor")).getText());
-				//formattedText = ((RichTextWidget)getWidget("editor")).getText();
-				pop.hide();
-			}
-			if(sender == getWidget("cancel")){
-				pop.hide();
-			}
-			
+
+		public void onBlur(BlurEvent event) {
+			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onMouseOut(MouseOutEvent event) {
+			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onMouseOver(MouseOverEvent event) {
+			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);
 		}
 		
 	}
 
 	public EditBox() {
 		initWidget(hp);
-		text.setStyleName("ScreenTextArea");
+		text.setStyleName("ScreenTextBox");
 		text.setHeight("18px");
+		EditHandler handler = new EditHandler(this);
+		text.addFocusHandler(handler);
+		text.addBlurHandler(handler);
+		text.addMouseOutHandler(handler);
+		text.addMouseOverHandler(handler);
 		hp.add(text);
 		hp.add(fp);
 		fp.setStyleName("DotsButton");
-		fp.addClickListener(this);
+		fp.addClickHandler(this);
 	}
 
-	public void onClick(Widget sender) {
-		if(sender == fp){
-			if(pop == null){
-				pop = new PopupPanel();
-			}
-				Editor editor = new Editor();
-	            ScreenWindow win = new ScreenWindow(pop,"","standardNotePicker","",false);
-	            //win.setStyleName("ErrorWindow");
-	            win.setContent(editor);
-	            win.setVisible(true);
-				pop.setPopupPosition(text.getAbsoluteLeft(), text.getAbsoluteTop()+text.getOffsetHeight());
-				pop.setWidget(win);
-				//pop.center();
-				pop.show();
-			
+	public void onClick(ClickEvent sender) {
+		if(!isEnabled()) {
+			return;
+		}
+		if(sender.getSource() == fp){
+				win = new ScreenWindow(null,"","standardNotePicker","",true,false);
+				if(editorDef == null) {
+					editorDef = new ScreenDef();
+					editorDef.getPanel().add(UIUtil.createWidget(XMLParser.parse(editorScreen).getDocumentElement(),editorDef));
+					((AppButton)editorDef.getWidget("ok")).addClickHandler(new ClickHandler() {
+						public void onClick(ClickEvent event) {
+							text.setText(((TextArea)editorDef.getWidget("editor")).getText());
+							win.close();
+						}
+					});
+					((AppButton)editorDef.getWidget("cancel")).addClickHandler(new ClickHandler() {
+						public void onClick(ClickEvent event) {
+							win.close();
+						}
+					});
+				}
+				((TextArea)editorDef.getWidget("editor")).setText(text.getText());
+				win.setContent(editorDef.getPanel());
+				win.setVisible(true);
 		}	
 	}
 	
@@ -121,29 +159,165 @@ public class EditBox extends Composite implements ClickListener{
 	public String getText() {
 		return text.getText();
 	}
-	
-	public void setReadOnly(boolean read){
-		text.setReadOnly(read);
-	}
-	
-	public void addFocusListener(FocusListener listener){
-		text.addFocusListener(listener);
-	}
-	
-	public void removeFocusListener(FocusListener listener){
-		text.removeFocusListener(listener);
-	}
-	
+		
 	public void setFocus(boolean focus){
 		text.setFocus(focus);
 	}
-	
-	public boolean isReadOnly(){
-		return text.isReadOnly();
+		
+	public void setWidth(String width){
+		int wid;
+		if(width.indexOf("px") > -1)
+			wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 16;
+		else 
+			wid = Integer.parseInt(width) - 16;
+		text.setWidth(wid+"px");
+	}
+
+	public String getValue() {
+		return text.getText();
+	}
+
+	public void setValue(String value) {
+		setValue(value,false);
+		
+	}
+
+    public void onFocus(FocusEvent event) {
+        if (!text.isReadOnly()) {
+            if (event.getSource() == text) {
+                // we need to set the selected style name to the textbox
+                text.addStyleName("TextboxSelected");
+                text.removeStyleName("TextboxUnselected");
+
+            }
+        }
+        
+    }
+    
+    
+
+    public void onBlur(BlurEvent event) {
+        if (!text.isReadOnly()) {
+            if (event.getSource() == text) {
+                // we need to set the unselected style name to the textbox
+                text.addStyleName("TextboxUnselected");
+                text.removeStyleName("TextboxSelected");
+            }
+        }
+    }
+    
+	public void setValue(String value, boolean fireEvents) {
+		String old = getValue();
+		text.setText(value);
+		if(fireEvents)
+			ValueChangeEvent.fireIfNotEqual(this, old, value);
+		
+	}
+
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return addHandler(handler,ValueChangeEvent.getType());
+	}
+
+	public void addError(String error) {
+		field.addError(error);
+	}
+
+	public void checkValue() {
+		field.checkValue(this);
+	}
+
+	public void clearErrors() {
+		field.clearError(this);
+		
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		text.setReadOnly(!enabled);		
+	}
+
+	public ArrayList<String> getErrors() {
+		return field.errors;
+	}
+
+	public Field<String> getField() {
+		return field;
+	}
+
+	public String getFieldValue() {
+		return field.getValue();
+	}
+
+	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(field.queryString != null) {
+			QueryData qd = new QueryData();
+			qd.query = field.queryString;
+			qd.key = key;
+			qd.type = QueryData.Type.STRING;
+			list.add(qd);
+		}
+		
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setField(Field<String> field) {
+		this.field = field;
+		text.addValueChangeHandler(field);
+		addBlurHandler(field);
+		addMouseOutHandler(field);
+		addMouseOverHandler(field);
+		
+	}
+
+	public void setFieldValue(String value) {
+		field.setValue(value);
+		setText(value);
+		
+	}
+
+	public void setQueryMode(boolean query) {
+		field.setQueryMode(query);
+		
+	}
+
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return addDomHandler(handler,BlurEvent.getType());
+	}
+
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler,MouseOverEvent.getType());
+	}
+
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler,MouseOutEvent.getType());
+	}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	public void setAccessKey(char key) {
+		
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addDomHandler(handler,FocusEvent.getType());
 	}
 	
-	public void setWidth(String width){
-		text.setWidth(width);
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return field.addValueChangeHandler(handler);
 	}
 
 }

@@ -25,10 +25,10 @@
 */
 package org.openelis.interfaces;
 
-import org.openelis.gwt.common.Form;
 import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.ValidationException;
-import org.openelis.gwt.common.data.AbstractField;
+import org.openelis.gwt.common.data.deprecated.AbstractField;
+import org.openelis.gwt.common.deprecated.Form;
 
 import java.io.IOException;
 import java.sql.SQLException;

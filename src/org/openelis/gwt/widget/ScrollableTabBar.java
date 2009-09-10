@@ -25,220 +25,221 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.widget.deprecated.IconContainer;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabListener;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.RPC;
-//import org.openelis.gwt.common.data.TabRPC;
-import org.openelis.gwt.screen.ScreenBase;
-
-import java.util.ArrayList;
-
-public class ScrollableTabBar extends Composite implements ClickListener, TabListener{
-  private HorizontalPanel mainPanel = new HorizontalPanel();
+public class ScrollableTabBar extends Composite implements ClickHandler, HasSelectionHandlers<Integer>, HasBeforeSelectionHandlers<Integer>, MouseDownHandler, MouseUpHandler  {
+  
+  private VerticalPanel outer = new VerticalPanel();
+  private HorizontalPanel barPanel = new HorizontalPanel();
   private AbsolutePanel scrollPanel = new AbsolutePanel();
+  private AbsolutePanel content = new AbsolutePanel();
   private TabBar tabBar = new TabBar();
-  //private TabRPC tabRPC;
-  private ScreenBase tablistener = null;
-  private HTML next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
-  private HTML previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
-  private boolean noHTMLs = true;
-  private boolean nextDisabled = false;   
-  private boolean prevDisabled = false;
-  ArrayList<Widget> tabWidgets = new ArrayList<Widget>();
-  //private int scrollWidth;
-  //private int imageWidth;
+  private IconContainer next = new IconContainer();
+  private IconContainer previous = new IconContainer();
+  private Timer timer;
   
   public ScrollableTabBar(){
-      initWidget(mainPanel);
+      initWidget(outer);
+      outer.add(barPanel);
+      outer.add(content);
+      outer.setSpacing(0);
+      barPanel.setSpacing(0);
+      barPanel.setHeight("20px");
+      outer.setCellHeight(barPanel, "20px");
+      outer.setCellWidth(barPanel,"100%");
+      outer.setCellHeight(content, "100%");
+      outer.setCellWidth(content,"100%");
+      content.setHeight("100%");
+      content.setWidth("100%");
+      //DOM.setStyleAttribute(content.getElement(), "border", "1px solid black");
       scrollPanel.add(tabBar);
-      //mainPanel.setWidth("300px");
-      //scrollPanel.setWidth("300px");
-      //imageWidth = next.getOffsetWidth()+previous.getOffsetWidth();
-      //scrollWidth = mainPanel.getOffsetWidth()-imageWidth;
-      //scrollPanel.setWidth("\""+new Integer(scrollWidth).toString()+"px"+"\"");
       scrollPanel.setHeight("20px");
-      scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-10 , 0);       
       DOM.setStyleAttribute(scrollPanel.getElement(), "overflow", "hidden"); 
-      previous.addClickListener(this);
-      next.addClickListener(this);     
-      
-      if(scrollPanel.getOffsetWidth() > tabBar.getOffsetWidth()){
-        noHTMLs = false;  
-      }
-      
-      if(!noHTMLs){
-       mainPanel.add(previous);
-      }
-      mainPanel.add(scrollPanel);
-      
-      if(!noHTMLs){
-       mainPanel.add(next);
-      } 
+      previous.addClickHandler(this);
+      next.addClickHandler(this); 
+      next.addMouseDownHandler(this);
+      previous.addMouseDownHandler(this);
+      next.addMouseUpHandler(this);
+      previous.addMouseUpHandler(this);
+      previous.setStyleName("MoveLeft");
+      next.setStyleName("MoveRight");
+      previous.addStyleName("inactive");
+      next.addStyleName("inactive");
+      tabBar.setVisible(false);
+ 
+      barPanel.add(previous);
+      barPanel.add(scrollPanel);
+      barPanel.add(next);
+      barPanel.setCellHeight(previous, "20px");
+      barPanel.setStyleName("tabbar");
+
+      final HasSelectionHandlers<Integer>  source = this;
+      tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
+    	  public void onSelection(SelectionEvent<Integer> event) {
+    		  SelectionEvent.fire(source,event.getSelectedItem());
+    		  scrollToSelected();
+    	  }
+      });
                 
   }
   
-  public void onClick(Widget sender) {   
-    if(sender == next){                 
-      scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+10 , 0);      
-      manageScrolling(scrollPanel.getWidgetLeft(tabBar)+10);
+  public void onClick(ClickEvent event) {   
+    if(event.getSource() == previous && scrollPanel.getWidgetLeft(tabBar) < 0){                 
+       scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);      
     }
-    if(sender == previous){               
-       scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-10 , 0);
-       manageScrolling(scrollPanel.getWidgetLeft(tabBar)-10);
-    }   
+    if(event.getSource() == next && scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){               
+       scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
+    }  
+    checkScroll();
   }
   
   public void selectTab(int index){
      tabBar.selectTab(index); 
   }
   
-  public void addTabListener(ScreenBase screen){
-     tablistener = screen;
-     tabBar.addTabListener((TabListener)screen);
-  }
-  
   public void setWidth(String width){
-      mainPanel.setWidth(width);         
+      outer.setWidth(width);
+      int wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 32;
+      scrollPanel.setWidth(wid+"px");
   }
   
-  public void addTabWithContent(String text,Widget content) {
-      addTab(text);
-      tabWidgets.add(content);
+  public void setHeight(String height) {
+	  outer.setHeight(height);
+	  int hght = Integer.parseInt(height.substring(0,height.indexOf("px"))) - 20;
+	  content.setHeight(hght+"px");
   }
-  
-  public void addTabWithContent(Widget widget,Widget content) {
-      addTab(widget);
-      tabWidgets.add(content);
+    
+  public void addTab(String text){      
+      tabBar.addTab(text);   
+      tabBar.setVisible(true);
   }
-  
-  public void addRPC(RPC rpc) {
-      //tabRPC.addTab(rpc);
-  }
-  
-  public void setRPC(int index,RPC rpc) {
-      //tabRPC.setTab(index,rpc);
-  }
-  
-  public void addTab(String text){           
-      tabBar.addTab(text);     
-      if(scrollPanel.getOffsetWidth() < tabBar.getOffsetWidth()){                   
-             mainPanel.clear();              
-             previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");
-             previous.addClickListener(this);
-             
-             mainPanel.add(previous); 
-             mainPanel.add(scrollPanel);
-                       
-             mainPanel.add(next);                      
-      }
-   }
   
   public void addTab(Widget widget){
+      tabBar.addTab(widget);  
+      tabBar.setVisible(true);
+  }
+  
+  public void addTabAndSelect(String text){      
+      tabBar.addTab(text); 
+      selectTab(tabBar.getTabCount()-1);
+      tabBar.setVisible(true);
+  }
+  
+  public void addTabAndSelect(Widget widget){
       tabBar.addTab(widget);
-   }
-  
+      selectTab(tabBar.getTabCount()-1);
+      tabBar.setVisible(true);
+  }
+    
   public void removeTab(int index){
-     tabWidgets.remove(index);
      tabBar.removeTab(index);
-     if(scrollPanel.getOffsetWidth() > tabBar.getOffsetWidth()){          
-             mainPanel.clear();                      
-             mainPanel.add(scrollPanel);             
-         } 
-      }
+     if(tabBar.getTabCount() == 0)
+    	 tabBar.setVisible(false);
+  }
   
-  public void clearTabs(){      
-     tabBar = new TabBar(); 
-     if(tablistener != null) {
-        tabBar.addTabListener((TabListener)tablistener); 
-     }  
-     scrollPanel.clear();
-     scrollPanel.add(tabBar);
-     mainPanel.clear();  
-     mainPanel.add(scrollPanel);
+  public void clearTabs(){   
+     while(tabBar.getTabCount() > 0) 
+         removeTab(0); 
   }
   
   public TabBar getTabBar(){
       return tabBar;
   }
-     
-  
-  
-  private void manageScrolling(int left){           
-       if(left >= 0){          
-           mainPanel.remove(2);
-           next = new HTML("<img src=\"Images/nextbuttonimagedisabled.gif\">");
-           //next.setEnabled(false);  
-           nextDisabled = true;
-           mainPanel.add(next);
-       }
-       else{
-         //if(!next.isEnabled()){ 
-          //Window.alert("nextDisabled "+new Boolean(nextDisabled).toString()); 
-          if(nextDisabled){ 
-           mainPanel.remove(2);
-           next = new HTML("<img src=\"Images/nextbuttonimage.gif\">");
-           //next.setEnabled(true);  
-           next.addClickListener(this);
-           mainPanel.add(next);    
-           nextDisabled = false;
-         }  
-         
-       }
-       
-       if(tabBar.getOffsetWidth() < (scrollPanel.getOffsetWidth()-left)){
-           mainPanel.clear();
-           previous = new HTML("<img src=\"Images/previousbuttonimagedisabled.gif\">");
-           //previous.setEnabled(false);
-           mainPanel.add(previous);
-           mainPanel.add(scrollPanel);
-           mainPanel.add(next);
-           prevDisabled = true;
-        }else{
-          //if(!previous.isEnabled()){ 
-           // Window.alert("prevDisabled "+new Boolean(prevDisabled).toString());    
-         if(prevDisabled){  
-           mainPanel.clear();
-           previous = new HTML("<img src=\"Images/previousbuttonimage.gif\">");           
-           //previous.setEnabled(true);
-           previous.addClickListener(this);
-           mainPanel.add(previous);
-           mainPanel.add(scrollPanel);
-           mainPanel.add(next);
-           prevDisabled = false;
-          } 
-         
-        }
-   }
-  
-   public void sizeTabBar() {
-       scrollPanel.setWidth(mainPanel.getOffsetWidth()+"px");
-   }
-   /*
-   public void setTabRPC(TabRPC rpc) {
-       tabRPC = rpc;
-   }
-   
-   public TabRPC getTabRPC() {
-       return tabRPC;
-   }
-*/
-   public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-       // TODO Auto-generated method stub
-       return true;
+
+   public void onSelection(SelectionEvent<Integer> event) {
+	   selectTab(event.getSelectedItem());
+	
    }
 
-   public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-       // TODO Auto-generated method stub
-      // tabRPC.selectTab(tabIndex);
+   public HandlerRegistration addSelectionHandler(SelectionHandler<Integer> handler) {
+	   return addHandler(handler,SelectionEvent.getType());
    }
+
+   public HandlerRegistration addBeforeSelectionHandler(
+		BeforeSelectionHandler<Integer> handler) {
+	   return tabBar.addBeforeSelectionHandler(handler);
+   }
+   
+  public void setContent(Widget wid) {
+	  content.clear();
+	  content.add(wid);
+  }
+
+  public void onMouseDown(MouseDownEvent event) {
+	  if(event.getSource() == previous){
+	   	timer = new Timer() {
+	   		public void run() {
+	   			if(scrollPanel.getWidgetLeft(tabBar) < 0){       
+	   				scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);
+	   			}
+	   			checkScroll();
+	   		}
+	   	};
+	  }else {
+    	timer = new Timer() {
+    		public void run() {
+    			if(scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){   
+    				scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
+    			}
+    			checkScroll();
+    		}	    			
+	    };
+	  }
+	  timer.scheduleRepeating(100);
+  }
+
+  public void onMouseUp(MouseUpEvent event) {
+	if(timer != null)
+		timer.cancel();
+	timer = null;
+  }
   
+  private void checkScroll() {
+	  if(scrollPanel.getWidgetLeft(tabBar) >= 0){
+		  if(previous.getStyleName().indexOf("inactive") == -1 )
+			  previous.addStyleName("inactive");
+	  }else
+		  previous.removeStyleName("inactive");
+	  if(scrollPanel.getWidgetLeft(tabBar) <= -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){
+		  if(next.getStyleName().indexOf("inactive") == -1)
+			  next.addStyleName("inactive");
+	  }else
+		  next.removeStyleName("inactive");
+  }
+  
+  
+  public void scrollToSelected() {
+	  Widget wid = (Widget)tabBar.getTab(tabBar.getSelectedTab());
+	  int left = wid.getAbsoluteLeft();
+	  int width = wid.getOffsetWidth();
+	  int barLeft = scrollPanel.getAbsoluteLeft();
+	  int barWidth = scrollPanel.getOffsetWidth();
+	  if(left+width > barLeft+barWidth) {
+		  scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-((left+width)-(barLeft+barWidth)) , 0);
+	  }else if(left < barLeft){
+		  scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+(barLeft-left) , 0);
+	  }
+	  checkScroll();
+  }
 }

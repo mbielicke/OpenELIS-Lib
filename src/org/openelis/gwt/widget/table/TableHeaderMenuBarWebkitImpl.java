@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-@Deprecated
 public class TableHeaderMenuBarWebkitImpl extends TableHeaderMenuBar {
     
     /**
@@ -63,7 +62,7 @@ public class TableHeaderMenuBarWebkitImpl extends TableHeaderMenuBar {
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
-                                ((TableCellWidget)controller.view.table.getWidget(j,i)).setCellWidth(columns.get(i).getCurrentWidth());
+                                //((TableCellWidget)controller.view.table.getWidget(j,i)).setCellWidth(columns.get(i).getCurrentWidth());
                                 ((SimplePanel)controller.view.table.getWidget(j, i)).setWidth((columns.get(i).getCurrentWidth()) + "px");
                                 //((SimplePanel)view.table.getWidget(j,i)).getWidget().setWidth(curColWidth[i]+"px");
                             }
@@ -80,7 +79,7 @@ public class TableHeaderMenuBarWebkitImpl extends TableHeaderMenuBar {
                 int adj1 = -2;
                 int adj2 = 3;
                 int width = 0;
-                for(TableColumnInt column : columns)
+                for(TableColumn column : columns)
                     width += column.getCurrentWidth();
                 int displayWidth = width + (columns.size()*4) - (columns.size() -1);
                 setWidth(displayWidth+"px");  

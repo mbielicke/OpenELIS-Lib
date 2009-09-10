@@ -2,8 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.widget.rewrite.Field;
+import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;

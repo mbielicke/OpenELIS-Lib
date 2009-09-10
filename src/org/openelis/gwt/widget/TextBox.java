@@ -2,13 +2,9 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.rewrite.DateField;
-import org.openelis.gwt.widget.rewrite.DoubleField;
-import org.openelis.gwt.widget.rewrite.Field;
-import org.openelis.gwt.widget.rewrite.IntegerField;
-import org.openelis.gwt.widget.rewrite.StringField;
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.screen.UIUtil;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -102,7 +98,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		field.clearError(this);
 	}
 	
-	public void addTabHandler(UIUtil.TabHandler handler) {
+	public void addTabHandler(TabHandler handler) {
 		addDomHandler(handler,KeyPressEvent.getType());
 	}
 

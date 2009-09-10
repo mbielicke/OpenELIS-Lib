@@ -1874,3 +1874,57 @@ margin-left:-18px;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
 }
+
+.SlideOut .middle{
+    padding:0px;
+    border:0px;
+}
+.SlideOut .topRight {
+    width:8px;
+    height:8px;
+    background: transparent url("../Images/popuptr.png") no-repeat right top;
+}
+.SlideOut .middleRight {
+    width:8px;
+    height:100%;
+    background: transparent url("../Images/popupright.png") top no-repeat;
+}
+.SlideOut .middleRightInner{
+    background: transparent url("../Images/popupright-y.png") top repeat-y;
+    height:100%;
+    margin-top:8px;
+}
+.SlideOut .bottomRight {
+    background: transparent url("../Images/popupbr.png") no-repeat left bottom;
+    width:8px;
+    height:8px;
+}
+.SlideOut .bottomCenter {
+    background:url("../Images/popupbottom.png") left no-repeat;
+    height:8px;
+}
+.SlideOut .bottomCenterInner {
+    background:url("../Images/popupbottom-x.png") left;
+    height:8px;
+    margin-left:8px;
+}
+.SlideOut .bottomLeft {
+    width:2px;
+    height:8px;
+    background:url("../Images/slideoutbl.png") no-repeat left bottom;
+}
+.SlideOut .middleLeft {
+    width:2px;
+    height:100%;
+    background: url("../Images/slideoutleft.png") repeat-y left;
+}
+.SlideOut .topLeft {
+	width:2px;
+    height:8px;
+    background: url("../Images/slideouttl.png") no-repeat left top;
+}
+.SlideOut .topCenter{
+    background:url("../Images/popuptop.png") repeat-x top;
+    height:8px;
+}
+

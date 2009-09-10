@@ -29,8 +29,8 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
 
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenText;
+import org.openelis.gwt.screen.deprecated.ScreenBase;
+import org.openelis.gwt.screen.deprecated.ScreenText;
 
 public class TestGWTWidgets extends GWTTestCase {
     

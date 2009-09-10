@@ -13,13 +13,9 @@ import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.event.DropManager;
-
 /**
 * Allows one or more table rows to be dropped into an existing table.
 */
-@Deprecated
 public final class TableIndexDropController extends AbstractPositioningDropController {
 
  private static final String CSS_DROP_POSITIONER = "DropPositioner";
@@ -31,9 +27,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  private boolean validDrop;
  
  private Widget positioner;
- 
- public DropManager manager;
- 
+  
  private IndexedPanel flexTableRowsAsIndexPanel = new IndexedPanel() {
 
    public Widget getWidget(int index) {
@@ -57,7 +51,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  private int targetPosition = -1;
 
  public TableIndexDropController(TableWidget table) {
-   super(table);
+   super(table.view.cellView);
    this.table = table;
  }
 
@@ -65,8 +59,6 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  public void onPreviewDrop(DragContext context) throws VetoDragException {
      if(!validDrop) 
          throw new VetoDragException();
-    if(manager != null)
-        manager.previewDrop(context);
     super.onPreviewDrop(context);
  }
  
@@ -75,32 +67,25 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  public void onEnter(DragContext context) {
      super.onEnter(context);
      positioner = newPositioner(context); 
-     if(manager != null)
-         manager.onEnter(context);
  }
  
  @Override
  public void onDrop(DragContext context) {
      TableRow drop = null;
-     if(manager != null)
-         drop = (TableRow)manager.getDropWidget(context);
-     else
-         drop = (TableRow)context.draggable;
-     TableDataRow<Object> row = drop.dragRow;
+     drop = (TableRow)context.draggable;
+     TableDataRow row = drop.dragRow;
      int modelIndex = drop.dragModelIndex;
-     if(table.model.numRows() == 0 || table.model.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
-         table.model.addRow(row);
+     if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
+         table.addRow(row);
      else 
-         table.model.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
+         table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
      if(table.dragController == context.dragController){
          if(modelIndex > table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
              modelIndex++;
-         table.model.deleteRow(modelIndex);
+         table.deleteRow(modelIndex);
      }    
      dropping = false;
      super.onDrop(context);
-     if(manager != null)
-         manager.dropEnded(context);
  }
 
  @Override
@@ -108,8 +93,6 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
      positioner.removeFromParent();
      positioner = null;
      super.onLeave(context);
-     if(manager != null)
-         manager.onLeave(context);
  }
  
  
@@ -123,7 +106,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
    targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
        context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
    Location tableLocation = new WidgetLocation(table, context.boundaryPanel);
-   if(table.model.numRows() > 0){
+   if(table.numRows() > 0){
        if(table.dragController == context.dragController){
            int checkIndex = targetRow;
            if(checkIndex < 0) 
@@ -152,13 +135,13 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  public Timer scroll;
 
  public boolean checkScroll(final int targetRow) {
-     if(table.model.numRows() < table.maxRows)
+     if(table.numRows() < table.maxRows)
          return false;
      TableRow dRow = table.renderer.getRows().get(targetRow);
      if((dRow.index == 0 && dRow.modelIndex > 0) || 
-        (dRow.index == table.maxRows -1 && dRow.modelIndex < table.model.shownRows() -1)){
+        (dRow.index == table.maxRows -1 && dRow.modelIndex < table.shownRows() -1)){
          if(dRow.index == table.maxRows -1){
-             if(dRow.modelIndex < table.model.shownRows() -1){
+             if(dRow.modelIndex < table.shownRows() -1){
                  
                  scroll = new Timer() {
                      public void run() {

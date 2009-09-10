@@ -25,16 +25,15 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.common.data.TableDataModel;
+import org.openelis.gwt.common.data.deprecated.TableDataModel;
+import org.openelis.gwt.common.deprecated.Filter;
 
 import java.util.ArrayList;
 
-@Deprecated
 public interface TableFiltererInt {
     
-    public Filter[] getFilterValues(TableDataModel data,int col);
+    public Filter[] getFilterValues(ArrayList<TableDataRow> data,int col);
     
-    public void applyFilters(TableDataModel data, ArrayList filters);
+    public void applyFilters(ArrayList<TableDataRow> data, ArrayList filters);
 
 }

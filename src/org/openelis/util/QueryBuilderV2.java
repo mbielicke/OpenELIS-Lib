@@ -10,8 +10,8 @@ import javax.persistence.TemporalType;
 
 import org.openelis.gwt.common.Meta;
 import org.openelis.gwt.common.MetaMap;
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.widget.rewrite.QueryFieldUtil;
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.widget.QueryFieldUtil;
 
 public class QueryBuilderV2 {
 	private String selectStatement = "";

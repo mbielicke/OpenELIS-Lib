@@ -25,33 +25,38 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.event.HasActionHandlers;
+
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
 
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
-@Deprecated
-public class MenuItem extends SimplePanel implements MouseListener, ClickListener, PopupListener, SourcesClickEvents, SourcesMouseEvents, SourcesCommandEvents {
+public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverHandler, ClickHandler, CloseHandler<PopupPanel>, HasClickHandlers, HasMouseOverHandlers, HasMouseOutHandlers, HasActionHandlers<MenuItem.Action> {
     
     public MenuPanel parent;
     public boolean cursorOn;
@@ -59,9 +64,6 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     public PopupPanel pop = new PopupPanel(true,false);
     public boolean popClosed;
     public boolean popShowing;
-    public MouseListenerCollection mouseListeners = new MouseListenerCollection();
-    public ClickListenerCollection clickListeners = new ClickListenerCollection();
-    public CommandListenerCollection commandListeners = new CommandListenerCollection();
     public MenuPanel child;
     public MenuPanel menuItemsPanel;
     public Widget wid;
@@ -73,30 +75,20 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     public Object[] args;
     public String key;
     public String label;
-    
-    @Override
-    public void onBrowserEvent(Event event) {
-        switch (DOM.eventGetType(event)) {
-            case Event.ONMOUSEDOWN:
-            case Event.ONMOUSEUP:
-            case Event.ONMOUSEMOVE:
-            case Event.ONMOUSEOVER:
-            case Event.ONMOUSEOUT:
-                if (mouseListeners != null) {
-                    mouseListeners.fireMouseEvent(this, event);
-                }
-                break;
-            case Event.ONCLICK:
-                if (clickListeners != null) {
-                    clickListeners.fireClick(this);
-                }
-                break;
-        }
-        super.onBrowserEvent(event);
-    }
+    public String icon;
+    public String labelText;
+    public String description;
+    private boolean enabled;
+    public HandlerRegistration clickHandler;
+    public HandlerRegistration mouseOutHandler;
+    public HandlerRegistration mouseOverHandler;
     
     public MenuItem() {
-        
+
+    }
+    
+    public MenuItem clone() {
+    	return new MenuItem(icon,labelText,description);
     }
     
     public MenuItem(String icon, String labelText, String description) {
@@ -105,6 +97,9 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     }
     
     public void init(String icon, String labelText, String description) {
+    	this.icon = icon;
+    	this.labelText = labelText;
+    	this.description = description;
         Label label = new Label(labelText);
         label.setStyleName("topMenuItemTitle");
         label.addStyleName("locked");
@@ -206,19 +201,14 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
         menuItemsPanel = panel;
     }
     
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onMouseEnter(Widget sender) {
+    public void onMouseOver(MouseOverEvent event) {
         if(parent != null)
             parent.itemEnter(this);
         cursorOn = true;
         addStyleName("Hover");
     }
 
-    public void onMouseLeave(Widget sender) {
+    public void onMouseOut(MouseOutEvent event) {
         if(parent != null)
             parent.itemLeave(this);
         cursorOn = false;
@@ -226,35 +216,46 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
         
     }
 
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onClick(Widget sender) {
+    public void onClick(ClickEvent event) {
         if(menuItemsPanel != null){
             if(popClosed)
                 popClosed = false;
             else
                 createPopup();
-            mouseListeners.fireMouseEnter(sender);
+            
+            MouseOverEvent.fireNativeEvent(Document.get().createMouseOverEvent(0,
+            																   event.getNativeEvent().getScreenX(), 
+            																   event.getNativeEvent().getScreenY(), 
+            																   event.getNativeEvent().getClientX(), 
+            																   event.getNativeEvent().getClientY(), 
+            																   event.getNativeEvent().getCtrlKey(), 
+            																   event.getNativeEvent().getAltKey(), 
+            																   event.getNativeEvent().getShiftKey(), 
+            																   event.getNativeEvent().getMetaKey(), 
+            																   event.getNativeEvent().getButton(), 
+            																   ((Widget)event.getSource()).getElement()),this);
             return;
         }
         if(parent != null && parent.getParent() instanceof PopupPanel)
             ((PopupPanel)parent.getParent()).hide();
-        mouseListeners.fireMouseLeave(sender);
+        MouseOutEvent.fireNativeEvent(Document.get().createMouseOutEvent(0,
+				   event.getNativeEvent().getScreenX(), 
+				   event.getNativeEvent().getScreenY(), 
+				   event.getNativeEvent().getClientX(), 
+				   event.getNativeEvent().getClientY(), 
+				   event.getNativeEvent().getCtrlKey(), 
+				   event.getNativeEvent().getAltKey(), 
+				   event.getNativeEvent().getShiftKey(), 
+				   event.getNativeEvent().getMetaKey(), 
+				   event.getNativeEvent().getButton(), 
+				   ((Widget)event.getSource()).getElement()),this);
     }
 
-    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-        commandListeners.fireCommand(Action.CLOSING, this);
+    public void onClose(CloseEvent<PopupPanel> event) {
+    	ActionEvent.fire(this, Action.CLOSING, this);
         if(cursorOn)
             popClosed = true;
-        if(DOM.getElementProperty(sender.getElement(), "closeAll").equals("true")){
+        if(DOM.getElementProperty(((Widget)event.getSource()).getElement(), "closeAll").equals("true")){
                 if(parent != null && parent.getParent() instanceof PopupPanel)
                     ((PopupPanel)parent.getParent()).hide();
                 
@@ -272,14 +273,14 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
             parent.activeItem = this;
         if(menuItemsPanel == null)
             return;
-        commandListeners.fireCommand(Action.OPENING, this);
+        ActionEvent.fire(this, Action.OPENING, this);
         if(pop.getWidget() == null) {
             //pop = new PopupPanel(true,false);
             //ScreenMenuPanel mp = (ScreenMenuPanel)ScreenWidget.loadWidget(popupNode, screen);
             //use the menuItemsPanel so you can disable certain rows on the fly
             pop.setWidget(menuItemsPanel);
         
-            pop.addPopupListener(this);
+            pop.addCloseHandler(this);
             pop.setStyleName("");
  
         }
@@ -314,58 +315,44 @@ public class MenuItem extends SimplePanel implements MouseListener, ClickListene
     }
     
     public void enable(boolean enabled){
+    	this.enabled = enabled;
         if(enabled){
-           // removeClickListener(this);
-            addClickListener(this);
-            sinkEvents(Event.ONCLICK);
-            //removeMouseListener(this);
-            addMouseListener(this);
-            sinkEvents(Event.MOUSEEVENTS);
-            getWidget().removeStyleName("disabled");
+        	if(clickHandler == null) {
+        		clickHandler = addClickHandler(this);
+        		mouseOverHandler = addMouseOverHandler(this);
+        		mouseOutHandler = addMouseOutHandler(this);
+        		getWidget().removeStyleName("disabled");
+        	}
         }else{
-           // removeClickListener(this);
-           // removeMouseListener(this);
-            unsinkEvents(Event.ONCLICK);
-            unsinkEvents(Event.MOUSEEVENTS);
+        	clickHandler.removeHandler();
+        	mouseOverHandler.removeHandler();
+        	mouseOutHandler.removeHandler();
+        	clickHandler = null;
+        	mouseOverHandler = null;
+        	mouseOutHandler = null;
             getWidget().addStyleName("disabled");
         }
-    }
-
-    public void addClickListener(ClickListener listener) {
-        if(clickListeners == null)
-            clickListeners = new ClickListenerCollection();
-        clickListeners.add(listener);
         
     }
-
-    public void removeClickListener(ClickListener listener) {
-        if(clickListeners != null)
-            clickListeners.remove(listener);
+    
+    public boolean isEnabled() {
+    	return enabled;
     }
 
-    public void addMouseListener(MouseListener listener) {
-        if(mouseListeners == null)
-            mouseListeners = new MouseListenerCollection();
-        mouseListeners.add(listener);
-    }
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addDomHandler(handler,ClickEvent.getType());
+	}
 
-    public void removeMouseListener(MouseListener listener) {
-        if(mouseListeners != null)
-            mouseListeners.remove(listener);
-        
-    }
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler,MouseOverEvent.getType());
+	}
 
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler,MouseOutEvent.getType());
+	}
 
-    public void addCommandListener(CommandListener listener) {
-        if(commandListeners == null){
-            commandListeners = new CommandListenerCollection();
-        }
-        commandListeners.add(listener);
-    }
+	public HandlerRegistration addActionHandler(ActionHandler<Action> handler) {
+		return addHandler(handler,ActionEvent.getType());
+	}
 
-
-    public void removeCommandListener(CommandListener listener) {
-        if(commandListeners != null)
-            commandListeners.remove(listener);
-    }
 }

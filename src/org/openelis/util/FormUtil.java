@@ -3,12 +3,12 @@ package org.openelis.util;
 import java.util.HashMap;
 import java.util.List;
 
-import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.FieldType;
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.common.data.TableField;
-import org.openelis.gwt.screen.ClassFactory;
+import org.openelis.gwt.common.data.deprecated.AbstractField;
+import org.openelis.gwt.common.data.deprecated.FieldType;
+import org.openelis.gwt.common.data.deprecated.TableDataRow;
+import org.openelis.gwt.common.data.deprecated.TableField;
+import org.openelis.gwt.common.deprecated.Form;
+import org.openelis.gwt.screen.deprecated.ClassFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

@@ -27,6 +27,12 @@ package org.openelis.gwt.widget.richtext;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.Field;
+import org.openelis.gwt.widget.HasField;
+
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -38,19 +44,12 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.rewrite.Field;
-
-public class RichTextWidget extends Composite implements FocusListener, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
+public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
     
     private FlexTable vp = new FlexTable();
     public RichTextArea area;
@@ -59,12 +58,13 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
     private boolean enabled;
     private Field<String> field;
     
-    public RichTextWidget(ScreenBase screen) {
+    public RichTextWidget() {
         area = new RichTextArea();
-        toolbar = new RichTextToolbar(area,screen);
+        toolbar = new RichTextToolbar(area);
     }
     
     public RichTextWidget(boolean tools) {
+    	this();
         init(tools);
     }
     
@@ -85,7 +85,7 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
             vp.getFlexCellFormatter().addStyleName(0, 0, "WhiteContentPanel");
         }
         area.setSize("100%","100%");
-        area.addFocusListener(this);
+        area.addFocusHandler(this);
 
     }
     
@@ -101,13 +101,6 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
     	return area.getText();
     }
     
-    public void addFocusListener(FocusListener listener){
-        area.addFocusListener(listener);
-    }
-    
-    public void removeFocusListener(FocusListener listener){
-        area.removeFocusListener(listener);
-    }
     
     public void setFocus(boolean focused) {
         if(enabled)
@@ -136,7 +129,7 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
         area.setEnabled(enabled);
     }
 
-    public void onFocus(Widget sender) {
+    public void onFocus(FocusEvent event) {
         if(!enabled)
             area.setFocus(false);
     }
@@ -166,7 +159,7 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
-	public void addTabHandler(UIUtil.TabHandler handler) {
+	public void addTabHandler(TabHandler handler) {
 		addDomHandler(handler,KeyPressEvent.getType());
 	}
 
@@ -231,7 +224,6 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 
 	public void setFieldValue(String value) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	public HandlerRegistration addFieldValueChangeHandler(

@@ -25,30 +25,72 @@
 */
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.Field;
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.table.TableSorterInt.SortDirection;
+import org.openelis.gwt.widget.table.TableView.VerticalScroll;
+import org.openelis.gwt.widget.table.event.BeforeAutoAddEvent;
+import org.openelis.gwt.widget.table.event.BeforeAutoAddHandler;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
+import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
+import org.openelis.gwt.widget.table.event.BeforeRowAddedHandler;
+import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
+import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.table.event.CellEditedEvent;
+import org.openelis.gwt.widget.table.event.CellEditedHandler;
+import org.openelis.gwt.widget.table.event.HasBeforeAutoAddHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
+import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
+import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasTableValueChangeHandlers;
+import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
+import org.openelis.gwt.widget.table.event.RowAddedEvent;
+import org.openelis.gwt.widget.table.event.RowAddedHandler;
+import org.openelis.gwt.widget.table.event.RowDeletedEvent;
+import org.openelis.gwt.widget.table.event.RowDeletedHandler;
+import org.openelis.gwt.widget.table.event.TableValueChangeEvent;
+import org.openelis.gwt.widget.table.event.TableValueChangeHandler;
+import org.openelis.gwt.widget.table.event.UnselectionEvent;
+import org.openelis.gwt.widget.table.event.UnselectionHandler;
+
+import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.Filter;
-import org.openelis.gwt.screen.ScreenTableWidget;
-import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
-import org.openelis.gwt.widget.table.event.SourcesTableModelEvents;
-import org.openelis.gwt.widget.table.event.SourcesTableWidgetEvents;
-import org.openelis.gwt.widget.table.event.TableModelListener;
-import org.openelis.gwt.widget.table.event.TableWidgetListener;
-import org.openelis.gwt.widget.table.event.TableWidgetListenerCollection;
-
-
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 /**
  * This class is the main controller for the Table widget. It hooks the model to
@@ -58,106 +100,119 @@ import java.util.Iterator;
  * @author tschmidt
  * 
  */
-@Deprecated
-public class TableWidget extends FocusPanel implements
-                            TableListener,
-                            SourcesChangeEvents,
-                            SourcesTableWidgetEvents,
-                            TableModelListener,
-                            TableWidgetListener,
-                            FocusListener{
-    
-
-    public ArrayList<TableColumnInt> columns;
-    public ChangeListenerCollection changeListeners;
-    public TableWidgetListenerCollection tableWidgetListeners; 
+public class TableWidget extends FocusPanel implements ClickHandler, 
+													   HasField, 
+													   HasTableValueChangeHandlers,
+													   MouseOverHandler, 
+													   MouseOutHandler,
+													   HasBeforeSelectionHandlers<TableRow>,
+													   HasSelectionHandlers<TableRow>,
+													   HasUnselectionHandlers<TableDataRow>,
+													   HasBeforeCellEditedHandlers,
+													   HasCellEditedHandlers, 
+													   HasBeforeRowAddedHandlers,
+													   HasRowAddedHandlers, 
+													   HasBeforeRowDeletedHandlers,
+													   HasRowDeletedHandlers,
+													   HasBeforeAutoAddHandlers,
+													   HasDropController
+													   {
+                            
+    public ArrayList<TableColumn> columns;
     public boolean enabled;
     public boolean focused;
     public int activeRow = -1;
     public int activeCell = -1;
-    public TableModelInt model;
     public TableView view;
-    public TableRendererInt renderer;
+    public TableRenderer renderer;
     public TableKeyboardHandlerInt keyboardHandler;
-    public TableMouseHandlerInt mouseHandler;
     public boolean shiftKey;
     public boolean ctrlKey;
     public int maxRows;
     public int cellHeight = 18;
     public int cellSpacing = 1;
-    public TableCellWidget editingCell = null;
+    public Widget editingCell = null;
     public int[] modelIndexList;
     public boolean showRows;
     public String title;
     public boolean showHeader;
-    public ArrayList<Filter[]> filters;
-    public ScreenTableWidget screenWidget;
     public boolean isDropdown = false;
     public TableDragController dragController;
     public TableIndexDropController dropController;
     public boolean selectedByClick;
+    public VerticalScroll showScroll = VerticalScroll.NEEDED;
+    public String width;
+    private ArrayList<TableDataRow> data;
+    public TableSorterInt sorter = new TableSorter();
+    public int shownRows; 
+    public ArrayList<Integer> selections = new ArrayList<Integer>(1);
+    private int selected = -1;
+    private ArrayList<String> errors;
+    private boolean queryMode;
+    public boolean addIcon;
+    public boolean deleteIcon;
+    
+    public boolean autoAdd;
+    
+    public TableDataRow autoAddRow;
+    
+    public boolean multiSelect;
     
     public TableWidget() {
         
     }
     
-    public TableWidget(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
-        init(columns,maxRows,width,title,showHeader,showScroll);
+    public void addTabHandler(TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
     }
     
-    public void init(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll){
-        for(TableColumnInt column : columns) {
-            column.setTableWidget(this);
-        }
-        this.columns = columns;
-        this.maxRows = maxRows;
-        this.title = title;
-        this.showHeader = showHeader;
+    public void init(){
         renderer = new TableRenderer(this);
-        model = new TableModel(this);
+        keyboardHandler = new TableKeyboardHandler(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
         view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
-        keyboardHandler = new TableKeyboardHandler(this);
-        mouseHandler = new TableMouseHandler(this);
-        addTableWidgetListener((TableWidgetListener)renderer);
-        //addTableWidgetListener(this);
         setWidget(view);
-        addFocusListener(this);
+        addDomHandler(keyboardHandler,KeyUpEvent.getType());
+        addDomHandler(keyboardHandler,KeyDownEvent.getType());
         
     }
-    
-    /**
-     * Default constructor, puts table on top of the event stack.
-     * 
-     */
-    public TableWidget(ArrayList<TableColumnInt> columns,TableModel model, TableView view, TableRenderer renderer) {
-        init(columns,model,view,renderer);
-    }
-    
-    public void init(ArrayList<TableColumnInt> columns,TableModel model, TableView view, TableRenderer renderer){
-        this.columns = columns;
-        this.model = model;
-        this.view = view;
-        this.renderer = renderer;
-        model.addTableModelListener(renderer);
-        addTableWidgetListener(renderer);
-        view.table.addTableListener(this);
-        keyboardHandler = new TableKeyboardHandler(this);
-        mouseHandler = new TableMouseHandler(this);
+        
+    public void setTableWidth(String width) {
+    	this.width = width;
     }
 
     /**
      * This method handles all click events on the body of the table
      */
-    public void onCellClicked(SourcesTableEvents sender, int row, int col) {
-        focused = true;
-        if(!(columns.get(col).getColumnWidget() instanceof TableCheck) && activeRow == row && activeCell == col)
-            return;
-        selectedByClick = true;
-        select(row, col);
-        selectedByClick = false;
+    public void onClick(ClickEvent event) {
+    	if(event.getSource() == view.table){
+    		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
+    		if(isEnabled()){
+    			if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
+    				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue()))
+    					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
+    				else
+    					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
+    			}
+    		}
+    		if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
+    			return;
+    		selectedByClick = true;
+    		select(cell.getRowIndex(), cell.getCellIndex());
+    		selectedByClick = false;
+    	}
     }
+    
+    public void onMouseOver(MouseOverEvent event) {
+        ((Widget)event.getSource()).addStyleName("TableHighlighted");
+         
+     }
+
+     public void onMouseOut(MouseOutEvent event) {
+         ((Widget)event.getSource()).removeStyleName("TableHighlighted");
+         
+     }
 
     /**
      * This method will unselect the row specified. Unselecting will save any
@@ -166,10 +221,31 @@ public class TableWidget extends FocusPanel implements
      * @param row
      */
     public void unselect(int row) {
-        if(editingCell != null){
-            tableWidgetListeners.fireFinishedEditing(this, activeRow, activeCell);
+        finishEditing();
+        if(row == -1){
+            selections.clear();
+            selected = -1;
+            renderer.rowUnselected(-1);
+        }else if(row < selections.size()){
+            selections.remove(new Integer(row));
+            if(selected == row)
+                selected = -1;
         }
-        model.unselectRow(modelIndexList[row]);
+        activeRow = -1;
+        if(isRowDrawn(row))
+        	renderer.rowUnselected(tableIndex(row));
+    }
+    
+    private boolean isRowDrawn(int row){
+    	return row >= modelIndexList[0] && row <= modelIndexList[view.table.getRowCount()-1];
+    }
+    
+    private int tableIndex(int row) {
+    	for(int i = 0; i < view.table.getRowCount(); i++){
+    		if(modelIndexList[i] == row)
+    			return i;
+    	}
+    	return -1;
     }
     
     /**
@@ -180,9 +256,15 @@ public class TableWidget extends FocusPanel implements
      * @param row
      * @param col
      */
-    public void select(final int row, final int col) {
+    protected void select(final int row, final int col) {
+    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
+    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		if(event.isCanceled())
+    			return;
+    	}else if(!isEnabled()) 
+    		return;
         if(finishEditing()){
-            if(model.numRows() >= maxRows){
+            if(numRows() >= maxRows){
                 view.scrollBar.scrollToBottom();
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
@@ -193,178 +275,563 @@ public class TableWidget extends FocusPanel implements
             }
             view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
         }
-        if(model.canSelect(modelIndexList[row])){
-            focused = true;
-            if(activeRow != row){
-                if(activeRow > -1 && !ctrlKey){
-                    model.unselectRow(-1);
-                }
-                activeRow = row;
-                model.selectRow(modelIndexList[row]);
+        if(activeRow != row){
+            if(activeRow > -1 && !ctrlKey){
+            	UnselectionEvent.fire(this,data.get(selected));
+                unselect(-1);
+                
             }
-            if(activeCell > -1 && activeCell != col) {
-                if(columns.get(activeCell).getColumnWidget() instanceof TableCheck) {
-                    ((TableCheck)view.table.getWidget(activeRow,activeCell)).onLostFocus(this);
-                }
-            }
-            if(model.canEdit(modelIndexList[row],col)){
-                activeCell = col;
-                tableWidgetListeners.fireStartedEditing(this, row, col);
-                if(columns.get(col).getColumnWidget() instanceof TableCheck) {
-                    if(selectedByClick){
-                        ((TableCheck)view.table.getWidget(row,col)).check();
-                        if(finishEditing()){
-                            view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
-                        }
-                    }
-                    ((TableCheck)view.table.getWidget(row,col)).onFocus(this);
-                    editingCell = null;
-                }
-            }else
-                activeCell = -1;
-        }else{
-            return;
+            activeRow = row;
+            selectRow(modelIndexList[row]);
+            SelectionEvent.fire(this, renderer.rows.get(row));
         }
+        if(canEditCell(row,col)){
+            activeCell = col;
+            renderer.setCellEditor(row, col);
+            unsinkEvents(Event.ONKEYPRESS);
+        }else{
+       		activeCell = -1;
+       		sinkEvents(Event.ONKEYPRESS);
+       	}
+       
     }
     
     public boolean finishEditing() {
         if(editingCell != null) {
-            tableWidgetListeners.fireStopEditing(this, activeRow, activeCell);
-            if(model.isAutoAdd() && modelIndexList[activeRow] == model.numRows()){
-                if(model.canAutoAdd(model.getAutoAddRow())){
-                    model.addRow(model.getAutoAddRow());
-                    tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
+        	if(renderer.stopEditing())
+        		CellEditedEvent.fire(this, activeRow, activeCell, getRow(activeRow).cells.get(activeCell).value);
+            if(isAutoAdd() && modelIndexList[activeRow] == numRows()){
+            	BeforeAutoAddEvent event = BeforeAutoAddEvent.fire(this, getAutoAddRow());
+                if(event != null && !event.isCancelled()){
+                    addRow(getAutoAddRow());
+                    //tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
                     return true;
                 }
             }
-            tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
+            activeCell = -1;
+            sinkEvents(Event.KEYEVENTS);
+            //tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
         }
         return false;
         
     }
     
     public void startEditing(int row, int col) {
-        select(row,col);
-    }
-    
-    public void addChangeListener(ChangeListener listener) {
-        if(changeListeners == null)
-            changeListeners = new ChangeListenerCollection(); 
-        changeListeners.add(listener);
-    }
-
-    public void removeChangeListener(ChangeListener listener) {
-        if(changeListeners != null)
-            changeListeners.remove(listener);
-    }
-    
-    public void enabled(boolean enabled){
-        this.enabled = enabled;
-        if(dragController != null)
-            dragController.setEnable(enabled);
-        for(TableColumnInt column : columns) {
-            column.enable(enabled);
-        }
-        Iterator widIt = view.table.iterator();
-        while(widIt.hasNext()){
-            ((TableCellWidget)widIt.next()).enable(enabled);
-        }
-    }
-
-    public void addTableWidgetListener(TableWidgetListener listener) {
-        if(tableWidgetListeners == null)
-            tableWidgetListeners = new TableWidgetListenerCollection();
-        tableWidgetListeners.add(listener); 
-    }
-
-    public void removeTableWidgetListener(TableWidgetListener listener) {
-        if(tableWidgetListeners != null)
-            tableWidgetListeners.remove(listener);
-    }
-    
-    public void setFocus(boolean focused) {
-        this.focused = focused;
-        super.setFocus(focused);
-    }
-
-    public void onFocus(Widget sender) {
-       this.focused = true;
-        
-    }
-
-    public void onLostFocus(Widget sender) {
-        
-    }
-
-    public void cellUpdated(SourcesTableModelEvents sender, int row, int cell) {
-        
-    }
-
-    public void dataChanged(SourcesTableModelEvents sender) {
-        
-    }
-
-    public void rowAdded(SourcesTableModelEvents sender, int rows) {
-        
-    }
-
-    public void rowDeleted(SourcesTableModelEvents sender, int row) {
-        
-    }
-
-    public void rowSelected(SourcesTableModelEvents sender, int row) {
-        
-    }
-
-    public void rowUnselected(SourcesTableModelEvents sender, int row) {
-        
-    }
-
-    public void rowUpdated(SourcesTableModelEvents sender, int row) {
-        
-    }
-
-    public void unload(SourcesTableModelEvents sender) {
-       if(editingCell != null) {
-           finishEditing();
-       }
+    	if(isRowDrawn(row))
+    		select(tableIndex(row),col);
     }
     
     public void scrollToSelection(){
-        if(model.numRows() == model.shownRows()){
-            view.scrollBar.setScrollPosition(cellHeight*model.getData().getSelectedIndex());
+    	finishEditing();
+        if(numRows() == shownRows()){
+            view.scrollBar.setScrollPosition(cellHeight*getSelectedIndex());
         }else{
             int shownIndex = 0;
-            for(int i = 0; i < model.getData().getSelectedIndex(); i++){
-                if(model.getRow(i).shown)
+            for(int i = 0; i < getSelectedIndex(); i++){
+                if(getRow(i).shown)
                     shownIndex++;
             }
             view.scrollBar.setScrollPosition(cellHeight*shownIndex);
         }
     }
 
-    public void finishedEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        if(columns.get(col).getColumnWidget() instanceof TableCheck) {
-            ((SimplePanel)(TableCellWidget)view.table.getWidget(row, col)).addStyleName(view.widgetStyle);
-            ((SimplePanel)(TableCellWidget)view.table.getWidget(row, col)).addStyleName("Enabled");
-        }
-        
+    public void addRow() {
+    	finishEditing();
+        addRow(createRow());
+    }
+    
+    public void addRow(int index) {
+    	finishEditing();
+        addRow(index,createRow());
+    }
+    
+    public void addRow(TableDataRow row) {
+    	finishEditing();
+    	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
+    	if(event != null && event.isCancelled())
+    		return;
+        data.add(row);
+        if(row.shown)
+            shownRows++;
+        RowAddedEvent.fire(this, data.size()-1, row);
+       	renderer.dataChanged(true);
+    }
+    
+    public void addRow(int index, TableDataRow row) {
+    	finishEditing();
+    	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, row);
+    	if(event != null && event.isCancelled())
+    		return;
+        data.add(index, row);
+        if(row.shown)
+            shownRows++;
+        RowAddedEvent.fire(this, index, row);
+       	renderer.dataChanged(true);
     }
 
-    public void startEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        if(columns.get(col).getColumnWidget() instanceof TableCheck) {
-            if(selectedByClick){
-                ((TableCheck)view.table.getWidget(row,col)).check();
-                finishEditing();
+    public void deleteRow(int row) {
+    	finishEditing();
+    	BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
+    	if(event != null && event.isCancelled())
+    		return;
+        if(data.get(row).shown)
+            shownRows--;
+        if(row < data.size()){
+        	UnselectionEvent.fire(this, data.get(row));
+            TableDataRow tmp = data.remove(row);
+            RowDeletedEvent.fire(this, row, tmp);
+        }
+        renderer.dataChanged(true);
+        
+    }
+        
+    public TableDataRow getRow(int row) {
+        //if(data == null)
+          //  return null;
+        if(row < numRows())
+            return data.get(row);
+        if(autoAdd)
+            return autoAddRow;
+        return null;
+    }
+
+    public int numRows() {
+        if(data == null)
+            return 0;
+        return data.size();
+    }
+
+    public Object getObject(int row, int col) {
+        return data.get(row).cells.get(col).getValue();
+    }
+
+    public void clear() {
+    	if(data != null)
+    		data.clear();
+    	clearSelections();
+    	activeRow = -1;
+    	activeCell = -1;
+        shownRows = 0;
+        renderer.dataChanged(false);
+    }
+    
+    public TableDataRow setRow(int index, TableDataRow row){
+    	finishEditing();
+        TableDataRow set =  data.set(index, row);
+        if(isRowDrawn(index))
+        	renderer.loadRow(index);
+        return set;
+    }
+    
+    public boolean tableRowEmpty(int index){
+        return tableRowEmpty((TableDataRow)getRow(index));
+    }
+        
+    private boolean tableRowEmpty(TableDataRow row){ 
+        boolean empty = true;
+        List cells = row.getCells();
+        for(Object field : cells) {
+            if(field != null && !"".equals(field)){
+                empty = false;
+                break;
             }
         }
-        
+        return empty;
+    }
+    
+    public int shownRows() {
+        return shownRows;
+    }
+    
+    public TableDataRow createRow() {
+        TableDataRow row = new TableDataRow(columns.size());
+        return row;
+    }
+    
+    public void load(ArrayList<TableDataRow> data) {
+        selections.clear();
+        selected = -1;
+        renderer.rowUnselected(-1);
+        this.data = data;
+        shownRows = 0;
+        for(int i = 0; i < data.size(); i++){
+            if(((TableDataRow)data.get(i)).shown)
+                shownRows++;
+        }
+        editingCell = null;
+        activeRow = -1;
+        activeCell = -1;
+        renderer.dataChanged(false);
+    }
+    
+    /* Remove method when ResultsTable can be committed
+     * 
+     */
+    public void selectRow(int index, boolean dummy) {
+    	selectRow(index);
     }
 
-    public void stopEditing(SourcesTableWidgetEvents sender, int row, int col) {
-        // TODO Auto-generated method stub
-        
+    public void selectRow(final int index) throws IndexOutOfBoundsException{
+        if(index > data.size())
+            throw new IndexOutOfBoundsException();
+        selected = index;
+        if(!multiSelect)
+            selections.clear();
+        selections.add(index);
+        if(isRowDrawn(index))
+        	renderer.rowSelected(tableIndex(index));
+    }
+    
+    public void clearSelections() {
+        selections.clear();
+        selected = -1;
+    }
+    
+    public ArrayList<TableDataRow> getSelections() {
+    	ArrayList<TableDataRow>  sels = new ArrayList<TableDataRow>();
+    	for(int index : selections) {
+    		sels.add(getRow(index));
+    	}
+        return sels;
+    }
+
+
+    public boolean getAutoAdd() {
+        return autoAdd;
+    }
+
+
+    public TableDataRow getAutoAddRow() {
+        return autoAddRow;
+    }
+
+
+    public void setAutoAddRow(TableDataRow row) {
+        autoAddRow = row;
+    }
+
+    public ArrayList<TableDataRow> getData() {
+        return data;
+    }
+    
+    public void setCell(int row, int col, Object value) {
+        getRow(row).cells.get(col).setValue(value);
+        if(isRowDrawn(row))
+        	renderer.cellUpdated(tableIndex(row), col);
+        //CellEditedEvent.fire(this, row, col, value);
+    }
+    
+    public TableDataCell getCell(int row, int col) {
+        return getRow(row).cells.get(col);
+    }
+    
+    public void hideRow(int row) {
+        data.get(row).shown = false;
+        shownRows--;
+        renderer.dataChanged(true);
+    }
+    
+    public void showRow(int row) {
+        data.get(row).shown = true;
+        shownRows++;
+        renderer.dataChanged(true);
+    }
+
+    public void sort(int col, SortDirection direction) {
+    	unselect(-1);
+        sorter.sort(data, col, direction);
+    	renderer.dataChanged(false);
+    }
+    
+    public void refresh() {
+        shownRows = 0;
+        for(int i = 0; i < data.size(); i++){
+            if(data.get(i).shown)
+                shownRows++;
+        }
+        renderer.dataChanged(false);
+    }
+    
+    public boolean isSelected(int index) {
+        return selections.contains(index);
+    }
+
+    public void enableMultiSelect(boolean multi) {
+        this.multiSelect = multi;
+    }
+    
+    public boolean isEnabled(int index) {
+        if(index < numRows())
+            return data.get(index).enabled;
+        return autoAddRow.enabled;
+    }
+
+    public TableDataRow getSelection() {
+        return data.get(selected);
+    }
+
+    public ArrayList<TableDataRow> unload() {
+        finishEditing();
+        return data;
+    }
+    
+    public boolean isAutoAdd() {
+        return autoAdd;
+    }
+
+    public void enableAutoAdd(boolean autoAdd) {
+        this.autoAdd = autoAdd;
+        autoAddRow = new TableDataRow(columns.size());
+        renderer.dataChanged(true);   
+    }
+
+    public int getSelectedIndex() {
+        return selected;
+    }
+
+    public int[] getSelectedIndexes() {
+        int[] ret = new int[selections.size()];
+        for(int i = 0; i < selections.size(); i++)
+            ret[i] = (Integer)selections.get(i);
+        return ret;
+    }
+   
+    
+    public void setCellError(int row, int col, String error) {
+        data.get(row).cells.get(col).addError(error);
+        if(isRowDrawn(row))
+        	renderer.cellUpdated(tableIndex(row), col);
+    }
+    
+    public void setCellError(int row, String col, String error) {
+    	for(TableColumn column : columns) {
+    		if(column.key.equals(col)){
+    			setCellError(row,columns.indexOf(column),error);
+    			break;
+    		}
+    	}
+    }
+    
+    public void clearCellError(int row, int col) {
+    	 data.get(row).cells.get(col).clearErrors();
+    	 if(isRowDrawn(row))
+    		 renderer.cellUpdated(tableIndex(row), col);
     }
     
     
+ 
+    public void selectRow(Object key) {
+    	if(data == null && autoAdd){
+    		selectRow(0);
+    		return;
+    	}
+    	for(int i = 0; i < data.size(); i++) {
+    		if(data.get(i).key == key || key.equals(data.get(i).key)){
+        		selectRow(i);
+    			break;
+    		}
+    	}
+    }
+
+	public void addError(String Error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clearErrors() {
+		errors = null;
+		
+	}
+
+	public Field getField() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setQueryMode(boolean query) {
+		if(query == queryMode)
+			return;
+		queryMode = query;
+		for(TableColumn col : columns) {
+			((HasField)col.getColumnWidget()).setQueryMode(query);
+		}
+		ArrayList<TableDataRow> qModel = new ArrayList<TableDataRow>();
+		if(query) {
+			qModel.add(new TableDataRow(columns.size()));
+		}
+		load(qModel);
+	}
+
+	public void getQuery(ArrayList list, String key) {
+		for(TableColumn col : columns) {
+			((HasField)col.getColumnWidget()).getQuery(list, col.key);
+		}	
+	}
+	
+	public ArrayList<String> getErrors() {
+		return errors;
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+        if(dragController != null)
+            dragController.setEnable(enabled);
+        for(TableColumn column : columns) {
+            column.enable(enabled);
+        }
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void checkValue() {
+		finishEditing();
+		errors = null;
+		if(data == null)
+			return;
+		for(int i = 0; i < numRows(); i++) {
+			for(int j = 0; j < data.get(i).cells.size(); j++){
+				Widget wid = columns.get(j).getWidgetEditor(data.get(i).cells.get(j));
+				if(wid instanceof HasField){
+					((HasField)wid).checkValue();
+					data.get(i).cells.get(j).errors = ((HasField)wid).getErrors();
+					if(data.get(i).cells.get(j).errors != null){
+						errors = data.get(i).cells.get(j).errors;
+					}
+				}
+			}
+		}
+		if(errors != null)
+			refresh();
+		else
+			TableValueChangeEvent.fire(this, data);
+	}
+	
+	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
+		return addHandler(handler, CellEditedEvent.getType());
+	}
+	
+	public HandlerRegistration addRowAddedHandler(RowAddedHandler handler) {
+		return addHandler(handler, RowAddedEvent.getType());
+	}
+
+	public HandlerRegistration addRowDeletedHandler(RowDeletedHandler handler) {
+		return addHandler(handler, RowDeletedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeSelectionHandler(
+			BeforeSelectionHandler<TableRow> handler) {
+		return addHandler(handler, BeforeSelectionEvent.getType());
+	}
+
+	public HandlerRegistration addSelectionHandler(
+			SelectionHandler<TableRow> handler) {
+		return addHandler(handler, SelectionEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeCellEditedHandler(
+			BeforeCellEditedHandler handler) {
+		return addHandler(handler,BeforeCellEditedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeRowAddedHandler(
+			BeforeRowAddedHandler handler) {
+		return addHandler(handler, BeforeRowAddedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeRowDeletedHandler(
+			BeforeRowDeletedHandler handler) {
+		return addHandler(handler, BeforeRowDeletedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeAutoddHandler(
+			BeforeAutoAddHandler handler) {
+		return addHandler(handler, BeforeAutoAddEvent.getType());
+	}
+
+	public Object getFieldValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	protected boolean canEditCell(int row, int col) {
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(modelIndexList[row]).cells.get(col).value);
+        	if(bce.isCancelled()){
+        		return false;
+        	}
+        }
+        return (isEnabled());
+	}
+
+	public void setFieldValue(Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public HandlerRegistration addTableValueChangeHandler(
+			TableValueChangeHandler handler) {
+		return addHandler(handler, TableValueChangeEvent.getType());
+	}
+
+    public void enableDrag(boolean drag) {
+    	if(drag){
+    		dragController = new TableDragController(RootPanel.get());  		
+      		for(TableRow row : renderer.rows) 
+    			dragController.makeDraggable(row);
+    		dragController.setEnable(true);
+    	}else{
+    		for(TableRow row : renderer.rows)
+    			dragController.makeNotDraggable(row);
+    		dragController = null;
+    	}
+    	
+    }
+    
+    public void enableDrop(boolean drop) {
+    	if(drop)
+    		dropController = new TableIndexDropController(this);
+    	else
+    		dropController = null;
+    }
+    
+    public void addTarget(HasDropController drop){
+    	assert(dragController != null);
+    	dragController.registerDropController(drop.getDropController());
+    }
+    
+    public void removeTarget(HasDropController drop) {
+    	assert(dragController != null);
+    	dragController.unregisterDropController(drop.getDropController());
+    }
+
+	public DropController getDropController() {
+		return dropController;
+	}
+
+	public void setDropController(DropController controller) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void addDragHandler(DragHandler handler) {
+		dragController.addDragHandler(handler);
+	}
+	
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return null;
+	}
+
+	public HandlerRegistration addUnselectionHandler(
+			UnselectionHandler<TableDataRow> handler) {
+		return addHandler(handler,UnselectionEvent.getType());
+	}
+	
 }

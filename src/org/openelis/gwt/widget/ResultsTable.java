@@ -1,49 +1,57 @@
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
+import org.openelis.gwt.common.data.Query;
+import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.event.HasActionHandlers;
+import org.openelis.gwt.widget.AppButton.ButtonState;
+import org.openelis.gwt.widget.deprecated.ButtonPanel;
+import org.openelis.gwt.widget.table.TableRow;
+import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.Query;
-import org.openelis.gwt.common.data.KeyListManager;
-import org.openelis.gwt.common.data.TableDataModel;
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.event.CommandListener;
-import org.openelis.gwt.event.CommandListenerCollection;
-import org.openelis.gwt.event.SourcesCommandEvents;
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.AppScreenForm;
-import org.openelis.gwt.screen.ScreenAToZTable;
-import org.openelis.gwt.screen.ScreenButtonPanel;
-import org.openelis.gwt.screen.ScreenVertical;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.widget.AppButton.ButtonState;
-import org.openelis.gwt.widget.table.TableManager;
-import org.openelis.gwt.widget.table.TableModel;
-import org.openelis.gwt.widget.table.TableModelInt;
-import org.openelis.gwt.widget.table.TableWidget;
-@Deprecated
-public class ResultsTable extends Composite implements ClickListener, CommandListener, SourcesCommandEvents, ChangeListener, TableManager{
+public class ResultsTable extends Composite implements ClickHandler, HasActionHandlers<ResultsTable.Action>, BeforeSelectionHandler<TableRow>, BeforeCellEditedHandler {
     
-    private CommandListenerCollection commandListeners;
     public TableWidget table;
     
     private HorizontalPanel mainHP = new HorizontalPanel();
-    private ScreenVertical alphabetButtonVP = new ScreenVertical();
+    private VerticalPanel alphabetButtonVP = new VerticalPanel();
     private VerticalPanel tablePanel = new VerticalPanel();
     protected ButtonPanel bpanel;
     protected AppButton selectedButton;
     protected boolean refreshedByLetter;
     public enum Action {NEXT_PAGE,PREVIOUS_PAGE,ROW_SELECTED};
-    public ScreenAToZTable screenWidget;
     public boolean showNavPanel = true;
-    public TableModelInt model;
+    private ClickHandler navListener;
+    public Widget nextPage;
+    public Widget prevPage;
+    
+
+    
+    public void select(int select) {
+		table.unselect(-1);
+		for(int i = 0; i < table.shownRows(); i++){
+			if(table.modelIndexList[i] == select){
+				table.activeRow = i;
+			}
+		}
+        table.selectRow(select);
+    }
+    
+    public void unselect() {
+		table.unselect(-1);
+    }
     
     public ResultsTable() {
         mainHP.setHeight("100%");
@@ -54,164 +62,76 @@ public class ResultsTable extends Composite implements ClickListener, CommandLis
         initWidget(mainHP);     
     }
     
-    public void setTable(TableWidget table) {
-        this.table = table;
-        if(((TableModel)table.model).getManager() == null)
-            table.model.setManager(this);
-        table.addClickListener(this);
-        model = table.model;
-        tablePanel.add(table);
-    }
-
-    public void setButtonPanel(Widget wid) {
-        alphabetButtonVP.add(wid);
-        if(wid instanceof ScreenButtonPanel){
-            bpanel = (ButtonPanel)((ScreenWidget)wid).getWidget();
-            bpanel.addCommandListener(this);
+    public void setQuery(Query query) {
+        table.load(query.model);
+        table.activeCell = -1;
+        table.activeRow = -1;
+        table.view.setScrollHeight((table.getData().size()*table.cellHeight)+(table.getData().size()*table.cellSpacing)+table.cellSpacing);
+        if(showNavPanel){
+            table.view.setNavPanel(query.page, query.page+1, false);
+            table.view.prevNav.addClickHandler(navListener);
+            table.view.nextNav.addClickHandler(navListener);
+        	nextPage = table.view.nextNav;
+        	prevPage = table.view.prevNav;
         }
-    }
-    
-    public void onClick(Widget sender) {
-        if(table.view.table.isAttached()){
-            if(sender instanceof AppScreen){
-                if(table.focused && !DOM.isOrHasChild(table.view.getElement(), ((AppScreen)sender).clickTarget)){
-                    table.focused = false;
-                }
-                return;
-            }
-            if(sender == table.view.nextNav){
-                commandListeners.fireCommand(Action.NEXT_PAGE,table.model.getData());
-                refreshedByLetter = true;
-                return;
-            }
-            if(sender == table.view.prevNav){
-                commandListeners.fireCommand(Action.PREVIOUS_PAGE,table.model.getData());
-                refreshedByLetter = true;
-                return;
-            }
-        }
-    }
-    
-    public void performCommand(Enum action, Object obj) {
-        if(action == AppScreenForm.Action.NEW_MODEL) {
-            table.model.load(((Query)obj).results);
-            table.activeCell = -1;
-            table.activeRow = -1;
-            table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);
-            if(showNavPanel){
-                table.view.setNavPanel(((Query)obj).page, ((Query)obj).page+1, false);
-                table.view.prevNav.addClickListener(this);
-                table.view.nextNav.addClickListener(this);
-            }
-            if(!refreshedByLetter){
-                if(selectedButton != null){
-                    selectedButton.changeState(ButtonState.UNPRESSED);
-                }
-            }else
-                refreshedByLetter = false;
-            table.enabled(true);
-            table.focused = true;
-        }
-        else if(action == AppScreenForm.Action.NEW_PAGE){
-            table.model.load(((Query)obj).results);
-            table.view.setScrollHeight((table.model.getData().size()*table.cellHeight)+(table.model.getData().size()*table.cellSpacing)+table.cellSpacing);
-            table.activeCell = -1;
-            table.activeRow = -1;
-            if(showNavPanel){
-                table.view.setNavPanel(((Query)obj).page, ((Query)obj).page+1, false);
-                table.view.prevNav.addClickListener(this);
-                table.view.nextNav.addClickListener(this);
-            }
-            table.model.refresh();
-            table.focused = true;
-            table.enabled(true);
-        }
-        else if(action == KeyListManager.Action.SELECTION){   
-            
-            if(table.activeRow > -1){
-                table.model.unselectRow(table.activeRow);
-            }
-            
-            int select = ((Integer)obj).intValue();
-            for(int i = 0; i < table.model.shownRows(); i++){
-                if(table.modelIndexList[i] == select){
-                    table.activeRow = i;
-                }
-            }
-            table.model.selectRow(table.modelIndexList[table.activeRow]);
-        }
-        else if(action == KeyListManager.Action.UNSELECT){
-            if(table.activeRow > -1)
-                table.model.unselectRow(-1);
-        }
-        if(obj != null && obj instanceof AppButton && bpanel != null && DOM.isOrHasChild(bpanel.getElement(), ((AppButton)obj).getElement())){
+        if(!refreshedByLetter){
             if(selectedButton != null){
                 selectedButton.changeState(ButtonState.UNPRESSED);
             }
-            selectedButton = (AppButton)obj;
-            ((AppButton)obj).changeState(ButtonState.PRESSED);
-            refreshedByLetter = true;
+        }else
+            refreshedByLetter = false;
+        table.enable(true);
         
-           
-        }
-        
+        table.focused = true;
+    }
+    
+    public void setTable(TableWidget table) {
+        this.table = table;
+        tablePanel.add(table);
+        table.addBeforeSelectionHandler(this);
+        table.addBeforeCellEditedHandler(this);
     }
 
-    public void addCommandListener(CommandListener listener) {
-       if(commandListeners == null){
-           commandListeners = new CommandListenerCollection();
-       }
-       commandListeners.add(listener);
-    }
-
-    public void removeCommandListener(CommandListener listener) {
-        if(commandListeners != null)
-            commandListeners.remove(listener);
+    public void setButtonGroup(ButtonGroup bg) {
+        alphabetButtonVP.add(bg);
         
+        bg.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                refreshedByLetter = true;
+			}
+        });
     }
-
-    public void onChange(Widget sender) {
-
-        if(sender instanceof CollapsePanel) {
-            if(((CollapsePanel)sender).isOpen){
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        if(table.view.header != null)
-                            table.view.header.sizeHeader();
-                    }
-                });
+    
+    public void onClick(ClickEvent event) {
+        if(table.view.table.isAttached()){
+            if(event.getSource() == table.view.nextNav){
+            	ActionEvent.fire(this, Action.NEXT_PAGE, table.getData());
+                refreshedByLetter = true;
+                return;
+            }
+            if(event.getSource() == table.view.prevNav){
+                ActionEvent.fire(this,Action.PREVIOUS_PAGE,table.getData());
+                refreshedByLetter = true;
+                return;
             }
         }
     }
     
-    public boolean canPerformCommand(Enum action, Object obj) {
-        return true;
+    public void addPageHandler(ClickHandler handler) {
+    	navListener = handler;
     }
 
+	public HandlerRegistration addActionHandler(ActionHandler<Action> handler) {
+		return addHandler(handler,ActionEvent.getType());
+	}
 
-    public boolean canAdd(TableWidget widget, TableDataRow set, int row) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+		ActionEvent.fire(this,Action.ROW_SELECTED,event.getItem().index);
+		event.cancel();
+	}
 
-    public boolean canAutoAdd(TableWidget widget, TableDataRow addRow) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canDelete(TableWidget widget, TableDataRow set, int row) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canEdit(TableWidget widget, TableDataRow set, int row, int col) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean canSelect(TableWidget widget, TableDataRow set, int row) {
-        commandListeners.fireCommand(Action.ROW_SELECTED,new Integer(row));
-        return false;
-    }
+	public void onBeforeCellEdited(BeforeCellEditedEvent event) {
+		event.cancel();
+	}
 
 }

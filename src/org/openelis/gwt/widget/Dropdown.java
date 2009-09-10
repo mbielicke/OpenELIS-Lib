@@ -25,86 +25,88 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.ui.Label;
-
-import org.openelis.gwt.common.data.TableDataModel;
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.widget.table.TableColumn;
-import org.openelis.gwt.widget.table.TableColumnInt;
-import org.openelis.gwt.widget.table.TableLabel;
-import org.openelis.gwt.widget.table.TableViewInt.VerticalScroll;
-
 import java.util.ArrayList;
-@Deprecated
-public class Dropdown extends DropdownWidget {
+
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.deprecated.IconContainer;
+import org.openelis.gwt.widget.table.TableDataRow;
+import org.openelis.gwt.widget.table.TableRenderer;
+import org.openelis.gwt.widget.table.TableView;
+
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+
+public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasField {
     
     private int startPos;
     boolean linear;
-    /*
-    public class Delay extends Timer {
-        public String text;
+    private Field<T> field;
+    IconContainer icon = new IconContainer();
+    public String dropwidth;
+    public int minWidth;
+    HorizontalPanel hp; 
 
-        public Delay(String text, int time) {
-            this.text = text;
-            this.schedule(time);
-        }
-
-        public void run() {
-            if (textBox.getText().equals(text)) {
-                if (fieldCase.equals("upper"))
-                    text = text.toUpperCase();
-                else if (fieldCase.equals("lower"))
-                    text = text.toLowerCase();
-                currentCursorPos = textBox.getText().length();
-                getMatches(text);
-            }
-        }
-    };
-*/
     public DropDownListener listener = new DropDownListener(this);
     
     public Dropdown() {
-        TableColumn tc = new TableColumn();
-        tc.currentWidth = 100;
-        tc.cellWidget = new TableLabel();
-        ArrayList<TableColumnInt> colList = new ArrayList<TableColumnInt>();
-        colList.add(tc);
-        setup(colList,20,"100px","",false,VerticalScroll.NEEDED);
+    	super();
     }
     
-    private boolean enabled;
-    
-    public Dropdown(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
-        setup(columns,maxRows,width,title,showHeader,showScroll);
-    }
-    
-    public void setup(ArrayList<TableColumnInt> columns, int maxRows, String width, String title, boolean showHeader, VerticalScroll showScroll) {
-        super.init(columns,maxRows,width,title,showHeader,showScroll);
-        lookUp.addMouseListener(listener);
-        lookUp.addClickListener(listener);
-        lookUp.textbox.addKeyboardListener(listener);
-        lookUp.textbox.setReadOnly(!enabled);
-        lookUp.textbox.removeFocusListener(this);
-        if(enabled)
-            lookUp.textbox.addFocusListener(this);
-        
+    public void setup() {
+    	if(maxRows == 0)
+    		maxRows = 10;
+        renderer = new TableRenderer(this);
+        view = new TableView(this,showScroll);
+        view.setWidth(width);
+        setWidth(dropwidth);
+        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        keyboardHandler = this;
+        hp = new HorizontalPanel();
+        hp.add(textbox);
+        hp.add(icon);
+        setWidget(hp);
+        hp.setWidth(dropwidth);
+        int index = dropwidth.indexOf("px");
+		if(index > 0)
+			minWidth = Integer.parseInt(dropwidth.substring(0,index));
+		else
+			minWidth = Integer.parseInt(dropwidth);
+        setStyleName("AutoDropDown");
+        icon.setStyleName("AutoDropDownButton");
+        textbox.setStyleName("TextboxUnselected");
+        textbox.addFocusHandler(this);
+        textbox.addBlurHandler(this);
+        popup.setStyleName("DropdownPopup");
+        popup.setWidget(view);
+        popup.addCloseHandler(this);
+        icon.addClickHandler(listener);
+        icon.addFocusHandler(this);
+        textbox.addKeyUpHandler(listener);
+        textbox.setReadOnly(!enabled);
+       
         this.isDropdown = true;
+        addDomHandler(keyboardHandler,KeyDownEvent.getType());
+        addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
     
-    public void init(boolean multi, 
-                     String width
-                     ){ 
-        
-        this.multiSelect = multi;
-        model.enableMultiSelect(multi);
-        if (textBoxDefault != null)
-            lookUp.textbox.setText(textBoxDefault);
-
-       setWidth(width);
+    public void addTabHandler(TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
     }
     
     public void getMatches(String match) {
-        TableDataModel<TableDataRow<Object>> model = this.model.getData();
+        ArrayList<TableDataRow> model = this.getData();
         int tempStartPos = -1;
         int index = getIndexByTextValue(match);
         
@@ -114,17 +116,17 @@ public class Dropdown extends DropdownWidget {
             this.startPos = index;
         }
 
-        if (tempStartPos == -1 && !lookUp.textbox.getText().equals("")) {
+        if (tempStartPos == -1 && !textbox.getText().equals("")) {
             // set textbox text back to what it was before
-            lookUp.textbox.setText(lookUp.textbox.getText().substring(0, currentCursorPos));
+            textbox.setText(textbox.getText().substring(0, currentCursorPos));
             this.startPos = 0;
-            index = getIndexByTextValue(lookUp.textbox.getText()); 
+            index = getIndexByTextValue(textbox.getText()); 
 
             if (index > -1 && index < model.size()) {
                 tempStartPos = index;
                 this.startPos = index;
             }else{
-                lookUp.textbox.setText("");
+                textbox.setText("");
                 tempStartPos = 0;
                 return;
             }
@@ -135,7 +137,7 @@ public class Dropdown extends DropdownWidget {
     private int getIndexByTextValue(String textValue) {
         if(textValue.equals(""))
             return -1;
-        TableDataModel<TableDataRow<Object>> model = this.model.getData();
+        ArrayList<TableDataRow> model = this.getData();
         int low = 0;
         int high = model.size() - 1;
         int mid = -1;
@@ -143,7 +145,7 @@ public class Dropdown extends DropdownWidget {
         
         if(linear){
             for(int i = 0; i < model.size(); i++){
-                if(((String) model.get(i).getCells().get(0).getValue()).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
+                if(((String) model.get(i).getCells().get(0)).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
                     return i;
             }
             return -1;
@@ -152,9 +154,9 @@ public class Dropdown extends DropdownWidget {
             while (low <= high) {
                 mid = (low + high) / 2;
 
-                if (compareValue((String)model.get(mid).getCells().get(0).getValue(),textValue,length) < 0)
+                if (compareValue((String)model.get(mid).getCells().get(0),textValue,length) < 0)
                     low = mid + 1;
-                else if (compareValue((String)model.get(mid).getCells().get(0).getValue(),textValue,length) > 0)
+                else if (compareValue((String)model.get(mid).getCells().get(0),textValue,length) > 0)
                     high = mid - 1;
                 else
                     break;
@@ -164,7 +166,7 @@ public class Dropdown extends DropdownWidget {
                 return -1; // NOT FOUND
             else{
                 //we need to do a linear search backwards to find the first entry that matches our search
-                while(mid > -1 && compareValue((String)model.get(mid).getCells().get(0).getValue(),textValue,length) == 0)
+                while(mid > -1 && compareValue((String)model.get(mid).getCells().get(0),textValue,length) == 0)
                     mid--;
             
                 return (mid+1);
@@ -178,21 +180,151 @@ public class Dropdown extends DropdownWidget {
         return value.substring(0,length).toUpperCase().compareTo(textValue.toUpperCase());
     }
     
-    public void setModel(TableDataModel model){
-        this.model.load((TableDataModel)model.clone());
+    public void setModel(ArrayList<TableDataRow> model){
+        this.load((ArrayList<TableDataRow>)model);
     }
     
-    public void enabled(boolean enabled) {
+    public void enable(boolean enabled) {
         this.enabled = enabled;
-        lookUp.textbox.setReadOnly(!enabled);
-        lookUp.textbox.removeFocusListener(this);
-        if(enabled)
-            lookUp.textbox.addFocusListener(this);
-        lookUp.icon.enable(enabled);
-        super.enabled(enabled);
+        textbox.setReadOnly(!enabled);
+        icon.enable(enabled);
+        super.enable(enabled);
     }
 
     public boolean isEnabled() {
         return enabled;
     }
+
+    public T getValue() {
+        if(getSelectedIndex() > -1)
+            return (T)getRow(getSelectedIndex()).key;
+        else
+            return null;
+    }
+
+    public void setValue(T value) {
+        setValue(value,false);
+    }
+
+    public void setValue(T value, boolean fireEvents) {
+        T old = getValue();
+        setSelection(value);
+        if(fireEvents)
+            ValueChangeEvent.fireIfNotEqual(this, old, value);
+    }
+
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
+        return addHandler(handler,ValueChangeEvent.getType());
+    }
+    
+	@Override
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		return addValueChangeHandler(handler);
+	}
+
+
+	public void addError(String error) {
+		field.addError(error);
+		field.drawError(this);
+	}
+
+	public void clearErrors() {
+		field.clearError(this);
+	}
+
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+		//addValueChangeHandler(field);
+		addBlurHandler(field);
+		textbox.addMouseOutHandler(field);
+		textbox.addMouseOverHandler(field);
+	}
+	
+    @Override
+    public void setFocus(boolean focus) {
+    	textbox.setFocus(focus);
+    }
+
+	public void setQueryMode(boolean query) {
+		field.setQueryMode(query);		
+	}
+	
+	@Override
+	public void checkValue() {
+		field.checkValue(this);
+	}
+	
+	public void getQuery(ArrayList list, String key) {
+		ArrayList<TableDataRow> selections = getSelections();
+		if(selections.size() == 1 && selections.get(0).key ==  null)
+			return;
+		if(selections.size() > 0) {
+			QueryData qd = new QueryData();
+			qd.key = key;
+			if(field instanceof StringField)
+				qd.type = QueryData.Type.STRING;
+			else if(field instanceof IntegerField)
+				qd.type = QueryData.Type.INTEGER;
+			qd.query = "";
+			for(TableDataRow row : selections) {
+				if(selections.indexOf(row) > 0)
+					qd.query += "|";
+				qd.query += row.key.toString();
+			}
+			list.add(qd);
+		}
+	}
+	
+	public void onBlur(BlurEvent event) {
+		textbox.removeStyleName("Focus");
+	}
+	
+	public void onFocus(FocusEvent event) {
+		if(isEnabled())
+			textbox.addStyleName("Focus");
+	}
+	
+	@Override
+	public void setWidth(String width) {
+		if(hp != null && width != null)
+			hp.setWidth(width);
+		int index = width.indexOf("px");
+		int wid = 0;
+		if(index > 0)
+			wid = Integer.parseInt(width.substring(0,index)) - 15;
+		else
+			wid = Integer.parseInt(width) - 15;
+		if(wid+15 > minWidth)
+			dropwidth = (wid+15)+"px";
+		else
+			dropwidth = minWidth+"px";
+		view.setWidth(dropwidth);
+		super.setWidth(wid+"px");
+	}
+	
+	@Override
+	public ArrayList<String> getErrors() {
+		return field.errors;
+	}
+	
+	@Override
+	public void complete() {
+		super.complete();
+		ValueChangeEvent.fire(this, getValue());
+		textbox.setFocus(true);
+	}
+	@Override
+	public void setFieldValue(Object value) {
+		setValue((T)value);
+	}
+	
+	@Override
+	public Object getFieldValue() {
+		return getValue();
+	}
 }

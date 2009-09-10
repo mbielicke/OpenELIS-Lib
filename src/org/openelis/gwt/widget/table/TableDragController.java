@@ -16,7 +16,7 @@ import org.openelis.gwt.event.DragManager;
 
 import java.util.HashMap;
 
-@Deprecated
+
 public class TableDragController extends PickupDragController {
     
     public DragManager manager;
@@ -55,19 +55,13 @@ public class TableDragController extends PickupDragController {
     
     @Override
     public void previewDragStart() throws VetoDragException {
-        if(!enabled)
-            throw new VetoDragException();
         ((TableRow)context.draggable).setDragValues();
-        if(manager != null)
-            manager.dragStarted(context);
         super.previewDragStart();
         
     }
     
     @Override
     public void previewDragEnd() throws VetoDragException {
-        if(manager != null)
-            manager.dragEnded(context);
         super.previewDragEnd();
     }
     
@@ -80,8 +74,6 @@ public class TableDragController extends PickupDragController {
     @Override
     public void dragStart() {
         context.draggable.addStyleName("disabled");
-        if(manager != null)
-            manager.dragStarted(context);
         super.dragStart();
     }
     
@@ -106,8 +98,6 @@ public class TableDragController extends PickupDragController {
     public void dragEnd() {
         context.draggable.removeStyleName("TableHighlighted");
         context.draggable.removeStyleName("disabled");
-        if(manager != null)
-            manager.dragEnded(context);
         super.dragEnd();
     }
     

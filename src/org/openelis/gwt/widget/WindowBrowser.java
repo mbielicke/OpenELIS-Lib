@@ -47,10 +47,10 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import org.openelis.gwt.screen.AppScreen;
-import org.openelis.gwt.screen.ScreenBase;
-import org.openelis.gwt.screen.ScreenWindow;
-import org.openelis.gwt.screen.rewrite.Screen;
+import org.openelis.gwt.screen.Screen;
+import org.openelis.gwt.screen.deprecated.AppScreen;
+import org.openelis.gwt.screen.deprecated.ScreenBase;
+import org.openelis.gwt.screen.deprecated.ScreenWindow;
 
 import java.util.HashMap;
 

@@ -25,13 +25,12 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.TableDataModel;
+import java.util.ArrayList;
 
-@Deprecated
 public interface TableSorterInt {
     
     public enum SortDirection{UP,DOWN};
     
-    public void sort(TableDataModel data, int col, SortDirection direction);
+    public void sort(ArrayList<TableDataRow> data, int col, SortDirection direction);
 
 }

@@ -89,7 +89,24 @@ public class ServiceUtils {
             e.printStackTrace();
             throw new RPCException(e.getMessage());
         }
-
+    }
+    
+    public static String getGeneratorXML(String url,String props,String language) throws Exception {
+    	Document doc = XMLUtil.createNew("doc");
+    	 String loc = "en";
+         Element root = doc.getDocumentElement();
+         if(!language.equals("default"))
+        	 loc = language;
+         Element locale = doc.createElement("locale");
+         locale.appendChild(doc.createTextNode(loc));
+         root.appendChild(locale);
+         Element propsEL = doc.createElement("props");
+         propsEL.appendChild(doc.createTextNode(props));
+         root.appendChild(propsEL);
+         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+         StreamResult result = new StreamResult(bytes);
+         XMLUtil.transformXML(doc, new File(url), result);
+         return new String(bytes.toByteArray(),"UTF-8");
     }
     
     public static String getXML(String url, Document doc) throws RPCException {

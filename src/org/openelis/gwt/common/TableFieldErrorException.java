@@ -33,7 +33,8 @@ public class TableFieldErrorException extends FieldErrorException{
 	protected int rowIndex = -1;
 	protected List<Exception> childExceptionList = null; 
 	protected String tableKey = null;
-
+    
+	/*
 	public TableFieldErrorException() {
         super();
     }
@@ -45,17 +46,24 @@ public class TableFieldErrorException extends FieldErrorException{
     public TableFieldErrorException(String msg, String fieldName) {
         super(msg, fieldName);
     }
-    
-    public TableFieldErrorException(String msg, int rowIndex, String fieldName) {
-        super(msg, fieldName);
-        
+    */
+    public TableFieldErrorException(String key, int rowIndex, String fieldName) {
+        super(key, fieldName);
         this.rowIndex = rowIndex;
     }
     
-    public TableFieldErrorException(String msg, int rowIndex, String fieldName,String tableKey) {
-        super(msg, fieldName);
-        
+    public TableFieldErrorException(String key, int rowIndex, String fieldName, String... params) {
+        super(key, fieldName, params);
         this.rowIndex = rowIndex;
+    }
+    
+    public TableFieldErrorException(String key, int rowIndex, String fieldName,String tableKey) {
+        this(key, rowIndex, fieldName); 
+        this.tableKey = tableKey;
+    }
+    
+    public TableFieldErrorException(String key, int rowIndex, String fieldName,String tableKey, String... params) {
+        this(key, rowIndex, fieldName, params); 
         this.tableKey = tableKey;
     }
     

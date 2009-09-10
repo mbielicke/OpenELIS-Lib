@@ -1,8 +1,6 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.widget.rewrite.Field;
-import org.openelis.gwt.widget.rewrite.QueryFieldUtil;
+import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.NumberFormat;
 

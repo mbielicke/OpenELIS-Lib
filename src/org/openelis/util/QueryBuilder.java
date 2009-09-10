@@ -27,16 +27,16 @@ package org.openelis.util;
 
 import org.openelis.gwt.common.Meta;
 import org.openelis.gwt.common.MetaMap;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.QueryCheckField;
-import org.openelis.gwt.common.data.QueryDateField;
-import org.openelis.gwt.common.data.QueryDoubleField;
-import org.openelis.gwt.common.data.QueryField;
-import org.openelis.gwt.common.data.QueryIntegerField;
-import org.openelis.gwt.common.data.QueryStringField;
-import org.openelis.gwt.common.data.TableDataRow;
-import org.openelis.gwt.common.rewrite.QueryData;
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.common.data.deprecated.AbstractField;
+import org.openelis.gwt.common.data.deprecated.DropDownField;
+import org.openelis.gwt.common.data.deprecated.QueryCheckField;
+import org.openelis.gwt.common.data.deprecated.QueryDateField;
+import org.openelis.gwt.common.data.deprecated.QueryDoubleField;
+import org.openelis.gwt.common.data.deprecated.QueryField;
+import org.openelis.gwt.common.data.deprecated.QueryIntegerField;
+import org.openelis.gwt.common.data.deprecated.QueryStringField;
+import org.openelis.gwt.common.data.deprecated.TableDataRow;
 
 import java.util.ArrayList;
 import java.util.Date;

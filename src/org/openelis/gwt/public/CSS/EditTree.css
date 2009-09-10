@@ -99,3 +99,13 @@ tr .TreeHighlighted .treeOpenImage{
 .Disabled .TableCell .gwt-Label {
 	color:grey;
 }
+.AddRowIcon{
+	height:16px;
+	width:16px;
+	background:url(../Images/addButtonIcon.png);
+}
+.DeleteRowIcon{
+	height:16px;
+	width:16px;
+	background:url(../Images/deleteButtonIcon.png);
+}

@@ -1,7 +1,5 @@
 package org.openelis.gwt.widget.tree;
 
-import org.openelis.gwt.common.data.TreeDataItem;
-
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -19,7 +17,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
-@Deprecated
+
 public class TreeRow extends Widget implements HasAllMouseHandlers {
     
     public int index;

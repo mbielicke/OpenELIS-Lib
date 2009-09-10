@@ -26,18 +26,28 @@
 package org.openelis.gwt.common;
 
 
-public class FieldErrorException extends RPCException {
+public class FieldErrorException extends LocalizedException {
 
 	private static final long serialVersionUID = 1L;
 
-	private String msg;
-    public String appMsg;
+	//private String msg;
+    //public String appMsg;
     private String fieldName;
-
+    
+    public FieldErrorException(String key, String field) {
+    	super(key);
+    	this.fieldName = field;
+    }
+    
+    public FieldErrorException(String key, String field, String... params) {
+    	super(key,params);
+    	this.fieldName = field;
+    }
+    /*
     public FieldErrorException() {
         super();
     }
-
+    
     public FieldErrorException(String msg) {
         super(msg);
         this.msg = msg;
@@ -56,7 +66,7 @@ public class FieldErrorException extends RPCException {
     public void setMessage(String message){
     	this.msg = message;
     }
-    
+    */
     public String getFieldName(){
     	return fieldName;
     }

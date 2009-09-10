@@ -1,73 +1,140 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.screen.UIUtil;
+import org.openelis.gwt.widget.deprecated.IconContainer;
+
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
-import com.google.gwt.user.client.ui.SourcesFocusEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.rewrite.QueryData;
-import org.openelis.gwt.screen.ScreenWidget;
-import org.openelis.gwt.screen.ScreenWindow;
-import org.openelis.gwt.screen.rewrite.UIUtil;
-import org.openelis.gwt.widget.rewrite.Field;
+public class CalendarLookUp extends Composite implements HasValue<Datetime>, 
+														 HasField<Datetime>,
+														 FocusHandler,
+														 BlurHandler,
+														 ClickHandler,
+														 KeyUpHandler,
+														 ValueChangeHandler<Datetime>,
+														 Focusable {
 
-import java.util.ArrayList;
-import java.util.Date;
-
-public class CalendarLookUp extends LookUp implements KeyboardListener, 
-                                                      FocusListener, 
-                                                      ClickListener, 
-                                                      SourcesFocusEvents, 
-                                                      ChangeListener,
-                                                      SourcesChangeEvents,
-                                                      MouseListener,
-                                                      HasValue<Datetime>,
-                                                      ValueChangeHandler<Datetime>,
-                                                      HasFocusHandlers,
-                                                      HasField<Datetime> {
                                                 
 
     protected byte begin;
     protected byte end;
     protected boolean week;
     protected Date weekDate;
-    protected ChangeListenerCollection changeListeners;
     protected PopupPanel pop;
     private Field<Datetime> field;
     private boolean queryMode;
     private boolean enabled;
+    private TextBox textbox = new TextBox();
+    private IconContainer icon = new IconContainer();
+    
+    private class IconMouseHandler implements MouseDownHandler,
+    										  MouseOverHandler,
+    										  MouseOutHandler,
+    										  MouseUpHandler {
+
+    	public void onMouseDown(MouseDownEvent event) {
+           	icon.addStyleName("Pressed");
+        }
+
+        public void onMouseOver(MouseOverEvent event) {
+            icon.addStyleName("Hover");
+        }
+
+        public void onMouseOut(MouseOutEvent event) {
+            icon.removeStyleName("Hover");
+        }
+
+        public void onMouseUp(MouseUpEvent event) {
+            icon.removeStyleName("Pressed");
+        }
+    }
+    
+    private class CalendarHandler implements FocusHandler,BlurHandler,MouseOverHandler,MouseOutHandler {
+
+    	private CalendarLookUp source;
+    	
+    	public CalendarHandler(CalendarLookUp source) {
+    		this.source = source;
+    	}
+    	
+		public void onFocus(FocusEvent event) {
+			//FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onBlur(BlurEvent event) {
+			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+
+		public void onMouseOver(MouseOverEvent event) {
+			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);	
+		}
+
+		public void onMouseOut(MouseOutEvent event) {
+			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
+		}
+    	
+    }
 
     public CalendarLookUp() {
-        super();
-        setIconStyle("CalendarButton");
-        textbox.addKeyboardListener(this);
-        textbox.addFocusListener(this);
-        addClickListener(this);
-        icon.addMouseListener(this);
-        textbox.addStyleName("TextboxUnselected");
+        HorizontalPanel hp = new HorizontalPanel();
         hp.addStyleName("Calendar");
+        hp.add(textbox);
+        hp.add(icon);
+        initWidget(hp);
+        CalendarHandler handler = new CalendarHandler(this);
+        textbox.addFocusHandler(handler);
+        textbox.addBlurHandler(handler);
+        textbox.addMouseOutHandler(handler);
+        textbox.addMouseOverHandler(handler);
+        icon.setStyleName("CalendarButton");
+        textbox.setStyleName("TextboxUnselected");
+        textbox.addFocusHandler(this);
+        textbox.addBlurHandler(this);
+        textbox.addKeyUpHandler(this);
+        icon.addClickHandler(this);
+        IconMouseHandler iconHandler = new IconMouseHandler();
+        icon.addMouseOutHandler(iconHandler);
+        icon.addMouseOverHandler(iconHandler);
+        icon.addMouseDownHandler(iconHandler);
+        icon.addMouseUpHandler(iconHandler);
+        icon.setTabIndex(-1);
+        textbox.addStyleName("TextboxUnselected");
     }
     
     public CalendarLookUp(byte begin,byte end,boolean week) {
@@ -75,7 +142,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         init(begin,end,week);
     }
     
-    public void addTabHandler(UIUtil.TabHandler handler) {
+    public void addTabHandler(TabHandler handler) {
     	addDomHandler(handler,KeyPressEvent.getType());
     }
     
@@ -97,33 +164,22 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
                                         .format(date.getDate());
             String to = DateTimeFormat.getFormat("EEEE MMM d, yyyy")
                                       .format(endDate.getDate());
-            setText(from + " - " + to);
+            textbox.setText(from + " - " + to);
             weekDate = date.getDate();
         } else
-            setText(date.toString());
+            textbox.setText(date.toString());
     }
     
-
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void onKeyUp(Widget sender, char key, int modifiers) {
-        if (KeyboardListener.KEY_ENTER == (int)key) {
-            ((TextBox)sender).setFocus(false);
-            doCalendar(sender, begin, end);
+    public void onKeyUp(KeyUpEvent event) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+            ((TextBox)event.getSource()).setFocus(false);
+            doCalendar((Widget)event.getSource(), begin, end);
         }
     }
 
-    public void onFocus(Widget sender) {
+    public void onFocus(FocusEvent event) {
         if (!textbox.isReadOnly()) {
-            if (sender == textbox) {
+            if (event.getSource() == textbox) {
                 // we need to set the selected style name to the textbox
                 textbox.addStyleName("TextboxSelected");
                 textbox.removeStyleName("TextboxUnselected");
@@ -134,34 +190,27 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         }
         
     }
+    
+    
 
-    public void onLostFocus(Widget sender) {
+    public void onBlur(BlurEvent event) {
         if (!textbox.isReadOnly()) {
-            if (sender == textbox) {
+            if (event.getSource() == textbox) {
                 // we need to set the unselected style name to the textbox
                 textbox.addStyleName("TextboxUnselected");
                 textbox.removeStyleName("TextboxSelected");
-
                 icon.removeStyleName("Selected");
+                setValue(getValue(),true);
             }
         }
     }
-    
-    public void addFocusListener(FocusListener listener) {
-        textbox.removeFocusListener(listener);
-        textbox.addFocusListener(listener);
-    }
-
-    public void removeFocusListener(FocusListener listener) {
-        textbox.removeFocusListener(listener);
-    }
-    
-    public void onClick(Widget sender) {
+        
+    public void onClick(ClickEvent event) {
         textbox.addStyleName("TextboxSelected");
         textbox.removeStyleName("TextboxUnselected");
         textbox.setFocus(true);
         icon.addStyleName("Selected");
-        doCalendar(sender, begin, end);
+        doCalendar((Widget)event.getSource(), begin, end);
     }
     
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
@@ -183,15 +232,15 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
     }
     
     public Datetime getValue() {
-        if (getText().equals(""))
+        if (textbox.getText().equals(""))
             return null;
-        Date date = new Date(getText().replaceAll("-", "/"));
+        Date date = new Date(textbox.getText().replaceAll("-", "/"));
         return Datetime.getInstance(begin, end, date);
     }
 
     public Object getDisplay(String title) {
         Label tl = new Label();
-        tl.setText(getText());
+        tl.setText(textbox.getText());
         tl.setWordWrap(false);
         if (title != null)
             tl.setTitle(title);
@@ -202,40 +251,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
         return weekDate;
     }
     
-    public void onMouseDown(Widget sender, int x, int y) {
-        if (!textbox.isReadOnly()) {
-            if (sender == icon) {
-                icon.addStyleName("Pressed");
-            }
-        }
-    }
 
-    public void onMouseEnter(Widget sender) {
-        if (!textbox.isReadOnly()) {
-            if (sender == icon) {
-                icon.addStyleName("Hover");
-            }
-        }
-    }
-
-    public void onMouseLeave(Widget sender) {
-        if (!textbox.isReadOnly()) {
-            if (sender == icon) {
-                icon.removeStyleName("Hover");
-            }
-        }
-    }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        if (!textbox.isReadOnly()) {
-            if (sender == icon) {
-                icon.removeStyleName("Pressed");
-            }
-        }
-    }
     
     public void onValueChange(ValueChangeEvent<Datetime> event) {
     	setValue(event.getValue(),true);
@@ -265,31 +281,17 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
-	public void onChange(Widget sender) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void addChangeListener(ChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void removeChangeListener(ChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return textbox.addBlurHandler(handler);
+		return addDomHandler(handler,BlurEvent.getType());
 	}
 	
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-		return textbox.addMouseOutHandler(handler);
+		return addDomHandler(handler,MouseOutEvent.getType());
 	}
 	
 	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-		return textbox.addMouseOverHandler(handler);
+		return addDomHandler(handler,MouseOverEvent.getType());
 	}
 
 	public void addError(String error) {
@@ -344,7 +346,7 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
-		super.enable(enabled);
+		textbox.setReadOnly(!enabled);
 	}
 	
 	public boolean isEnabled() {
@@ -359,6 +361,35 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 	public void setFieldValue(Datetime value){
 		field.setValue(value);
 		setValue(value);
+	}
+	
+	public void setWidth(String width) {
+		int wid = 0;
+		if(width.indexOf("px") > 0)
+			wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 18;
+		else
+			wid = Integer.parseInt(width) - 18;
+		textbox.setWidth(wid+"px");
+	}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setFocus(boolean focused) {
+		textbox.setFocus(focused);
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public HandlerRegistration addFieldValueChangeHandler(

@@ -25,8 +25,17 @@
 */
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
+import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -34,53 +43,20 @@ import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseWheelListener;
-import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
-import com.google.gwt.user.client.ui.MouseWheelVelocity;
-import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.screen.ScreenMenuItem;
-
-
-import java.util.ArrayList;
-
-@Deprecated
-public class MenuPanel extends Composite implements MouseWheelListener, MouseListener{
+public class MenuPanel extends Composite implements MouseWheelHandler, MouseOverHandler, MouseOutHandler{
     
     String layout;
     public CellPanel panel;
     
-    private class MenuVP extends VerticalPanel implements SourcesMouseWheelEvents {
+    private class MenuVP extends VerticalPanel implements HasMouseWheelHandlers {
 
-        private MouseWheelListenerCollection listeners;
-        
-        public MenuVP() {
-            sinkEvents(Event.ONMOUSEWHEEL);
-        }
-        
-        public void onBrowserEvent(Event event) {
-            // TODO Auto-generated method stub
-            if(DOM.eventGetType(event) == event.ONMOUSEWHEEL){
-                listeners.fireMouseWheelEvent(this, event);
-            }
-            super.onBrowserEvent(event);
-        }
-        
-        public void addMouseWheelListener(MouseWheelListener listener) {
-            if(listeners == null){
-                listeners = new MouseWheelListenerCollection();
-            }
-            listeners.add(listener);
-        }
-
-        public void removeMouseWheelListener(MouseWheelListener listener) {
-            if(listeners != null){
-                listeners.remove(listener);
-            }
-        }
+		public HandlerRegistration addMouseWheelHandler(
+				MouseWheelHandler handler) {
+			return addDomHandler(handler, MouseWheelEvent.getType());
+		}
         
     }
     
@@ -107,8 +83,9 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
             panel = new HorizontalPanel();
         if(layout.equals("vertical")){
             MenuVP vp = new MenuVP();
-            vp.addMouseWheelListener(this);
-            up.addMouseListener(this);
+            vp.addMouseWheelHandler(this);
+            up.addMouseOverHandler(this);
+            up.addMouseOutHandler(this);
             up.setStyleName("MenuUp");
             up.addStyleName("MenuDisabled");
             up.setVisible(false);
@@ -117,7 +94,8 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
             DOM.setStyleAttribute(ap.getElement(),"overflow","hidden");
             ap.add(panel);
             vp.add(ap);
-            down.addMouseListener(this);
+            down.addMouseOverHandler(this);
+            down.addMouseOutHandler(this);
             down.setStyleName("MenuDown");
             down.setVisible(false);
             vp.add(down);
@@ -131,13 +109,7 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
             ((MenuItem)wid).parent = this;
             menuItems.add((MenuItem)wid);
         }
-        if(wid instanceof ScreenMenuItem) {
-            ((MenuItem)((ScreenMenuItem)wid).getWidget()).parent = this;
-            menuItems.add((MenuItem)((ScreenMenuItem)wid).getWidget());
-            panel.add(((ScreenMenuItem)wid).getWidget());
-        }else
-            panel.add(wid);
-        
+        panel.add(wid);
         
     }
     
@@ -170,48 +142,44 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
     public void itemLeave(MenuItem item) {
         
     }
-    public void onMouseDown(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-    public void onMouseEnter(final Widget sender) {
-        timer = new Timer() {
-            public void run() {
-                if(sender == down){
-                    if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
-                        down.addStyleName("MenuDisabled");
-                        cancel();
-                    }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
-                        up.removeStyleName("MenuDisabled");
-                    }
-                }
-                if(sender == up){
-                    if(ap.getWidgetTop(panel) >= 0){
-                        up.addStyleName("MenuDisabled");
-                        cancel();
-                    }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
-                        down.removeStyleName("MenuDisabled");
-                    }
-                }
-            }
-        };
-        timer.scheduleRepeating(50);
+
+    public void onMouseOver(MouseOverEvent event) {
+    	try {
+    	if(event.getSource() == down || event.getSource() == up) {
+    		final Widget source = (Widget)event.getSource(); 
+    		timer = new Timer() {
+    			public void run() {
+    				if(source == down){
+    					if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
+    						down.addStyleName("MenuDisabled");
+    						cancel();
+    					}else{
+    						ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
+    						up.removeStyleName("MenuDisabled");
+    					}
+    				}
+    				if(source == up){
+    					if(ap.getWidgetTop(panel) >= 0){
+    						up.addStyleName("MenuDisabled");
+    						cancel();
+    					}else{
+    						ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
+    						down.removeStyleName("MenuDisabled");
+    					}
+    				}
+    			}
+    	    };
+            timer.scheduleRepeating(50);
+    	}
+    	}catch(Exception e){
+    		Window.alert(e.getMessage());
+    	}
     }
     
-    public void onMouseLeave(Widget sender) {
+    public void onMouseOut(MouseOutEvent event) {
         if(timer != null)
             timer.cancel();
-    }
-    
-    public void onMouseMove(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
-    public void onMouseUp(Widget sender, int x, int y) {
-        // TODO Auto-generated method stub
-        
+        timer = null;
     }
     
     public void setSize(int top) {
@@ -229,8 +197,8 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
         }
     }
     
-    public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
-        if(velocity.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1){
+    public void onMouseWheel(MouseWheelEvent event) {
+        if(event.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1){
             if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
                 down.addStyleName("MenuDisabled");
             }else{
@@ -238,7 +206,7 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
                 up.removeStyleName("MenuDisabled");
             }
         }
-        if(velocity.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1){
+        if(event.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1){
             if(ap.getWidgetTop(panel) >= 0){
                 up.addStyleName("MenuDisabled");
             }else{
@@ -247,7 +215,7 @@ public class MenuPanel extends Composite implements MouseWheelListener, MouseLis
             }
         }
         
-    }
-    
+    }    
+
 
 }

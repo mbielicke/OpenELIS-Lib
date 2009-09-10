@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.openelis.gwt.screen.ScreenImage;
+import org.openelis.gwt.screen.deprecated.ScreenImage;
 /**
  * PopupWindow is used to display content in a Modal window in applications.
  * @author tschmidt

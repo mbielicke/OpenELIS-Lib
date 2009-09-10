@@ -21,6 +21,8 @@ import org.openelis.gwt.common.RPC;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.HTTPRequest;
+import com.google.gwt.user.client.impl.HTTPRequestImpl;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.SyncCallback;
@@ -70,7 +72,8 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 
     public <T extends RPC> T call(String method, RPC param) throws Exception {
         Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
+        Request req = service.call(method, param, callback);
+        
         return callback.getResult();
     }
     
@@ -164,13 +167,13 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 		return service.callString(method, callback);
 	}
 
-	public <T extends RPC> T call(String method) throws Throwable {
+	public <T extends RPC> T call(String method) throws Exception {
         Callback<RPC> callback = new Callback<RPC>();
         service.call(method, callback);
         return (T)callback.getResult();
 	}
 
-	public void callVoid(String method) throws Throwable {
+	public void callVoid(String method) throws Exception {
         Callback<RPC> callback = new Callback<RPC>();
         service.callVoid(method, callback);
         callback.getResult();
@@ -184,7 +187,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 		return service.callVoid(method,callback);
 	}
 
-	public <T extends RPC> T call(String method, Long param) throws Throwable {
+	public <T extends RPC> T call(String method, Long param) throws Exception {
         Callback<RPC> callback = new Callback<RPC>();
         service.call(method, param, callback);
         return (T)callback.getResult();

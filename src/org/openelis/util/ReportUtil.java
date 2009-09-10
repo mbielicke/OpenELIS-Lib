@@ -26,12 +26,12 @@
 package org.openelis.util;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.Form;
-import org.openelis.gwt.common.data.AbstractField;
-import org.openelis.gwt.common.data.DataObject;
-import org.openelis.gwt.common.data.DateField;
-import org.openelis.gwt.common.data.DropDownField;
-import org.openelis.gwt.common.data.TableDataRow;
+import org.openelis.gwt.common.data.deprecated.AbstractField;
+import org.openelis.gwt.common.data.deprecated.DataObject;
+import org.openelis.gwt.common.data.deprecated.DateField;
+import org.openelis.gwt.common.data.deprecated.DropDownField;
+import org.openelis.gwt.common.data.deprecated.TableDataRow;
+import org.openelis.gwt.common.deprecated.Form;
 
 import java.io.InputStream;
 import java.net.URL;

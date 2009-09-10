@@ -30,10 +30,10 @@ import java.util.Date;
 
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.screen.rewrite.Screen;
-import org.openelis.gwt.screen.rewrite.ScreenDef;
+import org.openelis.gwt.screen.Screen;
+import org.openelis.gwt.screen.ScreenDef;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.rewrite.AppButton;
+import org.openelis.gwt.widget.deprecated.IconContainer;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -42,6 +42,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.Label;
 /**
  * Calendar Widget will display a calendar and text boxes with the current time in
  * a popup panel.  A user can then select a date and time that will be returned back
@@ -51,14 +52,14 @@ import com.google.gwt.user.client.ui.HasValue;
  */
  public class CalendarWidget extends Screen implements HasValue<Datetime>, ClickHandler {
    
-    protected org.openelis.gwt.widget.rewrite.AppButton prevMonth;
-    protected org.openelis.gwt.widget.rewrite.AppButton nextMonth;
-    protected org.openelis.gwt.widget.rewrite.AppButton monthSelect;
-    protected org.openelis.gwt.widget.rewrite.AppButton ok;
-    protected org.openelis.gwt.widget.rewrite.AppButton cancel;
+    protected org.openelis.gwt.widget.AppButton prevMonth;
+    protected org.openelis.gwt.widget.AppButton nextMonth;
+    protected org.openelis.gwt.widget.AppButton monthSelect;
+    protected org.openelis.gwt.widget.AppButton ok;
+    protected org.openelis.gwt.widget.AppButton cancel;
     protected IconContainer prevDecade;
     protected IconContainer nextDecade;
-    protected org.openelis.gwt.widget.rewrite.AppButton today;
+    protected org.openelis.gwt.widget.AppButton today;
     protected ArrayList<Label> months = new ArrayList<Label>(12);
     protected ArrayList<Label> years = new ArrayList<Label>(10);
     protected ScreenService service; 
@@ -76,8 +77,8 @@ import com.google.gwt.user.client.ui.HasValue;
     }
     
     public void setHandlers() {
-    	if(def.name.equals("Calendar")) {
-    		prevMonth = (org.openelis.gwt.widget.rewrite.AppButton)def.getWidget("prevMonth");
+    	if(def.getName().equals("Calendar")) {
+    		prevMonth = (org.openelis.gwt.widget.AppButton)def.getWidget("prevMonth");
     		prevMonth.addClickHandler(this);
     		nextMonth = (AppButton)def.getWidget("nextMonth");
     		nextMonth.addClickHandler(this);
