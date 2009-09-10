@@ -518,7 +518,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         getRow(row).cells.get(col).setValue(value);
         if(isRowDrawn(row))
         	renderer.cellUpdated(tableIndex(row), col);
-        CellEditedEvent.fire(this, row, col, value);
+        //CellEditedEvent.fire(this, row, col, value);
     }
     
     public TableDataCell getCell(int row, int col) {
