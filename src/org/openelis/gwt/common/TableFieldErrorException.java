@@ -30,9 +30,9 @@ import java.util.List;
 public class TableFieldErrorException extends FieldErrorException{
 
 	private static final long serialVersionUID = 1L;
-	int rowIndex = -1;
-	private List<RPCException> childExceptionList = null; 
-	private String tableKey = null;
+	protected int rowIndex = -1;
+	protected List<Exception> childExceptionList = null; 
+	protected String tableKey = null;
 
 	public TableFieldErrorException() {
         super();
@@ -63,11 +63,11 @@ public class TableFieldErrorException extends FieldErrorException{
     	return rowIndex;
     }
 
-    public List<RPCException> getChildExceptionList() {
+    public List<Exception> getChildExceptionList() {
         return childExceptionList;
     }
 
-    public void setChildExceptionList(List<RPCException> childExceptionList) {
+    public void setChildExceptionList(List<Exception> childExceptionList) {
         this.childExceptionList = childExceptionList;
     }
 

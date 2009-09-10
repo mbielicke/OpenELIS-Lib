@@ -167,7 +167,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     }
     
-    public void addTabHandler(TabHandler handler) {
+    public void addTabHandler(UIUtil.TabHandler handler) {
     	addDomHandler(handler,KeyPressEvent.getType());
     }
     

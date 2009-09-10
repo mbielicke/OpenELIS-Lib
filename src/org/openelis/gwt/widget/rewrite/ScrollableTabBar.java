@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget.rewrite;
 
-import java.util.ArrayList;
-
 import org.openelis.gwt.widget.IconContainer;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -59,7 +57,6 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   private TabBar tabBar = new TabBar();
   private IconContainer next = new IconContainer();
   private IconContainer previous = new IconContainer();
-  ArrayList<Widget> tabWidgets = new ArrayList<Widget>();
   private Timer timer;
   
   public ScrollableTabBar(){
@@ -132,43 +129,38 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
 	  int hght = Integer.parseInt(height.substring(0,height.indexOf("px"))) - 20;
 	  content.setHeight(hght+"px");
   }
-  
-  public void addTabWithContent(String text,Widget content) {
-      addTab(text);
-      tabWidgets.add(content);
-      tabBar.setVisible(true);
-  }
-  
-  public void addTabWithContent(Widget widget,Widget content) {
-      addTab(widget);
-      tabWidgets.add(content);
-      tabBar.setVisible(true);
-  }
     
-  public void addTab(String text){           
+  public void addTab(String text){      
+      tabBar.addTab(text);   
+      tabBar.setVisible(true);
+  }
+  
+  public void addTab(Widget widget){
+      tabBar.addTab(widget);  
+      tabBar.setVisible(true);
+  }
+  
+  public void addTabAndSelect(String text){      
       tabBar.addTab(text); 
       selectTab(tabBar.getTabCount()-1);
       tabBar.setVisible(true);
-   }
+  }
   
-  public void addTab(Widget widget){
+  public void addTabAndSelect(Widget widget){
       tabBar.addTab(widget);
       selectTab(tabBar.getTabCount()-1);
       tabBar.setVisible(true);
-   }
-  
+  }
+    
   public void removeTab(int index){
-     tabWidgets.remove(index);
      tabBar.removeTab(index);
      if(tabBar.getTabCount() == 0)
     	 tabBar.setVisible(false);
   }
   
-  public void clearTabs(){      
-     tabBar = new TabBar(); 
-     scrollPanel.clear();
-     scrollPanel.add(tabBar);
-     tabBar.setVisible(false);
+  public void clearTabs(){   
+     while(tabBar.getTabCount() > 0) 
+         removeTab(0); 
   }
   
   public TabBar getTabBar(){
@@ -195,26 +187,26 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   }
 
   public void onMouseDown(MouseDownEvent event) {
-	  if(event.getSource() == previous){
-	   	timer = new Timer() {
-	   		public void run() {
-	   			if(scrollPanel.getWidgetLeft(tabBar) < 0){       
-	   				scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);
-	   			}
-	   			checkScroll();
-	   		}
-	   	};
-	  }else {
-    	timer = new Timer() {
-    		public void run() {
-    			if(scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){   
-    				scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
-    			}
-    			checkScroll();
-    		}	    			
-	    };
-	  }
-	  timer.scheduleRepeating(100);
+	if(event.getSource() == previous) {
+		timer = new Timer() {
+			public void run() {
+				if(scrollPanel.getWidgetLeft(tabBar) > -(tabBar.getOffsetWidth()-scrollPanel.getOffsetWidth())){               
+					scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)-15 , 0);
+				}   
+			}
+		};
+	}else {
+		timer = new Timer() {
+			public void run() {
+			    if(scrollPanel.getWidgetLeft(tabBar) < 0){                 
+			        scrollPanel.setWidgetPosition(tabBar,scrollPanel.getWidgetLeft(tabBar)+15 , 0);      
+			    }
+			}
+		};
+		checkScroll();
+	}
+	timer.scheduleRepeating(100);
+	
   }
 
   public void onMouseUp(MouseUpEvent event) {
