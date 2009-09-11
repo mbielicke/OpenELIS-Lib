@@ -160,7 +160,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	public void setFieldValue(T value) {
 		field.setValue(value);
 		if(value != null)
-			setText(value.toString());
+			setText(field.format());
 		else 
 			setText("");
 	}
@@ -170,6 +170,9 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		return field.addValueChangeHandler(handler);
 	}
 	
+	public void setValue(T value) {
+		setFieldValue(value);
+	}
 	
 	
 }
