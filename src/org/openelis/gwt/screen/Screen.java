@@ -71,7 +71,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     @Override
     public void onBrowserEvent(Event event) {
     	if(DOM.eventGetType(event) == Event.ONKEYPRESS)
-    		event.preventDefault();
+    		//event.preventDefault();
     	super.onBrowserEvent(event);
     }
     
