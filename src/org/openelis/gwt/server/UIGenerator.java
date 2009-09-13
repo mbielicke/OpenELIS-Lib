@@ -1,5 +1,7 @@
 package org.openelis.gwt.server;
 
+import java.io.File;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
@@ -59,9 +61,10 @@ public class UIGenerator extends Generator {
 		printWriter = context.tryCreate(logger, packageName, className+"_"+lang);
 		if(printWriter == null)
 			return;
-		
+
+		InputStream  xsl = context.getResourcesOracle().getResourceMap().get(packageName.replaceAll("\\.","/")+"/"+className+".xsl").openContents();
 		String props = context.getPropertyOracle().getSelectionProperty(logger,"props").getCurrentValue().replaceAll("_","\\.");
-    	doc = XMLUtil.parse(ServiceUtils.getGeneratorXML("src/"+packageName.replaceAll("\\.","/")+"/"+className+".xsl",props,lang));
+    	doc = XMLUtil.parse(ServiceUtils.getGeneratorXML(xsl,props,lang));
 		
     	composer = new ClassSourceFileComposerFactory(packageName,className+"_"+lang);
         composer.addImport("org.openelis.gwt.screen.ScreenPanel");

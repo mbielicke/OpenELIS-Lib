@@ -69,7 +69,7 @@
 	<xsd:element name="autoComplete" substitutionGroup="widgets">
 		<xsd:complexType mixed="true">
 			<xsd:sequence>
-				<xsd:element name="col" minOccurs="1" maxOccurs="unbounded">
+				<xsd:element name="col" minOccurs="0" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:sequence>
 							<xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
@@ -201,7 +201,22 @@
 				<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
 				<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
 			</xsd:sequence>
-			<xsd:attribute name="layout" type="xsd:string" use="required" />
+			<xsd:attribute name="layout" use="required">
+			  <xsd:simpleType>
+			  <xsd:restriction base="xsd:string">
+			    <xsd:enumeration value="vertical"/>
+			    <xsd:enumeration value="horizontal"/>
+			  </xsd:restriction>
+			</xsd:simpleType>
+	        </xsd:attribute>
+			<xsd:attribute name="position">
+			  <xsd:simpleType>
+			    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="below"/>
+			      <xsd:enumeration value="beside"/>
+			    </xsd:restriction>
+			  </xsd:simpleType> 
+			</xsd:attribute>
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>

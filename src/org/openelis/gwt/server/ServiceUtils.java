@@ -91,7 +91,7 @@ public class ServiceUtils {
         }
     }
     
-    public static String getGeneratorXML(String url,String props,String language) throws Exception {
+    public static String getGeneratorXML(InputStream xsl,String props,String language) throws Exception {
     	Document doc = XMLUtil.createNew("doc");
     	 String loc = "en";
          Element root = doc.getDocumentElement();
@@ -105,7 +105,7 @@ public class ServiceUtils {
          root.appendChild(propsEL);
          ByteArrayOutputStream bytes = new ByteArrayOutputStream();
          StreamResult result = new StreamResult(bytes);
-         XMLUtil.transformXML(doc, new File(url), result);
+         XMLUtil.transformXML(doc, xsl, result);
          return new String(bytes.toByteArray(),"UTF-8");
     }
     
