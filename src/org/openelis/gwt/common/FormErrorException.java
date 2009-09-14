@@ -33,4 +33,11 @@ public class FormErrorException extends LocalizedException {
         super();
     }
 
+    public FormErrorException(String key) {
+    	super(key);
+    }
+    
+    public FormErrorException(String key, String... params){
+    	super(key,params);
+    }
 }
