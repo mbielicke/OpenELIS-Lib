@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.common;
 
-public class FormErrorException extends RPCException {
+public class FormErrorException extends LocalizedException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,4 @@ public class FormErrorException extends RPCException {
         super();
     }
 
-    public FormErrorException(String msg) {
-        super(msg);
-    }
 }
