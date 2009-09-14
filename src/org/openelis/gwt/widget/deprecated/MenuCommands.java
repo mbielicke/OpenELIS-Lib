@@ -23,25 +23,17 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.common;
+package org.openelis.gwt.widget.deprecated;
 
+import com.google.gwt.user.client.Command;
+/**
+ * This interface is used by classes to pass Commands 
+ * to a MenuBar widget.
+ * @author tschmidt
+ *
+ */
+@Deprecated public interface MenuCommands {
+	
+	public Command getCommand(String cmd);
 
-public class RPCException extends Exception {
-    
-    private static final long serialVersionUID = 1L;
-    private String msg;
-    public String appMsg;
-
-    public RPCException() {
-        super();
-    }
-
-    public RPCException(String msg) {
-        super(msg);
-        this.msg = msg;
-    }
-
-    public String getMessage() {
-        return this.msg;
-    }
 }

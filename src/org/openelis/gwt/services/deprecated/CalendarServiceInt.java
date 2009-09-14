@@ -26,17 +26,16 @@
 package org.openelis.gwt.services.deprecated;
 
 import org.openelis.gwt.common.CalendarRPC;
-import org.openelis.gwt.common.RPCException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
 @Deprecated
 public interface CalendarServiceInt extends RemoteService {
     
-    public CalendarRPC getMonth(CalendarRPC form) throws RPCException;
+    public CalendarRPC getMonth(CalendarRPC form) throws Exception;
     
-    public CalendarRPC getMonthSelect(CalendarRPC form) throws RPCException;
+    public CalendarRPC getMonthSelect(CalendarRPC form) throws Exception;
     
-    public CalendarRPC getScreen(CalendarRPC form)  throws RPCException;
+    public CalendarRPC getScreen(CalendarRPC form)  throws Exception;
 
 }

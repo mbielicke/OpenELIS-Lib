@@ -25,23 +25,21 @@
 */
 package org.openelis.gwt.common;
 
-public class RPCDeleteException extends RPCException {
+public class DeleteException extends LocalizedException {
 
 	private static final long serialVersionUID = 1L;
-	private String msg;
-    public String appMsg;
 
-    public RPCDeleteException() {
+    public DeleteException() {
         super();
     }
-
-    public RPCDeleteException(String msg) {
-        super(msg);
-        this.msg = msg;
+    
+    public DeleteException(String key) {
+    	super(key);
+    }
+    
+    public DeleteException(String key, String... params) {
+    	super(key,params);
     }
 
-    public String getMessage() {
-        return this.msg;
-    }
     
 }

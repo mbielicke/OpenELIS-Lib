@@ -30,7 +30,6 @@ import java.util.Calendar;
 
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.RPCException;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,7 +40,7 @@ public class CalendarService {
 
     private static String appRoot ;
     
-    public CalendarRPC getMonth(CalendarRPC form) throws RPCException {
+    public CalendarRPC getMonth(CalendarRPC form) throws Exception {
         try {
             Calendar cal = Calendar.getInstance();
             if(form.date != null && !form.date.equals("")){
@@ -66,12 +65,12 @@ public class CalendarService {
             return form;
         }catch(Exception e){
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         
     }
 
-    public CalendarRPC getMonthSelect(CalendarRPC form) throws RPCException {
+    public CalendarRPC getMonthSelect(CalendarRPC form) throws Exception {
         try {
             Document doc = XMLUtil.createNew("doc");
             Element root = doc.getDocumentElement();
@@ -89,11 +88,11 @@ public class CalendarService {
             return form;
         }catch(Exception e){
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
-    public CalendarRPC getScreen(CalendarRPC rpc) throws RPCException {
+    public CalendarRPC getScreen(CalendarRPC rpc) throws Exception {
         try {
             Calendar cal = Calendar.getInstance();
             if(rpc.date != null){
@@ -121,7 +120,7 @@ public class CalendarService {
             return rpc;
         }catch(Exception e){
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     

@@ -23,7 +23,7 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.deprecated;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;

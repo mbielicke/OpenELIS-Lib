@@ -25,14 +25,13 @@
 */
 package org.openelis.gwt.services.deprecated;
 
-import com.google.gwt.http.client.Request;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.HashMap;
 
-import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.deprecated.FieldType;
 import org.openelis.gwt.common.data.deprecated.TableDataModel;
 
-import java.util.HashMap;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * AutoCompleteServiceIntAsync is the Asynchronous version of
@@ -43,6 +42,6 @@ import java.util.HashMap;
 @Deprecated
 public interface AutoCompleteServiceIntAsync {
 
-    public Request getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params, AsyncCallback<TableDataModel> callback) throws RPCException;
+    public Request getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params, AsyncCallback<TableDataModel> callback) throws Exception;
 
 }

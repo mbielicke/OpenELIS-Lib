@@ -19,8 +19,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.server.AppServlet;
 import org.openelis.gwt.services.ScreenServiceInt;
 
 public class ScreenControllerServlet extends AppServlet implements ScreenServiceInt {

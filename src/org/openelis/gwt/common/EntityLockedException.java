@@ -25,7 +25,7 @@
 */
 package org.openelis.gwt.common;
 
-public class EntityLockedException extends RPCException {
+public class EntityLockedException extends LocalizedException {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,11 @@ public class EntityLockedException extends RPCException {
         super();
     }
 
-    public EntityLockedException(String msg) {
-        super(msg);
+    public EntityLockedException(String key) {
+    	super(key);
+    }
+    
+    public EntityLockedException(String key, String... params) {
+    	super(key,params);
     }
 }

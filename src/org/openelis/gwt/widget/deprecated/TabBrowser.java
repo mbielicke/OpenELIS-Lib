@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.deprecated.ScreenBase;
-import org.openelis.gwt.widget.MenuLabel;
 
 import java.util.ArrayList;
 /**

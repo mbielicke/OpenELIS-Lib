@@ -218,7 +218,9 @@ public class DateField extends Field<Datetime> {
         if(value == null)
             return "";
         if(pattern != null)
+        	
             return DateTimeFormat.getFormat(pattern).format(value.getDate());
+        
         return value.toString();
     }
     
@@ -236,7 +238,9 @@ public class DateField extends Field<Datetime> {
      */
     public void setStringValue(String val) {
         valid = true;
+        
         Date date = null;
+        //if(pattern == null){
         if (val == null || val.equals("")){ 
             value = null;
             return;
@@ -247,7 +251,8 @@ public class DateField extends Field<Datetime> {
    	   }catch(Exception e) {
    		   valid = false;
   		   addError("Invalid Date format entered");
-   	   }/*
+   	   }
+   	   /*
         }else{
         	try {
         		date = DateTimeFormat.getFormat(pattern).parse(val);

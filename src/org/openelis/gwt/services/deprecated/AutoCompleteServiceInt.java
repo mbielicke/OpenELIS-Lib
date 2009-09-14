@@ -25,13 +25,12 @@
 */
 package org.openelis.gwt.services.deprecated;
 
-import com.google.gwt.user.client.rpc.RemoteService;
+import java.util.HashMap;
 
-import org.openelis.gwt.common.RPCException;
 import org.openelis.gwt.common.data.deprecated.FieldType;
 import org.openelis.gwt.common.data.deprecated.TableDataModel;
 
-import java.util.HashMap;
+import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
  * AutoCompleteServiceInt is a GWT RemoteService interface to be
@@ -45,6 +44,6 @@ import java.util.HashMap;
 @Deprecated
 public interface AutoCompleteServiceInt extends RemoteService {
 
-    public TableDataModel getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params) throws RPCException;
+    public TableDataModel getMatches(String cat, TableDataModel model, String match, HashMap<String,FieldType> params) throws Exception;
 
 }

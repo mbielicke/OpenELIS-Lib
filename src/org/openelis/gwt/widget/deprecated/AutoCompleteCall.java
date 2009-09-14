@@ -25,15 +25,14 @@
 */
 package org.openelis.gwt.widget.deprecated;
 
+import org.openelis.gwt.common.data.deprecated.TableDataModel;
+import org.openelis.gwt.services.deprecated.AutoCompleteServiceInt;
+import org.openelis.gwt.services.deprecated.AutoCompleteServiceIntAsync;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-
-import org.openelis.gwt.common.RPCException;
-import org.openelis.gwt.common.data.deprecated.TableDataModel;
-import org.openelis.gwt.services.deprecated.AutoCompleteServiceInt;
-import org.openelis.gwt.services.deprecated.AutoCompleteServiceIntAsync;
 @Deprecated
 public class AutoCompleteCall implements AutoCompleteCallInt {
     
@@ -60,7 +59,7 @@ public class AutoCompleteCall implements AutoCompleteCallInt {
                     Window.alert(caught.getMessage());
                 }
             });
-        } catch (RPCException e) {
+        } catch (Exception e) {
             Window.alert(e.getMessage());
         }
     }

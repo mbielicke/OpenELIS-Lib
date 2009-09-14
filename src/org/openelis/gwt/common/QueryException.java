@@ -25,22 +25,19 @@
 */
 package org.openelis.gwt.common;
 
-public class QueryException extends RPCException {
+public class QueryException extends LocalizedException {
 
     private static final long serialVersionUID = 1L;
-    private String msg;
-    public String appMsg;
 
     public QueryException() {
         super();
     }
-
-    public QueryException(String msg) {
-        super(msg);
-        this.msg = msg;
+    
+    public QueryException(String key) {
+    	super(key);
     }
-
-    public String getMessage() {
-        return this.msg;
+    
+    public QueryException(String key, String... params) {
+    	super(key,params);
     }
 }

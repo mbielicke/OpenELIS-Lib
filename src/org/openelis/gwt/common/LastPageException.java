@@ -26,22 +26,19 @@
 package org.openelis.gwt.common;
 
 
-public class LastPageException extends RPCException {
+public class LastPageException extends LocalizedException {
 
 	private static final long serialVersionUID = 1L;
-	private String msg;
-	public String appMsg;
 
 	public LastPageException() {
 	    super();
 	}
-
-	public LastPageException(String msg) {
-	    super(msg);
-	    this.msg = msg;
+	
+	public LastPageException(String key, String... params) {
+		super(key,params);
 	}
-
-	public String getMessage() {
-	    return this.msg;
+	
+	public LastPageException(String key) {
+		super(key);
 	}
 }

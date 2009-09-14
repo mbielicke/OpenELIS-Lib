@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.data.deprecated.AbstractField;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.deprecated.AppScreenForm.State;
-import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.deprecated.MenuLabel;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;

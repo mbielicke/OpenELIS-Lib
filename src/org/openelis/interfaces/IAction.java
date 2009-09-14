@@ -25,13 +25,12 @@
 */
 package org.openelis.interfaces;
 
-import org.openelis.gwt.common.RPCException;
+import java.io.IOException;
+import java.sql.SQLException;
+
 import org.openelis.gwt.common.ValidationException;
 import org.openelis.gwt.common.data.deprecated.AbstractField;
 import org.openelis.gwt.common.deprecated.Form;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * The parent class for all Action subclass.
@@ -41,8 +40,7 @@ import java.sql.SQLException;
 @Deprecated public interface IAction {
     public void execute(Form form) throws SQLException,
                                      IOException,
-                                     ValidationException,
-                                     RPCException;
+                                     ValidationException;
 
     public boolean hasPermission(Form form) throws SQLException,
                                               IOException,
@@ -50,6 +48,5 @@ import java.sql.SQLException;
 
     public AbstractField query(Form form) throws SQLException,
                                      IOException,
-                                     ValidationException,
-                                     RPCException;
+                                     ValidationException;
 }

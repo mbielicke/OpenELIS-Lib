@@ -45,7 +45,7 @@ import org.openelis.gwt.common.data.deprecated.AbstractField;
 import org.openelis.gwt.common.data.deprecated.FieldType;
 import org.openelis.gwt.screen.deprecated.ScreenBase;
 import org.openelis.gwt.screen.deprecated.AppScreenForm.State;
-import org.openelis.gwt.widget.MenuLabel;
+import org.openelis.gwt.widget.deprecated.MenuLabel;
 
 import java.util.ArrayList;
 @Deprecated

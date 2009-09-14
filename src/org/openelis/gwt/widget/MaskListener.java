@@ -1,14 +1,17 @@
 package org.openelis.gwt.widget;
 
-import com.google.gwt.user.client.ui.FocusListener;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Widget;
-import org.openelis.gwt.widget.TextBox;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class MaskListener implements KeyboardListener, FocusListener{
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+
+public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
     
     private String mask;
     private HashSet<String> literals = new HashSet<String>();
@@ -26,8 +29,8 @@ public class MaskListener implements KeyboardListener, FocusListener{
     
     public MaskListener(TextBox textbox, String mask) {
         this.textbox = textbox;
-        textbox.addKeyboardListener(this);
-        textbox.addFocusListener(this);
+        textbox.addKeyUpHandler(this);
+        textbox.addKeyDownHandler(this);
         setMask(mask);
     }
 
@@ -159,25 +162,21 @@ public class MaskListener implements KeyboardListener, FocusListener{
         return true;
     }
 
-    public void onKeyDown(Widget sender, char keyCode, int modifiers) {
+    public void onKeyDown(KeyDownEvent event) {
         // TODO Auto-generated method stub
         if(!textbox.enforceMask)
             return;
-        if (keyCode == KeyboardListener.KEY_BACKSPACE) {
+        if (event.getNativeKeyCode() == KeyboardHandler.KEY_BACKSPACE) {
             if (literals.contains(String.valueOf(textbox.getText().charAt(textbox.getText().length() - 1))))
                 textbox.setText(textbox.getText().substring(0, textbox.getText().length() - 1));
         }
     }
 
-    public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-        // TODO Auto-generated method stub
-    }
-
-    public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+    public void onKeyUp(KeyUpEvent event) {
         // TODO Auto-generated method stub
         if(!textbox.enforceMask)
             return;
-        if (keyCode == KeyboardListener.KEY_BACKSPACE || keyCode == KeyboardListener.KEY_SHIFT || noMask) {
+        if (event.getNativeKeyCode() == KeyboardHandler.KEY_BACKSPACE || event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT || noMask) {
             return;
         }
         String text = textbox.getText();
@@ -186,18 +185,13 @@ public class MaskListener implements KeyboardListener, FocusListener{
             return;
         }
         textbox.setText(applyMask(text, false));
-        if (text.length() == mask.length() && keyCode != KeyboardListener.KEY_TAB){
+        if (text.length() == mask.length() && event.getNativeKeyCode() != KeyboardHandler.KEY_TAB){
             complete();
         }
             
     }
 
-    public void onFocus(Widget sender) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void onLostFocus(Widget sender) {
+    public void onBlur(BlurEvent event) {
         if(textbox.isReadOnly() || !textbox.enforceMask)
             return;
         format();

@@ -25,21 +25,19 @@
 */
 package org.openelis.gwt.server;
 
-import org.openelis.gwt.common.RPCException;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpSession;
+import javax.xml.transform.stream.StreamResult;
+
 import org.openelis.gwt.common.SecurityUtil;
 import org.openelis.util.SessionManager;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.util.HashMap;
-
-import javax.servlet.http.HttpSession;
-import javax.xml.transform.stream.StreamResult;
 
 public class ServiceUtils {
     
@@ -64,7 +62,7 @@ public class ServiceUtils {
         }
     }
 
-    public static HashMap<String,Boolean> getPermissions() throws RPCException {
+    public static HashMap<String,Boolean> getPermissions() throws Exception {
         // TODO Auto-generated method stub
         try {
             HttpSession sess = SessionManager.getSession();
@@ -77,17 +75,17 @@ public class ServiceUtils {
             return perms;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     
-    public static String getXML(String url) throws RPCException {
+    public static String getXML(String url) throws Exception {
         try{
             Document doc = XMLUtil.createNew("doc");
             return getXML(url,doc);
         }catch(Exception e){
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     
@@ -109,7 +107,7 @@ public class ServiceUtils {
          return new String(bytes.toByteArray(),"UTF-8");
     }
     
-    public static String getXML(String url, Document doc) throws RPCException {
+    public static String getXML(String url, Document doc) throws Exception {
         try {
             String loc = "en";
             if(SessionManager.getSession().getAttribute("locale") != null)
@@ -127,11 +125,11 @@ public class ServiceUtils {
             return new String(bytes.toByteArray(),"UTF-8");
         }catch(Exception e){
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     
-    public static String getXML(InputStream is, Document doc) throws RPCException {
+    public static String getXML(InputStream is, Document doc) throws Exception {
         try {
             String loc = "en";
             if(SessionManager.getSession().getAttribute("locale") != null)
@@ -149,7 +147,7 @@ public class ServiceUtils {
             return new String(bytes.toByteArray(),"UTF-8");
         }catch(Exception e){
             e.printStackTrace();
-            throw new RPCException(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 

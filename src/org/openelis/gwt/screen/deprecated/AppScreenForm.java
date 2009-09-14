@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.LastPageException;
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.RPCDeleteException;
+import org.openelis.gwt.common.DeleteException;
 import org.openelis.gwt.common.data.deprecated.AbstractField;
 import org.openelis.gwt.common.data.deprecated.KeyListManager;
 import org.openelis.gwt.common.deprecated.Form;
@@ -232,7 +232,7 @@ public class AppScreenForm<ScreenRPC extends Form,QueryRPC extends RPC> extends 
     }
     
     protected void handleError(Throwable caught) {
-        if(caught instanceof RPCDeleteException)
+        if(caught instanceof DeleteException)
             window.setError(caught.getMessage());
         else
             Window.alert(caught.getMessage());

@@ -26,23 +26,22 @@
 package org.openelis.gwt.services.deprecated;
 
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.common.RPCException;
 
 @Deprecated
 public interface AppScreenFormServiceInt<ScreenRPC extends RPC,QueryRPC extends RPC> extends AppScreenServiceInt<ScreenRPC> {
     
-    public ScreenRPC commitUpdate(ScreenRPC rpc) throws RPCException;
+    public ScreenRPC commitUpdate(ScreenRPC rpc) throws Exception;
     
-    public ScreenRPC commitAdd(ScreenRPC rpc) throws RPCException;
+    public ScreenRPC commitAdd(ScreenRPC rpc) throws Exception; 
     
-    public QueryRPC commitQuery(QueryRPC data) throws RPCException;
+    public QueryRPC commitQuery(QueryRPC data) throws Exception;
     
-    public ScreenRPC fetch(ScreenRPC rpc) throws RPCException;
+    public ScreenRPC fetch(ScreenRPC rpc) throws Exception;
     
-    public ScreenRPC fetchForUpdate(ScreenRPC rpc) throws RPCException;
+    public ScreenRPC fetchForUpdate(ScreenRPC rpc) throws Exception;
     
-    public ScreenRPC commitDelete(ScreenRPC rpc) throws RPCException;
+    public ScreenRPC commitDelete(ScreenRPC rpc) throws Exception;
     
-    public ScreenRPC abort(ScreenRPC rpcReturn) throws RPCException;
+    public ScreenRPC abort(ScreenRPC rpcReturn) throws Exception;
     
 }
