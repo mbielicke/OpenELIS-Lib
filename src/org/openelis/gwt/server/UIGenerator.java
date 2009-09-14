@@ -1253,11 +1253,11 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			sw.println("Label wid"+id+" = new Label();");
     	        if (node.getAttributes().getNamedItem("wordwrap") != null)
-    	            sw.println("wid"+id+".setWordWrap("+node.getAttributes().getNamedItem("wordwrap").getNodeValue()+");");
+    	            sw.println("wid"+id+".setWordWrap("+node.getAttributes().getNamedItem("wordwrap").getNodeValue().trim()+");");
     	        else
     	            sw.println("wid"+id+".setWordWrap(false);");
     	        if (node.hasChildNodes())
-    	            sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue()+"\");");
+    	            sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue().trim()+"\");");
     	        else
     	            sw.println("wid"+id+".setText(\"\");");
     	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
