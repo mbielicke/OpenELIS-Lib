@@ -190,10 +190,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     		if(isEnabled()){
     			if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
-    				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue()))
+    				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue())){
     					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
-    				else
+    					CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.UNCHECKED);
+    				}else{
     					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
+    					CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.CHECKED);
+    				}
     			}
     		}
     		if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
