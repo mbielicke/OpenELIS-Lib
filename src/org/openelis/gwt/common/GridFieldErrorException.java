@@ -31,11 +31,11 @@ public class GridFieldErrorException extends TableFieldErrorException{
 	private static final long serialVersionUID = 1L;
 	protected int columnIndex = -1;
     
-	/*
+	
 	public GridFieldErrorException() {
 	    super();
 	}
-	*/
+	
     public GridFieldErrorException(String key, int rowIndex,int columnIndex,
                                         String fieldName,String tableKey) {
         super(key,rowIndex,fieldName,tableKey);

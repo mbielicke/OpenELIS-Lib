@@ -43,11 +43,11 @@ public class FieldErrorException extends LocalizedException {
     	super(key,params);
     	this.fieldName = field;
     }
-    /*
+    
     public FieldErrorException() {
         super();
     }
-    
+    /*
     public FieldErrorException(String msg) {
         super(msg);
         this.msg = msg;

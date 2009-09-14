@@ -34,11 +34,11 @@ public class TableFieldErrorException extends FieldErrorException{
 	protected List<Exception> childExceptionList = null; 
 	protected String tableKey = null;
     
-	/*
+	
 	public TableFieldErrorException() {
         super();
     }
-
+    /*
     public TableFieldErrorException(String msg) {
         super(msg);
     }
