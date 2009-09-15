@@ -28,7 +28,7 @@ public class LocalizedException extends Exception {
 		String message = Screen.consts.get(key);
 		if(params != null) {
 			for(int i = 0; i < params.length; i++) {
-				message = message.replaceFirst("{"+i+"}", params[i]);
+				message = message.replaceFirst("\\{"+i+"\\}", params[i]);
 			}
 		}
 		return message;
