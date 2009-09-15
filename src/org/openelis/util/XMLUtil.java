@@ -68,7 +68,6 @@ public class XMLUtil {
 	
 	public static class MyResolver implements URIResolver {
 
-		@Override
 		public Source resolve(String href, String base)
 				throws TransformerException {
 			if(href.startsWith("IMPORT"))
