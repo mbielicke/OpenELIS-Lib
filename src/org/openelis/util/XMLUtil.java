@@ -52,10 +52,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -63,6 +65,18 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 public class XMLUtil {
+	
+	public static class MyResolver implements URIResolver {
+
+		@Override
+		public Source resolve(String href, String base)
+				throws TransformerException {
+			if(href.startsWith("IMPORT"))
+				return new StreamSource(new File(System.getenv("IMPORT")+href.substring(6)));
+			return null;
+		}
+		
+	}
     /**
      * This will return a new, empty Document object with only a root tag
      * matching the parameter sent in.
@@ -127,8 +141,11 @@ public class XMLUtil {
     public static void transformXML(Document doc, InputStream xsl, StreamResult result) throws TransformerConfigurationException,
     																			TransformerException, FileNotFoundException {
     	TransformerFactory tf = TransformerFactory.newInstance();
+    	tf.setURIResolver(new MyResolver());
     	Transformer transformer = tf.newTransformer(new StreamSource(xsl));
+    	transformer.setURIResolver(new MyResolver());
     	DOMSource document = new DOMSource(doc);
+    	transformer.setParameter("importPath","/home/tschmidt/GWT2.0/workspace/OpenELIS-Lib/src/org/openelis/gwt/public/Forms/");
     	transformer.transform(document, result);
     }
 
