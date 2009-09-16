@@ -219,4 +219,40 @@ public class Datetime implements java.io.Serializable, Comparable<Datetime> {
 			return -1;
 		return 0;
 	}
+	
+	public int get(byte precision) {
+		switch(precision) {
+			case Datetime.YEAR :
+				if(endCode < HOUR)
+					return year;
+				else
+					return timestamp.getYear();
+			case Datetime.MONTH :
+				if(endCode < HOUR)
+					return month;
+				else
+					return timestamp.getMonth();
+			case Datetime.DAY :
+				 if(endCode < DAY)
+					 return date;
+				 else
+					 return timestamp.getDate();
+			case Datetime.HOUR :
+				if(endCode < DAY)
+					return 0;
+				else
+					return timestamp.getHours();
+			case Datetime.MINUTE :
+				if(endCode < DAY)
+					return 0;
+				else
+					return timestamp.getMinutes();
+			case Datetime.SECOND :
+				if(endCode < DAY)
+					return 0;
+				else
+					return timestamp.getSeconds();
+		}
+		return -1;
+	}
 }

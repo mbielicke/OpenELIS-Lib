@@ -42,6 +42,18 @@ public class CalendarUtils {
         return cal;
     }
     
+    public static Calendar getCalforMonth(int month, int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.DATE, 1);
+        if(cal.get(Calendar.DAY_OF_WEEK) > 1)
+            cal.add(Calendar.DATE, -cal.get(Calendar.DAY_OF_WEEK));
+        else
+            cal.add(Calendar.DATE, -8);
+        return cal;
+    }
+    
     public static int getField(String field){
         if(field.equals("DATE"))
             return Calendar.DATE;
@@ -93,6 +105,8 @@ public class CalendarUtils {
         }
         return null;
     }
+    
+
     
     public static String getMonthAbrv(String month){
         switch(Integer.parseInt(month)){

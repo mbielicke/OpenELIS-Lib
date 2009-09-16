@@ -27,9 +27,13 @@ package org.openelis.gwt.server;
 
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
+import org.openelis.util.CalendarUtils;
+import org.openelis.util.SessionManager;
+import org.openelis.util.UTFResource;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,28 +44,48 @@ public class CalendarService {
 
     private static String appRoot ;
     
+    private static UTFResource resource;
+    
+    
     public CalendarRPC getMonth(CalendarRPC form) throws Exception {
         try {
+        	if(resource == null)
+        	resource = UTFResource.getBundle("org.openelis.gwt.server.CalendarConstants",new Locale(((SessionManager.getSession() == null  || (String)SessionManager.getSession().getAttribute("locale") == null) 
+                    ? "en" : (String)SessionManager.getSession().getAttribute("locale"))));
             Calendar cal = Calendar.getInstance();
             if(form.date != null && !form.date.equals("")){
                 cal.setTime(form.date.getDate());
             }else{
-                form.date = Datetime.getInstance(Datetime.YEAR,Datetime.DAY,cal.getTime());
+                form.date = Datetime.getInstance(form.begin,form.end,cal.getTime());
             }
-            Document doc = XMLUtil.createNew("doc");
-            Element root = doc.getDocumentElement();
-            Element monthEl = doc.createElement("month");
-            monthEl.appendChild(doc.createTextNode(String.valueOf(form.month)));
-            root.appendChild(monthEl);
-            Element yearEl = doc.createElement("year");
-            System.out.println("Year is "+form.year);
-            yearEl.appendChild(doc.createTextNode(String.valueOf(form.year)));
-            root.appendChild(yearEl);
-            Element day = doc.createElement("date");
-            day.appendChild(doc.createTextNode(form.date.toString()));
-            root.appendChild(day);
-            InputStream is = CalendarService.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/calendar.xsl");
-            form.xml = ServiceUtils.getXML(is,doc);
+            if(form.month == -1)
+            	form.month = cal.get(Calendar.MONTH);
+            else
+            	cal.set(Calendar.MONTH, form.month);
+            if(form.year == -1)
+            	form.year = cal.get(Calendar.YEAR);
+            else
+            	cal.set(Calendar.YEAR, form.year);
+            
+            cal.set(Calendar.DATE, 1);
+            if(cal.get(Calendar.DAY_OF_WEEK) > 1)
+                cal.add(Calendar.DATE, -cal.get(Calendar.DAY_OF_WEEK)+1);
+            else
+                cal.add(Calendar.DATE, -8);
+            
+            for(int i = 0; i < 6; i++) {
+            	for(int j = 0; j < 7; j++) {
+            		if(form.month != cal.get(Calendar.MONTH))
+            			form.cells[i][j][0] = "OffMonth";
+            		else if(form.date.equals(Datetime.getInstance(form.begin,form.end,cal.getTime())))
+            			form.cells[i][j][0] = "Current";
+            		else
+            			form.cells[i][j][0] = "";
+        			form.cells[i][j][1] = String.valueOf(cal.get(Calendar.DATE));
+        			cal.add(Calendar.DATE, 1);
+            	}
+            }
+            form.monthDisplay = resource.getString("month"+form.month) + " " +(form.year);
             return form;
         }catch(Exception e){
             e.printStackTrace();
@@ -123,5 +147,6 @@ public class CalendarService {
             throw new Exception(e.getMessage());
         }
     }
+   
     
 }

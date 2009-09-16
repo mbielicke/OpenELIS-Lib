@@ -36,12 +36,12 @@ public class UTFResource {
     private PropertyResourceBundle bundle;
     private static final String OPENELIS_CONSTANTS = "org.openelis.modules.main.server.constants.OpenELISConstants";
     public static String DEFAULT_LANG = "en";
-    private static HashMap<Locale, UTFResource> cache = new HashMap();
+    private static HashMap<String, UTFResource> cache = new HashMap<String,UTFResource>();
     
     public static UTFResource getBundle(String constantClass, Locale locale){
         UTFResource ret;
         
-        ret = cache.get(locale);
+        ret = cache.get(constantClass+locale.toString());
         
         if(ret == null)
             ret = buildBundle(constantClass, locale);
@@ -83,7 +83,7 @@ public class UTFResource {
         UTFResource ret = new UTFResource();
         
         ret.bundle = (PropertyResourceBundle)ResourceBundle.getBundle(name,locale);
-        cache.put(locale, ret);
+        cache.put(name+locale.toString(), ret);
         
         return ret;
     }

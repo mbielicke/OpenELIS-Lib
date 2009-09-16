@@ -215,12 +215,12 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
     
     protected void doCalendar(Widget sender, final byte begin, final byte end) {
     	try  {
-    		CalendarWidget cal = new CalendarWidget(getValue());
+    		CalendarWidget cal = new CalendarWidget(getValue(),begin,end);
     		cal.addValueChangeHandler(this);
         //	pop = new (null,"","","",true);
     		pop = new PopupPanel(true, false);
         
-    		pop.setWidth("150px");
+    		//pop.setWidth("150px");
     		pop.setWidget(cal);
     		pop.setPopupPosition(textbox.getAbsoluteLeft(),
     				textbox.getAbsoluteTop() + textbox.getOffsetHeight());

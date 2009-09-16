@@ -32,14 +32,17 @@ import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDef;
+import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.deprecated.IconContainer;
+import org.openelis.gwt.widget.IconContainer;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
@@ -60,54 +63,100 @@ import com.google.gwt.user.client.ui.Label;
     protected IconContainer prevDecade;
     protected IconContainer nextDecade;
     protected org.openelis.gwt.widget.AppButton today;
-    protected ArrayList<Label> months = new ArrayList<Label>(12);
-    protected ArrayList<Label> years = new ArrayList<Label>(10);
+    protected ArrayList<Label> months;
+    protected ArrayList<Label> years;
     protected ScreenService service; 
     protected CalendarRPC form;
+    protected TextBox<Datetime> time;
+    protected ScreenDefInt calendarDef;
+    protected ScreenDefInt monthYearDef;
     
-    public CalendarWidget(Datetime date) throws Exception {
+    public CalendarWidget(Datetime date,byte begin, byte end) throws Exception {
+    	super((ScreenDefInt)GWT.create(CalendarDef.class));
+    	calendarDef = def;
     	service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
         form = new CalendarRPC();
         form.date = date;
-        form = service.call("getScreen",form);
-        ScreenDef def = new ScreenDef();
-        def.setXMLString(form.xml);
-		drawScreen(def);
+        form.begin = begin;
+        form.end = end;
+        form = service.call("getMonth",form);
+        //ScreenDef def = new ScreenDef();
+        //def.setXMLString(form.xml);
+		//drawScreen(def);
 		setHandlers();
     }
     
     public void setHandlers() {
     	if(def.getName().equals("Calendar")) {
-    		prevMonth = (org.openelis.gwt.widget.AppButton)def.getWidget("prevMonth");
-    		prevMonth.addClickHandler(this);
-    		nextMonth = (AppButton)def.getWidget("nextMonth");
-    		nextMonth.addClickHandler(this);
-    		monthSelect = (AppButton)def.getWidget("monthSelect");
-    		monthSelect.addClickHandler(this);
-    		for(int i = 1; i <= 42; i++) {
-    			Label date = (Label)def.getWidget("Cell"+i);
-    			if(date.getText() != null && !date.getText().equals(""))
-    				((Label)def.getWidget("Cell"+i)).addClickHandler(this);
+    		((Label)def.getWidget("MonthDisplay")).setText(form.monthDisplay);
+    		for(int i = 0; i < 6; i++) {
+    			for(int j = 0; j < 7; j++) {
+    				Label date = (Label)def.getWidget("cell:"+i+":"+j);
+    				date.setStyleName("DateText");
+    				String style = form.cells[i][j][0];
+    				if(!style.equals(""))
+    					date.addStyleName(style);
+    				date.setText(form.cells[i][j][1]);
+    				if(prevMonth == null)
+    					date.addClickHandler(this);
+    			}
     		}
+       		if(prevMonth == null){
+    			prevMonth = (org.openelis.gwt.widget.AppButton)def.getWidget("prevMonth");
+    			prevMonth.addClickHandler(this);
+    		}
+    		if(nextMonth == null){
+    			nextMonth = (AppButton)def.getWidget("nextMonth");
+    			nextMonth.addClickHandler(this);
+    		}
+    		if(monthSelect == null){
+    			monthSelect = (AppButton)def.getWidget("monthSelect");
+    			monthSelect.addClickHandler(this);
+    		}
+    		if(form.date.endCode > Datetime.DAY){
+    			if(time == null) {
+    				time = (TextBox<Datetime>)def.getWidget("time");
+    			}
+    			time.setValue(Datetime.getInstance(Datetime.HOUR,Datetime.MINUTE,form.date.getDate()));
+    			def.getWidget("TimeBar").setVisible(true);
+    		}else
+    			def.getWidget("TimeBar").setVisible(false);
     	}else{
-        	months = new ArrayList<Label>();
-        	years = new ArrayList<Label>();
-            prevDecade = (IconContainer)def.getWidget("prevDecade");
-            prevDecade.addClickHandler(this);
-            nextDecade = (IconContainer)def.getWidget("nextDecade");
-            nextDecade.addClickHandler(this);
-    		ok = (AppButton)def.getWidget("ok");
-    		ok.addClickHandler(this);
-    		cancel = (AppButton)def.getWidget("cancel");
-    		cancel.addClickHandler(this);
-            for(int i = 0; i < 12; i++) {
-            	months.add((Label)def.getWidget("month:"+i+"Text")); 
-            	months.get(i).addClickHandler(this);
-            }
-            for(int i = 0; i < 10; i++) {
-            	years.add((Label)def.getWidget("year:"+i+"Text"));
-            	years.get(i).addClickHandler(this);
-            }
+        	if(prevDecade == null){
+        		prevDecade = (IconContainer)def.getWidget("prevDecade");
+            	prevDecade.addClickHandler(this);
+        	}
+        	if(nextDecade == null) {
+        		nextDecade = (IconContainer)def.getWidget("nextDecade");
+        		nextDecade.addClickHandler(this);
+        	}
+        	if(ok == null){
+        		ok = (AppButton)def.getWidget("ok");
+    			ok.addClickHandler(this);
+        	}
+        	if(cancel == null) {
+        		cancel = (AppButton)def.getWidget("cancel");
+        		cancel.addClickHandler(this);
+        	}
+        	if(months == null) {
+        		months = new ArrayList<Label>();
+        		for(int i = 0; i < 12; i++) {
+        			months.add((Label)def.getWidget("month"+i+"Text")); 
+        			months.get(i).addClickHandler(this);
+        		}
+        	}
+        	if(years == null) {
+        		years = new ArrayList<Label>();
+        		for(int i = 0; i < 10; i++) {
+        			years.add((Label)def.getWidget("year"+i+"Text"));
+        			years.get(i).addClickHandler(this);
+        		}
+        	}
+        	int yr = form.year/10*10;
+        	for(int i = 0; i < 10; i++) {
+        		Label year = years.get(i);
+        		year.setText(String.valueOf(yr+i));
+        	}
         }
     }
     
@@ -121,9 +170,6 @@ import com.google.gwt.user.client.ui.Label;
             }
             try {
             	form = service.call("getMonth",form);
-            	ScreenDef newDef = new ScreenDef();
-            	newDef.setXMLString(form.xml);
-            	drawScreen(newDef);
             	setHandlers();
             }catch(Exception e) {
             	e.printStackTrace();
@@ -139,9 +185,6 @@ import com.google.gwt.user.client.ui.Label;
             }
             try {
             	form = service.call("getMonth", form);
-            	ScreenDef newDef = new ScreenDef();
-            	newDef.setXMLString(form.xml);
-            	drawScreen(newDef);
             	setHandlers();
             }catch(Exception e) {
             	e.printStackTrace();
@@ -151,10 +194,12 @@ import com.google.gwt.user.client.ui.Label;
         }
         if(event.getSource() == monthSelect){
         	try {
-        		form = service.call("getMonthSelect",form);
-        		ScreenDef newDef = new ScreenDef();
-        		newDef.setXMLString(form.xml);
-        		drawScreen(newDef);
+        		//form = service.call("getMonthSelect",form);
+        		//ScreenDef newDef = new ScreenDef();
+        		//newDef.setXMLString(form.xml);
+        		if(monthYearDef == null)
+        			monthYearDef = (ScreenDefInt)GWT.create(MonthYearDef.class);
+        		drawScreen(monthYearDef);
         		setHandlers();
         	}catch(Exception e) {
         		e.printStackTrace();
@@ -166,9 +211,7 @@ import com.google.gwt.user.client.ui.Label;
            event.getSource() == cancel){
         	try {
         		form = service.call("getMonth", form);
-        		ScreenDef newDef = new ScreenDef();
-        		newDef.setXMLString(form.xml);
-        		drawScreen(newDef);
+        		drawScreen(calendarDef);
         		setHandlers();
         	}catch(Exception e) {
         		e.printStackTrace();
@@ -192,7 +235,7 @@ import com.google.gwt.user.client.ui.Label;
             years.get(0).addStyleName("Current");
             return;
         }
-        if(event.getSource() instanceof Label && months.contains(event.getSource()) ){
+        if(event.getSource() instanceof Label && months != null && months.contains(event.getSource()) ){
             String value = ((Label)event.getSource()).getText();
             for(int i = 0; i < 11; i++) {
             	months.get(i).removeStyleName("Current");
@@ -224,7 +267,7 @@ import com.google.gwt.user.client.ui.Label;
             ((Label)event.getSource()).addStyleName("Current");
             return;
         }
-        if(event.getSource() instanceof Label && years.contains(event.getSource()) ) {
+        if(event.getSource() instanceof Label && years != null && years.contains(event.getSource()) ) {
             String value = ((Label)event.getSource()).getText();
             years.get(form.year%10).removeStyleName("Current");
             form.year = Integer.parseInt(value);
@@ -232,7 +275,8 @@ import com.google.gwt.user.client.ui.Label;
             return;
         }
         String date = ((Label)event.getSource()).getText();
-        setValue(Datetime.getInstance(Datetime.YEAR,Datetime.DAY,new Date(form.year-1900,form.month,Integer.parseInt(date))),true);
+        if(!date.equals(""))
+        	setValue(Datetime.getInstance(form.begin,form.end,new Date(form.year-1900,form.month,Integer.parseInt(date),time.getFieldValue().get(Datetime.HOUR),time.getFieldValue().get(Datetime.MINUTE))),true);
     }
 
 	public Datetime getValue() {

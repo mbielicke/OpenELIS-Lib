@@ -1856,31 +1856,21 @@ public class UIGenerator extends Generator {
 				}
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
-			    
-				/*
     	        NodeList widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
     	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	                Widget wid = loadWidget(widgets.item(k),def);
-    	                int x = -1;
-    	                if (widgets.item(k).getAttributes().getNamedItem("x") != null)
-    	                    x = Integer.parseInt(widgets.item(k)
-    	                                                .getAttributes()
-    	                                                .getNamedItem("x")
-    	                                                .getNodeValue());
-    	                int y = -1;
-    	                if (widgets.item(k).getAttributes().getNamedItem("y") != null)
-    	                    y = Integer.parseInt(widgets.item(k)
-    	                                                .getAttributes()
-    	                                                .getNamedItem("y")
-    	                                                .getNodeValue());
+    	            	int child = ++count;
+    	                if(!loadWidget(widgets.item(k),child)){
+    	                	count--;
+    	                	continue;
+    	                }
     	                if(node.getAttributes().getNamedItem("align") != null)
-    	                    DOM.setElementProperty(icon.getElement(),"align",node.getAttributes().getNamedItem("align").getNodeValue());
-    	                icon.setWidget(wid);
+    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\","+node.getAttributes().getNamedItem("align").getNodeValue()+");");
+    	                sw.println("wid"+id+".add(wid"+child+");");
     	            }
     	        }
-    	        */
     	        setDefaults(node,"wid"+id);
+    	        
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.IconContainer");
