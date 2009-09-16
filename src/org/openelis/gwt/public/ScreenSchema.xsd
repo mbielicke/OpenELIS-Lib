@@ -551,6 +551,7 @@
 				</xsd:simpleType>
 			</xsd:attribute>
 			<xsd:attribute name="spacing" type="xsd:integer" />
+			<xsd:attributeGroup ref="align"/>
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>

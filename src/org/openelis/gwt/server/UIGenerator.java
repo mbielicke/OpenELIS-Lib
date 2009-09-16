@@ -487,7 +487,7 @@ public class UIGenerator extends Generator {
     	                                                .getNamedItem("y")
     	                                                .getNodeValue());
     	                if(node.getAttributes().getNamedItem("align") != null)
-    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\","+node.getAttributes().getNamedItem("align").getNodeValue()+");");
+    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\",\""+node.getAttributes().getNamedItem("align").getNodeValue()+"\");");
     	                sw.println("wid"+id+".add(wid"+child+","+x+","+y+");");
     	            }
     	        }
