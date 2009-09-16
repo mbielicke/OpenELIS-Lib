@@ -320,6 +320,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	}
 
 	public void setQueryMode(boolean query) {
+		
 		field.setQueryMode(query);
 		
 	}

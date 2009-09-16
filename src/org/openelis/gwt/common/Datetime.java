@@ -233,7 +233,7 @@ public class Datetime implements java.io.Serializable, Comparable<Datetime> {
 				else
 					return timestamp.getMonth();
 			case Datetime.DAY :
-				 if(endCode < DAY)
+				 if(endCode < HOUR)
 					 return date;
 				 else
 					 return timestamp.getDate();
