@@ -68,6 +68,9 @@ import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
+import com.google.gwt.event.dom.client.HasContextMenuHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -115,7 +118,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasBeforeRowDeletedHandlers,
 													   HasRowDeletedHandlers,
 													   HasBeforeAutoAddHandlers,
-													   HasDropController
+													   HasDropController,
+													   HasContextMenuHandlers
 													   {
                             
     public ArrayList<TableColumn> columns;
@@ -142,7 +146,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public boolean selectedByClick;
     public VerticalScroll showScroll = VerticalScroll.NEEDED;
     public String width;
-    private ArrayList<TableDataRow> data;
+    private ArrayList<TableDataRow> data = new ArrayList<TableDataRow>();
     public TableSorterInt sorter = new TableSorter();
     public int shownRows; 
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
@@ -835,6 +839,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	public HandlerRegistration addUnselectionHandler(
 			UnselectionHandler<TableDataRow> handler) {
 		return addHandler(handler,UnselectionEvent.getType());
+	}
+
+	public HandlerRegistration addContextMenuHandler(ContextMenuHandler handler) {
+		return addDomHandler(handler, ContextMenuEvent.getType());
 	}
 	
 }

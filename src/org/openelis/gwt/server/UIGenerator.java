@@ -1234,15 +1234,17 @@ public class UIGenerator extends Generator {
     	    	            	   continue;
     	    	               }
     	                    sw.println("ScrollPanel scroll"+child+" = new ScrollPanel();");
-    	                    sw.println("scroll"+child+".add(wid"+child+");");
-    	                    sw.println("scroll"+child+".setWidth(\"100%\");");
-    	                    //tabs can not have a constant or hard coded text
+    	                    sw.println("scroll"+child+".setWidget(wid"+child+");");
     	                    sw.println("wid"+id+".add(scroll"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
+    	                    if(node.getAttributes().getNamedItem("height") != null)
+    	                    	sw.println("scroll"+child+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    	                    if(node.getAttributes().getNamedItem("width") != null)
+    	                    	sw.println("scroll"+child+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
     	                }
     	            }
     	        }
     	        sw.println("wid"+id+".selectTab(0);");
-    	        setDefaults(node, "wid"+id);
+    	        //setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
     			composer.addImport("com.google.gwt.user.client.ui.TabPanel");

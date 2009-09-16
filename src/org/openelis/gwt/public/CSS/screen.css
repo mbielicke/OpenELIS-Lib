@@ -161,6 +161,11 @@ border-top:0;
     padding:4px;
 }
 
+.contextMenuContainer{
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+}
+
 .favoritesMenuContainer {
 	 background:#f0f0f0 url('../Images/menu.gif') repeat-y;
 }

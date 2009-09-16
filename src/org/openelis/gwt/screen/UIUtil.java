@@ -1022,16 +1022,19 @@ public class UIUtil {
     	                    Widget wid = loadWidget(widgets.item(l),def);
     	                    ScrollPanel scroll = new ScrollPanel();
     	                    scroll.add(wid);
-    	                    scroll.setWidth("100%");
     	                    //tabs can not have a constant or hard coded text
     	                    panel.add(scroll, tabs.item(k).getAttributes()
     	                                             .getNamedItem("text")
     	                                             .getNodeValue());
+    	                    if(node.getAttributes().getNamedItem("height") != null)
+    	                    	scroll.setHeight(node.getAttributes().getNamedItem("height").getNodeValue());
+    	                    if(node.getAttributes().getNamedItem("width") != null)
+    	                    	scroll.setWidth(node.getAttributes().getNamedItem("width").getNodeValue());
     	                }
     	            }
     	        }
     	        panel.selectTab(0);
-    	        setDefaults(node, panel);
+    	        //setDefaults(node, panel);
     	        return panel;
     		}
     	});
