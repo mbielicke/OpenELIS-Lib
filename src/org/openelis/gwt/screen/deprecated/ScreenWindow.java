@@ -56,6 +56,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -430,12 +431,12 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
                 //pop.setStyleName("MessagePopup");
             }
             
-            ScreenWindow win = new ScreenWindow(pop,"","","",false);
-            win.setStyleName("ErrorWindow");
-            win.setContent(messagePanel);
-            win.setVisible(true);
+            DecoratorPanel dp = new DecoratorPanel();
+            dp.setStyleName("ErrorWindow");
+            dp.add(messagePanel);
+            dp.setVisible(true);
             
-            pop.setWidget(win);
+            pop.setWidget(dp);
             //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
             final int left = sender.getAbsoluteLeft()+16;
             final int top = sender.getAbsoluteTop();
@@ -573,12 +574,12 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
                 //pop.setStyleName("MessagePopup");
             }
             
-            ScreenWindow win = new ScreenWindow(pop,"","","",false);
-            win.setStyleName("ErrorWindow");
-            win.setContent(messagePanel);
-            win.setVisible(true);
+            DecoratorPanel dp = new DecoratorPanel();
+            dp.setStyleName("ErrorWindow");
+            dp.add(messagePanel);
+            dp.setVisible(true);
             
-            pop.setWidget(win);
+            pop.setWidget(dp);
             //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
             final int left = ((Widget)event.getSource()).getAbsoluteLeft()+16;
             final int top = ((Widget)event.getSource()).getAbsoluteTop();
