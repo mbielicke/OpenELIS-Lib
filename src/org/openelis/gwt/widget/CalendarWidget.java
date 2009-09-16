@@ -31,10 +31,8 @@ import java.util.Date;
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.Screen;
-import org.openelis.gwt.screen.ScreenDef;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.IconContainer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,7 +40,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
@@ -89,14 +86,21 @@ import com.google.gwt.user.client.ui.Label;
     public void setHandlers() {
     	if(def.getName().equals("Calendar")) {
     		((Label)def.getWidget("MonthDisplay")).setText(form.monthDisplay);
+    		boolean displayMonth = false; 
+    		Date currDate = new Date();
+    		if(form.date.get(Datetime.MONTH) == currDate.getMonth() && form.date.get(Datetime.YEAR) == currDate.getYear())
+    			displayMonth = true;
     		for(int i = 0; i < 6; i++) {
     			for(int j = 0; j < 7; j++) {
     				Label date = (Label)def.getWidget("cell:"+i+":"+j);
     				date.setStyleName("DateText");
-    				String style = form.cells[i][j][0];
-    				if(!style.equals(""))
-    					date.addStyleName(style);
-    				date.setText(form.cells[i][j][1]);
+    				if(i == 0 && form.cells[i][j] > 7) 
+    					date.addStyleName("offMonth");
+    				else if(i >= 4 && form.cells[i][j] < 14)
+    					date.addStyleName("offMonth");
+    				else if(displayMonth && form.cells[i][j] == form.date.get(Datetime.DAY))
+    					date.addStyleName("Current");
+    				date.setText(String.valueOf(form.cells[i][j]));
     				if(prevMonth == null)
     					date.addClickHandler(this);
     			}
@@ -274,9 +278,10 @@ import com.google.gwt.user.client.ui.Label;
             ((Label)event.getSource()).addStyleName("Current");
             return;
         }
-        String date = ((Label)event.getSource()).getText();
-        if(!date.equals(""))
+        if(((Label)event.getSource()).getStyleName().indexOf("offMonth") < 0){
+        	String date =  ((Label)event.getSource()).getText();
         	setValue(Datetime.getInstance(form.begin,form.end,new Date(form.year-1900,form.month,Integer.parseInt(date),time.getFieldValue().get(Datetime.HOUR),time.getFieldValue().get(Datetime.MINUTE))),true);
+        }
     }
 
 	public Datetime getValue() {

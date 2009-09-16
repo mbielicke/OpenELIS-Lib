@@ -255,4 +255,43 @@ public class Datetime implements java.io.Serializable, Comparable<Datetime> {
 		}
 		return -1;
 	}
+	
+	public int getLastDay() {
+		int mn = month;
+		int yr = year;
+		if(endCode > DAY) {
+			mn = timestamp.getMonth();
+			yr = timestamp.getYear();
+		}
+		switch(mn) {
+			case 0 :
+				return 31;
+			case 1 :
+				if(yr % 4 == 0)
+					return 29;
+				else
+					return 28;
+			case 2 :
+				return 31;
+			case 3 :
+				return 30;
+			case 4:
+				return 31;
+			case 5 : 
+				return 30;
+			case 6 :
+				return 31;
+			case 7 :
+				return 31;
+			case 8 :
+				return 30;
+			case 9 :
+				return 31;
+			case 10 :
+				return 30;
+			case 11 :
+				return 31;
+		}
+		return -1;
+	}
 }

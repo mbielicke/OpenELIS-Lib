@@ -75,13 +75,7 @@ public class CalendarService {
             
             for(int i = 0; i < 6; i++) {
             	for(int j = 0; j < 7; j++) {
-            		if(form.month != cal.get(Calendar.MONTH))
-            			form.cells[i][j][0] = "OffMonth";
-            		else if(form.date.equals(Datetime.getInstance(form.begin,form.end,cal.getTime())))
-            			form.cells[i][j][0] = "Current";
-            		else
-            			form.cells[i][j][0] = "";
-        			form.cells[i][j][1] = String.valueOf(cal.get(Calendar.DATE));
+        			form.cells[i][j] = (byte)cal.get(Calendar.DATE);
         			cal.add(Calendar.DATE, 1);
             	}
             }
