@@ -52,14 +52,14 @@ import com.google.gwt.user.client.ui.Label;
  */
  public class CalendarWidget extends Screen implements HasValue<Datetime>, ClickHandler {
    
-    protected org.openelis.gwt.widget.AppButton prevMonth;
-    protected org.openelis.gwt.widget.AppButton nextMonth;
-    protected org.openelis.gwt.widget.AppButton monthSelect;
-    protected org.openelis.gwt.widget.AppButton ok;
-    protected org.openelis.gwt.widget.AppButton cancel;
-    protected IconContainer prevDecade;
-    protected IconContainer nextDecade;
-    protected org.openelis.gwt.widget.AppButton today;
+    protected AppButton prevMonth;
+    protected AppButton nextMonth;
+    protected AppButton monthSelect;
+    protected AppButton ok;
+    protected AppButton cancel;
+    protected AppButton prevDecade;
+    protected AppButton nextDecade;
+    protected AppButton today;
     protected ArrayList<Label> months;
     protected ArrayList<Label> years;
     protected ScreenService service; 
@@ -127,11 +127,11 @@ import com.google.gwt.user.client.ui.Label;
     			def.getWidget("TimeBar").setVisible(false);
     	}else{
         	if(prevDecade == null){
-        		prevDecade = (IconContainer)def.getWidget("prevDecade");
+        		prevDecade = (AppButton)def.getWidget("prevDecade");
             	prevDecade.addClickHandler(this);
         	}
         	if(nextDecade == null) {
-        		nextDecade = (IconContainer)def.getWidget("nextDecade");
+        		nextDecade = (AppButton)def.getWidget("nextDecade");
         		nextDecade.addClickHandler(this);
         	}
         	if(ok == null){

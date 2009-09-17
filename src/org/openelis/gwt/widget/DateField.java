@@ -31,6 +31,7 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 
 /**
  * DateField is an implementation of AbstractField that represents data

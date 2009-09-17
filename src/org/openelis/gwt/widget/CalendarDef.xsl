@@ -35,14 +35,14 @@ UIRF Software License are applicable instead of those above.
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <VerticalPanel width="100%" style="CalendarWidget">
       <HorizontalPanel style="MonthBar">
-        <appButton action="prevMonth" key="prevMonth" onclick="this">
+        <appButton action="prevMonth" key="prevMonth" style="Button">
           <AbsolutePanel style="PreviousMonth"/>
         </appButton>
         <label key="MonthDisplay" style="MonthDisplay"></label>
-        <appButton action="monthSelect" key="monthSelect" onclick="this">
+        <appButton action="monthSelect" key="monthSelect" style="Button">
 		  <AbsolutePanel style="MonthSelect"/>
         </appButton>
-        <appButton action="nextMonth" key="nextMonth" onclick="this">
+        <appButton action="nextMonth" key="nextMonth" style="Button">
 		  <AbsolutePanel style="NextMonth"/>
         </appButton>
       </HorizontalPanel>
@@ -231,7 +231,7 @@ UIRF Software License are applicable instead of those above.
    </HorizontalPanel>
    </widget>
    <AbsolutePanel style="TodayBar" width="100%" halign="center">
-     <appButton action="today" key="today">
+     <appButton action="today" key="today" style="Button">
        <text>Today</text>
      </appButton>
    </AbsolutePanel>

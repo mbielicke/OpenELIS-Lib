@@ -55,102 +55,102 @@ UIRF Software License are applicable instead of those above.
 	    <HorizontalPanel style="Calendar" width="100%">
 	      <TablePanel spacing="0" padding="0" width="100%">
 	        <row>
-	         <icon key="month0" style="MYCell">
+	         <appButton key="month0" style="Button">
                 <label key="month0Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth0')}"/>
-             </icon>
-             <icon key="month6" style="MYCell">
+             </appButton>
+             <appButton key="month6" style="Button">
                 <label key="month6Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth6')}"/>
-             </icon>
+             </appButton>
 	      </row>
 	      <row>
-	         <icon key="month1" style="MYCell">
+	         <appButton key="month1" style="MYCell">
                 <label key="month1Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth1')}"/>
-             </icon>
-	         <icon key="month7" style="MYCell">
+             </appButton>
+	         <appButton key="month7" style="MYCell">
                 <label key="month7Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth7')}"/>
-             </icon>             	      
+             </appButton>             	      
 	      </row>	     
 	      <row>
-	         <icon key="month2" style="MYCell">
+	         <appButton key="month2" style="MYCell">
                 <label key="month2Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth2')}"/>
-             </icon>	      
-	         <icon key="month8" style="MYCell">
+             </appButton>	      
+	         <appButton key="month8" style="MYCell">
                 <label key="month8Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth8')}"/>
-             </icon>             
+             </appButton>             
 	      </row>	     
 	      <row>
-	         <icon key="month3" style="MYCell">
+	         <appButton key="month3" style="MYCell">
                 <label key="month3Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth3')}"/>
-             </icon>	      
-              <icon key="month9" style="MYCell">
+             </appButton>	      
+              <appButton key="month9" style="MYCell">
                 <label key="month9Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth9')}"/>
-             </icon>
+             </appButton>
 	      </row>	     
 	      <row>
-	         <icon key="month4" style="MYCell">
+	         <appButton key="month4" style="MYCell">
                 <label key="month4Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth4')}"/>
-             </icon>	      
-	         <icon key="month10" style="MYCell">
+             </appButton>	      
+	         <appButton key="month10" style="MYCell">
                 <label key="month10Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth10')}"/>
-             </icon>             
+             </appButton>             
 	      </row>	     
 	      <row>
-	         <icon key="month5" style="MYCell">
+	         <appButton key="month5" style="MYCell">
                 <label key="month5Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth5')}"/>
-             </icon>
-	         <icon key="month11" style="MYCell">
+             </appButton>
+	         <appButton key="month11" style="MYCell">
                 <label key="month11Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth11')}"/>
-             </icon>             	      
+             </appButton>             	      
 	      </row>	          
 	    </TablePanel>
 	    <TablePanel spacing="0" padding="0" width="100%">
 	      <row>
 	        <widget>
-    	        <icon key="prevDecade" style="prevNavIndex"/>
+    	        <appButton key="prevDecade" style="prevNavIndex"/>
     	    </widget>
     	    <widget>
-		        <icon key="nextDecade" style="nextNavIndex"/>
+		        <appButton key="nextDecade" style="nextNavIndex"/>
 		    </widget>
 	      </row>	      
 	      <row>
-	        <icon key="year0" style="MyCell">
+	        <appButton key="year0" style="Button">
 	          <label key="year0Text" wordwrap="true"/>
-	        </icon> 
-	        <icon key="year5" style="MyCell">
+	        </appButton> 
+	        <appButton key="year5" style="Button">
 	          <label key="year5Text" wordwrap="true"/>
-	        </icon> 
+	        </appButton> 
 	      </row>	 
 	      <row>
-	      	<icon key="year1" style="MyCell">
+	      	<appButton key="year1" style="Button">
 	          <label key="year1Text" wordwrap="true"/>
-	        </icon> 
-	        <icon key="year6" style="MyCell">
+	        </appButton> 
+	        <appButton key="year6" style="Button">
 	          <label key="year6Text" wordwrap="true"/>
-	        </icon> 	        
+	        </appButton> 	        
 	      </row>		  
 	      <row>
-	        <icon key="year2" style="MyCell">
+	        <appButton key="year2" style="Button">
 	          <label key="year2Text" wordwrap="true"/>
-	        </icon> 	      
-	        <icon key="year7" style="MyCell">
+	        </appButton> 	      
+	        <appButton key="year7" style="Button">
 	          <label key="year7Text" wordwrap="true"/>
-	        </icon> 	        
+	        </appButton> 	        
 	      </row>		  
 	      <row>
-	        <icon key="year3" style="MyCell">
+	        <appButton key="year3" style="Button">
 	          <label key="year3Text" wordwrap="true"/>
-	        </icon> 	      
-	        <icon key="year8" style="MyCell">
+	        </appButton> 	      
+	        <appButton key="year8" style="Button">
 	          <label key="year8Text" wordwrap="true"/>
-	        </icon> 	        
+	        </appButton> 	        
 	      </row>		  
 	      <row>
-	        <icon key="year4" style="MyCell">
+	        <appButton key="year4" style="Button">
 	          <label key="year4Text" wordwrap="true"/>
-	        </icon> 	      
-	        <icon key="year9" style="MyCell">
+	        </appButton> 	      
+	        <appButton key="year9" style="Button">
 	          <label key="year9Text" wordwrap="true"/>
-	        </icon> 	        
+	        </appButton> 	        
 	      </row>		                         
 	    </TablePanel>
 	    </HorizontalPanel>

@@ -266,8 +266,9 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	}
 
 	public void setValue(Datetime value, boolean fireEvents) {
+		field.setValue(value);
         if (value != null)
-            textbox.setValue(value.toString(),fireEvents);
+            textbox.setValue(field.format(),fireEvents);
         else
            textbox.setValue("",fireEvents);
         if(fireEvents) {

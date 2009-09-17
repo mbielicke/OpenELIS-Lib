@@ -125,7 +125,7 @@ public class UIGenerator extends Generator {
 		sw.println("}");
 		sw.println("private void createPanel() {");
 	    try {
-	    	
+	    	count = 0;
 	    	createWidgets();
 	    }catch(Exception e) {
 	    	e.printStackTrace();
