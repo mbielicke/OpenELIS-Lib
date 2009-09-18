@@ -483,10 +483,13 @@
 				<xsd:element name="widget" minOccurs="0" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:sequence>
-							<xsd:element ref="widgets" minOccurs="1" maxOccurs="1" />
+							<xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
+							<xsd:element ref="panels" minOccurs="0" maxOccurs="1" />
 						</xsd:sequence>
 						<xsd:attributeGroup ref="halign" />
 						<xsd:attributeGroup ref="valign" />
+						<xsd:attribute name="height" type="xsd:string"/>
+						<xsd:attribute name="width" type="xsd:string"/>
 						<xsd:attribute name="style" type="xsd:string" />
 					</xsd:complexType>
 				</xsd:element>

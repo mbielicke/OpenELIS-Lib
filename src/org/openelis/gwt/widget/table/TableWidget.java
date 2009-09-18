@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
@@ -70,7 +70,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasContextMenuHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -87,6 +90,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -105,9 +109,9 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
  */
 public class TableWidget extends FocusPanel implements ClickHandler, 
 													   HasField, 
-													   HasTableValueChangeHandlers,
-													   MouseOverHandler, 
+													   MouseOverHandler,
 													   MouseOutHandler,
+													   HasTableValueChangeHandlers,
 													   HasBeforeSelectionHandlers<TableRow>,
 													   HasSelectionHandlers<TableRow>,
 													   HasUnselectionHandlers<TableDataRow>,
@@ -119,7 +123,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasRowDeletedHandlers,
 													   HasBeforeAutoAddHandlers,
 													   HasDropController,
-													   HasContextMenuHandlers
+													   HasContextMenuHandlers,
+													   FocusHandler,
+													   HasFocusHandlers
 													   {
                             
     public ArrayList<TableColumn> columns;
@@ -155,6 +161,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     private boolean queryMode;
     public boolean addIcon;
     public boolean deleteIcon;
+    public boolean mouseOver;
     
     public boolean autoAdd;
     
@@ -179,7 +186,6 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         setWidget(view);
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
-        
     }
         
     public void setTableWidth(String width) {
@@ -213,12 +219,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public void onMouseOver(MouseOverEvent event) {
         ((Widget)event.getSource()).addStyleName("TableHighlighted");
+        mouseOver = true;
          
      }
 
      public void onMouseOut(MouseOutEvent event) {
          ((Widget)event.getSource()).removeStyleName("TableHighlighted");
-         
+        mouseOver = false;   
      }
 
     /**
@@ -843,6 +850,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public HandlerRegistration addContextMenuHandler(ContextMenuHandler handler) {
 		return addDomHandler(handler, ContextMenuEvent.getType());
+	}
+
+	public void onFocus(FocusEvent event) {
+		if(!DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
+			finishEditing();
+		}
 	}
 	
 }

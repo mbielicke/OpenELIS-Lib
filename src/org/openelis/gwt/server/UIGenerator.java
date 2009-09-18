@@ -90,6 +90,7 @@ public class UIGenerator extends Generator {
         composer.addImport("org.openelis.gwt.screen.Screen");
         composer.addImport("org.openelis.gwt.screen.TabHandler");
         composer.addImport("org.openelis.gwt.screen.ShortcutHandler");
+        composer.addImport("com.google.gwt.event.dom.client.HasFocusHandlers");
         composer.addImplementedInterface("ScreenDefInt");
         
 		sw = composer.createSourceWriter(context,printWriter);
@@ -317,6 +318,7 @@ public class UIGenerator extends Generator {
 				}
 				sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
 			}
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
@@ -577,7 +579,8 @@ public class UIGenerator extends Generator {
     			
     			sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
     			sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
-    			
+				sw.println("wid"+id+".addFocusHandler(panel);");
+
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.CalendarLookUp");
@@ -620,6 +623,7 @@ public class UIGenerator extends Generator {
     	        
     	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
     	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
     		public void addImport() {
@@ -840,6 +844,7 @@ public class UIGenerator extends Generator {
     			
     			sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
     			sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
     			
     		}
     		public void addImport() {
@@ -1074,6 +1079,7 @@ public class UIGenerator extends Generator {
     	        
     	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
     	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
     		public void addImport(){
@@ -1101,6 +1107,7 @@ public class UIGenerator extends Generator {
                 
                 sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
                 
     		}
     		public void addImport() {
@@ -1183,6 +1190,7 @@ public class UIGenerator extends Generator {
     	        
     	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
     	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
     		public void addImport() {
@@ -1295,6 +1303,7 @@ public class UIGenerator extends Generator {
     	        
     	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
     	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
     		public void addImport() {
@@ -1475,6 +1484,8 @@ public class UIGenerator extends Generator {
                 
                 sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+                sw.println("panel.addFocusHandler(wid"+id+");");
+				sw.println("wid"+id+".addFocusHandler(panel);");
                 
                 //if(def != null)
                 	//def.panel.addClickHandler(table);
@@ -1586,7 +1597,8 @@ public class UIGenerator extends Generator {
 					.getNodeValue().toUpperCase();
 					sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
 	        	}
-                setDefaults(node,"wid"+id);
+				sw.println("wid"+id+".addFocusHandler(panel);");
+				setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.Dropdown");
@@ -1685,6 +1697,7 @@ public class UIGenerator extends Generator {
                 	sw.println("wid"+id+".columns.add(column"+id+");");
                 }
                 sw.println("wid"+id+".setup();");
+				sw.println("wid"+id+".addFocusHandler(panel);");
 				if (node.getAttributes().getNamedItem("case") != null){
 					String fieldCase = node.getAttributes().getNamedItem("case")
 					.getNodeValue().toUpperCase();
@@ -1800,6 +1813,7 @@ public class UIGenerator extends Generator {
                 
                 sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
                 
                 
     		}
