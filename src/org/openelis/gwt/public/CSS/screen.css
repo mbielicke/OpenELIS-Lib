@@ -137,7 +137,16 @@ border-top:0;
     margin-bottom:8px;
     background:black url(../Images/topmenubg.gif) repeat-x;
 }
-
+.topMenuBarWeb { 
+    height:30px;
+    width:100%;
+    background:black url(../Images/topmenubg.gif) repeat-x;
+}
+.ContentWeb{
+	background:#bac8d9;
+    //opacity:0.5;
+    //filter: alpha(opacity=50);
+}
 .topMenuBarItem {
     margin:3px 0 0 8px;
     padding:4px;

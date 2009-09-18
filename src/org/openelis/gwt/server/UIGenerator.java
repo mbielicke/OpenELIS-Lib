@@ -361,6 +361,12 @@ public class UIGenerator extends Generator {
     	                    if (align.equals("bottom"))
     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_BOTTOM);");
     	                }
+    	                if(widgets.item(k).getAttributes().getNamedItem("height") != null) {
+    	                	sw.println("wid"+id+".setCellHeight(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    	                }
+    	                if(widgets.item(k).getAttributes().getNamedItem("width") != null) {
+    	                	sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	                }
     	            }
     	        }
     	        sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
