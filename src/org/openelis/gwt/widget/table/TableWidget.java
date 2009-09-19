@@ -581,6 +581,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
     public TableDataRow getSelection() {
+        if(selected == -1)
+            return null;
+        
         return data.get(selected);
     }
 
