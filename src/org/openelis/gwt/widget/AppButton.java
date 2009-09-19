@@ -58,7 +58,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     private AbsolutePanel right = new AbsolutePanel();
     private AbsolutePanel left = new AbsolutePanel();
     private AbsolutePanel content = new AbsolutePanel();
-    private boolean enabled;
+    private boolean enabled = true;
     private ShortcutHandler shortcut;
     
     public AppButton() {

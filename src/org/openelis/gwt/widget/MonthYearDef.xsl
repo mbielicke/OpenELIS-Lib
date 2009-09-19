@@ -63,42 +63,42 @@ UIRF Software License are applicable instead of those above.
              </appButton>
 	      </row>
 	      <row>
-	         <appButton key="month1" style="MYCell">
+	         <appButton key="month1" style="Button">
                 <label key="month1Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth1')}"/>
              </appButton>
-	         <appButton key="month7" style="MYCell">
+	         <appButton key="month7" style="Button">
                 <label key="month7Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth7')}"/>
              </appButton>             	      
 	      </row>	     
 	      <row>
-	         <appButton key="month2" style="MYCell">
+	         <appButton key="month2" style="Button">
                 <label key="month2Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth2')}"/>
              </appButton>	      
-	         <appButton key="month8" style="MYCell">
+	         <appButton key="month8" style="Button">
                 <label key="month8Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth8')}"/>
              </appButton>             
 	      </row>	     
 	      <row>
-	         <appButton key="month3" style="MYCell">
+	         <appButton key="month3" style="Button">
                 <label key="month3Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth3')}"/>
              </appButton>	      
-              <appButton key="month9" style="MYCell">
+              <appButton key="month9" style="Button">
                 <label key="month9Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth9')}"/>
              </appButton>
 	      </row>	     
 	      <row>
-	         <appButton key="month4" style="MYCell">
+	         <appButton key="month4" style="Button">
                 <label key="month4Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth4')}"/>
              </appButton>	      
-	         <appButton key="month10" style="MYCell">
+	         <appButton key="month10" style="Button">
                 <label key="month10Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth10')}"/>
              </appButton>             
 	      </row>	     
 	      <row>
-	         <appButton key="month5" style="MYCell">
+	         <appButton key="month5" style="Button">
                 <label key="month5Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth5')}"/>
              </appButton>
-	         <appButton key="month11" style="MYCell">
+	         <appButton key="month11" style="Button">
                 <label key="month11Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth11')}"/>
              </appButton>             	      
 	      </row>	          
@@ -106,10 +106,14 @@ UIRF Software License are applicable instead of those above.
 	    <TablePanel spacing="0" padding="0" width="100%">
 	      <row>
 	        <widget>
-    	        <appButton key="prevDecade" style="prevNavIndex"/>
+    	        <appButton key="prevDecade" style="Button">
+    	           <AbsolutePanel style="prevNavIndex"/>
+    	        </appButton>
     	    </widget>
     	    <widget>
-		        <appButton key="nextDecade" style="nextNavIndex"/>
+		        <appButton key="nextDecade" style="Button"> 
+		           <AbsolutePanel style="nextNavIndex"/>
+		        </appButton>
 		    </widget>
 	      </row>	      
 	      <row>
@@ -156,10 +160,10 @@ UIRF Software License are applicable instead of those above.
 	    </HorizontalPanel>
 	    <AbsolutePanel layout="absolute" style="SelectBar" halign="center">
 	    <HorizontalPanel layout="horizontal" >
-	        <appButton action="ok" key="ok">
+	        <appButton action="ok" key="ok" style="Button">
 	            <text>OK</text>
 	        </appButton>
-            <appButton action="cancel" key="cancel" align="left">
+            <appButton action="cancel" key="cancel" align="left" style="Button">
 	            <text>CANCEL</text>
             </appButton>
 	    </HorizontalPanel>

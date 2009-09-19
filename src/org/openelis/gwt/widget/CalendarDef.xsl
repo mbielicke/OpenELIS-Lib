@@ -34,6 +34,13 @@ UIRF Software License are applicable instead of those above.
 
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <VerticalPanel width="100%" style="CalendarWidget">
+            <widget halign="center">
+   	<HorizontalPanel style="TimeBar" width="100%" key="TimeBar">
+    	 <widget halign="center">
+     		<textbox key="time" field="Date" begin="3" end="5" width="45px" pattern="HH:mm"/>
+     	</widget>
+   	</HorizontalPanel>
+   	</widget>
       <HorizontalPanel style="MonthBar">
         <appButton action="prevMonth" key="prevMonth" style="Button">
           <AbsolutePanel style="PreviousMonth"/>
@@ -47,6 +54,7 @@ UIRF Software License are applicable instead of those above.
         </appButton>
       </HorizontalPanel>
       <VerticalPanel width="100%">
+ 
         <TablePanel style="Calendar" width="100%" spacing="0" padding="0">
           <row style="DayBar">
             <icon style="DayCell">
@@ -212,24 +220,7 @@ UIRF Software License are applicable instead of those above.
          </row>
       </TablePanel>
    </VerticalPanel>
-   <widget align="center">
-   <HorizontalPanel style="TodayBar" width="100%" key="TimeBar">
-     <widget halign="center">
-     	<textbox key="time" field="Date" begin="3" end="5" width="45px" pattern="HH:mm"/>
-     </widget>
-     <!-- 
-     <widget halign="right">
-     	<textbox key="hour" mask="99" width="20px"/>
-     </widget>
-     <widget halign="center">
-     <text width="3px">:</text>
-     </widget>
-     <widget align="left">
-     <textbox key="minute" mask="99" width="20px"/>
-     </widget>
-     -->
-   </HorizontalPanel>
-   </widget>
+
    <AbsolutePanel style="TodayBar" width="100%" halign="center">
      <appButton action="today" key="today" style="Button">
        <text>Today</text>

@@ -108,14 +108,17 @@ import com.google.gwt.user.client.ui.Label;
        		if(prevMonth == null){
     			prevMonth = (org.openelis.gwt.widget.AppButton)def.getWidget("prevMonth");
     			prevMonth.addClickHandler(this);
+    			prevMonth.enable(true);
     		}
     		if(nextMonth == null){
     			nextMonth = (AppButton)def.getWidget("nextMonth");
     			nextMonth.addClickHandler(this);
+    			nextMonth.enable(true);
     		}
     		if(monthSelect == null){
     			monthSelect = (AppButton)def.getWidget("monthSelect");
     			monthSelect.addClickHandler(this);
+    			monthSelect.enable(true);
     		}
     		if(form.date.endCode > Datetime.DAY){
     			if(time == null) {
@@ -129,18 +132,22 @@ import com.google.gwt.user.client.ui.Label;
         	if(prevDecade == null){
         		prevDecade = (AppButton)def.getWidget("prevDecade");
             	prevDecade.addClickHandler(this);
+            	prevDecade.enable(true);
         	}
         	if(nextDecade == null) {
         		nextDecade = (AppButton)def.getWidget("nextDecade");
         		nextDecade.addClickHandler(this);
+        		nextDecade.enable(true);
         	}
         	if(ok == null){
         		ok = (AppButton)def.getWidget("ok");
     			ok.addClickHandler(this);
+    			ok.enable(true);
         	}
         	if(cancel == null) {
         		cancel = (AppButton)def.getWidget("cancel");
         		cancel.addClickHandler(this);
+        		cancel.enable(true);
         	}
         	if(months == null) {
         		months = new ArrayList<Label>();

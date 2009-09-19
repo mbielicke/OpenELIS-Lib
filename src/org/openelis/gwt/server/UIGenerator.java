@@ -412,47 +412,49 @@ public class UIGenerator extends Generator {
     	                    	continue;
     	                    }
     	                    sw.println("wid"+id+".setWidget("+k+","+w+",wid"+child+");");
-    	                    if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
-    	                        sw.println("wid"+id+".getFlexCellFormatter().setColSpan("+k+","+w+","+
-    	                                         Integer.parseInt(widgets.item(l)
-    	                                                                 .getAttributes()
-    	                                                                 .getNamedItem("colspan")
-    	                                                                 .getNodeValue())+");");
-    	                    if (widgets.item(l).getAttributes().getNamedItem("rowspan") != null)
-    	                        sw.println("wid"+id+".getFlexCellFormatter().setRowSpan("+k+","+w+","+
-    	                                         Integer.parseInt(widgets.item(l)
-    	                                                                 .getAttributes()
-    	                                                                 .getNamedItem("rowspan")
-    	                                                                 .getNodeValue())+");");
-    	                    if (widgets.item(l).getAttributes().getNamedItem("style") != null)
-    	                        sw.println("wid"+id+".getFlexCellFormatter().addStyleName("+k+","+w+","+"\""+
-    	                                           widgets.item(l)
-    	                                                  .getAttributes()
-    	                                                  .getNamedItem("style")
-    	                                                  .getNodeValue()+"\");");
-    	                    if (widgets.item(l).getAttributes().getNamedItem("align") != null) {
-    	                        String align = widgets.item(l)
-    	                                              .getAttributes()
-    	                                              .getNamedItem("align")
-    	                                              .getNodeValue();
-    	                        if (align.equals("right"))
-    	                            sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_RIGHT);");
-    	                        if (align.equals("left"))
-    	                            sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_LEFT);");
-    	                        if (align.equals("center"))
-    	                            sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_CENTER);");
-    	                    }
-    	                    if (widgets.item(l).getAttributes().getNamedItem("valign") != null) {
-    	                        String align = widgets.item(l)
-    	                                              .getAttributes()
-    	                                              .getNamedItem("valign")
-    	                                              .getNodeValue();
-    	                        if (align.equals("top"))
-    	                            sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_TOP);");
-    	                        if (align.equals("bottom"))
-    	                            sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_BOTTOM);");
-    	                        if (align.equals("middle"))
-    	                            sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_MIDDLE);");
+    	                    if(widgets.item(l).getNodeName().equals("widget")) {
+    	                    	if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setColSpan("+k+","+w+","+
+    	                    				Integer.parseInt(widgets.item(l)
+    	                    						.getAttributes()
+    	                    						.getNamedItem("colspan")
+    	                    						.getNodeValue())+");");
+    	                    	if (widgets.item(l).getAttributes().getNamedItem("rowspan") != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setRowSpan("+k+","+w+","+
+    	                    				Integer.parseInt(widgets.item(l)
+    	                    						.getAttributes()
+    	                    						.getNamedItem("rowspan")
+    	                    						.getNodeValue())+");");
+    	                    	if (widgets.item(l).getAttributes().getNamedItem("style") != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().addStyleName("+k+","+w+","+"\""+
+    	                    				widgets.item(l)
+    	                    				.getAttributes()
+    	                    				.getNamedItem("style")
+    	                    				.getNodeValue()+"\");");
+    	                    	if (widgets.item(l).getAttributes().getNamedItem("align") != null) {
+    	                    		String align = widgets.item(l)
+    	                    			.getAttributes()
+    	                    			.getNamedItem("align")
+    	                    			.getNodeValue();
+    	                    		if (align.equals("right"))
+    	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_RIGHT);");
+    	                    		if (align.equals("left"))
+    	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_LEFT);");
+    	                    		if (align.equals("center"))
+    	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_CENTER);");
+    	                    	}
+    	                    	if (widgets.item(l).getAttributes().getNamedItem("valign") != null) {
+    	                    		String align = widgets.item(l)
+    	                    			.getAttributes()
+    	                    			.getNamedItem("valign")
+    	                    			.getNodeValue();
+    	                    		if (align.equals("top"))
+    	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_TOP);");
+    	                    		if (align.equals("bottom"))
+    	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_BOTTOM);");
+    	                    		if (align.equals("middle"))
+    	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_MIDDLE);");
+    	                    	}
     	                    }
     	                }
     	            }
