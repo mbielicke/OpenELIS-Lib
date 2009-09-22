@@ -94,12 +94,19 @@ import com.google.gwt.user.client.ui.Label;
     			for(int j = 0; j < 7; j++) {
     				Label date = (Label)def.getWidget("cell:"+i+":"+j);
     				date.setStyleName("DateText");
-    				if(i == 0 && form.cells[i][j] > 7) 
+    				if(i == 0 && form.cells[i][j] > 7) {
     					date.addStyleName("offMonth");
-    				else if(i >= 4 && form.cells[i][j] < 14)
+    					((IconContainer)date.getParent()).enable(false);
+    				}
+    				else if(i >= 4 && form.cells[i][j] < 14){
     					date.addStyleName("offMonth");
-    				else if(displayMonth && form.cells[i][j] == form.date.get(Datetime.DAY))
-    					date.addStyleName("Current");
+    					((IconContainer)date.getParent()).enable(false);
+    				}else{
+    					date.removeStyleName("offMonth");
+    					((IconContainer)date.getParent()).enable(true);
+    					if(displayMonth && form.cells[i][j] == form.date.get(Datetime.DAY))
+        					date.addStyleName("Current");
+    				}
     				date.setText(String.valueOf(form.cells[i][j]));
     				if(prevMonth == null)
     					date.addClickHandler(this);
@@ -161,13 +168,17 @@ import com.google.gwt.user.client.ui.Label;
         		for(int i = 0; i < 10; i++) {
         			years.add((Label)def.getWidget("year"+i+"Text"));
         			years.get(i).addClickHandler(this);
+        			
         		}
         	}
         	int yr = form.year/10*10;
         	for(int i = 0; i < 10; i++) {
         		Label year = years.get(i);
         		year.setText(String.valueOf(yr+i));
+        		if(form.year == yr)
+        			year.addStyleName("current");
         	}
+        	months.get(form.month).addStyleName("Current");
         }
     }
     

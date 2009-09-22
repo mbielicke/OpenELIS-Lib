@@ -53,6 +53,7 @@ UIRF Software License are applicable instead of those above.
   <screen name="MonthYear" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	  <VerticalPanel width="100%" style="CalendarWidget">
 	    <HorizontalPanel style="Calendar" width="100%">
+	      <AbsolutePanel>
 	      <TablePanel spacing="0" padding="0" width="100%">
 	        <row>
 	         <appButton key="month0" style="Button">
@@ -103,6 +104,10 @@ UIRF Software License are applicable instead of those above.
              </appButton>             	      
 	      </row>	          
 	    </TablePanel>
+	    </AbsolutePanel>
+	    <AbsolutePanel style="Divider">
+	    </AbsolutePanel>
+	    <AbsolutePanel>
 	    <TablePanel spacing="0" padding="0" width="100%">
 	      <row>
 	        <widget>
@@ -157,6 +162,7 @@ UIRF Software License are applicable instead of those above.
 	        </appButton> 	        
 	      </row>		                         
 	    </TablePanel>
+	    </AbsolutePanel>
 	    </HorizontalPanel>
 	    <AbsolutePanel layout="absolute" style="SelectBar" halign="center">
 	    <HorizontalPanel layout="horizontal" >

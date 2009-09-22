@@ -23,14 +23,16 @@ import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class IconContainer extends FocusPanel implements HasAllMouseHandlers, HasClickHandlers {
+public class IconContainer extends FocusPanel implements HasAllMouseHandlers, HasClickHandlers, MouseOverHandler, MouseOutHandler {
     
 
-    private boolean enabled;
+    private boolean enabled = true;
     
     public IconContainer() {
-    	
+        addMouseOverHandler(this);
+        addMouseOutHandler(this);
     }
     
     public void addTabHandler(TabHandler handler) {
@@ -40,6 +42,8 @@ public class IconContainer extends FocusPanel implements HasAllMouseHandlers, Ha
     public IconContainer(String style) {
         this();
         setStyleName(style);
+        addMouseOverHandler(this);
+        addMouseOutHandler(this);
     }
     
     public void enable(boolean enabled) {
@@ -77,6 +81,17 @@ public class IconContainer extends FocusPanel implements HasAllMouseHandlers, Ha
 
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
 		return addDomHandler(handler,ClickEvent.getType());
+	}
+
+	public void onMouseOver(MouseOverEvent event) {
+		if(enabled)
+			((Widget)event.getSource()).addStyleName("Hover");
+		
+	}
+
+	public void onMouseOut(MouseOutEvent event) {
+		((Widget)event.getSource()).removeStyleName("Hover");
+		
 	}
     
 }

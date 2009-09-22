@@ -222,7 +222,7 @@ UIRF Software License are applicable instead of those above.
    </VerticalPanel>
 
    <AbsolutePanel style="TodayBar" width="100%" halign="center">
-     <appButton action="today" key="today" style="Button">
+     <appButton action="today" key="today" style="Button" width="75px">
        <text>Today</text>
      </appButton>
    </AbsolutePanel>

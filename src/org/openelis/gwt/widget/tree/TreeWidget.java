@@ -114,8 +114,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasField, 
 													  MouseOverHandler, 
 													  MouseOutHandler,
-													  HasBeforeSelectionHandlers<TreeRow>,
-													  HasSelectionHandlers<TreeRow>,
+													  HasBeforeSelectionHandlers<TreeDataItem>,
+													  HasSelectionHandlers<TreeDataItem>,
 													  HasUnselectionHandlers<TreeDataItem>,
 													  HasBeforeCellEditedHandlers,
 													  HasCellEditedHandlers, 
@@ -253,7 +253,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      */
     protected void select(final int row, final int col) {
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
-    		BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(modelIndexList[row]));
     		if(event.isCanceled())
     			return;
     	}else if(!isEnabled())
@@ -277,7 +277,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             }
             activeRow = row;
             selectRow(modelIndexList[row]);
-            SelectionEvent.fire(this,renderer.rows.get(row));
+            SelectionEvent.fire(this,rows.get(modelIndexList[row]));
         }
         if(canEditCell(row,col)){
             activeCell = col;
@@ -288,6 +288,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
        		sinkEvents(Event.ONKEYPRESS);
        	}
 
+    }
+    
+    public void select(TreeDataItem item) {
+    	selectRow(rows.indexOf(item));
+    	SelectionEvent.fire(this, item);
     }
 
     public boolean finishEditing() {
@@ -603,14 +608,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     
     public void toggle(int row) {
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
-    		BeforeSelectionEvent<TreeRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(modelIndexList[row]));
     		if(!event.isCanceled()){
     			selectRow(row);
-    			SelectionEvent.fire(this,  renderer.rows.get(row));
+    			SelectionEvent.fire(this, rows.get(modelIndexList[row]));
     		}
     	}else if(isEnabled()){
     		selectRow(row);
-    		SelectionEvent.fire(this,  renderer.rows.get(row));
+    		SelectionEvent.fire(this, rows.get(modelIndexList[row]));
     	}
     	if(!rows.get(row).open) {
     		BeforeLeafOpenEvent event = BeforeLeafOpenEvent.fire(this, row, rows.get(row));
@@ -827,12 +832,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public HandlerRegistration addBeforeSelectionHandler(
-			BeforeSelectionHandler<TreeRow> handler) {
+			BeforeSelectionHandler<TreeDataItem> handler) {
 		return addHandler(handler, BeforeSelectionEvent.getType());
 	}
 
 	public HandlerRegistration addSelectionHandler(
-			SelectionHandler<TreeRow> handler) {
+			SelectionHandler<TreeDataItem> handler) {
 		return addHandler(handler, SelectionEvent.getType());
 	}
 
