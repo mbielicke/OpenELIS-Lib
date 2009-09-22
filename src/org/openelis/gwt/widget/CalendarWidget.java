@@ -127,6 +127,11 @@ import com.google.gwt.user.client.ui.Label;
     			monthSelect.addClickHandler(this);
     			monthSelect.enable(true);
     		}
+    		if(today == null) {
+    			today = (AppButton)def.getWidget("today");
+    			today.addClickHandler(this);
+    			today.enable(true);
+    		}
     		if(form.date.endCode > Datetime.DAY){
     			if(time == null) {
     				time = (TextBox<Datetime>)def.getWidget("time");
@@ -288,6 +293,15 @@ import com.google.gwt.user.client.ui.Label;
             	form.month = 12;
             ((Label)event.getSource()).addStyleName("Current");
             return;
+        }
+        if(event.getSource() == today) {
+        	try {
+        		setValue(service.callDatetime("getCurrentDatetime",form.begin,form.end),true);
+        		return;
+        	}catch(Exception e) {
+        		e.printStackTrace();
+        		return;
+        	}
         }
         if(event.getSource() instanceof Label && years != null && years.contains(event.getSource()) ) {
             String value = ((Label)event.getSource()).getText();

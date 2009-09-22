@@ -27,6 +27,7 @@ package org.openelis.gwt.services;
 
 import java.util.Date;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 
 import com.google.gwt.http.client.Request;
@@ -42,7 +43,7 @@ public interface ScreenServiceIntAsync {
     public Request callString(String method, AsyncCallback<String> callback);
     public Request callInteger(String method, AsyncCallback<Integer> callback);
     public Request callBoolean(String method, AsyncCallback<Boolean> callback);
-    public Request callDate(String method, AsyncCallback<Date> callback);
+    public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);
     public Request callDouble(String method, AsyncCallback<Double> callback);
     public Request call(String method, AsyncCallback<? extends RPC> callback);
     public Request callVoid(String method, AsyncCallback<? extends RPC> callback);
@@ -50,7 +51,7 @@ public interface ScreenServiceIntAsync {
     public Request call(String method, RPC param, AsyncCallback<? extends RPC> callback);
     public Request call(String method, Double param, AsyncCallback<? extends RPC> callback);
     public Request call(String method, String param, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, Date param, AsyncCallback<? extends RPC> callback);
+    public Request call(String method, Datetime param, AsyncCallback<? extends RPC> callback);
     public Request call(String method, Long param, AsyncCallback<? extends RPC> callback);
 
 }

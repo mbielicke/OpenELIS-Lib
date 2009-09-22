@@ -18,6 +18,7 @@ package org.openelis.gwt.server;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.services.ScreenServiceInt;
 
@@ -68,7 +69,7 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     }
 
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Date param) throws Throwable {
+	public <T extends RPC> T call(String method, Datetime param) throws Throwable {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
  
@@ -76,8 +77,8 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     	return (Boolean)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
  
-	public Date callDate(String method) throws Throwable {
-    	return (Date)invoke(getThreadLocalRequest().getParameter("service"),method);
+	public Datetime callDatetime(String method, byte begin, byte end) throws Throwable {
+    	return (Datetime)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{byte.class,byte.class},new Object[]{begin,end});
 	}
 
 	public Double callDouble(String method) throws Throwable {

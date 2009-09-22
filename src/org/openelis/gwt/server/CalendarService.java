@@ -141,6 +141,10 @@ public class CalendarService {
             throw new Exception(e.getMessage());
         }
     }
+    
+    public Datetime getCurrentDatetime(byte begin, byte end) {
+    	return Datetime.getInstance(begin,end);
+    }
    
     
 }

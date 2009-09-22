@@ -168,6 +168,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public TableDataRow autoAddRow;
     
     public boolean multiSelect;
+    private boolean allSelected;
     
     public TableWidget() {
         
@@ -307,7 +308,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
        		activeCell = -1;
        		sinkEvents(Event.ONKEYPRESS);
        	}
-       
+    }
+    
+    public void selectAll() {
+    	if(multiSelect) {
+    		allSelected = true;
+    		renderer.dataChanged(true);
+    	}
     }
     
     public boolean finishEditing() {
@@ -502,6 +509,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     public ArrayList<TableDataRow> getSelections() {
+    	if(allSelected)
+    		return data;
     	ArrayList<TableDataRow>  sels = new ArrayList<TableDataRow>();
     	for(int index : selections) {
     		sels.add(getRow(index));
@@ -567,6 +576,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     public boolean isSelected(int index) {
+    	if(allSelected)
+    		return true;
         return selections.contains(index);
     }
 
@@ -607,6 +618,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
     public int[] getSelectedIndexes() {
+    	if(allSelected){
+    		int[] ret = new int[selections.size()];
+    		for(int i = 0; i < selections.size(); i++)
+    			ret[i] = i;
+    		return ret;
+    	}	
         int[] ret = new int[selections.size()];
         for(int i = 0; i < selections.size(); i++)
             ret[i] = (Integer)selections.get(i);

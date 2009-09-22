@@ -27,6 +27,7 @@ package org.openelis.gwt.services;
 
 import java.util.Date;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -45,7 +46,7 @@ public interface ScreenServiceInt extends RemoteService {
     public String            callString(String method) throws Throwable;
     public Integer           callInteger(String method) throws Throwable;
     public Boolean           callBoolean(String method) throws Throwable;
-    public Date              callDate(String method) throws Throwable;
+    public Datetime          callDatetime(String method, byte begin, byte end) throws Throwable;
     public Double            callDouble(String method) throws Throwable;
     public <T extends RPC>  T call(String method) throws Throwable;
     public void callVoid(String method) throws Throwable;
@@ -53,7 +54,7 @@ public interface ScreenServiceInt extends RemoteService {
     public <T extends RPC> T call(String method, RPC param) throws Throwable;
     public <T extends RPC> T call(String method, Double param) throws Throwable;
     public <T extends RPC> T call(String method, String param) throws Throwable;
-    public <T extends RPC> T call(String method, Date param) throws Throwable;
+    public <T extends RPC> T call(String method, Datetime param) throws Throwable;
     public <T extends RPC> T call(String method, Long param) throws Throwable;
 
     

@@ -17,6 +17,7 @@ package org.openelis.gwt.services;
 
 import java.util.Date;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 
 import com.google.gwt.core.client.GWT;
@@ -101,7 +102,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         return callback.getResult();
 	}
 
-	public <T extends RPC> T call(String method, Date param) throws Exception {
+	public <T extends RPC> T call(String method, Datetime param) throws Exception {
         Callback<T> callback = new Callback<T>();
         service.call(method, param, callback);
         return callback.getResult();
@@ -113,9 +114,9 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         return callback.getResult();
 	}
 
-	public Date callDate(String method) throws Exception {
-        Callback<Date> callback = new Callback<Date>();
-        service.callDate(method, callback);
+	public Datetime callDatetime(String method, byte begin, byte end) throws Exception {
+        Callback<Datetime> callback = new Callback<Datetime>();
+        service.callDatetime(method, begin, end, callback);
         return callback.getResult();
 	}
 
@@ -142,7 +143,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 		return service.call(method,param,callback);
 	}
 
-	public Request call(String method, Date param,
+	public Request call(String method, Datetime param,
 			AsyncCallback<? extends RPC> callback) {
 		return service.call(method, param, callback);
 	}
@@ -151,8 +152,8 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 		return service.callBoolean(method, callback);
 	}
 
-	public Request callDate(String method, AsyncCallback<Date> callback) {
-		return service.callDate(method, callback);
+	public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback) {
+		return service.callDatetime(method, begin, end, callback);
 	}
 
 	public Request callDouble(String method, AsyncCallback<Double> callback) {
