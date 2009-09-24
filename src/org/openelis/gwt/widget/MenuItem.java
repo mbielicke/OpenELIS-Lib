@@ -45,7 +45,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -79,12 +81,10 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public String labelText;
     public String description;
     private boolean enabled;
-    public HandlerRegistration clickHandler;
-    public HandlerRegistration mouseOutHandler;
-    public HandlerRegistration mouseOverHandler;
+
     
     public MenuItem() {
-
+    	
     }
     
     public MenuItem clone() {
@@ -104,7 +104,9 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
         label.setStyleName("topMenuItemTitle");
         label.addStyleName("locked");
         setWidget(create(icon,label,description));
-        enable(true);
+        addClickHandler(this);
+        addMouseOverHandler(this);
+        addMouseOutHandler(this);
         this.label = labelText;
     }
     
@@ -114,7 +116,9 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     
     public void init(String icon, Widget wid, String description) {
         setWidget(create(icon,wid,description));
-        enable(true);
+        addClickHandler(this);
+        addMouseOverHandler(this);
+        addMouseOutHandler(this);
     }
     
     public MenuItem(Widget wid) {
@@ -123,7 +127,9 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     
     public void init(Widget wid) {
         setWidget(wid);
-        enable(true);
+        addClickHandler(this);
+        addMouseOverHandler(this);
+        addMouseOutHandler(this);
     }
     
     public Widget getWidget() {
@@ -317,19 +323,14 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public void enable(boolean enabled){
     	this.enabled = enabled;
         if(enabled){
-        	if(clickHandler == null) {
-        		clickHandler = addClickHandler(this);
-        		mouseOverHandler = addMouseOverHandler(this);
-        		mouseOutHandler = addMouseOutHandler(this);
-        		getWidget().removeStyleName("disabled");
-        	}
+        	sinkEvents(Event.ONCLICK);
+        	sinkEvents(Event.ONMOUSEOUT);
+        	sinkEvents(Event.ONMOUSEOVER);
+        	getWidget().removeStyleName("disabled");
         }else{
-        	clickHandler.removeHandler();
-        	mouseOverHandler.removeHandler();
-        	mouseOutHandler.removeHandler();
-        	clickHandler = null;
-        	mouseOverHandler = null;
-        	mouseOutHandler = null;
+        	unsinkEvents(Event.ONCLICK);
+        	unsinkEvents(Event.MOUSEEVENTS);
+        	unsinkEvents(Event.ONMOUSEOVER);
             getWidget().addStyleName("disabled");
         }
         
@@ -340,15 +341,15 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     }
 
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
-		return addDomHandler(handler,ClickEvent.getType());
+		return addHandler(handler,ClickEvent.getType());
 	}
 
 	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-		return addDomHandler(handler,MouseOverEvent.getType());
+		return addHandler(handler,MouseOverEvent.getType());
 	}
 
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-		return addDomHandler(handler,MouseOutEvent.getType());
+		return addHandler(handler,MouseOutEvent.getType());
 	}
 
 	public HandlerRegistration addActionHandler(ActionHandler<Action> handler) {

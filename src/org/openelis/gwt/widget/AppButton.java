@@ -126,7 +126,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     }
 
 	public HandlerRegistration addClickHandler(ClickHandler handler){
-	    return addDomHandler(handler, ClickEvent.getType());
+	    return addHandler(handler, ClickEvent.getType());
 	}
 
     public void onMouseOut(MouseOutEvent event) {

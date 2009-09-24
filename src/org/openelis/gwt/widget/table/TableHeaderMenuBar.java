@@ -454,7 +454,7 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
 
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 ((MenuItem)event.getData()).pop.addCloseHandler(this);
-              	item.clickHandler.removeHandler();
+              	item.unsinkEvents(Event.ONCLICK);
               	final TableColumn column = col;
                 entryText.addKeyUpHandler(new KeyUpHandler() {
                 	
