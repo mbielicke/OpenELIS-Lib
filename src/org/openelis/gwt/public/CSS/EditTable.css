@@ -21,11 +21,14 @@
 	height: 19px;
 	background: white;
 
-}/*
+}
+
+/*
 .noteSubjectText{padding-left:4px;}
 .noteAuthorText{}
 .noteBodyText{}
 */
+
 .noteTableRow {
 padding:0px 0px 4px 4px;
 	border-bottom:1px solid #B5B8C8;
@@ -162,11 +165,10 @@ tr .TableHighlighted {
 }
 
 .Header {
-/*	height: 17px;
-	background: #eeeff1 url("../Images/headersprite.gif") repeat-x;
-	*/
-	overflow: hidden; //
-	border: 1px solid #B5B8C8;
+	height: 18px;
+	width: 100%;
+	background: transparent url("../Images/headersprite.gif") repeat-x;
+	border-bottom: 1px solid #b5b8c8;
 }
 
 .HeaderBar {
@@ -193,13 +195,25 @@ tr .TableHighlighted {
 	width: 13;
 	height: 13;
 }
-
+.Divider{
+background:#8DB2E3;
+width:1px;
+height:100%;
+}
+.Title{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding:2px;
+	padding-left:4px;
+	color:gray;
+}
 .HeaderLabel {
 	overflow: hidden;
 	color: grey;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	-moz-user-select: none;
+	padding-left:2px;
 }
 
 .hide {
@@ -324,11 +338,10 @@ tr .Highlighted {
 	color: grey;
 }
 
-.topHeaderBar {
-	height: 18px;
-	width: 100%;
-	background: black url("../Images/headersprite.gif") repeat-x;
-	border-bottom: 1px solid #b5b8c8;
+.tableheader {
+	height: 19px;
+	background: transparent url("../Images/headersprite.gif") repeat-x;
+	width:100%;
 }
 
 .topHeaderBarItem {
