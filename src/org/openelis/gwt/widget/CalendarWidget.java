@@ -43,6 +43,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 /**
  * Calendar Widget will display a calendar and text boxes with the current time in
  * a popup panel.  A user can then select a date and time that will be returned back
@@ -180,10 +181,13 @@ import com.google.gwt.user.client.ui.Label;
         	for(int i = 0; i < 10; i++) {
         		Label year = years.get(i);
         		year.setText(String.valueOf(yr+i));
-        		if(form.year == yr)
+        		if(form.year+1900 == yr){
         			year.addStyleName("current");
+        			((Widget)def.getWidget("year"+i)).addStyleName("Current");
+        		}
         	}
-        	months.get(form.month).addStyleName("Current");
+        	((Widget)def.getWidget("month"+form.month)).addStyleName("Current");
+        	
         }
     }
     
