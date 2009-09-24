@@ -38,6 +38,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     }
     
     public String format() {
+    	if(queryMode){
+    		if(queryString == null)
+    			return "";
+    		return queryString;
+    	}
         if(value == null)
             return "";
     	return value.toString();

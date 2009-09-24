@@ -88,6 +88,8 @@ public class LongField extends Field<Long> {
     }
 
     public String format() {
+    	if(queryMode)
+    		return super.format();
         if (value == null)
             return "";
         if (pattern != null)

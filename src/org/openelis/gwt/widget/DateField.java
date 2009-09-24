@@ -216,6 +216,8 @@ public class DateField extends Field<Datetime> {
      * Formats the string representation of this fields value using the set pattern
      */
     public String format() {
+    	if(queryMode)
+    		return super.format();
         if(value == null)
             return "";
         if(pattern != null)

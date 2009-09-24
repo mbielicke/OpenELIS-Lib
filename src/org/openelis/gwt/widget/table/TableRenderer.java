@@ -228,7 +228,9 @@ public class TableRenderer  {
         	Object newVal = null;
         	if(controller.editingCell instanceof AutoComplete){
         		newVal = ((AutoComplete)controller.editingCell).getSelection();
-        	}else
+        	}else if(controller.queryMode)
+        		newVal = ((HasField)controller.editingCell).getField().queryString;
+        	else
         		newVal = ((HasField)controller.editingCell).getFieldValue();
         	if(controller.editingCell instanceof HasField)
         		controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();

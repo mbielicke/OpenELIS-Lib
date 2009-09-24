@@ -158,7 +158,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
     private ArrayList<String> errors;
-    private boolean queryMode;
+    public boolean queryMode;
     public boolean addIcon;
     public boolean deleteIcon;
     public boolean mouseOver;

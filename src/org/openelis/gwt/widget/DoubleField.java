@@ -88,6 +88,8 @@ public class DoubleField extends Field<Double> {
     }
 
     public String format() {
+    	if(queryMode)
+    		return super.format();
         if (value == null)
             return "";
         if (pattern != null)
