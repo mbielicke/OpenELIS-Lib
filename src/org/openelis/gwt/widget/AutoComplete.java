@@ -84,8 +84,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         textbox.setReadOnly(!enabled);
         
         this.isDropdown = true;
-        addDomHandler(keyboardHandler,KeyDownEvent.getType());
-        addDomHandler(keyboardHandler,KeyUpEvent.getType());
+        addHandler(keyboardHandler,KeyDownEvent.getType());
+        addHandler(keyboardHandler,KeyUpEvent.getType());
     }
     
     public void addTabHandler(TabHandler handler) {
@@ -95,6 +95,10 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     public void enable(boolean enabled) {
         this.enabled = enabled;
         textbox.setReadOnly(!enabled);
+        if(enabled){
+        	sinkEvents(Event.KEYEVENTS);
+        }else
+        	unsinkEvents(Event.KEYEVENTS);
         super.enable(enabled);
     }
     

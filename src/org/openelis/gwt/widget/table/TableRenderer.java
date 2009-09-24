@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import java.util.ArrayList;
 
 import org.openelis.gwt.widget.AutoComplete;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.user.client.ui.Focusable;
@@ -228,7 +229,7 @@ public class TableRenderer  {
         	Object newVal = null;
         	if(controller.editingCell instanceof AutoComplete){
         		newVal = ((AutoComplete)controller.editingCell).getSelection();
-        	}else if(controller.queryMode)
+        	}else if(controller.queryMode && !(controller.editingCell instanceof Dropdown))
         		newVal = ((HasField)controller.editingCell).getField().queryString;
         	else
         		newVal = ((HasField)controller.editingCell).getFieldValue();
