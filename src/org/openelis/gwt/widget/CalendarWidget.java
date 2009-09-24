@@ -61,8 +61,8 @@ import com.google.gwt.user.client.ui.Widget;
     protected AppButton prevDecade;
     protected AppButton nextDecade;
     protected AppButton today;
-    protected ArrayList<Label> months;
-    protected ArrayList<Label> years;
+    protected ArrayList<AppButton> months;
+    protected ArrayList<AppButton> years;
     protected ScreenService service; 
     protected CalendarRPC form;
     protected TextBox<Datetime> time;
@@ -89,7 +89,7 @@ import com.google.gwt.user.client.ui.Widget;
     		((Label)def.getWidget("MonthDisplay")).setText(form.monthDisplay);
     		boolean displayMonth = false; 
     		Date currDate = new Date();
-    		if(form.date.get(Datetime.MONTH) == currDate.getMonth() && form.date.get(Datetime.YEAR) == currDate.getYear())
+    		if(form.month == currDate.getMonth() && (form.year -1900) == currDate.getYear())
     			displayMonth = true;
     		for(int i = 0; i < 6; i++) {
     			for(int j = 0; j < 7; j++) {
@@ -107,6 +107,8 @@ import com.google.gwt.user.client.ui.Widget;
     					((IconContainer)date.getParent()).enable(true);
     					if(displayMonth && form.cells[i][j] == form.date.get(Datetime.DAY))
         					date.addStyleName("Current");
+    					else
+    						date.removeStyleName("Current");
     				}
     				date.setText(String.valueOf(form.cells[i][j]));
     				if(prevMonth == null)
@@ -163,26 +165,25 @@ import com.google.gwt.user.client.ui.Widget;
         		cancel.enable(true);
         	}
         	if(months == null) {
-        		months = new ArrayList<Label>();
+        		months = new ArrayList<AppButton>();
         		for(int i = 0; i < 12; i++) {
-        			months.add((Label)def.getWidget("month"+i+"Text")); 
-        			months.get(i).addClickHandler(this);
+        			months.add((AppButton)def.getWidget("month"+i));
+        			((AppButton)def.getWidget("month"+i)).addClickHandler(this);
         		}
         	}
         	if(years == null) {
-        		years = new ArrayList<Label>();
+        		years = new ArrayList<AppButton>();
         		for(int i = 0; i < 10; i++) {
-        			years.add((Label)def.getWidget("year"+i+"Text"));
+        			years.add((AppButton)def.getWidget("year"+i));
         			years.get(i).addClickHandler(this);
         			
         		}
         	}
         	int yr = form.year/10*10;
         	for(int i = 0; i < 10; i++) {
-        		Label year = years.get(i);
+        		Label year = (Label)def.getWidget("year"+i+"Text");
         		year.setText(String.valueOf(yr+i));
-        		if(form.year+1900 == yr){
-        			year.addStyleName("current");
+        		if(form.year == yr+i){
         			((Widget)def.getWidget("year"+i)).addStyleName("Current");
         		}
         	}
@@ -254,7 +255,7 @@ import com.google.gwt.user.client.ui.Widget;
             years.get(form.year%10).removeStyleName("Current");
             form.year = form.year/10*10 -10;
             for(int i = 0; i < 10; i++) 
-                years.get(i).setText(String.valueOf(form.year+i));
+                ((Label)def.getWidget("year"+i+"Text")).setText(String.valueOf(form.year+i));
             years.get(0).addStyleName("Current");
             return;
         }
@@ -262,40 +263,16 @@ import com.google.gwt.user.client.ui.Widget;
             years.get(form.year%10).removeStyleName("Current");
             form.year = form.year/10*10 +10;
             for(int i = 0; i < 10; i++) 
-                years.get(i).setText(String.valueOf(form.year+i));
+                ((Label)def.getWidget("year"+i+"Text")).setText(String.valueOf(form.year+i));
             years.get(0).addStyleName("Current");
             return;
         }
-        if(event.getSource() instanceof Label && months != null && months.contains(event.getSource()) ){
-            String value = ((Label)event.getSource()).getText();
+        if(event.getSource() instanceof AppButton && months != null && months.contains(event.getSource()) ){
             for(int i = 0; i < 11; i++) {
             	months.get(i).removeStyleName("Current");
             }
-            if(value.equals("Jan"))
-            	form.month = 0;
-            else if (value.equals("Feb"))
-            	form.month = 1;
-            else if (value.equals("Mar"))
-            	form.month = 2;
-            else if (value.equals("Apr"))
-            	form.month = 3;
-            else if (value.equals("May"))
-            	form.month = 4;
-            else if (value.equals("Jun"))
-            	form.month = 5;
-            else if (value.equals("Jul"))
-            	form.month = 6;
-            else if (value.equals("Aug"))
-            	form.month = 7;
-            else if (value.equals("Sep"))
-            	form.month = 8;
-            else if (value.equals("Oct"))
-            	form.month = 9;
-            else if (value.equals("Nov"))
-            	form.month = 10;
-            else if (value.equals("Dec"))
-            	form.month = 12;
-            ((Label)event.getSource()).addStyleName("Current");
+            form.month = months.indexOf(event.getSource());
+            ((AppButton)event.getSource()).addStyleName("Current");
             return;
         }
         if(event.getSource() == today) {
@@ -307,11 +284,10 @@ import com.google.gwt.user.client.ui.Widget;
         		return;
         	}
         }
-        if(event.getSource() instanceof Label && years != null && years.contains(event.getSource()) ) {
-            String value = ((Label)event.getSource()).getText();
+        if(event.getSource() instanceof AppButton && years != null && years.contains(event.getSource()) ) {
             years.get(form.year%10).removeStyleName("Current");
-            form.year = Integer.parseInt(value);
-            ((Label)event.getSource()).addStyleName("Current");
+            form.year = (form.year/10*10) + years.indexOf(event.getSource());
+            ((AppButton)event.getSource()).addStyleName("Current");
             return;
         }
         if(((Label)event.getSource()).getStyleName().indexOf("offMonth") < 0){

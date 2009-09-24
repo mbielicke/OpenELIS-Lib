@@ -51,7 +51,7 @@ public class Datetime implements java.io.Serializable, Comparable<Datetime> {
     }
     
     public Datetime(byte startCode, byte endCode, Date date) {
-    	setDate(startCode,endCode,date);
+    	setDate(startCode,endCode,(Date)date.clone());
     }
 
     private void setDate(byte startCode, byte endCode, Date date) {
@@ -74,7 +74,7 @@ public class Datetime implements java.io.Serializable, Comparable<Datetime> {
     public static Datetime getInstance(byte startCode, byte endCode, Date date) {
     	if(date == null)
     		return null;
-        return new Datetime(startCode, endCode, date);
+        return new Datetime(startCode, endCode, (Date)date.clone());
     }
 
     /**
