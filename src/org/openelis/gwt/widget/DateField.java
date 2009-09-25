@@ -249,8 +249,16 @@ public class DateField extends Field<Datetime> {
             return;
         }
    	   try {
-   		   val = val.replaceAll("-", "/");
-   		   date = new Date(val);
+   		   if(begin > 2){
+   			 String[] time = val.split(":");
+   			 if(time.length == 3)
+   				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+   			 else
+   				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
+   		   }else{
+   			   val = val.replaceAll("-", "/");
+   			   date = new Date(val);
+   		   }
    	   }catch(Exception e) {
    		   valid = false;
   		   addError("Invalid Date format entered");
