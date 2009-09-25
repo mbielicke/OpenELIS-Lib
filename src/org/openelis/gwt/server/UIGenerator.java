@@ -1599,6 +1599,7 @@ public class UIGenerator extends Generator {
 					.getNodeValue().toUpperCase();
 					sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
 	        	}
+				sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				setDefaults(node,"wid"+id);
     		}

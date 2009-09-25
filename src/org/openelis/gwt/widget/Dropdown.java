@@ -28,6 +28,7 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.deprecated.IconContainer;
@@ -285,6 +286,12 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	}
 	
 	public void onFocus(FocusEvent event) {
+		if(event.getSource() instanceof ScreenPanel){
+			if(((ScreenPanel)event.getSource()).focused != this){
+				textbox.removeStyleName("Focus");
+				return;
+			}
+		}
 		if(isEnabled())
 			textbox.addStyleName("Focus");
 	}
