@@ -420,7 +420,10 @@ background:white;
 color:gray;
 }
 
-.AddTabButtonImage, .DictionaryButtonImage, .AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupRowButtonImage, .ungroupRowButtonImage, AddColumnButtonImage, RemoveColumnButtonImage{
+.AddTabButtonImage, .DictionaryButtonImage,
+.AddRowButtonImage, .RemoveRowButtonImage,
+.StandardNoteButtonImage, .groupRowButtonImage,
+.ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage{
     width:20px;
     height:20px;
 }
@@ -430,7 +433,6 @@ color:gray;
 .disabled .AddtabButtonImage{
     background:url("../Images/addtabbuttonimagedisabled.gif") no-repeat;
 }
-
 .DictionaryButtonImage{
     background:url("../Images/dictionarybuttonimage.gif") no-repeat;
 }
