@@ -162,6 +162,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public boolean addIcon;
     public boolean deleteIcon;
     public boolean mouseOver;
+    public boolean fireEvents = true;
     
     public boolean autoAdd;
     
@@ -202,10 +203,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     			if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
     				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue())){
     					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
-    					CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.UNCHECKED);
+    					if(fireEvents)
+    						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.UNCHECKED);
     				}else{
     					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
-    					CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.CHECKED);
+    					if(fireEvents)
+    						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.CHECKED);
     				}
     			}
     		}
@@ -271,7 +274,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
-    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0) {
+    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
     		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
     		if(event.isCanceled())
     			return;
@@ -291,13 +294,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         }
         if(activeRow != row){
             if(activeRow > -1 && !ctrlKey){
-            	UnselectionEvent.fire(this,data.get(selected));
+            	if(fireEvents)
+            		UnselectionEvent.fire(this,data.get(selected));
                 unselect(-1);
                 
             }
             activeRow = row;
             selectRow(modelIndexList[row]);
-            SelectionEvent.fire(this, renderer.rows.get(row));
+            if(fireEvents)
+            	SelectionEvent.fire(this, renderer.rows.get(row));
         }
         if(canEditCell(row,col)){
             activeCell = col;
@@ -320,15 +325,20 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public boolean finishEditing() {
         if(editingCell != null) {
-        	if(renderer.stopEditing())
+        	if(renderer.stopEditing() && fireEvents)
         		CellEditedEvent.fire(this, activeRow, activeCell, getRow(activeRow).cells.get(activeCell).value);
             if(isAutoAdd() && modelIndexList[activeRow] == numRows()){
-            	BeforeAutoAddEvent event = BeforeAutoAddEvent.fire(this, getAutoAddRow());
-                if(event != null && !event.isCancelled()){
-                    addRow(getAutoAddRow());
-                    //tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
-                    return true;
-                }
+            	if(fireEvents){
+            		BeforeAutoAddEvent event = BeforeAutoAddEvent.fire(this, getAutoAddRow());
+                	if(event != null && !event.isCancelled()){
+                		addRow(getAutoAddRow());
+                		//tableWidgetListeners.fireFinishedEditing(this, modelIndexList[activeRow], activeCell);
+                		return true;
+                	}
+            	}else{
+            		addRow(getAutoAddRow());
+            		return true;
+            	}
             }
             activeCell = -1;
             sinkEvents(Event.KEYEVENTS);
@@ -369,39 +379,49 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public void addRow(TableDataRow row) {
     	finishEditing();
-    	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
-    	if(event != null && event.isCancelled())
-    		return;
+    	if(fireEvents){
+    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
+    		if(event != null && event.isCancelled())
+    			return;
+    	}
         data.add(row);
         if(row.shown)
             shownRows++;
-        RowAddedEvent.fire(this, data.size()-1, row);
+        if(fireEvents)
+        	RowAddedEvent.fire(this, data.size()-1, row);
        	renderer.dataChanged(true);
     }
     
     public void addRow(int index, TableDataRow row) {
     	finishEditing();
-    	BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, row);
-    	if(event != null && event.isCancelled())
-    		return;
+    	if(fireEvents){
+    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, row);
+    		if(event != null && event.isCancelled())
+    			return;
+    	}
         data.add(index, row);
         if(row.shown)
             shownRows++;
-        RowAddedEvent.fire(this, index, row);
+        if(fireEvents)
+        	RowAddedEvent.fire(this, index, row);
        	renderer.dataChanged(true);
     }
 
     public void deleteRow(int row) {
     	finishEditing();
-    	BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
-    	if(event != null && event.isCancelled())
-    		return;
+    	if(fireEvents){
+    		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
+    		if(event != null && event.isCancelled())
+    			return;
+    	}
         if(data.get(row).shown)
             shownRows--;
         if(row < data.size()){
-        	UnselectionEvent.fire(this, data.get(row));
+        	if(fireEvents)
+        		UnselectionEvent.fire(this, data.get(row));
             TableDataRow tmp = data.remove(row);
-            RowDeletedEvent.fire(this, row, tmp);
+            if(fireEvents)
+            	RowDeletedEvent.fire(this, row, tmp);
         }
         renderer.dataChanged(true);
         
@@ -681,6 +701,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	public void setQueryMode(boolean query) {
 		if(query == queryMode)
 			return;
+		if(query)
+			fireEvents = false;
+		else
+			fireEvents = true;
 		queryMode = query;
 		for(TableColumn col : columns) {
 			((HasField)col.getColumnWidget()).setQueryMode(query);
@@ -734,7 +758,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		}
 		if(errors != null)
 			refresh();
-		else
+		else if(fireEvents)
 			TableValueChangeEvent.fire(this, data);
 	}
 	
@@ -786,7 +810,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	protected boolean canEditCell(int row, int col) {
-        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0 && fireEvents) {
         	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(modelIndexList[row]).cells.get(col).value);
         	if(bce.isCancelled()){
         		return false;
@@ -867,6 +891,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		if(!DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
 			finishEditing();
 		}
+	}
+	
+	public void fireEvents(boolean fire) {
+		fireEvents = fire;
 	}
 	
 }

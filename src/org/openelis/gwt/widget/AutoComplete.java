@@ -59,6 +59,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     public AutoCompleteListener listener = new AutoCompleteListener(this);
     public boolean queryMode;
     public Field<T> field;
+    public boolean enabled;
     
     public AutoComplete() {
     
@@ -84,8 +85,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         textbox.setReadOnly(!enabled);
         
         this.isDropdown = true;
-        addHandler(keyboardHandler,KeyDownEvent.getType());
-        addHandler(keyboardHandler,KeyUpEvent.getType());
+        addDomHandler(keyboardHandler,KeyDownEvent.getType());
+        addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
     
     public void addTabHandler(TabHandler handler) {
@@ -95,11 +96,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     public void enable(boolean enabled) {
         this.enabled = enabled;
         textbox.setReadOnly(!enabled);
-        if(enabled){
-        	sinkEvents(Event.KEYEVENTS);
-        }else
-        	unsinkEvents(Event.KEYEVENTS);
-        super.enable(enabled);
+        //super.enable(enabled);
     }
     
     public boolean isEnabled() {
@@ -218,11 +215,10 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     }
 
 	public void setQueryMode(boolean query) {
+		if(query == queryMode)
+			return;
+		queryMode = query;
 		field.setQueryMode(query);	
-		if(query)
-			textbox.unsinkEvents(Event.ONKEYUP);
-		else
-			textbox.sinkEvents(Event.ONKEYUP);
 			
 	}
 	
