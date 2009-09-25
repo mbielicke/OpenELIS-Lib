@@ -112,7 +112,7 @@ public class TableColumn {
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				label.setText((((CalendarLookUp) colWidget).getField().format()));
-    			}else if(colWidget instanceof AutoComplete) {
+    			}else if(colWidget instanceof AutoComplete && ((AutoComplete)colWidget).queryMode) {
     				label.setText((String)val);
     			}else if(colWidget instanceof DropdownWidget) {
     				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
