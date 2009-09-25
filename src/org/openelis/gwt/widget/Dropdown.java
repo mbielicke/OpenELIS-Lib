@@ -296,11 +296,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		int index = width.indexOf("px");
 		int wid = 0;
 		if(index > 0)
-			wid = Integer.parseInt(width.substring(0,index)) - 15;
+			wid = Integer.parseInt(width.substring(0,index)) - 16;
 		else
-			wid = Integer.parseInt(width) - 15;
-		if(wid+15 > minWidth)
-			dropwidth = (wid+15)+"px";
+			wid = Integer.parseInt(width) - 16;
+		if(wid+16 > minWidth)
+			dropwidth = (wid+16)+"px";
 		else
 			dropwidth = minWidth+"px";
 		view.setWidth(dropwidth);

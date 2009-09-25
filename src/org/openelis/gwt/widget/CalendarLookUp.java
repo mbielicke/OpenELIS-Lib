@@ -368,7 +368,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	public void setWidth(String width) {
 		int wid = 0;
 		if(width.indexOf("px") > 0)
-			wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 18;
+			wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 14;
 		else
 			wid = Integer.parseInt(width) - 18;
 		textbox.setWidth(wid+"px");
