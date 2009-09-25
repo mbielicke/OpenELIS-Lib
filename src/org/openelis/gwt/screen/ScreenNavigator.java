@@ -35,12 +35,12 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
 		this.query = query;
 		if(resultsTable != null)
 			resultsTable.setQuery(query);
-		if(query.results.size() == 0)
+		if(query.getResults().size() == 0)
 			return;
 		try {
             if (selectItem) {
                 if (selectLast)
-                    select(query.model.size() - 1);
+                    select(query.getModel().size() - 1);
                 else
                     select(0);
             }else{
@@ -54,15 +54,15 @@ public class ScreenNavigator<T extends Query<? extends RPC>> implements BeforeSe
 	}
 	
     public void select(int selection) throws Exception {
-        if (selection > query.model.size() - 1) {
+        if (selection > query.getModel().size() - 1) {
             selectItem = true;
             setPage(query.page + 1);
         } else if (selection < 0) {
             selectItem = true;
             selectLast = true;
             setPage(query.page - 1);
-        } else if(selection > -1 && selection < query.model.size()) {
-        	getSelection(query.results.get(selection));
+        } else if(selection > -1 && selection < query.getModel().size()) {
+        	getSelection(query.getResults().get(selection));
         	this.selection = selection; 
         	if(resultsTable != null)
         		resultsTable.select(selection);

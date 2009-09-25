@@ -63,7 +63,7 @@ public class ResultsTable extends Composite implements ClickHandler, HasActionHa
     }
     
     public void setQuery(Query query) {
-        table.load(query.model);
+        table.load(query.getModel());
         table.activeCell = -1;
         table.activeRow = -1;
         table.view.setScrollHeight((table.getData().size()*table.cellHeight)+(table.getData().size()*table.cellSpacing)+table.cellSpacing);
