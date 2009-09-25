@@ -377,7 +377,7 @@ background:white;
 }
 
 .ButtonLeftSide{
-    margin:2px 0 0 4px;
+    margin:2px 0 0 2px;
     width:2px;    
     height:21px;
     background:url("../Images/screenbuttonls.gif") no-repeat;
@@ -420,9 +420,16 @@ background:white;
 color:gray;
 }
 
-.AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupRowButtonImage, .ungroupRowButtonImage{
+.DictionaryButtonImage, .AddRowButtonImage, .RemoveRowButtonImage, .StandardNoteButtonImage, .groupRowButtonImage, .ungroupRowButtonImage, AddColumnButtonImage, RemoveColumnButtonImage{
     width:20px;
     height:20px;
+}
+
+.DictionaryButtonImage{
+    background:url("../Images/dictionarybuttonimage.gif") no-repeat;
+}
+.disabled .DictionaryButtonImage{
+    background:url("../Images/dictionarybuttonimagedisabled.gif") no-repeat;
 }
 .groupRowButtonImage{
     background:url("../Images/group.gif") no-repeat;
@@ -442,12 +449,24 @@ color:gray;
 .disabled .RemoveRowButtonImage{
     background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
 }
-
 .AddRowButtonImage{
     background:url("../Images/addrowbuttonimage.gif") no-repeat;
 }
 .disabled .AddRowButtonImage{
     background:url("../Images/addrowbuttonimagedisabled.gif") no-repeat;
+}
+
+.AddColumnButtonImage{
+    background:url("../Images/addcolumnbuttonimage.gif") no-repeat;
+}
+.disabled .AddColumnButtonImage{
+    background:url("../Images/addcolumnbuttonimagedisabled.gif") no-repeat;
+}
+.RemoveColumnButtonImage{
+    background:url("../Images/removecolumnbuttonimage.gif") no-repeat;
+}
+.disabled .RemoveColumnButtonImage{
+    background:url("../Images/removecolumnbuttonimagedisabled.gif") no-repeat;
 }
 
 .StandardNoteButtonImage{
