@@ -183,7 +183,7 @@ public class TableColumn {
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
     			if(((AutoComplete) colWidget).queryMode){
-    				((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
+    				((Label)widget).setText((String)cell.getValue());
     			}else{
     				TableDataRow row = (TableDataRow)cell.getValue();
     				if(row != null)
