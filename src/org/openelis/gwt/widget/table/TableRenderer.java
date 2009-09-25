@@ -227,7 +227,7 @@ public class TableRenderer  {
         	if(controller.editingCell instanceof Focusable)
         		((Focusable)controller.editingCell).setFocus(false);
         	Object newVal = null;
-        	if(controller.editingCell instanceof AutoComplete){
+        	if(controller.editingCell instanceof AutoComplete && !controller.queryMode){
         		newVal = ((AutoComplete)controller.editingCell).getSelection();
         	}else if(controller.queryMode && !(controller.editingCell instanceof Dropdown))
         		newVal = ((HasField)controller.editingCell).getField().queryString;
