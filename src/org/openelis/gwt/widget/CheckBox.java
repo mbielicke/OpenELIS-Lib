@@ -174,6 +174,10 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     
     public void enable(boolean enabled){
        this.enabled = enabled;
+       if(enabled){
+    	   removeStyleName("disabled");
+       }else
+    	   addStyleName("disabled");
     }
     
     public boolean isEnabled(){
