@@ -717,9 +717,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 
 	public void getQuery(ArrayList list, String key) {
-		for(TableColumn col : columns) {
-			((HasField)col.getColumnWidget()).getQuery(list, col.key);
-		}	
+		if(!queryMode){
+			for(TableColumn col : columns) {
+				((HasField)col.getColumnWidget()).getQuery(list, col.key);
+			}
+		}
 	}
 	
 	public ArrayList<String> getErrors() {
