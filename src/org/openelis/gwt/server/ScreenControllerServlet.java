@@ -16,7 +16,7 @@
 package org.openelis.gwt.server;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
+import java.util.ArrayList;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
@@ -106,6 +106,10 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 	@SuppressWarnings("unchecked")
 	public <T extends RPC> T call(String method, Long param) throws Throwable {
 		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+	}
+
+	public ArrayList<RPC> callList(String method, RPC param) throws Throwable {
+		return (ArrayList<RPC>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
 }

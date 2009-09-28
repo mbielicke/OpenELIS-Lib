@@ -15,6 +15,7 @@
  */
 package org.openelis.gwt.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
@@ -198,5 +199,16 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	public Request call(String method, Long param,
 			AsyncCallback<? extends RPC> callback) {
 		return service.call(method,param, callback);
+	}
+
+	public ArrayList<RPC> callList(String method, RPC param) throws Throwable {
+	       Callback<ArrayList<RPC>> callback = new Callback<ArrayList<RPC>>();
+	       service.callList(method, param, callback);
+	       return callback.getResult();
+	}
+
+	public Request callList(String method, RPC param,
+			AsyncCallback<ArrayList<RPC>> callback) {
+		return service.callList(method,param, callback);
 	}
 }
