@@ -109,6 +109,8 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     }
     
     public void lock(){
+        panel.removeStyleName("Hover");
+        
         unsinkEvents(Event.ONCLICK);
         unsinkEvents(Event.ONMOUSEOUT);
         unsinkEvents(Event.ONMOUSEOVER);
