@@ -235,6 +235,7 @@ color:gray;
 .systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon{
     width:16px;
     height:16px;
+   
 }
 .preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
 .EditSettings{background:url('../Images/editsettingsbuttonimage.png') no-repeat center;}
@@ -371,23 +372,23 @@ background:white;
 .disabled .ButtonRightSide{
     background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
 }
-.pressed .ButtonRightSide{
-    background:url("../Images/screenbuttonrspressed.gif") no-repeat;
+.hover .ButtonRightSide{
+    background:url("../Images/screenbuttonrs.gif") no-repeat;
 }
 
 .ButtonLeftSide{
     margin:2px 0 0 2px;
     width:2px;    
     height:21px;
-    background:url("../Images/screenbuttonls.gif") no-repeat;
+    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
     cursor:default;
 }
 .disabled .ButtonLeftSide{
     background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
 }
 
-.pressed .ButtonLeftSide{
-    background:url("../Images/screenbuttonlspressed.gif") no-repeat;
+.hover .ButtonLeftSide{
+    background:url("../Images/screenbuttonls.gif") no-repeat;
 }
 
 .ButtonContent{
@@ -417,12 +418,24 @@ background:white;
     color:gray;
 }
 
-.AddTabButtonImage, .DictionaryButtonImage,
-.AddRowButtonImage, .RemoveRowButtonImage,
+.AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage,
+.AddRowButtonImage, .RemoveRowButtonImage, .ExitButtonImage,
 .StandardNoteButtonImage, .groupRowButtonImage,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage{
     width:20px;
     height:20px;
+}
+.SaveButtonImage{
+    background:url("../Images/savebuttonimage.gif") no-repeat;
+}
+.disabled .SaveButtonImage{
+    background:url("../Images/savebuttonimagedisabled.gif") no-repeat;
+}
+.ExitButtonImage{
+    background:url("../Images/logoutbuttonimage.gif") no-repeat;
+}
+.disabled .ExitButtonImage{
+    background:url("../Images/logoutbuttonimagedisabled.gif") no-repeat;
 }
 .AddTabButtonImage{
     background:url("../Images/addtabbuttonimage.gif") no-repeat;
@@ -637,18 +650,22 @@ border:1px solid #D8D8D8;
     background:none;
 }
 
-/*.disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{*/
-.disabled .ButtonContent .ScreenLabel{
+.disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
     cursor:default;
     color:gray;
     background:none;
 }
+/*.disabled  .ButtonPanelButton .ButtonContent{
+cursor:default;
+    background:none;
+}*/
 
 .ButtonPanelButton .ButtonRightSide{
 width:2px;
      background:none;
 }
-.Hover .ButtonPanelButton .ButtonRightSide, .Pressed .ButtonPanelButton .ButtonRightSide{
+.Hover .ButtonPanelButton .ButtonRightSide,
+.Pressed .ButtonPanelButton .ButtonRightSide{
 background:url("../Images/screenbuttonrs.gif") no-repeat;
 cursor:pointer;
 }
@@ -1730,18 +1747,21 @@ font-weight:bold;
     width:13px;
     background:url("../Images/apply.png") left center no-repeat;
     cursor:pointer;
+    border:1px solid white;
 }
 .Unchecked {
     height:13px;
     width:13px;
     background:url("../Images/unapply.png") left center no-repeat;
     cursor:pointer;
+    border:1px solid white;
 }
 .Unknown {
     height:13px;
     width:13px;
     background:url("../Images/unknow.png") left center no-repeat;
     cursor:pointer;
+    border:1px solid white;
 }
 
 
