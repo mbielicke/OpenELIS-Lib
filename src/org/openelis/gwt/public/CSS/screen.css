@@ -696,7 +696,7 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:none;
     cursor:default;
 }
-.QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .UpdateButtonImage, .DeleteButtonImage, .CommitButtonImage, .AbortButtonImage{
+.QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
@@ -718,11 +718,17 @@ background:none;
 .AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
 .disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
 
+.AddButtonIcon{background:url("../Images/addButtonIcon.png") no-repeat;}
+.disabled .AddButtonIcon{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+
 .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
 .disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
 
 .DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
 .disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
+
+.DeleteButtonIcon{background:url("../Images/deleteButtonIcon.png") no-repeat;}
+.disabled .DeleteButtonIcon{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
 
 .CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
 .disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
@@ -1517,6 +1523,8 @@ background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 //    margin-right:8px;
 }
 .Prompt {
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
    -moz-user-select: none;
 	color:gray;
 	padding:2px 0 2px 2px;
