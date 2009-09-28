@@ -186,8 +186,8 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             ft.setWidget(1, 2, scrollBar);
             ft.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_LEFT);
             ft.getFlexCellFormatter().setVerticalAlignment(1,2,HasAlignment.ALIGN_TOP);
-            if(headers != null)
-                ft.getFlexCellFormatter().addStyleName(0,2, "tableheader");
+            //if(headers != null)
+            //    ft.getFlexCellFormatter().addStyleName(0,2, "tableheader");
         }else{
             if(header != null){
                 ft.setWidget(0,0,headerView);
@@ -196,8 +196,8 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                     ft.setWidget(1,1,scrollBar);
                     ft.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
                     ft.getFlexCellFormatter().setVerticalAlignment(1,1,HasAlignment.ALIGN_TOP);
-                    if(showScroll == VerticalScroll.ALWAYS)
-                        ft.getFlexCellFormatter().addStyleName(0, 1, "tableheader");
+              //      if(showScroll == VerticalScroll.ALWAYS)
+                //        ft.getFlexCellFormatter().addStyleName(0, 1, "tableheader");
                 }
                 ft.getFlexCellFormatter().setVerticalAlignment(1,0,HasAlignment.ALIGN_TOP);
  
