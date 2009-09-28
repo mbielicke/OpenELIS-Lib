@@ -20,12 +20,19 @@ public class QueryBuilderV2 {
 	private String orderByStatement = "";
     private MetaMap meta;
 	
-    
+    /**
+     * This method sets the Meta to be used to compare and validate field keys returned from the 
+     * client for query data.
+     */
     public void setMeta(MetaMap meta){
         this.meta = meta;
     }
     
-    public static String getQuery(QueryFieldUtil field, String fieldName) {
+    /**
+     * Possibly creates a standard SQL statement, but not sure of the purpose of this method
+     * 
+     */
+    private static String getQuery(QueryFieldUtil field, String fieldName) {
         if (field.getParameter() == null || field.getParameter().size() == 0)
             return "";
         
@@ -39,7 +46,13 @@ public class QueryBuilderV2 {
         return sb.toString();
     }
     
-    public static String getQueryNoOperand(QueryFieldUtil field, String fieldName) {
+    /**
+     * Builds entrys into the where clause list using the passed QueryFieldUtil and using the fieldName passed.
+     * @param field
+     * @param fieldName
+     * @return
+     */
+    private static String getQueryNoOperand(QueryFieldUtil field, String fieldName) {
 
     	if (field.getParameter() == null || field.getParameter().size() == 0)
             return "";
@@ -100,14 +113,29 @@ public class QueryBuilderV2 {
     	this.selectStatement = selectStatment;
     }
     
+    /**
+     * Resturns the currently constructed Select statement used in the Query
+     * @return
+     */
     public String getSelectStatement(){
     	return selectStatement;
     }
     
+    /**
+     * Use constructWhere(ArrayList<QueryData> fields);
+     * @param fields
+     * @throws Exception
+     */
+    @Deprecated public void addWhere(ArrayList<QueryData> fields) throws Exception {
+    	constructWhere(fields);
+    }
     
-    public void addWhere(ArrayList<QueryData> fields) throws Exception{
-    	//fieldsFromRPC = fields;
-//    	where clause
+    /**
+     * Constructs a sql "where" clause based on QueryData list returned from the client.
+     * @param fields
+     * @throws Exception
+     */
+    public void constructWhere(ArrayList<QueryData> fields) throws Exception{
     	for (QueryData field : fields){
             boolean columnFound = meta.hasColumn(field.key);
 
@@ -118,10 +146,7 @@ public class QueryBuilderV2 {
             qField.parse(field.query);
             String whereClause = getQueryNoOperand(qField, field.key);
             if(!"".equals(whereClause)){
-                whereOperands.add(whereClause);
-		
-				//add the table name to the from hash map
-			//	addTable(meta);
+                whereOperands.add(whereClause);		
             }
         }
     }
@@ -134,11 +159,20 @@ public class QueryBuilderV2 {
     	whereOperands.add(whereStatement);
     }
     
+    /**
+     * Clears the current where clause list.
+     */
     public void clearWhereClause(){
         whereOperands.clear();
     }
     
-    public void setQueryParams(Query query, ArrayList<QueryData> fields){
+    /**
+     * Sets the query values in the Query object passed into the method using the list of QueryData also passed into the 
+     * method 
+     * @param query
+     * @param fields
+     */
+    public static void setQueryParams(Query query, ArrayList<QueryData> fields){
         for (QueryData field : fields) {//int i = 0; i < keys.length; i++) {
         	QueryFieldUtil qField = new QueryFieldUtil();
         	qField.parse(field.query);
@@ -196,10 +230,18 @@ public class QueryBuilderV2 {
     	return query.toString();
     }
     
+    /**
+     * Adds the passes "order by" sql fragment to the current Query
+     * @param orderBy
+     */
     public void setOrderBy(String orderBy){
     	this.orderByStatement = orderBy;
     }
     
+    /**
+     * returns the current order by clause set in the Query.
+     * @return
+     */
     public String getOrderBy(){
         if(!"".equals(orderByStatement))
             return " ORDER BY "+orderByStatement;
@@ -207,6 +249,10 @@ public class QueryBuilderV2 {
             return "";
     }
     
+    /**
+     * Returns the sql "where" section that is set for the current query.
+     * @return
+     */
     public String getWhereClause(){
         String returnString = "";
         if(whereOperands.size() > 0){
@@ -220,10 +266,19 @@ public class QueryBuilderV2 {
         return returnString;
     }
     
+    /**
+     * returns the sql "from" portion that is set for the current query.
+     * @param where
+     * @return
+     */
     public String getFromClause(String where){
         return meta.buildFrom(where);
     }
     
+    /**
+     * returns the sql "select" portion of the currently set Query
+     * @return
+     */
     public String getSelectClause(){
         return "SELECT "+selectStatement+" FROM ";
     }
@@ -233,11 +288,18 @@ public class QueryBuilderV2 {
      * @param tableName
      * @return
      */
-    public boolean hasTable(String tableName){
+    private boolean hasTable(String tableName){
     	return fromTables.containsKey(tableName);
     }
     
-    public static void setStringParameters(QueryFieldUtil field,
+    /**
+     * Pulls string parameters out of the passed QueryFieldUtil and sets them to the correct params in the
+     * query.
+     * @param field
+     * @param fieldName
+     * @param query
+     */
+    private static void setStringParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	if(field.getParameter() == null)
@@ -265,8 +327,14 @@ public class QueryBuilderV2 {
     }
 
 
-
-    public static void setIntegerParameters(QueryFieldUtil field,
+    /**
+     * Pulls Integer parameters out of the passed QueryFieldUtil and sets them to the correct params in the
+     * query.
+     * @param field
+     * @param fieldName
+     * @param query
+     */
+    private static void setIntegerParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	if(field.getParameter() == null)
@@ -301,8 +369,12 @@ public class QueryBuilderV2 {
     		i++;
     	}
     }
-
-    public static void setDoubleParameters(QueryFieldUtil field,
+   
+    /**
+    * Pulls double parameters out of the passed QueryFieldUtil and sets them to the correct params in the
+    * query.
+    */
+    private static void setDoubleParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	if(field.getParameter() == null)
@@ -335,7 +407,11 @@ public class QueryBuilderV2 {
     		i++;
     	}
     }
-    
+    /**
+     * 
+     * @param name
+     * @return
+     */
     private static String getParamName(String name){
         while(name.indexOf(".") > -1){
             name = name.substring(0,name.indexOf(".")) + name.substring(name.indexOf(".")+1,name.length());
@@ -343,7 +419,14 @@ public class QueryBuilderV2 {
         return name;
     }
 
-    public static void setDateParameters(QueryFieldUtil field,
+    /**
+     * Pulls Date parameters out of the passed QueryFieldUtil and sets them to the correct params in the
+     * query.
+     * @param field
+     * @param fieldName
+     * @param query
+     */
+    private static void setDateParameters(QueryFieldUtil field,
     		String fieldName,
     		Query query) {
     	String paramName = getParamName(fieldName);
