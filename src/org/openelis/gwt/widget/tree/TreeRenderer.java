@@ -236,7 +236,8 @@ public class TreeRenderer {
     }
 
     public void rowSelected(int row) {
-    	rows.get(row).addStyleName(controller.view.selectedStyle);
+    	if(row > -1 && row < rows.size())
+    		rows.get(row).addStyleName(controller.view.selectedStyle);
     }
 
     public ArrayList<TreeRow> getRows() {
