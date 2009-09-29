@@ -45,6 +45,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import org.openelis.gwt.screen.Screen;
@@ -66,7 +67,7 @@ import java.util.HashMap;
 public class WindowBrowser extends Composite implements HasKeyPressHandlers, KeyPressHandler, DragHandler {
     
     public AbsolutePanel browser = new AbsolutePanel();
-    public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
+    public HashMap<String,Object> windows = new HashMap<String,Object>();
     public int index;
     public int limit ;
     public PickupDragController dragController = new PickupDragController(browser,true);
@@ -75,10 +76,13 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     	public void onDrop(DragContext context) {
     		// TODO Auto-generated method stub
     		super.onDrop(context);
-    	    ((ScreenWindow)context.draggable).positionGlass();
+    		if(context.draggable instanceof ScreenWindow)
+    			((ScreenWindow)context.draggable).positionGlass();
+    		else
+    			((org.openelis.gwt.widget.ScreenWindow)context.draggable).positionGlass();
     	}
     };
-    public ScreenWindow focusedWindow;
+    public FocusPanel focusedWindow;
     
     public static native void setIndex(Element elem, int index) /*-{
         elem.style.zIndex = index;
@@ -202,7 +206,7 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
         }
         RootPanel.get().addStyleName("ScreenLoad");
         index++;
-        ScreenWindow window = new ScreenWindow(this, key);
+        org.openelis.gwt.widget.ScreenWindow window = new org.openelis.gwt.widget.ScreenWindow(this, key);
         window.setContent(screen);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(key,window);
@@ -211,19 +215,35 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     
     public boolean selectScreen(String text) {
         if (windows.containsKey(text)) {
-            if(index != windows.get(text).zIndex){
-                ScreenWindow wid = windows.get(text);
-                index++;
-                //setIndex(((Widget)windows.get(text)).getElement(),index);
-                windows.get(text).zIndex = index;
-                int top = browser.getWidgetTop(wid);
-                int left = browser.getWidgetLeft(wid);
-                wid.setKeep(true);
-                browser.add(wid, left, top);
-                wid.setKeep(false);
-                setFocusedWindow();
-            }
-            return true;
+        	if(windows.get(text) instanceof ScreenWindow) {
+        		ScreenWindow wid = (ScreenWindow)windows.get(text); 
+        		if(index != wid.zIndex){
+        			index++;
+                //	setIndex(((Widget)windows.get(text)).getElement(),index);
+        			wid.zIndex = index;
+        			int top = browser.getWidgetTop(wid);
+        			int left = browser.getWidgetLeft(wid);
+        			wid.setKeep(true);
+        			browser.add(wid, left, top);
+        			wid.setKeep(false);
+        			setFocusedWindow();
+        		}
+        		return true;
+        	}else{
+        		org.openelis.gwt.widget.ScreenWindow wid = (org.openelis.gwt.widget.ScreenWindow)windows.get(text);
+        		if(index != wid.zIndex){
+        			index++;
+                //	setIndex(((Widget)windows.get(text)).getElement(),index);
+        			wid.zIndex = index;
+        			int top = browser.getWidgetTop(wid);
+        			int left = browser.getWidgetLeft(wid);
+//        			wid.setKeep(true);
+        			browser.add(wid, left, top);
+//        			wid.setKeep(false);
+        			setFocusedWindow();
+        		}
+        		return true;
+        	}
         }
         return false;
     }
@@ -236,14 +256,26 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     }
     
     public void setFocusedWindow() {
-        for(ScreenWindow wind : windows.values()) {
-            if(wind.zIndex != index){
-                if(wind.getStyleName().indexOf("unfocused") < 0)
-                    wind.addStyleName("unfocused");
-            }else{
-                wind.removeStyleName("unfocused");
-                focusedWindow = wind;
-            }
+        for(Object wind : windows.values()) {
+        	if(wind instanceof ScreenWindow){
+        		ScreenWindow wid = (ScreenWindow)wind;
+        		if(wid.zIndex != index){
+        			if(wid.getStyleName().indexOf("unfocused") < 0)
+        				wid.addStyleName("unfocused");
+        		}else{
+        			wid.removeStyleName("unfocused");
+        			focusedWindow = wid;
+        		}
+        	}else{
+        		org.openelis.gwt.widget.ScreenWindow wid = (org.openelis.gwt.widget.ScreenWindow)wind;
+        		if(wid.zIndex != index){
+        			if(wid.getStyleName().indexOf("unfocused") < 0)
+        				wid.addStyleName("unfocused");
+        		}else{
+        			wid.removeStyleName("unfocused");
+        			focusedWindow = wid;
+        		}
+        	}
         }
     }
 

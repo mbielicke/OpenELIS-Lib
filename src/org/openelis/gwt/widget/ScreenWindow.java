@@ -23,13 +23,15 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.screen.deprecated;
+package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -62,6 +64,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
@@ -81,7 +84,7 @@ import org.openelis.gwt.widget.deprecated.MenuLabel;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends FocusPanel implements MouseListener, ClickListener, EventPreview, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler {
+public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, EventPreview {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -173,21 +176,21 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
     private AbsolutePositionDropController dropController;
     private HorizontalPanel titleButtonsContainer;
     
-    public ScreenWindow(Object container, String key, String cat, String loadingText){
-        this(container,key,cat,loadingText,false,true);
+    public ScreenWindow(String key, String cat, String loadingText){
+        init(key,cat,loadingText,false,true);
     }
     
-    public ScreenWindow(Object container, String key, String cat, String loadingText, boolean modal){
-        this(container,key,cat,loadingText,modal,true);
+    public ScreenWindow(String key, String cat, String loadingText, boolean modal){
+        init(key,cat,loadingText,modal,true);
     }
     
-    public ScreenWindow(Object container, String key, String cat, String loadingText, boolean modal, boolean showClose) {      
+    public ScreenWindow(String key, String cat, String loadingText, boolean modal, boolean showClose) {
+    	init(key,cat,loadingText,modal,showClose);
+    }
+    
+    public void init(String key, String cat, String loadingText, boolean modal, boolean showClose) {      
         setWidget(outer);
         setVisible(false);
-        if(container instanceof PopupPanel)
-            this.popupPanel = (PopupPanel)container;
-        else
-            this.browser = (WindowBrowser) container;
         
         this.key = key;
         if(browser != null)
@@ -217,9 +220,9 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         winLabel.setStyleName("ScreenWindowLabel");
         cap.add(winLabel);
         cap.setWidth("100%");
-        close.addClickListener(this);
+        close.addClickHandler(this);
         close.setStyleName("CloseButton");
-        collapse.addClickListener(this);
+        collapse.addClickHandler(this);
         collapse.setStyleName("MinimizeButton");
         hp.add(tlCorner);
         titleButtonsContainer.add(cap);
@@ -273,19 +276,20 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         outer.setWidth("auto");
         if(browser != null){
             browser.dragController.makeDraggable(this, cap);
+            return;
         }
         if(modal){
             modalGlass = new AbsolutePanel();
             modalGlass.setStyleName("GlassPanel");
             modalGlass.setHeight(Window.getClientHeight()+"px");
             modalGlass.setWidth(Window.getClientWidth()+"px");
-            RootPanel.get().add(modalGlass, 0, 0);
+            RootPanel.get("main").add(modalGlass, 0, 0);
             modalPanel = new AbsolutePanel();
             modalPanel.setStyleName("ModalPanel");
             modalPanel.setHeight(Window.getClientHeight()+"px");
             modalPanel.setWidth(Window.getClientWidth()+"px");
             modalPanel.add(this,100,100);
-            RootPanel.get().add(modalPanel,0,0); 
+            RootPanel.get("main").add(modalPanel,0,0); 
             setVisible(true);
             dragController = new PickupDragController(modalPanel,true);
             dropController = new AbsolutePositionDropController(modalPanel);
@@ -293,17 +297,27 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
             dragController.registerDropController(dropController);
             dragController.makeDraggable(this,cap);
           //  DOM.addEventPreview(this);
+        }else{
+        	RootPanel.get("main").add(this,100,100);
+        	setVisible(true);
+        	dragController = new PickupDragController(RootPanel.get(),true);
+        	dropController = new AbsolutePositionDropController(RootPanel.get());
+        	dragController.registerDropController(dropController);
+        	dragController.makeDraggable(this,cap);
         }
     }
     
     public ScreenWindow(WindowBrowser brws, String key){
-        this(brws,key,"ScreenWindow","Loading...",false);
+    	this.browser = brws;
+    	init(key,"ScreenWindow","Loading...",false,true);
+    	
     }
     
     public void setContent(Widget content, int x, int y) {
         if(modalGlass != null){
             modalPanel.setWidgetPosition(this, x, y);
-        }
+        }else
+        	RootPanel.get().setWidgetPosition(this, x, y);
         setContent(content);
     }
     
@@ -315,11 +329,8 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
     public void setContent(final Widget content){
         this.content = content;
         body.insert(content, 0);
-        if(content instanceof AppScreen){
-            ((AppScreen)content).window = this;
-        }
         if(content instanceof Screen) {
-        	//((Screen)content).setWindow(this);
+        	((Screen)content).setWindow(this);
         	setName(((Screen)content).getDefinition().getName());
         	setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
@@ -345,31 +356,25 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         if(browser != null && browser.index != zIndex){
            browser.index++;
            zIndex = browser.index;
-           setKeep(true);
            int top = browser.browser.getWidgetTop(this);
            int left = browser.browser.getWidgetLeft(this);
            browser.browser.add((Widget)this,left,top);
-           setKeep(false);
-           if(content instanceof AppScreen){
-               DOM.removeEventPreview((AppScreen)content);
-               DOM.addEventPreview((AppScreen)content);
-           }
            browser.setFocusedWindow();
         }
     }
     
-    public void onClick(Widget sender) {
-        if(sender == fp){
+    public void onClick(ClickEvent event) {
+        if(event.getSource() == fp){
             if(browser != null && browser.index != zIndex){
                 browser.index++;
 
                zIndex = browser.index;
             }
         }
-        if(sender == close){
+        if(event.getSource() == close){
             close();
         }
-        if(sender == collapse){
+        if(event.getSource() == collapse){
             if(middleGrid.isVisible())
                 outer.setWidth(outer.getOffsetWidth()+"px");
             else
@@ -381,11 +386,6 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
     }
     
     public void close() {        
-        if(content instanceof AppScreenForm){
-            if(((AppScreenForm)content).hasChanges()){
-                return;
-            }
-        }
         if(modalGlass != null) {
             DOM.removeEventPreview(this);
             removeFromParent();
@@ -401,8 +401,6 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         if(popupPanel != null){
             popupPanel.hide();
         }
-        if(content instanceof ScreenBase)
-            ((ScreenBase)content).destroy();
         destroy();
         if(browser != null){
             browser.index--;
@@ -410,63 +408,6 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         }
     }
 
-    public void onMouseDown(Widget sender, final int x, final int y) {
-        if(sender == cap){
-            if(browser != null) {
-                if(browser.index != zIndex){
-                    checkZ();
-                    return;
-                }
-            }
-        }
-    }
-
-    public void onMouseEnter(Widget sender) {
-        if(sender == statusImg){
-            if(messagePanel == null){
-                return;
-            }
-            if(pop == null){
-                pop = new PopupPanel();
-                //pop.setStyleName("MessagePopup");
-            }
-            
-            DecoratorPanel dp = new DecoratorPanel();
-            dp.setStyleName("ErrorWindow");
-            dp.add(messagePanel);
-            dp.setVisible(true);
-            
-            pop.setWidget(dp);
-            //pop.setPopupPosition(sender.getAbsoluteLeft()+16, sender.getAbsoluteTop());
-            final int left = sender.getAbsoluteLeft()+16;
-            final int top = sender.getAbsoluteTop();
-            pop.setPopupPositionAndShow(new PopupPanel.PositionCallback(){
-
-                public void setPosition(int offsetWidth, int offsetHeight) {
-                    pop.setPopupPosition(left, top-offsetHeight);
-                    pop.show();
-                }
-               
-            });
-            pop.show();
-        }
-    }
-
-    public void onMouseLeave(Widget sender) {
-       if(sender == statusImg){
-           if(pop != null){
-               pop.hide();
-           }
-       }
-    }
-
-    public void onMouseMove(Widget sender, int x, int y) {
-        
-    }
-
-    public void onMouseUp(Widget sender, int x, int y) {
-        
-    }
     
     public void destroy() {
         cap = null;
@@ -479,26 +420,23 @@ public class ScreenWindow extends FocusPanel implements MouseListener, ClickList
         message = null;
 
     }
-    
-    public void setKeep(boolean keep){
-        ((ScreenBase)content).keep = keep;
-    }
-    
+        
     public void setMessagePopup(ArrayList<String> messages, String style) {
         statusImg.setStyleName(style);
-        statusImg.removeMouseListener(this);
-        statusImg.addMouseListener(this);
+        statusImg.sinkEvents(Event.MOUSEEVENTS);
         messagePanel = new VerticalPanel();
         for(int i = 0; i < messages.size(); i++){
-            MenuLabel errorLabel = new MenuLabel(messages.get(i),"Images/bullet_red.png");
-            errorLabel.setStyleName("errorPopupLabel");
-            messagePanel.add(errorLabel);
+        	HorizontalPanel hp = new HorizontalPanel();
+        	hp.add(new Image("Images/bullet_red.png"));
+        	hp.add(new Label(messages.get(i)));
+            hp.setStyleName("errorPopupLabel");
+            messagePanel.add(hp);
         }
     }
     
     public void clearMessagePopup(String style) {
         statusImg.setStyleName(style);
-        statusImg.removeMouseListener(this);
+        statusImg.unsinkEvents(Event.MOUSEEVENTS);
     }
     
     public void setStatus(String text, String style){
