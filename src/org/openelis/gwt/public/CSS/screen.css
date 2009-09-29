@@ -734,7 +734,7 @@ background:none;
 .disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
 
 .DeleteButtonIcon{background:url("../Images/deleteButtonIcon.png") no-repeat;}
-.disabled .DeleteButtonIcon{background:url("../Images/deleteButtonIconndisabled.png") no-repeat;}
+.disabled .DeleteButtonIcon{background:url("../Images/deleteButtonIcondisabled.png") no-repeat;}
 
 .CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
 .disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
