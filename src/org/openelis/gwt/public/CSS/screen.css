@@ -431,6 +431,12 @@ background:white;
 .disabled .SaveButtonImage{
     background:url("../Images/savebuttonimagedisabled.gif") no-repeat;
 }
+.SelectAllButtonImage{
+    background:url("../Images/selectallbuttonimage.gif") no-repeat;
+}
+.disabled .SelecttAllButtonImage{
+    background:url("../Images/selectallbuttonimagedisabled.gif") no-repeat;
+}
 .ExitButtonImage{
     background:url("../Images/logoutbuttonimage.gif") no-repeat;
 }
@@ -719,7 +725,7 @@ background:none;
 .disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
 
 .AddButtonIcon{background:url("../Images/addButtonIcon.png") no-repeat;}
-.disabled .AddButtonIcon{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+.disabled .AddButtonIcon{background:url("../Images/addbuttonicondisabled.png") no-repeat;}
 
 .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
 .disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
@@ -728,7 +734,7 @@ background:none;
 .disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
 
 .DeleteButtonIcon{background:url("../Images/deleteButtonIcon.png") no-repeat;}
-.disabled .DeleteButtonIcon{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
+.disabled .DeleteButtonIcon{background:url("../Images/deletebuttoniocndisabled.png") no-repeat;}
 
 .CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
 .disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
