@@ -229,6 +229,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	}
 	
 	public void getQuery(ArrayList list, String key) {
+		if(!queryMode)
+			return;
 		if(textbox.getText() != null && !textbox.getText().equals("")){
 			QueryData qd = new QueryData();
 			qd.key = key;

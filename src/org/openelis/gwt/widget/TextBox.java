@@ -118,6 +118,8 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(!queryMode)
+			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;

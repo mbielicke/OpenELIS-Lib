@@ -286,6 +286,8 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(!field.queryMode)
+			return;
 		if(field.queryString != null){
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;

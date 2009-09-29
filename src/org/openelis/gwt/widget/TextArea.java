@@ -52,6 +52,8 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(!field.queryMode)
+			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;

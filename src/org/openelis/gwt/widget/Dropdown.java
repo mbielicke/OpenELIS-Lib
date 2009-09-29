@@ -261,6 +261,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	}
 	
 	public void getQuery(ArrayList list, String key) {
+		if(!queryMode)
+			return;
 		ArrayList<TableDataRow> selections = getSelections();
 		if(selections.size() == 1 && selections.get(0).key ==  null)
 			return;

@@ -332,6 +332,8 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(!queryMode)
+			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;

@@ -250,6 +250,8 @@ public class EditBox extends Composite implements ClickHandler,
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
+		if(!field.queryMode)
+			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;
