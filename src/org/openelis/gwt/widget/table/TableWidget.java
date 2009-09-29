@@ -243,7 +243,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             selections.clear();
             selected = -1;
             renderer.rowUnselected(-1);
-        }else if(row < selections.size()){
+        }else {
             selections.remove(new Integer(row));
             if(selected == row)
                 selected = -1;
@@ -408,7 +408,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
     public void deleteRow(int row) {
-    	finishEditing();
+    	unselect(row);
     	if(fireEvents){
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
     		if(event != null && event.isCancelled())

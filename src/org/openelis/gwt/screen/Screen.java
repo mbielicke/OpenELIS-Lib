@@ -14,7 +14,7 @@ import org.openelis.gwt.event.HasDataChangeHandlers;
 import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
-import org.openelis.gwt.screen.deprecated.ScreenWindow;
+import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.table.TableWidget;
