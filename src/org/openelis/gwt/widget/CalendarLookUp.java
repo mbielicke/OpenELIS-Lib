@@ -60,7 +60,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
     private Field<Datetime> field;
     private boolean queryMode;
     private boolean enabled;
-    private TextBox textbox = new TextBox();
+    public TextBox textbox = new TextBox();
     private IconContainer icon = new IconContainer();
     
     private class IconMouseHandler implements MouseDownHandler,
@@ -200,7 +200,10 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
                 textbox.addStyleName("TextboxUnselected");
                 textbox.removeStyleName("TextboxSelected");
                 icon.removeStyleName("Selected");
-                setValue(getValue(),true);
+                if(queryMode){
+                	field.setStringValue(textbox.getText());
+                }else
+                	setValue(getValue(),true);
             }
         }
     }

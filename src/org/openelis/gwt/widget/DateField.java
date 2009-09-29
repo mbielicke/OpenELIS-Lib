@@ -32,6 +32,8 @@ import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * DateField is an implementation of AbstractField that represents data
@@ -104,13 +106,26 @@ public class DateField extends Field<Datetime> {
     	qField.parse(queryString);
     	
         for (String param : qField.parameter) {
-            try {
-                Date date = new Date(param.replaceAll("-", "/"));
-            } catch (Exception e) {
-                addError("Not a Valid Date");
-                valid = false;
-                return;
-            }
+        	  String[] dates = param.split("..");
+        	  for(int i = 0; i < dates.length; i++) {
+               Date date = null;
+        	   try {
+           		   if(begin > 2){
+           			 String[] time = dates[i].split(":");
+           			 if(time.length == 3)
+           				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+           			 else
+           				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
+           		   }else{
+           			   dates[i] = dates[i].replaceAll("-", "/");
+           			   date = new Date(dates[i]);
+           		   }
+           	   }catch(Exception e) {
+           		   valid = false;
+          		   addError("Invalid Date entered");
+          		   return;
+           	   }
+        	 }
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -216,8 +231,6 @@ public class DateField extends Field<Datetime> {
      * Formats the string representation of this fields value using the set pattern
      */
     public String format() {
-    	if(queryMode)
-    		return super.format();
         if(value == null)
             return "";
         if(pattern != null)
@@ -241,7 +254,10 @@ public class DateField extends Field<Datetime> {
      */
     public void setStringValue(String val) {
         valid = true;
-        
+        if(queryMode) {
+        	queryString = val;
+        	validateQuery();
+        }
         Date date = null;
         //if(pattern == null){
         if (val == null || val.equals("")){ 
@@ -276,5 +292,30 @@ public class DateField extends Field<Datetime> {
         if(valid)
         	setValue(Datetime.getInstance(begin, end, date));
     }
+    
+	public void checkValue(Widget wid) {
+		clearError(wid);
+		if(queryMode){
+			if(wid instanceof CalendarLookUp) {
+				queryString = ((CalendarLookUp)wid).textbox.getText();
+			}else if(wid instanceof TextBox) {
+				queryString = ((TextBox)wid).getText();
+			}
+			if(queryString != null && !queryString.equals(""))
+				validateQuery();
+			else
+				queryString = null;
+		}else{
+			Object value = ((HasValue)wid).getValue();
+			if(value == null)
+				value = "";
+			setStringValue(value.toString());
+			
+			validate();
+		}
+		if(!valid){
+			drawError(wid);
+		}
+	}
     
 }
