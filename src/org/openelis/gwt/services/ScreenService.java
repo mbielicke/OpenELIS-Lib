@@ -201,14 +201,14 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 		return service.call(method,param, callback);
 	}
 
-	public ArrayList<RPC>  callList(String method, RPC param) throws Throwable {
-	       Callback<ArrayList<RPC>> callback = new Callback<ArrayList<RPC>>();
+	public <T extends RPC> ArrayList<T>  callList(String method, RPC param) throws Throwable {
+	       Callback<ArrayList<T>> callback = new Callback<ArrayList<T>>();
 	       service.callList(method, param, callback);
 	       return callback.getResult();
 	}
 
-	public Request callList(String method, RPC param,
-			AsyncCallback<ArrayList<RPC>> callback) {
+	public <T extends RPC> Request callList(String method, RPC param,
+			AsyncCallback<ArrayList<T>> callback) {
 		return service.callList(method,param, callback);
 	}
 }
