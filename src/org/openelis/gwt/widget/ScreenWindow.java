@@ -389,8 +389,8 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         if(modalGlass != null) {
             DOM.removeEventPreview(this);
             removeFromParent();
-            RootPanel.get().remove(modalGlass);
-            RootPanel.get().remove(modalPanel);
+            RootPanel.get("main").remove(modalGlass);
+            RootPanel.get("main").remove(modalPanel);
             return;
         }
         removeFromParent();
