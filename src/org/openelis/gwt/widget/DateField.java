@@ -306,11 +306,7 @@ public class DateField extends Field<Datetime> {
 			else
 				queryString = null;
 		}else{
-			Object value = ((HasValue)wid).getValue();
-			if(value == null)
-				value = "";
-			setStringValue(value.toString());
-			
+			value = (Datetime)((HasValue)wid).getValue();			
 			validate();
 		}
 		if(!valid){
