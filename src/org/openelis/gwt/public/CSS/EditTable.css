@@ -44,12 +44,7 @@ padding:0px 0px 4px 4px;
     border-bottom:1px solid #B5B8C8;
 }
 
-tr .TableHighlighted {
-	color: #000000;
-	background: #EFEFEF url('../Images/row-over.gif') repeat-x scroll left
-		top;
-	border: 1px solid #DDDDDD;
-}
+
 
 .dropdowncell {
 	height: 21px;
@@ -97,12 +92,20 @@ tr .TableHighlighted {
 	padding: 1px 1px 0px;
 }
 
-.SubHeader td.TableCell {
+.SubHeader .TableCell {
 	border: 1px solid #B5B8C8;
 	border-right: 1px solid grey;
 	border-width: 1 1 1 0;
 	background: #B5B8C8;
 	color: white;
+}
+
+/*tr .TableHighlighted {*/
+.TableHighlighted .TableCell{
+	color: #000000;
+	background: #EFEFEF url('../Images/row-over.gif') repeat-x scroll left
+		top;
+	/*border: 1px solid #DDDDDD;*/
 }
 
 .RowNum {
