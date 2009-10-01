@@ -200,6 +200,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                 //        ft.getFlexCellFormatter().addStyleName(0, 1, "tableheader");
                 }
                 ft.getFlexCellFormatter().setVerticalAlignment(1,0,HasAlignment.ALIGN_TOP);
+                ft.getFlexCellFormatter().addStyleName(0, 0, "tableheader");
  
             }else{
                 ft.setWidget(0,0,cellView);
@@ -209,7 +210,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                     ft.getFlexCellFormatter().setVerticalAlignment(0,1,HasAlignment.ALIGN_TOP);
                 }
             }
-            ft.getFlexCellFormatter().addStyleName(0, 0, "tableheader");
+           
         }
         vp.add(ft);
         ft.setCellPadding(0);
@@ -249,18 +250,21 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         }
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
-        headerView.setHeight("20px");
+        if(headers != null)
+        	headerView.setHeight("20px");
 
     }
 
     public void setWidth(String width) {
         this.width = width.trim();
         cellView.setWidth(width);
-        titlePanel.setWidth(width);
-        headerView.setWidth(width);
+        if(headers != null)
+        	headerView.setWidth(width);
         rows.setWidth("25px");
-        titleLabel.setWidth(width);
-        titlePanel.setWidth(width);
+        if(controller.title != null && !controller.title.equals("")){
+        	titleLabel.setWidth(width);
+        	titlePanel.setWidth(width);
+        }
     }
 
     public void setCell(Widget widget, int row, int col) {
