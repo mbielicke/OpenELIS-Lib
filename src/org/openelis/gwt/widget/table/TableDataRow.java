@@ -71,6 +71,8 @@ public class TableDataRow {
     		return false;
     	if(key == null && ((TableDataRow)obj).key != null)
     		return false;
+    	else if(key == null)
+    		return true;
     	return key.equals(((TableDataRow)obj).key);
     }
 
