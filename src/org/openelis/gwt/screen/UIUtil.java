@@ -1,14 +1,11 @@
 package org.openelis.gwt.screen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.ButtonGroup;
@@ -22,7 +19,6 @@ import org.openelis.gwt.widget.DoubleField;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.EditBox;
 import org.openelis.gwt.widget.Field;
-import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IntegerField;
 import org.openelis.gwt.widget.LongField;
 import org.openelis.gwt.widget.MenuItem;
@@ -30,7 +26,6 @@ import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.NotesPanel;
 import org.openelis.gwt.widget.PassWordTextBox;
 import org.openelis.gwt.widget.RadioButton;
-import org.openelis.gwt.widget.ResultsTable;
 import org.openelis.gwt.widget.ScrollableTabBar;
 import org.openelis.gwt.widget.SlideOutPanel;
 import org.openelis.gwt.widget.StringField;
@@ -38,6 +33,7 @@ import org.openelis.gwt.widget.TextArea;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.TitledPanel;
 import org.openelis.gwt.widget.WindowBrowser;
+import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.richtext.RichTextWidget;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableWidget;
@@ -46,23 +42,13 @@ import org.openelis.gwt.widget.tree.TreeColumn;
 import org.openelis.gwt.widget.tree.TreeView;
 import org.openelis.gwt.widget.tree.TreeWidget;
 
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -75,7 +61,6 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -911,39 +896,6 @@ public class UIUtil {
                 radio.addBlurHandler(Screen.focusHandler);
                 radio.addFocusHandler(Screen.focusHandler);
                 return radio;
-    		}
-    	});
-    	factoryMap.put("resultsTable", new Factory<ResultsTable>() {
-    		public ResultsTable getNewInstance(Node node, ScreenDef def) {
-    			ResultsTable results = new ResultsTable();
-    	        NodeList children = node.getChildNodes();
-    	        Node buttons = null;
-    	        Node table = null;
-    	        Node query = null;
-    	        for(int i = 0; i < children.getLength(); i++){
-    	            if(children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-    	                if(children.item(i).getNodeName().equals("buttonGroup"))
-    	                    buttons = children.item(i);
-    	                else if(children.item(i).getNodeName().equals("table"))
-    	                    table = children.item(i);
-    	                else if(children.item(i).getNodeName().equals("query"))
-    	                    query = children.item(i);
-    	            }
-    	        }
-    	        if(table != null){
-    	            results.setTable((TableWidget)factoryMap.get("table").getNewInstance(table, null));
-    	        }
-    	        if(node.getAttributes().getNamedItem("showNavPanel") != null) {
-    	            if(node.getAttributes().getNamedItem("showNavPanel").getNodeValue().equals("false")){
-    	                results.showNavPanel = false;
-    	            }
-    	        }
-
-    	        if(buttons != null)
-    	            results.setButtonGroup((ButtonGroup)loadWidget(buttons,def));
-    	        
-    	        setDefaults(node, results);
-    	        return results;
     		}
     	});
     	factoryMap.put("richtext", new Factory<RichTextWidget>() {
