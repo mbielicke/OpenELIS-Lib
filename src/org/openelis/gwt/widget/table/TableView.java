@@ -103,9 +103,9 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     private AbsolutePanel statView = new AbsolutePanel();
     private FlexTable ft = new FlexTable();
     public final HorizontalPanel titlePanel = new HorizontalPanel();
-    private final Label titleLabel = new Label();
+    public final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
-    public TableHeaderMenuBar header = null;
+    public TableHeaderBar header = null;
     public FlexTable rows = new FlexTable();
     public int left = 0;
     public int top = 0;
@@ -164,7 +164,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             }
         }
         if(controller.showHeader){
-            header = GWT.create(TableHeaderMenuBar.class);
+            header = new TableHeaderBar();
             header.init(controller);
             headerView.add(header);
         }
@@ -278,57 +278,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         titleLabel.setText(title);
     }
 
-    public void setNavPanel(int curIndex, int pages, boolean showIndex) {
-        vp.remove(navPanel);
-        navPanel = new HorizontalPanel();
-        navPanel.setSpacing(3);
-        navPanel.addStyleName(navLinks);
-        navPanel.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
-        DOM.setAttribute(navPanel.getElement(), "align", "center");
-        FocusPanel leftButtonPanel = new FocusPanel();
-        FocusPanel rightButtonPanel = new FocusPanel();
 
-        prevNav = new HTML("");
-        prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickHandler(controller);
-        
-        nextNav = new HTML("");
-        nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickHandler(controller);
-        
-        leftButtonPanel.add(prevNav);
-        rightButtonPanel.add(nextNav);
-        navPanel.add(leftButtonPanel);
-        navPanel.add(rightButtonPanel);                       
-                        
-        if (curIndex > 0) {            
-            leftButtonPanel.removeStyleName("disabled");
-        }
-        else{          
-            leftButtonPanel.setStyleName("disabled");
-        }
-        if(showIndex){
-            for (int i = 1; i <= pages; i++) {
-                final int index = i - 1;
-                HTML nav = null;
-                if (index != curIndex) {
-                    nav = new HTML("<a class='navIndex' value='" + index
-                                   + "'>"
-                                   + i
-                                   + "</a>");
-                    nav.addClickHandler(controller);
-                } else {
-                    nav = new HTML("" + i);
-                    nav.setStyleName("current");
-                }
-                navPanel.add(nav);
-            }
-        }
-
-        navPanel.add(nextNav);    
-        
-        vp.add(navPanel);
-    }
 
     public void setScrollPosition(int scrollPos) {
         scrollBar.setScrollPosition(scrollPos);

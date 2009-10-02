@@ -35,7 +35,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -47,17 +46,9 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseWheelListener;
-import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
-import com.google.gwt.user.client.ui.MouseWheelVelocity;
-import com.google.gwt.user.client.ui.ScrollListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.widget.table.TableHeaderMenuBar;
-import org.openelis.gwt.widget.table.deprecated.TableHeader;
 
 /**
  * This class represents the View of the table widget. It contains the logic for
@@ -108,7 +99,7 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
     public final HorizontalPanel titlePanel = new HorizontalPanel();
     private final Label titleLabel = new Label();
     public FlexTable table = new FlexTable();
-    public TreeHeaderMenuBar header = null;
+    public TreeHeaderBar header = null;
     public FlexTable rows = new FlexTable();
     public int left = 0;
     public int top = 0;
@@ -144,7 +135,7 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
             titlePanel.addStyleName("TitlePanel");
         }
         if(controller.showHeader){
-            header = GWT.create(TreeHeaderMenuBar.class);
+            header = new TreeHeaderBar();
             header.init(controller);
             headerView.add(header);
         }
@@ -254,58 +245,6 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
     public void setTitle(String title) {
         this.title = title;
         titleLabel.setText(title);
-    }
-
-    public void setNavPanel(int curIndex, int pages, boolean showIndex) {
-        vp.remove(navPanel);
-        navPanel = new HorizontalPanel();
-        navPanel.setSpacing(3);
-        navPanel.addStyleName(navLinks);
-        navPanel.setHorizontalAlignment(HasAlignment.ALIGN_CENTER);
-        DOM.setAttribute(navPanel.getElement(), "align", "center");
-        FocusPanel leftButtonPanel = new FocusPanel();
-        FocusPanel rightButtonPanel = new FocusPanel();
-
-        prevNav = new HTML("");
-        prevNav.addStyleName("prevNavIndex");
-        prevNav.addClickHandler(controller);
-        
-        nextNav = new HTML("");
-        nextNav.addStyleName("nextNavIndex");
-        nextNav.addClickHandler(controller);
-        
-        leftButtonPanel.add(prevNav);
-        rightButtonPanel.add(nextNav);
-        navPanel.add(leftButtonPanel);
-        navPanel.add(rightButtonPanel);                       
-                        
-        if (curIndex > 0) {            
-            leftButtonPanel.removeStyleName("disabled");
-        }
-        else{          
-            leftButtonPanel.setStyleName("disabled");
-        }
-        if(showIndex){
-            for (int i = 1; i <= pages; i++) {
-                final int index = i - 1;
-                HTML nav = null;
-                if (index != curIndex) {
-                    nav = new HTML("<a class='navIndex' value='" + index
-                                   + "'>"
-                                   + i
-                                   + "</a>");
-                    nav.addClickHandler(controller);
-                } else {
-                    nav = new HTML("" + i);
-                    nav.setStyleName("current");
-                }
-                navPanel.add(nav);
-            }
-        }
-
-        navPanel.add(nextNav);    
-        
-        vp.add(navPanel);
     }
 
     public void setScrollPosition(int scrollPos) {

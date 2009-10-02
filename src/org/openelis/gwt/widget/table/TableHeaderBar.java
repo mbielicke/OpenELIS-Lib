@@ -33,8 +33,6 @@ import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.QueryFieldUtil;
 import org.openelis.gwt.widget.TextBox;
-
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
@@ -57,12 +55,13 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -70,11 +69,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler, 
+public class TableHeaderBar extends Composite implements MouseMoveHandler, 
 															 MouseDownHandler, 
 															 MouseUpHandler,  
 															 CloseHandler<PopupPanel>, 
@@ -85,6 +83,7 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
     public static String headerCellStyle = "HeaderCell";
     public ArrayList<Label> hLabels = new ArrayList<Label>();
     public ArrayList<MenuItem> hMenus = new ArrayList<MenuItem>();
+    public ArrayList<HorizontalPanel> headers = new ArrayList<HorizontalPanel>();
     protected ArrayList<TableColumn> columns;
     protected boolean resizing;
     protected int startx;
@@ -95,15 +94,20 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
     protected TableWidget controller;
     public boolean doFilter;
     public boolean doQuery;
+    private FlexTable bar = new FlexTable(); 
     
-    public TableHeaderMenuBar() {
-        super("horizontal");
+    public TableHeaderBar() {
+    	initWidget(bar);
     }
     
     public class BarContainer extends AbsolutePanel implements HasMouseDownHandlers,
     														   HasMouseUpHandlers, 
     														   HasMouseMoveHandlers {
 
+    	public BarContainer() {
+    		sinkEvents(Event.MOUSEEVENTS);
+    	}
+    	
 		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
 			return addDomHandler(handler,MouseDownEvent.getType());
 		}
@@ -126,19 +130,19 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
         
 
         public void onMouseOver(MouseOverEvent event) {
-            getWidget(1).setStyleName("HeaderDropdownButton");
+            getWidget(2).setStyleName("HeaderDropdownButton");
         }
 
         /**
          * Catches mouses Events for resizing columns.
          */
         public void onMouseOut(MouseOutEvent event) {
-            if(!((MenuItem)getWidget(1)).popShowing)
-                getWidget(1).removeStyleName("HeaderDropdownButton");
+            if(!((MenuItem)getWidget(2)).popShowing)
+                getWidget(2).removeStyleName("HeaderDropdownButton");
         }
 
         public void onClose(CloseEvent<PopupPanel> event) {
-            getWidget(1).removeStyleName("HeaderDropdownButton");
+            getWidget(2).removeStyleName("HeaderDropdownButton");
         }
 
 		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
@@ -156,65 +160,55 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.columns;
-        panel.setSpacing(0);
-        int j = 0;
+        bar.setCellSpacing(1);
         for(TableColumn column : columns) {
+        	ListenContainer header = new ListenContainer();
+        	header.setSpacing(0);
+        	headers.add(header);
             Label headerLabel = new Label(column.getHeader());
             hLabels.add(headerLabel);
+
+            DOM.setStyleAttribute(header.getElement(), "overflow", "hidden");
+            DOM.setStyleAttribute(header.getElement(), "overflowX", "hidden");
+            headerLabel.addStyleName("HeaderLabel");
+            DOM.setStyleAttribute(headerLabel.getElement(),"overflowX","hidden");
+            DOM.setStyleAttribute(headerLabel.getElement(), "overflow", "hidden");
+            
+            BarContainer barc = new BarContainer(); 
+            barc.addMouseDownHandler(this);
+             barc.addMouseUpHandler(this);
+             barc.addMouseMoveHandler(this);
+            AbsolutePanel ap3 = new AbsolutePanel();
+            ap3.addStyleName("HeaderBarPad");
+            barc.add(ap3);
+            header.add(barc);
+            header.setCellWidth(bar, "3px");
+            
+            headerLabel.setWordWrap(false);
+            header.add(headerLabel);
+            header.setCellWidth(headerLabel, "100%");
+            header.add(headerLabel);
             MenuItem menuItem = null;
             if(column.getSortable() || column.getFilterable()){
                 AbsolutePanel wid = new AbsolutePanel();
                 wid.setHeight("18px");
                 wid.setWidth("16px");
                 menuItem = new MenuItem(wid);
-                menuItem.addMouseOverHandler(this);
-                menuItem.addMouseOutHandler(this);
                 menuItem.menuItemsPanel = new MenuPanel("vertical");
                 menuItem.menuItemsPanel.setStyleName("topHeaderContainer");
                 menuItem.addActionHandler(this);
+                header.add(menuItem);
+                header.setCellHorizontalAlignment(menuItem, HasAlignment.ALIGN_RIGHT);
+                header.addMouseOverHandler(header);
+                header.addMouseOutHandler(header);
+                header.setCellVerticalAlignment(menuItem, HasAlignment.ALIGN_TOP);
+                menuItem.pop.addCloseHandler(header);
+                menuItem.enable(true);
             }
-            menuItems.add(menuItem);
             hMenus.add(menuItem);
-            if (hLabels.size() > 1) {
-                BarContainer bar = new BarContainer(); 
-                bar.addMouseDownHandler(this);
-                bar.addMouseUpHandler(this);
-                bar.addMouseMoveHandler(this);
-                HorizontalPanel hpBar = new HorizontalPanel();
-                AbsolutePanel ap1 = new AbsolutePanel();
-                ap1.addStyleName("HeaderBarPad");
-                AbsolutePanel ap2 = new AbsolutePanel();
-                ap2.addStyleName("HeaderBar");
-                AbsolutePanel ap3 = new AbsolutePanel();
-                ap3.addStyleName("HeaderBarPad");
-                hpBar.add(ap2);
-                hpBar.add(ap1);
-                hpBar.add(ap3);
-                bar.add(hpBar);
-                add(bar);
-                panel.setCellWidth(bar, "3px");
-                j++;
-            }
-            ListenContainer hp0 = new ListenContainer();
-            hp0.setSpacing(0);
-            DOM.setStyleAttribute(hp0.getElement(), "overflow", "hidden");
-            DOM.setStyleAttribute(hp0.getElement(), "overflowX", "hidden");
-            headerLabel.addStyleName("HeaderLabel");
-            DOM.setStyleAttribute(headerLabel.getElement(),"overflowX","hidden");
-            DOM.setStyleAttribute(headerLabel.getElement(), "overflow", "hidden");
-            headerLabel.setWordWrap(false);
-            hp0.add(headerLabel);
-            hp0.setCellWidth(headerLabel, "100%");
-            if(menuItem != null){
-                hp0.add(menuItem);
-                hp0.setCellHorizontalAlignment(menuItem, HasAlignment.ALIGN_RIGHT);
-                hp0.addMouseOverHandler(hp0);
-                hp0.addMouseOutHandler(hp0);
-                menuItem.pop.addCloseHandler(hp0);
-            }
-            hp0.setWidth("100%");
-            add(hp0);            
-            j++;
+            bar.setWidget(0,columns.indexOf(column),header);
+            bar.getCellFormatter().setHeight(0, columns.indexOf(column), "20px");
+            
         }
         sizeHeader();
     }
@@ -230,82 +224,80 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
      * Catches mouses Events for resizing columns.
      */
     public void onMouseDown(MouseDownEvent event) {
-        Widget sender = (Widget)event.getSource();
-        // TODO Auto-generated method stub
-        resizing = true;
-        startx = sender.getAbsoluteLeft();
-            for (int i = 0; i < panel.getWidgetCount(); i++) {
-                if (sender == panel.getWidget(i)) {
-                    resizeColumn1 = i - 1;
-                    tableCol1 = resizeColumn1 / 2;
-                    if(columns.get(tableCol1).getFixedWidth() && columns.get(tableCol1+1).getFixedWidth()){
-                        resizing = false;
-                        resizeColumn1 = -1;
-                        tableCol1 = -1;
-                        tableCol2 = -1;
-                        return;
-                    }  
-                    if(columns.get(tableCol1).getFixedWidth()){
-                        tableCol1 = -1;
-                        int j = tableCol1 -1; 
-                        while(tableCol1 < 0 && j > -1){
-                            if(!columns.get(tableCol1).getFixedWidth())
-                                tableCol1 = j;
-                            j--;
-                        }
-                    }
-                    if(tableCol1 < 0){
-                        int j = tableCol1 +1;
-                        while(tableCol1 < 0 && j < columns.size()){
-                            if(!columns.get(j).getFixedWidth())
-                                tableCol1 = j;
-                            j++;
-                        }
-                    }
-                }
-            }
-            if(tableCol1 < 0){
-                resizing = false;
-                resizeColumn1 = -1;
-                tableCol1 = -1;
-                tableCol2 = -1;
-                return;
-            }
-            tableCol2 = -1;
-            int i = tableCol1 +1;
-            while(tableCol2 < 0 && i < columns.size()){
-                if(!columns.get(i).getFixedWidth())
-                    tableCol2 = i;
-                i++;
-            }
-            if(tableCol2 < 0){
-                i = 0;
-                while(tableCol2 < 0 && i < tableCol1){
-                    if(!columns.get(i).getFixedWidth())
-                        tableCol2 = i;
-                    i++;
-                }
-            }
-            if(tableCol2 < 0){
-                resizing = false;
-                resizeColumn1 = -1;
-                tableCol1 = -1;
-                tableCol2 = -1;
-                return;
-            }
-            FocusPanel bar = new FocusPanel();
-            bar.addMouseUpHandler(this);
-            bar.addMouseDownHandler(this);
-            bar.addMouseMoveHandler(this);
-            bar.setHeight((controller.view.table.getOffsetHeight()+17)+"px");
-            bar.setWidth("1px");
-            DOM.setStyleAttribute(bar.getElement(), "background", "red");
-            DOM.setStyleAttribute(bar.getElement(), "position", "absolute");
-            DOM.setStyleAttribute(bar.getElement(),"left",sender.getAbsoluteLeft()+"px");
-            DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
-            RootPanel.get().add(bar);   
-            DOM.setCapture(bar.getElement());
-           
+    	Widget sender = (Widget)event.getSource();
+    	// TODO Auto-generated method stub
+    	resizing = true;
+    	startx = sender.getAbsoluteLeft();
+    	resizeColumn1 = headers.indexOf(sender.getParent());
+    	tableCol1 = resizeColumn1;
+    	if(columns.get(tableCol1).getFixedWidth() && columns.get(tableCol1+1).getFixedWidth()){
+    		resizing = false;
+    		resizeColumn1 = -1;
+    		tableCol1 = -1;
+    		tableCol2 = -1;
+    		return;
+    	}  
+    	if(columns.get(tableCol1).getFixedWidth()){
+    		tableCol1 = -1;
+    		int j = tableCol1 -1; 
+    		while(tableCol1 < 0 && j > -1){
+    			if(!columns.get(tableCol1).getFixedWidth())
+    				tableCol1 = j;
+    			j--;
+    		}
+    	}
+    	if(tableCol1 < 0){
+    		int j = tableCol1 +1;
+    		while(tableCol1 < 0 && j < columns.size()){
+    			if(!columns.get(j).getFixedWidth())
+    				tableCol1 = j;
+    			j++;
+    		}
+    	}
+
+    	if(tableCol1 < 0){
+    		resizing = false;
+    		resizeColumn1 = -1;
+    		tableCol1 = -1;
+    		tableCol2 = -1;
+    		return;
+    	}
+    	tableCol2 = -1;
+    	int i = tableCol1 +1;
+    	while(tableCol2 < 0 && i < columns.size()){
+    		if(!columns.get(i).getFixedWidth())
+    			tableCol2 = i;
+    		i++;
+    	}
+    	if(tableCol2 < 0){
+    		i = 0;
+    		while(tableCol2 < 0 && i < tableCol1){
+    			if(!columns.get(i).getFixedWidth())
+    				tableCol2 = i;
+    			i++;
+    		}
+    	}
+    	if(tableCol2 < 0){
+    		resizing = false;
+    		resizeColumn1 = -1;
+    		tableCol1 = -1;
+    		tableCol2 = -1;
+    		return;
+    	}
+    	FocusPanel bar = new FocusPanel();
+    	bar.addMouseUpHandler(this);
+    	bar.addMouseDownHandler(this);
+    	bar.addMouseMoveHandler(this);
+    	bar.setHeight((controller.view.table.getOffsetHeight()+17)+"px");
+    	bar.setWidth("1px");
+    	DOM.setStyleAttribute(bar.getElement(), "background", "red");
+    	DOM.setStyleAttribute(bar.getElement(), "position", "absolute");
+    	DOM.setStyleAttribute(bar.getElement(),"left",sender.getAbsoluteLeft()+"px");
+    	DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
+    	RootPanel.get().add(bar);   
+    	DOM.setCapture(bar.getElement());
+    	controller.view.titleLabel.setText("Bar Set");
+
     }
 
     /**
@@ -335,23 +327,11 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
                 resizing = false;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                        int adj1 = 0;
-                        int adj2 = 3;
-                        if(getUserAgent().indexOf("webkit") > -1){
-                            Window.alert(getUserAgent());
-                            adj1 = 6;
-                            adj2 = 2;
-                        }
-                        
-                        for(int i = 0; i < columns.size(); i++){
-                            if( i > 0 && i < columns.size() - 1){
-                                panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj1)+"px");
-                                ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj1 -16)+"px");
-                            }else{
-                                panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj2)+"px");
-                                ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj2 - 16)+"px");
-                            }   
-                        }
+                    	for(int i = 0; i <  headers.size(); i++) {
+                    		HorizontalPanel header = headers.get(i);
+                    		header.setWidth(columns.get(i).currentWidth+"px");
+                    		hLabels.get(i).setWidth((columns.get(i).currentWidth-20)+"px");
+                    	}
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
@@ -367,28 +347,11 @@ public class TableHeaderMenuBar extends MenuPanel implements MouseMoveHandler,
     public void sizeHeader() {
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                int adj1 = 0;
-                int adj2 = 3;
-                if(getUserAgent().indexOf("webkit") > -1){
-                    adj1 = 6;
-                    adj2 = 2;
-                }
-                int width = 0;
-                for(TableColumn column : columns)
-                    width += column.getCurrentWidth();
-                int displayWidth = width + (columns.size()*4) - (columns.size() -1);
-                setWidth(displayWidth+"px");  
-                for(int i = 0; i < columns.size(); i++){
-                    if( i > 0 && i < columns.size() - 1){
-                        panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj1)+"px");
-                        ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj1 -16)+"px");
-                    }else{
-                        panel.setCellWidth(panel.getWidget(i*2),(columns.get(i).getCurrentWidth()+adj2)+"px");
-                        ((ListenContainer)panel.getWidget(i*2)).getWidget(0).setWidth((columns.get(i).getCurrentWidth()+adj2 - 16)+"px");
-                    }
-                }
-                setWidth(displayWidth+"px");
-                controller.view.cellView.setScrollWidth(displayWidth+"px");
+            	for(int i = 0; i <  headers.size(); i++) {
+            		HorizontalPanel header = headers.get(i);
+            		header.setWidth(columns.get(i).currentWidth+"px");
+            		hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
+            	}
             }
         });
         

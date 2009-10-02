@@ -26,6 +26,7 @@ import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.NotesPanel;
 import org.openelis.gwt.widget.PassWordTextBox;
 import org.openelis.gwt.widget.RadioButton;
+//import org.openelis.gwt.widget.ResultsTable;
 import org.openelis.gwt.widget.ScrollableTabBar;
 import org.openelis.gwt.widget.SlideOutPanel;
 import org.openelis.gwt.widget.StringField;
@@ -898,6 +899,41 @@ public class UIUtil {
                 return radio;
     		}
     	});
+    	/*
+    	factoryMap.put("resultsTable", new Factory<ResultsTable>() {
+    		public ResultsTable getNewInstance(Node node, ScreenDef def) {
+    			ResultsTable results = new ResultsTable();
+    	        NodeList children = node.getChildNodes();
+    	        Node buttons = null;
+    	        Node table = null;
+    	        Node query = null;
+    	        for(int i = 0; i < children.getLength(); i++){
+    	            if(children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+    	                if(children.item(i).getNodeName().equals("buttonGroup"))
+    	                    buttons = children.item(i);
+    	                else if(children.item(i).getNodeName().equals("table"))
+    	                    table = children.item(i);
+    	                else if(children.item(i).getNodeName().equals("query"))
+    	                    query = children.item(i);
+    	            }
+    	        }
+    	        if(table != null){
+    	            results.setTable((TableWidget)factoryMap.get("table").getNewInstance(table, null));
+    	        }
+    	        if(node.getAttributes().getNamedItem("showNavPanel") != null) {
+    	            if(node.getAttributes().getNamedItem("showNavPanel").getNodeValue().equals("false")){
+    	                results.showNavPanel = false;
+    	            }
+    	        }
+
+    	        if(buttons != null)
+    	            results.setButtonGroup((ButtonGroup)loadWidget(buttons,def));
+    	        
+    	        setDefaults(node, results);
+    	        return results;
+    		}
+    	});
+    	*/
     	factoryMap.put("richtext", new Factory<RichTextWidget>() {
     		public RichTextWidget getNewInstance(Node node, ScreenDef def) {
     			RichTextWidget textarea = new RichTextWidget(); 

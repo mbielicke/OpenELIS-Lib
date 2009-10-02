@@ -27,7 +27,9 @@ UIRF Software License are applicable instead of those above.
 <module>
   <source path="screen"/>
   <source path="event"/>
+  
   <stylesheet src="CSS/screen.css"/>
+ 
   	  <generate-with class="org.openelis.gwt.server.UIGenerator">
         <when-type-assignable class="org.openelis.gwt.screen.ScreenDefInt"/>
       </generate-with>

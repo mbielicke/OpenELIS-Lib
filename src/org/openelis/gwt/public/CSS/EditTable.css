@@ -175,14 +175,17 @@ padding:0px 0px 4px 4px;
 }
 
 .HeaderBar {
-	width: 3px;
+	width: 1px;
 	height: 18px;
 	background: url('../Images/headerdivider.gif') no-repeat center bottom;
 	cursor: e-resize;
 }
 
 .HeaderBarPad {
+	width:3px;
+	height:18px;
 	cursor: e-resize;
+	align:right;
 }
 
 .HeaderCell {

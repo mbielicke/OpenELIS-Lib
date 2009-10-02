@@ -140,7 +140,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public boolean ctrlKey;
     public int maxRows;
     public int cellHeight = 18;
-    public int cellSpacing = 1;
+    public int cellSpacing = 3;
     public Widget editingCell = null;
     public int[] modelIndexList;
     public boolean showRows;
