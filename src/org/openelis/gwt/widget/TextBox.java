@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.screen.UIUtil;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -23,7 +22,6 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     public String mask;
     public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
     private Field<T> field;
-    public boolean queryMode;
     private boolean enabled;
     
     public TextBox() {
@@ -103,7 +101,6 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 
 	public void setQueryMode(boolean query) {
-		queryMode = query;
 		field.setQueryMode(query);
 		enforceLength = !query;
 		enforceMask = !query;
@@ -119,7 +116,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
-		if(!queryMode)
+		if(!field.queryMode)
 			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();

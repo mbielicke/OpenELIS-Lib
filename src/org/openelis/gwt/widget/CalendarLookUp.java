@@ -58,7 +58,6 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
     protected Date weekDate;
     protected PopupPanel pop;
     private Field<Datetime> field;
-    private boolean queryMode;
     private boolean enabled;
     public TextBox textbox = new TextBox();
     private IconContainer icon = new IconContainer();
@@ -200,7 +199,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
                 textbox.addStyleName("TextboxUnselected");
                 textbox.removeStyleName("TextboxSelected");
                 icon.removeStyleName("Selected");
-                if(queryMode){
+                if(field.queryMode){
                 	field.setStringValue(textbox.getText());
                 }else
                 	setValue(getValue(),true);
@@ -324,7 +323,6 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	}
 
 	public void setQueryMode(boolean query) {
-		
 		field.setQueryMode(query);
 		
 	}
@@ -335,7 +333,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	}
 
 	public void getQuery(ArrayList<QueryData> list, String key) {
-		if(!queryMode)
+		if(!field.queryMode)
 			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();

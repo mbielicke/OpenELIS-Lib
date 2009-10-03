@@ -58,6 +58,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public String dropwidth;
     public int minWidth;
     HorizontalPanel hp; 
+    public boolean queryMode;
 
     public DropDownListener listener = new DropDownListener(this);
     
@@ -252,7 +253,13 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
 
 	public void setQueryMode(boolean query) {
-		field.setQueryMode(query);		
+		if(queryMode == query)
+			return;
+		queryMode = query;
+		if(query){
+			setMultiSelect(true);
+		}else
+			setMultiSelect(false);
 	}
 	
 	@Override

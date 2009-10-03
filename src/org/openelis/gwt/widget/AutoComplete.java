@@ -35,7 +35,6 @@ import org.openelis.gwt.event.GetMatchesHandler;
 import org.openelis.gwt.event.HasBeforeGetMatchesHandlers;
 import org.openelis.gwt.event.HasGetMatchesHandlers;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRenderer;
 import org.openelis.gwt.widget.table.TableView;
@@ -50,14 +49,12 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 
 public class AutoComplete<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasBeforeGetMatchesHandlers, HasGetMatchesHandlers{
     
     public AutoCompleteListener listener = new AutoCompleteListener(this);
-    public boolean queryMode;
     public Field<T> field;
     public boolean enabled;
     
@@ -215,9 +212,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     }
 
 	public void setQueryMode(boolean query) {
-		if(query == queryMode)
+		if(query == field.queryMode)
 			return;
-		queryMode = query;
 		field.setQueryMode(query);	
 			
 	}
@@ -229,7 +225,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	}
 	
 	public void getQuery(ArrayList list, String key) {
-		if(!queryMode)
+		if(!field.queryMode)
 			return;
 		if(textbox.getText() != null && !textbox.getText().equals("")){
 			QueryData qd = new QueryData();
