@@ -163,14 +163,14 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 TableFieldErrorException tfe = (TableFieldErrorException)ex;
                 ((TableWidget)def.getWidget(tfe.getTableKey())).setCellError(tfe.getRowIndex(),
                                                                              tfe.getFieldName(),
-                                                                             consts.get(tfe.getMessage()));
+                                                                             tfe.getMessage());
             } else if (ex instanceof FormErrorException) {
                 FormErrorException fe = (FormErrorException)ex;
-                formErrors.add(consts.get(fe.getMessage()));
+                formErrors.add(fe.getMessage());
 
             } else {
                 FieldErrorException fe = (FieldErrorException)ex;
-                ((HasField)def.getWidget(fe.getFieldName())).addError(consts.get(fe.getMessage()));
+                ((HasField)def.getWidget(fe.getFieldName())).addError(fe.getMessage());
             }
         }
 
