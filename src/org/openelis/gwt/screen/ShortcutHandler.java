@@ -6,7 +6,10 @@ import java.util.List;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.HasField;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -46,6 +49,10 @@ public class ShortcutHandler implements KeyPressHandler {
 	public void onKeyPress(KeyPressEvent event) {
 		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getNativeEvent().getKeyCode() == key){
 			if(wid instanceof AppButton) {
+				//Fire Blur event to the currently focused widget so that it will save it's value before Button click is fired 
+				if(((ScreenPanel)event.getSource()).focused != null)
+					BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), ((ScreenPanel)event.getSource()).focused);
+					
 				NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
 																								   wid.getAbsoluteLeft(), 
 																								   wid.getAbsoluteTop(), 
