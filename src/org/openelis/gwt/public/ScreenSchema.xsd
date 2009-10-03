@@ -198,6 +198,8 @@
 	<xsd:element name="menuPanel" substitutionGroup="panels">
 		<xsd:complexType>
 			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			    <xsd:element ref="xsl:call-template" minOccurs="0"
+					maxOccurs="unbounded" />
 				<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
 				<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
 			</xsd:sequence>
