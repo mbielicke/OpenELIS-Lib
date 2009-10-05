@@ -101,7 +101,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     }
     
     public void getMatches(final String text) {
-        if(!queryMode) {
+        if(!field.queryMode) {
             try {
             	if(getHandlerCount(BeforeGetMatchesEvent.getType()) > 0) {
             		BeforeGetMatchesEvent event = BeforeGetMatchesEvent.fire(this, text);
