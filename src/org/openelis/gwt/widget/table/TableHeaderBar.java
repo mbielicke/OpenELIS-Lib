@@ -388,7 +388,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             }
             if (col.filterable) {
                 MenuItem filterMenu = new MenuItem("",new Label("Filters"),"");
-                filterMenu.popPosition = MenuItem.PopPosition.SIDE;
+                filterMenu.popPosition = MenuItem.PopPosition.BESIDE;
                 filterMenu.menuItemsPanel = new MenuPanel("vertical");
                 filterMenu.menuItemsPanel.setStyleName("topHeaderContainer");
                 ArrayList<Filter> filters = col.getFilters();
