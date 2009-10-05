@@ -750,6 +750,13 @@ background:none;
     height:16px;
 }
 .duplicateRecordIcon{background:url('../Images/quickentrybuttonimage.gif') no-repeat center;}
+
+.historyIcon{
+    width:16px;
+    height:16px;
+}
+.historyIcon{background:url('../Images/history.png') no-repeat center;}
+
 /********* end button panel **********/
 
 
