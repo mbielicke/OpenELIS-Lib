@@ -1148,45 +1148,6 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.RadioButton");
     		}
     	});
-    	factoryMap.put("resultsTable", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("ResultsTable wid"+id+"= new ResultsTable();");
-    	        NodeList children = node.getChildNodes();
-    	        Node buttons = null;
-    	        Node table = null;
-    	        Node query = null;
-    	        for(int i = 0; i < children.getLength(); i++){
-    	            if(children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-    	                if(children.item(i).getNodeName().equals("buttonGroup"))
-    	                    buttons = children.item(i);
-    	                else if(children.item(i).getNodeName().equals("table"))
-    	                    table = children.item(i);
-    	                else if(children.item(i).getNodeName().equals("query"))
-    	                    query = children.item(i);
-    	            }
-    	        }
-    	        if(table != null){
-    	        	int child = ++count;
-    	        	factoryMap.get("table").getNewInstance(table,child);
-    	            sw.println("wid"+id+".setTable(wid"+child+");");
-    	        }
-    	        if(node.getAttributes().getNamedItem("showNavPanel") != null) {
-    	            if(node.getAttributes().getNamedItem("showNavPanel").getNodeValue().equals("false")){
-    	                sw.println("wid"+id+".showNavPanel = false;");
-    	            }
-    	        }
-
-    	        if(buttons != null){
-    	        	int child = ++count;
-    	        	loadWidget(buttons,child);
-    	            sw.println("wid"+id+".setButtonGroup(wid"+child+");");
-    	        }    		
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.ResultsTable");
-    		}
-    	});
     	factoryMap.put("richtext", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("RichTextWidget wid"+id+" = new RichTextWidget();"); 
