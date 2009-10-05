@@ -306,7 +306,7 @@ public class DateField extends Field<Datetime> {
 			else
 				queryString = null;
 		}else{
-			value = (Datetime)((HasValue)wid).getValue();			
+			value = (Datetime)((HasField)wid).getFieldValue();			
 			validate();
 		}
 		if(!valid){
