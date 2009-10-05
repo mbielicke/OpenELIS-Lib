@@ -92,7 +92,7 @@ public class TableColumn {
     		wid.setWidth("15px");
     	}else{
     		if(colWidget instanceof AutoComplete) {
-    			if(((AutoComplete) colWidget).queryMode){
+    			if(controller.queryMode){
     				val = cell.getValue();
     			}else{
     				TableDataRow row = (TableDataRow)cell.getValue();
@@ -112,7 +112,7 @@ public class TableColumn {
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				label.setText((((CalendarLookUp) colWidget).getField().format()));
-    			}else if(colWidget instanceof AutoComplete && ((AutoComplete)colWidget).queryMode) {
+    			}else if(colWidget instanceof AutoComplete && controller.queryMode) {
     				label.setText((String)val);
     			}else if(colWidget instanceof DropdownWidget) {
     				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
@@ -182,7 +182,7 @@ public class TableColumn {
     	    	widget.setStyleName(CheckBox.UNCHECKED_STYLE);
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
-    			if(((AutoComplete) colWidget).queryMode){
+    			if(controller.queryMode){
     				((Label)widget).setText((String)cell.getValue());
     			}else{
     				TableDataRow row = (TableDataRow)cell.getValue();
@@ -266,7 +266,7 @@ public class TableColumn {
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");
     	if(colWidget instanceof AutoComplete){
-    		if(((AutoComplete) colWidget).queryMode){
+    		if(controller.queryMode){
     			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
     			TableDataRow row =  (TableDataRow)cell.getValue();
