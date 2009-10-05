@@ -6,7 +6,6 @@ import java.util.Date;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.deprecated.IconContainer;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -93,10 +92,32 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
     	}
     	
 		public void onFocus(FocusEvent event) {
-			//FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
+	        if (!textbox.isReadOnly()) {
+	            if (event.getSource() == textbox) {
+	                // we need to set the selected style name to the textbox
+	                textbox.addStyleName("TextboxSelected");
+	                textbox.removeStyleName("TextboxUnselected");
+	                textbox.setFocus(true);
+	                // textBox.setText("");
+	                icon.addStyleName("Selected");
+	            }
+	        }
+			FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
 		}
 
 		public void onBlur(BlurEvent event) {
+	        if (!textbox.isReadOnly()) {
+	            if (event.getSource() == textbox) {
+	                // we need to set the unselected style name to the textbox
+	                textbox.addStyleName("TextboxUnselected");
+	                textbox.removeStyleName("TextboxSelected");
+	                icon.removeStyleName("Selected");
+	                if(field.queryMode){
+	                	field.setStringValue(textbox.getText());
+	                }else
+	                	setValue(getValue(),true);
+	            }
+	        }
 			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
 		}
 
@@ -123,8 +144,8 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
         textbox.addMouseOverHandler(handler);
         icon.setStyleName("CalendarButton");
         textbox.setStyleName("TextboxUnselected");
-        textbox.addFocusHandler(this);
-        textbox.addBlurHandler(this);
+//        textbox.addFocusHandler(this);
+ //       textbox.addBlurHandler(this);
         textbox.addKeyUpHandler(this);
         icon.addClickHandler(this);
         IconMouseHandler iconHandler = new IconMouseHandler();
@@ -208,10 +229,10 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
     }
         
     public void onClick(ClickEvent event) {
-        textbox.addStyleName("TextboxSelected");
-        textbox.removeStyleName("TextboxUnselected");
-        textbox.setFocus(true);
-        icon.addStyleName("Selected");
+        //textbox.addStyleName("TextboxSelected");
+       // textbox.removeStyleName("TextboxUnselected");
+       // textbox.setFocus(true);
+        //icon.addStyleName("Selected");
         doCalendar((Widget)event.getSource(), begin, end);
     }
     
@@ -260,6 +281,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
     	if(pop != null){
     		pop.hide();
     	}
+    	textbox.setFocus(true);
     }
 
 	public void setValue(Datetime value) {

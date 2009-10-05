@@ -436,20 +436,20 @@ public class QueryBuilderV2 {
     		String param = (String)fieldParamIt.next();
     		if (param.indexOf("..") > -1) {
     			String[] bparams = param.split("..");
-    			Date date = new Date(bparams[0]);
+    			Date date = new Date(bparams[0].replaceAll("-","/"));
     			query.setParameter(paramName + i + "0", date, TemporalType.DATE);
-    			date = new Date(bparams[1]);
+    			date = new Date(bparams[1].replaceAll("-","/"));
     			query.setParameter(paramName + i + "1", date, TemporalType.DATE);
     		} else if (param.indexOf(",") > -1) {
     			String[] params = param.split(",");
     			for (int j = 0; j < params.length; j++) {
-    				Date date = new Date(params[j]);
+    				Date date = new Date(params[j].replaceAll("-","/"));
     				query.setParameter(paramName + i + j,
     						date,
     						TemporalType.DATE);
     			}
     		} else {
-    			Date date = new Date(param);
+    			Date date = new Date(param.replaceAll("-","/"));
     			query.setParameter(paramName + i, date, TemporalType.DATE);
     		}
     		i++;
