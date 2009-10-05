@@ -306,7 +306,11 @@ public class DateField extends Field<Datetime> {
 			else
 				queryString = null;
 		}else{
-			value = (Datetime)((HasField)wid).getFieldValue();			
+			if(wid instanceof CalendarLookUp) 
+				value = (Datetime)((HasValue)wid).getValue();
+			else if(wid instanceof TextBox) {
+				setStringValue(((TextBox)wid).getText());
+			}
 			validate();
 		}
 		if(!valid){
