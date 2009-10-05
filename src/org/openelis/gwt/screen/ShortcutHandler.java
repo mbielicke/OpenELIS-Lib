@@ -13,6 +13,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -46,25 +48,25 @@ public class ShortcutHandler implements KeyPressHandler {
 		this.wid = wid;
 	}
 	
-	public void onKeyPress(KeyPressEvent event) {
+	public void onKeyPress(final KeyPressEvent event) {
 		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getNativeEvent().getKeyCode() == key){
 			if(wid instanceof AppButton) {
-				//Fire Blur event to the currently focused widget so that it will save it's value before Button click is fired 
-				if(((ScreenPanel)event.getSource()).focused != null)
-					BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), ((ScreenPanel)event.getSource()).focused);
-					
+				
+				
 				NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
-																								   wid.getAbsoluteLeft(), 
-																								   wid.getAbsoluteTop(), 
-																								   -1, 
-																								   -1, 
-																								   event.isControlKeyDown(), 
-																								   event.isAltKeyDown(), 
-																								   event.isShiftKeyDown(), 
-																								   event.isMetaKeyDown());
-				ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
+							wid.getAbsoluteLeft(), 
+							wid.getAbsoluteTop(), 
+							-1, 
+							-1, 
+							event.isControlKeyDown(), 
+							event.isAltKeyDown(), 
+							event.isShiftKeyDown(), 
+							event.isMetaKeyDown());
+						ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
+						event.stopPropagation();
+				
 				event.preventDefault();
-				event.stopPropagation();
+				event.stopPropagation();		
 			}else if(((HasField)wid).isEnabled()){ 
 				((Focusable)wid).setFocus(true);
 				event.preventDefault();

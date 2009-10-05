@@ -81,6 +81,7 @@ import org.openelis.gwt.widget.deprecated.MenuLabel;
  * @author tschmidt
  *
  */
+@Deprecated
 public class ScreenWindow extends FocusPanel implements MouseListener, ClickListener, EventPreview, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.

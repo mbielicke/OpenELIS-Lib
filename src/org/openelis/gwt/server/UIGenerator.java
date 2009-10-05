@@ -309,6 +309,9 @@ public class UIGenerator extends Generator {
 					sw.println("wid"+id+".setMask(\""+mask+"\");");
 				}
 				setDefaults(node,"wid"+id);
+		        if (node.getAttributes().getNamedItem("enable") != null){
+		        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+		        }
 				if (node.getAttributes().getNamedItem("field") != null) {
 					factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, id);
 					sw.println("wid"+id+".setField(field"+id+");");
@@ -527,6 +530,9 @@ public class UIGenerator extends Generator {
     	            }
     	        }
     	        setDefaults(node,"wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     		}
     		public void addImport() {
     			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
@@ -550,6 +556,9 @@ public class UIGenerator extends Generator {
     	            }
     	        }
     	        setDefaults(node,"wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.ButtonGroup");
@@ -576,6 +585,9 @@ public class UIGenerator extends Generator {
     				sw.println("wid"+id+".init(begin"+id+", end"+id+", false);");
     			sw.println("wid"+id+".setStyleName(\"ScreenCalendar\");");
     			setDefaults(node,"wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     			factoryMap.get("Date").getNewInstance(node, id);
     			sw.println("wid"+id+".setField(field"+id+");");
     			
@@ -620,6 +632,11 @@ public class UIGenerator extends Generator {
     	        }
     	        //check.setStyleName("ScreenCheck");
     	        setDefaults(node, "wid"+id);
+    	        
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
+    	        
     	        factoryMap.get("Check").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
@@ -706,6 +723,9 @@ public class UIGenerator extends Generator {
     	        }
     	        sw.println("wid"+id+".showWidget(0);");
     	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable")+");");
+    	        }
     		}
     		public void addImport() {
     			composer.addImport("com.google.gwt.user.client.ui.DeckPanel");
@@ -715,6 +735,9 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			sw.println("Diagram wid"+id+" = new Diagram();");
     	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.Diagram");
@@ -760,6 +783,7 @@ public class UIGenerator extends Generator {
     	            }
     	        }
     	        setDefaults(node, "wid"+id);
+
     		}
     		public void addImport() {
     			composer.addImport("com.google.gwt.user.client.ui.DisclosurePanel");
@@ -843,7 +867,9 @@ public class UIGenerator extends Generator {
 					addShortcutHandler(node,"wid"+id);
 					
     			setDefaults(node,"wid"+id);
-    			
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     			sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
     			sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
@@ -1007,8 +1033,8 @@ public class UIGenerator extends Generator {
     	        }
 
     	        Node popup = ((Element)node).getElementsByTagName("menuPanel").item(0);
-    	        if(node.getAttributes().getNamedItem("enabled") != null){
-    	            if(node.getAttributes().getNamedItem("enabled").getNodeValue().equals("true"))
+    	        if(node.getAttributes().getNamedItem("enable") != null){
+    	            if(node.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
     	                sw.println("wid"+id+".enable(true);");
     	            else
     	                sw.println("wid"+id+".enable(false);");
@@ -1076,6 +1102,9 @@ public class UIGenerator extends Generator {
 			    
     	        sw.println("wid"+id+".setStyleName(\"ScreenPassword\");");
     	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
@@ -1104,6 +1133,9 @@ public class UIGenerator extends Generator {
                 	sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue()+"\");");
                 sw.println("wid"+id+".setStyleName(\"ScreenRadio\");");
                 setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
                 factoryMap.get("Check").getNewInstance(node, id);
                 sw.println("wid"+id+".setField(field"+id+");");
                 
@@ -1187,6 +1219,9 @@ public class UIGenerator extends Generator {
     	        
     	        sw.println("wid"+id+".area.setStyleName(\"ScreenTextArea\");");
     	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
@@ -1300,6 +1335,9 @@ public class UIGenerator extends Generator {
 			    
     	        sw.println("wid"+id+".setStyleName(\"ScreenTextArea\");");
     	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
@@ -1483,6 +1521,9 @@ public class UIGenerator extends Generator {
                 sw.println("wid"+id+".init();");
                 sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
                 setDefaults(node,"wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
                 
                 sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
@@ -1602,6 +1643,9 @@ public class UIGenerator extends Generator {
 				sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				setDefaults(node,"wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.Dropdown");
@@ -1706,6 +1750,9 @@ public class UIGenerator extends Generator {
 					.getNodeValue().toUpperCase();
 					sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
 	        	}
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.AutoComplete");
@@ -1813,7 +1860,9 @@ public class UIGenerator extends Generator {
                 sw.println("wid"+id+".init();");
                 sw.println("wid"+id+".setStyleName(\"ScreenTree\");");
                 setDefaults(node,"wid"+id);
-                
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
                 sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
@@ -1861,7 +1910,9 @@ public class UIGenerator extends Generator {
     	        }
 
     	        setDefaults(node, "wid"+id);
-    	        
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     	        if (node.getAttributes().getNamedItem("style") != null)
     	        	sw.println("wid"+id+".setStyleName(\""+node.getAttributes().getNamedItem("style").getNodeValue()+"\");");
     		}
@@ -1895,6 +1946,9 @@ public class UIGenerator extends Generator {
     	            }
     	        }
     	        setDefaults(node,"wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
     	        
     		}
     		public void addImport() {
