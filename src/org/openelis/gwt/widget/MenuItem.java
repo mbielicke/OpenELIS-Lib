@@ -69,7 +69,7 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public MenuPanel child;
     public MenuPanel menuItemsPanel;
     public Widget wid;
-    public enum PopPosition {BELOW,SIDE};
+    public enum PopPosition {BELOW,BESIDE};
     public PopPosition popPosition = PopPosition.BELOW;
     public enum Action {OPENING,CLOSING};
     public AbsolutePanel iconPanel = new AbsolutePanel();
