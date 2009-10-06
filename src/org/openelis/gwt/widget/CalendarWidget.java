@@ -311,7 +311,7 @@ import com.google.gwt.user.client.ui.Widget;
 		Datetime old = form.date;
 		form.date = value;
 		if(fireEvents)
-			ValueChangeEvent.fireIfNotEqual(this, old, getValue());
+			ValueChangeEvent.fire(this, getValue());
 		
 	}
 
