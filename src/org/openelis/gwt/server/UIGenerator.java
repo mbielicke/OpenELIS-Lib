@@ -1704,7 +1704,7 @@ public class UIGenerator extends Generator {
                 	sw.println("column"+id+".controller = wid"+id+";");
                 	sw.println("wid"+id+".columns.add(column"+id+");");
                 }
-                sw.println("wid"+id+".setup();");
+                sw.println("wid"+id+".init();");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				if (node.getAttributes().getNamedItem("case") != null){
 					String fieldCase = node.getAttributes().getNamedItem("case")
@@ -1850,14 +1850,12 @@ public class UIGenerator extends Generator {
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 			    
-    			if(node.getAttributes().getNamedItem("action") != null) {
-    				sw.println("wid"+id+".action = \""+node.getAttributes().getNamedItem("action").getNodeValue()+"\";");
-    			}
+    			if(node.getAttributes().getNamedItem("action") != null) 
+    				sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+"\");");
+    			
+    	        if(node.getAttributes().getNamedItem("toggle") != null)
+   	                sw.println("wid"+id+".setToggle("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
     	        
-    	        if(node.getAttributes().getNamedItem("toggle") != null){
-    	            if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
-    	                sw.println("wid"+id+".toggle = true;");
-    	        }
     	        NodeList widgets = node.getChildNodes();
     	        for (int l = 0; l < widgets.getLength(); l++) {
     	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {

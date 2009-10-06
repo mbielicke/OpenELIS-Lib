@@ -14,6 +14,12 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This widget class implements a a panel of buttons where only one button can be clicked at a time.  An object that handles
+ * clicks for all the buttons in the group only needs to register once to this widget.  Used Mostly for AZButtons
+ * @author tschmidt
+ *
+ */
 public class ButtonGroup extends Composite implements ClickHandler, HasClickHandlers {
 
     private ArrayList<AppButton> buttons = new ArrayList<AppButton>();
@@ -22,12 +28,17 @@ public class ButtonGroup extends Composite implements ClickHandler, HasClickHand
     public ButtonGroup() {
     }
 
+    /**
+     * Sets the panel of buttons to the group. The widget will walk through the Panel finding all the buttons registering
+     * them to the group.
+     * @param panel
+     */
     public void setButtons(Panel panel) {
         initWidget(panel);
         findButtons(panel);
     }
 
-    public void findButtons(HasWidgets hw) {
+    private void findButtons(HasWidgets hw) {
         Iterator<Widget> widsIt = hw.iterator();
         while (widsIt.hasNext()) {
             Widget wids = widsIt.next();
@@ -40,6 +51,9 @@ public class ButtonGroup extends Composite implements ClickHandler, HasClickHand
         }
     }
 
+    /**
+     * Registers all buttons in this group to handler that is passed to the method
+     */
     public HandlerRegistration addClickHandler(ClickHandler handler) {
         for (AppButton button : buttons) {
             button.addClickHandler(handler);
@@ -47,20 +61,28 @@ public class ButtonGroup extends Composite implements ClickHandler, HasClickHand
         return null;
     }
 
+    /**
+     * Recives clickEvents from buttons so that the current button can be styled correctly.
+     * 
+     */
     public void onClick(ClickEvent event) {
         if (selected != null) {
-            selected.changeState(ButtonState.UNPRESSED);
+            selected.setState(ButtonState.UNPRESSED);
         }
         selected = (AppButton)event.getSource();
-        selected.changeState(ButtonState.PRESSED);
+        selected.setState(ButtonState.PRESSED);
     }
 
+    /**
+     * enables or disables the buttons in this group based on the boolean passed
+     * @param enabled
+     */
     public void enable(boolean enabled) {
         for (AppButton button : buttons) {
             if ( !enabled)
-                button.changeState(ButtonState.DISABLED);
+                button.setState(ButtonState.DISABLED);
             else
-                button.changeState(ButtonState.UNPRESSED);
+                button.setState(ButtonState.UNPRESSED);
         }
     }
 }

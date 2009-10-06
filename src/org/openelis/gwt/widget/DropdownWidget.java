@@ -80,7 +80,11 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         public void run() {
             if (textbox.getText().equals(text)) {
                 currentCursorPos = textbox.getText().length();
-                getMatches(text);
+                try {
+                	getMatches(text);
+                }catch(Exception e) {
+                	e.printStackTrace();
+                }
             }
         }
     };
@@ -178,15 +182,16 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public boolean isMultiSelect() {
         return multiSelect;
     }
+    
+    protected void getMatches(String text) throws Exception {
+    	
+    }
 
     public void setMultiSelect(boolean multiSelect) {
         this.multiSelect = multiSelect;
         enableMultiSelect(multiSelect);
     }
     
-    public void getMatches(String text) {
-        
-    }
     
     public void setDelay(String text, int delay) {
         new Delay(text, delay);

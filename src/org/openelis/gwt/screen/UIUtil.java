@@ -1396,7 +1396,7 @@ public class UIUtil {
                 	columns.add(column);
                 }
                 auto.columns = columns;
-                auto.setup();
+                auto.init();
 				if (node.getAttributes().getNamedItem("case") != null){
 					String fieldCase = node.getAttributes().getNamedItem("case")
 					.getNodeValue().toUpperCase();
@@ -1508,12 +1508,12 @@ public class UIUtil {
     				button.addTabHandler(new TabHandler(node,def));
     			}
     			if(node.getAttributes().getNamedItem("action") != null) {
-    				button.action = node.getAttributes().getNamedItem("action").getNodeValue();
+    				button.setAction(node.getAttributes().getNamedItem("action").getNodeValue());
     			}
     	        
     	        if(node.getAttributes().getNamedItem("toggle") != null){
     	            if(node.getAttributes().getNamedItem("toggle").getNodeValue().equals("true"))
-    	                button.toggle = true;
+    	                button.setToggle(true);
     	        }
     	        if(node.getAttributes().getNamedItem("shortcut") != null) {
     	        	def.panel.addShortcutHandler(new ShortcutHandler(node,button));

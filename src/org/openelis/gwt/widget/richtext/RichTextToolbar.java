@@ -423,7 +423,7 @@ public class RichTextToolbar extends Composite {
 
   private AppButton createPushButton(String img, String action) {
       AppButton ab = new AppButton();
-      ab.action = action;
+      ab.setAction(action);
       AbsolutePanel ap = new AbsolutePanel();
       ap.setStyleName(img);
       ab.setWidget(ap);
@@ -433,12 +433,12 @@ public class RichTextToolbar extends Composite {
 
   private AppButton createToggleButton(String img, String action) {
     AppButton ab = new AppButton();
-    ab.action = action;
+    ab.setAction(action);
     AbsolutePanel ap = new AbsolutePanel();
     ap.setStyleName(img);
     ab.setWidget(ap);
     ab.addClickHandler(listener);
-    ab.toggle = true;
+    ab.setToggle(true);
     return ab;
   }
   

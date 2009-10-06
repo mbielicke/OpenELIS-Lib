@@ -25,15 +25,19 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
-public class AutoCompleteListener implements
-                                 ClickHandler,
-                                 KeyUpHandler {
+
+/**
+ * Implements a Key Listener for the AutoComplete widget to determine when a GetMatchesEvent should be fired.  Implemented in separate
+ * class because DropdownWidget which is the super of AutoComplete implements the same handler for Keyboard navigation of the PopupTable
+ *  
+ * @author tschmidt
+ *
+ */
+public class AutoCompleteListener implements KeyUpHandler {
     
     private AutoComplete widget;
    
@@ -42,10 +46,11 @@ public class AutoCompleteListener implements
         this.widget = widget;
     }
 
-    public void onClick(ClickEvent event) {
-
-    }
-
+    /**
+     * Catches key events from the AutoComplete widget and determines if getMatches should be called.  We set a delay so
+     * that if multiple key strokes are entered quickly we don't call getMathces with calls that will most likely be never seen by the 
+     * user. 
+     */
     public void onKeyUp(KeyUpEvent event) {
         if(widget.queryMode)
             return;

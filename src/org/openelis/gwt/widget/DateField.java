@@ -31,7 +31,6 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -297,7 +296,7 @@ public class DateField extends Field<Datetime> {
 		clearError(wid);
 		if(queryMode){
 			if(wid instanceof CalendarLookUp) {
-				queryString = ((CalendarLookUp)wid).textbox.getText();
+				queryString = ((CalendarLookUp)wid).getStringValue();
 			}else if(wid instanceof TextBox) {
 				queryString = ((TextBox)wid).getText();
 			}
