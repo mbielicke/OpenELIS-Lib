@@ -93,9 +93,14 @@ public class ButtonPanel extends Composite implements ClickListener, SourcesComm
      */
     public void onClick(Widget sender) {
         if(state == ButtonPanelState.ENABLED){
-            Action action = Action.valueOf(((AppButton)sender).action.toUpperCase().split(":")[0]);
-            if(commandListeners != null)
-                commandListeners.fireCommand(action,sender);
+        	if(((AppButton)sender).action.indexOf("*") > -1){
+        		if(commandListeners != null) 
+        			commandListeners.fireCommand(Action.QUERY, sender);
+        	}else {
+        		Action action = Action.valueOf(((AppButton)sender).action.toUpperCase().split(":")[0]);
+            	if(commandListeners != null)
+            		commandListeners.fireCommand(action,sender);
+        	}
         }else{
             ((AppButton)sender).changeState(ButtonState.UNPRESSED);
         }
