@@ -239,6 +239,8 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
         }
         hp.add(trCorner);
+        statusImg.addMouseOverHandler(this);
+        statusImg.addMouseOutHandler(this);
         status.setStyleName("StatusBar");
         status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 
