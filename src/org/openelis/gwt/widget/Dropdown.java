@@ -264,7 +264,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	@Override
 	public void checkValue() {
-		field.checkValue(this);
+		if(!queryMode)
+			field.checkValue(this);
 	}
 	
 	public void getQuery(ArrayList list, String key) {
