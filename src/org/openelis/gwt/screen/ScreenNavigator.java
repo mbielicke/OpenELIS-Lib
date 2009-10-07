@@ -99,15 +99,6 @@ public abstract class ScreenNavigator {
                 }
             });
         }
-        //
-        // disabling next/prev buttons does not work until the widgets are on the
-        // screen. We will defer this until the screen is drawn.
-        //
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                enable(false);
-            }
-        });
     }
 
     /**
