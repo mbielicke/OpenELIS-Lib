@@ -156,7 +156,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public int shownRows; 
     public boolean multiSelect;
     public VerticalScroll showScroll;
-    public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
+   // public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
     protected HashMap<String,TreeDataItem> leaves;
     public String width;
     public ArrayList<TreeDataItem> deleted;// = new ArrayList<DataSet<Key>>();
@@ -223,6 +223,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public void unselect(int row) {
         finishEditing();
         if(row == -1){
+        	for(int i : selections) {
+        		rows.get(i).selected = false;
+        	}
             selections.clear();
             selected = -1;
             renderer.rowUnselected(-1);
@@ -231,6 +234,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             if(selected == row)
                 selected = -1;
         }
+        if(activeRow > -1)
+        	rows.get(activeRow).selected = false;
         activeRow = -1;
         if(isRowDrawn(row))
         	renderer.rowUnselected(treeIndex(row));
@@ -413,8 +418,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		data.clear();
     	if(rows != null)
     		rows.clear();
-    	if(selectedRows != null)
-    		selectedRows.clear();
+    	if(selections != null)
+    		selections.clear();
     	activeRow = -1;
     	activeCell = -1;
     	editingCell = null;
@@ -424,10 +429,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void clearSelections() {
-        for(int i : selectedRows){
+        for(int i : selections){
             rows.get(i).selected = false;
         }
-        selectedRows.clear();
+        selections.clear();
     }
 
 
@@ -438,7 +443,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		if(event != null && event.isCancelled())
     			return;
     	}
-    	if(selectedRows.contains(row)){
+    	if(selections.contains(row)){
             unselectRow(row);
             if(fireEvents)
             	UnselectionEvent.fire(this, getRow(row));
@@ -507,21 +512,21 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public TreeDataItem getSelection() {
-        return rows.get(selectedRows.get(0));
+        return rows.get(selections.get(0));
     }
 
     public ArrayList<TreeDataItem> getSelections() {
-        ArrayList<TreeDataItem> selections = new ArrayList<TreeDataItem>();
-        for(int i : selectedRows) {
-            selections.add(rows.get(i));
+        ArrayList<TreeDataItem> selected = new ArrayList<TreeDataItem>();
+        for(int i : selections) {
+            selected.add(rows.get(i));
         }
-        return selections;
+        return selected;
     }
     
     public int getSelectedIndex() {
-        if(selectedRows.size() == 0)
+        if(selections.size() == 0)
             return -1;
-        return selectedRows.get(0);
+        return selections.get(0);
     }
 
     public void hideRow(int row) {
@@ -537,14 +542,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public boolean isSelected(int index) {
-        return selectedRows.contains(index);
+        return selections.contains(index);
     }
 
     public void load(ArrayList<TreeDataItem> data) {
         this.data = data;
         shownRows = 0;
         getVisibleRows();
-        selectedRows.clear();
+        selections.clear();
         activeRow = -1;
         activeCell = -1;
         renderer.dataChanged(false);
@@ -556,15 +561,15 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public void selectRow(int index){
         if(index < numRows()){
-           if(!multiSelect && selectedRows.size() > 0){
+           if(!multiSelect && selections.size() > 0){
         	   if(fireEvents)
-        		   UnselectionEvent.fire(this, rows.get(selectedRows.get(0)));
-               rows.get(selectedRows.get(0)).selected = false;
+        		   UnselectionEvent.fire(this, rows.get(selections.get(0)));
+               rows.get(selections.get(0)).selected = false;
                renderer.rowUnselected(-1);
-               selectedRows.clear();
+               selections.clear();
            }
            rows.get(index).selected = true;
-           selectedRows.add(index);
+           selections.add(index);
            renderer.rowSelected(treeIndex(index));
         }    
     }
@@ -594,7 +599,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             clearSelections();
         }else if(index < numRows()){
             rows.get(index).selected = false;
-            selectedRows.remove(new Integer(index));
+            selections.remove(new Integer(index));
         }
         renderer.rowUnselected(-1);
     }
@@ -631,13 +636,21 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
     		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(modelIndexList[row]));
     		if(!event.isCanceled()){
-    			selectRow(row);
-    			SelectionEvent.fire(this, rows.get(modelIndexList[row]));
+    			unselect(-1);
+    			selections.add(row);
+    			rows.get(row).selected = true;
+    			renderer.rowSelected(treeIndex(row));
+    			activeRow = treeIndex(row);
+    			SelectionEvent.fire(this, rows.get(row));
     		}
     	}else if(isEnabled()){
-    		selectRow(row);
+    		unselect(-1);
+			selections.add(row);
+			rows.get(row).selected = true;
+			renderer.rowSelected(treeIndex(row));
+			activeRow = treeIndex(row);
     		if(fireEvents)
-    			SelectionEvent.fire(this, rows.get(modelIndexList[row]));
+    			SelectionEvent.fire(this, rows.get(row));
     	}
     	if(!rows.get(row).open) {
     		if(fireEvents){
@@ -663,20 +676,20 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public int getSelectedRowIndex() {
-        if(selectedRows.size() == 0)
+        if(selections.size() == 0)
             return -1;
-        return selectedRows.get(0);
+        return selections.get(0);
     }
     
     public int[] getSelectedRowIndexes() {
-        int[] ret = new int[selectedRows.size()];
-        for(int i = 0;  i < selectedRows.size(); i++)
-            ret[i] = selectedRows.get(i);
+        int[] ret = new int[selections.size()];
+        for(int i = 0;  i < selections.size(); i++)
+            ret[i] = selections.get(i);
         return ret;
     }
 
     public ArrayList<Integer> getSelectedRowList() {
-        return selectedRows;
+        return selections;
     }
     
     public void clearCellError(int row, int col) {
