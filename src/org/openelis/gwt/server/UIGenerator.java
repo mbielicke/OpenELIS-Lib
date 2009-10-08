@@ -617,9 +617,11 @@ public class UIGenerator extends Generator {
     	            sw.println("wid"+id+".setType(CheckBox.CheckType.THREE_STATE);");
     	            //defaultType = CheckBox.CheckType.THREE_STATE;
     	        }
-    	        if (node.getFirstChild() != null){
-    	             sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue()+"\"");
+    	       
+    	        if (node.getAttributes().getNamedItem("prompt") != null){
+    	             sw.println("wid"+id+".setText(\""+node.getAttributes().getNamedItem("prompt").getNodeValue()+"\");");
     	        }
+    	        
     	        if (node.getChildNodes().getLength() > 0){
     	            NodeList widgets = node.getChildNodes();
     	            for (int k = 0; k < widgets.getLength(); k++) {
@@ -1974,7 +1976,7 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("required") != null)
     	            sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
     	        if (node.hasChildNodes()) {
-    	            sw.println("field"+id+".setValue("+node.getFirstChild().getNodeValue()+");");
+    	            sw.println("field"+id+".setValue(\""+node.getFirstChild().getNodeValue()+"\");");
     	        }
     		}
     		public void addImport() {
