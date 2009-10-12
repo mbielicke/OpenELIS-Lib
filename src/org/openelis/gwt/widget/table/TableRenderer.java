@@ -88,7 +88,8 @@ public class TableRenderer  {
 
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.shownRows()*controller.cellHeight)+(controller.maxRows*2);
+        int ScrollHeight = (controller.shownRows*controller.cellHeight)+(controller.shownRows*controller.cellSpacing);
+        //int ScrollHeight = (controller.shownRows()*controller.cellHeight)+(controller.maxRows*2);
         if(controller.isAutoAdd()){
             ScrollHeight += controller.cellHeight;
         }
