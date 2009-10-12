@@ -9,7 +9,9 @@ import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.allen_sauer.gwt.dnd.client.util.WidgetLocation;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -105,7 +107,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
    }
    targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
        context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
-   Location tableLocation = new WidgetLocation(table, context.boundaryPanel);
+   Location tableLocation = new WidgetLocation(table, RootPanel.get());
    if(table.numRows() > 0){
        if(table.dragController == context.dragController){
            int checkIndex = targetRow;
@@ -120,12 +122,12 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
            }
        }
        TableRow row = table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
-       Location widgetLocation = new WidgetLocation(row, context.boundaryPanel);
-       context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
+       Location widgetLocation = new WidgetLocation(row, RootPanel.get());
+       RootPanel.get().add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
                                  + (targetRow == -1 ? 0 : row.getOffsetHeight()));
    }else{
-       Location headerLocation = new WidgetLocation(table.view.header,context.boundaryPanel);
-       context.boundaryPanel.add(positioner,tableLocation.getLeft(),headerLocation.getTop()+table.view.header.getOffsetHeight());
+       Location headerLocation = new WidgetLocation(table.view.header,RootPanel.get());
+       RootPanel.get().add(positioner,tableLocation.getLeft(),headerLocation.getTop()+table.view.header.getOffsetHeight());
    }
    validDrop = true;
    if(targetRow == 0 || targetRow == table.maxRows -1)
@@ -177,7 +179,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
  }
  
  Widget newPositioner(DragContext context) {
-     Widget p = new SimplePanel();
+     Widget p = new AbsolutePanel();
      p.addStyleName(CSS_DROP_POSITIONER);
      p.setPixelSize(table.getOffsetWidth(), 1);
      return p;

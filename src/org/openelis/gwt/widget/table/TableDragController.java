@@ -55,7 +55,8 @@ public class TableDragController extends PickupDragController {
     
     @Override
     public void previewDragStart() throws VetoDragException {
-        ((TableRow)context.draggable).setDragValues();
+    	if(enabled);
+        	((TableRow)context.draggable).setDragValues();
         super.previewDragStart();
         
     }
@@ -121,7 +122,7 @@ public class TableDragController extends PickupDragController {
     }
     
     public void setEnable(boolean enable) {
-        enabled = enable;
+       enabled = enable;
     }
 
 }

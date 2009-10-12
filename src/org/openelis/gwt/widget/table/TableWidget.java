@@ -732,8 +732,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
-        if(dragController != null)
-            dragController.setEnable(enabled);
+        //if(dragController != null)
+          //  dragController.setEnable(enabled);
         for(TableColumn column : columns) {
             column.enable(enabled);
         }
@@ -835,14 +835,14 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
     public void enableDrag(boolean drag) {
     	if(drag){
-    		dragController = new TableDragController(RootPanel.get());  		
-      		for(TableRow row : renderer.rows) 
-    			dragController.makeDraggable(row);
+    		if(dragController == null) {
+    			dragController = new TableDragController(RootPanel.get());  		
+      			for(TableRow row : renderer.rows) 
+      				dragController.makeDraggable(row);
+    		}
     		dragController.setEnable(true);
     	}else{
-    		for(TableRow row : renderer.rows)
-    			dragController.makeNotDraggable(row);
-    		dragController = null;
+    		dragController.setEnable(false);
     	}
     	
     }
