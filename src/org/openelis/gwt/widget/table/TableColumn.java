@@ -89,7 +89,7 @@ public class TableColumn {
     		else
     			wid.setStyleName(CheckBox.UNCHECKED_STYLE);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
-    		wid.setWidth("15px");
+    		wid.setWidth((currentWidth)+ "px");
     	}else{
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -260,7 +260,7 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		((CheckBox)editor).setValue((String)cell.getValue());
     		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
-    		editor.setWidth("15px");
+    		editor.setWidth((currentWidth)+ "px");
     		return editor;
     	}
     	editor = colWidget;

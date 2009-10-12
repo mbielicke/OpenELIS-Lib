@@ -370,6 +370,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void addRow() {
     	finishEditing();
         addRow(createRow());
+        view.scrollBar.scrollToBottom();
     }
     
     public void addRow(int index) {
@@ -389,7 +390,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             shownRows++;
         if(fireEvents)
         	RowAddedEvent.fire(this, data.size()-1, row);
+        view.scrollBar.scrollToBottom();
        	renderer.dataChanged(true);
+       	
     }
     
     public void addRow(int index, TableDataRow row) {

@@ -70,24 +70,24 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     
     public class CellView extends ScrollPanel implements HasMouseWheelHandlers {
 
-        private AbsolutePanel ap = new AbsolutePanel();
+        //private AbsolutePanel ap = new AbsolutePanel();
         
         public CellView() {
-            super.setWidget(ap);
+            //super.setWidget(ap);
         }
         
         public void setScrollWidth(String width){
-            ap.setWidth(width);
+           // ap.setWidth(width);
         }
         
-        public void setWidget(final Widget wid){
-            ap.clear();
-            ap.add(wid);
-        }
+        //public void setWidget(final Widget wid){
+            //ap.clear();
+           // ap.add(wid);
+        //}
         
         public void setHeight(String height) {
             super.setHeight(height);
-            ap.setHeight(height);
+           // ap.setHeight(height);
         }
 
 		public HandlerRegistration addMouseWheelHandler(
@@ -140,28 +140,6 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             titleLabel.setText(controller.title);
             titlePanel.add(titleLabel);
             titlePanel.addStyleName("TitlePanel");
-            if(controller.addIcon) {
-            	IconContainer add = (IconContainer)UIUtil.createWidget(XMLParser.parse("<icon style='AddRowIcon'/>").getDocumentElement());
-            	add.addClickHandler(new ClickHandler() {
-            		public void onClick(ClickEvent event) {
-            			controller.addRow();
-            		}
-            	});
-            	titlePanel.add(add);
-            	titlePanel.setCellWidth(add, "16px");
-            }
-            if(controller.deleteIcon) {
-            	IconContainer delete = (IconContainer)UIUtil.createWidget(XMLParser.parse("<icon style='DeleteRowIcon'/>").getDocumentElement());
-            	delete.addClickHandler(new ClickHandler() {
-            		public void onClick(ClickEvent event) {
-            			if(controller.activeRow > -1) {
-            				controller.deleteRow(controller.activeRow);
-            			}
-            		}
-            	});
-            	titlePanel.add(delete);
-            	titlePanel.setCellWidth(delete, "16px");
-            }
         }
         if(controller.showHeader){
             header = new TableHeaderBar();
@@ -250,7 +228,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         }
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
-        if(headers != null)
+        //if(headers != null)
         	headerView.setHeight("20px");
 
     }
@@ -258,8 +236,12 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     public void setWidth(String width) {
         this.width = width.trim();
         cellView.setWidth(width);
-        if(headers != null)
-        	headerView.setWidth(width);
+        //cellView.setScrollWidth(width);
+        //if(headers != null)
+        headerView.setWidth(width);
+        titlePanel.setWidth(width);
+        titleLabel.setWidth(width);
+        vp.setCellWidth(titlePanel, width);
         rows.setWidth("25px");
         if(controller.title != null && !controller.title.equals("")){
         	titleLabel.setWidth(width);

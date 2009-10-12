@@ -308,7 +308,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         if(resizing) {
             int colA =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
             int colB =  columns.get(tableCol2).getCurrentWidth() - (sender.getAbsoluteLeft() - startx);
-            if((event.getX() < 0 && colA <= 16) || (event.getX() > 0 && colB <= 16)) 
+            if((event.getX() < 0 && (colA-23) <= 16) || (event.getX() > 0 && (colB-23) <= 16)) 
                  return;
             DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(event.getX()))+"px");
         }
@@ -350,7 +350,10 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             	for(int i = 0; i <  headers.size(); i++) {
             		HorizontalPanel header = headers.get(i);
             		header.setWidth(columns.get(i).currentWidth+"px");
-            		hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
+            		if(columns.get(i).currentWidth - 23 < 0)
+            			hLabels.get(i).setWidth("15px");
+            		else
+            			hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
             	}
             }
         });
