@@ -131,8 +131,8 @@ public class TableColumn {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
             	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Image("Images/bullet_red.png"));
             	hp.add(new Label(error));
-            	hp.add(new Image("Iamges/bullet_red.png"));
                 hp.setStyleName("errorPopupLabel");
                 errorPanel.add(hp);
             }
@@ -213,8 +213,8 @@ public class TableColumn {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
             	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Image("Images/bullet_red.png"));
             	hp.add(new Label(error));
-            	hp.add(new Image("Iamges/bullet_red.png"));
                 hp.setStyleName("errorPopupLabel");
                 errorPanel.add(hp);
             }
@@ -285,8 +285,8 @@ public class TableColumn {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
             	HorizontalPanel hp = new HorizontalPanel();
+            	hp.add(new Image("Images/bullet_red.png"));
             	hp.add(new Label(error));
-            	hp.add(new Image("Iamges/bullet_red.png"));
                 hp.setStyleName("errorPopupLabel");
                 errorPanel.add(hp);
             }
