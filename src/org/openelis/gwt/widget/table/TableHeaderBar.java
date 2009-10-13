@@ -160,7 +160,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.columns;
-        bar.setCellSpacing(1);
+        bar.setCellSpacing(0);
+        bar.setCellPadding(0);
         for(TableColumn column : columns) {
         	ListenContainer header = new ListenContainer();
         	header.setSpacing(0);
