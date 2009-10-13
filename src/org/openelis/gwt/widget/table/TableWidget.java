@@ -446,12 +446,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		}
     	}
     	TableDataRow row = data.remove(curIndex);
+    	int insert = newIndex;
     	if(newIndex > curIndex) 
-    		newIndex--;
+    		insert--;
     	if(newIndex >= data.size())
     		data.add(row);
     	else
-    		data.add(newIndex, row);
+    		data.add(insert, row);
     	if(fireEvents) 
     		RowMovedEvent.fire(this, curIndex, newIndex, row);
     	renderer.dataChanged(true);
