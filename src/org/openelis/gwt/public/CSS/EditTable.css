@@ -78,6 +78,9 @@ padding:0px 0px 4px 4px;
 	overflow: hidden;
 	padding: 1px 1px 0px;
 }
+.AtoZtable .TableCell {
+	border-width: 1px 0 1px 0px;
+}
 
 .TableCellLeft {
 	border-color: #FFFFFF #EDEDED #EDEDED #EDEDED;
@@ -205,6 +208,7 @@ padding:0px 0px 4px 4px;
 background:#8DB2E3;
 width:1px;
 height:100%;
+border-right:1px solid #d8d8d8;
 }
 .Title{
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -238,7 +242,7 @@ height:100%;
 
 .AtoZ {
 	background: white;
-	border-right:1px solid #d8d8d8;
+	/*border-right:1px solid #d8d8d8;*/
 	padding:2px;
 }
 

@@ -815,10 +815,11 @@ cursor:default;}
 /************ end AtoZ button ***************/
 
 /************ Window border ***************/
+/*
 .WindowPanel td table td{
     height:100%;
 }
-
+*/
 .CloseButton {
     background:url("../Images/close.png");
     width:20px;
@@ -1042,6 +1043,13 @@ cursor:default;}
     border-width:1px 0px;
     background:white;
     /*margin:2px;*/
+}
+
+.AtoZTable {
+    border:1px solid #D8D8D8;
+    border-width:1px;
+    background:white;
+    margin:6px 0 0 0;
 }
 
 .TitlePanel{
@@ -2013,7 +2021,10 @@ rich text css
     background:url("../Images/popuptop.png") repeat-x top;
     height:8px;
 }
-
+div.Focus{
+    border:1px solid #63b159;
+    border-width:1px 0;
+}
 .Focus {
     border:1px solid #63b159;
 }
@@ -2025,6 +2036,3 @@ rich text css
     border:1px solid #63b159;
 }
 
-.Focus .ScreenTable{
-    border:1px 0 solid #63b159;
-}
