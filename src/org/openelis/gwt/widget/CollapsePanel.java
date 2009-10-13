@@ -78,6 +78,7 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
             content.remove(0);
         content.add(wid);
         content.setCellVerticalAlignment(wid,HasAlignment.ALIGN_TOP);
+        content.setHeight("100%");
     }
     
     public void open() {
