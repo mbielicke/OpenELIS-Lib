@@ -155,7 +155,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         }
     }
 
-    protected void showErrors(ValidationErrorsList errors) {
+    public void showErrors(ValidationErrorsList errors) {
         ArrayList<String> formErrors = new ArrayList<String>();
 
         for (Exception ex : errors.getErrorList()) {
