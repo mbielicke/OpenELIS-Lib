@@ -419,7 +419,7 @@ background:white;
 }
 
 .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage,
-.AddRowButtonImage, .RemoveRowButtonImage, .ExitButtonImage,
+.AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage,
 .StandardNoteButtonImage, .groupRowButtonImage,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage{
     width:20px;
@@ -466,6 +466,12 @@ background:white;
 }
 .disabled .ungroupRowButtonImage{
     background:url("../Images/ungroupdisabled.gif") no-repeat;
+}
+.DuplicateRowButtonImage{
+    background:url("../Images/quickentrybuttonimage.gif") no-repeat;
+}
+.disabled .DuplicateRowButtonImage{
+    background:url("../Images/quickentrybuttonimagedisabled.gif") no-repeat;
 }
 .RemoveRowButtonImage{
     background:url("../Images/removerowbuttonimage.gif") no-repeat;
