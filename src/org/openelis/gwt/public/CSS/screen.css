@@ -1807,6 +1807,7 @@ font-weight:bold;
 }
 
 .DropPositioner {
+	height : 1px;
     background:green;
 }
 

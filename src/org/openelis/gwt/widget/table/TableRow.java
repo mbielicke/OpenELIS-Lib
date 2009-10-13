@@ -29,6 +29,7 @@ public class TableRow extends Widget implements HasAllMouseHandlers {
     
     public int dragIndex;
     public int dragModelIndex;
+    public int droppedIndex = -1;
     public TableDataRow dragRow;
     
     public TableRow() {

@@ -44,21 +44,27 @@ import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.table.event.BeforeRowMovedEvent;
+import org.openelis.gwt.widget.table.event.BeforeRowMovedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeAutoAddHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeRowMovedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasRowMovedHandlers;
 import org.openelis.gwt.widget.table.event.HasTableValueChangeHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.event.RowDeletedHandler;
+import org.openelis.gwt.widget.table.event.RowMovedEvent;
+import org.openelis.gwt.widget.table.event.RowMovedHandler;
 import org.openelis.gwt.widget.table.event.TableValueChangeEvent;
 import org.openelis.gwt.widget.table.event.TableValueChangeHandler;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
@@ -122,6 +128,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasBeforeRowDeletedHandlers,
 													   HasRowDeletedHandlers,
 													   HasBeforeAutoAddHandlers,
+													   HasBeforeRowMovedHandlers,
+													   HasRowMovedHandlers,
 													   HasDropController,
 													   HasContextMenuHandlers,
 													   FocusHandler,
@@ -427,7 +435,26 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             	RowDeletedEvent.fire(this, row, tmp);
         }
         renderer.dataChanged(true);
-        
+    }
+    
+    public void MoveRow(int curIndex, int newIndex) {
+    	if(fireEvents) {
+    		if(getHandlerCount(BeforeRowMovedEvent.getType()) > 0){
+    			BeforeRowMovedEvent event = BeforeRowMovedEvent.fire(this, curIndex, newIndex, data.get(curIndex));
+    			if(event != null && event.isCancelled())
+    				return;
+    		}
+    	}
+    	TableDataRow row = data.remove(curIndex);
+    	if(newIndex > curIndex) 
+    		newIndex--;
+    	if(newIndex >= data.size())
+    		data.add(row);
+    	else
+    		data.add(newIndex, row);
+    	if(fireEvents) 
+    		RowMovedEvent.fire(this, curIndex, newIndex, row);
+    	renderer.dataChanged(true);
     }
         
     public TableDataRow getRow(int row) {
@@ -899,6 +926,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	
 	public void fireEvents(boolean fire) {
 		fireEvents = fire;
+	}
+
+	public HandlerRegistration addBeforeRowMovedHandler(
+			BeforeRowMovedHandler handler) {
+		return addHandler(handler, BeforeRowMovedEvent.getType());
+	}
+
+	public HandlerRegistration addRowMovedHandler(RowMovedHandler handler) {
+		return addHandler(handler, RowMovedEvent.getType());
 	}
 	
 }

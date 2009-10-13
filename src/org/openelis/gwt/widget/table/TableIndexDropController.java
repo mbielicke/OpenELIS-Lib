@@ -77,15 +77,28 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
      drop = (TableRow)context.draggable;
      TableDataRow row = drop.dragRow;
      int modelIndex = drop.dragModelIndex;
-     if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
-         table.addRow(row);
-     else 
-         table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
-     if(table.dragController == context.dragController){
-         if(modelIndex > table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
-             modelIndex++;
-         table.deleteRow(modelIndex);
-     }    
+     //if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
+     //    table.addRow(row);
+     //else 
+     //    table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
+     
+     //if(table.dragController == context.dragController){
+     //    if(modelIndex > table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
+     //        modelIndex++;
+     //    table.deleteRow(modelIndex);
+     //}
+     if(table.dragController == context.dragController){	
+    	 if(targetRow < 0)
+    		table.MoveRow(drop.dragIndex, 0);
+    	 else
+    		table.MoveRow(drop.dragIndex, table.renderer.getRows().get(targetRow).modelIndex+1);
+    	 //table.MoveRow(drop.dragIndex, table.renderer.getRows().get(targetRow+1).modelIndex);
+     }else {
+    	 if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
+    		 table.addRow(row);
+    	 else 
+    		 table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
+     }
      dropping = false;
      super.onDrop(context);
  }
