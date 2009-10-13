@@ -228,7 +228,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     	// TODO Auto-generated method stub
     	resizing = true;
     	startx = sender.getAbsoluteLeft();
-    	resizeColumn1 = headers.indexOf(sender.getParent());
+    	resizeColumn1 = headers.indexOf(sender.getParent()) - 1;
     	tableCol1 = resizeColumn1;
     	if(columns.get(tableCol1).getFixedWidth() && columns.get(tableCol1+1).getFixedWidth()){
     		resizing = false;
@@ -263,7 +263,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     		return;
     	}
     	tableCol2 = -1;
-    	int i = tableCol1 +1;
+    	int i = tableCol1 + 1;
     	while(tableCol2 < 0 && i < columns.size()){
     		if(!columns.get(i).getFixedWidth())
     			tableCol2 = i;
