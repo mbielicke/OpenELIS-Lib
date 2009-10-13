@@ -58,6 +58,7 @@
 			</xsd:sequence>
 			<xsd:attribute name="enable" type="xsd:boolean"/>
 			<xsd:attribute name="key" type="xsd:string" />
+			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
 
