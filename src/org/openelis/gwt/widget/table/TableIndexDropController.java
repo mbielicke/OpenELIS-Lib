@@ -8,6 +8,7 @@ import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.allen_sauer.gwt.dnd.client.util.WidgetLocation;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
@@ -195,6 +196,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
      Widget p = new AbsolutePanel();
      p.addStyleName(CSS_DROP_POSITIONER);
      p.setPixelSize(table.getOffsetWidth(), 1);
+     DOM.setStyleAttribute(p.getElement(), "zIndex", "1000");
      return p;
    }
 
