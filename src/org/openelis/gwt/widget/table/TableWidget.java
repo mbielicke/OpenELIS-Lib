@@ -46,6 +46,8 @@ import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowMovedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowMovedHandler;
+import org.openelis.gwt.widget.table.event.BeforeSortEvent;
+import org.openelis.gwt.widget.table.event.BeforeSortHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeAutoAddHandlers;
@@ -53,10 +55,12 @@ import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowMovedHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeSortHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowMovedHandlers;
+import org.openelis.gwt.widget.table.event.HasSortHandlers;
 import org.openelis.gwt.widget.table.event.HasTableValueChangeHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.RowAddedEvent;
@@ -65,6 +69,8 @@ import org.openelis.gwt.widget.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.event.RowDeletedHandler;
 import org.openelis.gwt.widget.table.event.RowMovedEvent;
 import org.openelis.gwt.widget.table.event.RowMovedHandler;
+import org.openelis.gwt.widget.table.event.SortEvent;
+import org.openelis.gwt.widget.table.event.SortHandler;
 import org.openelis.gwt.widget.table.event.TableValueChangeEvent;
 import org.openelis.gwt.widget.table.event.TableValueChangeHandler;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
@@ -130,6 +136,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasBeforeAutoAddHandlers,
 													   HasBeforeRowMovedHandlers,
 													   HasRowMovedHandlers,
+													   HasBeforeSortHandlers,
+													   HasSortHandlers,
 													   HasDropController,
 													   HasContextMenuHandlers,
 													   FocusHandler,
@@ -610,9 +618,20 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
     public void sort(int col, SortDirection direction) {
+    	if(fireEvents){
+    		if(getHandlerCount(BeforeSortEvent.getType()) > 0){
+    			BeforeSortEvent event = BeforeSortEvent.fire(this, col, columns.get(col).key, direction);
+    			if(event != null && event.isCancelled())
+    				return;
+    		}
+    	}
     	unselect(-1);
-        sorter.sort(data, col, direction);
-    	renderer.dataChanged(false);
+    	if(fireEvents && getHandlerCount(SortEvent.getType()) > 0) {
+    		SortEvent.fire(this, col, columns.get(col).key, direction);
+    	}else{
+    		sorter.sort(data, col, direction);
+    		renderer.dataChanged(false);
+    	}
     }
     
     public void refresh() {
@@ -936,6 +955,14 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public HandlerRegistration addRowMovedHandler(RowMovedHandler handler) {
 		return addHandler(handler, RowMovedEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeSortHandler(BeforeSortHandler handler) {
+		return addHandler(handler, BeforeSortEvent.getType());
+	}
+
+	public HandlerRegistration addSortHandler(SortHandler handler) {
+		return addHandler(handler, SortEvent.getType());
 	}
 	
 }
