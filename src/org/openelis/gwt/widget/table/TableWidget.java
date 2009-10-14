@@ -220,11 +220,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue())){
     					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
     					if(fireEvents)
-    						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.UNCHECKED);
+    						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), modelIndexList[cell.getRowIndex()], CheckBox.UNCHECKED);
     				}else{
     					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
     					if(fireEvents)
-    						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), CheckBox.CHECKED);
+    						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), modelIndexList[cell.getRowIndex()], CheckBox.CHECKED);
     				}
     			}
     		}
@@ -342,7 +342,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public boolean finishEditing() {
         if(editingCell != null) {
         	if(renderer.stopEditing() && fireEvents)
-        		CellEditedEvent.fire(this, activeRow, activeCell, getRow(activeRow).cells.get(activeCell).value);
+        		CellEditedEvent.fire(this, activeRow, activeCell, modelIndexList[activeRow], getRow(activeRow).cells.get(activeCell).value);
             if(isAutoAdd() && modelIndexList[activeRow] == numRows()){
             	if(fireEvents){
             		BeforeAutoAddEvent event = BeforeAutoAddEvent.fire(this, getAutoAddRow());

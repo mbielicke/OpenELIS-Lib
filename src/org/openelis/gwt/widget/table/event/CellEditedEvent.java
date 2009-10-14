@@ -5,20 +5,22 @@ import com.google.gwt.event.shared.GwtEvent;
 public class CellEditedEvent extends GwtEvent<CellEditedHandler> {
 	
 	private static Type<CellEditedHandler> TYPE;
-	private int row;
-	private int cell;
+	private int tableIndex;
+	private int tableCell;
+	private int modelIndex;
 	private Object value;
 	
-	public static void fire(HasCellEditedHandlers source, int row, int cell, Object value) {
+	public static void fire(HasCellEditedHandlers source, int tableIndex, int cell, int modelIndex, Object value) {
 		if(TYPE != null) {
-			CellEditedEvent event = new CellEditedEvent(row, cell, value);
+			CellEditedEvent event = new CellEditedEvent(tableIndex, cell, modelIndex, value);
 			source.fireEvent(event);
 		}
 	}
 	
-	protected CellEditedEvent(int row, int col, Object value) {
-		this.row = row;
-		this.cell = col;
+	protected CellEditedEvent(int tableIndex, int col, int modelIndex, Object value) {
+		this.tableIndex = tableIndex;
+		this.tableCell = col;
+		this.modelIndex = modelIndex;
 		this.value = value;
 	}
 
@@ -39,12 +41,16 @@ public class CellEditedEvent extends GwtEvent<CellEditedHandler> {
 		return TYPE;
 	}
 	
-	public int getRow() {
-		return row;
+	public int getTableIndex() {
+		return tableIndex;
 	}
 	
 	public int getCell() {
-		return cell;
+		return tableCell;
+	}
+	
+	public int getModelIndex() {
+		return modelIndex;
 	}
 	
 	public Object getValue() {
