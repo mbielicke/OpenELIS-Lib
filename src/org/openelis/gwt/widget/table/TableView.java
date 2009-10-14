@@ -220,10 +220,10 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     
     public void setHeight(int height) {
         if(!width.equals("auto")){
-            //cellView.setHeight(height+18+"px");
+            cellView.setHeight(height+18+"px");
             this.height = height+18;
         }else{
-            //cellView.setHeight(height+"px");
+            cellView.setHeight(height+"px");
             this.height = height;
         }
         rowsView.setHeight(height+"px");
