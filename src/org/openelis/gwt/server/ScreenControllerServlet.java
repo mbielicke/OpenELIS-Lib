@@ -108,8 +108,14 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
-	public ArrayList<RPC> callList(String method, RPC param) throws Throwable {
-		return (ArrayList<RPC>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+	public <T extends RPC> ArrayList<T> callList(String method, RPC param)
+			throws Throwable {
+		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+	}
+
+	public <T extends RPC> ArrayList<T> callList(String method)
+			throws Throwable {
+		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
 }
