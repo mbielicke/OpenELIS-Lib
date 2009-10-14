@@ -1937,6 +1937,26 @@ rich text css
     background: url(../Images/removeFormat.gif);
 }
 
+.TableWidget, .TableWidget .TextboxUnselected, .TableWidget .TextboxSelected, .TableWidget .CalendarButton{
+   height:18px;
+}
+.TableWidget .CalendarButton, .TableWidget .DotsButton{
+   height:17px;
+}
+
+
+
+.HeaderBarPad {
+border-left:1px solid #b5b8c8;
+cursor:e-resize;
+height:19px;
+width:2px;
+}
+
+.InputError {
+	border-bottom:1px dashed red;
+height:17px;
+}
 .InputError .ScreenTextBox{
 	border-bottom:1px dashed red;
 }
@@ -1947,10 +1967,6 @@ rich text css
 	border-bottom:1px dashed red;
 }
 .InputError .CalendarButton{
-	border-bottom:1px dashed red;
-}
-
-.InputError {
 	border-bottom:1px dashed red;
 }
 
