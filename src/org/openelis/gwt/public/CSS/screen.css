@@ -421,7 +421,7 @@ background:white;
 .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage,
 .AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage,
 .StandardNoteButtonImage, .groupRowButtonImage,
-.ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage{
+.ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
     width:20px;
     height:20px;
 }
@@ -504,16 +504,11 @@ background:white;
 .disabled .StandardNoteButtonImage{
     background:url("../Images/standardnotebuttonimagedisabled.gif") no-repeat;
 }
-.LookupButtonImage{
-    background:url("../Images/querybuttonimage.gif") no-repeat;
+.PickerButtonImage{
+    background:url("../Images/fieldlookup.png") no-repeat;
 }
-.disabled .LookupButtonImage{
-    background:url("../Images/querybuttonimagedisabled.gif") no-repeat;
-}
-.LookupButtonImage{
-    width:16px;
-    height:16px;
-    padding:2px;
+.disabled .PickerButtonImage{
+    background:url("../Images/fieldlookupdisabled.png") no-repeat;
 }
 .FindButtonImage{
     width:20px;
