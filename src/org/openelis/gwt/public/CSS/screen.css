@@ -1945,14 +1945,14 @@ rich text css
 }
 
 
-
+/*
 .HeaderBarPad {
 border-left:1px solid #b5b8c8;
 cursor:e-resize;
 height:19px;
 width:2px;
 }
-
+*/
 .InputError {
 	border-bottom:1px dashed red;
 height:17px;

@@ -169,16 +169,18 @@ padding:0px 0px 4px 4px;
 	height: 18px;
 	width: 100%;
 	background: transparent url("../Images/headersprite.gif") repeat-x;
-	border-bottom: 1px solid #b5b8c8;
+	border-color: #b5b8c8;
+	border-style: solid;
+	border-width: 0px 1px 0px 0px;
 }
-
+/*
 .HeaderBar {
 	width: 1px;
 	height: 18px;
 	background: url('../Images/headerdivider.gif') no-repeat center bottom;
 	cursor: e-resize;
 }
-
+*/
 .HeaderBarPad {
 	width:3px;
 	height:18px;
@@ -203,7 +205,7 @@ padding:0px 0px 4px 4px;
 background:#8DB2E3;
 width:1px;
 height:100%;
-border-right:1px solid #d8d8d8;
+
 }
 .Title{
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
