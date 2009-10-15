@@ -204,11 +204,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue())){
 					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
 					if(fireEvents)
-						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), modelIndexList[cell.getRowIndex()], CheckBox.UNCHECKED);
+						CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
 				}else{
 					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
 					if(fireEvents)
-						CellEditedEvent.fire(this, cell.getRowIndex(),cell.getCellIndex(), modelIndexList[cell.getRowIndex()], CheckBox.CHECKED);
+						CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()],cell.getCellIndex(), CheckBox.CHECKED);
 				}
 			}
 		}
@@ -311,7 +311,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public boolean finishEditing() {
         if (editingCell != null) {
         	if(renderer.stopEditing() && fireEvents)
-        		CellEditedEvent.fire(this, activeRow, activeCell, modelIndexList[activeRow], getRow(activeRow).cells.get(activeCell).value);
+        		CellEditedEvent.fire(this,modelIndexList[activeRow], activeCell, getRow(activeRow).cells.get(activeCell).value);
         	activeCell = -1;
             sinkEvents(Event.KEYEVENTS);
         }

@@ -89,7 +89,7 @@ public class TableColumn {
     		else
     			wid.setStyleName(CheckBox.UNCHECKED_STYLE);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
-    		wid.setWidth((currentWidth)+ "px");
+    		//wid.setWidth((currentWidth)+ "px");
     	}else{
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -124,9 +124,10 @@ public class TableColumn {
     		label.setWordWrap(false);
     		wid = label;
     		wid.setWidth((currentWidth)+ "px");
+    		//wid.setHeight((controller.cellHeight+"px"));
     	}
         
-        wid.setHeight((controller.cellHeight+"px"));
+        
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
@@ -171,6 +172,7 @@ public class TableColumn {
         	});
         	
         }
+        wid.addStyleName("TableWidget");
         return wid;
     }
     
@@ -260,7 +262,7 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		((CheckBox)editor).setValue((String)cell.getValue());
     		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
-    		editor.setWidth((currentWidth)+ "px");
+    		//editor.setWidth((currentWidth)+ "px");
     		return editor;
     	}
     	editor = colWidget;
@@ -280,7 +282,7 @@ public class TableColumn {
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
        
-        editor.setHeight((controller.cellHeight+"px"));
+        //editor.setHeight((controller.cellHeight+"px"));
         if(cell.errors != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
             for (String error : cell.errors) {
@@ -325,6 +327,7 @@ public class TableColumn {
         	});
         	
         }
+        editor.addStyleName("TableWidget");
         return editor;
     }
 

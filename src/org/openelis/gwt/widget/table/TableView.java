@@ -229,7 +229,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         rowsView.setHeight(height+"px");
         scrollBar.setHeight(height+"px");
         //if(headers != null)
-        	headerView.setHeight("20px");
+        	headerView.setHeight("18px");
 
     }
 

@@ -160,7 +160,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.columns;
-        bar.setCellSpacing(0);
+        bar.setCellSpacing(1);
         bar.setCellPadding(0);
         for(TableColumn column : columns) {
         	ListenContainer header = new ListenContainer();
@@ -208,7 +208,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             }
             hMenus.add(menuItem);
             bar.setWidget(0,columns.indexOf(column),header);
-            bar.getCellFormatter().setHeight(0, columns.indexOf(column), "20px");
+            bar.getCellFormatter().setHeight(0, columns.indexOf(column), "18px");
             
         }
         sizeHeader();
