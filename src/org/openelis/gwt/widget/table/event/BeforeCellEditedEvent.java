@@ -6,7 +6,7 @@ public class BeforeCellEditedEvent extends GwtEvent<BeforeCellEditedHandler> {
 	
 	private static Type<BeforeCellEditedHandler> TYPE;
 	private int row;
-	private int cell;
+	private int col;
 	private Object value;
 	private boolean cancelled;
 	
@@ -21,7 +21,7 @@ public class BeforeCellEditedEvent extends GwtEvent<BeforeCellEditedHandler> {
 	
 	protected BeforeCellEditedEvent(int row, int col, Object value) {
 		this.row = row;
-		this.cell = col;
+		this.col = col;
 		this.value = value;
 	}
 
@@ -46,8 +46,8 @@ public class BeforeCellEditedEvent extends GwtEvent<BeforeCellEditedHandler> {
 		return row;
 	}
 	
-	public int getCell() {
-		return cell;
+	public int getCol() {
+		return col;
 	}
 	
 	public Object getValue() {
