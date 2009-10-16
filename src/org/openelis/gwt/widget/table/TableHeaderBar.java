@@ -161,8 +161,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.columns;
-        //bar.setCellSpacing(0);
-       // bar.setCellPadding(0);
+        bar.setCellSpacing(0);
+        bar.setCellPadding(0);
         for(TableColumn column : columns) {
         	ListenContainer header = new ListenContainer();
         	header.setSpacing(0);
@@ -351,14 +351,14 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             	for(int i = 0; i <  headers.size(); i++) {
             		scrollWidth += columns.get(i).getCurrentWidth();
             		HorizontalPanel header = headers.get(i);
-            		header.setWidth((columns.get(i).currentWidth-2)+"px");
+            		header.setWidth((columns.get(i).currentWidth+2)+"px");
             		if(columns.get(i).currentWidth - 23 < 15){
             			hLabels.get(i).setWidth("15px");
             		}else{
             			hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
             		}
             	}
-            	controller.view.cellView.setScrollWidth((scrollWidth+(controller.columns.size()*3))+"px");
+            	controller.view.cellView.setScrollWidth((scrollWidth+(controller.columns.size()*2))+"px");
             }
         });
         

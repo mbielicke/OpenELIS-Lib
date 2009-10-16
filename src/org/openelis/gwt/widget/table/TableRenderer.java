@@ -94,6 +94,9 @@ public class TableRenderer  {
         //if(controller.isAutoAdd()){
           //  ScrollHeight += controller.cellHeight;
         //}
+        if(controller.isDropdown) {
+        	ScrollHeight += controller.cellHeight;
+        }
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
