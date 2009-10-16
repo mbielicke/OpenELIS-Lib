@@ -48,10 +48,10 @@ public class IntegerField extends Field<Integer> {
     	QueryFieldUtil qField = new QueryFieldUtil();
     	qField.parse(queryString);
         for(String param : qField.parameter){
-        	String[] vals = param.split("..");
+        	String[] vals = param.split("\\.\\.");
         	for(int i = 0; i < vals.length; i++){
         		try {
-        			Double.parseDouble(vals[i]);
+        			Integer.parseInt(vals[i]);
         		} catch (Exception e) {
         			addError("Param is not a valid integer");
         			valid = false;
