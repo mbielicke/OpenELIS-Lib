@@ -1046,7 +1046,7 @@ cursor:default;}
     /*margin:2px;*/
 }
 
-.AtoZTable {
+.atozTable {
     border:1px solid #D8D8D8;
     border-width:1px;
     background:white;
@@ -2039,8 +2039,6 @@ height:17px;
     background:url("../Images/popuptop.png") repeat-x top;
     height:8px;
 }
-
-/********************* Focus ****************/
 .Focus {
     border-color:#63b159;
 }
@@ -2048,6 +2046,6 @@ height:17px;
 .Focus .ScreenTextBox,
 .Focus .ScreenMaskedBox,
 .Focus .ScreenCheck{
-    border-color:#63b159;
+    border:1px solid #63b159;
 }
 

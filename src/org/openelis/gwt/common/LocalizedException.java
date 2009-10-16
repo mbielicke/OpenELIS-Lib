@@ -23,6 +23,14 @@ public class LocalizedException extends Exception {
 		this.params = params;		
 	}
 	
+	public String getKey() {
+	    return key;
+	}
+	
+	public String[] getParams() {
+	    return params;
+	}
+
 	@Override
 	public String getMessage() {
 		String message = Screen.consts.get(key);
