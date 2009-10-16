@@ -155,8 +155,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public boolean shiftKey;
     public boolean ctrlKey;
     public int maxRows;
-    public int cellHeight = 18;
-    public int cellSpacing = 3;
+    public int cellHeight = 21;
+    public int cellSpacing = 2;
     public Widget editingCell = null;
     public int[] modelIndexList;
     public boolean showRows;
@@ -199,7 +199,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         keyboardHandler = new TableKeyboardHandler(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
-        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        view.setHeight(maxRows*cellHeight);
         setWidget(view);
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
@@ -217,12 +217,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     		if(isEnabled()){
     			if(columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
-    				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue())){
-    					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
+    				if(CheckBox.CHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
+    					setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNCHECKED);
     					if(fireEvents)
     						CellEditedEvent.fire(this,  modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
     				}else{
-    					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
+    					setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.CHECKED);
     					if(fireEvents)
     						CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.CHECKED);
     				}

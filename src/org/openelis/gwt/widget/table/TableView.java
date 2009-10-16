@@ -70,24 +70,24 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     
     public class CellView extends ScrollPanel implements HasMouseWheelHandlers {
 
-        //private AbsolutePanel ap = new AbsolutePanel();
+        private AbsolutePanel ap = new AbsolutePanel();
         
         public CellView() {
-            //super.setWidget(ap);
+            super.setWidget(ap);
         }
         
         public void setScrollWidth(String width){
-           // ap.setWidth(width);
+            ap.setWidth(width);
         }
         
-        //public void setWidget(final Widget wid){
-            //ap.clear();
-           // ap.add(wid);
-        //}
+        public void setWidget(final Widget wid){
+            ap.clear();
+           ap.add(wid);
+        }
         
         public void setHeight(String height) {
             super.setHeight(height);
-           // ap.setHeight(height);
+            ap.setHeight(height);
         }
 
 		public HandlerRegistration addMouseWheelHandler(

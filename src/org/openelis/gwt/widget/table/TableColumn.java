@@ -45,6 +45,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -83,13 +85,16 @@ public class TableColumn {
     	Widget wid = null;
     	Object val = null;
     	if(colWidget instanceof CheckBox){
-    		wid = new IconContainer();
+    		wid = new AbsolutePanel();
+    		IconContainer icon = new IconContainer();
     		if(CheckBox.CHECKED.equals(cell.getValue()))
-    			wid.setStyleName(CheckBox.CHECKED_STYLE);
+    			icon.setStyleName(CheckBox.CHECKED_STYLE);
     		else
-    			wid.setStyleName(CheckBox.UNCHECKED_STYLE);
+    			icon.setStyleName(CheckBox.UNCHECKED_STYLE);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
-    		//wid.setWidth((currentWidth)+ "px");
+    		((AbsolutePanel)wid).add(icon);
+    		DOM.setStyleAttribute(wid.getElement(), "align", "center");
+    		wid.setWidth((currentWidth)+ "px");
     	}else{
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -179,9 +184,9 @@ public class TableColumn {
     public void loadWidget(Widget widget, TableDataCell cell) {
     	if(colWidget instanceof CheckBox){
     		if(CheckBox.CHECKED.equals(cell.getValue()))
-    			widget.setStyleName(CheckBox.CHECKED_STYLE);
+    			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CHECKED_STYLE);
     	    else
-    	    	widget.setStyleName(CheckBox.UNCHECKED_STYLE);
+    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNCHECKED_STYLE);
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -260,10 +265,12 @@ public class TableColumn {
     public Widget getWidgetEditor(TableDataCell cell) {
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
+    		AbsolutePanel ap = new AbsolutePanel();
     		((CheckBox)editor).setValue((String)cell.getValue());
     		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
-    		//editor.setWidth((currentWidth)+ "px");
-    		return editor;
+    		ap.setWidth((currentWidth)+ "px");
+    		ap.add(editor);
+    		return ap;
     	}
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");

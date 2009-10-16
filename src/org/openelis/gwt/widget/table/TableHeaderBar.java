@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.QueryFieldUtil;
@@ -160,8 +161,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.columns;
-        bar.setCellSpacing(1);
-        bar.setCellPadding(0);
+        //bar.setCellSpacing(0);
+       // bar.setCellPadding(0);
         for(TableColumn column : columns) {
         	ListenContainer header = new ListenContainer();
         	header.setSpacing(0);
@@ -174,16 +175,17 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             headerLabel.addStyleName("HeaderLabel");
             DOM.setStyleAttribute(headerLabel.getElement(),"overflowX","hidden");
             DOM.setStyleAttribute(headerLabel.getElement(), "overflow", "hidden");
-            
-            BarContainer barc = new BarContainer(); 
-            barc.addMouseDownHandler(this);
-             barc.addMouseUpHandler(this);
-             barc.addMouseMoveHandler(this);
-            AbsolutePanel ap3 = new AbsolutePanel();
-            ap3.addStyleName("HeaderBarPad");
-            barc.add(ap3);
-            header.add(barc);
-            header.setCellWidth(bar, "3px");
+            //if(columns.indexOf(column) > 0) {
+            	BarContainer barc = new BarContainer(); 
+            	barc.addMouseDownHandler(this);
+            	barc.addMouseUpHandler(this);
+            	barc.addMouseMoveHandler(this);
+            	AbsolutePanel ap3 = new AbsolutePanel();
+            	ap3.addStyleName("HeaderBarPad");
+            	barc.add(ap3);
+            	header.add(barc);
+            	header.setCellWidth(bar, "3px");
+           // }
             
             headerLabel.setWordWrap(false);
             header.add(headerLabel);
@@ -209,6 +211,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             hMenus.add(menuItem);
             bar.setWidget(0,columns.indexOf(column),header);
             bar.getCellFormatter().setHeight(0, columns.indexOf(column), "18px");
+            if(columns.indexOf(column) < columns.size()-1)
+            	bar.getCellFormatter().setStyleName(0,columns.indexOf(column), "Header");
             
         }
         sizeHeader();
@@ -297,8 +301,6 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     	DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
     	RootPanel.get().add(bar);   
     	DOM.setCapture(bar.getElement());
-    	controller.view.titleLabel.setText("Bar Set");
-
     }
 
     /**
@@ -328,15 +330,12 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 resizing = false;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                    	for(int i = 0; i <  headers.size(); i++) {
-                    		HorizontalPanel header = headers.get(i);
-                    		header.setWidth(columns.get(i).currentWidth+"px");
-                    		hLabels.get(i).setWidth((columns.get(i).currentWidth-20)+"px");
-                    	}
+                    	sizeHeader();
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
-                                controller.view.table.getWidget(j, i).setWidth((columns.get(i).getCurrentWidth()) + "px");
+                                if(!(controller.columns.get(i).getColumnWidget() instanceof CheckBox))
+                                	controller.view.table.getWidget(j, i).setWidth((columns.get(i).getCurrentWidth()) + "px");
                             }
                         }
                     }
@@ -348,14 +347,18 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     public void sizeHeader() {
         DeferredCommand.addCommand(new Command() {
             public void execute() {
+            	int scrollWidth = 0;
             	for(int i = 0; i <  headers.size(); i++) {
+            		scrollWidth += columns.get(i).getCurrentWidth();
             		HorizontalPanel header = headers.get(i);
-            		header.setWidth(columns.get(i).currentWidth+"px");
-            		if(columns.get(i).currentWidth - 23 < 0)
+            		header.setWidth((columns.get(i).currentWidth-2)+"px");
+            		if(columns.get(i).currentWidth - 23 < 15){
             			hLabels.get(i).setWidth("15px");
-            		else
+            		}else{
             			hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
+            		}
             	}
+            	controller.view.cellView.setScrollWidth((scrollWidth+(controller.columns.size()*3))+"px");
             }
         });
         

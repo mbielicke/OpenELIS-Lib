@@ -1411,11 +1411,7 @@ public class UIGenerator extends Generator {
 					String key = node.getAttributes().getNamedItem("key").getNodeValue();
 					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
 				}
-			    
-                if(node.getAttributes().getNamedItem("cellHeight") != null){
-                    sw.println("wid"+id+".cellHeight = (Integer.parseInt(\""+node.getAttributes().getNamedItem("cellHeight").getNodeValue()+"\"));");
-                }
-                
+			                   
                 sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
                 sw.println("wid"+id+".maxRows = Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\");");
 

@@ -31,6 +31,7 @@ import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasField;
 
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
@@ -88,11 +89,11 @@ public class TableRenderer  {
 
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.shownRows*controller.cellHeight)+(controller.shownRows*controller.cellSpacing);
+        int ScrollHeight = (controller.shownRows*controller.cellHeight);//+(controller.shownRows*controller.cellSpacing);
         //int ScrollHeight = (controller.shownRows()*controller.cellHeight)+(controller.maxRows*2);
-        if(controller.isAutoAdd()){
-            ScrollHeight += controller.cellHeight;
-        }
+        //if(controller.isAutoAdd()){
+          //  ScrollHeight += controller.cellHeight;
+        //}
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
@@ -145,7 +146,9 @@ public class TableRenderer  {
         TableDataRow row = controller.getRow(modelIndex);
         rows.get(index).modelIndex = modelIndex;
         rows.get(index).row = row;
+        
         for (int i = 0; i < row.cells.size(); i++) {
+        	//controller.view.table.getCellFormatter().setWidth(index, i, controller.columns.get(i).getCurrentWidth()+"px");
             controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.cells.get(i));
         }
         rows.get(index).setStyleName("");
@@ -210,6 +213,8 @@ public class TableRenderer  {
     
     public void setCellEditor(int row, int col) {
         controller.editingCell = (Widget)controller.columns.get(col).getWidgetEditor((TableDataCell)controller.getCell(controller.modelIndexList[row],col));
+        if(controller.editingCell instanceof AbsolutePanel)
+        	controller.editingCell = ((AbsolutePanel)controller.editingCell).getWidget(0);
         controller.view.table.setWidget(row, col, controller.editingCell);
         if(controller.editingCell instanceof Focusable)
         	((Focusable)controller.editingCell).setFocus(true);
