@@ -2039,18 +2039,15 @@ height:17px;
     background:url("../Images/popuptop.png") repeat-x top;
     height:8px;
 }
-div.Focus{
-    border:1px solid #63b159;
-    border-width:1px 0;
-}
-.Focus {
-    border:1px solid #63b159;
-}
 
+/********************* Focus ****************/
+.Focus {
+    border-color:#63b159;
+}
 .Focus .ScreenTextArea,
 .Focus .ScreenTextBox,
 .Focus .ScreenMaskedBox,
 .Focus .ScreenCheck{
-    border:1px solid #63b159;
+    border-color:#63b159;
 }
 

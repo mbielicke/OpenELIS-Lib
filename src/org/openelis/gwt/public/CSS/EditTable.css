@@ -168,11 +168,7 @@ padding:0px 0px 4px 4px;
 .Header {
 	height: 18px;
 	width: 100%;
-	background: transparent url("../Images/headersprite.gif") repeat-x;
-	border-color: #b5b8c8;
-	border-style: solid;
-	border-width: 0px 1px 0px 0px;
-}
+	border-right:1px solid #b5b8c8;}
 /*
 .HeaderBar {
 	width: 1px;
