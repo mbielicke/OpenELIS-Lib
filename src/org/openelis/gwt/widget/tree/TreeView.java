@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.widget.tree;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
@@ -39,7 +38,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -192,7 +190,7 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
         DOM.setStyleAttribute(table.getElement(), "background", "white");
         cellView.setWidget(table);
         ft.setCellSpacing(0);
-        scrollBar.setWidth("16px");
+        scrollBar.setWidth("18px");
         scrollBar.setStyleName("TableVertScroll");
         scrollBar.addScrollHandler(this);
         AbsolutePanel ap = new AbsolutePanel();

@@ -160,7 +160,8 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
         setStyleName("topHeaderBar");
         this.controller = controller;
         this.columns = controller.headers;
-        bar.setCellSpacing(1);
+        bar.setCellSpacing(0);
+        bar.setCellPadding(0);
         for(TreeColumn column : columns) {
         	ListenContainer header = new ListenContainer();
         	header.setSpacing(0);
@@ -189,7 +190,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             header.setCellWidth(headerLabel, "100%");
             header.add(headerLabel);
             MenuItem menuItem = null;
-            if(column.getSortable() || column.getFilterable()){
+            if(column.getSortable()){
                 AbsolutePanel wid = new AbsolutePanel();
                 wid.setHeight("18px");
                 wid.setWidth("16px");
@@ -207,7 +208,9 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             }
             hMenus.add(menuItem);
             bar.setWidget(0,columns.indexOf(column),header);
-            bar.getCellFormatter().setHeight(0, columns.indexOf(column), "20px");
+            bar.getCellFormatter().setHeight(0, columns.indexOf(column), "18px");
+            if(columns.indexOf(column) < columns.size()-1)
+            	bar.getCellFormatter().setStyleName(0,columns.indexOf(column), "Header");
             
         }
         sizeHeader();
@@ -228,7 +231,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     	// TODO Auto-generated method stub
     	resizing = true;
     	startx = sender.getAbsoluteLeft();
-    	resizeColumn1 = headers.indexOf(sender.getParent());
+    	resizeColumn1 = headers.indexOf(sender.getParent()) -1;
     	tableCol1 = resizeColumn1;
     	if(columns.get(tableCol1).getFixedWidth() && columns.get(tableCol1+1).getFixedWidth()){
     		resizing = false;
@@ -325,11 +328,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
                 resizing = false;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                    	for(int i = 0; i <  headers.size(); i++) {
-                    		HorizontalPanel header = headers.get(i);
-                    		header.setWidth(columns.get(i).currentWidth+"px");
-                    		hLabels.get(i).setWidth((columns.get(i).currentWidth-20)+"px");
-                    	}
+                    	sizeHeader();
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
                             for (int i = 0; i < columns.size(); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
@@ -345,11 +344,18 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     public void sizeHeader() {
         DeferredCommand.addCommand(new Command() {
             public void execute() {
+            	int scrollWidth = 0;
             	for(int i = 0; i <  headers.size(); i++) {
+            		scrollWidth += columns.get(i).getCurrentWidth();
             		HorizontalPanel header = headers.get(i);
-            		header.setWidth(columns.get(i).currentWidth+"px");
-            		hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
+            		header.setWidth((columns.get(i).currentWidth+2)+"px");
+            		if(columns.get(i).currentWidth - 23 < 15){
+            			hLabels.get(i).setWidth("15px");
+            		}else{
+            			hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
+            		}
             	}
+            	controller.view.cellView.setScrollWidth((scrollWidth+(columns.size()*2))+"px");
             }
         });
         
