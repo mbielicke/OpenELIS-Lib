@@ -198,7 +198,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         table.addStyleName(tableStyle);
         cellView.setWidget(table);
         ft.setCellSpacing(0);
-        scrollBar.setWidth("16px");
+        scrollBar.setWidth("18px");
         scrollBar.setStyleName("TableVertScroll");
         scrollBar.addScrollHandler(this);
         AbsolutePanel ap = new AbsolutePanel();
@@ -206,6 +206,8 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         if(showScroll == VerticalScroll.NEEDED)
             DOM.setStyleAttribute(scrollBar.getElement(), "display", "none");
         DOM.setStyleAttribute(cellView.getElement(),"overflowY","hidden");
+        ap.setWidth("15px");
+        ap.setHeight("15px");
         scrollBar.setWidget(ap);
         cellView.addMouseWheelHandler(this);
         table.addClickHandler(controller);
