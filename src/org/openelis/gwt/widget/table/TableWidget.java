@@ -507,14 +507,19 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         renderer.rowUnselected(-1);
         this.model = model;
         shownRows = 0;
+        activeRow = -1;
+        activeCell = -1;
+        editingCell = null;
+        
+        if(model == null)
+        	model = new ArrayList<TableDataRow>();
+        
         for(int i = 0; i < model.size(); i++){
             if(((TableDataRow)model.get(i)).shown)
                 shownRows++;
         }
-        editingCell = null;
-        activeRow = -1;
-        activeCell = -1;
-        renderer.dataChanged(false);
+        
+        renderer.dataChanged(false);        
     }
 
     public void selectRow(final int index) {
