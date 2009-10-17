@@ -239,7 +239,15 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
 
     public void setWidth(String width) {
         this.width = width.trim();
-        cellView.setWidth(width);
+        if(!width.equals("auto"))
+        	cellView.setWidth(width);
+        else{
+        	int wid = 0;
+        	for(TableColumn col : controller.columns) {
+        		wid += col.getCurrentWidth()+2;
+        	}
+        	controller.setWidth(wid+"px");
+        }
         //cellView.setScrollWidth(width);
         //if(headers != null)
         headerView.setWidth(width);

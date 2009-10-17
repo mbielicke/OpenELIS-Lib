@@ -1479,7 +1479,7 @@ public class UIGenerator extends Generator {
                 }
                 sw.println("wid"+id+".init();");
                 sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
-                setDefaults(node,"wid"+id);
+               // setDefaults(node,"wid"+id);
     	        if (node.getAttributes().getNamedItem("enable") != null){
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
