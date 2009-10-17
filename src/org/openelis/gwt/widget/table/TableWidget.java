@@ -475,6 +475,37 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             return autoAddRow;
         return null;
     }
+    
+    public void addColumn(TableColumn column) {
+    	columns.add(column);
+    	resetTable();
+    }
+    
+    public void addColumn(int index, TableColumn column) {
+    	columns.add(index,column);
+    	resetTable();
+    }
+    
+    public void removeColumn(int index) {
+    	columns.remove(index);
+    	resetTable();
+    }
+    
+    public ArrayList<TableColumn> getColumns(){
+    	return columns;
+    }
+    
+    public void setColumns(ArrayList<TableColumn> columns) {
+    	this.columns = columns;
+    	resetTable();
+    }
+    
+    private void resetTable() {
+    	view.header = new TableHeaderBar();
+    	view.header.init(this);
+    	view.table.clear();
+    	renderer.dataChanged(false);
+    }
 
     public int numRows() {
         if(data == null)
