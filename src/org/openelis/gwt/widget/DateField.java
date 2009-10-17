@@ -105,7 +105,7 @@ public class DateField extends Field<Datetime> {
     	qField.parse(queryString);
     	
         for (String param : qField.parameter) {
-        	  String[] dates = param.split("..");
+        	  String[] dates = param.split("\\.\\.");
         	  for(int i = 0; i < dates.length; i++) {
                Date date = null;
         	   try {

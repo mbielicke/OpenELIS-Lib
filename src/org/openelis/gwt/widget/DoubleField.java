@@ -49,7 +49,7 @@ public class DoubleField extends Field<Double> {
     	QueryFieldUtil qField = new QueryFieldUtil();
     	qField.parse(queryString);
         for(String param : qField.parameter){
-        	String[] vals = param.split("..");
+        	String[] vals = param.split("\\.\\.");
         	for(int i = 0; i < vals.length; i++){
         		try {
         			Double.parseDouble(vals[i]);
