@@ -2,8 +2,10 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
-public class TableSorter implements TableSorterInt {
+public class TableSorter {
 
+	public enum SortDirection{UP,DOWN};
+	
 	ArrayList<TableDataRow> data;
 	SortDirection direction;
 	

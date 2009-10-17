@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget.table.event;
 
-import org.openelis.gwt.widget.table.TableSorterInt.SortDirection;
+import org.openelis.gwt.widget.table.TableSorter.SortDirection;
 
 import com.google.gwt.event.shared.GwtEvent;
 

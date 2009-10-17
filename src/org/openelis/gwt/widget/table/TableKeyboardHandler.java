@@ -157,36 +157,11 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()) {
             if(controller.editingCell != null) {
-                if(controller.finishEditing()){
-                    /*if(controller.columns.get(controller.activeCell).getColumnWidget() instanceof TableCheck) {
-                            ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).check();
-                            if(controller.finishEditing()){
-                                controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
-                            }
-                            ((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).onFocus(null);
-                    }*/
-                    if(controller.numRows() >= controller.maxRows){
-                        controller.view.scrollBar.scrollToBottom();
-                        DeferredCommand.addCommand(new Command() {
-                            public void execute() {
-                                controller.activeRow--;
-                                controller.selectRow(controller.modelIndexList[controller.activeRow]);
-                                
-                            }
-                        });
-                    }else{
-                        controller.selectRow(controller.modelIndexList[controller.activeRow]);
-                    }
-                }else{
-                    controller.selectRow(controller.modelIndexList[controller.activeRow]);
-                }
+                controller.finishEditing();
             }else if(controller.activeCell > -1){
                 if(controller.columns.get(controller.activeCell).getColumnWidget() instanceof CheckBox) {
                     ((CheckBox)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).setState("CHECKED");
-                    if(controller.finishEditing()){
-                        controller.view.table.getRowFormatter().addStyleName(controller.activeRow, controller.view.selectedStyle);
-                    }
-                    //((TableCheck)controller.view.table.getWidget(controller.activeRow,controller.activeCell)).onFocus(null);
+                    controller.finishEditing();
             }
             }else if(controller.activeRow < 0) {
                 DeferredCommand.addCommand(new Command() {

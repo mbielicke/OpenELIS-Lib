@@ -378,7 +378,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorterInt.SortDirection.UP);
+                        controller.sort(index, TableSorter.SortDirection.UP);
                     }
                 });
                 item = new MenuItem("",new Label("Sort Down"),"");
@@ -386,7 +386,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorterInt.SortDirection.DOWN);
+                        controller.sort(index, TableSorter.SortDirection.DOWN);
                     }
                 });
                 if(col.filterable){

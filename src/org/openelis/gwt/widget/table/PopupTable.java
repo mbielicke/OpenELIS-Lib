@@ -89,7 +89,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
         renderer = new TableRenderer(this);
         view = new TableView(this, showScroll);
         view.setWidth(width);
-        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        view.setHeight(maxRows*cellHeight);
         keyboardHandler = new TableKeyboardHandler(this);
         setWidget(view);
         popup.addStyleName("AutoCompletePopup");
@@ -111,10 +111,10 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
-        if(numRows() < maxRows){
-            view.setHeight((numRows()*cellHeight+(numRows()*cellSpacing)+(numRows()*2)+cellSpacing));
-        }else
-            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        //if(numRows() < maxRows){
+          //  view.setHeight((numRows()*cellHeight+(numRows()*cellSpacing)+(numRows()*2)+cellSpacing));
+        //}else
+          //  view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;
@@ -139,10 +139,10 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
-        if(numRows() < maxRows){
-            view.setHeight((numRows()*cellHeight+(numRows()*cellSpacing)+(numRows()*2)+cellSpacing));
-        }else
-            view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        //if(numRows() < maxRows){
+         //   view.setHeight(numRows()*cellHeight);
+        //}else
+          //  view.setHeight(maxRows*cellHeight);
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
         activeRow = -1;

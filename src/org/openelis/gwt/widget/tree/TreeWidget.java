@@ -38,8 +38,6 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.table.TableDataCell;
-import org.openelis.gwt.widget.table.event.BeforeAutoAddEvent;
-import org.openelis.gwt.widget.table.event.BeforeAutoAddHandler;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
@@ -48,7 +46,6 @@ import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
-import org.openelis.gwt.widget.table.event.HasBeforeAutoAddHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
@@ -123,7 +120,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasRowAddedHandlers, 
 													  HasBeforeRowDeletedHandlers,
 													  HasRowDeletedHandlers,
-													  HasBeforeAutoAddHandlers,
 													  HasBeforeLeafOpenHandlers,
 													  HasBeforeLeafCloseHandlers,
 													  HasLeafOpenedHandlers,
@@ -895,11 +891,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	public HandlerRegistration addBeforeRowDeletedHandler(
 			BeforeRowDeletedHandler handler) {
 		return addHandler(handler, BeforeRowDeletedEvent.getType());
-	}
-
-	public HandlerRegistration addBeforeAutoddHandler(
-			BeforeAutoAddHandler handler) {
-		return addHandler(handler, BeforeAutoAddEvent.getType());
 	}
 
 	public HandlerRegistration addBeforeLeafOpenHandler(

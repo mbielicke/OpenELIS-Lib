@@ -1135,9 +1135,7 @@ public class UIUtil {
     			TableWidget table = new TableWidget();
     			if(node.getAttributes().getNamedItem("tab") != null) 
     				table.addTabHandler(new TabHandler(node,def));
-                if(node.getAttributes().getNamedItem("cellHeight") != null){
-                    table.cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
-                }
+              
                 
                 table.setTableWidth(node.getAttributes().getNamedItem("width").getNodeValue());
                 table.maxRows = Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue());

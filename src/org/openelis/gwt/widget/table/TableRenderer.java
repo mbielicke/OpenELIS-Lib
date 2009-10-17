@@ -97,7 +97,8 @@ public class TableRenderer  {
         if(controller.isDropdown) {
         	ScrollHeight += controller.cellHeight;
         }
-        int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
+        //int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
+        int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight)/(controller.cellHeight)))).intValue();
         if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
         controller.view.setScrollHeight(ScrollHeight);
@@ -109,14 +110,10 @@ public class TableRenderer  {
                 controller.view.table.removeRow(0);
                 rows.remove(0);
             }
-            if(!controller.getAutoAdd())
-                return;
+            return;
         }
         if(controller.shownRows() < controller.maxRows){
             tRows = controller.shownRows();
-            if(controller.getAutoAdd()){
-                tRows++;
-            }
         }
         if(controller.view.table.getRowCount() > tRows){
             int count = controller.view.table.getRowCount();
@@ -130,9 +127,6 @@ public class TableRenderer  {
             for(int i = count; i < tRows; i++){
                 createRow(i);
             }
-        }
-        if(controller.getAutoAdd() && controller.view.table.getRowCount() == 0){
-            createRow(0);
         }
         scrollLoad(pos);
 
@@ -179,8 +173,6 @@ public class TableRenderer  {
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){
             rowsPer = controller.shownRows();
-            if(controller.getAutoAdd())
-                rowsPer++;
         }
         int loadStart = new Double(Math.ceil(((double)scrollPos)/(controller.cellHeight))).intValue();
         if(controller.numRows() != controller.shownRows()){
@@ -194,22 +186,13 @@ public class TableRenderer  {
              loadStart = i;   
         }
         int numRows = controller.numRows();
-        if(controller.getAutoAdd())
-            numRows++;
         if(loadStart+rowsPer > numRows){
             loadStart = loadStart - ((loadStart+rowsPer) - numRows);
-            if(controller.getAutoAdd())
-                loadStart++;
         }
         for(int i = 0; i < rowsPer; i++){
             while(loadStart+i < controller.numRows() && !controller.getRow(loadStart+i).shown)
                 loadStart++;
-            if(loadStart+i < controller.numRows())
-                loadRow(i,loadStart+i);
-            else{
-                controller.setAutoAddRow((TableDataRow)controller.createRow());
-                loadRow(i,controller.numRows());
-            }
+            loadRow(i,loadStart+i);
         }
 
     }
@@ -221,8 +204,6 @@ public class TableRenderer  {
         controller.view.table.setWidget(row, col, controller.editingCell);
         if(controller.editingCell instanceof Focusable)
         	((Focusable)controller.editingCell).setFocus(true);
-        //controller.editingCell.getWidget().addStyleName(controller.view.widgetStyle);
-        //((SimplePanel)cell).getWidget().addStyleName("Enabled");
             
     }
     

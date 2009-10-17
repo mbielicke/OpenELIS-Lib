@@ -85,7 +85,6 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         renderer = new TableRenderer(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
-        view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         keyboardHandler = this;
         setWidget(textbox);
         setStyleName("AutoDropDown");
@@ -97,8 +96,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         popup.addCloseHandler(this);
         textbox.addKeyUpHandler(listener);
         textbox.setReadOnly(!enabled);
-        
-        this.isDropdown = true;
+  
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
