@@ -144,9 +144,12 @@ public class TableRenderer  {
         rows.get(index).modelIndex = modelIndex;
         rows.get(index).row = row;
         
-        for (int i = 0; i < row.cells.size(); i++) {
+        for (int i = 0; i < controller.columns.size(); i++) {
         	//controller.view.table.getCellFormatter().setWidth(index, i, controller.columns.get(i).getCurrentWidth()+"px");
-            controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row.cells.get(i));
+        	TableDataCell cell = new TableDataCell(null);
+        	if( i < row.cells.size())
+        		cell = row.cells.get(i);
+        	controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),cell);
         }
         rows.get(index).setStyleName("");
         if(index % 2 == 1 && !controller.isDropdown){
