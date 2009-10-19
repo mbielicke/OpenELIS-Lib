@@ -68,14 +68,13 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     
     public void setup() {
         isDropdown = true;
-        cellHeight = 17;
     	if(maxRows == 0)
     		maxRows = 10;
         renderer = new TableRenderer(this);
         view = new TableView(this,showScroll);
         view.setWidth(width);
         setWidth(dropwidth);
-        //view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
+        view.setHeight(maxRows*cellHeight);
         keyboardHandler = this;
         hp = new HorizontalPanel();
         hp.add(textbox);
