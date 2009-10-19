@@ -33,16 +33,18 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     @SuppressWarnings("unchecked")
 	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Throwable {
 
-		try{
+		try {
 			Object serviceInst = Class.forName(service).newInstance();
 		    return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
 		
-		}catch(InvocationTargetException e){
+		} catch(InvocationTargetException e){
 			if(e.getCause() != null)
 				throw (Exception)e.getCause();
 			else
 				throw (Exception)e.getTargetException();
-		}catch(Exception e){
+		} catch (NoSuchMethodException e) {
+            throw new Exception("NoSuchMethodException: "+e.getMessage());
+		} catch(Exception e){
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
