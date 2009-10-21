@@ -124,7 +124,7 @@ width:100%;
     padding:2px;
     background:white;
 }
-.errorPopupLabel{
+.errorPopupLabel, .warnPopupLabel{
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
     background:#e5f5f9;
@@ -1963,6 +1963,23 @@ height:17px;
 }
 .InputError .CalendarButton{
 	border-bottom:1px dashed red;
+}
+
+.InputWarning {
+	border-bottom:1px dashed #FFDF00;
+height:17px;
+}
+.InputWarning .ScreenTextBox{
+	border-bottom:1px dashed #FFDF00;
+}
+.InputWarning .TextboxUnselected{
+	border-bottom:1px dashed #FFDF00;
+}
+.InputWarning .AutoDropDownButton{
+	border-bottom:1px dashed #FFDF00;
+}
+.InputWarning .CalendarButton{
+	border-bottom:1px dashed #FFDF00;
 }
 
 .TableVertScroll{

@@ -74,6 +74,8 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.widget.WindowBrowser;
 import org.openelis.gwt.widget.deprecated.MenuLabel;
@@ -423,15 +425,21 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 
     }
         
-    public void setMessagePopup(ArrayList<String> messages, String style) {
+    public void setMessagePopup(ArrayList<LocalizedException> exceptions, String style) {
         statusImg.setStyleName(style);
         statusImg.sinkEvents(Event.MOUSEEVENTS);
         messagePanel = new VerticalPanel();
-        for(int i = 0; i < messages.size(); i++){
+        for (LocalizedException exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
-        	hp.add(new Image("Images/bullet_red.png"));
-        	hp.add(new Label(messages.get(i)));
-            hp.setStyleName("errorPopupLabel");
+        	if(exception instanceof Warning) {
+                hp.add(new Image("Images/bullet_yellow.png"));
+                hp.setStyleName("warnPopupLabel");
+            }else{
+                hp.add(new Image("Images/bullet_red.png"));
+                hp.setStyleName("errorPopupLabel");
+                style = "InputError";
+            }
+        	hp.add(new Label(exception.getMessage()));
             messagePanel.add(hp);
         }
     }

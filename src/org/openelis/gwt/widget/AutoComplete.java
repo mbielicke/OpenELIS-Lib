@@ -257,16 +257,16 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      * Adds a an error to the widget.  An error style is added to the widget and on MouseOver a popup will 
      * be displayed with errors.
      */
-	public void addError(LocalizedException error) {
-		field.addException(error);
-		field.drawExceptions(this);
-	}
-
+    public void addException(LocalizedException error) {
+        field.addException(error);
+        field.drawExceptions(textbox);
+    }
+	
 	/**
 	 * Clears the error list and removes the error style from the widget
 	 */
 	public void clearExceptions() {
-		field.clearExceptions(this);
+		field.clearExceptions(textbox);
 	}
 
 	/**

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.openelis.gwt.common.FieldErrorException;
 import org.openelis.gwt.common.FormErrorException;
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.TableFieldErrorException;
 import org.openelis.gwt.common.ValidationErrorsList;
 import org.openelis.gwt.common.Warning;
@@ -160,7 +161,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     }
 
     public void showErrors(ValidationErrorsList errors) {
-        ArrayList<String> formErrors = new ArrayList<String>();
+        ArrayList<LocalizedException> formErrors = new ArrayList<LocalizedException>();
 
         for (Exception ex : errors.getErrorList()) {
             if (ex instanceof TableFieldErrorException) {
@@ -170,7 +171,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                                                                              tfe);
             } else if (ex instanceof FormErrorException) {
                 FormErrorException fe = (FormErrorException)ex;
-                formErrors.add(fe.getMessage());
+                formErrors.add(fe);
 
             } else if (ex instanceof FieldErrorException){
                 FieldErrorException fe = (FieldErrorException)ex;
@@ -181,9 +182,9 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         if (formErrors.size() == 0)
             window.setError(consts.get("correctErrors"));
         else if (formErrors.size() == 1)
-            window.setError(formErrors.get(0));
+            window.setError(formErrors.get(0).getMessage());
         else {
-            window.setError("(Error 1 of " + formErrors.size() + ") " + formErrors.get(0));
+            window.setError("(Error 1 of " + formErrors.size() + ") " + formErrors.get(0).getMessage());
             window.setMessagePopup(formErrors, "ErrorPanel");
         }
     }

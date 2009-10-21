@@ -128,7 +128,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         for (LocalizedException exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
         	if(exception instanceof Warning) {
-        		hp.add(new Image("Images/warning.png"));
+        		hp.add(new Image("Images/bullet_yellow.png"));
         		hp.setStyleName("warnPopupLabel");
         	}else{
         		hp.add(new Image("Images/bullet_red.png"));
@@ -149,7 +149,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     }
     
 	public void onMouseOut(MouseOutEvent event) {
-        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+	    String styleName = ((Widget)event.getSource()).getStyleName();
+        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
             if(pop != null){
                 pop.hide();
             }
@@ -157,7 +158,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 
 	public void onMouseOver(MouseOverEvent event) {
-        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+	    String styleName = ((Widget)event.getSource()).getStyleName();
+        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
             if(pop == null){
                 pop = new PopupPanel(true);
                 pop.setStyleName("");

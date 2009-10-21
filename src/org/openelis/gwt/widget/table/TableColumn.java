@@ -141,7 +141,7 @@ public class TableColumn {
             for (LocalizedException error : cell.exceptions) {
             	HorizontalPanel hp = new HorizontalPanel();
             	if(error instanceof Warning){
-            		hp.add(new Image("Images/warn.png"));
+            		hp.add(new Image("Images/bullet_yellow.png"));
             		hp.setStyleName("warnPopupLabel");
             	}else{
             		hp.add(new Image("Images/bullet_red.png"));
@@ -155,7 +155,8 @@ public class TableColumn {
         	((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {
-			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+				    String styleName = ((Widget)event.getSource()).getStyleName();
+			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 			            if(pop == null){
 			                pop = new PopupPanel();
 			                //pop.setStyleName("ErrorPopup");
@@ -176,7 +177,8 @@ public class TableColumn {
         	((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
 
 				public void onMouseOut(MouseOutEvent event) {
-			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+				    String styleName = ((Widget)event.getSource()).getStyleName();
+			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 			            if(pop != null){
 			                pop.hide();
 			            }
@@ -231,7 +233,7 @@ public class TableColumn {
             for (LocalizedException error : cell.exceptions) {
             	HorizontalPanel hp = new HorizontalPanel();
             	if(error instanceof Warning){
-            		hp.add(new Image("Images/warn.png"));
+            		hp.add(new Image("Images/bullet_yellow.png"));
             		hp.setStyleName("warnPopupLabel");
             	}else{
             		hp.add(new Image("Images/bullet_red.png"));
@@ -245,7 +247,8 @@ public class TableColumn {
         	((HasMouseOverHandlers)widget).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {
-			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+				    String styleName = ((Widget)event.getSource()).getStyleName();
+			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 			            if(pop == null){
 			                pop = new PopupPanel();
 			                //pop.setStyleName("ErrorPopup");
@@ -266,7 +269,8 @@ public class TableColumn {
         	((HasMouseOutHandlers)widget).addMouseOutHandler(new MouseOutHandler() {
 
 				public void onMouseOut(MouseOutEvent event) {
-			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
+				    String styleName = ((Widget)event.getSource()).getStyleName();
+			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 			            if(pop != null){
 			                pop.hide();
 			            }
