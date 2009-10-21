@@ -25,28 +25,18 @@
 */
 package org.openelis.gwt.common;
 
+public class FieldErrorWarning extends FieldErrorException implements Warning {
+    private static final long serialVersionUID = 1L;
 
-public class FieldErrorException extends LocalizedException {
-
-	private static final long serialVersionUID = 1L;
-
-	private String fieldName;
-    
-    public FieldErrorException(String key, String field) {
-    	super(key);
-    	this.fieldName = field;
+    public FieldErrorWarning(String key, String field) {
+        super(key, field);
     }
     
-    public FieldErrorException(String key, String field, String... params) {
-    	super(key,params);
-    	this.fieldName = field;
+    public FieldErrorWarning(String key, String field, String... params) {
+        super(key,field, params);
     }
     
-    public FieldErrorException() {
+    public FieldErrorWarning() {
         super();
-    }
-    
-    public String getFieldName(){
-    	return fieldName;
     }
 }

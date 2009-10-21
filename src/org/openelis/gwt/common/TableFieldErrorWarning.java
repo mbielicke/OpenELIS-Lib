@@ -25,28 +25,28 @@
 */
 package org.openelis.gwt.common;
 
+public class TableFieldErrorWarning extends TableFieldErrorException implements Warning {
 
-public class FieldErrorException extends LocalizedException {
-
-	private static final long serialVersionUID = 1L;
-
-	private String fieldName;
+    private static final long serialVersionUID = 1L;
     
-    public FieldErrorException(String key, String field) {
-    	super(key);
-    	this.fieldName = field;
-    }
-    
-    public FieldErrorException(String key, String field, String... params) {
-    	super(key,params);
-    	this.fieldName = field;
-    }
-    
-    public FieldErrorException() {
+    public TableFieldErrorWarning() {
         super();
     }
+
+    public TableFieldErrorWarning(String key, int rowIndex, String fieldName) {
+        super(key, rowIndex, fieldName);
+    }
     
-    public String getFieldName(){
-    	return fieldName;
+    public TableFieldErrorWarning(String key, int rowIndex, String fieldName, String... params) {
+        super(key, rowIndex, fieldName, params);
+    }
+    
+    public TableFieldErrorWarning(String key, int rowIndex, String fieldName,String tableKey) {
+        super(key, rowIndex, fieldName, tableKey); 
+
+    }
+    
+    public TableFieldErrorWarning(String key, int rowIndex, String fieldName,String tableKey, String... params) {
+        super(key, rowIndex, fieldName, tableKey, params); 
     }
 }

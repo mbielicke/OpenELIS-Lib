@@ -3,10 +3,12 @@ package org.openelis.gwt.screen;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+
 import org.openelis.gwt.common.FieldErrorException;
 import org.openelis.gwt.common.FormErrorException;
 import org.openelis.gwt.common.TableFieldErrorException;
 import org.openelis.gwt.common.ValidationErrorsList;
+import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
@@ -18,6 +20,7 @@ import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.table.TableWidget;
+
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -26,6 +29,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -168,7 +172,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 FormErrorException fe = (FormErrorException)ex;
                 formErrors.add(fe.getMessage());
 
-            } else {
+            } else if (ex instanceof FieldErrorException){
                 FieldErrorException fe = (FieldErrorException)ex;
                 ((HasField)def.getWidget(fe.getFieldName())).addError(fe.getMessage());
             }
@@ -182,6 +186,26 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             window.setError("(Error 1 of " + formErrors.size() + ") " + formErrors.get(0));
             window.setMessagePopup(formErrors, "ErrorPanel");
         }
+    }
+    
+    protected void showWarningsDialog(ValidationErrorsList warnings){
+        String warningText = consts.get("warningDialogLine1")+"\n";
+        
+        for (Exception ex : warnings.getErrorList()){
+            if(ex instanceof Warning)
+                warningText+=" * "+ex.getMessage()+"\n";
+        }
+            
+        warningText+="\n"+consts.get("warningDialogLastLine");
+        
+        if(Window.confirm(warningText))
+            commitWithWarnings();
+    }
+    
+    protected void commitWithWarnings(){
+        //by default this method does nothing
+        //but it can be overridden by screens to do screen
+        //specific actions
     }
 
     protected String getString(Object obj) {
