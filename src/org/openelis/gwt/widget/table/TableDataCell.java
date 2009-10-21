@@ -2,10 +2,12 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
+
 public class TableDataCell  {
 
 	public Object value;
-	public ArrayList<String> errors;
+	public ArrayList<LocalizedException> exceptions;
 	public String style;
 	
 	public TableDataCell() {
@@ -16,18 +18,18 @@ public class TableDataCell  {
 		this.value = value;
 	}
 	
-	public void addError(String error) {
-		if(errors == null)
-			errors = new ArrayList<String>();
-		errors.add(error);
+	public void addException(LocalizedException exception) {
+		if(exceptions == null)
+			exceptions = new ArrayList<LocalizedException>();
+		exceptions.add(exception);
 	}
 	
-	public void clearErrors() {
-		errors = null;
+	public void clearExceptions() {
+		exceptions = null;
 	}
 	
-	public ArrayList<String> getErrors() {
-		return errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return exceptions;
 	}
 
 	public Object getValue() {

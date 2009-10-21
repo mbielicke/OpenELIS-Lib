@@ -144,7 +144,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasField) {
                 ((HasField)wid).checkValue();
-                if ( ((HasField)wid).getErrors() != null) {
+                if ( ((HasField)wid).getExceptions() != null) {
                     valid = false;
                 }
             }
@@ -155,7 +155,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     protected void clearErrors() {
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasField)
-                ((HasField)wid).clearErrors();
+                ((HasField)wid).clearExceptions();
         }
     }
 
@@ -165,16 +165,16 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         for (Exception ex : errors.getErrorList()) {
             if (ex instanceof TableFieldErrorException) {
                 TableFieldErrorException tfe = (TableFieldErrorException)ex;
-                ((TableWidget)def.getWidget(tfe.getTableKey())).setCellError(tfe.getRowIndex(),
+                ((TableWidget)def.getWidget(tfe.getTableKey())).setCellException(tfe.getRowIndex(),
                                                                              tfe.getFieldName(),
-                                                                             tfe.getMessage());
+                                                                             tfe);
             } else if (ex instanceof FormErrorException) {
                 FormErrorException fe = (FormErrorException)ex;
                 formErrors.add(fe.getMessage());
 
             } else if (ex instanceof FieldErrorException){
                 FieldErrorException fe = (FieldErrorException)ex;
-                ((HasField)def.getWidget(fe.getFieldName())).addError(fe.getMessage());
+                ((HasField)def.getWidget(fe.getFieldName())).addException(fe);
             }
         }
 

@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.screen.UIUtil;
@@ -16,13 +17,13 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 	private Field<String> field;
 	private boolean enabled;
 	
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addException(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 
 	public Field getField() {
@@ -64,8 +65,8 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 		
 	}
 
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 	public void enable(boolean enabled) {

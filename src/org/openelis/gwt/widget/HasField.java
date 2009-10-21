@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -13,9 +14,9 @@ public interface HasField<T> {
 	
 	public void setField(Field<T> field);
 	
-	public void addError(String Error);
+	public void addException(LocalizedException exception);
 	
-	public void clearErrors();
+	public void clearExceptions();
 	
 	public void setQueryMode(boolean query);
 	
@@ -23,7 +24,7 @@ public interface HasField<T> {
 	
 	public void getQuery(ArrayList<QueryData> list, String key);
 	
-	public ArrayList<String> getErrors();
+	public ArrayList<LocalizedException> getExceptions();
 	
 	public void enable(boolean enabled);
 	

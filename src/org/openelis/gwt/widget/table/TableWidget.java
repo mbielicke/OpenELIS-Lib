@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
@@ -167,7 +168,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public int shownRows; 
     public ArrayList<Integer> selections = new ArrayList<Integer>(1);
     private int selected = -1;
-    private ArrayList<String> errors;
+    private ArrayList<LocalizedException> exceptions;
     public boolean queryMode;
     public boolean mouseOver;
     public boolean fireEvents = true;    
@@ -654,23 +655,23 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
    
     
-    public void setCellError(int row, int col, String error) {
-        model.get(row).cells.get(col).addError(error);
+    public void setCellException(int row, int col, LocalizedException ex) {
+        model.get(row).cells.get(col).addException(ex);
         if(isRowDrawn(row))
         	renderer.cellUpdated(tableIndex(row), col);
     }
     
-    public void setCellError(int row, String col, String error) {
+    public void setCellException(int row, String col, LocalizedException ex) {
     	for(TableColumn column : columns) {
     		if(column.key.equals(col)){
-    			setCellError(row,columns.indexOf(column),error);
+    			setCellException(row,columns.indexOf(column),ex);
     			break;
     		}
     	}
     }
     
-    public void clearCellError(int row, int col) {
-    	 model.get(row).cells.get(col).clearErrors();
+    public void clearCellExceptions(int row, int col) {
+    	 model.get(row).cells.get(col).clearExceptions();
     	 if(isRowDrawn(row))
     		 renderer.cellUpdated(tableIndex(row), col);
     }
@@ -689,13 +690,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	}
     }
 
-	public void addError(String Error) {
+	public void addException(LocalizedException exception) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void clearErrors() {
-		errors = null;
+	public void clearExceptions() {
+		exceptions = null;
 		
 	}
 
@@ -735,8 +736,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		}
 	}
 	
-	public ArrayList<String> getErrors() {
-		return errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return exceptions;
 	}
 
 	public void enable(boolean enabled) {
@@ -754,20 +755,20 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		if(model == null)
 			return;
 		finishEditing();
-		errors = null;
+		exceptions = null;
 		for(int i = 0; i < numRows(); i++) {
 			for(int j = 0; j < model.get(i).cells.size(); j++){
 				Widget wid = columns.get(j).getWidgetEditor(model.get(i).cells.get(j));
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
-					model.get(i).cells.get(j).errors = ((HasField)wid).getErrors();
-					if(model.get(i).cells.get(j).errors != null){
-						errors = model.get(i).cells.get(j).errors;
+					model.get(i).cells.get(j).exceptions = ((HasField)wid).getExceptions();
+					if(model.get(i).cells.get(j).exceptions != null){
+						exceptions = model.get(i).cells.get(j).exceptions;
 					}
 				}
 			}
 		}
-		if(errors != null)
+		if(exceptions != null)
 			refresh();
 		else if(fireEvents)
 			TableValueChangeEvent.fire(this, model);

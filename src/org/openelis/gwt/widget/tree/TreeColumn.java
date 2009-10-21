@@ -28,6 +28,8 @@ package org.openelis.gwt.widget.tree;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.AutoComplete;
@@ -120,16 +122,23 @@ public class TreeColumn {
     	}
         
         wid.setHeight((controller.cellHeight+"px"));
-        if(cell.errors != null) {
+        if(cell.exceptions != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
-            for (String error : cell.errors) {
+        	String style = "InputWarning";
+            for (LocalizedException error : cell.exceptions) {
             	HorizontalPanel hp = new HorizontalPanel();
-            	hp.add(new Image("Images/bullet_red.png"));
-            	hp.add(new Label(error));
-                hp.setStyleName("errorPopupLabel");
+            	if(error instanceof Warning){
+            		hp.add(new Image("Images/warn.png"));
+            		hp.setStyleName("warnPopupLabel");
+            	}else{
+            		hp.add(new Image("Images/bullet_red.png"));
+            		hp.setStyleName("errorPopupLabel");
+            		style = "InputError";
+            	}
+            	hp.add(new Label(error.getMessage()));
                 errorPanel.add(hp);
             }
-        	wid.addStyleName("InputError");
+        	wid.addStyleName(style);
         	((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {
@@ -197,16 +206,23 @@ public class TreeColumn {
     			}
     		}
     	}
-        if(cell.errors != null) {
+        if(cell.exceptions != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
-            for (String error : cell.errors) {
+        	String style = "InputWarning";
+            for (LocalizedException error : cell.exceptions) {
             	HorizontalPanel hp = new HorizontalPanel();
-            	hp.add(new Image("Images/bullet_red.png"));
-            	hp.add(new Label(error));
-                hp.setStyleName("errorPopupLabel");
+            	if(error instanceof Warning){
+            		hp.add(new Image("Images/warn.png"));
+            		hp.setStyleName("warnPopupLabel");
+            	}else{
+            		hp.add(new Image("Images/bullet_red.png"));
+            		hp.setStyleName("errorPopupLabel");
+            		style = "InputError";
+            	}
+            	hp.add(new Label(error.getMessage()));
                 errorPanel.add(hp);
             }
-        	widget.addStyleName("InputError");
+        	widget.addStyleName(style);
         	((HasMouseOverHandlers)widget).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {
@@ -265,16 +281,23 @@ public class TreeColumn {
     		((HasField)editor).setFieldValue(cell.getValue());
        
         editor.setHeight((controller.cellHeight+"px"));
-        if(cell.errors != null) {
+        if(cell.exceptions != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
-            for (String error : cell.errors) {
+        	String style = "InputWarning";
+            for (LocalizedException error : cell.exceptions) {
             	HorizontalPanel hp = new HorizontalPanel();
-            	hp.add(new Image("Images/bullet_red.png"));
-            	hp.add(new Label(error));
-                hp.setStyleName("errorPopupLabel");
+            	if(error instanceof Warning){
+            		hp.add(new Image("Images/warn.png"));
+            		hp.setStyleName("warnPopupLabel");
+            	}else{
+            		hp.add(new Image("Images/bullet_red.png"));
+            		hp.setStyleName("errorPopupLabel");
+            		style = "InputError";
+            	}
+            	hp.add(new Label(error.getMessage()));
                 errorPanel.add(hp);
             }
-        	editor.addStyleName("InputError");
+        	editor.addStyleName(style);
         	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {

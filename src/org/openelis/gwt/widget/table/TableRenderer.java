@@ -230,7 +230,7 @@ public class TableRenderer  {
         	else
         		newVal = ((HasField)controller.editingCell).getFieldValue();
         	if(controller.editingCell instanceof HasField)
-        		controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).errors = ((HasField)controller.editingCell).getErrors();
+        		controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).exceptions = ((HasField)controller.editingCell).getExceptions();
         	controller.getData().get(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).setValue(newVal);
         	setCellDisplay(controller.activeRow,controller.activeCell);
         	controller.editingCell = null;

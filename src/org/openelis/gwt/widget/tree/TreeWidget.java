@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.screen.UIUtil;
@@ -688,35 +689,35 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return selections;
     }
     
-    public void clearCellError(int row, int col) {
-        rows.get(row).cells.get(col).clearErrors();
+    public void clearCellExceptions(int row, int col) {
+        rows.get(row).cells.get(col).clearExceptions();
         renderer.cellUpdated(row, col);
     }
 
-    public void setCellError(int row, int col, String Error) {
-        rows.get(row).cells.get(col).addError(Error);
+    public void setCellException(int row, int col, LocalizedException ex) {
+        rows.get(row).cells.get(col).addException(ex);
         renderer.cellUpdated(row, col);
         
     }
     
-    public void clearCellError(int row, String col) {
+    public void clearCellExceptions(int row, String col) {
     	int index = -1;
     	for(TreeColumn column : columns.get(getRow(row).leafType)) {
     		if(column.key.equals(col)){
     			index = columns.get(getRow(row).leafType).indexOf(column);
-    			rows.get(row).cells.get(index).clearErrors();
+    			rows.get(row).cells.get(index).clearExceptions();
     			break;
     		}
     	}
         renderer.cellUpdated(row, index);
     }
 
-    public void setCellError(int row, String col, String error) {
+    public void setCellException(int row, String col, LocalizedException ex) {
     	int index = -1;
     	for(TreeColumn column : columns.get(getRow(row).leafType)) {
     		if(column.key.equals(col)){
     			index = columns.get(getRow(row).leafType).indexOf(column);
-    			rows.get(row).cells.get(index).addError(error);
+    			rows.get(row).cells.get(index).addException(ex);
     			break;
     		}
     	}
@@ -786,16 +787,16 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return isEnabled();
     }
     
-	public void addError(String Error) {
+	public void addException(LocalizedException exception) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	ArrayList<String> errors;
+	ArrayList<LocalizedException> exceptions;
 	
 	public void checkValue() {
 		finishEditing();
-		errors = null;
+		exceptions = null;
 		if(data == null)
 			return;
 		for(int i = 0; i < rows.size(); i++) {
@@ -803,25 +804,25 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 				Widget wid = columns.get(rows.get(i).leafType).get(j).getWidgetEditor(rows.get(i).cells.get(j));
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
-					rows.get(i).cells.get(j).errors = ((HasField)wid).getErrors();
-					if(rows.get(i).cells.get(j).errors != null){
-						errors = rows.get(i).cells.get(j).errors;
+					rows.get(i).cells.get(j).exceptions = ((HasField)wid).getExceptions();
+					if(rows.get(i).cells.get(j).exceptions != null){
+						exceptions = rows.get(i).cells.get(j).exceptions;
 					}
 				}
 			}
 		}
-		if(errors != null)
+		if(exceptions != null)
 			renderer.dataChanged(false);
 	}
 
-	public void clearErrors() {
+	public void clearExceptions() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public ArrayList<String> getErrors() {
+	public ArrayList<LocalizedException> getExceptions() {
 		// TODO Auto-generated method stub
-		return errors;
+		return exceptions;
 	}
 
 	public Field getField() {

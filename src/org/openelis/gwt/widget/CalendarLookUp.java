@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.deprecated.IconContainer;
@@ -370,16 +371,16 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
      * Adds a an error to the widget.  An error style is added to the widget and on MouseOver a popup will 
      * be displayed with errors.
      */
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addException(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 
 	/**
 	 * Clears the error list for this widget and removes the error style from it.
 	 */
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 	
     /**
@@ -444,8 +445,8 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 	/**
 	 * The current list of error for this widget.
 	 */
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 	/**

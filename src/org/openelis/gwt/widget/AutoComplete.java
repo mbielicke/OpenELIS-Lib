@@ -27,6 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.BeforeGetMatchesEvent;
 import org.openelis.gwt.event.BeforeGetMatchesHandler;
@@ -256,16 +257,16 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      * Adds a an error to the widget.  An error style is added to the widget and on MouseOver a popup will 
      * be displayed with errors.
      */
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addError(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 
 	/**
 	 * Clears the error list and removes the error style from the widget
 	 */
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 
 	/**
@@ -352,8 +353,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	 * The current list of error for this widget.
 	 */
 	@Override
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
     
 	/**

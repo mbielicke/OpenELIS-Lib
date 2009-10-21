@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
@@ -87,13 +88,13 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		addMouseOverHandler(field);
 	}
 	
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addException(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 	
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 	
 	public void addTabHandler(TabHandler handler) {
@@ -135,8 +136,8 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		
 	}
 
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 	public void enable(boolean enabled) {

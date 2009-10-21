@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.screen.Screen;
 
 
@@ -52,7 +53,7 @@ public class StringField extends Field<String> {
         if (required) {
             if (value == null || value.trim().length() == 0) {
             	valid = false;
-                addError(Screen.consts.get("fieldRequiredException"));    
+                addException(new LocalizedException("fieldRequiredException"));    
              }
         }
         if (value != null && !isInRange())
@@ -65,7 +66,7 @@ public class StringField extends Field<String> {
     		qField.parse(value);
     		queryString = value;
     	}catch(Exception e) {
-    		addError("Invalid Query format");
+    		addException(new LocalizedException("invalidQueryFormat"));
     	}	
     }
     
@@ -78,12 +79,12 @@ public class StringField extends Field<String> {
         if (value != null) {
         	if (max != null && value.length() > ((Integer)max).intValue()) {
         		rangeVal = false;
-        		addError(Screen.consts.get("fieldMaxLengthException"));
+        		addException(new LocalizedException("fieldMaxLengthException"));
         	}
         	if (min != null && value.length() < ((Integer)min).intValue() &&
         			value.length() > 0) {
         		rangeVal = false;
-        		addError(Screen.consts.get("fieldMinLengthException"));
+        		addException(new LocalizedException("fieldMinLengthException"));
         	}
         }
         return rangeVal;

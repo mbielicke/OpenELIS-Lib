@@ -27,6 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenDef;
 import org.openelis.gwt.screen.UIUtil;
@@ -219,16 +220,16 @@ public class EditBox extends Composite implements ClickHandler,
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
-	public void addError(String error) {
-		field.addError(error);
+	public void addException(LocalizedException error) {
+		field.addException(error);
 	}
 
 	public void checkValue() {
 		field.checkValue(this);
 	}
 
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 		
 	}
 
@@ -237,8 +238,8 @@ public class EditBox extends Composite implements ClickHandler,
 		text.setReadOnly(!enabled);		
 	}
 
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 	public Field<String> getField() {

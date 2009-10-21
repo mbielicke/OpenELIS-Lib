@@ -28,6 +28,7 @@ package org.openelis.gwt.widget;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -87,7 +88,7 @@ public class DateField extends Field<Datetime> {
         if (required) {
             if (value == null) {
             	valid = false;
-                addError(Screen.consts.get("fieldRequiredException"));
+                addException(new LocalizedException("fieldRequiredException"));
             }
         }
         if (value != null && !isInRange()) {
@@ -121,7 +122,7 @@ public class DateField extends Field<Datetime> {
            		   }
            	   }catch(Exception e) {
            		   valid = false;
-          		   addError("Invalid Date entered");
+          		   addException(new LocalizedException("invalidDateFormat"));
           		   return;
            	   }
         	 }
@@ -147,12 +148,12 @@ public class DateField extends Field<Datetime> {
     	Date today = new Date();
         if (min != null && value.before(Datetime.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
-            addError(Screen.consts.get("fieldPastException"));
+            addException(new LocalizedException("fieldPastException"));
         }
         if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
-            addError(Screen.consts.get("fieldFutureException"));
+            addException(new LocalizedException("fieldFutureException"));
         }
         return true;
     }
@@ -276,7 +277,7 @@ public class DateField extends Field<Datetime> {
    		   }
    	   }catch(Exception e) {
    		   valid = false;
-  		   addError("Invalid Date format entered");
+  		   addException(new LocalizedException("invalidDateFormat"));
    	   }
    	   /*
         }else{
@@ -293,7 +294,7 @@ public class DateField extends Field<Datetime> {
     }
     
 	public void checkValue(Widget wid) {
-		clearError(wid);
+		clearExceptions(wid);
 		if(queryMode){
 			if(wid instanceof CalendarLookUp) {
 				queryString = ((CalendarLookUp)wid).getStringValue();
@@ -313,7 +314,7 @@ public class DateField extends Field<Datetime> {
 			validate();
 		}
 		if(!valid){
-			drawError(wid);
+			drawExceptions(wid);
 		}
 	}
     

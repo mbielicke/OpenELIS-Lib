@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.screen.UIUtil;
@@ -171,13 +172,13 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		addDomHandler(handler,KeyPressEvent.getType());
 	}
 
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addException(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 
 	public Field<String> getField() {
@@ -225,8 +226,8 @@ public class RichTextWidget extends Composite implements FocusListener, HasValue
 		
 	}
 
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 

@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.screen.UIUtil;
@@ -294,13 +295,13 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 		return textbox.addMouseOverHandler(handler);
 	}
 
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addException(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 
 	public Field getField() {
@@ -340,8 +341,8 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 		
 	}
 
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 	public void enable(boolean enabled) {

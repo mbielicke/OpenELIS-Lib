@@ -1,5 +1,6 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.NumberFormat;
@@ -25,12 +26,12 @@ public class IntegerField extends Field<Integer> {
     public void validate() {
         if (invalid) {
             valid = false;
-            addError(Screen.consts.get("fieldNumericException"));
+            addException(new LocalizedException("fieldNumericException"));
         }
         if (required) {
             if (value == null) {
             	valid = false;
-                addError(Screen.consts.get("fieldRequiredException"));
+                addException(new LocalizedException("fieldRequiredException"));
             }
         }
         if (value != null && !isInRange()) {
@@ -53,7 +54,7 @@ public class IntegerField extends Field<Integer> {
         		try {
         			Integer.parseInt(vals[i]);
         		} catch (Exception e) {
-        			addError("Param is not a valid integer");
+        			addException(new LocalizedException("fieldNumericException"));
         			valid = false;
         			return;
         		}
@@ -67,11 +68,11 @@ public class IntegerField extends Field<Integer> {
             return true;
         if (max != null && value > max) {
         	valid = false;
-            addError(Screen.consts.get("fieldMaxException"));
+            addException(new LocalizedException("fieldMaxException"));
         }
         if (min != null && value < min) {
         	valid = false;
-            addError(Screen.consts.get("fieldMinException"));
+            addException(new LocalizedException("fieldMinException"));
         }
         return true;
     }
@@ -112,7 +113,7 @@ public class IntegerField extends Field<Integer> {
                 }
             } catch (Exception e) {
                 valid = false;
-                addError("Field must be a valid number");
+                addException(new LocalizedException("fieldNumericException"));
             }
         } else {
             try {
@@ -122,7 +123,7 @@ public class IntegerField extends Field<Integer> {
 
             } catch (Exception e) {
                 valid = false;
-                addError("Field must be a valid number");
+                addException(new LocalizedException("fieldNumericException"));
             }
         }
     }

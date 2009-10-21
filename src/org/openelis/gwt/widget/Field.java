@@ -2,6 +2,9 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Warning;
+
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -27,11 +30,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     public boolean required;
     public boolean valid = true;
     public T value;
-    protected VerticalPanel errorPanel = new VerticalPanel();
+    protected VerticalPanel exceptionPanel = new VerticalPanel();
     protected PopupPanel pop;
-    public ArrayList<String> errors;
     public boolean queryMode;
     public String queryString;
+    public ArrayList<LocalizedException> exceptions;
     
     public void validate() {
     	
@@ -81,7 +84,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 	
 	public void onValueChange(ValueChangeEvent<String> event) {
-		clearError((Widget)event.getSource());
+		clearExceptions((Widget)event.getSource());
 		if(queryMode) {
 			queryString = event.getValue();
 			validateQuery();
@@ -89,48 +92,58 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			valid = true;
 			setStringValue(event.getValue());
 			if(!valid){
-				drawError((Widget)event.getSource());
+				drawExceptions((Widget)event.getSource());
 				return;
 			}
 			((HasValue)event.getSource()).setValue(format(), false);
 			validate();
 		}
 		if(!valid){
-			drawError((Widget)event.getSource());
+			drawExceptions((Widget)event.getSource());
 		}
 		if(!queryMode)
 			ValueChangeEvent.fire(this, value);
 	}
 	
-    public void clearError(Widget wid) {
+    public void clearExceptions(Widget wid) {
         if(pop != null){
             pop.hide();
         }
         wid.removeStyleName("InputError");
-        errorPanel.clear();
-        errors = null;
+        wid.removeStyleName("InputWarning");
+        exceptionPanel.clear();
+        exceptions = null;
         valid = true;
     }
     
-    public void addError(String error){
-    	if(errors == null)
-    		errors = new ArrayList<String>();
-    	errors.add(error);
+    public void addException(LocalizedException e){
+    	if(exceptions == null)
+    		exceptions = new ArrayList<LocalizedException>();
+    	exceptions.add(e);
     }
     
-    public void drawError(Widget wid) {        
-        errorPanel.clear();
-        for (String error : errors) {
+    public void drawExceptions(Widget wid) {        
+        exceptionPanel.clear();
+        String style = "InputWarning";
+        for (LocalizedException exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
-        	hp.add(new Image("Images/bullet_red.png"));
-        	hp.add(new Label(error));
-            hp.setStyleName("errorPopupLabel");
-            errorPanel.add(hp);
+        	if(exception instanceof Warning) {
+        		hp.add(new Image("Images/warning.png"));
+        		hp.setStyleName("warnPopupLabel");
+        	}else{
+        		hp.add(new Image("Images/bullet_red.png"));
+        		hp.setStyleName("errorPopupLabel");
+        		style = "InputError";
+        	}
+        	hp.add(new Label(exception.getMessage()));
+            
+            exceptionPanel.add(hp);
         }
-        if(errors.size() == 0){
+        if(exceptions.size() == 0){
             wid.removeStyleName("InputError");
+            wid.removeStyleName("InputWarning");
         }else{
-            wid.addStyleName("InputError");
+            wid.addStyleName(style);
         }
         
     }
@@ -153,7 +166,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
             
             //ScreenWindow win = new ScreenWindow(pop,"","","",false);
             dp.setStyleName("ErrorWindow");
-            dp.add(errorPanel);
+            dp.add(exceptionPanel);
             dp.setVisible(true);
             pop.setWidget(dp);
             pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
@@ -167,7 +180,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 	
 	public void checkValue(Widget wid) {
-		clearError(wid);
+		clearExceptions(wid);
 		if(queryMode){
 			if(((HasValue)wid).getValue() != null && !((HasValue)wid).getValue().equals("")){
 				queryString = ((HasValue)wid).getValue().toString();
@@ -183,7 +196,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			validate();
 		}
 		if(!valid){
-			drawError(wid);
+			drawExceptions(wid);
 		}
 	}
 

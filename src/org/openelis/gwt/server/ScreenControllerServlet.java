@@ -110,14 +110,22 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends RPC> ArrayList<T> callList(String method, RPC param)
 			throws Throwable {
 		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends RPC> ArrayList<T> callList(String method)
 			throws Throwable {
 		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends RPC> ArrayList<T> callList(String method, String param)
+			throws Throwable {
+		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
 }

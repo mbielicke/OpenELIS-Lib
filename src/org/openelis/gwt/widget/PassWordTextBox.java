@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
@@ -15,13 +16,13 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 	private Field<String> field; 
 	private boolean enabled;
 	
-	public void addError(String error) {
-		field.addError(error);
-		field.drawError(this);
+	public void addException(LocalizedException error) {
+		field.addException(error);
+		field.drawExceptions(this);
 	}
 
-	public void clearErrors() {
-		field.clearError(this);
+	public void clearExceptions() {
+		field.clearExceptions(this);
 	}
 
 	public Field<String> getField() {
@@ -64,8 +65,8 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 		
 	}
 
-	public ArrayList<String> getErrors() {
-		return field.errors;
+	public ArrayList<LocalizedException> getExceptions() {
+		return field.exceptions;
 	}
 
 	public void enable(boolean enabled) {
