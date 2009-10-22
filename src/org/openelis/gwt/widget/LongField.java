@@ -24,6 +24,7 @@ public class LongField extends Field<Long> {
     }
 
     public void validate() {
+    	valid = true;
         if (invalid) {
             valid = false;
             addException(new LocalizedException("fieldNumericException"));
@@ -36,9 +37,7 @@ public class LongField extends Field<Long> {
         }
         if (value != null && !isInRange()) {
             valid = false;
-            return;
         }
-        valid = true;
     }
     
     public void validateQuery() {

@@ -37,7 +37,6 @@ public class DoubleField extends Field<Double> {
         }
         if (value != null && !isInRange()) {
             valid = false;
-            return;
         }
     }
     

@@ -133,7 +133,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                 return;
             }
         }
-        showTable(this.startPos);
+        if(textbox.getStyleName().indexOf("Focus") > -1)
+        	showTable(this.startPos);
+        else
+        	setValue((T)model.get(this.startPos).key,true);
     }
     
     private int getIndexByTextValue(String textValue) {

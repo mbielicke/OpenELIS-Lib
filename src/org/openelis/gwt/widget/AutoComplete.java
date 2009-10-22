@@ -44,9 +44,15 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -63,11 +69,33 @@ import com.google.gwt.user.client.ui.HasValue;
  * @param <T>
  *        generic parameter used to define the Type of Key to used by the widget.  
  */
-public class AutoComplete<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasBeforeGetMatchesHandlers, HasGetMatchesHandlers {
+public class AutoComplete<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasBeforeGetMatchesHandlers, HasGetMatchesHandlers, HasMouseOutHandlers, HasMouseOverHandlers {
     
     private AutoCompleteListener listener = new AutoCompleteListener(this);
     private Field<T> field;
     private boolean enabled;
+    
+    private class Handler implements MouseOutHandler, MouseOverHandler {
+    	
+    	AutoComplete<T> source;
+    	
+    	public Handler(AutoComplete<T> source) {
+    		this.source = source;
+    	}
+
+		public void onMouseOut(MouseOutEvent event) {
+			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
+			
+		}
+
+		public void onMouseOver(MouseOverEvent event) {
+			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);
+			
+		}
+    	
+    }
+    
+    Handler mouseHandler = new Handler(this);
     
     /**
      * Default No-Arg constructor
@@ -97,7 +125,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         popup.addCloseHandler(this);
         textbox.addKeyUpHandler(listener);
         textbox.setReadOnly(!enabled);
-  
+        textbox.addMouseOutHandler(mouseHandler);
+        textbox.addMouseOverHandler(mouseHandler);
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
@@ -166,10 +195,16 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      *        A model for the DropdownWidget to display for matching suggestions.
      */
     public void showAutoMatches(ArrayList<TableDataRow> data){
-        activeRow = -1;
-        activeCell = -1;
-        load(data);
-        showTable(0);
+    		activeRow = -1;
+    		activeCell = -1;
+    		load(data);
+    	if(textbox.getStyleName().indexOf("Focus") > -1)
+    		showTable(0);
+    	else if(data != null && data.size() > 0)
+    		setValue((T)data.get(0).key,true);
+    	else
+    		setSelection(null,"");
+    	
     }
         
     /**
@@ -283,8 +318,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	public void setField(Field field) {
 		this.field = field;
 		addBlurHandler(field);
-		textbox.addMouseOutHandler(field);
-		textbox.addMouseOverHandler(field);
+		addMouseOutHandler(field);
+		addMouseOverHandler(field);
 	}
 	
 	/**

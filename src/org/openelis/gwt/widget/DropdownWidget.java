@@ -176,7 +176,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
         if(textValue.equalsIgnoreCase("NULL"))
             return "";
-        return textValue;
+        return textValue.trim();
     }
 
     public boolean isMultiSelect() {
