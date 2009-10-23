@@ -177,8 +177,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 
 	public void onBlur(BlurEvent event) {
-		if(((HasField)event.getSource()).isEnabled())
-			checkValue((Widget)event.getSource());
+		//if(((HasField)event.getSource()).isEnabled())
+			//checkValue((Widget)event.getSource());
 	}
 	
 	public void checkValue(Widget wid) {
