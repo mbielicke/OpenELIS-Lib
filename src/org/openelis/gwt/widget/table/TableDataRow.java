@@ -41,10 +41,11 @@ public class TableDataRow {
         }
     }
     
-    public TableDataRow(Object key, Object display) {
+    public TableDataRow(Object key, Object... display) {
     	this.key = key;
-    	cells = new ArrayList<TableDataCell>(1);
-    	cells.add(new TableDataCell(display));
+        cells = new ArrayList<TableDataCell>(display.length);
+    	for (int i= 0; i < display.length; i++)
+    	    cells.add(new TableDataCell(display[i]));
     }
 
     public Object clone() {
