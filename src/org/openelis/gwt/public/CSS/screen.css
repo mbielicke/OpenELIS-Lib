@@ -127,7 +127,6 @@ width:100%;
 .errorPopupLabel, .warnPopupLabel{
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
-    background:#e5f5f9;
     padding:0 4px 2px 0;
 }
 /*******TOP MENU BAR CSS***********/
@@ -1532,22 +1531,18 @@ margin:0px;
 }
 
 .FormTitle{
-text-align:center;
+	-moz-user-select: none;
+    text-align:center;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
- //   padding:0 8px 0 4px;
     height:18px;
-background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
-
-//   border:1px solid #99bbe8;
- //   border-bottom:0;
-//    margin-right:8px;
+    background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 }
 .Prompt {
 	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
     font-size:11px;
-   -moz-user-select: none;
+    -moz-user-select: none;
 	color:gray;
 	padding:2px 0 2px 2px;
 	text-align:right;
@@ -1948,9 +1943,12 @@ height:19px;
 width:2px;
 }
 */
+
+.middleCenter{
+background:#deecfd;
+		}
 .InputError {
 	border-bottom:1px dashed red;
-height:17px;
 }
 .InputError .ScreenTextBox{
 	border-bottom:1px dashed red;
@@ -1966,22 +1964,25 @@ height:17px;
 }
 
 .InputWarning {
-	border-bottom:1px dashed #FFDF00;
-height:17px;
+	border-bottom:1px dashed #f5d852;
 }
 .InputWarning .ScreenTextBox{
-	border-bottom:1px dashed #FFDF00;
+	border-bottom:1px dashed #f5d852;
 }
 .InputWarning .TextboxUnselected{
-	border-bottom:1px dashed #FFDF00;
+	border-bottom:1px dashed #f5d852;
 }
 .InputWarning .AutoDropDownButton{
-	border-bottom:1px dashed #FFDF00;
+	border-bottom:1px dashed #f5d852;
 }
+.InputWarning .CalendarButton{
+	border-bottom:1px dashed #f5d852;
+}
+/*
 .InputWarning .CalendarButton{
 	border-bottom:1px dashed #FFDF00;
 }
-
+*/
 .TableVertScroll{
 }
 
@@ -2057,6 +2058,7 @@ height:17px;
     height:8px;
 }
 .Focus {
+	border-style:solid;
     border-color:#63b159;
 }
 .Focus .ScreenTextArea,
