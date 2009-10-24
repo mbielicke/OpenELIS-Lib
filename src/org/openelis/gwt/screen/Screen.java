@@ -104,6 +104,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     }
 
     public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
+        assert wid != null : "addScreenHandler received a null widget";
+        
         screenHandler.target = wid;
         addDataChangeHandler(screenHandler);
         addStateChangeHandler(screenHandler);
