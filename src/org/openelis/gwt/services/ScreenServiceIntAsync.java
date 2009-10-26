@@ -26,7 +26,6 @@
 package org.openelis.gwt.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
@@ -57,5 +56,6 @@ public interface ScreenServiceIntAsync {
     public <T extends RPC> Request callList(String method, RPC param, AsyncCallback<ArrayList<T>> callback);
     public <T extends RPC> Request callList(String method, AsyncCallback<ArrayList<T>> callback);
     public <T extends RPC> Request callList(String method, String param, AsyncCallback<ArrayList<T>> callback);
+    public <T extends RPC> Request callList(String method, Integer param, AsyncCallback<ArrayList<T>> callback);
 
 }

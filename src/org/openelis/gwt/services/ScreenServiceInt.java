@@ -60,6 +60,7 @@ public interface ScreenServiceInt extends RemoteService {
     public <T extends RPC> ArrayList<T>  callList(String method, RPC param) throws Throwable; 
     public <T extends RPC> ArrayList<T>  callList(String method) throws Throwable; 
     public <T extends RPC> ArrayList<T>  callList(String method, String param) throws Throwable;
+    public <T extends RPC> ArrayList<T>  callList(String method, Integer param) throws Throwable; 
 
     
 }
