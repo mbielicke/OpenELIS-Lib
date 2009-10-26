@@ -381,6 +381,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                         controller.sort(index, TableSorter.SortDirection.UP);
                     }
                 });
+                item.sinkEvents(Event.ONCLICK);
                 item = new MenuItem("",new Label("Sort Down"),"");
                 item.setStyleName("topHeaderRowContainer");
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
@@ -389,6 +390,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                         controller.sort(index, TableSorter.SortDirection.DOWN);
                     }
                 });
+                item.sinkEvents(Event.ONCLICK);
                 if(col.filterable){
                     ((MenuItem)event.getData()).menuItemsPanel.add(new HTML("<hr/>"));
                 }
