@@ -57,7 +57,6 @@
 				<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
 			</xsd:sequence>
 			<xsd:attribute name="enable" type="xsd:boolean"/>
-			<xsd:attribute name="key" type="xsd:string" />
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
@@ -395,6 +394,7 @@
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
+			<xsd:attribute name="required" type="xsd:boolean"/>
 		</xsd:complexType>
 	</xsd:element>
 
