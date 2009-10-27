@@ -1436,7 +1436,11 @@ public class UIGenerator extends Generator {
                 	Node col = colList.item(i);
                 	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                 		continue;
-                	sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
+                	if(col.getAttributes().getNamedItem("class") != null){
+                		String colClass = col.getAttributes().getNamedItem("class").getNodeValue();
+                		sw.println(colClass+" column"+id+"_"+i+" = new "+colClass+"();");
+                	}else
+                		sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
                 	sw.println("column"+id+"_"+i+".controller = wid"+id+";");
                 	if(col.getAttributes().getNamedItem("key") != null)
                 		sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
