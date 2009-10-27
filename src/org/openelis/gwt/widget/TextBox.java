@@ -35,10 +35,14 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
             addStyleName("Upper");
             removeStyleName("Lower");
         }
-        if (textCase == Case.LOWER){
+        else if (textCase == Case.LOWER){
             addStyleName("Lower");
             removeStyleName("Upper");
+        }else{
+        	removeStyleName("Upper");
+        	removeStyleName("Lower");
         }
+        	
     }
     
     public void setLength(int length) {
