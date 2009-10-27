@@ -303,5 +303,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 		
 	}
 	
+	public void setCase(TextBox.Case textCase) {
+		textbox.setCase(textCase);
+	}
+	
 	
 }
