@@ -224,8 +224,8 @@ public class TableRenderer  {
         	else
         		newVal = ((HasField)controller.activeWidget).getFieldValue();
         	if(controller.activeWidget instanceof HasField)
-        		controller.getRow(controller.modelIndexList[controller.selectedRow]).cells.get(controller.selectedCol).exceptions = ((HasField)controller.activeWidget).getExceptions();
-        	controller.getData().get(controller.modelIndexList[controller.selectedRow]).cells.get(controller.selectedCol).setValue(newVal);
+        		controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = ((HasField)controller.activeWidget).getExceptions();
+        	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;
             return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
