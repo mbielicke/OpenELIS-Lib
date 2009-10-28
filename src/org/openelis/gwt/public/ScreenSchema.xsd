@@ -353,7 +353,7 @@
 				<xsd:element name="col" minOccurs="1" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:sequence>
-							<xsd:element ref="widgets" minOccurs="1" maxOccurs="1" />
+							<xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
 						</xsd:sequence>
 						<xsd:attribute name="class" type="xsd:string"/>
 						<xsd:attribute name="key" type="xsd:string" />
