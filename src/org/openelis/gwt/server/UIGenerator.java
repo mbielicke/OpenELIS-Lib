@@ -1413,25 +1413,21 @@ public class UIGenerator extends Generator {
 				}
 			                   
                 sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-                sw.println("wid"+id+".maxRows = Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\");");
+                sw.println("wid"+id+".setMaxRows(Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\"));");
 
                 if(node.getAttributes().getNamedItem("title") != null){
-                        sw.println("wid"+id+".title = \""+node.getAttributes().getNamedItem("title").getNodeValue() + "\";");
-                }
-                if(node.getAttributes().getNamedItem("showRows") != null){
-                    if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
-                        sw.println("wid"+id+".showRows = true;");
+                        sw.println("wid"+id+".setTitle(\""+node.getAttributes().getNamedItem("title").getNodeValue() + "\");");
                 }
                 if(node.getAttributes().getNamedItem("showScroll") != null){
                 	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    sw.println("wid"+id+".showScroll = VerticalScroll.valueOf(\""+showScroll+"\");");
+                    sw.println("wid"+id+".setShowScroll(VerticalScroll.valueOf(\""+showScroll+"\"));");
                 }
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
                         sw.println("wid"+id+".enableMultiSelect(true);");
                 }
                 NodeList colList = node.getChildNodes();
-                sw.println("wid"+id+".columns = new ArrayList<TableColumn>();");
+                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
                 for(int i = 0; i < colList.getLength(); i++) {
                 	Node col = colList.item(i);
                 	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
@@ -1446,7 +1442,7 @@ public class UIGenerator extends Generator {
                 		sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
                 	if(col.getAttributes().getNamedItem("header") != null){
                 		sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                		sw.println("wid"+id+".showHeader = true;");
+                		sw.println("wid"+id+".showHeader(true);");
                 	}
                 	if(col.getAttributes().getNamedItem("width") != null)
                 		sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
@@ -1479,7 +1475,7 @@ public class UIGenerator extends Generator {
                 			break;
                 		}
                 	}
-                	sw.println("wid"+id+".columns.add(column"+id+"_"+i+");");
+                	sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
                 }
                 sw.println("wid"+id+".init();");
                 sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
@@ -1529,10 +1525,10 @@ public class UIGenerator extends Generator {
 			    
     		    sw.println("wid"+id+".setField(field"+id+");");
     		    		
-    		    sw.println("wid"+id+".multiSelect = false;");
+    		    sw.println("wid"+id+".setMultiSelect(false);");
     		        	                
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-    	        	sw.println("wid"+id+".multiSelect = true;");
+    	        	sw.println("wid"+id+".setMultiSelect(true);");
     	        
     	        if (node.getAttributes().getNamedItem("text") != null)
     	        	sw.println("wid"+id+".textBoxDefault = \""+node.getAttributes().getNamedItem("text").getNodeValue()+"\";");
@@ -1546,7 +1542,7 @@ public class UIGenerator extends Generator {
     	        else
     	        	sw.println("wid"+id+".setTableWidth(\"auto\");");
                 NodeList colList = ((Element)node).getElementsByTagName("col");
-                sw.println("wid"+id+".columns = new ArrayList<TableColumn>();");
+                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
                 if(colList.getLength() > 0){
                 	for(int i = 0; i < colList.getLength(); i++) {
                 		Node col = colList.item(i);
@@ -1556,7 +1552,7 @@ public class UIGenerator extends Generator {
                 			sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
                 		if(col.getAttributes().getNamedItem("header") != null){
                 			sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			sw.println("wid"+id+".showHeader = true;");
+                			sw.println("wid"+id+".showHeader(true);");
                 		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
@@ -1576,7 +1572,7 @@ public class UIGenerator extends Generator {
                 		int child = ++count;
                 		factoryMap.get("label").getNewInstance(colList.item(i),child);
                 		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                		sw.println("wid"+id+".columns.add(column"+id+"_"+i+");");
+                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
                 	}
                 }else{
                 	sw.println("TableColumn column"+id+" = new TableColumn();");
@@ -1595,7 +1591,7 @@ public class UIGenerator extends Generator {
                 	sw.println("org.openelis.gwt.widget.Label label"+id+" = new org.openelis.gwt.widget.Label();");
                 	sw.println("label"+id+".setField(new StringField());");
                 	sw.println("column"+id+".setColumnWidget(label"+id+");");
-                	sw.println("wid"+id+".columns.add(column"+id+");");
+                	sw.println("wid"+id+".getColumns().add(column"+id+");");
                 }
                 sw.println("wid"+id+".setup();");
 				if (node.getAttributes().getNamedItem("case") != null){
@@ -1646,7 +1642,7 @@ public class UIGenerator extends Generator {
 					addShortcutHandler(node,"wid"+id);
 			    
     	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-    	        	sw.println("wid"+id+".multiSelect = true;");
+    	        	sw.println("wid"+id+".multiSelect(true);");
     	        
     	        if (node.getAttributes().getNamedItem("text") != null)
     	        	sw.println("wid"+id+".textBoxDefault = \""+node.getAttributes().getNamedItem("text").getNodeValue()+"\";");
@@ -1665,7 +1661,7 @@ public class UIGenerator extends Generator {
     	            sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+textCase+"\"));");
     	        }
                 NodeList colList = ((Element)node).getElementsByTagName("col");
-                sw.println("wid"+id+".columns = new ArrayList<TableColumn>();");
+                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
                 if(colList.getLength() > 0){
                 	for(int i = 0; i < colList.getLength(); i++) {
                 		Node col = colList.item(i);
@@ -1675,7 +1671,7 @@ public class UIGenerator extends Generator {
                 			sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
                 		if(col.getAttributes().getNamedItem("header") != null) {
                 			sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			sw.println("wid"+id+".showHeader = true;");
+                			sw.println("wid"+id+".showHeader(true);");
                 		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
@@ -1695,7 +1691,7 @@ public class UIGenerator extends Generator {
                 		int child = ++count;
                 		factoryMap.get("label").getNewInstance(colList.item(i),child);
                 		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                		sw.println("wid"+id+".columns.add(column"+id+"_"+i+");");	
+                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");	
                 	}
                 }else{
                 	sw.println("TableColumn column"+id+" = new TableColumn();");
@@ -1704,7 +1700,7 @@ public class UIGenerator extends Generator {
                 	sw.println("label"+id+".setField(new StringField());");
                 	sw.println("column"+id+".setColumnWidget(label"+id+");");
                 	sw.println("column"+id+".controller = wid"+id+";");
-                	sw.println("wid"+id+".columns.add(column"+id+");");
+                	sw.println("wid"+id+".getColumns().add(column"+id+");");
                 }
                 sw.println("wid"+id+".init();");
 				sw.println("wid"+id+".addFocusHandler(panel);");

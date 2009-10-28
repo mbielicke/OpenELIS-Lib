@@ -1138,18 +1138,14 @@ public class UIUtil {
               
                 
                 table.setTableWidth(node.getAttributes().getNamedItem("width").getNodeValue());
-                table.maxRows = Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue());
+                table.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
 
                 if(node.getAttributes().getNamedItem("title") != null){
-                        table.title =node.getAttributes().getNamedItem("title").getNodeValue();
-                }
-                if(node.getAttributes().getNamedItem("showRows") != null){
-                    if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
-                        table.showRows = true;
+                        table.setTitle(node.getAttributes().getNamedItem("title").getNodeValue());
                 }
                 if(node.getAttributes().getNamedItem("showScroll") != null){
                 	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    table.showScroll = VerticalScroll.valueOf(showScroll);
+                    table.setShowScroll(VerticalScroll.valueOf(showScroll));
                 }
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
@@ -1167,7 +1163,7 @@ public class UIUtil {
                 		column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
                 	if(col.getAttributes().getNamedItem("header") != null){
                 		column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
-                		table.showHeader = true;
+                		table.showHeader(true);
                 	}
                 	if(col.getAttributes().getNamedItem("width") != null)
                 		column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
@@ -1198,7 +1194,7 @@ public class UIUtil {
                 	}
                 	columns.add(column);
                 }
-                table.columns = columns;
+                table.setColumns(columns);
                 table.init();
                 table.setStyleName("ScreenTable");
                 setDefaults(node,table);
@@ -1262,7 +1258,7 @@ public class UIUtil {
                 			column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
                 		if(col.getAttributes().getNamedItem("header") != null){
                 			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
-                			drop.showHeader = true;
+                			drop.showHeader(true);
                 		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
@@ -1291,7 +1287,7 @@ public class UIUtil {
                 	column.setColumnWidget(label);
                 	columns.add(column);
                 }
-                drop.columns = columns;
+                drop.setColumns(columns);
                 drop.setup();
 				if (node.getAttributes().getNamedItem("case") != null){
 					String fieldCase = node.getAttributes().getNamedItem("case")
@@ -1363,7 +1359,7 @@ public class UIUtil {
                 			column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
                 		if(col.getAttributes().getNamedItem("header") != null) {
                 			column.setHeader(col.getAttributes().getNamedItem("header").getNodeValue());
-                			auto.showHeader = true;
+                			auto.showHeader(true);
                 		}
                 		if(col.getAttributes().getNamedItem("width") != null)
                 			column.setCurrentWidth(Integer.parseInt(col.getAttributes().getNamedItem("width").getNodeValue()));
@@ -1393,7 +1389,7 @@ public class UIUtil {
                 	column.controller = auto;
                 	columns.add(column);
                 }
-                auto.columns = columns;
+                auto.setColumns(columns);
                 auto.init();
 				if (node.getAttributes().getNamedItem("case") != null){
 					String fieldCase = node.getAttributes().getNamedItem("case")

@@ -117,11 +117,11 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
           //  view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
-        activeRow = -1;
+        selectedRow = -1;
         
         for(int i = 0; i < view.table.getRowCount(); i++){
             if(modelIndexList[i] == active)
-                activeRow = i;
+                selectedRow = i;
             }
         if(view.table.getRowCount() > 0)
             selectRow(active);
@@ -145,11 +145,11 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
           //  view.setHeight(maxRows*cellHeight);
         view.scrollBar.setScrollPosition((active*cellHeight));
         renderer.load(view.scrollBar.getScrollPosition());
-        activeRow = -1;
+        selectedRow = -1;
         
         for(int i = 0; i < view.table.getRowCount(); i++){
             if(modelIndexList[i] == active)
-                activeRow = i;
+                selectedRow = i;
             }
         if(view.table.getRowCount() > 0)
             selectRow(active);

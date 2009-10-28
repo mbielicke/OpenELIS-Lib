@@ -110,13 +110,13 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     	}else if(!isEnabled()){
     		return;
     	}
-        if(activeRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
+        if(selectedRow > -1 && ((multiSelect && !ctrlKey) || !multiSelect)){
             unselect(-1);
         }
         if(multiSelect && ctrlKey && isSelected(modelIndexList[row])){
             unselect(modelIndexList[row]);
         }else {
-            activeRow = row;
+            selectedRow = row;
             selectRow(modelIndexList[row]);
         }
         SelectionEvent.fire(this, renderer.rows.get(row));
@@ -238,48 +238,48 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
             shiftKey = true;
         if (event.getNativeKeyCode()== KeyboardHandler.KEY_DOWN) {
-            if(activeRow < 0){
-                activeRow = findNextActive(0);
-                selectRow(activeRow);    
+            if(selectedRow < 0){
+                selectedRow = findNextActive(0);
+                selectRow(selectedRow);    
             }else{
-                if(activeRow == view.table.getRowCount() -1){
-                    if(modelIndexList[activeRow]+1 < numRows()){                        
+                if(selectedRow == view.table.getRowCount() -1){
+                    if(modelIndexList[selectedRow]+1 < numRows()){                        
                         view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
                         renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                        findNextActive(activeRow-1);
-                        unselect(activeRow);
-                        activeRow = view.table.getRowCount() -1;
+                        findNextActive(selectedRow-1);
+                        unselect(selectedRow);
+                        selectedRow = view.table.getRowCount() -1;
                         selectRow(modelIndexList[view.table.getRowCount() -1]);
                     }
                 }else{
-                    int row = findNextActive(activeRow);
-                    unselect(activeRow);
-                    activeRow = row;
-                    selectRow(modelIndexList[activeRow]);
+                    int row = findNextActive(selectedRow);
+                    unselect(selectedRow);
+                    selectedRow = row;
+                    selectRow(modelIndexList[selectedRow]);
                 }
             }
         }
         if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
-            if(activeRow == 0){
-                if(modelIndexList[activeRow] - 1 > -1){
+            if(selectedRow == 0){
+                if(modelIndexList[selectedRow] - 1 > -1){
                     view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
                     renderer.scrollLoad(view.scrollBar.getScrollPosition());
                     findPrevActive(1);
-                    unselect(activeRow);
-                    activeRow = 0;
+                    unselect(selectedRow);
+                    selectedRow = 0;
                     selectRow(modelIndexList[0]);
                 }
-            }else if (activeRow > 0){
-                int row = findPrevActive(activeRow);
-                unselect(activeRow);
-                activeRow = row;
-                selectRow(modelIndexList[activeRow]);
+            }else if (selectedRow > 0){
+                int row = findPrevActive(selectedRow);
+                unselect(selectedRow);
+                selectedRow = row;
+                selectRow(modelIndexList[selectedRow]);
             }
         }
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
-            if(activeRow > -1){
+            if(selectedRow > -1){
                 itemSelected = true;
-                SelectionEvent.fire(this, renderer.rows.get(activeRow));
+                SelectionEvent.fire(this, renderer.rows.get(selectedRow));
                 complete();
             }
         }

@@ -49,6 +49,7 @@ import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -58,6 +59,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 /**
  * This widget class implements a textbox that listens to keystrokes and will fire a GetMatchesEvent to a
@@ -75,6 +77,50 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     private Field<T> field;
     private boolean enabled;
     
+    private class AutoCompleteListener implements KeyUpHandler {
+        
+        private AutoComplete widget;
+       
+        
+        public AutoCompleteListener(AutoComplete widget){
+            this.widget = widget;
+        }
+
+        /**
+         * Catches key events from the AutoComplete widget and determines if getMatches should be called.  We set a delay so
+         * that if multiple key strokes are entered quickly we don't call getMathces with calls that will most likely be never seen by the 
+         * user. 
+         */
+        public void onKeyUp(KeyUpEvent event) {
+            if(widget.queryMode)
+                return;
+            if (!widget.textbox.isReadOnly()) {
+                if (event.getNativeKeyCode() == KeyboardHandler.KEY_DOWN || event.getNativeKeyCode() == KeyboardHandler.KEY_UP ||  event.getNativeKeyCode() == KeyboardHandler.KEY_TAB 
+                        || event.getNativeKeyCode() == KeyboardHandler.KEY_LEFT || event.getNativeKeyCode() == KeyboardHandler.KEY_RIGHT || event.getNativeKeyCode() == KeyboardHandler.KEY_ALT || 
+                        event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL || event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT || event.getNativeKeyCode() == KeyboardHandler.KEY_ESCAPE)
+                    return;
+                if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
+                    if(widget.selectedRow < 0)
+                        widget.showTable(0);
+                    else
+                        widget.showTable(widget.modelIndexList[widget.selectedRow]);
+                    return;
+                }
+                if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && widget.itemSelected){
+                    widget.itemSelected = false;
+                    return;
+                }
+                String text = widget.textbox.getText();
+                if (text.length() > 0 && !text.endsWith("*")) {
+                    widget.setDelay(text, 350);
+                } else {
+                    widget.hideTable();
+                }
+            }
+        }
+
+    }
+
     private class Handler implements MouseOutHandler, MouseOverHandler {
     	
     	AutoComplete<T> source;
@@ -195,8 +241,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      *        A model for the DropdownWidget to display for matching suggestions.
      */
     public void showAutoMatches(ArrayList<TableDataRow> data){
-    		activeRow = -1;
-    		activeCell = -1;
+    		selectedRow = -1;
+    		selectedCol = -1;
     		load(data);
     	if(textbox.getStyleName().indexOf("Focus") > -1)
     		showTable(0);
@@ -220,8 +266,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      * Returns the key value for the selected option in the current model of suggestions for the widget.
      */
     public T getValue() {
-        if(getSelectedIndex() > -1)
-            return (T)getRow(getSelectedIndex()).key;
+        if(getSelectedRow() > -1)
+            return (T)getRow(getSelectedRow()).key;
         else
             return null;
     }

@@ -140,48 +140,51 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasFocusHandlers
 													   {
                             
-    public ArrayList<TableColumn> columns;
-    public boolean enabled;
-    public boolean focused;
-    public int activeRow = -1;
-    public int activeCell = -1;
-    public TableView view;
-    public TableRenderer renderer;
-    public TableKeyboardHandlerInt keyboardHandler;
-    public boolean shiftKey;
-    public boolean ctrlKey;
-    public int maxRows;
+    protected ArrayList<TableColumn> columns;
+    protected boolean enabled;
+    protected boolean focused;
+    protected int selectedRow = -1;
+    protected int selectedCol = -1;
+    protected TableView view;
+    protected TableRenderer renderer;
+    protected TableKeyboardHandlerInt keyboardHandler;
+    protected boolean shiftKey;
+    protected boolean ctrlKey;
+    protected int maxRows;
     protected int cellHeight = 21;
-    public Widget editingCell = null;
-    public int[] modelIndexList;
-    public boolean showRows;
-    public String title;
-    public boolean showHeader;
-    public boolean isDropdown = false;
-    public TableDragController dragController;
-    public TableIndexDropController dropController;
-    public boolean selectedByClick;
-    public VerticalScroll showScroll = VerticalScroll.NEEDED;
-    public String width;
-    private ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
-    public TableSorter sorter = new TableSorter();
-    public int shownRows; 
-    public ArrayList<Integer> selections = new ArrayList<Integer>(1);
-    private int selected = -1;
-    private ArrayList<LocalizedException> exceptions;
-    public boolean queryMode;
-    public boolean mouseOver;
-    public boolean fireEvents = true;    
-    public boolean multiSelect;
+    protected Widget activeWidget = null;
+    protected int[] modelIndexList;
+    protected String title;
+    protected boolean showHeader;
+    protected boolean isDropdown = false;
+    protected TableDragController dragController;
+    protected TableIndexDropController dropController;
+    protected boolean selectedByClick;
+    protected VerticalScroll showScroll = VerticalScroll.NEEDED;
+    protected String width;
+    protected ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
+    protected TableSorter sorter = new TableSorter();
+    protected int shownRows; 
+    protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
+    //protected int selected = -1;
+    protected ArrayList<LocalizedException> exceptions;
+    protected boolean queryMode;
+    protected boolean mouseOver;
+    protected boolean fireEvents = true;    
+    protected boolean multiSelect;
     
+    /**
+     * Table has too many configuration options to pass to a constructor. 
+     * We use a no-arg constructor to create the widget, set option fields
+     * then call init to realize the widget.
+     */
     public TableWidget() {
         
     }
     
-    public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
-    }
-    
+    /**
+     * Call to realize the widget for use.
+     */
     public void init(){
         renderer = new TableRenderer(this);
         keyboardHandler = new TableKeyboardHandler(this);
@@ -193,12 +196,66 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
     }
         
+    /**
+     * Sets the width of the cellView which is not the width of the overall widget.  When set to "auto"
+     * the width of the cellView will the sum of the column widths and no Horizontal Scrollbar will appear.
+     * @param width
+     */
     public void setTableWidth(String width) {
     	this.width = width;
     }
+    
+    public void setMaxRows(int maxRows) {
+    	this.maxRows = maxRows;
+    }
+    
+    public int getMaxRows() {
+    	return maxRows;
+    }
+    
+    public void setTitle(String title) {
+    	this.title = title;
+    }
+    
+    public String getTitle() {
+    	return title;
+    }
+    
+    public void setShowScroll(VerticalScroll scroll){
+    	this.showScroll = scroll;
+    }
+    
+    public void showHeader(boolean showHeader) {
+    	this.showHeader = showHeader;
+    }
+    
+    public boolean showHeader() {
+    	return showHeader;
+    }
+    
+    public void multiSelect(boolean multiSelect){
+    	this.multiSelect = multiSelect;
+    }
+    
+    public boolean multiSelect() {
+    	return multiSelect;
+    }
+    
+    public int getTableWidth() {
+    	int tw = 0;
+    	
+    	if(width.equals("auto")){
+    		for(TableColumn column : columns)
+    			tw += column.getCurrentWidth();
+    	}else {
+    		tw = Integer.parseInt(width.substring(0,width.length()-2));
+    	}
+    	
+    	return tw;
+    }
 
     /**
-     * This method handles all click events on the body of the table
+     * This method handles all click events on the body of the table.  
      */
     public void onClick(ClickEvent event) {
     	if(event.getSource() == view.table){
@@ -214,7 +271,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.CHECKED);
     			}
     		}
-    		if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
+    		if(selectedRow == cell.getRowIndex() && selectedCol == cell.getCellIndex())
     			return;
     		selectedByClick = true;
     		select(cell.getRowIndex(), cell.getCellIndex());
@@ -222,12 +279,18 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	}
     }
     
+    /**
+     * Adds the highlighting of the rows when the mouse is moved over the table.
+     */
     public void onMouseOver(MouseOverEvent event) {
         ((Widget)event.getSource()).addStyleName("TableHighlighted");
         mouseOver = true;
          
      }
 
+     /**
+      * Removes the highlight on the table rows whent the mouse is moved over the table. 
+      */
      public void onMouseOut(MouseOutEvent event) {
          ((Widget)event.getSource()).removeStyleName("TableHighlighted");
         mouseOver = false;   
@@ -243,22 +306,33 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         finishEditing();
         if(row == -1){
             selections.clear();
-            selected = -1;
             renderer.rowUnselected(-1);
         }else {
             selections.remove(new Integer(row));
-            if(selected == row)
-                selected = -1;
         }
-        activeRow = -1;
+        selectedRow = -1;
         if(isRowDrawn(row))
         	renderer.rowUnselected(tableIndex(row));
     }
     
+    /**
+     * Method used to determine if a row in the table model is currently drawn in the table
+     * @param row
+     * @return
+     *    true if the row is currently displayed
+     */
     private boolean isRowDrawn(int row){
     	return row >= modelIndexList[0] && row <= modelIndexList[view.table.getRowCount()-1];
     }
     
+    /**
+     * This method is used to find the display index of a row in the model.
+     * @param row
+     *      the index of a row in the table model
+     * @return
+     *      the index of the table where the row is currently displayed.  If
+     *      the row is currently scrolled off the table this method will return -1.
+     */
     private int tableIndex(int row) {
     	for(int i = 0; i < view.table.getRowCount(); i++){
     		if(modelIndexList[i] == row)
@@ -283,28 +357,32 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	}else if(!isEnabled()) 
     		return;
         finishEditing();
-        if(activeRow != row){
-            if(activeRow > -1 && !ctrlKey && !shiftKey){
+        if(selectedRow != row){
+            if(selectedRow > -1 && !ctrlKey && !shiftKey){
             	if(fireEvents)
-            		UnselectionEvent.fire(this,model.get(selected));
+            		UnselectionEvent.fire(this,model.get(selectedRow));
                 unselect(-1);
                 
             }
-            activeRow = row;
+            selectedRow = row;
             selectRow(modelIndexList[row]);
             if(fireEvents)
             	SelectionEvent.fire(this, renderer.rows.get(row));
         }
         if(canEditCell(row,col)){
-            activeCell = col;
+            selectedCol = col;
             renderer.setCellEditor(row, col);
             unsinkEvents(Event.ONKEYPRESS);
         }else{
-       		activeCell = -1;
+       		selectedCol = -1;
        		sinkEvents(Event.ONKEYPRESS);
        	}
     }
     
+    /**
+     *  This method will select all rows in the model, but only if the table is in 
+     *  MultiSelect mode.
+     */
     public void selectAll() {
     	if(multiSelect) {
     		selections = new ArrayList<Integer>();
@@ -314,27 +392,42 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	}
     }
     
+    /**
+     * This method is called to save the currently edited cell into the model and to 
+     * switch the table cell to display mode.
+     */
     public void finishEditing() {
-        if(editingCell != null) {
+        if(activeWidget != null) {
         	if(renderer.stopEditing() && fireEvents)
-        		CellEditedEvent.fire(this, modelIndexList[activeRow], activeCell, getRow(activeRow).cells.get(activeCell).value);
-            activeCell = -1;
+        		CellEditedEvent.fire(this, modelIndexList[selectedRow], selectedCol, getRow(selectedRow).cells.get(selectedCol).value);
+            selectedCol = -1;
             sinkEvents(Event.KEYEVENTS);
         }
     }
     
+    /**
+     * This method is used to put a cell into edit mode by code.  Model index is passed in and if the
+     * row is currently not drawn the method will do nothing.    
+     * @param row
+     *    Model Index of the row to be edited.
+     * @param col
+     *    col index to be edited
+     */
     public void startEditing(int row, int col) {
     	if(isRowDrawn(row))
     		select(tableIndex(row),col);
     }
     
+    /**
+     * Scrolls the table to the first selected index in the selected list.
+     */
     public void scrollToSelection(){
     	finishEditing();
         if(numRows() == shownRows()){
-            view.scrollBar.setScrollPosition(cellHeight*getSelectedIndex());
+            view.scrollBar.setScrollPosition(cellHeight*getSelectedRow());
         }else{
             int shownIndex = 0;
-            for(int i = 0; i < getSelectedIndex(); i++){
+            for(int i = 0; i < getSelectedRow(); i++){
                 if(getRow(i).shown)
                     shownIndex++;
             }
@@ -342,12 +435,20 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         }
     }
 
+    /**
+     * Adds a new default row to the end of the model and scrolls the table to the bottom so 
+     * that it can be seen.
+     */
     public void addRow() {
     	finishEditing();
         addRow(createRow());
         view.scrollBar.scrollToBottom();
     }
     
+    /**
+     * 
+     * @param index
+     */
     public void addRow(int index) {
     	finishEditing();
         addRow(index,createRow());
@@ -443,6 +544,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     private void resetTable() {
+    	if(view == null) {
+    		return;
+    	}
     	view.header = new TableHeaderBar();
     	view.header.init(this);
     	view.table.clear();
@@ -463,8 +567,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(model != null)
     		model.clear();
     	clearSelections();
-    	activeRow = -1;
-    	activeCell = -1;
+    	selectedRow = -1;
+    	selectedCol = -1;
         shownRows = 0;
         renderer.dataChanged(false);
     }
@@ -504,13 +608,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public void load(ArrayList<TableDataRow> model) {
         selections.clear();
-        selected = -1;
         renderer.rowUnselected(-1);
         this.model = model;
         shownRows = 0;
-        activeRow = -1;
-        activeCell = -1;
-        editingCell = null;
+        selectedRow = -1;
+        selectedCol = -1;
+        activeWidget = null;
         
         if(model == null)
         	model = new ArrayList<TableDataRow>();
@@ -526,7 +629,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void selectRow(final int index) {
         if(index > model.size())
             throw new IndexOutOfBoundsException();
-        selected = index;
+        selectedRow = index;
         if(multiSelect && shiftKey){
         	if(selections.size() == 0)
         		selections.add(index);
@@ -555,7 +658,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public void clearSelections() {
         selections.clear();
-        selected = -1;
+        selectedRow = -1;
     }
     
     public ArrayList<TableDataRow> getSelections() {
@@ -633,9 +736,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
     public TableDataRow getSelection() {
-        if(selected == -1)
+        if(selectedRow == -1)
             return null;
-        return model.get(selected);
+        return model.get(selectedRow);
     }
 
     public ArrayList<TableDataRow> unload() {
@@ -643,11 +746,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         return model;
     }
     
-    public int getSelectedIndex() {
-        return selected;
+    public int getSelectedRow() {
+        return selectedRow;
+    }
+    
+    public int getSelectedCol() {
+    	return selectedCol;
     }
 
-    public int[] getSelectedIndexes() {
+    public int[] getSelectedRows() {
         int[] ret = new int[selections.size()];
         for(int i = 0; i < selections.size(); i++)
             ret[i] = (Integer)selections.get(i);
@@ -922,5 +1029,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	public HandlerRegistration addSortHandler(SortHandler handler) {
 		return addHandler(handler, SortEvent.getType());
 	}
+	
+    public void addTabHandler(TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
+    }
 	
 }

@@ -38,16 +38,20 @@ import org.openelis.gwt.widget.table.TableView;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasField {
     
@@ -59,6 +63,66 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public int minWidth;
     HorizontalPanel hp; 
     public boolean queryMode;
+    
+    private class DropDownListener implements ClickHandler, KeyUpHandler {
+        
+        private Dropdown widget;
+        
+        public DropDownListener(Dropdown widget){
+            this.widget = widget;
+        }
+
+        public void onClick(ClickEvent event) {
+            if(!widget.isEnabled())
+                return;
+            if(event.getSource() == widget.icon){
+                if(widget.selectedRow < 0)
+                    if(widget.getSelections().size() > 0)
+                        widget.showTable((Integer)widget.getSelectedRows()[0]);
+                    else
+                        widget.showTable(0);
+                else
+                    widget.showTable(widget.modelIndexList[widget.selectedRow]);
+            }
+
+        }
+
+        public void onKeyUp(KeyUpEvent event) {
+            if(!widget.isEnabled())
+                return;
+            if (!widget.textbox.isReadOnly()) {
+            	int keyCode = event.getNativeKeyCode();
+                if (keyCode == KeyboardHandler.KEY_DOWN || keyCode == KeyboardHandler.KEY_UP ||  keyCode == KeyboardHandler.KEY_TAB 
+                        || keyCode == KeyboardHandler.KEY_LEFT || keyCode == KeyboardHandler.KEY_RIGHT || keyCode == KeyboardHandler.KEY_ALT || 
+                        keyCode == KeyboardHandler.KEY_CTRL || keyCode == KeyboardHandler.KEY_SHIFT || keyCode == KeyboardHandler.KEY_ESCAPE)
+                    return;
+                if(keyCode == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
+                    if(widget.selectedRow < 0)
+                        widget.showTable(0);
+                    else
+                        widget.showTable(widget.modelIndexList[widget.selectedRow]);
+                    return;
+                }
+                if(keyCode == KeyboardHandler.KEY_ENTER && widget.itemSelected){
+                    widget.itemSelected = false;
+                    return;
+                }
+                String text = widget.textbox.getText();
+                if (text.length() > 0 && !text.endsWith("*")) {
+                    widget.setDelay(text, 350);
+                } else if(text.length() == 0){
+                    widget.selectedRow = 0;
+                    widget.selectRow(0);
+                    widget.scrollToSelection();
+                }else{
+                    widget.hideTable();
+                }
+            }
+            
+        }
+
+    }
+    
 
     public DropDownListener listener = new DropDownListener(this);
     
@@ -201,8 +265,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
 
     public T getValue() {
-        if(getSelectedIndex() > -1)
-            return (T)getRow(getSelectedIndex()).key;
+        if(getSelectedRow() > -1)
+            return (T)getRow(getSelectedRow()).key;
         else
             return null;
     }
