@@ -1479,7 +1479,15 @@ public class UIGenerator extends Generator {
                 }
                 sw.println("wid"+id+".init();");
                 sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
-                setDefaults(node,"wid"+id);
+                //setDefaults(node,"wid"+id);
+            	StringBuffer sb = new StringBuffer();
+                if (node.getAttributes().getNamedItem("style") != null){
+                    String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
+                    sw.println("wid"+id+".setStyleName(\""+styles[0]+"\");");
+                    for(int i = 1; i < styles.length; i++){
+                        sw.println("wid"+id+".addStyleName(\""+styles[i]+"\");");
+                    }
+                }
     	        if (node.getAttributes().getNamedItem("enable") != null){
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
