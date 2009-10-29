@@ -208,7 +208,7 @@ public class TableRenderer  {
 
     public boolean stopEditing() {
         if(controller.activeWidget != null){
-        	Object currVal = controller.getData().get(controller.modelIndexList[controller.selectedRow]).cells.get(controller.selectedCol).getValue();
+        	Object currVal = controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
         	if(controller.activeWidget instanceof Focusable)
         		((Focusable)controller.activeWidget).setFocus(false);
         	Object newVal = null;
