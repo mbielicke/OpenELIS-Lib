@@ -83,7 +83,10 @@ public class TableColumn {
     protected ArrayList<Filter> filterList;
     
     
-    public Widget getDisplayWidget(TableDataCell cell) {
+    public Widget getDisplayWidget(TableDataRow row) {
+    	TableDataCell cell = new TableDataCell(null);
+    	if( columnIndex < row.cells.size())
+    		cell = row.cells.get(columnIndex);
     	Widget wid = null;
     	Object val = null;
     	if(colWidget instanceof CheckBox){
@@ -102,9 +105,9 @@ public class TableColumn {
     			if(controller.queryMode){
     				val = cell.getValue();
     			}else{
-    				TableDataRow row = (TableDataRow)cell.getValue();
+    				TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(row  != null)
-    					((AutoComplete)colWidget).setSelection(row);
+    					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
     			}
@@ -192,7 +195,10 @@ public class TableColumn {
         return wid;
     }
     
-    public void loadWidget(Widget widget, TableDataCell cell) {
+    public void loadWidget(Widget widget, TableDataRow row) {
+    	TableDataCell cell = new TableDataCell(null);
+    	if( columnIndex < row.cells.size())
+    		cell = row.cells.get(columnIndex);
     	if(colWidget instanceof CheckBox){
     		if(CheckBox.CHECKED.equals(cell.getValue()))
     			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CHECKED_STYLE);
@@ -203,9 +209,9 @@ public class TableColumn {
     			if(controller.queryMode){
     				((Label)widget).setText((String)cell.getValue());
     			}else{
-    				TableDataRow row = (TableDataRow)cell.getValue();
+    				TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(row != null)
-    					((AutoComplete)colWidget).setSelection(row);
+    					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
     			
@@ -282,7 +288,10 @@ public class TableColumn {
         }
     }
     
-    public Widget getWidgetEditor(TableDataCell cell) {
+    public Widget getWidgetEditor(TableDataRow row) {
+    	TableDataCell cell = new TableDataCell(null);
+    	if( columnIndex < row.cells.size())
+    		cell = row.cells.get(columnIndex);
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
     		AbsolutePanel ap = new AbsolutePanel();
@@ -298,9 +307,9 @@ public class TableColumn {
     		if(controller.queryMode){
     			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
-    			TableDataRow row =  (TableDataRow)cell.getValue();
+    			TableDataRow vrow =  (TableDataRow)cell.getValue();
     			if(row != null)
-    				((AutoComplete)colWidget).setSelection(row);
+    				((AutoComplete)colWidget).setSelection(vrow);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
     		}
@@ -464,7 +473,7 @@ public class TableColumn {
     	for(TableDataRow row : controller.getData()){
     		if(checkList.contains(row.cells.get(col).getValue()))
     			continue;
-    		Filter filter = new Filter(row.cells.get(col).getValue(),getDisplayWidget(row.cells.get(col)),false);
+    		Filter filter = new Filter(row.cells.get(col).getValue(),getDisplayWidget(row),false);
     		if(filtered){
     			if(filtersInForce.contains(row.cells.get(col).getValue())){
     				filter.filtered = true;

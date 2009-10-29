@@ -865,7 +865,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		exceptions = null;
 		for(int i = 0; i < numRows(); i++) {
 			for(int j = 0; j < model.get(i).cells.size(); j++){
-				Widget wid = columns.get(j).getWidgetEditor(model.get(i).cells.get(j));
+				Widget wid = columns.get(j).getWidgetEditor(model.get(i));
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
 					model.get(i).cells.get(j).exceptions = ((HasField)wid).getExceptions();

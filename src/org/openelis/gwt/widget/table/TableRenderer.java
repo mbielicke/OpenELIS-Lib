@@ -33,8 +33,6 @@ import org.openelis.gwt.widget.HasField;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TableRenderer  {
@@ -49,7 +47,7 @@ public class TableRenderer  {
     public void createRow(int i) {
         int j = 0;
         for(TableColumn column : controller.columns) {
-            Widget wid = column.getDisplayWidget(new TableDataCell(null));
+            Widget wid = column.getDisplayWidget(new TableDataRow(controller.columns.size()));
             controller.view.table.setWidget(i,j,wid);            
             if(controller.isDropdown)
                 controller.view.table.getFlexCellFormatter().addStyleName(i,
@@ -143,7 +141,7 @@ public class TableRenderer  {
         	TableDataCell cell = new TableDataCell(null);
         	if( i < row.cells.size())
         		cell = row.cells.get(i);
-        	controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),cell);
+        	controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row);
         }
         rows.get(index).setStyleName("");
         if(index % 2 == 1 && !controller.isDropdown){
@@ -195,7 +193,7 @@ public class TableRenderer  {
     }
     
     public void setCellEditor(int row, int col) {
-        controller.activeWidget = (Widget)controller.columns.get(col).getWidgetEditor((TableDataCell)controller.getCell(controller.modelIndexList[row],col));
+        controller.activeWidget = (Widget)controller.columns.get(col).getWidgetEditor(controller.getRow(controller.modelIndexList[row]));
         if(controller.activeWidget instanceof AbsolutePanel)
         	controller.activeWidget = ((AbsolutePanel)controller.activeWidget).getWidget(0);
         controller.view.table.setWidget(row, col, controller.activeWidget);
@@ -205,7 +203,7 @@ public class TableRenderer  {
     }
     
     public void setCellDisplay(int row, int col) {
-    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget((TableDataCell)controller.getCell(controller.modelIndexList[row],col)));
+    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget(controller.getRow(controller.modelIndexList[row])));
     }
 
     public boolean stopEditing() {
