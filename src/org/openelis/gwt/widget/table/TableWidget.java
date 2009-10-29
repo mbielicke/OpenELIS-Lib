@@ -321,7 +321,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @return
      *    true if the row is currently displayed
      */
-    private boolean isRowDrawn(int row){
+    protected boolean isRowDrawn(int row){
     	return row >= modelIndexList[0] && row <= modelIndexList[view.table.getRowCount()-1];
     }
     
@@ -333,7 +333,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      *      the index of the table where the row is currently displayed.  If
      *      the row is currently scrolled off the table this method will return -1.
      */
-    private int tableIndex(int row) {
+    protected int tableIndex(int row) {
     	for(int i = 0; i < view.table.getRowCount(); i++){
     		if(modelIndexList[i] == row)
     			return i;

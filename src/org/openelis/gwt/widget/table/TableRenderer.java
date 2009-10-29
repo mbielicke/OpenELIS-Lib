@@ -156,7 +156,7 @@ public class TableRenderer  {
     }
     
     public void loadRow(int index) {
-    	loadRow(index,controller.modelIndexList[index]);
+    	loadRow(controller.tableIndex(index),index);
     }
     
     public void scrollLoad(int scrollPos){
@@ -193,7 +193,7 @@ public class TableRenderer  {
     }
     
     public void setCellEditor(int row, int col) {
-        controller.activeWidget = (Widget)controller.columns.get(col).getWidgetEditor(controller.getRow(controller.modelIndexList[row]));
+        controller.activeWidget = (Widget)controller.columns.get(col).getWidgetEditor(controller.getRow(row));
         if(controller.activeWidget instanceof AbsolutePanel)
         	controller.activeWidget = ((AbsolutePanel)controller.activeWidget).getWidget(0);
         controller.view.table.setWidget(row, col, controller.activeWidget);
