@@ -106,7 +106,7 @@ public class TableColumn {
     				val = cell.getValue();
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
-    				if(row  != null)
+    				if(vrow  != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
@@ -210,7 +210,7 @@ public class TableColumn {
     				((Label)widget).setText((String)cell.getValue());
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
-    				if(row != null)
+    				if(vrow != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
@@ -308,7 +308,7 @@ public class TableColumn {
     			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
     			TableDataRow vrow =  (TableDataRow)cell.getValue();
-    			if(row != null)
+    			if(vrow != null)
     				((AutoComplete)colWidget).setSelection(vrow);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
