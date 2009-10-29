@@ -203,7 +203,7 @@ public class TableRenderer  {
     }
     
     public void setCellDisplay(int row, int col) {
-    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget(controller.getRow(controller.modelIndexList[row])));
+    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget(controller.getRow(row)));
     }
 
     public boolean stopEditing() {
