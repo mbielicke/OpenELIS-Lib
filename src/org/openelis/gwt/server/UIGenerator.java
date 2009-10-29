@@ -1461,6 +1461,7 @@ public class UIGenerator extends Generator {
                         if (align.equals("right"))
                             sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
                 	}
+    	            sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
                 	NodeList editor = col.getChildNodes();
                 	for(int j = 0; j < editor.getLength(); j++){
                 		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
