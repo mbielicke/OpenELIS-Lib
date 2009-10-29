@@ -1578,6 +1578,7 @@ public class UIGenerator extends Generator {
                 			if (align.equals("right"))
                 				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
                 		}
+                		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
                 		int child = ++count;
                 		factoryMap.get("label").getNewInstance(colList.item(i),child);
                 		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
@@ -1697,6 +1698,7 @@ public class UIGenerator extends Generator {
                 			if (align.equals("right"))
                 				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
                 		}
+                		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
                 		int child = ++count;
                 		factoryMap.get("label").getNewInstance(colList.item(i),child);
                 		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
