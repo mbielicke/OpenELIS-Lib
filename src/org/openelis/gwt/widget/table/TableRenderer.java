@@ -196,14 +196,14 @@ public class TableRenderer  {
         controller.activeWidget = (Widget)controller.columns.get(col).getWidgetEditor(controller.getRow(row));
         if(controller.activeWidget instanceof AbsolutePanel)
         	controller.activeWidget = ((AbsolutePanel)controller.activeWidget).getWidget(0);
-        controller.view.table.setWidget(row, col, controller.activeWidget);
+        controller.view.table.setWidget(controller.tableIndex(row), col, controller.activeWidget);
         if(controller.activeWidget instanceof Focusable)
         	((Focusable)controller.activeWidget).setFocus(true);
             
     }
     
     public void setCellDisplay(int row, int col) {
-    	controller.view.table.setWidget(row, col, controller.columns.get(col).getDisplayWidget(controller.getRow(row)));
+    	controller.view.table.setWidget(controller.tableIndex(row), col, controller.columns.get(col).getDisplayWidget(controller.getRow(row)));
     }
 
     public boolean stopEditing() {
@@ -238,7 +238,7 @@ public class TableRenderer  {
                 controller.view.table.getRowFormatter().removeStyleName(i,controller.view.selectedStyle);
             }
         }else
-            controller.view.table.getRowFormatter().removeStyleName(row, controller.view.selectedStyle);
+            controller.view.table.getRowFormatter().removeStyleName(controller.tableIndex(row), controller.view.selectedStyle);
     }
 
     public void cellUpdated(int row, int cell) {

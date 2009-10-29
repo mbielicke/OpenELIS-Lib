@@ -271,11 +271,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.CHECKED);
     			}
     		}
-    		if(selectedRow == cell.getRowIndex() && selectedCol == cell.getCellIndex())
+    		if(tableIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
     			return;
-    		selectedByClick = true;
-    		select(cell.getRowIndex(), cell.getCellIndex());
-    		selectedByClick = false;
+    		//selectedByClick = true;
+    		select(modelIndexList[cell.getRowIndex()], cell.getCellIndex());
+    		//selectedByClick = false;
     	}
     }
     
@@ -312,7 +312,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         }
         selectedRow = -1;
         if(isRowDrawn(row))
-        	renderer.rowUnselected(tableIndex(row));
+        	renderer.rowUnselected(row);
     }
     
     /**
@@ -351,7 +351,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      */
     protected void select(final int row, final int col) {
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(row));
+    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
     		if(event.isCanceled())
     			return;
     	}else if(!isEnabled()) 
@@ -364,10 +364,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
                 unselect(-1);
                 
             }
-            selectedRow = row;
-            selectRow(modelIndexList[row]);
+            //selectedRow = row;
+            selectRow(row);
             if(fireEvents)
-            	SelectionEvent.fire(this, renderer.rows.get(row));
+            	SelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
         }
         if(canEditCell(row,col)){
             selectedCol = col;
@@ -399,7 +399,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void finishEditing() {
         if(activeWidget != null) {
         	if(renderer.stopEditing() && fireEvents)
-        		CellEditedEvent.fire(this, modelIndexList[selectedRow], selectedCol, getRow(selectedRow).cells.get(selectedCol).value);
+        		CellEditedEvent.fire(this, selectedRow, selectedCol, getRow(selectedRow).cells.get(selectedCol).value);
             selectedCol = -1;
             sinkEvents(Event.KEYEVENTS);
         }
