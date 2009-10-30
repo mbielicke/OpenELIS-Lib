@@ -119,7 +119,8 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     public void addException(LocalizedException e){
     	if(exceptions == null)
     		exceptions = new ArrayList<LocalizedException>();
-    	exceptions.add(e);
+    	if(!exceptions.contains(e))
+    		exceptions.add(e);
     }
     
     public void drawExceptions(HasField wid) {        

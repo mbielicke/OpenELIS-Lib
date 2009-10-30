@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasField;
@@ -221,8 +222,16 @@ public class TableRenderer  {
         		newVal = ((HasField)controller.activeWidget).getField().queryString;
         	else
         		newVal = ((HasField)controller.activeWidget).getFieldValue();
-        	if(controller.activeWidget instanceof HasField)
-        		controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = ((HasField)controller.activeWidget).getExceptions();
+        	if(controller.activeWidget instanceof HasField){
+        		if(((HasField)controller.activeWidget).getExceptions() != null){
+        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
+        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)controller.activeWidget).getExceptions())
+        				exceps.add((LocalizedException)exc.clone());
+        				
+        			 controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
+        		}else
+        			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;

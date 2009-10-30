@@ -38,7 +38,6 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.DropdownWidget;
 import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.QueryFieldUtil;
 import org.openelis.gwt.widget.deprecated.IconContainer;
 
@@ -54,6 +53,7 @@ import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -106,7 +106,7 @@ public class TableColumn {
     				val = cell.getValue();
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
-    				if(vrow  != null)
+    				if(row  != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
@@ -118,10 +118,7 @@ public class TableColumn {
     		}
     		if(val == null)
     			val = ((HasField)colWidget).getFieldValue();
-    		Label label = new Label();
-    		label.setField(((HasField)colWidget).getField());
-    		
-    		
+    		Label label = new Label("");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				label.setText((((CalendarLookUp) colWidget).getField().format()));
@@ -138,9 +135,9 @@ public class TableColumn {
     		wid = label;
     		wid.setWidth((currentWidth)+ "px");
     		//wid.setHeight((controller.cellHeight+"px"));
-    	//}
+    	}
         
-        /*
+        
         if(cell.exceptions != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
         	String style = "InputWarning";
@@ -164,7 +161,7 @@ public class TableColumn {
 				    String styleName = ((Widget)event.getSource()).getStyleName();
 			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 			            if(pop == null){
-			                pop = new PopupPanel();
+			                pop = new PopupPanel(true);
 			                //pop.setStyleName("ErrorPopup");
 			            }
 			            DecoratorPanel dp = new DecoratorPanel();
@@ -192,18 +189,9 @@ public class TableColumn {
 				}
         		
         	});
-        */	
-          //  if(cell.exceptions != null){
-            //	for(LocalizedException exc : cell.exceptions)
-            	//	((HasField)wid).addException(exc);
-            	((HasField)wid).getField().drawExceptions((HasField)wid);
-           // }else{
-            //	((HasField)wid).clearExceptions();
-           // }
+        	
         }
-        
         wid.addStyleName("TableWidget");
-
         return wid;
     }
     
@@ -222,7 +210,7 @@ public class TableColumn {
     				((Label)widget).setText((String)cell.getValue());
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
-    				if(vrow != null)
+    				if(row != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
@@ -230,12 +218,7 @@ public class TableColumn {
     				((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
     			}
     		}else{
-    			
     			((HasField)colWidget).setFieldValue(cell.getValue());
-    			((HasField)widget).setField(((HasField)colWidget).getField());
-    			
-    			//((HasField)widget).checkValue();
-    			
     			if(colWidget instanceof CalendarLookUp) {
     				((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
     			}else if(colWidget instanceof DropdownWidget) {
@@ -248,11 +231,8 @@ public class TableColumn {
     				else
     					((Label)widget).setText("");
     			}
-    			
     		}
-    		((HasField)widget).getField().drawExceptions((HasField)widget);
     	}
-    	/*
         if(cell.exceptions != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
         	String style = "InputWarning";
@@ -276,7 +256,7 @@ public class TableColumn {
 				    String styleName = ((Widget)event.getSource()).getStyleName();
 			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 			            if(pop == null){
-			                pop = new PopupPanel();
+			                pop = new PopupPanel(true);
 			                //pop.setStyleName("ErrorPopup");
 			            }
 			            DecoratorPanel dp = new DecoratorPanel();
@@ -305,16 +285,7 @@ public class TableColumn {
         		
         	});
         	
-        	
         }
-        */
-    	 //if(cell.exceptions != null){
-         	//for(LocalizedException exc : cell.exceptions)
-         		//((HasField)widget).addException(exc);
-         	
-        // }else{
-         //	((HasField)widget).clearExceptions();
-        // }
     }
     
     public Widget getWidgetEditor(TableDataRow row) {
@@ -325,7 +296,6 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		AbsolutePanel ap = new AbsolutePanel();
     		((CheckBox)editor).setValue((String)cell.getValue());
-    		((CheckBox)editor).checkValue();
     		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		ap.setWidth((currentWidth)+ "px");
     		ap.add(editor);
@@ -338,7 +308,7 @@ public class TableColumn {
     			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
     			TableDataRow vrow =  (TableDataRow)cell.getValue();
-    			if(vrow != null)
+    			if(row != null)
     				((AutoComplete)colWidget).setSelection(vrow);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
@@ -347,10 +317,13 @@ public class TableColumn {
 			((Dropdown)colWidget).setSelection(cell.getValue());
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
-       //((HasField)editor).checkValue();
+       ((HasField)editor).clearExceptions();
+       if(cell.exceptions != null) {
+    	   for(LocalizedException exc : cell.exceptions) 
+    		   ((HasField)editor).addException(exc);
+       }
         //editor.setHeight((controller.cellHeight+"px"));
-    	/*
-        if(cell.exceptions != null) {
+        /*if(cell.exceptions != null) {
         	final VerticalPanel errorPanel = new VerticalPanel();
         	String style = "InputWarning";
             for (LocalizedException error : cell.exceptions) {
@@ -366,7 +339,10 @@ public class TableColumn {
             	hp.add(new Label(error.getMessage()));
                 errorPanel.add(hp);
             }
-        	editor.addStyleName(style);
+            if(editor instanceof Dropdown)
+            	((Dropdown)editor).textbox.addStyleName(style);
+            else
+            	editor.addStyleName(style);
         	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
         		
 				public void onMouseOver(MouseOverEvent event) {
@@ -402,13 +378,6 @@ public class TableColumn {
         	
         }
         */
-    	// if(cell.exceptions != null){
-         //	for(LocalizedException exc : cell.exceptions)
-         	//	((HasField)editor).addException(exc);
-         	((HasField)editor).getField().drawExceptions((HasField)editor);
-   //      }else{
-     //    	((HasField)editor).clearExceptions();
-      //   }
         editor.addStyleName("TableWidget");
         return editor;
     }
