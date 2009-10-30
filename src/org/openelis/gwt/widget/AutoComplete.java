@@ -363,7 +363,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	 */
 	public void setField(Field field) {
 		this.field = field;
-		addBlurHandler(field);
+		//addBlurHandler(field);
 		addMouseOutHandler(field);
 		addMouseOverHandler(field);
 	}
@@ -411,7 +411,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	@Override
 	public void checkValue() {
 		if(!field.queryMode)
-			field.checkValue(this);
+			field.checkValue(textbox);
 	}
 	
 	/**
@@ -461,6 +461,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 		super.complete();
 		field.setValue(getValue());
 		ValueChangeEvent.fire(this, getValue());
+		checkValue();
 		textbox.setFocus(true);
 		
 	}

@@ -295,11 +295,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 
 	public void addException(LocalizedException error) {
 		field.addException(error);
-		field.drawExceptions(this);
+		field.drawExceptions(textbox);
 	}
 
 	public void clearExceptions() {
-		field.clearExceptions(this);
+		field.clearExceptions(textbox);
 	}
 
 	public Field getField() {
@@ -309,7 +309,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	public void setField(Field field) {
 		this.field = field;
 		//addValueChangeHandler(field);
-		addBlurHandler(field);
+		//addBlurHandler(field);
 		textbox.addMouseOutHandler(field);
 		textbox.addMouseOverHandler(field);
 	}
@@ -332,7 +332,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	@Override
 	public void checkValue() {
 		if(!queryMode)
-			field.checkValue(this);
+			field.checkValue(textbox);
 	}
 	
 	public void getQuery(ArrayList list, String key) {
@@ -399,7 +399,9 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	@Override
 	public void complete() {
 		super.complete();
+		field.setValue(getValue());
 		ValueChangeEvent.fire(this, getValue());
+		checkValue();
 		textbox.setFocus(true);
 	}
 	@Override
