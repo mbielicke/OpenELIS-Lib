@@ -94,4 +94,17 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 			ValueChangeHandler handler) {
 		return field.addValueChangeHandler(handler);
 	}
+
+	public void addExceptionStyle(String style) {
+		addStyleName(style);
+		
+	}
+
+	public Object getWidgetValue() {
+		return getValue();
+	}
+
+	public void removeExceptionStyle(String style) {
+		removeStyleName(style);
+	}
 }

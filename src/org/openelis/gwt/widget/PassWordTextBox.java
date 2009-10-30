@@ -88,4 +88,16 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 		return field.addValueChangeHandler(handler);
 	}
 
+	public void addExceptionStyle(String style) {
+		addStyleName(style);
+	}
+
+	public Object getWidgetValue() {
+		return getText();
+	}
+
+	public void removeExceptionStyle(String style) {
+		removeStyleName(style);
+	}
+
 }

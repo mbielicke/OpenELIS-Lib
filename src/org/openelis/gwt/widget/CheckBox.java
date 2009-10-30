@@ -316,4 +316,17 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 		return field.addValueChangeHandler(handler);
 	}
 
+	public void addExceptionStyle(String style) {
+		addStyleName(style);
+	}
+
+	public Object getWidgetValue() {
+		return getValue();
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -345,4 +345,19 @@ public class CheckBox extends Composite implements ClickListener, SourcesClickEv
 		return field.addValueChangeHandler(handler);
 	}
 
+	public void addExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getWidgetValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

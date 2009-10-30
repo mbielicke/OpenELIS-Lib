@@ -178,6 +178,18 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	public void setValue(T value) {
 		setFieldValue(value);
 	}
+
+	public void addExceptionStyle(String style) {
+		addStyleName(style);
+	}
+
+	public Object getWidgetValue() {
+		return getText();
+	}
+
+	public void removeExceptionStyle(String style) {
+		removeStyleName(style);
+	}
 	
 	
 }

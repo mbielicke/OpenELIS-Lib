@@ -52,7 +52,8 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 	}
 
 	public void checkValue() {
-		// TODO Auto-generated method stub
+		if(field != null)
+			field.checkValue(this);
 		
 	}
 
@@ -92,6 +93,8 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 
 	public void setField(Field<T> field) {
 		this.field = field;
+		addMouseOverHandler(field);
+		addMouseOutHandler(field);
 		
 	}
 
@@ -104,9 +107,24 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 		
 	}
 	
+
+	public void addExceptionStyle(String style) {
+		addStyleName(style);
+		
+	}
+
 	public HandlerRegistration addFieldValueChangeHandler(
-			ValueChangeHandler handler) {
-		return field.addValueChangeHandler(handler);
+			ValueChangeHandler<T> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getWidgetValue() {
+		return getText();
+	}
+
+	public void removeExceptionStyle(String style) {
+		removeStyleName(style);
 	}
 
 }

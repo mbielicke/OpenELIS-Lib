@@ -92,4 +92,16 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 		return field.addValueChangeHandler(handler);
 	}
 
+	public void addExceptionStyle(String style) {
+		addStyleName(style);	
+	}
+
+	public Object getWidgetValue() {
+		return getText();
+	}
+
+	public void removeExceptionStyle(String style) {
+		removeStyleName(style);
+	}
+
 }

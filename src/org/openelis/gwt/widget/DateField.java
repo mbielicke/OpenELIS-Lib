@@ -293,7 +293,7 @@ public class DateField extends Field<Datetime> {
         	setValue(Datetime.getInstance(begin, end, date));
     }
     
-	public void checkValue(Widget wid) {
+	public void checkValue(HasField wid) {
 		clearExceptions(wid);
 		if(queryMode){
 			if(wid instanceof CalendarLookUp) {

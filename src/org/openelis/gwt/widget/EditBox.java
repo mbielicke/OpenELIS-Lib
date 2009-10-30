@@ -323,4 +323,16 @@ public class EditBox extends Composite implements ClickHandler,
 		return field.addValueChangeHandler(handler);
 	}
 
+	public void addExceptionStyle(String style) {
+		text.addStyleName(style);	
+	}
+
+	public Object getWidgetValue() {
+		return text.getText();
+	}
+
+	public void removeExceptionStyle(String style) {
+		text.removeStyleName(style);
+	}
+
 }

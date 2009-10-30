@@ -977,5 +977,20 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 			UnselectionHandler<TreeDataItem> handler) {
 		return addHandler(handler,UnselectionEvent.getType());
 	}
+
+	public void addExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getWidgetValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

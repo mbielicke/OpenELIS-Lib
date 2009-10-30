@@ -512,5 +512,18 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
 			ValueChangeHandler<Datetime> handler) {
 		return field.addValueChangeHandler(handler);
 	}
+
+	public void addExceptionStyle(String style) {
+		textbox.addStyleName(style);
+	}
+
+	public Object getWidgetValue() {
+		return textbox.getText();
+	}
+
+	public void removeExceptionStyle(String style) {
+		textbox.removeStyleName(style);
+		
+	}
     
 }

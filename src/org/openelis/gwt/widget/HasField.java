@@ -34,6 +34,12 @@ public interface HasField<T> {
 	
 	public void setFieldValue(T value);
 	
+	public Object getWidgetValue();
+	
+	public void addExceptionStyle(String style);
+	
+	public void removeExceptionStyle(String style);
+	
 	public HandlerRegistration addFieldValueChangeHandler(ValueChangeHandler<T> handler);
 
 }

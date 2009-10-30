@@ -340,14 +340,14 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      */
     public void addException(LocalizedException error) {
         field.addException(error);
-        field.drawExceptions(textbox);
+        field.drawExceptions(this);
     }
 	
 	/**
 	 * Clears the error list and removes the error style from the widget
 	 */
 	public void clearExceptions() {
-		field.clearExceptions(textbox);
+		field.clearExceptions(this);
 	}
 
 	/**
@@ -411,7 +411,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	@Override
 	public void checkValue() {
 		if(!field.queryMode)
-			field.checkValue(textbox);
+			field.checkValue(this);
 	}
 	
 	/**
@@ -480,5 +480,18 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 		return addHandler(handler,GetMatchesEvent.getType());
 	}
 	
+    @Override
+    public void addExceptionStyle(String style) {
+    	textbox.addStyleName(style);
+    }
 	
+    @Override
+    public void removeExceptionStyle(String style) {
+    	textbox.removeStyleName(style);
+    }
+    
+    @Override
+    public Object getWidgetValue() {
+    	return getValue();
+    }
 }

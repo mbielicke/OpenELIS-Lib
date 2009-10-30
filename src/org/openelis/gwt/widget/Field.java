@@ -84,7 +84,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 	
 	public void onValueChange(ValueChangeEvent<String> event) {
-		clearExceptions((Widget)event.getSource());
+		clearExceptions((HasField)event.getSource());
 		if(queryMode) {
 			queryString = event.getValue();
 			validateQuery();
@@ -92,25 +92,25 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			valid = true;
 			setStringValue(event.getValue());
 			if(!valid){
-				drawExceptions((Widget)event.getSource());
+				drawExceptions((HasField)event.getSource());
 				return;
 			}
 			((HasValue)event.getSource()).setValue(format(), false);
 			validate();
 		}
 		if(!valid){
-			drawExceptions((Widget)event.getSource());
+			drawExceptions((HasField)event.getSource());
 		}
 		if(!queryMode)
 			ValueChangeEvent.fire(this, value);
 	}
 	
-    public void clearExceptions(Widget wid) {
+    public void clearExceptions(HasField wid) {
         if(pop != null){
             pop.hide();
         }
-        wid.removeStyleName("InputError");
-        wid.removeStyleName("InputWarning");
+        wid.removeExceptionStyle("InputError");
+        wid.removeExceptionStyle("InputWarning");
         exceptionPanel.clear();
         exceptions = null;
         valid = true;
@@ -122,8 +122,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     	exceptions.add(e);
     }
     
-    public void drawExceptions(Widget wid) {        
+    public void drawExceptions(HasField wid) {        
         exceptionPanel.clear();
+        if(exceptions == null)
+        	return;
         String style = "InputWarning";
         for (LocalizedException exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
@@ -140,10 +142,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
             exceptionPanel.add(hp);
         }
         if(exceptions.size() == 0){
-            wid.removeStyleName("InputError");
-            wid.removeStyleName("InputWarning");
+            wid.removeExceptionStyle("InputError");
+            wid.removeExceptionStyle("InputWarning");
         }else{
-            wid.addStyleName(style);
+            wid.addExceptionStyle(style);
         }
         
     }
@@ -178,10 +180,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 
 	public void onBlur(BlurEvent event) {
 		//if(((HasField)event.getSource()).isEnabled())
-			//checkValue((Widget)event.getSource());
+			//checkValue((HasField)event.getSource());
 	}
 	
-	public void checkValue(Widget wid) {
+	public void checkValue(HasField wid) {
 		clearExceptions(wid);
 		if(queryMode){
 			if(((HasValue)wid).getValue() != null && !((HasValue)wid).getValue().equals("")){
@@ -190,7 +192,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			}else
 				queryString = null;
 		}else{
-			Object value = ((HasValue)wid).getValue();
+			Object value = wid.getWidgetValue();
 			if(value == null)
 				value = "";
 			setStringValue(value.toString());

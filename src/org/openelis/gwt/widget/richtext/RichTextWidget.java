@@ -224,12 +224,24 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 
 
 	public void setFieldValue(String value) {
-		// TODO Auto-generated method stub
+		field.setValue(value);
 	}
 	
 	public HandlerRegistration addFieldValueChangeHandler(
 			ValueChangeHandler<String> handler) {
 		return field.addValueChangeHandler(handler);
+	}
+
+	public void addExceptionStyle(String style) {
+		area.addStyleName(style);
+	}
+
+	public Object getWidgetValue() {
+		return area.getHTML();
+	}
+
+	public void removeExceptionStyle(String style) {	
+		area.removeStyleName(style);
 	}
 
 

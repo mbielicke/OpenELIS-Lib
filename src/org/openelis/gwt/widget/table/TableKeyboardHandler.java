@@ -72,31 +72,31 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     }
     
     private void tabToNextRow() {
-        int row = findNextActive(controller.selectedRow);
+        int row = findNextActive(controller.tableIndex(controller.selectedRow));
         int col = 0;
        
-        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
+        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(controller.modelIndexList[row],col)))
             col++;
         if(row < controller.view.table.getRowCount()){
             final int fRow = row;
             final int fCol = col;
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
-                    controller.select(fRow, fCol);
+                    controller.select(controller.modelIndexList[fRow], fCol);
                 }
             });
         }
     }
     
     private void tabToPrevRow() {
-        final int row = findPrevActive(controller.selectedRow);
+        final int row = findPrevActive(controller.tableIndex(controller.selectedRow));
         int col = controller.columns.size() - 1;
-        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
+        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(controller.modelIndexList[row],col)))
             col--;
         final int fCol = col;
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                controller.select(row, fCol);
+                controller.select(controller.modelIndexList[row], fCol);
             }
         });
     }
@@ -112,35 +112,35 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
 
         boolean shift = event.isShiftKeyDown();
         if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
-            if (controller.selectedRow >= 0 && controller.selectedRow < controller.shownRows() - 1) {
-                if(controller.selectedRow < controller.view.table.getRowCount() -1){
-                    final int row = findNextActive(controller.selectedRow);
+            if (controller.tableIndex(controller.selectedRow) >= 0 && controller.selectedRow < controller.shownRows() - 1) {
+                if(controller.tableIndex(controller.selectedRow) < controller.view.table.getRowCount() -1){
+                    final int row = findNextActive(controller.tableIndex(controller.selectedRow));
                     final int col = controller.selectedCol;
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
-                            controller.select(row, col);
+                            controller.select(controller.modelIndexList[row], col);
                         }
                     });
                 }else{
                     controller.view.setScrollPosition(controller.view.top+controller.cellHeight);
-                    findNextActive(controller.selectedRow -1);
+                    findNextActive(controller.tableIndex(controller.selectedRow -1));
                     final int col = controller.selectedCol;
-                    controller.selectedCol = -1;
+                    controller.selectedCol = 0;
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
-                            controller.select(controller.view.table.getRowCount()-1, col);
+                            controller.select(controller.modelIndexList[controller.modelIndexList.length-1], col);
                         }
                     });
                 }
             }
         }
         if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
-            if (controller.selectedRow >= 0 && controller.selectedRow != 0) {
-                final int row = findPrevActive(controller.selectedRow);
+            if (controller.tableIndex(controller.selectedRow) >= 0 && controller.selectedRow != 0) {
+                final int row = findPrevActive(controller.tableIndex(controller.selectedRow));
                 final int col = controller.selectedCol;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                        controller.select(row, col);
+                        controller.select(controller.modelIndexList[row], col);
                     }
                 });
             }else{
@@ -160,10 +160,10 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 controller.finishEditing();
             }else if(controller.selectedCol > -1){
                 if(controller.columns.get(controller.selectedCol).getColumnWidget() instanceof CheckBox) {
-                    ((CheckBox)controller.view.table.getWidget(controller.selectedRow,controller.selectedCol)).setState("CHECKED");
+                    ((CheckBox)controller.view.table.getWidget(controller.tableIndex(controller.selectedRow),controller.selectedCol)).setState("CHECKED");
                     controller.finishEditing();
             }
-            }else if(controller.selectedRow < 0) {
+            }else if(controller.tableIndex(controller.selectedRow) < 0) {
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                         tabToNextRow();
@@ -180,11 +180,11 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && !shift) {
         	event.preventDefault();
-            if(controller.selectedRow < 0){
+            if(controller.tableIndex(controller.selectedRow) < 0){
                 controller.selectedRow = 0;
                 controller.selectedCol = -1;
             }
-            if((controller.modelIndexList[controller.selectedRow] >= controller.shownRows()-1 || controller.modelIndexList[controller.selectedRow] >= controller.numRows()-1) &&
+            if((controller.selectedRow >= controller.shownRows()-1 || controller.selectedRow >= controller.numRows()-1) &&
                 controller.selectedCol + 1 >= controller.columns.size()) {
             	  controller.finishEditing();
                   controller.selectedCol = -1;
@@ -216,7 +216,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
         if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && shift) {
         	event.preventDefault();
-            if (controller.selectedCol == 0 && controller.modelIndexList[controller.selectedRow] == 0){
+            if (controller.selectedCol == 0 && controller.selectedRow == 0){
                controller.finishEditing();
                controller.selectedCol = -1;
                controller.setFocus(true);

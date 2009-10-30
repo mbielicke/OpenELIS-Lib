@@ -247,9 +247,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(width.equals("auto")){
     		for(TableColumn column : columns)
     			tw += column.getCurrentWidth();
-    	}else {
+    	}else if(width.indexOf("px") > -1){
     		tw = Integer.parseInt(width.substring(0,width.length()-2));
-    	}
+    	}else
+    		tw = Integer.parseInt(width);
     	
     	return tw;
     }
@@ -676,7 +677,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void setCell(int row, int col, Object value) {
         getRow(row).cells.get(col).setValue(value);
         if(isRowDrawn(row))
-        	renderer.cellUpdated(tableIndex(row), col);
+        	renderer.cellUpdated(row, col);
     }
     
     public TableDataCell getCell(int row, int col) {
@@ -888,7 +889,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	
 	protected boolean canEditCell(int row, int col) {
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0 && fireEvents) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(modelIndexList[row]).cells.get(col).value);
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
         	if(bce.isCancelled()){
         		return false;
         	}
@@ -1033,5 +1034,20 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void addTabHandler(TabHandler handler) {
     	addDomHandler(handler,KeyPressEvent.getType());
     }
+
+	public void addExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getWidgetValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -368,5 +368,22 @@ public class CalendarLookUp extends LookUp implements KeyboardListener,
 			ValueChangeHandler<Datetime> handler) {
 		return field.addValueChangeHandler(handler);
 	}
+
+	public void addExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getWidgetValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
     
 }
