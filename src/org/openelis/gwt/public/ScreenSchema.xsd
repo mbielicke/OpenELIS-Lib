@@ -723,7 +723,8 @@
 				<xsd:element name="widget" minOccurs="0" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:sequence>
-							<xsd:element ref="widgets" minOccurs="1" maxOccurs="1" />
+							<xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
+							<xsd:element ref="panels" maxOccurs="1" minOccurs="0" 
 						</xsd:sequence>
 						<xsd:attributeGroup ref="halign" />
 						<xsd:attributeGroup ref="valign" />
