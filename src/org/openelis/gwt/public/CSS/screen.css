@@ -271,13 +271,23 @@ color:gray;
 .spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
 .panelIcon{
 }
-.QAEventIcon{
+.analyteIcon{
+	    background:url("../Images/map.png") no-repeat;
 }
 .labSectionIcon{
+	    background:url("../Images/group.png") no-repeat;
 }
-.analyteIcon{
+.QAEventIcon{
+	    background:url("../Images/tick.png") no-repeat;
+}
+.standardNoteIcon{
+	    background:url("../Images/note.gif") no-repeat;
+}
+.environmentalSampleLoginIcon{
+	    background:url("../Images/world_add.png") no-repeat;
 }
 .dictionaryIcon{
+	    background:url("../Images/dictionarybuttonimage.gif") no-repeat;
 }
 .auxiliaryPromptIcon{
 }
@@ -286,12 +296,14 @@ color:gray;
 .standardNoteIcon{
 }
 .trailerForTestIcon{
+	    background:url("../Images/page.png") no-repeat;
 }
 .storageUnitIcon{
 }
 .storageLocationIcon{
 }
 .systemVariableIcon{
+		    background:url("../Images/brick.png") no-repeat;
 }
 .scriptletIcon{
 }
@@ -417,13 +429,14 @@ background:white;
     color:gray;
 }
 
-.AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage,
-.AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage,
-.StandardNoteButtonImage, .groupRowButtonImage,
+.analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
+.AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
+.StandardNoteButtonImage, .groupRowButtonImage, .SelectAllButtonImage, .environmentalSampleLoginIcon,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
     width:20px;
     height:20px;
 }
+
 .SaveButtonImage{
     background:url("../Images/savebuttonimage.gif") no-repeat;
 }
@@ -431,7 +444,7 @@ background:white;
     background:url("../Images/savebuttonimagedisabled.gif") no-repeat;
 }
 .SelectAllButtonImage{
-    background:url("../Images/selectallbuttonimage.gif") no-repeat;
+    background:url("../Images/selectallbuttonimage.png") no-repeat;
 }
 .disabled .SelecttAllButtonImage{
     background:url("../Images/selectallbuttonimagedisabled.gif") no-repeat;
@@ -467,10 +480,10 @@ background:white;
     background:url("../Images/ungroupdisabled.gif") no-repeat;
 }
 .DuplicateRowButtonImage{
-    background:url("../Images/quickentrybuttonimage.gif") no-repeat;
+    background:url("../Images/duplicaterowbuttonimage.gif") no-repeat;
 }
 .disabled .DuplicateRowButtonImage{
-    background:url("../Images/quickentrybuttonimagedisabled.gif") no-repeat;
+    background:url("../Images/duplicaterowbuttonimagedisabled.gif") no-repeat;
 }
 .RemoveRowButtonImage{
     background:url("../Images/removerowbuttonimage.gif") no-repeat;
@@ -1947,9 +1960,8 @@ width:2px;
 .middleCenter{
 background:#deecfd;
 		}
-.InputError {
-	border-bottom:1px dashed red;
-}
+
+
 .InputError .ScreenTextBox{
 	border-bottom:1px dashed red;
 }
@@ -1962,9 +1974,8 @@ background:#deecfd;
 .InputError .CalendarButton{
 	border-bottom:1px dashed red;
 }
-
-.InputWarning {
-	border-bottom:1px dashed #f5d852;
+.InputError {
+	border-bottom:1px dashed red;
 }
 .InputWarning .ScreenTextBox{
 	border-bottom:1px dashed #f5d852;
@@ -1977,6 +1988,9 @@ background:#deecfd;
 }
 .InputWarning .CalendarButton{
 	border-bottom:1px dashed #f5d852;
+}
+.InputWarning {
+	border-bottom:1px dashed red;
 }
 /*
 .InputWarning .CalendarButton{
