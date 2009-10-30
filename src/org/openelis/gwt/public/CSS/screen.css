@@ -1062,6 +1062,8 @@ cursor:default;}
     border:1px solid #D8D8D8;
     border-width:1px;
     background:white;
+}
+.LeftSidePanel .atozTable {
     margin:6px 0 0 0;
 }
 
