@@ -285,6 +285,9 @@ public class TableColumn {
         		
         	});
         	
+        }else{
+        	widget.removeStyleName("InputError");
+        	widget.removeStyleName("InputWarning");
         }
     }
     
