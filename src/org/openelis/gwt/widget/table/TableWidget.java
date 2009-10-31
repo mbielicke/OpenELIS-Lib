@@ -772,7 +772,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void setCellException(int row, int col, LocalizedException ex) {
         model.get(row).cells.get(col).addException(ex);
         if(isRowDrawn(row))
-        	renderer.cellUpdated(tableIndex(row), col);
+        	renderer.cellUpdated(row, col);
     }
     
     public void setCellException(int row, String col, LocalizedException ex) {
@@ -787,7 +787,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void clearCellExceptions(int row, int col) {
     	 model.get(row).cells.get(col).clearExceptions();
     	 if(isRowDrawn(row))
-    		 renderer.cellUpdated(tableIndex(row), col);
+    		 renderer.cellUpdated(row, col);
     }
     
     
