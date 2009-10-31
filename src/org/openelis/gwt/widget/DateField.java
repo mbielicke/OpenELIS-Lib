@@ -29,11 +29,8 @@ import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * DateField is an implementation of AbstractField that represents data

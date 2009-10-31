@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -50,13 +51,13 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>, 
-														 HasField<Datetime>,
-														 ValueChangeHandler<Datetime>,
-														 HasMouseOverHandlers,
-														 HasMouseOutHandlers,
-														 HasBlurHandlers,
-														 HasFocusHandlers{
+public class CalendarLookUp extends FocusPanel implements HasValue, 
+														  HasField<Datetime>,
+														  ValueChangeHandler<Datetime>,
+														  HasMouseOverHandlers,
+														  HasMouseOutHandlers,
+														  HasBlurHandlers,
+														  HasFocusHandlers {
 
     protected byte begin;
     protected byte end;
@@ -128,7 +129,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     										 BlurHandler,
     										 MouseOverHandler,
     										 MouseOutHandler,
-    										 KeyUpHandler{
+    										 KeyUpHandler,
+    										 ValueChangeHandler{
 
     	/**
     	 * Reference to outer instance.
@@ -150,8 +152,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	        if (isEnabled()) {
 	            if (event.getSource() == textbox) {
 	                // we need to set the selected style name to the textbox
-	                textbox.addStyleName("TextboxSelected");
-	                textbox.removeStyleName("TextboxUnselected");
+	                textbox.addStyleName("Focus");
+//	                textbox.removeStyleName("TextboxUnselected");
 	                textbox.setFocus(true);
 	                icon.addStyleName("Selected");
 	            }
@@ -166,16 +168,20 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	        if (isEnabled()) {
 	            if (event.getSource() == textbox) {
 	                // we need to set the unselected style name to the textbox
-	                textbox.addStyleName("TextboxUnselected");
-	                textbox.removeStyleName("TextboxSelected");
+//	                textbox.addStyleName("TextboxUnselected");
+	                textbox.removeStyleName("Focus");
 	                icon.removeStyleName("Selected");
-	                if(field.queryMode){
-	                	field.setStringValue(textbox.getText());
-	                }else
-	                	setValue(getValue(),true);
+//	                if(field.queryMode){
+//	                	field.setStringValue(textbox.getText());
+//	                }else
+//	                	setValue(getValue(),true);
 	            }
 	        }
 			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+//			if(field.exceptions != null){
+//				field.drawExceptions(source);
+//			}
+			
 		}
 
 		public void onMouseOver(MouseOverEvent event) {
@@ -195,6 +201,11 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	            doCalendar((Widget)event.getSource(), begin, end);
 	        }
 	    }
+
+		public void onValueChange(ValueChangeEvent event) {
+			ValueChangeEvent.fire(source, event);
+			
+		}
     	
     }
 
@@ -225,6 +236,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
         icon.addMouseUpHandler(iconHandler);
         icon.setTabIndex(-1);
         textbox.addStyleName("TextboxUnselected");
+        
+        textbox.addValueChangeHandler(handler);
     }
     
     /**
@@ -316,7 +329,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     /**
      * Sets the current value of the widget and does not Fire ValueChangeEvent.
      */
-	public void setValue(Datetime value) {
+	public void setValue(Object value) {
 		setValue(value,false);
 		
 	}
@@ -325,8 +338,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	 * Sets the current value of the widget and will fire a ValueChangeEvent only
 	 * if fireEvents flag is passed as true.
 	 */
-	public void setValue(Datetime value, boolean fireEvents) {
-		field.setValue(value);
+	public void setValue(Object value, boolean fireEvents) {
+		field.setValue((Datetime)value);
         if (value != null)
             textbox.setValue(field.format(),fireEvents);
         else
@@ -341,7 +354,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	 * Adds a ValueChangeHandler for this widget.
 	 */
 	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<Datetime> handler) {
+			ValueChangeHandler handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
@@ -396,7 +409,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	 */
 	public void setField(Field<Datetime> field) {
 		this.field = field;
-		textbox.addValueChangeHandler(field);
+		addValueChangeHandler(field);
 		addBlurHandler(field);
 		addMouseOutHandler(field);
 		addMouseOverHandler(field);
@@ -499,6 +512,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 		else
 			wid = Integer.parseInt(width) - 18;
 		textbox.setWidth(wid+"px");
+		super.setWidth(width);
 	}
 
 	public void setFocus(boolean focused) {
