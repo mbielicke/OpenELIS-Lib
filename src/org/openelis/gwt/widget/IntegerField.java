@@ -27,12 +27,14 @@ public class IntegerField extends Field<Integer> {
         if (invalid) {
             valid = false;
             addException(new LocalizedException("fieldNumericException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldNumericException"));
         if (required) {
             if (value == null) {
             	valid = false;
                 addException(new LocalizedException("fieldRequiredException"));
-            }
+            }else
+            	removeException(new LocalizedException("fieldRequiredException"));
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -53,6 +55,7 @@ public class IntegerField extends Field<Integer> {
         	for(int i = 0; i < vals.length; i++){
         		try {
         			Integer.parseInt(vals[i]);
+        			removeException(new LocalizedException("fieldNumericException"));
         		} catch (Exception e) {
         			addException(new LocalizedException("fieldNumericException"));
         			valid = false;
@@ -69,11 +72,13 @@ public class IntegerField extends Field<Integer> {
         if (max != null && value > max) {
         	valid = false;
             addException(new LocalizedException("fieldMaxException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldMaxException"));
         if (min != null && value < min) {
         	valid = false;
             addException(new LocalizedException("fieldMinException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldMinException"));
         return true;
     }
 
@@ -111,6 +116,7 @@ public class IntegerField extends Field<Integer> {
                 } else {
                     value = null;
                 }
+                removeException(new LocalizedException("fieldNumericException"));
             } catch (Exception e) {
                 valid = false;
                 addException(new LocalizedException("fieldNumericException"));
@@ -120,7 +126,7 @@ public class IntegerField extends Field<Integer> {
                 if (val != null && !"".equals(val))
                     setValue(Integer.valueOf((int)NumberFormat.getFormat(pattern)
                                                              .parse(val.toString())));
-
+                removeException(new LocalizedException("fieldNumericException"));
             } catch (Exception e) {
                 valid = false;
                 addException(new LocalizedException("fieldNumericException"));

@@ -363,7 +363,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	 */
 	public void setField(Field field) {
 		this.field = field;
-		//addBlurHandler(field);
+		addBlurHandler(field);
 		addMouseOutHandler(field);
 		addMouseOverHandler(field);
 	}

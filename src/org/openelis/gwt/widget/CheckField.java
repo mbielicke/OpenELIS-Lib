@@ -46,7 +46,8 @@ public class CheckField extends Field<String> {
             if (value == null) {
             	valid =  false;
                 addException(new LocalizedException("fieldRequiredException"));
-            }
+            }else
+            	removeException(new LocalizedException("fieldRequiredException"));
         }
     }
     

@@ -43,7 +43,8 @@ public class TabHandler implements KeyPressHandler {
 					}
 				}else{
 					if(((HasField)def.getWidget(next)).isEnabled()) 
-						((Focusable)def.getWidget(next)).setFocus(true);
+						if(def.getWidget(next) instanceof Focusable)
+							((Focusable)def.getWidget(next)).setFocus(true);
 					else{
 						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next), def.getWidget(wid).getElement());
 					}							

@@ -36,6 +36,7 @@ import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRenderer;
 import org.openelis.gwt.widget.table.TableView;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -309,7 +310,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	public void setField(Field field) {
 		this.field = field;
 		//addValueChangeHandler(field);
-		//addBlurHandler(field);
+		addBlurHandler(field);
 		textbox.addMouseOutHandler(field);
 		textbox.addMouseOverHandler(field);
 	}
@@ -360,6 +361,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public void onBlur(BlurEvent event) {
 		textbox.removeStyleName("Focus");
+		BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
 	}
 	
 	public void onFocus(FocusEvent event) {

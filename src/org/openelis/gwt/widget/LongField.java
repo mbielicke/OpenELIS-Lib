@@ -28,12 +28,14 @@ public class LongField extends Field<Long> {
         if (invalid) {
             valid = false;
             addException(new LocalizedException("fieldNumericException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldNumericException"));
         if (required) {
             if (value == null) {
             	valid = false;
                 addException(new LocalizedException("fieldRequiredException"));
-            }
+            }else
+            	removeException(new LocalizedException("fieldRequiredException"));
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -51,6 +53,7 @@ public class LongField extends Field<Long> {
         for(String param : qField.parameter){
             try {
                 Double.parseDouble(param);
+                removeException(new LocalizedException("fieldNumericException"));
             } catch (Exception e) {
                 addException(new LocalizedException("fieldNumericException"));
                 valid = false;
@@ -66,11 +69,13 @@ public class LongField extends Field<Long> {
         if (max != null && value > max) {
         	valid = false;
             addException(new LocalizedException("fieldMaxException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldMaxException"));
         if (min != null && value < min) {
         	valid = false;
             addException(new LocalizedException("fieldMinException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldMinException"));
         return true;
     }
 
@@ -110,6 +115,7 @@ public class LongField extends Field<Long> {
                 } else {
                     value = null;
                 }
+                removeException(new LocalizedException("fieldNumericException"));
             } catch (Exception e) {
                 valid = false;
                 addException(new LocalizedException("fieldNumericException"));
@@ -119,7 +125,7 @@ public class LongField extends Field<Long> {
                 if (val != null && !"".equals(val))
                     setValue(Long.valueOf((int)NumberFormat.getFormat(pattern)
                                                              .parse(val.toString())));
-
+                removeException(new LocalizedException("fieldNumericException"));
             } catch (Exception e) {
                 valid = false;
                 addException(new LocalizedException("fieldNumericException"));

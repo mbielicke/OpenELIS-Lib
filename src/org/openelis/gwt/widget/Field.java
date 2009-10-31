@@ -123,6 +123,14 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     		exceptions.add(e);
     }
     
+    public void removeException(LocalizedException e) {
+    	if(exceptions == null)
+    		return;
+    	exceptions.remove(e);
+    	if(exceptions.size() == 0)
+    		exceptions = null;
+    }
+    
     public void drawExceptions(HasField wid) {        
         exceptionPanel.clear();
         if(exceptions == null)
@@ -161,15 +169,13 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 
 	public void onMouseOver(MouseOverEvent event) {
-	    String styleName = ((Widget)event.getSource()).getStyleName();
-        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
+        if(exceptions != null && exceptions.size() > 0) {
             if(pop == null){
                 pop = new PopupPanel(true);
                 pop.setStyleName("");
             }
-            DecoratorPanel dp = new DecoratorPanel();
-            
-            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
+            drawExceptions((HasField)event.getSource());
+            DecoratorPanel dp = new DecoratorPanel();            
             dp.setStyleName("ErrorWindow");
             dp.add(exceptionPanel);
             dp.setVisible(true);
@@ -180,12 +186,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 
 	public void onBlur(BlurEvent event) {
-		//if(((HasField)event.getSource()).isEnabled())
-			//checkValue((HasField)event.getSource());
+		if(((HasField)event.getSource()).isEnabled())
+			checkValue((HasField)event.getSource());
 	}
 	
 	public void checkValue(HasField wid) {
-		clearExceptions(wid);
 		if(queryMode){
 			if(((HasValue)wid).getValue() != null && !((HasValue)wid).getValue().equals("")){
 				queryString = ((HasValue)wid).getValue().toString();

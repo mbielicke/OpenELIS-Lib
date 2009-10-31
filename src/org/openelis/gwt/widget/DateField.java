@@ -89,7 +89,8 @@ public class DateField extends Field<Datetime> {
             if (value == null) {
             	valid = false;
                 addException(new LocalizedException("fieldRequiredException"));
-            }
+            }else
+            	removeException(new LocalizedException("fieldRequiredException"));
         }
         if (value != null && !isInRange()) {
         	valid = false;
@@ -120,6 +121,7 @@ public class DateField extends Field<Datetime> {
            			   dates[i] = dates[i].replaceAll("-", "/");
            			   date = new Date(dates[i]);
            		   }
+           		   removeException(new LocalizedException("invalidDateFormat"));
            	   }catch(Exception e) {
            		   valid = false;
           		   addException(new LocalizedException("invalidDateFormat"));
@@ -149,11 +151,14 @@ public class DateField extends Field<Datetime> {
         if (min != null && value.before(Datetime.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
             addException(new LocalizedException("fieldPastException"));
-        }
+        }else
+        	removeException(new LocalizedException("fieldPastException"));
         if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
             addException(new LocalizedException("fieldFutureException"));
+        }else{
+        	removeException(new LocalizedException("fieldFutureException"));
         }
         return true;
     }
@@ -275,6 +280,7 @@ public class DateField extends Field<Datetime> {
    			   val = val.replaceAll("-", "/");
    			   date = new Date(val);
    		   }
+   		   removeException(new LocalizedException("invalidDateFormat"));
    	   }catch(Exception e) {
    		   valid = false;
   		   addException(new LocalizedException("invalidDateFormat"));
