@@ -37,6 +37,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -49,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class CalendarLookUp extends Composite implements HasValue<Datetime>, 
+public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>, 
 														 HasField<Datetime>,
 														 ValueChangeHandler<Datetime>,
 														 HasMouseOverHandlers,
@@ -205,7 +206,7 @@ public class CalendarLookUp extends Composite implements HasValue<Datetime>,
         hp.addStyleName("Calendar");
         hp.add(textbox);
         hp.add(icon);
-        initWidget(hp);
+        setWidget(hp);
   
         CalendarHandler handler = new CalendarHandler(this);
         textbox.addFocusHandler(handler);
