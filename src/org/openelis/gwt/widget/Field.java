@@ -83,14 +83,14 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		
 	}
 	
-	public void onValueChange(ValueChangeEvent<String> event) {
+	public void onValueChange(ValueChangeEvent event) {
 		clearExceptions((HasField)event.getSource());
 		if(queryMode) {
-			queryString = event.getValue();
+			queryString = event.getValue().toString();
 			validateQuery();
 		}else{
 			valid = true;
-			setStringValue(event.getValue());
+			setStringValue(event.getValue().toString());
 			if(!valid){
 				drawExceptions((HasField)event.getSource());
 				return;
@@ -161,7 +161,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     
 	public void onMouseOut(MouseOutEvent event) {
 	    String styleName = ((Widget)event.getSource()).getStyleName();
-        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
+        if(exceptions != null && exceptions.size() > 0){
             if(pop != null){
                 pop.hide();
             }

@@ -313,7 +313,7 @@ public class DateField extends Field<Datetime> {
 				queryString = null;
 		}else{
 			if(wid instanceof CalendarLookUp) 
-				value = (Datetime)((HasValue)wid).getValue();
+				setStringValue(((CalendarLookUp)wid).getStringValue());
 			else if(wid instanceof TextBox) {
 				setStringValue(((TextBox)wid).getText());
 			}
