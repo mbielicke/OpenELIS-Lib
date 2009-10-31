@@ -365,6 +365,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
                 unselect(-1);
                 
             }
+            if(multiSelect && ctrlKey && isSelected(row)){
+            	unselect(row);
+            	selectedCol = -1;
+           		sinkEvents(Event.ONKEYPRESS);
+            	return;
+            }
             //selectedRow = row;
             selectRow(row);
             if(fireEvents)
