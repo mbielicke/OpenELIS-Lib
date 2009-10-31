@@ -435,7 +435,7 @@ public class QueryBuilderV2 {
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
     		if (param.indexOf("..") > -1) {
-    			String[] bparams = param.split("..");
+    			String[] bparams = param.split("\\.\\.");
     			Date date = new Date(bparams[0].replaceAll("-","/"));
     			query.setParameter(paramName + i + "0", date, TemporalType.DATE);
     			date = new Date(bparams[1].replaceAll("-","/"));
