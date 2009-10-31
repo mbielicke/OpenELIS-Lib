@@ -1973,7 +1973,7 @@ background:#deecfd;
 .InputError .AutoDropDownButton{
 	border-bottom:1px dashed red;
 }
-.InputError .CalendarButton{
+.Calendar .InputError {
 	border-bottom:1px dashed red;
 }
 .InputError {
@@ -1988,7 +1988,7 @@ background:#deecfd;
 .InputWarning .AutoDropDownButton{
 	border-bottom:1px dashed #f5d852;
 }
-.InputWarning .CalendarButton{
+.Calendar .InputWarning {
 	border-bottom:1px dashed #f5d852;
 }
 .InputWarning {
