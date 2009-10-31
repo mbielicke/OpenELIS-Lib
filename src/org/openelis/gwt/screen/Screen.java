@@ -43,7 +43,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     };
 
     public String                         name;
-    public State                          state        = State.DEFAULT;
+    public State                          state        = null;
     public ScreenWindow                   window;
     protected ScreenDefInt                def;
     protected ScreenService               service;
@@ -124,8 +124,10 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     }
 
     public void setState(Screen.State state) {
-        this.state = state;
-        StateChangeEvent.fire(this, state);
+        if (state != this.state) {
+            this.state = state;
+            StateChangeEvent.fire(this, state);
+        }
     }
 
     protected ArrayList<QueryData> getQueryFields() {
