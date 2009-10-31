@@ -52,7 +52,7 @@ public class CheckField extends Field<String> {
     }
     
     public void validateQuery() {
-    	queryString = value;
+    	//queryString = value;
     }
 
     /**

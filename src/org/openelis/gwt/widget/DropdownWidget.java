@@ -40,6 +40,8 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -127,23 +129,19 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     private int findNextActive(int current) {
         int next = current + 1;
-        while(next < modelIndexList.length && !isEnabled(modelIndexList[next]))
+        while(next < numRows() && !isEnabled(next))
             next++;
-        if(next < modelIndexList.length)
+        if(next < numRows())
             return next;
-        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-        renderer.scrollLoad(view.scrollBar.getScrollPosition());
-        return findNextActive(modelIndexList.length-2);
+        return findNextActive(next);
     }
     
     private int findPrevActive(int current) {
         int prev = current - 1;
-        while(prev > -1 && !isEnabled(modelIndexList[prev]))
+        while(prev > -1 && !isEnabled(prev))
             prev--;
         if(prev >  -1)
             return prev;
-        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-        renderer.scrollLoad(view.scrollBar.getScrollPosition());
         return findPrevActive(1);
     }
     
@@ -237,43 +235,34 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             ctrlKey = true;
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
             shiftKey = true;
-        if (event.getNativeKeyCode()== KeyboardHandler.KEY_DOWN) {
-            if(selectedRow < 0){
-                selectedRow = findNextActive(0);
-                selectRow(selectedRow);    
-            }else{
-                if(selectedRow == view.table.getRowCount() -1){
-                    if(modelIndexList[selectedRow]+1 < numRows()){                        
-                        view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()+cellHeight);
-                        renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                        findNextActive(selectedRow-1);
-                        unselect(selectedRow);
-                        selectedRow = view.table.getRowCount() -1;
-                        selectRow(modelIndexList[view.table.getRowCount() -1]);
-                    }
-                }else{
-                    int row = findNextActive(selectedRow);
-                    unselect(selectedRow);
-                    selectedRow = row;
-                    selectRow(modelIndexList[selectedRow]);
-                }
+        if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
+            if (selectedRow >= 0 && selectedRow < numRows() - 1) {
+            	final int row = findNextActive(selectedRow);
+            	final int col = selectedCol;
+            	if(!isRowDrawn(row)){
+            		view.setScrollPosition(view.top+(cellHeight*(row-selectedRow)));
+            		unselect(-1);
+            	}
+                DeferredCommand.addCommand(new Command() {
+                     public void execute() {
+                         select(row, col);
+                     }
+                 });
             }
         }
         if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
-            if(selectedRow == 0){
-                if(modelIndexList[selectedRow] - 1 > -1){
-                    view.scrollBar.setScrollPosition(view.scrollBar.getScrollPosition()-cellHeight);
-                    renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                    findPrevActive(1);
-                    unselect(selectedRow);
-                    selectedRow = 0;
-                    selectRow(modelIndexList[0]);
-                }
-            }else if (selectedRow > 0){
-                int row = findPrevActive(selectedRow);
-                unselect(selectedRow);
-                selectedRow = row;
-                selectRow(modelIndexList[selectedRow]);
+            if (selectedRow > 0) {
+                final int row = findPrevActive(selectedRow);
+                final int col = selectedCol;
+            	if(!isRowDrawn(row)){
+            		view.setScrollPosition(view.top-(cellHeight*(selectedRow-row)));
+            		unselect(-1);
+            	}
+                DeferredCommand.addCommand(new Command() {
+                     public void execute() {
+                         select(row, col);
+                     }
+                 });
             }
         }
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
