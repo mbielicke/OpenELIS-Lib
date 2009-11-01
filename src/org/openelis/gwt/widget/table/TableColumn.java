@@ -104,15 +104,19 @@ public class TableColumn {
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
     				val = cell.getValue();
+    				if(val == null)
+    					val = "";
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(vrow  != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
+    				val = ((AutoComplete)colWidget).getTextBoxDisplay();
     			}
     		}else if(colWidget instanceof Dropdown){
     			((Dropdown)colWidget).setSelection(cell.getValue());
+    			val = ((Dropdown)colWidget).getTextBoxDisplay();
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
     		}

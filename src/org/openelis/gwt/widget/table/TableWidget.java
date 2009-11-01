@@ -550,6 +550,14 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	resetTable();
     }
     
+    public Widget getColumnWidget(String key) {
+    	for(TableColumn col : columns){
+    		if(col.key.equals(key))
+    			return col.getColumnWidget();
+    	}
+    	return null;
+    }
+    
     private void resetTable() {
     	if(view == null) {
     		return;
