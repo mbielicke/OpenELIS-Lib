@@ -29,13 +29,13 @@ public class DoubleField extends Field<Double> {
             valid = false;
             addException(new LocalizedException("fieldNumericException"));
         }else
-        	removeException(new LocalizedException("fieldNumericException"));
+        	removeException("fieldNumericException");
         if (required) {
             if (value == null) {
             	valid = false;
                 addException(new LocalizedException("fieldRequiredException"));
             }else
-            	removeException(new LocalizedException("fieldRequiredException"));
+            	removeException("fieldRequiredException");
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -55,7 +55,7 @@ public class DoubleField extends Field<Double> {
         	for(int i = 0; i < vals.length; i++){
         		try {
         			Double.parseDouble(vals[i]);
-        			removeException(new LocalizedException("invalidDouble"));
+        			removeException("invalidDouble");
         		} catch (Exception e) {
         			addException(new LocalizedException("invalidDouble"));
         			valid = false;
@@ -73,12 +73,12 @@ public class DoubleField extends Field<Double> {
         	valid = false;
             addException(new LocalizedException("fieldMaxException"));
         }else
-        	removeException(new LocalizedException("fieldMaxException"));
+        	removeException("fieldMaxException");
         if (min != null && value < min) {
         	valid = false;
             addException(new LocalizedException("fieldMinException"));
         }else
-        	removeException(new LocalizedException("fieldMinException"));
+        	removeException("fieldMinException");
         return true;
     }
 
@@ -119,7 +119,7 @@ public class DoubleField extends Field<Double> {
                 } else {
                     value = null;
                 }
-                removeException(new LocalizedException("invalidDouble"));
+                removeException("invalidDouble");
             } catch (Exception e) {
                 valid = false;
                 addException(new LocalizedException("invalidDouble"));
@@ -129,7 +129,7 @@ public class DoubleField extends Field<Double> {
                 if (val != null && !"".equals(val))
                     setValue(Double.valueOf(NumberFormat.getFormat(pattern)
                                                        .parse(val.toString())));
-                removeException(new LocalizedException("invalidDouble"));
+                removeException("invalidDouble");
             } catch (Exception e) {
                 valid = false;
                 addException(new LocalizedException("invalidDouble"));

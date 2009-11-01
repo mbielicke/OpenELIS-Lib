@@ -123,10 +123,13 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     		exceptions.add(e);
     }
     
-    public void removeException(LocalizedException e) {
+    protected void removeException(String key) {
     	if(exceptions == null)
     		return;
-    	exceptions.remove(e);
+    	for(LocalizedException exc : exceptions) {
+    		if(exc.getKey().equals(key))
+    			exceptions.remove(exc);
+    	}
     	if(exceptions.size() == 0)
     		exceptions = null;
     }

@@ -55,7 +55,7 @@ public class StringField extends Field<String> {
             	valid = false;
                 addException(new LocalizedException("fieldRequiredException"));    
              }else
-            	removeException(new LocalizedException("fieldRequiredException"));
+            	removeException("fieldRequiredException");
         }
         if (value != null && !isInRange())
         	valid = false;
@@ -66,7 +66,7 @@ public class StringField extends Field<String> {
     	try {
     		qField.parse(value);
     		queryString = value;
-    		removeException(new LocalizedException("invalidQuertFormat"));
+    		removeException("invalidQuertFormat");
     	}catch(Exception e) {
     		addException(new LocalizedException("invalidQueryFormat"));
     	}	
@@ -83,13 +83,13 @@ public class StringField extends Field<String> {
         		rangeVal = false;
         		addException(new LocalizedException("fieldMaxLengthException"));
         	}else
-        		removeException(new LocalizedException("fieldMaxLengthException"));
+        		removeException("fieldMaxLengthException");
         	if (min != null && value.length() < ((Integer)min).intValue() &&
         			value.length() > 0) {
         		rangeVal = false;
         		addException(new LocalizedException("fieldMinLengthException"));
         	}else
-        		removeException(new LocalizedException("fieldMinLengthException"));
+        		removeException("fieldMinLengthException");
         }
         return rangeVal;
     }
