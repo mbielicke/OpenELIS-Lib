@@ -53,6 +53,8 @@ padding:0px 0px 4px 4px;
 	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
 
+
+
 .TableCell div div.gwt-label {
 	padding: 2px;
 }
@@ -73,9 +75,11 @@ padding:0px 0px 4px 4px;
 	overflow: hidden;
 	padding: 1px 1px 0px;
 }
+
+/*
 .AtoZtable .TableCell {
 	border-width: 1px 0 1px 0px;
-}
+}*/
 
 .TableCellLeft {
 	border-color: #FFFFFF #EDEDED #EDEDED #EDEDED;
