@@ -266,6 +266,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNCHECKED);
     				if(fireEvents)
     					CellEditedEvent.fire(this,  modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
+    			}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
+    				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNKNOWN);
+    				if(fireEvents)
+    					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNKNOWN);
     			}else{
     				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.CHECKED);
     				if(fireEvents)

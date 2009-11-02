@@ -94,6 +94,8 @@ public class TableColumn {
     		IconContainer icon = new IconContainer();
     		if(CheckBox.CHECKED.equals(cell.getValue()))
     			icon.setStyleName(CheckBox.CHECKED_STYLE);
+    		else if(controller.queryMode && cell.getValue() == null)
+    			icon.setStyleName(CheckBox.UNKNOWN_STYLE);
     		else
     			icon.setStyleName(CheckBox.UNCHECKED_STYLE);
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
@@ -206,6 +208,8 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		if(CheckBox.CHECKED.equals(cell.getValue()))
     			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CHECKED_STYLE);
+    	    else if(controller.queryMode && cell.getValue() == null)
+    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNKNOWN_STYLE);
     	    else
     	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNCHECKED_STYLE);
     	}else if(widget instanceof Label) {

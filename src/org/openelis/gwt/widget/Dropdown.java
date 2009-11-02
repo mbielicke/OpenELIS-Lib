@@ -362,7 +362,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public void onBlur(BlurEvent event) {
 		textbox.removeStyleName("Focus");
-		BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
+		if(!queryMode)
+			BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
 	}
 	
 	public void onFocus(FocusEvent event) {
