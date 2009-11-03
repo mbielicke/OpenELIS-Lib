@@ -211,6 +211,13 @@ color:gray;
     width:200px;
     padding:1px;
 }
+
+.Ascending{
+	background:url('../Images/go-up.png') no-repeat;
+}
+.Descending{
+	background:url('../Images/go-down.png') no-repeat;
+}
 .FavMenuRowContainer{
     width:200px;
 }
