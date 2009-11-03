@@ -23,7 +23,7 @@ public class ValidationErrorsList extends Exception {
     public void add(Exception ex){
         errors.add(ex);
 
-        if(!hasWarnings && ex instanceof Warning)
+        if(ex instanceof Warning)
             hasWarnings = true;
         else
             hasErrors = true;
