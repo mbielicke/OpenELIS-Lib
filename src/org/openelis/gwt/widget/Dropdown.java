@@ -216,7 +216,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         
         if(linear){
             for(int i = 0; i < model.size(); i++){
-                if(((String) model.get(i).getCells().get(0)).substring(0,length).toUpperCase().compareTo(textValue.toUpperCase()) == 0)
+                if(compareValue((String)model.get(i).getCells().get(0),textValue,length) == 0)
                     return i;
             }
             return -1;
@@ -432,4 +432,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	public Object getWidgetValue() {
 		return getValue();
 	}
+	
+	public void searchLinear(boolean linear) {
+		this.linear = linear;
+	}
+
 }
+
