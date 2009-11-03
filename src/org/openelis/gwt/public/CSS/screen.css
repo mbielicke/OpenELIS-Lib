@@ -1332,7 +1332,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     cursor:default;
 }
 .ScreenCalendar .TextboxUnselected{
-    border:1px solid #d8d8d8;
+    /*border:1px solid #d8d8d8;*/
     color:#000000;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
@@ -1973,9 +1973,10 @@ background:#deecfd;
 .InputError .AutoDropDownButton{
 	border-bottom:1px dashed red;
 }
+/*
 .Calendar .InputError {
 	border-bottom:1px dashed red;
-}
+}*/
 .InputError {
 	border-bottom:1px dashed red;
 }
@@ -1988,9 +1989,11 @@ background:#deecfd;
 .InputWarning .AutoDropDownButton{
 	border-bottom:1px dashed #f5d852;
 }
+/*
 .Calendar .InputWarning {
 	border-bottom:1px dashed #f5d852;
-}
+}*/
+
 .InputWarning {
 	border-bottom:1px dashed red;
 }
