@@ -86,11 +86,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	public void onValueChange(ValueChangeEvent<String> event) {
 		clearExceptions((HasField)event.getSource());
 		if(queryMode) {
-			queryString = event.getValue().toString();
+			queryString = getString(event.getValue());
 			validateQuery();
 		}else{
 			valid = true;
-			setStringValue(event.getValue().toString());
+			setStringValue(getString(event.getValue()));
 			if(!valid){
 				drawExceptions((HasField)event.getSource());
 				return;
@@ -103,6 +103,12 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		}
 		if(!queryMode)
 			ValueChangeEvent.fire(this, value);
+	}
+	
+	private String getString(Object val) {
+		if(val == null)
+			return "";
+		return val.toString();
 	}
 	
     public void clearExceptions(HasField wid) {
