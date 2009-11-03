@@ -213,10 +213,14 @@ color:gray;
 }
 
 .Ascending{
-	background:url('../Images/go-up.png') no-repeat;
+	background:url('../Images/go-up.png') no-repeat center center;
+	width:16;
+	height:16;
 }
 .Descending{
-	background:url('../Images/go-down.png') no-repeat;
+	background:url('../Images/go-down.png') no-repeat center center;
+	width:16;
+	height:16;
 }
 .FavMenuRowContainer{
     width:200px;
@@ -1150,6 +1154,7 @@ cursor:default;}
     height:18px;/**
     border-bottom: 1px solid #d8d8d8;**/
     background: url(../Images/trigger.gif) 2px -1px no-repeat;
+    cursor:pointer;
 }
 
 /*******autodropdown css***********/
@@ -1980,13 +1985,10 @@ background:#deecfd;
 .InputError .AutoDropDownButton{
 	border-bottom:1px dashed red;
 }
-/*
-.Calendar .InputError {
-	border-bottom:1px dashed red;
-}*/
 .InputError {
 	border-bottom:1px dashed red;
 }
+
 .InputWarning .ScreenTextBox{
 	border-bottom:1px dashed #f5d852;
 }
@@ -1996,19 +1998,10 @@ background:#deecfd;
 .InputWarning .AutoDropDownButton{
 	border-bottom:1px dashed #f5d852;
 }
-/*
-.Calendar .InputWarning {
-	border-bottom:1px dashed #f5d852;
-}*/
-
 .InputWarning {
-	border-bottom:1px dashed red;
+	border-bottom:1px dashed #f5d852;
 }
-/*
-.InputWarning .CalendarButton{
-	border-bottom:1px dashed #FFDF00;
-}
-*/
+
 .TableVertScroll{
 }
 
