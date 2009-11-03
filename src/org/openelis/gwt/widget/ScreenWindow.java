@@ -27,9 +27,12 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Warning;
+import org.openelis.gwt.screen.Screen;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
@@ -48,16 +51,16 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.HasCloseHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -66,19 +69,10 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.Warning;
-import org.openelis.gwt.screen.Screen;
-import org.openelis.gwt.widget.WindowBrowser;
-import org.openelis.gwt.widget.deprecated.MenuLabel;
 
 /**
  * ScreenWindow is used to display Screens inside a draggable window.  
@@ -86,7 +80,7 @@ import org.openelis.gwt.widget.deprecated.MenuLabel;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, EventPreview {
+public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow> {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -391,7 +385,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     
     public void close() {        
         if(modalGlass != null) {
-            DOM.removeEventPreview(this);
+            //DOM.removeEventPreview(this);
             removeFromParent();
             RootPanel.get("main").remove(modalGlass);
             RootPanel.get("main").remove(modalPanel);
@@ -410,6 +404,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             browser.index--;
             browser.setFocusedWindow();
         }
+        CloseEvent.fire(this, this);
     }
 
     
@@ -578,5 +573,10 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 			unlockWindow();
 			lockWindow();
 		}
+	}
+
+	public HandlerRegistration addCloseHandler(
+			CloseHandler<ScreenWindow> handler) {
+		return addHandler(handler, CloseEvent.getType());
 	}
 }
