@@ -54,7 +54,6 @@ padding:0px 0px 4px 4px;
 }
 
 
-
 .TableCell div div.gwt-label {
 	padding: 2px;
 }
@@ -367,7 +366,6 @@ tr .Highlighted {
 
 .topHeaderContainer {
 	border: 1px solid #b5b8c8;
-	border-top: 0;
 	background: #f0f0f0 url('../Images/menu.gif') repeat-y;
 }
 
