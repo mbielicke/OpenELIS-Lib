@@ -83,7 +83,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		
 	}
 	
-	public void onValueChange(ValueChangeEvent event) {
+	public void onValueChange(ValueChangeEvent<String> event) {
 		clearExceptions((HasField)event.getSource());
 		if(queryMode) {
 			queryString = event.getValue().toString();

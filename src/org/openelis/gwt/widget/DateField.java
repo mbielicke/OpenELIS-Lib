@@ -30,6 +30,7 @@ import java.util.Date;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 /**
@@ -292,8 +293,11 @@ public class DateField extends Field<Datetime> {
         	}
         }
         */
-        if(valid)
+        if(valid){
         	setValue(Datetime.getInstance(begin, end, date));
+        	ValueChangeEvent.fire(this, getValue());
+        }
+        
     }
     
 	public void checkValue(HasField wid) {

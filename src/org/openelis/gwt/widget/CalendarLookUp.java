@@ -526,7 +526,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	 */
 	public HandlerRegistration addFieldValueChangeHandler(
 			ValueChangeHandler<Datetime> handler) {
-		return addValueChangeHandler(handler);
+		return field.addValueChangeHandler(handler);
 	}
 
 	public void addExceptionStyle(String style) {
