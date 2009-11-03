@@ -33,7 +33,6 @@ import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.table.TableDataRow;
-import org.openelis.gwt.widget.table.TableKeyboardHandler;
 import org.openelis.gwt.widget.table.TableRenderer;
 import org.openelis.gwt.widget.table.TableView;
 
@@ -58,7 +57,8 @@ import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasField {
     
     private int startPos;
-    boolean linear;
+    public enum Search {LINEAR,BINARY}
+    protected Search searchMode = Search.BINARY;
     private Field<T> field;
     IconContainer icon = new IconContainer();
     public String dropwidth;
@@ -214,7 +214,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         int mid = -1;
         int length = textValue.length();
         
-        if(linear){
+        if(searchMode == Search.LINEAR){
             for(int i = 0; i < model.size(); i++){
                 if(compareValue((String)model.get(i).getCells().get(0),textValue,length) == 0)
                     return i;
@@ -433,8 +433,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		return getValue();
 	}
 	
-	public void searchLinear(boolean linear) {
-		this.linear = linear;
+	public void setSearchMode(Search mode) {
+		searchMode = mode;
 	}
 
 }
