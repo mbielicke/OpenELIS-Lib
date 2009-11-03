@@ -90,9 +90,9 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
      //}
      if(table.dragController == context.dragController){	
     	 if(targetRow < 0)
-    		table.MoveRow(drop.dragIndex, 0);
+    		table.moveRow(drop.dragIndex, 0);
     	 else
-    		table.MoveRow(drop.dragIndex, table.renderer.getRows().get(targetRow).modelIndex+1);
+    		table.moveRow(drop.dragIndex, table.renderer.getRows().get(targetRow).modelIndex+1);
     	 //table.MoveRow(drop.dragIndex, table.renderer.getRows().get(targetRow+1).modelIndex);
      }else {
     	 if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)

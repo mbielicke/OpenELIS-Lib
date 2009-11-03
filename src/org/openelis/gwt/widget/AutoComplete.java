@@ -460,6 +460,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	public void complete() {
 		super.complete();
 		field.setValue(getValue());
+		clearExceptions();
 		ValueChangeEvent.fire(this, getValue());
 		checkValue();
 		textbox.setFocus(true);

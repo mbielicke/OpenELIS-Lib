@@ -166,7 +166,6 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected TableSorter sorter = new TableSorter();
     protected int shownRows; 
     protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
-    //protected int selected = -1;
     protected ArrayList<LocalizedException> exceptions;
     protected boolean queryMode;
     protected boolean mouseOver;
@@ -426,7 +425,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      */
     public void startEditing(int row, int col) {
     	if(isRowDrawn(row))
-    		select(tableIndex(row),col);
+    		select(row,col);
     }
     
     /**
@@ -503,7 +502,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         renderer.dataChanged(true);
     }
     
-    public void MoveRow(int curIndex, int newIndex) {
+    public void moveRow(int curIndex, int newIndex) {
     	if(fireEvents) {
     		if(getHandlerCount(BeforeRowMovedEvent.getType()) > 0){
     			BeforeRowMovedEvent event = BeforeRowMovedEvent.fire(this, curIndex, newIndex, model.get(curIndex));
@@ -556,7 +555,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public Widget getColumnWidget(String key) {
     	for(TableColumn col : columns){
-    		if(col.key.equals(key))
+    		if(key.equals(col.key))
     			return col.getColumnWidget();
     	}
     	return null;
@@ -789,7 +788,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
     public void setCellException(int row, String col, LocalizedException ex) {
     	for(TableColumn column : columns) {
-    		if(column.key.equals(col)){
+    		if(col.equals(column.key)){
     			setCellException(row,columns.indexOf(column),ex);
     			break;
     		}
@@ -974,6 +973,16 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		}
 	}
 	
+	public Object getWidgetValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	// Methods for registering Event Handlers to the table.
 	
 	public HandlerRegistration addCellEditedHandler(CellEditedHandler handler) {
@@ -1054,16 +1063,6 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
 	public void addExceptionStyle(String style) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Object getWidgetValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void removeExceptionStyle(String style) {
 		// TODO Auto-generated method stub
 		
 	}

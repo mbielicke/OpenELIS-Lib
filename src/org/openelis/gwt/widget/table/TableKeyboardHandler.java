@@ -25,13 +25,10 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Label;
@@ -40,17 +37,10 @@ import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     
     private TableWidget controller;
-    private Screen screen;
     
     public TableKeyboardHandler(TableWidget controller) {
         this.controller = controller;
     }
-    
-    public void setScreen(Screen screen) {
-        this.screen = screen;
-    }
-    
-
     
     private int findNextActive(int current) {
         int next = current + 1;
@@ -156,7 +146,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                     ((CheckBox)controller.view.table.getWidget(controller.tableIndex(controller.selectedRow),controller.selectedCol)).setState("CHECKED");
                     controller.finishEditing();
             }
-            }else if(controller.tableIndex(controller.selectedRow) < 0) {
+            }else if(controller.selectedRow < 0) {
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                         tabToNextRow();
@@ -198,10 +188,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                     DeferredCommand.addCommand(new Command() {
                         public void execute() {
                             controller.select(controller.selectedRow, fCol);
-                            /*controller.onCellClicked(controller.view.table, controller.activeRow, fCol);
-                            if(((TableCellWidget)controller.view.table.getWidget(controller.activeRow, fCol)).getWidget() instanceof FocusWidget)
-                                ((FocusWidget)((TableCellWidget)controller.view.table.getWidget(controller.activeRow, fCol)).getWidget()).setFocus(true);
-                            */
+
                         }
                     });
                 }
@@ -226,11 +213,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                     tabToPrevRow();
                 }else{
                     final int fCol = col;
-                    //DeferredCommand.addCommand(new Command() {
-                      //  public void execute() {
-                            controller.select(controller.selectedRow, fCol);
-                       // }
-                    //});
+                    controller.select(controller.selectedRow, fCol);
                 }
             }
         }

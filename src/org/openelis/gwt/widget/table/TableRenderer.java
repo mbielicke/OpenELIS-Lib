@@ -31,6 +31,7 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -220,7 +221,12 @@ public class TableRenderer  {
         			newVal = ((AutoComplete)controller.activeWidget).getSelection();
         	}else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown))
         		newVal = ((HasField)controller.activeWidget).getField().queryString;
-        	else
+        	else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
+        		if(((HasField)controller.activeWidget).getFieldValue() == null &&
+        		   !((TextBox)controller.activeWidget).getText().equals(""))
+        		     newVal = ((TextBox)controller.activeWidget).getText();
+        	}
+        	if(newVal == null)		
         		newVal = ((HasField)controller.activeWidget).getFieldValue();
         	if(controller.activeWidget instanceof HasField){
         		if(((HasField)controller.activeWidget).getExceptions() != null){
@@ -264,7 +270,7 @@ public class TableRenderer  {
 
 
     public void rowSelected(int row) {
-    	rows.get(row).addStyleName(controller.view.selectedStyle);
+    	rows.get(controller.tableIndex(row)).addStyleName(controller.view.selectedStyle);
     }
     
     public ArrayList<TableRow> getRows() {
