@@ -133,6 +133,26 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
+<!-- ok button template -->
+<xsl:template name="okButton">
+	<appButton key="ok" action="ok" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="ctrl+m">
+		<HorizontalPanel>
+	    	<AbsolutePanel style="CommitButtonImage" width="20px" height="20px"/>
+        	<text><xsl:value-of select='resource:getString($constants,"ok")'/></text>
+	  	</HorizontalPanel>
+	</appButton>
+</xsl:template>
+
+<!-- cancel button template -->
+<xsl:template name="cancelButton">
+	<appButton key="cancel" action="cancel" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="ctrl+a">
+		<HorizontalPanel>
+	    	<AbsolutePanel style="AbortButtonImage" width="20px" height="20px"/>
+        	<text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>
+	  	</HorizontalPanel>
+	</appButton>
+</xsl:template>
+
 <!-- duplicate menu item-->
 <xsl:template name="duplicateRecordMenuItem">
 	<xsl:call-template name="menuItem">
