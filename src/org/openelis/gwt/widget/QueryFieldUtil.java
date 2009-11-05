@@ -101,7 +101,7 @@ public class QueryFieldUtil {
                 else
                     logical.add("&");
                 value = value.substring(1);
-                while (value.charAt(0) == ' ')
+                while (value != null && value.length() > 0 && value.charAt(0) == ' ')
                     value = value.substring(1);
             }
         }

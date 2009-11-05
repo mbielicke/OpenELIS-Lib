@@ -35,6 +35,7 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -64,7 +65,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     protected boolean week;
     protected Date weekDate;
     protected PopupPanel pop;
-    private Field<Datetime> field;
+    private DateField field;
     private boolean enabled;
     protected TextBox textbox = new TextBox();
     private IconContainer icon = new IconContainer();
@@ -177,7 +178,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	                	//setValue(getValue(),true);
 	            }
 	        }
-			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+        	BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
 //			if(field.exceptions != null){
 //				field.drawExceptions(source);
 //			}
@@ -203,7 +204,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	    }
 
 		public void onValueChange(ValueChangeEvent<String> event) {
-			field.setStringValue(event.getValue());
+				field.setStringValue(event.getValue());
 			
 		}
     	
@@ -287,7 +288,11 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
      */
     private void doCalendar(Widget sender, final byte begin, final byte end) {
     	try  {
-    		CalendarWidget cal = new CalendarWidget(getValue(),begin,end);
+    		CalendarWidget cal = null;
+    		if(field.queryMode)
+    			cal = new CalendarWidget(Datetime.getInstance(begin,end),begin,end);
+    		else
+    		    cal = new CalendarWidget(getValue(),begin,end);
     		cal.addValueChangeHandler(this);
     		pop = new PopupPanel(true, false);
     		pop.setWidget(cal);
@@ -319,7 +324,10 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
      * and the popup has closed.
      */
     public void onValueChange(ValueChangeEvent<Datetime> event) {
-    	setValue(event.getValue(),true);
+    	if(field.queryMode){
+    		textbox.setText(textbox.getText()+DateTimeFormat.getFormat(field.pattern).format(event.getValue().getDate()));
+    	}else
+    		setValue(event.getValue(),true);
     	if(pop != null){
     		pop.hide();
     	}
@@ -409,7 +417,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	 * Sets the field to be used by this widget.
 	 */
 	public void setField(Field<Datetime> field) {
-		this.field = field;
+		this.field = (DateField)field;
 		//addValueChangeHandler(field);
 		addBlurHandler(field);
 		addMouseOutHandler(field);
