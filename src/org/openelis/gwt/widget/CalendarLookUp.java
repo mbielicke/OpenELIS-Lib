@@ -66,7 +66,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     protected PopupPanel pop;
     private Field<Datetime> field;
     private boolean enabled;
-    private TextBox textbox = new TextBox();
+    protected TextBox textbox = new TextBox();
     private IconContainer icon = new IconContainer();
     
     

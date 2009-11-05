@@ -103,32 +103,45 @@ public class DateField extends Field<Datetime> {
     	}
     	QueryFieldUtil qField = new QueryFieldUtil();
     	qField.parse(queryString);
-    	
-        for (String param : qField.parameter) {
+    	StringBuffer sb = new StringBuffer();
+        for (int j = 0; j < qField.parameter.size(); j++) {
+        	if(j > 0)
+        		sb.append(" ");
+        	  if(!qField.getComparator().get(j).equals("=") && !qField.getComparator().get(j).equals("between "))
+       	 	  	sb.append(qField.getComparator().get(j)+" ");
+       	 	 
+        	  String param = qField.getParameter().get(j);
         	  String[] dates = param.split("\\.\\.");
         	  for(int i = 0; i < dates.length; i++) {
+        		  if(i > 0)
+        			  sb.append("..");
                Date date = null;
         	   try {
            		   if(begin > 2){
            			 String[] time = dates[i].split(":");
            			 if(time.length == 3)
-           				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+           				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2])); 	
            			 else
            				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
            		   }else{
            			   dates[i] = dates[i].replaceAll("-", "/");
            			   date = new Date(dates[i]);
            		   }
+           		   sb.append(DateTimeFormat.getFormat(pattern).format(date));
            		   removeException("invalidDateFormat");
            	   }catch(Exception e) {
            		   valid = false;
           		   addException(new LocalizedException("invalidDateFormat"));
           		   return;
            	   }
+           	   
         	 }
         }
         if (value != null && !isInRange()) {
             valid = false;
+        }
+        if(valid) {
+        	queryString = sb.toString();
         }
     }
 
@@ -312,6 +325,11 @@ public class DateField extends Field<Datetime> {
 				validateQuery();
 			else
 				queryString = null;
+			if(wid instanceof CalendarLookUp) {
+				((CalendarLookUp)wid).textbox.setText(queryString);
+			}else if(wid instanceof TextBox) {
+				((TextBox)wid).setText(queryString);
+			}
 		}else{
 			if(wid instanceof CalendarLookUp) 
 				setStringValue(((CalendarLookUp)wid).getStringValue());
