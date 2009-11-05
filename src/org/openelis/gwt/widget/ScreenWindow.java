@@ -29,6 +29,9 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
+import org.openelis.gwt.event.BeforeCloseEvent;
+import org.openelis.gwt.event.BeforeCloseHandler;
+import org.openelis.gwt.event.HasBeforeCloseHandlers;
 import org.openelis.gwt.screen.Screen;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -80,7 +83,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow> {
+public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow> {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -383,7 +386,12 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         
     }
     
-    public void close() {        
+    public void close() { 
+    	if(getHandlerCount(BeforeCloseEvent.getType()) > 0) {
+    		BeforeCloseEvent<ScreenWindow> event = BeforeCloseEvent.fire(this, this);
+    		if(event != null && event.isCancelled())
+    			return;
+    	}
         if(modalGlass != null) {
             //DOM.removeEventPreview(this);
             removeFromParent();
@@ -579,4 +587,10 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 			CloseHandler<ScreenWindow> handler) {
 		return addHandler(handler, CloseEvent.getType());
 	}
+
+	public HandlerRegistration addBeforeClosedHandler(
+			BeforeCloseHandler<ScreenWindow> handler) {
+		return addHandler(handler, BeforeCloseEvent.getType());
+	}
+
 }
