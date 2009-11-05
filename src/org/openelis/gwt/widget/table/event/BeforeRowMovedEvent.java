@@ -1,50 +1,49 @@
 package org.openelis.gwt.widget.table.event;
 
-import org.openelis.gwt.widget.table.TableDataRow;
-
 import com.google.gwt.event.shared.GwtEvent;
 
-public class BeforeRowMovedEvent extends GwtEvent<BeforeRowMovedHandler> {
+public class BeforeRowMovedEvent<T> extends GwtEvent<BeforeRowMovedHandler<T>> {
 	
-	private static Type<BeforeRowMovedHandler> TYPE;
+	private static Type<BeforeRowMovedHandler<?>> TYPE;
 	private int oldIndex;
 	private int newIndex;
-	private TableDataRow row;
+	private T row;
 	private boolean cancelled;
 	
-	public static BeforeRowMovedEvent fire(HasBeforeRowMovedHandlers source, int oldIndex, int newIndex, TableDataRow row) {
+	public static <T> BeforeRowMovedEvent<T> fire(HasBeforeRowMovedHandlers<T> source, int oldIndex, int newIndex, T row) {
 		if(TYPE != null) {
-			BeforeRowMovedEvent event = new BeforeRowMovedEvent(oldIndex, newIndex, row);
+			BeforeRowMovedEvent<T> event = new BeforeRowMovedEvent<T>(oldIndex, newIndex, row);
 			source.fireEvent(event);
 			return event;
 		}
 		return null;
 	}
 	
-	protected BeforeRowMovedEvent(int oldIndex, int newIndex, TableDataRow row) {
+	protected BeforeRowMovedEvent(int oldIndex, int newIndex, T row) {
 		this.row = row;
 		this.oldIndex = oldIndex;
 		this.newIndex = newIndex;
 	}
 
 	@Override
-	protected void dispatch(BeforeRowMovedHandler handler) {
+	protected void dispatch(BeforeRowMovedHandler<T> handler) {
 		handler.onBeforeRowMoved(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public com.google.gwt.event.shared.GwtEvent.Type<BeforeRowMovedHandler> getAssociatedType() {
+	public com.google.gwt.event.shared.GwtEvent.Type<BeforeRowMovedHandler<T>> getAssociatedType() {
 		return (Type) TYPE;
 	}
 	
-	public static Type<BeforeRowMovedHandler> getType() {
+	public static Type<BeforeRowMovedHandler<?>> getType() {
 		if(TYPE == null) {
-			TYPE = new Type<BeforeRowMovedHandler>();
+			TYPE = new Type<BeforeRowMovedHandler<?>>();
 		}
 		return TYPE;
 	}
 	
-	public TableDataRow getRow() {
+	public T getRow() {
 		return row;
 	}
 	

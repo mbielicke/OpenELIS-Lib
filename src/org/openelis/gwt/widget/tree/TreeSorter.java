@@ -3,7 +3,9 @@ package org.openelis.gwt.widget.tree;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TreeSorter implements TreeSorterInt {
+import org.openelis.gwt.widget.table.TableSorter.SortDirection;
+
+public class TreeSorter {
 
 	ArrayList<TreeDataItem> data;
 	SortDirection direction;

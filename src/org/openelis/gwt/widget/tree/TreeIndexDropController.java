@@ -13,6 +13,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IndexedPanel;
@@ -111,37 +112,32 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 			dropRow = (TreeRow)context.draggable;
 		TreeDataItem item = dropRow.dragItem;
 		int modelIndex = dropRow.dragModelIndex;
-		if(tree.dragController == context.dragController){
-			if(modelIndex < tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
-				targetRow--;
-			//tree.unlink(modelIndex);
-		}   
-		boolean advanceScroll = false;
 		TreeDataItem targetItem = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).item;
-		if(tree.numRows() == 0 || (tree.numRows() -1 != 0 && tree.numRows() -1 == tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex && targetItem.depth == 0)){
-			tree.addRow(item);
-			advanceScroll = true;
-		}else if(targetItem.open && targetItem.mightHaveChildren() && targetRow > -1)
-			targetItem.addItem(0,item);
-		else if(targetRow < 0)
-			tree.addRow(0,item);
-		else if(targetItem.depth > 0)
-			targetItem.parent.addItem(targetItem.childIndex+1, item);
-		else
-			tree.addRow(tree.renderer.getRows().get(targetRow+1).modelIndex, item);
 		if(tree.dragController == context.dragController){
-			//if(modelIndex > tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
-				//  modelIndex++;
-			//tree.model.deleteRow(modelIndex);
-		}    
-		if(advanceScroll){
-			DeferredCommand.addCommand(new Command() {
-				public void execute() {
-					tree.view.setScrollPosition(tree.view.scrollBar.getScrollPosition()+20);
-				}
-			});
+			if(targetItem.open && targetItem.mightHaveChildren() && targetRow > -1){
+				tree.deleteRow(modelIndex);
+				tree.addChildItem(targetItem,item,0);
+			}else if(targetItem.depth > 0){
+				tree.deleteRow(modelIndex);
+				tree.addChildItem(targetItem.parent,item,targetItem.childIndex+1);				
+			}else if(targetRow < 0)
+	     		tree.moveRow(dropRow.dragIndex, 0);
+	     	 else
+	     		tree.moveRow(dropRow.dragIndex, tree.renderer.getRows().get(targetRow).modelIndex+1);
+		}else {   
+			if(tree.numRows() == 0 || (tree.numRows() -1 != 0 && tree.numRows() -1 == tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex && targetItem.depth == 0)){
+				tree.addRow(item);
+			}else if(targetItem.open && targetItem.mightHaveChildren() && targetRow > -1)
+				tree.addChildItem(targetItem,item,0);
+			else if(targetRow < 0)
+				tree.addRow(0,item);
+			else if(targetItem.depth > 0)
+				tree.addChildItem(targetItem.parent,item,targetItem.childIndex+1);
+			else
+				tree.addRow(tree.renderer.getRows().get(targetRow+1).modelIndex, item);
 		}
 		dropping = false;
+		dropRow = null;
 		super.onDrop(context);
 
 	}
@@ -257,6 +253,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 		Widget p = new SimplePanel();
 		p.addStyleName(CSS_DROP_POSITIONER);
 		p.setPixelSize(tree.getOffsetWidth(), 1);
+		DOM.setStyleAttribute(p.getElement(), "zIndex", "1000");
 		return p;
 	}
 

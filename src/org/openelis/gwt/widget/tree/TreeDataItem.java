@@ -207,4 +207,12 @@ public class TreeDataItem extends TableDataRow {
     	return this == obj;
     }
     
+    public Object clone() {
+    	TreeDataItem clone = new TreeDataItem(cells.size());
+        for(int i = 0; i < cells.size(); i++)
+            clone.cells.get(i).setValue(cells.get(i).getValue());
+    	clone.leafType = leafType;
+        return clone;
+    	
+    }
 }

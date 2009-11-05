@@ -33,34 +33,49 @@ import java.util.List;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableDataCell;
+import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.table.event.BeforeRowMovedEvent;
+import org.openelis.gwt.widget.table.event.BeforeRowMovedHandler;
+import org.openelis.gwt.widget.table.event.BeforeSortEvent;
+import org.openelis.gwt.widget.table.event.BeforeSortHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeRowMovedHandlers;
+import org.openelis.gwt.widget.table.event.HasBeforeSortHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasRowMovedHandlers;
+import org.openelis.gwt.widget.table.event.HasSortHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.event.RowDeletedHandler;
+import org.openelis.gwt.widget.table.event.RowMovedEvent;
+import org.openelis.gwt.widget.table.event.RowMovedHandler;
+import org.openelis.gwt.widget.table.event.SortEvent;
+import org.openelis.gwt.widget.table.event.SortHandler;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
-import org.openelis.gwt.widget.tree.TreeSorterInt.SortDirection;
+import org.openelis.gwt.widget.table.TableSorter.SortDirection;
 import org.openelis.gwt.widget.tree.TreeView.VerticalScroll;
 import org.openelis.gwt.widget.tree.event.BeforeLeafCloseEvent;
 import org.openelis.gwt.widget.tree.event.BeforeLeafCloseHandler;
@@ -75,6 +90,8 @@ import org.openelis.gwt.widget.tree.event.LeafClosedHandler;
 import org.openelis.gwt.widget.tree.event.LeafOpenedEvent;
 import org.openelis.gwt.widget.tree.event.LeafOpenedHandler;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -98,6 +115,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -125,43 +143,48 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasBeforeLeafCloseHandlers,
 													  HasLeafOpenedHandlers,
 													  HasLeafClosedHandlers,
-													  HasDropController{
+													  HasDropController,
+													  HasBeforeSortHandlers,
+													  HasSortHandlers,
+													  HasBeforeRowMovedHandlers,
+													  HasRowMovedHandlers{
 
-    public HashMap<String,ArrayList<TreeColumn>> columns;
-    public boolean enabled;
-    public boolean focused;
-    public int activeRow = -1;
-    public int activeCell = -1;
-    public TreeView view;
-    public TreeRenderer renderer;
-    public TreeKeyboardHandler keyboardHandler;
-    public boolean shiftKey;
-    public boolean ctrlKey;
-    public int maxRows;
-    public int cellHeight = 18;
-    public int cellSpacing = 0;
-    public Widget editingCell = null;
-    public int[] modelIndexList;
-    public boolean showRows;
-    public String title;
-    public boolean showHeader;
-    public TreeDragController dragController;
-    public TreeIndexDropController dropController;
-    public boolean selectedByClick;
-    private ArrayList<TreeDataItem> data;
-    public ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
-    public int shownRows; 
-    public boolean multiSelect;
-    public VerticalScroll showScroll;
+    protected HashMap<String,ArrayList<TreeColumn>> columns;
+    protected boolean enabled;
+    protected boolean focused;
+    protected int selectedRow = -1;
+    protected int selectedCol = -1;
+    protected TreeView view;
+    protected TreeRenderer renderer;
+    protected TreeKeyboardHandler keyboardHandler;
+    protected boolean shiftKey;
+    protected boolean ctrlKey;
+    protected int maxRows;
+    protected int cellHeight = 21;
+    protected int cellSpacing = 0;
+    protected Widget activeWidget = null;
+    protected int[] modelIndexList;
+    protected boolean showRows;
+    protected String title;
+    protected boolean showHeader;
+    protected TreeDragController dragController;
+    protected TreeIndexDropController dropController;
+    protected boolean selectedByClick;
+    protected ArrayList<TreeDataItem> data;
+    protected ArrayList<TreeDataItem> rows = new ArrayList<TreeDataItem>();
+    protected int shownRows; 
+    protected boolean multiSelect;
+    protected VerticalScroll showScroll;
    // public ArrayList<Integer> selectedRows = new ArrayList<Integer>();
     protected HashMap<String,TreeDataItem> leaves;
-    public String width;
-    public ArrayList<TreeDataItem> deleted;// = new ArrayList<DataSet<Key>>();
-    public ArrayList<Integer> selections = new ArrayList<Integer>(1);
-    private int selected = -1;
-    public ArrayList<TreeColumn> headers;
-    public TreeSorterInt sorter = new TreeSorter();
-    public boolean fireEvents = true;
+    protected String width;
+    protected ArrayList<TreeDataItem> deleted;// = new ArrayList<DataSet<Key>>();
+    protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
+    protected int selected = -1;
+    protected ArrayList<TreeColumn> headers;
+    protected TreeSorter sorter = new TreeSorter();
+    protected boolean fireEvents = true;
+    protected boolean queryMode;
     
     public TreeWidget() {
 
@@ -176,14 +199,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         keyboardHandler = new TreeKeyboardHandler(this);
         view = new TreeView(this, showScroll);
         view.setWidth(width);
-        view.setHeight((maxRows * cellHeight
-                        + (maxRows * cellSpacing)
-                        + (maxRows * 3) + cellSpacing));        
+        view.setHeight(maxRows * cellHeight);
         setWidget(view);
         addDomHandler(keyboardHandler, KeyUpEvent.getType());
         addDomHandler(keyboardHandler, KeyDownEvent.getType());
-        addFocusHandler(this);
-        addBlurHandler(this);
+        //addFocusHandler(this);
+        //addBlurHandler(this);
         
     }
     
@@ -191,29 +212,97 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	this.width = width;
     }
     
+    public void setMaxRows(int maxRows) {
+    	this.maxRows = maxRows;
+    }
+    
+    public int getMaxRows() {
+    	return maxRows;
+    }
+    
+    public void setTitle(String title) {
+    	this.title = title;
+    }
+    
+    public String getTitle() {
+    	return title;
+    }
+    
+    public void setShowScroll(VerticalScroll scroll){
+    	this.showScroll = scroll;
+    }
+    
+    public void showHeader(boolean showHeader) {
+    	this.showHeader = showHeader;
+    }
+    
+    public boolean showHeader() {
+    	return showHeader;
+    }
+    
+    public void multiSelect(boolean multiSelect){
+    	this.multiSelect = multiSelect;
+    }
+    
+    public boolean multiSelect() {
+    	return multiSelect;
+    }
+    
+    public HashMap<String,ArrayList<TreeColumn>> getColumns() {
+    	return columns;
+    }
+    
+    public void setHeaders(ArrayList<TreeColumn> headers) {
+    	this.headers = headers;
+    }
+    
+    public ArrayList<TreeColumn> getHeaders() {
+    	return headers;
+    }
+    
+    public void setColumns(HashMap<String,ArrayList<TreeColumn>> columns) {
+    	this.columns = columns;
+    }
+    
+    public int getTreeWidth() {
+    	int tw = 0;
+    	
+    	if(width.equals("auto")){
+    		for(TreeColumn column : headers)
+    			tw += column.getCurrentWidth();
+    	}else if(width.indexOf("px") > -1){
+    		tw = Integer.parseInt(width.substring(0,width.length()-2));
+    	}else
+    		tw = Integer.parseInt(width);
+    	
+    	return tw;
+    }
+    
     /**
      * This method handles all click events on the body of the table
      */
     public void onClick(ClickEvent event) {
     	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-		if(isEnabled()){
-			if(columns.get(rows.get(modelIndexList[cell.getRowIndex()]).leafType).get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox){
-				if(CheckBox.CHECKED.equals(getCell(cell.getRowIndex(),cell.getCellIndex()).getValue())){
-					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.UNCHECKED);
-					if(fireEvents)
-						CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
-				}else{
-					setCell(cell.getRowIndex(),cell.getCellIndex(),CheckBox.CHECKED);
-					if(fireEvents)
-						CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()],cell.getCellIndex(), CheckBox.CHECKED);
-				}
+		if(isEnabled() && columns.get(getRow(modelIndexList[cell.getRowIndex()]).leafType).get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+			if(CheckBox.CHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
+				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNCHECKED);
+				if(fireEvents)
+					CellEditedEvent.fire(this,  modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
+			}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
+				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNKNOWN);
+				if(fireEvents)
+					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNKNOWN);
+			}else{
+				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.CHECKED);
+				if(fireEvents)
+					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.CHECKED);
 			}
 		}
-        if(activeRow == cell.getRowIndex() && activeCell == cell.getCellIndex())
+        if(treeIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
             return;
-        selectedByClick = true;
-        select(cell.getRowIndex(), cell.getCellIndex());
-        selectedByClick = false;
+        //selectedByClick = true;
+        select(modelIndexList[cell.getRowIndex()], cell.getCellIndex());
+        //selectedByClick = false;
     }
 
 
@@ -224,25 +313,22 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         		rows.get(i).selected = false;
         	}
             selections.clear();
-            selected = -1;
             renderer.rowUnselected(-1);
         }else if(row < selections.size()){
             selections.remove(new Integer(row));
-            if(selected == row)
-                selected = -1;
         }
-        if(activeRow > -1)
-        	rows.get(activeRow).selected = false;
-        activeRow = -1;
+        if(selectedRow > -1)
+        	rows.get(selectedRow).selected = false;
+        selectedRow = -1;
         if(isRowDrawn(row))
-        	renderer.rowUnselected(treeIndex(row));
+        	renderer.rowUnselected(row);
     }
     
-    private boolean isRowDrawn(int row){
+    protected boolean isRowDrawn(int row){
     	return row >= modelIndexList[0] && row <= modelIndexList[view.table.getRowCount()-1];
     }
     
-    private int treeIndex(int modelIndex) {
+    protected int treeIndex(int modelIndex) {
     	for(int i = 0; i < view.table.getRowCount(); i++){
     		if(modelIndexList[i] == modelIndex)
     			return i;
@@ -260,43 +346,51 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      */
     protected void select(final int row, final int col) {
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(modelIndexList[row]));
+    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
     		if(event.isCanceled())
     			return;
     	}else if(!isEnabled())
     		return;
-        if(finishEditing()){
-            if(numRows() >= maxRows){
-                view.scrollBar.scrollToBottom();
-                DeferredCommand.addCommand(new Command() {
-                    public void execute() {
-                        renderer.scrollLoad(view.scrollBar.getScrollPosition());
-                        select(row-1,col);
-                    }
-                });
-            }
-            view.table.getRowFormatter().addStyleName(activeRow, view.selectedStyle);
-        }
-        if(activeRow != row){
-            if(activeRow > -1 && !ctrlKey){
+        finishEditing();
+        if(selectedRow != row){
+            if(selectedRow > -1 && !ctrlKey && !shiftKey){
             	if(fireEvents)
-            		UnselectionEvent.fire(this, rows.get(activeRow));
+            		UnselectionEvent.fire(this, rows.get(selectedRow));
                 unselect(-1);
             }
-            activeRow = row;
-            selectRow(modelIndexList[row]);
+            if(multiSelect && ctrlKey && isSelected(row)){
+            	unselect(row);
+            	selectedCol = -1;
+           		sinkEvents(Event.ONKEYPRESS);
+            	return;
+            }
+            //selectedRow = row;
+            selectRow(row);
             if(fireEvents)
-            	SelectionEvent.fire(this,rows.get(modelIndexList[row]));
+            	SelectionEvent.fire(this,rows.get(row));
         }
         if(canEditCell(row,col)){
-            activeCell = col;
+            selectedCol = col;
             renderer.setCellEditor(row, col);
             unsinkEvents(Event.ONKEYPRESS);
         }else{
-      		activeCell = -1;
+      		selectedCol = -1;
        		sinkEvents(Event.ONKEYPRESS);
        	}
 
+    }
+    
+    /**
+     *  This method will select all rows in the model, but only if the table is in 
+     *  MultiSelect mode.
+     */
+    public void selectAll() {
+    	if(multiSelect) {
+    		selections = new ArrayList<Integer>();
+    		for(int i = 0; i < rows.size(); i++)
+    			selections.add(i);
+    		renderer.dataChanged(true);
+    	}
     }
     
     public void select(TreeDataItem item) {
@@ -305,26 +399,23 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		SelectionEvent.fire(this, item);
     }
 
-    public boolean finishEditing() {
-        if (editingCell != null) {
+    public void finishEditing() {
+        if (activeWidget != null) {
         	if(renderer.stopEditing() && fireEvents)
-        		CellEditedEvent.fire(this,modelIndexList[activeRow], activeCell, getRow(activeRow).cells.get(activeCell).value);
-        	activeCell = -1;
+        		CellEditedEvent.fire(this,selectedRow, selectedCol, getRow(selectedRow).cells.get(selectedCol).value);
+        	selectedCol = -1;
             sinkEvents(Event.KEYEVENTS);
         }
-        return false;
     }
 
     public void startEditing(int row, int col) {
     	if(isRowDrawn(row))
-    		select(treeIndex(row), col);
+    		select(row, col);
     }
 
 
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
-        if(dragController != null)
-            dragController.setEnable(enabled);
         for(ArrayList<TreeColumn> leaf : columns.values()) {
         	for(TreeColumn column : leaf) {
         		column.enable(enabled);
@@ -337,6 +428,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public void onFocus(FocusEvent event) {
+		if(!DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
+			finishEditing();
+		}
 	}
 
 
@@ -345,16 +439,61 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 
     public void scrollToSelection() {
-        if (numRows() == shownRows()) {
-            view.scrollBar.setScrollPosition(cellHeight * getSelectedIndex());
-        } else {
+    	finishEditing();
+        if(numRows() == shownRows()){
+            view.scrollBar.setScrollPosition(cellHeight*selectedRow);
+        }else{
             int shownIndex = 0;
-            for (int i = 0; i < getSelectedIndex(); i++) {
-                if (getRow(i).shown)
+            for(int i = 0; i < selectedRow; i++){
+                if(getRow(i).shown)
                     shownIndex++;
             }
-            view.scrollBar.setScrollPosition(cellHeight * shownIndex);
+            view.scrollBar.setScrollPosition(cellHeight*shownIndex);
         }
+    }
+    
+    public void moveRow(int curIndex, int newIndex) {
+    	if(fireEvents) {
+    		if(getHandlerCount(BeforeRowMovedEvent.getType()) > 0){
+    			BeforeRowMovedEvent<TreeDataItem> event = BeforeRowMovedEvent.fire(this, curIndex, newIndex, rows.get(curIndex));
+    			if(event != null && event.isCancelled())
+    				return;
+    		}
+    	}
+        TreeDataItem item = rows.get(curIndex);
+        if(item.parent != null){
+            item.parent.removeItem(item.childIndex);
+        }else{
+            data.remove(rows.get(curIndex).childIndex);
+        }
+        int index = rows.indexOf(item);
+        while(index+1 < rows.size() && item.isDecendant(rows.get(index+1))){	
+    		TreeDataItem itemc = rows.get(index+1);
+    		rows.remove(index+1);
+    		if(itemc.shown)
+    			shownRows--;
+        }
+        if(item.shown)
+        	shownRows--;
+        rows.remove(index);
+    	int insert = newIndex;
+    	if(newIndex > curIndex) 
+    		insert--;
+    	if(insert >= rows.size())
+    		insert = rows.size();
+    	item.depth = 0;
+    	item.parent = null;
+    	int rowindex = rows.indexOf(data.get(insert));
+        data.add(insert,item);
+        ArrayList<TreeDataItem> added = new ArrayList<TreeDataItem>();
+        checkChildItems(item,added);
+       	rows.addAll(rowindex, added);
+       	
+       	for(int i = insert; i < data.size(); i++)
+       		data.get(i).childIndex = i;
+    	if(fireEvents) 
+    		RowMovedEvent.fire(this, curIndex, newIndex, item);
+    	renderer.dataChanged(true);
     }
     
     public void addRow(TreeDataItem row) {
@@ -367,6 +506,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         data.add(row);
         checkChildItems(row,rows);
         renderer.dataChanged(true);
+        row.childIndex = data.size()-1;
         if(fireEvents)
         	RowAddedEvent.fire(this, data.size()-1, row);
     }
@@ -374,7 +514,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public void addRow(int index, TreeDataItem row) {
     	finishEditing();
     	if(fireEvents){
-    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
+    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, row);
     		if(event != null && event.isCancelled())
     			return;
     	}
@@ -383,9 +523,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         ArrayList<TreeDataItem> added = new ArrayList<TreeDataItem>();
         checkChildItems(row,added);
        	rows.addAll(rowindex, added);
-       	renderer.dataChanged(true);
+       	for(int i = index; i < data.size(); i++) {
+       		data.get(i).childIndex = i;
+       	}
        	if(fireEvents)
-       		RowAddedEvent.fire(this, data.size()-1, row);  	
+       		RowAddedEvent.fire(this, index, row);  	
+    	renderer.dataChanged(true);
     }
     
     public void addChildItem(TreeDataItem parent, TreeDataItem child) {
@@ -417,9 +560,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		rows.clear();
     	if(selections != null)
     		selections.clear();
-    	activeRow = -1;
-    	activeCell = -1;
-    	editingCell = null;
+    	selectedRow = -1;
+    	selectedCol = -1;
+    	activeWidget = null;
     	shownRows = 0;
         rows = new ArrayList<TreeDataItem>();
         renderer.dataChanged(false);
@@ -430,29 +573,26 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             rows.get(i).selected = false;
         }
         selections.clear();
+        selectedRow = -1;
+        selectedCol = -1;
     }
 
 
     public void deleteRow(int row) {
-    	finishEditing();
+    	unselect(row);
     	if(fireEvents) {
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
     		if(event != null && event.isCancelled())
     			return;
     	}
-    	if(selections.contains(row)){
-            unselectRow(row);
-            if(fireEvents)
-            	UnselectionEvent.fire(this, getRow(row));
-        }
         TreeDataItem item = rows.get(row);
         if(item.parent != null){
             item.parent.removeItem(item.childIndex);
         }else{
             data.remove(rows.get(row).childIndex);
         }
-        int index = rows.indexOf(item)+1;
-        while(item.isDecendant(rows.get(index))){	
+        int index = rows.indexOf(item);
+        while(index+1 < rows.size() && item.isDecendant(rows.get(index+1))){	
     		TreeDataItem itemc = rows.get(index+1);
     		rows.remove(index+1);
     		if(itemc.shown)
@@ -461,13 +601,16 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         if(item.shown)
         	shownRows--;
         rows.remove(index);
+        for(int i = row; i < data.size(); i++) {
+        	data.get(i).childIndex = i;
+        }
         renderer.dataChanged(true);
         if(fireEvents)
         	RowDeletedEvent.fire(this, row, item);
     }
     
     public void deleteRows(List<Integer> rowIndexes) {
-    	finishEditing();
+    	unselect(-1);
         Collections.sort(rowIndexes);
         Collections.reverse(rowIndexes);
         for(int row : rowIndexes) {
@@ -520,10 +663,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return selected;
     }
     
-    public int getSelectedIndex() {
-        if(selections.size() == 0)
-            return -1;
-        return selections.get(0);
+    public int getSelectedRow() {
+        return selectedRow;
     }
 
     public void hideRow(int row) {
@@ -547,8 +688,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         shownRows = 0;
         getVisibleRows();
         selections.clear();
-        activeRow = -1;
-        activeCell = -1;
+        selectedRow = -1;
+        selectedCol = -1;
         renderer.dataChanged(false);
     }
 
@@ -557,18 +698,33 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void selectRow(int index){
-        if(index < numRows()){
-           if(!multiSelect && selections.size() > 0){
-        	   if(fireEvents)
-        		   UnselectionEvent.fire(this, rows.get(selections.get(0)));
-               rows.get(selections.get(0)).selected = false;
-               renderer.rowUnselected(-1);
-               selections.clear();
-           }
-           rows.get(index).selected = true;
-           selections.add(index);
-           renderer.rowSelected(treeIndex(index));
-        }    
+        if(index > rows.size())
+            throw new IndexOutOfBoundsException();
+        selectedRow = index;
+        if(multiSelect && shiftKey){
+        	if(selections.size() == 0)
+        		selections.add(index);
+        	else{
+        		Integer max = Collections.max(selections);
+        		Integer min = Collections.min(selections);
+        		if(index < min) {
+        			selections.clear();
+        			for(int i = index; i <= min; i++) {
+        				selections.add(i);
+        			}
+        		}else if(index > max) {
+        			selections.clear();
+        			for(int i = max; i <= index; i++) {
+        				selections.add(i);
+        			}
+        		}
+        	}
+        }else{
+        	if(!multiSelect || (multiSelect && !ctrlKey))
+               	selections.clear();
+        	selections.add(index);
+        }
+       	renderer.dataChanged(true);      
     }
 
     public void setModel(ArrayList<TreeDataItem> data) {
@@ -603,7 +759,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public void setCell(int row, int col,Object value) {
         rows.get(row).cells.get(col).setValue(value);
-        renderer.cellUpdated(row, col);
+        if(isRowDrawn(row))
+        	renderer.cellUpdated(row, col);
     }
 
     public TableDataCell getCell(int row, int col) {
@@ -626,26 +783,27 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         ArrayList<TreeDataItem> added = new ArrayList<TreeDataItem>();
         checkChildItems(row,added);
         rows.addAll(rowindex,added);
+        row.childIndex = index;
         renderer.dataChanged(true);
     }
     
     public void toggle(int row) {
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(modelIndexList[row]));
+    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
     		if(!event.isCanceled()){
     			unselect(-1);
     			selections.add(row);
     			rows.get(row).selected = true;
-    			renderer.rowSelected(treeIndex(row));
-    			activeRow = treeIndex(row);
+    			renderer.rowSelected(row);
+    			selectedRow = row;
     			SelectionEvent.fire(this, rows.get(row));
     		}
     	}else if(isEnabled()){
     		unselect(-1);
 			selections.add(row);
 			rows.get(row).selected = true;
-			renderer.rowSelected(treeIndex(row));
-			activeRow = treeIndex(row);
+			renderer.rowSelected(row);
+			selectedRow = row;
     		if(fireEvents)
     			SelectionEvent.fire(this, rows.get(row));
     	}
@@ -739,9 +897,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         rows = new ArrayList<TreeDataItem>();
         if(data == null)
         	return;
-        Iterator<TreeDataItem> it = data.iterator();
-        while(it.hasNext())
-            checkChildItems(it.next(),rows);
+        for(int i = 0; i < data.size(); i++) {
+        	TreeDataItem item = data.get(i);
+        	item.childIndex = i;
+        	checkChildItems(item,rows);
+        }
     }
     
     private void checkChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows){
@@ -778,7 +938,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     protected boolean canEditCell(int row, int col) {
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0 && fireEvents) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, modelIndexList[row], col, getRow(row).cells.get(col).value);
+        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
         	if(bce.isCancelled()){
         		return false;
         	}else
@@ -918,20 +1078,32 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 	
     public void sort(int col, SortDirection direction) {
+    	if(fireEvents){
+    		if(getHandlerCount(BeforeSortEvent.getType()) > 0){
+    			BeforeSortEvent event = BeforeSortEvent.fire(this, col, headers.get(col).key, direction);
+    			if(event != null && event.isCancelled())
+    				return;
+    		}
+    	}
     	unselect(-1);
-        sorter.sort(data,headers.get(col).sortLeaves, col,direction);
-    	load(data);
+    	if(fireEvents && getHandlerCount(SortEvent.getType()) > 0) {
+    		SortEvent.fire(this, col, headers.get(col).key, direction);
+    	}else{
+    		sorter.sort(data, headers.get(col).sortLeaves, col, direction);
+    		renderer.dataChanged(false);
+    	}
     }
     
     public void enableDrag(boolean drag) {
     	if(drag) {
-    		dragController = new TreeDragController(RootPanel.get());
-    		for(TreeRow row : renderer.rows)
-    			dragController.makeDraggable(row);
+    		if(dragController == null) {
+    			dragController = new TreeDragController(RootPanel.get());
+    			for(TreeRow row : renderer.rows)
+    				dragController.makeDraggable(row);
+    		}
+    		dragController.setEnable(true);
     	}else{
-    		for(TreeRow row : renderer.rows) 
-    			dragController.makeNotDraggable(row);
-    		dragController = null;
+    		dragController.setEnable(false);
     	}
     }
     
@@ -949,11 +1121,19 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     
     public void removeTarget(HasDropController drop){
     	assert dragController != null;
-    	dragController.registerDropController(drop.getDropController());
+    	dragController.unregisterDropController(drop.getDropController());
     }
 
 	public DropController getDropController() {
 		return dropController;
+	}
+	
+	public DragController getDragController() {
+		return dragController;
+	}
+	
+	public void addDragHandler(DragHandler handler) {
+		dragController.addDragHandler(handler);
 	}
 
 	public void setDropController(DropController controller) {
@@ -966,6 +1146,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	
 	public void refresh(int row, int col) {
 		renderer.cellUpdated(row, col);
+	}
+	
+	public void fireEvents(boolean fire) {
+		fireEvents = fire;
 	}
 	
 	public HandlerRegistration addFieldValueChangeHandler(
@@ -991,6 +1175,25 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	public void removeExceptionStyle(String style) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public HandlerRegistration addBeforeSortHandler(BeforeSortHandler handler) {
+		return addHandler(handler,BeforeSortEvent.getType());
+	}
+
+	public HandlerRegistration addSortHandler(SortHandler handler) {
+		return addHandler(handler,SortEvent.getType());
+	}
+
+	public HandlerRegistration addBeforeRowMovedHandler(
+			BeforeRowMovedHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public HandlerRegistration addRowMovedHandler(RowMovedHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
 	}
     
 }

@@ -29,10 +29,14 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
+import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.QueryFieldUtil;
 import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.table.TableSorter;
+import org.openelis.gwt.widget.tree.TreeRenderer.ItemGrid;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
@@ -330,9 +334,14 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
                     public void execute() {
                     	sizeHeader();
                         for (int j = 0; j < controller.view.table.getRowCount(); j++) {
-                            for (int i = 0; i < columns.size(); i++) {
+                            for (int i = 0; i < controller.view.table.getCellCount(j); i++) {
                                 controller.view.table.getFlexCellFormatter().setWidth(j, i, (columns.get(i).getCurrentWidth()) +  "px");
-                                controller.view.table.getWidget(j, i).setWidth((columns.get(i).getCurrentWidth()) + "px");
+                                if(i == 0) {
+                                	ItemGrid ig = (ItemGrid)controller.view.table.getWidget(j,0);
+                                	ig.setWidth(columns.get(i).getCurrentWidth());
+                                }else
+                                //if(!(controller.columns.get(controller.getRow(controller.modelIndexList[j])).get(i).getColumnWidget() instanceof CheckBox))
+                                	controller.view.table.getWidget(j, i).setWidth((columns.get(i).getCurrentWidth()) + "px");
                             }
                         }
                     }
@@ -374,7 +383,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TreeSorterInt.SortDirection.UP);
+                        controller.sort(index, TableSorter.SortDirection.UP);
                     }
                 });
                 item = new MenuItem("",new Label("Sort Down"),"");
@@ -382,7 +391,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TreeSorterInt.SortDirection.DOWN);
+                        controller.sort(index, TableSorter.SortDirection.DOWN);
                     }
                 });
             }

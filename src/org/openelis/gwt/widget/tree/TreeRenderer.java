@@ -25,22 +25,22 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.widget.AutoComplete;
+import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.Label;
+import org.openelis.gwt.widget.table.TableDataCell;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
-
-import java.util.ArrayList;
-import java.util.Stack;
-
-import org.openelis.gwt.widget.AutoComplete;
-import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.Label;
-import org.openelis.gwt.widget.table.TableDataCell;
 
 public class TreeRenderer {
     
@@ -65,7 +65,7 @@ public class TreeRenderer {
     
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.shownRows()*controller.cellHeight)+controller.maxRows*3;
+        int ScrollHeight = (controller.shownRows*controller.cellHeight);
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*3)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
@@ -78,6 +78,7 @@ public class TreeRenderer {
                 controller.view.table.removeRow(0);
                 rows.remove(0);
             }
+            return;
         }
         if(controller.shownRows() < controller.maxRows){
             tRows = controller.shownRows();
@@ -139,10 +140,10 @@ public class TreeRenderer {
 
     
     public void scrollLoad(int scrollPos){
-        if(controller.editingCell != null){
+        if(controller.activeWidget != null){
             stopEditing();
-            controller.activeCell = -1;
-            controller.activeRow--;
+            controller.selectedCol = -1;
+            controller.selectedRow--;
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){
@@ -174,40 +175,48 @@ public class TreeRenderer {
     }
     
     public void setCellEditor(int row, int col) {
-    	TreeColumn column = controller.columns.get(controller.getRow(controller.modelIndexList[row]).leafType).get(col);
-        controller.editingCell = (Widget)column.getWidgetEditor((TableDataCell)controller.getCell(controller.modelIndexList[row],col));
+    	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
+        controller.activeWidget = (Widget)column.getWidgetEditor((TableDataCell)controller.getCell(row,col));
         if(col == 0)
-        	((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(controller.editingCell);
+        	((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(controller.activeWidget);
         else
-        	controller.view.table.setWidget(row, col, controller.editingCell);
-        if(controller.editingCell instanceof Focusable)
-        	((Focusable)controller.editingCell).setFocus(true);
+        	controller.view.table.setWidget(controller.treeIndex(row), col, controller.activeWidget);
+        if(controller.activeWidget instanceof Focusable)
+        	((Focusable)controller.activeWidget).setFocus(true);
     }
     
     public void setCellDisplay(int row, int col) {
-    	TreeColumn column = controller.columns.get(controller.getRow(controller.modelIndexList[row]).leafType).get(col);
+    	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
     	if(col == 0)
-    		((ItemGrid)controller.view.table.getWidget(row, col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(controller.modelIndexList[row],col))));
+    		((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(controller.modelIndexList[row],col))));
     	else
-    		controller.view.table.setWidget(row, col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
+    		controller.view.table.setWidget(controller.treeIndex(row), col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
     }
 
     public boolean stopEditing() {
-        if(controller.editingCell != null){
-        	Object currVal = controller.rows.get(controller.activeRow).cells.get(controller.activeCell).getValue();
-	        if(controller.editingCell instanceof Focusable)
-    	    	((Focusable)controller.editingCell).setFocus(false);
+        if(controller.activeWidget != null){
+        	Object currVal = controller.rows.get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
+	        if(controller.activeWidget instanceof Focusable)
+    	    	((Focusable)controller.activeWidget).setFocus(false);
 	        Object newVal = null;
-        	if(controller.editingCell instanceof AutoComplete){
-        		newVal = ((AutoComplete)controller.editingCell).getSelection();
+        	if(controller.activeWidget instanceof AutoComplete){
+        		newVal = ((AutoComplete)controller.activeWidget).getSelection();
         	}else
-        		newVal = ((HasField)controller.editingCell).getFieldValue();
+        		newVal = ((HasField)controller.activeWidget).getFieldValue();
 
-        	if(controller.editingCell instanceof HasField)
-	        	controller.getRow(controller.modelIndexList[controller.activeRow]).cells.get(controller.activeCell).exceptions = ((HasField)controller.editingCell).getExceptions();
-        	controller.rows.get(controller.activeRow).cells.get(controller.activeCell).setValue(newVal);
-        	setCellDisplay(controller.activeRow,controller.activeCell);
-        	controller.editingCell = null;
+        	if(controller.activeWidget instanceof HasField){
+          		if(((HasField)controller.activeWidget).getExceptions() != null){
+        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
+        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)controller.activeWidget).getExceptions())
+        				exceps.add((LocalizedException)exc.clone());
+        				
+        			 controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
+        		}else
+        			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        	}
+        	controller.rows.get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
+        	setCellDisplay(controller.selectedRow,controller.selectedCol);
+        	controller.activeWidget = null;
             return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         }
         return false;
@@ -219,7 +228,7 @@ public class TreeRenderer {
                 controller.view.table.getRowFormatter().removeStyleName(i,controller.view.selectedStyle);
             }
         }else
-            controller.view.table.getRowFormatter().removeStyleName(controller.activeRow, controller.view.selectedStyle);
+            controller.view.table.getRowFormatter().removeStyleName(controller.treeIndex(row), controller.view.selectedStyle);
         
     }
 
@@ -235,9 +244,9 @@ public class TreeRenderer {
     	
     }
 
-    public void rowSelected(int row) {
+    protected void rowSelected(int row) {
     	if(row > -1 && row < rows.size())
-    		rows.get(row).addStyleName(controller.view.selectedStyle);
+    		rows.get(controller.treeIndex(row)).addStyleName(controller.view.selectedStyle);
     }
 
     public ArrayList<TreeRow> getRows() {
@@ -250,6 +259,7 @@ public class TreeRenderer {
         public int rowIndex;
         public int widgetIndex;
         public int width;
+        private Widget wid;
         
         public ItemGrid(int rows, int cols) {
             super(rows,cols);
@@ -267,6 +277,7 @@ public class TreeRenderer {
         }
         
         public void setWidget(Widget wid){
+        	this.wid = wid;
         	int widAdj = width - (widgetIndex)*18;
         	wid.setWidth(widAdj+"px");
         	setWidget(0, widgetIndex, wid);
@@ -275,6 +286,10 @@ public class TreeRenderer {
         public void setWidth(int width) {
         	this.width = width;
         	setWidth(width+"px");
+        	if(wid != null) {
+        		int widAdj = width - (widgetIndex)*18;
+            	wid.setWidth(widAdj+"px");
+        	}
         }
         
     }

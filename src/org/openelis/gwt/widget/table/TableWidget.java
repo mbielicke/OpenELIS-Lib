@@ -505,7 +505,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void moveRow(int curIndex, int newIndex) {
     	if(fireEvents) {
     		if(getHandlerCount(BeforeRowMovedEvent.getType()) > 0){
-    			BeforeRowMovedEvent event = BeforeRowMovedEvent.fire(this, curIndex, newIndex, model.get(curIndex));
+    			BeforeRowMovedEvent<TableDataRow> event = BeforeRowMovedEvent.fire(this, curIndex, newIndex, model.get(curIndex));
     			if(event != null && event.isCancelled())
     				return;
     		}

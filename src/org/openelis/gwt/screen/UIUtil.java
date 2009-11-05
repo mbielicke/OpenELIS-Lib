@@ -1404,23 +1404,17 @@ public class UIUtil {
     			TreeWidget tree = new TreeWidget();
     			if(node.getAttributes().getNamedItem("tab") != null) 
     				tree.addTabHandler(new TabHandler(node,def));
-                if(node.getAttributes().getNamedItem("cellHeight") != null){
-                    tree.cellHeight = (Integer.parseInt(node.getAttributes().getNamedItem("cellHeight").getNodeValue()));
-                }
                 
                 tree.setTreeWidth(node.getAttributes().getNamedItem("width").getNodeValue());
-                tree.maxRows = Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue());
+                tree.setMaxRows(Integer.parseInt(node.getAttributes().getNamedItem("maxRows").getNodeValue()));
 
                 if(node.getAttributes().getNamedItem("title") != null){
-                        tree.title =node.getAttributes().getNamedItem("title").getNodeValue();
+                        tree.setTitle(node.getAttributes().getNamedItem("title").getNodeValue());
                 }
-                if(node.getAttributes().getNamedItem("showRows") != null){
-                    if(node.getAttributes().getNamedItem("showRows").getNodeValue().equals("true"))
-                        tree.showRows = true;
-                }
+  
                 if(node.getAttributes().getNamedItem("showScroll") != null){
                 	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    tree.showScroll = TreeView.VerticalScroll.valueOf(showScroll);
+                    tree.setShowScroll(TreeView.VerticalScroll.valueOf(showScroll));
                 }
                 if(node.getAttributes().getNamedItem("multiSelect") != null){
                     if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
@@ -1428,14 +1422,14 @@ public class UIUtil {
                 }
                 Node header  = ((Element)node).getElementsByTagName("header").item(0);
                 if(header != null){
-                    tree.showHeader = true;
+                    tree.showHeader(true);
                     NodeList colList = ((Element)header).getElementsByTagName("col");
-                    tree.headers = new ArrayList<TreeColumn>(colList.getLength());
+                    tree.setHeaders(new ArrayList<TreeColumn>(colList.getLength()));
                     for(int i = 0; i < colList.getLength(); i++) {
                     	TreeColumn col = new TreeColumn();
                 		if(colList.item(i).getAttributes().getNamedItem("header") != null){
                 			col.setHeader(colList.item(i).getAttributes().getNamedItem("header").getNodeValue());
-                			tree.showHeader = true;
+                			tree.showHeader(true);
                 		}
                 		if(colList.item(i).getAttributes().getNamedItem("width") != null)
                 			col.setCurrentWidth(Integer.parseInt(colList.item(i).getAttributes().getNamedItem("width").getNodeValue()));
@@ -1446,7 +1440,7 @@ public class UIUtil {
                 			for(String leaf : sortLeaves) 
                 				col.sortLeaves.add(leaf);
                 		}
-                		tree.headers.add(col);
+                		tree.getHeaders().add(col);
                     }
                 }
                 NodeList leafList = ((Element)node).getElementsByTagName("leaf");
@@ -1459,8 +1453,8 @@ public class UIUtil {
                 		TreeColumn column = new TreeColumn();
                 		if(col.getAttributes().getNamedItem("key") != null)
                 			column.setKey(col.getAttributes().getNamedItem("key").getNodeValue());
-                		if(tree.headers != null) {
-                			column.setCurrentWidth(tree.headers.get(i).currentWidth);
+                		if(tree.getHeaders() != null) {
+                			column.setCurrentWidth(tree.getHeaders().get(i).currentWidth);
                 		}
                 		if(col.getAttributes().getNamedItem("align") != null){
                 			String align = col.getAttributes().getNamedItem("align").getNodeValue();
@@ -1486,7 +1480,7 @@ public class UIUtil {
                 	}
                 	columns.put(leafList.item(h).getAttributes().getNamedItem("key").getNodeValue(), cols);
                 }
-                tree.columns = columns;
+                tree.setColumns(columns);
                 tree.init();
                 setDefaults(node,tree);
                 tree.addBlurHandler(Screen.focusHandler);
