@@ -91,32 +91,32 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
          */
         private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
 
-        public String name;
-        
-		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-			return addDomHandler(handler, MouseDownEvent.getType());
-		}
+        	public String name;
 
-		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-			return addDomHandler(handler,MouseUpEvent.getType());
-		}
+        	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+        		return addDomHandler(handler, MouseDownEvent.getType());
+        	}
 
-		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-			return addDomHandler(handler,MouseOutEvent.getType());
-		}
+        	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+        		return addDomHandler(handler,MouseUpEvent.getType());
+        	}
 
-		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-			return addDomHandler(handler,MouseOverEvent.getType());
-		}
+        	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+        		return addDomHandler(handler,MouseOutEvent.getType());
+        	}
 
-		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-			return addDomHandler(handler,MouseMoveEvent.getType());
-		}
+        	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+        		return addDomHandler(handler,MouseOverEvent.getType());
+        	}
 
-		public HandlerRegistration addMouseWheelHandler(
-				MouseWheelHandler handler) {
-			return addDomHandler(handler,MouseWheelEvent.getType());
-		}
+        	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+        		return addDomHandler(handler,MouseMoveEvent.getType());
+        	}
+
+        	public HandlerRegistration addMouseWheelHandler(
+        			MouseWheelHandler handler) {
+        		return addDomHandler(handler,MouseWheelEvent.getType());
+        	}
     }
         
     private Caption cap = new Caption();
@@ -225,6 +225,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         collapse.setStyleName("MinimizeButton");
         hp.add(tlCorner);
         titleButtonsContainer.add(cap);
+        titleButtonsContainer.setCellWidth(cap, "100%");
         hp.add(titleButtonsContainer);        
         hp.setCellWidth(titleButtonsContainer, "100%");
         if(showClose){
