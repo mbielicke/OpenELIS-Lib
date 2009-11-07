@@ -233,5 +233,9 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             }
         }
     }
+    
+    protected void setFocus(Widget widget) {
+    	def.getPanel().setFocusWidget(widget);
+    }
 
 }
