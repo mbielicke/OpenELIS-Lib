@@ -77,6 +77,8 @@ import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -258,6 +260,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * This method handles all click events on the body of the table.  
      */
     public void onClick(ClickEvent event) {
+    	event.preventDefault();
     	if(event.getSource() == view.table){
     		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
     		if(isEnabled() && columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
@@ -968,7 +971,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	public void onFocus(FocusEvent event) {
-		if(!DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
+		if(((ScreenPanel)event.getSource()).focused == null || !DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
 			finishEditing();
 		}
 	}
