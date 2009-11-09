@@ -84,7 +84,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                     else
                         widget.showTable(0);
                 else
-                    widget.showTable(widget.modelIndexList[widget.selectedRow]);
+                    widget.showTable(widget.selectedRow);
             }
 
         }
@@ -100,9 +100,12 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                     return;
                 if(keyCode == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
                     if(widget.selectedRow < 0)
-                        widget.showTable(0);
+                        if(widget.getSelections().size() > 0)
+                            widget.showTable((Integer)widget.getSelectedRows()[0]);
+                        else
+                            widget.showTable(0);
                     else
-                        widget.showTable(widget.modelIndexList[widget.selectedRow]);
+                        widget.showTable(widget.selectedRow);
                     return;
                 }
                 if(keyCode == KeyboardHandler.KEY_ENTER && widget.itemSelected){

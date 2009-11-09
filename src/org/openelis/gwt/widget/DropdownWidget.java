@@ -127,24 +127,6 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
        
     }
     
-    private int findNextActive(int current) {
-        int next = current + 1;
-        while(next < numRows() && !isEnabled(next))
-            next++;
-        if(next < numRows())
-            return next;
-        return findNextActive(next);
-    }
-    
-    private int findPrevActive(int current) {
-        int prev = current - 1;
-        while(prev > -1 && !isEnabled(prev))
-            prev--;
-        if(prev >  -1)
-            return prev;
-        return findPrevActive(1);
-    }
-    
     public void complete() {
         String textValue = "";
          
@@ -238,7 +220,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
             if (selectedRow >= 0 && selectedRow < numRows() - 1) {
             	final int row = findNextActive(selectedRow);
-            	final int col = selectedCol;
+            	final int col = 0;
             	if(!isRowDrawn(row)){
             		view.setScrollPosition(view.top+(cellHeight*(row-selectedRow)));
             		unselect(-1);
@@ -253,7 +235,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
             if (selectedRow > 0) {
                 final int row = findPrevActive(selectedRow);
-                final int col = selectedCol;
+                final int col = 0;
             	if(!isRowDrawn(row)){
             		view.setScrollPosition(view.top-(cellHeight*(selectedRow-row)));
             		unselect(-1);
@@ -268,7 +250,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
             if(selectedRow > -1){
                 itemSelected = true;
-                SelectionEvent.fire(this, renderer.rows.get(selectedRow));
+                SelectionEvent.fire(this, renderer.rows.get(tableIndex(selectedRow)));
                 complete();
             }
         }
@@ -277,6 +259,24 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }
 		
 	}
+	
+    private int findNextActive(int current) {
+        int next = current + 1;
+        while(next < numRows() && !isEnabled(next))
+            next++;
+        if(next < numRows())
+            return next;
+        return findNextActive(next);
+    }
+    
+    private int findPrevActive(int current) {
+        int prev = current - 1;
+        while(prev > -1 && !isEnabled(prev))
+            prev--;
+        if(prev >  -1)
+            return prev;
+        return findPrevActive(1);
+    }
 
 	public void onKeyUp(KeyUpEvent event) {
         if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
@@ -286,10 +286,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 	}
 
 	public void onClose(CloseEvent<PopupPanel> event) {
-        if(multiSelect && event.isAutoClosed()){
-            complete();
-        }
-		
+        if(event.isAutoClosed())
+            complete();		
 	}
 	
 	public void setCase(TextBox.Case textCase) {

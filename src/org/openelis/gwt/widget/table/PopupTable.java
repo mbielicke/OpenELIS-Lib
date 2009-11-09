@@ -111,20 +111,8 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
-        //if(numRows() < maxRows){
-          //  view.setHeight((numRows()*cellHeight+(numRows()*cellSpacing)+(numRows()*2)+cellSpacing));
-        //}else
-          //  view.setHeight((maxRows*cellHeight+(maxRows*cellSpacing)+(maxRows*2)+cellSpacing));
-        view.scrollBar.setScrollPosition((active*cellHeight));
-        renderer.load(view.scrollBar.getScrollPosition());
-        selectedRow = -1;
-        
-        for(int i = 0; i < view.table.getRowCount(); i++){
-            if(modelIndexList[i] == active)
-                selectedRow = i;
-            }
-        if(view.table.getRowCount() > 0)
-            selectRow(active);
+        select(active,0);
+        scrollToSelection();
     }
     
     public void showTable(final int active,Widget wid) {
@@ -139,20 +127,8 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
-        //if(numRows() < maxRows){
-         //   view.setHeight(numRows()*cellHeight);
-        //}else
-          //  view.setHeight(maxRows*cellHeight);
-        view.scrollBar.setScrollPosition((active*cellHeight));
-        renderer.load(view.scrollBar.getScrollPosition());
-        selectedRow = -1;
-        
-        for(int i = 0; i < view.table.getRowCount(); i++){
-            if(modelIndexList[i] == active)
-                selectedRow = i;
-            }
-        if(view.table.getRowCount() > 0)
-            selectRow(active);
+        select(active,0);
+        scrollToSelection();
     }
     
     public void hideTable() {

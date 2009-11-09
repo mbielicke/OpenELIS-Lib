@@ -674,7 +674,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
                	selections.clear();
         	selections.add(index);
         }
-       	renderer.dataChanged(true);        
+        if(view.isVisible())
+        	renderer.dataChanged(true);        
     }
     
     public void clearSelections() {
