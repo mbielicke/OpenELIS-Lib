@@ -729,7 +729,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(fireEvents && getHandlerCount(SortEvent.getType()) > 0) {
     		SortEvent.fire(this, col, columns.get(col).key, direction);
     	}else{
-    		sorter.sort(model, col, direction);
+    		Collections.sort(model,new ColumnComparator(col,direction));
     		renderer.dataChanged(false);
     	}
     }

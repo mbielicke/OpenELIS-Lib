@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -225,6 +226,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
             return -1;
         }else{
             //we first need to do a binary search to 
+        	//Collections.binarySearch(model,textValue,)
             while (low <= high) {
                 mid = (low + high) / 2;
 
