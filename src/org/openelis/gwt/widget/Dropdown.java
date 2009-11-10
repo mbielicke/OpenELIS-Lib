@@ -28,15 +28,18 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.deprecated.IconContainer;
+import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRenderer;
 import org.openelis.gwt.widget.table.TableView;
+import org.openelis.gwt.widget.table.event.SortEvent;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -67,12 +70,14 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public int minWidth;
     HorizontalPanel hp; 
     public boolean queryMode;
+    public ArrayList<TableDataRow> searchText;
+    
     
     private class DropDownListener implements ClickHandler, KeyUpHandler {
         
-        private Dropdown widget;
+        private Dropdown<T> widget;
         
-        public DropDownListener(Dropdown widget){
+        public DropDownListener(Dropdown<T> widget){
             this.widget = widget;
         }
 
@@ -193,44 +198,43 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     private int getIndexByTextValue(String textValue) {
-        if(textValue.equals(""))
-            return -1;
-        ArrayList<TableDataRow> model = this.getData();
-        int low = 0;
-        int high = model.size() - 1;
-        int mid = -1;
-        int length = textValue.length();
-        
-        if(searchMode == Search.LINEAR){
-            for(int i = 0; i < model.size(); i++){
-                if(compareValue((String)model.get(i).getCells().get(0),textValue,length) == 0)
-                    return i;
-            }
-            return -1;
-        }else{
-            //we first need to do a binary search to 
-        	mid = Collections.binarySearch(model,new TableDataRow(null,textValue),new MatchComparator(length));
+    	textValue = textValue.toUpperCase();
+    	if(textValue.equals(""))
+    		return -1;
+    	ArrayList<TableDataRow> model = this.getData();
+    	int index = -1;
 
-        	if(mid < 0)
-        		return -1;
-        	else{
-        		 //we need to do a linear search backwards to find the first entry that matches our search
-                while(mid > -1 && compareValue((String)model.get(mid).getCells().get(0),textValue,length) == 0)
-                    mid--;
-            
-                return (mid+1);
-            }
-        }
+    	if(searchText == null) {
+    		searchText = new ArrayList<TableDataRow>();
+    		for(int i = 0; i < model.size(); i++) 
+    			searchText.add(new TableDataRow(i,((String)model.get(i).cells.get(0).getValue()).toUpperCase()));
+    		Collections.sort(searchText, new ColumnComparator(0,SortEvent.SortDirection.ASCENDING));
+    	}
+
+    	index = Collections.binarySearch(searchText,new TableDataRow(null,textValue),new MatchComparator());
+
+    	if(index < 0)
+    		return -1;
+    	else{
+    		//we need to do a linear search backwards to find the first entry that matches our search
+    		while(index > -1 && compareValue((String)searchText.get(index).getCells().get(0),textValue,textValue.length()) == 0)
+    			index--;
+
+    		return (((Integer)searchText.get(index+1).key)).intValue();
+    	}
+
     }
     
     private int compareValue(String value, String textValue, int length) {
         if(value.length() < length)
             return -1;
-        return value.substring(0,length).toUpperCase().compareTo(textValue.toUpperCase());
+        return value.substring(0,length).compareTo(textValue);
     }
     
     public void setModel(ArrayList<TableDataRow> model){
         this.load((ArrayList<TableDataRow>)model);
+
+        
     }
     
     public void enable(boolean enabled) {
@@ -417,16 +421,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	private class MatchComparator implements Comparator<TableDataRow> {
 		
-		int length;
-		
-		public MatchComparator(int length) {
-			this.length = length;
-		}
-
 		public int compare(TableDataRow o1, TableDataRow o2) {
 			String value = (String)o1.cells.get(0).getValue();
 			String textValue = (String)o2.cells.get(0).getValue();
-			return compareValue(value,textValue,length);
+			return compareValue(value,textValue,textValue.length());
 		}
 				
 	}

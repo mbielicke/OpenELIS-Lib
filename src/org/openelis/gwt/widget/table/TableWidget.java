@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.openelis.gwt.common.LocalizedException;
@@ -172,6 +173,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean mouseOver;
     protected boolean fireEvents = true;    
     protected boolean multiSelect;
+    public HashMap<Object,Integer> searchKey;
     
     /**
      * Table has too many configuration options to pass to a constructor. 
@@ -638,9 +640,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(model == null)
         	model = new ArrayList<TableDataRow>();
         
+        searchKey = new HashMap<Object,Integer>();
+        
         for(int i = 0; i < model.size(); i++){
             if(((TableDataRow)model.get(i)).shown)
                 shownRows++;
+            searchKey.put(model.get(i).key,i);
         }
         
         renderer.dataChanged(false);        
@@ -810,12 +815,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(model == null){
     		return;
     	}
-    	for(int i = 0; i < model.size(); i++) {
-    		if(model.get(i).key == key || key.equals(model.get(i).key)){
-        		selectRow(i);
-    			break;
-    		}
-    	}
+    	selectRow(((Integer)searchKey.get(key)).intValue());
     }
 
 	public void addException(LocalizedException exception) {
