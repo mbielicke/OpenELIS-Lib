@@ -27,6 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -178,35 +179,17 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     public void getMatches(String match) {
-        ArrayList<TableDataRow> model = this.getData();
-        int tempStartPos = -1;
         int index = getIndexByTextValue(match);
-        
 
-        if (index > -1 && index < model.size()) {
-            tempStartPos = index;
-            this.startPos = index;
+        if (index == -1 && !textbox.getText().equals("")) {
+            textbox.setText(textbox.getText().substring(0, currentCursorPos-1));
+        }else{
+        	if(popup.isShowing()){
+        		selectRow(index);
+        	    scrollToSelection();
+        	}else
+        		showTable(index);
         }
-
-        if (tempStartPos == -1 && !textbox.getText().equals("")) {
-            // set textbox text back to what it was before
-            textbox.setText(textbox.getText().substring(0, currentCursorPos));
-            this.startPos = 0;
-            index = getIndexByTextValue(textbox.getText()); 
-
-            if (index > -1 && index < model.size()) {
-                tempStartPos = index;
-                this.startPos = index;
-            }else{
-                textbox.setText("");
-                tempStartPos = 0;
-                return;
-            }
-        }
-        if(textbox.getStyleName().indexOf("Focus") > -1)
-        	showTable(this.startPos);
-        else
-        	setValue((T)model.get(this.startPos).key,true);
     }
     
     private int getIndexByTextValue(String textValue) {
@@ -226,22 +209,12 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
             return -1;
         }else{
             //we first need to do a binary search to 
-        	//Collections.binarySearch(model,textValue,)
-            while (low <= high) {
-                mid = (low + high) / 2;
+        	mid = Collections.binarySearch(model,new TableDataRow(null,textValue),new MatchComparator(length));
 
-                if (compareValue((String)model.get(mid).getCells().get(0),textValue,length) < 0)
-                    low = mid + 1;
-                else if (compareValue((String)model.get(mid).getCells().get(0),textValue,length) > 0)
-                    high = mid - 1;
-                else
-                    break;
-            }
-        
-            if(low > high)
-                return -1; // NOT FOUND
-            else{
-                //we need to do a linear search backwards to find the first entry that matches our search
+        	if(mid < 0)
+        		return -1;
+        	else{
+        		 //we need to do a linear search backwards to find the first entry that matches our search
                 while(mid > -1 && compareValue((String)model.get(mid).getCells().get(0),textValue,length) == 0)
                     mid--;
             
@@ -440,6 +413,22 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public void setSearchMode(Search mode) {
 		searchMode = mode;
+	}
+	
+	private class MatchComparator implements Comparator<TableDataRow> {
+		
+		int length;
+		
+		public MatchComparator(int length) {
+			this.length = length;
+		}
+
+		public int compare(TableDataRow o1, TableDataRow o2) {
+			String value = (String)o1.cells.get(0).getValue();
+			String textValue = (String)o2.cells.get(0).getValue();
+			return compareValue(value,textValue,length);
+		}
+				
 	}
 
 }

@@ -108,11 +108,11 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             public void execute() {
                 if(view.header != null)
                    view.header.sizeHeader();
+                scrollToSelection();
             }
         });
         focused = true;
-        select(active,0);
-        scrollToSelection();
+        selectRow(active);
     }
     
     public void showTable(final int active,Widget wid) {
@@ -124,11 +124,11 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             public void execute() {
                 if(view.header != null)
                    view.header.sizeHeader();
+                scrollToSelection();
             }
         });
         focused = true;
-        select(active,0);
-        scrollToSelection();
+        selectRow(active);
     }
     
     public void hideTable() {
