@@ -196,6 +196,9 @@ public class TableColumn {
         		
         	});
         	
+        }else{
+        	wid.removeStyleName("InputError");
+        	wid.removeStyleName("InputWarning");
         }
         wid.addStyleName("TableWidget");
         return wid;
