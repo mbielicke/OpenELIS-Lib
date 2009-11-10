@@ -2,7 +2,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.Comparator;
 
-import org.openelis.gwt.widget.table.TableSorter.SortDirection;
+import org.openelis.gwt.widget.table.event.SortEvent.SortDirection;
 
 public class ColumnComparator implements Comparator<TableDataRow> {
 
@@ -17,7 +17,7 @@ public class ColumnComparator implements Comparator<TableDataRow> {
 	
 	@SuppressWarnings("unchecked")
 	public int compare(TableDataRow row1, TableDataRow row2) {
-		if(dir == SortDirection.DOWN) {
+		if(dir == SortDirection.ASCENDING) {
 			if(row1.cells.get(col).getValue() != null){
 				if(row2.getCells().get(col) == null)
 					return 0;

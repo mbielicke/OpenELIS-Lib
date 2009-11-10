@@ -39,6 +39,7 @@ import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableDataCell;
 import org.openelis.gwt.widget.table.TableDataRow;
@@ -75,7 +76,7 @@ import org.openelis.gwt.widget.table.event.SortEvent;
 import org.openelis.gwt.widget.table.event.SortHandler;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
-import org.openelis.gwt.widget.table.TableSorter.SortDirection;
+import org.openelis.gwt.widget.table.event.SortEvent.SortDirection;
 import org.openelis.gwt.widget.tree.TreeView.VerticalScroll;
 import org.openelis.gwt.widget.tree.event.BeforeLeafCloseEvent;
 import org.openelis.gwt.widget.tree.event.BeforeLeafCloseHandler;
@@ -182,7 +183,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
     protected int selected = -1;
     protected ArrayList<TreeColumn> headers;
-    protected TreeSorter sorter = new TreeSorter();
     protected boolean fireEvents = true;
     protected boolean queryMode;
     
@@ -1089,9 +1089,28 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(fireEvents && getHandlerCount(SortEvent.getType()) > 0) {
     		SortEvent.fire(this, col, headers.get(col).key, direction);
     	}else{
-    		sorter.sort(data, headers.get(col).sortLeaves, col, direction);
-    		renderer.dataChanged(false);
+            for(String leaf : headers.get(col).sortLeaves){
+            	if(leaf.equals("model")){
+            		Collections.sort(data,new ColumnComparator(col,direction));
+            	}else {
+            		Iterator<TreeDataItem> it = data.iterator();
+                    while(it.hasNext())
+                        sortChildItems(it.next(),leaf, col,direction);
+            	}
+            	
+            }
     	}
+    	getVisibleRows();
+    	renderer.dataChanged(false);
+    }
+    
+    private void sortChildItems(TreeDataItem item, String leaf, int col, SortDirection dir){
+    	if(item.leafType.equals(leaf)){
+    		Collections.sort(item.getItems(),new ColumnComparator(col,dir));
+    	}
+        Iterator<TreeDataItem> it = item.getItems().iterator();   
+        while(it.hasNext())
+            sortChildItems(it.next(),leaf,col,dir);
     }
     
     public void enableDrag(boolean drag) {

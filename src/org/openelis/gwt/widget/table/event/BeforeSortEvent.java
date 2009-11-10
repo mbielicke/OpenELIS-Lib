@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget.table.event;
 
-import org.openelis.gwt.widget.table.TableSorter.SortDirection;
+import org.openelis.gwt.widget.table.event.SortEvent.SortDirection;
 
 import com.google.gwt.event.shared.GwtEvent;
 
@@ -12,8 +12,7 @@ public class BeforeSortEvent extends GwtEvent<BeforeSortHandler> {
 	private SortDirection direction;
 	private boolean cancelled;
 	
-	public static BeforeSortEvent fire(HasBeforeSortHandlers source, int index, String colKey, SortDirection direction) {
-		if(TYPE != null) {
+	public static BeforeSortEvent fire(HasBeforeSortHandlers source, int index, String colKey, SortDirection direction) {		if(TYPE != null) {
 			BeforeSortEvent event = new BeforeSortEvent(index,colKey,direction);
 			source.fireEvent(event);
 			return event;

@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import java.util.ArrayList;
 
 import org.openelis.gwt.event.ActionEvent;
+import org.openelis.gwt.widget.table.event.SortEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.MenuItem;
@@ -378,7 +379,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorter.SortDirection.DOWN);
+                        controller.sort(index, SortEvent.SortDirection.ASCENDING);
                     }
                 });
                 item.enable(true);
@@ -387,7 +388,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorter.SortDirection.UP);
+                        controller.sort(index, SortEvent.SortDirection.DESCENDING);
                     }
                 });
                 item.enable(true);

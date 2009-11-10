@@ -1,7 +1,5 @@
 package org.openelis.gwt.widget.table.event;
 
-import org.openelis.gwt.widget.table.TableSorter.SortDirection;
-
 import com.google.gwt.event.shared.GwtEvent;
 
 public class SortEvent extends GwtEvent<SortHandler> {
@@ -10,6 +8,7 @@ public class SortEvent extends GwtEvent<SortHandler> {
 	private int index;
 	private String colKey;
 	private SortDirection direction;
+	public enum SortDirection {ASCENDING,DESCENDING}
 	
 	public static void fire(HasSortHandlers source, int index, String colKey, SortDirection direction) {
 		if(TYPE != null) {

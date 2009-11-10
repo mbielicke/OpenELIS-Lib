@@ -36,7 +36,7 @@ import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.table.TableSorter.SortDirection;
+import org.openelis.gwt.widget.table.event.SortEvent.SortDirection;
 import org.openelis.gwt.widget.table.TableView.VerticalScroll;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
@@ -165,7 +165,6 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected VerticalScroll showScroll = VerticalScroll.NEEDED;
     protected String width;
     protected ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
-    protected TableSorter sorter = new TableSorter();
     protected int shownRows; 
     protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
     protected ArrayList<LocalizedException> exceptions;

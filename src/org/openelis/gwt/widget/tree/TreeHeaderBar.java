@@ -29,12 +29,9 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
-import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
-import org.openelis.gwt.widget.QueryFieldUtil;
-import org.openelis.gwt.widget.TextBox;
-import org.openelis.gwt.widget.table.TableSorter;
+import org.openelis.gwt.widget.table.event.SortEvent;
 import org.openelis.gwt.widget.tree.TreeRenderer.ItemGrid;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -44,8 +41,6 @@ import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -59,22 +54,20 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class TreeHeaderBar extends Composite implements MouseMoveHandler, 
 															 MouseDownHandler, 
@@ -378,22 +371,24 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             final TreeColumn col = (TreeColumn)controller.headers.get(index);
             ((MenuItem)event.getSource()).menuItemsPanel.clear();
             if(col.getSortable()) {
-                MenuItem item = new MenuItem("",new Label("Sort Up"),"");
+                MenuItem item = new MenuItem("Ascending",new Label("Ascending"),"");
                 item.setStyleName("topHeaderRowContainer");
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorter.SortDirection.UP);
+                        controller.sort(index, SortEvent.SortDirection.ASCENDING);
                     }
                 });
-                item = new MenuItem("",new Label("Sort Down"),"");
+                item.enable(true);
+                item = new MenuItem("Descending",new Label("Descending"),"");
                 item.setStyleName("topHeaderRowContainer");
                 ((MenuItem)event.getData()).menuItemsPanel.add(item);
                 item.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        controller.sort(index, TableSorter.SortDirection.DOWN);
+                        controller.sort(index, SortEvent.SortDirection.DESCENDING);
                     }
                 });
+                item.enable(true);
             }
         }
     }
