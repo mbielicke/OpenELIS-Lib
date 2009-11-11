@@ -1992,9 +1992,9 @@ public class UIGenerator extends Generator {
     			if(node.getAttributes().getNamedItem("required") != null)
     				sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
     			if(node.getAttributes().getNamedItem("max") != null)
-    				sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
+    				sw.println("field"+id+".setMax(new Integer("+node.getAttributes().getNamedItem("max").getNodeValue()+"));");
     			if(node.getAttributes().getNamedItem("min") != null)
-    				sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("min").getNodeValue()+");");
+    				sw.println("field"+id+".setMin(new Integer("+node.getAttributes().getNamedItem("min").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            sw.println("field"+id+".setFormat(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
     	        }
@@ -2009,9 +2009,9 @@ public class UIGenerator extends Generator {
     			if(node.getAttributes().getNamedItem("required") != null)
     				sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
     			if(node.getAttributes().getNamedItem("max") != null)
-    				sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
+    				sw.println("field"+id+".setMax(new Long("+node.getAttributes().getNamedItem("max").getNodeValue()+"));");
     			if(node.getAttributes().getNamedItem("min") != null)
-    				sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("min").getNodeValue()+");");
+    				sw.println("field"+id+".setMin(new Long("+node.getAttributes().getNamedItem("min").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            sw.println("field"+id+".setFormat(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
     	        }
@@ -2027,9 +2027,9 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("required") != null)
     	        	sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
     	        if (node.getAttributes().getNamedItem("max") != null)
-    	            sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
+    	            sw.println("field"+id+".setMax(new Double("+node.getAttributes().getNamedItem("max").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("min") != null)
-    	            sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("min").getNodeValue()+");");
+    	            sw.println("field"+id+".setMin(new Double("+node.getAttributes().getNamedItem("min").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            sw.println("field"+id+".setFormat(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
     	        }
