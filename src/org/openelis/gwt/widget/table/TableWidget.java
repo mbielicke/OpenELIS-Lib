@@ -815,7 +815,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(model == null){
     		return;
     	}
-    	selectRow(((Integer)searchKey.get(key)).intValue());
+    	if(key == null)
+    		selectRow(0);
+    	else
+    		selectRow(((Integer)searchKey.get(key)).intValue());
     }
 
 	public void addException(LocalizedException exception) {
