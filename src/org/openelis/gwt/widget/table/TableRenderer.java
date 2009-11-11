@@ -70,14 +70,18 @@ public class TableRenderer  {
             j++;
         }
         TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i));
-        row.addMouseOutHandler(controller);
-        row.addMouseOverHandler(controller);
+        if(controller.isDropdown){
+        	row.addMouseOutHandler(controller);
+        	row.addMouseOverHandler(controller);
+        }
         if(controller.dragController != null)
             controller.dragController.makeDraggable(row);
         row.index = i;
+        /*
         if(i % 2 == 1 && !controller.isDropdown){
             row.addStyleName("AltTableRow");
         }
+        */
         rows.add(row);
     }
 

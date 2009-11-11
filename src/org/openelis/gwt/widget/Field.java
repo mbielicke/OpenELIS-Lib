@@ -132,9 +132,9 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     protected void removeException(String key) {
     	if(exceptions == null)
     		return;
-    	for(LocalizedException exc : exceptions) {
-    		if(exc.getKey().equals(key))
-    			exceptions.remove(exc);
+    	for(int i = 0; i < exceptions.size(); i++){
+    		if(exceptions.get(i).getKey().equals(key))
+    			exceptions.remove(i);
     	}
     	if(exceptions.size() == 0)
     		exceptions = null;
@@ -142,8 +142,11 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     
     public void drawExceptions(HasField wid) {        
         exceptionPanel.clear();
-        if(exceptions == null)
+        if(exceptions == null){
+        	wid.removeExceptionStyle("InputWarning");
+        	wid.removeExceptionStyle("InputError");
         	return;
+        }
         String style = "InputWarning";
         for (LocalizedException exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();

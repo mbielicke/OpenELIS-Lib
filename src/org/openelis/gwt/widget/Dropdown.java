@@ -189,8 +189,13 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         	if(popup.isShowing()){
         		selectRow(index);
         	    scrollToSelection();
-        	}else
+        	}else if(textbox.getStyleName().indexOf("Focus") > -1)
         		showTable(index);
+        	else{
+        		setValue((T)model.get(index).key,true);
+        		field.checkValue(this);
+        		field.drawExceptions(this);
+        	}
         }
     }
     
