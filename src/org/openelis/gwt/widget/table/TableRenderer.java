@@ -212,20 +212,27 @@ public class TableRenderer  {
     	controller.view.table.setWidget(controller.tableIndex(row), col, controller.columns.get(col).getDisplayWidget(controller.getRow(row)));
     }
 
-    public boolean stopEditing() {
+    @SuppressWarnings("unchecked")
+	public boolean stopEditing() {
         if(controller.activeWidget != null){
         	Object currVal = controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
         	if(controller.activeWidget instanceof Focusable)
         		((Focusable)controller.activeWidget).setFocus(false);
         	Object newVal = null;
+        	if(controller.activeWidget instanceof Dropdown) {
+        		if(((Dropdown)controller.activeWidget).popup.isShowing())
+        			((Dropdown)controller.activeWidget).popup.hide(true);
+        	}
         	if(controller.activeWidget instanceof AutoComplete){
+        		if(((AutoComplete)controller.activeWidget).popup.isShowing())
+        			((AutoComplete)controller.activeWidget).popup.hide(true);
         		if(controller.queryMode)
         			newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
         		else
         			newVal = ((AutoComplete)controller.activeWidget).getSelection();
-        	}else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown))
+        	}else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown)){
         		newVal = ((HasField)controller.activeWidget).getField().queryString;
-        	else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
+        	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
         		if(((HasField)controller.activeWidget).getFieldValue() == null &&
         		   !((TextBox)controller.activeWidget).getText().equals(""))
         		     newVal = ((TextBox)controller.activeWidget).getText();
