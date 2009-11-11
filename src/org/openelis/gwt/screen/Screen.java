@@ -45,11 +45,14 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     public String                         name;
     public State                          state        = null;
     public ScreenWindow                   window;
+
     protected ScreenDefInt                def;
     protected ScreenService               service;
+    protected String                      fatalError;
+
+    public final AbsolutePanel            panel        = new AbsolutePanel();
     public static UIFocusHandler          focusHandler = new UIFocusHandler();
     public static HashMap<String, String> consts;
-    public final AbsolutePanel            panel        = new AbsolutePanel();
 
     /**
      * No arg constructor will initiate a blank panel and new FormRPC
@@ -128,6 +131,10 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             this.state = state;
             StateChangeEvent.fire(this, state);
         }
+    }
+
+    protected void setFocus(Widget widget) {
+        def.getPanel().setFocusWidget(widget);
     }
 
     protected ArrayList<QueryData> getQueryFields() {
@@ -213,13 +220,36 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         //specific actions
     }
 
+    /**
+     * This method returns the string representing the fatal error. 
+     */
+    public String getFatalError() {
+        return fatalError;
+    }
+
+    /**
+     * Sets one or more fatal screen errors. Normally, fatal errors are handled
+     * by closing the screen after displaying them.  
+     */
+    public void setFatalError(String... messages) {
+        int i;
+        
+        for (i = 0; i < messages.length; i++) {
+            if (messages[i] != null) {
+                if (fatalError == null)
+                    fatalError = messages[i];
+                else
+                    fatalError += "\n" + messages[i];
+            }
+        }
+    }
+    
     protected String getString(Object obj) {
         if (obj == null)
             return "";
 
         return obj.toString();
     }
-
 
     private static class UIFocusHandler implements FocusHandler, BlurHandler {
         public void onFocus(FocusEvent event) {
@@ -233,9 +263,4 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             }
         }
     }
-    
-    protected void setFocus(Widget widget) {
-    	def.getPanel().setFocusWidget(widget);
-    }
-
 }
