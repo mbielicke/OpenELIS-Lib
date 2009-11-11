@@ -219,30 +219,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         //but it can be overridden by screens to do screen
         //specific actions
     }
-
-    /**
-     * This method returns the string representing the fatal error. 
-     */
-    public String getFatalError() {
-        return fatalError;
-    }
-
-    /**
-     * Sets one or more fatal screen errors. Normally, fatal errors are handled
-     * by closing the screen after displaying them.  
-     */
-    public void setFatalError(String... messages) {
-        int i;
-        
-        for (i = 0; i < messages.length; i++) {
-            if (messages[i] != null) {
-                if (fatalError == null)
-                    fatalError = messages[i];
-                else
-                    fatalError += "\n" + messages[i];
-            }
-        }
-    }
     
     protected String getString(Object obj) {
         if (obj == null)
