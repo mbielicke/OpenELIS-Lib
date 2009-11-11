@@ -61,9 +61,6 @@ import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasField {
     
-    private int startPos;
-    public enum Search {LINEAR,BINARY}
-    protected Search searchMode = Search.BINARY;
     private Field<T> field;
     IconContainer icon = new IconContainer();
     public String dropwidth;
@@ -413,10 +410,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public Object getWidgetValue() {
 		return getValue();
-	}
-	
-	public void setSearchMode(Search mode) {
-		searchMode = mode;
 	}
 	
 	private class MatchComparator implements Comparator<TableDataRow> {
