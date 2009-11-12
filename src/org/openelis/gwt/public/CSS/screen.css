@@ -159,16 +159,23 @@ width:100%;
     cursor:pointer;
     padding:3px;
     border:1px solid #333;
+    border-bottom:0;
     background:#f0f0f0;
 }
 
 .topMenuContainer{
     border:1px solid #333;
-    border-top:0;
+    /*border-top:0;*/
     background:#f0f0f0 url('../Images/menu.gif') repeat-y;
     padding:4px;
 }
-
+.buttonMenuContainer{
+    border:1px solid #8DB2E3;
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+    margin-left:-4px;
+    margin-top:-2px;
+}
 .contextMenuContainer{
     background:#f0f0f0 url('../Images/menu.gif') repeat-y;
     padding:4px;
@@ -439,6 +446,7 @@ background:white;
 .disabled .ScreenLabel{
     color:gray;
 }
+
 
 .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
 .AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
@@ -766,7 +774,7 @@ background:none;
 .AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
 .disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
 
-.OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat;margin:4px 0px 4px 4px; width:8px; height:8px;}
+.OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat center;}
 .disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
 
 .duplicateRecordIcon{
@@ -1066,16 +1074,18 @@ cursor:default;}
     border:1px solid #D8D8D8;
     border-width:1px 0px;
     background:white;
-    /*margin:2px;*/
+}
+
+.ScreenTableWithSides{
+    border:1px solid #D8D8D8;
+    border-width:1px;
+    background:white;
 }
 
 .atozTable {
     border:1px solid #D8D8D8;
     border-width:1px;
     background:white;
-}
-.LeftSidePanel .atozTable {
-    margin:6px 0 0 0;
 }
 
 .TitlePanel{
@@ -1161,7 +1171,7 @@ cursor:default;}
 .AutoDropdown{
 }
 .DropdownPopup .TableCell{
-    border:none;
+    /*border:none;*/
     overflow:hidden;
 }
 .AutoDropdownButton{
@@ -1656,7 +1666,11 @@ legend {
 	border-width:1px 0px;
     width:100%;
 }
-
+.ScreenTreeWithSides {
+	border:1px solid #D8D8D8;
+	border-width:1px;
+    width:100%
+}
 .ScreenTree .gwt-TreeItem{
     cursor:pointer;
     font-family:Verdana;
@@ -2001,23 +2015,18 @@ background:#deecfd;
 .InputWarning {
 	border-bottom:1px dashed #f5d852;
 }
-
 .TableVertScroll{
 }
-
-
 .noteSubjectText{
 	color:black;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
-}
-	
+}	
 .noteAuthorText{
 	color:gray;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:9px;
 }
-
 .noteBodyText{
 	color:black;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -2086,4 +2095,6 @@ background:#deecfd;
 .Focus .ScreenCheck{
     border:1px solid #63b159;
 }
-
+.TextboxUnselected-readonly{
+    color:gray;
+}
