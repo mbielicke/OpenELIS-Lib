@@ -28,18 +28,12 @@
 padding:0px 0px 4px 4px;
 	border-bottom:1px solid #B5B8C8;
 	}
-	
-tr .AltTableRow {
-	background: #f8f8f9;
-}
 
 .noteAltTableRow{
 padding:0px 0px 4px 4px;
 	background: #f8f8f9;
     border-bottom:1px solid #B5B8C8;
 }
-
-
 
 .dropdowncell {
 	height: 21px;
@@ -52,7 +46,6 @@ padding:0px 0px 4px 4px;
 		0;
 	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
-
 
 .TableCell div div.gwt-label {
 	padding: 2px;
@@ -101,14 +94,20 @@ padding:0px 0px 4px 4px;
 	color: white;
 }
 
-/*tr .TableHighlighted {*/
-.TableHighlighted .TableCell{
-	color: #000000;
-	background: #EFEFEF url('../Images/row-over.gif') repeat-x scroll left
-		top;
-	/*border: 1px solid #DDDDDD;*/
+/*********** Alternate Row Background class ********/
+.LeftSidePanel .atozTable {
+    margin:6px 0 0 0;
 }
-
+/*.DropdownPopup tr .AltTableRow,*/
+.LeftSidePanel .atozTable tr .AltTableRow {
+	background: #f8f8f9;
+}
+/*************** Table Row Hover Class ************/
+.DropdownPopup .TableHighlighted .TableCell,
+.TableHighlighted .dropdowncell{
+	color: #000000;
+	background: #EFEFEF url('../Images/row-over.gif') repeat-x scroll left top;
+}
 .RowNum {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
@@ -116,29 +115,13 @@ padding:0px 0px 4px 4px;
 	text-align: center;
 }
 
+.DropdownPopup .Selected .TableCell,
 .Selected .TableCell {
-	background: transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0
-		0;
+	background: transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
 
-.Selected .TableCellLeft {
-	background: transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0
-		0;
-	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
-}
 
-.Selected .TableCellMiddle {
-	background: transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0
-		0;
-	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
-}
-
-.Selected .TableCellRight {
-	background: transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0
-		0;
-	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
-}
 
 .Enabled {
 	width: 100%;
@@ -367,6 +350,8 @@ tr .Highlighted {
 .topHeaderContainer {
 	border: 1px solid #b5b8c8;
 	background: #f0f0f0 url('../Images/menu.gif') repeat-y;
+	padding:4px;
+	margin-left: -32px;
 }
 
 .topHeaderItemMiddle {
