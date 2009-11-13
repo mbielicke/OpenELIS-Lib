@@ -167,7 +167,7 @@ public class TableRenderer  {
     
     public void scrollLoad(int scrollPos){
         if(controller.activeWidget != null){
-            stopEditing();
+        	controller.finishEditing();
             controller.selectedCol = -1;
             controller.selectedRow--;
         }
@@ -220,8 +220,9 @@ public class TableRenderer  {
         		((Focusable)controller.activeWidget).setFocus(false);
         	Object newVal = null;
         	if(controller.activeWidget instanceof Dropdown) {
-        		if(((Dropdown)controller.activeWidget).popup.isShowing())
-        			((Dropdown)controller.activeWidget).popup.hide(true);
+        		if(((Dropdown)controller.activeWidget).popup.isShowing()){
+        			((Dropdown)controller.activeWidget).popup.hide(true);	
+        		}
         	}
         	if(controller.activeWidget instanceof AutoComplete){
         		if(((AutoComplete)controller.activeWidget).popup.isShowing())
