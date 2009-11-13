@@ -312,10 +312,10 @@ public class QueryBuilderV2 {
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
     		if (param.indexOf("..") > -1) {
-    			String[] bparams = param.split("..");
+    			String[] bparams = param.split("\\.\\.");
     			query.setParameter(paramName + i + "0", bparams[0]);
     			query.setParameter(paramName + i + "1", bparams[1]);
-    		} else if (param.indexOf(",") > -1) {
+    		} else if (field.getComparator().get(i).startsWith("(") && param.indexOf(",") > -1) {
     			String[] params = param.split(",");
     			for (int j = 0; j < params.length; j++) {
     				query.setParameter(paramName + i + j, params[j]);
