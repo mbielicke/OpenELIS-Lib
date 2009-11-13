@@ -241,9 +241,13 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      *        A model for the DropdownWidget to display for matching suggestions.
      */
     public void showAutoMatches(ArrayList<TableDataRow> data){
-    		selectedRow = -1;
-    		selectedCol = -1;
-    		load(data);
+    	selectedRow = -1;
+    	selectedCol = -1;
+    	if(data == null || data.size() == 0){
+    		data = new ArrayList<TableDataRow>();
+    		data.add(new TableDataRow(null,""));
+    	}
+    	load(data);
     	if(textbox.getStyleName().indexOf("Focus") > -1)
     		showTable(0);
     	else if(data != null && data.size() > 0)
