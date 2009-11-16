@@ -142,9 +142,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     
     public void drawExceptions(HasField wid) {        
         exceptionPanel.clear();
-        if(exceptions == null){
-        	wid.removeExceptionStyle("InputWarning");
-        	wid.removeExceptionStyle("InputError");
+    	wid.removeExceptionStyle("InputWarning");
+    	wid.removeExceptionStyle("InputError");
+        if(exceptions == null || exceptions.size() == 0){
+        	exceptions = null;
         	return;
         }
         String style = "InputWarning";
@@ -162,13 +163,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
             
             exceptionPanel.add(hp);
         }
-        if(exceptions.size() == 0){
-            wid.removeExceptionStyle("InputError");
-            wid.removeExceptionStyle("InputWarning");
-        }else{
-            wid.addExceptionStyle(style);
-        }
-        
+        wid.addExceptionStyle(style);
     }
     
 	public void onMouseOut(MouseOutEvent event) {
