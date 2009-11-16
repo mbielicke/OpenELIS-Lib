@@ -1446,6 +1446,10 @@ public class UIGenerator extends Generator {
                 	}
                 	if(col.getAttributes().getNamedItem("width") != null)
                 		sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
+                	if(col.getAttributes().getNamedItem("minWidth") != null)
+                		sw.println("column"+id+"_"+i+".setMinWidth("+col.getAttributes().getNamedItem("minWidth").getNodeValue()+");");
+                	if(col.getAttributes().getNamedItem("fixedWidth") != null)
+                		sw.println("column"+id+"_"+i+".setFixedWidth("+col.getAttributes().getNamedItem("fixedWidth").getNodeValue()+");");
                 	if(col.getAttributes().getNamedItem("sort") != null)
                 		sw.println("column"+id+"_"+i+".setSortable("+col.getAttributes().getNamedItem("sort").getNodeValue()+");");
                 	if(col.getAttributes().getNamedItem("filter") != null)
@@ -1771,6 +1775,10 @@ public class UIGenerator extends Generator {
                 		}
                 		if(colList.item(i).getAttributes().getNamedItem("width") != null)
                 			sw.println("col"+id+"_"+i+".setCurrentWidth("+colList.item(i).getAttributes().getNamedItem("width").getNodeValue()+");");
+                    	if(colList.item(i).getAttributes().getNamedItem("minWidth") != null)
+                    		sw.println("col"+id+"_"+i+".setMinWidth("+colList.item(i).getAttributes().getNamedItem("minWidth").getNodeValue()+");");
+                    	if(colList.item(i).getAttributes().getNamedItem("fixedWidth") != null)
+                    		sw.println("col"+id+"_"+i+".setFixedWidth("+colList.item(i).getAttributes().getNamedItem("fixedWidth").getNodeValue()+");");
                 		if(colList.item(i).getAttributes().getNamedItem("sort") != null){
                 			sw.println("col"+id+"_"+i+".setSortable(true);");
                 			String[] sortLeaves = colList.item(i).getAttributes().getNamedItem("sort").getNodeValue().split(",");

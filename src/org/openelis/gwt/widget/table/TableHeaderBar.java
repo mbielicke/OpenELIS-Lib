@@ -180,11 +180,12 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             header.add(headerLabel);
             header.setCellWidth(headerLabel, "100%");
             header.add(headerLabel);
+            MenuItem menuItem = null;
             if(column.getSortable() || column.getFilterable()){
                 AbsolutePanel wid = new AbsolutePanel();
                 wid.setHeight("18px");
                 wid.setWidth("16px");
-                MenuItem menuItem = new MenuItem(wid);
+                menuItem = new MenuItem(wid);
                 menuItem.menuItemsPanel = new MenuPanel("vertical");
                 menuItem.menuItemsPanel.setStyleName("topHeaderContainer");
                 menuItem.addActionHandler(this);
@@ -195,9 +196,9 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 header.setCellVerticalAlignment(menuItem, HasAlignment.ALIGN_TOP);
                 menuItem.pop.addCloseHandler(header);
                 menuItem.enable(true);
-                hMenus.add(menuItem);
+                
             }
-
+            hMenus.add(menuItem);
         	BarContainer barc = new BarContainer(); 
         	barc.addMouseDownHandler(this);
         	barc.addMouseUpHandler(this);
@@ -263,7 +264,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             int pad = 5;
             if(columns.get(tableCol1).sortable || columns.get(tableCol1).filterable)
             	pad = 23;
-            if((event.getX() < 0 && (colA-pad) <= 16)) 
+            if((event.getX() < 0 && (colA-pad) <= columns.get(tableCol1).getMinWidth())) 
             	return;
             DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(event.getX()))+"px");
         }
@@ -306,8 +307,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             		int pad = 5;
                     if(columns.get(i).sortable || columns.get(i).filterable)
                     	pad = 23;
-            		if(columns.get(i).currentWidth - pad < 15){
-            			hLabels.get(i).setWidth("15px");
+            		if(columns.get(i).currentWidth - pad < columns.get(i).getMinWidth()){
+            			hLabels.get(i).setWidth(columns.get(i).getMinWidth()+"px");
             		}else{
             			hLabels.get(i).setWidth((columns.get(i).currentWidth-pad)+"px");
             		}

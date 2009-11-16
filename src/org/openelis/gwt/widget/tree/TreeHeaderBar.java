@@ -86,8 +86,6 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     protected int startx;
     protected int resizeColumn1 = -1;
     protected int tableCol1 = -1;
-    protected int resizeColumn2 = -1;
-    protected int tableCol2 = -1;
     protected TreeWidget controller;
     public boolean doFilter;
     public boolean doQuery;
@@ -171,16 +169,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             headerLabel.addStyleName("HeaderLabel");
             DOM.setStyleAttribute(headerLabel.getElement(),"overflowX","hidden");
             DOM.setStyleAttribute(headerLabel.getElement(), "overflow", "hidden");
-            
-            BarContainer barc = new BarContainer(); 
-            barc.addMouseDownHandler(this);
-             barc.addMouseUpHandler(this);
-             barc.addMouseMoveHandler(this);
-            AbsolutePanel ap3 = new AbsolutePanel();
-            ap3.addStyleName("HeaderBarPad");
-            barc.add(ap3);
-            header.add(barc);
-            header.setCellWidth(bar, "3px");
+           
             
             headerLabel.setWordWrap(false);
             header.add(headerLabel);
@@ -204,10 +193,18 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
                 menuItem.enable(true);
             }
             hMenus.add(menuItem);
+            BarContainer barc = new BarContainer(); 
+            barc.addMouseDownHandler(this);
+            barc.addMouseUpHandler(this);
+            barc.addMouseMoveHandler(this);
+            AbsolutePanel ap3 = new AbsolutePanel();
+            ap3.addStyleName("HeaderBarPad");
+            barc.add(ap3);
+            header.add(barc);
+            
             bar.setWidget(0,columns.indexOf(column),header);
             bar.getCellFormatter().setHeight(0, columns.indexOf(column), "18px");
-            if(columns.indexOf(column) < columns.size()-1)
-            	bar.getCellFormatter().setStyleName(0,columns.indexOf(column), "Header");
+          	bar.getCellFormatter().setStyleName(0,columns.indexOf(column), "Header");
             
         }
         sizeHeader();
@@ -230,59 +227,12 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     	startx = sender.getAbsoluteLeft();
     	resizeColumn1 = headers.indexOf(sender.getParent()) -1;
     	tableCol1 = resizeColumn1;
-    	if(columns.get(tableCol1).getFixedWidth() && columns.get(tableCol1+1).getFixedWidth()){
+    	if(columns.get(tableCol1).getFixedWidth()){
     		resizing = false;
     		resizeColumn1 = -1;
     		tableCol1 = -1;
-    		tableCol2 = -1;
     		return;
     	}  
-    	if(columns.get(tableCol1).getFixedWidth()){
-    		tableCol1 = -1;
-    		int j = tableCol1 -1; 
-    		while(tableCol1 < 0 && j > -1){
-    			if(!columns.get(tableCol1).getFixedWidth())
-    				tableCol1 = j;
-    			j--;
-    		}
-    	}
-    	if(tableCol1 < 0){
-    		int j = tableCol1 +1;
-    		while(tableCol1 < 0 && j < columns.size()){
-    			if(!columns.get(j).getFixedWidth())
-    				tableCol1 = j;
-    			j++;
-    		}
-    	}
-    	if(tableCol1 < 0){
-    		resizing = false;
-    		resizeColumn1 = -1;
-    		tableCol1 = -1;
-    		tableCol2 = -1;
-    		return;
-    	}
-    	tableCol2 = -1;
-    	int i = tableCol1 +1;
-    	while(tableCol2 < 0 && i < columns.size()){
-    		if(!columns.get(i).getFixedWidth())
-    			tableCol2 = i;
-    		i++;
-    	}
-    	if(tableCol2 < 0){
-    		i = 0;
-    		while(tableCol2 < 0 && i < tableCol1){
-    			if(!columns.get(i).getFixedWidth())
-    				tableCol2 = i;
-    			i++;
-    		}
-    	}
-    	if(tableCol2 < 0){
-    		resizing = false;
-    		resizeColumn1 = -1;
-    		tableCol1 = -1;
-    		tableCol2 = -1;
-    		return;
-    	}
     	FocusPanel bar = new FocusPanel();
     	bar.addMouseUpHandler(this);
     	bar.addMouseDownHandler(this);
@@ -305,8 +255,10 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     	Widget sender = (Widget)event.getSource();
         if(resizing) {
             int colA =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
-            int colB =  columns.get(tableCol2).getCurrentWidth() - (sender.getAbsoluteLeft() - startx);
-            if((event.getX() < 0 && colA <= 16) || (event.getX() > 0 && colB <= 16)) 
+            int pad = 5;
+            if(columns.get(tableCol1).sortable || columns.get(tableCol1).filterable)
+            	pad = 23;
+            if((event.getX() < 0 && (colA - pad) <= columns.get(tableCol1).getMinWidth())) 
                  return;
             DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(event.getX()))+"px");
         }
@@ -320,7 +272,6 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
                 columns.get(tableCol1).setCurrentWidth( columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx));
-                columns.get(tableCol2).setCurrentWidth( columns.get(tableCol2).getCurrentWidth() - (sender.getAbsoluteLeft() - startx));
                 RootPanel.get().remove(sender);
                 resizing = false;
                 DeferredCommand.addCommand(new Command() {
@@ -351,13 +302,16 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             		scrollWidth += columns.get(i).getCurrentWidth();
             		HorizontalPanel header = headers.get(i);
             		header.setWidth((columns.get(i).currentWidth+2)+"px");
-            		if(columns.get(i).currentWidth - 23 < 15){
-            			hLabels.get(i).setWidth("15px");
+            		int pad = 5;
+            		if(columns.get(i).sortable || columns.get(i).getFilterable())
+            			pad = 23;
+            		if(columns.get(i).currentWidth - pad < columns.get(i).getMinWidth()){
+            			hLabels.get(i).setWidth(columns.get(i).getMinWidth()+"px");
             		}else{
-            			hLabels.get(i).setWidth((columns.get(i).currentWidth-23)+"px");
+            			hLabels.get(i).setWidth((columns.get(i).currentWidth-pad)+"px");
             		}
             	}
-            	controller.view.cellView.setScrollWidth((scrollWidth+(columns.size()*2))+"px");
+            	controller.view.cellView.setScrollWidth((scrollWidth+(columns.size()*3))+"px");
             }
         });
         

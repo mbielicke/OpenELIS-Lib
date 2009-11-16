@@ -68,7 +68,7 @@ public class TreeColumn {
     public boolean filterable;
     public int preferredWidth;
     public int currentWidth;
-    public int minWidth;
+    public int minWidth = 15;
     public boolean fixedWidth;
     public HasHorizontalAlignment.HorizontalAlignmentConstant alignment = HasHorizontalAlignment.ALIGN_LEFT;
     public TreeWidget controller;
