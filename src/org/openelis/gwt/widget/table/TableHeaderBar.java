@@ -306,8 +306,6 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             		int pad = 5;
                     if(columns.get(i).sortable || columns.get(i).filterable)
                     	pad = 23;
-                    else if(i == columns.size() -1)
-                    	pad = 0;
             		if(columns.get(i).currentWidth - pad < 15){
             			hLabels.get(i).setWidth("15px");
             		}else{
