@@ -62,7 +62,10 @@ public class QueryFieldUtil {
             while (operators.contains(pos)) {
                 comp += pos;
                 value = value.substring(1);
-                pos = value.substring(0, 1);
+                if(value.length() > 0)
+                	pos = value.substring(0, 1);
+                else
+                	pos = "";
             }
             if (comp.equals("")) {
                 comp = "=";
@@ -76,6 +79,8 @@ public class QueryFieldUtil {
                 if (value.length() > 0)
                     pos = value.substring(0, 1);
             }
+            if(param.equals(""))
+            	param = "NULL";
             if (param.indexOf("..") > -1) {
                 comp = "between ";
                 comparator.set(comparator.size() - 1, comp);

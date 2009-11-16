@@ -65,31 +65,39 @@ public class QueryBuilderV2 {
         while (fieldCompIt.hasNext()) {
             sb.append(fieldName + " ");
             String comp = (String)fieldCompIt.next();
-            if (comp.startsWith("!")) {
-                sb.append("not ");
-                comp = comp.substring(1);
-            }
-            if (comp.equals("~"))
-                comp = "like ";
             String param = (String)fieldParamIt.next();
-            if (comp.endsWith("(")) {
-                String[] list = param.split(",");
-                sb.append("in (");
-                for (int j = 0; j < list.length; j++) {
-                    if (j > 0)
-                        sb.append(",");
-                    sb.append(":" + paramName + i + j);
-                }
-                sb.append(") ");
-            } else if (comp.startsWith("between")) {
-                sb.append("between :" + paramName
-                          + i
-                          + "0 and :"
-                          + paramName
-                          + i
-                          + "1 ");
-            } else
-                sb.append(comp + " :" + paramName + i + " ");
+            if(param.equals("NULL")){
+            	if(comp.startsWith("!"))
+            		sb.append("IS NOT NULL ");
+            	else
+            		sb.append("IS NULL ");
+            }else {
+            	if (comp.startsWith("!")) {
+            		sb.append("not ");
+            		comp = comp.substring(1);
+            	}
+            	if (comp.equals("~"))
+            		comp = "like ";
+
+            	if (comp.endsWith("(")) {
+            		String[] list = param.split(",");
+            		sb.append("in (");
+            		for (int j = 0; j < list.length; j++) {
+            			if (j > 0)
+            				sb.append(",");
+            			sb.append(":" + paramName + i + j);
+            		}
+            		sb.append(") ");
+            	} else if (comp.startsWith("between")) {
+            		sb.append("between :" + paramName
+            				+ i
+            				+ "0 and :"
+            				+ paramName
+            				+ i
+            				+ "1 ");
+            	} else
+            		sb.append(comp + " :" + paramName + i + " ");
+            }
             if (fieldLogicalIt.hasNext()) {
                 String logical = (String)fieldLogicalIt.next();
                 if (logical.equals("|"))
@@ -311,17 +319,19 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
-    		if (param.indexOf("..") > -1) {
-    			String[] bparams = param.split("\\.\\.");
-    			query.setParameter(paramName + i + "0", bparams[0]);
-    			query.setParameter(paramName + i + "1", bparams[1]);
-    		} else if (field.getComparator().get(i).startsWith("(") && param.indexOf(",") > -1) {
-    			String[] params = param.split(",");
-    			for (int j = 0; j < params.length; j++) {
-    				query.setParameter(paramName + i + j, params[j]);
-    			}
-    		} else
-    			query.setParameter(paramName + i, param);
+    		if(param.indexOf("NULL") < 0) {
+    			if (param.indexOf("..") > -1) {
+    				String[] bparams = param.split("\\.\\.");
+    				query.setParameter(paramName + i + "0", bparams[0]);
+    				query.setParameter(paramName + i + "1", bparams[1]);
+    			} else if (field.getComparator().get(i).startsWith("(") && param.indexOf(",") > -1) {
+    				String[] params = param.split(",");
+    				for (int j = 0; j < params.length; j++) {
+    					query.setParameter(paramName + i + j, params[j]);
+    				}
+    			} else
+    				query.setParameter(paramName + i, param);
+    		}
     		i++;
     	}
     }
@@ -345,26 +355,27 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
+    		if(param.indexOf("NULL") < 0) {
+    			if (param.indexOf("..") > -1) {
+    				String param1 = param.substring(0, param.indexOf(".."));
+    				String param2 = param.substring(param.indexOf("..") + 2,
+    						param.length());
 
-    		if (param.indexOf("..") > -1) {
-    			String param1 = param.substring(0, param.indexOf(".."));
-    			String param2 = param.substring(param.indexOf("..") + 2,
-    					param.length());
+    				query.setParameter(paramName + i + "0",
+    						new Integer(param1.trim()));
+    				query.setParameter(paramName + i + "1",
+    						new Integer(param2.trim()));
 
-    			query.setParameter(paramName + i + "0",
-    					new Integer(param1.trim()));
-    			query.setParameter(paramName + i + "1",
-    					new Integer(param2.trim()));
+    			} else if (param.indexOf(",") > -1) {
+    				String[] params = param.split(",");
+    				for (int j = 0; j < params.length; j++) {
+    					query.setParameter(paramName + i + j,
+    							new Integer(params[j].trim()));
 
-    		} else if (param.indexOf(",") > -1) {
-    			String[] params = param.split(",");
-    			for (int j = 0; j < params.length; j++) {
-    				query.setParameter(paramName + i + j,
-    						new Integer(params[j].trim()));
-
+    				}
+    			} else {
+    				query.setParameter(paramName + i, new Integer(param.trim()));
     			}
-    		} else {
-    			query.setParameter(paramName + i, new Integer(param.trim()));
     		}
     		i++;
     	}
@@ -385,24 +396,25 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
+    		if(param.indexOf("NULL") < 0) {
+    			if (param.indexOf("..") > -1) {
+    				String param1 = param.substring(0, param.indexOf(".."));
+    				String param2 = param.substring(param.indexOf("..") + 2,
+    						param.length());
 
-    		if (param.indexOf("..") > -1) {
-    			String param1 = param.substring(0, param.indexOf(".."));
-    			String param2 = param.substring(param.indexOf("..") + 2,
-    					param.length());
-
-    			query.setParameter(paramName + i + "0",
-    					new Double(param1.trim()));
-    			query.setParameter(paramName + i + "1",
-    					new Double(param2.trim()));
-    		} else if (param.indexOf(",") > -1) {
-    			String[] params = param.split(",");
-    			for (int j = 0; j < params.length; j++) {
-    				query.setParameter(paramName + i + j,
-    						new Double(params[j].trim()));
+    				query.setParameter(paramName + i + "0",
+    						new Double(param1.trim()));
+    				query.setParameter(paramName + i + "1",
+    						new Double(param2.trim()));
+    			} else if (param.indexOf(",") > -1) {
+    				String[] params = param.split(",");
+    				for (int j = 0; j < params.length; j++) {
+    					query.setParameter(paramName + i + j,
+    							new Double(params[j].trim()));
+    				}
+    			} else {
+    				query.setParameter(paramName + i, new Double(param.trim()));
     			}
-    		} else {
-    			query.setParameter(paramName + i, new Double(param.trim()));
     		}
     		i++;
     	}
@@ -436,25 +448,27 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
-    		if(param.indexOf(":") > -1)
-    			dateType = TemporalType.TIMESTAMP;
-    		if (param.indexOf("..") > -1) {
-    			String[] bparams = param.split("\\.\\.");
-    			Date date = new Date(bparams[0].replaceAll("-","/"));
-    			query.setParameter(paramName + i + "0", date, dateType);
-    			date = new Date(bparams[1].replaceAll("-","/"));
-    			query.setParameter(paramName + i + "1", date, dateType);
-    		} else if (param.indexOf(",") > -1) {
-    			String[] params = param.split(",");
-    			for (int j = 0; j < params.length; j++) {
-    				Date date = new Date(params[j].replaceAll("-","/"));
-    				query.setParameter(paramName + i + j,
-    						date,
-    						dateType);
+    		if(param.indexOf("NULL") < 0) {
+    			if(param.indexOf(":") > -1)
+    				dateType = TemporalType.TIMESTAMP;
+    			if (param.indexOf("..") > -1) {
+    				String[] bparams = param.split("\\.\\.");
+    				Date date = new Date(bparams[0].replaceAll("-","/"));
+    				query.setParameter(paramName + i + "0", date, dateType);
+    				date = new Date(bparams[1].replaceAll("-","/"));
+    				query.setParameter(paramName + i + "1", date, dateType);
+    			} else if (param.indexOf(",") > -1) {
+    				String[] params = param.split(",");
+    				for (int j = 0; j < params.length; j++) {
+    					Date date = new Date(params[j].replaceAll("-","/"));
+    					query.setParameter(paramName + i + j,
+    							date,
+    							dateType);
+    				}
+    			} else {
+    				Date date = new Date(param.replaceAll("-","/"));
+    				query.setParameter(paramName + i, date, dateType);
     			}
-    		} else {
-    			Date date = new Date(param.replaceAll("-","/"));
-    			query.setParameter(paramName + i, date, dateType);
     		}
     		i++;
     	}
