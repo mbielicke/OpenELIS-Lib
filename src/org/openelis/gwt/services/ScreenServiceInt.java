@@ -26,7 +26,6 @@
 package org.openelis.gwt.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;

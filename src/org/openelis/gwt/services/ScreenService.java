@@ -16,15 +16,12 @@
 package org.openelis.gwt.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
-import com.google.gwt.user.client.HTTPRequest;
-import com.google.gwt.user.client.impl.HTTPRequestImpl;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.SyncCallback;

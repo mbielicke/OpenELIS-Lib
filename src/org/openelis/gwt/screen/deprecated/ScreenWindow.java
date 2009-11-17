@@ -72,7 +72,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.openelis.gwt.screen.Screen;
-import org.openelis.gwt.widget.WindowBrowser;
+import org.openelis.gwt.widget.deprecated.WindowBrowser;
 import org.openelis.gwt.widget.deprecated.MenuLabel;
 
 /**

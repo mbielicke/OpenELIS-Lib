@@ -23,11 +23,7 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget;
-
-import java.util.HashMap;
-
-import org.openelis.gwt.screen.Screen;
+package org.openelis.gwt.widget.deprecated;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
@@ -36,21 +32,28 @@ import com.allen_sauer.gwt.dnd.client.DragStartEvent;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import org.openelis.gwt.screen.Screen;
+import org.openelis.gwt.screen.deprecated.AppScreen;
+import org.openelis.gwt.screen.deprecated.ScreenBase;
+import org.openelis.gwt.screen.deprecated.ScreenWindow;
+
+import java.util.HashMap;
 
 /**
  * WindowBrowser will display Screen widgets in draggable Windows
@@ -64,7 +67,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class WindowBrowser extends Composite implements HasKeyPressHandlers, KeyPressHandler, DragHandler {
     
     public AbsolutePanel browser = new AbsolutePanel();
-    public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
+    public HashMap<String,Object> windows = new HashMap<String,Object>();
     public int index;
     public int limit ;
     public PickupDragController dragController = new PickupDragController(browser,true);
@@ -73,7 +76,10 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     	public void onDrop(DragContext context) {
     		// TODO Auto-generated method stub
     		super.onDrop(context);
-    		((ScreenWindow)context.draggable).positionGlass();
+    		if(context.draggable instanceof ScreenWindow)
+    			((ScreenWindow)context.draggable).positionGlass();
+    		else
+    			((org.openelis.gwt.widget.ScreenWindow)context.draggable).positionGlass();
     	}
     };
     public FocusPanel focusedWindow;
@@ -98,34 +104,75 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
         initWidget(browser);
         dragController.setBehaviorDragProxy(true);
         dragController.registerDropController(dropController);
+        //setIndex(getElement(),index);
         DOM.setStyleAttribute(browser.getElement(),
                               "overflow",
                               "auto");
         if(size){
-            Window.addResizeHandler(new ResizeHandler() {
+            Window.addWindowResizeListener(new WindowResizeListener() {
 
-				public void onResize(ResizeEvent event) {
-					 setBrowserHeight();
-					
-				}
+                public void onWindowResized(int width, int height) {
+                    setBrowserHeight();
+                }
 
             });
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     setBrowserHeight();
+                    //index = getIndex(browser.getElement());
                 }
             });
         }
-    } 
-       
-    public void addScreen(Screen screen) {
-    	addScreen(screen,null);
+    }
+    
+    public void addScreen(final Screen screen, final String text, final String category, final String loadingText) {
+        if(windows.size() == limit){
+            Window.alert("Please close at least one window before opening another.");
+            return;
+        }
+        if (windows.containsKey(text)) {
+            return;
+        }
+        RootPanel.get().addStyleName("ScreenLoad");
+        final WindowBrowser brws = this;
+        index++;
+        ScreenWindow window = new ScreenWindow(brws, text, category, loadingText,false);
+        window.setContent(screen);
+        browser.add(window,(windows.size()*25),(windows.size()*25));
+        windows.put(text,window);
+//        if(screen instanceof AppScreen){
+  //          DOM.addEventPreview((AppScreen)screen);
+   //     }
+    }
+    
+    public void addScreen(final ScreenBase screen, final String text, final String category, final String loadingText) {
+        if(windows.size() == limit){
+            Window.alert("Please close at least one window before opening another.");
+            return;
+        }
+        if (windows.containsKey(text)) {
+            return;
+        }
+        RootPanel.get().addStyleName("ScreenLoad");
+        final WindowBrowser brws = this;
+        index++;
+        ScreenWindow window = new ScreenWindow(brws, text, category, loadingText,false);
+        window.setContent(screen);
+        browser.add(window,(windows.size()*25),(windows.size()*25));
+        windows.put(text,window);
+        if(screen instanceof AppScreen){
+            DOM.addEventPreview((AppScreen)screen);
+        }
+    }
+    
+    public void addScreen(AppScreen screen) {
+        addScreen(screen,null);
     }
     
     
-    public void addScreen(Screen screen, String key) {
+    public void addScreen(AppScreen screen, String key) {
         if(key == null)
-           key = screen.getClass().getName();
+           key = GWT.getTypeName(screen);
         if(windows.size() == limit){
             Window.alert("Please close at least one window before opening another.");
             return;
@@ -138,26 +185,45 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
         index++;
         ScreenWindow window = new ScreenWindow(this, key);
         window.setContent(screen);
-        screen.setWindow(window);
         browser.add(window,(windows.size()*25),(windows.size()*25));
         windows.put(key,window);
         setFocusedWindow();
     }
     
+    
     public boolean selectScreen(String text) {
-    	if (windows.containsKey(text)) {
-    		ScreenWindow wid = windows.get(text);
-    		if(index != wid.zIndex){
-    			index++;
-    			wid.zIndex = index;
-    			int top = browser.getWidgetTop(wid);
-    			int left = browser.getWidgetLeft(wid);
-    			browser.add(wid, left, top);
-    			setFocusedWindow();
-    		}
-    		return true;
-    	}
-    	return false;
+        if (windows.containsKey(text)) {
+        	if(windows.get(text) instanceof ScreenWindow) {
+        		ScreenWindow wid = (ScreenWindow)windows.get(text); 
+        		if(index != wid.zIndex){
+        			index++;
+                //	setIndex(((Widget)windows.get(text)).getElement(),index);
+        			wid.zIndex = index;
+        			int top = browser.getWidgetTop(wid);
+        			int left = browser.getWidgetLeft(wid);
+        			wid.setKeep(true);
+        			browser.add(wid, left, top);
+        			wid.setKeep(false);
+        			setFocusedWindow();
+        		}
+        		return true;
+        	}else{
+        		org.openelis.gwt.widget.ScreenWindow wid = (org.openelis.gwt.widget.ScreenWindow)windows.get(text);
+        		if(index != wid.zIndex){
+        			index++;
+                //	setIndex(((Widget)windows.get(text)).getElement(),index);
+        			wid.zIndex = index;
+        			int top = browser.getWidgetTop(wid);
+        			int left = browser.getWidgetLeft(wid);
+//        			wid.setKeep(true);
+        			browser.add(wid, left, top);
+//        			wid.setKeep(false);
+        			setFocusedWindow();
+        		}
+        		return true;
+        	}
+        }
+        return false;
     }
     
     public void setBrowserHeight() {
@@ -168,15 +234,27 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     }
     
     public void setFocusedWindow() {
-    	for(ScreenWindow wid : windows.values()) {
-    		if(wid.zIndex != index){
-    			if(wid.getStyleName().indexOf("unfocused") < 0)
-    				wid.addStyleName("unfocused");
-    		}else{
-    			wid.removeStyleName("unfocused");
-    			focusedWindow = wid;
-    		}
-    	}
+        for(Object wind : windows.values()) {
+        	if(wind instanceof ScreenWindow){
+        		ScreenWindow wid = (ScreenWindow)wind;
+        		if(wid.zIndex != index){
+        			if(wid.getStyleName().indexOf("unfocused") < 0)
+        				wid.addStyleName("unfocused");
+        		}else{
+        			wid.removeStyleName("unfocused");
+        			focusedWindow = wid;
+        		}
+        	}else{
+        		org.openelis.gwt.widget.ScreenWindow wid = (org.openelis.gwt.widget.ScreenWindow)wind;
+        		if(wid.zIndex != index){
+        			if(wid.getStyleName().indexOf("unfocused") < 0)
+        				wid.addStyleName("unfocused");
+        		}else{
+        			wid.removeStyleName("unfocused");
+        			focusedWindow = wid;
+        		}
+        	}
+        }
     }
 
 	public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
