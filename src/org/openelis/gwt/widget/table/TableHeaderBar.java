@@ -277,9 +277,18 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         	Widget sender = (Widget)event.getSource();
             if (resizing) {
                 DOM.releaseCapture(sender.getElement());
-                columns.get(tableCol1).setCurrentWidth( columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx));
-                RootPanel.get().remove(sender);
+               
+                int colWidth =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
+                int scrollWidth = 0;
+                for(int i = 0; i < headers.size(); i++) {
+                	if(tableCol1 != i)
+                		scrollWidth += columns.get(i).getCurrentWidth()+3;
+                }
+                if(scrollWidth + colWidth < controller.getTableWidth())
+                	colWidth = controller.getTableWidth() - scrollWidth -3;
+                columns.get(tableCol1).setCurrentWidth(colWidth);
                 resizing = false;
+                RootPanel.get().remove(sender);
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
                     	sizeHeader();

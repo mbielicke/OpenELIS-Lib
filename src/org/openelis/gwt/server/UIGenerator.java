@@ -1482,6 +1482,7 @@ public class UIGenerator extends Generator {
                 	}
                 	sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
                 }
+                sw.println("wid"+id+".setTableWidth(wid"+id+".getTableWidth()+\"px\");");
                 sw.println("wid"+id+".init();");
                 sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
                 //setDefaults(node,"wid"+id);
@@ -1501,6 +1502,7 @@ public class UIGenerator extends Generator {
                 sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
                 sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
+				
                 
                 //if(def != null)
                 	//def.panel.addClickHandler(table);

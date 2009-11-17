@@ -74,6 +74,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         
         public CellView() {
             super.setWidget(ap);
+            this.setAlwaysShowScrollBars(true);
         }
         
         public void setScrollWidth(String width){

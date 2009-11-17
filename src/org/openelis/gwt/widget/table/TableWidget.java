@@ -205,6 +205,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      */
     public void setTableWidth(String width) {
     	this.width = width;
+    	
     }
     
     public void setMaxRows(int maxRows) {
@@ -248,7 +249,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	
     	if(width.equals("auto")){
     		for(TableColumn column : columns)
-    			tw += column.getCurrentWidth();
+    			tw += column.getCurrentWidth()+3;
     	}else if(width.indexOf("px") > -1){
     		tw = Integer.parseInt(width.substring(0,width.length()-2));
     	}else
