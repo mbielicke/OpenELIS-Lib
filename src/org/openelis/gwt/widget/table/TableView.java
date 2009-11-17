@@ -74,7 +74,6 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         
         public CellView() {
             super.setWidget(ap);
-            this.setAlwaysShowScrollBars(true);
         }
         
         public void setScrollWidth(String width){
@@ -147,6 +146,8 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             header.init(controller);
             headerView.add(header);
         }
+        if(showScroll == VerticalScroll.ALWAYS)
+        	cellView.setAlwaysShowScrollBars(true);
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollHandler(this);
@@ -207,9 +208,9 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     
     
     public void setHeight(int height) {
-        if(!width.equals("auto")){
+    	if(showScroll == VerticalScroll.ALWAYS){
         	if(!controller.isDropdown)
-        		cellView.setHeight(height+18+"px");
+        		cellView.setHeight((height+18)+"px");
             this.height = height+18;
         }else{
         	if(!controller.isDropdown)
