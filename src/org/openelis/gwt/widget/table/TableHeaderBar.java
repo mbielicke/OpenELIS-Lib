@@ -130,19 +130,19 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         
 
         public void onMouseOver(MouseOverEvent event) {
-            getWidget(2).setStyleName("HeaderDropdownButton");
+            getWidget(1).setStyleName("HeaderDropdownButton");
         }
 
         /**
          * Catches mouses Events for resizing columns.
          */
         public void onMouseOut(MouseOutEvent event) {
-            if(!((MenuItem)getWidget(2)).popShowing)
-                getWidget(2).removeStyleName("HeaderDropdownButton");
+            if(!((MenuItem)getWidget(1)).popShowing)
+                getWidget(1).removeStyleName("HeaderDropdownButton");
         }
 
         public void onClose(CloseEvent<PopupPanel> event) {
-            getWidget(2).removeStyleName("HeaderDropdownButton");
+            getWidget(1).removeStyleName("HeaderDropdownButton");
         }
 
 		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
