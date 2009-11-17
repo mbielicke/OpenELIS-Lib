@@ -577,6 +577,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         selectedCol = -1;
     }
 
+    public void deleteRow(TreeDataItem item) {
+    	deleteRow(rows.indexOf(item));
+    }
 
     public void deleteRow(int row) {
     	unselect(row);
