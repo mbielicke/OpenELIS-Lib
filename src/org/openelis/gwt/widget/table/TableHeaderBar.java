@@ -31,12 +31,14 @@ import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.widget.table.event.SortEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.QueryFieldUtil;
 import org.openelis.gwt.widget.TextBox;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
@@ -62,6 +64,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -95,7 +98,9 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     public boolean doFilter;
     public boolean doQuery;
     private FlexTable bar = new FlexTable(); 
-    
+    private TableHeaderBar source = this;
+	MenuItem menuItem = null;
+	
     public TableHeaderBar() {
     	initWidget(bar);
     }
@@ -126,23 +131,38 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     																HasMouseOutHandlers,
     																MouseOverHandler,
     																MouseOutHandler,
+    																HasClickHandlers,
+    																ClickHandler,
     																CloseHandler<PopupPanel> {
         
-
+    	
         public void onMouseOver(MouseOverEvent event) {
-            getWidget(1).setStyleName("HeaderDropdownButton");
+        	if(menuItem != null){
+        		menuItem.closePopup();
+        		menuItem.removeFromParent();
+        	}
+        	int index = headers.indexOf(this);
+        	menuItem = hMenus.get(index);
+        	RootPanel.get().add(menuItem,this.getAbsoluteLeft()+this.getOffsetWidth()-19, this.getAbsoluteTop());
+            DOM.setStyleAttribute(menuItem.getElement(),"zIndex", "1000");
         }
 
         /**
          * Catches mouses Events for resizing columns.
          */
         public void onMouseOut(MouseOutEvent event) {
-            if(!((MenuItem)getWidget(1)).popShowing)
-                getWidget(1).removeStyleName("HeaderDropdownButton");
+            if(menuItem != null && !menuItem.popShowing && ((event.getClientX() < getAbsoluteLeft() || event.getClientX() > getAbsoluteLeft()+getOffsetWidth())
+            		                || (event.getClientY() < getAbsoluteTop() || event.getClientY() > getAbsoluteTop()+getOffsetHeight()))){
+            	RootPanel.get().remove(menuItem);
+            	menuItem = null;
+            }
         }
 
         public void onClose(CloseEvent<PopupPanel> event) {
-            getWidget(1).removeStyleName("HeaderDropdownButton");
+        	if(menuItem != null) {
+        		RootPanel.get().remove(menuItem);
+           		menuItem = null;
+        	}
         }
 
 		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
@@ -151,6 +171,15 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
 
 		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
 			return addDomHandler(handler, MouseOutEvent.getType());
+		}
+		
+		public HandlerRegistration addClickHandler(ClickHandler handler){
+			return addDomHandler(handler,ClickEvent.getType());
+		}
+
+		public void onClick(ClickEvent event) {
+			//menuItem.onClick(event);
+			
 		}
     }
     
@@ -189,14 +218,11 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 menuItem.menuItemsPanel = new MenuPanel("vertical");
                 menuItem.menuItemsPanel.setStyleName("topHeaderContainer");
                 menuItem.addActionHandler(this);
-                header.add(menuItem);
-                header.setCellHorizontalAlignment(menuItem, HasAlignment.ALIGN_RIGHT);
                 header.addMouseOverHandler(header);
                 header.addMouseOutHandler(header);
-                header.setCellVerticalAlignment(menuItem, HasAlignment.ALIGN_TOP);
                 menuItem.pop.addCloseHandler(header);
                 menuItem.enable(true);
-                
+                menuItem.setStyleName("HeaderDropdownButton");
             }
             hMenus.add(menuItem);
         	BarContainer barc = new BarContainer(); 
@@ -240,6 +266,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     		tableCol1 = -1;
     		return;
     	}  
+    	menuItem.removeFromParent();
     	FocusPanel bar = new FocusPanel();
     	bar.addMouseUpHandler(this);
     	bar.addMouseDownHandler(this);
@@ -263,7 +290,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             int colA =  columns.get(tableCol1).getCurrentWidth() + (sender.getAbsoluteLeft() - startx);
             int pad = 5;
             if(columns.get(tableCol1).sortable || columns.get(tableCol1).filterable)
-            	pad = 23;
+            	pad = 5;
             if((event.getX() < 0 && (colA-pad) <= columns.get(tableCol1).getMinWidth())) 
             	return;
             DOM.setStyleAttribute(sender.getElement(),"left",(DOM.getAbsoluteLeft(sender.getElement())+(event.getX()))+"px");
@@ -315,7 +342,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             		header.setWidth((columns.get(i).currentWidth+2)+"px");
             		int pad = 5;
                     if(columns.get(i).sortable || columns.get(i).filterable)
-                    	pad = 23;
+                    	pad = 5;
             		if(columns.get(i).currentWidth - pad < columns.get(i).getMinWidth()){
             			hLabels.get(i).setWidth(columns.get(i).getMinWidth()+"px");
             		}else{
