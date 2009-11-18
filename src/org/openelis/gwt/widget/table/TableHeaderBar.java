@@ -267,12 +267,13 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     		tableCol1 = -1;
     		return;
     	}  
-    	menuItem.removeFromParent();
+    	if(menuItem != null)
+    		menuItem.removeFromParent();
     	FocusPanel bar = new FocusPanel();
     	bar.addMouseUpHandler(this);
     	bar.addMouseDownHandler(this);
     	bar.addMouseMoveHandler(this);
-    	bar.setHeight((controller.view.table.getOffsetHeight()+17)+"px");
+    	bar.setHeight((controller.view.cellView.getOffsetHeight()+17)+"px");
     	bar.setWidth("1px");
     	DOM.setStyleAttribute(bar.getElement(), "background", "red");
     	DOM.setStyleAttribute(bar.getElement(), "position", "absolute");
@@ -280,6 +281,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     	DOM.setStyleAttribute(bar.getElement(),"top",sender.getAbsoluteTop()+"px");
     	RootPanel.get().add(bar);   
     	DOM.setCapture(bar.getElement());
+    	DOM.setStyleAttribute(bar.getElement(),"zIndex", "1000");
     }
 
     /**
