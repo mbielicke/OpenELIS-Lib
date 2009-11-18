@@ -218,6 +218,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 menuItem.menuItemsPanel = new MenuPanel("vertical");
                 menuItem.menuItemsPanel.setStyleName("topHeaderContainer");
                 menuItem.addActionHandler(this);
+                menuItem.addMouseOutHandler(header);
                 header.addMouseOverHandler(header);
                 header.addMouseOutHandler(header);
                 menuItem.pop.addCloseHandler(header);
