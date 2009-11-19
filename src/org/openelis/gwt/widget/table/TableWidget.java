@@ -678,6 +678,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         	if(!multiSelect || (multiSelect && !ctrlKey))
                	selections.clear();
         	selections.add(index);
+        	selectedRow = index;
         }
         if(view.isVisible())
         	renderer.dataChanged(true);        

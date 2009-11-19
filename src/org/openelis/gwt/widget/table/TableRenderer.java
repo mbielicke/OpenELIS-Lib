@@ -169,7 +169,7 @@ public class TableRenderer  {
         if(controller.activeWidget != null){
         	controller.finishEditing();
             controller.selectedCol = -1;
-            controller.selectedRow--;
+//            controller.selectedRow--;
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){

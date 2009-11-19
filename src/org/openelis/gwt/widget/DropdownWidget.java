@@ -186,14 +186,14 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         }else
             textbox.setText("");
         
-        textBoxDefault = textbox.getText();
+        //textBoxDefault = textbox.getText();
     }    
     
     public void setSelection(Object key) {
         clearSelections();
         selectRow(key);
         textbox.setText(getTextBoxDisplay());
-        textBoxDefault = textbox.getText();
+        //textBoxDefault = textbox.getText();
     }
     
     public void setFocus(boolean focus) {
@@ -220,14 +220,12 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
             if (selectedRow >= 0 && selectedRow < numRows() - 1) {
             	final int row = findNextActive(selectedRow);
-            	final int col = 0;
             	if(!isRowDrawn(row)){
             		view.setScrollPosition(view.top+(cellHeight*(row-selectedRow)));
-            		unselect(-1);
             	}
                 DeferredCommand.addCommand(new Command() {
                      public void execute() {
-                         select(row, col);
+                         selectRow(row);
                      }
                  });
             }
@@ -235,20 +233,18 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
             if (selectedRow > 0) {
                 final int row = findPrevActive(selectedRow);
-                final int col = 0;
             	if(!isRowDrawn(row)){
             		view.setScrollPosition(view.top-(cellHeight*(selectedRow-row)));
-            		unselect(-1);
             	}
                 DeferredCommand.addCommand(new Command() {
                      public void execute() {
-                         select(row, col);
+                         selectRow(row);
                      }
                  });
             }
         }
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
-            if(selectedRow > -1){
+        	if(selectedRow > -1){
                 itemSelected = true;
                 SelectionEvent.fire(this, renderer.rows.get(tableIndex(selectedRow)));
                 complete();

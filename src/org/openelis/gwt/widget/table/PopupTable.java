@@ -112,7 +112,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
-        selectRow(active);
+        
     }
     
     public void showTable(final int active,Widget wid) {

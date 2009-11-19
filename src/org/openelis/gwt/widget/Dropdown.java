@@ -28,7 +28,6 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -83,10 +82,13 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                 return;
             if(event.getSource() == widget.icon){
                 if(widget.selectedRow < 0)
-                    if(widget.getSelections().size() > 0)
+                    if(widget.getSelections().size() > 0){
+                    	selectRow((Integer)widget.getSelectedRows()[0]);
                         widget.showTable((Integer)widget.getSelectedRows()[0]);
-                    else
+                    }else{
+                    	selectRow(0);
                         widget.showTable(0);
+                    }
                 else
                     widget.showTable(widget.selectedRow);
             }
@@ -189,9 +191,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         	if(popup.isShowing()){
         		selectRow(index);
         	    scrollToSelection();
-        	}else if(textbox.getStyleName().indexOf("Focus") > -1)
+        	}else if(textbox.getStyleName().indexOf("Focus") > -1){
+        		selectRow(index);
         		showTable(index);
-        	else{
+        	}else{
         		setValue((T)model.get(index).key,true);
         		field.checkValue(this);
         		field.drawExceptions(this);
@@ -392,6 +395,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		field.clearExceptions(this);
 		checkValue();
 		textbox.setFocus(true);
+		activeWidget = null;
 	}
 	@Override
 	public void setFieldValue(Object value) {
