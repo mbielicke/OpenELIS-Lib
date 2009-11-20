@@ -119,6 +119,7 @@ public class IntegerField extends Field<Integer> {
                 removeException("fieldNumericException");
             } catch (Exception e) {
                 valid = false;
+                invalid = true;
                 addException(new LocalizedException("fieldNumericException"));
             }
         } else {
@@ -129,6 +130,7 @@ public class IntegerField extends Field<Integer> {
                 removeException("fieldNumericException");
             } catch (Exception e) {
                 valid = false;
+                invalid = true;
                 addException(new LocalizedException("fieldNumericException"));
             }
         }

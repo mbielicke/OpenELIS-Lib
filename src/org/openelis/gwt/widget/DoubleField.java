@@ -122,6 +122,7 @@ public class DoubleField extends Field<Double> {
                 removeException("invalidDouble");
             } catch (Exception e) {
                 valid = false;
+                invalid = true;
                 addException(new LocalizedException("invalidDouble"));
             }
         } else {
@@ -132,6 +133,7 @@ public class DoubleField extends Field<Double> {
                 removeException("invalidDouble");
             } catch (Exception e) {
                 valid = false;
+                invalid = true;
                 addException(new LocalizedException("invalidDouble"));
             }
         }

@@ -118,6 +118,7 @@ public class LongField extends Field<Long> {
                 removeException("fieldNumericException");
             } catch (Exception e) {
                 valid = false;
+                invalid=true;
                 addException(new LocalizedException("fieldNumericException"));
             }
         } else {
@@ -128,6 +129,7 @@ public class LongField extends Field<Long> {
                 removeException("fieldNumericException");
             } catch (Exception e) {
                 valid = false;
+                invalid = true;
                 addException(new LocalizedException("fieldNumericException"));
             }
         }
