@@ -223,11 +223,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             	if(!isRowDrawn(row)){
             		view.setScrollPosition(view.top+(cellHeight*(row-selectedRow)));
             	}
-                DeferredCommand.addCommand(new Command() {
-                     public void execute() {
-                         selectRow(row);
-                     }
-                 });
+                selectRow(row);
+            }else if(selectedRow < 0){
+            	selectRow(0);
             }
         }
         if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
@@ -236,11 +234,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             	if(!isRowDrawn(row)){
             		view.setScrollPosition(view.top-(cellHeight*(selectedRow-row)));
             	}
-                DeferredCommand.addCommand(new Command() {
-                     public void execute() {
-                         selectRow(row);
-                     }
-                 });
+                selectRow(row);
             }
         }
         if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
