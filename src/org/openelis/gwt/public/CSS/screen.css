@@ -247,9 +247,9 @@ color:gray;
 }
 .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
-.fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon,
+.fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
-.systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon{
+.systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon {
     width:16px;
     height:16px;
    
@@ -287,6 +287,8 @@ color:gray;
 .testIcon {background:transparent url(../Images/testbuttonimage.gif) no-repeat scroll center;}
 .methodIcon {background:transparent url(../Images/methodbuttonimage.gif) no-repeat scroll center;}
 .spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+.errorIcon {background:transparent url(../Images/bullet_red.png) no-repeat scroll center;}
+.warnIcon {background:transparent url(../Images/bullet_yellow.png) no-repeat scroll center;}
 .panelIcon{
 }
 .analyteIcon{
@@ -1164,7 +1166,7 @@ cursor:default;}
     height:18px;/**
     border-bottom: 1px solid #d8d8d8;**/
     background: url(../Images/trigger.gif) 2px -1px no-repeat;
-    cursor:pointer;
+    /**cursor:pointer;**/
 }
 
 /*******autodropdown css***********/

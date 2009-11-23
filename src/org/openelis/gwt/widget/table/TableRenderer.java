@@ -253,6 +253,10 @@ public class TableRenderer  {
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;
+        	if(newVal instanceof TableDataRow)
+        		newVal = ((TableDataRow)newVal).key;
+        	if(currVal instanceof TableDataRow)
+        		currVal = ((TableDataRow)currVal).key;
             return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         }
         return false;

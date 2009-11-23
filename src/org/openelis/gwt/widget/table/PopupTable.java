@@ -99,7 +99,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
  
-    public void showTable(final int active) {
+    public void showTable() {
         popup.setPopupPosition(this.getAbsoluteLeft(), this
                                       .getAbsoluteTop()
                                       + this.getOffsetHeight() - 1);
@@ -115,7 +115,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
         
     }
     
-    public void showTable(final int active,Widget wid) {
+    public void showTable(Widget wid) {
         popup.setPopupPosition(wid.getAbsoluteLeft(), wid
                                       .getAbsoluteTop()
                                       + wid.getOffsetHeight() - 1);
@@ -128,7 +128,6 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
-        selectRow(active);
     }
     
     public void hideTable() {

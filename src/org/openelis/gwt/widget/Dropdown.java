@@ -81,16 +81,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
             if(!widget.isEnabled())
                 return;
             if(event.getSource() == widget.icon){
-                if(widget.selectedRow < 0)
-                    if(widget.getSelections().size() > 0){
+                if(widget.selectedRow < 0) {
+                    if(widget.getSelections().size() > 0)
                     	selectRow((Integer)widget.getSelectedRows()[0]);
-                        widget.showTable((Integer)widget.getSelectedRows()[0]);
-                    }else{
-                    	selectRow(0);
-                        widget.showTable(0);
-                    }
-                else
-                    widget.showTable(widget.selectedRow);
+                }
+                widget.showTable();
             }
 
         }
@@ -105,13 +100,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                         keyCode == KeyboardHandler.KEY_CTRL || keyCode == KeyboardHandler.KEY_SHIFT || keyCode == KeyboardHandler.KEY_ESCAPE)
                     return;
                 if(keyCode == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
-                    if(widget.selectedRow < 0)
+                    if(widget.selectedRow < 0) {
                         if(widget.getSelections().size() > 0)
-                            widget.showTable((Integer)widget.getSelectedRows()[0]);
-                        else
-                            widget.showTable(0);
-                    else
-                        widget.showTable(widget.selectedRow);
+                        	selectRow((Integer)widget.getSelectedRows()[0]);
+                    }
+                    widget.showTable();
                     return;
                 }
                 if(keyCode == KeyboardHandler.KEY_ENTER && widget.itemSelected){
@@ -193,7 +186,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         	    scrollToSelection();
         	}else if(textbox.getStyleName().indexOf("Focus") > -1){
         		selectRow(index);
-        		showTable(index);
+        		showTable();
         	}else{
         		setValue((T)model.get(index).key,true);
         		field.checkValue(this);

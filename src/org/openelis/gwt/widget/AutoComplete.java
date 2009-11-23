@@ -100,10 +100,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
                         event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL || event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT || event.getNativeKeyCode() == KeyboardHandler.KEY_ESCAPE)
                     return;
                 if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
-                    if(widget.selectedRow < 0)
-                        widget.showTable(0);
-                    else
-                        widget.showTable(widget.modelIndexList[widget.selectedRow]);
+                     widget.showTable();
                     return;
                 }
                 if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && widget.itemSelected){
@@ -248,12 +245,18 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     		data.add(new TableDataRow(null,""));
     	}
     	load(data);
-    	if(textbox.getStyleName().indexOf("Focus") > -1)
-    		showTable(0);
-    	else if(data != null && data.size() > 0)
+    	if(textbox.getStyleName().indexOf("Focus") > -1){
+    		selectRow(0);
+    		showTable();
+    	}else if(data != null && data.size() > 0){
     		setValue((T)data.get(0).key,true);
-    	else
+    		field.checkValue(this);
+    		field.drawExceptions(this);
+    	}else{
     		setSelection(null,"");
+    		field.checkValue(this);
+    		field.drawExceptions(this);
+    	}
     	
     }
         
