@@ -3,7 +3,6 @@ package org.openelis.gwt.common.data;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.RPC;
-import org.openelis.gwt.widget.table.TableDataRow;
 
 /**
  * Class used to transfer query fields and the page number to the query service.
@@ -27,10 +26,10 @@ public class Query implements RPC {
     }
 
     public void setFields(QueryData field) {
-        ArrayList<QueryData> fields = new ArrayList<QueryData>(1);
+        if (fields == null)
+            fields = new ArrayList<QueryData>(1);
 
         fields.add(field);
-        setFields(fields);
     }
 
     public void setFields(ArrayList<QueryData> fields) {
