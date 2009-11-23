@@ -112,6 +112,7 @@ public class DoubleField extends Field<Double> {
 
     public void setStringValue(String val) {
         valid = true;
+        invalid = false;
         if (pattern == null) {
             try {
                 if (val != null && !"".equals(val)) {

@@ -109,6 +109,7 @@ public class IntegerField extends Field<Integer> {
 
     public void setStringValue(String val) {
         valid = true;
+        invalid = false;
         if (pattern == null) {
             try {
                 if (val != null && !"".equals(val)) {
