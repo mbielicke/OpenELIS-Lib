@@ -279,6 +279,9 @@ public class DateField extends Field<Datetime> {
         Date date = null;
         //if(pattern == null){
         if (val == null || val.equals("")){ 
+        	if(value != null){
+            	ValueChangeEvent.fire(this, null);
+        	}
             value = null;
             return;
         }
