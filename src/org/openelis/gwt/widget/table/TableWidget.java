@@ -265,26 +265,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	event.preventDefault();
     	if(event.getSource() == view.table){
     		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-    		if(isEnabled() && columns.get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
-    	    	if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0 && fireEvents) {
-    	    		BeforeCellEditedEvent bevent = BeforeCellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), getRow(modelIndexList[cell.getRowIndex()]).cells.get(cell.getCellIndex()).value);
-    	    		if(bevent.isCancelled())
-    	    			return;
-    	    	}
-    			if(CheckBox.CHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
-    				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNCHECKED);
-    				if(fireEvents)
-    					CellEditedEvent.fire(this,  modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
-    			}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
-    				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNKNOWN);
-    				if(fireEvents)
-    					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNKNOWN);
-    			}else{
-    				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.CHECKED);
-    				if(fireEvents)
-    					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.CHECKED);
-    			}
-    		}
+
     		if(tableIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
     			return;
     		//selectedByClick = true;
@@ -390,9 +371,25 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             	SelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
         }
         if(canEditCell(row,col)){
-            selectedCol = col;
-            renderer.setCellEditor(row, col);
-            unsinkEvents(Event.ONKEYPRESS);
+        	if(isEnabled() && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.UNCHECKED);
+        			if(fireEvents)
+        				CellEditedEvent.fire(this, row, col, CheckBox.UNCHECKED);
+        		}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.UNKNOWN);
+        			if(fireEvents)
+        				CellEditedEvent.fire(this, row, col, CheckBox.UNKNOWN);
+        		}else{
+        			setCell(row,col,CheckBox.CHECKED);
+        			if(fireEvents)
+        				CellEditedEvent.fire(this, row, col, CheckBox.CHECKED);
+        		}
+        	}else{
+        		selectedCol = col;
+        		renderer.setCellEditor(row, col);
+        		unsinkEvents(Event.ONKEYPRESS);
+        	}
         }else{
        		selectedCol = -1;
        		sinkEvents(Event.ONKEYPRESS);
