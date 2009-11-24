@@ -235,7 +235,7 @@ public class TableRenderer  {
         		newVal = ((HasField)controller.activeWidget).getField().queryString;
         	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
         		if(((HasField)controller.activeWidget).getFieldValue() == null &&
-        		   !((TextBox)controller.activeWidget).getText().equals(""))
+        		   !((TextBox)controller.activeWidget).getText().equals("") || !((HasField)controller.activeWidget).getField().valid)
         		     newVal = ((TextBox)controller.activeWidget).getText();
         	}
         	if(newVal == null)		
