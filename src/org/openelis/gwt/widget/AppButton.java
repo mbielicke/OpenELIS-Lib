@@ -28,10 +28,14 @@ package org.openelis.gwt.widget;
 import org.openelis.gwt.screen.ShortcutHandler;
 import org.openelis.gwt.screen.TabHandler;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyUpHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -43,6 +47,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.event.KeyboardEvent;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 
 /**
@@ -54,7 +60,7 @@ import com.google.gwt.user.client.ui.Widget;
  *   All buttons are defaulted to enabled true.  If a button needs to be ensured to be disabled on the initial state of the
  *   screen set enable="false" in the xsl.
  */
-public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler {     
+public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler{     
     
     public enum ButtonState {UNPRESSED,PRESSED,DISABLED,LOCK_PRESSED}
     
@@ -183,6 +189,16 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 	    return addHandler(handler, ClickEvent.getType());
 	}
 
+	public void setFocus() {
+		panel.addStyleName("Hover");
+		//sinkEvents(Event.ONKEYUP);
+	}
+	
+	public void blur() {
+		panel.removeStyleName("Hover");
+		//unsinkEvents(Event.ONKEYUP);
+	}
+	
 	/**
 	 * Removes "Hover" style from Button when event received.
 	 * 
@@ -286,6 +302,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 	 */
 	public void setToggle(boolean toggle) {
 		this.toggle = toggle;
-	}    
+	}
+
 
 }
