@@ -485,9 +485,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         model.add(index, row);
         if(row.shown)
             shownRows++;
+    	renderer.dataChanged(true);
         if(fireEvents)
         	RowAddedEvent.fire(this, index, row);
-       	renderer.dataChanged(true);
     }
 
     public void deleteRow(int row) {
