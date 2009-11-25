@@ -296,8 +296,12 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     		CalendarWidget cal = null;
     		if(field.queryMode)
     			cal = new CalendarWidget(Datetime.getInstance(begin,end),begin,end);
-    		else
-    		    cal = new CalendarWidget(getValue(),begin,end);
+    		else{
+    			Datetime date = getValue();
+    			if(date == null)
+    				date = Datetime.getInstance(begin,end);
+    		    cal = new CalendarWidget(date,begin,end);
+    		}
     		cal.addValueChangeHandler(this);
     		pop = new PopupPanel(true, false);
     		pop.setWidget(cal);
@@ -316,7 +320,12 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     public Datetime getValue() {
         if (textbox.getText().equals(""))
             return null;
-        Date date = new Date(textbox.getText().replaceAll("-", "/"));
+        Date date;
+        try {
+        	date = new Date(textbox.getText().replaceAll("-", "/"));
+        }catch(Exception e){
+        	return null;
+        }
         return Datetime.getInstance(begin, end, date);
     }
 
