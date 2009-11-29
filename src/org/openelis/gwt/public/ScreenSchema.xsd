@@ -251,7 +251,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="richText" substitutionGroup="widgets">
+	<xsd:element name="richtext" substitutionGroup="widgets">
 		<xsd:complexType>
 			<xsd:attributeGroup ref="ScreenWidget" />
 			<xsd:attribute name="tab" type="xsd:string" />
