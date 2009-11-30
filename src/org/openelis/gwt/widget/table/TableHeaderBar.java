@@ -137,13 +137,14 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         
     	
         public void onMouseOver(MouseOverEvent event) {
-        	if(menuItem != null){
-        		menuItem.closePopup();
-        		menuItem.removeFromParent();
-        	}
         	int index = headers.indexOf(this);
+        	if(menuItem == hMenus.get(index))
+        		return;
         	menuItem = hMenus.get(index);
-        	RootPanel.get().add(menuItem,this.getAbsoluteLeft()+this.getOffsetWidth()-19, this.getAbsoluteTop());
+        	int left = this.getAbsoluteLeft()+this.getOffsetWidth()-19;
+        	if(left > controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth())
+        		left = controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth()-16;
+        	RootPanel.get().add(menuItem,left, this.getAbsoluteTop());
             DOM.setStyleAttribute(menuItem.getElement(),"zIndex", "1000");
         }
 
