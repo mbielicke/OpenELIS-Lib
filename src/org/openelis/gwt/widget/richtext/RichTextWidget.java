@@ -41,6 +41,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -70,6 +71,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 	public void init(boolean tools){
 		this.tools = tools;
 		initWidget(vp);
+		DOM.setStyleAttribute(vp.getElement(),"background","white");
 		vp.setSpacing(0);
 
 		if(tools){
