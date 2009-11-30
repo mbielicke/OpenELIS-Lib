@@ -43,21 +43,25 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
     
-    private FlexTable vp = new FlexTable();
+    private VerticalPanel vp = new VerticalPanel();
     public RichTextArea area;
     public RichTextToolbar toolbar;
     private boolean tools;
     private boolean enabled;
     private Field<String> field;
+    private HandlerRegistration focReg;
     
     public RichTextWidget() {
         area = new RichTextArea();
@@ -72,22 +76,30 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
     public void init(boolean tools){
         this.tools = tools;
         initWidget(vp);
-        vp.setCellPadding(0);
-        vp.setCellSpacing(0);
+        //vp.setPadding(0);
+        vp.setSpacing(0);
         
         if(tools){
-        	vp.setWidget(0,0,toolbar);
+        	vp.add(toolbar);
            // vp.getFlexCellFormatter().setHeight(0, 0,"75px");
-            vp.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
-            vp.setWidget(1,0,area);
-            vp.getFlexCellFormatter().addStyleName(1, 0, "WhiteContentPanel");
+            //vp.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
+            vp.add(area);
+            //vp.getgetFlexCellFormatter().addStyleName(1, 0, "WhiteContentPanel");
+            //vp.getFlexCellFormatter().setWidth(0, 0, "100%");
+            vp.setCellWidth(toolbar, "100%");
         }else{
-            vp.setWidget(0,0,area);
-            vp.getFlexCellFormatter().addStyleName(0, 0, "WhiteContentPanel");
+            vp.add(area);
+            //vp.getFlexCellFormatter().addStyleName(0, 0, "WhiteContentPanel");
         }
         area.setSize("100%","100%");
         area.addFocusHandler(this);
-
+        focReg = area.addFocusHandler(new FocusHandler() {
+        	public void onFocus(FocusEvent event) {
+         		  area.getFormatter().setFontName("Verdana");
+        		  area.getFormatter().setFontSize(RichTextArea.FontSize.X_SMALL);
+        		  focReg.removeHandler();
+        	}
+        });
     }
     
     public void setText(String text){
