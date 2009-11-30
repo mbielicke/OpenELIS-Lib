@@ -428,6 +428,7 @@ public class RichTextToolbar extends Composite {
       ap.setStyleName(img);
       ab.setWidget(ap);
       ab.addClickHandler(listener);
+      ab.enable(true);
       return ab;
   }
 
@@ -439,6 +440,7 @@ public class RichTextToolbar extends Composite {
     ab.setWidget(ap);
     ab.addClickHandler(listener);
     ab.setToggle(true);
+    ab.enable(true);
     return ab;
   }
   
