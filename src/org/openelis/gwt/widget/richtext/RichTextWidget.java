@@ -28,9 +28,7 @@ package org.openelis.gwt.widget.richtext;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.screen.UIUtil;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 
@@ -43,114 +41,106 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
-    
-    private VerticalPanel vp = new VerticalPanel();
-    public RichTextArea area;
-    public RichTextToolbar toolbar;
-    private boolean tools;
-    private boolean enabled;
-    private Field<String> field;
-    private HandlerRegistration focReg;
-    
-    public RichTextWidget() {
-        area = new RichTextArea();
-        toolbar = new RichTextToolbar(area);
-    }
-    
-    public RichTextWidget(boolean tools) {
-    	this();
-        init(tools);
-    }
-    
-    public void init(boolean tools){
-        this.tools = tools;
-        initWidget(vp);
-        //vp.setPadding(0);
-        vp.setSpacing(0);
-        
-        if(tools){
-        	vp.add(toolbar);
-           // vp.getFlexCellFormatter().setHeight(0, 0,"75px");
-            //vp.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
-            vp.add(area);
-            //vp.getgetFlexCellFormatter().addStyleName(1, 0, "WhiteContentPanel");
-            //vp.getFlexCellFormatter().setWidth(0, 0, "100%");
-            vp.setCellWidth(toolbar, "100%");
-        }else{
-            vp.add(area);
-            //vp.getFlexCellFormatter().addStyleName(0, 0, "WhiteContentPanel");
-        }
-        area.setSize("100%","100%");
-        area.addFocusHandler(this);
-        focReg = area.addFocusHandler(new FocusHandler() {
-        	public void onFocus(FocusEvent event) {
-         		  area.getFormatter().setFontName("Verdana");
-        		  area.getFormatter().setFontSize(RichTextArea.FontSize.X_SMALL);
-        		  focReg.removeHandler();
-        	}
-        });
-    }
-    
-    public void setText(String text){
-        area.setHTML(text);
-    }
-    
-    public String getText(){
-        return area.getHTML();
-    }
-    
-    public String getClearText() {
-    	return area.getText();
-    }
-    
-    
-    public void setFocus(boolean focused) {
-        if(enabled)
-            area.setFocus(focused);
-        else
-            area.setFocus(false);
-    }
-    
-    public boolean isEnabled(){
-        return area.isEnabled();
-    }
-    
-    public void setWidth(String width){
-        vp.setWidth(width);
-    }
-    
-    public void setHeight(String height){
-        vp.setHeight(height);
-    }
-    
-    public void enable(boolean enabled) {
-        this.enabled = enabled;
-        if(tools) {
-            toolbar.enable(enabled);
-        }
-        area.setEnabled(enabled);
-    }
 
-    public void onFocus(FocusEvent event) {
-        if(!enabled)
-            area.setFocus(false);
-    }
+	private VerticalPanel vp = new VerticalPanel();
+	public RichTextArea area;
+	public RichTextToolbar toolbar;
+	private boolean tools;
+	private boolean enabled;
+	private Field<String> field;
+	private HandlerRegistration focReg;
 
-    public void onLostFocus(Widget sender) {
-        // TODO Auto-generated method stub
-        
-    }
+	public RichTextWidget() {
+		area = new RichTextArea();
+		toolbar = new RichTextToolbar(area);
+	}
+
+	public RichTextWidget(boolean tools) {
+		this();
+		init(tools);
+	}
+
+	public void init(boolean tools){
+		this.tools = tools;
+		initWidget(vp);
+		vp.setSpacing(0);
+
+		if(tools){
+			vp.add(toolbar);
+			vp.add(area);
+			vp.setCellWidth(toolbar, "100%");
+		}else{
+			vp.add(area);
+		}
+		area.setSize("100%","100%");
+		area.addFocusHandler(this);
+		//Font and Font size can not be set until the area recieves focus.  We set up this handler to 
+		//set the font and size that we want to default then remove the handler so we don't repeat it.
+		focReg = area.addFocusHandler(new FocusHandler() {
+			public void onFocus(FocusEvent event) {
+				area.getFormatter().setFontName("Verdana");
+				area.getFormatter().setFontSize(RichTextArea.FontSize.X_SMALL);
+				focReg.removeHandler();
+			}
+		});
+	}
+
+	public void setText(String text){
+		area.setHTML(text);
+	}
+
+	public String getText(){
+		return area.getHTML();
+	}
+
+	public String getClearText() {
+		return area.getText();
+	}
+
+
+	public void setFocus(boolean focused) {
+		if(enabled)
+			area.setFocus(focused);
+		else
+			area.setFocus(false);
+	}
+
+	public boolean isEnabled(){
+		return area.isEnabled();
+	}
+
+	public void setWidth(String width){
+		vp.setWidth(width);
+	}
+
+	public void setHeight(String height){
+		vp.setHeight(height);
+	}
+
+	public void enable(boolean enabled) {
+		this.enabled = enabled;
+		if(tools) {
+			toolbar.enable(enabled);
+		}
+		area.setEnabled(enabled);
+	}
+
+	public void onFocus(FocusEvent event) {
+		if(!enabled)
+			area.setFocus(false);
+	}
+
+	public void onLostFocus(Widget sender) {
+		// TODO Auto-generated method stub
+
+	}
 
 	public String getValue() {
 		return area.getHTML();
@@ -200,7 +190,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 	public String getFieldValue() {
 		return field.getValue();
 	}
-	
+
 	public HandlerRegistration addFocusHandler(FocusHandler handler) {
 		return area.addFocusHandler(handler);
 	}
@@ -211,23 +201,14 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 
 	public void setQueryMode(boolean query) {
 		field.setQueryMode(query);
-		
 	}
 
 	public void checkValue() {
 		field.checkValue(this);
-		
 	}
 
 	public void getQuery(ArrayList list, String key) {
-		if(field.queryString != null) {
-			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			qd.type = QueryData.Type.STRING;
-			list.add(qd);
-		}
-		
+
 	}
 
 	public ArrayList<LocalizedException> getExceptions() {
@@ -238,7 +219,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 	public void setFieldValue(String value) {
 		field.setValue(value);
 	}
-	
+
 	public HandlerRegistration addFieldValueChangeHandler(
 			ValueChangeHandler<String> handler) {
 		return field.addValueChangeHandler(handler);
