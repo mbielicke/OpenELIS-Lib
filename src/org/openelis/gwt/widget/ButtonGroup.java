@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import org.openelis.gwt.widget.AppButton.ButtonState;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -20,10 +19,9 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class ButtonGroup extends Composite implements ClickHandler, HasClickHandlers {
+public class ButtonGroup extends Composite implements HasClickHandlers {
 
     private ArrayList<AppButton> buttons = new ArrayList<AppButton>();
-    private AppButton            selected;
 
     public ButtonGroup() {
     }
@@ -44,7 +42,6 @@ public class ButtonGroup extends Composite implements ClickHandler, HasClickHand
             Widget wids = widsIt.next();
             if (wids instanceof AppButton) {
                 buttons.add((AppButton)wids);
-                ((AppButton)wids).addClickHandler(this);
             } else if (wids instanceof HasWidgets) {
                 findButtons((HasWidgets)wids);
             }
@@ -59,18 +56,6 @@ public class ButtonGroup extends Composite implements ClickHandler, HasClickHand
             button.addClickHandler(handler);
         }
         return null;
-    }
-
-    /**
-     * Recives clickEvents from buttons so that the current button can be styled correctly.
-     * 
-     */
-    public void onClick(ClickEvent event) {
-        if (selected != null) {
-            selected.setState(ButtonState.UNPRESSED);
-        }
-        selected = (AppButton)event.getSource();
-        selected.setState(ButtonState.PRESSED);
     }
 
     /**
