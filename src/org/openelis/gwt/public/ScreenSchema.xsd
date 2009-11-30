@@ -577,7 +577,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="ScrollPanel">
+	<xsd:element name="ScrollPanel" substitutionGroup="panels">
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:choice>
