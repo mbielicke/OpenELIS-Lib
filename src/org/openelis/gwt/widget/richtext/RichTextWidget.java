@@ -84,7 +84,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 			vp.add(area);
 		}
 		area.setSize("100%","100%");
-		area.addFocusHandler(this);
+        area.addFocusHandler(this);
 		//Font and Font size can not be set until the area recieves focus.  We set up this handler to 
 		//set the font and size that we want to default then remove the handler so we don't repeat it.
 		focReg = area.addFocusHandler(new FocusHandler() {
