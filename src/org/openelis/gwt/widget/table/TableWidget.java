@@ -903,9 +903,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
 					if(((HasField)wid).getExceptions() != null)
-						exceptions.addAll(((HasField)wid).getExceptions());
+						exceptions = ((HasField)wid).getExceptions();
 					if(model.get(i).cells.get(j).exceptions != null){
-						exceptions.addAll(model.get(i).cells.get(j).exceptions);
+						exceptions = model.get(i).cells.get(j).exceptions;
 					}
 				}
 			}
