@@ -85,6 +85,10 @@ public class RichTextToolbar extends Composite {
 				formatter.insertUnorderedList();
 			else if (event.getSource() == removeFormat)
 				formatter.removeFormat();
+			else if (event.getSource() == undo)
+				formatter.undo();
+			else if (event.getSource() == redo)
+				formatter.redo();
 			else if (event.getSource() == richText)
 				checkToggleStates();
 		}
@@ -151,6 +155,8 @@ public class RichTextToolbar extends Composite {
 	private AppButton ul;
 	private AppButton removeLink;
 	private AppButton removeFormat;
+	private AppButton undo;
+	private AppButton redo;
 
 	/**
 	 * Creates a new toolbar that drives the given rich text area.
@@ -167,7 +173,6 @@ public class RichTextToolbar extends Composite {
 		
 		outer.setWidget(0,0,topPanel);
 		outer.setWidget(1,0,bottomPanel);
-		topPanel.setWidth("100%");
 		topPanel.setStyleName("ButtonPanelContainer");
 		bottomPanel.setWidth("100%");
 		initWidget(outer);
@@ -180,26 +185,46 @@ public class RichTextToolbar extends Composite {
 		topPanel.add(bold = createToggleButton("Bold", "Bold"));
 		topPanel.add(italic = createToggleButton("Italic", "Italic"));
 		topPanel.add(underline = createToggleButton("Underline","Underline"));
+		AbsolutePanel ap = new AbsolutePanel();
+		ap.setStyleName("ButtonDivider");
+		topPanel.add(ap);
 		topPanel.add(subscript = createToggleButton("Subscript","Subscript"));
 		topPanel.add(superscript = createToggleButton("Superscript","Superscript"));
+		ap = new AbsolutePanel();
+		ap.setStyleName("ButtonDivider");
+		topPanel.add(ap);
 		topPanel.add(justifyLeft = createButton("JustifyLeft","Justify Left"));
 		topPanel.add(justifyCenter = createButton("JustifyCenter","JustifyCenter"));
 		topPanel.add(justifyRight = createButton("JustifyRight","JustifyRight"));
-
-		topPanel.add(strikethrough = createToggleButton("StrikeThrough","Strike Through"));
+		ap = new AbsolutePanel();
+		ap.setStyleName("ButtonDivider");
+		topPanel.add(ap);
 		topPanel.add(indent = createButton("Indent", "Indent"));
 		topPanel.add(outdent = createButton("Outdent", "Outdent"));
-		topPanel.add(hr = createButton("HR", "HR"));
+		ap = new AbsolutePanel();
+		ap.setStyleName("ButtonDivider");
+		topPanel.add(ap);
 		topPanel.add(ol = createButton("OL", "OL"));
 		topPanel.add(ul = createButton("UL", "UL"));
+		ap = new AbsolutePanel();
+		ap.setStyleName("ButtonDivider");
+		topPanel.add(ap);
+		topPanel.add(strikethrough = createToggleButton("StrikeThrough","Strike Through"));
+		topPanel.add(hr = createButton("HR", "HR"));
+		ap = new AbsolutePanel();
+		ap.setStyleName("ButtonDivider");
+		topPanel.add(ap);
 		topPanel.add(removeFormat = createButton("RemoveFormat","Remove Format"));
+		topPanel.add(redo = createButton("redo","redo"));
+		topPanel.add(undo = createButton("undo","undo"));
+		
 		
 	}
 	
 	private AppButton createButton(String img, String action) {
 		AppButton ab = new AppButton();
 		ab.setAction(action);
-		ab.setStyleName("Button");
+		ab.setStyleName("ButtonPanelButton");
 		AbsolutePanel ap = new AbsolutePanel();
 		ap.setStyleName(img);
 		ab.setWidget(ap);

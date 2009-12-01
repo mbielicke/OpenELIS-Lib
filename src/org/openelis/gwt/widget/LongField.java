@@ -51,14 +51,19 @@ public class LongField extends Field<Long> {
     	QueryFieldUtil qField = new QueryFieldUtil();
     	qField.parse(queryString);
         for(String param : qField.parameter){
-            try {
-                Double.parseDouble(param);
-                removeException("fieldNumericException");
-            } catch (Exception e) {
-                addException(new LocalizedException("fieldNumericException"));
-                valid = false;
-                return;
-            }
+           	String[] vals = param.split("\\.\\.");
+        	for(int i = 0; i < vals.length; i++){
+        		if(!vals[i].equalsIgnoreCase("null")){
+        			try {
+        				Double.parseDouble(param);
+        				removeException("fieldNumericException");
+        			} catch (Exception e) {
+        				addException(new LocalizedException("fieldNumericException"));
+        				valid = false;
+        				return;
+        			}
+        		}
+        	}
         }
     }
 

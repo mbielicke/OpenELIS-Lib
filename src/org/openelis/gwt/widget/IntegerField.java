@@ -53,13 +53,15 @@ public class IntegerField extends Field<Integer> {
         for(String param : qField.parameter){
         	String[] vals = param.split("\\.\\.");
         	for(int i = 0; i < vals.length; i++){
-        		try {
-        			Integer.parseInt(vals[i]);
-        			removeException("fieldNumericException");
-        		} catch (Exception e) {
-        			addException(new LocalizedException("fieldNumericException"));
-        			valid = false;
-        			return;
+        		if(!vals[i].equalsIgnoreCase("null")){
+        			try {
+        				Integer.parseInt(vals[i]);
+        				removeException("fieldNumericException");
+        			} catch (Exception e) {
+        				addException(new LocalizedException("fieldNumericException"));
+        				valid = false;
+        				return;
+        			}
         		}
         	}
         }

@@ -107,7 +107,7 @@ public class DateField extends Field<Datetime> {
     	for (int j = 0; j < qField.parameter.size(); j++) {
     		if(j > 0)
     			sb.append(" ");
-    		if(!qField.getComparator().get(j).equals("=") && !qField.getComparator().get(j).equals("between "))
+    		if(!qField.getComparator().get(j).equals("=") && !qField.getComparator().get(j).equals("between ") || qField.getParameter().get(j).equalsIgnoreCase("null"))
     			sb.append(qField.getComparator().get(j)+" ");
 
     		String param = qField.getParameter().get(j);
@@ -115,23 +115,25 @@ public class DateField extends Field<Datetime> {
     		for(int i = 0; i < dates.length; i++) {
 
     			Date date = null;
-    			try {
-    				if(begin > 2){
-    					String[] time = dates[i].split(":");
-    					if(time.length == 3)
-    						date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2])); 	
-    					else
-    						date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
-    				}else{
-    					dates[i] = dates[i].replaceAll("-", "/");
-    					date = new Date(dates[i]);
+    			if(!dates[i].equalsIgnoreCase("null")){
+    				try {
+    					if(begin > 2){
+    						String[] time = dates[i].split(":");
+    						if(time.length == 3)
+    							date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2])); 	
+    						else
+    							date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
+    					}else{
+    						dates[i] = dates[i].replaceAll("-", "/");
+    						date = new Date(dates[i]);
+    					}
+    					sb.append(DateTimeFormat.getFormat(pattern).format(date));
+    					removeException("invalidDateFormat");
+    				}catch(Exception e) {
+    					valid = false;
+    					addException(new LocalizedException("invalidDateFormat"));
+    					return;
     				}
-    				sb.append(DateTimeFormat.getFormat(pattern).format(date));
-    				removeException("invalidDateFormat");
-    			}catch(Exception e) {
-    				valid = false;
-    				addException(new LocalizedException("invalidDateFormat"));
-    				return;
     			}
     			if(i == 0  && ((dates.length == 1 && param.indexOf("..") > -1) || dates.length == 2))
     				sb.append("..");

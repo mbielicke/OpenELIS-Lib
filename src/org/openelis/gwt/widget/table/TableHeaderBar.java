@@ -101,7 +101,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     private FlexTable bar = new FlexTable(); 
     private TableHeaderBar source = this;
 	protected MenuItem menuItem = null;
-	protected PopupPanel pop;
+	protected PopupPanel pop = new PopupPanel(true);
 	
     public TableHeaderBar() {
     	initWidget(bar);
@@ -151,17 +151,14 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         	int left = this.getAbsoluteLeft()+this.getOffsetWidth()-19;
         	if(left > controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth())
         		left = controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth()-19;
-        	pop = new PopupPanel(true);
         	pop.addCloseHandler(new CloseHandler<PopupPanel>() {
         		public void onClose(CloseEvent<PopupPanel> event) {
         			menuItem = null;
         		}
         	});
-        	pop.add(menuItem);
+        	pop.setWidget(menuItem);
         	pop.setPopupPosition(left, this.getAbsoluteTop());
         	pop.show();
-        	//RootPanel.get().add(menuItem,left, this.getAbsoluteTop());
-            //DOM.setStyleAttribute(menuItem.getElement(),"zIndex", "1000");
         }
 
         /**

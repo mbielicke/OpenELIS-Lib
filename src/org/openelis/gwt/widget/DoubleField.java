@@ -53,13 +53,15 @@ public class DoubleField extends Field<Double> {
         for(String param : qField.parameter){
         	String[] vals = param.split("\\.\\.");
         	for(int i = 0; i < vals.length; i++){
-        		try {
-        			Double.parseDouble(vals[i]);
-        			removeException("invalidDouble");
-        		} catch (Exception e) {
-        			addException(new LocalizedException("invalidDouble"));
-        			valid = false;
-        			return;
+        		if(!vals[i].equalsIgnoreCase("null")) {
+        			try {
+        				Double.parseDouble(vals[i]);
+        				removeException("invalidDouble");
+        			} catch (Exception e) {
+        				addException(new LocalizedException("invalidDouble"));
+        				valid = false;
+        				return;
+        			}
         		}
         	}
         }
