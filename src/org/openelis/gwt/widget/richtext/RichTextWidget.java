@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.richtext;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
@@ -43,12 +44,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers{
+public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers, Focusable {
 
 	private VerticalPanel vp = new VerticalPanel();
 	public RichTextArea area;
@@ -237,6 +239,21 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 
 	public void removeExceptionStyle(String style) {	
 		area.removeStyleName(style);
+	}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
