@@ -1865,85 +1865,97 @@ rich text css
 .Italic {
     width:20;
     height:20;
-    background: url(../Images/italic.gif);
+    background: url(../Images/italic.gif) no-repeat;
 }
 
 .Bold {
     width:20;
     height:20;
-    background: url(../Images/bold.gif);
+    background: url(../Images/bold.png) no-repeat ;
 }
 
 .Underline{
     width:20;
     height:20;
-    background: url(../Images/underline.gif);
+    background: url(../Images/underline.png) no-repeat ;
 }
 
 .Subscript{
     width:20;
     height:20;
-    background: url(../Images/subscript.gif);
+    background: url(../Images/subscript.png) no-repeat;
 }
 
 .Superscript{
     width:20;
     height:20;
-    background: url(../Images/superscript.gif);
+    background: url(../Images/superscript.png) no-repeat;
 }
 
 .JustifyLeft{
     width:20;
     height:20;
-    background: url(../Images/justifyLeft.gif);
+    background: url(../Images/justifyLeft.gif) no-repeat;
 }
 
 .JustifyCenter{
     width:20;
     height:20;
-    background: url(../Images/justifyCenter.gif);
+    background: url(../Images/justifyCenter.gif) no-repeat;
 }
 
 .JustifyRight{
     width:20;
     height:20;
-    background: url(../Images/justifyRight.gif);
+    background: url(../Images/justifyRight.gif) no-repeat;
 }
 
 .StrikeThrough{
     width:20;
     height:20;
-    background: url(../Images/strikeThrough.gif);
+    background: url(../Images/strikeThrough.png) no-repeat;
 }
 
 .Indent{
     width:20;
     height:20;
-    background: url(../Images/indent.gif);
+    background: url(../Images/indent.gif) no-repeat;
 }
 
 .Outdent{
     width:20;
     height:20;
-    background: url(../Images/outdent.gif);
+    background: url(../Images/outdent.gif) no-repeat;
 }
 
 .HR{
     width:20;
     height:20;
-    background: url(../Images/hr.gif);
+    background: url(../Images/hr.gif) no-repeat;
 }
 
 .OL{
     width:20;
     height:20;
-    background: url(../Images/ol.gif);
+    background: url(../Images/ol.png) no-repeat;
 }
 
 .UL{
     width:20;
     height:20;
-    background: url(../Images/ul.gif);
+    background: url(../Images/ul.png) no-repeat;
+}
+
+.redo{
+    width:20;
+    height:20;
+    background: url(../Images/arrow_redo.png) no-repeat;
+}
+
+.undo{
+    width:20;
+    height:20;
+    background: url(../Images/arrow_undo.png) no-repeat;
 }
 
 .InsertImage{
