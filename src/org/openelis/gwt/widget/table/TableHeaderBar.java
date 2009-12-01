@@ -82,7 +82,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
 															 MouseUpHandler,  
 															 CloseHandler<PopupPanel>, 
 															 ActionHandler<MenuItem.Action>,
-															 ClickHandler {
+															 ClickHandler,
+															 HasMouseOutHandlers {
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
@@ -99,7 +100,8 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     public boolean doQuery;
     private FlexTable bar = new FlexTable(); 
     private TableHeaderBar source = this;
-	MenuItem menuItem = null;
+	protected MenuItem menuItem = null;
+	protected PopupPanel pop;
 	
     public TableHeaderBar() {
     	initWidget(bar);
@@ -138,30 +140,47 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     	
         public void onMouseOver(MouseOverEvent event) {
         	int index = headers.indexOf(this);
+        	if(hMenus.get(index) == null){
+        		pop.hide();
+        		menuItem = null;
+        		return;
+        	}
         	if(menuItem == hMenus.get(index))
         		return;
         	menuItem = hMenus.get(index);
         	int left = this.getAbsoluteLeft()+this.getOffsetWidth()-19;
         	if(left > controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth())
-        		left = controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth()-16;
-        	RootPanel.get().add(menuItem,left, this.getAbsoluteTop());
-            DOM.setStyleAttribute(menuItem.getElement(),"zIndex", "1000");
+        		left = controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth()-19;
+        	pop = new PopupPanel(true);
+        	pop.addCloseHandler(new CloseHandler<PopupPanel>() {
+        		public void onClose(CloseEvent<PopupPanel> event) {
+        			menuItem = null;
+        		}
+        	});
+        	pop.add(menuItem);
+        	pop.setPopupPosition(left, this.getAbsoluteTop());
+        	pop.show();
+        	//RootPanel.get().add(menuItem,left, this.getAbsoluteTop());
+            //DOM.setStyleAttribute(menuItem.getElement(),"zIndex", "1000");
         }
 
         /**
          * Catches mouses Events for resizing columns.
          */
         public void onMouseOut(MouseOutEvent event) {
-            if(menuItem != null && !menuItem.popShowing && ((event.getClientX() < getAbsoluteLeft() || event.getClientX() > getAbsoluteLeft()+getOffsetWidth())
-            		                || (event.getClientY() < getAbsoluteTop() || event.getClientY() > getAbsoluteTop()+getOffsetHeight()))){
-            	RootPanel.get().remove(menuItem);
+        	//Window.alert(""+event.getRelativeY(getElement()));
+            if(pop.isShowing() && !menuItem.popShowing && ((event.getRelativeX(((Widget)event.getSource()).getElement()) <= 0 || event.getRelativeX(((Widget)event.getSource()).getElement()) >= getOffsetWidth())
+            		                || (event.getRelativeY(((Widget)event.getSource()).getElement()) <= 0 || event.getRelativeY(((Widget)event.getSource()).getElement()) >= getOffsetHeight()))){
+            	//RootPanel.get().remove(menuItem);
+            	pop.hide();
             	menuItem = null;
             }
         }
 
         public void onClose(CloseEvent<PopupPanel> event) {
         	if(menuItem != null) {
-        		RootPanel.get().remove(menuItem);
+        		//RootPanel.get().remove(menuItem);
+        		pop.hide();
            		menuItem = null;
         	}
         }
@@ -243,6 +262,17 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
             
         }
         sizeHeader();
+        addMouseOutHandler(new MouseOutHandler() {
+        	public void onMouseOut(MouseOutEvent event) {
+        		if(pop.isShowing()){
+        			if((event.getRelativeX(getElement()) <= 0 || event.getRelativeX(getElement()) >= getOffsetWidth())
+        			    || (event.getRelativeY(getElement()) <= 0 || event.getRelativeY(getElement()) >= getOffsetHeight())){
+        				pop.hide();
+        				menuItem = null;
+        			}
+        		}
+        	}
+        });
     }
     
     public void setHeaders(String[] headers) {
@@ -268,8 +298,11 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     		tableCol1 = -1;
     		return;
     	}  
-    	if(menuItem != null)
-    		menuItem.removeFromParent();
+    	if(pop.isShowing()){
+    		pop.hide();
+    		menuItem =  null;
+    	}
+    		//menuItem.removeFromParent();
     	FocusPanel bar = new FocusPanel();
     	bar.addMouseUpHandler(this);
     	bar.addMouseDownHandler(this);
@@ -530,6 +563,10 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     public static native String getUserAgent() /*-{
         return navigator.userAgent.toLowerCase();
      }-*/;
+
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler,MouseOutEvent.getType());
+	}
     
 
 }
