@@ -217,6 +217,8 @@ public class RichTextToolbar extends Composite {
 		topPanel.add(removeFormat = createButton("RemoveFormat","Remove Format"));
 		topPanel.add(redo = createButton("redo","redo"));
 		topPanel.add(undo = createButton("undo","undo"));
+		undo.setTitle("Undo");
+		redo.setTitle("Redo");
 		
 		
 	}
