@@ -6,7 +6,9 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
@@ -73,7 +75,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
         modalPanel.setStyleName("ModalPanel");
         modalPanel.setHeight(Window.getClientHeight()+"px");
         modalPanel.setWidth(Window.getClientWidth()+"px");
-        modalPanel.add(this,Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+        //modalPanel.add(this,Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
         if(active > -1){
@@ -82,6 +84,14 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
         ((AppButton)bp.getWidget(0)).setFocus();
         active = 0;
         keyHandler = Event.addNativePreviewHandler(this);
+        final int fWidth = this.getOffsetWidth();
+        final int fHeight = this.getOffsetHeight();
+        final Widget wid = this;
+        DeferredCommand.addCommand(new Command() {
+        	public void execute() {
+                modalPanel.add(wid,Window.getClientWidth()/2 - fWidth/2,Window.getClientHeight()/2 - fHeight/2);
+        	}
+        });
     }
     
     private Widget createButtons(String[] buttons) {
