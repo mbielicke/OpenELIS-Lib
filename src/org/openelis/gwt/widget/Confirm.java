@@ -84,12 +84,10 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
         ((AppButton)bp.getWidget(0)).setFocus();
         active = 0;
         keyHandler = Event.addNativePreviewHandler(this);
-        final int fWidth = this.getOffsetWidth();
-        final int fHeight = this.getOffsetHeight();
         final Widget wid = this;
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
-                modalPanel.add(wid,Window.getClientWidth()/2 - fWidth/2,Window.getClientHeight()/2 - fHeight/2);
+                modalPanel.add(wid,Window.getClientWidth()/2 - wid.getOffsetWidth()/2,Window.getClientHeight()/2 - wid.getOffsetHeight()/2);
         	}
         });
     }
