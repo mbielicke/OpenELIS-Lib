@@ -194,8 +194,8 @@ public class RichTextToolbar extends Composite {
 		ap.setStyleName("ButtonDivider");
 		topPanel.add(ap);
 		topPanel.add(justifyLeft = createButton("JustifyLeft","Justify Left"));
-		topPanel.add(justifyCenter = createButton("JustifyCenter","JustifyCenter"));
-		topPanel.add(justifyRight = createButton("JustifyRight","JustifyRight"));
+		topPanel.add(justifyCenter = createButton("JustifyCenter","Justify Center"));
+		topPanel.add(justifyRight = createButton("JustifyRight","Justify Right"));
 		ap = new AbsolutePanel();
 		ap.setStyleName("ButtonDivider");
 		topPanel.add(ap);
@@ -204,28 +204,27 @@ public class RichTextToolbar extends Composite {
 		ap = new AbsolutePanel();
 		ap.setStyleName("ButtonDivider");
 		topPanel.add(ap);
-		topPanel.add(ol = createButton("OL", "OL"));
-		topPanel.add(ul = createButton("UL", "UL"));
+		topPanel.add(ol = createButton("OL", "Ordered List"));
+		topPanel.add(ul = createButton("UL", "Unordered List"));
 		ap = new AbsolutePanel();
 		ap.setStyleName("ButtonDivider");
 		topPanel.add(ap);
 		topPanel.add(strikethrough = createToggleButton("StrikeThrough","Strike Through"));
-		topPanel.add(hr = createButton("HR", "HR"));
+		topPanel.add(hr = createButton("HR", "Horizontal Line"));
 		ap = new AbsolutePanel();
 		ap.setStyleName("ButtonDivider");
 		topPanel.add(ap);
 		topPanel.add(removeFormat = createButton("RemoveFormat","Remove Format"));
-		topPanel.add(redo = createButton("redo","redo"));
-		topPanel.add(undo = createButton("undo","undo"));
-		undo.setTitle("Undo");
-		redo.setTitle("Redo");
+		topPanel.add(redo = createButton("redo","Redo"));
+		topPanel.add(undo = createButton("undo","Undo"));
+		
 		
 		
 	}
 	
-	private AppButton createButton(String img, String action) {
+	private AppButton createButton(String img, String title) {
 		AppButton ab = new AppButton();
-		ab.setAction(action);
+		ab.setTitle(title);
 		ab.setStyleName("ButtonPanelButton");
 		AbsolutePanel ap = new AbsolutePanel();
 		ap.setStyleName(img);
@@ -235,8 +234,8 @@ public class RichTextToolbar extends Composite {
 		return ab;
 	}
 
-	private AppButton createToggleButton(String img, String action) {		
-		AppButton ab = createButton(img,action);
+	private AppButton createToggleButton(String img, String title) {		
+		AppButton ab = createButton(img,title);
 		ab.setToggle(true);
 		return ab;
 	}
