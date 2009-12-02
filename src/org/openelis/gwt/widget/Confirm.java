@@ -45,9 +45,11 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     	else if(type == Type.QUESTION)
     		ap.setStyleName("questionIcon");
     	hp.add(ap);
+    	hp.setCellVerticalAlignment(ap, HasAlignment.ALIGN_MIDDLE);
     	com.google.gwt.user.client.ui.Label lb = new com.google.gwt.user.client.ui.Label();
     	lb.setText(message);
     	lb.setWordWrap(true);
+    	lb.setStyleName("noteBodyText");
     	hp.add(lb);
     	vp.add(hp);
     	createButtons(buttons);
