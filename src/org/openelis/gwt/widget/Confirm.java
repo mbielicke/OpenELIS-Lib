@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -46,7 +45,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     		ap.setStyleName("questionIcon");
     	hp.add(ap);
     	hp.setCellVerticalAlignment(ap, HasAlignment.ALIGN_MIDDLE);
-    	com.google.gwt.user.client.ui.Label lb = new com.google.gwt.user.client.ui.Label();
+    	Label lb = new Label();
     	lb.setText(message);
     	lb.setWordWrap(true);
     	lb.setStyleName("noteBodyText");
@@ -112,7 +111,9 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     	for(int i = 0; i < buttons.length; i++) {
     		AppButton ab = new AppButton();
     		ab.action = String.valueOf(i);
-    		ab.setWidget(new Label(buttons[i]));
+    		Label bl = new Label(buttons[i]);
+    		bl.setStyleName("ScreenLabel");
+    		ab.setWidget(bl);
     		ab.setStyleName("Button");
     		ab.enable(true);
     		bp.add(ab);
