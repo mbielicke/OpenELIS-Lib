@@ -124,8 +124,9 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
 				SelectionEvent.fire(this, active);
 				hide();
 			}
-		}	
-		event.cancel();
+		}
+		if(event.getTypeInt() != Event.ONCLICK)
+			event.cancel();
 	}
     
 }
