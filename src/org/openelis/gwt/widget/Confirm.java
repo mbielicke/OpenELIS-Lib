@@ -16,6 +16,7 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -46,14 +47,15 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     	hp.add(ap);
     	com.google.gwt.user.client.ui.Label lb = new com.google.gwt.user.client.ui.Label();
     	lb.setText(message);
-    	lb.setStyleName("Form Prompt");
     	lb.setWordWrap(true);
     	hp.add(lb);
     	vp.add(hp);
-    	vp.add(createButtons(buttons));
+    	createButtons(buttons);
+    	vp.add(bp);
+    	vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
     	dp.add(vp);
     	dp.setStyleName("ErrorWindow");
-    	dp.setVisible(true);
+    	dp.setVisible(false);
     	initWidget(dp);
     }
     
@@ -65,6 +67,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     }
     
     public void show() {
+    	setWidth("400px");
         modalGlass = new AbsolutePanel();
         modalGlass.setStyleName("GlassPanel");
         modalGlass.setHeight(Window.getClientHeight()+"px");
@@ -75,7 +78,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
         modalPanel.setStyleName("ModalPanel");
         modalPanel.setHeight(Window.getClientHeight()+"px");
         modalPanel.setWidth(Window.getClientWidth()+"px");
-        //modalPanel.add(this,Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+        modalPanel.add(this,Window.getClientWidth()/2 - 400/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
         if(active > -1){
@@ -87,9 +90,17 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
         final Widget wid = this;
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
-                modalPanel.add(wid,Window.getClientWidth()/2 - wid.getOffsetWidth()/2,Window.getClientHeight()/2 - wid.getOffsetHeight()/2);
+               size();
         	}
         });
+    }
+    
+    private void size() {
+    	dp.setVisible(true);
+    	if(bp.getOffsetWidth() > 400)
+    		setWidth((bp.getOffsetWidth()+50)+"px");
+    	modalPanel.setWidgetPosition(this, Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+    	
     }
     
     private Widget createButtons(String[] buttons) {
