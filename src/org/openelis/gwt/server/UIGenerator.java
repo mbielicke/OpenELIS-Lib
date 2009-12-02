@@ -61,7 +61,7 @@ public class UIGenerator extends Generator {
 		printWriter = context.tryCreate(logger, packageName, className+"_"+lang);
 		if(printWriter == null)
 			return;
-		System.out.println("Genertating "+className+".xsl");
+		System.out.println("Generating "+className+".xsl");
 		InputStream  xsl = context.getResourcesOracle().getResourceMap().get(packageName.replaceAll("\\.","/")+"/"+className+".xsl").openContents();
 		String props = context.getPropertyOracle().getSelectionProperty(logger,"props").getCurrentValue().replaceAll("_","\\.");
     	doc = XMLUtil.parse(ServiceUtils.getGeneratorXML(xsl,props,lang));
