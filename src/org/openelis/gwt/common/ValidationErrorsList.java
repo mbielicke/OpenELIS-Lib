@@ -2,10 +2,10 @@ package org.openelis.gwt.common;
 
 import java.util.ArrayList;
 
-public class ValidationErrorsList extends LocalizedException {
+public class ValidationErrorsList extends Exception {
     
     private static final long serialVersionUID = 1L;
-    private ArrayList<LocalizedException> errors = new ArrayList<LocalizedException>();
+    private ArrayList<Exception> errors = new ArrayList<Exception>();
     private boolean hasErrors, hasWarnings;
     
     public ValidationErrorsList() {
@@ -20,7 +20,7 @@ public class ValidationErrorsList extends LocalizedException {
         hasWarnings = false;
     }
     
-    public void add(LocalizedException ex){
+    public void add(Exception ex){
         errors.add(ex);
 
         if(ex instanceof Warning)
@@ -33,7 +33,7 @@ public class ValidationErrorsList extends LocalizedException {
         return errors.size();
     }
     
-    public ArrayList<LocalizedException> getErrorList(){
+    public ArrayList<Exception> getErrorList(){
         return errors;
     }
     
