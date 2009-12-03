@@ -32,6 +32,8 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     HorizontalPanel bp;
     HandlerRegistration keyHandler;
     public enum Type {WARN,ERROR,QUESTION};
+    private int width = 400;
+    private int height = -1;
     
     public Confirm(Type type, String message, String... buttons) {
     	VerticalPanel vp = new VerticalPanel();
@@ -48,7 +50,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     	Label lb = new Label();
     	lb.setText(message);
     	lb.setWordWrap(true);
-    	lb.setStyleName("noteBodyText");
+    	lb.setStyleName("Form ScreenLabel");
     	hp.add(lb);
     	vp.add(hp);
     	createButtons(buttons);
@@ -65,10 +67,13 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     	modalPanel.removeFromParent();
     	modalGlass.removeFromParent();
     	keyHandler.removeHandler();
+    	dp.setVisible(false);
     }
     
     public void show() {
-    	setWidth("400px");
+    	setWidth(width+"px");
+    	if(height > -1)
+    		setHeight(height+"px");
         modalGlass = new AbsolutePanel();
         modalGlass.setStyleName("GlassPanel");
         modalGlass.setHeight(Window.getClientHeight()+"px");
@@ -98,7 +103,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     
     private void size() {
     	dp.setVisible(true);
-    	if(bp.getOffsetWidth() > 400)
+    	if(bp.getOffsetWidth() > width)
     		setWidth((bp.getOffsetWidth()+50)+"px");
     	modalPanel.setWidgetPosition(this, Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
     	
@@ -106,8 +111,6 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     
     private Widget createButtons(String[] buttons) {
     	bp = new HorizontalPanel();
-    	bp.setStyleName("ButtonPanelContainer");
-    	bp.setStyleName("Form");
     	for(int i = 0; i < buttons.length; i++) {
     		AppButton ab = new AppButton();
     		ab.action = String.valueOf(i);
@@ -149,6 +152,19 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
 		}
 		if(event.getTypeInt() != Event.ONCLICK)
 			event.cancel();
+	}
+	
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+	
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public void setHeight(int height) {
+		this.height = height;
 	}
     
 }
