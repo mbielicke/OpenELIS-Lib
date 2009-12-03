@@ -30,9 +30,6 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenDef;
-import org.openelis.gwt.screen.UIUtil;
-import org.openelis.gwt.screen.deprecated.ScreenWindow;
-import org.openelis.gwt.widget.deprecated.IconContainer;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -131,10 +128,10 @@ public class EditBox extends Composite implements ClickHandler,
 			return;
 		}
 		if(sender.getSource() == fp){
-				win = new ScreenWindow(null,"","standardNotePicker","",true,false);
+				win = new ScreenWindow(ScreenWindow.Mode.DIALOG);
 				if(editorDef == null) {
 					editorDef = new ScreenDef();
-					editorDef.getPanel().add(UIUtil.createWidget(XMLParser.parse(editorScreen).getDocumentElement(),editorDef));
+					//editorDef.getPanel().add(UIUtil.createWidget(XMLParser.parse(editorScreen).getDocumentElement(),editorDef));
 					((AppButton)editorDef.getWidget("ok")).addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
 							text.setText(((TextArea)editorDef.getWidget("editor")).getText());

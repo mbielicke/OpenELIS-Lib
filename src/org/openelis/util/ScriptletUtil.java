@@ -1,8 +1,6 @@
 package org.openelis.util;
 
-import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFManager;
-import org.apache.bsf.util.CodeBuffer;
 
 public class ScriptletUtil {
 

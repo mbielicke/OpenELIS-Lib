@@ -25,19 +25,18 @@
 */
 package org.openelis.persistence;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.Status;
-import org.apache.log4j.Category;
-
 import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import javax.naming.NamingException;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.Status;
+
+import org.apache.log4j.Category;
 
 /**
  * Manage DataSource.

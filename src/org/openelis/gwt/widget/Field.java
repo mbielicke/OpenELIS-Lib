@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
 
-
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;

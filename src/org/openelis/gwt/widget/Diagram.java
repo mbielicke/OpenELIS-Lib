@@ -6,8 +6,6 @@ import java.util.HashMap;
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.HasActionHandlers;
-import org.openelis.gwt.screen.deprecated.ScreenWindow;
-import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.tree.TreeDataItem;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;

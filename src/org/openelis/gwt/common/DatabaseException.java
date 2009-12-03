@@ -3,7 +3,7 @@ package org.openelis.gwt.common;
 /**
  * DatabaseException denotes a generic runtime data access (SQL) exception.
  */
-public class DatabaseException extends Exception {
+public class DatabaseException extends LocalizedException {
 
     private static final long serialVersionUID = 1L;
 

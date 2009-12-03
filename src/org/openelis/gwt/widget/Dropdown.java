@@ -33,7 +33,6 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRenderer;

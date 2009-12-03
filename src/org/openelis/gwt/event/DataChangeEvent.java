@@ -2,7 +2,6 @@ package org.openelis.gwt.event;
 
 import org.openelis.gwt.screen.ScreenEventHandler;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.Widget;
 

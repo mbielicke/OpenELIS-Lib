@@ -1,7 +1,5 @@
 package org.openelis.persistence;
 
-import org.openelis.persistence.MessageHandler;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;

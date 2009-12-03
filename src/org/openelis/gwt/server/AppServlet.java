@@ -25,11 +25,13 @@
 */
 package org.openelis.gwt.server;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.google.gwt.user.server.rpc.SerializationPolicy;
-import org.openelis.util.SessionManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.openelis.util.SessionManager;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
 
 public class AppServlet extends RemoteServiceServlet {
     

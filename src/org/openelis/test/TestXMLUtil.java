@@ -25,11 +25,9 @@
 */
 package org.openelis.test;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 import org.openelis.util.XMLUtil;
-
-import junit.framework.TestCase;
 
 public class TestXMLUtil extends TestCase {
 

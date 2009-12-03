@@ -38,8 +38,8 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.DropdownWidget;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.QueryFieldUtil;
-import org.openelis.gwt.widget.deprecated.IconContainer;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;

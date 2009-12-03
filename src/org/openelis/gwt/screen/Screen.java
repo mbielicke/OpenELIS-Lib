@@ -69,15 +69,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             super.onBrowserEvent(event);
     }
 
-    public Screen(String url) throws Exception {
-        initWidget(panel);
-        service = new ScreenService(url);
-        def = new ScreenDef();
-        ((ScreenDef)def).loadURL = url;
-        UIUtil.createWidgets((ScreenDef)def);
-        panel.add(def.getPanel());
-    }
-
     public Screen(ScreenDefInt def) {
         initWidget(panel);
         this.def = def;

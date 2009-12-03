@@ -1,6 +1,5 @@
 package org.openelis.gwt.server;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;

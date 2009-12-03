@@ -1,6 +1,6 @@
 package org.openelis.gwt.common;
 
-public class NotFoundException extends Exception {
+public class NotFoundException extends LocalizedException {
 
     private static final long serialVersionUID = 1L;
 

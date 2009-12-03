@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.screen.UIUtil;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;

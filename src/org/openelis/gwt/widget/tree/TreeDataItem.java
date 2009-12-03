@@ -26,7 +26,6 @@
 package org.openelis.gwt.widget.tree;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Iterator;
 
 import org.openelis.gwt.widget.table.TableDataRow;

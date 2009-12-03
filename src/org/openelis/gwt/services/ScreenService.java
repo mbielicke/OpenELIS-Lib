@@ -71,8 +71,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 
     public <T extends RPC> T call(String method, RPC param) throws Exception {
         Callback<T> callback = new Callback<T>();
-        Request req = service.call(method, param, callback);
-        
+        service.call(method, param, callback);
         return callback.getResult();
     }
     
@@ -167,9 +166,9 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	}
 
 	public <T extends RPC> T call(String method) throws Exception {
-        Callback<RPC> callback = new Callback<RPC>();
+        Callback<T> callback = new Callback<T>();
         service.call(method, callback);
-        return (T)callback.getResult();
+        return callback.getResult();
 	}
 
 	public void callVoid(String method) throws Exception {
@@ -187,9 +186,9 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	}
 
 	public <T extends RPC> T call(String method, Long param) throws Exception {
-        Callback<RPC> callback = new Callback<RPC>();
+        Callback<T> callback = new Callback<T>();
         service.call(method, param, callback);
-        return (T)callback.getResult();
+        return callback.getResult();
         
 	}
 
@@ -198,45 +197,47 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 		return service.call(method,param, callback);
 	}
 
-	public <T extends RPC> ArrayList<T>  callList(String method, RPC param) throws Exception {
-	       Callback<ArrayList<T>> callback = new Callback<ArrayList<T>>();
+	public <T extends ArrayList<? extends RPC>> T  callList(String method, RPC param) throws Exception {
+	       Callback<T> callback = new Callback<T>();
 	       service.callList(method, param, callback);
 	       return callback.getResult();
 	}
 
-	public <T extends RPC> Request callList(String method, RPC param,
-			AsyncCallback<ArrayList<T>> callback) {
+	public <T extends ArrayList<? extends RPC>> Request callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		return service.callList(method, param, callback);
+	}
+	
+	public <T extends ArrayList<? extends RPC>> Request callList(String method, RPC param,
+			AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
 		return service.callList(method,param, callback);
 	}
 	
-	public <T extends RPC> ArrayList<T> callList(String method)	throws Exception {
-	       Callback<ArrayList<T>> callback = new Callback<ArrayList<T>>();
+	public <T extends ArrayList<? extends RPC>> T callList(String method)	throws Exception {
+	       Callback<T> callback = new Callback<T>();
 	       service.callList(method, callback);
 	       return callback.getResult();
 	}
 
-	public <T extends RPC> Request callList(String method,AsyncCallback<ArrayList<T>> callback) {
+	public <T extends ArrayList<? extends RPC>> Request callList(String method,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
 		return service.callList(method, callback);
 	}
 
-	public <T extends RPC> ArrayList<T> callList(String method, String param) throws Exception {
-	       Callback<ArrayList<T>> callback = new Callback<ArrayList<T>>();
+	public <T extends ArrayList<? extends RPC>> T callList(String method, String param) throws Exception {
+	       Callback<T> callback = new Callback<T>();
 	       service.callList(method, param, callback);
 	       return callback.getResult();
 	}
 
-	public <T extends RPC> Request callList(String method, String param, AsyncCallback<ArrayList<T>> callback) {
-		return service.callList(method, param, callback);
-	}
+
 	
-   public <T extends RPC> ArrayList<T>  callList(String method, Integer param) throws Exception {
-        Callback<ArrayList<T>> callback = new Callback<ArrayList<T>>();
+   public <T extends ArrayList<? extends RPC>> T  callList(String method, Integer param) throws Exception {
+        Callback<T> callback = new Callback<T>();
         service.callList(method, param, callback);
         return callback.getResult();
     }
 
-    public <T extends RPC> Request callList(String method, Integer param,
-        AsyncCallback<ArrayList<T>> callback) {
+    public <T extends ArrayList<? extends RPC>> Request callList(String method, Integer param,
+        AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
         return service.callList(method,param, callback);
     }
 

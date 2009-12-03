@@ -25,11 +25,11 @@
 */
 package org.openelis.persistence;
 
-import org.openelis.util.SessionManager;
-
 import java.util.Properties;
 
 import javax.naming.InitialContext;
+
+import org.openelis.util.SessionManager;
 
 public class EJBFactory {
 

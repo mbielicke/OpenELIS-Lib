@@ -25,9 +25,6 @@
 */
 package org.openelis.gwt.widget.table;
 
-import org.openelis.gwt.common.data.deprecated.TableDataModel;
-import org.openelis.gwt.common.deprecated.Filter;
-
 import java.util.ArrayList;
 
 public interface TableFiltererInt {

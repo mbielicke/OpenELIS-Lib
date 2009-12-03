@@ -25,10 +25,6 @@
 */
 package org.openelis.util;
 
-import edu.uiowa.uhl.wa.bean.ApplicationLogBuilder;
-
-import org.apache.log4j.Category;
-
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,11 +32,16 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+
+import org.apache.log4j.Category;
+
+import edu.uiowa.uhl.wa.bean.ApplicationLogBuilder;
 
 public class SessionManager implements HttpSessionListener, HttpSessionAttributeListener{
     private static Category log = Category.getInstance(SessionManager.class.getName());

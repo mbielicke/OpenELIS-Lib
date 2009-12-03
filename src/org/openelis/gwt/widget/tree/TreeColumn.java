@@ -30,14 +30,13 @@ import java.util.HashSet;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
-import org.openelis.gwt.screen.UIUtil;
-import org.openelis.gwt.widget.deprecated.IconContainer;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.DropdownWidget;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.table.Filter;
 import org.openelis.gwt.widget.table.TableDataCell;
 import org.openelis.gwt.widget.table.TableDataRow;

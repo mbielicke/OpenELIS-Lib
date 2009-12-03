@@ -1,7 +1,6 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.screen.Screen;
 
 import com.google.gwt.i18n.client.NumberFormat;
 

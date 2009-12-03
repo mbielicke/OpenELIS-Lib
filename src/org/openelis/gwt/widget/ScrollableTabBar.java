@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.widget.deprecated.IconContainer;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;

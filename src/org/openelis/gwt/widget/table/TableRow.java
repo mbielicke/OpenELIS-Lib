@@ -1,8 +1,6 @@
 package org.openelis.gwt.widget.table;
 
 
-import org.openelis.gwt.widget.HasField;
-
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;

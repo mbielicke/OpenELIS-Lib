@@ -25,9 +25,9 @@
 */
 package org.openelis.gwt.common.data;
 
-import org.openelis.gwt.widget.table.TableDataRow;
-
 import java.util.ArrayList;
+
+import org.openelis.gwt.widget.table.TableDataRow;
 
 public interface DataFiltererInt {
     

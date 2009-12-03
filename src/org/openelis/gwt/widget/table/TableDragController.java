@@ -1,20 +1,18 @@
 package org.openelis.gwt.widget.table;
 
+import java.util.HashMap;
+
+import org.openelis.gwt.event.DragManager;
+
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
-import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import org.openelis.gwt.event.DragManager;
-
-import java.util.HashMap;
 
 
 public class TableDragController extends PickupDragController {

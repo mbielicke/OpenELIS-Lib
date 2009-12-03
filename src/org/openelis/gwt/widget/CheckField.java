@@ -26,7 +26,6 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.screen.Screen;
 
 
 /**

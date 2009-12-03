@@ -25,16 +25,18 @@
 */
 package org.openelis.persistence;
 
-import org.apache.log4j.Category;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import org.apache.log4j.Category;
 
 /**
  * Manage DataSource.

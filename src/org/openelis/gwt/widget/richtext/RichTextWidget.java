@@ -28,7 +28,6 @@ package org.openelis.gwt.widget.richtext;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;

@@ -26,12 +26,12 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 
     private static final long serialVersionUID = 1L;
     
-    private Object invoke(String service, String method) throws Throwable {
+    private Object invoke(String service, String method) throws Exception {
     	return invoke(service,method,new Class[]{},new Object[]{});
     }
     
     @SuppressWarnings("unchecked")
-	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Throwable {
+	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
 
 		try {
 			Object serviceInst = Class.forName(service).newInstance();
@@ -51,86 +51,86 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     }
 
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Integer param)	throws Throwable {
+	public <T extends RPC> T call(String method, Integer param)	throws Exception {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
     
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, RPC param) throws Throwable {
+	public <T extends RPC> T call(String method, RPC param) throws Exception {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
     
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Double param) throws Throwable {
+	public <T extends RPC> T call(String method, Double param) throws Exception {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
     
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, String param) throws Throwable {
+	public <T extends RPC> T call(String method, String param) throws Exception {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
     }
 
     @SuppressWarnings(value = "unchecked")
-	public <T extends RPC> T call(String method, Datetime param) throws Throwable {
+	public <T extends RPC> T call(String method, Datetime param) throws Exception {
     	return (T)invoke(getThreadLocalRequest().getParameter("service"),method, new Class[]{param.getClass()},new Object[] {param});
 	}
  
-	public Boolean callBoolean(String method) throws Throwable {
+	public Boolean callBoolean(String method) throws Exception {
     	return (Boolean)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
  
-	public Datetime callDatetime(String method, byte begin, byte end) throws Throwable {
+	public Datetime callDatetime(String method, byte begin, byte end) throws Exception {
     	return (Datetime)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{byte.class,byte.class},new Object[]{begin,end});
 	}
 
-	public Double callDouble(String method) throws Throwable {
+	public Double callDouble(String method) throws Exception {
     	return (Double)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
-	public Integer callInteger(String method) throws Throwable {
+	public Integer callInteger(String method) throws Exception {
     	return (Integer)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
-	public String callString(String method) throws Throwable {
+	public String callString(String method) throws Exception {
     	return (String)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends RPC> T call(String method) throws Throwable {
+	public <T extends RPC> T call(String method) throws Exception {
 		return (T)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
-	public void callVoid(String method) throws Throwable {
+	public void callVoid(String method) throws Exception {
 		invoke(getThreadLocalRequest().getParameter("service"),method);
 		
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends RPC> T call(String method, Long param) throws Throwable {
+	public <T extends RPC> T call(String method, Long param) throws Exception {
 		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends RPC> ArrayList<T> callList(String method, RPC param)
-			throws Throwable {
-		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+	public <T extends ArrayList<? extends RPC>> T callList(String method, RPC param)
+			throws Exception {
+		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends RPC> ArrayList<T> callList(String method)
-			throws Throwable {
-		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method);
+	public <T extends ArrayList<? extends RPC>> T callList(String method)
+			throws Exception {
+		return (T)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends RPC> ArrayList<T> callList(String method, String param)
-			throws Throwable {
-		return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+	public <T extends ArrayList<? extends RPC>> T callList(String method, String param)
+			throws Exception {
+		return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
 	}
 
 	@SuppressWarnings("unchecked")
-    public <T extends RPC> ArrayList<T> callList(String method, Integer param) throws Throwable {
-        return (ArrayList<T>)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+    public <T extends ArrayList<? extends RPC>> T callList(String method, Integer param) throws Exception {
+        return (T)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
     }
 
 }
