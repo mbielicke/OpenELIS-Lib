@@ -519,7 +519,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	int insert = newIndex;
     	if(newIndex > curIndex) 
     		insert--;
-    	if(newIndex >= model.size())
+    	if(insert >= model.size())
     		model.add(row);
     	else
     		model.add(insert, row);
