@@ -392,8 +392,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	    	if(field.getValue() != null){
     			setSelection(null,"");
     			ValueChangeEvent.fire(this, null);
-    		}else
-    			checkValue();
+    		}
+    		checkValue();
     	}
     }
     
