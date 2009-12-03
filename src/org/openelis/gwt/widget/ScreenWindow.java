@@ -278,20 +278,20 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             modalGlass.setStyleName("GlassPanel");
             modalGlass.setHeight(Window.getClientHeight()+"px");
             modalGlass.setWidth(Window.getClientWidth()+"px");
-            RootPanel.get("main").add(modalGlass, 0, 0);
+            RootPanel.get().add(modalGlass, 0, 0);
             modalPanel = new AbsolutePanel();
             modalPanel.setStyleName("ModalPanel");
             modalPanel.setHeight(Window.getClientHeight()+"px");
             modalPanel.setWidth(Window.getClientWidth()+"px");
             modalPanel.add(this,100,100);
-            RootPanel.get("main").add(modalPanel,0,0); 
+            RootPanel.get().add(modalPanel,0,0); 
             setVisible(true);
             dragController = new PickupDragController(modalPanel,true);
             dropController = new AbsolutePositionDropController(modalPanel);
             dragController.registerDropController(dropController);
             dragController.makeDraggable(this,cap);
         }else{
-        	RootPanel.get("main").add(this,100,100);
+        	RootPanel.get().add(this,100,100);
         	setVisible(true);
         	dragController = new PickupDragController(RootPanel.get(),true);
         	dropController = new AbsolutePositionDropController(RootPanel.get());
@@ -383,8 +383,8 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     	}
         if(modalGlass != null) {
             removeFromParent();
-            RootPanel.get("main").remove(modalGlass);
-            RootPanel.get("main").remove(modalPanel);
+            RootPanel.get().remove(modalGlass);
+            RootPanel.get().remove(modalPanel);
             return;
         }
         removeFromParent();
