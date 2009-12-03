@@ -133,7 +133,7 @@ public class XMLUtil {
     	Transformer transformer = tf.newTransformer(new StreamSource(xsl));
     	transformer.setURIResolver(new MyResolver());
     	DOMSource document = new DOMSource(doc);
-    	transformer.setParameter("importPath","/home/tschmidt/GWT2.0/workspace/OpenELIS-Lib/src/org/openelis/gwt/public/Forms/");
+    	//transformer.setParameter("importPath","/home/tschmidt/GWT2.0/workspace/OpenELIS-Lib/src/org/openelis/gwt/public/Forms/");
     	transformer.transform(document, result);
     }
 
