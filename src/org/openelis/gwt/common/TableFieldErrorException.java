@@ -52,7 +52,7 @@ public class TableFieldErrorException extends FieldErrorException{
         this.rowIndex = rowIndex;
     }
     
-    public TableFieldErrorException(String key, int rowIndex, String fieldName, String... params) {
+    public TableFieldErrorException(String key, int rowIndex, String fieldName, String[] params) {
         super(key, fieldName, params);
         this.rowIndex = rowIndex;
     }
@@ -62,7 +62,7 @@ public class TableFieldErrorException extends FieldErrorException{
         this.tableKey = tableKey;
     }
     
-    public TableFieldErrorException(String key, int rowIndex, String fieldName,String tableKey, String... params) {
+    public TableFieldErrorException(String key, int rowIndex, String fieldName,String tableKey, String[] params) {
         this(key, rowIndex, fieldName, params); 
         this.tableKey = tableKey;
     }
