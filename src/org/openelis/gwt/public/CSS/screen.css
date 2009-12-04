@@ -467,11 +467,20 @@ background:white;
 .upButtonImage{
     background:url("../Images/arrow_up.png") no-repeat;
 }
+.disabled .upButtonImage{
+    background:url("../Images/arrow_updisabled.png") no-repeat;
+}
 .downButtonImage{
     background:url("../Images/arrow_down.png") no-repeat;
 }
+.disabled .downButtonImage{
+    background:url("../Images/arrow_downdisabled.png") no-repeat;
+}
 .refreshButtonImage{
     background:url("../Images/arrow_refresh.png") no-repeat;
+}
+.disabled .refreshButtonImage{
+    background:url("../Images/arrow_refreshdisabled.png") no-repeat;
 }
 .SaveButtonImage{
     background:url("../Images/savebuttonimage.gif") no-repeat;
