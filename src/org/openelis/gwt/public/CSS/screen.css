@@ -159,7 +159,7 @@ width:100%;
     cursor:pointer;
     padding:3px;
     border:1px solid #333;
-    border-bottom:0;
+    /*border-bottom:0;*/
     background:#f0f0f0;
 }
 
@@ -245,7 +245,7 @@ color:gray;
     font-size:11px;
     border:1px solid #99bbe8;
 }
-.EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
+.labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
 .fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
@@ -289,7 +289,12 @@ color:gray;
 .spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
 .errorIcon {background:transparent url(../Images/bullet_red.png) no-repeat scroll center;}
 .warnIcon {background:transparent url(../Images/bullet_yellow.png) no-repeat scroll center;}
+
+.labelIcon{
+	 background:url("../Images/inventoryReceiptButtonImage.gif") no-repeat;
+}
 .panelIcon{
+	 background:url("../Images/calculator_link.png") no-repeat;
 }
 .analyteIcon{
 	    background:url("../Images/map.png") no-repeat;
@@ -319,6 +324,7 @@ color:gray;
 	    background:url("../Images/page.png") no-repeat;
 }
 .storageUnitIcon{
+		    background:url("../Images/") no-repeat;
 }
 .storageLocationIcon{
 }
@@ -450,7 +456,7 @@ background:white;
 }
 
 
-.analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
+.upButtonImage, .downButtonImage, .refreshButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
 .AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
 .StandardNoteButtonImage, .groupRowButtonImage, .SelectAllButtonImage, .environmentalSampleLoginIcon,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
@@ -458,6 +464,15 @@ background:white;
     height:20px;
 }
 
+.upButtonImage{
+    background:url("../Images/arrow_up.png") no-repeat;
+}
+.downButtonImage{
+    background:url("../Images/arrow_down.png") no-repeat;
+}
+.refreshButtonImage{
+    background:url("../Images/arrow_refresh.png") no-repeat;
+}
 .SaveButtonImage{
     background:url("../Images/savebuttonimage.gif") no-repeat;
 }
@@ -1979,7 +1994,7 @@ rich text css
 .RemoveFormat{
     width:20;
     height:20;
-    background: url(../Images/removeFormat.gif);
+    background: url(../Images/removeFormat.png) no-repeat;
 }
 
 .TableWidget, .TableWidget .TextboxUnselected, .TableWidget .TextboxSelected, .TableWidget .CalendarButton{
