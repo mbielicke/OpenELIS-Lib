@@ -36,16 +36,17 @@ public class TabHandler implements KeyPressHandler {
 		if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
 			if(((HasField)event.getSource()).isEnabled() ||  !def.getWidget(wid).getElement().equals(event.getRelativeElement())){
 				if(event.isShiftKeyDown()){
-					if(((HasField)def.getWidget(prev)).isEnabled()) 
-						((Focusable)def.getWidget(prev)).setFocus(true);
-					else{
+					if(((HasField)def.getWidget(prev)).isEnabled()) {
+						if(def.getWidget(next) instanceof Focusable)
+							((Focusable)def.getWidget(prev)).setFocus(true);
+					}else{
 						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev), def.getWidget(wid).getElement());
 					}
 				}else{
-					if(((HasField)def.getWidget(next)).isEnabled()) 
+					if(((HasField)def.getWidget(next)).isEnabled()) {
 						if(def.getWidget(next) instanceof Focusable)
 							((Focusable)def.getWidget(next)).setFocus(true);
-					else{
+					}else{
 						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next), def.getWidget(wid).getElement());
 					}							
 				}
