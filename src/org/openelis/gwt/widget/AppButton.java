@@ -25,24 +25,34 @@
 */
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.screen.ShortcutHandler;
 import org.openelis.gwt.screen.TabHandler;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 
 /**
@@ -54,7 +64,7 @@ import com.google.gwt.user.client.ui.Widget;
  *   All buttons are defaulted to enabled true.  If a button needs to be ensured to be disabled on the initial state of the
  *   screen set enable="false" in the xsl.
  */
-public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler{     
+public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler, Focusable, BlurHandler, HasField, KeyPressHandler{     
     
     public enum ButtonState {UNPRESSED,PRESSED,DISABLED,LOCK_PRESSED}
     
@@ -86,6 +96,9 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
         panel.addMouseOutHandler(this);
         panel.addMouseOverHandler(this);
         addClickHandler(this);
+        panel.addBlurHandler(this);
+        panel.addKeyPressHandler(this);
+        panel.unsinkEvents(Event.ONKEYPRESS);
     }
     
     /**
@@ -296,6 +309,114 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 	 */
 	public void setToggle(boolean toggle) {
 		this.toggle = toggle;
+	}
+
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setFocus(boolean focused) {
+		if(focused){
+			panel.addStyleName("Hover");
+			panel.sinkEvents(Event.ONKEYPRESS);
+		}else{
+			panel.removeStyleName("Hover");
+			panel.unsinkEvents(Event.ONKEYPRESS);
+		}
+		panel.setFocus(focused);
+	}
+
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBlur(BlurEvent event) {
+		panel.removeStyleName("Hover");
+		
+	}
+
+	public void addException(LocalizedException exception) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public HandlerRegistration addFieldValueChangeHandler(
+			ValueChangeHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void checkValue() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clearExceptions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList getExceptions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Field getField() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getFieldValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void getQuery(ArrayList list, String key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getWidgetValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeExceptionStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setFieldValue(Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setQueryMode(boolean query) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onKeyPress(KeyPressEvent event) {
+		if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_ENTER) {
+			ClickEvent.fireNativeEvent(Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false), this);
+		}
 	}
 
 

@@ -1,11 +1,13 @@
 package org.openelis.gwt.screen;
 
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.TabPanel;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 import com.google.gwt.xml.client.Node;
 
@@ -35,17 +37,28 @@ public class TabHandler implements KeyPressHandler {
 	public void onKeyPress(KeyPressEvent event) {
 		if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
 			if(((HasField)event.getSource()).isEnabled() ||  !def.getWidget(wid).getElement().equals(event.getRelativeElement())){
+				HasField nextWid = null;
 				if(event.isShiftKeyDown()){
-					if(((HasField)def.getWidget(prev)).isEnabled()) {
-						if(def.getWidget(next) instanceof Focusable)
-							((Focusable)def.getWidget(prev)).setFocus(true);
+					if(def.getWidget(prev) instanceof TabPanel)
+						nextWid = (HasField)def.getWidget(((TabPanel)def.getWidget(prev)).getKeyTabWidget());
+					else 
+						nextWid = (HasField)def.getWidget(prev);
+					if(nextWid.isEnabled()) {
+						def.getPanel().setFocusWidget((Widget)nextWid);
+						//if(nextWid instanceof Focusable)
+							//((Focusable)nextWid).setFocus(true);
 					}else{
 						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(prev), def.getWidget(wid).getElement());
 					}
 				}else{
-					if(((HasField)def.getWidget(next)).isEnabled()) {
-						if(def.getWidget(next) instanceof Focusable)
-							((Focusable)def.getWidget(next)).setFocus(true);
+					if(def.getWidget(next) instanceof TabPanel)
+						nextWid = (HasField)def.getWidget(((TabPanel)def.getWidget(next)).getKeyTabWidget());
+					else 
+						nextWid = (HasField)def.getWidget(next);
+					if(nextWid.isEnabled()) {
+						def.getPanel().setFocusWidget((Widget)nextWid);
+						//if(nextWid instanceof Focusable)
+							//((Focusable)nextWid).setFocus(true);
 					}else{
 						KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (HasHandlers)def.getWidget(next), def.getWidget(wid).getElement());
 					}							

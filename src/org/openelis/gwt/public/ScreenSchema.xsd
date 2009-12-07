@@ -26,6 +26,7 @@
 			<xsd:attributeGroup ref="ScreenWidget" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
+			<xsd:attribute name="tab" type="xsd:string"/>
 		</xsd:complexType>
 	</xsd:element>
 
@@ -299,6 +300,7 @@
 						</xsd:sequence>
 						<xsd:attribute name="text" type="xsd:string" />
 						<xsd:attribute name="key" type="xsd:string" />
+						<xsd:attribute name="tab" type="xsd:string"/>
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>

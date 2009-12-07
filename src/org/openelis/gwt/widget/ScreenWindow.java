@@ -278,20 +278,23 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             modalGlass.setStyleName("GlassPanel");
             modalGlass.setHeight(Window.getClientHeight()+"px");
             modalGlass.setWidth(Window.getClientWidth()+"px");
-            RootPanel.get().add(modalGlass, 0, 0);
+            RootPanel.get().add(modalGlass);
+            RootPanel.get().setWidgetPosition(modalGlass, 0, 0);
             modalPanel = new AbsolutePanel();
             modalPanel.setStyleName("ModalPanel");
             modalPanel.setHeight(Window.getClientHeight()+"px");
             modalPanel.setWidth(Window.getClientWidth()+"px");
             modalPanel.add(this,100,100);
-            RootPanel.get().add(modalPanel,0,0); 
+            RootPanel.get().add(modalPanel); 
+            RootPanel.get().setWidgetPosition(modalPanel,0,0);
             setVisible(true);
             dragController = new PickupDragController(modalPanel,true);
             dropController = new AbsolutePositionDropController(modalPanel);
             dragController.registerDropController(dropController);
             dragController.makeDraggable(this,cap);
         }else{
-        	RootPanel.get().add(this,100,100);
+        	RootPanel.get().add(this);
+        	RootPanel.get().setWidgetPosition(this, 100, 100);
         	setVisible(true);
         	dragController = new PickupDragController(RootPanel.get(),true);
         	dropController = new AbsolutePositionDropController(RootPanel.get());

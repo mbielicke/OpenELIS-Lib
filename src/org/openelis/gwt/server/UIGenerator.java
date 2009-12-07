@@ -1248,7 +1248,12 @@ public class UIGenerator extends Generator {
     	    	               }
     	                    sw.println("ScrollPanel scroll"+child+" = new ScrollPanel();");
     	                    sw.println("scroll"+child+".setWidget(wid"+child+");");
-    	                    sw.println("wid"+id+".add(scroll"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
+    	                    if(tabs.item(k).getAttributes().getNamedItem("tab") != null)
+    	                    	sw.println("wid"+id+".add(scroll"+child+", \""+
+    	                    			                  tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\",\""+
+    	                    			                  tabs.item(k).getAttributes().getNamedItem("tab").getNodeValue()+"\");");
+    	                    else
+    	                    	sw.println("wid"+id+".add(scroll"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
     	                    if(node.getAttributes().getNamedItem("height") != null)
     	                    	sw.println("scroll"+child+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
     	                    if(node.getAttributes().getNamedItem("width") != null)
@@ -1260,7 +1265,7 @@ public class UIGenerator extends Generator {
     	        //setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.TabPanel");
+    			composer.addImport("org.openelis.gwt.widget.TabPanel");
     			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
     		}
     	});
