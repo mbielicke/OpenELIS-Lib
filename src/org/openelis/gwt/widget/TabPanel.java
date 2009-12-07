@@ -13,8 +13,12 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		add(wid,text);
 	}
 	
-	public String getKeyTabWidget() {
-		return keyTabList.get(getTabBar().getSelectedTab());
+	public String getNextTabWidget() {
+		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[0];
+	}
+	
+	public String getPrevTabWidget() {
+		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[1];
 	}
 
 }
