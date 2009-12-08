@@ -31,6 +31,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.event.BeforeDragStartEvent;
+import org.openelis.gwt.event.BeforeDragStartHandler;
+import org.openelis.gwt.event.BeforeDropHandler;
+import org.openelis.gwt.event.DragStartHandler;
+import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
@@ -950,7 +955,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public void enableDrag(boolean drag) {
     	if(drag){
     		if(dragController == null) {
-    			dragController = new TableDragController(RootPanel.get());  		
+    			dragController = new TableDragController(RootPanel.get());  	
+    			dragController.addBeforeStartHandler(new BeforeDragStartHandler<TableRow>() {
+					public void onBeforeDragStart(
+							BeforeDragStartEvent<TableRow> event) {
+						finishEditing();
+					}
+    			});
       			for(TableRow row : renderer.rows) 
       				dragController.makeDraggable(row);
     		}
@@ -1095,4 +1106,28 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		
 	}
 	
+	public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<TableRow> handler) throws Exception{
+		if(dragController == null)
+			throw new Exception("Enable Dragging first before registering handlers");
+		return dragController.addBeforeStartHandler(handler);	
+	}
+	
+	public HandlerRegistration addDagStartHandler(DragStartHandler<TableRow> handler) throws Exception {
+		if(dragController == null)
+			throw new Exception("Enable Dragging first before registerning handlers");
+		return dragController.addStartHandler(handler);
+	}
+	
+	public HandlerRegistration addBeforeDropHandler(BeforeDropHandler<TableRow> handler) throws Exception {
+		if(dropController == null)
+			throw new Exception("Enable Dropping first before registering handlers");
+		return dropController.addBeforeDropHandler(handler);
+	}
+	
+	public HandlerRegistration addDropHandler(DropHandler<TableRow> handler) throws Exception {
+		if(dropController == null)
+			throw new Exception("Enable Dropping first before registering handlers");
+		return dropController.addDropHandler(handler);
+	}
+ 	
 }
