@@ -33,11 +33,14 @@ import java.util.List;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.event.NavigationSelectionEvent;
+import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataCell;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
@@ -143,7 +146,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasBeforeSortHandlers,
 													  HasSortHandlers,
 													  HasBeforeRowMovedHandlers,
-													  HasRowMovedHandlers{
+													  HasRowMovedHandlers,
+													  NavigationWidget<TreeDataItem>{
 
     protected HashMap<String,ArrayList<TreeColumn>> columns;
     protected boolean enabled;
@@ -340,6 +344,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
+    		if(rows.get(row).parent == null){
+    			NavigationSelectionEvent.fire(this, row);
+    			return;
+    		}
+    	}
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
     		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
     		if(event.isCanceled())
@@ -1200,6 +1210,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
 	public HandlerRegistration addSortHandler(SortHandler handler) {
 		return addHandler(handler,SortEvent.getType());
+	}
+
+	public HandlerRegistration addNavigationSelectionHandler(
+			NavigationSelectionHandler handler) {
+		return addHandler(handler,NavigationSelectionEvent.getType());
 	}
 
 	public HandlerRegistration addBeforeRowMovedHandler(

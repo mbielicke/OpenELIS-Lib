@@ -4,17 +4,15 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
+import org.openelis.gwt.event.NavigationSelectionEvent;
+import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.TableDataRow;
-import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
-import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
-import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 
 /**
  * This class is used by screens to manage paged queries.
@@ -46,9 +44,9 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 public abstract class ScreenNavigator {
     protected int         selection, oldPage;
     protected boolean     byRow, enable;
-    protected ArrayList   result;
+    protected ArrayList<?>   result;
     protected Query       query;
-    protected TableWidget table;
+    protected NavigationWidget      table;
     protected AppButton   atozNext, atozPrev;
 
     public ScreenNavigator(ScreenDefInt def) {
@@ -58,21 +56,15 @@ public abstract class ScreenNavigator {
     }
 
     protected void initialize(ScreenDefInt def) {
-        table = (TableWidget)def.getWidget("atozTable");
+        table = (NavigationWidget)def.getWidget("atozTable");
         if (table != null) {
-            table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
-                public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+            table.addNavigationSelectionHandler(new NavigationSelectionHandler() {
+                public void onNavigationSelection(NavigationSelectionEvent event) {
                     // since we don't know if the fetch will succeed, we are
                     // going
                     // cancel this selection and select the table row ourselves.
                     if (enable)
-                        select(event.getItem().index);
-                    event.cancel();
-                }
-            });
-            table.addBeforeCellEditedHandler(new BeforeCellEditedHandler() {
-                public void onBeforeCellEdited(BeforeCellEditedEvent event) {
-                    event.cancel();
+                        select(event.getIndex());
                 }
             });
             // we don't want the table to get focus; we can still select because
@@ -116,7 +108,8 @@ public abstract class ScreenNavigator {
      * @param result
      *        should be null to indicate no records were found.
      */
-    public void setQueryResult(ArrayList result) {
+    @SuppressWarnings("unchecked")
+	public void setQueryResult(ArrayList<?> result) {
         int row;
         //
         // if next page failed, reset the query page # to the old page #
@@ -143,7 +136,8 @@ public abstract class ScreenNavigator {
         select(row);
     }
 
-    public ArrayList getQueryResult() {
+    @SuppressWarnings("unchecked")
+	public ArrayList getQueryResult() {
         return result;
     }
 
@@ -198,7 +192,7 @@ public abstract class ScreenNavigator {
      * 
      * @return model that is used to set the atoz table; This model cannot be null.
      */
-    public abstract ArrayList<TableDataRow> getModel();
+    public abstract ArrayList<?> getModel();
 
     /**
      * Select a row within the result set

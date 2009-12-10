@@ -1770,14 +1770,15 @@ public class UIGenerator extends Generator {
                 }
                 Node header  = ((Element)node).getElementsByTagName("header").item(0);
                 if(header != null){
-                    sw.println("wid"+id+".showHeader(true);");
+                	boolean showHeader = false;
                     NodeList colList = ((Element)header).getElementsByTagName("col");
                     sw.println("wid"+id+".setHeaders(new ArrayList<TreeColumn>("+colList.getLength()+"));");
                     for(int i = 0; i < colList.getLength(); i++) {
                     	sw.println("TreeColumn col"+id+"_"+i+" = new TreeColumn();");
                 		if(colList.item(i).getAttributes().getNamedItem("header") != null){
                 			sw.println("col"+id+"_"+i+".setHeader(\""+colList.item(i).getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			sw.println("wid"+id+".showHeader(true);");
+                			//sw.println("wid"+id+".showHeader(true);");
+                			showHeader = true;
                 		}
                 		if(colList.item(i).getAttributes().getNamedItem("width") != null)
                 			sw.println("col"+id+"_"+i+".setCurrentWidth("+colList.item(i).getAttributes().getNamedItem("width").getNodeValue()+");");
@@ -1795,6 +1796,8 @@ public class UIGenerator extends Generator {
                 		sw.println("wid"+id+".getHeaders().add(col"+id+"_"+i+");");
                 				
                     }
+                    if(showHeader)
+                    	sw.println("wid"+id+".showHeader(true);");
                 }
                 NodeList leafList = ((Element)node).getElementsByTagName("leaf");
                 sw.println("wid"+id+".setColumns(new HashMap<String,ArrayList<TreeColumn>>());");

@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.BeforeDragStartEvent;
 import org.openelis.gwt.event.BeforeDragStartHandler;
@@ -37,11 +38,14 @@ import org.openelis.gwt.event.BeforeDropHandler;
 import org.openelis.gwt.event.DragStartHandler;
 import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasDropController;
+import org.openelis.gwt.event.NavigationSelectionEvent;
+import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.TableView.VerticalScroll;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
@@ -143,7 +147,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasDropController,
 													   HasContextMenuHandlers,
 													   FocusHandler,
-													   HasFocusHandlers
+													   HasFocusHandlers,
+													   NavigationWidget<TableDataRow>
 													   {
                             
     protected ArrayList<TableColumn> columns;
@@ -348,6 +353,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
+    		NavigationSelectionEvent.fire(this,row);
+    		return;
+    	}
     	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
     		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
     		if(event.isCanceled())
@@ -636,7 +645,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         return row;
     }
     
-    public void load(ArrayList<TableDataRow> model) {
+	public void load(ArrayList<TableDataRow> model) {
         selections.clear();
         renderer.rowUnselected(-1);
         this.model = model;
@@ -651,7 +660,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         searchKey = new HashMap<Object,Integer>();
         
         for(int i = 0; i < model.size(); i++){
-            if(((TableDataRow)model.get(i)).shown)
+            if(model.get(i).shown)
                 shownRows++;
             searchKey.put(model.get(i).key,i);
         }
@@ -1128,6 +1137,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		if(dropController == null)
 			throw new Exception("Enable Dropping first before registering handlers");
 		return dropController.addDropHandler(handler);
+	}
+
+	public HandlerRegistration addNavigationSelectionHandler(
+			NavigationSelectionHandler handler) {
+		return addHandler(handler,NavigationSelectionEvent.getType());
 	}
  	
 }
