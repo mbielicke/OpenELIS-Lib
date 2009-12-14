@@ -397,6 +397,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         			if(fireEvents)
         				CellEditedEvent.fire(this, row, col, CheckBox.CHECKED);
         		}
+           		selectedCol = -1;
+           		sinkEvents(Event.ONKEYPRESS);
         	}else{
         		selectedCol = col;
         		renderer.setCellEditor(row, col);
