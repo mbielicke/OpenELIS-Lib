@@ -670,7 +670,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         renderer.dataChanged(false);        
     }
 
-    public void selectRow(final int index) {
+	public void selectRow(final int index) {
+		selectRow(index,false);
+	}
+	
+    public void selectRow(final int index, boolean fire) {
         if(index > model.size())
             throw new IndexOutOfBoundsException();
         selectedRow = index;
@@ -699,7 +703,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         	selectedRow = index;
         }
         if(view.isVisible())
-        	renderer.dataChanged(true);        
+        	renderer.dataChanged(true);
+        if(fire)
+        	SelectionEvent.fire(this,renderer.getRows().get(tableIndex(index)));
     }
     
     public void clearSelections() {
