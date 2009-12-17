@@ -276,9 +276,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
     		if(tableIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
     			return;
-    		//selectedByClick = true;
-    		select(modelIndexList[cell.getRowIndex()], cell.getCellIndex());
-    		//selectedByClick = false;
+    		select(modelIndexList[cell.getRowIndex()], cell.getCellIndex(),true);
     	}
     }
     
@@ -352,7 +350,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @param row
      * @param col
      */
-    protected void select(final int row, final int col) {
+    protected void select(final int row, final int col, boolean byClick) {
     	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
     		NavigationSelectionEvent.fire(this,row);
     		return;
@@ -383,7 +381,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             	SelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
         }
         if(canEditCell(row,col)){
-        	if(isEnabled() && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        	if(byClick && isEnabled() && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
         		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
         			setCell(row,col,CheckBox.UNCHECKED);
         			if(fireEvents)
@@ -408,6 +406,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
        		selectedCol = -1;
        		sinkEvents(Event.ONKEYPRESS);
        	}
+    }
+    
+    public void select(int row, int col) {
+    	select(row,col,false);
     }
     
     /**
