@@ -240,24 +240,28 @@ public class TableRenderer  {
         	}
         	if(newVal == null)		
         		newVal = ((HasField)controller.activeWidget).getFieldValue();
-        	if(controller.activeWidget instanceof HasField){
-        		if(((HasField)controller.activeWidget).getExceptions() != null){
-        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
-        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)controller.activeWidget).getExceptions())
-        				exceps.add((LocalizedException)exc.clone());
-        				
-        			 controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
-        		}else
-        			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
-        	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
-        	setCellDisplay(controller.selectedRow,controller.selectedCol);
-        	controller.activeWidget = null;
+        	
         	if(newVal instanceof TableDataRow)
         		newVal = ((TableDataRow)newVal).key;
         	if(currVal instanceof TableDataRow)
         		currVal = ((TableDataRow)currVal).key;
-            return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
+        	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
+        	if(changed) {
+        		if(controller.activeWidget instanceof HasField){
+        			if(((HasField)controller.activeWidget).getExceptions() != null){
+        				ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
+        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)controller.activeWidget).getExceptions())
+        					exceps.add((LocalizedException)exc.clone());
+        				
+        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
+        			}else
+        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        		}
+        	}
+        	setCellDisplay(controller.selectedRow,controller.selectedCol);
+        	controller.activeWidget = null;
+            return changed;
         }
         return false;
     }
