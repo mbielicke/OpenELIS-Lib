@@ -1124,22 +1124,22 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<TableRow> handler) {
-		assert(dragController == null) : new Exception("Enable Dragging first before registering handlers");
+		assert(dragController != null) : new Exception("Enable Dragging first before registering handlers");
 		return dragController.addBeforeStartHandler(handler);	
 	}
 	
 	public HandlerRegistration addDagStartHandler(DragStartHandler<TableRow> handler) {
-		assert(dragController == null) : new Exception("Enable Dragging first before registerning handlers");
+		assert(dragController != null) : new Exception("Enable Dragging first before registerning handlers");
 		return dragController.addStartHandler(handler);
 	}
 	
 	public HandlerRegistration addBeforeDropHandler(BeforeDropHandler<TableRow> handler) {
-		assert(dropController == null) : new Exception("Enable Dropping first before registering handlers");
+		assert(dropController != null) : new Exception("Enable Dropping first before registering handlers");
 		return dropController.addBeforeDropHandler(handler);
 	}
 	
 	public HandlerRegistration addDropHandler(DropHandler<TableRow> handler) {
-		assert(dropController == null) : new Exception("Enable Dropping first before registering handlers");
+		assert(dropController != null) : new Exception("Enable Dropping first before registering handlers");
 		return dropController.addDropHandler(handler);
 	}
 
