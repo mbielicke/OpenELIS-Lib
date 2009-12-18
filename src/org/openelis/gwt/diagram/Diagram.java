@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.diagram;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,9 @@ import java.util.HashMap;
 import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.HasActionHandlers;
+import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.ScreenWindow;
+import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.tree.TreeDataItem;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;

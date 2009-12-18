@@ -1,8 +1,9 @@
 package org.openelis.gwt.common.data;
 
-import java.io.Serializable;
+import org.openelis.gwt.common.RPC;
 
-public class QueryData implements Serializable {
+
+public class QueryData implements RPC {
 	
 	private static final long serialVersionUID = 1L;
 	public enum Type {STRING,INTEGER,DOUBLE,DATE}

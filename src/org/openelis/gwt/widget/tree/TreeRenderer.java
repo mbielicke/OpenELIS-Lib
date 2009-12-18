@@ -188,7 +188,7 @@ public class TreeRenderer {
     public void setCellDisplay(int row, int col) {
     	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
     	if(col == 0)
-    		((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(controller.modelIndexList[row],col))));
+    		((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(row,col))));
     	else
     		controller.view.table.setWidget(controller.treeIndex(row), col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
     }

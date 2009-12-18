@@ -3,12 +3,11 @@ package org.openelis.gwt.screen;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.TabPanel;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 import com.google.gwt.xml.client.Node;
 
 public class TabHandler implements KeyPressHandler {
@@ -35,7 +34,7 @@ public class TabHandler implements KeyPressHandler {
 	}
 	
 	public void onKeyPress(KeyPressEvent event) {
-		if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
+		if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB){
 			if(((HasField)event.getSource()).isEnabled() ||  !def.getWidget(wid).getElement().equals(event.getRelativeElement())){
 				HasField nextWid = null;
 				if(event.isShiftKeyDown()){

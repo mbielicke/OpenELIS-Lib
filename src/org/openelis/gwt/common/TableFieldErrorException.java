@@ -25,13 +25,13 @@
 */
 package org.openelis.gwt.common;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class TableFieldErrorException extends FieldErrorException{
 
 	private static final long serialVersionUID = 1L;
 	protected int rowIndex = -1;
-	protected List<Exception> childExceptionList = null; 
+	protected ArrayList<Exception> childExceptionList = null; 
 	protected String tableKey = null;
     
 	
@@ -71,11 +71,11 @@ public class TableFieldErrorException extends FieldErrorException{
     	return rowIndex;
     }
 
-    public List<Exception> getChildExceptionList() {
+    public ArrayList<Exception> getChildExceptionList() {
         return childExceptionList;
     }
 
-    public void setChildExceptionList(List<Exception> childExceptionList) {
+    public void setChildExceptionList(ArrayList<Exception> childExceptionList) {
         this.childExceptionList = childExceptionList;
     }
 

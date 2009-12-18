@@ -1179,6 +1179,13 @@ cursor:default;}
        -moz-user-select: none;
 }
 
+.gwt-TabBarText {
+	color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+}
+
 .gwt-TabPanelBottom{
     background:#fbfbfb;
     border:1px solid #8db2e3;
@@ -1186,6 +1193,13 @@ cursor:default;}
 }
 .gwt-TabBar .gwt-TabBarRest {
     background:white;
+}
+
+.gwt-TabCloseButton {
+    background:url("../Images/close.png");
+    width:19px;
+    height:19px;
+    cursor:pointer;
 }
 /*******END TAB PANEL CSS***********/
 

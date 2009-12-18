@@ -5,11 +5,11 @@ import java.util.HashSet;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
     
@@ -166,7 +166,7 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
         // TODO Auto-generated method stub
         if(!textbox.enforceMask)
             return;
-        if (event.getNativeKeyCode() == KeyboardHandler.KEY_BACKSPACE) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE) {
             if (literals.contains(String.valueOf(textbox.getText().charAt(textbox.getText().length() - 1))))
                 textbox.setText(textbox.getText().substring(0, textbox.getText().length() - 1));
         }
@@ -176,7 +176,7 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
         // TODO Auto-generated method stub
         if(!textbox.enforceMask)
             return;
-        if (event.getNativeKeyCode() == KeyboardHandler.KEY_BACKSPACE || event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT || noMask) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || event.getNativeKeyCode() == KeyCodes.KEY_SHIFT || noMask) {
             return;
         }
         String text = textbox.getText();
@@ -185,7 +185,7 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
             return;
         }
         textbox.setText(applyMask(text, false));
-        if (text.length() == mask.length() && event.getNativeKeyCode() != KeyboardHandler.KEY_TAB){
+        if (text.length() == mask.length() && event.getNativeKeyCode() != KeyCodes.KEY_TAB){
             complete();
         }
             

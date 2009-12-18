@@ -118,14 +118,14 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   
   public void setWidth(String width){
       outer.setWidth(width);
-      int wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 32;
-      scrollPanel.setWidth(wid+"px");
+      //int wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 32;
+      scrollPanel.setWidth(width);
   }
   
   public void setHeight(String height) {
 	  outer.setHeight(height);
-	  int hght = Integer.parseInt(height.substring(0,height.indexOf("px"))) - 20;
-	  content.setHeight(hght+"px");
+	  //int hght = Integer.parseInt(height.substring(0,height.indexOf("px"))) - 20;
+	  content.setHeight(height);
   }
     
   public void addTab(String text){      
@@ -182,6 +182,10 @@ public class ScrollableTabBar extends Composite implements ClickHandler, HasSele
   public void setContent(Widget wid) {
 	  content.clear();
 	  content.add(wid);
+  }
+  
+  public Widget getContent() {
+	  return content.getWidget(0);
   }
 
   public void onMouseDown(MouseDownEvent event) {

@@ -37,6 +37,7 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -52,7 +53,6 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 
 /**
@@ -414,7 +414,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 	}
 
 	public void onKeyPress(KeyPressEvent event) {
-		if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_ENTER) {
+		if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 			ClickEvent.fireNativeEvent(Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false), this);
 		}
 	}

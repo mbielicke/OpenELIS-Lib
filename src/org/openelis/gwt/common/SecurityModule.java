@@ -25,9 +25,8 @@
 */
 package org.openelis.gwt.common;
 
-import java.io.Serializable;
 
-public class SecurityModule implements Serializable {
+public class SecurityModule implements RPC {
     
     public enum ModuleFlags {SELECT,ADD,UPDATE,DELETE}
     

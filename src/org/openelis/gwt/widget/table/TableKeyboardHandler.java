@@ -27,12 +27,13 @@ package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.widget.CheckBox;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+
 
 public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     
@@ -99,16 +100,16 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     }
 
 	public void onKeyDown(KeyDownEvent event) {
-        if(controller.activeWidget instanceof CheckBox && KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()){
+        if(controller.activeWidget instanceof CheckBox && KeyCodes.KEY_ENTER == event.getNativeKeyCode()){
         	return;
         }
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             controller.ctrlKey = true;
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             controller.shiftKey = true;
 
         boolean shift = event.isShiftKeyDown();
-        if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
+        if (KeyCodes.KEY_DOWN == event.getNativeKeyCode()) {
             if (controller.selectedRow >= 0 && controller.selectedRow < controller.numRows() - 1) {
             	final int row = findNextActive(controller.selectedRow);
             	final int col = controller.selectedCol;
@@ -123,7 +124,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                  });
             }
         }
-        if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
+        if (KeyCodes.KEY_UP == event.getNativeKeyCode()) {
             if (controller.selectedRow > 0) {
                 final int row = findPrevActive(controller.selectedRow);
                 final int col = controller.selectedCol;
@@ -138,7 +139,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                  });
             }
         }
-        if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode()) {
+        if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
             if(controller.activeWidget != null) {
                 controller.finishEditing();
             }else if(controller.selectedCol > -1){
@@ -161,7 +162,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 });
             }
         }
-        if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && !shift) {
+        if (KeyCodes.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && !shift) {
         	event.preventDefault();
             if(controller.selectedRow < 0){
                 controller.selectedRow = 0;
@@ -194,7 +195,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 }
             }
         }
-        if (KeyboardHandler.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && shift) {
+        if (KeyCodes.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && shift) {
         	event.preventDefault();
             if (controller.selectedCol == 0 && controller.selectedRow == 0){
                controller.finishEditing();
@@ -221,9 +222,9 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
 	}
 
 	public void onKeyUp(KeyUpEvent event) {
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             controller.ctrlKey = false;
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             controller.shiftKey = false;
 	}
 }

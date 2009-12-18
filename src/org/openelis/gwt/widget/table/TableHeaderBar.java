@@ -44,6 +44,7 @@ import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -73,7 +74,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class TableHeaderBar extends Composite implements MouseMoveHandler, 
 															 MouseDownHandler, 
@@ -464,7 +464,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                             item.iconPanel.setStyleName("Unchecked");
                             col.query = null;
                         }
-                        if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER){
+                        if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER){
                         	if(doQuery) {
                         		query(col,entryText.getText());
                         	}else{

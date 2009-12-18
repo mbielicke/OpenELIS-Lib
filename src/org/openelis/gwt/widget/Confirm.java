@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -21,7 +22,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class Confirm extends Composite implements HasSelectionHandlers<Integer>, ClickHandler, NativePreviewHandler {
 
@@ -138,14 +138,14 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
 
 	public void onPreviewNativeEvent(NativePreviewEvent event) {
 		if(event.getTypeInt() == Event.ONKEYUP){
-			if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_TAB){
+			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB){
 				((AppButton)bp.getWidget(active)).blur();
 				active++;
 				if(active == bp.getWidgetCount())
 					active = 0;
 				((AppButton)bp.getWidget(active)).setFocus();
 			}
-			if(event.getNativeEvent().getKeyCode() == KeyboardHandler.KEY_ENTER) {
+			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				SelectionEvent.fire(this, active);
 				hide();
 			}

@@ -46,6 +46,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -55,7 +56,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasField {
     
@@ -94,11 +94,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                 return;
             if (!widget.textbox.isReadOnly()) {
             	int keyCode = event.getNativeKeyCode();
-                if (keyCode == KeyboardHandler.KEY_DOWN || keyCode == KeyboardHandler.KEY_UP ||  keyCode == KeyboardHandler.KEY_TAB 
-                        || keyCode == KeyboardHandler.KEY_LEFT || keyCode == KeyboardHandler.KEY_RIGHT || keyCode == KeyboardHandler.KEY_ALT || 
-                        keyCode == KeyboardHandler.KEY_CTRL || keyCode == KeyboardHandler.KEY_SHIFT || keyCode == KeyboardHandler.KEY_ESCAPE)
+                if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP ||  keyCode == KeyCodes.KEY_TAB 
+                        || keyCode == KeyCodes.KEY_LEFT || keyCode == KeyCodes.KEY_RIGHT || keyCode == KeyCodes.KEY_ALT || 
+                        keyCode == KeyCodes.KEY_CTRL || keyCode == KeyCodes.KEY_SHIFT || keyCode == KeyCodes.KEY_ESCAPE)
                     return;
-                if(keyCode == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
+                if(keyCode == KeyCodes.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
                     if(widget.selectedRow < 0) {
                         if(widget.getSelections().size() > 0)
                         	selectRow((Integer)widget.getSelectedRows()[0]);
@@ -106,7 +106,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                     widget.showTable();
                     return;
                 }
-                if(keyCode == KeyboardHandler.KEY_ENTER && widget.itemSelected){
+                if(keyCode == KeyCodes.KEY_ENTER && widget.itemSelected){
                     widget.itemSelected = false;
                     return;
                 }

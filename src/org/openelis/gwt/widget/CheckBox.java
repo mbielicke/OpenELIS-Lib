@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -51,7 +52,7 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+
 
 public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField<String>, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyDownHandlers, KeyDownHandler {
         
@@ -250,7 +251,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	}
 
 	public void onKeyDown(KeyDownEvent event) {
-		if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER) {
+		if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 	    	if(!enabled)
 	    		return;
 	       if(type == CheckType.TWO_STATE){

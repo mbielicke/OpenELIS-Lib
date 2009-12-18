@@ -33,6 +33,7 @@ import org.openelis.gwt.widget.table.TableKeyboardHandlerInt;
 import org.openelis.gwt.widget.table.TableRow;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
@@ -45,7 +46,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+
 
 public class DropdownWidget extends PopupTable implements TableKeyboardHandlerInt, CloseHandler<PopupPanel> {
     
@@ -211,11 +212,11 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         if(!popup.isShowing())
             return;
         event.stopPropagation();
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             ctrlKey = true;
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             shiftKey = true;
-        if (KeyboardHandler.KEY_DOWN == event.getNativeKeyCode()) {
+        if (KeyCodes.KEY_DOWN == event.getNativeKeyCode()) {
             if (selectedRow >= 0 && selectedRow < numRows() - 1) {
             	final int row = findNextActive(selectedRow);
             	if(!isRowDrawn(row)){
@@ -226,7 +227,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             	selectRow(0);
             }
         }
-        if (KeyboardHandler.KEY_UP == event.getNativeKeyCode()) {
+        if (KeyCodes.KEY_UP == event.getNativeKeyCode()) {
             if (selectedRow > 0) {
                 final int row = findPrevActive(selectedRow);
             	if(!isRowDrawn(row)){
@@ -235,14 +236,14 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
                 selectRow(row);
             }
         }
-        if (KeyboardHandler.KEY_ENTER == event.getNativeKeyCode() || KeyboardHandler.KEY_TAB == event.getNativeKeyCode()) {
+        if (KeyCodes.KEY_ENTER == event.getNativeKeyCode() || KeyCodes.KEY_TAB == event.getNativeKeyCode()) {
         	if(selectedRow > -1){
                 itemSelected = true;
                 SelectionEvent.fire(this, renderer.rows.get(tableIndex(selectedRow)));
                 complete();
             }
         }
-        if (KeyboardHandler.KEY_ESCAPE == event.getNativeKeyCode()){
+        if (KeyCodes.KEY_ESCAPE == event.getNativeKeyCode()){
             complete();
         }
 		
@@ -267,9 +268,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }
 
 	public void onKeyUp(KeyUpEvent event) {
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             ctrlKey = false;
-        if(event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT)
+        if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             shiftKey = false;
 	}
 

@@ -30,6 +30,7 @@ import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -37,7 +38,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
 
 
 /**
@@ -94,10 +94,10 @@ public class RichTextToolbar extends Composite {
 		}
 
 		public void onKeyUp(KeyUpEvent event) {
-			if(event.getNativeKeyCode() == KeyboardHandler.KEY_RIGHT || 
-					event.getNativeKeyCode() == KeyboardHandler.KEY_LEFT || 
-					event.getNativeKeyCode() == KeyboardHandler.KEY_UP ||
-					event.getNativeKeyCode() == KeyboardHandler.KEY_DOWN) {
+			if(event.getNativeKeyCode() == KeyCodes.KEY_RIGHT || 
+					event.getNativeKeyCode() == KeyCodes.KEY_LEFT || 
+					event.getNativeKeyCode() == KeyCodes.KEY_UP ||
+					event.getNativeKeyCode() == KeyCodes.KEY_DOWN) {
 				checkToggleStates();
 			}
 		}

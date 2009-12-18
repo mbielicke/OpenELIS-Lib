@@ -46,6 +46,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -59,7 +60,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.widgetideas.client.event.KeyboardHandler;
+
 
 /**
  * This widget class implements a textbox that listens to keystrokes and will fire a GetMatchesEvent to a
@@ -95,15 +96,15 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
             if(widget.queryMode)
                 return;
             if (!widget.textbox.isReadOnly()) {
-                if (event.getNativeKeyCode() == KeyboardHandler.KEY_DOWN || event.getNativeKeyCode() == KeyboardHandler.KEY_UP ||  event.getNativeKeyCode() == KeyboardHandler.KEY_TAB 
-                        || event.getNativeKeyCode() == KeyboardHandler.KEY_LEFT || event.getNativeKeyCode() == KeyboardHandler.KEY_RIGHT || event.getNativeKeyCode() == KeyboardHandler.KEY_ALT || 
-                        event.getNativeKeyCode() == KeyboardHandler.KEY_CTRL || event.getNativeKeyCode() == KeyboardHandler.KEY_SHIFT || event.getNativeKeyCode() == KeyboardHandler.KEY_ESCAPE)
+                if (event.getNativeKeyCode() == KeyCodes.KEY_DOWN || event.getNativeKeyCode() == KeyCodes.KEY_UP ||  event.getNativeKeyCode() == KeyCodes.KEY_TAB 
+                        || event.getNativeKeyCode() == KeyCodes.KEY_LEFT || event.getNativeKeyCode() == KeyCodes.KEY_RIGHT || event.getNativeKeyCode() == KeyCodes.KEY_ALT || 
+                        event.getNativeKeyCode() == KeyCodes.KEY_CTRL || event.getNativeKeyCode() == KeyCodes.KEY_SHIFT || event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE)
                     return;
-                if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
+                if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected && widget.focused){
                      widget.showTable();
                     return;
                 }
-                if(event.getNativeKeyCode() == KeyboardHandler.KEY_ENTER && widget.itemSelected){
+                if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER && widget.itemSelected){
                     widget.itemSelected = false;
                     return;
                 }
