@@ -652,7 +652,10 @@ public class UIGenerator extends Generator {
     	});
     	factoryMap.put("CollapsePanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("CollapsePanel wid"+id+" = new CollapsePanel();");
+    			if(node.getAttributes().getNamedItem("open") != null) {
+    				sw.println("CollapsePanel wid"+id+" = new CollapsePanel("+node.getAttributes().getNamedItem("open").getNodeValue()+");");
+    			}else
+    				sw.println("CollapsePanel wid"+id+" = new CollapsePanel(false);");
     		    if (node.getChildNodes().getLength() > 0){
     		       NodeList widgets = node.getChildNodes();
     		       for (int k = 0; k < widgets.getLength(); k++) {
@@ -1260,8 +1263,9 @@ public class UIGenerator extends Generator {
     	                    	sw.println("scroll"+child+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
     	                }
     	            }
+    	            sw.println("wid"+id+".selectTab(0);");
     	        }
-    	        sw.println("wid"+id+".selectTab(0);");
+    	        
     	        //setDefaults(node, "wid"+id);
     		}
     		public void addImport() {

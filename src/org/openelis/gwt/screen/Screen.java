@@ -128,7 +128,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         def.getPanel().setFocusWidget(widget);
     }
 
-    protected ArrayList<QueryData> getQueryFields() {
+    public ArrayList<QueryData> getQueryFields() {
         Set<String> keys;
         ArrayList<QueryData> list;
 
@@ -142,7 +142,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         return list;
     }
 
-    protected boolean validate() {
+    public boolean validate() {
         boolean valid = true;
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasField) {
@@ -155,7 +155,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         return valid;
     }
 
-    protected void clearErrors() {
+    public void clearErrors() {
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasField)
                 ((HasField)wid).clearExceptions();

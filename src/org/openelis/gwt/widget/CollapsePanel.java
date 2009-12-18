@@ -48,14 +48,18 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
     private FocusPanel arrow = new FocusPanel();
     public boolean isOpen;
     
-    public CollapsePanel(){
+    public CollapsePanel(boolean open){
         initWidget(panel);
         panel.setCellPadding(0);
         panel.setCellSpacing(0);
-        content.setVisible(false);
+        if(open)
+        	open();
+        else
+        	close();
+        //content.setVisible(false);
         //middleBar.setHeight("100%");
         //middleBar.setStyleName("LeftMenuPanePanelClosed");
-        panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
+        //panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickHandler(this);
         arrow.addMouseOverHandler(this);
