@@ -831,6 +831,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	}
     }
     
+    public void removeCellException(int row, int col, LocalizedException ex) {
+    	if(model.get(row).cells.get(col).exceptions != null) {
+    		model.get(row).cells.get(col).exceptions.remove(ex);
+    		if(model.get(row).cells.get(col).exceptions.size() == 0)
+    			model.get(row).cells.get(col).exceptions = null;
+    	}
+    	
+    }
+    
     public void clearCellExceptions(int row, int col) {
     	 model.get(row).cells.get(col).clearExceptions();
     	 if(isRowDrawn(row))
