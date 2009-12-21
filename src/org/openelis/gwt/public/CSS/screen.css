@@ -761,20 +761,19 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:none;
     cursor:default;
 }
-.privateWellWaterSampleLoginIcon, QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
+.privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
 }
+
 .Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, 
 .Disabled .CommitButtonImage, .Disabled .AbortButtonImage, .Disabled .OptionsButtonImage{
     background:none;
     cursor:default;
 }
 
-.privateWellWaterSampleLoginIcon{
-background:url("../Images/house.png") no-repeat;}
-}
+.privateWellWaterSampleLoginIcon{background:url("../Images/house.png") no-repeat;}
 
 .QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
 .disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
@@ -2154,5 +2153,4 @@ background:#deecfd;
     border:1px solid #63b159;
 }
 .TextboxUnselected-readonly{
-    color:gray;
 }
