@@ -61,6 +61,8 @@ public class XMLUtil {
 				throws TransformerException {
 			if(href.startsWith("IMPORT"))
 				return new StreamSource(new File(System.getenv("IMPORT")+href.substring(6)));
+			if(href.startsWith("OPENELIS"))
+				return new StreamSource(new File(System.getenv("OPENELIS")+href.substring(8)));
 			return null;
 		}
 		

@@ -52,14 +52,11 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
         initWidget(panel);
         panel.setCellPadding(0);
         panel.setCellSpacing(0);
-        if(open)
-        	open();
-        else
-        	close();
-        //content.setVisible(false);
+      
+        content.setVisible(false);
         //middleBar.setHeight("100%");
         //middleBar.setStyleName("LeftMenuPanePanelClosed");
-        //panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
+        panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickHandler(this);
         arrow.addMouseOverHandler(this);
@@ -75,6 +72,8 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
            }
         });
         
+        if(open)
+        	open();
     }
     
     public void setContent(Widget wid){

@@ -905,6 +905,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	public void getQuery(ArrayList list, String key) {
 		if(queryMode){
 			for(TableColumn col : columns) {
+				((HasField)col.getColumnWidget()).setFieldValue(model.get(0).cells.get(columns.indexOf(col)).value);
 				((HasField)col.getColumnWidget()).getQuery(list, col.key);
 			}
 		}
