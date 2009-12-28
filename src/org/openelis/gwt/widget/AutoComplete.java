@@ -457,7 +457,10 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	 * Sets the value of the field to the object passed in the method.
 	 */
 	public void setFieldValue(Object value) {
-		setValue((T)value);
+		if(field.queryMode)
+			field.setStringValue((String)value);
+		else
+			setValue((T)value);
 	}
 	
 	@Override
