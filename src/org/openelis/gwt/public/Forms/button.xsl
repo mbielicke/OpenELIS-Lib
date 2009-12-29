@@ -190,7 +190,7 @@ version="1.0">
 <xsl:template name="aToZButton">
 <xsl:param name="keyParam" />
 <xsl:param name="queryParam" />
-	<appButton key="{string($keyParam)}" action="{string($queryParam)}" toggle="true" alwaysEnabled="true" enabledStates="default,display" lockedStates="add,query,update,delete" style="smallButton">
+	<appButton key="{string($keyParam)}" action="{string($queryParam)}" alwaysEnabled="true" enabledStates="default,display" lockedStates="add,query,update,delete" style="smallButton">
        	<text><xsl:value-of select="string($keyParam)"/></text>
  	</appButton>
 </xsl:template>
