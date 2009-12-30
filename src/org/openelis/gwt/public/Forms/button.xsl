@@ -30,7 +30,7 @@ xmlns:xalan="http://xml.apache.org/xalan"
 xmlns:resource="xalan://org.openelis.util.UTFResource" 
 xmlns:locale="xalan://java.util.Locale" 
 version="1.0">
-
+<!-- 
 <xalan:component prefix="resource">
 	<xalan:script lang="javaclass" src="xalan://org.openelis.util.UTFResource"/>
 </xalan:component>
@@ -38,11 +38,11 @@ version="1.0">
 <xalan:component prefix="locale">
 	<xalan:script lang="javaclass" src="xalan://java.util.Locale"/>
 </xalan:component>
-  
+-->
 <xsl:variable name="language"><xsl:value-of select="doc/locale"/></xsl:variable>
 <xsl:variable name="props"><xsl:value-of select="doc/props"/></xsl:variable>
 <xsl:variable name="constants" select="resource:getBundle(string($props),locale:new(string($language)))"/>
-    
+
 <!-- query button template -->
 <xsl:template name="queryButton">
 	<appButton key="query" action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="ctrl+q">	

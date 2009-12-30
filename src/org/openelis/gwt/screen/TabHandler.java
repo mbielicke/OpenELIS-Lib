@@ -1,5 +1,6 @@
 package org.openelis.gwt.screen;
 
+import org.openelis.gwt.widget.DeckPanel;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.TabPanel;
 
@@ -40,6 +41,8 @@ public class TabHandler implements KeyPressHandler {
 				if(event.isShiftKeyDown()){
 					if(def.getWidget(prev) instanceof TabPanel)
 						nextWid = (HasField)def.getWidget(((TabPanel)def.getWidget(prev)).getPrevTabWidget());
+					else if(def.getWidget(prev) instanceof DeckPanel)
+						nextWid = (HasField)def.getWidget(((DeckPanel)def.getWidget(prev)).getPrevTabWidget());
 					else 
 						nextWid = (HasField)def.getWidget(prev);
 					if(nextWid.isEnabled()) {
@@ -52,7 +55,9 @@ public class TabHandler implements KeyPressHandler {
 				}else{
 					if(def.getWidget(next) instanceof TabPanel)
 						nextWid = (HasField)def.getWidget(((TabPanel)def.getWidget(next)).getNextTabWidget());
-					else 
+					else if(def.getWidget(next) instanceof DeckPanel)
+						nextWid = (HasField)def.getWidget(((DeckPanel)def.getWidget(next)).getNextTabWidget());
+					else
 						nextWid = (HasField)def.getWidget(next);
 					if(nextWid.isEnabled()) {
 						def.getPanel().setFocusWidget((Widget)nextWid);

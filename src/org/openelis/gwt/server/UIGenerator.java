@@ -707,10 +707,14 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.SlideOutPanel");
     		}
     	});
-    	factoryMap.put("Deck", new Factory() {
+    	factoryMap.put("DeckPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("DeckPanel wid"+id+" = new DeckPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenDeck\");");
+    	        sw.println("wid"+id+".setStyleName(\"gwt-TabPanelBottom\");");
+    	        if(node.getAttributes().getNamedItem("height") != null)
+                	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+                if(node.getAttributes().getNamedItem("width") != null)
+                	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
     	        NodeList decks = ((Element)node).getElementsByTagName("deck");
     	        for (int k = 0; k < decks.getLength(); k++) {
     	            NodeList widgets = decks.item(k).getChildNodes();
@@ -721,7 +725,10 @@ public class UIGenerator extends Generator {
     	    	            	   count--;
     	    	            	   continue;
     	    	               }
-    	                    sw.println("wid"+id+".add(wid"+child+");");
+    	                	if(decks.item(k).getAttributes().getNamedItem("tab") != null) 
+    	                		sw.println("wid"+id+".add(wid"+child+",\""+decks.item(k).getAttributes().getNamedItem("tab").getNodeValue()+"\");");
+    	                	else
+    	                		sw.println("wid"+id+".add(wid"+child+",null);");
     	                }
     	            }
     	        }
@@ -732,7 +739,8 @@ public class UIGenerator extends Generator {
     	        }
     		}
     		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.DeckPanel");
+    			composer.addImport("org.openelis.gwt.widget.DeckPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
     		}
     	});
     	factoryMap.put("diagram", new Factory() {
@@ -1210,6 +1218,21 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.ScrollableTabBar");
     		}
     	});
+    	factoryMap.put("TabBar", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("TabBar wid"+id+" = new TabBar();");
+    			NodeList tabs = ((Element)node).getElementsByTagName("tab");
+      	        for (int k = 0; k < tabs.getLength(); k++) {
+      	        	sw.println("wid"+id+".addTab(\""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
+      	        }
+      	        if(tabs.getLength() > 0)
+      	        	sw.println("wid"+id+".selectTab(0);");
+    			setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.TabBar");
+    		}
+    	});
     	factoryMap.put("StackPanel", new Factory(){
     		public void getNewInstance(Node node, int id) {
     			sw.println("StackPanel wid"+id+" = new StackPanel();");
@@ -1239,6 +1262,10 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id){
     			sw.println("TabPanel wid"+id+" = new TabPanel();");
     	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
+    	        if(node.getAttributes().getNamedItem("width") != null)
+    	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	        if(node.getAttributes().getNamedItem("height") != null)
+    	        	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
     	        NodeList tabs = ((Element)node).getElementsByTagName("tab");
     	        for (int k = 0; k < tabs.getLength(); k++) {
     	            NodeList widgets = tabs.item(k).getChildNodes();
@@ -1249,18 +1276,18 @@ public class UIGenerator extends Generator {
     	    	            	   count--;
     	    	            	   continue;
     	    	               }
-    	                    sw.println("ScrollPanel scroll"+child+" = new ScrollPanel();");
-    	                    sw.println("scroll"+child+".setWidget(wid"+child+");");
+    	                    //sw.println("ScrollPanel scroll"+child+" = new ScrollPanel();");
+    	                    //sw.println("scroll"+child+".setWidget(wid"+child+");");
     	                    if(tabs.item(k).getAttributes().getNamedItem("tab") != null)
-    	                    	sw.println("wid"+id+".add(scroll"+child+", \""+
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+
     	                    			                  tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\",\""+
     	                    			                  tabs.item(k).getAttributes().getNamedItem("tab").getNodeValue()+"\");");
     	                    else
-    	                    	sw.println("wid"+id+".add(scroll"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
-    	                    if(node.getAttributes().getNamedItem("height") != null)
-    	                    	sw.println("scroll"+child+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
-    	                    if(node.getAttributes().getNamedItem("width") != null)
-    	                    	sw.println("scroll"+child+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
+    	                    //if(node.getAttributes().getNamedItem("height") != null)
+    	                    	//sw.println("scroll"+child+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    	                    //if(node.getAttributes().getNamedItem("width") != null)
+    	                    	//sw.println("scroll"+child+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
     	                }
     	            }
     	            sw.println("wid"+id+".selectTab(0);");

@@ -186,6 +186,7 @@
 					<xsd:complexType>
 						<xsd:sequence>
 							<xsd:choice>
+								<xsd:element ref="xsl:call-template" minOccurs="0" maxOccurs="unbounded" />
 								<xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
 								<xsd:element ref="panels" minOccurs="0" maxOccurs="1" />
 							</xsd:choice>
@@ -264,6 +265,27 @@
 
 	<xsd:element name="ScrollTabBar" substitutionGroup="widgets">
 		<xsd:complexType>
+			<xsd:attributeGroup ref="ScreenWidget" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="TabBar" substitutionGroup="widgets">
+		<xsd:complexType>
+		    <xsd:sequence>
+		      <xsd:element name="tab" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+							<xsd:element ref="xsl:call-template" minOccurs="0"
+								maxOccurs="unbounded" />
+							<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
+							<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
+						</xsd:sequence>
+						<xsd:attribute name="text" type="xsd:string" />
+						<xsd:attribute name="key" type="xsd:string" />
+						<xsd:attribute name="tab" type="xsd:string"/>
+					</xsd:complexType>
+				</xsd:element>
+		    </xsd:sequence>
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
@@ -622,7 +644,7 @@
 	<xsd:element name="DeckPanel" substitutionGroup="panels">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="deck" minOccurs="1" maxOccurs="unbounded">
+				<xsd:element name="deck" minOccurs="0" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:sequence minOccurs="0" maxOccurs="unbounded">
 							<xsd:element ref="xsl:call-template" minOccurs="0"
@@ -630,6 +652,7 @@
 							<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
 							<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
 						</xsd:sequence>
+						<xsd:attribute name="tab" type="xsd:string"/>
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>

@@ -5,32 +5,19 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
+public class DeckPanel extends com.google.gwt.user.client.ui.DeckPanel {
+	
 	private ArrayList<String> keyTabList = new  ArrayList<String>();
 	private String width;	
 	private String height;
 	
-	public void add(Widget wid, String text, String tab) {
+	public void add(Widget wid, String tab) {
 		keyTabList.add(tab);
-		add(wid,text);
-	}
-	
-	@Override
-	public void add(Widget wid, String tabText) {
 		ScrollPanel scroll = new ScrollPanel();
 		scroll.setWidget(wid);
-		super.add(scroll, tabText);
+		super.add(scroll);
 		scroll.setWidth(width);
 		scroll.setHeight(height);
-	
-	}
-	
-	public String getNextTabWidget() {
-		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[0];
-	}
-	
-	public String getPrevTabWidget() {
-		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[1];
 	}
 	
 	@Override
@@ -43,6 +30,14 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	public void setHeight(String height) {
 		this.height = height;
 		//super.setHeight(height);
+	}
+	
+	public String getNextTabWidget() {
+		return keyTabList.get(getVisibleWidget()).split(",")[0];
+	}
+	
+	public String getPrevTabWidget() {
+		return keyTabList.get(getVisibleWidget()).split(",")[1];
 	}
 
 }

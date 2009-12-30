@@ -1157,6 +1157,10 @@ cursor:default;}
     height:19px;
 }
 
+.None .gwt-TabBarFirst {
+	background:white;
+}
+
 .gwt-TabBarFirst{
     background:url('../Images/tabfirst.gif') no-repeat;
 }   
