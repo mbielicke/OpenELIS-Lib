@@ -286,7 +286,9 @@ color:gray;
 .instrumentIcon {background:transparent url(../Images/instrumentbuttonimage.gif) no-repeat scroll center;}
 .testIcon {background:transparent url(../Images/testbuttonimage.gif) no-repeat scroll center;}
 .methodIcon {background:transparent url(../Images/methodbuttonimage.gif) no-repeat scroll center;}
-.spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+
+.spinnerIcon {width:50px; height:50px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+
 .errorIcon {background:transparent url(../Images/bullet_red.png) no-repeat scroll center;}
 .warnIcon {background:transparent url(../Images/bullet_yellow.png) no-repeat scroll center;}
 
@@ -761,11 +763,21 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:none;
     cursor:default;
 }
-.privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
+.expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
 }
+
+.expandButtonImage{background:url("../Images/arrow_out.png") no-repeat;}
+.disabled .expandButtonImage{background:url("../Images/arrow_outdisabled.png") no-repeat;}
+
+.collapseButtonImage{background:url("../Images/arrow_in.png") no-repeat;}
+.disabled .collapseButtonImage{background:url("../Images/arrow_indisabled.png") no-repeat;}
+
+.similarButtonImage{background:url("../Images/find.png") no-repeat;}
+.disabled .similarButtonImage{background:url("../Images/finddisabled.png") no-repeat;}
+
 
 .Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, 
 .Disabled .CommitButtonImage, .Disabled .AbortButtonImage, .Disabled .OptionsButtonImage{
