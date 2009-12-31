@@ -121,6 +121,7 @@ public class TreeColumn {
     		if(val == null)
     			val = ((HasField)colWidget).getFieldValue();
     		Label label = new Label("");
+    		label.setStyleName("ScreenLabel");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				label.setText((((CalendarLookUp) colWidget).getField().format()));
