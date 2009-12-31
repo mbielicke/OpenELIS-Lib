@@ -901,6 +901,31 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         this.leaves = leaves;
     }
     
+    public void expand() {
+        rows = new ArrayList<TreeDataItem>();
+        if(data == null)
+        	return;
+        for(int i = 0; i < data.size(); i++) {
+        	TreeDataItem item = data.get(i);
+        	item.childIndex = i;
+        	openChildItems(item,rows);
+        }
+        refresh(false);
+    }
+    
+    public void collapse() {
+        rows = new ArrayList<TreeDataItem>();
+        if(data == null)
+        	return;
+        for(int i = 0; i < data.size(); i++) {
+        	TreeDataItem item = data.get(i);
+        	item.childIndex = i;
+        	rows.add(item);
+        	closeChildItems(item,rows);
+        }
+        refresh(false);
+    }
+    
     private void getVisibleRows() {
         rows = new ArrayList<TreeDataItem>();
         if(data == null)
@@ -911,6 +936,27 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	checkChildItems(item,rows);
         }
     }
+    
+    private void openChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows) {
+    	 item.open = true;
+    	 rows.add(item);
+         if(item.shown)
+         	shownRows++;
+         if(item.shownItems() > 0) {
+            Iterator<TreeDataItem> it = item.getItems().iterator();   
+            while(it.hasNext())
+                openChildItems(it.next(),rows);
+         }
+    }
+    
+    private void closeChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows) {
+   	 item.open = false;
+     if(item.shown)
+       	shownRows++;
+     Iterator<TreeDataItem> it = item.getItems().iterator();   
+     while(it.hasNext())
+         closeChildItems(it.next(),rows);
+   }
     
     private void checkChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows){
         rows.add(item);
