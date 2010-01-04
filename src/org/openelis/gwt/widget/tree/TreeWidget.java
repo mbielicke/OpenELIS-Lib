@@ -346,7 +346,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     protected void select(final int row, final int col) {
     	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
     		if(rows.get(row).parent == null){
-    			NavigationSelectionEvent.fire(this, row);
+    			NavigationSelectionEvent.fire(this,rows.get(row).childIndex);
     			return;
     		}
     	}
@@ -370,7 +370,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             	return;
             }
             //selectedRow = row;
-            selectRow(row);
+            selectRow(row,true);
             if(fireEvents)
             	SelectionEvent.fire(this,rows.get(row));
         }
@@ -705,9 +705,16 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return rows.size();
     }
 
-    public void selectRow(int index){
+    public void selectRow(int index) {
+    	selectRow(index,false);
+    }
+    
+    public void selectRow(int index, boolean byClick){
         if(index > rows.size())
             throw new IndexOutOfBoundsException();
+        if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !byClick){
+        	index = rows.indexOf(data.get(index));
+        }
         selectedRow = index;
         if(multiSelect && shiftKey){
         	if(selections.size() == 0)
@@ -796,24 +803,30 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void toggle(int row) {
-    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
-    		if(!event.isCanceled()){
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
+    		if(rows.get(row).parent == null){
+    			NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
+    		}
+    	}else {
+    		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
+    			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
+    			if(!event.isCanceled()){
+    				unselect(-1);
+    				selections.add(row);
+    				rows.get(row).selected = true;
+    				renderer.rowSelected(row);
+    				selectedRow = row;
+    				SelectionEvent.fire(this, rows.get(row));
+    			}
+    		}else if(isEnabled()){
     			unselect(-1);
     			selections.add(row);
     			rows.get(row).selected = true;
     			renderer.rowSelected(row);
     			selectedRow = row;
-    			SelectionEvent.fire(this, rows.get(row));
+    			if(fireEvents)
+    				SelectionEvent.fire(this, rows.get(row));
     		}
-    	}else if(isEnabled()){
-    		unselect(-1);
-			selections.add(row);
-			rows.get(row).selected = true;
-			renderer.rowSelected(row);
-			selectedRow = row;
-    		if(fireEvents)
-    			SelectionEvent.fire(this, rows.get(row));
     	}
     	if(!rows.get(row).open) {
     		if(fireEvents){
