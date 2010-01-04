@@ -803,10 +803,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void toggle(int row) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
-    		if(rows.get(row).parent == null){
-    			NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
-    		}
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && rows.get(row).parent == null) {
+    		NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
     	}else {
     		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
     			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
@@ -915,6 +913,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void expand() {
+    	unselect(-1);
         rows = new ArrayList<TreeDataItem>();
         if(data == null)
         	return;
@@ -927,6 +926,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void collapse() {
+    	unselect(-1);
         rows = new ArrayList<TreeDataItem>();
         if(data == null)
         	return;
