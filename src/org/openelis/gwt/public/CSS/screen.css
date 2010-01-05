@@ -317,6 +317,7 @@ color:gray;
 	    background:url("../Images/dictionarybuttonimage.gif") no-repeat;
 }
 .auxiliaryPromptIcon{
+	background:url("../Images/lightbulb.png") no-repeat;
 }
 .barcodeLabelIcon{
 }
