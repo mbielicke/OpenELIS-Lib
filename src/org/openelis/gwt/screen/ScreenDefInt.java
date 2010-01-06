@@ -17,5 +17,7 @@ public interface ScreenDefInt {
 	public ScreenPanel getPanel();
 	
 	public String getName();
+	
+	public void setName(String name);
 
 }

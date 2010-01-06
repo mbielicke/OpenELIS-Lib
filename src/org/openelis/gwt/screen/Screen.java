@@ -42,7 +42,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         DEFAULT, DISPLAY, UPDATE, ADD, QUERY, DELETE
     };
 
-    public String                         name;
     public State                          state        = null;
     public ScreenWindow                   window;
 
@@ -217,6 +216,14 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             return "";
 
         return obj.toString();
+    }
+    
+    public void setName(String name) {
+    	def.setName(name);
+    }
+    
+    public String getName() {
+    	return def.getName();
     }
 
     private static class UIFocusHandler implements FocusHandler, BlurHandler {

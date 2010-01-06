@@ -123,6 +123,9 @@ public class UIGenerator extends Generator {
 		sw.println("public String getName() {");
 		sw.println("return name;");
 		sw.println("}");
+		sw.println("public void setName(String name) {");
+		sw.println("this.name = name;");
+		sw.println("}");
 		sw.println("private void createPanel() {");
 	    try {
 	    	count = 0;
