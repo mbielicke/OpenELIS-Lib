@@ -149,8 +149,6 @@ public abstract class ScreenNavigator {
             atozNext.enable(enable && result != null);
         if (atozPrev != null)
             atozPrev.enable(enable && result != null);
-        if(table != null)
-        	table.enable(enable);
         this.enable = enable;
     }
 
