@@ -7,12 +7,15 @@ public class NavigationSelectionEvent extends GwtEvent<NavigationSelectionHandle
 	
 	private static Type<NavigationSelectionHandler> TYPE;
 	private Integer index;
+	private boolean cancel;
 	
-	public static void fire(HasNavigationSelectionHandlers source, Integer index) {
+	public static NavigationSelectionEvent fire(HasNavigationSelectionHandlers source, Integer index) {
 		if(TYPE != null){
 			NavigationSelectionEvent event = new NavigationSelectionEvent(index);
 			source.fireEvent(event);
+			return event;
 		}
+		return null;
 	}
 	
 	protected NavigationSelectionEvent(Integer index) {
@@ -39,6 +42,14 @@ public class NavigationSelectionEvent extends GwtEvent<NavigationSelectionHandle
 
     public Integer getIndex() {
     	return index;
+    }
+    
+    public void cancel() {
+    	cancel = true;
+    }
+    
+    public boolean isCancelled() {
+    	return cancel;
     }
 
 }

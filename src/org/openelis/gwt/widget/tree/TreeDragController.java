@@ -77,6 +77,8 @@ public class TreeDragController extends PickupDragController implements HasBefor
 		}
 		if(enabled)
 			((TreeRow)context.draggable).setDragValues();
+		else
+			throw new VetoDragException();
         super.previewDragStart();
     }
     

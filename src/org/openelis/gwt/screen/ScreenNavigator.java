@@ -65,6 +65,8 @@ public abstract class ScreenNavigator {
                     // cancel this selection and select the table row ourselves.
                     if (enable)
                         select(event.getIndex());
+                    else
+                    	event.cancel();
                 }
             });
             // we don't want the table to get focus; we can still select because

@@ -77,6 +77,8 @@ public class TableDragController extends PickupDragController implements HasBefo
 		}
 		if(enabled)
 			((TableRow)context.draggable).setDragValues();
+		else
+			throw new VetoDragException();
 		super.previewDragStart();
 	}
 

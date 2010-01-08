@@ -32,6 +32,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.event.BeforeDragStartHandler;
+import org.openelis.gwt.event.BeforeDropHandler;
+import org.openelis.gwt.event.DragStartHandler;
+import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.event.NavigationSelectionEvent;
 import org.openelis.gwt.event.NavigationSelectionHandler;
@@ -660,6 +664,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public TreeDataItem getSelection() {
+    	if(selections == null || selections.size() == 0)
+    		return null;
         return rows.get(selections.get(0));
     }
 
@@ -803,8 +809,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void toggle(int row) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && rows.get(row).parent == null) {
-    		NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && rows.get(row).parent == null && rows.get(row) != getSelection()) {
+    		NavigationSelectionEvent event = NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
+    		if(event != null && event.isCancelled())
+    			return;
     	}else {
     		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
     			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
@@ -1269,6 +1277,26 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
 	public HandlerRegistration addSortHandler(SortHandler handler) {
 		return addHandler(handler,SortEvent.getType());
+	}
+	
+	public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<TreeRow> handler) {
+		assert(dragController != null) : new Exception("Enable Dragging first before registering handlers");
+		return dragController.addBeforeStartHandler(handler);	
+	}
+	
+	public HandlerRegistration addDagStartHandler(DragStartHandler<TreeRow> handler) {
+		assert(dragController != null) : new Exception("Enable Dragging first before registerning handlers");
+		return dragController.addStartHandler(handler);
+	}
+	
+	public HandlerRegistration addBeforeDropHandler(BeforeDropHandler<TreeRow> handler) {
+		assert(dropController != null) : new Exception("Enable Dropping first before registering handlers");
+		return dropController.addBeforeDropHandler(handler);
+	}
+	
+	public HandlerRegistration addDropHandler(DropHandler<TreeRow> handler) {
+		assert(dropController != null) : new Exception("Enable Dropping first before registering handlers");
+		return dropController.addDropHandler(handler);
 	}
 
 	public HandlerRegistration addNavigationSelectionHandler(

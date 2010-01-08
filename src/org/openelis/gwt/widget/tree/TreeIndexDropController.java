@@ -1,5 +1,14 @@
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.event.BeforeDropEvent;
+import org.openelis.gwt.event.BeforeDropHandler;
+import org.openelis.gwt.event.DropEvent;
+import org.openelis.gwt.event.DropHandler;
+import org.openelis.gwt.event.HasBeforeDropHandlers;
+import org.openelis.gwt.event.HasDropHandlers;
+import org.openelis.gwt.widget.table.TableDragController;
+import org.openelis.gwt.widget.table.TableRow;
+
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
@@ -21,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Allows one or more table rows to be dropped into an existing table.
  */
-public class TreeIndexDropController extends AbstractPositioningDropController {
+public class TreeIndexDropController extends AbstractPositioningDropController implements HasBeforeDropHandlers<TreeRow>, HasDropHandlers<TreeRow> {
 
 	private static final String CSS_DROP_POSITIONER = "DropPositioner";
 
@@ -35,33 +44,6 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 	
 	public TreeRow dropRow;
 
-
-	private HandlerManager handlerManager;
-
-	protected final <H extends EventHandler> HandlerRegistration addHandler(
-			final H handler, GwtEvent.Type<H> type) {
-		return ensureHandlers().addHandler(type, handler);
-	}
-
-	/**
-	 * Ensures the existence of the handler manager.
-	 * 
-	 * @return the handler manager
-	 * */
-	HandlerManager ensureHandlers() {
-		return handlerManager == null ? handlerManager = new HandlerManager(this)
-		: handlerManager;
-	}
-
-	HandlerManager getHandlerManager() {
-		return handlerManager;
-	}
-
-	public void fireEvent(GwtEvent<?> event) {
-		if (handlerManager != null) {
-			handlerManager.fireEvent(event);
-		}
-	}
 
 	private IndexedPanel flexTableRowsAsIndexPanel = new IndexedPanel() {
 
@@ -94,6 +76,11 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 	public void onPreviewDrop(DragContext context) throws VetoDragException {
 		if(!validDrop)
 			throw new VetoDragException();
+		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
+			BeforeDropEvent event = BeforeDropEvent.fire(this, (TreeRow)context.draggable);
+			if(event != null && event.isCancelled())
+				throw new VetoDragException();
+		}
 		super.onPreviewDrop(context);
 	}
 
@@ -102,6 +89,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 	public void onEnter(DragContext context) {
 		super.onEnter(context);
 		positioner = newPositioner(context); 
+		((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
 	}
 
 	@Override
@@ -137,6 +125,8 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 		dropping = false;
 		dropRow = null;
 		super.onDrop(context);
+		if(getHandlerCount(DropEvent.getType()) > 0)
+			DropEvent.fire(this, dropRow);
 
 	}
 
@@ -144,6 +134,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 	public void onLeave(DragContext context) {
 		positioner.removeFromParent();
 		positioner = null;
+		((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 		super.onLeave(context);
 	}
 
@@ -254,5 +245,48 @@ public class TreeIndexDropController extends AbstractPositioningDropController {
 		DOM.setStyleAttribute(p.getElement(), "zIndex", "1000");
 		return p;
 	}
+	private HandlerManager handlerManager;
+
+	protected final <H extends EventHandler> HandlerRegistration addHandler(
+			final H handler, GwtEvent.Type<H> type) {
+		return ensureHandlers().addHandler(type, handler);
+	}
+
+	/**
+	 * Ensures the existence of the handler manager.
+	 * 
+	 * @return the handler manager
+	 * */
+	HandlerManager ensureHandlers() {
+		return handlerManager == null ? handlerManager = new HandlerManager(this)
+		: handlerManager;
+	}
+
+	HandlerManager getHandlerManager() {
+		return handlerManager;
+	}
+
+	public void fireEvent(GwtEvent<?> event) {
+		if (handlerManager != null) {
+			handlerManager.fireEvent(event);
+		}
+	}
+
+	public int getHandlerCount(GwtEvent.Type<?> type){
+		if(handlerManager == null)
+			return 0;
+		return handlerManager.getHandlerCount(type);
+
+	}	
+
+	public HandlerRegistration addBeforeDropHandler(
+			BeforeDropHandler<TreeRow> handler) {
+		return addHandler(handler,BeforeDropEvent.getType());
+	}
+
+	public HandlerRegistration addDropHandler(DropHandler<TreeRow> handler) {
+		return addHandler(handler,DropEvent.getType());
+	}
+	
 
 }
