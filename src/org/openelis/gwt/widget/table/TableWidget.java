@@ -836,6 +836,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		model.get(row).cells.get(col).exceptions.remove(ex);
     		if(model.get(row).cells.get(col).exceptions.size() == 0)
     			model.get(row).cells.get(col).exceptions = null;
+    		if(isRowDrawn(row))
+    			renderer.cellUpdated(row,col);
     	}
     	
     }
