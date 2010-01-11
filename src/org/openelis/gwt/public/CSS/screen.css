@@ -288,7 +288,6 @@ color:gray;
 .methodIcon {background:transparent url(../Images/methodbuttonimage.gif) no-repeat scroll center;}
 
 .spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
-.spinnerIconLarge {width:50px; height:50px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
 
 .errorIcon {background:transparent url(../Images/bullet_red.png) no-repeat scroll center;}
 .warnIcon {background:transparent url(../Images/bullet_yellow.png) no-repeat scroll center;}
