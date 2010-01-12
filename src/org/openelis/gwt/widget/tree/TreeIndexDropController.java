@@ -2,12 +2,14 @@ package org.openelis.gwt.widget.tree;
 
 import org.openelis.gwt.event.BeforeDropEvent;
 import org.openelis.gwt.event.BeforeDropHandler;
+import org.openelis.gwt.event.DropEnterEvent;
+import org.openelis.gwt.event.DropEnterHandler;
 import org.openelis.gwt.event.DropEvent;
 import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasBeforeDropHandlers;
+import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
 import org.openelis.gwt.widget.table.TableDragController;
-import org.openelis.gwt.widget.table.TableRow;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
@@ -30,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Allows one or more table rows to be dropped into an existing table.
  */
-public class TreeIndexDropController extends AbstractPositioningDropController implements HasBeforeDropHandlers<TreeRow>, HasDropHandlers<TreeRow> {
+public class TreeIndexDropController extends AbstractPositioningDropController implements HasBeforeDropHandlers<TreeRow>, HasDropHandlers<TreeRow>, HasDropEnterHandlers<TreeRow> {
 
 	private static final String CSS_DROP_POSITIONER = "DropPositioner";
 
@@ -64,7 +66,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		}
 	};
 
-	private int targetRow;
+	public int targetRow;
 	private int targetPosition = -1;
 
 	public TreeIndexDropController(TreeWidget tree) {
@@ -77,9 +79,13 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		if(!validDrop)
 			throw new VetoDragException();
 		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
-			BeforeDropEvent event = BeforeDropEvent.fire(this, (TreeRow)context.draggable);
-			if(event != null && event.isCancelled())
+			BeforeDropEvent event = BeforeDropEvent.fire(this, (TreeRow)context.draggable, tree.getRow(targetRow));
+			if(event != null && event.isCancelled()){
+				positioner.removeFromParent();
+				positioner = null;
+				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 				throw new VetoDragException();
+			}
 		}
 		super.onPreviewDrop(context);
 	}
@@ -89,7 +95,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 	public void onEnter(DragContext context) {
 		super.onEnter(context);
 		positioner = newPositioner(context); 
-		((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
+		//((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
 	}
 
 	@Override
@@ -126,7 +132,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		dropRow = null;
 		super.onDrop(context);
 		if(getHandlerCount(DropEvent.getType()) > 0)
-			DropEvent.fire(this, dropRow);
+			DropEvent.fire(this, dropRow, tree.getRow(targetRow));
 
 	}
 
@@ -134,7 +140,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 	public void onLeave(DragContext context) {
 		positioner.removeFromParent();
 		positioner = null;
-		((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
+		((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 		super.onLeave(context);
 	}
 
@@ -150,9 +156,14 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			scroll.cancel();
 			scroll = null;
 		}
-		targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
+		
+		int newRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
 				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
+		if(newRow == targetRow)
+			return;
+		targetRow = newRow;
 		Location tableLocation = new WidgetLocation(tree, context.boundaryPanel);
+		validDrop = true;
 		if(tree.numRows() > 0){
 			if(tree.dragController == context.dragController){
 				int checkIndex = targetRow;
@@ -166,15 +177,26 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 					return;
 				}
 			}
-			TreeRow row = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
-			Location widgetLocation = new WidgetLocation(row, context.boundaryPanel);
-			context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
-					+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+			if(getHandlerCount(DropEnterEvent.getType()) > 0){
+				DropEnterEvent event = DropEnterEvent.fire(this, (TreeRow)context.draggable, tree.getRow(targetRow));
+				if(event != null && event.isCancelled())
+					validDrop = false;
+			}
+			if(validDrop) {
+				TreeRow row = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
+				Location widgetLocation = new WidgetLocation(row, context.boundaryPanel);
+				context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
+						+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
+			}else{
+				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
+				positioner.removeFromParent();
+			}
 		}else{
 			Location headerLocation = new WidgetLocation(tree.view.header,context.boundaryPanel);
 			context.boundaryPanel.add(positioner,tableLocation.getLeft(),headerLocation.getTop()+tree.view.header.getOffsetHeight());
 		}
-		validDrop = true;
+		
 		if(targetRow == 0 || targetRow == tree.maxRows -1)
 			checkScroll(targetRow);
 		if(targetRow > -1 && targetRow < tree.maxRows){
@@ -196,6 +218,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			}
 		}
 	}
+	
 	public Timer open;
 	public Timer scroll;
 
@@ -286,6 +309,11 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 
 	public HandlerRegistration addDropHandler(DropHandler<TreeRow> handler) {
 		return addHandler(handler,DropEvent.getType());
+	}
+
+	public HandlerRegistration addDropEnterHandler(
+			DropEnterHandler<TreeRow> handler) {
+		return addHandler(handler,DropEnterEvent.getType());
 	}
 	
 

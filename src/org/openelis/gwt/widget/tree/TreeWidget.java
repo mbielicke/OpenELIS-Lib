@@ -35,6 +35,7 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.BeforeDropHandler;
 import org.openelis.gwt.event.DragStartHandler;
+import org.openelis.gwt.event.DropEnterHandler;
 import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasDropController;
 import org.openelis.gwt.event.NavigationSelectionEvent;
@@ -402,10 +403,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	}
     }
     
-    public void select(TreeDataItem item) {
-    	selectRow(rows.indexOf(item));
+    public void select(int index) {
+    	selectRow(index);
     	if(fireEvents)
-    		SelectionEvent.fire(this, item);
+    		SelectionEvent.fire(this, getSelection());
+    }
+    
+    public void select(TreeDataItem item) {
+    	select(rows.indexOf(item));
     }
 
     public void finishEditing() {
@@ -808,6 +813,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         renderer.dataChanged(true);
     }
     
+    public void toggle(TreeDataItem item) {
+    	toggle(rows.indexOf(item));
+    }
+    
     public void toggle(int row) {
     	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && rows.get(row).parent == null && rows.get(row) != getSelection()) {
     		NavigationSelectionEvent event = NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
@@ -945,6 +954,17 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	closeChildItems(item,rows);
         }
         refresh(false);
+    }
+    
+    public void collapse(TreeDataItem item) {
+    	unselect(-1);
+    	collapse(rows.indexOf(item));
+    }
+    
+    public void collapse(int index) {
+    	unselect(-1);
+    	closeChildItems(rows.get(index),rows);
+		refreshRow(index);
     }
     
     private void getVisibleRows() {
@@ -1297,6 +1317,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	public HandlerRegistration addDropHandler(DropHandler<TreeRow> handler) {
 		assert(dropController != null) : new Exception("Enable Dropping first before registering handlers");
 		return dropController.addDropHandler(handler);
+	}
+	
+	public HandlerRegistration addDropEnterHandler(DropEnterHandler<TreeRow> handler) {
+		assert(dropController != null) : new Exception("Enable Dropping first before registering handlers");
+		return dropController.addDropEnterHandler(handler);
 	}
 
 	public HandlerRegistration addNavigationSelectionHandler(

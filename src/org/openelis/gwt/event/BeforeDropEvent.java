@@ -7,19 +7,21 @@ public class BeforeDropEvent<I> extends GwtEvent<BeforeDropHandler<I>> {
 	
 	private static Type<BeforeDropHandler<?>> TYPE;
 	private I dragObject;
+	private Object dropTarget;
 	private boolean cancelled;
 	
-	public static <I> BeforeDropEvent<I> fire(HasBeforeDropHandlers<I> source, I dragObject) {
+	public static <I> BeforeDropEvent<I> fire(HasBeforeDropHandlers<I> source, I dragObject, Object dropTarget) {
 		if(TYPE != null) {
-			BeforeDropEvent<I> event = new BeforeDropEvent<I>(dragObject);
+			BeforeDropEvent<I> event = new BeforeDropEvent<I>(dragObject, dropTarget);
 			source.fireEvent(event);
 			return event;
 		}
 		return null;
 	}
 	
-	protected BeforeDropEvent(I dragObject) {
+	protected BeforeDropEvent(I dragObject, Object dropTarget) {
 		this.dragObject = dragObject;
+		this.dropTarget = dropTarget;
 	}
 
 	@Override
@@ -41,6 +43,10 @@ public class BeforeDropEvent<I> extends GwtEvent<BeforeDropHandler<I>> {
 
 	public I getDragObject() {
 		return dragObject;
+	}
+	
+	public Object getDropTarget() {
+		return dropTarget;
 	}
 
 	public void cancel() {

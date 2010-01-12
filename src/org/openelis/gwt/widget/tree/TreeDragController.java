@@ -9,7 +9,6 @@ import org.openelis.gwt.event.DragStartEvent;
 import org.openelis.gwt.event.DragStartHandler;
 import org.openelis.gwt.event.HasBeforeDragStartHandlers;
 import org.openelis.gwt.event.HasDragStartHandlers;
-import org.openelis.gwt.widget.table.TableRow;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -131,15 +130,16 @@ public class TreeDragController extends PickupDragController implements HasBefor
 			if(proxy != null){
 				ap.add(proxy);
 			}else{
-				proxy = ((TableRow)context.draggable).getDragProxy();
+				proxy = ((TreeRow)context.draggable).getDragProxy();
 				//dl.setStyleName("ScreenLabel");
 				ap.add(proxy);
 			}
 			hp.setStyleName(PRIVATE_CSS_PROXY);
-			container.add(hp, widgetArea.getLeft() - draggableArea.getLeft(), widgetArea.getTop()
-					- draggableArea.getTop());
+			container.add(hp, 0, 0
+					);
 		}
 		//this.proxy = container;
+		DOM.setStyleAttribute(container.getElement(), "zIndex", "1000");
 		return container;
 	}
     

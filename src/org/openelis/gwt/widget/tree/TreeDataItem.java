@@ -144,9 +144,7 @@ public class TreeDataItem extends TableDataRow {
         Iterator<TreeDataItem> it = items.iterator();
         while(it.hasNext()){
             TreeDataItem item = it.next();
-            item.open = false;
-            if(items.size() > 0)
-                item.close();
+            item.close();
         }
     }
     
@@ -192,12 +190,10 @@ public class TreeDataItem extends TableDataRow {
     }
     
     public boolean isDecendant(TreeDataItem child) {
-    	if(items.contains(child)){
-    		return true;
-    	}
-    	Iterator<TreeDataItem> it = items.iterator();
-    	while(it.hasNext()){
-    		return it.next().isDecendant(child);
+    	while(child.parent != null) {
+    		if(child.parent == this)
+    			return true;
+    		child = child.parent;
     	}
     	return false;
     }

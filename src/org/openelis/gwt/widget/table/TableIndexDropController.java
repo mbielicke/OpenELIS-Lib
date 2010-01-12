@@ -73,7 +73,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 		if(!validDrop) 
 			throw new VetoDragException();
 		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
-			BeforeDropEvent event = BeforeDropEvent.fire(this, (TableRow)context.draggable);
+			BeforeDropEvent event = BeforeDropEvent.fire(this, (TableRow)context.draggable, table.getRow(targetRow));
 			if(event != null && event.isCancelled())
 				throw new VetoDragException();
 		}
@@ -119,7 +119,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 		dropping = false;
 		super.onDrop(context);
 		if(getHandlerCount(DropEvent.getType()) > 0)
-			DropEvent.fire(this, drop);
+			DropEvent.fire(this, drop, table.getRow(targetRow));
 	}
 
 	@Override

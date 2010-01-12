@@ -250,4 +250,8 @@ public abstract class ScreenNavigator {
 
         executeQuery(query);
     }
+    
+    public int getSelection() {
+    	return selection;
+    }
 }

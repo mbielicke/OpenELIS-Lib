@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TreeRow extends Widget implements HasAllMouseHandlers {
@@ -26,6 +27,7 @@ public class TreeRow extends Widget implements HasAllMouseHandlers {
     
     public int dragIndex;
     public int dragModelIndex;
+    public int droppedIndex = -1;
     public TreeDataItem dragItem;
     
     public TreeRow() {
@@ -42,6 +44,12 @@ public class TreeRow extends Widget implements HasAllMouseHandlers {
         dragIndex = index;
         dragModelIndex = modelIndex;
         dragItem = (TreeDataItem)item.clone();
+    }
+    
+    public Widget getDragProxy() {
+    	Label wid = new Label(dragItem.cells.get(0).value.toString());
+    	wid.setStyleName("ScreenLabel");
+    	return wid;
     }
     
 	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
