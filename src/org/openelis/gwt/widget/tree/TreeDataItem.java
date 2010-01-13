@@ -208,6 +208,6 @@ public class TreeDataItem extends TableDataRow {
             clone.cells.get(i).setValue(cells.get(i).getValue());
     	clone.leafType = leafType;
         return clone;
-    	
     }
+ 
 }
