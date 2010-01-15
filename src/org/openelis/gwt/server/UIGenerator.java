@@ -1267,8 +1267,12 @@ public class UIGenerator extends Generator {
     	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
     	        if(node.getAttributes().getNamedItem("width") != null)
     	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	        else
+    	        	sw.println("wid"+id+".setWidth(\"auto\");");
     	        if(node.getAttributes().getNamedItem("height") != null)
     	        	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    	        else
+    	        	sw.println("wid"+id+".setHeight(\"auto\");");
     	        NodeList tabs = ((Element)node).getElementsByTagName("tab");
     	        for (int k = 0; k < tabs.getLength(); k++) {
     	            NodeList widgets = tabs.item(k).getChildNodes();
