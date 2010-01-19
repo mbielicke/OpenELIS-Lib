@@ -375,7 +375,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             	return;
             }
             //selectedRow = row;
-            selectRow(row,true);
+            selectRow(row);
             if(fireEvents)
             	SelectionEvent.fire(this,rows.get(row));
         }
@@ -408,6 +408,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(fireEvents)
     		SelectionEvent.fire(this, getSelection());
     }
+    
     
     public void select(TreeDataItem item) {
     	select(rows.indexOf(item));
@@ -715,17 +716,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public int numRows() {
         return rows.size();
     }
-
-    public void selectRow(int index) {
-    	selectRow(index,false);
+    
+    public void navSelect(int index) {
+    	selectRow(index = rows.indexOf(data.get(index)));
     }
     
-    public void selectRow(int index, boolean byClick){
+    public void selectRow(int index){
         if(index > rows.size())
             throw new IndexOutOfBoundsException();
-        if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !byClick){
-        	index = rows.indexOf(data.get(index));
-        }
         selectedRow = index;
         if(multiSelect && shiftKey){
         	if(selections.size() == 0)
@@ -750,7 +748,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
                	selections.clear();
         	selections.add(index);
         }
-       	renderer.dataChanged(true);      
+        if(isRowDrawn(index))
+        	renderer.dataChanged(true);
+        else
+        	scrollToSelection();
     }
 
     public void setModel(ArrayList<TreeDataItem> data) {
@@ -1027,7 +1028,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         renderer.dataChanged(true);
     }
     
-    private void refreshRow(TreeDataItem item) {
+    public void refreshRow(TreeDataItem item) {
     	refreshRow(rows.indexOf(item));
     }
 

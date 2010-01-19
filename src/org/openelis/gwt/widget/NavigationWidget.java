@@ -12,6 +12,6 @@ public interface NavigationWidget<I> extends HasNavigationSelectionHandlers {
 
 	public void unselect(int selection);
 	
-	public void selectRow(int selection);
+	public void navSelect(int selection);
 	
 }

@@ -323,7 +323,8 @@
 						<xsd:attribute name="text" type="xsd:string" />
 						<xsd:attribute name="key" type="xsd:string" />
 						<xsd:attribute name="tab" type="xsd:string"/>
-					</xsd:complexType>
+						<xsd:attribute name="visible" type="xsd:boolean"/>
+				    </xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>
 			<xsd:attributeGroup ref="ScreenWidget" />

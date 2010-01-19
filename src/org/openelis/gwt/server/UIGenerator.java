@@ -1227,13 +1227,16 @@ public class UIGenerator extends Generator {
     			NodeList tabs = ((Element)node).getElementsByTagName("tab");
       	        for (int k = 0; k < tabs.getLength(); k++) {
       	        	sw.println("wid"+id+".addTab(\""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
+      	        	if(tabs.item(k).getAttributes().getNamedItem("visible") != null) {
+      	        		sw.println("wid"+id+".setTabVisible(wid"+id+".getTabCount() -1, "+tabs.item(k).getAttributes().getNamedItem("visible").getNodeValue()+");");
+      	        	}
       	        }
       	        if(tabs.getLength() > 0)
       	        	sw.println("wid"+id+".selectTab(0);");
     			setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.TabBar");
+    			composer.addImport("org.openelis.gwt.widget.TabBar");
     		}
     	});
     	factoryMap.put("StackPanel", new Factory(){
@@ -1274,6 +1277,7 @@ public class UIGenerator extends Generator {
     	        else
     	        	sw.println("wid"+id+".setHeight(\"auto\");");
     	        NodeList tabs = ((Element)node).getElementsByTagName("tab");
+    	        boolean visible = false;
     	        for (int k = 0; k < tabs.getLength(); k++) {
     	            NodeList widgets = tabs.item(k).getChildNodes();
     	            for (int l = 0; l < widgets.getLength(); l++) {
@@ -1283,24 +1287,25 @@ public class UIGenerator extends Generator {
     	    	            	   count--;
     	    	            	   continue;
     	    	               }
-    	                    //sw.println("ScrollPanel scroll"+child+" = new ScrollPanel();");
-    	                    //sw.println("scroll"+child+".setWidget(wid"+child+");");
     	                    if(tabs.item(k).getAttributes().getNamedItem("tab") != null)
     	                    	sw.println("wid"+id+".add(wid"+child+", \""+
     	                    			                  tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\",\""+
     	                    			                  tabs.item(k).getAttributes().getNamedItem("tab").getNodeValue()+"\");");
     	                    else
     	                    	sw.println("wid"+id+".add(wid"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
-    	                    //if(node.getAttributes().getNamedItem("height") != null)
-    	                    	//sw.println("scroll"+child+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
-    	                    //if(node.getAttributes().getNamedItem("width") != null)
-    	                    	//sw.println("scroll"+child+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	                    if(tabs.item(k).getAttributes().getNamedItem("visible") != null) {
+    	                    	if(tabs.item(k).getAttributes().getNamedItem("visible").getNodeValue().equals("true"))
+    	                    			visible= true;
+    	                    	else
+    	                    		sw.println("wid"+id+".setTabVisible(wid"+id+".getTabBar().getTabCount() -1, false);");
+    	      	        	}else
+    	      	        		visible= true;
     	                }
     	            }
+    	            if(!visible)
+    	            	sw.println("wid"+id+".getTabBar().setStyleName(\"None\");");
     	            sw.println("wid"+id+".selectTab(0);");
     	        }
-    	        
-    	        //setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.TabPanel");

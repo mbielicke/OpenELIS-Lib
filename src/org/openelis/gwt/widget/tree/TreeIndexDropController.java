@@ -138,8 +138,10 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 
 	@Override
 	public void onLeave(DragContext context) {
-		positioner.removeFromParent();
-		positioner = null;
+		if(positioner != null) {
+			positioner.removeFromParent();
+			positioner = null;
+		}
 		((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 		super.onLeave(context);
 	}

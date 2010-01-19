@@ -351,7 +351,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @param col
      */
     protected void select(final int row, final int col, boolean byClick) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode) {
     		NavigationSelectionEvent.fire(this,row);
     		return;
     	}
@@ -671,6 +671,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         
         renderer.dataChanged(false);        
     }
+	
+	public void navSelect(int index) {
+		selectRow(index);
+	}
 
 	public void selectRow(final int index) {
 		selectRow(index,false);

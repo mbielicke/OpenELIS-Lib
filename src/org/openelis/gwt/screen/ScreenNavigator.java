@@ -224,7 +224,7 @@ public abstract class ScreenNavigator {
             if (fetch((RPC)result.get(row))) {
                 selection = row;
                 if (table != null)
-                    table.selectRow(selection);
+                    table.navSelect(selection);
                 if (atozNext != null)
                     atozNext.enable(true);
                 if (atozPrev != null)

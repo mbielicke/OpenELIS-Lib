@@ -44,5 +44,9 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		this.height = height;
 		//super.setHeight(height);
 	}
+	
+	public void setTabVisible(int index, boolean visible) {
+		((Widget)getTabBar().getTab(index)).setVisible(visible);
+	}
 
 }
