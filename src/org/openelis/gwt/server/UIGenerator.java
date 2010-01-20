@@ -1,6 +1,11 @@
 package org.openelis.gwt.server;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
@@ -92,7 +97,7 @@ public class UIGenerator extends Generator {
         composer.addImport("com.google.gwt.event.dom.client.HasFocusHandlers");
         composer.addImplementedInterface("ScreenDefInt");
         
-		sw = composer.createSourceWriter(context,printWriter);
+		sw = composer.createSourceWriter(context,printWriter); 
 	  
 		sw.println("protected ScreenPanel panel;");
 		sw.println("protected HashMap<String,Widget> widgets;");
@@ -372,7 +377,8 @@ public class UIGenerator extends Generator {
     	                	sw.println("wid"+id+".setCellHeight(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("height").getNodeValue()+"\");");
     	                }
     	                if(widgets.item(k).getAttributes().getNamedItem("width") != null) {
-    	                	sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	                	if(!widgets.item(k).getAttributes().getNamedItem("width").getNodeValue().equals("auto"))
+    	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
     	                }
     	            }
     	        }
