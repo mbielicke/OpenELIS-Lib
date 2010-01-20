@@ -47,6 +47,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -81,6 +82,18 @@ public class TableColumn {
     protected HashSet<Object> filtersInForce;
     protected ArrayList<Filter> filterList;
     
+    private class CheckBoxContainer extends AbsolutePanel implements HasMouseOutHandlers, HasMouseOverHandlers {
+
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+			return addDomHandler(handler, MouseOutEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+			return addDomHandler(handler, MouseOverEvent.getType());
+		}
+    	
+    }
+    
     
     public Widget getDisplayWidget(TableDataRow row) {
     	TableDataCell cell = new TableDataCell(null);
@@ -89,7 +102,7 @@ public class TableColumn {
     	Widget wid = null;
     	Object val = null;
     	if(colWidget instanceof CheckBox){
-    		wid = new AbsolutePanel();
+    		wid = new CheckBoxContainer();
     		IconContainer icon = new IconContainer();
     		if(CheckBox.CHECKED.equals(cell.getValue()))
     			icon.setStyleName(CheckBox.CHECKED_STYLE);
@@ -196,7 +209,7 @@ public class TableColumn {
     		cell = row.cells.get(columnIndex);
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
-    		AbsolutePanel ap = new AbsolutePanel();
+    		CheckBoxContainer ap = new CheckBoxContainer();
     		((CheckBox)editor).setValue((String)cell.getValue());
     		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		ap.setWidth((currentWidth)+ "px");
