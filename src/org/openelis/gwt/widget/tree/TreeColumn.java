@@ -47,12 +47,12 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -82,12 +82,24 @@ public class TreeColumn {
     public String leafType;
     public ArrayList<String> sortLeaves;
     
+    private class CheckBoxContainer extends AbsolutePanel implements HasMouseOverHandlers, HasMouseOutHandlers {
+
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+			return addDomHandler(handler,MouseOverEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+			return addDomHandler(handler,MouseOutEvent.getType());
+		}
+   
+    }
+    
     
     public Widget getDisplayWidget(TableDataCell cell) {
     	Widget wid = null;
     	Object val = null;
     	if(colWidget instanceof CheckBox){
-    		wid = new AbsolutePanel();
+    		wid = new CheckBoxContainer();
     		IconContainer icon = new IconContainer();
     		if(CheckBox.CHECKED.equals(cell.getValue()))
     			icon.setStyleName(CheckBox.CHECKED_STYLE);
@@ -136,60 +148,7 @@ public class TreeColumn {
     		wid = label;
     		wid.setWidth((currentWidth)+ "px");
     	}
-        
-        if(cell.exceptions != null) {
-        	final VerticalPanel errorPanel = new VerticalPanel();
-        	String style = "InputWarning";
-            for (LocalizedException error : cell.exceptions) {
-            	HorizontalPanel hp = new HorizontalPanel();
-            	if(error instanceof Warning){
-            		hp.add(new Image("Images/bullet_yellow.png"));
-            		hp.setStyleName("warnPopupLabel");
-            	}else{
-            		hp.add(new Image("Images/bullet_red.png"));
-            		hp.setStyleName("errorPopupLabel");
-            		style = "InputError";
-            	}
-            	hp.add(new Label(error.getMessage()));
-                errorPanel.add(hp);
-            }
-        	wid.addStyleName(style);
-        	((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
-        		
-				public void onMouseOver(MouseOverEvent event) {
-				    String styleName = ((Widget)event.getSource()).getStyleName();
-			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
-			            if(pop == null){
-			                pop = new PopupPanel();
-			                //pop.setStyleName("ErrorPopup");
-			            }
-			            DecoratorPanel dp = new DecoratorPanel();
-			            
-			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
-			            dp.setStyleName("ErrorWindow");
-			            dp.add(errorPanel);
-			            dp.setVisible(true);
-			            pop.setWidget(dp);
-			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
-			            pop.show();
-			        }
-				}
-        		
-        	});
-        	((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
-
-				public void onMouseOut(MouseOutEvent event) {
-				    String styleName = ((Widget)event.getSource()).getStyleName();
-			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
-			            if(pop != null){
-			                pop.hide();
-			            }
-			        }
-				}
-        		
-        	});
-        	
-        }
+        setExceptions(wid,cell.exceptions);
         wid.addStyleName("TableWidget");
         return wid;
     }
@@ -230,68 +189,13 @@ public class TreeColumn {
     			}
     		}
     	}
-        if(cell.exceptions != null) {
-        	final VerticalPanel errorPanel = new VerticalPanel();
-        	String style = "InputWarning";
-            for (LocalizedException error : cell.exceptions) {
-            	HorizontalPanel hp = new HorizontalPanel();
-            	if(error instanceof Warning){
-            		hp.add(new Image("Images/bullet_yellow.png"));
-            		hp.setStyleName("warnPopupLabel");
-            	}else{
-            		hp.add(new Image("Images/bullet_red.png"));
-            		hp.setStyleName("errorPopupLabel");
-            		style = "InputError";
-            	}
-            	hp.add(new Label(error.getMessage()));
-                errorPanel.add(hp);
-            }
-        	widget.addStyleName(style);
-        	((HasMouseOverHandlers)widget).addMouseOverHandler(new MouseOverHandler() {
-        		
-				public void onMouseOver(MouseOverEvent event) {
-				    String styleName = ((Widget)event.getSource()).getStyleName();
-			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
-			            if(pop == null){
-			                pop = new PopupPanel();
-			                //pop.setStyleName("ErrorPopup");
-			            }
-			            DecoratorPanel dp = new DecoratorPanel();
-			            
-			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
-			            dp.setStyleName("ErrorWindow");
-			            dp.add(errorPanel);
-			            dp.setVisible(true);
-			            pop.setWidget(dp);
-			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
-			            pop.show();
-			        }
-				}
-        		
-        	});
-        	((HasMouseOutHandlers)widget).addMouseOutHandler(new MouseOutHandler() {
-
-				public void onMouseOut(MouseOutEvent event) {
-				    String styleName = ((Widget)event.getSource()).getStyleName();
-			        if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
-			            if(pop != null){
-			                pop.hide();
-			            }
-			        }
-				}
-        		
-        	});
-        	
-        }else{
-        	widget.removeStyleName("InputError");
-        	widget.removeStyleName("InputWarning");
-        }
+    	setExceptions(widget,cell.exceptions);
     }
     
     public Widget getWidgetEditor(TableDataCell cell) {
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
-    		AbsolutePanel ap = new AbsolutePanel();
+    		CheckBoxContainer ap = new CheckBoxContainer();
     		((CheckBox)editor).setValue((String)cell.getValue());
     		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		ap.setWidth((currentWidth)+ "px");
@@ -316,62 +220,7 @@ public class TreeColumn {
     		((HasField)editor).setFieldValue(cell.getValue());
        
         ((HasField)editor).clearExceptions();
-        if(cell.exceptions != null) {
-     	   for(LocalizedException exc : cell.exceptions) 
-     		   ((HasField)editor).addException(exc);
-        }
-/*        if(cell.exceptions != null) {
-        	final VerticalPanel errorPanel = new VerticalPanel();
-        	String style = "InputWarning";
-            for (LocalizedException error : cell.exceptions) {
-            	HorizontalPanel hp = new HorizontalPanel();
-            	if(error instanceof Warning){
-            		hp.add(new Image("Images/warn.png"));
-            		hp.setStyleName("warnPopupLabel");
-            	}else{
-            		hp.add(new Image("Images/bullet_red.png"));
-            		hp.setStyleName("errorPopupLabel");
-            		style = "InputError";
-            	}
-            	hp.add(new Label(error.getMessage()));
-                errorPanel.add(hp);
-            }
-        	editor.addStyleName(style);
-        	((HasMouseOverHandlers)colWidget).addMouseOverHandler(new MouseOverHandler() {
-        		
-				public void onMouseOver(MouseOverEvent event) {
-			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
-			            if(pop == null){
-			                pop = new PopupPanel();
-			                //pop.setStyleName("ErrorPopup");
-			            }
-			            DecoratorPanel dp = new DecoratorPanel();
-			            
-			            //ScreenWindow win = new ScreenWindow(pop,"","","",false);
-			            dp.setStyleName("ErrorWindow");
-			            dp.add(errorPanel);
-			            dp.setVisible(true);
-			            pop.setWidget(dp);
-			            pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
-			            pop.show();
-			        }
-				}
-        		
-        	});
-        	((HasMouseOutHandlers)editor).addMouseOutHandler(new MouseOutHandler() {
-
-				public void onMouseOut(MouseOutEvent event) {
-			        if(((Widget)event.getSource()).getStyleName().indexOf("InputError") > -1){
-			            if(pop != null){
-			                pop.hide();
-			            }
-			        }
-				}
-        		
-        	});
-        	
-        }
-        */
+        setExceptions(editor,cell.exceptions);
         editor.addStyleName("TableWidget");
         return editor;
     }
@@ -527,6 +376,75 @@ public class TreeColumn {
     public void setKey(String key) {
         this.key = key;
         
+    }
+    
+    public void setExceptions(Widget wid, ArrayList<LocalizedException> exceptions) {
+    	if(exceptions == null || exceptions.size() == 0){
+        	wid.removeStyleName("InputError");
+        	wid.removeStyleName("InputWarning");
+    		return;
+    	}
+    	final VerticalPanel errorPanel = new VerticalPanel();
+		String style = "InputWarning";
+		for (LocalizedException error : exceptions) {
+			HorizontalPanel hp = new HorizontalPanel();
+			if(error instanceof Warning){
+				AbsolutePanel ap = new AbsolutePanel();
+				ap.setStyleName("warnIcon");
+				hp.add(ap);
+				hp.setStyleName("warnPopupLabel");
+			}else{
+				AbsolutePanel ap = new AbsolutePanel();
+				ap.setStyleName("errorIcon");
+				hp.add(ap);
+				hp.setStyleName("errorPopupLabel");
+				style = "InputError";
+			}
+			hp.add(new Label(error.getMessage()));
+			errorPanel.add(hp);
+		}
+		if(wid instanceof HasField)
+			((HasField)wid).addExceptionStyle(style);
+		else
+			wid.addStyleName(style);
+		((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
+
+			public void onMouseOver(MouseOverEvent event) {
+				String styleName = ((Widget)event.getSource()).getStyleName();
+				if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
+					if(pop == null){
+						pop = new PopupPanel(true);
+						//pop.setStyleName("ErrorPopup");
+					}
+					DecoratorPanel dp = new DecoratorPanel();
+
+					//ScreenWindow win = new ScreenWindow(pop,"","","",false);
+					dp.setStyleName("ErrorWindow");
+					dp.add(errorPanel);
+					dp.setVisible(true);
+					pop.setWidget(dp);
+					int left = ((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth();
+					if(left > controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth())
+						left = controller.view.cellView.getAbsoluteLeft()+controller.view.cellView.getOffsetWidth();
+					pop.setPopupPosition(left, ((Widget)event.getSource()).getAbsoluteTop());
+					pop.show();
+				}
+			}
+
+		});
+		((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
+
+			public void onMouseOut(MouseOutEvent event) {
+				String styleName = ((Widget)event.getSource()).getStyleName();
+				if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
+					if(pop != null){
+						pop.hide();
+					}
+				}
+			}
+
+		});
+
     }
 
     
