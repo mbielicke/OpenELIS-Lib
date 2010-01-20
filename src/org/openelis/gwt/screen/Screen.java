@@ -159,6 +159,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             if (wid instanceof HasField)
                 ((HasField)wid).clearExceptions();
         }
+        window.clearStatus();
         window.clearMessagePopup("");
     }
 
