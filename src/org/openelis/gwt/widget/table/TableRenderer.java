@@ -248,10 +248,11 @@ public class TableRenderer  {
         		currVal = ((TableDataRow)currVal).key;
         	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         	if(changed) {
-        		if(controller.activeWidget instanceof HasField){
-        			if(((HasField)controller.activeWidget).getExceptions() != null){
+        		Widget wid = controller.activeWidget;
+        		if(wid instanceof HasField){
+        			if(((HasField)wid).getExceptions() != null){
         				ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
-        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)controller.activeWidget).getExceptions())
+        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions())
         					exceps.add((LocalizedException)exc.clone());
         				
         				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;

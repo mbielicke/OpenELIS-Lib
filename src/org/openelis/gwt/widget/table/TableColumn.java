@@ -82,7 +82,7 @@ public class TableColumn {
     protected HashSet<Object> filtersInForce;
     protected ArrayList<Filter> filterList;
     
-    private class CheckBoxContainer extends AbsolutePanel implements HasMouseOutHandlers, HasMouseOverHandlers {
+    public class CheckBoxContainer extends AbsolutePanel implements HasMouseOutHandlers, HasMouseOverHandlers {
 
 		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
 			return addDomHandler(handler, MouseOutEvent.getType());

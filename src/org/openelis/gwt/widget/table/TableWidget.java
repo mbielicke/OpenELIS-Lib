@@ -382,6 +382,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         }
         if(canEditCell(row,col)){
         	if(byClick && isEnabled() && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        		clearCellExceptions(row, col);
         		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
         			setCell(row,col,CheckBox.UNCHECKED);
         			if(fireEvents)
