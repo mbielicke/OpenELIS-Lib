@@ -563,6 +563,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     public void removeChild(TreeDataItem parent, TreeDataItem child) {
+    	unselect(-1);
     	parent.removeItem(parent.getItems().indexOf(child));
     	if(parent.open)
     		refreshRow(parent);
@@ -597,6 +598,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void deleteRow(int row) {
+    	if(fireEvents)
+    		UnselectionEvent.fire(this,rows.get(selectedRow));
     	unselect(row);
     	if(fireEvents) {
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
