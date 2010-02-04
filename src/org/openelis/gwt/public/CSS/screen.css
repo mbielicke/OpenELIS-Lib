@@ -170,6 +170,7 @@ width:100%;
     padding:4px;
 }
 .buttonMenuContainer{
+   .spinnerIconLarge {width:50px; height:50px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
     border:1px solid #8DB2E3;
     background:#f0f0f0 url('../Images/menu.gif') repeat-y;
     padding:4px;
@@ -272,6 +273,7 @@ color:gray;
 .worksheetCompletionIcon{background:url('../Images/worksheetcompletionbuttonimage.gif') no-repeat center;}
 .addOrCancelIcon{background:url('../Images/addorcancelIconbuttonimage.gif') no-repeat center;}
 .reviewAndReleaseIcon{background:url('../Images/reviewandreleasebuttonimage.gif') no-repeat center;}
+.disabled .reviewAndReleaseIcon{background:url('../Images/reviewandreleasebuttonimagedisabled.gif') no-repeat center;}
 .toDoIcon{background:url('../Images/todobuttonimage.gif') no-repeat center;}
 .labelForIcon{background:url('../Images/labelforbuttonimage.gif') no-repeat center;}
 .storageIcon{background:url('../Images/storagebuttonimage.gif') no-repeat center;}
@@ -460,13 +462,19 @@ background:white;
 }
 
 
-.upButtonImage, .downButtonImage, .refreshButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
+.DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
 .AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
 .StandardNoteButtonImage, .groupRowButtonImage, .SelectAllButtonImage, .environmentalSampleLoginIcon,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
     width:20px;
     height:20px;
 }
+
+.DiscardButtonImage{background:url("../Images/bin_closed.png") no-repeat;}
+.disabled .DiscardButtonImage{background:url("../Images/bin_closeddisabled.png") no-repeat;}
+
+.MoveStorageButtonImage{background:url("../Images/package_go.png") no-repeat;}
+.disabled .MoveStorageButtonImage{background:url("../Images/package_godisabled.png") no-repeat;}
 
 .upButtonImage{
     background:url("../Images/arrow_up.png") no-repeat;
@@ -764,11 +772,17 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:none;
     cursor:default;
 }
-.expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
+.addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
 }
+
+.addTestButtonImage{background:url("../Images/calculator_add.png") no-repeat;}
+.disabled .addTestButtonImage{background:url("../Images/calculator_adddisabled.png") no-repeat;}
+
+.cancelTestButtonImage{background:url("../Images/calculator_delete.png") no-repeat;}
+.disabled .cancelTestButtonImage{background:url("../Images/calculator_deletedisabled.png") no-repeat;}
 
 .expandButtonImage{background:url("../Images/arrow_out.png") no-repeat;}
 .disabled .expandButtonImage{background:url("../Images/arrow_outdisabled.png") no-repeat;}
