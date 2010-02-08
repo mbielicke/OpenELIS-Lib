@@ -27,6 +27,9 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.HasResizeHandlers;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -36,7 +39,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Screen extends Composite implements HasStateChangeHandlers<Screen.State>,
-                                     HasDataChangeHandlers {
+                                     HasDataChangeHandlers, HasResizeHandlers {
 
     public enum State {
         DEFAULT, DISPLAY, UPDATE, ADD, QUERY, DELETE
@@ -49,7 +52,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     protected ScreenService               service;
     protected String                      fatalError;
 
-    public final AbsolutePanel            panel        = new AbsolutePanel();
+    public final AbsolutePanel            screenpanel        = new AbsolutePanel();
     public static UIFocusHandler          focusHandler = new UIFocusHandler();
     public static HashMap<String, String> consts;
 
@@ -57,7 +60,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
      * No arg constructor will initiate a blank panel and new FormRPC
      */
     public Screen() {
-        initWidget(panel);
+        initWidget(screenpanel);
         sinkEvents(Event.ONKEYPRESS);
     }
 
@@ -69,15 +72,15 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     }
 
     public Screen(ScreenDefInt def) {
-        initWidget(panel);
+        initWidget(screenpanel);
         this.def = def;
-        panel.add(def.getPanel());
+        screenpanel.add(def.getPanel());
     }
 
     public void drawScreen(ScreenDefInt def) throws Exception {
         this.def = def;
-        panel.clear();
-        panel.add(def.getPanel());
+        screenpanel.clear();
+        screenpanel.add(def.getPanel());
     }
 
     public void setWindow(ScreenWindow window) {
@@ -239,4 +242,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             }
         }
     }
+
+	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
+		return addHandler(handler,ResizeEvent.getType());
+	}
 }

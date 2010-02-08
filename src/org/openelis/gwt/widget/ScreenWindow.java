@@ -57,6 +57,8 @@ import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.HasCloseHandlers;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -64,6 +66,7 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -74,6 +77,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -83,7 +87,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow> {
+public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow>, ResizeHandler {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -118,6 +122,32 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         		return addDomHandler(handler,MouseWheelEvent.getType());
         	}
     }
+        
+    private class ProgressBar extends AbsolutePanel {
+    		
+    		AbsolutePanel prog = new AbsolutePanel();
+    		Label pct = new Label();
+    		
+    		public ProgressBar() {
+    			setSize("75px","12px");
+    			add(prog,0,0);
+    			add(pct,30,0);
+    			setStyleName("ProgressBarOuter");
+     			prog.setHeight("100%");
+    			prog.setWidth("0%");
+    			setWidgetPosition(prog, 0, 0);
+    			prog.setStyleName("ProgressBar");
+    			pct.setStyleName("ProgressBarPct");
+    			DOM.setStyleAttribute(pct.getElement(), "zIndex","1000");
+    			
+    		}
+    		
+    		public void setProgress(int percent) {
+    			prog.setWidth(percent+"%");
+    			pct.setText(percent+"%");
+    		}
+    		
+    	}
         
     private Caption cap = new Caption();
     protected VerticalPanel messagePanel;
@@ -173,6 +203,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     private AbsolutePositionDropController dropController;
     private HorizontalPanel titleButtonsContainer;
     public enum Mode {SCREEN,DIALOG,LOOK_UP};
+    private ProgressBar progressBar = new ProgressBar();
     
     
     public ScreenWindow(Mode mode) {
@@ -182,7 +213,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     public ScreenWindow(WindowBrowser brws, String key){
     	this.browser = brws;
     	this.key = key;
-    	init(Mode.SCREEN);	
+    	init(Mode.SCREEN);
     }
     
     public void init(Mode mode) {      
@@ -239,8 +270,11 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 
         status.add(statusImg);
         status.add(message);
-        
+        status.add(progressBar);
+        progressBar.setVisible(false);
         status.setWidth("100%");
+        
+        
         status.setCellWidth(message, "100%");
         message.setStyleName("ScreenWindowLabel");
         outer.add(hp);
@@ -269,6 +303,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         outer.addStyleName("WindowPanel");
         outer.sinkEvents(Event.ONCLICK);
         outer.setWidth("auto");
+        Window.addResizeHandler(this);
         if(browser != null){
             browser.dragController.makeDraggable(this, cap);
             return;
@@ -278,6 +313,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             modalGlass.setStyleName("GlassPanel");
             modalGlass.setHeight(Window.getClientHeight()+"px");
             modalGlass.setWidth(Window.getClientWidth()+"px");
+            
             RootPanel.get().add(modalGlass);
             RootPanel.get().setWidgetPosition(modalGlass, 0, 0);
             modalPanel = new AbsolutePanel();
@@ -300,6 +336,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         	dropController = new AbsolutePositionDropController(RootPanel.get());
         	dragController.registerDropController(dropController);
         	dragController.makeDraggable(this,cap);
+        	dragController.setBehaviorDragProxy(false);
         }
     }
     
@@ -319,6 +356,8 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
      * @param content
      */
     public void setContent(final Widget content){
+    	if(this.content != null) 
+    		body.remove(this.content);
         this.content = content;
         body.insert(content, 0);
         if(content instanceof Screen) {
@@ -349,10 +388,11 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         if(browser != null && browser.index != zIndex){
            browser.index++;
            zIndex = browser.index;
-           int top = browser.browser.getWidgetTop(this);
-           int left = browser.browser.getWidgetLeft(this);
-           browser.browser.add((Widget)this,left,top);
-           browser.setFocusedWindow();
+           DOM.setStyleAttribute(getElement(), "zIndex", String.valueOf(zIndex));
+           //int top = browser.browser.getWidgetTop(this);
+           //int left = browser.browser.getWidgetLeft(this);
+           //browser.browser.setWidgetPosition((Widget)this,left,top);
+           //browser.setFocusedWindow();
         }
     }
     
@@ -578,5 +618,30 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 			BeforeCloseHandler<ScreenWindow> handler) {
 		return addHandler(handler, BeforeCloseEvent.getType());
 	}
+
+	public void onResize(ResizeEvent event) {
+		 if(modalGlass != null) {
+			 modalGlass.setHeight(Window.getClientHeight()+"px");
+			 modalGlass.setWidth(Window.getClientWidth()+"px");
+		 }
+		 if(modalPanel != null) {
+			 modalPanel.setHeight(Window.getClientHeight()+"px");
+			 modalPanel.setWidth(Window.getClientWidth()+"px");
+		 }
+		 if(glass != null) {
+			 glass.setHeight(content.getOffsetHeight()+"px");
+			 glass.setWidth(content.getOffsetWidth()+"px");
+		 }
+
+	}
+	
+	public void setProgress(int percent) {
+		if(percent > 0){
+			progressBar.setVisible(true);
+			progressBar.setProgress(percent);
+		}else
+			progressBar.setVisible(false);
+	}
+	
 
 }

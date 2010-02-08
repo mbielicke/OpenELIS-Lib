@@ -31,6 +31,10 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.HasResizeHandlers;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Composite;
@@ -40,7 +44,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CollapsePanel extends Composite implements ClickHandler, MouseOverHandler, MouseOutHandler{
+public class CollapsePanel extends Composite implements ClickHandler, HasResizeHandlers {
     
     private Grid panel = new Grid(1,2);
     private HorizontalPanel content = new HorizontalPanel();
@@ -59,8 +63,18 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
         panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickHandler(this);
-        arrow.addMouseOverHandler(this);
-        arrow.addMouseOutHandler(this);
+        arrow.addMouseOverHandler(new MouseOverHandler() {
+        	public void onMouseOver(MouseOverEvent event) {
+        		arrow.addStyleName("Hover");
+                panel.getCellFormatter().addStyleName(0,1,"Hover");
+        	}
+        });
+        arrow.addMouseOutHandler(new MouseOutHandler() {
+        	public void onMouseOut(MouseOutEvent event) {
+                arrow.removeStyleName("Hover");
+                panel.getCellFormatter().removeStyleName(0,1,"Hover");
+        	}
+        });
         //middleBar.add(arrow);
         panel.setWidget(0, 0, content);
         panel.setWidget(0,1,arrow);
@@ -90,6 +104,7 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
             panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelOpen");
             arrow.setFocus(false);
             isOpen = true;
+            ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
         }
     }
     
@@ -98,7 +113,8 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
             content.setVisible(false);
             panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
             arrow.setFocus(false);
-            isOpen = false;
+            isOpen = false;       
+            ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
         }
     }
 
@@ -110,9 +126,9 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
         }   
         
     }
-
+/*
     public void onMouseOver(MouseOverEvent event) {
-        arrow.addStyleName("Hover");
+        arrow.addStyleDependentName("Hover");
         panel.getCellFormatter().addStyleName(0,1,"Hover");
         
     }
@@ -121,12 +137,16 @@ public class CollapsePanel extends Composite implements ClickHandler, MouseOverH
         arrow.removeStyleName("Hover");
         panel.getCellFormatter().addStyleName(0,1,"Hover");
     }
-    
+*/  
     @Override
     protected void onAttach() {
         panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
         super.onAttach();
     }
+
+	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
+		return addHandler(handler,ResizeEvent.getType());
+	}
     
 
 }

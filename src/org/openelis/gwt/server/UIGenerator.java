@@ -1,11 +1,7 @@
 package org.openelis.gwt.server;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
@@ -18,12 +14,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
@@ -97,7 +96,7 @@ public class UIGenerator extends Generator {
         composer.addImport("com.google.gwt.event.dom.client.HasFocusHandlers");
         composer.addImplementedInterface("ScreenDefInt");
         
-		sw = composer.createSourceWriter(context,printWriter); 
+        sw = composer.createSourceWriter(context,printWriter);
 	  
 		sw.println("protected ScreenPanel panel;");
 		sw.println("protected HashMap<String,Widget> widgets;");
@@ -333,6 +332,63 @@ public class UIGenerator extends Generator {
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
 			}
+    	});
+    	factoryMap.put("LayoutPanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("LayoutPanel wid"+id+" = new LayoutPanel();");
+    			NodeList widgets = node.getChildNodes();
+     	        for (int k = 0; k < widgets.getLength(); k++) {
+     	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+     	            	int child = ++count;
+     	                if(!loadWidget(widgets.item(k),child)){
+     	                	count--;
+     	                	continue;
+     	                }
+     	                sw.println("wid"+id+".add(wid"+child+");");
+     	                String left = widgets.item(k).getAttributes().getNamedItem("left").getNodeValue();
+     	                String width = widgets.item(k).getAttributes().getNamedItem("width").getNodeValue();
+     	                
+     	                sw.println("wid"+id+".setWidgetLeftWidth(wid"+child+","+Double.parseDouble(left)+", Unit.PCT,"+Double.parseDouble(width)+", Unit.PCT);");
+     	                /*
+     	                if (widgets.item(k).getAttributes().getNamedItem("halign") != null) {
+     	                    String align = widgets.item(k).getAttributes()
+     	                                         .getNamedItem("halign")
+     	                                         .getNodeValue();
+     	                    if (align.equals("right"))
+     	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_RIGHT);");
+     	                    if (align.equals("left"))
+     	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_LEFT);");
+     	                    if (align.equals("center"))
+     	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_CENTER);");
+     	                }
+     	                if (widgets.item(k).getAttributes().getNamedItem("valign") != null) {
+     	                    String align = widgets.item(k).getAttributes()
+     	                                         .getNamedItem("valign")
+     	                                         .getNodeValue();
+     	                    if (align.equals("top"))
+     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_TOP);");
+     	                    if (align.equals("middle"))
+     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_MIDDLE);");
+     	                    if (align.equals("bottom"))
+     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_BOTTOM);");
+     	                }
+     	                if(widgets.item(k).getAttributes().getNamedItem("height") != null) {
+     	                	sw.println("wid"+id+".setCellHeight(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("height").getNodeValue()+"\");");
+     	                }
+     	                if(widgets.item(k).getAttributes().getNamedItem("width") != null) {
+     	                	if(!widgets.item(k).getAttributes().getNamedItem("width").getNodeValue().equals("auto"))
+     	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
+     	                }
+     	                */
+     	            }
+     	        }
+     	        sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
+     	        setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.LayoutPanel");
+    			composer.addImport("com.google.gwt.dom.client.Style.Unit");
+    		}
     	});
     	factoryMap.put("VerticalPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -904,7 +960,7 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			sw.println("HorizontalPanel wid"+id+" = new HorizontalPanel();");
     			if (node.getAttributes().getNamedItem("spacing") != null)
-    				sw.println("wid"+id+".setSpacing(Integer.parseInt(\""+node.getAttributes().getNamedItem("spacing").getNodeValue()+"\"));");
+    				sw.println("wid"+id+".setSpacing("+node.getAttributes().getNamedItem("spacing").getNodeValue()+");");
     			NodeList widgets = node.getChildNodes();
     			for (int k = 0; k < widgets.getLength(); k++) {
     				if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
@@ -1943,8 +1999,6 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("enable") != null){
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
-    	        if (node.getAttributes().getNamedItem("style") != null)
-    	        	sw.println("wid"+id+".setStyleName(\""+node.getAttributes().getNamedItem("style").getNodeValue()+"\");");
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.AppButton");

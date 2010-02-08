@@ -33,7 +33,7 @@ UIRF Software License are applicable instead of those above.
   <xsl:template match="doc"> 
 
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <VerticalPanel width="100%" style="CalendarWidget">
+    <VerticalPanel style="CalendarWidget">
             <widget halign="center">
    	<HorizontalPanel style="TimeBar" width="100%" key="TimeBar">
     	 <widget halign="center">

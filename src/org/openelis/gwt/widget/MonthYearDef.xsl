@@ -51,7 +51,7 @@ UIRF Software License are applicable instead of those above.
     </xsl:variable>
     <xsl:variable name="constants" select="resource:getBundle('org.openelis.gwt.server.CalendarConstants',locale:new(string($language)))"/>
   <screen name="MonthYear" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	  <VerticalPanel width="100%" style="CalendarWidget">
+	  <VerticalPanel style="CalendarWidget">
 	    <HorizontalPanel style="Calendar" width="100%">
 	      <AbsolutePanel>
 	      <TablePanel spacing="0" padding="0" width="100%">

@@ -50,6 +50,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -144,6 +145,13 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
         setFocusedWindow();
     }
     
+    public void addWindow(ScreenWindow window, String key) {
+    	index++;
+    	browser.add(window,(windows.size()*25),(windows.size()*25));
+    	windows.put(key, window);
+    	setFocusedWindow();
+    }
+    
     public boolean selectScreen(String text) {
     	if (windows.containsKey(text)) {
     		ScreenWindow wid = windows.get(text);
@@ -152,7 +160,13 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     			wid.zIndex = index;
     			int top = browser.getWidgetTop(wid);
     			int left = browser.getWidgetLeft(wid);
-    			browser.add(wid, left, top);
+    			if(wid.content instanceof ReportFrame){
+    				//browser.setWidgetPosition(wid, left, top);
+    				DOM.setStyleAttribute(wid.getElement(), "zIndex", String.valueOf(index));
+    				DOM.setStyleAttribute(wid.content.getElement(), "zIndex", String.valueOf(index));
+    				
+    			}else
+    				browser.add(wid, left, top);
     			setFocusedWindow();
     		}
     		return true;
@@ -170,8 +184,9 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     public void setFocusedWindow() {
     	for(ScreenWindow wid : windows.values()) {
     		if(wid.zIndex != index){
-    			if(wid.getStyleName().indexOf("unfocused") < 0)
+    			if(wid.getStyleName().indexOf("unfocused") < 0){	
     				wid.addStyleName("unfocused");
+    			}
     		}else{
     			wid.removeStyleName("unfocused");
     			focusedWindow = wid;
