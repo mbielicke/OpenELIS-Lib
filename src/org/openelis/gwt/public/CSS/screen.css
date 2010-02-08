@@ -2191,12 +2191,13 @@ background:#deecfd;
 .TextboxUnselected-readonly{
 }
 .ProgressBarOuter {
-	border: 1px solid black;
+	border: 1px solid #99BBE8;
 }
 .ProgressBar {
-	background:red;
+	background:#E9F3F5;
 }
 .ProgressBarPct {
+    color:#486095;
 	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
 }
@@ -2206,7 +2207,6 @@ background:#deecfd;
     font-size:12px;
     font-weight:bold;    
     padding-left:6px;
-    padding-top:2px;
        -moz-user-select: none;
 }
 
