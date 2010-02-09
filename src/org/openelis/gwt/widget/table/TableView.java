@@ -206,8 +206,8 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
             this.height = hght+18;
         }else{
         	if(!controller.isDropdown)
-        		cellView.setHeight(height+"px");
-            this.height = height;
+        		cellView.setHeight(hght+"px");
+            this.height = hght;
         }
         rowsView.setHeight(hght+"px");
        	headerView.setHeight("18px");
