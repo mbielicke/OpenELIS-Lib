@@ -79,6 +79,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
     private AbsolutePanel content = new AbsolutePanel();
     private boolean enabled;
     private ShortcutHandler shortcut;
+    private boolean locked;
     
     /**
      *   Default No-Arg constructor.  Event handlers are added at, but not sunk until enabe(true) is called.   
@@ -158,7 +159,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
      */
     public void lock(){
         panel.removeStyleName("Hover");
-        
+        locked = true;
         unsinkEvents(Event.ONCLICK);
         panel.unsinkEvents(Event.ONMOUSEOUT);
         panel.unsinkEvents(Event.ONMOUSEOVER);
@@ -172,6 +173,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
         sinkEvents(Event.ONCLICK);
         panel.sinkEvents(Event.ONMOUSEOUT);
         panel.sinkEvents(Event.ONMOUSEOVER);
+        locked = false;
         
     }
    
@@ -419,5 +421,8 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 		}
 	}
 
+	public boolean isLocked() {
+		return locked;
+	}
 
 }

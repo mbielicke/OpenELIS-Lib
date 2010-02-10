@@ -47,7 +47,7 @@ public class ShortcutHandler implements KeyPressHandler {
 		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getNativeEvent().getKeyCode() == key){
 			if(wid instanceof AppButton) {
 				
-				if(((AppButton)wid).isEnabled()){
+				if(((AppButton)wid).isEnabled() && !((AppButton)wid).isLocked()){
 					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
 							wid.getAbsoluteLeft(), 
 							wid.getAbsoluteTop(), 
