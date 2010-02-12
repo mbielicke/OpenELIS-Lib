@@ -30,8 +30,13 @@ public class NotesPanel extends Composite {
 	public void addNote(String subject, String userName, String text, Datetime time) {
 		VerticalPanel note = new VerticalPanel();
 		HorizontalPanel topRow = new HorizontalPanel();
+		DateField field = new DateField();
+		field.setBegin(Datetime.YEAR);
+		field.setEnd(Datetime.SECOND);
+		field.setFormat("yyyy-MM-dd HH:mm");
+		field.setValue(time);
 		Label titleText = new Label(subject);
-		Label userDateText = new Label(userName + " on " + time.toString());
+		Label userDateText = new Label(" by "+userName + " on " + field.format());
 		Label bodyText = new Label(text);
 		bodyText.setWordWrap(true);
 		note.setWidth(width);

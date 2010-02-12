@@ -72,6 +72,7 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
     public PopPosition popPosition = PopPosition.BELOW;
     public enum Action {OPENING,CLOSING};
     public AbsolutePanel iconPanel = new AbsolutePanel();
+    private AbsolutePanel openIcon = new AbsolutePanel();
     public String objClass;
     public Object[] args;
     public String key;
@@ -139,6 +140,11 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
         FlexTable table = new FlexTable();
         table.setStyleName("TopMenuRowContainer");
         iconPanel.setStyleName(icon);
+        HorizontalPanel hp = new HorizontalPanel();
+        hp.add(wid);
+        hp.setCellWidth(wid,"100%");
+        hp.add(openIcon);
+        hp.setWidth("100%");
         VerticalPanel textPanel = new VerticalPanel();
         //Label label = new Label(labelText);
         wid.setStyleName("topMenuItemTitle");
@@ -152,8 +158,10 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
         
         description.setStyleName("topMenuItemDesc");
         table.setWidget(0,0,iconPanel);
-        textPanel.add(wid);
+        textPanel.add(hp);
+        textPanel.setCellWidth(hp, "100%");
         textPanel.add(description);
+        textPanel.setWidth("100%");
         table.setWidget(0,1,textPanel);
         table.getFlexCellFormatter().setStyleName(0,0,"topMenuIcon");
         table.getFlexCellFormatter().setStyleName(0,1,"topMenuItemMiddle");
@@ -202,6 +210,13 @@ public class MenuItem extends SimplePanel implements MouseOutHandler, MouseOverH
         return hp;
     }
 
+    public void setMenuPopup(MenuPanel panel, PopPosition position) {
+    	addPopPanel(panel);
+    	popPosition = position;
+    	if(position == PopPosition.BESIDE)
+    		openIcon.setStyleName("MenuArrow");
+    }
+    
     public void addPopPanel(MenuPanel panel) {
         menuItemsPanel = panel;
     }

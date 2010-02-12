@@ -1121,9 +1121,10 @@ public class UIGenerator extends Generator {
     	        if(popup != null){
     	        	int child = ++count;
     	        	loadWidget(popup, child);
-    	            sw.println("wid"+id+".menuItemsPanel = (MenuPanel)wid"+child+";");
     	            if(popup.getAttributes().getNamedItem("position") != null)
-    	                sw.println("wid"+id+".popPosition = MenuItem.PopPosition.valueOf(\""+popup.getAttributes().getNamedItem("position").getNodeValue().toUpperCase()+"\");");
+    	                sw.println("wid"+id+".setMenuPopup((MenuPanel)wid"+child+", MenuItem.PopPosition.valueOf(\""+popup.getAttributes().getNamedItem("position").getNodeValue().toUpperCase()+"\"));");
+    	            else
+    	            	sw.println("wid"+id+".setMenuPopup((MenuPanel)wid"+child+", MenuItem.PopPosition.BESIDE);");
     	        }
 
     	        if(node.getAttributes().getNamedItem("key") != null){
