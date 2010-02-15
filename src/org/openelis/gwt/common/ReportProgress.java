@@ -1,6 +1,6 @@
 package org.openelis.gwt.common;
 
-public class FileProgress implements RPC {
+public class ReportProgress implements RPC {
 	
 	public String name;
 	public long size;

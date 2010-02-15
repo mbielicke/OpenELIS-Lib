@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.FileProgress;
+import org.openelis.gwt.common.ReportProgress;
 import org.openelis.gwt.services.ScreenService;
 
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -57,8 +57,8 @@ public class ReportFrame extends Composite {
 	}
 	
 	public void getFileProgress(final String id) {
-		service.call("fileProgress", id, new AsyncCallback<FileProgress>() {
-			public void onSuccess(FileProgress progress) {
+		service.call("fileProgress", id, new AsyncCallback<ReportProgress>() {
+			public void onSuccess(ReportProgress progress) {
 				if(!bar.isVisible())
 					bar.setVisible(true);
 				bar.setMessage("Downloading : "+getSize(progress.progress)+" of "+getSize(progress.size));
