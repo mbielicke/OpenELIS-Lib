@@ -5,11 +5,12 @@ import java.util.ArrayList;
 public class ValidationErrorsList extends Exception {
     
     private static final long serialVersionUID = 1L;
-    private ArrayList<Exception> errors = new ArrayList<Exception>();
+    private ArrayList<Exception> errors;
     private boolean hasErrors, hasWarnings;
     
     public ValidationErrorsList() {
         super();
+        errors = new ArrayList<Exception>();
         hasErrors = false;
         hasWarnings = false;
     }
