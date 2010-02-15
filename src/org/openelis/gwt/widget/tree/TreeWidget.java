@@ -415,7 +415,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	TreeDataItem parent = item.parent;
     	while(!parent.open){
     		parent.open = true;
-    		parent = parent.parent;
+    		if(parent.parent != null)
+    			parent = parent.parent;
     	}
     	refreshRow(parent);
     	select(rows.indexOf(item));
