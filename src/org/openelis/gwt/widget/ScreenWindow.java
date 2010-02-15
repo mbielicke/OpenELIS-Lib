@@ -388,11 +388,10 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         if(browser != null && browser.index != zIndex){
            browser.index++;
            zIndex = browser.index;
-           DOM.setStyleAttribute(getElement(), "zIndex", String.valueOf(zIndex));
-           //int top = browser.browser.getWidgetTop(this);
-           //int left = browser.browser.getWidgetLeft(this);
-           //browser.browser.setWidgetPosition((Widget)this,left,top);
-           //browser.setFocusedWindow();
+           int top = browser.browser.getWidgetTop(this);
+           int left = browser.browser.getWidgetLeft(this);
+           browser.browser.setWidgetPosition((Widget)this,left,top);
+           browser.setFocusedWindow();
         }
     }
     
