@@ -64,7 +64,7 @@ public class SecurityUtil implements RPC {
     }
 
     public void setSystemUserName(String userName) {
-        systemUserName = userName;
+        systemUserName = userName.trim();
     }
 
     public String getFirstName() {
@@ -72,7 +72,7 @@ public class SecurityUtil implements RPC {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     public String getLastName() {
@@ -80,7 +80,7 @@ public class SecurityUtil implements RPC {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     public String getInitials() {
@@ -88,21 +88,21 @@ public class SecurityUtil implements RPC {
     }
 
     public void setInitials(String initials) {
-        this.initials = initials;
+        this.initials = initials.trim();
     }
 
     /**
      * Adds SecurityModule to the user's module list.  
      */
     public void add(SecurityModule module) {
-        modules.put(module.getName(), module);
+        modules.put(module.getName().trim(), module);
     }
 
     /**
      * Adds SecuritySection to the user's section list.  
      */
     public void add(SecuritySection section) {
-        sections.put(section.getName(), section);
+        sections.put(section.getName().trim(), section);
     }
 
     /**
