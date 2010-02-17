@@ -1775,6 +1775,9 @@ public class UIGenerator extends Generator {
     	        else
     	            sw.println("wid"+id+".textBoxDefault = \"\";");
     	        
+    	        if (node.getAttributes().getNamedItem("max") != null)
+    	        	sw.println("wid"+id+".textbox.setLength("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
+    	        
     	        if (node.getAttributes().getNamedItem("width") != null)
     	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
     	        

@@ -95,6 +95,7 @@
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
+			<xsd:attribute name="max" type="xsd:integer"/>
 		</xsd:complexType>
 	</xsd:element>
 
@@ -141,6 +142,8 @@
 			<xsd:attribute name="style" type="xsd:string"/>
 			<xsd:attribute name="width" type="xsd:string"/>
 			<xsd:attribute name="enable" type="xsd:boolean"/>
+			<xsd:attribute name="max" type="xsd:integer"/>
+			<xsd:attribute name="min" type="xsd:integer"/>
 		</xsd:complexType>
 	</xsd:element>
 
