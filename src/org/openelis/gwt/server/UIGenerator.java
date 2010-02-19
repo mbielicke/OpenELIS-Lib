@@ -1695,9 +1695,26 @@ public class UIGenerator extends Generator {
                 				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
                 		}
                 		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                		int child = ++count;
-                		factoryMap.get("label").getNewInstance(colList.item(i),child);
-                		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                		boolean widgetDefined = false;
+                    	NodeList editor = col.getChildNodes();
+                    	for(int j = 0; j < editor.getLength(); j++){
+                    		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                    			int child = count++;
+                    			if(!createWidget(editor.item(j),child)){
+                    				count--;
+                    				continue;
+                    			}
+                    			widgetDefined = true;
+                    			sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                    			break;
+                    		}
+                    	}
+                    	if(!widgetDefined){
+                    		int child = count++;
+                    		factoryMap.get("label").getNewInstance(colList.item(i),child);
+                    		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                    	}
+                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");	
                 		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
                 	}
                 }else{
@@ -1818,9 +1835,25 @@ public class UIGenerator extends Generator {
                 				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
                 		}
                 		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                		int child = ++count;
-                		factoryMap.get("label").getNewInstance(colList.item(i),child);
-                		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                		boolean widgetDefined = false;
+                    	NodeList editor = col.getChildNodes();
+                    	for(int j = 0; j < editor.getLength(); j++){
+                    		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                    			int child = ++count;
+                    			if(!createWidget(editor.item(j),child)){
+                    				count--;
+                    				continue;
+                    			}
+                    			widgetDefined = true;
+                    			sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                    			break;
+                    		}
+                    	}
+                    	if(!widgetDefined){
+                    		int child = ++count;
+                    		factoryMap.get("label").getNewInstance(colList.item(i),child);
+                    		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                    	}
                 		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");	
                 	}
                 }else{
