@@ -42,12 +42,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
  * For all screen queries, call nav.setQuery(query).
  */
 public abstract class ScreenNavigator {
-    protected int         selection, oldPage;
-    protected boolean     byRow, enable;
-    protected ArrayList<?>   result;
-    protected Query       query;
-    protected NavigationWidget      table;
-    protected AppButton   atozNext, atozPrev;
+    protected int              selection, oldPage;
+    protected boolean          byRow, enable;
+    protected ArrayList<?>     result;
+    protected Query            query;
+    protected NavigationWidget table;
+    protected AppButton        atozNext, atozPrev;
 
     public ScreenNavigator(ScreenDefInt def) {
         oldPage = -1;
@@ -66,7 +66,7 @@ public abstract class ScreenNavigator {
                     if (enable)
                         select(event.getIndex());
                     else
-                    	event.cancel();
+                        event.cancel();
                 }
             });
             // we don't want the table to get focus; we can still select because
@@ -111,7 +111,7 @@ public abstract class ScreenNavigator {
      *        should be null to indicate no records were found.
      */
     @SuppressWarnings("unchecked")
-	public void setQueryResult(ArrayList<?> result) {
+    public void setQueryResult(ArrayList<?> result) {
         int row;
         //
         // if next page failed, reset the query page # to the old page #
@@ -139,7 +139,7 @@ public abstract class ScreenNavigator {
     }
 
     @SuppressWarnings("unchecked")
-	public ArrayList getQueryResult() {
+    public ArrayList getQueryResult() {
         return result;
     }
 
@@ -192,7 +192,8 @@ public abstract class ScreenNavigator {
     /**
      * Returns the table data model representing the query result.
      * 
-     * @return model that is used to set the atoz table; This model cannot be null.
+     * @return model that is used to set the atoz table; This model cannot be
+     *         null.
      */
     public abstract ArrayList<?> getModel();
 
@@ -250,8 +251,8 @@ public abstract class ScreenNavigator {
 
         executeQuery(query);
     }
-    
+
     public int getSelection() {
-    	return selection;
+        return selection;
     }
 }
