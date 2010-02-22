@@ -1024,6 +1024,20 @@ cursor:default;}
     background:url("../Images/popuptop.png") repeat-x top;
     height:8px;
 }
+.ErrorWindow .middleCenterInner{
+    padding:16px;}
+.ErrorWindow .Button{
+    padding-top:16px;}
+.ErrorWindow .ButtonLeftSide{
+    margin-left:16px;}
+.ErrorWindow .ButtonContent{
+    width: 75px;
+    text-align:center}
+.questionIcon{
+	height:32;
+	width:32;
+    background: url("../Images/icon-question.gif") no-repeat left top;
+}
 /*ErrorWindow end*/
 
 .LeftMenuPanePanelClosed {
