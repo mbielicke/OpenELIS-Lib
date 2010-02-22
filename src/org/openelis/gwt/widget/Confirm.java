@@ -1,8 +1,23 @@
 package org.openelis.gwt.widget;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -17,13 +32,14 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Confirm extends Composite implements HasSelectionHandlers<Integer>, ClickHandler, NativePreviewHandler {
+public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>, ClickHandler, NativePreviewHandler {
 
     DecoratorPanel dp = new DecoratorPanel();
     AbsolutePanel modalGlass;
@@ -34,17 +50,66 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     public enum Type {WARN,ERROR,QUESTION};
     private int width = 400;
     private int height = -1;
+    private PickupDragController dragController;
+    private AbsolutePositionDropController dropController;
+    Caption cap = new Caption();
     
-    public Confirm(Type type, String message, String... buttons) {
+    private class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
+
+    	public String name;
+
+    	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+    		return addDomHandler(handler, MouseDownEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+    		return addDomHandler(handler,MouseUpEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+    		return addDomHandler(handler,MouseOutEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+    		return addDomHandler(handler,MouseOverEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+    		return addDomHandler(handler,MouseMoveEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseWheelHandler(
+    			MouseWheelHandler handler) {
+    		return addDomHandler(handler,MouseWheelEvent.getType());
+    	}
+    }
+    
+    public Confirm(Type type, String caption, String message, String... buttons) {
     	VerticalPanel vp = new VerticalPanel();
+    	cap.name = caption;
+    	cap.setStyleName("ConfirmCaption");
     	AbsolutePanel ap = new AbsolutePanel();
     	HorizontalPanel hp = new HorizontalPanel();
-    	if(type == Type.WARN)
+    	if(type == Type.WARN){
     		ap.setStyleName("warnIcon");
-    	else if(type == Type.ERROR)
+    		if(caption == null || caption.equals(""))
+    			cap.name = "Warning";
+    	}else if(type == Type.ERROR){
     		ap.setStyleName("errorIcon");
-    	else if(type == Type.QUESTION)
+    		if(caption == null || caption.equals(""))
+    			cap.name = "Error";
+    	}else if(type == Type.QUESTION){
     		ap.setStyleName("questionIcon");
+    		if(caption == null || caption.equals(""))
+    			cap.name = "Question";
+    	}
+   	    
+        Label winLabel = new Label();
+        winLabel.setStyleName("ConfirmCaptionLabel");
+        winLabel.setText(cap.name);
+        cap.add(winLabel);
+        cap.setWidth("100%");
+    	vp.add(cap);
     	hp.add(ap);
     	hp.setCellVerticalAlignment(ap, HasAlignment.ALIGN_MIDDLE);
     	Label lb = new Label();
@@ -59,7 +124,7 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
     	dp.add(vp);
     	dp.setStyleName("ErrorWindow");
     	dp.setVisible(false);
-    	initWidget(dp);
+    	setWidget(dp);
     }
     
     private void hide() {
@@ -99,6 +164,10 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
                size();
         	}
         });
+        dragController = new PickupDragController(modalPanel,true);
+        dropController = new AbsolutePositionDropController(modalPanel);
+        dragController.registerDropController(dropController);
+        dragController.makeDraggable(this,cap);
     }
     
     private void size() {
@@ -150,8 +219,8 @@ public class Confirm extends Composite implements HasSelectionHandlers<Integer>,
 				hide();
 			}
 		}
-		if(event.getTypeInt() != Event.ONCLICK)
-			event.cancel();
+		//if(event.getTypeInt() != Event.ONCLICK)
+			//event.cancel();
 	}
 	
 	public void setSize(int width, int height) {
