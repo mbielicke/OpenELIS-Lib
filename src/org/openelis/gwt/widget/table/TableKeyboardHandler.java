@@ -49,7 +49,10 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             next++;
         if(next < controller.numRows())
             return next;
-        return findNextActive(next);
+        controller.finishEditing();
+        controller.selectedCol = -1;
+        controller.setFocus(true);
+        return -1;
     }
     
     private int findPrevActive(int current) {
@@ -58,11 +61,16 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             prev--;
         if(prev >  -1)
             return prev;
-        return findPrevActive(1);
+        controller.finishEditing();
+        controller.selectedCol = -1;
+        controller.setFocus(true);
+        return -1;
     }
     
     private void tabToNextRow() {
         int row = findNextActive(controller.selectedRow);
+        if(row < 0)
+        	return;
         int col = 0;
        
         while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
@@ -84,6 +92,8 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     
     private void tabToPrevRow() {
         final int row = findPrevActive(controller.selectedRow);
+        if(row < 0)
+        	return;
         int col = controller.columns.size() - 1;
         while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
             col--;
