@@ -77,6 +77,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     private AutoCompleteListener listener = new AutoCompleteListener(this);
     private Field<T> field;
     private boolean enabled;
+    private int delay = 350;
     
     private class AutoCompleteListener implements KeyUpHandler {
         
@@ -110,7 +111,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
                 }
                 String text = widget.textbox.getText();
                 if (text.length() > 0 && !text.endsWith("*")) {
-                    widget.setDelay(text, 350);
+                    widget.setDelay(text,delay);
                 } else {
                     widget.hideTable();
                 }
@@ -505,5 +506,9 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     @Override
     public Object getWidgetValue() {
     	return getValue();
+    }
+    
+    public void setDelay(int delay) {
+    	this.delay = delay;
     }
 }

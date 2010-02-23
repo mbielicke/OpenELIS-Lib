@@ -206,7 +206,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 	}
 
 	public void onPreviewNativeEvent(NativePreviewEvent event) {
-		if(event.getTypeInt() == Event.ONKEYUP){
+		if(event.getTypeInt() == Event.ONKEYDOWN){
 			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB){
 				((AppButton)bp.getWidget(active)).blur();
 				active++;

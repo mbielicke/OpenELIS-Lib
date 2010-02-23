@@ -1662,6 +1662,10 @@ public class UIGenerator extends Generator {
     	        	sw.println("wid"+id+".dropwidth = \""+node.getAttributes().getNamedItem("width").getNodeValue()+"\";");
     	        }
     	        
+    	        if (node.getAttributes().getNamedItem("delay") != null) {
+    	        	sw.println("wid"+id+".setDelay("+node.getAttributes().getNamedItem("delay").getNodeValue()+");");
+    	        }
+    	        
     	        if (node.getAttributes().getNamedItem("popWidth") != null)
     	            sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("popWidth").getNodeValue()+"\");");
     	        else
@@ -1797,6 +1801,9 @@ public class UIGenerator extends Generator {
     	        
     	        if (node.getAttributes().getNamedItem("width") != null)
     	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	        
+    	        if (node.getAttributes().getNamedItem("delay") != null) 
+    	        	sw.println("wid"+id+".setDelay("+node.getAttributes().getNamedItem("delay").getNodeValue()+");");
     	        
     	        if (node.getAttributes().getNamedItem("popWidth") != null)
     	            sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("popWidth").getNodeValue()+"\");");

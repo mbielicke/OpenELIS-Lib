@@ -66,6 +66,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     HorizontalPanel hp; 
     public boolean queryMode;
     public ArrayList<TableDataRow> searchText;
+    private int delay = 0;
     
     
     private class DropDownListener implements ClickHandler, KeyUpHandler {
@@ -112,7 +113,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                 }
                 String text = widget.textbox.getText();
                 if (text.length() > 0 && !text.endsWith("*")) {
-                    widget.setDelay(text, 350);
+                    widget.setDelay(text, delay);
                 } else if(text.length() == 0){
                     widget.selectedRow = 0;
                     widget.selectRow(0);
@@ -421,6 +422,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			return compareValue(value,textValue,textValue.length());
 		}
 				
+	}
+	
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 
 }
