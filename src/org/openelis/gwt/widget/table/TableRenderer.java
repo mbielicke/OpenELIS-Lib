@@ -49,7 +49,7 @@ public class TableRenderer  {
     public void createRow(int i) {
         int j = 0;
         for(TableColumn column : controller.columns) {
-            Widget wid = column.getDisplayWidget(new TableDataRow(controller.columns.size()));
+            Widget wid = column.getDisplayWidget(controller.getRow(i));
             controller.view.table.setWidget(i,j,wid);            
             if(controller.isDropdown)
                 controller.view.table.getFlexCellFormatter().addStyleName(i,
