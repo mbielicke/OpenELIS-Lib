@@ -160,7 +160,7 @@ public class TableColumn {
         return wid;
     }
     
-    public void loadWidget(Widget widget, TableDataRow row) {
+    public void loadWidget(Widget widget, TableDataRow row, int modelIndex) {
     	TableDataCell cell = new TableDataCell(null);
     	if( columnIndex < row.cells.size())
     		cell = row.cells.get(columnIndex);

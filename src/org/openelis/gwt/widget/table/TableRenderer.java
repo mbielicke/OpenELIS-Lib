@@ -147,7 +147,7 @@ public class TableRenderer  {
         	TableDataCell cell = new TableDataCell(null);
         	if( i < row.cells.size())
         		cell = row.cells.get(i);
-        	controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row);
+        	controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row,modelIndex);
         }
         rows.get(index).setStyleName("");
         if(index % 2 == 1 && !controller.isDropdown){
