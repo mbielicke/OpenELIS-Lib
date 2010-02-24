@@ -156,8 +156,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean focused;
     protected int selectedRow = -1;
     protected int selectedCol = -1;
-    protected TableView view;
-    protected TableRenderer renderer;
+    public TableView view;
+    public TableRenderer renderer;
     protected TableKeyboardHandlerInt keyboardHandler;
     protected boolean shiftKey;
     protected boolean ctrlKey;
@@ -173,7 +173,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean selectedByClick;
     protected VerticalScroll showScroll = VerticalScroll.NEEDED;
     protected String width;
-    protected ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
+    public ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
     protected int shownRows; 
     protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
     protected ArrayList<LocalizedException> exceptions;
@@ -334,7 +334,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      *      the index of the table where the row is currently displayed.  If
      *      the row is currently scrolled off the table this method will return -1.
      */
-    protected int tableIndex(int row) {
+    public int tableIndex(int row) {
     	for(int i = 0; i < view.table.getRowCount(); i++){
     		if(modelIndexList[i] == row)
     			return i;
