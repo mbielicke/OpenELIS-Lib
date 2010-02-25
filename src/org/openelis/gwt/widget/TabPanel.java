@@ -2,13 +2,32 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
+public class TabPanel extends com.google.gwt.user.client.ui.TabPanel { 
 	private ArrayList<String> keyTabList = new  ArrayList<String>();
 	private String width;	
 	private String height;
+	private TabBar bar;
+	private TabBarScroller barScroller;
+	
+	public TabPanel() {
+		super();
+		VerticalPanel panel = ((VerticalPanel)getWidget());
+		bar = (TabBar)panel.getWidget(0);
+		Widget deck = panel.getWidget(1);
+		barScroller = new TabBarScroller(bar);
+		panel.clear();
+		panel.add(barScroller);
+		panel.add(deck);
+		
+	}
+	
 	
 	public void add(Widget wid, String text, String tab) {
 		keyTabList.add(tab);
@@ -22,6 +41,12 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		super.add(scroll, tabText);
 		scroll.setWidth(width);
 		scroll.setHeight(height);
+		DeferredCommand.addCommand(new Command() {
+			public void execute() {
+				barScroller.checkScroll();
+			}
+		});
+		
 	
 	}
 	
@@ -36,6 +61,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	@Override
 	public void setWidth(String width) {
 		this.width = width;
+		barScroller.setWidth(width);
 		//super.setWidth(width);
 	}
 	
@@ -47,6 +73,20 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	
 	public void setTabVisible(int index, boolean visible) {
 		((Widget)getTabBar().getTab(index)).setVisible(visible);
+		DeferredCommand.addCommand(new Command() {
+			public void execute() {
+				barScroller.checkScroll();
+			}
+		});
 	}
+	
+	@Override
+	protected void onAttach() {
+		super.onAttach();
+		barScroller.checkScroll();
+	}
+	
+
+	
 
 }
