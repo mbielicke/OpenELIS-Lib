@@ -562,4 +562,14 @@ public class TableColumn {
     public String getKey() {
     	return key;
     }
+    
+    protected Widget setCellDisplay(int modelIndex) {
+    	int tableIndex = controller.tableIndex(modelIndex);
+    	controller.renderer.setCellDisplay(modelIndex, columnIndex);
+    	return controller.view.table.getWidget(tableIndex, columnIndex);
+    }
+    
+    protected void resetAlign(int modelIndex) {
+    	controller.view.table.getFlexCellFormatter().setHorizontalAlignment(controller.tableIndex(modelIndex), columnIndex, getAlign());
+    }
 }
