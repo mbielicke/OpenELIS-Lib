@@ -1025,7 +1025,8 @@ cursor:default;}
     height:8px;
 }
 .ErrorWindow .middleCenterInner{
-    padding:16px;}
+    padding:16px;
+    padding-top:0;}
 .ErrorWindow .Button{
     padding-top:16px;}
 .ErrorWindow .ButtonLeftSide{
@@ -1038,7 +1039,18 @@ cursor:default;}
 	width:32;
     background: url("../Images/icon-question.gif") no-repeat left top;
 }
+.ConfirmCaption{
+padding-top:16;
+
+}
+.ConfirmCaptionLabel{
+color:#486095;
+font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+font-size:11px;
+font-weight:bold;
+}
 /*ErrorWindow end*/
+
 
 .LeftMenuPanePanelClosed {
     height:100%;
