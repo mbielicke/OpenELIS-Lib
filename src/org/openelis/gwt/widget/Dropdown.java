@@ -66,7 +66,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     HorizontalPanel hp; 
     public boolean queryMode;
     public ArrayList<TableDataRow> searchText;
-    private int delay = 0;
+    private int delay = 1;
     
     
     private class DropDownListener implements ClickHandler, KeyUpHandler {
