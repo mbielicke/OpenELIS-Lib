@@ -128,6 +128,10 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     }
     
     private void hide() {
+    	dragController.unregisterDropController(dropController);
+    	dragController.makeNotDraggable(this);
+    	dragController = null;
+    	dropController = null;
     	removeFromParent();
     	modalPanel.removeFromParent();
     	modalGlass.removeFromParent();
@@ -164,10 +168,12 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
                size();
         	}
         });
-        dragController = new PickupDragController(modalPanel,true);
-        dropController = new AbsolutePositionDropController(modalPanel);
-        dragController.registerDropController(dropController);
-        dragController.makeDraggable(this,cap);
+        //if(dragController == null) {
+        	dragController = new PickupDragController(modalPanel,true);
+        	dropController = new AbsolutePositionDropController(modalPanel);
+        	dragController.registerDropController(dropController);
+        	dragController.makeDraggable(this,cap);
+        //}
     }
     
     private void size() {
