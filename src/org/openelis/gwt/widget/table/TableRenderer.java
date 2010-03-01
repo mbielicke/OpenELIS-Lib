@@ -299,5 +299,9 @@ public class TableRenderer  {
     public ArrayList<TableRow> getRows() {
         return rows;
     }
+    
+    public void clear() {
+    	controller.view.table.removeAllRows();
+    }
 
 }

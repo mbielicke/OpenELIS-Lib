@@ -899,6 +899,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		else
 			fireEvents = true;
 		queryMode = query;
+		if(columns.size() == 0){
+			renderer.clear();
+			return;
+		}
 		for(TableColumn col : columns) {
 			((HasField)col.getColumnWidget()).setQueryMode(query);
 		}
