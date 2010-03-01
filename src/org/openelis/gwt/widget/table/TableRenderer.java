@@ -47,6 +47,8 @@ public class TableRenderer  {
     }
     
     public void createRow(int i) {
+    	if(controller.columns.size() == 0)
+    		return;
         int j = 0;
         for(TableColumn column : controller.columns) {
             Widget wid = column.getDisplayWidget(controller.getRow(i));
