@@ -246,7 +246,7 @@ color:gray;
     font-size:11px;
     border:1px solid #99bbe8;
 }
-.labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
+.summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
 .fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
@@ -346,8 +346,10 @@ color:gray;
 .loginLabelIcon{
 }
 .summaryIcon{
+    background:url('../Images/nextbuttonimage.gif') no-repeat;
 }
 .referenceIcon{
+	background:url('../Images/nextbuttonimage.gif') no-repeat;
 }
 .arrowIcon{
    background:url('../Images/nextbuttonimage.gif') no-repeat center;
@@ -1026,7 +1028,8 @@ cursor:default;}
 }
 .ErrorWindow .middleCenterInner{
     padding:16px;
-    padding-top:0;}
+    padding-top:0;
+    padding-left:20;}
 .ErrorWindow .Button{
     padding-top:16px;}
 .ErrorWindow .ButtonLeftSide{
@@ -1034,14 +1037,25 @@ cursor:default;}
 .ErrorWindow .ButtonContent{
     width: 75px;
     text-align:center}
-.questionIcon{
+    
+.largeWarnIcon{
+	height:32;
+	width:32;
+    background: url("../Images/icon-warning.gif") no-repeat left top;
+}
+.largeErrorIcon{
+	height:32;
+	width:32;
+    background: url("../Images/icon-error.gif") no-repeat left top;
+}
+.largeQuestionIcon{
 	height:32;
 	width:32;
     background: url("../Images/icon-question.gif") no-repeat left top;
 }
 .ConfirmCaption{
-padding-top:16;
-
+padding-top:12;
+padding-bottom:4;
 }
 .ConfirmCaptionLabel{
 color:#486095;
@@ -1050,7 +1064,6 @@ font-size:11px;
 font-weight:bold;
 }
 /*ErrorWindow end*/
-
 
 .LeftMenuPanePanelClosed {
     height:100%;
