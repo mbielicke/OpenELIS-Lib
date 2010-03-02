@@ -402,6 +402,19 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     @Override
     public void setFocus(boolean focus) {
     	textbox.setFocus(focus);
+    	if(getSelection() != null) {
+    		if(getSelection().display != null) {
+    			if(columns.get(0).getColumnWidget() instanceof Dropdown){
+        			((Dropdown)columns.get(0).getColumnWidget()).setValue(getSelection().getCells().get(0));
+        			textbox.setText(((Dropdown)columns.get(0).getColumnWidget()).getTextBoxDisplay());
+        		}else {
+        			String textValue = "";
+        			textValue = (String)getSelection().getCells().get(0)
+        			+ (!"".equals(textValue) ? "|" : "") + textValue;
+        			textbox.setText(textValue);
+        		}
+    		}
+    	}
     }
 
     /**

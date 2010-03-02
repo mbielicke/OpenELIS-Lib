@@ -89,14 +89,13 @@
 			</xsd:sequence>
 			<xsd:attribute name="popWidth" type="xsd:string" />
 			<xsd:attribute name="rows" type="xsd:integer" />
-			<xsd:attributeGroup ref="case" />
-			<xsd:attributeGroup ref="ScreenWidget" />
-			<xsd:attributeGroup ref="field" />
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
-			<xsd:attribute name="max" type="xsd:integer"/>
 			<xsd:attribute name="delay" type="xsd:integer"/>
+			<xsd:attributeGroup ref="case" />
+			<xsd:attributeGroup ref="ScreenWidgetWidth" />
+			<xsd:attributeGroup ref="field" />
 	     </xsd:complexType>
 	</xsd:element>
 
@@ -117,16 +116,17 @@
 						<xsd:attribute name="query" type="xsd:boolean" />
 					</xsd:complexType>
 				</xsd:element>
+				
 			</xsd:sequence>
 			<xsd:attribute name="multiSelect" type="xsd:boolean" />
 			<xsd:attribute name="popWidth" type="xsd:string" />
-			<xsd:attributeGroup ref="case" />
-			<xsd:attributeGroup ref="ScreenWidget" />
-			<xsd:attributeGroup ref="field" />
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
 			<xsd:attribute name="delay" type="xsd:integer"/>
+			<xsd:attributeGroup ref="case" />
+			<xsd:attributeGroup ref="ScreenWidgetWidth"/>
+			<xsd:attributeGroup ref="field" />
 		</xsd:complexType>
 	</xsd:element>
 
@@ -815,6 +815,15 @@
 		<xsd:attribute name="key" type="xsd:string" />
 		<xsd:attribute name="style" type="xsd:string" />
 		<xsd:attribute name="width" type="xsd:string" />
+		<xsd:attribute name="height" type="xsd:string" />
+		<xsd:attribute name="tip" type="xsd:string" />
+		<xsd:attribute name="visible" type="xsd:boolean" />
+	</xsd:attributeGroup>
+	
+	<xsd:attributeGroup name="ScreenWidgetWidth">
+	    <xsd:attribute name="key" type="xsd:string" />
+		<xsd:attribute name="style" type="xsd:string" />
+		<xsd:attribute name="width" type="xsd:string" use="required"/>
 		<xsd:attribute name="height" type="xsd:string" />
 		<xsd:attribute name="tip" type="xsd:string" />
 		<xsd:attribute name="visible" type="xsd:boolean" />

@@ -148,13 +148,17 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         
         for(int i=0;i<selected.size();i++){
             if(selected.get(i) instanceof TableDataRow){
-            	if(columns.get(0).getColumnWidget() instanceof Dropdown){
-            		((Dropdown)columns.get(0).getColumnWidget()).setValue(selected.get(i).getCells().get(0));
-            		return ((Dropdown)columns.get(0).getColumnWidget()).getTextBoxDisplay();
+            	if(selected.get(i).display != null)
+            		textValue = selected.get(i).display;
+            	else {
+            		if(columns.get(0).getColumnWidget() instanceof Dropdown){
+            			((Dropdown)columns.get(0).getColumnWidget()).setValue(selected.get(i).getCells().get(0));
+            			return ((Dropdown)columns.get(0).getColumnWidget()).getTextBoxDisplay();
+            		}
+            		TableDataRow select = selected.get(i);
+            		textValue = (String)select.getCells().get(0)
+            			        + (!"".equals(textValue) ? "|" : "") + textValue;
             	}
-                 TableDataRow select = selected.get(i);
-                 textValue = (String)select.getCells().get(0)
-                                + (!"".equals(textValue) ? "|" : "") + textValue;
             }
         }
         if(textValue.equalsIgnoreCase("NULL"))

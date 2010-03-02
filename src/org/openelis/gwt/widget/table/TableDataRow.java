@@ -11,6 +11,7 @@ public class TableDataRow {
     public Object key;
     public Object data;
     public String style;
+    public String display;
     
 
     /**
