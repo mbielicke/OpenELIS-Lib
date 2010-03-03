@@ -41,11 +41,13 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		super.add(scroll, tabText);
 		scroll.setWidth(width);
 		scroll.setHeight(height);
-		DeferredCommand.addCommand(new Command() {
-			public void execute() {
-				barScroller.checkScroll();
-			}
-		});
+		if(isAttached()) {
+			DeferredCommand.addCommand(new Command() {
+				public void execute() {
+					barScroller.checkScroll();
+				}
+			});
+		}
 		
 	
 	}
@@ -73,6 +75,18 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	
 	public void setTabVisible(int index, boolean visible) {
 		((Widget)getTabBar().getTab(index)).setVisible(visible);
+		if(isAttached()) {
+			DeferredCommand.addCommand(new Command() {
+				public void execute() {
+					barScroller.checkScroll();
+				}
+			});
+		}
+	}
+	
+	@Override
+	protected void onAttach() {
+		super.onAttach();
 		DeferredCommand.addCommand(new Command() {
 			public void execute() {
 				barScroller.checkScroll();
@@ -80,9 +94,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		});
 	}
 	
-	@Override
-	protected void onAttach() {
-		super.onAttach();
+	public void checkScroll() {
 		barScroller.checkScroll();
 	}
 	

@@ -102,7 +102,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 	}
 
 	public void checkScroll() {
-		if(bar.getOffsetWidth() >= intWidth){
+		if(bar.getOffsetWidth() > intWidth){
 			ap.setWidth((intWidth-32)+"px");
 			hp.getCellFormatter().setVisible(0, 0, true);
 			hp.getCellFormatter().setVisible(0, 2, true);
