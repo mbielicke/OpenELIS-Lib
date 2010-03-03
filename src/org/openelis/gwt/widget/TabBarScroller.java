@@ -117,7 +117,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 			  }else
 				  rightArrow.removeStyleName("inactive");
 		}else{
-			ap.setWidth("100%");
+			ap.setWidth(intWidth+"px");
 			hp.getCellFormatter().setVisible(0, 0, false);
 			hp.getCellFormatter().setVisible(0, 2, false);
 		}
