@@ -93,8 +93,8 @@ public class QueryFieldUtil {
                 while(param.indexOf("_",index) > -1){
                     index = param.indexOf("_");
                     
-                    param = param.substring(0,index) + "\\" + param.substring(index+1);
-                    index++;
+                    param = param.substring(0,index) + "\\" + param.substring(index);
+                    index += 2;
                 }
                 //param = param.replace("_","\\_");
                 param = param.replace('?', '_');
