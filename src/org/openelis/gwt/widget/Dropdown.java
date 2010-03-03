@@ -427,6 +427,20 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
+	
+	public ArrayList<Object> getSelectionKeys() {
+		ArrayList<Object> ret = new ArrayList<Object>();
+		ArrayList<TableDataRow> selections = getSelections();
+		for(TableDataRow row : selections) 
+			ret.add(row.key);
+		return ret;
+	}
+	
+	public void setSelectionKeys(ArrayList<Object> selections) {
+		shiftKey = true;
+		setSelections(selections);
+		shiftKey = false;
+	}
 
 }
 

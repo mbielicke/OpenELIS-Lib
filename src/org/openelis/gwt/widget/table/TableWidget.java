@@ -43,6 +43,7 @@ import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.NavigationWidget;
@@ -555,6 +556,22 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         return null;
     }
     
+    public TableDataRow getRowByKey(Object key) {
+        Integer n;
+
+        if(model == null)
+    		return null;
+
+        if (key == null) {
+    		n = 0;
+        } else {
+            n = searchKey.get(key);
+            if (n == null)
+                n = 0;
+        }
+        return model.get(n.intValue());
+    }
+    
     public void addColumn(TableColumn column) {
     	columns.add(column);
     	resetTable();
@@ -917,8 +934,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		if(queryMode){
 			for(TableColumn col : columns) {
 				if(model != null && model.size() > 0 && model.get(0).cells.get(columns.indexOf(col)).value != null){
-					((HasField)col.getColumnWidget()).setFieldValue(model.get(0).cells.get(columns.indexOf(col)).value);
+					if(col.colWidget instanceof Dropdown) {
+						((Dropdown)col.colWidget).setSelectionKeys((ArrayList<Object>)model.get(0).cells.get(columns.indexOf(col)).value);
+					}else {
+						((HasField)col.getColumnWidget()).setFieldValue(model.get(0).cells.get(columns.indexOf(col)).value);
+					}
 					((HasField)col.getColumnWidget()).getQuery(list, col.key);
+					
 				}
 			}
 		}

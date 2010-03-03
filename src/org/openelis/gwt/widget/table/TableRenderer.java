@@ -225,6 +225,7 @@ public class TableRenderer  {
         		if(((Dropdown)controller.activeWidget).popup.isShowing()){
         			((Dropdown)controller.activeWidget).popup.hide(true);	
         		}
+        		newVal = ((Dropdown)controller.activeWidget).getSelectionKeys();
         	}
         	if(controller.activeWidget instanceof AutoComplete){
         		if(((AutoComplete)controller.activeWidget).popup.isShowing())

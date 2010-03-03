@@ -129,7 +129,10 @@ public class TableColumn {
     				val = ((AutoComplete)colWidget).getTextBoxDisplay();
     			}
     		}else if(colWidget instanceof Dropdown){
-    			((Dropdown)colWidget).setSelection(cell.getValue());
+    			if(cell.getValue() instanceof ArrayList)
+    				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+    			else
+    				((Dropdown)colWidget).setSelection(cell.getValue());
     			val = ((Dropdown)colWidget).getTextBoxDisplay();
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
