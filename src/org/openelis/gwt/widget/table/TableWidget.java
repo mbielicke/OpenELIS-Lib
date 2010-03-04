@@ -1205,4 +1205,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		return addHandler(handler,NavigationSelectionEvent.getType());
 	}
  	
+	public boolean getCtrlKey() {
+		return ctrlKey;
+	}
+	
+	public boolean getShiftKey(){
+		return shiftKey;
+	}
 }
