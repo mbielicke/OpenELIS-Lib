@@ -113,11 +113,12 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         if(controller.activeWidget instanceof CheckBox && KeyCodes.KEY_ENTER == event.getNativeKeyCode()){
         	return;
         }
+        /*
         if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             controller.ctrlKey = true;
         if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             controller.shiftKey = true;
-
+        */
         boolean shift = event.isShiftKeyDown();
         if (KeyCodes.KEY_DOWN == event.getNativeKeyCode()) {
             if (controller.selectedRow >= 0 && controller.selectedRow < controller.numRows() - 1) {
@@ -232,9 +233,11 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
 	}
 
 	public void onKeyUp(KeyUpEvent event) {
+		/*
         if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             controller.ctrlKey = false;
         if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             controller.shiftKey = false;
+        */
 	}
 }

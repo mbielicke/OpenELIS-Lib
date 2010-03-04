@@ -272,6 +272,14 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      */
     public void onClick(ClickEvent event) {
     	event.preventDefault();
+    	if(event.getNativeEvent().getCtrlKey())
+    		ctrlKey = true;
+    	else
+    		ctrlKey = false;
+    	if(event.getNativeEvent().getShiftKey())
+    		shiftKey = true;
+    	else
+    		shiftKey = false;
     	if(event.getSource() == view.table){
     		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
 
@@ -279,6 +287,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     			return;
     		select(modelIndexList[cell.getRowIndex()], cell.getCellIndex(),true);
     	}
+    	ctrlKey = false;
+    	shiftKey = false;
     }
     
     /**
