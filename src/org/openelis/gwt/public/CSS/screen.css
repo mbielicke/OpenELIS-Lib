@@ -464,13 +464,15 @@ background:white;
 }
 
 
-.DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
+.sdwisSampleLoginIcon, .DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
 .AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
 .StandardNoteButtonImage, .groupRowButtonImage, .SelectAllButtonImage, .environmentalSampleLoginIcon,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
     width:20px;
     height:20px;
 }
+
+.sdwisSampleLoginIcon{background:url("../Images/cup.png") no-repeat;}
 
 .DiscardButtonImage{background:url("../Images/bin_closed.png") no-repeat;}
 .disabled .DiscardButtonImage{background:url("../Images/bin_closeddisabled.png") no-repeat;}
