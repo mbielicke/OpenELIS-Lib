@@ -246,15 +246,15 @@ color:gray;
     font-size:11px;
     border:1px solid #99bbe8;
 }
-.summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
+.MenuArrow, .summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .reviewAndReleaseIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
 .fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
 .systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon {
     width:16px;
     height:16px;
-   
 }
+
 .preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
 .EditSettings{background:url('../Images/editsettingsbuttonimage.png') no-repeat center;}
 .favoritesMenuIcon{background:url('../Images/favoritesbuttonimage.gif') no-repeat center;}
@@ -346,9 +346,9 @@ color:gray;
 .loginLabelIcon{
 }
 .summaryIcon{
-    background:url('../Images/nextbuttonimage.gif') no-repeat;
+    
 }
-.referenceIcon{
+.MenuArrow{
 	background:url('../Images/nextbuttonimage.gif') no-repeat;
 }
 .arrowIcon{
