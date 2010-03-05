@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -720,20 +721,28 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		selectRow(index,false);
 	}
 	
-	public void selectRows(int... selections) {
+	public void selectRows(Integer... selections) {
+		selectRows(Arrays.asList(selections));
+	}
+	
+	public void selectRows(TableDataRow... selections){
+		List<Integer> indexes = new ArrayList<Integer>();
+		for(int i = 0; i < selections.length; i++) {
+			indexes.add(model.indexOf(selections[i]));
+		}
+		selectRows(indexes);
+	}
+	
+	public void selectRows(ArrayList<TableDataRow> selections) {
+		selectRows((TableDataRow[])selections.toArray());
+	}
+	
+	public void selectRows(List<Integer> selections) {
 		if(multiSelect)
 			ctrlKey = true;
 		for(int i : selections)
 			selectRow(i,false);
 		ctrlKey = false;
-	}
-	
-	public void selectRows(TableDataRow... selections){
-		int[] indexes = new int[selections.length];
-		for(int i = 0; i < selections.length; i++) {
-			indexes[i] = model.indexOf(selections[i]);
-		}
-		selectRows(indexes);
 	}
 	
     public void selectRow(final int index, boolean fire) {
