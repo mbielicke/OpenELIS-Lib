@@ -720,6 +720,22 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		selectRow(index,false);
 	}
 	
+	public void selectRows(int... selections) {
+		if(multiSelect)
+			ctrlKey = true;
+		for(int i : selections)
+			selectRow(i,false);
+		ctrlKey = false;
+	}
+	
+	public void selectRows(TableDataRow... selections){
+		int[] indexes = new int[selections.length];
+		for(int i = 0; i < selections.length; i++) {
+			indexes[i] = model.indexOf(selections[i]);
+		}
+		selectRows(indexes);
+	}
+	
     public void selectRow(final int index, boolean fire) {
         if(index > model.size())
             throw new IndexOutOfBoundsException();
@@ -1223,10 +1239,5 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	
 	public boolean getShiftKey(){
 		return shiftKey;
-	}
-	
-	public void doMultipleSelection(boolean multi) {
-		assert multiSelect == true : "Table is not enabled for Multiple Selection";
-		ctrlKey = multi;
 	}
 }

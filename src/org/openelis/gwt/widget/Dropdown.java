@@ -437,9 +437,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	}
 	
 	public void setSelectionKeys(ArrayList<Object> selections) {
-		doMultipleSelection(true);
+		if(multiSelect)
+			ctrlKey = true;
 		setSelections(selections);
-		doMultipleSelection(false);
+		ctrlKey = false; 
 	}
 
 }

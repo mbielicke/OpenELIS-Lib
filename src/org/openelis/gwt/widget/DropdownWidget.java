@@ -186,7 +186,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public void setSelections(ArrayList<Object> selections){
     	if(isMultiSelect())
-    		doMultipleSelection(true);
+    		ctrlKey = true;
         clearSelections();
         if(selections != null) {
             for(Object key : selections)
@@ -194,8 +194,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
             textbox.setText(getTextBoxDisplay());
         }else
             textbox.setText("");
-        if(isMultiSelect())
-        	doMultipleSelection(false);
+        ctrlKey = false;
+        	
         //textBoxDefault = textbox.getText();
     }    
     
