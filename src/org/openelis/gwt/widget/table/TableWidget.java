@@ -366,27 +366,33 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		NavigationSelectionEvent.fire(this,row);
     		return;
     	}
-    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    		BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
-    		if(event.isCanceled())
+    	// Remove selections if not multiselect and no key is held
+    	if(selectedRow != row) {
+    		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
+    			for(Integer index : selections) {
+    				if(fireEvents)
+    					UnselectionEvent.fire(this,model.get(index));
+    				unselect(index);	
+    			
+    			}
+    		}
+    	
+    		//Fire Before Selection
+    		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
+    			BeforeSelectionEvent<TableRow> event = BeforeSelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
+    			if(event.isCanceled())
+    				return;
+    		}else if(!isEnabled()) 
     			return;
-    	}else if(!isEnabled()) 
-    		return;
+    	}
         finishEditing();
+        if(multiSelect && ctrlKey && isSelected(row)){
+        	unselect(row);
+        	selectedCol = -1;
+       		sinkEvents(Event.ONKEYPRESS);
+        	return;
+        }
         if(selectedRow != row){
-            if(selectedRow > -1 && !ctrlKey && !shiftKey){
-            	if(fireEvents)
-            		UnselectionEvent.fire(this,model.get(selectedRow));
-                unselect(-1);
-                
-            }
-            if(multiSelect && ctrlKey && isSelected(row)){
-            	unselect(row);
-            	selectedCol = -1;
-           		sinkEvents(Event.ONKEYPRESS);
-            	return;
-            }
-            //selectedRow = row;
             selectRow(row);
             if(fireEvents)
             	SelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
@@ -701,6 +707,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 	
 	public void navSelect(int index) {
+        if(multiSelect && ctrlKey && isSelected(index)){
+        	unselect(index);
+        	selectedCol = -1;
+       		sinkEvents(Event.ONKEYPRESS);
+        	return;
+        }
 		selectRow(index);
 	}
 
@@ -1211,5 +1223,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	
 	public boolean getShiftKey(){
 		return shiftKey;
+	}
+	
+	public void doMultipleSelection(boolean multi) {
+		assert multiSelect == true : "Table is not enabled for Multiple Selection";
+		ctrlKey = multi;
 	}
 }
