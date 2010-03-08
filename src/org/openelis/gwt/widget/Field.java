@@ -15,6 +15,7 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -191,6 +192,12 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
             pop.setWidget(dp);
             pop.setPopupPosition(((Widget)event.getSource()).getAbsoluteLeft()+((Widget)event.getSource()).getOffsetWidth(), ((Widget)event.getSource()).getAbsoluteTop());
             pop.show();
+            Timer timer = new Timer() {
+            	public void run() {
+            		pop.hide();
+            	}
+            };
+            timer.schedule(5000);
         }
 	}
 

@@ -30,7 +30,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -122,7 +121,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	vp.add(bp);
     	vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
     	dp.add(vp);
-    	dp.setStyleName("ErrorWindow");
+    	dp.setStyleName("ConfirmWindow");
     	dp.setVisible(false);
     	setWidget(dp);
     }
