@@ -91,15 +91,15 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	AbsolutePanel ap = new AbsolutePanel();
     	HorizontalPanel hp = new HorizontalPanel();
     	if(type == Type.WARN){
-    		ap.setStyleName("warnIcon");
+    		ap.setStyleName("largeWarnIcon");
     		if(caption == null || caption.equals(""))
     			cap.name = "Warning";
     	}else if(type == Type.ERROR){
-    		ap.setStyleName("errorIcon");
+    		ap.setStyleName("largeErrorIcon");
     		if(caption == null || caption.equals(""))
     			cap.name = "Error";
     	}else if(type == Type.QUESTION){
-    		ap.setStyleName("questionIcon");
+    		ap.setStyleName("largeQuestionIcon");
     		if(caption == null || caption.equals(""))
     			cap.name = "Question";
     	}
