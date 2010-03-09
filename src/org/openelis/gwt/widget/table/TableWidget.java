@@ -376,6 +376,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     					UnselectionEvent event = UnselectionEvent.fire(this,model.get(index),model.get(row));
     					if(event != null && event.isCanceled())
     						return;
+    					unselect(index);
     				}else
     					unselect(index);	
     			
