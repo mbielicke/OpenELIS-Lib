@@ -45,14 +45,14 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 					sPolicy.validateSerialize(e.getCause().getClass());
 					throw (Exception)e.getCause();
 				}catch(SerializationException se) {
-					throw new Exception(se.getClass().getName()+" : "+se.getMessage());
+					throw new Exception(e.getCause().getClass().getName()+" : "+e.getCause().getMessage());
 				}
 			}else{
 				try {
 					sPolicy.validateSerialize(e.getTargetException().getClass());
 					throw (Exception)e.getTargetException();
 				}catch(SerializationException se){
-					throw new Exception(se.getClass().getName()+" : "+se.getMessage());
+					throw new Exception(e.getTargetException().getClass().getName()+" : "+e.getTargetException().getMessage());
 				}
 			}
 		} catch (NoSuchMethodException e) {
