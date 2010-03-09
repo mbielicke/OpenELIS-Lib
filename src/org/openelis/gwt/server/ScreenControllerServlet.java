@@ -22,6 +22,8 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.services.ScreenServiceInt;
 
+import com.google.gwt.user.client.rpc.SerializationException;
+
 public class ScreenControllerServlet extends AppServlet implements ScreenServiceInt {
 
     private static final long serialVersionUID = 1L;
@@ -32,16 +34,27 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     
     @SuppressWarnings("unchecked")
 	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
-
+    	
 		try {
 			Object serviceInst = Class.forName(service).newInstance();
 		    return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
 		
 		} catch(InvocationTargetException e){
-			if(e.getCause() != null)
-				throw (Exception)e.getCause();
-			else
-				throw (Exception)e.getTargetException();
+			if(e.getCause() != null){
+				try {
+					sPolicy.validateSerialize(e.getCause().getClass());
+					throw (Exception)e.getCause();
+				}catch(SerializationException se) {
+					throw new Exception(se.getClass().getName()+" : "+se.getMessage());
+				}
+			}else{
+				try {
+					sPolicy.validateSerialize(e.getTargetException().getClass());
+					throw (Exception)e.getTargetException();
+				}catch(SerializationException se){
+					throw new Exception(se.getClass().getName()+" : "+se.getMessage());
+				}
+			}
 		} catch (NoSuchMethodException e) {
             throw new Exception("NoSuchMethodException: "+e.getMessage());
 		} catch(Exception e){

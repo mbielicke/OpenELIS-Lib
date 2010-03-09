@@ -39,6 +39,7 @@ public class AppServlet extends RemoteServiceServlet {
      * 
      */
     private static final long serialVersionUID = 1L;
+    protected static SerializationPolicy sPolicy;
 
     /*
      * (non-Javadoc)
@@ -48,11 +49,11 @@ public class AppServlet extends RemoteServiceServlet {
      */
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // TODO Auto-generated method stub
-        if(moduleBaseURL.indexOf("/shell") > -1) {
-            String temp = moduleBaseURL.substring(0, moduleBaseURL.indexOf("/shell"));
-            moduleBaseURL = temp + moduleBaseURL.substring(moduleBaseURL.indexOf("/shell")+6);
-        }
-        return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
+    	if(sPolicy == null) {
+    		sPolicy = super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
+    		return sPolicy;
+    	}else
+    		return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
     }
 
     /*
