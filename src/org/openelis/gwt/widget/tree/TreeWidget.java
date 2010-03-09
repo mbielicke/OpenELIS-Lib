@@ -365,7 +365,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         if(selectedRow != row){
             if(selectedRow > -1 && !ctrlKey && !shiftKey){
             	if(fireEvents)
-            		UnselectionEvent.fire(this, rows.get(selectedRow));
+            		UnselectionEvent.fire(this, rows.get(selectedRow),rows.get(row));
                 unselect(-1);
             }
             if(multiSelect && ctrlKey && isSelected(row)){
@@ -609,7 +609,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public void deleteRow(int row) {
     	if(fireEvents)
-    		UnselectionEvent.fire(this,rows.get(selectedRow));
+    		UnselectionEvent.fire(this,rows.get(selectedRow),null);
     	unselect(row);
     	if(fireEvents) {
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));

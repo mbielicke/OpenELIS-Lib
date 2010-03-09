@@ -371,9 +371,12 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(selectedRow != row) {
     		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
     			for(Integer index : selections) {
-    				if(fireEvents)
-    					UnselectionEvent.fire(this,model.get(index));
-    				unselect(index);	
+    				if(fireEvents){
+    					UnselectionEvent event = UnselectionEvent.fire(this,model.get(index),model.get(row));
+    					if(event != null && event.isCanceled())
+    						return;
+    				}else
+    					unselect(index);	
     			
     			}
     		}
@@ -398,8 +401,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             if(fireEvents)
             	SelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
         }
-        if(canEditCell(row,col)){
-        	if(byClick && isEnabled() && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        if(isEnabled() && canEditCell(row,col)){
+        	if(byClick && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
         		clearCellExceptions(row, col);
         		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
         			setCell(row,col,CheckBox.UNCHECKED);
@@ -536,7 +539,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             shownRows--;
         if(row < model.size()){
         	if(fireEvents)
-        		UnselectionEvent.fire(this, model.get(row));
+        		UnselectionEvent.fire(this, model.get(row),null);
             TableDataRow tmp = model.remove(row);
             if(fireEvents)
             	RowDeletedEvent.fire(this, row, tmp);
