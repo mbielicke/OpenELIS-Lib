@@ -370,7 +370,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	// Remove selections if not multiselect and no key is held
     	if(selectedRow != row) {
     		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
-    			for(Integer index : selections) {
+    			while(selections.size() > 0) {
+    				int index = selections.get(0);
     				if(fireEvents){
     					UnselectionEvent event = UnselectionEvent.fire(this,model.get(index),model.get(row));
     					if(event != null && event.isCanceled())
