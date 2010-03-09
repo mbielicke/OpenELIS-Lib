@@ -87,6 +87,7 @@ public class UIGenerator extends Generator {
         composer.addImport("org.openelis.gwt.widget.LongField");
         composer.addImport("org.openelis.gwt.widget.DoubleField");
         composer.addImport("org.openelis.gwt.widget.CheckField");
+        composer.addImport("org.openelis.gwt.common.Util");
 
         findImports(doc.getElementsByTagName("screen").item(0));
 
