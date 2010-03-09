@@ -53,7 +53,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     protected String                      fatalError;
 
     public final AbsolutePanel            screenpanel  = new AbsolutePanel();
-    public static UIFocusHandler          focusHandler = new UIFocusHandler();
     public static HashMap<String, String> consts;
 
     /**
@@ -221,19 +220,5 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 
     protected void setFocus(Widget widget) {
         def.getPanel().setFocusWidget(widget);
-    }
-
-    private static class UIFocusHandler implements FocusHandler, BlurHandler {
-        public void onFocus(FocusEvent event) {
-            if ( ((HasField)event.getSource()).isEnabled()) {
-                ((Widget)event.getSource()).addStyleName("Focus");
-            }
-        }
-
-        public void onBlur(BlurEvent event) {
-            if ( ((HasField)event.getSource()).isEnabled()) {
-                ((Widget)event.getSource()).removeStyleName("Focus");
-            }
-        }
     }
 }

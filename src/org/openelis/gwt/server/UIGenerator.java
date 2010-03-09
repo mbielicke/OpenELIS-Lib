@@ -325,8 +325,8 @@ public class UIGenerator extends Generator {
 					factoryMap.get("String").getNewInstance(node, id);
 					sw.println("wid"+id+".setField(field"+id+");");
 				}
-				sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 			}
 			public void addImport() {
@@ -655,8 +655,8 @@ public class UIGenerator extends Generator {
     			factoryMap.get("Date").getNewInstance(node, id);
     			sw.println("wid"+id+".setField(field"+id+");");
     			
-    			//sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-    			//sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+    			//sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    			//sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 
     		}
@@ -706,8 +706,8 @@ public class UIGenerator extends Generator {
     	        factoryMap.get("Check").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
-    	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -947,8 +947,8 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("enable") != null){
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
-    			sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-    			sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+    			sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    			sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     			
     		}
@@ -1186,8 +1186,8 @@ public class UIGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
-    	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -1217,8 +1217,8 @@ public class UIGenerator extends Generator {
                 factoryMap.get("Check").getNewInstance(node, id);
                 sw.println("wid"+id+".setField(field"+id+");");
                 
-                sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
                 
     		}
@@ -1264,8 +1264,8 @@ public class UIGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
-    	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
-    	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -1414,8 +1414,8 @@ public class UIGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setField(field"+id+");");
     	        
-    	        sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -1608,8 +1608,8 @@ public class UIGenerator extends Generator {
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
                 
-                sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				
@@ -1995,8 +1995,8 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("enable") != null){
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
-                sw.println("wid"+id+".addBlurHandler(Screen.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Screen.focusHandler);");
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
                 
                 

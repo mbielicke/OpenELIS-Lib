@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.Util;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -124,10 +126,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 	}
 
 	public void setWidth(String width) {
-		if(width.indexOf("px") > 0)
-			intWidth = Integer.parseInt(width.substring(0,width.length()-2));
-		else
-			intWidth = Integer.parseInt(width);
+		intWidth = Util.stripUnits(width, "px");
 		ap.setWidth(width);
 	}
 	
