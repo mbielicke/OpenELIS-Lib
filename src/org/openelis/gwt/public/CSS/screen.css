@@ -1836,11 +1836,13 @@ legend {
 	border:1px solid #D8D8D8;
 	border-width:1px 0px;
     width:100%;
+    background:white;
 }
 .ScreenTreeWithSides {
 	border:1px solid #D8D8D8;
 	border-width:1px;
     width:100%
+    background:white;
 }
 .ScreenTree .gwt-TreeItem{
     cursor:pointer;
