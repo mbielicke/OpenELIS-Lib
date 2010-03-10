@@ -188,6 +188,12 @@ public class TableColumn {
     			
     				((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
     			}
+        	}else if(colWidget instanceof Dropdown){
+        		if(cell.getValue() instanceof ArrayList)
+    				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+    			else
+    				((Dropdown)colWidget).setSelection(cell.getValue());
+        		((Label)widget).setText(((Dropdown)colWidget).getTextBoxDisplay());
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
     			if(colWidget instanceof CalendarLookUp) {
@@ -233,7 +239,10 @@ public class TableColumn {
     				((AutoComplete)colWidget).setSelection(null,"");
     		}
     	}else if(colWidget instanceof Dropdown){
-    		((Dropdown)colWidget).setSelection(cell.getValue());
+    		if(cell.getValue() instanceof ArrayList)
+				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+			else
+				((Dropdown)colWidget).setSelection(cell.getValue());
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
     	((HasField)editor).clearExceptions();

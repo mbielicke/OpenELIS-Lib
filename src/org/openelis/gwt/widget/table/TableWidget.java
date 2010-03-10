@@ -643,7 +643,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
 
     public Object getObject(int row, int col) {
-        return model.get(row).cells.get(col).getValue();
+    	Object obj = model.get(row).cells.get(col).getValue();
+    	if(obj instanceof ArrayList) {
+    		if(((ArrayList)obj).size() == 1)
+    			return ((ArrayList)obj).get(0);
+    	}
+    	return obj;
+    
     }
 
     public void clear() {

@@ -314,8 +314,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	@Override
 	public void checkValue() {
 		if(!queryMode){
-			if(multiSelect && selections.size() > 0) 
-				return;
 			field.checkValue(this);
 		}
 	}
@@ -444,6 +442,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			ctrlKey = true;
 		setSelections(selections);
 		ctrlKey = false; 
+		if(selections != null && selections.size() > 0)
+			field.setValue((T)selections.get(0));
+		else
+			field.setValue(null);
 	}
 
 }
