@@ -313,8 +313,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	@Override
 	public void checkValue() {
-		if(!queryMode)
+		if(!queryMode){
+			if(multiSelect && selections.size() > 0) 
+				return;
 			field.checkValue(this);
+		}
 	}
 	
 	public void getQuery(ArrayList list, String key) {
