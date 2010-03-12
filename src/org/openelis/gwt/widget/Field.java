@@ -15,6 +15,8 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasValue;
@@ -104,8 +106,15 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 		if(!valid){
 			drawExceptions((HasField)event.getSource());
 		}
-		if(!queryMode)
-			ValueChangeEvent.fire(this, value);
+		if(!queryMode){
+			final HasValueChangeHandlers source = this;
+			DeferredCommand.addCommand(new Command() {
+				public void execute() {
+					ValueChangeEvent.fire(source, value);
+				}
+			});
+		}
+			
 	}
 	
 	private String getString(Object val) {
