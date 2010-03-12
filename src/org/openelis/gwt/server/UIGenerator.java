@@ -2120,7 +2120,7 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("max") != null)
     	            sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
     	        if (node.getAttributes().getNamedItem("min") != null)
-    	            sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("min").getNodeValue()+")");
+    	            sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("min").getNodeValue()+");");
     	        if (node.hasChildNodes()) {
     	            String deflt = node.getFirstChild().getNodeValue();
     	            Date dat = null;
