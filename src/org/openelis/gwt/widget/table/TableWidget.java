@@ -47,6 +47,7 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.TableView.VerticalScroll;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
@@ -1060,11 +1061,16 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	protected boolean canEditCell(int row, int col) {
-        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0 && fireEvents) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
-        	if(bce.isCancelled()){
-        		return false;
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	if(fireEvents) {
+        		BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
+        		if(bce.isCancelled()){
+        			return false;
+        		}
         	}
+        }else {
+        	if(columns.get(col).colWidget instanceof Label)
+        		return false;
         }
         return (isEnabled());
 	}
