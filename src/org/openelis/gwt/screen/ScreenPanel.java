@@ -12,6 +12,8 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,10 +45,14 @@ public class ScreenPanel extends AbsolutePanel implements HasClickHandlers, Focu
 
 	}
 	
-	public void setFocusWidget(Widget widget) {
+	public void setFocusWidget(final Widget widget) {
 		focused = widget;
 		if(widget instanceof Focusable)
-			((Focusable)(widget)).setFocus(true);
+			DeferredCommand.addCommand(new Command() {
+				public void execute() {
+					((Focusable)(widget)).setFocus(true);
+				}
+			});
 		FocusEvent.fireNativeEvent(Document.get().createFocusEvent(), this);
 	}
 
