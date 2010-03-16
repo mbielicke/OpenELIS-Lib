@@ -76,10 +76,14 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 
 	@Override
 	public void onPreviewDrop(DragContext context) throws VetoDragException {
+		if(scroll != null){
+			scroll.cancel();
+			scroll = null;
+		}	
 		if(!validDrop)
 			throw new VetoDragException();
 		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
-			BeforeDropEvent event = BeforeDropEvent.fire(this, (TreeRow)context.draggable, tree.getRow(targetRow));
+			BeforeDropEvent event = BeforeDropEvent.fire(this, (TreeRow)context.draggable, tree.renderer.rows.get(targetRow));
 			if(event != null && event.isCancelled()){
 				positioner.removeFromParent();
 				positioner = null;
@@ -146,6 +150,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		super.onLeave(context);
 	}
 
+	
 
 	@Override
 	public void onMove(DragContext context) {
@@ -161,8 +166,11 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		
 		int newRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
 				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
-		if(newRow == targetRow)
+		if(newRow == targetRow){
+			if(targetRow == 0 || targetRow == tree.maxRows -1)
+				checkScroll(targetRow);
 			return;
+		}
 		targetRow = newRow;
 		Location tableLocation = new WidgetLocation(tree, context.boundaryPanel);
 		validDrop = true;
@@ -180,7 +188,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 				}
 			}
 			if(getHandlerCount(DropEnterEvent.getType()) > 0){
-				DropEnterEvent event = DropEnterEvent.fire(this, (TreeRow)context.draggable, tree.getRow(targetRow));
+				DropEnterEvent event = DropEnterEvent.fire(this, (TreeRow)context.draggable, tree.renderer.rows.get(targetRow == -1 ? 0 : targetRow));
 				if(event != null && event.isCancelled())
 					validDrop = false;
 			}
@@ -227,7 +235,11 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 	public boolean checkScroll(final int targetRow) {
 		if(tree.numRows() < tree.maxRows)
 			return false;
-		TreeRow dRow = tree.renderer.getRows().get(targetRow);
+		TreeRow dRow = null;
+		if(targetRow > -1)
+			dRow = tree.renderer.getRows().get(targetRow);
+		else
+			dRow = tree.renderer.getRows().get(0);
 		if((dRow.index == 0 && dRow.modelIndex > 0) || 
 				(dRow.index == tree.maxRows -1 && dRow.modelIndex < tree.shownRows() -1)){
 			if(dRow.index == tree.maxRows -1){
@@ -238,7 +250,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 							checkScroll(targetRow);
 						}
 					};
-					scroll.schedule(350);
+					scroll.schedule(150);
 					return true;
 				}
 			}
@@ -251,7 +263,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 							checkScroll(targetRow);
 						}
 					};
-					scroll.schedule(350);
+					scroll.schedule(150);
 					return true;
 				}
 			}  
@@ -317,6 +329,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			DropEnterHandler<TreeRow> handler) {
 		return addHandler(handler,DropEnterEvent.getType());
 	}
+	
 	
 
 }

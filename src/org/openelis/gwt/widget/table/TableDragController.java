@@ -95,8 +95,10 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	@Override
 	public void dragStart() {
-		context.draggable.addStyleName("disabled");
+		((TableRow)context.draggable).dragRow.enabled = false;
+		((TableRow)context.draggable).addStyleName(TableView.disabledStyle);
 		super.dragStart();
+		((TableRow)context.draggable).removeStyleName("dragdrop-dragging");
 		if(getHandlerCount(DragStartEvent.getType()) > 0){
 			DragStartEvent.fire(this, (TableRow)context.draggable);
 		}
@@ -136,8 +138,10 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	@Override
 	public void dragEnd() {
-		context.draggable.removeStyleName("TableHighlighted");
-		context.draggable.removeStyleName("disabled");
+		//context.draggable.removeStyleName("TableHighlighted");
+		((TableRow)context.draggable).dragRow.enabled = true;
+		if(((TableRow)context.draggable).controller.isRowDrawn(((TableRow)context.draggable).dragModelIndex))
+			((TableRow)context.draggable).controller.renderer.loadRow(((TableRow)context.draggable).dragModelIndex);
 		proxy = null;
 		super.dragEnd();
 	}

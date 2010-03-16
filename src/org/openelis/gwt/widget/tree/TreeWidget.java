@@ -26,12 +26,15 @@
 package org.openelis.gwt.widget.tree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
+import org.openelis.gwt.event.BeforeDragStartEvent;
 import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.BeforeDropHandler;
 import org.openelis.gwt.event.DragStartHandler;
@@ -45,9 +48,11 @@ import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataCell;
+import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
@@ -194,9 +199,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     }
     
-    public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
-    }
     
     public void init() {
         renderer = new TreeRenderer(this);
@@ -206,10 +208,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         view.setHeight(maxRows * cellHeight);
         setWidget(view);
         addDomHandler(keyboardHandler, KeyUpEvent.getType());
-        addDomHandler(keyboardHandler, KeyDownEvent.getType());
-        //addFocusHandler(this);
-        //addBlurHandler(this);
-        
+        addDomHandler(keyboardHandler, KeyDownEvent.getType());        
     }
     
     public void setTreeWidth(String width) {
@@ -274,10 +273,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(width.equals("auto")){
     		for(TreeColumn column : headers)
     			tw += column.getCurrentWidth();
-    	}else if(width.indexOf("px") > -1){
-    		tw = Integer.parseInt(width.substring(0,width.length()-2));
     	}else
-    		tw = Integer.parseInt(width);
+    		tw = Util.stripUnits(width, "px");
     	
     	return tw;
     }
@@ -286,27 +283,23 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * This method handles all click events on the body of the table
      */
     public void onClick(ClickEvent event) {
-    	Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-		if(isEnabled() && columns.get(getRow(modelIndexList[cell.getRowIndex()]).leafType).get(cell.getCellIndex()).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
-			if(CheckBox.CHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
-				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNCHECKED);
-				if(fireEvents)
-					CellEditedEvent.fire(this,  modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNCHECKED);
-			}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex()).getValue())){
-				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.UNKNOWN);
-				if(fireEvents)
-					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.UNKNOWN);
-			}else{
-				setCell(modelIndexList[cell.getRowIndex()],cell.getCellIndex(),CheckBox.CHECKED);
-				if(fireEvents)
-					CellEditedEvent.fire(this, modelIndexList[cell.getRowIndex()], cell.getCellIndex(), CheckBox.CHECKED);
-			}
+    	if(event.getNativeEvent().getCtrlKey())
+    		ctrlKey = true;
+    	else
+    		ctrlKey = false;
+    	if(event.getNativeEvent().getShiftKey())
+    		shiftKey = true;
+    	else
+    		shiftKey = false;
+    	if(event.getSource() == view.table) {
+    		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
+           
+    		if(treeIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
+                return;
+            select(modelIndexList[cell.getRowIndex()], cell.getCellIndex());
 		}
-        if(treeIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
-            return;
-        //selectedByClick = true;
-        select(modelIndexList[cell.getRowIndex()], cell.getCellIndex());
-        //selectedByClick = false;
+    	ctrlKey = false;
+    	shiftKey = false;
     }
 
 
@@ -318,7 +311,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	}
             selections.clear();
             renderer.rowUnselected(-1);
-        }else if(row < selections.size()){
+        }else {
             selections.remove(new Integer(row));
         }
         if(selectedRow > -1)
@@ -349,46 +342,74 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0) {
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode) {
     		if(rows.get(row).parent == null){
     			NavigationSelectionEvent.fire(this,rows.get(row).childIndex);
     			return;
     		}
     	}
-    	if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    		BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
-    		if(event.isCanceled())
+    	if(selectedRow != row) {
+    		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
+    			while(selections.size() > 0) {
+    				int index = selections.get(0);
+    				if(fireEvents) {
+    					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+    					if(event != null && event.isCanceled())
+    						return;
+    				}
+    				unselect(index);
+    			}
+    		}
+    		
+    		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
+    			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
+    			if(event.isCanceled())
+    				return;
+    		}else if(!isEnabled())
     			return;
-    	}else if(!isEnabled())
-    		return;
+    	}
         finishEditing();
+        if(multiSelect && ctrlKey && isSelected(row)){
+        	unselect(row);
+        	selectedCol = -1;
+       		sinkEvents(Event.ONKEYPRESS);
+        	return;
+        }
         if(selectedRow != row){
-            if(selectedRow > -1 && !ctrlKey && !shiftKey){
-            	if(fireEvents)
-            		UnselectionEvent.fire(this, rows.get(selectedRow),rows.get(row));
-                unselect(-1);
-            }
-            if(multiSelect && ctrlKey && isSelected(row)){
-            	unselect(row);
-            	selectedCol = -1;
-           		sinkEvents(Event.ONKEYPRESS);
-            	return;
-            }
-            //selectedRow = row;
             selectRow(row);
             if(fireEvents)
             	SelectionEvent.fire(this,rows.get(row));
         }
-        if(canEditCell(row,col)){
-            selectedCol = col;
-            renderer.setCellEditor(row, col);
-            unsinkEvents(Event.ONKEYPRESS);
+        if(isEnabled() && canEditCell(row,col)){
+        	if(columns.get(rows.get(row).leafType).get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        		clearCellExceptions(row, col);
+        		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.UNCHECKED);
+        			if(fireEvents)
+        				CellEditedEvent.fire(this, row, col, CheckBox.UNCHECKED);
+        		}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.UNKNOWN);
+        			if(fireEvents)
+        				CellEditedEvent.fire(this, row, col, CheckBox.UNKNOWN);
+        		}else{
+        			setCell(row,col,CheckBox.CHECKED);
+        			if(fireEvents)
+        				CellEditedEvent.fire(this, row, col, CheckBox.CHECKED);
+        		}
+           		selectedCol = -1;
+           		sinkEvents(Event.ONKEYPRESS);
+        	}else{
+        		selectedCol = col;
+        		renderer.setCellEditor(row, col);
+        		unsinkEvents(Event.ONKEYPRESS);
+        	}
         }else{
       		selectedCol = -1;
        		sinkEvents(Event.ONKEYPRESS);
        	}
 
     }
+   
     
     /**
      *  This method will select all rows in the model, but only if the table is in 
@@ -453,7 +474,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 
 	public void onFocus(FocusEvent event) {
-		if(!DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
+		if(((ScreenPanel)event.getSource()).focused == null || !DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
 			finishEditing();
 		}
 	}
@@ -760,12 +781,35 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	if(!multiSelect || (multiSelect && !ctrlKey))
                	selections.clear();
         	selections.add(index);
+        	selectedRow = index;
         }
-        if(isRowDrawn(index))
+        if(isRowDrawn(index) && view.isVisible())
         	renderer.dataChanged(true);
-        else
-        	scrollToSelection();
     }
+    
+	public void selectRows(Integer... selections) {
+		selectRows(Arrays.asList(selections));
+	}
+	
+	public void selectRows(TreeDataItem... selections){
+		List<Integer> indexes = new ArrayList<Integer>();
+		for(int i = 0; i < selections.length; i++) {
+			indexes.add(rows.indexOf(selections[i]));
+		}
+		selectRows(indexes);
+	}
+	
+	public void selectRows(ArrayList<TreeDataItem> selections) {
+		selectRows((TreeDataItem[])selections.toArray());
+	}
+	
+	public void selectRows(List<Integer> selections) {
+		if(multiSelect)
+			ctrlKey = true;
+		for(int i : selections)
+			select(i);
+		ctrlKey = false;
+	}
 
     public void setModel(ArrayList<TreeDataItem> data) {
         this.data = data;
@@ -1046,12 +1090,16 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     protected boolean canEditCell(int row, int col) {
-        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0 && fireEvents) {
-        	BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
-        	if(bce.isCancelled()){
+        if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
+        	if(fireEvents) {
+        		BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
+        		if(bce.isCancelled()){
+        			return false;
+        		}
+        	}
+        }else {
+        	if(columns.get(rows.get(row).leafType).get(col).colWidget instanceof Label)
         		return false;
-        	}else
-        		return true;
         }
         return isEnabled();
     }
@@ -1070,7 +1118,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 			return;
 		for(int i = 0; i < rows.size(); i++) {
 			for(int j = 0; j < rows.get(i).cells.size(); j++){
-				Widget wid = columns.get(rows.get(i).leafType).get(j).getWidgetEditor(rows.get(i).cells.get(j));
+				Widget wid = columns.get(rows.get(i).leafType).get(j).getWidgetEditor(rows.get(i));
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
 					rows.get(i).cells.get(j).exceptions = ((HasField)wid).getExceptions();
@@ -1226,6 +1274,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	if(drag) {
     		if(dragController == null) {
     			dragController = new TreeDragController(RootPanel.get());
+    			dragController.addBeforeStartHandler(new BeforeDragStartHandler<TreeRow>() {
+    				public void onBeforeDragStart(BeforeDragStartEvent<TreeRow> event) {
+    					finishEditing();
+    				}
+    			});
     			for(TreeRow row : renderer.rows)
     				dragController.makeDraggable(row);
     		}
@@ -1313,6 +1366,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		return addHandler(handler,SortEvent.getType());
 	}
 	
+    public void addTabHandler(TabHandler handler) {
+    	addDomHandler(handler,KeyPressEvent.getType());
+    }
+	
 	public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<TreeRow> handler) {
 		assert(dragController != null) : new Exception("Enable Dragging first before registering handlers");
 		return dragController.addBeforeStartHandler(handler);	
@@ -1352,6 +1409,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	public HandlerRegistration addRowMovedHandler(RowMovedHandler handler) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public boolean getCtrlKey() {
+		return ctrlKey;
+	}
+	
+	public boolean getShiftKey(){
+		return shiftKey;
 	}
     
 }

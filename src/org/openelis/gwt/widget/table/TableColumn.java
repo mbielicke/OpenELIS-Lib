@@ -157,7 +157,6 @@ public class TableColumn {
     		label.setWordWrap(false);
     		wid = label;
     		wid.setWidth((currentWidth)+ "px");
-    		//wid.setHeight((controller.cellHeight+"px"));
     	}
         setExceptions(wid,cell.exceptions);
         wid.addStyleName("TableWidget");
@@ -221,7 +220,6 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		CheckBoxContainer ap = new CheckBoxContainer();
     		((CheckBox)editor).setValue((String)cell.getValue());
-    		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		ap.setWidth((currentWidth)+ "px");
     		ap.add(editor);
     		return ap;
@@ -245,6 +243,7 @@ public class TableColumn {
 				((Dropdown)colWidget).setSelection(cell.getValue());
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
+    	
     	((HasField)editor).clearExceptions();
    		setExceptions(editor, cell.exceptions);
     	editor.addStyleName("TableWidget");

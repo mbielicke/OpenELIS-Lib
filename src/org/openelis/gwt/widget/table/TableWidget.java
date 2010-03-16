@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.event.BeforeDragStartEvent;
 import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.BeforeDropHandler;
@@ -261,11 +262,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(width.equals("auto")){
     		for(TableColumn column : columns)
     			tw += column.getCurrentWidth()+3;
-    	}else if(width.indexOf("px") > -1){
-    		tw = Integer.parseInt(width.substring(0,width.length()-2));
     	}else
-    		tw = Integer.parseInt(width);
-    	
+    		tw = Util.stripUnits(width,"px");    	
     	return tw;
     }
 
@@ -376,11 +374,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     				if(fireEvents){
     					UnselectionEvent event = UnselectionEvent.fire(this,model.get(index),model.get(row));
     					if(event != null && event.isCanceled())
-    						return;
-    					unselect(index);
-    				}else
-    					unselect(index);	
-    			
+    						return;	
+    				}
+    				unselect(index);	
     			}
     		}
     	
@@ -405,7 +401,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             	SelectionEvent.fire(this, renderer.rows.get(tableIndex(row)));
         }
         if(isEnabled() && canEditCell(row,col)){
-        	if(byClick && columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        	if(columns.get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
         		clearCellExceptions(row, col);
         		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
         			setCell(row,col,CheckBox.UNCHECKED);
@@ -757,7 +753,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		ctrlKey = false;
 	}
 	
-    public void selectRow(final int index, boolean fire) {
+    public void selectRow(final int index,boolean fire) {
         if(index > model.size())
             throw new IndexOutOfBoundsException();
         selectedRow = index;

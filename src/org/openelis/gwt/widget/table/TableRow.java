@@ -30,6 +30,7 @@ public class TableRow extends Widget implements HasAllMouseHandlers {
     public int dragModelIndex;
     public int droppedIndex = -1;
     public TableDataRow dragRow;
+    protected TableWidget controller;
     
     public TableRow() {
         
@@ -68,7 +69,7 @@ public class TableRow extends Widget implements HasAllMouseHandlers {
     public void setDragValues() {
         dragIndex = index;
         dragModelIndex = modelIndex;
-        dragRow = (TableDataRow)row.clone();
+        dragRow = row;
     }
     
     public Widget getDragProxy() {

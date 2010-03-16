@@ -72,6 +72,7 @@ public class TableRenderer  {
             j++;
         }
         TableRow  row = new TableRow(controller.view.table.getRowFormatter().getElement(i));
+        row.controller = controller;
         if(controller.isDropdown){
         	row.addMouseOutHandler(controller);
         	row.addMouseOverHandler(controller);
@@ -89,15 +90,10 @@ public class TableRenderer  {
 
     public void load(int pos) {
         controller.modelIndexList = new int[controller.maxRows];
-        int ScrollHeight = (controller.shownRows*controller.cellHeight);//+(controller.shownRows*controller.cellSpacing);
-        //int ScrollHeight = (controller.shownRows()*controller.cellHeight)+(controller.maxRows*2);
-        //if(controller.isAutoAdd()){
-          //  ScrollHeight += controller.cellHeight;
-        //}
+        int ScrollHeight = (controller.shownRows*controller.cellHeight);
         if(controller.isDropdown) {
         	ScrollHeight += controller.cellHeight;
         }
-        //int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*2)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight)/(controller.cellHeight)))).intValue();
         if(testStart < controller.shownRows() - controller.maxRows)
             ScrollHeight += controller.cellHeight;
@@ -171,7 +167,6 @@ public class TableRenderer  {
         if(controller.activeWidget != null){
         	controller.finishEditing();
             controller.selectedCol = -1;
-//            controller.selectedRow--;
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){

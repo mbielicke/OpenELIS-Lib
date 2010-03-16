@@ -29,6 +29,7 @@ public class TreeRow extends Widget implements HasAllMouseHandlers {
     public int dragModelIndex;
     public int droppedIndex = -1;
     public TreeDataItem dragItem;
+    protected TreeWidget controller;
     
     public TreeRow() {
         
@@ -43,7 +44,7 @@ public class TreeRow extends Widget implements HasAllMouseHandlers {
     public void setDragValues() {
         dragIndex = index;
         dragModelIndex = modelIndex;
-        dragItem = (TreeDataItem)item.clone();
+        dragItem = item;
     }
     
     public Widget getDragProxy() {

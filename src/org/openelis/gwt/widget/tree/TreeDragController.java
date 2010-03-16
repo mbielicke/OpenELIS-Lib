@@ -9,6 +9,7 @@ import org.openelis.gwt.event.DragStartEvent;
 import org.openelis.gwt.event.DragStartHandler;
 import org.openelis.gwt.event.HasBeforeDragStartHandlers;
 import org.openelis.gwt.event.HasDragStartHandlers;
+import org.openelis.gwt.widget.table.TableRow;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -88,8 +89,10 @@ public class TreeDragController extends PickupDragController implements HasBefor
     
     @Override
     public void dragStart() {
-        context.draggable.addStyleName("disabled");
+        ((TreeRow)context.draggable).dragItem.enabled = false;
+        ((TreeRow)context.draggable).addStyleName(TreeView.disabledStyle);
         super.dragStart();
+        ((TreeRow)context.draggable).removeStyleName("dragdrop-dragging");
 		if(getHandlerCount(DragStartEvent.getType()) > 0){
 			DragStartEvent.fire(this, (TreeRow)context.draggable);
 		}
@@ -104,8 +107,10 @@ public class TreeDragController extends PickupDragController implements HasBefor
     
     @Override
     public void dragEnd() {
-        context.draggable.removeStyleName("TreeHighlighted");
-        context.draggable.removeStyleName("disabled");
+        //context.draggable.removeStyleName("TreeHighlighted");
+        ((TreeRow)context.draggable).dragItem.enabled = true;
+		if(((TreeRow)context.draggable).controller.isRowDrawn(((TableRow)context.draggable).dragModelIndex))
+			((TreeRow)context.draggable).controller.renderer.loadRow(((TableRow)context.draggable).dragModelIndex);
         proxy = null;
         super.dragEnd();
     }
@@ -135,11 +140,11 @@ public class TreeDragController extends PickupDragController implements HasBefor
 				ap.add(proxy);
 			}
 			hp.setStyleName(PRIVATE_CSS_PROXY);
-			container.add(hp, 0, 0
-					);
+			container.add(hp, widgetArea.getLeft() - draggableArea.getLeft(), widgetArea.getTop()
+					- draggableArea.getTop());
 		}
 		//this.proxy = container;
-		DOM.setStyleAttribute(container.getElement(), "zIndex", "1000");
+		//DOM.setStyleAttribute(container.getElement(), "zIndex", "1000");
 		return container;
 	}
     

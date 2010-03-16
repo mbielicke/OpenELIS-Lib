@@ -30,9 +30,12 @@ import java.util.Stack;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.Label;
+import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableDataCell;
+import org.openelis.gwt.widget.table.TableDataRow;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -52,9 +55,12 @@ public class TreeRenderer {
     }
     
     public void createRow(int i) {
+    	if(controller.columns.size() == 0)
+    		return;
         controller.view.table.setWidget(i, 0, new Label());
         controller.view.table.getFlexCellFormatter().setHeight(i, 0, controller.cellHeight+"px");
         TreeRow row = new TreeRow(controller.view.table.getRowFormatter().getElement(i));
+        row.controller = controller;
         row.addMouseOverHandler(controller);
         row.addMouseOutHandler(controller);
         row.index = i;
@@ -115,7 +121,7 @@ public class TreeRenderer {
         }
         ArrayList<TreeColumn> columns = controller.columns.get(controller.getRow(modelIndex).leafType);
         for (int i = 0; i < row.cells.size(); i++) {
-        	Widget wid = columns.get(i).getDisplayWidget(row.cells.get(i));
+        	Widget wid = columns.get(i).getDisplayWidget(row);
         	if(i == 0){
         		ItemGrid ig =  createItem(row);
         		ig.setWidth(columns.get(i).getCurrentWidth());
@@ -130,20 +136,22 @@ public class TreeRenderer {
                 rows.get(index).addStyleName(controller.view.selectedStyle);
             else
                 rows.get(index).removeStyleName(controller.view.selectedStyle);
-            if(controller.isEnabled(modelIndex)) 
-                rows.get(index).removeStyleName(controller.view.disabledStyle);
-            else
+        
+            rows.get(index).removeStyleName(controller.view.disabledStyle);            
+            if(!controller.isEnabled(modelIndex))  {
                 rows.get(index).addStyleName(controller.view.disabledStyle);
+            }
         }
     }
     
-
+    public void loadRow(int index) {
+    	loadRow(controller.treeIndex(index),index);
+    }
     
     public void scrollLoad(int scrollPos){
         if(controller.activeWidget != null){
-            stopEditing();
+        	controller.finishEditing();
             controller.selectedCol = -1;
-            controller.selectedRow--;
         }
         int rowsPer = controller.maxRows;
         if(controller.maxRows > controller.shownRows()){
@@ -176,7 +184,7 @@ public class TreeRenderer {
     
     public void setCellEditor(int row, int col) {
     	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
-        controller.activeWidget = (Widget)column.getWidgetEditor((TableDataCell)controller.getCell(row,col));
+        controller.activeWidget = (Widget)column.getWidgetEditor(controller.getRow(row));
         if(col == 0)
         	((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(controller.activeWidget);
         else
@@ -188,36 +196,62 @@ public class TreeRenderer {
     public void setCellDisplay(int row, int col) {
     	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
     	if(col == 0)
-    		((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(column.getDisplayWidget(((TableDataCell)controller.getCell(row,col))));
+    		((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(column.getDisplayWidget(controller.getRow(row)));
     	else
-    		controller.view.table.setWidget(controller.treeIndex(row), col, column.getDisplayWidget((TableDataCell)controller.getCell(row,col)));
+    		controller.view.table.setWidget(controller.treeIndex(row), col, column.getDisplayWidget(controller.getRow(row)));
     }
 
+    @SuppressWarnings("unchecked")
     public boolean stopEditing() {
-        if(controller.activeWidget != null){
+        if(controller.activeWidget != null && !(controller.activeWidget instanceof Label)){
         	Object currVal = controller.rows.get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
 	        if(controller.activeWidget instanceof Focusable)
     	    	((Focusable)controller.activeWidget).setFocus(false);
 	        Object newVal = null;
-        	if(controller.activeWidget instanceof AutoComplete){
-        		newVal = ((AutoComplete)controller.activeWidget).getSelection();
-        	}else
-        		newVal = ((HasField)controller.activeWidget).getFieldValue();
-
-        	if(controller.activeWidget instanceof HasField){
-          		if(((HasField)controller.activeWidget).getExceptions() != null){
-        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
-        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)controller.activeWidget).getExceptions())
-        				exceps.add((LocalizedException)exc.clone());
-        				
-        			 controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
-        		}else
-        			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        	if(controller.activeWidget instanceof Dropdown) {
+        		if(((Dropdown)controller.activeWidget).popup.isShowing()){
+        			((Dropdown)controller.activeWidget).popup.hide(true);	
+        		}
+        		newVal = ((Dropdown)controller.activeWidget).getSelectionKeys();
         	}
-        	controller.rows.get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
+        	if(controller.activeWidget instanceof AutoComplete){
+        		if(((AutoComplete)controller.activeWidget).popup.isShowing())
+        			((AutoComplete)controller.activeWidget).popup.hide(true);
+        		if(controller.queryMode)
+        			newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
+        		else
+        			newVal = ((AutoComplete)controller.activeWidget).getSelection();
+        	}else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown)){
+        		newVal = ((HasField)controller.activeWidget).getField().queryString;
+        	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
+        		if(//((HasField)controller.activeWidget).getFieldValue() == null &&
+        		   !((TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
+        		     newVal = ((TextBox)controller.activeWidget).getText();
+        	}
+        	if(newVal == null)		
+        		newVal = ((HasField)controller.activeWidget).getFieldValue();
+        	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
+        	if(newVal instanceof TableDataRow)
+        		newVal = ((TableDataRow)newVal).key;
+        	if(currVal instanceof TableDataRow)
+        		currVal = ((TableDataRow)currVal).key;
+        	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
+        	if(changed) {
+        		Widget wid = controller.activeWidget;
+        		if(wid instanceof HasField){
+        			if(((HasField)wid).getExceptions() != null){
+        				ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
+        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions())
+        					exceps.add((LocalizedException)exc.clone());
+        				
+        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
+        			}else
+        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        		}
+        	}
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;
-            return (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
+            return changed;
         }
         return false;
     }

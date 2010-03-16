@@ -2,9 +2,12 @@ package org.openelis.gwt.widget.table;
 
 import org.openelis.gwt.event.BeforeDropEvent;
 import org.openelis.gwt.event.BeforeDropHandler;
+import org.openelis.gwt.event.DropEnterEvent;
+import org.openelis.gwt.event.DropEnterHandler;
 import org.openelis.gwt.event.DropEvent;
 import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasBeforeDropHandlers;
+import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -29,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
 * Allows one or more table rows to be dropped into an existing table.
 */
-public final class TableIndexDropController extends AbstractPositioningDropController implements HasBeforeDropHandlers<TableRow>, HasDropHandlers<TableRow> {
+public final class TableIndexDropController extends AbstractPositioningDropController implements HasBeforeDropHandlers<TableRow>, HasDropHandlers<TableRow>,HasDropEnterHandlers<TableRow> {
 
 	private static final String CSS_DROP_POSITIONER = "DropPositioner";
 
@@ -74,8 +77,12 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 			throw new VetoDragException();
 		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
 			BeforeDropEvent event = BeforeDropEvent.fire(this, (TableRow)context.draggable, table.getRow(targetRow));
-			if(event != null && event.isCancelled())
+			if(event != null && event.isCancelled()){
+				positioner.removeFromParent();
+				positioner = null;
+				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 				throw new VetoDragException();
+			}
 		}
 		super.onPreviewDrop(context);
 	}
@@ -85,7 +92,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 	public void onEnter(DragContext context) {
 		super.onEnter(context);
 		positioner = newPositioner(context); 
-		((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
+		//((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
 	}
 
 	@Override
@@ -124,8 +131,10 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onLeave(DragContext context) {
-		positioner.removeFromParent();
-		positioner = null;
+		if(positioner != null) {
+			positioner.removeFromParent();
+			positioner = null;
+		}
 		((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 		super.onLeave(context);
 	}
@@ -138,9 +147,16 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 			scroll.cancel();
 			scroll = null;
 		}
-		targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
+		int newRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
 				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
-		Location tableLocation = new WidgetLocation(table, RootPanel.get());
+		if(newRow == targetRow) {
+			if(targetRow == 0 || targetRow == table.maxRows -1)
+				checkScroll(targetRow);
+			return;
+		}
+		targetRow = newRow;
+		Location tableLocation = new WidgetLocation(table, context.boundaryPanel);
+		validDrop = true;
 		if(table.numRows() > 0){
 			if(table.dragController == context.dragController){
 				int checkIndex = targetRow;
@@ -154,15 +170,25 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 					return;
 				}
 			}
-			TableRow row = table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
-			Location widgetLocation = new WidgetLocation(row, RootPanel.get());
-			RootPanel.get().add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
+			if(getHandlerCount(DropEnterEvent.getType()) > 0){
+				DropEnterEvent event = DropEnterEvent.fire(this, (TableRow)context.draggable, table.renderer.rows.get(targetRow == -1 ? 0 : targetRow));
+				if(event != null && event.isCancelled())
+					validDrop = false;
+			}
+			if(validDrop) {
+				TableRow row = table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
+				Location widgetLocation = new WidgetLocation(row, RootPanel.get());
+				context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
 					+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
+			}else{
+				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
+				positioner.removeFromParent();
+			}
 		}else{
 			Location headerLocation = new WidgetLocation(table.view.header,RootPanel.get());
 			RootPanel.get().add(positioner,tableLocation.getLeft(),headerLocation.getTop()+table.view.header.getOffsetHeight());
 		}
-		validDrop = true;
 		if(targetRow == 0 || targetRow == table.maxRows -1)
 			checkScroll(targetRow);
 	}
@@ -180,12 +206,11 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 					scroll = new Timer() {
 						public void run() {
-							table.view.setScrollPosition(table.view.scrollBar.getScrollPosition()+10);
+							table.view.setScrollPosition(table.view.scrollBar.getScrollPosition()+20);
 							checkScroll(targetRow);
-							//table.view.setScrollPosition(table.view.scrollBar.getScrollPosition()+10);
 						}
 					};
-					scroll.schedule(500);
+					scroll.schedule(200);
 					return true;
 				}
 			}
@@ -194,12 +219,11 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 					scroll = new Timer() {
 						public void run() {
-							table.view.setScrollPosition(table.view.scrollBar.getScrollPosition()-10);
+							table.view.setScrollPosition(table.view.scrollBar.getScrollPosition()-20);
 							checkScroll(targetRow);
-							//table.view.setScrollPosition(table.view.scrollBar.getScrollPosition()-10);
 						}
 					};
-					scroll.schedule(500);
+					scroll.schedule(200);
 					return true;
 				}
 			}  
@@ -260,6 +284,11 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	public HandlerRegistration addDropHandler(DropHandler<TableRow> handler) {
 		return addHandler(handler,DropEvent.getType());
+	}
+
+	public HandlerRegistration addDropEnterHandler(
+			DropEnterHandler<TableRow> handler) {
+		return addHandler(handler, DropEnterEvent.getType());
 	}
 
 }

@@ -96,7 +96,10 @@ public class TreeColumn {
     }
     
     
-    public Widget getDisplayWidget(TableDataCell cell) {
+    public Widget getDisplayWidget(TreeDataItem row) {
+    	TableDataCell cell = new TableDataCell(null);
+    	if(columnIndex < row.cells.size())
+    		cell = row.cells.get(columnIndex);
     	Widget wid = null;
     	Object val = null;
     	if(colWidget instanceof CheckBox){
@@ -119,14 +122,18 @@ public class TreeColumn {
     				if(val == null)
     					val = "";
     			}else{
-    				TableDataRow row = (TableDataRow)cell.getValue();
+    				TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(row  != null)
     					((AutoComplete)colWidget).setSelection(row);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
+    				val = ((AutoComplete)colWidget).getTextBoxDisplay();
     			}
     		}else if(colWidget instanceof Dropdown){
-    			((Dropdown)colWidget).setSelection(cell.getValue());
+    			if(cell.getValue() instanceof ArrayList)
+    				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+    			else
+    				((Dropdown)colWidget).setSelection(cell.getValue());
     			val = ((Dropdown)colWidget).getTextBoxDisplay();
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
@@ -138,8 +145,10 @@ public class TreeColumn {
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				label.setText((((CalendarLookUp) colWidget).getField().format()));
-    			}else if(colWidget instanceof DropdownWidget) {
+    			}else if(colWidget instanceof AutoComplete && controller.queryMode) {
     				label.setText((String)val);
+    			}else if(colWidget instanceof DropdownWidget) {
+    				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
     				label.setText(((TextBoxBase)colWidget).getText());
     			}else if(colWidget instanceof Label)
@@ -154,7 +163,10 @@ public class TreeColumn {
         return wid;
     }
     
-    public void loadWidget(Widget widget, TableDataCell cell) {
+    public void loadWidget(Widget widget, TreeDataItem row, int modelIndex) {
+    	TableDataCell cell = new TableDataCell(null);
+    	if(columnIndex < row.cells.size())
+    		cell = row.cells.get(columnIndex);
     	if(colWidget instanceof CheckBox){
     		if(CheckBox.CHECKED.equals(cell.getValue()))
     			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CHECKED_STYLE);
@@ -167,13 +179,19 @@ public class TreeColumn {
     			if(controller.queryMode){
     				((Label)widget).setText((String)cell.getValue());
     			}else{
-    				TableDataRow row = (TableDataRow)cell.getValue();
+    				TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(row != null)
-    					((AutoComplete)colWidget).setSelection(row);
+    					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
     				((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
     			}
+    		}else if(colWidget instanceof Dropdown){
+        		if(cell.getValue() instanceof ArrayList)
+    				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+    			else
+    				((Dropdown)colWidget).setSelection(cell.getValue());
+        		((Label)widget).setText(((Dropdown)colWidget).getTextBoxDisplay());
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
     			if(colWidget instanceof CalendarLookUp) {
@@ -193,12 +211,14 @@ public class TreeColumn {
     	setExceptions(widget,cell.exceptions);
     }
     
-    public Widget getWidgetEditor(TableDataCell cell) {
+    public Widget getWidgetEditor(TableDataRow row) {
+    	TableDataCell cell = new TableDataCell(null);
+    	if(columnIndex < row.cells.size())
+    		cell = row.cells.get(columnIndex);
     	Widget editor = colWidget;
     	if(colWidget instanceof CheckBox){
     		CheckBoxContainer ap = new CheckBoxContainer();
     		((CheckBox)editor).setValue((String)cell.getValue());
-    		//editor = controller.view.table.getWidget(controller.activeRow,controller.activeCell);
     		ap.setWidth((currentWidth)+ "px");
     		ap.add(editor);
     		return ap;
@@ -209,14 +229,17 @@ public class TreeColumn {
     		if(controller.queryMode){
     			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
-    			TableDataRow row =  (TableDataRow)cell.getValue();
+    			TableDataRow vrow =  (TableDataRow)cell.getValue();
     			if(row != null)
-    				((AutoComplete)colWidget).setSelection(row);
+    				((AutoComplete)colWidget).setSelection(vrow);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
     		}
 		}else if(colWidget instanceof Dropdown){
-			((Dropdown)colWidget).setSelection(cell.getValue());
+    		if(cell.getValue() instanceof ArrayList)
+				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+			else
+				((Dropdown)colWidget).setSelection(cell.getValue());
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
        
@@ -320,10 +343,10 @@ public class TreeColumn {
     	int col = controller.columns.get(leafType).indexOf(this);
     	ArrayList<Object> checkList = new ArrayList<Object>();
     	checkList.add(null);
-    	for(TableDataRow row : controller.getData()){
+    	for(TreeDataItem row : controller.getData()){
     		if(checkList.contains(row.cells.get(col).getValue()))
     			continue;
-    		Filter filter = new Filter(row.cells.get(col).getValue(),getDisplayWidget(row.cells.get(col)),false);
+    		Filter filter = new Filter(row.cells.get(col).getValue(),getDisplayWidget(row),false);
     		if(filtered){
     			if(filtersInForce.contains(row.cells.get(col).getValue())){
     				filter.filtered = true;
@@ -454,5 +477,14 @@ public class TreeColumn {
 
     }
 
+    protected Widget setCellDisplay(int modelIndex) {
+    	int tableIndex = controller.treeIndex(modelIndex);
+    	controller.renderer.setCellDisplay(modelIndex, columnIndex);
+    	return controller.view.table.getWidget(tableIndex, columnIndex);
+    }
+    
+    protected void resetAlign(int modelIndex) {
+    	controller.view.table.getFlexCellFormatter().setHorizontalAlignment(controller.treeIndex(modelIndex), columnIndex, getAlign());
+    }
     
 }
