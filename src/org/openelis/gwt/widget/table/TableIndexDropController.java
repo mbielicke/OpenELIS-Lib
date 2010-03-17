@@ -73,6 +73,10 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onPreviewDrop(DragContext context) throws VetoDragException {
+		if(scroll != null) {
+			scroll.cancel();
+			scroll = null;
+		}
 		if(!validDrop) 
 			throw new VetoDragException();
 		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
