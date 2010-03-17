@@ -1952,10 +1952,12 @@ public class UIGenerator extends Generator {
                 NodeList leafList = ((Element)node).getElementsByTagName("leaf");
                 sw.println("wid"+id+".setColumns(new HashMap<String,ArrayList<TreeColumn>>());");
                 for(int h = 0; h < leafList.getLength(); h++) {
-                	NodeList colList = ((Element)leafList.item(h)).getElementsByTagName("col");
+                	NodeList colList = leafList.item(h).getChildNodes();
                 	sw.println("ArrayList<TreeColumn> cols"+id+"_"+h+" = new ArrayList<TreeColumn>();");
                 	for(int i = 0; i < colList.getLength(); i++) {
-                		Node col = colList.item(i);
+                    	Node col = colList.item(i);
+                    	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                    		continue;
                 		sw.println("TreeColumn column"+id+"_"+h+"_"+i+" = new TreeColumn();");
                 		if(col.getAttributes().getNamedItem("key") != null)
                 			sw.println("column"+id+"_"+h+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
