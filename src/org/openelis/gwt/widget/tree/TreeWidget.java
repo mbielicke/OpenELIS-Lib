@@ -296,7 +296,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
            
     		if(treeIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
                 return;
-            select(modelIndexList[cell.getRowIndex()], cell.getCellIndex());
+            select(modelIndexList[cell.getRowIndex()], cell.getCellIndex(),true);
 		}
     	ctrlKey = false;
     	shiftKey = false;
@@ -333,6 +333,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	return -1;
     }
     
+    protected void select(int row, int col) {
+    	select(row,col,false);
+    }
+    
     /**
      * This method will cause the table row passed to be selected. If the row is
      * already selected, the column clicked will be opened for editing if the
@@ -341,7 +345,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param row
      * @param col
      */
-    protected void select(final int row, final int col) {
+    protected void select(final int row, final int col, boolean byClick) {
     	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode) {
     		if(rows.get(row).parent == null){
     			NavigationSelectionEvent.fire(this,rows.get(row).childIndex);
@@ -381,7 +385,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             	SelectionEvent.fire(this,rows.get(row));
         }
         if(isEnabled() && canEditCell(row,col)){
-        	if(columns.get(rows.get(row).leafType).get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
+        	if(byClick && columns.get(rows.get(row).leafType).get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
         		clearCellExceptions(row, col);
         		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
         			setCell(row,col,CheckBox.UNCHECKED);
@@ -456,7 +460,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public void startEditing(int row, int col) {
     	if(isRowDrawn(row))
-    		select(row, col);
+    		select(row, col,false);
     }
 
 

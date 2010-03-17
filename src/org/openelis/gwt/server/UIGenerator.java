@@ -1954,10 +1954,12 @@ public class UIGenerator extends Generator {
                 for(int h = 0; h < leafList.getLength(); h++) {
                 	NodeList colList = leafList.item(h).getChildNodes();
                 	sw.println("ArrayList<TreeColumn> cols"+id+"_"+h+" = new ArrayList<TreeColumn>();");
+                	int colIndex = -1;
                 	for(int i = 0; i < colList.getLength(); i++) {
                     	Node col = colList.item(i);
                     	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                     		continue;
+                    	colIndex++;
                 		sw.println("TreeColumn column"+id+"_"+h+"_"+i+" = new TreeColumn();");
                 		if(col.getAttributes().getNamedItem("key") != null)
                 			sw.println("column"+id+"_"+h+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
@@ -1988,6 +1990,7 @@ public class UIGenerator extends Generator {
                 			}
                 		}
                 		sw.println("column"+id+"_"+h+"_"+i+".controller = wid"+id+";");
+                		sw.println("column"+id+"_"+h+"_"+i+".columnIndex = "+colIndex+";");
                 		sw.println("cols"+id+"_"+h+".add(column"+id+"_"+h+"_"+i+");");
                 	}
                 	sw.println("wid"+id+".getColumns().put(\""+leafList.item(h).getAttributes().getNamedItem("key").getNodeValue()+"\", cols"+id+"_"+h+");");
