@@ -73,7 +73,7 @@ public class QueryBuilderV2 {
             		sb.append("IS NULL ");
             }else {
             	if (comp.startsWith("!")) {
-            		sb.append("not ");
+            		sb.append("<> ");
             		comp = comp.substring(1);
             	}
             	if (comp.equals("~"))
