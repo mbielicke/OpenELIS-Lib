@@ -67,14 +67,20 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         return -1;
     }
     
-    private void tabToNextRow() {
-        int row = findNextActive(controller.selectedRow);
+    private void tabToNextRow(int curRow) {
+        int row = findNextActive(curRow);
         if(row < 0)
         	return;
         int col = 0;
        
-        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
+        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col))) {
             col++;
+            if(col == controller.columns.size()) {
+            	tabToNextRow(row);
+            	return;
+            } 
+        }
+       
         if(row < controller.numRows()){
             final int fRow = row;
             final int fCol = col;
@@ -90,13 +96,19 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
     }
     
-    private void tabToPrevRow() {
-        final int row = findPrevActive(controller.selectedRow);
+    private void tabToPrevRow(int curRow) {
+        final int row = findPrevActive(curRow);
         if(row < 0)
         	return;
         int col = controller.columns.size() - 1;
-        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col)))
+        while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col))) {
             col--;
+            if(col < 0) {
+            	tabToPrevRow(row);
+            	return;
+            }
+        }
+        	
         final int fCol = col;
        	if(!controller.isRowDrawn(row)){
     		controller.view.setScrollPosition(controller.view.top-(controller.cellHeight*(controller.selectedRow-row)));
@@ -161,14 +173,14 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             }else if(controller.selectedRow < 0) {
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                        tabToNextRow();
+                        tabToNextRow(controller.selectedRow);
                     }
                 });
             }else {
                 controller.selectedRow--;
                 DeferredCommand.addCommand(new Command() {
                     public void execute() {
-                        tabToNextRow();
+                        tabToNextRow(controller.selectedRow);
                     }
                 });
             }
@@ -187,14 +199,14 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                   return;
             }
             if (controller.selectedCol + 1 >= controller.columns.size()) {
-                tabToNextRow();
+                tabToNextRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol + 1;
                 while (col < controller.columns.size() && (controller.columns.get(col).getColumnWidget() instanceof Label ||
                        (!controller.canEditCell(controller.selectedRow, col)))) 
                     col++;
                 if(col == controller.columns.size()){
-                    tabToNextRow();
+                    tabToNextRow(controller.selectedRow);
                 }else{
                     final int fCol = col;
                     DeferredCommand.addCommand(new Command() {
@@ -215,14 +227,14 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                return;
             }
             if (controller.selectedCol - 1 < 0) {
-                tabToPrevRow();
+                tabToPrevRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol - 1;
                 while (col > -1 && ((controller.columns.get(col).getColumnWidget() instanceof Label) ||
                                     (!controller.canEditCell(controller.selectedRow,col))))
                     col--;
                 if(col < 0){
-                    tabToPrevRow();
+                    tabToPrevRow(controller.selectedRow);
                 }else{
                     final int fCol = col;
                     controller.select(controller.selectedRow, fCol);
