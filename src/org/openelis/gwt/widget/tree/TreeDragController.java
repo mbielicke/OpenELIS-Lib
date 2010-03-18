@@ -109,8 +109,8 @@ public class TreeDragController extends PickupDragController implements HasBefor
     public void dragEnd() {
         //context.draggable.removeStyleName("TreeHighlighted");
         ((TreeRow)context.draggable).dragItem.enabled = true;
-		if(((TreeRow)context.draggable).controller.isRowDrawn(((TableRow)context.draggable).dragModelIndex))
-			((TreeRow)context.draggable).controller.renderer.loadRow(((TableRow)context.draggable).dragModelIndex);
+		if(((TreeRow)context.draggable).controller.isRowDrawn(((TreeRow)context.draggable).dragModelIndex))
+			((TreeRow)context.draggable).controller.renderer.loadRow(((TreeRow)context.draggable).dragModelIndex);
         proxy = null;
         super.dragEnd();
     }
