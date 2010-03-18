@@ -164,6 +164,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
        }
     };
 
+    public static final int position=100;
     private HorizontalPanel status = new HorizontalPanel();
     private FocusPanel fp = new FocusPanel();
     private FocusPanel close = new FocusPanel();
@@ -320,7 +321,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             modalPanel.setStyleName("ModalPanel");
             modalPanel.setHeight(Window.getClientHeight()+"px");
             modalPanel.setWidth(Window.getClientWidth()+"px");
-            modalPanel.add(this,100,100);
+            modalPanel.add(this,position,position);
             RootPanel.get().add(modalPanel); 
             RootPanel.get().setWidgetPosition(modalPanel,0,0);
             setVisible(true);
@@ -330,7 +331,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             dragController.makeDraggable(this,cap);
         }else{
         	RootPanel.get().add(this);
-        	RootPanel.get().setWidgetPosition(this, 100, 100);
+        	RootPanel.get().setWidgetPosition(this, position, position);
         	setVisible(true);
         	dragController = new PickupDragController(RootPanel.get(),true);
         	dropController = new AbsolutePositionDropController(RootPanel.get());
