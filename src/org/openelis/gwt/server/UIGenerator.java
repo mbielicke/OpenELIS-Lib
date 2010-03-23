@@ -2122,10 +2122,10 @@ public class UIGenerator extends Generator {
     	            sw.println("field"+id+".setBegin(Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\"));");
     	        if (node.getAttributes().getNamedItem("end") != null)
     	            sw.println("field"+id+".setEnd(Byte.parseByte(\""+node.getAttributes().getNamedItem("end").getNodeValue()+"\"));");
-    	        if (node.getAttributes().getNamedItem("max") != null)
-    	            sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
-    	        if (node.getAttributes().getNamedItem("min") != null)
-    	            sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("min").getNodeValue()+");");
+    	        if (node.getAttributes().getNamedItem("maxValue") != null)
+    	            sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("maxValue").getNodeValue()+");");
+    	        if (node.getAttributes().getNamedItem("minValue") != null)
+    	            sw.println("field"+id+".setMin("+node.getAttributes().getNamedItem("minValue").getNodeValue()+");");
     	        if (node.hasChildNodes()) {
     	            String deflt = node.getFirstChild().getNodeValue();
     	            Date dat = null;
@@ -2161,10 +2161,10 @@ public class UIGenerator extends Generator {
     			sw.println("IntegerField field"+id+" = new IntegerField();");
     			if(node.getAttributes().getNamedItem("required") != null)
     				sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
-    			if(node.getAttributes().getNamedItem("max") != null)
-    				sw.println("field"+id+".setMax(new Integer("+node.getAttributes().getNamedItem("max").getNodeValue()+"));");
-    			if(node.getAttributes().getNamedItem("min") != null)
-    				sw.println("field"+id+".setMin(new Integer("+node.getAttributes().getNamedItem("min").getNodeValue()+"));");
+    			if(node.getAttributes().getNamedItem("maxValue") != null)
+    				sw.println("field"+id+".setMax(new Integer("+node.getAttributes().getNamedItem("maxValue").getNodeValue()+"));");
+    			if(node.getAttributes().getNamedItem("minValue") != null)
+    				sw.println("field"+id+".setMin(new Integer("+node.getAttributes().getNamedItem("minValue").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            sw.println("field"+id+".setFormat(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
     	        }
@@ -2178,10 +2178,10 @@ public class UIGenerator extends Generator {
     			sw.println("LongField field"+id+" = new LongField();");
     			if(node.getAttributes().getNamedItem("required") != null)
     				sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
-    			if(node.getAttributes().getNamedItem("max") != null)
-    				sw.println("field"+id+".setMax(new Long("+node.getAttributes().getNamedItem("max").getNodeValue()+"));");
-    			if(node.getAttributes().getNamedItem("min") != null)
-    				sw.println("field"+id+".setMin(new Long("+node.getAttributes().getNamedItem("min").getNodeValue()+"));");
+    			if(node.getAttributes().getNamedItem("maxValue") != null)
+    				sw.println("field"+id+".setMax(new Long("+node.getAttributes().getNamedItem("maxValue").getNodeValue()+"));");
+    			if(node.getAttributes().getNamedItem("minValue") != null)
+    				sw.println("field"+id+".setMin(new Long("+node.getAttributes().getNamedItem("minValue").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            sw.println("field"+id+".setFormat(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
     	        }
@@ -2196,10 +2196,10 @@ public class UIGenerator extends Generator {
     			sw.println("DoubleField field"+id+" = new DoubleField();");
     	        if (node.getAttributes().getNamedItem("required") != null)
     	        	sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
-    	        if (node.getAttributes().getNamedItem("max") != null)
-    	            sw.println("field"+id+".setMax(new Double("+node.getAttributes().getNamedItem("max").getNodeValue()+"));");
-    	        if (node.getAttributes().getNamedItem("min") != null)
-    	            sw.println("field"+id+".setMin(new Double("+node.getAttributes().getNamedItem("min").getNodeValue()+"));");
+    	        if (node.getAttributes().getNamedItem("maxValue") != null)
+    	            sw.println("field"+id+".setMax(new Double("+node.getAttributes().getNamedItem("maxValue").getNodeValue()+"));");
+    	        if (node.getAttributes().getNamedItem("minValue") != null)
+    	            sw.println("field"+id+".setMin(new Double("+node.getAttributes().getNamedItem("minValue").getNodeValue()+"));");
     	        if (node.getAttributes().getNamedItem("pattern") != null) {
     	            sw.println("field"+id+".setFormat(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
     	        }

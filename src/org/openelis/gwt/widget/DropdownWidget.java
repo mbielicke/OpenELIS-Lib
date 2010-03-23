@@ -62,6 +62,8 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public String popWidth;
     
+    public boolean queryMode;
+    
     public TextBox textbox = new TextBox() {
     	@Override
     	protected void delegateEvent(Widget target, GwtEvent<?> event) {
@@ -200,8 +202,9 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     }    
     
     public void setSelection(Object key) {
-        clearSelections();
-        selectRow(key);
+        unselect(-1);
+        if(!queryMode && key != null)
+        	selectRow(key);
         textbox.setText(getTextBoxDisplay());
         //textBoxDefault = textbox.getText();
     }

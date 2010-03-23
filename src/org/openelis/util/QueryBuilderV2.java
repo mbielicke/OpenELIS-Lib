@@ -1,6 +1,7 @@
 package org.openelis.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -466,7 +467,17 @@ public class QueryBuilderV2 {
     							dateType);
     				}
     			} else {
-    				Date date = new Date(param.replaceAll("-","/"));
+    				Date date;
+    				if(param.indexOf("-") < 0 && param.indexOf("/") < 0){
+    					dateType = TemporalType.TIMESTAMP;
+						String[] time = param.split(":");
+						if(time.length == 3)
+							date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2])); 	
+						else
+							date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
+    				}else{
+    					date = new Date(param.replaceAll("-","/"));
+    				}
     				query.setParameter(paramName + i, date, dateType);
     			}
     		}

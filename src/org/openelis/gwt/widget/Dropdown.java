@@ -64,7 +64,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public String dropwidth;
     public int minWidth;
     HorizontalPanel hp; 
-    public boolean queryMode;
     public ArrayList<TableDataRow> searchText;
     private int delay = 1;
     
@@ -259,7 +258,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 
     public void setValue(T value, boolean fireEvents) {
         T old = getValue();
-        setSelection(value);
+       	setSelection(value);
         if(fireEvents)
             ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
@@ -322,8 +321,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		if(!queryMode)
 			return;
 		ArrayList<TableDataRow> selections = getSelections();
-		if(selections.size() == 1 && selections.get(0).key ==  null)
-			return;
 		if(selections.size() > 0) {
 			QueryData qd = new QueryData();
 			qd.key = key;
@@ -335,7 +332,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			for(TableDataRow row : selections) {
 				if(selections.indexOf(row) > 0)
 					qd.query += "|";
-				qd.query += row.key.toString();
+				if(row.key == null)
+					qd.query += "NULL";
+				else
+					qd.query += row.key.toString();
 			}
 			list.add(qd);
 		}

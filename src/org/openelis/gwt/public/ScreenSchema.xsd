@@ -144,8 +144,8 @@
 			<xsd:attribute name="style" type="xsd:string"/>
 			<xsd:attribute name="width" type="xsd:string"/>
 			<xsd:attribute name="enable" type="xsd:boolean"/>
-			<xsd:attribute name="max" type="xsd:integer"/>
-			<xsd:attribute name="min" type="xsd:integer"/>
+			<xsd:attribute name="maxValue" type="xsd:integer"/>
+			<xsd:attribute name="minValue" type="xsd:integer"/>
 		</xsd:complexType>
 	</xsd:element>
 
@@ -244,6 +244,8 @@
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
+			<xsd:attribute name="max" type="xsd:integer"/>
+			<xsd:attribute name="min" type="xsd:integer"/>
 		</xsd:complexType>
 	</xsd:element>
 
@@ -440,6 +442,8 @@
 			<xsd:attribute name="mask" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
+			<xsd:attribute name="max" type="xsd:integer"/>
+			<xsd:attribute name="min" type="xsd:integer"/>
 		</xsd:complexType>
 	</xsd:element>
 
@@ -853,8 +857,8 @@
 				</xsd:restriction>
 			</xsd:simpleType>
 		</xsd:attribute>
-		<xsd:attribute name="max" type="xsd:integer" />
-		<xsd:attribute name="min" type="xsd:integer" />
+		<xsd:attribute name="maxValue" type="xsd:integer" />
+		<xsd:attribute name="minValue" type="xsd:integer" />
 		<xsd:attribute name="required" type="xsd:boolean" />
 		<xsd:attribute name="begin" type="xsd:integer" />
 		<xsd:attribute name="end" type="xsd:integer" />
