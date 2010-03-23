@@ -258,6 +258,8 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     		setSelection(null,"");
     		field.checkValue(this);
     		field.drawExceptions(this);
+    		if(fireEvents)
+    			ValueChangeEvent.fire(this, null);
     	}
     	
     }
