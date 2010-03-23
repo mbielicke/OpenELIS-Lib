@@ -53,7 +53,7 @@ public class QueryBuilderV2 {
      * @param fieldName
      * @return
      */
-    private static String getQueryNoOperand(QueryFieldUtil field, String fieldName) {
+    public static String getQueryNoOperand(QueryFieldUtil field, String fieldName) {
 
     	if (field.getParameter() == null || field.getParameter().size() == 0)
             return "";
