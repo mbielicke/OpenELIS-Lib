@@ -225,7 +225,7 @@ public class TableRenderer  {
         	if(controller.activeWidget instanceof AutoComplete){
         		if(((AutoComplete)controller.activeWidget).popup.isShowing())
         			((AutoComplete)controller.activeWidget).popup.hide(true);
-        		if(controller.queryMode)
+        		if(((AutoComplete)controller.activeWidget).queryMode)
         			newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
         		else
         			newVal = ((AutoComplete)controller.activeWidget).getSelection();
