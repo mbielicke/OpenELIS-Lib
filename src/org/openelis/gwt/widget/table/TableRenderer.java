@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.TextBox;
 
@@ -236,8 +237,13 @@ public class TableRenderer  {
         		   !((TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
         		     newVal = ((TextBox)controller.activeWidget).getText();
         	}
-        	if(newVal == null)		
-        		newVal = ((HasField)controller.activeWidget).getFieldValue();
+        	if(newVal == null){
+        		Field field = ((HasField)controller.activeWidget).getField();
+        		if(field.queryMode)
+        			newVal = field.queryString;
+        		else
+        			newVal = field.getValue();
+        	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	
         	if(newVal instanceof TableDataRow)
