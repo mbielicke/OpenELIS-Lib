@@ -315,6 +315,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     	model.add(new TableDataRow(key,display));
     	setModel(model);
     	setSelection(key);
+    	field.setValue(key);
     }
     
     /**
