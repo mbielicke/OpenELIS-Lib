@@ -138,8 +138,12 @@ public class TableColumn {
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
     		}
-    		if(val == null)
-    			val = ((HasField)colWidget).getFieldValue();
+    		if(val == null){
+    			if(((HasField)colWidget).getField().queryMode)
+    				val = ((HasField)colWidget).getField().queryString;
+    			else
+    				val = ((HasField)colWidget).getFieldValue();
+    		}
     		Label label = new Label("");
     		label.setStyleName("ScreenLabel");
     		if(val != null) {
