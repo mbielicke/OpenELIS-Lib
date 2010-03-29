@@ -122,7 +122,7 @@ public class TableColumn {
     				if(val == null)
     					val = "";
     			}else{
-    				TableDataRow vrow = (TableDataRow)cell.getValue();
+    			    TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(vrow  != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
@@ -148,13 +148,19 @@ public class TableColumn {
     		label.setStyleName("ScreenLabel");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
-    				label.setText((((CalendarLookUp) colWidget).getField().format()));
+    				if(((HasField)colWidget).getField().queryMode)
+    					label.setText(((HasField)colWidget).getField().queryString);
+    				else
+    					label.setText((((CalendarLookUp) colWidget).getField().format()));
     			}else if(colWidget instanceof AutoComplete && controller.queryMode) {
     				label.setText((String)val);
     			}else if(colWidget instanceof DropdownWidget) {
     				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
-    				label.setText(((TextBoxBase)colWidget).getText());
+    				if(((HasField)colWidget).getField().queryMode)
+    					label.setText(((HasField)colWidget).getField().queryString);
+    				else
+    					label.setText(((TextBoxBase)colWidget).getText());
     			}else if(colWidget instanceof Label)
     				label.setText(((Label)colWidget).getText());
     		}
@@ -200,11 +206,17 @@ public class TableColumn {
     		}else{
     			((HasField)colWidget).setFieldValue(cell.getValue());
     			if(colWidget instanceof CalendarLookUp) {
-    				((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
+    				if(((HasField)colWidget).getField().queryMode)
+    					((Label)widget).setText(((HasField)colWidget).getField().queryString);
+    				else
+    					((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
     			}else if(colWidget instanceof DropdownWidget) {
     				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
-    				((Label)widget).setText(((TextBoxBase)colWidget).getText());
+    				if(((HasField)colWidget).getField().queryMode)
+    					((Label)widget).setText(((HasField)colWidget).getField().queryString);
+    				else
+    					((Label)widget).setText(((TextBoxBase)colWidget).getText());
     			}else{
     				if(((HasField)colWidget).getFieldValue() != null)
     					((Label)widget).setText(((HasField)colWidget).getField().format());
