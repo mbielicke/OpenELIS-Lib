@@ -88,11 +88,11 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             	controller.view.setScrollPosition(controller.view.top+(controller.cellHeight*(row-controller.selectedRow)));
         		controller.unselect(-1);
             }
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
+            //DeferredCommand.addCommand(new Command() {
+              //  public void execute() {
                     controller.select(fRow, fCol);
-                }
-            });
+               // }
+            //});
         }
     }
     
@@ -134,6 +134,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         boolean shift = event.isShiftKeyDown();
         if (KeyCodes.KEY_DOWN == event.getNativeKeyCode()) {
             if (controller.selectedRow >= 0 && controller.selectedRow < controller.numRows() - 1) {
+            	controller.finishEditing();
             	final int row = findNextActive(controller.selectedRow);
             	final int col = controller.selectedCol;
             	if(!controller.isRowDrawn(row)){
@@ -149,6 +150,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
         if (KeyCodes.KEY_UP == event.getNativeKeyCode()) {
             if (controller.selectedRow > 0) {
+            	controller.finishEditing();
                 final int row = findPrevActive(controller.selectedRow);
                 final int col = controller.selectedCol;
             	if(!controller.isRowDrawn(row)){
@@ -199,6 +201,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                   return;
             }
             if (controller.selectedCol + 1 >= controller.columns.size()) {
+            	controller.finishEditing();
                 tabToNextRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol + 1;
@@ -227,6 +230,7 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                return;
             }
             if (controller.selectedCol - 1 < 0) {
+            	controller.finishEditing();
                 tabToPrevRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol - 1;
