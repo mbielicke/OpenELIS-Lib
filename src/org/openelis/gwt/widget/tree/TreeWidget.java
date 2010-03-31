@@ -634,7 +634,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public void deleteRow(int row) {
     	if(fireEvents)
-    		UnselectionEvent.fire(this,rows.get(selectedRow),null);
+    		UnselectionEvent.fire(this,rows.get(row),null);
     	unselect(row);
     	if(fireEvents) {
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
