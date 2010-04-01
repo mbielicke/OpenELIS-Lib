@@ -102,7 +102,7 @@ public class DoubleField extends Field<Double> {
         if (value == null)
             return "";
         if (pattern != null)
-            return NumberFormat.getFormat(pattern).format(value);
+            return NumberFormat.getFormat(pattern).format(Double.parseDouble(String.valueOf(value)));
         return String.valueOf(value);
     }
 
@@ -134,9 +134,13 @@ public class DoubleField extends Field<Double> {
                                                        .parse(val.toString())));
                 removeException("invalidDouble");
             } catch (Exception e) {
-                valid = false;
-                invalid = true;
-                addException(new LocalizedException("invalidDouble"));
+            	try {
+            		setValue(Double.valueOf(val.toString()));
+            	}catch(Exception ee) {
+            	    valid = false;
+            	    invalid = true;
+            	    addException(new LocalizedException("invalidDouble"));
+            	}
             }
         }
     }
