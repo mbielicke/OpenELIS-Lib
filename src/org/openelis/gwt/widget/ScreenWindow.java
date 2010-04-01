@@ -329,6 +329,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
             dropController = new AbsolutePositionDropController(modalPanel);
             dragController.registerDropController(dropController);
             dragController.makeDraggable(this,cap);
+            dragController.setBehaviorDragProxy(true);
         }else{
         	RootPanel.get().add(this);
         	RootPanel.get().setWidgetPosition(this, position, position);
@@ -337,7 +338,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         	dropController = new AbsolutePositionDropController(RootPanel.get());
         	dragController.registerDropController(dropController);
         	dragController.makeDraggable(this,cap);
-        	dragController.setBehaviorDragProxy(false);
+        	dragController.setBehaviorDragProxy(true);
         }
     }
     
