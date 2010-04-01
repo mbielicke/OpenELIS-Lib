@@ -319,6 +319,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(row == -1){
             selections.clear();
             renderer.rowUnselected(-1);
+            selectedRow = -1;
+            return;
         }else {
             selections.remove(new Integer(row));
         }
