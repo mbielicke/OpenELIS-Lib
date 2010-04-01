@@ -538,6 +538,18 @@ public class UIGenerator extends Generator {
     			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
     		}
     	});
+    	factoryMap.put("fu", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("FileUpload wid"+id+" = new FileUpload();");
+    			sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+
+    					                       "?service="+node.getAttributes().getNamedItem("service").getNodeValue()+"" +
+    					                       	"&method="+node.getAttributes().getNamedItem("method").getNodeValue()+"\");");
+    			setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.FileUpload");
+    		}
+    	});
     	factoryMap.put("AbsolutePanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("AbsolutePanel wid"+id+" = new AbsolutePanel();");

@@ -29,6 +29,15 @@
 			<xsd:attribute name="tab" type="xsd:string"/>
 		</xsd:complexType>
 	</xsd:element>
+	
+		<xsd:element name="fu" substitutionGroup="widgets">
+		<xsd:complexType>
+			<xsd:attribute name="action" type="xsd:string" use="required"/>
+			<xsd:attribute name="service" type="xsd:string" use="required"/>
+			<xsd:attribute name="method" type="xsd:string" use="required"/>
+			<xsd:attributeGroup ref="ScreenWidget" />
+		</xsd:complexType>
+	</xsd:element>
 
 	<xsd:element name="resultsTable" substitutionGroup="widgets">
 		<xsd:complexType>
