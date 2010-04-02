@@ -181,6 +181,26 @@ version="1.0">
 	</appButton>
 </xsl:template>
 
+<!-- select button template -->
+<xsl:template name="selectButton">
+	<appButton key="select" action="select" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+		<HorizontalPanel>
+	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
+        	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
+	  	</HorizontalPanel>
+	</appButton>
+</xsl:template>
+
+<!-- print button template -->
+<xsl:template name="printButton">
+	<appButton key="print" action="print" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+		<HorizontalPanel>
+	    	<AbsolutePanel style="PrintButtonImage" width="20" height="20"/>
+        	<text><xsl:value-of select='resource:getString($constants,"print")'/></text>
+	  	</HorizontalPanel>
+	</appButton>
+</xsl:template>
+
 <!-- buttonpanel divider template -->
 <xsl:template name="buttonPanelDivider">
 	<AbsolutePanel style="ButtonDivider"/>
