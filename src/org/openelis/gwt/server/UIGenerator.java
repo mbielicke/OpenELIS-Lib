@@ -538,12 +538,14 @@ public class UIGenerator extends Generator {
     			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
     		}
     	});
-    	factoryMap.put("fu", new Factory() {
+    	factoryMap.put("fileUpload", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("FileUpload wid"+id+" = new FileUpload();");
     			sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+
     					                       "?service="+node.getAttributes().getNamedItem("service").getNodeValue()+"" +
     					                       	"&method="+node.getAttributes().getNamedItem("method").getNodeValue()+"\");");
+    			if(node.getAttributes().getNamedItem("multi") != null)
+    				sw.println("wid"+id+".setMultiFile("+node.getAttributes().getNamedItem("multi").getNodeValue()+");");
     			setDefaults(node,"wid"+id);
     		}
     		public void addImport() {

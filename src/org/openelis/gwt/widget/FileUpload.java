@@ -16,7 +16,6 @@ public class FileUpload extends Composite {
 		fu.setName("fu");
 		fp.setEncoding(FormPanel.ENCODING_MULTIPART);
 		fp.setMethod(FormPanel.METHOD_POST);
-      
 	}
 	
 	public void setAction(String url) {
