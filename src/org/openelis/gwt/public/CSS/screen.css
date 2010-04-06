@@ -3,7 +3,9 @@ html, body {
    padding:0pt;
    height:100%;
 }
-
+.ModalPanel *{
+	    border:none;
+}
 td {outline:0px;}
 
 div{outline:0px;}
@@ -2042,11 +2044,7 @@ rich text css
 .ModalPanel{
 	    background: url(../Images/transgrey.png);
 	    filter:alpha(opacity=50),
-}
-.ModalPanel div{
-	    border:none;
-}
-.Italic {
+}.Italic {
     width:20;
     height:20;
     background: url(../Images/italic.gif) no-repeat;
@@ -2319,4 +2317,3 @@ background:#deecfd;
     padding-left:6px;
        -moz-user-select: none;
 }
-
