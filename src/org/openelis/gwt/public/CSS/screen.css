@@ -1046,7 +1046,7 @@ cursor:default;}
     padding:0px;
     border:0px;
 }
-.ConfirmWindow .topRight {
+.ConfirmWindow .topRightInner {
     width:8px;
     height:8px;
     background: transparent url("../Images/popuptr.png") no-repeat right top;
@@ -1061,7 +1061,7 @@ cursor:default;}
     height:100%;
     margin-top:8px;
 }
-ConfirmWindow .bottomRight {
+.ConfirmWindow .bottomRightInner {
     background: transparent url("../Images/popupbr.png") no-repeat left bottom;
     width:8px;
     height:8px;
@@ -1085,7 +1085,7 @@ ConfirmWindow .bottomRight {
     height:100%;
     background: url("../Images/popupleft.png") repeat-y left;
 }
-.ConfirmWindow .topLeft {
+.ConfirmWindow .topLeftInner {
     width:8px;
     height:8px;
     background: url("../Images/popuptl.png") no-repeat left top;
@@ -1095,9 +1095,9 @@ ConfirmWindow .bottomRight {
     height:8px;
 }
 .ConfirmWindow .middleCenterInner{
-    padding:16px;
+    padding:4px;
     padding-top:0;
-    padding-left:20;}
+    /*padding-left:20;*/}
 .ConfirmWindow .Button{
     padding-top:16px;}
 .ConfirmWindow .ButtonLeftSide{
@@ -1122,8 +1122,7 @@ ConfirmWindow .bottomRight {
     background: url("../Images/icon-question.gif") no-repeat left top;
 }
 .ConfirmCaption{
-padding-top:12;
-padding-bottom:4;
+  padding:4;
 }
 .ConfirmCaptionLabel{
 color:#486095;
@@ -2044,7 +2043,9 @@ rich text css
 	    background: url(../Images/transgrey.png);
 	    filter:alpha(opacity=50),
 }
-
+.ModalPanel div{
+	    border:none;
+}
 .Italic {
     width:20;
     height:20;
