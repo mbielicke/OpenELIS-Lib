@@ -53,17 +53,23 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 
 	public void onClick(ClickEvent event) {
 		int pos = 0;
-		if(event.getSource() == leftArrow && ap.getWidgetLeft(bar) < 0){ 
-			pos = ap.getWidgetLeft(bar)+15;
-			if(pos > 0)
-				pos = 0;
-			ap.setWidgetPosition(bar,pos, 0);
+		if(event.getSource() == leftArrow) {
+			if(ap.getWidgetLeft(bar) < 0){ 
+				pos = ap.getWidgetLeft(bar)+15;
+				if(pos > 0)
+					pos = 0;
+				ap.setWidgetPosition(bar,pos, 0);
+			}
 		}
-		if(event.getSource() == rightArrow && ap.getWidgetLeft(bar) > -(bar.getOffsetWidth()-(ap.getOffsetWidth()+16))){
-			pos = ap.getWidgetLeft(bar)-15;
-			if(ap.getWidgetLeft(bar) < -(bar.getOffsetWidth()-(ap.getOffsetWidth()+16)))
-				pos = -(bar.getOffsetWidth()-(ap.getOffsetWidth()+16));	
-			ap.setWidgetPosition(bar,pos, 0);
+		if(event.getSource() == rightArrow){
+			if(ap.getWidgetLeft(bar) > -(bar.getOffsetWidth()-(ap.getOffsetWidth()+18))){
+				pos = ap.getWidgetLeft(bar)-15;
+				if(ap.getWidgetLeft(bar) < -(bar.getOffsetWidth()-(ap.getOffsetWidth()+18)))
+					pos = -(bar.getOffsetWidth()-(ap.getOffsetWidth()+3));	
+				ap.setWidgetPosition(bar,pos, 0);
+			}else{
+				ap.setWidgetPosition(bar, -(bar.getOffsetWidth()-(ap.getOffsetWidth()+3)), 0);
+			}
 		}  
 		checkScroll();
 	}
@@ -84,11 +90,13 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 		}else {
 			timer = new Timer() {
 				public void run() {
-					if(ap.getWidgetLeft(bar) > -(bar.getOffsetWidth()-(ap.getOffsetWidth()+16))){
+					if(ap.getWidgetLeft(bar) > -(bar.getOffsetWidth()-(ap.getOffsetWidth()+18))){
 						int pos = ap.getWidgetLeft(bar)-15;
-						if(ap.getWidgetLeft(bar) < -(bar.getOffsetWidth()-(ap.getOffsetWidth()+16)))
-							pos = -(bar.getOffsetWidth()-(ap.getOffsetWidth()+16));	
+						if(ap.getWidgetLeft(bar) < -(bar.getOffsetWidth()-(ap.getOffsetWidth()+18)))
+							pos = -(bar.getOffsetWidth()-(ap.getOffsetWidth()+3));	
 						ap.setWidgetPosition(bar,pos, 0);
+					}else{
+						ap.setWidgetPosition(bar, -(bar.getOffsetWidth()-(ap.getOffsetWidth()+3)), 0);
 					}
 					checkScroll();
 				}	    			
@@ -105,7 +113,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 
 	public void checkScroll() {
 		if(bar.getOffsetWidth() > intWidth){
-			ap.setWidth((intWidth-32)+"px");
+			ap.setWidth((intWidth-36)+"px");
 			hp.getCellFormatter().setVisible(0, 0, true);
 			hp.getCellFormatter().setVisible(0, 2, true);
 			  if(ap.getWidgetLeft(bar) >= 0){
@@ -113,7 +121,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 					  leftArrow.addStyleName("inactive");
 			  }else
 				  leftArrow.removeStyleName("inactive");
-			  if(ap.getWidgetLeft(bar) <= -(bar.getOffsetWidth()-ap.getOffsetWidth())){
+			  if(ap.getWidgetLeft(bar) <= -(bar.getOffsetWidth()-(ap.getOffsetWidth()+3))){
 				  if(rightArrow.getStyleName().indexOf("inactive") == -1)
 					  rightArrow.addStyleName("inactive");
 			  }else
