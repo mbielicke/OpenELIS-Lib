@@ -851,6 +851,9 @@ background:none;
 .CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
 .disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
 
+.ProcessButtonImage{background:url("../Images/cart_go.png") no-repeat;}
+.disabled .ProcessButtonImage{background:url("../Images/cart_godisabled.png") no-repeat;}
+
 .AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
 .disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
 
@@ -1570,6 +1573,32 @@ padding:8px;
 padding-bottom:0;
 }
 /************** Drag & Drop ************/
+.dragdrop-movable-panel{
+Left:15px;
+top:35px;
+background:black;
+}
+.dragdrop-proxy{
+/**	border:1px solid #d8d8d8;**/
+		background:none;
+opacity:0.8;
+
+}
+
+.dragdrop-proxy{
+/**	border:1px solid #d8d8d8;**/
+}	
+	
+.dragdrop-proxy .ScreenLabel{
+	border:1px solid #d8d8d8;
+	border-left:0;
+	padding-bottom:3px;
+		}
+
+.DropPositioner {
+	height : 130px;
+    background:green;
+}
 
 .DragSelector{
    border:1px solid #99bbe8;
@@ -1593,7 +1622,7 @@ padding-bottom:0;
 .Dragstatus{
     width:20px;
     height:20px;
-    border:1px solid #99bbe8;
+    border:1px solid #d8d8d8;
     border-right:0;
 }
 .Drop{
@@ -2034,10 +2063,7 @@ font-weight:bold;
 	background: url(../Images/dotdotdot.gif) 0px 0px no-repeat;
 }
 
-.DropPositioner {
-	height : 1px;
-    background:green;
-}
+
 
 /**
 rich text css
