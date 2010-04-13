@@ -3,9 +3,7 @@ html, body {
    padding:0pt;
    height:100%;
 }
-.ModalPanel *{
-	    border:none;
-}
+
 td {outline:0px;}
 
 div{outline:0px;}
