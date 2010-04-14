@@ -131,6 +131,8 @@ public class LongField extends Field<Long> {
                 if (val != null && !"".equals(val))
                     setValue(Long.valueOf((int)NumberFormat.getFormat(pattern)
                                                              .parse(val.toString())));
+                else if(val.equals(""))
+                	setValue(null);
                 removeException("fieldNumericException");
             } catch (Exception e) {
                 valid = false;

@@ -132,6 +132,8 @@ public class DoubleField extends Field<Double> {
                 if (val != null && !"".equals(val))
                     setValue(Double.valueOf(NumberFormat.getFormat(pattern)
                                                        .parse(val.toString())));
+                else if(val.equals(""))
+                	setValue(null);
                 removeException("invalidDouble");
             } catch (Exception e) {
             	try {

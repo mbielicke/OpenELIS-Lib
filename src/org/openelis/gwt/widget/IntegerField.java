@@ -130,6 +130,8 @@ public class IntegerField extends Field<Integer> {
                 if (val != null && !"".equals(val))
                     setValue(Integer.valueOf((int)NumberFormat.getFormat(pattern)
                                                              .parse(val.toString())));
+                else if(val.equals(""))
+                	setValue(null);
                 removeException("fieldNumericException");
             } catch (Exception e) {
                 valid = false;
