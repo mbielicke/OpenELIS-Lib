@@ -9,6 +9,7 @@ import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasBeforeDropHandlers;
 import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
+import org.openelis.gwt.event.DropEnterEvent.DropPosition;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
@@ -175,7 +176,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 				}
 			}
 			if(getHandlerCount(DropEnterEvent.getType()) > 0){
-				DropEnterEvent event = DropEnterEvent.fire(this, (TableRow)context.draggable, table.renderer.rows.get(targetRow == -1 ? 0 : targetRow));
+				DropEnterEvent event = DropEnterEvent.fire(this, (TableRow)context.draggable, table.renderer.rows.get(targetRow == -1 ? 0 : targetRow),DropPosition.BELOW);
 				if(event != null && event.isCancelled())
 					validDrop = false;
 			}

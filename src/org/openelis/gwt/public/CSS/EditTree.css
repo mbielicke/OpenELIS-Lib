@@ -109,3 +109,6 @@ tr .TreeHighlighted .treeOpenImage{
 	width:16px;
 	background:url(../Images/deleteButtonIcon.png);
 }
+tr .DropOnRow {
+   background : green;
+}

@@ -9,7 +9,7 @@ import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasBeforeDropHandlers;
 import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
-import org.openelis.gwt.widget.table.TableDragController;
+import org.openelis.gwt.event.DropEnterEvent.DropPosition;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
@@ -45,6 +45,8 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 	private Widget positioner;
 	
 	public TreeRow dropRow;
+	
+	public DropPosition dropPos;
 
 
 	private IndexedPanel flexTableRowsAsIndexPanel = new IndexedPanel() {
@@ -109,7 +111,9 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		TreeDataItem item = dropRow.dragItem;
 		int modelIndex = dropRow.dragModelIndex;
 		TreeDataItem targetItem = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).item;
+		tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).removeStyleName("DropOnRow");
 		if(tree.dragController == context.dragController){
+			/*
 			if(targetItem.open && targetItem.mightHaveChildren() && targetRow > -1){
 				tree.deleteRow(modelIndex);
 				tree.addChildItem(targetItem,item,0);
@@ -120,17 +124,44 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 	     		tree.moveRow(dropRow.dragIndex, 0);
 	     	 else
 	     		tree.moveRow(dropRow.dragIndex, tree.renderer.getRows().get(targetRow).modelIndex+1);
+	        */
+			if(dropPos == DropPosition.ON) {
+				tree.deleteRow(modelIndex);
+				tree.addChildItem(targetItem,item);
+			}else if(dropPos == DropPosition.ABOVE) {
+				if(targetItem.depth > 0){
+					tree.deleteRow(modelIndex);
+					tree.addChildItem(targetItem.parent,item,targetItem.childIndex);
+				}else
+					tree.moveRow(dropRow.dragIndex, tree.renderer.getRows().get(targetRow).modelIndex);
+			}else {
+				if(targetItem.depth > 0){
+					tree.deleteRow(modelIndex);
+					tree.addChildItem(targetItem.parent,item,targetItem.childIndex+1);
+				}else
+					tree.moveRow(dropRow.dragIndex, tree.renderer.getRows().get(targetRow).modelIndex+1);
+			}
+			
 		}else {   
-			if(tree.numRows() == 0 || (tree.numRows() -1 != 0 && tree.numRows() -1 == tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex && targetItem.depth == 0)){
+			if(tree.numRows() == 0){
 				tree.addRow(item);
-			}else if(targetItem.open && targetItem.mightHaveChildren() && targetRow > -1)
-				tree.addChildItem(targetItem,item,0);
+			}else if(tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex == tree.rows.size()-1 && dropPos == DropPosition.BELOW ){
+				tree.addRow(item);
+			}else if(dropPos == DropPosition.ON)
+				tree.addChildItem(targetItem,item);
 			else if(targetRow < 0)
 				tree.addRow(0,item);
-			else if(targetItem.depth > 0)
-				tree.addChildItem(targetItem.parent,item,targetItem.childIndex+1);
-			else
-				tree.addRow(tree.renderer.getRows().get(targetRow+1).modelIndex, item);
+			else if(targetItem.depth > 0){
+				if(dropPos == DropPosition.ABOVE)
+					tree.addChildItem(targetItem.parent,item,targetItem.childIndex);
+				else
+					tree.addChildItem(targetItem.parent,item,targetItem.childIndex+1);
+			}else{
+				if(dropPos == DropPosition.ABOVE)
+					tree.addRow(tree.renderer.getRows().get(targetRow).modelIndex,item);
+				else
+					tree.addRow(tree.renderer.getRows().get(targetRow+1).modelIndex, item);
+			}
 		}
 		dropping = false;
 		dropRow = null;
@@ -165,16 +196,25 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		}
 		
 		int newRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
-				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
+				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR);
+		if(newRow >= tree.view.table.getRowCount() || context.mouseY < tree.renderer.rows.get(newRow).getAbsoluteTop())
+			newRow--;
+		
+		int rowTop = tree.renderer.rows.get(targetRow).getAbsoluteTop();
+		int rowHght =  tree.renderer.rows.get(targetRow).getOffsetHeight();
+		int rowBot = rowTop + rowHght;
+		/*
 		if(newRow == targetRow){
 			if(targetRow == 0 || targetRow == tree.maxRows -1)
 				checkScroll(targetRow);
 			return;
 		}
+		*/
 		targetRow = newRow;
 		Location tableLocation = new WidgetLocation(tree, context.boundaryPanel);
 		validDrop = true;
 		if(tree.numRows() > 0){
+			/*
 			if(tree.dragController == context.dragController){
 				int checkIndex = targetRow;
 				if(checkIndex < 0) 
@@ -187,16 +227,37 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 					return;
 				}
 			}
+			*/
+			
+			
+			int diff = context.mouseY - rowTop;
+			double perc = ((double)diff)/((double)rowHght);
+			if(perc <= 0.33)
+				dropPos = DropPosition.ABOVE;
+			else if(perc > 0.33 && perc < 0.66)
+				dropPos = DropPosition.ON;
+			else 
+				dropPos = DropPosition.BELOW;
 			if(getHandlerCount(DropEnterEvent.getType()) > 0){
-				DropEnterEvent event = DropEnterEvent.fire(this, (TreeRow)context.draggable, tree.renderer.rows.get(targetRow == -1 ? 0 : targetRow));
+				DropEnterEvent event = DropEnterEvent.fire(this, (TreeRow)context.draggable, tree.renderer.rows.get(targetRow == -1 ? 0 : targetRow),dropPos);
 				if(event != null && event.isCancelled())
 					validDrop = false;
 			}
 			if(validDrop) {
 				TreeRow row = tree.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
 				Location widgetLocation = new WidgetLocation(row, context.boundaryPanel);
-				context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
-						+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				for(TreeRow trow : tree.renderer.rows )
+					trow.removeStyleName("DropOnRow");
+				if(dropPos == DropPosition.BELOW) {
+					context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
+							+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				}else if(dropPos == DropPosition.ON) {
+					positioner.removeFromParent();
+					tree.renderer.rows.get(targetRow).addStyleName("DropOnRow");
+				}else{
+					context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop());
+							//+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				}
 				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
 			}else{
 				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
@@ -207,7 +268,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			context.boundaryPanel.add(positioner,tableLocation.getLeft(),headerLocation.getTop()+tree.view.header.getOffsetHeight());
 		}
 		
-		if(targetRow == 0 || targetRow == tree.maxRows -1)
+		if((targetRow == 0  && context.mouseY < rowTop) || (targetRow == tree.maxRows -1 && context.mouseY > rowBot))
 			checkScroll(targetRow);
 		if(targetRow > -1 && targetRow < tree.maxRows){
 			final TreeRow targetItem = tree.renderer.getRows().get(targetRow);

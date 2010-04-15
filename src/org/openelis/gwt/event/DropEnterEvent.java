@@ -8,19 +8,22 @@ public class DropEnterEvent<I> extends GwtEvent<DropEnterHandler<I>> {
 	private I dragObject;
 	private Object dropTarget;
 	private boolean cancelled;
+	public enum DropPosition {BELOW, ON, ABOVE};
+	public DropPosition dropPos;
 	
-	public static <I> DropEnterEvent<I> fire(HasDropEnterHandlers<I> source, I dragObject, Object dropTarget) {
+	public static <I> DropEnterEvent<I> fire(HasDropEnterHandlers<I> source, I dragObject, Object dropTarget, DropPosition pos) {
 		if(TYPE != null) {
-			DropEnterEvent<I> event = new DropEnterEvent<I>(dragObject, dropTarget);
+			DropEnterEvent<I> event = new DropEnterEvent<I>(dragObject, dropTarget, pos);
 			source.fireEvent(event);
 			return event;
 		}
 		return null;
 	}
 	
-	protected DropEnterEvent(I dragObject, Object dropTarget) {
+	protected DropEnterEvent(I dragObject, Object dropTarget, DropPosition pos) {
 		this.dragObject = dragObject;
 		this.dropTarget = dropTarget;
+		this.dropPos = pos;
 	}
 
 	@Override
@@ -56,5 +59,8 @@ public class DropEnterEvent<I> extends GwtEvent<DropEnterHandler<I>> {
 		return cancelled;
 	}
 
+	public DropPosition getDropPosition() {
+		return dropPos;
+	}
 	
 }
