@@ -1572,15 +1572,12 @@ padding-bottom:0;
 }
 /************** Drag & Drop ************/
 .dragdrop-movable-panel{
-Left:15px;
-top:35px;
 background:black;
 }
 .dragdrop-proxy{
 /**	border:1px solid #d8d8d8;**/
-		background:none;
-opacity:0.8;
-
+	background:none;
+opacity:0.9;
 }
 
 .dragdrop-proxy{
@@ -1591,11 +1588,11 @@ opacity:0.8;
 	border:1px solid #d8d8d8;
 	border-left:0;
 	padding-bottom:3px;
+	background:white;
 		}
 
 .DropPositioner {
-	height : 130px;
-    background:green;
+    background:#70c163;
 }
 
 .DragSelector{
@@ -1619,19 +1616,19 @@ opacity:0.8;
 }
 .Dragstatus{
     width:20px;
-    height:20px;
+    height:18px;
     border:1px solid #d8d8d8;
     border-right:0;
 }
 .Drop{
-    background:url('../Images/commitbuttonimage.gif') no-repeat center;
+    background:white url('../Images/commitbuttonimage.gif') no-repeat center;
 }
 .NoDrop{
-    background:url('../Images/stop.gif') no-repeat center;
+    background:white url('../Images/stop.gif') no-repeat center;
 }
 
 .ScreenDragList .Hover{
-    background:#d9e8fb;
+    background:#63B159;
     cursor:move;
 }
 
