@@ -44,6 +44,8 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 	private boolean validDrop;
 
 	private Widget positioner;
+	
+	private DropPosition dropPos;
 
 	private IndexedPanel flexTableRowsAsIndexPanel = new IndexedPanel() {
 
@@ -117,16 +119,22 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 		//    table.deleteRow(modelIndex);
 		//}
 		if(table.dragController == context.dragController){	
-			if(targetRow < 0)
-				table.moveRow(drop.dragModelIndex, 0);
+			if(dropPos == DropPosition.ABOVE)
+				table.moveRow(drop.dragModelIndex, table.renderer.getRows().get(targetRow).modelIndex);
 			else
 				table.moveRow(drop.dragModelIndex, table.renderer.getRows().get(targetRow).modelIndex+1);
 			//table.MoveRow(drop.dragIndex, table.renderer.getRows().get(targetRow+1).modelIndex);
 		}else {
-			if(table.numRows() == 0 || table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex)
+			if(table.numRows() == 0)
 				table.addRow(row);
-			else 
-				table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex, row);
+			else if(table.numRows() -1 == table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow).modelIndex && dropPos == DropPosition.BELOW)
+				table.addRow(row);
+			else{
+				if(dropPos == DropPosition.ABOVE)
+					table.addRow(table.renderer.getRows().get(targetRow).modelIndex, row);
+				else
+					table.addRow(table.renderer.getRows().get(targetRow+1).modelIndex,row);
+			}
 		}
 		dropping = false;
 		super.onDrop(context);
@@ -152,50 +160,51 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 			scroll.cancel();
 			scroll = null;
 		}
-		int newRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
-				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
-		if(newRow == targetRow) {
-			if(targetRow == 0 || targetRow == table.maxRows -1)
-				checkScroll(targetRow);
-			return;
-		}
-		targetRow = newRow;
+		targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
+				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR);
+		if(targetRow >= table.view.table.getRowCount() || context.mouseY < table.renderer.rows.get(targetRow).getAbsoluteTop())
+			targetRow--;
+		if(targetRow < 0)
+			targetRow = 0;
+		
 		Location tableLocation = new WidgetLocation(table, context.boundaryPanel);
 		validDrop = true;
 		if(table.numRows() > 0){
-			if(table.dragController == context.dragController){
-				int checkIndex = targetRow;
-				if(checkIndex < 0) 
-					checkIndex = 0;
-				if(checkIndex >= table.maxRows)
-					checkIndex = table.maxRows - 1;
-				if(((TableRow)context.draggable).dragModelIndex == table.modelIndexList[checkIndex]){
-					positioner.removeFromParent();
-					validDrop = false;
-					return;
-				}
-			}
+			int rowTop = table.renderer.rows.get(targetRow).getAbsoluteTop();
+			int rowHght =  table.renderer.rows.get(targetRow).getOffsetHeight();
+			int rowBot = rowTop + rowHght;
+			int diff = context.mouseY - rowTop;
+			double perc = ((double)diff)/((double)rowHght);
+			if(perc <= 0.5)
+				dropPos = DropPosition.ABOVE;
+			else 
+				dropPos = DropPosition.BELOW;
 			if(getHandlerCount(DropEnterEvent.getType()) > 0){
-				DropEnterEvent event = DropEnterEvent.fire(this, (TableRow)context.draggable, table.renderer.rows.get(targetRow == -1 ? 0 : targetRow),DropPosition.BELOW);
+				DropEnterEvent event = DropEnterEvent.fire(this, (TableRow)context.draggable, table.renderer.rows.get(targetRow == -1 ? 0 : targetRow),dropPos);
 				if(event != null && event.isCancelled())
 					validDrop = false;
 			}
 			if(validDrop) {
 				TableRow row = table.renderer.getRows().get(targetRow == -1 ? 0 : targetRow);
 				Location widgetLocation = new WidgetLocation(row, RootPanel.get());
-				context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
-					+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				if(dropPos == DropPosition.BELOW) {
+					context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
+							+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
+				}else{
+					context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop());
+				}
 				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
 			}else{
 				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 				positioner.removeFromParent();
 			}
+			if((targetRow == 0 && context.mouseY < rowTop+3)|| (targetRow == table.maxRows -1 && context.mouseY > rowBot-3))
+				checkScroll(targetRow);
 		}else{
 			Location headerLocation = new WidgetLocation(table.view.header,RootPanel.get());
 			RootPanel.get().add(positioner,tableLocation.getLeft(),headerLocation.getTop()+table.view.header.getOffsetHeight());
 		}
-		if(targetRow == 0 || targetRow == table.maxRows -1)
-			checkScroll(targetRow);
+
 	}
 
 	public Timer scroll;
