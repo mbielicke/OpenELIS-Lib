@@ -195,41 +195,20 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			scroll = null;
 		}
 		
-		int newRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
+		targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
 				context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR);
-		if(newRow >= tree.view.table.getRowCount() || context.mouseY < tree.renderer.rows.get(newRow).getAbsoluteTop())
-			newRow--;
+		if(targetRow >= tree.view.table.getRowCount() || context.mouseY < tree.renderer.rows.get(targetRow).getAbsoluteTop())
+			targetRow--;
+		if(targetRow < 0)
+			targetRow = 0;
 		
 		int rowTop = tree.renderer.rows.get(targetRow).getAbsoluteTop();
 		int rowHght =  tree.renderer.rows.get(targetRow).getOffsetHeight();
 		int rowBot = rowTop + rowHght;
-		/*
-		if(newRow == targetRow){
-			if(targetRow == 0 || targetRow == tree.maxRows -1)
-				checkScroll(targetRow);
-			return;
-		}
-		*/
-		targetRow = newRow;
+		
 		Location tableLocation = new WidgetLocation(tree, context.boundaryPanel);
 		validDrop = true;
 		if(tree.numRows() > 0){
-			/*
-			if(tree.dragController == context.dragController){
-				int checkIndex = targetRow;
-				if(checkIndex < 0) 
-					checkIndex = 0;
-				if(checkIndex >= tree.maxRows)
-					checkIndex = tree.maxRows - 1;
-				if(((TreeRow)context.draggable).dragModelIndex == tree.modelIndexList[checkIndex]){
-					positioner.removeFromParent();
-					validDrop = false;
-					return;
-				}
-			}
-			*/
-			
-			
 			int diff = context.mouseY - rowTop;
 			double perc = ((double)diff)/((double)rowHght);
 			if(perc <= 0.33)
@@ -256,7 +235,6 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 					tree.renderer.rows.get(targetRow).addStyleName("DropOnRow");
 				}else{
 					context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop());
-							//+ (targetRow == -1 ? 0 : row.getOffsetHeight()));
 				}
 				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
 			}else{
