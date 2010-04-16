@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -111,6 +112,8 @@ public class TableDragController extends PickupDragController implements HasBefo
 		WidgetArea draggableArea = new WidgetArea(context.draggable, null);
 		for (Widget widget : context.selectedWidgets) {
 			WidgetArea widgetArea = new WidgetArea(widget, null);
+			DecoratorPanel dp = new DecoratorPanel();
+			dp.setStyleName("ErrorWindow");
 			HorizontalPanel hp = new HorizontalPanel();
 			AbsolutePanel ap = new AbsolutePanel();
 			ap.setPixelSize(10, widget.getOffsetHeight());
@@ -128,8 +131,9 @@ public class TableDragController extends PickupDragController implements HasBefo
 				//dl.setStyleName("ScreenLabel");
 				ap.add(proxy);
 			}
-			hp.setStyleName(PRIVATE_CSS_PROXY);
-			container.add(hp, widgetArea.getLeft() - draggableArea.getLeft(), widgetArea.getTop()
+			hp.setStyleName("DragProxy");
+			dp.add(hp);
+			container.add(dp, widgetArea.getLeft() - draggableArea.getLeft(), widgetArea.getTop()
 					- draggableArea.getTop());
 		}
 		//this.proxy = container;
