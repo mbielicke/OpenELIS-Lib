@@ -137,6 +137,7 @@ public class TreeDragController extends PickupDragController implements HasBefor
 			hp.add(ap);
 			if(proxy != null){
 				ap.add(proxy);
+				ap.setWidth("100%");
 			}else{
 				proxy = ((TreeRow)context.draggable).getDragProxy();
 				//dl.setStyleName("ScreenLabel");

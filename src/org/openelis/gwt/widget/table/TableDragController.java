@@ -126,6 +126,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 			hp.add(ap);
 			if(proxy != null){
 				ap.add(proxy);
+				ap.setWidth("100%");
 			}else{
 				proxy = ((TableRow)context.draggable).getDragProxy();
 				//dl.setStyleName("ScreenLabel");
