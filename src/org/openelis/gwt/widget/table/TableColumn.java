@@ -82,6 +82,7 @@ public class TableColumn {
     public boolean filtered;
     protected HashSet<Object> filtersInForce;
     protected ArrayList<Filter> filterList;
+    protected boolean enabled;
     
     public class CheckBoxContainer extends AbsolutePanel implements HasMouseOutHandlers, HasMouseOverHandlers {
 
@@ -269,8 +270,12 @@ public class TableColumn {
     public void enable(boolean enable) {
     	if(colWidget instanceof HasField){
     		((HasField)colWidget).enable(enable);
-    		
     	}
+    	this.enabled = enable;
+    }
+    
+    public boolean isEnabled() {
+    	return enabled;
     }
     
     public void setExceptions(Widget wid, ArrayList<LocalizedException> exceptions) {

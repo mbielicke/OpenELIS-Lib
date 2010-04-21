@@ -1070,7 +1070,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         	if(columns.get(col).colWidget instanceof Label)
         		return false;
         }
-        return (isEnabled());
+        return (isEnabled() && columns.get(col).isEnabled());
 	}
 
 	public void setFieldValue(Object value) {
