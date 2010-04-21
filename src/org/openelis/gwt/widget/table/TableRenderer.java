@@ -251,7 +251,7 @@ public class TableRenderer  {
         	if(currVal instanceof TableDataRow)
         		currVal = ((TableDataRow)currVal).key;
         	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
-        	if(changed) {
+        	//if(changed) {
         		Widget wid = controller.activeWidget;
         		if(wid instanceof HasField){
         			if(((HasField)wid).getExceptions() != null){
@@ -263,7 +263,7 @@ public class TableRenderer  {
         			}else
         				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
         		}
-        	}
+        	//}
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;
             return changed;
