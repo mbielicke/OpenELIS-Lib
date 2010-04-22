@@ -724,7 +724,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
        		sinkEvents(Event.ONKEYPRESS);
         	return;
         }
-		selectRow(index);
+		selectRow(index,true);
 	}
 
 	public void selectRow(final int index) {
