@@ -123,8 +123,8 @@ public class TreeColumn {
     					val = "";
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
-    				if(row  != null)
-    					((AutoComplete)colWidget).setSelection(row);
+    				if(vrow  != null)
+    					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
     				val = ((AutoComplete)colWidget).getTextBoxDisplay();
