@@ -2,6 +2,8 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -15,6 +17,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	private String height;
 	private TabBar bar;
 	private TabBarScroller barScroller;
+	
 	
 	public TabPanel() {
 		super();
