@@ -37,6 +37,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     public boolean queryMode;
     public String queryString;
     public ArrayList<LocalizedException> exceptions;
+    public boolean drawErrors = true;
     
     public void validate() {
     	
@@ -152,7 +153,9 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     		exceptions = null;
     }
     
-    public void drawExceptions(HasField wid) {        
+    public void drawExceptions(HasField wid) {     
+    	if(!drawErrors)
+    		return;
         exceptionPanel.clear();
     	wid.removeExceptionStyle("InputWarning");
     	wid.removeExceptionStyle("InputError");

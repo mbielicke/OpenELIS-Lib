@@ -286,6 +286,10 @@ public class TableColumn {
     	}
     	final VerticalPanel errorPanel = new VerticalPanel();
 		String style = "InputWarning";
+		if(wid instanceof HasField){
+			((HasField)wid).clearExceptions();
+			((HasField)wid).getField().drawErrors = false;
+		}
 		for (LocalizedException error : exceptions) {
 			HorizontalPanel hp = new HorizontalPanel();
 			if(error instanceof Warning){
@@ -302,6 +306,8 @@ public class TableColumn {
 			}
 			hp.add(new Label(error.getMessage()));
 			errorPanel.add(hp);
+			if(wid instanceof HasField)
+				((HasField)wid).addException(error);
 		}
 		if(wid instanceof HasField)
 			((HasField)wid).addExceptionStyle(style);
