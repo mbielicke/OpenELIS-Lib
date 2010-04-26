@@ -426,6 +426,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	public void setQueryMode(boolean query) {
 		if(query == field.queryMode)
 			return;
+		load(null);
 		field.setQueryMode(query);	
 			
 	}
@@ -511,12 +512,12 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	
     @Override
     public void addExceptionStyle(String style) {
-    	textbox.addStyleName(style);
+    	addStyleName(style);
     }
 	
     @Override
     public void removeExceptionStyle(String style) {
-    	textbox.removeStyleName(style);
+    	removeStyleName(style);
     }
     
     @Override
