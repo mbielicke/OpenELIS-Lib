@@ -191,7 +191,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 
 	public void onMouseOver(MouseOverEvent event) {
-        if(exceptions != null && exceptions.size() > 0) {
+        if(exceptions != null && exceptions.size() > 0 && drawErrors) {
             if(pop == null){
                 pop = new PopupPanel(true);
                 pop.setStyleName("");

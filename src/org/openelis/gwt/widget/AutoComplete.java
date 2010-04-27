@@ -129,12 +129,12 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     	}
 
 		public void onMouseOut(MouseOutEvent event) {
-			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
+			//MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
 			
 		}
 
 		public void onMouseOver(MouseOverEvent event) {
-			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);
+			//MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);
 			
 		}
     	
@@ -512,12 +512,12 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
 	
     @Override
     public void addExceptionStyle(String style) {
-    	addStyleName(style);
+    	textbox.addStyleName(style);
     }
 	
     @Override
     public void removeExceptionStyle(String style) {
-    	removeStyleName(style);
+    	textbox.removeStyleName(style);
     }
     
     @Override
