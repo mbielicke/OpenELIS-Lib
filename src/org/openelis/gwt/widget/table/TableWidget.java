@@ -364,7 +364,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @param col
      */
     protected void select(final int row, final int col, boolean byClick) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode) {
+    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode && selectedRow != row) {
     		NavigationSelectionEvent.fire(this,row);
     		return;
     	}
