@@ -175,6 +175,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     public void getMatches(String match) {
+    	//match = match.replaceAll("//","////");
         int index = getIndexByTextValue(match);
 
         if (index == -1 && !textbox.getText().equals("")) {
@@ -207,7 +208,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     			searchText.add(new TableDataRow(i,((String)model.get(i).cells.get(0).getValue()).toUpperCase()));
     		Collections.sort(searchText, new ColumnComparator(0,SortEvent.SortDirection.ASCENDING));
     	}
-
     	index = Collections.binarySearch(searchText,new TableDataRow(null,textValue),new MatchComparator());
 
     	if(index < 0)
@@ -224,7 +224,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     
     private int compareValue(String value, String textValue, int length) {
         if(value.length() < length)
-            return -1;
+            return value.compareTo(textValue.substring(0,value.length()));
         return value.substring(0,length).compareTo(textValue);
     }
     
