@@ -123,7 +123,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	public void getQuery(ArrayList<QueryData> list, String key) {
 		if(!field.queryMode)
 			return;
-		if(field.queryString != null) {
+		if(field.queryString != null && !"".equals(field.queryString)) {
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;
 			qd.key = key;
