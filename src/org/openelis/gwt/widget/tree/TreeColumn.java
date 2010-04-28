@@ -180,7 +180,7 @@ public class TreeColumn {
     				((Label)widget).setText((String)cell.getValue());
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
-    				if(row != null)
+    				if(vrow != null)
     					((AutoComplete)colWidget).setSelection(vrow);
     				else
     					((AutoComplete)colWidget).setSelection(null,"");
@@ -230,7 +230,7 @@ public class TreeColumn {
     			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
     			TableDataRow vrow =  (TableDataRow)cell.getValue();
-    			if(row != null)
+    			if(vrow != null)
     				((AutoComplete)colWidget).setSelection(vrow);
     			else
     				((AutoComplete)colWidget).setSelection(null,"");
