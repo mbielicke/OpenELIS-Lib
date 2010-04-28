@@ -253,10 +253,16 @@ public class DateField extends Field<Datetime> {
     public String format() {
         if(value == null)
             return "";
-        if(pattern != null)
-        	
+        if(pattern != null)	
             return DateTimeFormat.getFormat(pattern).format(value.getDate());
-        
+        else if(begin == Datetime.YEAR && end == Datetime.DAY) 
+        	return DateTimeFormat.getFormat("yyyy-MM-dd").format(value.getDate());
+        else if(begin == Datetime.YEAR && end == Datetime.MINUTE)
+        	return DateTimeFormat.getFormat("yyyy-MM-dd HH:mm").format(value.getDate());
+        else if(begin == Datetime.YEAR && end == Datetime.SECOND)
+        	return DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").format(value.getDate());
+        else if(begin == Datetime.HOUR && end == Datetime.MINUTE)
+        	return DateTimeFormat.getFormat("HH:mm").format(value.getDate());
         return value.toString();
     }
     
