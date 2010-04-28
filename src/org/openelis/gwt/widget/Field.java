@@ -79,9 +79,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 	}
 	
 	public void setValue(T value) {
-		if(queryMode)
+		if(queryMode){
 			queryString = getString(value);
-		else
+			validateQuery();
+		}else
 			this.value = value;
 	}
 	
