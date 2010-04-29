@@ -4,15 +4,18 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
-import org.openelis.gwt.event.NavigationSelectionEvent;
-import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.widget.AppButton;
-import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.TableDataRow;
+import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by screens to manage paged queries.
@@ -42,12 +45,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
  * For all screen queries, call nav.setQuery(query).
  */
 public abstract class ScreenNavigator {
-    protected int              selection, oldPage;
-    protected boolean          byRow, enable;
-    protected ArrayList<?>     result;
-    protected Query            query;
-    protected NavigationWidget table;
-    protected AppButton        atozNext, atozPrev;
+    protected int         selection, oldPage;
+    protected boolean     byRow, enable;
+    protected ArrayList   result;
+    protected Query       query;
+    protected Widget      widget;
+    protected AppButton   atozNext, atozPrev;
 
     public ScreenNavigator(ScreenDefInt def) {
         oldPage = -1;
@@ -56,22 +59,9 @@ public abstract class ScreenNavigator {
     }
 
     protected void initialize(ScreenDefInt def) {
-        table = (NavigationWidget)def.getWidget("atozTable");
-        if (table != null) {
-            table.addNavigationSelectionHandler(new NavigationSelectionHandler() {
-                public void onNavigationSelection(NavigationSelectionEvent event) {
-                    // since we don't know if the fetch will succeed, we are
-                    // going
-                    // cancel this selection and select the table row ourselves.
-                    if (enable)
-                        select(event.getIndex());
-                    else
-                        event.cancel();
-                }
-            });
-            // we don't want the table to get focus; we can still select because
-            // we will get the onBeforeSelection event.
-            table.enable(false);
+        widget = (TableWidget)def.getWidget("atozTable");
+        if (widget != null) {
+            addSelectionHandler();
         }
 
         atozNext = (AppButton)def.getWidget("atozNext");
@@ -110,8 +100,7 @@ public abstract class ScreenNavigator {
      * @param result
      *        should be null to indicate no records were found.
      */
-    @SuppressWarnings("unchecked")
-    public void setQueryResult(ArrayList<?> result) {
+    public void setQueryResult(ArrayList result) {
         int row;
         //
         // if next page failed, reset the query page # to the old page #
@@ -124,8 +113,8 @@ public abstract class ScreenNavigator {
 
         row = 0;
         this.result = result;
-        if (table != null)
-            table.load(getModel());
+        if (widget != null)
+            load();
         //
         // we are going back a page and we want to select the last row in
         // in the list
@@ -138,7 +127,6 @@ public abstract class ScreenNavigator {
         select(row);
     }
 
-    @SuppressWarnings("unchecked")
     public ArrayList getQueryResult() {
         return result;
     }
@@ -192,10 +180,9 @@ public abstract class ScreenNavigator {
     /**
      * Returns the table data model representing the query result.
      * 
-     * @return model that is used to set the atoz table; This model cannot be
-     *         null.
+     * @return model that is used to set the atoz table; This model cannot be null.
      */
-    public abstract ArrayList<?> getModel();
+    public abstract ArrayList<TableDataRow> getModel();
 
     /**
      * Select a row within the result set
@@ -211,8 +198,8 @@ public abstract class ScreenNavigator {
             } finally {
                 selection = -1;
             }
-            if (table != null)
-                table.unselect(selection);
+            if (widget != null)
+                unselect(selection);
             if (atozNext != null)
                 atozNext.enable(false);
             if (atozPrev != null)
@@ -224,16 +211,16 @@ public abstract class ScreenNavigator {
         } else {
             if (fetch((RPC)result.get(row))) {
                 selection = row;
-                if (table != null)
-                    table.navSelect(selection);
+                if (widget != null)
+                    selectRow(selection);
                 if (atozNext != null)
                     atozNext.enable(true);
                 if (atozPrev != null)
                     atozPrev.enable(true);
             } else {
                 selection = -1;
-                if (table != null)
-                    table.unselect(selection);
+                if (widget != null)
+                    unselect(selection);
             }
         }
     }
@@ -252,7 +239,52 @@ public abstract class ScreenNavigator {
         executeQuery(query);
     }
 
-    public int getSelection() {
-        return selection;
+    /*
+     * Can be overridden to allow a different widget or behavior for selection
+     * handler. 
+     */
+    protected void addSelectionHandler() {
+        TableWidget table;
+        
+        table = (TableWidget) widget;
+        table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
+            public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+                // since we don't know if the fetch will succeed, we are
+                // going
+                // cancel this selection and select the table row ourselves.
+                if (enable)
+                    select(event.getItem().index);
+                event.cancel();
+            }
+        });
+        table.addBeforeCellEditedHandler(new BeforeCellEditedHandler() {
+            public void onBeforeCellEdited(BeforeCellEditedEvent event) {
+                event.cancel();
+            }
+        });
+        // we don't want the table to get focus; we can still select because
+        // we will get the onBeforeSelection event.
+        table.enable(false);
+    }
+
+    /*
+     * Can be overridden to allow a different widget.
+     */
+    protected void load() {
+        ((TableWidget)widget).load(getModel());
+    }
+
+    /*
+     * Can be overridden to allow a different widget.
+     */
+    protected void selectRow(int selection) {
+        ((TableWidget)widget).selectRow(selection);
+    }
+
+    /*
+     * Can be overridden to allow a different widget.
+     */
+    protected void unselect(int selection) {
+        ((TableWidget)widget).unselect(selection);
     }
 }
