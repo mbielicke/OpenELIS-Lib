@@ -230,13 +230,13 @@ public class TreeRenderer {
         	}
         	if(newVal == null)		
         		newVal = ((HasField)controller.activeWidget).getFieldValue();
-        	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
+        	controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	if(newVal instanceof TableDataRow)
         		newVal = ((TableDataRow)newVal).key;
         	if(currVal instanceof TableDataRow)
         		currVal = ((TableDataRow)currVal).key;
         	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
-        	if(changed) {
+        	//if(changed) {
         		Widget wid = controller.activeWidget;
         		if(wid instanceof HasField){
         			if(((HasField)wid).getExceptions() != null){
@@ -248,7 +248,7 @@ public class TreeRenderer {
         			}else
         				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
         		}
-        	}
+        	//}
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;
             return changed;
