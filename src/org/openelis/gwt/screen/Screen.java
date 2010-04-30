@@ -128,6 +128,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         FormErrorException formE;
         FieldErrorException fieldE;
         TableWidget tableWid;
+        HasField field;
 
         formErrors = new ArrayList<LocalizedException>();
         for (Exception ex : errors.getErrorList()) {
@@ -140,7 +141,10 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 formErrors.add(formE);
             } else if (ex instanceof FieldErrorException) {
                 fieldE = (FieldErrorException)ex;
-                ((HasField)def.getWidget(fieldE.getFieldName())).addException(fieldE);
+                field = (HasField)def.getWidget(fieldE.getFieldName());
+                
+                if(field != null)
+                 field.addException(fieldE);
             }
         }
 

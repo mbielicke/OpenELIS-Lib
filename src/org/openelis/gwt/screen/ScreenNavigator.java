@@ -59,7 +59,7 @@ public abstract class ScreenNavigator {
     }
 
     protected void initialize(ScreenDefInt def) {
-        widget = (TableWidget)def.getWidget("atozTable");
+        widget = (Widget)def.getWidget("atozTable");
         if (widget != null) {
             addSelectionHandler();
         }
@@ -199,7 +199,7 @@ public abstract class ScreenNavigator {
                 selection = -1;
             }
             if (widget != null)
-                unselect(selection);
+                unselectRow(selection);
             if (atozNext != null)
                 atozNext.enable(false);
             if (atozPrev != null)
@@ -220,7 +220,7 @@ public abstract class ScreenNavigator {
             } else {
                 selection = -1;
                 if (widget != null)
-                    unselect(selection);
+                    unselectRow(selection);
             }
         }
     }
@@ -284,7 +284,7 @@ public abstract class ScreenNavigator {
     /*
      * Can be overridden to allow a different widget.
      */
-    protected void unselect(int selection) {
+    protected void unselectRow(int selection) {
         ((TableWidget)widget).unselect(selection);
     }
 }
