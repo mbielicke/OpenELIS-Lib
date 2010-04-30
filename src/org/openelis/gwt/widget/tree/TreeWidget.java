@@ -333,6 +333,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	return -1;
     }
     
+    public int getTreeIndex(TreeDataItem item) {
+    	return rows.indexOf(item);
+    }
+    
     protected void select(int row, int col) {
     	select(row,col,false);
     }
