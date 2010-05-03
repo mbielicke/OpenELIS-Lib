@@ -10,6 +10,8 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Node;
@@ -46,8 +48,8 @@ public class ShortcutHandler implements KeyPressHandler {
 	public void onKeyPress(final KeyPressEvent event) {
 		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getNativeEvent().getKeyCode() == key){
 			if(wid instanceof AppButton) {
-				
 				if(((AppButton)wid).isEnabled() && !((AppButton)wid).isLocked()){
+					((Focusable)wid).setFocus(true);
 					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
 							wid.getAbsoluteLeft(), 
 							wid.getAbsoluteTop(), 
@@ -57,8 +59,9 @@ public class ShortcutHandler implements KeyPressHandler {
 							event.isAltKeyDown(), 
 							event.isShiftKeyDown(), 
 							event.isMetaKeyDown());
-						ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
-						event.stopPropagation();
+					
+					ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
+					event.stopPropagation();
 				}
 				event.preventDefault();
 				event.stopPropagation();		
