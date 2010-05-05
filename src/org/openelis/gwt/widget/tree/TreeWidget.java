@@ -889,25 +889,33 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		if(event != null && event.isCancelled())
     			return;
     	}else {
-    		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-    			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
-    			if(!event.isCanceled()){
-    				unselect(-1);
-    				selections.add(row);
-    				rows.get(row).selected = true;
-    				renderer.rowSelected(row);
-    				selectedRow = row;
-    				SelectionEvent.fire(this, rows.get(row));
-    			}
-    		}else if(isEnabled()){
-    			unselect(-1);
-    			selections.add(row);
-    			rows.get(row).selected = true;
-    			renderer.rowSelected(row);
-    			selectedRow = row;
-    			if(fireEvents)
-    				SelectionEvent.fire(this, rows.get(row));
-    		}
+        	if(selectedRow != row) {
+        		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
+        			while(selections.size() > 0) {
+        				int index = selections.get(0);
+        				if(fireEvents) {
+        					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+        					if(event != null && event.isCanceled())
+        						return;
+        				}
+        				unselect(index);
+        			}
+        		}
+        		
+        		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
+        			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
+        			if(event.isCanceled())
+        				return;
+        		}else if(!isEnabled())
+        			return;
+        	}
+   			unselect(-1);
+   			selections.add(row);
+   			rows.get(row).selected = true;
+   			renderer.rowSelected(row);
+   			selectedRow = row;
+   			if(fireEvents)
+   				SelectionEvent.fire(this, rows.get(row));
     	}
     	if(!rows.get(row).open) {
     		if(fireEvents){
