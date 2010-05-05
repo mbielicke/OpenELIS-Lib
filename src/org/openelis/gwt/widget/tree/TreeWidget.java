@@ -1006,6 +1006,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public void expand() {
     	unselect(-1);
         rows = new ArrayList<TreeDataItem>();
+        shownRows = 0;
         if(data == null)
         	return;
         for(int i = 0; i < data.size(); i++) {
@@ -1019,12 +1020,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     public void collapse() {
     	unselect(-1);
         rows = new ArrayList<TreeDataItem>();
+        shownRows = 0;
         if(data == null)
         	return;
         for(int i = 0; i < data.size(); i++) {
         	TreeDataItem item = data.get(i);
         	item.childIndex = i;
         	rows.add(item);
+        	shownRows++;
         	closeChildItems(item,rows);
         }
         refresh(false);
@@ -1066,8 +1069,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     
     private void closeChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows) {
    	 item.open = false;
-     if(item.shown)
-       	shownRows++;
+     //if(item.shown)
+       //	shownRows++;
      Iterator<TreeDataItem> it = item.getItems().iterator();   
      while(it.hasNext())
          closeChildItems(it.next(),rows);
