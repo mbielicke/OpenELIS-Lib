@@ -156,8 +156,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 													  HasBeforeSortHandlers,
 													  HasSortHandlers,
 													  HasBeforeRowMovedHandlers,
-													  HasRowMovedHandlers,
-													  NavigationWidget<TreeDataItem>{
+													  HasRowMovedHandlers{
+
 
     protected HashMap<String,ArrayList<TreeColumn>> columns;
     protected boolean enabled;
@@ -194,6 +194,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     protected ArrayList<TreeColumn> headers;
     protected boolean fireEvents = true;
     protected boolean queryMode;
+    ArrayList<LocalizedException> exceptions;
     
     public TreeWidget() {
 
@@ -337,7 +338,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     /**
-     * This method will determine if a specific TreeDataItem by its rowIndex[0..lastVisibleItem] is currently visible 
+     * This method will determine if a specific TreeDataItem by its rowIndex[0..lastReachableItem] is currently visible 
      * in the tree view.
      * @param row
      * @return
@@ -348,7 +349,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     
     /**
      * This method will determine the physical tree index[0..maxRow] of a TreeDataItem by its
-     * rowIndex[0..lastVisibleItem].  If the the row is currently not drawn on the screen this method will return a -1 
+     * rowIndex[0..lastReachableItem].  If the the row is currently not drawn on the screen this method will return a -1 
      * @param modelIndex
      * @return
      */
@@ -361,7 +362,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     /**
-     * This method will return the rowIndex[0..lastVisibleItem] of the given TreeDataItem.  
+     * This method will return the rowIndex[0..lastReachableItem] of the given TreeDataItem.  
      * Will return -1 if the TreeDataItem is not currently in the visible rows.
      * 
      * @param item
@@ -389,12 +390,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      */
     protected void select(final int row, final int col, boolean byClick) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode) {
-    		if(rows.get(row).parent == null){
-    			NavigationSelectionEvent.fire(this,rows.get(row).childIndex);
-    			return;
-    		}
-    	}
     	if(selectedRow != row) {
     		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
     			while(selections.size() > 0) {
@@ -472,7 +467,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     /** 
-     * This method will select a TreeDataItem based on its rowIndex[0..lastVisibleItem].  The row does not need
+     * This method will select a TreeDataItem based on its rowIndex[0..lastReachableItem].  The row does not need
      * to be currently drawn in the TreeView. 
      * @param index
      */
@@ -501,7 +496,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
     
     /**
-     * This method will select the TreeDataItem passed. 
+     * This method will select the TreeDataItem passed.  If the passed item is not currently visible
+     * becuase its parent nodes are closed, the method will will recursively open all parent nodes until the 
+     * item is added to the visible list of rows.  if you need to make sure this item is also drawn on the
+     * screen, call scrollToSelection() after this method.
      * @param item
      */
     public void select(TreeDataItem item) {
@@ -517,6 +515,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	select(rows.indexOf(item));
     }
 
+    /**
+     * This method will stop editing the active cell and flip it to it display state and fire any valueChangeEvents
+     * if necessary.
+     */
     public void finishEditing() {
         if (activeWidget != null) {
         	if(renderer.stopEditing() && fireEvents)
@@ -526,12 +528,32 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
     }
 
+    /**
+     * This method can be called to flip a cell to its active editing state.  Pass the rowIndex[0..lastReachableItem], if the 
+     * row is not currently displayed on the screen this method will do nothing.  
+     * @param row
+     * @param col
+     */
     public void startEditing(int row, int col) {
     	if(isRowDrawn(row))
     		select(row, col,false);
     }
+    
+    /**
+     * This method can be called to flip a cell to its active editing state.  if the item passed is currently not 
+     * displayed on the screen this method will do nothing.
+     * @param item
+     * @param col
+     */
+    public void startEditing(TreeDataItem item, int col) {
+    	startEditing(getRowIndex(item),col);
+    }
 
 
+    /**
+     * Enables the tree and columns to be edited.  Make sure column definitions are set before calling
+     * this method.
+     */
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
         for(ArrayList<TreeColumn> leaf : columns.values()) {
@@ -545,6 +567,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		return enabled;
 	}
 
+	/**
+	 * This method is coded to determine if the user has clicked outside the tree and will call finishEditing.
+	 */
 	public void onFocus(FocusEvent event) {
 		if(((ScreenPanel)event.getSource()).focused == null || !DOM.isOrHasChild(getElement(),((ScreenPanel)event.getSource()).focused.getElement())){
 			finishEditing();
@@ -556,6 +581,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
 	}
 
+	/**
+	 * Scrolls the to tree to the first selected item in the tree.  Will finishEditng an activeCell before scrolling.
+	 */
     public void scrollToSelection() {
     	finishEditing();
         if(numRows() == shownRows()){
@@ -570,6 +598,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
     }
     
+    /**
+     * Moves a TreeDataItem from its currentRowIndex[0..lastReachableItem] to the newRowIndex[0..lastReachableItem]
+     * @param curIndex
+     * @param newIndex
+     */
     public void moveRow(int curIndex, int newIndex) {
     	if(fireEvents) {
     		if(getHandlerCount(BeforeRowMovedEvent.getType()) > 0){
@@ -614,41 +647,56 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	renderer.dataChanged(true);
     }
     
-    public void addRow(TreeDataItem row) {
+    /**
+     * Adds the passed item to end of the data model as a TopLevel tree node.
+     * @param row
+     */
+    public void addRow(TreeDataItem item) {
     	finishEditing();
     	if(fireEvents) {
-    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), row);
+    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, data.size(), item);
     		if(event != null && event.isCancelled())
     			return;
     	}
-        data.add(row);
-        checkChildItems(row,rows);
+        data.add(item);
+        checkChildItems(item,rows);
         renderer.dataChanged(true);
-        row.childIndex = data.size()-1;
+        item.childIndex = data.size()-1;
         if(fireEvents)
-        	RowAddedEvent.fire(this, data.size()-1, row);
+        	RowAddedEvent.fire(this, data.size()-1, item);
     }
 
-    public void addRow(int index, TreeDataItem row) {
+    /**
+     * Inserts the passed item to the data model as a TopLevel tree node at the passed index
+     * @param index
+     * @param item
+     */
+    public void addRow(int index, TreeDataItem item) {
     	finishEditing();
     	if(fireEvents){
-    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, row);
+    		BeforeRowAddedEvent event = BeforeRowAddedEvent.fire(this, index, item);
     		if(event != null && event.isCancelled())
     			return;
     	}
     	int rowindex = rows.indexOf(data.get(index));
-        data.add(index,row);
+        data.add(index,item);
         ArrayList<TreeDataItem> added = new ArrayList<TreeDataItem>();
-        checkChildItems(row,added);
+        checkChildItems(item,added);
        	rows.addAll(rowindex, added);
        	for(int i = index; i < data.size(); i++) {
        		data.get(i).childIndex = i;
        	}
        	if(fireEvents)
-       		RowAddedEvent.fire(this, index, row);  	
+       		RowAddedEvent.fire(this, index, item);  	
     	renderer.dataChanged(true);
     }
     
+    /**
+     * Adds the passed Child Item to the passed Parent item at the end of its children list and will refresh and render the tree 
+     * for the cahnges.
+     * @param parent
+     * @param child
+     */
     public void addChildItem(TreeDataItem parent, TreeDataItem child) {
     	parent.addItem(child);
     	if(parent.open)
@@ -657,6 +705,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		RowAddedEvent.fire(this,-1, child);
     }
     
+    /**
+     * Inserts the passed Child Item to the passed Parent item at the index supplied and will refresh and render the tree 
+     * for the cahnges.
+     * @param parent
+     * @param child
+     */
     public void addChildItem(TreeDataItem parent, TreeDataItem child, int index) {
     	parent.addItem(index, child);
     	if(parent.open)
@@ -665,6 +719,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		RowAddedEvent.fire(this, -1, child);
     }
     
+    /**
+     * Removes the passed Child Item from the passed Parent Item and will refersh and render the tree for the changes.
+     * @param parent
+     * @param child
+     */
     public void removeChild(TreeDataItem parent, TreeDataItem child) {
     	unselect(-1);
     	parent.removeItem(parent.getItems().indexOf(child));
@@ -672,6 +731,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		refreshRow(parent);
     }
     
+    /**
+     * Clears the tree and and its data model.
+     */
     public void clear() {
     	if(data != null)
     		data.clear();
@@ -687,7 +749,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         renderer.dataChanged(false);
     }
 
-    public void clearSelections() {
+    /**
+     * Clears all selections without firing UnselectEvents.
+     */
+    protected void clearSelections() {
         for(int i : selections){
             rows.get(i).selected = false;
         }
@@ -696,14 +761,21 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         selectedCol = -1;
     }
 
+    /**
+     * Deletes the passed item from the tree and will refresh and render the tree for the change.
+     * @param item
+     */
     public void deleteRow(TreeDataItem item) {
     	deleteRow(rows.indexOf(item));
     }
 
+    /**
+     * Deletes the passed item from the tree by its rowIndex[0..lastReachableItem] and will refresh
+     * and render the tree for the change
+     * @param row
+     */
     public void deleteRow(int row) {
-    	//if(fireEvents)
-    		//UnselectionEvent.fire(this,rows.get(row),null);
-    	unselect(row);
+    	unselect(-1);
     	if(fireEvents) {
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
     		if(event != null && event.isCancelled())
@@ -733,6 +805,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	RowDeletedEvent.fire(this, row, item);
     }
     
+    /**
+     * Deletes the passed list of rowIndexes[0..lastReachableItem] from the tree. Will refresh and 
+     * render the tree for the changes.
+     * @param rowIndexes
+     */
     public void deleteRows(List<Integer> rowIndexes) {
     	unselect(-1);
         Collections.sort(rowIndexes);
@@ -762,25 +839,48 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         this.multiSelect = multi;
     }
 
+    /**
+     * Returns the model of the TopLevel tree nodes.
+     * @return
+     */
     public ArrayList<TreeDataItem> getData() {
         return data;
     }
 
+    /**
+     * Returns the value of of a given cell of TreeDataItem.  row is the rowIndex[0..lastReachableItem] of the item.
+     * @param row
+     * @param col
+     * @return
+     */
     public Object getObject(int row, int col) {
         return rows.get(row).cells.get(col).getValue();
     }
 
 
+    /**
+     * Returns the TreeDataItem at the passed rowIndex[0..lastReachableItem]
+     * @param row
+     * @return
+     */
     public TreeDataItem getRow(int row) {
         return rows.get(row);
     }
 
+    /**
+     * Returns the currently selcted TreeDataItem
+     * @return
+     */
     public TreeDataItem getSelection() {
     	if(selections == null || selections.size() == 0)
     		return null;
         return rows.get(selections.get(0));
     }
 
+    /**
+     * Returns a list of currently selected TreeDataItems
+     * @return
+     */
     public ArrayList<TreeDataItem> getSelections() {
         ArrayList<TreeDataItem> selected = new ArrayList<TreeDataItem>();
         for(int i : selections) {
@@ -789,45 +889,71 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return selected;
     }
     
+    /**
+     * Returns the rowIndex[0..lastReachableItem] of the currently selected item
+     * @return
+     */
     public int getSelectedRow() {
         return selectedRow;
     }
 
+    /**
+     * Will hide the TreeDataItem at the passed rowIndex[0..lastReachableItem]
+     * @param row
+     */
     public void hideRow(int row) {
         rows.get(row).shown = false;
         shownRows--;
         renderer.dataChanged(true);
     }
 
+    /**
+     * Determines if the TreeDataItem is enabled for editing at the passed
+     * rowIndex[0..lastReachableItem] 
+     * @param index
+     * @return
+     */
     public boolean isEnabled(int index) {
         if(index < numRows())
             return rows.get(index).enabled;
         return false;
     }
 
+    /**
+     * Determines if the TreeDataItem is selected at the passed rowIndex[0..lastReachableItem]
+     * @param index
+     * @return
+     */
     public boolean isSelected(int index) {
         return selections.contains(index);
     }
 
+    /**
+     * Loads a new model of TopLevel tree nodes into the tree completly replacing any existing model
+     */
     public void load(ArrayList<TreeDataItem> data) {
         this.data = data;
         shownRows = 0;
-        getVisibleRows();
+        getReachableRows();
         selections.clear();
         selectedRow = -1;
         selectedCol = -1;
         renderer.dataChanged(false);
     }
 
+    /**
+     * returns current number of ReachableItems in the tree. 
+     * @return
+     */
     public int numRows() {
         return rows.size();
     }
-    
-    public void navSelect(int index) {
-    	selectRow(index = rows.indexOf(data.get(index)));
-    }
-    
-    public void selectRow(int index){
+        
+    /**
+     * private method to handle the selection with multiSelection and rendering of selected rows
+     * @param index
+     */
+    private void selectRow(int index){
         if(index > rows.size())
             throw new IndexOutOfBoundsException();
         selectedRow = index;
@@ -859,11 +985,23 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	renderer.dataChanged(true);
     }
     
+    /**
+     * MultiSelection method that will select all items in the passed parameters of rowIndexes[0..lastReachableItem]
+     * Throws assertion error if tree is not in multiSelect mode;
+     * @param selections
+     */
 	public void selectRows(Integer... selections) {
+		assert multiSelect == true;
 		selectRows(Arrays.asList(selections));
 	}
 	
+	/**
+     * MultiSelection method that will select all items in the passed parameters of items
+     * Throws assertion error if tree is not in multiSelect mode;
+	 * @param selections
+	 */
 	public void selectRows(TreeDataItem... selections){
+		assert multiSelect == true;
 		List<Integer> indexes = new ArrayList<Integer>();
 		for(int i = 0; i < selections.length; i++) {
 			indexes.add(rows.indexOf(selections[i]));
@@ -871,38 +1009,64 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		selectRows(indexes);
 	}
 	
+	/**
+     * MultiSelection method that will select all items in the passed list of items
+     * Throws assertion error if tree is not in multiSelect mode;
+	 * @param selections
+	 */
 	public void selectRows(ArrayList<TreeDataItem> selections) {
+		assert multiSelect == true;
 		selectRows((TreeDataItem[])selections.toArray());
 	}
 	
+	/**
+     * MultiSelection method that will select all items in the passed list of rowIndexes[0..lastReachableItem] 
+     * Throws assertion error if tree is not in multiSelect mode;
+	 * @param selections
+	 */	
 	public void selectRows(List<Integer> selections) {
-		if(multiSelect)
-			ctrlKey = true;
+		assert multiSelect == true;
+		ctrlKey = true;
 		for(int i : selections)
 			select(i);
 		ctrlKey = false;
 	}
 
+	/*
     public void setModel(ArrayList<TreeDataItem> data) {
-        this.data = data;
-        
+        this.data = data;  
     }
+    */
 
+	/**
+	 * Will make an item visible if currently hidden 
+	 */
     public void showRow(int row) {
-        rows.get(row).shown = true;
-        shownRows++;
-        renderer.dataChanged(true);
+    	if(!rows.get(row).shown) {
+    		rows.get(row).shown = true;
+    		shownRows++;
+    		renderer.dataChanged(true);
+    	}
     }
 
+    /**
+     * Returns the number of shownRows which is a subset of reachable rows in the model
+     * @return
+     */
     public int shownRows() {
         return shownRows;
     }
 
+    /**
+     * This method will finishEditing the active cell and return the model of top level nodes
+     * @return
+     */
     public ArrayList<TreeDataItem> unload() {
     	finishEditing();
         return data;
     }
 
+   /*
     public void unselectRow(int index){
         if(index < 0) {
             clearSelections();
@@ -912,20 +1076,35 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
         renderer.rowUnselected(-1);
     }
-
+    */
+    
+    /**
+     * Sets the value of a cell in the item at the passed rowIndex[0..lastReachableItem] and column.  
+     */
     public void setCell(int row, int col,Object value) {
         rows.get(row).cells.get(col).setValue(value);
         if(isRowDrawn(row))
         	renderer.cellUpdated(row, col);
     }
 
+    /**
+     * Returns the Cell at the passed rowIndex[0..lastReachableItem] and column
+     * @param row
+     * @param col
+     * @return
+     */
     public TableDataCell getCell(int row, int col) {
         return rows.get(row).cells.get(col);
     }
 
-    public void setRow(int index, TreeDataItem row) {
+    /**
+     * Replaces the item at the passesd rowIndex[0..lastReachableItem] with the passed item
+     * @param index
+     * @param newItem
+     */
+    public void setRow(int index, TreeDataItem newItem) {
     	int rowindex = rows.indexOf(data.get(index));
-        data.set(index, row);
+        data.set(index, newItem);
         TreeDataItem item = rows.get(rowindex);
         while(item.isDecendant(rows.get(rowindex+1))){
     		TreeDataItem itemc = rows.get(rowindex+1);
@@ -937,49 +1116,53 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	shownRows--;
     	rows.remove(rowindex);
         ArrayList<TreeDataItem> added = new ArrayList<TreeDataItem>();
-        checkChildItems(row,added);
+        checkChildItems(newItem,added);
         rows.addAll(rowindex,added);
-        row.childIndex = index;
+        newItem.childIndex = index;
         renderer.dataChanged(true);
     }
     
+    /**
+     * Will toggle the passed TreeDataItem.  Will also select that item if not currently selected.
+     * @param item
+     */
     public void toggle(TreeDataItem item) {
     	toggle(rows.indexOf(item));
     }
     
+    /**
+     * Will toggle the treeDataItem at the passed in rowIndex[0..lastReachableItem].  Will also select the item if not
+     * currently selected.
+     * @param row
+     */
     public void toggle(int row) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && rows.get(row).parent == null && rows.get(row) != getSelection()) {
-    		NavigationSelectionEvent event = NavigationSelectionEvent.fire(this, rows.get(row).childIndex);
-    		if(event != null && event.isCancelled())
-    			return;
-    	}else {
-        	if(selectedRow != row) {
-        		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
-        			while(selections.size() > 0) {
-        				int index = selections.get(0);
-        				if(fireEvents) {
-        					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
-        					if(event != null && event.isCanceled())
-        						return;
-        				}
-        				unselect(index);
-        			}
-        		}
-        		
-        		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
-        			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
-        			if(event.isCanceled())
-        				return;
-        		}else if(!isEnabled())
-        			return;
-        	}
-   			selections.add(row);
-   			rows.get(row).selected = true;
-   			renderer.rowSelected(row);
-   			selectedRow = row;
-   			if(fireEvents)
-   				SelectionEvent.fire(this, rows.get(row));
-    	}
+       	if(selectedRow != row) {
+       		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
+       			while(selections.size() > 0) {
+       				int index = selections.get(0);
+       				if(fireEvents) {
+       					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+       					if(event != null && event.isCanceled())
+       						return;
+       				}
+       				unselect(index);
+       			}
+       		}
+       		
+       		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
+       			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(row));
+       			if(event.isCanceled())
+       				return;
+       		}else if(!isEnabled())
+       			return;
+       	}
+ 		selections.add(row);
+ 		rows.get(row).selected = true;
+ 		renderer.rowSelected(row);
+     	selectedRow = row;
+   		if(fireEvents)
+   			SelectionEvent.fire(this, rows.get(row));
+
     	if(!rows.get(row).open) {
     		if(fireEvents){
     			BeforeLeafOpenEvent event = BeforeLeafOpenEvent.fire(this, row, rows.get(row));
@@ -1003,12 +1186,20 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	}
     }
     
+    /** 
+     * Returns the rowIndex[0..lastReachableItem] of the first selcted row in the tree
+     * @return
+     */
     public int getSelectedRowIndex() {
         if(selections.size() == 0)
             return -1;
         return selections.get(0);
     }
     
+    /**
+     * Returns an int[] of selected rowIndexes[0..lastReachableItem] in the tree.
+     * @return
+     */
     public int[] getSelectedRowIndexes() {
         int[] ret = new int[selections.size()];
         for(int i = 0;  i < selections.size(); i++)
@@ -1016,21 +1207,41 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return ret;
     }
 
+    /**
+     * Returns an ArrayLis<Integer> of the selected rowIndexes[0..lastReachableItem]
+     * @return
+     */
     public ArrayList<Integer> getSelectedRowList() {
         return selections;
     }
     
+    /**
+     * Clears exceptions for the cell at the passed rowIndex[0..lastReachableItem]  and column
+     * @param row
+     * @param col
+     */
     public void clearCellExceptions(int row, int col) {
         rows.get(row).cells.get(col).clearExceptions();
         renderer.cellUpdated(row, col);
     }
 
+    /**
+     * Adds the passed exception to the cell at the passed rowIndex[0..lastReachableItem] and column
+     * @param row
+     * @param col
+     * @param ex
+     */
     public void setCellException(int row, int col, LocalizedException ex) {
         rows.get(row).cells.get(col).addException(ex);
         renderer.cellUpdated(row, col);
         
     }
     
+    /**
+     * Clears exceptions for the cell at the passed rowIndex[0..lastReachableItem] and column key
+     * @param row
+     * @param col
+     */    
     public void clearCellExceptions(int row, String col) {
     	int index = -1;
     	for(TreeColumn column : columns.get(getRow(row).leafType)) {
@@ -1042,7 +1253,13 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	}
         renderer.cellUpdated(row, index);
     }
-
+    
+    /**
+     * Adds the passed exception to the cell at the passed rowIndex[0..lastReachableItem] and column key
+     * @param row
+     * @param col
+     * @param ex
+     */
     public void setCellException(int row, String col, LocalizedException ex) {
     	int index = -1;
     	for(TreeColumn column : columns.get(getRow(row).leafType)) {
@@ -1056,16 +1273,30 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         
     }
     
+    /**
+     * Creates and returns a TreeDataItem of the passed leaf type
+     * @param leafType
+     * @return
+     */
     public TreeDataItem createTreeItem(String leafType) {
     	TreeDataItem td = new TreeDataItem(columns.get(leafType).size());
     	td.leafType = leafType;
     	return td;
     }
     
+    /**
+     * Sets the defined Hash of leaf types that defines the TreeColumns to the tree.
+     * @param leaves
+     */
     public void setLeaves(HashMap<String,TreeDataItem> leaves){
         this.leaves = leaves;
     }
     
+    /**
+     * This method will open all top level nodes in the model and also recurse through all children to open them and make
+     * every item in the tree reachable and be displayed in the tree.  It will also cause all current selections to be lost
+     * and the tree scrolled to the top.
+     */
     public void expand() {
     	unselect(-1);
         rows = new ArrayList<TreeDataItem>();
@@ -1080,6 +1311,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         refresh(false);
     }
     
+    /**
+     * This method will close all top level nodes in the model and also recurse through all children to close them. 
+     * Only top level nodes will be reachable. It will also cause all current selections to be lost
+     * and the tree scrolled to the top.
+     */
     public void collapse() {
     	unselect(-1);
         rows = new ArrayList<TreeDataItem>();
@@ -1096,28 +1332,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         refresh(false);
     }
     
-    public void collapse(TreeDataItem item) {
-    	unselect(-1);
-    	collapse(rows.indexOf(item));
-    }
-    
-    public void collapse(int index) {
-    	unselect(-1);
-    	closeChildItems(rows.get(index),rows);
-		refreshRow(index);
-    }
-    
-    private void getVisibleRows() {
-        rows = new ArrayList<TreeDataItem>();
-        if(data == null)
-        	return;
-        for(int i = 0; i < data.size(); i++) {
-        	TreeDataItem item = data.get(i);
-        	item.childIndex = i;
-        	checkChildItems(item,rows);
-        }
-    }
-    
+    /**
+     * Method called for recursively opening child items
+     * @param item
+     * @param rows
+     */
     private void openChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows) {
     	 item.open = true;
     	 rows.add(item);
@@ -1130,6 +1349,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
          }
     }
     
+    /**
+     * Method called for recursively closing child items
+     * @param item
+     * @param rows
+     */
     private void closeChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows) {
    	 item.open = false;
      //if(item.shown)
@@ -1139,6 +1363,39 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
          closeChildItems(it.next(),rows);
    }
     
+    /*
+    public void collapse(TreeDataItem item) {
+    	unselect(-1);
+    	collapse(rows.indexOf(item));
+    }
+    
+    public void collapse(int index) {
+    	unselect(-1);
+    	closeChildItems(rows.get(index),rows);
+		refreshRow(index);
+    }
+    */
+    
+    /**
+     * This method will walk the tree creating the initial list of reachable rows.  This method is called once when
+     * the data is initally loaded.
+     */
+    private void getReachableRows() {
+        rows = new ArrayList<TreeDataItem>();
+        if(data == null)
+        	return;
+        for(int i = 0; i < data.size(); i++) {
+        	TreeDataItem item = data.get(i);
+        	item.childIndex = i;
+        	checkChildItems(item,rows);
+        }
+    }
+    
+    /**
+     * Method recursively called for walking the tree to find reachable items 
+     * @param item
+     * @param rows
+     */
     private void checkChildItems(TreeDataItem item, ArrayList<TreeDataItem> rows){
         rows.add(item);
         if(item.shown)
@@ -1150,6 +1407,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         }
     }
     
+    /**
+     * Refreshes a the row at the rowIndex[0..lastReachableItem] making any changes to the tree and 
+     * rendering them in the display
+     * @param index
+     */
     private void refreshRow(int index) {
     	TreeDataItem row = rows.get(index);
     	while(index+1 < rows.size() && row.isDecendant(rows.get(index+1))){
@@ -1167,10 +1429,22 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         renderer.dataChanged(true);
     }
     
+    /**
+     * Refreshes the passed item into the reachable rows making any changes to the tree and 
+     * rendering them in the display
+     * @param index
+     */
     public void refreshRow(TreeDataItem item) {
     	refreshRow(rows.indexOf(item));
     }
 
+    /**
+     * Method called to determine if a cell can be edited by its passed rowIndex[0..lastReachableItem] and column.  Fires BeforeCellEdited event if
+     * registered.
+     * @param row
+     * @param col
+     * @return
+     */
     protected boolean canEditCell(int row, int col) {
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
         	if(fireEvents) {
@@ -1186,13 +1460,17 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         return isEnabled();
     }
     
-	public void addException(LocalizedException exception) {
+	/**
+	 * Stub method inherited from HasField interface
+	 */
+    public void addException(LocalizedException exception) {
 		// TODO Auto-generated method stub
-		
 	}
-
-	ArrayList<LocalizedException> exceptions;
-	
+    
+    /**
+     * This method is called on commit of a screen to determine if the Tree contains any 
+     * errors  
+     */
 	public void checkValue() {
 		finishEditing();
 		exceptions = null;
@@ -1214,35 +1492,57 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 			renderer.dataChanged(false);
 	}
 
+	/**
+	 * Stub method inherited from Hasfield Interface
+	 */
 	public void clearExceptions() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Returns any exceptions that may have been found in checkValue so the screen
+	 * knows the tree has errors and will cancel commit
+	 */
 	public ArrayList<LocalizedException> getExceptions() {
 		// TODO Auto-generated method stub
 		return exceptions;
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public Field getField() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public void getQuery(ArrayList list, String key) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public void setField(Field field) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public Object getFieldValue() {
 		return null;
 	}
 	
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public void setQueryMode(boolean query) {
 		// TODO Auto-generated method stub
 		
@@ -1311,11 +1611,20 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		return addHandler(handler,LeafClosedEvent.getType());
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public void setFieldValue(Object value) {
 		// TODO Auto-generated method stub
 		
 	}
 	
+	/**
+	 * Sorts the tree model by the selected column in the headers list.
+	 * This will cause the tree to be walked agian to determine the reachable rows
+	 * @param col
+	 * @param direction
+	 */
     public void sort(int col, SortDirection direction) {
     	if(fireEvents){
     		if(getHandlerCount(BeforeSortEvent.getType()) > 0){
@@ -1339,10 +1648,17 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             	
             }
     	}
-    	getVisibleRows();
+    	getReachableRows();
     	renderer.dataChanged(false);
     }
     
+    /**
+     * Method called recursively for sorting child items
+     * @param item
+     * @param leaf
+     * @param col
+     * @param dir
+     */
     private void sortChildItems(TreeDataItem item, String leaf, int col, SortDirection dir){
     	if(item.leafType.equals(leaf)){
     		Collections.sort(item.getItems(),new ColumnComparator(col,dir));
@@ -1352,6 +1668,10 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
             sortChildItems(it.next(),leaf,col,dir);
     }
     
+    /**
+     * Enables or disables the tree items to be dragged
+     * @param drag
+     */
     public void enableDrag(boolean drag) {
     	if(drag) {
     		if(dragController == null) {
@@ -1370,6 +1690,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	}
     }
     
+    /**
+     * Enables or disables the Tree from accepting drop events
+     */
     public void enableDrop(boolean drop) {
     	if(drop){
     		dropController = new TreeIndexDropController(this);
@@ -1377,11 +1700,19 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		dropController = null;
     }
     
+    /**
+     * Adds a target where items from this tree can be dragged to.
+     * @param drop
+     */
     public void addTarget(HasDropController drop) {
     	assert dragController != null;
     	dragController.registerDropController(drop.getDropController());
     }
     
+    /**
+     * Removes a target that this tree can no longer be dragged to.
+     * @param drop
+     */
     public void removeTarget(HasDropController drop){
     	assert dragController != null;
     	dragController.unregisterDropController(drop.getDropController());
@@ -1403,18 +1734,37 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		// TODO Auto-generated method stub
 	}
 	
+	/**
+	 * Will redraw the displayed tree to pull in changes made to TreeDataItems directly.  
+	 * if true is passed in the the tree will keep its current scroll postion, false will 
+	 * cause the tree to be scrolled to the top
+	 * @param keepPosition
+	 */
 	public void refresh(boolean keepPosition) {
 		renderer.dataChanged(keepPosition);
 	}
 	
+	/**
+	 * Redraws a cell based on its rowIndex[0..lastReachableItem] and column.  Used if a TreeDataItem 
+	 * cell was changed directly through code
+	 * @param row
+	 * @param col
+	 */
 	public void refresh(int row, int col) {
 		renderer.cellUpdated(row, col);
 	}
 	
+	/**
+	 * Sets the flag usesd to determine if the tree should fire registered events or not
+	 * @param fire
+	 */
 	public void fireEvents(boolean fire) {
 		fireEvents = fire;
 	}
 	
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public HandlerRegistration addFieldValueChangeHandler(
 			ValueChangeHandler handler) {
 		return null;
@@ -1425,16 +1775,25 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		return addHandler(handler,UnselectionEvent.getType());
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public void addExceptionStyle(String style) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public Object getWidgetValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Stub method inherited from HasField interface
+	 */
 	public void removeExceptionStyle(String style) {
 		// TODO Auto-generated method stub
 		
