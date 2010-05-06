@@ -305,6 +305,16 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     public void unselect(int row) {
         finishEditing();
+        if(selections.size() > 0) {
+        	if(fireEvents) {
+        		TreeDataItem cand = null;
+        		if( row > -1)
+        			cand = rows.get(row);
+        		UnselectionEvent event = UnselectionEvent.fire(this, rows.get(selections.get(0)), cand);
+        		if(event != null && event.isCanceled())
+        			return;
+        	}
+        }
         if(row == -1){
         	for(int i : selections) {
         		rows.get(i).selected = false;
@@ -360,11 +370,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
     			while(selections.size() > 0) {
     				int index = selections.get(0);
-    				if(fireEvents) {
-    					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
-    					if(event != null && event.isCanceled())
-    						return;
-    				}
+    				//if(fireEvents) {
+    				//	UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+    				//	if(event != null && event.isCanceled())
+    				//		return;
+    				//}
     				unselect(index);
     			}
     		}
@@ -637,8 +647,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
     public void deleteRow(int row) {
-    	if(fireEvents)
-    		UnselectionEvent.fire(this,rows.get(row),null);
+    	//if(fireEvents)
+    		//UnselectionEvent.fire(this,rows.get(row),null);
     	unselect(row);
     	if(fireEvents) {
     		BeforeRowDeletedEvent event = BeforeRowDeletedEvent.fire(this, row, getRow(row));
@@ -893,11 +903,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
         			while(selections.size() > 0) {
         				int index = selections.get(0);
-        				if(fireEvents) {
-        					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
-        					if(event != null && event.isCanceled())
-        						return;
-        				}
+        				//if(fireEvents) {
+        				//	UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+        				//	if(event != null && event.isCanceled())
+        				//		return;
+        				//}
         				unselect(index);
         			}
         		}
