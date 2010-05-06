@@ -238,9 +238,13 @@ public class TreeRenderer {
         	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         	//if(changed) {
         		Widget wid = controller.activeWidget;
+        		ArrayList<LocalizedException> exceps = null;
+				if(controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions != null)
+					exceps = controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions;
+				else
+					exceps =  new ArrayList<LocalizedException>(); 
         		if(wid instanceof HasField){
-        			if(((HasField)wid).getExceptions() != null){
-        				ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
+        			if(((HasField)wid).getExceptions() != null){	
         				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions())
         					exceps.add((LocalizedException)exc.clone());
         				
