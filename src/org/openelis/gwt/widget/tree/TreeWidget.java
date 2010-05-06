@@ -173,7 +173,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     protected int cellHeight = 21;
     protected int cellSpacing = 0;
     protected Widget activeWidget = null;
-    protected int[] modelIndexList;
+    protected int[] rowIndexList;
     protected boolean showRows;
     protected String title;
     protected boolean showHeader;
@@ -299,7 +299,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
            
     		if(treeIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
                 return;
-            select(modelIndexList[cell.getRowIndex()], cell.getCellIndex(),true);
+            select(rowIndexList[cell.getRowIndex()], cell.getCellIndex(),true);
 		}
     	ctrlKey = false;
     	shiftKey = false;
@@ -308,8 +308,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 
     /**
      * Pass -1 to this method to unselect all rows in the tree.  This method will fire an UnselectionEvent
-     * if a current item is selected and UnselectionHandler is registered to the tree. UnselectEvent will be
-     * passed a null candidate row when -1 is pa
+     * if a current item is selected and an UnselectionHandler is registered to the tree. UnselectEvent will be
+     * passed a null candidate row when -1 is passed.
      */
     public void unselect(int row) {
         finishEditing();
@@ -336,22 +336,46 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         	renderer.rowUnselected(row);
     }
     
+    /**
+     * This method will determine if a specific TreeDataItem by its rowIndex[0..lastVisibleItem] is currently visible 
+     * in the tree view.
+     * @param row
+     * @return
+     */
     protected boolean isRowDrawn(int row){
-    	return row >= modelIndexList[0] && row <= modelIndexList[view.table.getRowCount()-1];
+    	return row >= rowIndexList[0] && row <= rowIndexList[view.table.getRowCount()-1];
     }
     
-    protected int treeIndex(int modelIndex) {
+    /**
+     * This method will determine the physical tree index[0..maxRow] of a TreeDataItem by its
+     * rowIndex[0..lastVisibleItem].  If the the row is currently not drawn on the screen this method will return a -1 
+     * @param modelIndex
+     * @return
+     */
+    protected int treeIndex(int rowIndex) {
     	for(int i = 0; i < view.table.getRowCount(); i++){
-    		if(modelIndexList[i] == modelIndex)
+    		if(rowIndexList[i] == rowIndex)
     			return i;
     	}
     	return -1;
     }
     
-    public int getTreeIndex(TreeDataItem item) {
+    /**
+     * This method will return the rowIndex[0..lastVisibleItem] of the given TreeDataItem.  
+     * Will return -1 if the TreeDataItem is not currently in the visible rows.
+     * 
+     * @param item
+     * @return
+     */
+    public int getRowIndex(TreeDataItem item) {
     	return rows.indexOf(item);
     }
     
+    /**
+     * Method used by lib classes to start editing in a cell.
+     * @param row
+     * @param col
+     */
     protected void select(int row, int col) {
     	select(row,col,false);
     }
@@ -447,15 +471,40 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	}
     }
     
-    public void select(int index) {
-    	selectRow(index);
+    /** 
+     * This method will select a TreeDataItem based on its rowIndex[0..lastVisibleItem].  The row does not need
+     * to be currently drawn in the TreeView. 
+     * @param index
+     */
+    public void select(int rowIndex) {
+    	if(selectedRow != rowIndex) {
+  			while(selections.size() > 0) {
+    			int index = selections.get(0);
+    			if(fireEvents) {
+    				UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(rowIndex));
+    				if(event != null && event.isCanceled())
+    					return;
+    			}
+    			unselect(index);
+    		}
+    		
+    		if(getHandlerCount(BeforeSelectionEvent.getType()) > 0 && fireEvents) {
+    			BeforeSelectionEvent<TreeDataItem> event = BeforeSelectionEvent.fire(this, rows.get(rowIndex));
+    			if(event.isCanceled())
+    				return;
+    		}else if(!isEnabled())
+    			return;
+    	}
+    	selectRow(rowIndex);
     	if(fireEvents)
     		SelectionEvent.fire(this, getSelection());
     }
     
-    
+    /**
+     * This method will select the TreeDataItem passed. 
+     * @param item
+     */
     public void select(TreeDataItem item) {
-    	unselect(-1);
     	if(item.parent != null && !item.parent.open) {
     		TreeDataItem parent = item.parent;
     		while(!parent.open){
@@ -924,7 +973,6 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         		}else if(!isEnabled())
         			return;
         	}
-   			unselect(-1);
    			selections.add(row);
    			rows.get(row).selected = true;
    			renderer.rowSelected(row);

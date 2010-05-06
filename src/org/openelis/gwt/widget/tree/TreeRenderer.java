@@ -70,7 +70,7 @@ public class TreeRenderer {
     }
     
     public void load(int pos) {
-        controller.modelIndexList = new int[controller.maxRows];
+        controller.rowIndexList = new int[controller.maxRows];
         int ScrollHeight = (controller.shownRows*controller.cellHeight);
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight+(controller.maxRows*controller.cellSpacing)+(controller.maxRows*3)+controller.cellSpacing))/(controller.cellHeight))).intValue();
         if(testStart < controller.shownRows() - controller.maxRows)
@@ -111,7 +111,7 @@ public class TreeRenderer {
      * @param index
      */
     private void loadRow(int index, int modelIndex) {
-        controller.modelIndexList[index] = modelIndex;     
+        controller.rowIndexList[index] = modelIndex;     
         TreeDataItem row = controller.getRow(modelIndex);
         rows.get(index).modelIndex = modelIndex;
         rows.get(index).item = row;
@@ -305,7 +305,7 @@ public class TreeRenderer {
 
         public void onClick(ClickEvent event) {
             if(((Grid)event.getSource()).getCellForEvent(event).getCellIndex() == clickCell){
-                controller.toggle(controller.modelIndexList[rowIndex]);
+                controller.toggle(controller.rowIndexList[rowIndex]);
                 event.stopPropagation();
             }
         }
