@@ -267,9 +267,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     	this.columns = columns;
     }
     
-    public int getTreeWidth() {
+    /**
+     * This method is called be TreeViewHeader for accurate resizing
+     * @return
+     */
+    protected int getTreeWidth() {
     	int tw = 0;
-    	
     	if(width.equals("auto")){
     		for(TreeColumn column : headers)
     			tw += column.getCurrentWidth();
@@ -303,19 +306,21 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     }
 
 
+    /**
+     * Pass -1 to this method to unselect all rows in the tree.  This method will fire an UnselectionEvent
+     * if a current item is selected and UnselectionHandler is registered to the tree. UnselectEvent will be
+     * passed a null candidate row when -1 is pa
+     */
     public void unselect(int row) {
         finishEditing();
-        if(selections.size() > 0) {
-        	if(fireEvents) {
-        		TreeDataItem cand = null;
-        		if( row > -1)
-        			cand = rows.get(row);
-        		UnselectionEvent event = UnselectionEvent.fire(this, rows.get(selections.get(0)), cand);
-        		if(event != null && event.isCanceled())
-        			return;
-        	}
-        }
         if(row == -1){
+        	if(selections.size() > 0) {
+            	if(fireEvents && getHandlerCount(UnselectionEvent.getType())> 0) {
+            		UnselectionEvent event = UnselectionEvent.fire(this, rows.get(selections.get(0)), null);
+            		if(event != null && event.isCanceled())
+            			return;
+            	}
+            }
         	for(int i : selections) {
         		rows.get(i).selected = false;
         	}
@@ -370,11 +375,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
     			while(selections.size() > 0) {
     				int index = selections.get(0);
-    				//if(fireEvents) {
-    				//	UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
-    				//	if(event != null && event.isCanceled())
-    				//		return;
-    				//}
+    				if(fireEvents) {
+    					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+    					if(event != null && event.isCanceled())
+    						return;
+    				}
     				unselect(index);
     			}
     		}
@@ -903,11 +908,11 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
         			while(selections.size() > 0) {
         				int index = selections.get(0);
-        				//if(fireEvents) {
-        				//	UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
-        				//	if(event != null && event.isCanceled())
-        				//		return;
-        				//}
+        				if(fireEvents) {
+        					UnselectionEvent event = UnselectionEvent.fire(this, rows.get(index), rows.get(row));
+        					if(event != null && event.isCanceled())
+        						return;
+        				}
         				unselect(index);
         			}
         		}
