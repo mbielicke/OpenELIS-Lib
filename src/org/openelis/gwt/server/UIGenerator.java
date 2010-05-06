@@ -22,6 +22,8 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
@@ -1383,11 +1385,18 @@ public class UIGenerator extends Generator {
     	            if(!visible)
     	            	sw.println("wid"+id+".getTabBar().setStyleName(\"None\");");
     	            sw.println("wid"+id+".selectTab(0);");
+    	    		sw.println("wid"+id+".addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {");
+    	    			sw.println("public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {");
+    	    				sw.println("panel.setFocusWidget(null);");
+    	    			sw.println("}");	
+    	    		sw.println("});");
     	        }
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.TabPanel");
     			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionEvent");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionHandler");
     		}
     	});
     	factoryMap.put("text",new Factory() {
@@ -2017,6 +2026,7 @@ public class UIGenerator extends Generator {
     	        }
                 sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+                sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
                 
                 
