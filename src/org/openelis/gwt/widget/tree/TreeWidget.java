@@ -1481,9 +1481,20 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 				Widget wid = columns.get(rows.get(i).leafType).get(j).getWidgetEditor(rows.get(i));
 				if(wid instanceof HasField){
 					((HasField)wid).checkValue();
-					rows.get(i).cells.get(j).exceptions = ((HasField)wid).getExceptions();
-					if(rows.get(i).cells.get(j).exceptions != null){
+					if(rows.get(i).cells.get(j).exceptions != null)
 						exceptions = rows.get(i).cells.get(j).exceptions;
+					if(((HasField)wid).getExceptions() != null) {
+						exceptions = ((HasField)wid).getExceptions();
+	        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
+	        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
+	        				exceps.add((LocalizedException)exc.clone());
+	        				if(rows.get(i).cells.get(j).exceptions != null){
+	        					if(!rows.get(i).cells.get(j).getExceptions().contains(exc))
+	        						rows.get(i).cells.get(j).exceptions.add(exc);
+	        				}
+	        			}						
+						if(rows.get(i).cells.get(j).exceptions != null)
+							exceptions = rows.get(i).cells.get(j).exceptions;
 					}
 				}
 			}
