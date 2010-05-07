@@ -82,6 +82,9 @@ public class TreeColumn {
     protected ArrayList<Filter> filterList;
     public String leafType;
     public ArrayList<String> sortLeaves;
+    protected HandlerRegistration mouseOver;
+    protected HandlerRegistration mouseOut;
+    protected VerticalPanel errorPanel;
     
     private class CheckBoxContainer extends AbsolutePanel implements HasMouseOverHandlers, HasMouseOutHandlers {
 
@@ -403,13 +406,32 @@ public class TreeColumn {
     }
     
     public void setExceptions(Widget wid, ArrayList<LocalizedException> exceptions) {
+		//Clean up previous MouseHandlers
+    	if(mouseOver != null){
+    		try {
+    			mouseOver.removeHandler();
+    		}catch(AssertionError e) {
+    			mouseOver = null;
+    		}
+    	}
+    	if(mouseOut != null){
+    		try {
+    			mouseOut.removeHandler();
+    		}catch(AssertionError e){
+    			mouseOut = null;
+    		}
+    	}
     	if(exceptions == null || exceptions.size() == 0){
         	wid.removeStyleName("InputError");
         	wid.removeStyleName("InputWarning");
     		return;
     	}
-    	final VerticalPanel errorPanel = new VerticalPanel();
+    	errorPanel = new VerticalPanel();
 		String style = "InputWarning";
+		if(wid instanceof HasField){
+			((HasField)wid).clearExceptions();
+			((HasField)wid).getField().drawErrors = false;
+		}
 		for (LocalizedException error : exceptions) {
 			HorizontalPanel hp = new HorizontalPanel();
 			if(error instanceof Warning){
@@ -426,16 +448,21 @@ public class TreeColumn {
 			}
 			hp.add(new Label(error.getMessage()));
 			errorPanel.add(hp);
+			if(wid instanceof HasField)
+				((HasField)wid).addException(error);
 		}
 		if(wid instanceof HasField)
 			((HasField)wid).addExceptionStyle(style);
 		else
 			wid.addStyleName(style);
-		((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
+    	
+		mouseOver = ((HasMouseOverHandlers)wid).addMouseOverHandler(new MouseOverHandler() {
 
 			public void onMouseOver(MouseOverEvent event) {
+
 				String styleName = ((Widget)event.getSource()).getStyleName();
-				if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
+				
+				//if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 					if(pop == null){
 						pop = new PopupPanel(true);
 						//pop.setStyleName("ErrorPopup");
@@ -459,18 +486,19 @@ public class TreeColumn {
 					};
 					timer.schedule(5000);
 				}
-			}
+		//	}
 
 		});
-		((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
+		
+		mouseOut = ((HasMouseOutHandlers)wid).addMouseOutHandler(new MouseOutHandler() {
 
 			public void onMouseOut(MouseOutEvent event) {
 				String styleName = ((Widget)event.getSource()).getStyleName();
-				if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
+				//if(styleName.indexOf("InputError") > -1 || styleName.indexOf("InputWarning") > -1){
 					if(pop != null){
 						pop.hide();
 					}
-				}
+				//}
 			}
 
 		});
