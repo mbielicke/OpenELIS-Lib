@@ -31,6 +31,7 @@ import java.util.Stack;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
+import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.TextBox;
@@ -217,7 +218,7 @@ public class TreeRenderer {
         	if(controller.activeWidget instanceof AutoComplete){
         		if(((AutoComplete)controller.activeWidget).popup.isShowing())
         			((AutoComplete)controller.activeWidget).popup.hide(true);
-        		if(controller.queryMode)
+        		if(((AutoComplete)controller.activeWidget).getField().queryMode)
         			newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
         		else
         			newVal = ((AutoComplete)controller.activeWidget).getSelection();
@@ -228,8 +229,13 @@ public class TreeRenderer {
         		   !((TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
         		     newVal = ((TextBox)controller.activeWidget).getText();
         	}
-        	if(newVal == null)		
-        		newVal = ((HasField)controller.activeWidget).getFieldValue();
+        	if(newVal == null){
+        		Field field = ((HasField)controller.activeWidget).getField();
+        		if(field.queryMode)
+        			newVal = field.queryString;
+        		else
+        			newVal = field.getValue();
+        	}
         	controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	if(newVal instanceof TableDataRow)
         		newVal = ((TableDataRow)newVal).key;
@@ -245,8 +251,10 @@ public class TreeRenderer {
 					exceps =  new ArrayList<LocalizedException>(); 
         		if(wid instanceof HasField){
         			if(((HasField)wid).getExceptions() != null){	
-        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions())
-        					exceps.add((LocalizedException)exc.clone());
+        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
+        					if(!exceps.contains(exc))
+        						exceps.add((LocalizedException)exc.clone());
+        				}
         				
         				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
         			}else
