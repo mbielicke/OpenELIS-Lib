@@ -123,20 +123,20 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
                 controller.selectedCol = -1;
             }
             if((controller.selectedRow >= controller.shownRows()-1 || controller.selectedRow >= controller.numRows()-1) &&
-                controller.selectedCol + 1 >= controller.columns.size()) {
+                controller.selectedCol + 1 >= controller.columns.get(controller.getRow(controller.selectedRow).leafType).size()) {
                   controller.finishEditing();
                   controller.selectedCol = -1;
                   controller.setFocus(true);
                   return;
             }
-            if (controller.selectedCol + 1 >= controller.columns.size()) {
+            if (controller.selectedCol + 1 >= controller.columns.get(controller.getRow(controller.selectedRow).leafType).size()) {
                 tabToNextRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol + 1;
                 while (col < controller.columns.get(controller.getRow(controller.selectedRow).leafType).size() && (controller.columns.get(controller.getRow(controller.selectedRow).leafType).get(col).getColumnWidget() instanceof Label ||
                        (!controller.canEditCell(controller.selectedRow,col))))
                     col++;
-                if(col == controller.columns.size()){
+                if(col == controller.columns.get(controller.getRow(controller.selectedRow).leafType).size()){
                     tabToNextRow(controller.selectedRow);
                 }else{
                     final int fCol = col;
