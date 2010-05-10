@@ -582,9 +582,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 
 	/**
-	 * Scrolls the to tree to the first selected item in the tree.  Will finishEditng an activeCell before scrolling.
+	 * Scrolls the tree to the first selected item in the tree.  Selection will be at the top of the tree regardless 
+	 * of its current position in the tree. Will finishEditng an activeCell before scrolling.
 	 */
     public void scrollToSelection() {
+    	if(isRowDrawn(selectedRow))
+    		return;
     	finishEditing();
         if(numRows() == shownRows()){
             view.scrollBar.setScrollPosition(cellHeight*selectedRow);
@@ -595,6 +598,33 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
                     shownIndex++;
             }
             view.scrollBar.setScrollPosition(cellHeight*shownIndex);
+        }
+    }
+    
+	/**
+	 * Scrolls the tree to the first selected item in the tree.  If the selection is off the top the selected Item will 
+	 * be at the top of the tree.  If the item is off the bottom the selection will the last item in the tree view. 
+	 * WillfinishEditng an activeCell before scrolling.
+	 */
+    public void scrollToVisible() {
+    	if(isRowDrawn(selectedRow))
+    		return;
+    	finishEditing();
+        if(numRows() == shownRows()){
+        	if(selectedRow > rowIndexList[maxRows-1])
+        		view.scrollBar.setScrollPosition((cellHeight*selectedRow)-(cellHeight*(maxRows-1)));
+        	else
+        		view.scrollBar.setScrollPosition(cellHeight*selectedRow);
+        }else{
+            int shownIndex = 0;
+            for(int i = 0; i < selectedRow; i++){
+                if(getRow(i).shown)
+                    shownIndex++;
+            }
+            if(selectedRow > rowIndexList[maxRows-1])
+            	view.scrollBar.setScrollPosition((cellHeight*shownIndex)-(cellHeight*(maxRows-1)));
+            else
+            	view.scrollBar.setScrollPosition(cellHeight*shownIndex);
         }
     }
     

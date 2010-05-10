@@ -475,7 +475,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     /**
-     * Scrolls the table to the first selected index in the selected list.
+     * Scrolls the table to the first selected index in the selected list.  The Row will be at the top of
+     * the view regardless of the current position.
+     * 
      */
     public void scrollToSelection(){
     	finishEditing();
@@ -488,6 +490,32 @@ public class TableWidget extends FocusPanel implements ClickHandler,
                     shownIndex++;
             }
             view.scrollBar.setScrollPosition(cellHeight*shownIndex);
+        }
+    }
+    
+    /**
+     * Scrolls the table to the first selected index in the selected list. If selectedRow is off the bottom of the view the
+     * selected row will be at the bootom of the view,else it will be at the top.
+     */
+    public void scrollToVisisble(){
+    	if(isRowDrawn(selectedRow))
+    		return;
+    	finishEditing();
+        if(numRows() == shownRows()){
+        	if(selectedRow > modelIndexList[maxRows-1])
+        		view.scrollBar.setScrollPosition((cellHeight*selectedRow)-(cellHeight*(maxRows-1)));
+        	else
+        		view.scrollBar.setScrollPosition(cellHeight*getSelectedRow());
+        }else{
+            int shownIndex = 0;
+            for(int i = 0; i < getSelectedRow(); i++){
+                if(getRow(i).shown)
+                    shownIndex++;
+            }
+            if(shownIndex > modelIndexList[maxRows-1])
+            	view.scrollBar.setScrollPosition((cellHeight*shownIndex)-(cellHeight*(maxRows-1)));
+            else
+            	view.scrollBar.setScrollPosition(cellHeight*shownIndex);
         }
     }
 
