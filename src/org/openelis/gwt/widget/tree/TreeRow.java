@@ -1,6 +1,9 @@
 package org.openelis.gwt.widget.tree;
 
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -19,7 +22,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TreeRow extends Widget implements HasAllMouseHandlers {
+public class TreeRow extends Widget implements HasAllMouseHandlers, HasDoubleClickHandlers{
     
     public int index;
     public int modelIndex;
@@ -39,6 +42,12 @@ public class TreeRow extends Widget implements HasAllMouseHandlers {
         setElement(elem);
         sinkEvents(Event.MOUSEEVENTS);
         onAttach();
+        addDoubleClickHandler(new DoubleClickHandler() {
+			public void onDoubleClick(DoubleClickEvent event) {
+				controller.toggle(item);
+			}
+        	
+        });
     }
     
     public void setDragValues() {
@@ -75,6 +84,10 @@ public class TreeRow extends Widget implements HasAllMouseHandlers {
 
 	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
 		return addDomHandler(handler,MouseWheelEvent.getType());
+	}
+
+	public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
+		return addDomHandler(handler,DoubleClickEvent.getType());
 	}
     
 }
