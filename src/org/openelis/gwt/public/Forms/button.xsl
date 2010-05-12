@@ -117,7 +117,7 @@ version="1.0">
 <xsl:template name="processButton">
     <appButton key="process" action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="ctrl+a">
 		<HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
+	    	<AbsolutePanel style="ProcessButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
 	  	</HorizontalPanel>
 	</appButton>
