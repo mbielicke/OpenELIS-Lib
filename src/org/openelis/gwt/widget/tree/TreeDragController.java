@@ -117,30 +117,33 @@ public class TreeDragController extends PickupDragController implements HasBefor
     }
     
 	protected Widget newDragProxy(DragContext context) {
-		AbsolutePanel container = new AbsolutePanel();
+	    AbsolutePanel ap, container;
+	    WidgetArea draggableArea, widgetArea;
+        DecoratorPanel dp;
+        HorizontalPanel hp;
+        
+	    container = new AbsolutePanel();
 		container.getElement().getStyle().setProperty("overflow", "visible");
 
-		WidgetArea draggableArea = new WidgetArea(context.draggable, null);
+		draggableArea = new WidgetArea(context.draggable, null);
 		for (Widget widget : context.selectedWidgets) {
-			WidgetArea widgetArea = new WidgetArea(widget, null);
-			DecoratorPanel dp = new DecoratorPanel();
+			widgetArea = new WidgetArea(widget, null);
+			dp = new DecoratorPanel();
+			
 			dp.setStyleName("ErrorWindow");
-			HorizontalPanel hp = new HorizontalPanel();
-			AbsolutePanel ap = new AbsolutePanel();
-			ap.setPixelSize(10, widget.getOffsetHeight());
-			hp.add(ap);
+			hp = new HorizontalPanel();
+			
 			dropIndicator = new AbsolutePanel();
 			dropIndicator.setStyleName("DragStatus NoDrop");
 			hp.add(dropIndicator);
 			ap = new AbsolutePanel();
-			ap.setPixelSize(widget.getOffsetWidth(), widget.getOffsetHeight());
 			hp.add(ap);
+			
 			if(proxy != null){
 				ap.add(proxy);
 				ap.setWidth("100%");
 			}else{
 				proxy = ((TreeRow)context.draggable).getDragProxy();
-				//dl.setStyleName("ScreenLabel");
 				ap.add(proxy);
 			}
 			hp.setStyleName("DragProxy");
@@ -148,8 +151,7 @@ public class TreeDragController extends PickupDragController implements HasBefor
 			container.add(dp, widgetArea.getLeft() - draggableArea.getLeft(), widgetArea.getTop()
 					- draggableArea.getTop());
 		}
-		//this.proxy = container;
-		//DOM.setStyleAttribute(container.getElement(), "zIndex", "1000");
+
 		return container;
 	}
     
