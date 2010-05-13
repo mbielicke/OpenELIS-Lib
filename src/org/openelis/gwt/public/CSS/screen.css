@@ -998,11 +998,12 @@ cursor:default;}
     height:28px;
 }
 /*Error PopUP panel*/
+/*.ErrorWindow{
+    width:200px;
+    height:30px;}*/
 .ErrorWindow .middle{
     padding:0px;
     border:0px;
-    width:500px;
-    height:30px;
 }
 .ErrorWindow .topRight {
     width:8px;
@@ -1576,13 +1577,86 @@ padding:8px;
 padding-bottom:0;
 }
 /************** Drag & Drop ************/
-.dragdrop-movable-panel{
-background:black;
+.dragdrop-movable-panel .middleCenter{
+background:white;
+opacity:0.8;
+border:1px solid #d8d8d8;
+border-top:0;
+		}
+.dragdrop-movable-panel .ErrorWindow{
+    width:176px;}
+.dragdrop-movable-panel .ErrorWindow .middle{
+    padding:0px;
+    border:0px;
 }
+.dragdrop-movable-panel .ErrorWindow .topRight {
+    width:6px;
+    height:6px;
+background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
+}
+.dragdrop-movable-panel .ErrorWindow .middleRight {
+    width:6px;
+    height:100%;
+    background: transparent url("../Images/shadow-lr.png") repeat-y -6px 0;
+}
+.dragdrop-movable-panel .ErrorWindow .middleRightInner{
+ /*   background: transparent url("../Images/popupright-y.png") top repeat-y;*/
+ background:none;
+    height:100%;
+    margin-top:6px;
+}
+.dragdrop-movable-panel .ErrorWindow .bottomRight {
+    background: transparent url("../Images/shadow.png") no-repeat 0 -6px;
+    width:6px;
+    height:6px;
+}
+.dragdrop-movable-panel .ErrorWindow .bottomCenter {
+    background:url("../Images/shadow.png") no-repeat 0 -36px;
+    height:6px;
+}
+.dragdrop-movable-panel .ErrorWindow .bottomCenterInner {
+    background:url("../Images/shadow.png") repeat-x 0 -36px;
+    height:6px;
+    margin-left:6px;
+}
+.dragdrop-movable-panel .ErrorWindow .bottomLeft {
+    width:6px;
+    height:6px;
+    background:url("../Images/shadow.png") no-repeat 0 -12px;
+}
+.dragdrop-movable-panel .ErrorWindow .middleLeft {
+    width:6px;
+    height:100%;
+    background: url("../Images/shadow-lr.png") repeat-y 0 0;
+}
+.dragdrop-movable-panel .ErrorWindow .topLeft {
+    width:6px;
+    height:6px;
+    background: url("../Images/shadow.png") no-repeat 0 0;
+}
+.dragdrop-movable-panel .ErrorWindow .topCenter{
+    background:none;
+    height:6px;
+}
+.dragdrop-movable-panel .ErrorWindow .topCenter .topCenterInner{
+    background:white;
+    height:5px;
+    border:1px solid #d8d8d8;
+    border-bottom:0;
+    opacity:0.8;
+}
+.DragProxy{
+ margin-top:-3;
+}
+
 .dragdrop-proxy{
 /**	border:1px solid #d8d8d8;**/
 	background:none;
 opacity:0.9;
+}
+
+tr .DropOnRow{
+	background:#defadc;
 }
 
 .dragdrop-proxy{
@@ -1592,13 +1666,12 @@ opacity:0.9;
 .dragdrop-proxy .ScreenLabel{
 	border:1px solid #d8d8d8;
 	border-left:0;
-	padding-bottom:3px;
 	background:white;
+	padding-right:4px;
 		}
 
 .DropPositioner {
-    background:#70c163;
-}
+		border-top:1px dashed #63B159;}
 
 .DragSelector{
    border:1px solid #99bbe8;
@@ -1622,14 +1695,13 @@ opacity:0.9;
 .Dragstatus{
     width:20px;
     height:18px;
-    border:1px solid #d8d8d8;
-    border-right:0;
+    margin:0 0 2 2;
 }
 .Drop{
-    background:white url('../Images/commitbuttonimage.gif') no-repeat center;
+    background:url('../Images/commitbuttonimage.gif') no-repeat center;
 }
 .NoDrop{
-    background:white url('../Images/stop.gif') no-repeat center;
+    background:url('../Images/stop.gif') no-repeat center;
 }
 
 .ScreenDragList .Hover{
