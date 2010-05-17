@@ -434,9 +434,11 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                     //item.addMouseListener((MouseListener)ClassFactory.forName("HoverListener"));
                     filterMenu.menuItemsPanel.add(item);
                     item.args = new Object[] {filter,index};
+                    item.enable(true);
                 } 
                 filterMenu.pop.addCloseHandler(this);
                 ((MenuItem)event.getData()).menuItemsPanel.add(filterMenu);
+                filterMenu.enable(true);
             }
             if(col.queryable) {
                 final TextBox entryText = new TextBox();
