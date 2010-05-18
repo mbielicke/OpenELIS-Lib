@@ -25,6 +25,9 @@ license ("UIRF Software License"), in which case the provisions of a
 UIRF Software License are applicable instead of those above. 
 -->
 <module>
+  <inherits name="gwtupload.GWTUpload"/>
+  <!-- Load dinamically predefined styles in the library when the application starts -->
+  <stylesheet src="Upload.css"/>
   <source path="widget"/>
   
     <replace-with class="org.openelis.gwt.widget.FTPFileUpload.DecoratedFileUploadImplClick">

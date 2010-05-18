@@ -12,13 +12,14 @@ public class DropEvent<I> extends GwtEvent<DropHandler<I>> {
 	public static <I> DropEvent<I> fire(HasDropHandlers<I> source, I dragObject, Object dropTarget) {
 		if(TYPE != null) {
 			DropEvent<I> event = new DropEvent<I>(dragObject,dropTarget);
-			source.fireEvent(event);
+			//source.fireEvent(event);
 			return event;
 		}
 		return null;
 	}
 	
-	protected DropEvent(I dragObject,Object dropTarget) {
+	
+	public DropEvent(I dragObject,Object dropTarget) {
 		this.dragObject = dragObject;
 		this.dropTarget = dropTarget;
 	}

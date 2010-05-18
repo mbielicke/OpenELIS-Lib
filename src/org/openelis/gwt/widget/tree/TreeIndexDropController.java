@@ -19,8 +19,6 @@ import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.allen_sauer.gwt.dnd.client.util.WidgetLocation;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
@@ -84,11 +82,14 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		}	
 		if(!validDrop)
 			throw new VetoDragException();
-		if(getHandlerCount(BeforeDropEvent.getType()) > 0) {
-			BeforeDropEvent event = BeforeDropEvent.fire(this, (TreeRow)context.draggable, tree.renderer.rows.get(targetRow));
+		if(handlerManager.getHandlerCount(BeforeDropEvent.getType()) > 0) {
+			BeforeDropEvent<TreeRow> event = new BeforeDropEvent<TreeRow>((TreeRow)context.draggable, tree.renderer.rows.get(targetRow));
+			handlerManager.fireEvent(event);
 			if(event != null && event.isCancelled()){
 				positioner.removeFromParent();
 				positioner = null;
+				for(TreeRow trow : tree.renderer.rows )
+					trow.removeStyleName("DropOnRow");
 				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 				throw new VetoDragException();
 			}
@@ -165,9 +166,11 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		}
 		dropping = false;
 		dropRow = null;
+		for(TreeRow trow : tree.renderer.rows )
+			trow.removeStyleName("DropOnRow");
 		super.onDrop(context);
-		if(getHandlerCount(DropEvent.getType()) > 0)
-			DropEvent.fire(this, dropRow, tree.getRow(targetRow));
+		if(handlerManager.getHandlerCount(DropEvent.getType()) > 0)
+			handlerManager.fireEvent(new DropEvent<TreeRow>(dropRow, tree.getRow(targetRow)));
 		tree.select(item);
 	}
 
@@ -177,6 +180,8 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			positioner.removeFromParent();
 			positioner = null;
 		}
+		for(TreeRow trow : tree.renderer.rows )
+			trow.removeStyleName("DropOnRow");
 		((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 		super.onLeave(context);
 	}
@@ -217,8 +222,9 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 				dropPos = DropPosition.ON;
 			else 
 				dropPos = DropPosition.BELOW;
-			if(getHandlerCount(DropEnterEvent.getType()) > 0){
-				DropEnterEvent event = DropEnterEvent.fire(this, (TreeRow)context.draggable, tree.renderer.rows.get(targetRow == -1 ? 0 : targetRow),dropPos);
+			if(handlerManager.getHandlerCount(DropEnterEvent.getType()) > 0){
+				DropEnterEvent<TreeRow> event = new DropEnterEvent<TreeRow>((TreeRow)context.draggable, tree.renderer.rows.get(targetRow == -1 ? 0 : targetRow),dropPos);
+				handlerManager.fireEvent(event);
 				if(event != null && event.isCancelled())
 					validDrop = false;
 			}
@@ -240,6 +246,8 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			}else{
 				((TreeDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
 				positioner.removeFromParent();
+				for(TreeRow trow : tree.renderer.rows )
+					trow.removeStyleName("DropOnRow");
 			}
 		}else{
 			Location headerLocation = new WidgetLocation(tree.view.header,context.boundaryPanel);
@@ -321,8 +329,10 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		DOM.setStyleAttribute(p.getElement(), "zIndex", "1000");
 		return p;
 	}
-	private HandlerManager handlerManager;
+	
+	private HandlerManager handlerManager = new HandlerManager(this);
 
+	/*
 	protected final <H extends EventHandler> HandlerRegistration addHandler(
 			final H handler, GwtEvent.Type<H> type) {
 		return ensureHandlers().addHandler(type, handler);
@@ -333,6 +343,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 	 * 
 	 * @return the handler manager
 	 * */
+	/*
 	HandlerManager ensureHandlers() {
 		return handlerManager == null ? handlerManager = new HandlerManager(this)
 		: handlerManager;
@@ -354,19 +365,19 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		return handlerManager.getHandlerCount(type);
 
 	}	
-
+    */
 	public HandlerRegistration addBeforeDropHandler(
 			BeforeDropHandler<TreeRow> handler) {
-		return addHandler(handler,BeforeDropEvent.getType());
+		return handlerManager.addHandler(BeforeDropEvent.getType(),handler);
 	}
 
 	public HandlerRegistration addDropHandler(DropHandler<TreeRow> handler) {
-		return addHandler(handler,DropEvent.getType());
+		return handlerManager.addHandler(DropEvent.getType(),handler);
 	}
 
 	public HandlerRegistration addDropEnterHandler(
 			DropEnterHandler<TreeRow> handler) {
-		return addHandler(handler,DropEnterEvent.getType());
+		return handlerManager.addHandler(DropEnterEvent.getType(),handler);
 	}
 	
 	
