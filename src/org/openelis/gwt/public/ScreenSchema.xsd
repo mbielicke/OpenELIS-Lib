@@ -32,10 +32,7 @@
 	
 		<xsd:element name="fileUpload" substitutionGroup="widgets">
 		<xsd:complexType>
-			<xsd:attribute name="action" type="xsd:string" use="required"/>
 			<xsd:attribute name="service" type="xsd:string" use="required"/>
-			<xsd:attribute name="method" type="xsd:string" use="required"/>
-			<xsd:attribute name="multi" type="xsd:boolean"/>
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
