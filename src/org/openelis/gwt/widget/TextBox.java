@@ -106,6 +106,8 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 
 	public void setQueryMode(boolean query) {
+		if(field.queryMode == query)
+			return;
 		field.setQueryMode(query);
 		enforceLength = !query;
 		enforceMask = !query;

@@ -44,6 +44,7 @@ public interface ScreenServiceInt extends RemoteService {
 
 
     public String            callString(String method) throws Exception;
+    public String            callString(String method, String param) throws Exception;
     public Integer           callInteger(String method) throws Exception;
     public Boolean           callBoolean(String method) throws Exception;
     public Datetime          callDatetime(String method, byte begin, byte end) throws Exception;

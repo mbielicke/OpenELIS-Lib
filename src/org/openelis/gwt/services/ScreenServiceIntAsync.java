@@ -41,6 +41,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface ScreenServiceIntAsync {
 
     public Request callString(String method, AsyncCallback<String> callback);
+    public Request callString(String method, String param, AsyncCallback<String> callback);
     public Request callInteger(String method, AsyncCallback<Integer> callback);
     public Request callBoolean(String method, AsyncCallback<Boolean> callback);
     public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);

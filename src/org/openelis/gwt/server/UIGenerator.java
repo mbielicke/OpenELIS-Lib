@@ -542,16 +542,11 @@ public class UIGenerator extends Generator {
     	});
     	factoryMap.put("fileUpload", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("FileUpload wid"+id+" = new FileUpload();");
-    			sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+
-    					                       "?service="+node.getAttributes().getNamedItem("service").getNodeValue()+"" +
-    					                       	"&method="+node.getAttributes().getNamedItem("method").getNodeValue()+"\");");
-    			if(node.getAttributes().getNamedItem("multi") != null)
-    				sw.println("wid"+id+".setMultiFile("+node.getAttributes().getNamedItem("multi").getNodeValue()+");");
+    			sw.println("FileUploadWidget wid"+id+" = new FileUploadWidget(\""+node.getAttributes().getNamedItem("service").getNodeValue()+"\");");
     			setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.FileUpload");
+    			composer.addImport("org.openelis.gwt.widget.FileUploadWidget");
     		}
     	});
     	factoryMap.put("AbsolutePanel", new Factory() {

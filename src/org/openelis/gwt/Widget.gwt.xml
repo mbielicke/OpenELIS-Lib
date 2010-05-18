@@ -26,5 +26,23 @@ UIRF Software License are applicable instead of those above.
 -->
 <module>
   <source path="widget"/>
+  
+    <replace-with class="org.openelis.gwt.widget.FTPFileUpload.DecoratedFileUploadImplClick">
+    <when-type-is class="org.openelis.gwt.widget.FTPFileUpload.DecoratedFileUploadImpl"/>
+    <any>
+      <when-property-is name="user.agent" value="ie6"/>
+      <when-property-is name="user.agent" value="ie8" />
+      <when-property-is name="user.agent" value="safari"/>
+    </any>
+  </replace-with>
+
+  <replace-with class="org.openelis.gwt.widget.FTPFileUpload.DecoratedFileUploadImplNoClick">
+    <when-type-is class="org.openelis.gwt.widget.FTPFileUpload.DecoratedFileUploadImpl"/>
+    <any>
+      <when-property-is name="user.agent" value="gecko"/>
+      <when-property-is name="user.agent" value="gecko1_8" />
+      <when-property-is name="user.agent" value="opera"/>
+    </any>
+  </replace-with>
 
 </module>

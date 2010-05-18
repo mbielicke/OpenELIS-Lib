@@ -134,6 +134,12 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         service.callString(method, callback);
         return callback.getResult();
 	}
+	
+	public String callString(String method, String param) throws Exception {
+        Callback<String> callback = new Callback<String>();
+        service.callString(method, param, callback);
+        return callback.getResult();
+	}
 
 	public Request call(String method, Double param,
 			AsyncCallback<? extends RPC> callback) {
@@ -163,6 +169,10 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 
 	public Request callString(String method, AsyncCallback<String> callback) {
 		return service.callString(method, callback);
+	}
+	
+	public Request callString(String method, String param, AsyncCallback<String> callback) {
+		return service.callString(method, param, callback);
 	}
 
 	public <T extends RPC> T call(String method) throws Exception {

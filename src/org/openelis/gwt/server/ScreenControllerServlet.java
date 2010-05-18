@@ -107,6 +107,10 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 	public String callString(String method) throws Exception {
     	return (String)invoke(getThreadLocalRequest().getParameter("service"),method);
 	}
+	
+	public String callString(String method, String param) throws Exception {
+    	return (String)invoke(getThreadLocalRequest().getParameter("service"),method,new Class[]{param.getClass()},new Object[] {param});
+	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends RPC> T call(String method) throws Exception {

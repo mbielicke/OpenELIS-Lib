@@ -168,8 +168,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 		super.onDrop(context);
 		if(getHandlerCount(DropEvent.getType()) > 0)
 			DropEvent.fire(this, dropRow, tree.getRow(targetRow));
-		
-		 tree.select(item);
+		tree.select(item);
 	}
 
 	@Override
