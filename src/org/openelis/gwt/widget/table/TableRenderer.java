@@ -241,8 +241,8 @@ public class TableRenderer  {
         		Field field = ((HasField)controller.activeWidget).getField();
         		if(field.queryMode)
         			newVal = field.queryString;
-        		//else
-        			//newVal = field.getValue();
+        		else
+        			newVal = field.getValue();
         	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	
