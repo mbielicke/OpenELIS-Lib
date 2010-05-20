@@ -15,7 +15,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by screens to manage paged queries.
@@ -49,7 +48,7 @@ public abstract class ScreenNavigator {
     protected boolean     byRow, enable;
     protected ArrayList   result;
     protected Query       query;
-    protected Widget      widget;
+    protected TableWidget table;
     protected AppButton   atozNext, atozPrev;
 
     public ScreenNavigator(ScreenDefInt def) {
@@ -59,9 +58,26 @@ public abstract class ScreenNavigator {
     }
 
     protected void initialize(ScreenDefInt def) {
-        widget = (Widget)def.getWidget("atozTable");
-        if (widget != null) {
-            addSelectionHandler();
+        table = (TableWidget)def.getWidget("atozTable");
+        if (table != null) {
+            table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
+                public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+                    // since we don't know if the fetch will succeed, we are
+                    // going
+                    // cancel this selection and select the table row ourselves.
+                    if (enable)
+                        select(event.getItem().index);
+                    event.cancel();
+                }
+            });
+            table.addBeforeCellEditedHandler(new BeforeCellEditedHandler() {
+                public void onBeforeCellEdited(BeforeCellEditedEvent event) {
+                    event.cancel();
+                }
+            });
+            // we don't want the table to get focus; we can still select because
+            // we will get the onBeforeSelection event.
+            table.enable(false);
         }
 
         atozNext = (AppButton)def.getWidget("atozNext");
@@ -113,8 +129,8 @@ public abstract class ScreenNavigator {
 
         row = 0;
         this.result = result;
-        if (widget != null)
-            load();
+        if (table != null)
+            table.load(getModel());
         //
         // we are going back a page and we want to select the last row in
         // in the list
@@ -198,8 +214,8 @@ public abstract class ScreenNavigator {
             } finally {
                 selection = -1;
             }
-            if (widget != null)
-                unselectRow(selection);
+            if (table != null)
+                table.unselect(selection);
             if (atozNext != null)
                 atozNext.enable(false);
             if (atozPrev != null)
@@ -211,16 +227,16 @@ public abstract class ScreenNavigator {
         } else {
             if (fetch((RPC)result.get(row))) {
                 selection = row;
-                if (widget != null)
-                    selectRow(selection);
+                if (table != null)
+                    table.selectRow(selection);
                 if (atozNext != null)
                     atozNext.enable(true);
                 if (atozPrev != null)
                     atozPrev.enable(true);
             } else {
                 selection = -1;
-                if (widget != null)
-                    unselectRow(selection);
+                if (table != null)
+                    table.unselect(selection);
             }
         }
     }
@@ -237,54 +253,5 @@ public abstract class ScreenNavigator {
         query.setPage(page);
 
         executeQuery(query);
-    }
-
-    /*
-     * Can be overridden to allow a different widget or behavior for selection
-     * handler. 
-     */
-    protected void addSelectionHandler() {
-        TableWidget table;
-        
-        table = (TableWidget) widget;
-        table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
-            public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
-                // since we don't know if the fetch will succeed, we are
-                // going
-                // cancel this selection and select the table row ourselves.
-                if (enable)
-                    select(event.getItem().index);
-                event.cancel();
-            }
-        });
-        table.addBeforeCellEditedHandler(new BeforeCellEditedHandler() {
-            public void onBeforeCellEdited(BeforeCellEditedEvent event) {
-                event.cancel();
-            }
-        });
-        // we don't want the table to get focus; we can still select because
-        // we will get the onBeforeSelection event.
-        table.enable(false);
-    }
-
-    /*
-     * Can be overridden to allow a different widget.
-     */
-    protected void load() {
-        ((TableWidget)widget).load(getModel());
-    }
-
-    /*
-     * Can be overridden to allow a different widget.
-     */
-    protected void selectRow(int selection) {
-        ((TableWidget)widget).selectRow(selection);
-    }
-
-    /*
-     * Can be overridden to allow a different widget.
-     */
-    protected void unselectRow(int selection) {
-        ((TableWidget)widget).unselect(selection);
     }
 }
