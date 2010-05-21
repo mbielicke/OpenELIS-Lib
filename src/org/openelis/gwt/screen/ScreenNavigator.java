@@ -66,7 +66,7 @@ public abstract class ScreenNavigator {
                     // going
                     // cancel this selection and select the table row ourselves.
                     if (enable)
-                        select(event.getItem().index);
+                        select(event.getItem().modelIndex);
                     event.cancel();
                 }
             });
