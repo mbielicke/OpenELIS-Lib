@@ -462,13 +462,16 @@ background:white;
 }
 
 
-.selectIcon, .completeIcon, .reviewAndReleaseIcon, .PrintButtonImage, .EditMultipleButtonImage, .sdwisSampleLoginIcon, .DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .popoutButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
+.selectIcon, .completeIcon, .reviewAndReleaseIcon, .unreleaseIcon, .PrintButtonImage, .EditMultipleButtonImage, .sdwisSampleLoginIcon, .DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .popoutButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
 .AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
 .StandardNoteButtonImage, .groupRowButtonImage, .SelectAllButtonImage, .environmentalSampleLoginIcon,
 .ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
     width:20px;
     height:20px;
 }
+
+.unreleaseIcon{background:url('../Images/unrelease.png') no-repeat;}
+.disabled .unreleaseIcon{background:url('../Images/unreleasedisabled.png') no-repeat;}
 
 .selectIcon{background:url('../Images/select.png') no-repeat;}
 .disabled .selectIcon{background:url('../Images/selectdisabled.png') no-repeat;}
