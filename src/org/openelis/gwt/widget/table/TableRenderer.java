@@ -241,7 +241,7 @@ public class TableRenderer  {
         		Field field = ((HasField)controller.activeWidget).getField();
         		if(field.queryMode)
         			newVal = field.queryString;
-        		else
+        		else if(!(controller.activeWidget instanceof AutoComplete))
         			newVal = field.getValue();
         	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
