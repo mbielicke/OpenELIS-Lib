@@ -53,21 +53,13 @@ import com.google.gwt.user.client.ui.Widget;
  */
  public class CalendarWidget extends Screen implements HasValue<Datetime>, ClickHandler {
    
-    protected AppButton prevMonth;
-    protected AppButton nextMonth;
-    protected AppButton monthSelect;
-    protected AppButton ok;
-    protected AppButton cancel;
-    protected AppButton prevDecade;
-    protected AppButton nextDecade;
-    protected AppButton today;
-    protected ArrayList<AppButton> months;
-    protected ArrayList<AppButton> years;
+    protected AppButton prevMonth, nextMonth, monthSelect, ok, cancel, prevDecade,
+                        nextDecade, today;
+    protected ArrayList<AppButton> months, years;
     protected ScreenService service; 
     protected CalendarRPC form;
     protected TextBox<Datetime> time;
-    protected ScreenDefInt calendarDef;
-    protected ScreenDefInt monthYearDef;
+    protected ScreenDefInt calendarDef, monthYearDef;
     
     public CalendarWidget(Datetime date,byte begin, byte end) throws Exception {
     	super((ScreenDefInt)GWT.create(CalendarDef.class));
@@ -78,9 +70,6 @@ import com.google.gwt.user.client.ui.Widget;
         form.begin = begin;
         form.end = end;
         form = service.call("getMonth",form);
-        //ScreenDef def = new ScreenDef();
-        //def.setXMLString(form.xml);
-		//drawScreen(def);
 		setHandlers();
     }
     

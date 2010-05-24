@@ -11,187 +11,161 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 
-public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements HasField<T> {
+public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
+                                                                     ScreenWidgetInt<T> {
 
-	public enum Case {MIXED,UPPER,LOWER};
-    public Case textCase = Case.MIXED;
-    
-    public boolean enforceMask = true;
-    public boolean enforceLength = true;
-    public boolean autoNext = false;
-    public int length = 255;
-    public String mask;
-    public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
-    private Field<T> field;
-    private boolean enabled;
-    
+    protected int               length      = 255;
+    protected boolean           enforceMask = true, enforceLength = true, autoNext = false,
+                                enabled;
+    protected String            mask;
+    protected TextAlignConstant alignment   = TextBox.ALIGN_LEFT;
+    protected Field<T>          field;
+
+    protected Case              textCase    = Case.MIXED;
+
+    public enum Case {
+        MIXED, UPPER, LOWER
+    };
+
     public TextBox() {
-        
     }
     
-    public void setCase(Case textCase){
+
+    /**
+     * Set the text case for input.
+     */
+    public void setCase(Case textCase) {
         this.textCase = textCase;
-        if (textCase == Case.UPPER){
-            addStyleName("Upper");
-            removeStyleName("Lower");
+
+        switch (textCase) {
+            case UPPER:
+                addStyleName("Upper");
+                removeStyleName("Lower");
+                break;
+            case LOWER:
+                addStyleName("Lower");
+                removeStyleName("Upper");
+                break;
+            default:
+                removeStyleName("Upper");
+                removeStyleName("Lower");
         }
-        else if (textCase == Case.LOWER){
-            addStyleName("Lower");
-            removeStyleName("Upper");
-        }else{
-        	removeStyleName("Upper");
-        	removeStyleName("Lower");
-        }
-        	
     }
-    
-    public void setLength(int length) {
+
+    /**
+     * Sets the maximum input characters allowed for this text field.
+     */
+    public void setMaxLength(int length) {
         this.length = length;
-        setMaxLength(length);
+        super.setMaxLength(length);
     }
-    
-    public String getText() {
-        if (textCase == Case.UPPER)
-            return super.getText().toUpperCase();
-        else if(textCase == Case.LOWER)
-            return super.getText().toLowerCase();
-        else
-            return super.getText();
-    }
-    
-    public void setText(String text) {
-        if(text == null || textCase == Case.MIXED)
-            super.setText(text);
-        else if(textCase == Case.UPPER)
-            super.setText(text.toUpperCase());
-        else 
-            super.setText(text.toLowerCase());
-    }
-    
+
+    /**
+     * Sets the mask for this input field. 
+     * @see MaskListener 
+     */
     public void setMask(String mask) {
         this.mask = mask;
-        new MaskListener(this,mask);
-        setLength(mask.length()); 
+        new MaskListener(this, mask);
+        setMaxLength(mask.length());
     }
-    
-    public void setTextAlignment(TextAlignConstant alignment){
+
+    /**
+     * Set the text alignment. 
+     */
+    public void setTextAlignment(TextAlignConstant alignment) {
         this.alignment = alignment;
         super.setTextAlignment(alignment);
     }
 
-	public Field getField() {
-		return field;
-	}
+    public void addException(LocalizedException error) {
+    }
 
-	
-	public void setField(Field<T> field) {
-		this.field = field;
-		addValueChangeHandler(field);
-		addBlurHandler(field);
-		addMouseOutHandler(field);
-		addMouseOverHandler(field);
-	}
-	
-	public void addException(LocalizedException error) {
-		field.addException(error);
-		field.drawExceptions(this);
-	}
-	
-	public void clearExceptions() {
-		field.clearExceptions(this);
-	}
-	
-	public void addTabHandler(TabHandler handler) {
-		addDomHandler(handler,KeyPressEvent.getType());
-	}
+    public void clearExceptions() {
+    }
 
-	public void setQueryMode(boolean query) {
-		if(field.queryMode == query)
-			return;
-		field.setQueryMode(query);
-		enforceLength = !query;
-		enforceMask = !query;
-		//if(query)
-			//changeReg.removeHandler();
-		//else
-			//addValueChangeHandler(handler);
-	}
+    public void setQueryMode(boolean query) {
+        if (field.queryMode == query) {
+            return;
+        } else if (query) {
+            field.setQueryMode(true);
+            enforceMask = false;
+            super.setMaxLength(255);
+            super.setTextAlignment(TextBox.ALIGN_LEFT);
+        } else {
+            field.setQueryMode(false);
+            enforceMask = true;
+            super.setMaxLength(length);
+            super.setTextAlignment(TextBox.ALIGN_LEFT);
+        }
+    }
 
-	public void checkValue() {
-		field.checkValue(this);
-		
-	}
+    public Object getQuery() {
+        if ( !field.queryMode)
+            return null;
+    
+        return field.getQuery();
+    }
 
-	public void getQuery(ArrayList<QueryData> list, String key) {
-		if(!field.queryMode)
-			return;
-		if(field.queryString != null && !"".equals(field.queryString)) {
-			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			if(field instanceof StringField)
-				qd.type = QueryData.Type.STRING;
-			else if(field instanceof IntegerField)
-				qd.type = QueryData.Type.INTEGER;
-			else if(field instanceof DoubleField)
-				qd.type = QueryData.Type.DOUBLE;
-			else if(field instanceof DateField)
-				qd.type = QueryData.Type.DATE;
-			list.add(qd);
-		}
-		
-	}
+    public ArrayList<LocalizedException> getExceptions() {
+    }
 
-	public ArrayList<LocalizedException> getExceptions() {
-		return field.exceptions;
-	}
+    public void setEnabled(boolean enabled) {
+        setReadOnly( !enabled);
+        /*if ( !enabled)
+            unsinkEvents(Event.KEYEVENTS);
+        else
+            sinkEvents(Event.KEYEVENTS); */
+    }
 
-	public void enable(boolean enabled) {
-		this.enabled = enabled;
-		setReadOnly(!enabled);
-		if(!enabled){
-			unsinkEvents(Event.KEYEVENTS);
-		}else
-			sinkEvents(Event.KEYEVENTS);
-	}
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public boolean isEnabled() {
+        return !isReadOnly();
+    }
 
-	public T getFieldValue() {
-		// TODO Auto-generated method stub
-		return field.getValue();
-	}
-	
-	public void setFieldValue(T value) {
-		field.setValue(value);
-		if(value != null)
-			setText(field.format());
-		else 
-			setText("");
-	}
+    public T getValue() {
+        return field.getValue();
+    }
 
-	public HandlerRegistration addFieldValueChangeHandler(
-			ValueChangeHandler<T> handler) {
-		return field.addValueChangeHandler(handler);
-	}
-	
-	public void setValue(T value) {
-		setFieldValue(value);
-	}
+    public void setValue(T value) {
+        field.setValue(value);
+        if (value != null)
+            setText(field.format());
+        else
+            setText("");
+    }
 
-	public void addExceptionStyle(String style) {
-		addStyleName(style);
-	}
+    public HandlerRegistration addFieldValueChangeHandler(ValueChangeHandler<T> handler) {
+        return field.addValueChangeHandler(handler);
+    }
 
-	public Object getWidgetValue() {
-		return getText();
-	}
+    public void addExceptionStyle(String style) {
+        addStyleName(style);
+    }
 
-	public void removeExceptionStyle(String style) {
-		removeStyleName(style);
-	}
-	
-	
+    public Object getWidgetValue() {
+        return getText();
+    }
+
+    public void removeExceptionStyle(String style) {
+        removeStyleName(style);
+    }
+
+    public void addTabHandler(TabHandler handler) {
+        addDomHandler(handler, KeyPressEvent.getType());
+    }
+
+    /**
+     * This method is overwritten to implement case management. Use the
+     * setValue/getValue methods for normal screen use.
+     */
+    public String getText() {
+        switch (textCase) {
+            case UPPER:
+                return super.getText().toUpperCase();
+            case LOWER:
+                return super.getText().toLowerCase();
+            default:
+                return super.getText();
+        }
+    }
 }
