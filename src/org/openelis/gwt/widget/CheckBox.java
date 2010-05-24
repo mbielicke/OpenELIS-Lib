@@ -50,8 +50,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 
 public class CheckBox extends FocusPanel implements ClickHandler, HasValue<String>,  HasField<String>, HasMouseOutHandlers, HasMouseOverHandlers, HasKeyDownHandlers, KeyDownHandler {
@@ -90,34 +88,8 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
             setState(UNKNOWN);
     }
     
-    public CheckBox(CheckType type, String text){
-        this(type);
-        Label label = new Label(text);
-        label.setStyleName("CheckText");
-        hp.add(label);
-    }
-    
-    public CheckBox(CheckType type, Widget widget){
-        this(type);
-        hp.add(widget);
-    }
-    
     public void addTabHandler(TabHandler handler) {
     	addDomHandler(handler,KeyPressEvent.getType());
-    }
-    
-    public void setText(String text){
-        Label label = new Label(text);
-        label.setStyleName("CheckText");
-        if(hp.getWidgetCount() > 1)
-            hp.remove(1);
-        hp.add(label);
-    }
-    
-    public void setWidget(Widget widget){
-        if(hp.getWidgetCount() > 1)
-            hp.remove(1);
-        hp.add(widget);
     }
     
     public void setType(CheckType type){
@@ -233,18 +205,6 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 		addMouseOutHandler(field);
 		addMouseOverHandler(field);
 	}
-
-	/*
-	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return addDomHandler(handler, BlurEvent.getType());
-	}
-	
-	public HandlerRegistration addFocusHandler(FocusHandler handler) {
-		return addDomHandler(handler, FocusEvent.getType());
-	}
-
-	*/
-
 
 	public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
 		return addDomHandler(handler,KeyDownEvent.getType());

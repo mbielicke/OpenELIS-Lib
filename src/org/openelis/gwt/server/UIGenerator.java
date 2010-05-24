@@ -694,10 +694,6 @@ public class UIGenerator extends Generator {
     	            //defaultType = CheckBox.CheckType.THREE_STATE;
     	        }
     	       
-    	        if (node.getAttributes().getNamedItem("prompt") != null){
-    	             sw.println("wid"+id+".setText(\""+node.getAttributes().getNamedItem("prompt").getNodeValue()+"\");");
-    	        }
-    	        
     	        if (node.getChildNodes().getLength() > 0){
     	            NodeList widgets = node.getChildNodes();
     	            for (int k = 0; k < widgets.getLength(); k++) {
