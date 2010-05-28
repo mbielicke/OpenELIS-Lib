@@ -70,14 +70,14 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     private void tabToNextRow(int curRow) {
         int row = findNextActive(curRow);
         if(row < 0)
-        	return;
+            return;
         int col = 0;
        
         while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col))) {
             col++;
             if(col == controller.columns.size()) {
-            	tabToNextRow(row);
-            	return;
+                tabToNextRow(row);
+                return;
             } 
         }
        
@@ -85,8 +85,8 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             final int fRow = row;
             final int fCol = col;
             if(!controller.isRowDrawn(fRow)){
-            	controller.view.setScrollPosition(controller.view.top+(controller.cellHeight*(row-controller.selectedRow)));
-        		controller.unselect(-1);
+                controller.view.setScrollPosition(controller.view.top+(controller.cellHeight*(row-controller.selectedRow)));
+                controller.unselect(-1);
             }
             //DeferredCommand.addCommand(new Command() {
               //  public void execute() {
@@ -99,21 +99,21 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
     private void tabToPrevRow(int curRow) {
         final int row = findPrevActive(curRow);
         if(row < 0)
-        	return;
+            return;
         int col = controller.columns.size() - 1;
         while ((controller.columns.get(col).getColumnWidget() instanceof Label) || (!controller.canEditCell(row,col))) {
             col--;
             if(col < 0) {
-            	tabToPrevRow(row);
-            	return;
+                tabToPrevRow(row);
+                return;
             }
         }
-        	
+            
         final int fCol = col;
-       	if(!controller.isRowDrawn(row)){
-    		controller.view.setScrollPosition(controller.view.top-(controller.cellHeight*(controller.selectedRow-row)));
-    		controller.unselect(-1);
-    	}
+        if(!controller.isRowDrawn(row)){
+            controller.view.setScrollPosition(controller.view.top-(controller.cellHeight*(controller.selectedRow-row)));
+            controller.unselect(-1);
+        }
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 controller.select(row, fCol);
@@ -121,9 +121,9 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         });
     }
 
-	public void onKeyDown(KeyDownEvent event) {
+    public void onKeyDown(KeyDownEvent event) {
         if(controller.activeWidget instanceof CheckBox && KeyCodes.KEY_ENTER == event.getNativeKeyCode()){
-        	return;
+            return;
         }
         /*
         if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
@@ -134,13 +134,13 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         boolean shift = event.isShiftKeyDown();
         if (KeyCodes.KEY_DOWN == event.getNativeKeyCode()) {
             if (controller.selectedRow >= 0 && controller.selectedRow < controller.numRows() - 1) {
-            	controller.finishEditing();
-            	final int row = findNextActive(controller.selectedRow);
-            	final int col = controller.selectedCol;
-            	if(!controller.isRowDrawn(row)){
-            		controller.view.setScrollPosition(controller.view.top+(controller.cellHeight*(row-controller.selectedRow)));
-            		controller.unselect(-1);
-            	}
+                controller.finishEditing();
+                final int row = findNextActive(controller.selectedRow);
+                final int col = controller.selectedCol;
+                if(!controller.isRowDrawn(row)){
+                    controller.view.setScrollPosition(controller.view.top+(controller.cellHeight*(row-controller.selectedRow)));
+                    controller.unselect(-1);
+                }
                 DeferredCommand.addCommand(new Command() {
                      public void execute() {
                          controller.select(row, col);
@@ -150,13 +150,13 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
         }
         if (KeyCodes.KEY_UP == event.getNativeKeyCode()) {
             if (controller.selectedRow > 0) {
-            	controller.finishEditing();
+                controller.finishEditing();
                 final int row = findPrevActive(controller.selectedRow);
                 final int col = controller.selectedCol;
-            	if(!controller.isRowDrawn(row)){
-            		controller.view.setScrollPosition(controller.view.top-(controller.cellHeight*(controller.selectedRow-row)));
-            		controller.unselect(-1);
-            	}
+                if(!controller.isRowDrawn(row)){
+                    controller.view.setScrollPosition(controller.view.top-(controller.cellHeight*(controller.selectedRow-row)));
+                    controller.unselect(-1);
+                }
                 DeferredCommand.addCommand(new Command() {
                      public void execute() {
                          controller.select(row, col);
@@ -188,20 +188,19 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             }
         }
         if (KeyCodes.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && !shift) {
-        	event.preventDefault();
+            event.preventDefault();
+            controller.finishEditing();
             if(controller.selectedRow < 0){
                 controller.selectedRow = 0;
                 controller.selectedCol = -1;
             }
             if((controller.selectedRow >= controller.shownRows()-1 || controller.selectedRow >= controller.numRows()-1) &&
                 controller.selectedCol + 1 >= controller.columns.size()) {
-            	  controller.finishEditing();
                   controller.selectedCol = -1;
                   controller.setFocus(true);
                   return;
             }
             if (controller.selectedCol + 1 >= controller.columns.size()) {
-            	controller.finishEditing();
                 tabToNextRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol + 1;
@@ -222,7 +221,8 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
             }
         }
         if (KeyCodes.KEY_TAB == event.getNativeKeyCode() && controller.selectedCol > -1 && shift) {
-        	event.preventDefault();
+            event.preventDefault();
+            controller.finishEditing();
             if (controller.selectedCol == 0 && controller.selectedRow == 0){
                controller.finishEditing();
                controller.selectedCol = -1;
@@ -230,7 +230,6 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                return;
             }
             if (controller.selectedCol - 1 < 0) {
-            	controller.finishEditing();
                 tabToPrevRow(controller.selectedRow);
             } else {
                 int col = controller.selectedCol - 1;
@@ -245,15 +244,15 @@ public class TableKeyboardHandler implements TableKeyboardHandlerInt {
                 }
             }
         }
-		
-	}
+        
+    }
 
-	public void onKeyUp(KeyUpEvent event) {
-		/*
+    public void onKeyUp(KeyUpEvent event) {
+        /*
         if(event.getNativeKeyCode() == KeyCodes.KEY_CTRL)
             controller.ctrlKey = false;
         if(event.getNativeKeyCode() == KeyCodes.KEY_SHIFT)
             controller.shiftKey = false;
         */
-	}
+    }
 }
