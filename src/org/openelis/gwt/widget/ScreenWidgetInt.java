@@ -1,21 +1,13 @@
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
+import org.openelis.gwt.screen.TabHandler;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.user.client.ui.HasValue;
 
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-
-public interface ScreenWidgetInt<T> {
-
-    /**
-     * Returns the state of screen widget.
-     * 
-     * @return TRUE if the screen widget is enabled, FALSE otherwise.
-     */
-    public boolean isEnabled();
+public interface ScreenWidgetInt<T> extends HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<T>, HasValue<T>,  HasExceptions {
 
     /**
      * Enables/Disables the screen widget. Disabled screen widgets will not
@@ -24,13 +16,11 @@ public interface ScreenWidgetInt<T> {
     public void setEnabled(boolean enabled);
 
     /**
-     * The following methods get/set the contents of the widget, ie. the string
-     * in a TextBox widget. Note that the ScreenWidget interface returns a
-     * specific type rather than always returning a string.
+     * Returns the state of screen widget.
+     * 
+     * @return TRUE if the screen widget is enabled, FALSE otherwise.
      */
-    public T getValue();
-
-    public void setValue(T value);
+    public boolean isEnabled();
 
     /**
      * Enables/disables the query mode mode on a widget. The effects of query
@@ -45,23 +35,22 @@ public interface ScreenWidgetInt<T> {
     public Object getQuery();
 
     /**
-     * Sets/gets a validator f
+     * Sets a Helper instance for this widget.
      */
-    public void setValidator(ScreenWidgetInt<T> validator);
+    public void setHelper(WidgetHelper<T> helper);
 
-    public ScreenWidgetInt<T> getValidator();
+    /**
+     * Method for the screen to validate widget values without require the user
+     * to visit the widget.
+     */
+    public void validateValue();
 
-    public void validate();
+    /**
+     * Adds a TabHandler to the widget to override the default browser tabing
+     * and use the tab order defined in the ScreenDef
+     * 
+     * @param handler
+     */
+    public void addTabHandler(TabHandler handler);
 
-    public void addException(LocalizedException exception);
-
-    public ArrayList<LocalizedException> getExceptions();
-
-    public void clearExceptions();
-
-    public void addExceptionStyle(String style);
-
-    public void removeExceptionStyle(String style);
-
-    public HandlerRegistration addFieldValueChangeHandler(ValueChangeHandler<T> handler);
 }

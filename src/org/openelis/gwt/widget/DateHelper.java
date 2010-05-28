@@ -1,0 +1,137 @@
+package org.openelis.gwt.widget;
+
+import java.util.Date;
+
+import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.data.QueryData;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
+
+public class DateHelper implements WidgetHelper<Datetime> {
+    
+    /**
+     * Widget value attributes
+     */
+    protected boolean required;
+    protected String  pattern;
+    protected byte    begin, end;
+    
+    /**
+     * Public no arg constructor;
+     */
+    public DateHelper() {
+
+    }
+    
+    /**
+     * Will return a new QueryData object using the passed query string and and
+     * the setting the type to QueryData.Type.DATE.
+     */
+    public QueryData getQuery(String input) {
+        QueryData qd;
+
+        // Do nothing and return if passed null or empty string
+        if (input == null || "".equals(input))
+            return null;
+
+        qd = new QueryData();
+        qd.query = input;
+        qd.type = QueryData.Type.DATE;
+
+        return qd;
+    }
+
+    /**
+     * Will parse the input value from string to a Datetime and return if
+     * successful otherwise an InvalidDate exception will be thrown to the
+     * widget.
+     */
+    @SuppressWarnings("deprecation")
+    public Datetime getValue(String input) throws LocalizedException {
+        Date date;
+        
+        // If null or empty string return value as null;
+        if (input == null || "".equals(input)){
+            if (required)
+                throw new LocalizedException("fieldRequiredException");
+            return null;
+        }
+                
+        try {
+            date =  DateTimeFormat.getFormat(pattern).parseStrict(input);
+        }catch(Exception e) {
+            throw new LocalizedException("invalidDateFormat");
+        }
+        
+        return Datetime.getInstance(begin,end,date);
+    }
+
+    /**
+     * This method will ensure the passed query string is in the correct format
+     * and that the query params are all valid date values. 
+     */
+    public void validateQuery(String input) throws LocalizedException {
+        QueryFieldUtil qField;
+
+        // If null or empty string do nothing and return.
+        if (input == null || input.equals(""))
+            return;
+
+        // Parse query and if invalid set exception and return right away.
+        qField = new QueryFieldUtil();
+        
+        qField.parse(input);
+
+    }
+
+    /**
+     * This method will return a string value for display applying any
+     * formatting if needed.
+     */
+    public String format(Datetime value) {
+   
+        if(value == null)
+            return "";
+        
+        if(pattern != null) 
+            return DateTimeFormat.getFormat(pattern).format(value.getDate());
+        
+        return value.toString();
+        
+    }
+    
+    /**
+     * Boolean flag indicating if a value is required by the widget.
+     * @param required
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+    
+    /**
+     * Sets the Formatting pattern to be used when displaying the 
+     * widgets value on the screen.
+     * @param pattern
+     */
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
+    /**
+     * Sets the begin precision for this Datetime to be returned by getValue()
+     * @param begin
+     */
+    public void setBegin(byte begin) {
+        this.begin = begin;
+    }
+    
+    /**
+     * Sets the end precision for this Datetime to be returned by getValue()
+     * @param begin
+     */
+    public void setEnd(byte end) {
+        this.end = end;
+    }
+
+}

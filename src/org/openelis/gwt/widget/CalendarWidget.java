@@ -282,7 +282,7 @@ import com.google.gwt.user.client.ui.Widget;
         if(((Label)event.getSource()).getStyleName().indexOf("offMonth") < 0){
         	String date =  ((Label)event.getSource()).getText();
         	if(form.end > Datetime.DAY)
-        		setValue(Datetime.getInstance(form.begin,form.end,new Date(form.year-1900,form.month,Integer.parseInt(date),time.getFieldValue().get(Datetime.HOUR),time.getFieldValue().get(Datetime.MINUTE))),true);
+        		setValue(Datetime.getInstance(form.begin,form.end,new Date(form.year-1900,form.month,Integer.parseInt(date),time.getValue().get(Datetime.HOUR),time.getValue().get(Datetime.MINUTE))),true);
         	else
         		setValue(Datetime.getInstance(form.begin,form.end,new Date(form.year-1900,form.month,Integer.parseInt(date))),true);
         }

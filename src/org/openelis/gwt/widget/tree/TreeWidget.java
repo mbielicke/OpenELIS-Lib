@@ -1849,7 +1849,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	}
 	
     public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
+    	addDomHandler(handler,KeyDownEvent.getType());
     }
 	
 	public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<TreeRow> handler) {

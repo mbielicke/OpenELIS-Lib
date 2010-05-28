@@ -37,6 +37,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -166,7 +167,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 	}
 
 	public void addTabHandler(TabHandler handler) {
-		addDomHandler(handler,KeyPressEvent.getType());
+		addDomHandler(handler,KeyDownEvent.getType());
 	}
 
 	public void addException(LocalizedException error) {

@@ -1252,7 +1252,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
     public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
+    	addDomHandler(handler,KeyDownEvent.getType());
     }
 
 	public void addExceptionStyle(String style) {

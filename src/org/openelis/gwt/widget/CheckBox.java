@@ -103,7 +103,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     }
     
     public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
+    	addDomHandler(handler,KeyDownEvent.getType());
     }
     
     public void setText(String text){

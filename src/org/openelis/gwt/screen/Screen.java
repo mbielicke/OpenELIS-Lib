@@ -19,6 +19,7 @@ import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.table.TableWidget;
 
@@ -104,6 +105,11 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 if ( ((HasField)wid).getExceptions() != null)
                     valid = false;
             }
+            if(wid instanceof ScreenWidgetInt) {
+                ((ScreenWidgetInt)wid).validateValue();
+                if ( ((ScreenWidgetInt)wid).hasExceptions())
+                    valid = false;
+            }
         }
         return valid;
     }
@@ -118,6 +124,21 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             if (def.getWidget(key) instanceof HasField) {
                 ((HasField)def.getWidget(key)).getQuery(list, key);
             }
+            if (def.getWidget(key) instanceof ScreenWidgetInt) {
+                Object query = ((ScreenWidgetInt)def.getWidget(key)).getQuery();
+                if(query instanceof Object[]){
+                    QueryData[] qds = (QueryData[])query;
+                    for(int i = 0; i < qds.length; i++) {
+                        ((QueryData)qds[i]).key = key;
+                        list.add(qds[i]);
+                    }
+                }else if(query != null) {
+                    ((QueryData)query).key = key;
+                    list.add((QueryData)query);
+                }
+                    
+            }
+            
         }
         return list;
     }
@@ -182,6 +203,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasField)
                 ((HasField)wid).clearExceptions();
+            if (wid instanceof ScreenWidgetInt)
+                ((ScreenWidgetInt)wid).clearExceptions();
         }
         window.clearStatus();
         window.clearMessagePopup("");
@@ -203,6 +226,9 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             ((HasField)wid).addFieldValueChangeHandler(screenHandler);
         if (wid instanceof HasClickHandlers)
             ((HasClickHandlers)wid).addClickHandler(screenHandler);
+        if (wid instanceof ScreenWidgetInt) {
+            ((ScreenWidgetInt)wid).addValueChangeHandler(screenHandler);
+        }
     }
 
     public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {

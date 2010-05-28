@@ -171,7 +171,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
+    	addDomHandler(handler,KeyDownEvent.getType());
     }
     
     public void getMatches(String match) {

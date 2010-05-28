@@ -1,6 +1,5 @@
 package org.openelis.gwt.server;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -8,23 +7,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.TextBox.Case;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
@@ -268,7 +264,7 @@ public class UIGenerator extends Generator {
 						sw.println("TextBox<Integer> wid"+id+" = new TextBox<Integer>();");
 					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Double"))
 						sw.println("TextBox<Double> wid"+id+" = new TextBox<Double>();");
-					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long"))
+					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long")) 
 						sw.println("TextBox<Long> wid"+id+" = new TextBox<Long>();");
 					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Date"))
 						sw.println("TextBox<Datetime> wid"+id+" = new TextBox<Datetime>();");
@@ -286,14 +282,14 @@ public class UIGenerator extends Generator {
 					addShortcutHandler(node,"wid"+id);
 				sw.println("wid"+id+".setStyleName(\"ScreenTextBox\");");
 				if (node.getAttributes().getNamedItem("case") != null){
-					String fieldCase = node.getAttributes().getNamedItem("case")
-					.getNodeValue().toUpperCase();
-					sw.println("wid"+id+".setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
+				    String fieldCase = node.getAttributes().getNamedItem("case")
+				    .getNodeValue().toUpperCase();
+				    sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
 	        	}
 
 				if (node.getAttributes().getNamedItem("max") != null) {
 					int length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
-					sw.println("wid"+id+".setLength("+length+");");
+					sw.println("wid"+id+".setMaxLength("+length+");");
 				}
 	        
 				if (node.getAttributes().getNamedItem("textAlign") != null) {
@@ -322,18 +318,25 @@ public class UIGenerator extends Generator {
 		        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
 		        }
 				if (node.getAttributes().getNamedItem("field") != null) {
-					factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, id);
-					sw.println("wid"+id+".setField(field"+id+");");
+					factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()+"Helper").getNewInstance(node, id);
+					sw.println("wid"+id+".setHelper(field"+id+");");
 				}else{
-					factoryMap.get("String").getNewInstance(node, id);
-					sw.println("wid"+id+".setField(field"+id+");");
+					factoryMap.get("StringHelper").getNewInstance(node, id);
+					sw.println("wid"+id+".setHelper(field"+id+");");
 				}
+				
 				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 			}
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
+				composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+                composer.addImport("org.openelis.gwt.widget.IntegerHelper");
+                composer.addImport("org.openelis.gwt.widget.DoubleHelper");
+                composer.addImport("org.openelis.gwt.widget.LongHelper");
+                composer.addImport("org.openelis.gwt.widget.DateHelper");
+                composer.addImport("org.openelis.gwt.widget.StringHelper");
 			}
     	});
     	factoryMap.put("LayoutPanel", new Factory() {
@@ -1760,11 +1763,11 @@ public class UIGenerator extends Generator {
                 	sw.println("wid"+id+".getColumns().add(column"+id+");");
                 }
                 sw.println("wid"+id+".setup();");
-				if (node.getAttributes().getNamedItem("case") != null){
-					String fieldCase = node.getAttributes().getNamedItem("case")
-					.getNodeValue().toUpperCase();
-					sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
-	        	}
+				//if (node.getAttributes().getNamedItem("case") != null){
+				//	String fieldCase = node.getAttributes().getNamedItem("case")
+				//	.getNodeValue().toUpperCase();
+				//	sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
+	        	//}
 				sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				setDefaults(node,"wid"+id);
@@ -1828,10 +1831,10 @@ public class UIGenerator extends Generator {
     	            sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("popWidth").getNodeValue()+"\");");
     	        else
     	        	sw.println("wid"+id+".setTableWidth(\"auto\");");
-    	        if(node.getAttributes().getNamedItem("case") != null){
-    	            String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
-    	            sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+textCase+"\"));");
-    	        }
+    	      //  if(node.getAttributes().getNamedItem("case") != null){
+    	      //      String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
+    	       //     sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+textCase+"\"));");
+    	       // }
                 NodeList colList = ((Element)node).getElementsByTagName("col");
                 sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
                 if(colList.getLength() > 0){
@@ -1893,11 +1896,11 @@ public class UIGenerator extends Generator {
                 }
                 sw.println("wid"+id+".init();");
 				sw.println("wid"+id+".addFocusHandler(panel);");
-				if (node.getAttributes().getNamedItem("case") != null){
-					String fieldCase = node.getAttributes().getNamedItem("case")
-					.getNodeValue().toUpperCase();
-					sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
-	        	}
+				//if (node.getAttributes().getNamedItem("case") != null){
+				//	String fieldCase = node.getAttributes().getNamedItem("case")
+				//	.getNodeValue().toUpperCase();
+				//	sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
+	        	//}
     	        if (node.getAttributes().getNamedItem("enable") != null){
     	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
     	        }
@@ -2227,6 +2230,73 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.DoubleField");
     		}
     	});
+        factoryMap.put("StringHelper", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                sw.println("StringHelper field"+id+" = new StringHelper();");
+                if(node.getAttributes().getNamedItem("required") != null)
+                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.StringHelper");
+            }
+        });
+        factoryMap.put("DateHelper", new Factory() {
+            public void getNewInstance(Node node, int id){
+                sw.println("DateHelper field"+id+" = new DateHelper();");
+                if (node.getAttributes().getNamedItem("required") != null)
+                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
+                if (node.getAttributes().getNamedItem("begin") != null)
+                    sw.println("field"+id+".setBegin(Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\"));");
+                if (node.getAttributes().getNamedItem("end") != null)
+                    sw.println("field"+id+".setEnd(Byte.parseByte(\""+node.getAttributes().getNamedItem("end").getNodeValue()+"\"));");
+                if(node.getAttributes().getNamedItem("pattern") != null){
+                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
+                }   
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.DateHelper");
+            }
+        });
+        factoryMap.put("IntegerHelper", new Factory(){
+            public void getNewInstance(Node node, int id) {
+                sw.println("IntegerHelper field"+id+" = new IntegerHelper();");
+                if(node.getAttributes().getNamedItem("required") != null)
+                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
+                if (node.getAttributes().getNamedItem("pattern") != null) {
+                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
+                }
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.IntegerHelper");
+            }
+        });
+        factoryMap.put("LongHelper", new Factory(){
+            public void getNewInstance(Node node,int id) {
+                sw.println("LongHelper field"+id+" = new LongHelper();");
+                if(node.getAttributes().getNamedItem("required") != null)
+                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
+                if (node.getAttributes().getNamedItem("pattern") != null) {
+                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
+                }
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.LongHelper");
+            }
+        });
+        factoryMap.put("DoubleHelper", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                StringBuffer sb = new StringBuffer();
+                sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
+                if (node.getAttributes().getNamedItem("required") != null)
+                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
+                if (node.getAttributes().getNamedItem("pattern") != null) {
+                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
+                }
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.DoubleHelper");
+            }
+        });
     }
 
 

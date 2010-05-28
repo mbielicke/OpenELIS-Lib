@@ -226,8 +226,8 @@ public class TreeRenderer {
         		newVal = ((HasField)controller.activeWidget).getField().queryString;
         	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
         		if(//((HasField)controller.activeWidget).getFieldValue() == null &&
-        		   !((TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
-        		     newVal = ((TextBox)controller.activeWidget).getText();
+        		   !((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
+        		     newVal = ((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText();
         	}
         	if(newVal == null){
         		Field field = ((HasField)controller.activeWidget).getField();

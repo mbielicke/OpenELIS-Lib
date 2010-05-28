@@ -49,7 +49,9 @@ public class IntegerField extends Field<Integer> {
     		return;
     	}
     	QueryFieldUtil qField = new QueryFieldUtil();
-    	qField.parse(queryString);
+    	try {
+    	    qField.parse(queryString);
+    	}catch(Exception e) {}
         for(String param : qField.parameter){
         	String[] vals = param.split("\\.\\.");
         	for(int i = 0; i < vals.length; i++){

@@ -102,7 +102,9 @@ public class DateField extends Field<Datetime> {
     		return;
     	}
     	QueryFieldUtil qField = new QueryFieldUtil();
-    	qField.parse(queryString);
+    	try {
+    	    qField.parse(queryString);
+    	}catch(Exception e) {}
     	StringBuffer sb = new StringBuffer();
     	for (int j = 0; j < qField.parameter.size(); j++) {
     		if(j > 0)
@@ -341,7 +343,7 @@ public class DateField extends Field<Datetime> {
 			if(wid instanceof CalendarLookUp) {
 				((CalendarLookUp)wid).textbox.setText(queryString);
 			}else if(wid instanceof TextBox) {
-				((TextBox)wid).setText(queryString);
+				((com.google.gwt.user.client.ui.TextBox)wid).setText(queryString);
 			}
 		}else{
 			if(wid instanceof CalendarLookUp) 

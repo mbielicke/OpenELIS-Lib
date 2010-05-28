@@ -27,6 +27,9 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.data.QueryData;
+
 public class QueryFieldUtil {
 
     private static final long serialVersionUID = 1L;
@@ -51,7 +54,7 @@ public class QueryFieldUtil {
         operators.add("|");
     }
     
-    public void parse(String value) {
+    public void parse(String value) throws LocalizedException {
     	this.queryString = value;
         comparator = new ArrayList<String>();
         parameter = new ArrayList<String>();
@@ -123,5 +126,10 @@ public class QueryFieldUtil {
     public ArrayList<String> getLogical() {
         return logical;
     }
+    
+    public void validateQuery(String query) throws Exception {
+    	
+    }
+    
 
 }

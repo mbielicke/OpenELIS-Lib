@@ -48,7 +48,9 @@ public class DoubleField extends Field<Double> {
     		return;
     	}
     	QueryFieldUtil qField = new QueryFieldUtil();
-    	qField.parse(queryString);
+    	try {
+    	    qField.parse(queryString);
+    	}catch(Exception e){}
         for(String param : qField.parameter){
         	String[] vals = param.split("\\.\\.");
         	for(int i = 0; i < vals.length; i++){
@@ -101,9 +103,8 @@ public class DoubleField extends Field<Double> {
     		return super.format();
         if (value == null)
             return "";
-        if (pattern != null)
-            return NumberFormat.getFormat(pattern).format(Double.parseDouble(String.valueOf(value)));
-        return String.valueOf(value);
+        return "";
+
     }
 
     public void setFormat(String pattern) {

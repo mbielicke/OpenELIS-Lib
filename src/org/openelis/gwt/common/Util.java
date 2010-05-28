@@ -26,6 +26,7 @@
 package org.openelis.gwt.common;
 
 import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.ScreenWidgetInt;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -57,13 +58,18 @@ public class Util {
     
     private static class UIFocusHandler implements FocusHandler, BlurHandler {
         public void onFocus(FocusEvent event) {
+            if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
+                ((Widget)event.getSource()).addStyleName("Focus");
+            }
+            /*
             if ( ((HasField)event.getSource()).isEnabled()) {
                 ((Widget)event.getSource()).addStyleName("Focus");
             }
+            */
         }
 
         public void onBlur(BlurEvent event) {
-            if ( ((HasField)event.getSource()).isEnabled()) {
+            if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
                 ((Widget)event.getSource()).removeStyleName("Focus");
             }
         }

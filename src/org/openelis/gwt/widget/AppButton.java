@@ -38,6 +38,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -110,7 +111,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
      *        Instance of TabHandler that controls tabing logic for widget.
      */
     public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
+    	addDomHandler(handler,KeyDownEvent.getType());
     }
     
     /**

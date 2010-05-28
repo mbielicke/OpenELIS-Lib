@@ -64,7 +64,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public boolean queryMode;
     
-    public TextBox textbox = new TextBox() {
+    public com.google.gwt.user.client.ui.TextBox textbox = new com.google.gwt.user.client.ui.TextBox() {
     	@Override
     	protected void delegateEvent(Widget target, GwtEvent<?> event) {
     		// TODO Auto-generated method stub
@@ -294,7 +294,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 	}
 	
 	public void setCase(TextBox.Case textCase) {
-		textbox.setCase(textCase);
+		//textbox.setCase(textCase);
 	}
 	
 	

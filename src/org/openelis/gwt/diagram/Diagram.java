@@ -282,7 +282,7 @@ public class Diagram extends Composite implements MouseDownHandler,MouseUpHandle
         if(selectNode != null)
             selectNode.removeStyleName("NodeSelected");
         editNode = (TreeNode)event.getSource();
-        TextBox box = new TextBox();
+        com.google.gwt.user.client.ui.TextBox box = new com.google.gwt.user.client.ui.TextBox();
         box.setWidth(editNode.getOffsetWidth()+"px");
         box.setValue((String)editNode.item.cells.get(0).getValue());
      //   editNode.remove(0);

@@ -441,7 +441,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 filterMenu.enable(true);
             }
             if(col.queryable) {
-                final TextBox entryText = new TextBox();
+                final com.google.gwt.user.client.ui.TextBox entryText = new com.google.gwt.user.client.ui.TextBox();
                 String checkState = "Unchecked";
                 if(col.query != null){
                 	checkState = "Checked";
@@ -456,7 +456,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 entryText.addKeyUpHandler(new KeyUpHandler() {
                 	
                     public void onKeyUp(KeyUpEvent event) {
-                        if(((TextBox)event.getSource()).getText().length() > 0){
+                        if(((com.google.gwt.user.client.ui.TextBox)event.getSource()).getText().length() > 0){
                             doQuery = true;
                             item.iconPanel.setStyleName("Checked");
                             //col.query = ((TextBox)event.getSource()).getText();
@@ -552,7 +552,11 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     
     public void query(TableColumn col, String query) {
     	QueryFieldUtil qField = new QueryFieldUtil();
-    	qField.parse(query);
+    	try {
+    	    qField.parse(query);
+    	}catch(Exception e) {
+    	    
+    	}
     	col.query = qField;
     	applyQueryFilter();
     }

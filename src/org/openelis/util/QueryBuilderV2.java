@@ -184,7 +184,9 @@ public class QueryBuilderV2 {
     public static void setQueryParams(Query query, ArrayList<QueryData> fields){
         for (QueryData field : fields) {//int i = 0; i < keys.length; i++) {
         	QueryFieldUtil qField = new QueryFieldUtil();
-        	qField.parse(field.query);
+        	try {
+        	    qField.parse(field.query);
+        	}catch(Exception e){}
         	
             if(field.type == QueryData.Type.DOUBLE)
                 setDoubleParameters(qField, field.key, query);

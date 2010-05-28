@@ -16,7 +16,7 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
     private String mask;
     private HashSet<String> literals = new HashSet<String>();
     private ArrayList<String> masks = new ArrayList<String>();
-    private TextBox textbox;
+    private com.google.gwt.user.client.ui.TextBox textbox;
     
     {
         masks.add("Z");
@@ -27,7 +27,7 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
 
     public boolean noMask;
     
-    public MaskListener(TextBox textbox, String mask) {
+    public MaskListener(com.google.gwt.user.client.ui.TextBox textbox, String mask) {
         this.textbox = textbox;
         textbox.addKeyUpHandler(this);
         textbox.addKeyDownHandler(this);
@@ -164,8 +164,8 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
 
     public void onKeyDown(KeyDownEvent event) {
         // TODO Auto-generated method stub
-        if(!textbox.enforceMask)
-            return;
+        //if(!textbox.enforceMask)
+          //  return;
         if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE) {
             if (literals.contains(String.valueOf(textbox.getText().charAt(textbox.getText().length() - 1))))
                 textbox.setText(textbox.getText().substring(0, textbox.getText().length() - 1));
@@ -174,8 +174,8 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
 
     public void onKeyUp(KeyUpEvent event) {
         // TODO Auto-generated method stub
-        if(!textbox.enforceMask)
-            return;
+//        if(!textbox.enforceMask)
+  //          return;
         if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || event.getNativeKeyCode() == KeyCodes.KEY_SHIFT || noMask) {
             return;
         }
@@ -192,8 +192,8 @@ public class MaskListener implements KeyUpHandler, KeyDownHandler, BlurHandler {
     }
 
     public void onBlur(BlurEvent event) {
-        if(textbox.isReadOnly() || !textbox.enforceMask)
-            return;
+    //    if(textbox.isReadOnly() || !textbox.enforceMask)
+      //      return;
         format();
     }
     

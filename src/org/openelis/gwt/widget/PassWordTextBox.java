@@ -6,6 +6,7 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -42,7 +43,7 @@ public class PassWordTextBox extends PasswordTextBox implements HasField<String>
 	}
 	
 	public void addTabHandler(TabHandler handler) {
-		addDomHandler(handler,KeyPressEvent.getType());
+		addDomHandler(handler,KeyDownEvent.getType());
 	}
 
 	public void setQueryMode(boolean query) {

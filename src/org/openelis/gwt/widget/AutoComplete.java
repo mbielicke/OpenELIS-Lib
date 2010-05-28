@@ -184,7 +184,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      *        Instance of TabHandler that controls tabing logic for widget.
      */
     public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyPressEvent.getType());
+    	addDomHandler(handler,KeyDownEvent.getType());
     }
     
     /**
