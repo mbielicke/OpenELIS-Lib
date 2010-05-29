@@ -8,6 +8,13 @@ import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+/**
+ * This class is used by ScreenWidgets that implement HasValue<Date> to
+ * provide methods for formatting, validating and query by Date values. 
+ * 
+ * @author tschmidt
+ * 
+ */
 public class DateHelper implements WidgetHelper<Datetime> {
     
     /**
@@ -47,7 +54,6 @@ public class DateHelper implements WidgetHelper<Datetime> {
      * successful otherwise an InvalidDate exception will be thrown to the
      * widget.
      */
-    @SuppressWarnings("deprecation")
     public Datetime getValue(String input) throws LocalizedException {
         Date date;
         
@@ -81,7 +87,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
         // Parse query and if invalid set exception and return right away.
         qField = new QueryFieldUtil();
         
-        qField.parse(input);
+        qField.parseDate(input, pattern);
 
     }
 

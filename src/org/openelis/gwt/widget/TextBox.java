@@ -84,7 +84,6 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
      */
     public TextBox() {
         textbox = new com.google.gwt.user.client.ui.TextBox();
-        initWidget(textbox);
         textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
             /*
              * This event calls validate(true) so that that the valueChangeEvent
@@ -99,6 +98,11 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
             }
 
         });
+        init();
+    }
+    
+    public void init() {
+        initWidget(textbox);
     }
 
     // ************** Methods for TextBox attributes ***********************

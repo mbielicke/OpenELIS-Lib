@@ -7,10 +7,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 
 /**
  * This class is used by ScreenWidgets that implement HasValue<Integer> to
- * provide methods for formatting, validating and query by Integer values. Since
- * this class has no state and can be used by multiple widgets through the
- * WidgetHelper<T> interface a Singleton pattern is used instead of static class
- * methods.
+ * provide methods for formatting, validating and query by Integer values. 
  * 
  * @author tschmidt
  * 
@@ -93,24 +90,8 @@ public class IntegerHelper implements WidgetHelper<Integer> {
 		// Parse query and if invalid set exception and return right away.
 		qField = new QueryFieldUtil();
 		
-		qField.parse(input);
-		/*
-		// Loop through query params and make sure each is a valid double value
-		for (String param : qField.parameter) {
-			String[] vals = param.split("\\.\\.");
-			for (int i = 0; i < vals.length; i++) {
-				if (!vals[i].equalsIgnoreCase("null")) {
-					try {
-						Double.parseDouble(vals[i]);
-					} catch (Exception e) {
-						if (exceptions == null)
-							exceptions = new ArrayList<LocalizedException>();
-						exceptions.add(new LocalizedException("invalidDouble"));
-					}
-				}
-			}
-		}
-  		*/
+		qField.parseInteger(input);
+
 	}
 
 	/**
