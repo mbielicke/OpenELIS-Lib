@@ -215,6 +215,7 @@ public class TableRenderer  {
 	public boolean stopEditing() {
         if(controller.activeWidget != null){
             if(controller.activeWidget instanceof CalendarLookUp && ((CalendarLookUp)controller.activeWidget).getField().queryMode) {
+                setCellDisplay(controller.selectedRow,controller.selectedCol);
                 controller.activeWidget = null;
                 return true;
             }

@@ -263,6 +263,8 @@ public class TableColumn {
 				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
 			else
 				((Dropdown)colWidget).setSelection(cell.getValue());
+    	}else if(colWidget instanceof CalendarLookUp && ((CalendarLookUp)colWidget).getField().queryMode){
+            // do nothing;
     	}else
     		((HasField)editor).setFieldValue(cell.getValue());
     	
