@@ -139,7 +139,9 @@ public class TableColumn {
     			else
     				((Dropdown)colWidget).setSelection(cell.getValue());
     			val = ((Dropdown)colWidget).getTextBoxDisplay();
-    		}else{
+    		}else if(colWidget instanceof CalendarLookUp && ((CalendarLookUp)colWidget).getField().queryMode){
+    		    val = ((HasField)colWidget).getField().queryString;
+    		}else {
     			((HasField)colWidget).setFieldValue(cell.getValue());
     		}
     		if(val == null){
