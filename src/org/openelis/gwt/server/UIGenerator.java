@@ -252,11 +252,32 @@ public class UIGenerator extends Generator {
     		alt = "true";
     	key = shortcut.charAt(shortcut.length()-1);
     	sw.println("panel.addShortcutHandler(new ShortcutHandler("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
-    }
+    }	
     
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
     
     {
+    	factoryMap.put("udropdown", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("UDropdown<Integer> wid"+id+" = new UDropdown<Integer>();");
+				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+				if(node.getAttributes().getNamedItem("tab") != null) {
+		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+					String[] tabs = tab.split(",");
+					String key = node.getAttributes().getNamedItem("key").getNodeValue();
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+				}
+				Node table = ((Element)node).getElementsByTagName("table").item(0);
+				factoryMap.get("table").getNewInstance(table,1000);
+				sw.println("wid"+id+".setTable(wid1000);");
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.UDropdown");
+
+    		}
+    	});
     	factoryMap.put("textbox",new Factory() {
 			public void getNewInstance(Node node, int id) {
 				if(node.getAttributes().getNamedItem("field") != null){

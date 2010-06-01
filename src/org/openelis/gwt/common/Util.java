@@ -58,9 +58,11 @@ public class Util {
     
     private static class UIFocusHandler implements FocusHandler, BlurHandler {
         public void onFocus(FocusEvent event) {
-            if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
-                ((Widget)event.getSource()).addStyleName("Focus");
-            }
+        	if(event.getSource() instanceof ScreenWidgetInt) {
+        		if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
+        			((ScreenWidgetInt)event.getSource()).addFocusStyle("Focus");
+        		}
+        	}
             /*
             if ( ((HasField)event.getSource()).isEnabled()) {
                 ((Widget)event.getSource()).addStyleName("Focus");
@@ -69,9 +71,12 @@ public class Util {
         }
 
         public void onBlur(BlurEvent event) {
-            if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
-                ((Widget)event.getSource()).removeStyleName("Focus");
-            }
+        	//Remove this outer instance check after the redesign is completed
+        	if(event.getSource() instanceof ScreenWidgetInt) {
+        		if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
+        			((ScreenWidgetInt)event.getSource()).removeFocusStyle("Focus");
+        		}
+        	}
         }
     }
 }

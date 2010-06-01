@@ -53,4 +53,7 @@ public interface ScreenWidgetInt<T> extends HasBlurHandlers, HasFocusHandlers, H
      */
     public void addTabHandler(TabHandler handler);
 
+    public void addFocusStyle(String style);
+    
+    public void removeFocusStyle(String style);
 }

@@ -25,6 +25,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.TextBoxBase;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
 /**
@@ -83,6 +84,10 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
      * from the user.
      */
     public TextBox() {
+        init();
+    }
+    
+    public void init() {
         textbox = new com.google.gwt.user.client.ui.TextBox();
         textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
             /*
@@ -98,11 +103,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
             }
 
         });
-        init();
-    }
-    
-    public void init() {
-        initWidget(textbox);
+    	initWidget(textbox);
     }
 
     // ************** Methods for TextBox attributes ***********************
@@ -282,6 +283,14 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
      */
     public void addTabHandler(TabHandler handler) {
         addDomHandler(handler, KeyDownEvent.getType());
+    }
+    
+    public void addFocusStyle(String style) {
+    	textbox.addStyleName(style);
+    }
+    
+    public void removeFocusStyle(String style) {
+    	textbox.removeStyleName(style);
     }
     
     // ********** Implementation of HasException interface ***************
