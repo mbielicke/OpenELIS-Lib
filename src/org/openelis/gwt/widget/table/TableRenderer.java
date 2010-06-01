@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
+import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
@@ -213,6 +214,9 @@ public class TableRenderer  {
     @SuppressWarnings("unchecked")
 	public boolean stopEditing() {
         if(controller.activeWidget != null){
+            if(controller.activeWidget instanceof CalendarLookUp && ((CalendarLookUp)controller.activeWidget).getField().queryMode) {
+                return true;
+            }
         	Object currVal = controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
         	if(controller.activeWidget instanceof Focusable)
         		((Focusable)controller.activeWidget).setFocus(false);
