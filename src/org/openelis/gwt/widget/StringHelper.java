@@ -12,10 +12,6 @@ import org.openelis.gwt.common.data.QueryData;
  */
 public class StringHelper implements WidgetHelper<String> {
 
-    /**
-     * Widget value attributes
-     */
-    protected boolean required;
 
     /**
      * Public no arg constructor
@@ -50,11 +46,8 @@ public class StringHelper implements WidgetHelper<String> {
     public String getValue(String input) throws LocalizedException {
 
         // If null or empty string return value as null;
-        if (input == null || "".equals(input)) {
-            if (required)
-                throw new LocalizedException("fieldRequiredException");
+        if (input == null || "".equals(input)) 
             return null;
-        }
 
         return input;
     }
@@ -86,15 +79,6 @@ public class StringHelper implements WidgetHelper<String> {
             return "";
 
         return value;
-    }
-
-    /**
-     * Boolean flag indicating if a value is required by the widget.
-     * 
-     * @param required
-     */
-    public void setRequired(boolean required) {
-        this.required = required;
     }
 
 }

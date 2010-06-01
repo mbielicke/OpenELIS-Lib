@@ -1,18 +1,28 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.widget.table.TableDataRow;
+import org.openelis.gwt.widget.table.TableWidget;
+
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 public class UDropdown<T> extends TextBox<T> {
 
     protected HorizontalPanel  hp;
-    protected IconContainer    icon;
-    protected DropdownListener listener;
-    protected DropdownTable    table;
+    protected AppButton        button;
+    protected TableWidget      table;
+    protected PopupPanel       popup;
 
     public UDropdown() {
     }
@@ -20,81 +30,85 @@ public class UDropdown<T> extends TextBox<T> {
     @Override
     public void init() {
         hp = new HorizontalPanel();
-        icon = new IconContainer();
-        setStyleName("AutoDropDown");
-        icon.setStyleName("AutoDropDownButton");
+        textbox = new com.google.gwt.user.client.ui.TextBox();
+        button = new AppButton("AutoDropdownButton");
+        
         textbox.setStyleName("TextboxUnselected");
         
-        icon.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                // TODO Auto-generated method stub
-                
+        final UDropdown<T> source = this;
+        
+        textbox.addFocusHandler(new FocusHandler() {
+            public void onFocus(FocusEvent event) {
+                FocusEvent.fireNativeEvent(Document.get().createFocusEvent(),source);
             }
-            
         });
         
-        addDomHandler(new KeyUpHandler() {
-
+        textbox.addBlurHandler(new BlurHandler() {
+            public void onBlur(BlurEvent event) {
+                BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), source);
+            }
+        });
+        
+        textbox.addKeyUpHandler(new KeyUpHandler() {
             public void onKeyUp(KeyUpEvent event) {
-                // TODO Auto-generated method stub
                 
             }
-            
-        }, KeyUpEvent.getType());
-
-        hp.add(this);
-        hp.add(icon);
+        });
+        
+        button.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                if(popup == null){
+                    popup = new PopupPanel();
+                    popup.add(table);
+                }
+                popup.setPopupPosition(source.getAbsoluteLeft(), source.getAbsoluteTop()+source.getOffsetHeight());
+                popup.show();
+            }
+        });
+       
+        hp.add(textbox);
+        hp.add(button);
+        
         initWidget(hp);
+        setStyleName("AutoDropDown");
+        
     }
-
-    private class DropdownListener implements ClickHandler, KeyUpHandler {
-
-        public void onClick(ClickEvent event) {
-            if ( !isEnabled())
-                return;
-            if (event.getSource() == icon) {
-                if (table.getSelectedRow() < 0) {
-                    if (table.getSelections().size() > 0)
-                        table.selectRow((Integer)table.getSelectedRows()[0]);
-                }
-                table.showTable();
-            }
-
-        }
-
-        public void onKeyUp(KeyUpEvent event) {
-            if ( !isEnabled())
-                return;
-            int keyCode = event.getNativeKeyCode();
-            if (keyCode == KeyCodes.KEY_DOWN  || keyCode == KeyCodes.KEY_UP    ||
-                keyCode == KeyCodes.KEY_TAB   || keyCode == KeyCodes.KEY_LEFT  ||
-                keyCode == KeyCodes.KEY_RIGHT || keyCode == KeyCodes.KEY_ALT   ||
-                keyCode == KeyCodes.KEY_CTRL  || keyCode == KeyCodes.KEY_SHIFT ||
-                keyCode == KeyCodes.KEY_ESCAPE)
-                return;
-            if (keyCode == KeyCodes.KEY_ENTER && !table.popup.isShowing() && !table.itemSelected) {
-                if (table.getSelectedRow() < 0) {
-                    if (table.getSelections().size() > 0)
-                        table.selectRow((Integer)table.getSelectedRows()[0]);
-                }
-                table.showTable();
-                return;
-            }
-            if (keyCode == KeyCodes.KEY_ENTER && table.itemSelected) {
-                table.itemSelected = false;
-                return;
-            }
-            String text = getText();
-            if (text.length() > 0 && !text.endsWith("*")) {
-                table.setDelay(text, 1);
-            } else if (text.length() == 0) {
-                table.selectRow(0);
-                table.scrollToSelection();
-            } else {
-                table.hideTable();
-            }
-        }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        button.enable(enabled);
+        super.setEnabled(enabled);
     }
+    
+    public void setPopupContext(TableWidget table) {
+        this.table = table;
+    }
+    
+    public void setModel(ArrayList<TableDataRow> model) {
+        //code this
+    }
+   
+    public void setSelectedIndex(int index){
+        
+    }
+    
+    public int getSelectedIndex() {
+        return -1;
+    }
+    
+    public void setValues(T... values) {
+        
+    }
+        
+    public TableDataRow getSelectedRow() {
+        return null;
+    }
+    
+    public ArrayList<TableDataRow> getSelectedRows() {
+        return null;
+    }
+    
+ 
+
 
 }

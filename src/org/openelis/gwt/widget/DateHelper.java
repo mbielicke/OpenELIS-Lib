@@ -20,7 +20,6 @@ public class DateHelper implements WidgetHelper<Datetime> {
     /**
      * Widget value attributes
      */
-    protected boolean required;
     protected String  pattern;
     protected byte    begin, end;
     
@@ -58,11 +57,9 @@ public class DateHelper implements WidgetHelper<Datetime> {
         Date date;
         
         // If null or empty string return value as null;
-        if (input == null || "".equals(input)){
-            if (required)
-                throw new LocalizedException("fieldRequiredException");
+        if (input == null || "".equals(input))
             return null;
-        }
+
                 
         try {
             date =  DateTimeFormat.getFormat(pattern).parseStrict(input);
@@ -105,14 +102,6 @@ public class DateHelper implements WidgetHelper<Datetime> {
         
         return value.toString();
         
-    }
-    
-    /**
-     * Boolean flag indicating if a value is required by the widget.
-     * @param required
-     */
-    public void setRequired(boolean required) {
-        this.required = required;
     }
     
     /**

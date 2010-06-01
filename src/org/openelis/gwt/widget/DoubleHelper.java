@@ -18,7 +18,6 @@ public class DoubleHelper implements WidgetHelper<Double> {
     /**
      * Widget value attributes
      */
-    protected boolean required;
     protected String  pattern;
     
 	/**
@@ -107,14 +106,6 @@ public class DoubleHelper implements WidgetHelper<Double> {
 
 		return value.toString();
 	}
-	
-	/**
-     * Boolean flag indicating if a value is required by the widget.
-     * @param required
-     */
-    public void setRequired(boolean required) {
-        this.required = required;
-    }
     
     /**
      * Sets the Formatting pattern to be used when displaying the 

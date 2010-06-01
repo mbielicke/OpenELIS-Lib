@@ -271,7 +271,7 @@ public class UIGenerator extends Generator {
 				}
 				Node table = ((Element)node).getElementsByTagName("table").item(0);
 				factoryMap.get("table").getNewInstance(table,1000);
-				sw.println("wid"+id+".setTable(wid1000);");
+				sw.println("wid"+id+".setPopupContext(wid1000);");
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.UDropdown");
@@ -334,6 +334,11 @@ public class UIGenerator extends Generator {
 					String mask = node.getAttributes().getNamedItem("mask").getNodeValue();
 					sw.println("wid"+id+".setMask(\""+mask+"\");");
 				}
+				
+				if (node.getAttributes().getNamedItem("required") != null) {
+				    sw.println("wid"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
+				}
+				
 				setDefaults(node,"wid"+id);
 		        if (node.getAttributes().getNamedItem("enable") != null){
 		        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
@@ -2254,8 +2259,6 @@ public class UIGenerator extends Generator {
         factoryMap.put("StringHelper", new Factory() {
             public void getNewInstance(Node node, int id) {
                 sw.println("StringHelper field"+id+" = new StringHelper();");
-                if(node.getAttributes().getNamedItem("required") != null)
-                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.StringHelper");
@@ -2264,8 +2267,6 @@ public class UIGenerator extends Generator {
         factoryMap.put("DateHelper", new Factory() {
             public void getNewInstance(Node node, int id){
                 sw.println("DateHelper field"+id+" = new DateHelper();");
-                if (node.getAttributes().getNamedItem("required") != null)
-                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
                 if (node.getAttributes().getNamedItem("begin") != null)
                     sw.println("field"+id+".setBegin(Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\"));");
                 if (node.getAttributes().getNamedItem("end") != null)
@@ -2281,8 +2282,6 @@ public class UIGenerator extends Generator {
         factoryMap.put("IntegerHelper", new Factory(){
             public void getNewInstance(Node node, int id) {
                 sw.println("IntegerHelper field"+id+" = new IntegerHelper();");
-                if(node.getAttributes().getNamedItem("required") != null)
-                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
                 if (node.getAttributes().getNamedItem("pattern") != null) {
                     sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
                 }
@@ -2294,8 +2293,6 @@ public class UIGenerator extends Generator {
         factoryMap.put("LongHelper", new Factory(){
             public void getNewInstance(Node node,int id) {
                 sw.println("LongHelper field"+id+" = new LongHelper();");
-                if(node.getAttributes().getNamedItem("required") != null)
-                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
                 if (node.getAttributes().getNamedItem("pattern") != null) {
                     sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
                 }
@@ -2308,8 +2305,6 @@ public class UIGenerator extends Generator {
             public void getNewInstance(Node node, int id) {
                 StringBuffer sb = new StringBuffer();
                 sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
-                if (node.getAttributes().getNamedItem("required") != null)
-                    sw.println("field"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
                 if (node.getAttributes().getNamedItem("pattern") != null) {
                     sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
                 }

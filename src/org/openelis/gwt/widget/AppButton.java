@@ -103,6 +103,19 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
         panel.unsinkEvents(Event.ONKEYPRESS);
     }
     
+    public AppButton(String image) {
+        content.setStyleName(image);
+        classPanel.add(content);
+        panel.add(classPanel);
+        initWidget(panel);
+        panel.addMouseOutHandler(this);
+        panel.addMouseOverHandler(this);
+        addClickHandler(this);
+        panel.addBlurHandler(this);
+        panel.addKeyPressHandler(this);
+        panel.unsinkEvents(Event.ONKEYPRESS);
+    }
+    
     /**
      * Sinks a KeyPressEvent for this widget attaching a TabHandler that will override the default
      * browser tab order for the tab order defined by the screen for this widget.

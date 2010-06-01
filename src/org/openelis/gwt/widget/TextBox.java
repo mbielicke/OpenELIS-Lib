@@ -60,7 +60,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
     /**
      * Data moved from Field to the widget
      */
-    protected boolean                               queryMode;
+    protected boolean                               queryMode,required;
     protected T                                     value;
 
     /**
@@ -258,6 +258,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
         validateExceptions = null;
         try {
             setValue(helper.getValue(getText()), fireEvents);
+            if(required && value == null)
+                addValidateException(new LocalizedException("fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
         }
@@ -291,6 +293,10 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
     
     public void removeFocusStyle(String style) {
     	textbox.removeStyleName(style);
+    }
+    
+    public void setRequired(boolean required) {
+        this.required = required;
     }
     
     // ********** Implementation of HasException interface ***************

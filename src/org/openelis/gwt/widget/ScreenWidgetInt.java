@@ -56,4 +56,6 @@ public interface ScreenWidgetInt<T> extends HasBlurHandlers, HasFocusHandlers, H
     public void addFocusStyle(String style);
     
     public void removeFocusStyle(String style);
+    
+    public void setRequired(boolean required);
 }
