@@ -162,7 +162,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected int selectedCol = -1;
     public TableView view;
     public TableRenderer renderer;
-    protected TableKeyboardHandlerInt keyboardHandler;
+    public TableKeyboardHandlerInt keyboardHandler;
     protected boolean shiftKey;
     protected boolean ctrlKey;
     protected int maxRows;
@@ -209,6 +209,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
     }
+    
         
     /**
      * Sets the width of the cellView which is not the width of the overall widget.  When set to "auto"
@@ -1292,4 +1293,5 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	public boolean getShiftKey(){
 		return shiftKey;
 	}
+	
 }
