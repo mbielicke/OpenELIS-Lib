@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataRow;
@@ -127,15 +128,6 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
         });
 
         /*
-         * Listen to key strokes in textbox and look for matching entries
-         */
-        //textbox.addKeyUpHandler(new KeyUpHandler() {
-        //    public void onKeyUp(KeyUpEvent event) {
-
-//            }
-  //      });
-
-        /*
          * Register click handler to button to show the popup table
          */
         button.addClickHandler(new ClickHandler() {
@@ -145,8 +137,7 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
         });
 
         /*
-         * Registers the keyboard handling the for the popup table to the
-         * handlers implemented in this class
+         * Registers the keyboard handling this widget
          */
         addDomHandler(this, KeyDownEvent.getType());
         addDomHandler(this, KeyUpEvent.getType());
@@ -178,16 +169,17 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
 
     @Override
     public void setWidth(String width) {
+        /*
+         * Set the outer panel to full width;
+         */
         if (hp != null && width != null)
             hp.setWidth(width);
-        int index = width.indexOf("px");
-        int wid = 0;
-        if (index > 0)
-            wid = Integer.parseInt(width.substring(0, index)) - 16;
-        else
-            wid = Integer.parseInt(width) - 16;
-        table.view.setWidth(String.valueOf((wid + 16)));
-        textbox.setWidth(width);
+     
+        /*
+         * set the Textbox to width - 16 to account for button.
+         */
+        textbox.setWidth((Util.stripUnits(width, "px")-16)+"px");
+       
     }
 
     // ******* End User Dropdown methods ***********************
@@ -273,7 +265,7 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
      */
     public void setSelectedIndex(int index) {
         table.selectRow(index);
-        setValue((T)getSelectedRow().key, true);
+        textbox.setText(renderer.getDisplay(getSelectedRow()));
     }
 
     /**
@@ -449,27 +441,32 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
             case KeyCodes.KEY_SHIFT:
                 table.shiftKey = true;
                 break;
-
-
+            case KeyCodes.KEY_TAB:
+                if (getSelectedRow() != null)
+                    setValue((T)getSelectedRow().key, true);
+                if (popup != null)
+                    popup.hide();
+                event.stopPropagation();
+                break;
         }
 
     }
 
-    private int findNextActive(int current) {
-        int next = current + 1;
-        while (next < table.numRows() && !table.isEnabled(next))
-            next++ ;
-        if (next < table.numRows())
-            return next;
-        return findNextActive(next);
+    private int findNextActive(int index) {
+        index++;
+        while (index < table.numRows() && !table.isEnabled(index))
+            index++ ;
+        if (index < table.numRows())
+            return index;
+        return findNextActive(index);
     }
 
-    private int findPrevActive(int current) {
-        int prev = current - 1;
-        while (prev > -1 && !table.isEnabled(prev))
-            prev-- ;
-        if (prev > -1)
-            return prev;
+    private int findPrevActive(int index) {
+        index--;
+        while (index > -1 && !table.isEnabled(index))
+            index-- ;
+        if (index > -1)
+            return index;
         return findPrevActive(1);
     }
 
@@ -517,13 +514,6 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
                 }
                 event.stopPropagation();
                 break;
-            case KeyCodes.KEY_TAB:
-                if (getSelectedRow() != null)
-                    setValue((T)getSelectedRow().key, true);
-                if (popup != null)
-                    popup.hide();
-                event.stopPropagation();
-                break;
             case KeyCodes.KEY_ESCAPE:
                 popup.hide();
                 event.stopPropagation();
@@ -537,25 +527,28 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
                     setSelectedIndex(index);
                 else
                     cursorPos-- ;
-                textbox.setSelectionRange(cursorPos, getText().length() - 1);
+                textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
         }
     }
 
     // *************** Search methods ******************
 
     private int getIndexByTextValue(String textValue) {
-        textValue = textValue.toUpperCase();
+    	int index = -1;
+        /*
+         * Force to Upper case for matching 
+         */
+    	textValue = textValue.toUpperCase();
+        
         if (textValue.equals(""))
             return -1;
-        ArrayList<TableDataRow> model = table.getData();
-        int index = -1;
 
         if (searchText == null) {
             searchText = new ArrayList<TableDataRow>();
-            for (int i = 0; i < model.size(); i++ )
+            for (int i = 0; i < getModel().size(); i++ )
                 searchText.add(new TableDataRow(
                                                 i,
-                                                ((String)model.get(i).cells.get(0).getValue()).toUpperCase()));
+                                                ((String)getModel().get(i).cells.get(0).getValue()).toUpperCase()));
             Collections.sort(searchText, new ColumnComparator(0, SortEvent.SortDirection.ASCENDING));
         }
         index = Collections.binarySearch(searchText, new TableDataRow(null, textValue),
@@ -566,7 +559,7 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
         else {
             // we need to do a linear search backwards to find the first entry
             // that matches our search
-            while (index > -1 &&
+            while (index > 0 &&
                    compareValue((String)searchText.get(index).getCells().get(0), textValue,
                                 textValue.length()) == 0)
                 index-- ;
@@ -585,8 +578,12 @@ public class UDropdown<T> extends TextBox<T> implements KeyDownHandler, KeyUpHan
     private class MatchComparator implements Comparator<TableDataRow> {
 
         public int compare(TableDataRow o1, TableDataRow o2) {
-            String value = (String)o1.cells.get(0).getValue();
-            String textValue = (String)o2.cells.get(0).getValue();
+        	String value;
+        	String textValue;
+        	
+            value = (String)o1.cells.get(0).getValue();
+            textValue = (String)o2.cells.get(0).getValue();
+            
             return compareValue(value, textValue, textValue.length());
         }
 
