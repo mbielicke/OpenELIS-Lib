@@ -259,7 +259,11 @@ public class UIGenerator extends Generator {
     {
     	factoryMap.put("udropdown", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("UDropdown<Integer> wid"+id+" = new UDropdown<Integer>();");
+    		    Element table = null; 
+    		    if(node.getAttributes().getNamedItem("field") == null || node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) 
+    		        sw.println("UDropdown<Integer> wid"+id+" = new UDropdown<Integer>();");
+    		    else
+    		        sw.println("UDropdown<String> wid"+id+" = new UDropdown<String>();");
 				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
@@ -269,9 +273,34 @@ public class UIGenerator extends Generator {
 					String key = node.getAttributes().getNamedItem("key").getNodeValue();
 					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
 				}
-				Node table = ((Element)node).getElementsByTagName("table").item(0);
-				factoryMap.get("table").getNewInstance(table,1000);
-				sw.println("wid"+id+".setPopupContext(wid1000);");
+				if(((Element)node).getElementsByTagName("table").getLength() == 0) {
+				    table = doc.createElement("table");
+				    table.setAttribute("maxRows", "10");
+				    table.setAttribute("width", "auto");
+				    NodeList cols = ((Element)node).getElementsByTagName("col");
+				    if(cols.getLength() > 0){
+				        for(int i = 0; i < cols.getLength(); i++){
+				            if(!cols.item(i).hasChildNodes()) {
+				                Element label = doc.createElement("label");
+				                label.setAttribute("field", "String");
+				                cols.item(i).appendChild(label);
+				            }
+				            table.appendChild(cols.item(i));  
+				        }
+				            
+				    }else{
+				        Element col = doc.createElement("col");
+				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
+				        Element label = doc.createElement("label");
+				        label.setAttribute("field", "String");
+				        col.appendChild(label);
+				        table.appendChild(col);
+				    }
+				}else{
+				    table = (Element)((Element)node).getElementsByTagName("table").item(0);
+				}
+				factoryMap.get("table").getNewInstance(table,1000+id);
+				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
 				setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
@@ -279,6 +308,62 @@ public class UIGenerator extends Generator {
 
     		}
     	});
+        factoryMap.put("uautoComplete", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                Element table = null; 
+                if(node.getAttributes().getNamedItem("field") == null || node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) 
+                	sw.println("UAutoComplete<Integer> wid"+id+" = new UAutoComplete<Integer>();");
+                else
+                    sw.println("UAutoComplete<String> wid"+id+" = new UAutoComplete<String>();");
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(panel);");
+                if(node.getAttributes().getNamedItem("tab") != null) {
+                    String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+                    String[] tabs = tab.split(",");
+                    String key = node.getAttributes().getNamedItem("key").getNodeValue();
+                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+                }
+                if (node.getAttributes().getNamedItem("case") != null){
+                    String fieldCase = node.getAttributes().getNamedItem("case")
+                    .getNodeValue().toUpperCase();
+                    sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
+                }
+                if(((Element)node).getElementsByTagName("table").getLength() == 0) {
+                    table = doc.createElement("table");
+                    table.setAttribute("maxRows", "10");
+                    table.setAttribute("width", "auto");
+                    NodeList cols = ((Element)node).getElementsByTagName("col");
+                    if(cols.getLength() > 0){
+                        for(int i = 0; i < cols.getLength(); i++){
+                            if(!cols.item(i).hasChildNodes()) {
+                                Element label = doc.createElement("label");
+                                label.setAttribute("field", "String");
+                                cols.item(i).appendChild(label);
+                            }
+                            table.appendChild(cols.item(i));  
+                        }
+                            
+                    }else{
+                        Element col = doc.createElement("col");
+                        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
+                        Element label = doc.createElement("label");
+                        label.setAttribute("field", "String");
+                        col.appendChild(label);
+                        table.appendChild(col);
+                    }
+                }else{
+                    table = (Element)((Element)node).getElementsByTagName("table").item(0);
+                }
+                factoryMap.get("table").getNewInstance(table,1000+id);
+                sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
+                setDefaults(node,"wid"+id);
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.UAutoComplete");
+
+            }
+        });
     	factoryMap.put("textbox",new Factory() {
 			public void getNewInstance(Node node, int id) {
 				if(node.getAttributes().getNamedItem("field") != null){
