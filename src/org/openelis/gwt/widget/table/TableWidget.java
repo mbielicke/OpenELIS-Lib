@@ -163,15 +163,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     public TableView view;
     public TableRenderer renderer;
     public TableKeyboardHandlerInt keyboardHandler;
-    protected boolean shiftKey;
-    protected boolean ctrlKey;
+    public boolean shiftKey;
+    public boolean ctrlKey;
     protected int maxRows;
     protected int cellHeight = 21;
     protected Widget activeWidget = null;
     protected int[] modelIndexList;
     protected String title;
     protected boolean showHeader;
-    protected boolean isDropdown = false;
+    public boolean isDropdown = false;
     protected TableDragController dragController;
     protected TableIndexDropController dropController;
     protected boolean selectedByClick;
@@ -184,7 +184,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean queryMode;
     protected boolean mouseOver;
     protected boolean fireEvents = true;    
-    protected boolean multiSelect;
+    public boolean multiSelect;
     public HashMap<Object,Integer> searchKey;
     
     /**
@@ -336,7 +336,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @return
      *    true if the row is currently displayed
      */
-    protected boolean isRowDrawn(int row){
+    public boolean isRowDrawn(int row){
     	return row >= modelIndexList[0] && row <= modelIndexList[view.table.getRowCount()-1];
     }
     
@@ -498,7 +498,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * Scrolls the table to the first selected index in the selected list. If selectedRow is off the bottom of the view the
      * selected row will be at the bootom of the view,else it will be at the top.
      */
-    public void scrollToVisisble(){
+    public void scrollToVisible(){
     	if(isRowDrawn(selectedRow))
     		return;
     	finishEditing();

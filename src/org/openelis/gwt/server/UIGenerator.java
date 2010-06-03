@@ -272,6 +272,7 @@ public class UIGenerator extends Generator {
 				Node table = ((Element)node).getElementsByTagName("table").item(0);
 				factoryMap.get("table").getNewInstance(table,1000);
 				sw.println("wid"+id+".setPopupContext(wid1000);");
+				setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.UDropdown");
