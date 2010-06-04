@@ -31,21 +31,34 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
 
 
-public class UCheckBox extends FocusPanel implements ScreenWidgetInt<UCheckBox.CheckState> {
+public class UCheckBox extends Composite implements ScreenWidgetInt<String>, Focusable {
         
-    boolean enabled = true;
+    protected boolean enabled = true;
+    
+    protected AbsolutePanel panel; 
+    protected ArrayList<LocalizedException> endUserExceptions;
+    protected ArrayList<LocalizedException> validateExceptions;
         
     public enum CheckType {TWO_STATE,THREE_STATE};
     
@@ -69,9 +82,18 @@ public class UCheckBox extends FocusPanel implements ScreenWidgetInt<UCheckBox.C
         public String getStyle() {
             return style;
         }                      
+        
+        public static CheckState getState(String value){
+        	if(value.equals("Y"))
+        		return CheckState.CHECKED;
+        	else if(value.equals("N"))
+        		return CheckState.UNCHECKED;
+        	else
+        		return CheckState.UNKNOWN;
+        }
     };
         
-    private CheckState value; 
+    private CheckState value = CheckState.UNKNOWN; 
     
     protected boolean queryMode;
     
@@ -80,64 +102,53 @@ public class UCheckBox extends FocusPanel implements ScreenWidgetInt<UCheckBox.C
     private final UCheckBox check = this;
         
     public UCheckBox() {
+    	
+    	panel = new AbsolutePanel();
+    	initWidget(panel);
+    	
+        setValue(CheckState.UNCHECKED.getValue());
         
-        setValue(CheckState.UNCHECKED);
-        
-        addClickHandler(new ClickHandler() {
+        addHandler(new ClickHandler() {
            public void onClick(ClickEvent event) {
-               if(!enabled)
-                   return;
-              if(type == CheckType.TWO_STATE){
-                  if(value == CHECKED)
-                      setValue(UNCHECKED,true);
-                  else
-                      setValue(CHECKED,true);
-              }else{
-                  if(value == CHECKED) 
-                      setValue(UNCHECKED,true);
-                  else if (value == UNCHECKED)
-                      setValue(UNKNOWN,true);
-                  else
-                      setValue(CHECKED,true);
-              }
-              addStyleName("Focus");
+        	   changeValue();
             } 
-        });
+        },ClickEvent.getType());
         
-        addKeyDownHandler(new KeyDownHandler() {
+        addDomHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
                 if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    if(!enabled)
-                        return;
-                   if(type == CheckType.TWO_STATE){
-                       if(value == CHECKED)
-                           setValue(UNCHECKED,true);
-                       else
-                           setValue(CHECKED,true);
-                   }else{
-                       if(value == CHECKED) 
-                           setValue(UNCHECKED,true);
-                       else if (value == UNCHECKED)
-                           setValue(UNKNOWN,true);
-                       else
-                           setValue(CHECKED,true);
-                   }
-                   addStyleName("Focus");
+                	changeValue();
                 }
             }
-        });
+        },KeyDownEvent.getType());
         
         /*
          * Unsink these events so the will not fire until widget enabled
          */
-        unsinkEvents(Event.ONCLICK | Event.ONKEYDOWN);
+        //unsinkEvents(Event.ONCLICK);
+        unsinkEvents(Event.ONKEYDOWN);
     }
     
     public UCheckBox(CheckType type) {
         this();
-        this.type = type;
-        if(type == CheckType.THREE_STATE)
-            setValue(UNKNOWN);
+        setType(type);
+    }
+    
+    private void changeValue() {
+ 	   switch(value) {
+	    case CHECKED  :
+	    	if(type == CheckType.THREE_STATE)
+	    		setValue(CheckState.UNKNOWN.getValue(),true);
+	    	else
+	    		setValue(CheckState.UNCHECKED.getValue(),true);
+	    	break;
+	  	case UNCHECKED :
+	  		setValue(CheckState.CHECKED.getValue(),true);
+	  		break;
+	  	case UNKNOWN :
+	  		setValue(CheckState.UNCHECKED.getValue(),true);
+	  		break;
+	  };
     }
     
     public void addTabHandler(TabHandler handler) {
@@ -147,9 +158,9 @@ public class UCheckBox extends FocusPanel implements ScreenWidgetInt<UCheckBox.C
     public void setType(CheckType type){
         this.type = type;
         if(type == CheckType.THREE_STATE)
-            setValue(CheckState.UNKNOWN);
+            setValue(CheckState.UNKNOWN.getValue());
         else
-            setValue(CheckState.UNCHECKED);
+            setValue(CheckState.UNCHECKED.getValue());
     }
     
     public CheckType getType() {
@@ -199,7 +210,6 @@ public class UCheckBox extends FocusPanel implements ScreenWidgetInt<UCheckBox.C
         if(queryMode == query)
             return;
         setType(CheckType.THREE_STATE);
-        setValue(UNKNOWN);
     }
 
     /**
@@ -220,55 +230,130 @@ public class UCheckBox extends FocusPanel implements ScreenWidgetInt<UCheckBox.C
     }
 
     public String getValue() {
-        return value;
+        return value.getValue();
     }
 
     public void setValue(String value) {
         setValue(value,false);
     }
 
-    public void setValue(String value, boolean fireEvents) {
+    public void setValue(String val, boolean fireEvents) {
         String old;
         
-        old = value;
-        this.value = value;
-        setStyle
+        old = value.getValue();
+        value = CheckState.getState(val);
+        panel.setStylePrimaryName(value.getStyle());
+        
+        if(fireEvents) 
+        	ValueChangeEvent.fireIfNotEqual(this, old, value.getValue());
     }
 
-    public void addException(LocalizedException exception) {
-        // TODO Auto-generated method stub
-        
+    /**
+     * Convenience method to check if a widget has exceptions so we do not need
+     * to go through the cost of merging the logical and validation exceptions
+     * in the getExceptions method.
+     * 
+     * @return
+     */
+    public boolean hasExceptions() {
+        return endUserExceptions != null || validateExceptions != null;
     }
 
-    public void addExceptionStyle(String style) {
-        // TODO Auto-generated method stub
-        
+    /**
+     * Adds a manual Exception to the widgets exception list.
+     */
+    public void addException(LocalizedException error) {
+        if (endUserExceptions == null)
+            endUserExceptions = new ArrayList<LocalizedException>();
+        endUserExceptions.add(error);
+        ExceptionHelper.getInstance().checkExceptionHandlers(this);
     }
 
-    public void clearExceptions() {
-        // TODO Auto-generated method stub
-        
+    protected void addValidateException(LocalizedException error) {
+        if (validateExceptions == null)
+            validateExceptions = new ArrayList<LocalizedException>();
+        validateExceptions.add(error);
+    }
+
+    /**
+     * Combines both exceptions list into a single list to be displayed on the
+     * screen.
+     */
+    public ArrayList<LocalizedException> getValidateExceptions() {
+        return validateExceptions;
     }
 
     public ArrayList<LocalizedException> getEndUserExceptions() {
-        // TODO Auto-generated method stub
-        return null;
+        return endUserExceptions;
     }
 
-    public ArrayList<LocalizedException> getValidateExceptions() {
-        // TODO Auto-generated method stub
-        return null;
+    /**
+     * Clears all manual and validate exceptions from the widget.
+     */
+    public void clearExceptions() {
+        endUserExceptions = null;
+        validateExceptions = null;
+        ExceptionHelper.getInstance().checkExceptionHandlers(this);
     }
 
-    public boolean hasExceptions() {
-        // TODO Auto-generated method stub
-        return false;
+    /**
+     * Will add the style to the widget.
+     */
+    public void addExceptionStyle(String style) {
+        addStyleName(style);
     }
 
+    /**
+     * will remove the style from the widget
+     */
     public void removeExceptionStyle(String style) {
-        // TODO Auto-generated method stub
-        
+        removeStyleName(style);
     }
+
+	@Override
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return addDomHandler(handler,BlurEvent.getType());
+	}
+	
+	@Override
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addDomHandler(handler,FocusEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return null;
+	}
+
+	@Override
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFocus(boolean focused) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
     
 
 }
