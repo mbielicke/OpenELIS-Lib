@@ -791,6 +791,35 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.CalendarLookUp");
     		}
     	});
+    	factoryMap.put("ucheck", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("UCheckBox wid"+id+" = new UCheckBox();");
+    			
+				if(node.getAttributes().getNamedItem("tab") != null) {
+		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+					String[] tabs = tab.split(",");
+					String key = node.getAttributes().getNamedItem("key").getNodeValue();
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+				}
+				if (node.getAttributes().getNamedItem("shortcut") != null)
+					addShortcutHandler(node,"wid"+id);
+					
+    	        if(node.getAttributes().getNamedItem("threeState") != null){
+    	            sw.println("wid"+id+".setType(CheckBox.CheckType.THREE_STATE);");
+    	            //defaultType = CheckBox.CheckType.THREE_STATE;
+    	        }
+    	        
+    	        setDefaults(node, "wid"+id);
+    	            	        
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+    	        
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.UCheckBox");
+    		}
+    	});
     	factoryMap.put("check", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("CheckBox wid"+id+" = new CheckBox();");
