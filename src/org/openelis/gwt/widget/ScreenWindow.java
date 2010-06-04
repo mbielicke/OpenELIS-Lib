@@ -535,6 +535,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     }
     
     public void setError(String message) {
+        clearMessagePopup(message);
         setStatus(message,"ErrorPanel");
         unlockWindow();
     }
