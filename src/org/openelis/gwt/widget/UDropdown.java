@@ -231,7 +231,8 @@ public class UDropdown<T> extends TextBox<T> {
         /*
          * Set the outer panel to full width;
          */
-        hp.setWidth(width);
+        if(hp != null)
+            hp.setWidth(width);
 
         /*
          * set the Textbox to width - 16 to account for button.
@@ -694,6 +695,7 @@ public class UDropdown<T> extends TextBox<T> {
                     event.stopPropagation();
                     break;
                 case KeyCodes.KEY_BACKSPACE:
+                case KeyCodes.KEY_TAB:    
                     break;
                 default:
                     handleKeyInput();
