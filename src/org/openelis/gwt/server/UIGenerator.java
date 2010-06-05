@@ -755,6 +755,45 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.ButtonGroup");
     		}
     	});
+        factoryMap.put("ucalendar", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                sw.println("UCalendar wid"+id+" = new UCalendar();");
+                
+                if(node.getAttributes().getNamedItem("tab") != null) {
+                    String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+                    String[] tabs = tab.split(",");
+                    String key = node.getAttributes().getNamedItem("key").getNodeValue();
+                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+                }
+                if (node.getAttributes().getNamedItem("shortcut") != null)
+                    addShortcutHandler(node,"wid"+id);
+                /*    
+                sw.println("byte begin"+id+" = Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\");");
+                sw.println("byte end"+id+" = Byte.parseByte(\""+node.getAttributes().getNamedItem("end").getNodeValue()+"\");");
+                if (node.getAttributes().getNamedItem("week") != null)
+                    sw.println("wid"+id+".init(begin"+id+",end"+id+","+node.getAttributes().getNamedItem("week").getNodeValue()+");");
+                else
+                    sw.println("wid"+id+".init(begin"+id+", end"+id+", false);");
+                sw.println("wid"+id+".setStyleName(\"ScreenCalendar\");");
+                */
+                setDefaults(node,"wid"+id);
+                /*
+                if (node.getAttributes().getNamedItem("enable") != null){
+                    sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+                }
+                */
+                factoryMap.get("DateHelper").getNewInstance(node, id);
+                sw.println("wid"+id+".setHelper(field"+id+");");
+                
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(panel);");
+
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.UCalendar");
+            }
+        });
     	factoryMap.put("calendar", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("CalendarLookUp wid"+id+" = new CalendarLookUp();");

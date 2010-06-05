@@ -53,8 +53,9 @@ UIRF Software License are applicable instead of those above.
 		  <AbsolutePanel style="NextMonth"/>
         </appButton>
       </HorizontalPanel>
-      <VerticalPanel width="100%">
+      <VerticalPanel width="100%" key="calContainer">
  
+      <!-- 
         <TablePanel style="Calendar" width="100%" spacing="0" padding="0">
           <row style="DayBar">
             <icon style="DayCell">
@@ -219,6 +220,7 @@ UIRF Software License are applicable instead of those above.
 		    </icon>
          </row>
       </TablePanel>
+      -->
    </VerticalPanel>
 
    <AbsolutePanel style="TodayBar" width="100%" halign="center">

@@ -73,7 +73,7 @@ import com.google.gwt.user.client.ui.Widget;
 		setHandlers();
     }
     
-    public void setHandlers() {
+    public void setHandlers() {/*
     	if(def.getName().equals("Calendar")) {
     		((Label)def.getWidget("MonthDisplay")).setText(form.monthDisplay);
     		boolean displayMonth = false; 
@@ -179,6 +179,7 @@ import com.google.gwt.user.client.ui.Widget;
         	((Widget)def.getWidget("month"+form.month)).addStyleName("Current");
         	
         }
+        */
     }
     
     public void onClick(ClickEvent event) {

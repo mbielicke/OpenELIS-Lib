@@ -74,7 +74,7 @@ public class CalendarService {
             
             for(int i = 0; i < 6; i++) {
             	for(int j = 0; j < 7; j++) {
-        			form.cells[i][j] = (byte)cal.get(Calendar.DATE);
+        			form.cells[i][j] = Datetime.getInstance(Datetime.YEAR,Datetime.DAY,cal.getTime());
         			cal.add(Calendar.DATE, 1);
             	}
             }
