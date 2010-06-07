@@ -198,7 +198,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     	textValue = textValue.toUpperCase();
     	if(textValue.equals(""))
     		return -1;
-    	ArrayList<TableDataRow> model = this.getData();
+    	ArrayList<TableDataRow> model = (ArrayList<TableDataRow>)this.getData();
     	int index = -1;
 
     	if(searchText == null) {
@@ -319,7 +319,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	public void getQuery(ArrayList list, String key) {
 		if(!queryMode)
 			return;
-		ArrayList<TableDataRow> selections = getSelections();
+		ArrayList<TableDataRow> selections = (ArrayList<TableDataRow>)getSelections();
 		if(selections.size() > 0) {
 			QueryData qd = new QueryData();
 			qd.key = key;
@@ -430,7 +430,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public ArrayList<Object> getSelectionKeys() {
 		ArrayList<Object> ret = new ArrayList<Object>();
-		ArrayList<TableDataRow> selections = getSelections();
+		ArrayList<TableDataRow> selections = (ArrayList<TableDataRow>)getSelections();
 		for(TableDataRow row : selections) 
 			ret.add(row.key);
 		return ret;

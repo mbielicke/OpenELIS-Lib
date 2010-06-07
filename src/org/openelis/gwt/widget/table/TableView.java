@@ -59,6 +59,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     
     public boolean loaded;
     public enum VerticalScroll {NEVER,ALWAYS,NEEDED};
+    public int scrollPos;
     
     public class CellView extends ScrollPanel implements HasMouseWheelHandlers {
 
@@ -254,6 +255,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
 
     public void setScrollPosition(int scrollPos) {
         scrollBar.setScrollPosition(scrollPos);
+        this.scrollPos = scrollPos;
         onScroll(null);
     }
     
@@ -289,6 +291,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                 left = cellView.getHorizontalScrollPosition();
             }
         }		
+        scrollPos = scrollBar.getScrollPosition();
 	}
 
 	public void onMouseWheel(MouseWheelEvent event) {

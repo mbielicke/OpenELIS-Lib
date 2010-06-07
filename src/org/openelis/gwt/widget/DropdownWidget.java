@@ -146,7 +146,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     
     public String getTextBoxDisplay(){
         String textValue = "";
-        ArrayList<TableDataRow> selected = getSelections();
+        ArrayList<TableDataRow> selected = (ArrayList<TableDataRow>)getSelections();
         
         for(int i=0;i<selected.size();i++){
             if(selected.get(i) instanceof TableDataRow){
@@ -192,7 +192,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
         clearSelections();
         if(selections != null) {
             for(Object key : selections)
-                selectRow(key);
+                //selectRow(key);
             textbox.setText(getTextBoxDisplay());
         }else
             textbox.setText("");
@@ -204,7 +204,7 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
     public void setSelection(Object key) {
         unselect(-1);
         if(!queryMode && key != null)
-        	selectRow(key);
+        	//selectRow(key);
         textbox.setText(getTextBoxDisplay());
         //textBoxDefault = textbox.getText();
     }

@@ -21,8 +21,8 @@ public class UCalendarTable extends Composite implements HasSelectionHandlers<Da
     protected Datetime[][] dates;
     
     public UCalendarTable() {
-    	final UCalendarTable source = this; 
-        
+    	final UCalendarTable source = this;
+    	
     	table = new FlexTable();
         table.insertRow(0);
         table.getRowFormatter().setStyleName(0,"DayBar");
@@ -68,8 +68,8 @@ public class UCalendarTable extends Composite implements HasSelectionHandlers<Da
         setWidth("100%");
         table.setCellPadding(0);
         table.setCellSpacing(0);
+        
         table.addClickHandler(new ClickHandler() {
-        	@Override
         	public void onClick(ClickEvent event) {
         		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
         		SelectionEvent.fire(source, dates[cell.getRowIndex()-1][cell.getCellIndex()]);
@@ -90,9 +90,9 @@ public class UCalendarTable extends Composite implements HasSelectionHandlers<Da
     	for(int i = 0; i < 6; i++) {
             for(int j = 0; j < 7; j++) {
             	dates[i][j] = counter;
-                Label cell = ((Label)table.getWidget(i+1,j));
+                com.google.gwt.user.client.ui.Label cell = ((com.google.gwt.user.client.ui.Label)table.getWidget(i+1,j));
                 cell.setText(String.valueOf(counter.get(Datetime.DAY)));
-                if(counter.get(Datetime.MONTH) == date.get(Datetime.MONTH))
+                if(counter.get(Datetime.MONTH) != date.get(Datetime.MONTH))
                     cell.addStyleName("offMonth");
                 else
                     cell.removeStyleName("offMonth");
@@ -105,13 +105,11 @@ public class UCalendarTable extends Composite implements HasSelectionHandlers<Da
         }
     }
 
-	@Override
 	public HandlerRegistration addSelectionHandler(
 			SelectionHandler<Datetime> handler) {
 		return addHandler(handler,SelectionEvent.getType());
 	}
 
-	@Override
 	public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
 		return addHandler(handler,DataChangeEvent.getType());
 	}

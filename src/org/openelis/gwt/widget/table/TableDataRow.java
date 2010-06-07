@@ -35,10 +35,12 @@ public class TableDataRow {
     	cells = new ArrayList<TableDataCell>();
     }
     
+    
     public TableDataRow(Object key, ArrayList<TableDataCell> cells) {
     	this.key = key;
     	this.cells = cells;
     }
+    
     
     public TableDataRow(int size) {
         cells = new ArrayList<TableDataCell>(size);
@@ -46,6 +48,7 @@ public class TableDataRow {
         	cells.add(new TableDataCell());
         }
     }
+    
     
     public TableDataRow(Object key, Object... display) {
     	this.key = key;

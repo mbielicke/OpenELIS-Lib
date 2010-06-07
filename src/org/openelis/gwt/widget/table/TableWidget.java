@@ -151,8 +151,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasDropController,
 													   HasContextMenuHandlers,
 													   FocusHandler,
-													   HasFocusHandlers,
-													   NavigationWidget<TableDataRow>
+													   HasFocusHandlers
 													   {
                             
     protected ArrayList<TableColumn> columns;
@@ -177,7 +176,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean selectedByClick;
     protected VerticalScroll showScroll = VerticalScroll.NEEDED;
     protected String width;
-    protected ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
+    protected ArrayList<TableDataRow> model;
     protected int shownRows; 
     protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
     protected ArrayList<LocalizedException> exceptions;
@@ -185,7 +184,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean mouseOver;
     protected boolean fireEvents = true;    
     public boolean multiSelect;
-    public HashMap<Object,Integer> searchKey;
+    //public HashMap<Object,Integer> searchKey;
     
     /**
      * Table has too many configuration options to pass to a constructor. 
@@ -365,10 +364,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * @param col
      */
     protected void select(final int row, final int col, boolean byClick) {
-    	if(getHandlerCount(NavigationSelectionEvent.getType()) > 0 && !queryMode && selectedRow != row) {
-    		NavigationSelectionEvent.fire(this,row);
-    		return;
-    	}
+    	
     	// Remove selections if not multiselect and no key is held
     	if(selectedRow != row) {
     		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
@@ -499,8 +495,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
      * selected row will be at the bootom of the view,else it will be at the top.
      */
     public void scrollToVisible(){
-    	if(isRowDrawn(selectedRow))
-    		return;
+        //make sure scroll is currently in correct place.
+        //view.scrollBar.setScrollPosition(view.scrollPos);
+    	//if(isRowDrawn(selectedRow))
+    		//return;
     	finishEditing();
         if(numRows() == shownRows()){
         	if(selectedRow > modelIndexList[maxRows-1])
@@ -607,6 +605,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     public TableDataRow getRowByKey(Object key) {
+        /*
         Integer n;
 
         if(model == null)
@@ -620,6 +619,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
                 n = 0;
         }
         return model.get(n.intValue());
+        */
+        return null;
     }
     
     public void addColumn(TableColumn column) {
@@ -723,10 +724,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         return row;
     }
     
-	public void load(ArrayList<TableDataRow> model) {
+	@SuppressWarnings("unchecked")
+    public void load(ArrayList<? extends TableDataRow> model) {
         selections.clear();
         renderer.rowUnselected(-1);
-        this.model = model;
+        this.model = (ArrayList<TableDataRow>)model;
         shownRows = 0;
         selectedRow = -1;
         selectedCol = -1;
@@ -735,13 +737,14 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(model == null)
         	model = new ArrayList<TableDataRow>();
         
-        searchKey = new HashMap<Object,Integer>();
+        //searchKey = new HashMap<Object,Integer>();
         
         for(int i = 0; i < model.size(); i++){
             if(model.get(i).shown)
                 shownRows++;
-            searchKey.put(model.get(i).key,i);
+            //searchKey.put(model.get(i).key,i);
         }
+        
         
         renderer.dataChanged(false);        
     }
@@ -823,7 +826,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         selectedRow = -1;
     }
     
-    public ArrayList<TableDataRow> getSelections() {
+    public ArrayList<? extends TableDataRow> getSelections() {
     	ArrayList<TableDataRow>  sels = new ArrayList<TableDataRow>();
     	for(int index : selections) {
     		sels.add(getRow(index));
@@ -831,7 +834,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         return sels;
     }
 
-    public ArrayList<TableDataRow> getData() {
+    public ArrayList<? extends TableDataRow> getData() {
         return model;
     }
     
@@ -957,8 +960,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     
- 
-    public void selectRow(Object key) {
+    /*
+    public void selectRow(int index) {
+        
         Integer n;
 
         if(model == null)
@@ -972,7 +976,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
                 n = 0;
         }
     	selectRow(n.intValue());
+    	
     }
+    */
+    
 
 	public void addException(LocalizedException exception) {
 		// TODO Auto-generated method stub

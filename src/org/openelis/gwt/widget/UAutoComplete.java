@@ -6,7 +6,6 @@ import org.openelis.gwt.common.Util;
 import org.openelis.gwt.event.GetMatchesEvent;
 import org.openelis.gwt.event.GetMatchesHandler;
 import org.openelis.gwt.event.HasGetMatchesHandlers;
-import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableWidget;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -61,6 +60,12 @@ public class UAutoComplete<T> extends UDropdown<T> implements HasGetMatchesHandl
         table.isDropdown = false;
     }
     
+    @Override
+    protected void handleKeyInput() {
+        GetMatchesEvent.fire(this, getText());
+    }
+    
+    
 //*************** End User methods added for AutoComplete ***********************    
     /**
      * Added this setValue permutation for Autocomplete for when the user set the 
@@ -69,16 +74,19 @@ public class UAutoComplete<T> extends UDropdown<T> implements HasGetMatchesHandl
      * @param display
      */
     public void setValue(T key, String display){
-        setValue(key);
-        textbox.setText(Util.toString(display));
+        ArrayList<Item<T>> model;
+        Item<T>            item;
         
-        /*
-         * Clear any model the table could be holding
-         */
-        setModel(new ArrayList<TableDataRow>());
+        model = new ArrayList<Item<T>>();
+        item = new Item<T>(key,display);
+        model.add(item);
+        
+        setModel(model);
+        setValue(key);
+        
     }
     
-    public void showAutoMatches(ArrayList<TableDataRow> model) {
+    public void showAutoMatches(ArrayList<Item<T>> model) {
         setModel(model);
         showPopup();
     }

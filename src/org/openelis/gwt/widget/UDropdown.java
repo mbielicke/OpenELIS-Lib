@@ -3,15 +3,14 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
-import org.openelis.gwt.widget.table.event.SortEvent;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -38,9 +37,10 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 /**
  * This class is used by OpenELIS Screens to display and input values in forms
- * and in table cells as a Drop down list selector. This class exteds TextBox 
- * which implements the ScreenWidgetInt and we override this implementation where needed.  
- *  
+ * and in table cells as a Drop down list selector. This class exteds TextBox
+ * which implements the ScreenWidgetInt and we override this implementation
+ * where needed.
+ * 
  * @param <T>
  */
 public class UDropdown<T> extends TextBox<T> {
@@ -48,16 +48,27 @@ public class UDropdown<T> extends TextBox<T> {
     /**
      * Used for Dropdown display
      */
-    protected HorizontalPanel         hp;
-    protected AppButton               button;
-    protected TableWidget             table;
-    protected PopupPanel              popup;
-    protected int                     cellHeight = 19;
+    protected HorizontalPanel       hp;
+    protected AppButton             button;
+    protected TableWidget           table;
+    protected PopupPanel            popup;
+    protected int                   cellHeight = 19;
 
     /**
      * Sorted list of display values for search
      */
-    protected ArrayList<TableDataRow> searchText;
+    protected ArrayList<SearchPair> searchText;
+
+    /**
+     * HashMap to set selections by key;
+     */
+    protected HashMap<T, Integer>   keyHash;
+
+    /**
+     * Instance of the Renderer interface. Initially set to the DefaultRenderer
+     * implementation.
+     */
+    protected Renderer              renderer   = new DefaultRenderer();
 
     /**
      * Public Interface used to provide rendering logic for the Dropdown display
@@ -66,22 +77,6 @@ public class UDropdown<T> extends TextBox<T> {
     public interface Renderer {
         public String getDisplay(TableDataRow row);
     }
-
-    /**
-     * Private Default implementation of the Renderer interface.
-     * 
-     */
-    protected class DefaultRenderer implements Renderer {
-        public String getDisplay(TableDataRow row) {
-            return row.getCells().get(0).toString();
-        }
-    }
-
-    /**
-     * Instance of the Renderer interface. Initially set to the DefaultRenderer
-     * implementation.
-     */
-    protected Renderer renderer = new DefaultRenderer();
 
     /**
      * Default no-arg constructor
@@ -101,11 +96,11 @@ public class UDropdown<T> extends TextBox<T> {
         final UDropdown<T> source = this;
 
         /*
-         * Final instance of the private class KeyboardHandler 
+         * Final instance of the private class KeyboardHandler
          */
         final KeyboardHandler keyHandler = new KeyboardHandler();
 
-        hp      = new HorizontalPanel();
+        hp = new HorizontalPanel();
         textbox = new com.google.gwt.user.client.ui.TextBox();
         /*
          * New constructor in Button to drop the border and a div with the
@@ -137,9 +132,14 @@ public class UDropdown<T> extends TextBox<T> {
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
+                Item<T> item;
+
                 BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), source);
-                if(getSelectedRow() != null)
-                    setValue((T)getSelectedRow().key,true);
+
+                item = getSelectedItem();
+
+                if (item != null)
+                    setValue(item.itemKey, true);
             }
         });
 
@@ -174,8 +174,14 @@ public class UDropdown<T> extends TextBox<T> {
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
-                    if(event.isAutoClosed() && getSelectedRow() != null) {
-                        setValue((T)getSelectedRow().key,true);
+                    Item<T> item;
+                    /*
+                     * Call set value if user arrowed down to select and clicked
+                     * to another widget to close the Popup.
+                     */
+                    item = getSelectedItem();
+                    if (event.isAutoClosed() && item != null) {
+                        setValue(item.itemKey, true);
                     }
                 }
             });
@@ -189,49 +195,64 @@ public class UDropdown<T> extends TextBox<T> {
         if (getSelectedIndex() > 0)
             table.scrollToVisible();
     }
-    
+
     /**
-     * This method is called when text is entered in the textbox.  This code was put
-     * in a method and removed from the KeyboardHandler code so that it could 
-     * be overridden by Autocomplete.
+     * This method is called when text is entered in the textbox. This code was
+     * put in a method and removed from the KeyboardHandler code so that it
+     * could be overridden by Autocomplete.
      */
     protected void handleKeyInput() {
-        int cursorPos = getText().length();
-        int index = getIndexByTextValue(getText());
+        int cursorPos, index;
+        String text;
+
+        text = getText();
+
+        /*
+         * Will hit this if backspaced to clear textbox.  Call setSelected 0 so that
+         * if user tabs off the value is selected correctly
+         */
+        if (text.equals("")) {
+            setSelectedIndex(0);
+            return;
+        }
+
+        cursorPos = getText().length();
+        index = findIndexByTextValue(getText());
+
         if (index > -1)
             setSelectedIndex(index);
         else
             cursorPos-- ;
+
         textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
     }
-    
-    /** 
-     * Method called by various event handlers to set the displayed text for the 
-     * selected row in the table without firing value change events to the end user. 
+
+    /**
+     * Method called by various event handlers to set the displayed text for the
+     * selected row in the table without firing value change events to the end
+     * user.
      */
     protected void setDisplay() {
-        /*
-         * Could put an if(multiSelect) or if(getSelectedRows()) > then 0 and then code
-         * an else without a for loop if it is preferred.
-         */
         StringBuffer sb;
-        
+        ArrayList<Item<T>> items;
+
         sb = new StringBuffer();
-        for (int i = 0; i < getSelectedRows().size(); i++ ) {
+        items = getSelectedItems();
+        for (int i = 0; i < items.size(); i++ ) {
             if (i > 0)
                 sb.append(" | ");
-            sb.append(renderer.getDisplay(getSelectedRows().get(i)));
+            sb.append(renderer.getDisplay(items.get(i)));
         }
-        
+
         textbox.setText(sb.toString());
-     }
+    }
 
     @Override
     public void setWidth(String width) {
         /*
          * Set the outer panel to full width;
          */
-        if(hp != null)
+        if (hp != null)
             hp.setWidth(width);
 
         /*
@@ -239,6 +260,19 @@ public class UDropdown<T> extends TextBox<T> {
          */
         textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
 
+    }
+
+    /**
+     * This method sets up the key hash which is used to search for the correct
+     * index to select when setting value by key.
+     * @param model
+     */
+    private void createKeyHash(ArrayList<Item<T>> model) {
+        keyHash = new HashMap<T, Integer>();
+
+        for (int i = 0; i < model.size(); i++ )
+            keyHash.put(model.get(i).itemKey, i);
+   
     }
 
     // ******* End User Dropdown methods ***********************
@@ -262,9 +296,10 @@ public class UDropdown<T> extends TextBox<T> {
     public void setPopupContext(TableWidget tableDef) {
         this.table = tableDef;
         table.isDropdown = true;
-        
+
         /*
-         * This handler will will cancel the selection if the item has been disabled.
+         * This handler will will cancel the selection if the item has been
+         * disabled.
          */
         table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
             public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
@@ -280,17 +315,17 @@ public class UDropdown<T> extends TextBox<T> {
         table.addSelectionHandler(new SelectionHandler<TableRow>() {
             public void onSelection(SelectionEvent<TableRow> event) {
                 /*
-                 * Close popup if not in multiSelect mode or if we are in 
+                 * Close popup if not in multiSelect mode or if we are in
                  * multiSelect but the ctrl or shift is not held
                  */
-                if (!table.multiSelect || (!table.ctrlKey && !table.shiftKey)) 
+                if ( !table.multiSelect || ( !table.ctrlKey && !table.shiftKey))
                     popup.hide();
-               
+
                 setDisplay();
-               
+
                 /*
-                 * Set the focus back to the Textbox after closing or nothing will
-                 * be focused
+                 * Set the focus back to the Textbox after closing or nothing
+                 * will be focused
                  */
                 textbox.setFocus(true);
             }
@@ -302,7 +337,7 @@ public class UDropdown<T> extends TextBox<T> {
      * 
      * @param model
      */
-    public void setModel(ArrayList<TableDataRow> model) {
+    public void setModel(ArrayList<Item<T>> model) {
         assert table != null;
 
         table.setMaxRows(10);
@@ -313,10 +348,12 @@ public class UDropdown<T> extends TextBox<T> {
         if (table.getMaxRows() > model.size()) {
             table.setMaxRows(model.size());
         }
-                    
+
         table.view.setHeight(table.getMaxRows() * cellHeight);
-        
+
         table.load(model);
+
+        createKeyHash(model);
 
     }
 
@@ -325,8 +362,9 @@ public class UDropdown<T> extends TextBox<T> {
      * 
      * @return
      */
-    public ArrayList<TableDataRow> getModel() {
-        return table.getData();
+    @SuppressWarnings("unchecked")
+    public ArrayList<Item<T>> getModel() {
+        return (ArrayList<Item<T>>)table.getData();
     }
 
     /**
@@ -337,7 +375,7 @@ public class UDropdown<T> extends TextBox<T> {
      */
     public void setSelectedIndex(int index) {
         table.selectRow(index);
-        textbox.setText(renderer.getDisplay(getSelectedRow()));
+        textbox.setText(renderer.getDisplay(getSelectedItem()));
     }
 
     /**
@@ -354,8 +392,9 @@ public class UDropdown<T> extends TextBox<T> {
      * 
      * @return
      */
-    public TableDataRow getSelectedRow() {
-        return table.getSelection();
+    @SuppressWarnings("unchecked")
+    public Item<T> getSelectedItem() {
+        return (Item<T>)table.getSelection();
     }
 
     /**
@@ -363,8 +402,9 @@ public class UDropdown<T> extends TextBox<T> {
      * 
      * @return
      */
-    public ArrayList<TableDataRow> getSelectedRows() {
-        return table.getSelections();
+    @SuppressWarnings("unchecked")
+    public ArrayList<Item<T>> getSelectedItems() {
+        return (ArrayList<Item<T>>)table.getSelections();
     }
 
     /**
@@ -379,12 +419,12 @@ public class UDropdown<T> extends TextBox<T> {
         table.clearSelections();
         if (values != null) {
             for (T key : values)
-                table.selectRow(key);
+                table.selectRow(keyHash.get(key));
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < getSelectedRows().size(); i++ ) {
+            for (int i = 0; i < getSelectedItems().size(); i++ ) {
                 if (i > 0)
                     sb.append(" | ");
-                sb.append(renderer.getDisplay(getSelectedRows().get(i)));
+                sb.append(renderer.getDisplay(getSelectedItems().get(i)));
             }
             textbox.setText(sb.toString());
         } else
@@ -400,13 +440,14 @@ public class UDropdown<T> extends TextBox<T> {
     public void enableMultiSelect(boolean multi) {
         table.multiSelect(multi);
     }
-    
+
     /**
-     * Returns the string currently displayed in the textbox portion of the widget.
-     * Added this here becuase it was being used for AutoComplete
+     * Returns the string currently displayed in the textbox portion of the
+     * widget. Added this here becuase it was being used for AutoComplete
+     * 
      * @return
      */
-    public String getDisplay(){
+    public String getDisplay() {
         return textbox.getText();
     }
 
@@ -420,7 +461,7 @@ public class UDropdown<T> extends TextBox<T> {
     public void setEnabled(boolean enabled) {
         button.enable(enabled);
         table.enable(enabled);
-        if(enabled)
+        if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
             unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
@@ -440,13 +481,16 @@ public class UDropdown<T> extends TextBox<T> {
         this.value = value;
 
         /*
-         * Make sure selected row matches value passed.  Useful when End User calls
-         * setValue(T value);
+         * Make sure selected row matches value passed. Useful when End User
+         * calls setValue(T value);
+         * 
+         * null check added for Autocomplete
          */
-        table.selectRow(value);
-        
+        if(table.getData() != null)
+            table.selectRow(keyHash.get(value));
+
         if (value != null) {
-            textbox.setText(renderer.getDisplay(getSelectedRow()));
+            textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
             textbox.setText("");
         }
@@ -491,7 +535,7 @@ public class UDropdown<T> extends TextBox<T> {
         /*
          * Return null if nothing selected
          */
-        if (getSelectedRows() == null)
+        if (getSelectedItems() == null)
             return null;
 
         qd = new QueryData();
@@ -508,10 +552,10 @@ public class UDropdown<T> extends TextBox<T> {
          * Create the query from the selected values
          */
         sb = new StringBuffer();
-        for (int i = 0; i < getSelectedRows().size(); i++ ) {
+        for (int i = 0; i < getSelectedItems().size(); i++ ) {
             if (i > 0)
                 sb.append(" | ");
-            sb.append(getSelectedRows().get(i).key.toString());
+            sb.append(getSelectedItems().get(i).key.toString());
         }
 
         qd.query = sb.toString();
@@ -525,7 +569,7 @@ public class UDropdown<T> extends TextBox<T> {
      * This method will perform a binary search on a sorted version of the the
      * Dropdown model
      */
-    private int getIndexByTextValue(String textValue) {
+    private int findIndexByTextValue(String textValue) {
         int index = -1;
         /*
          * Force to Upper case for matching
@@ -536,16 +580,15 @@ public class UDropdown<T> extends TextBox<T> {
             return -1;
 
         if (searchText == null) {
-            searchText = new ArrayList<TableDataRow>();
+            searchText = new ArrayList<SearchPair>();
             for (int i = 0; i < getModel().size(); i++ ) {
                 if (getModel().get(i).enabled)
-                    searchText.add(new TableDataRow(i, renderer.getDisplay(getModel().get(i))
-                                                               .toUpperCase()));
+                    searchText.add(new SearchPair(i, renderer.getDisplay(getModel().get(i))
+                                                             .toUpperCase()));
             }
-            Collections.sort(searchText, new ColumnComparator(0, SortEvent.SortDirection.ASCENDING));
+            Collections.sort(searchText);
         }
-        index = Collections.binarySearch(searchText, new TableDataRow(null, textValue),
-                                         new MatchComparator());
+        index = Collections.binarySearch(searchText, new SearchPair( -1, textValue), new MatchComparator());
 
         if (index < 0)
             return -1;
@@ -553,40 +596,27 @@ public class UDropdown<T> extends TextBox<T> {
             // we need to do a linear search backwards to find the first entry
             // that matches our search
             while (index > 0 &&
-                   compareValue((String)searchText.get(index).getCells().get(0), textValue,
+                   compareValue((String)searchText.get(index).display, textValue,
                                 textValue.length()) == 0)
                 index-- ;
 
-            return ( ((Integer)searchText.get(index + 1).key)).intValue();
+            return searchText.get(index + 1).modelIndex;
         }
 
+    }
+    
+    private class MatchComparator implements Comparator<SearchPair> {
+        
+        public int compare(SearchPair o1, SearchPair o2) {
+            return compareValue(o1.display,o2.display,o2.display.length());
+        }
+            
     }
 
     private int compareValue(String value, String textValue, int length) {
         if (value.length() < length)
             return value.compareTo(textValue.substring(0, value.length()));
         return value.substring(0, length).compareTo(textValue);
-    }
-
-    /**
-     * Comparator implementation for TableDataRow so we can use the
-     * Collections.sort and Collections.binarySearch
-     * 
-     * @author tschmidt
-     * 
-     */
-    private class MatchComparator implements Comparator<TableDataRow> {
-
-        public int compare(TableDataRow o1, TableDataRow o2) {
-            String value;
-            String textValue;
-
-            value = (String)o1.cells.get(0).getValue();
-            textValue = (String)o2.cells.get(0).getValue();
-
-            return compareValue(value, textValue, textValue.length());
-        }
-
     }
 
     // ********** Table Keyboard Handling ****************************
@@ -694,14 +724,44 @@ public class UDropdown<T> extends TextBox<T> {
                     popup.hide();
                     event.stopPropagation();
                     break;
-                case KeyCodes.KEY_BACKSPACE:
-                case KeyCodes.KEY_TAB:    
+                case KeyCodes.KEY_TAB:
                     break;
+                case KeyCodes.KEY_BACKSPACE:
+                    String value;
+                    value = textbox.getText();
+                    if ( !value.equals(""))
+                        textbox.setText(value.substring(0, value.length() - 1));
                 default:
                     handleKeyInput();
-                    
+
             }
         }
+    }
+
+    /**
+     * Private Default implementation of the Renderer interface.
+     * 
+     */
+    protected class DefaultRenderer implements Renderer {
+        public String getDisplay(TableDataRow row) {
+            return row.getCells().get(0).toString();
+        }
+    }
+
+    protected class SearchPair implements Comparable<SearchPair> {
+
+        public int    modelIndex;
+        public String display;
+
+        public SearchPair(int index, String display) {
+            this.modelIndex = index;
+            this.display = display;
+        }
+
+        public int compareTo(SearchPair o) {
+            return display.compareTo(o.display);
+        }
+
     }
 
 }

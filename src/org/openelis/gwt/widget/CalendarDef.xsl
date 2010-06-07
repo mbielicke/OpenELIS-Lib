@@ -36,7 +36,7 @@ UIRF Software License are applicable instead of those above.
   <xsl:template match="doc"> 
     <xsl:variable name="language" select="locale" />
     <xsl:variable name="props" select="props" />
-    <xsl:variable name="constants" select="resource:getBundle(string($props),locale:new(string($language)))" />
+    <xsl:variable name="constants" select="resource:getBundle(string('org.openelis.gwt.server.CalendarConstants'),locale:new(string($language)))" />
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <VerticalPanel style="CalendarWidget">
             <widget halign="center">
@@ -60,172 +60,172 @@ UIRF Software License are applicable instead of those above.
       </HorizontalPanel>
       <VerticalPanel width="100%" key="calContainer">
  
-      <!-- 
-        <TablePanel style="Calendar" width="100%" spacing="0" padding="0">
+       <!-- 
+        <TablePanel style="Calendar" width="100%" spacing="0" padding="0" key="ucalTable">
           <row style="DayBar">
-            <icon style="DayCell">
+            <widget style="DayCell">
                <text style="DayText">S</text>
-            </icon>
-            <icon style="DayCell">
+            </widget>
+            <widget style="DayCell">
               <text style="DayText">M</text>
-            </icon>
-            <icon style="DayCell">
+            </widget>
+            <widget style="DayCell">
               <text style="DayText">T</text>
-            </icon>
-            <icon style="DayCell">
+            </widget>
+            <widget style="DayCell">
               <text style="DayText">W</text>
-            </icon>
-            <icon style="DayCell">
+            </widget>
+            <widget style="DayCell">
               <text style="DayText">T</text>
-            </icon>
-            <icon style="DayCell">
+            </widget>
+            <widget style="DayCell">
               <text style="DayText">F</text>
-            </icon>
-            <icon style="DayCell">
+            </widget>
+            <widget style="DayCell">
               <text style="DayText">S</text>
-            </icon>
+            </widget>
           </row>
     
           <row>
-		    <icon style="DateCell">
-		      <label key="cell:0:0" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:0:1" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:0:2" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:0:3" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:0:4" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:0:5" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:0:6" style="DateText"/>
-		    </icon>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
           </row>
           <row>
-		    <icon style="DateCell">
-		      <label key="cell:1:0" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:1:1" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:1:2" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:1:3" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:1:4" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:1:5" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:1:6" style="DateText"/>
-		    </icon>
+		    <widget style="DateCell">
+		      <text  style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
           </row>
           <row>
-		    <icon style="DateCell">
-		      <label key="cell:2:0" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:2:1" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:2:2" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:2:3" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:2:4" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:2:5" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:2:6" style="DateText"/>
-		    </icon>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
           </row>
           <row>
-		    <icon style="DateCell">
-		      <label key="cell:3:0" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:3:1" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:3:2" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:3:3" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:3:4" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:3:5" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:3:6" style="DateText"/>
-		    </icon>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
           </row>
           <row>
-		    <icon style="DateCell">
-		      <label key="cell:4:0" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:4:1" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:4:2" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:4:3" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:4:4" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:4:5" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:4:6" style="DateText"/>
-		    </icon>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
          </row>
          <row>
-		    <icon style="DateCell">
-		      <label key="cell:5:0" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:5:1" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:5:2" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:5:3" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:5:4" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:5:5" style="DateText"/>
-		    </icon>
-		    <icon style="DateCell">
-		      <label key="cell:5:6" style="DateText"/>
-		    </icon>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
+		    <widget style="DateCell">
+		      <text style="DateText"/>
+		    </widget>
          </row>
       </TablePanel>
-      -->
+     -->
    </VerticalPanel>
 
    <AbsolutePanel style="TodayBar" width="100%" halign="center">

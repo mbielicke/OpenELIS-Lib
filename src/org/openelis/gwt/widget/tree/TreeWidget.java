@@ -469,7 +469,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     /** 
      * This method will select a TreeDataItem based on its rowIndex[0..lastReachableItem].  The row does not need
      * to be currently drawn in the TreeView. 
-     * @param index
+     * @param modelIndex
      */
     public void select(int rowIndex) {
     	if(selectedRow != rowIndex) {
@@ -1462,7 +1462,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     /**
      * Refreshes the passed item into the reachable rows making any changes to the tree and 
      * rendering them in the display
-     * @param index
+     * @param modelIndex
      */
     public void refreshRow(TreeDataItem item) {
     	refreshRow(rows.indexOf(item));

@@ -293,8 +293,10 @@ public class TableRenderer  {
     }
 
     public void dataChanged(boolean keepPosition) {
-    	if(keepPosition)
-    		load(controller.view.scrollBar.getScrollPosition());
+    	if(keepPosition){
+    	    int pos = controller.view.scrollPos;//scrollBar.getScrollPosition();
+    	    load(pos);//controller.view.scrollBar.getScrollPosition());
+    	}
     	else
     		load(0);
     }
