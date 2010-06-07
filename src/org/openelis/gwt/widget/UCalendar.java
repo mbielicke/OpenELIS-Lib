@@ -28,7 +28,7 @@ public class UCalendar extends TextBox<Datetime> {
     protected HorizontalPanel         hp;
     protected AppButton               button;
     protected PopupPanel              popup;
-    protected UCalendarWidget          calendar;
+    protected UCalendarWidget         calendar;
     
     public UCalendar() {
         
@@ -101,7 +101,7 @@ public class UCalendar extends TextBox<Datetime> {
         }
         try {
             if(calendar == null){
-                calendar = new UCalendarWidget(Datetime.getInstance(Datetime.YEAR,Datetime.DAY));
+                calendar = new UCalendarWidget(((DateHelper)helper).getBegin(),((DateHelper)helper).getEnd());
                 calendar.addValueChangeHandler(new ValueChangeHandler<Datetime>() {
                     public void onValueChange(ValueChangeEvent<Datetime> event) {
                         popup.hide();
@@ -109,7 +109,14 @@ public class UCalendar extends TextBox<Datetime> {
                         textbox.setFocus(true);
                     }
                 });
+                calendar.addMonthSelectHandler(new ClickHandler() {
+                	public void onClick(ClickEvent event) {
+                		popup.setWidget(new UMonthYearWidget());
+                	}
+                });
             }
+           	
+            calendar.setDate(value);
             popup.setWidget(calendar);
             
         }catch(Exception e){

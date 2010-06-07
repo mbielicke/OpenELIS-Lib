@@ -122,11 +122,27 @@ public class DateHelper implements WidgetHelper<Datetime> {
     }
     
     /**
+     * Returns the begin precision used by this helper
+     * @return
+     */
+    public byte getBegin() {
+    	return begin;
+    }
+    
+    /**
      * Sets the end precision for this Datetime to be returned by getValue()
      * @param begin
      */
     public void setEnd(byte end) {
         this.end = end;
+    }
+    
+    /**
+     * Returns the end precision used by this helper
+     * @return
+     */
+    public byte getEnd() {
+    	return end;
     }
 
 }

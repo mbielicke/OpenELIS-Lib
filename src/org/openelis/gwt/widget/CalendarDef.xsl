@@ -26,12 +26,17 @@ UIRF Software License are applicable instead of those above.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xalan="http://xml.apache.org/xalan"
+                extension-element-prefixes="resource"
+                xmlns:locale="xalan://java.util.Locale"
+                xmlns:resource="xalan://org.openelis.util.UTFResource"
                 xmlns:cal="xalan://java.util.Calendar"
                 xmlns:calUtils="xalan://org.openelis.util.CalendarUtils"
                 version="1.0">
 
   <xsl:template match="doc"> 
-
+    <xsl:variable name="language" select="locale" />
+    <xsl:variable name="props" select="props" />
+    <xsl:variable name="constants" select="resource:getBundle(string($props),locale:new(string($language)))" />
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <VerticalPanel style="CalendarWidget">
             <widget halign="center">
@@ -228,7 +233,22 @@ UIRF Software License are applicable instead of those above.
        <text>Today</text>
      </appButton>
    </AbsolutePanel>
+      <AbsolutePanel visible="false">
+     <label key="month0" text="{resource:getString($constants,'month0')}"/>
+     <label key="month1" text="{resource:getString($constants,'month1')}"/>
+     <label key="month2" text="{resource:getString($constants,'month2')}"/>
+     <label key="month3" text="{resource:getString($constants,'month3')}"/>
+     <label key="month4" text="{resource:getString($constants,'month4')}"/>
+     <label key="month5" text="{resource:getString($constants,'month5')}"/>
+     <label key="month6" text="{resource:getString($constants,'month6')}"/>
+     <label key="month7" text="{resource:getString($constants,'month7')}"/>
+     <label key="month8" text="{resource:getString($constants,'month8')}"/>
+     <label key="month9" text="{resource:getString($constants,'month9')}"/>
+     <label key="month10" text="{resource:getString($constants,'month10')}"/>
+     <label key="month11" text="{resource:getString($constants,'month11')}"/>     
+   </AbsolutePanel>
    </VerticalPanel>
+
    </screen>
  </xsl:template>
  

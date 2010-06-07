@@ -49,7 +49,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
     /**
      * Provided solely for GWT RPC Serialization
      */
-    private Datetime() {
+    public Datetime() {
     }
 
     /**
@@ -160,12 +160,9 @@ public class Datetime implements RPC, Comparable<Datetime> {
      * @see java.util.Calendar
      */
     public Datetime add(int days) {
-        if (endCode < HOUR)
-            return getInstance(startCode, endCode, new Date(new Date(year, month, date).getTime() +
-                                                            ((long)days * 86400000)));
-
-        return getInstance(startCode, endCode, new Date(timestamp.getTime() +
-                                                        ((long)days * 86400000)));
+    	Date cal = getDate();
+    	cal.setDate(cal.getDate()+days);
+    	return Datetime.getInstance(startCode,endCode,cal);
     }
 
     /**
@@ -235,7 +232,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
             date = timestamp.getDate();
             timestamp = null;
         } else {
-            if (startCode > YEAR)
+        	if(startCode > YEAR)
                 timestamp.setYear(1);
             if (startCode > MONTH)
                 timestamp.setMonth(0);

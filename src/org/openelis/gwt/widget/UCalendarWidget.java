@@ -25,9 +25,13 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.CalendarRPC;
+import java.util.Date;
+
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.DataChangeEvent;
+import org.openelis.gwt.event.DataChangeHandler;
+import org.openelis.gwt.event.HasActionHandlers;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.screen.ScreenEventHandler;
@@ -37,14 +41,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HTMLTable.Cell;
 /**
  * Calendar Widget will display a calendar and text boxes with the current time in
  * a popup panel.  A user can then select a date and time that will be returned back
@@ -54,7 +57,9 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
  */
  public class UCalendarWidget extends Screen implements HasValueChangeHandlers<Datetime> {
    
-    private CalendarRPC data;
+    private Datetime data;
+    private byte     begin;
+    private byte     end;
     
     protected AppButton prevMonth, nextMonth, monthSelect, today;
    
@@ -63,78 +68,75 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
     
     protected UCalendarTable table;
     
-    public UCalendarWidget(Datetime date) throws Exception {
+    public UCalendarWidget(byte begin, byte end) throws Exception {
     	super((ScreenDefInt)GWT.create(CalendarDef.class));
+ 
     	service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
-    	initialize(date);
+ 
+    	this.begin = begin;
+    	this.end   = end;
+    
+    	initialize();    	
     }
     
-    private void initialize(Datetime date) throws Exception {
+    private void initialize() throws Exception {
         
         final UCalendarWidget source = this;
         
         table = new UCalendarTable();
         ((VerticalPanel)def.getWidget("calContainer")).add(table);
-        table.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
-                ValueChangeEvent.fire(source, data.cells[cell.getRowIndex()-1][cell.getCellIndex()]);
+        
+        addScreenHandler(table, new ScreenEventHandler<Object>() {
+        	public void onDataChange(DataChangeEvent event) {
+        		table.setCalendar(data);
+        	}
+        });
+        
+        table.addSelectionHandler(new SelectionHandler<Datetime>() {
+            public void onSelection(SelectionEvent<Datetime> event) {
+                ValueChangeEvent.fire(source, event.getSelectedItem());
             }
         });
         
         monthDisplay = (Label)def.getWidget("MonthDisplay");
         addScreenHandler(monthDisplay, new ScreenEventHandler<String>() {
             public void onDataChange(DataChangeEvent event) {
-                monthDisplay.setText(data.monthDisplay);
+                monthDisplay.setText(((Label)def.getWidget("month"+data.get(Datetime.MONTH))).getText()+" "+(data.get(Datetime.YEAR)+1900));
             }
         });
+        
+        monthSelect = (AppButton)def.getWidget("monthSelect");
+        monthSelect.enable(true);
         
         prevMonth = (AppButton)def.getWidget("prevMonth");
         prevMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                data.month--;
-                if(data.month < 0) {
-                    data.month = 11;
-                    data.year--;
-                }
-                try {
-                    data = service.call("getMonth",data);
-                    table.setCalendar(data);
-                    DataChangeEvent.fire(source);
-                }catch(Exception e) {
-                    e.printStackTrace();
-                    Window.alert(e.getMessage());
-                }
-                return;
-                
+            	Date cal = data.getDate();
+            	cal.setMonth(data.get(Datetime.MONTH)-1);
+                data = Datetime.getInstance(data.startCode, data.endCode, cal);
+                table.setCalendar(data);
+                DataChangeEvent.fire(source);
             }
         });
+        prevMonth.enable(true);
         
         nextMonth = (AppButton)def.getWidget("nextMonth");
         nextMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                data.month++;
-                if(data.month > 11) {
-                    data.month = 0;
-                    data.year++;
-                }
-                try {
-                    data = service.call("getMonth", data);
-                    table.setCalendar(data);
-                    DataChangeEvent.fire(source);
-                }catch(Exception e) {
-                    e.printStackTrace();
-                    Window.alert(e.getMessage());
-                }
-                
+               	Date cal = data.getDate();
+            	cal.setMonth(data.get(Datetime.MONTH)+1);
+                data = Datetime.getInstance(data.startCode, data.endCode, cal);
+                table.setCalendar(data);
+                DataChangeEvent.fire(source);
             }
         });
+        nextMonth.enable(true);
         
         today = (AppButton)def.getWidget("today");
         today.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 try {
-                    ValueChangeEvent.fire(source,service.callDatetime("getCurrentDatetime",data.begin,data.end));
+                    ValueChangeEvent.fire(source,service.callDatetime("getCurrentDatetime",data.startCode,data.endCode));
                 }catch(Exception e) {
                     e.printStackTrace();
                     return;
@@ -142,31 +144,38 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
             }
         });
         
-        if(date.endCode > Datetime.DAY){
+        if(end > Datetime.DAY){
             time = (TextBox<Datetime>)def.getWidget("time");
             addScreenHandler(time, new ScreenEventHandler<Datetime>() {
                 public void onDataChange(DataChangeEvent event) {
-                    time.setValue(data.date);
+                    time.setValue(data);
                 } 
             });
             def.getWidget("TimeBar").setVisible(true);
         }else
             def.getWidget("TimeBar").setVisible(false);
         
-        data = new CalendarRPC();
-        data.date = date;
-        data.begin = date.startCode;
-        data.end = date.endCode;
-        data = service.call("getMonth",data);
-        
-        table.setCalendar(data);
-        
-        DataChangeEvent.fire(this);
-        
     }
 
 	public HandlerRegistration addValueChangeHandler(
 			ValueChangeHandler<Datetime> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
+	}
+	
+	public void setDate(Datetime date) {
+		if(date != null){
+			data = date;
+		}else{
+			try {
+				data = service.callDatetime("getCurrentDatetime", begin, end);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		DataChangeEvent.fire(this);
+	}
+	
+	public void addMonthSelectHandler(ClickHandler handler) {
+		monthSelect.addClickHandler(handler);
 	}
 }

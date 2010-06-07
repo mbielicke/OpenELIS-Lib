@@ -1,19 +1,29 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.event.DataChangeEvent;
+import org.openelis.gwt.event.DataChangeHandler;
+import org.openelis.gwt.event.HasDataChangeHandlers;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
-public class UCalendarTable extends Composite {
+public class UCalendarTable extends Composite implements HasSelectionHandlers<Datetime>, HasDataChangeHandlers{
     
     protected FlexTable table;
+    protected Datetime[][] dates;
     
     public UCalendarTable() {
-        table = new FlexTable();
+    	final UCalendarTable source = this; 
+        
+    	table = new FlexTable();
         table.insertRow(0);
         table.getRowFormatter().setStyleName(0,"DayBar");
 
@@ -58,26 +68,51 @@ public class UCalendarTable extends Composite {
         setWidth("100%");
         table.setCellPadding(0);
         table.setCellSpacing(0);
+        table.addClickHandler(new ClickHandler() {
+        	@Override
+        	public void onClick(ClickEvent event) {
+        		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
+        		SelectionEvent.fire(source, dates[cell.getRowIndex()-1][cell.getCellIndex()]);
+        	}
+        });
     }
     
-    public void setCalendar(CalendarRPC rpc) {
-        for(int i = 0; i < 6; i++) {
+    public void setCalendar(Datetime date) {
+    	Datetime counter = Datetime.getInstance(date.getStartCode(),date.getEndCode(),date.getDate());
+    	counter = counter.add(-(counter.get(Datetime.DAY)-1));
+
+    	if(counter.getDate().getDay() > 0)
+            counter = counter.add(-(counter.getDate().getDay()));
+        else
+            counter = counter.add(-7);
+    	dates = new Datetime[6][7];
+        
+    	for(int i = 0; i < 6; i++) {
             for(int j = 0; j < 7; j++) {
+            	dates[i][j] = counter;
                 Label cell = ((Label)table.getWidget(i+1,j));
-                cell.setText(String.valueOf(rpc.cells[i][j].get(Datetime.DAY)));
-                if(rpc.cells[i][j].get(Datetime.MONTH) != rpc.date.get(Datetime.MONTH))
+                cell.setText(String.valueOf(counter.get(Datetime.DAY)));
+                if(counter.get(Datetime.MONTH) == date.get(Datetime.MONTH))
                     cell.addStyleName("offMonth");
                 else
                     cell.removeStyleName("offMonth");
-                if(rpc.cells[i][j].equals(rpc.date))
+                if(counter.equals(date))
                     cell.addStyleName("current");
                 else
                     cell.removeStyleName("current");
+                counter = counter.add(1);
             }
         }
     }
-    
-    public HandlerRegistration addClickHandler(ClickHandler handler) {
-        return table.addClickHandler(handler);
-    }
+
+	@Override
+	public HandlerRegistration addSelectionHandler(
+			SelectionHandler<Datetime> handler) {
+		return addHandler(handler,SelectionEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
+		return addHandler(handler,DataChangeEvent.getType());
+	}
 }
