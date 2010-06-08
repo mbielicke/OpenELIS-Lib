@@ -33,16 +33,20 @@ import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasValue;
 
-public class UCheckBox extends FocusPanel implements ScreenWidgetInt<String> {
+public class UCheckBox extends FocusPanel implements ScreenWidgetInt<String>, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<String>, HasValue<String>,  HasExceptions {
 
     /*
      * Enum to define check state 

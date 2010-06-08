@@ -7,7 +7,7 @@ import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.user.client.ui.HasValue;
 
-public interface ScreenWidgetInt<T> extends HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<T>, HasValue<T>,  HasExceptions {
+public interface ScreenWidgetInt<T>  {
 
     /**
      * Enables/Disables the screen widget. Disabled screen widgets will not

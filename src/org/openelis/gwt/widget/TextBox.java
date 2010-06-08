@@ -10,6 +10,8 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -19,11 +21,13 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
@@ -37,7 +41,7 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusable {
+public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<T>, HasValue<T>,  HasExceptions {
 
     /**
      * Wrapped GWT TextBox

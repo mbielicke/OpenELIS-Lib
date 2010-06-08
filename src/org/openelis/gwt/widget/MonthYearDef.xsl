@@ -51,50 +51,50 @@ UIRF Software License are applicable instead of those above.
 	      <AbsolutePanel>
 	      <TablePanel spacing="0" padding="0" width="100%">
 	        <row>
-	         <appButton key="month0" style="Button" enable="true" toggle="true">
+	         <appButton key="month0" style="Button" toggle="true">
                 <label key="month0Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth0')}"/>
              </appButton>
-             <appButton key="month6" style="Button" enable="true" toggle="true">
+             <appButton key="month6" style="Button" toggle="true">
                 <label key="month6Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth6')}"/>
              </appButton>
 	      </row>
 	      <row>
-	         <appButton key="month1" style="Button" enable="true" toggle="true">
+	         <appButton key="month1" style="Button" toggle="true">
                 <label key="month1Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth1')}"/>
              </appButton>
-	         <appButton key="month7" style="Button" enable="true" toggle="true">
+	         <appButton key="month7" style="Button" toggle="true">
                 <label key="month7Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth7')}"/>
              </appButton>             	      
 	      </row>	     
 	      <row>
-	         <appButton key="month2" style="Button" enable="true" toggle="true">
+	         <appButton key="month2" style="Button" toggle="true">
                 <label key="month2Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth2')}"/>
              </appButton>	      
-	         <appButton key="month8" style="Button" enable="true" toggle="true">
+	         <appButton key="month8" style="Button" toggle="true">
                 <label key="month8Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth8')}"/>
              </appButton>             
 	      </row>	     
 	      <row>
-	         <appButton key="month3" style="Button" enable="true" toggle="true">
+	         <appButton key="month3" style="Button" toggle="true">
                 <label key="month3Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth3')}"/>
              </appButton>	      
-              <appButton key="month9" style="Button" enable="true" toggle="true">
+              <appButton key="month9" style="Button" toggle="true">
                 <label key="month9Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth9')}"/>
              </appButton>
 	      </row>	     
 	      <row>
-	         <appButton key="month4" style="Button" enable="true" toggle="true">
+	         <appButton key="month4" style="Button" toggle="true">
                 <label key="month4Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth4')}"/>
              </appButton>	      
-	         <appButton key="month10" style="Button" enable="true" toggle="true">
+	         <appButton key="month10" style="Button" toggle="true">
                 <label key="month10Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth10')}"/>
              </appButton>             
 	      </row>	     
 	      <row>
-	         <appButton key="month5" style="Button" enable="true" toggle="true">
+	         <appButton key="month5" style="Button" toggle="true">
                 <label key="month5Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth5')}"/>
              </appButton>
-	         <appButton key="month11" style="Button" enable="true" toggle="true">
+	         <appButton key="month11" style="Button" toggle="true">
                 <label key="month11Text" wordwrap="true" text="{resource:getString($constants,'abrvMonth11')}"/>
              </appButton>             	      
 	      </row>	          
@@ -106,54 +106,54 @@ UIRF Software License are applicable instead of those above.
 	    <TablePanel spacing="0" padding="0" width="100%">
 	      <row>
 	        <widget>
-    	        <appButton key="prevDecade" style="Button" enable="true">
+    	        <appButton key="prevDecade" style="Button">
     	           <AbsolutePanel style="prevNavIndex"/>
     	        </appButton>
     	    </widget>
     	    <widget>
-		        <appButton key="nextDecade" style="Button" enable="true"> 
+		        <appButton key="nextDecade" style="Button"> 
 		           <AbsolutePanel style="nextNavIndex"/>
 		        </appButton>
 		    </widget>
 	      </row>	      
 	      <row>
-	        <appButton key="year0" style="Button" enable="true" toggle="true">
-	          <label key="year0Text" wordwrap="true"/>
+	        <appButton key="year0" style="Button" toggle="true">
+	          <label key="year0Text" wordwrap="true" text="2010"/>
 	        </appButton> 
-	        <appButton key="year5" style="Button" enable="true" toggle="true">
-	          <label key="year5Text" wordwrap="true"/>
+	        <appButton key="year5" style="Button" toggle="true">
+	          <label key="year5Text" wordwrap="true" text="2015"/>
 	        </appButton> 
 	      </row>	 
 	      <row>
-	      	<appButton key="year1" style="Button"  enable="true" toggle="true">
-	          <label key="year1Text" wordwrap="true"/>
+	      	<appButton key="year1" style="Button"  toggle="true">
+	          <label key="year1Text" wordwrap="true" text="2011"/>
 	        </appButton> 
-	        <appButton key="year6" style="Button"  enable="true" toggle="true">
-	          <label key="year6Text" wordwrap="true"/>
+	        <appButton key="year6" style="Button"  toggle="true">
+	          <label key="year6Text" wordwrap="true" text="2016"/>
 	        </appButton> 	        
 	      </row>		  
 	      <row>
-	        <appButton key="year2" style="Button" enable="true" toggle="true">
-	          <label key="year2Text" wordwrap="true"/>
+	        <appButton key="year2" style="Button" toggle="true">
+	          <label key="year2Text" wordwrap="true" text="2012"/>
 	        </appButton> 	      
-	        <appButton key="year7" style="Button" enable="true" toggle="true">
-	          <label key="year7Text" wordwrap="true"/>
+	        <appButton key="year7" style="Button" toggle="true">
+	          <label key="year7Text" wordwrap="true" text="2017"/>
 	        </appButton> 	        
 	      </row>		  
 	      <row>
-	        <appButton key="year3" style="Button" enable="true" toggle="true">
-	          <label key="year3Text" wordwrap="true"/>
+	        <appButton key="year3" style="Button" toggle="true">
+	          <label key="year3Text" wordwrap="true" text="2013"/>
 	        </appButton> 	      
-	        <appButton key="year8" style="Button" enable="true" toggle="true">
-	          <label key="year8Text" wordwrap="true"/>
+	        <appButton key="year8" style="Button"  toggle="true">
+	          <label key="year8Text" wordwrap="true" text="2018"/>
 	        </appButton> 	        
 	      </row>		  
 	      <row>
-	        <appButton key="year4" style="Button" enable="true" toggle="true">
-	          <label key="year4Text" wordwrap="true"/>
+	        <appButton key="year4" style="Button" toggle="true">
+	          <label key="year4Text" wordwrap="true" text="2014"/>
 	        </appButton> 	      
-	        <appButton key="year9" style="Button" enable="true" toggle="true">
-	          <label key="year9Text" wordwrap="true"/>
+	        <appButton key="year9" style="Button" toggle="true">
+	          <label key="year9Text" wordwrap="true" text="2019"/>
 	        </appButton> 	        
 	      </row>		                         
 	    </TablePanel>

@@ -12,7 +12,6 @@ import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -126,7 +125,7 @@ public class UDropdown<T> extends TextBox<T> {
          */
         textbox.addFocusHandler(new FocusHandler() {
             public void onFocus(FocusEvent event) {
-                FocusEvent.fireNativeEvent(Document.get().createFocusEvent(), source);
+                FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
             }
         });
 
@@ -134,7 +133,7 @@ public class UDropdown<T> extends TextBox<T> {
             public void onBlur(BlurEvent event) {
                 Item<T> item;
 
-                BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), source);
+                BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
 
                 item = getSelectedItem();
 
@@ -194,37 +193,6 @@ public class UDropdown<T> extends TextBox<T> {
          */
         if (getSelectedIndex() > 0)
             table.scrollToVisible();
-    }
-
-    /**
-     * This method is called when text is entered in the textbox. This code was
-     * put in a method and removed from the KeyboardHandler code so that it
-     * could be overridden by Autocomplete.
-     */
-    protected void handleKeyInput() {
-        int cursorPos, index;
-        String text;
-
-        text = getText();
-
-        /*
-         * Will hit this if backspaced to clear textbox.  Call setSelected 0 so that
-         * if user tabs off the value is selected correctly
-         */
-        if (text.equals("")) {
-            setSelectedIndex(0);
-            return;
-        }
-
-        cursorPos = getText().length();
-        index = findIndexByTextValue(getText());
-
-        if (index > -1)
-            setSelectedIndex(index);
-        else
-            cursorPos-- ;
-
-        textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
     }
 
     /**
@@ -414,21 +382,26 @@ public class UDropdown<T> extends TextBox<T> {
      * @param values
      */
     public void setValues(T... values) {
+        StringBuffer sb;
+        ArrayList<Item<T>> items;
+        
         if (table.multiSelect)
             table.ctrlKey = true;
         table.clearSelections();
         if (values != null) {
             for (T key : values)
                 table.selectRow(keyHash.get(key));
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < getSelectedItems().size(); i++ ) {
+            sb = new StringBuffer();
+            items = getSelectedItems();
+            for (int i = 0; i < items.size(); i++ ) {
                 if (i > 0)
                     sb.append(" | ");
-                sb.append(renderer.getDisplay(getSelectedItems().get(i)));
+                sb.append(renderer.getDisplay(items.get(i)));
             }
             textbox.setText(sb.toString());
         } else
             textbox.setText("");
+        
         table.ctrlKey = false;
     }
 
@@ -443,12 +416,12 @@ public class UDropdown<T> extends TextBox<T> {
 
     /**
      * Returns the string currently displayed in the textbox portion of the
-     * widget. Added this here becuase it was being used for AutoComplete
+     * widget. 
      * 
      * @return
      */
     public String getDisplay() {
-        return textbox.getText();
+        return getText();
     }
 
     // ********** Methods Overridden in the ScreenWidetInt ****************
@@ -459,6 +432,8 @@ public class UDropdown<T> extends TextBox<T> {
      */
     @Override
     public void setEnabled(boolean enabled) {
+        if(isEnabled() == enabled)
+            return;
         button.enable(enabled);
         table.enable(enabled);
         if (enabled)
@@ -475,28 +450,26 @@ public class UDropdown<T> extends TextBox<T> {
      */
     @Override
     public void setValue(T value, boolean fireEvents) {
-        T old;
-
-        old = this.value;
-        this.value = value;
-
-        /*
-         * Make sure selected row matches value passed. Useful when End User
-         * calls setValue(T value);
-         * 
-         * null check added for Autocomplete
-         */
-        if(table.getData() != null)
-            table.selectRow(keyHash.get(value));
+        boolean validKey;
+        
+        if (!(this.value == null && value != null) || (this.value != null && !this.value.equals(value)))
+            return;
 
         if (value != null) {
+            validKey = keyHash.containsKey(value);
+            assert validKey : "Key not found in Item list";
+            
+            table.selectRow(keyHash.get(value));
             textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
+            table.selectRow(-1);
             textbox.setText("");
         }
 
+        this.value = value;
+        
         if (fireEvents) {
-            ValueChangeEvent.fireIfNotEqual(this, old, value);
+            ValueChangeEvent.fire(this, value);
         }
     };
 
@@ -531,11 +504,13 @@ public class UDropdown<T> extends TextBox<T> {
     public Object getQuery() {
         QueryData qd;
         StringBuffer sb;
+        ArrayList<Item<T>> items;
 
+        items = getSelectedItems();
         /*
          * Return null if nothing selected
          */
-        if (getSelectedItems() == null)
+        if (items == null)
             return null;
 
         qd = new QueryData();
@@ -552,10 +527,11 @@ public class UDropdown<T> extends TextBox<T> {
          * Create the query from the selected values
          */
         sb = new StringBuffer();
-        for (int i = 0; i < getSelectedItems().size(); i++ ) {
+        
+        for (int i = 0; i < items.size(); i++ ) {
             if (i > 0)
                 sb.append(" | ");
-            sb.append(getSelectedItems().get(i).key.toString());
+            sb.append(items.get(i).itemKey);
         }
 
         qd.query = sb.toString();
@@ -595,9 +571,9 @@ public class UDropdown<T> extends TextBox<T> {
         else {
             // we need to do a linear search backwards to find the first entry
             // that matches our search
+            index-- ;
             while (index > 0 &&
-                   compareValue((String)searchText.get(index).display, textValue,
-                                textValue.length()) == 0)
+                   compareValue((String)searchText.get(index).display, textValue,textValue.length()) == 0)
                 index-- ;
 
             return searchText.get(index + 1).modelIndex;
@@ -644,39 +620,50 @@ public class UDropdown<T> extends TextBox<T> {
         }
 
         /**
-         * Recursive method to find the next selectable item in the Dropdown
+         * Method to find the next selectable item in the Dropdown
          * 
          * @param index
          * @return
          */
         private int findNextActive(int index) {
-            index++ ;
-            while (index < table.numRows() && !table.isEnabled(index))
-                index++ ;
-            if (index < table.numRows())
-                return index;
-            return findNextActive(index);
+            int next;
+            
+            next = index + 1;
+            while (next < table.numRows() && !table.isEnabled(next))
+                next++ ;
+            
+            if (next < table.numRows())
+                return next;
+            
+            return index;
+          
         }
 
         /**
-         * Recursive method to find the previous selectable item in the Dropdown
+         * Method to find the previous selectable item in the Dropdown
          * 
          * @param index
          * @return
          */
         private int findPrevActive(int index) {
-            index-- ;
-            while (index > -1 && !table.isEnabled(index))
-                index-- ;
-            if (index > -1)
-                return index;
-            return findPrevActive(1);
+            int prev;
+            
+            prev = index -1;
+            while (prev > -1 && !table.isEnabled(prev))
+                prev-- ;
+            
+            if (prev > -1)
+                return prev;
+            
+            return index;
         }
 
         /**
          * This method handles all keyup events for the dropdown widget.
          */
         public void onKeyUp(KeyUpEvent event) {
+            int cursorPos,index;
+            String text;
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_CTRL:
                     table.ctrlKey = false;
@@ -685,54 +672,55 @@ public class UDropdown<T> extends TextBox<T> {
                     table.shiftKey = false;
                     break;
                 case KeyCodes.KEY_DOWN:
-                    if (table.getSelectedRow() >= 0 && table.getSelectedRow() < table.numRows() - 1) {
-                        final int row = findNextActive(table.getSelectedRow());
-                        if ( !table.isRowDrawn(row)) {
-                            table.view.setScrollPosition(table.view.top +
-                                                         (21 * (row - table.getSelectedRow())));
-                        }
-                        table.selectRow(row);
-                        setDisplay();
-                    } else if (table.getSelectedRow() < 0) {
-                        table.selectRow(0);
-                        setValue(null, true);
-                    }
+                    table.selectRow(findNextActive(table.getSelectedRow()));
+                    table.scrollToVisible();
+                    setDisplay();
                     event.stopPropagation();
                     break;
                 case KeyCodes.KEY_UP:
-                    if (table.getSelectedRow() > 0) {
-                        final int row = findPrevActive(table.getSelectedRow());
-                        if ( !table.isRowDrawn(row)) {
-                            table.view.setScrollPosition(table.view.top -
-                                                         (21 * (table.getSelectedRow() - row)));
-                        }
-                        table.selectRow(row);
-                        setDisplay();
-                    }
+                    table.selectRow(findPrevActive(table.getSelectedRow()));
+                    table.scrollToVisible();
+                    setDisplay();
                     event.stopPropagation();
                     break;
                 case KeyCodes.KEY_ENTER:
-                    if (table.getSelectedRow() > -1) {
-                        if (popup == null || !popup.isShowing())
-                            showPopup();
-                        else
-                            popup.hide();
-                    }
-                    event.stopPropagation();
-                    break;
-                case KeyCodes.KEY_ESCAPE:
-                    popup.hide();
+                    if (popup == null || !popup.isShowing())
+                        showPopup();
+                    else
+                        popup.hide();
                     event.stopPropagation();
                     break;
                 case KeyCodes.KEY_TAB:
                     break;
                 case KeyCodes.KEY_BACKSPACE:
-                    String value;
-                    value = textbox.getText();
-                    if ( !value.equals(""))
-                        textbox.setText(value.substring(0, value.length() - 1));
+                    text = getText();
+                    if ( !text.equals(""))
+                        textbox.setText(text.substring(0, text.length() - 1));
                 default:
-                    handleKeyInput();
+                    text = getText();
+
+                    /*
+                     * Will hit this if backspaced to clear textbox. Call
+                     * setSelected 0 so that if user tabs off the value is
+                     * selected correctly
+                     */
+                    if (text.equals("")) {
+                        setSelectedIndex(-1);
+                        return;
+                    }
+
+                    cursorPos = text.length();
+                    index = findIndexByTextValue(text);
+
+                    if (index > -1)
+                        setSelectedIndex(index);
+                    else
+                        cursorPos-- ;
+
+                    /*
+                     * Call getText() here instead of text becaue it was changed by setSelectedIndex(0);
+                     */
+                    textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
 
             }
         }

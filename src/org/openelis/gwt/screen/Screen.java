@@ -18,6 +18,7 @@ import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.services.ScreenService;
+import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.ScreenWindow;
@@ -25,6 +26,7 @@ import org.openelis.gwt.widget.table.TableWidget;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -107,7 +109,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
             }
             if(wid instanceof ScreenWidgetInt) {
                 ((ScreenWidgetInt)wid).validateValue();
-                if ( ((ScreenWidgetInt)wid).hasExceptions())
+                if ( ((HasExceptions)wid).hasExceptions())
                     valid = false;
             }
         }
@@ -203,8 +205,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasField)
                 ((HasField)wid).clearExceptions();
-            if (wid instanceof ScreenWidgetInt)
-                ((ScreenWidgetInt)wid).clearExceptions();
+            if (wid instanceof HasExceptions)
+                ((HasExceptions)wid).clearExceptions();
         }
         window.clearStatus();
         window.clearMessagePopup("");
@@ -216,6 +218,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         screenpanel.add(def.getPanel());
     }
 
+    @SuppressWarnings("unchecked")
     public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
         assert wid != null : "addScreenHandler received a null widget";
 
@@ -227,7 +230,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         if (wid instanceof HasClickHandlers)
             ((HasClickHandlers)wid).addClickHandler(screenHandler);
         if (wid instanceof ScreenWidgetInt) {
-            ((ScreenWidgetInt)wid).addValueChangeHandler(screenHandler);
+            ((HasValueChangeHandlers)wid).addValueChangeHandler(screenHandler);
         }
     }
 
