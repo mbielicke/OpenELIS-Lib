@@ -85,7 +85,7 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 		set(ZONE_OFFSET,time.getTimezoneOffset());
 		set(AM_PM, hour < 12 ? 0 : 1);
 		set(DAY_OF_WEEK,time.getDay());
-		set(MILLISECOND,(int)(time.getTime()-timeInMilli));
+		set(MILLISECOND,(int)(timeInMilli - time.getTime()));
 		TimeZone tz = TimeZone.createTimeZone(zoneOffset);
 		set(DST_OFFSET,tz.getDaylightAdjustment(time));
 	}
