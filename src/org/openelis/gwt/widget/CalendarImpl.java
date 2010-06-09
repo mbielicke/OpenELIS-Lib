@@ -7,6 +7,7 @@ import com.google.gwt.i18n.client.TimeZone;
 public class CalendarImpl implements Comparable<CalendarImpl> {
 
 	private Date time;
+	private long timeInMilli;
 
 	public static final int AM = 0;
 	public static final int PM = 1;
@@ -75,20 +76,21 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 
 	private CalendarImpl() {
 		time = new Date();
+		timeInMilli = time.getTime();
 		setTime(new Date());		
 	}
 	
 	private void setTime(Date date) {
 		set(time.getYear(),time.getMonth(),time.getDate(),time.getHours(),time.getMinutes(),time.getSeconds());
 		set(ZONE_OFFSET,time.getTimezoneOffset());
-		set(AM_PM,get(HOUR) < 12 ? 0 : 1);
+		set(AM_PM, hour < 12 ? 0 : 1);
 		set(DAY_OF_WEEK,time.getDay());
-		set(MILLISECOND,(int)(time.getTime()-getTimeInMillis()));
-		TimeZone tz = TimeZone.createTimeZone(get(ZONE_OFFSET));
+		set(MILLISECOND,(int)(time.getTime()-timeInMilli));
+		TimeZone tz = TimeZone.createTimeZone(zoneOffset);
 		set(DST_OFFSET,tz.getDaylightAdjustment(time));
 	}
 
-	public CalendarImpl getInstance() {
+	public static CalendarImpl getInstance() {
 		return new CalendarImpl();
 	}
 
@@ -96,20 +98,22 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 		time = getTime();
 		switch (field) {
 		case YEAR:
-			time.setYear(amount);
+			time.setYear(year + amount);
 			break;
 		case MONTH:
-			time.setMonth(amount);
+			time.setMonth(month + amount);
 			break;
 		case DATE:
-			time.setDate(amount);
+			time.setDate(date + amount);
 			break;
 		case HOUR:
-			time.setHours(amount);
+			time.setHours(hour + amount);
 			break;
 		case MINUTE:
-			time.setMinutes(amount);
+			time.setMinutes(minute + amount);
 			break;
+		case SECOND :
+		    time.setSeconds(second + amount);
 		}
 		setTime(time);
 	}
@@ -162,6 +166,7 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 	}
 
 	public int get(int field) {
+	    getTime();
 		switch (field) {
 		case ERA:
 			return era;

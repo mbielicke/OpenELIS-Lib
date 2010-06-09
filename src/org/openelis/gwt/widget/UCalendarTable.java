@@ -20,6 +20,8 @@ public class UCalendarTable extends Composite implements HasSelectionHandlers<Da
     protected FlexTable table;
     protected Datetime[][] dates;
     
+    protected int selectedRow, selectedCol;
+    
     public UCalendarTable() {
     	final UCalendarTable source = this;
     	
@@ -75,34 +77,71 @@ public class UCalendarTable extends Composite implements HasSelectionHandlers<Da
         		SelectionEvent.fire(source, dates[cell.getRowIndex()-1][cell.getCellIndex()]);
         	}
         });
+        
     }
     
-    public void setCalendar(Datetime date) {
-    	Datetime counter = Datetime.getInstance(date.getStartCode(),date.getEndCode(),date.getDate());
-    	counter = counter.add(-(counter.get(Datetime.DAY)-1));
+    public void setCalendar(int year, int month, Datetime selected, Datetime current) {
+        byte begin, end;
+        
+        begin = current.getStartCode();
+        end   = current.getEndCode();
+        
+        CalendarImpl cal = CalendarImpl.getInstance();
+        cal.set(year,month,1,0,0,0);
 
-    	if(counter.getDate().getDay() > 0)
-            counter = counter.add(-(counter.getDate().getDay()));
+    	if(cal.get(CalendarImpl.DAY_OF_WEEK) > 0)
+    	    cal.add(CalendarImpl.DATE, -cal.get(CalendarImpl.DAY_OF_WEEK));
         else
-            counter = counter.add(-7);
+            cal.add(CalendarImpl.DATE, -7);
+    	
     	dates = new Datetime[6][7];
         
+    	selectedRow = -1;
+    	selectedCol = -1;
     	for(int i = 0; i < 6; i++) {
             for(int j = 0; j < 7; j++) {
-            	dates[i][j] = counter;
+            	dates[i][j] = Datetime.getInstance(begin,end,cal.getTime());
                 com.google.gwt.user.client.ui.Label cell = ((com.google.gwt.user.client.ui.Label)table.getWidget(i+1,j));
-                cell.setText(String.valueOf(counter.get(Datetime.DAY)));
-                if(counter.get(Datetime.MONTH) != date.get(Datetime.MONTH))
+                cell.setText(String.valueOf(cal.get(CalendarImpl.DATE)));
+                
+                if(cal.get(CalendarImpl.MONTH) != month)
                     cell.addStyleName("offMonth");
                 else
                     cell.removeStyleName("offMonth");
-                if(counter.equals(date))
+                
+                if(dates[i][j].equals(current))
                     cell.addStyleName("current");
                 else
                     cell.removeStyleName("current");
-                counter = counter.add(1);
+                
+                if(dates[i][j].equals(selected))
+                    select(i+1,j);
+                else 
+                    cell.removeStyleName("selected");
+                
+                cal.add(CalendarImpl.DATE,1);
             }
         }
+    }
+    
+    public int getSelectedRow() {
+        return selectedRow;
+    }
+    
+    public int getSelectedCol() {
+        return selectedCol;
+    }
+    
+    public Datetime select(int row, int col) {
+        if(selectedRow > -1)
+            table.getWidget(selectedRow, selectedCol).removeStyleName("selected");
+        
+        table.getWidget(row, col).addStyleName("selected");
+        
+        selectedRow = row;
+        selectedCol = col;
+        
+        return dates[row -1][col];
     }
 
 	public HandlerRegistration addSelectionHandler(

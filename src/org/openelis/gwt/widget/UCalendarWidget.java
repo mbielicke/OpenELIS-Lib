@@ -28,10 +28,8 @@ package org.openelis.gwt.widget;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.event.DataChangeEvent;
-import org.openelis.gwt.event.DataChangeHandler;
-import org.openelis.gwt.event.HasActionHandlers;
+import org.openelis.gwt.screen.Calendar;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.screen.ScreenEventHandler;
@@ -40,13 +38,15 @@ import org.openelis.gwt.services.ScreenService;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 /**
@@ -58,9 +58,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
  public class UCalendarWidget extends Screen implements HasValueChangeHandlers<Datetime> {
    
-    private Datetime data;
-    private byte     begin;
-    private byte     end;
+    private Datetime selected;    
+    private Datetime current;
+    private int year;
+    private int month;
     
     protected AppButton prevMonth, nextMonth, monthSelect, today;
    
@@ -73,9 +74,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
     	super((ScreenDefInt)GWT.create(CalendarDef.class));
  
     	service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
- 
-    	this.begin = begin;
-    	this.end   = end;
+    	
+    	current = Calendar.getCurrentDatetime(begin, end);
+    	
+    	year = current.get(Datetime.YEAR);
+    	month = current.get(Datetime.MONTH);
     
     	initialize();    	
     }
@@ -89,7 +92,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
         
         addScreenHandler(table, new ScreenEventHandler<Object>() {
         	public void onDataChange(DataChangeEvent event) {
-        		table.setCalendar(data);
+        		table.setCalendar(year,month,selected,current);
         	}
         });
         
@@ -102,7 +105,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
         monthDisplay = (Label)def.getWidget("MonthDisplay");
         addScreenHandler(monthDisplay, new ScreenEventHandler<String>() {
             public void onDataChange(DataChangeEvent event) {
-                monthDisplay.setText(((Label)def.getWidget("month"+data.get(Datetime.MONTH))).getText()+" "+(data.get(Datetime.YEAR)+1900));
+                monthDisplay.setText(((Label)def.getWidget("month"+month)).getText()+" "+(year+1900));
             }
         });
         
@@ -112,10 +115,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
         prevMonth = (AppButton)def.getWidget("prevMonth");
         prevMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-            	Date cal = data.getDate();
-            	cal.setMonth(data.get(Datetime.MONTH)-1);
-                data = Datetime.getInstance(data.startCode, data.endCode, cal);
-                table.setCalendar(data);
+            	CalendarImpl cal = CalendarImpl.getInstance();
+            	cal.set(year,month,1,0,0,0);
+            	cal.add(CalendarImpl.MONTH,-1);
+            	month = cal.get(CalendarImpl.MONTH);
                 DataChangeEvent.fire(source);
             }
         });
@@ -124,10 +127,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
         nextMonth = (AppButton)def.getWidget("nextMonth");
         nextMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-               	Date cal = data.getDate();
-            	cal.setMonth(data.get(Datetime.MONTH)+1);
-                data = Datetime.getInstance(data.startCode, data.endCode, cal);
-                table.setCalendar(data);
+                CalendarImpl cal = CalendarImpl.getInstance();
+                cal.set(year,month,1,0,0,0);
+                cal.add(CalendarImpl.MONTH,1);
+                month = cal.get(CalendarImpl.MONTH);
                 DataChangeEvent.fire(source);
             }
         });
@@ -137,7 +140,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
         today.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 try {
-                    ValueChangeEvent.fire(source,service.callDatetime("getCurrentDatetime",data.startCode,data.endCode));
+                    ValueChangeEvent.fire(source,service.callDatetime("getCurrentDatetime",selected.startCode,selected.endCode));
                 }catch(Exception e) {
                     e.printStackTrace();
                     return;
@@ -145,16 +148,62 @@ import com.google.gwt.user.client.ui.VerticalPanel;
             }
         });
         
-        if(end > Datetime.DAY){
+        if(current.endCode > Datetime.DAY){
             time = (TextBox<Datetime>)def.getWidget("time");
             addScreenHandler(time, new ScreenEventHandler<Datetime>() {
                 public void onDataChange(DataChangeEvent event) {
-                    time.setValue(data);
+                    time.setValue(selected);
                 } 
             });
             def.getWidget("TimeBar").setVisible(true);
         }else
             def.getWidget("TimeBar").setVisible(false);
+        
+        addDomHandler(new KeyDownHandler() {
+            public void onKeyDown(KeyDownEvent event) {
+                if(table.selectedRow < 0) {
+                    switch(event.getNativeKeyCode()) {
+                        case KeyCodes.KEY_DOWN :
+                        case KeyCodes.KEY_UP :
+                        case KeyCodes.KEY_RIGHT :
+                        case KeyCodes.KEY_LEFT :
+                            selected = Datetime.getInstance(current.getStartCode(),current.getEndCode(),new Date(year,month,1,0,0,0));
+                            for(int i = 0; i < 2; i++) {
+                                for(int j = 0; j < 7; j++) {
+                                    if(table.dates[i][j].equals(selected)) {
+                                        selected = table.select(i+1,j);
+                                        return;
+                                    }
+                                }
+                            }
+                    }
+                    return;
+                }
+                
+                int row = table.getSelectedRow(), col = table.getSelectedCol();
+            
+                switch(event.getNativeKeyCode()) {
+                    case KeyCodes.KEY_DOWN :
+                        row = row + 1 > 6 ? 1 : row + 1;
+                        break;
+                    case KeyCodes.KEY_UP :
+                        row = row - 1 < 1 ? 6 : row - 1;
+                        break;
+                    case KeyCodes.KEY_LEFT :
+                        col = col -1 < 0 ? 6 : col - 1;
+                        break;
+                    case KeyCodes.KEY_RIGHT :
+                        col = col + 1 > 6 ? 0 : col + 1;
+                        break;
+                    case KeyCodes.KEY_ENTER :
+                        ValueChangeEvent.fire(source, selected);
+                }
+                
+                selected = table.select(row,col);
+                
+                
+            }
+        }, KeyDownEvent.getType());
         
     }
 
@@ -164,19 +213,37 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 	}
 	
 	public void setDate(Datetime date) {
-		if(date != null){
-			data = date;
-		}else{
-			try {
-				data = service.callDatetime("getCurrentDatetime", begin, end);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
+	    selected = date;
+	    if(date != null) {
+	        year = date.get(Datetime.YEAR);
+	        month = date.get(Datetime.MONTH);
+	    }
 		DataChangeEvent.fire(this);
+	}
+	
+	public void drawMonth(int year, int month){
+	    this.year = year;
+	    this.month = month;
+	    DataChangeEvent.fire(this);
 	}
 	
 	public void addMonthSelectHandler(ClickHandler handler) {
 		monthSelect.addClickHandler(handler);
 	}
-}
+	
+	public int getYear() {
+	    return year;
+	}
+	
+	public int getMonth() {
+	    return month;
+	}
+	
+	public void setMonth(int month) {
+	    this.month = month;
+	}
+	
+	public void setYear(int year) {
+	    this.year = year;
+	}
+ }
