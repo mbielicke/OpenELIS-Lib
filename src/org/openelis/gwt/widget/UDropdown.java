@@ -31,6 +31,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 
@@ -106,6 +107,9 @@ public class UDropdown<T> extends TextBox<T> {
          * passed style.
          */
         button = new AppButton("AutoDropdownButton");
+        //AbsolutePanel image = new AbsolutePanel();
+        //image.setStyleName("AutoDropdownButton");
+        //button.setWidget(image, false);
 
         hp.add(textbox);
         hp.add(button);

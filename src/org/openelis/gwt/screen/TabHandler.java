@@ -1,6 +1,7 @@
 package org.openelis.gwt.screen;
 
 import org.openelis.gwt.widget.DeckPanel;
+import org.openelis.gwt.widget.Enable;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.TabPanel;
@@ -39,15 +40,15 @@ public class TabHandler implements KeyDownHandler {
 	
 	public void onKeyDown(KeyDownEvent event) {
 		if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB){
-			if(((ScreenWidgetInt)event.getSource()).isEnabled() ||  !def.getWidget(wid).getElement().equals(event.getRelativeElement())){
-				ScreenWidgetInt nextWid = null;
+			if(((Enable)event.getSource()).isEnabled() ||  !def.getWidget(wid).getElement().equals(event.getRelativeElement())){
+				Enable nextWid = null;
 				if(event.isShiftKeyDown()){
 					if(def.getWidget(prev) instanceof TabPanel)
-						nextWid = (ScreenWidgetInt)def.getWidget(((TabPanel)def.getWidget(prev)).getPrevTabWidget());
+						nextWid = (Enable)def.getWidget(((TabPanel)def.getWidget(prev)).getPrevTabWidget());
 					else if(def.getWidget(prev) instanceof DeckPanel)
-						nextWid = (ScreenWidgetInt)def.getWidget(((DeckPanel)def.getWidget(prev)).getPrevTabWidget());
+						nextWid = (Enable)def.getWidget(((DeckPanel)def.getWidget(prev)).getPrevTabWidget());
 					else 
-						nextWid = (ScreenWidgetInt)def.getWidget(prev);
+						nextWid = (Enable)def.getWidget(prev);
 					if(nextWid.isEnabled()) {
 						def.getPanel().setFocusWidget((Widget)nextWid);
 						//if(nextWid instanceof Focusable)
@@ -57,11 +58,11 @@ public class TabHandler implements KeyDownHandler {
 					}
 				}else{
 					if(def.getWidget(next) instanceof TabPanel)
-						nextWid = (ScreenWidgetInt)def.getWidget(((TabPanel)def.getWidget(next)).getNextTabWidget());
+						nextWid = (Enable)def.getWidget(((TabPanel)def.getWidget(next)).getNextTabWidget());
 					else if(def.getWidget(next) instanceof DeckPanel)
-						nextWid = (ScreenWidgetInt)def.getWidget(((DeckPanel)def.getWidget(next)).getNextTabWidget());
+						nextWid = (Enable)def.getWidget(((DeckPanel)def.getWidget(next)).getNextTabWidget());
 					else
-						nextWid = (ScreenWidgetInt)def.getWidget(next);
+						nextWid = (Enable)def.getWidget(next);
 					if(nextWid.isEnabled()) {
 						def.getPanel().setFocusWidget((Widget)nextWid);
 						//if(nextWid instanceof Focusable)

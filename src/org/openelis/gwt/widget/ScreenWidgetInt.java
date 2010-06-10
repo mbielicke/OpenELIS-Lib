@@ -2,27 +2,9 @@ package org.openelis.gwt.widget;
 
 import org.openelis.gwt.screen.TabHandler;
 
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
-import com.google.gwt.user.client.ui.HasValue;
-
-public interface ScreenWidgetInt<T>  {
-
-    /**
-     * Enables/Disables the screen widget. Disabled screen widgets will not
-     * allow input.
-     */
-    public void setEnabled(boolean enabled);
-
-    /**
-     * Returns the state of screen widget.
-     * 
-     * @return TRUE if the screen widget is enabled, FALSE otherwise.
-     */
-    public boolean isEnabled();
-
-    /**
+public interface ScreenWidgetInt<T>  extends Enable {
+    
+	/**
      * Enables/disables the query mode mode on a widget. The effects of query
      * mode is dependent on the type of widget.
      */

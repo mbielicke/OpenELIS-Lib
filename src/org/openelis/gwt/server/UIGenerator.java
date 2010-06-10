@@ -2216,6 +2216,47 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.tree.TreeView");
     		}
     	});
+    	factoryMap.put("uappButton", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("UAppButton wid"+id+" = new UAppButton();");
+    			
+				if(node.getAttributes().getNamedItem("tab") != null) {
+		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+					String[] tabs = tab.split(",");
+					String key = node.getAttributes().getNamedItem("key").getNodeValue();
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+				}
+				if (node.getAttributes().getNamedItem("shortcut") != null)
+					addShortcutHandler(node,"wid"+id);			    
+    			
+    	        if(node.getAttributes().getNamedItem("toggles") != null)
+   	                sw.println("wid"+id+".setToggle("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
+    	        
+    	        
+    	        NodeList widgets = node.getChildNodes();
+    	        for (int l = 0; l < widgets.getLength(); l++) {
+    	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	            	if(!loadWidget(widgets.item(l),child)){
+     	            	   count--;
+     	            	   continue;
+     	               }
+    	            	if(node.getAttributes().getNamedItem("wrap") != null)
+    	            		sw.println("wid"+id+".setWidget(wid"+child+","+node.getAttributes().getNamedItem("wrap").getNodeValue()+");");
+    	            	else
+    	                    sw.println("wid"+id+".setWidget(wid"+child+");");
+    	            }
+    	        }
+
+    	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".setEnabled("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.UAppButton");
+    		}
+    	});    	
     	factoryMap.put("appButton", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("AppButton wid"+id+" = new AppButton();");
