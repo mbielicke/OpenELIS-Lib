@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.calendar;
 
 import java.util.Date;
 

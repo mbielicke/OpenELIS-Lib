@@ -57,8 +57,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.xml.client.XMLParser;
 
 public class EditBox extends Composite implements ClickHandler, 
-												  HasValue<String>, 
-												  HasField<String>, 
+												  HasValue<String>,
 												  HasBlurHandlers, 
 												  HasMouseOverHandlers, 
 												  HasMouseOutHandlers,
@@ -80,7 +79,6 @@ public class EditBox extends Composite implements ClickHandler,
 	private ScreenWindow win;
 	private ScreenDef editorDef;
 	private boolean enabled;
-	private Field<String> field;
 	
 	private class EditHandler implements FocusHandler,BlurHandler,MouseOutHandler,MouseOverHandler {
 
@@ -217,72 +215,18 @@ public class EditBox extends Composite implements ClickHandler,
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
-	public void addException(LocalizedException error) {
-		field.addException(error);
-	}
-
-	public void checkValue() {
-		field.checkValue(this);
-	}
-
-	public void clearExceptions() {
-		field.clearExceptions(this);
-		
-	}
 
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
 		text.setReadOnly(!enabled);		
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
-		return field.exceptions;
-	}
-
-	public Field<String> getField() {
-		return field;
-	}
-
-	public String getFieldValue() {
-		return field.getValue();
-	}
-
-	public void getQuery(ArrayList<QueryData> list, String key) {
-		if(!field.queryMode)
-			return;
-		if(field.queryString != null) {
-			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			qd.type = QueryData.Type.STRING;
-			list.add(qd);
-		}
-		
-	}
 
 	public boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setField(Field<String> field) {
-		this.field = field;
-		text.addValueChangeHandler(field);
-		addBlurHandler(field);
-		addMouseOutHandler(field);
-		addMouseOverHandler(field);
-		
-	}
 
-	public void setFieldValue(String value) {
-		field.setValue(value);
-		setText(value);
-		
-	}
-
-	public void setQueryMode(boolean query) {
-		field.setQueryMode(query);
-		
-	}
 
 	public HandlerRegistration addBlurHandler(BlurHandler handler) {
 		return addDomHandler(handler,BlurEvent.getType());
@@ -315,10 +259,7 @@ public class EditBox extends Composite implements ClickHandler,
 		return addDomHandler(handler,FocusEvent.getType());
 	}
 	
-	public HandlerRegistration addFieldValueChangeHandler(
-			ValueChangeHandler<String> handler) {
-		return field.addValueChangeHandler(handler);
-	}
+
 
 	public void addExceptionStyle(String style) {
 		text.addStyleName(style);	

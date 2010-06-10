@@ -126,7 +126,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
     /**
      * Adds and removes Mouse handlers for displaying Exceptions as needed
      */
-    protected void checkExceptionHandlers(HasExceptions widget) {
+    public void checkExceptionHandlers(HasExceptions widget) {
         clearExceptionStyle(widget);
         if (widget.hasExceptions()) {
             if (!overHandlers.containsKey(widget)) { 

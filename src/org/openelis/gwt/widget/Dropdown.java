@@ -1,45 +1,42 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is OpenELIS code.
-* 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
-*/
+/**
+ * Exhibit A - UIRF Open-source Based Public Software License.
+ * 
+ * The contents of this file are subject to the UIRF Open-source Based Public
+ * Software License(the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * openelis.uhl.uiowa.edu
+ * 
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is OpenELIS code.
+ * 
+ * The Initial Developer of the Original Code is The University of Iowa.
+ * Portions created by The University of Iowa are Copyright 2006-2008. All
+ * Rights Reserved.
+ * 
+ * Contributor(s): ______________________________________.
+ * 
+ * Alternatively, the contents of this file marked "Separately-Licensed" may be
+ * used under the terms of a UIRF Software license ("UIRF Software License"), in
+ * which case the provisions of a UIRF Software License are applicable instead
+ * of those above.
+ */
 package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.ScreenPanel;
-import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataRow;
-import org.openelis.gwt.widget.table.TableRenderer;
-import org.openelis.gwt.widget.table.TableView;
-import org.openelis.gwt.widget.table.event.SortEvent;
+import org.openelis.gwt.widget.table.TableRow;
+import org.openelis.gwt.widget.table.TableWidget;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -48,404 +45,745 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 
-public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHandler, HasValue<T>, HasField {
-    
-    private Field<T> field;
-    IconContainer icon = new IconContainer();
-    public String dropwidth;
-    public int minWidth;
-    HorizontalPanel hp; 
-    public ArrayList<TableDataRow> searchText;
-    private int delay = 1;
-    
-    
-    private class DropDownListener implements ClickHandler, KeyUpHandler {
-        
-        private Dropdown<T> widget;
-        
-        public DropDownListener(Dropdown<T> widget){
-            this.widget = widget;
-        }
+/**
+ * This class is used by OpenELIS Screens to display and input values in forms
+ * and in table cells as a Drop down list selector. This class exteds TextBox
+ * which implements the ScreenWidgetInt and we override this implementation
+ * where needed.
+ * 
+ * @param <T>
+ */
+public class Dropdown<T> extends TextBox<T> {
 
-        public void onClick(ClickEvent event) {
-            if(!widget.isEnabled())
-                return;
-            if(event.getSource() == widget.icon){
-                if(widget.selectedRow < 0) {
-                    if(widget.getSelections().size() > 0)
-                    	selectRow((Integer)widget.getSelectedRows()[0]);
-                }
-                widget.showTable();
-            }
+    /**
+     * Used for Dropdown display
+     */
+    protected HorizontalPanel       hp;
+    protected AppButton             button;
+    protected TableWidget           table;
+    protected PopupPanel            popup;
+    protected int                   cellHeight = 19;
 
-        }
+    /**
+     * Sorted list of display values for search
+     */
+    protected ArrayList<SearchPair> searchText;
 
-        public void onKeyUp(KeyUpEvent event) {
-            if(!widget.isEnabled())
-                return;
-            if (!widget.textbox.isReadOnly()) {
-            	int keyCode = event.getNativeKeyCode();
-                if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP ||  keyCode == KeyCodes.KEY_TAB 
-                        || keyCode == KeyCodes.KEY_LEFT || keyCode == KeyCodes.KEY_RIGHT || keyCode == KeyCodes.KEY_ALT || 
-                        keyCode == KeyCodes.KEY_CTRL || keyCode == KeyCodes.KEY_SHIFT || keyCode == KeyCodes.KEY_ESCAPE)
-                    return;
-                if(keyCode == KeyCodes.KEY_ENTER && !widget.popup.isShowing() && !widget.itemSelected){
-                    if(widget.selectedRow < 0) {
-                        if(widget.getSelections().size() > 0)
-                        	selectRow((Integer)widget.getSelectedRows()[0]);
-                    }
-                    widget.showTable();
-                    return;
-                }
-                if(keyCode == KeyCodes.KEY_ENTER && widget.itemSelected){
-                    widget.itemSelected = false;
-                    return;
-                }
-                String text = widget.textbox.getText();
-                if (text.length() > 0 && !text.endsWith("*")) {
-                    widget.setDelay(text, delay);
-                } else if(text.length() == 0){
-                    widget.selectedRow = 0;
-                    widget.selectRow(0);
-                    widget.scrollToSelection();
-                }else{
-                    widget.hideTable();
-                }
-            }
-            
-        }
+    /**
+     * HashMap to set selections by key;
+     */
+    protected HashMap<T, Integer>   keyHash;
 
+    /**
+     * Instance of the Renderer interface. Initially set to the DefaultRenderer
+     * implementation.
+     */
+    protected Renderer              renderer   = new DefaultRenderer();
+
+    /**
+     * Public Interface used to provide rendering logic for the Dropdown display
+     * 
+     */
+    public interface Renderer {
+        public String getDisplay(TableDataRow row);
     }
-    
 
-    public DropDownListener listener = new DropDownListener(this);
-    
+    /**
+     * Default no-arg constructor
+     */
     public Dropdown() {
-    	super();
     }
-    
-    public void setup() {
-        isDropdown = true;
-    	if(maxRows == 0)
-    		maxRows = 10;
-        renderer = new TableRenderer(this);
-        view = new TableView(this,showScroll);
-        view.setWidth(width);
-        setWidth(dropwidth);
-        view.setHeight(maxRows*cellHeight);
-        keyboardHandler = this;
-        hp = new HorizontalPanel();
-        hp.add(textbox);
-        hp.add(icon);
-        setWidget(hp);
-        hp.setWidth(dropwidth);
-        int index = dropwidth.indexOf("px");
-		if(index > 0)
-			minWidth = Integer.parseInt(dropwidth.substring(0,index));
-		else
-			minWidth = Integer.parseInt(dropwidth);
-        setStyleName("AutoDropDown");
-        icon.setStyleName("AutoDropDownButton");
-        textbox.setStyleName("TextboxUnselected");
-        textbox.addFocusHandler(this);
-        textbox.addBlurHandler(this);
-        popup.setStyleName("DropdownPopup");
-        popup.setWidget(view);
-        popup.addCloseHandler(this);
-        icon.addClickHandler(listener);
-        icon.addFocusHandler(this);
-        textbox.addKeyUpHandler(listener);
-        textbox.setReadOnly(!enabled);
-       
-        addDomHandler(keyboardHandler,KeyDownEvent.getType());
-        addDomHandler(keyboardHandler,KeyUpEvent.getType());
-    }
-    
-    public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyDownEvent.getType());
-    }
-    
-    public void getMatches(String match) {
-    	//match = match.replaceAll("//","////");
-        int index = getIndexByTextValue(match);
 
-        if (index == -1 && !textbox.getText().equals("")) {
-            textbox.setText(textbox.getText().substring(0, currentCursorPos-1));
-        }else{
-        	if(popup.isShowing()){
-        		selectRow(index);
-        	    scrollToSelection();
-        	}else if(textbox.getStyleName().indexOf("Focus") > -1){
-        		selectRow(index);
-        		showTable();
-        	}else{
-        		setValue((T)model.get(index).key,true);
-        		field.checkValue(this);
-        		field.drawExceptions(this);
-        	}
+    /**
+     * Init() method overrriden from TextBox to draw the Dropdown correctly.
+     * Also set up handlers for click and key handling
+     */
+    @Override
+    public void init() {
+        /*
+         * Final instance used in Anonymous handlers.
+         */
+        final Dropdown<T> source = this;
+
+        /*
+         * Final instance of the private class KeyboardHandler
+         */
+        final KeyboardHandler keyHandler = new KeyboardHandler();
+
+        hp = new HorizontalPanel();
+        textbox = new com.google.gwt.user.client.ui.TextBox();
+        /*
+         * New constructor in Button to drop the border and a div with the
+         * passed style.
+         */
+        button = new AppButton();
+        AbsolutePanel image = new AbsolutePanel();
+        image.setStyleName("AutoDropdownButton");
+        button.setWidget(image, false);
+
+        hp.add(textbox);
+        hp.add(button);
+
+        /*
+         * Sets the panel as the wrapped widget
+         */
+        initWidget(hp);
+
+        setStyleName("AutoDropDown");
+        textbox.setStyleName("TextboxUnselected");
+
+        /*
+         * Since HorizontalPanel is not a Focusable widget we need to listen to
+         * the textbox focus and blur events and pass them through to the
+         * handlers registered to source.
+         */
+        textbox.addFocusHandler(new FocusHandler() {
+            public void onFocus(FocusEvent event) {
+                FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
+            }
+        });
+
+        textbox.addBlurHandler(new BlurHandler() {
+            public void onBlur(BlurEvent event) {
+                Item<T> item;
+
+                BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+
+                item = getSelectedItem();
+
+                if (item != null)
+                    setValue(item.itemKey, true);
+            }
+        });
+
+        /*
+         * Register click handler to button to show the popup table
+         */
+        button.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                showPopup();
+            }
+        });
+
+        /*
+         * Registers the keyboard handling this widget
+         */
+        addHandler(keyHandler, KeyDownEvent.getType());
+        addHandler(keyHandler, KeyUpEvent.getType());
+
+    }
+
+    /**
+     * This method will display the table set as the PopupContext for this
+     * Dropdown. Will create the Popup and initialize the first time if null. We
+     * also call scrollToVisible() on the table to make sure the selected value
+     * is in the current table view.
+     */
+    protected void showPopup() {
+        if (popup == null) {
+            popup = new PopupPanel(true);
+            popup.setStyleName("DropdownPopup");
+            popup.setWidget(table);
+            popup.setPreviewingAllNativeEvents(false);
+            popup.addCloseHandler(new CloseHandler<PopupPanel>() {
+                public void onClose(CloseEvent<PopupPanel> event) {
+                    Item<T> item;
+                    /*
+                     * Call set value if user arrowed down to select and clicked
+                     * to another widget to close the Popup.
+                     */
+                    item = getSelectedItem();
+                    if (event.isAutoClosed() && item != null) {
+                        setValue(item.itemKey, true);
+                    }
+                }
+            });
+        }
+        popup.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() + getOffsetHeight());
+        popup.show();
+
+        /*
+         * Scroll if needed to make selection visible
+         */
+        if (getSelectedIndex() > 0)
+            table.scrollToVisible();
+    }
+
+    /**
+     * Method called by various event handlers to set the displayed text for the
+     * selected row in the table without firing value change events to the end
+     * user.
+     */
+    protected void setDisplay() {
+        StringBuffer sb;
+        ArrayList<Item<T>> items;
+
+        sb = new StringBuffer();
+        items = getSelectedItems();
+        for (int i = 0; i < items.size(); i++ ) {
+            if (i > 0)
+                sb.append(" | ");
+            sb.append(renderer.getDisplay(items.get(i)));
+        }
+
+        textbox.setText(sb.toString());
+    }
+
+    @Override
+    public void setWidth(String width) {
+        /*
+         * Set the outer panel to full width;
+         */
+        if (hp != null)
+            hp.setWidth(width);
+
+        /*
+         * set the Textbox to width - 16 to account for button.
+         */
+        textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
+
+    }
+
+    /**
+     * This method sets up the key hash which is used to search for the correct
+     * index to select when setting value by key.
+     * 
+     * @param model
+     */
+    private void createKeyHash(ArrayList<Item<T>> model) {
+        keyHash = new HashMap<T, Integer>();
+
+        for (int i = 0; i < model.size(); i++ )
+            keyHash.put(model.get(i).itemKey, i);
+
+    }
+
+    // ******* End User Dropdown methods ***********************
+    /**
+     * Allows the end user to override the DefaultRenderer with a custom
+     * Renderer.
+     * 
+     * @param renderer
+     */
+    public void setRenderer(Renderer renderer) {
+        this.renderer = renderer;
+    }
+
+    /**
+     * Sets the Table definition to be used as the PopupContext for this
+     * Dropdown. Will set the isDropdown flag in the Table so the correct
+     * styling is used.
+     * 
+     * @param table
+     */
+    public void setPopupContext(TableWidget tableDef) {
+        this.table = tableDef;
+        table.isDropdown = true;
+
+        /*
+         * This handler will will cancel the selection if the item has been
+         * disabled.
+         */
+        table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
+            public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+                if ( !event.getItem().row.enabled)
+                    event.cancel();
+            }
+        });
+
+        /*
+         * This handler will catch the events when the user clicks on rows in
+         * the table.
+         */
+        table.addSelectionHandler(new SelectionHandler<TableRow>() {
+            public void onSelection(SelectionEvent<TableRow> event) {
+                /*
+                 * Close popup if not in multiSelect mode or if we are in
+                 * multiSelect but the ctrl or shift is not held
+                 */
+                if ( !table.multiSelect || ( !table.ctrlKey && !table.shiftKey))
+                    popup.hide();
+
+                setDisplay();
+
+                /*
+                 * Set the focus back to the Textbox after closing or nothing
+                 * will be focused
+                 */
+                textbox.setFocus(true);
+            }
+        });
+    }
+
+    /**
+     * Sets the data model for the PopupContext of this widget.
+     * 
+     * @param model
+     */
+    public void setModel(ArrayList<Item<T>> model) {
+        assert table != null;
+
+        table.setMaxRows(10);
+        /*
+         * If model is smaller than maxRows then we want to reset maxRows so the
+         * table is the correct size.
+         */
+        if (table.getMaxRows() > model.size()) {
+            table.setMaxRows(model.size());
+        }
+
+        table.view.setHeight(table.getMaxRows() * cellHeight);
+
+        table.load(model);
+
+        createKeyHash(model);
+
+    }
+
+    /**
+     * Returns the model used in the table
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public ArrayList<Item<T>> getModel() {
+        return (ArrayList<Item<T>>)table.getData();
+    }
+
+    /**
+     * Sets the selected row using its overall index in the model. This method
+     * will also cause a ValueChangeEvent to be fired.
+     * 
+     * @param index
+     */
+    public void setSelectedIndex(int index) {
+        table.selectRow(index);
+        textbox.setText(renderer.getDisplay(getSelectedItem()));
+    }
+
+    /**
+     * Returns the overall index of the selected row in the model
+     * 
+     * @return
+     */
+    public int getSelectedIndex() {
+        return table.getSelectedRow();
+    }
+
+    /**
+     * Returns the currently selected TableDataRow in the Table
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Item<T> getSelectedItem() {
+        return (Item<T>)table.getSelection();
+    }
+
+    /**
+     * Returns an ArrayList<TableDataRow> of selected rows in the table.
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public ArrayList<Item<T>> getSelectedItems() {
+        return (ArrayList<Item<T>>)table.getSelections();
+    }
+
+    /**
+     * This method is used to set multiple selections in the widget by key when
+     * the widget is in multiSelect mode.
+     * 
+     * @param values
+     */
+    public void setValues(T... values) {
+        StringBuffer sb;
+        ArrayList<Item<T>> items;
+
+        if (table.multiSelect)
+            table.ctrlKey = true;
+        table.clearSelections();
+        if (values != null) {
+            for (T key : values)
+                table.selectRow(keyHash.get(key));
+            sb = new StringBuffer();
+            items = getSelectedItems();
+            for (int i = 0; i < items.size(); i++ ) {
+                if (i > 0)
+                    sb.append(" | ");
+                sb.append(renderer.getDisplay(items.get(i)));
+            }
+            textbox.setText(sb.toString());
+        } else
+            textbox.setText("");
+
+        table.ctrlKey = false;
+    }
+
+    /**
+     * Puts the widget into multiSelect mode.
+     * 
+     * @param multi
+     */
+    public void enableMultiSelect(boolean multi) {
+        table.multiSelect(multi);
+    }
+
+    /**
+     * Returns the string currently displayed in the textbox portion of the
+     * widget.
+     * 
+     * @return
+     */
+    public String getDisplay() {
+        return getText();
+    }
+
+    // ********** Methods Overridden in the ScreenWidetInt ****************
+
+    /**
+     * Method overridden from TextBox to enable the button and table as well as
+     * the textbox.
+     */
+    @Override
+    public void setEnabled(boolean enabled) {
+        if (isEnabled() == enabled)
+            return;
+        button.setEnabled(enabled);
+        table.enable(enabled);
+        if (enabled)
+            sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
+        else
+            unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
+        super.setEnabled(enabled);
+    }
+
+    /**
+     * Overridden method to set the T value of this widget. Will fire a value
+     * change event if fireEvents is true and the value is changed from its
+     * current value
+     */
+    @Override
+    public void setValue(T value, boolean fireEvents) {
+        boolean validKey;
+
+        if ( ! (this.value == null && value != null) ||
+            (this.value != null && !this.value.equals(value)))
+            return;
+
+        if (value != null) {
+            validKey = keyHash.containsKey(value);
+            assert validKey : "Key not found in Item list";
+
+            table.selectRow(keyHash.get(value));
+            textbox.setText(renderer.getDisplay(getSelectedItem()));
+        } else {
+            table.selectRow( -1);
+            textbox.setText("");
+        }
+
+        this.value = value;
+
+        if (fireEvents) {
+            ValueChangeEvent.fire(this, value);
+        }
+    };
+
+    /**
+     * Overridden method of TextBox to check if the Dropdown is valid
+     */
+    @Override
+    protected void validateValue(boolean fireEvents) {
+        validateExceptions = null;
+        if (required && value == null) {
+            addValidateException(new LocalizedException("fieldRequiredException"));
+        }
+        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+    }
+
+    /**
+     * Overridden method from TextBox for putting the Dropdown into query mode.
+     */
+    @Override
+    public void setQueryMode(boolean query) {
+        if (query == queryMode)
+            return;
+        queryMode = query;
+        enableMultiSelect(query);
+    }
+
+    /**
+     * Overridden method from TextBox for creating a QueryData object for this
+     * widget
+     */
+    @Override
+    public Object getQuery() {
+        QueryData qd;
+        StringBuffer sb;
+        ArrayList<Item<T>> items;
+
+        items = getSelectedItems();
+        /*
+         * Return null if nothing selected
+         */
+        if (items == null)
+            return null;
+
+        qd = new QueryData();
+
+        /*
+         * Since there is no helper we need to do an instance check here
+         */
+        if (value instanceof Integer)
+            qd.type = QueryData.Type.INTEGER;
+        else
+            qd.type = QueryData.Type.STRING;
+
+        /*
+         * Create the query from the selected values
+         */
+        sb = new StringBuffer();
+
+        for (int i = 0; i < items.size(); i++ ) {
+            if (i > 0)
+                sb.append(" | ");
+            sb.append(items.get(i).itemKey);
+        }
+
+        qd.query = sb.toString();
+
+        return qd;
+    }
+
+    // *************** Search methods ******************
+
+    /**
+     * This method will perform a binary search on a sorted version of the the
+     * Dropdown model
+     */
+    private int findIndexByTextValue(String textValue) {
+        int index = -1;
+        /*
+         * Force to Upper case for matching
+         */
+        textValue = textValue.toUpperCase();
+
+        if (textValue.equals(""))
+            return -1;
+
+        if (searchText == null) {
+            searchText = new ArrayList<SearchPair>();
+            for (int i = 0; i < getModel().size(); i++ ) {
+                if (getModel().get(i).enabled)
+                    searchText.add(new SearchPair(i, renderer.getDisplay(getModel().get(i))
+                                                             .toUpperCase()));
+            }
+            Collections.sort(searchText);
+        }
+        index = Collections.binarySearch(searchText, new SearchPair( -1, textValue),
+                                         new MatchComparator());
+
+        if (index < 0)
+            return -1;
+        else {
+            // we need to do a linear search backwards to find the first entry
+            // that matches our search
+            index-- ;
+            while (index > 0 &&
+                   compareValue((String)searchText.get(index).display, textValue,
+                                textValue.length()) == 0)
+                index-- ;
+
+            return searchText.get(index + 1).modelIndex;
+        }
+
+    }
+
+    private class MatchComparator implements Comparator<SearchPair> {
+
+        public int compare(SearchPair o1, SearchPair o2) {
+            return compareValue(o1.display, o2.display, o2.display.length());
+        }
+
+    }
+
+    private int compareValue(String value, String textValue, int length) {
+        if (value.length() < length)
+            return value.compareTo(textValue.substring(0, value.length()));
+        return value.substring(0, length).compareTo(textValue);
+    }
+
+    // ********** Table Keyboard Handling ****************************
+
+    protected class KeyboardHandler implements KeyDownHandler, KeyUpHandler {
+        /**
+         * This method handles all key down events for this table
+         */
+        public void onKeyDown(KeyDownEvent event) {
+
+            switch (event.getNativeKeyCode()) {
+                case KeyCodes.KEY_CTRL:
+                    table.ctrlKey = true;
+                    break;
+                case KeyCodes.KEY_SHIFT:
+                    table.shiftKey = true;
+                    break;
+                case KeyCodes.KEY_TAB:
+                    if (popup != null && popup.isShowing())
+                        popup.hide();
+                    event.stopPropagation();
+                    break;
+            }
+
+        }
+
+        /**
+         * Method to find the next selectable item in the Dropdown
+         * 
+         * @param index
+         * @return
+         */
+        private int findNextActive(int index) {
+            int next;
+
+            next = index + 1;
+            while (next < table.numRows() && !table.isEnabled(next))
+                next++ ;
+
+            if (next < table.numRows())
+                return next;
+
+            return index;
+
+        }
+
+        /**
+         * Method to find the previous selectable item in the Dropdown
+         * 
+         * @param index
+         * @return
+         */
+        private int findPrevActive(int index) {
+            int prev;
+
+            prev = index - 1;
+            while (prev > -1 && !table.isEnabled(prev))
+                prev-- ;
+
+            if (prev > -1)
+                return prev;
+
+            return index;
+        }
+
+        /**
+         * This method handles all keyup events for the dropdown widget.
+         */
+        public void onKeyUp(KeyUpEvent event) {
+            int cursorPos, index;
+            String text;
+            switch (event.getNativeKeyCode()) {
+                case KeyCodes.KEY_CTRL:
+                    table.ctrlKey = false;
+                    break;
+                case KeyCodes.KEY_SHIFT:
+                    table.shiftKey = false;
+                    break;
+                case KeyCodes.KEY_DOWN:
+                    table.selectRow(findNextActive(table.getSelectedRow()));
+                    table.scrollToVisible();
+                    setDisplay();
+                    event.stopPropagation();
+                    break;
+                case KeyCodes.KEY_UP:
+                    table.selectRow(findPrevActive(table.getSelectedRow()));
+                    table.scrollToVisible();
+                    setDisplay();
+                    event.stopPropagation();
+                    break;
+                case KeyCodes.KEY_ENTER:
+                    if (popup == null || !popup.isShowing())
+                        showPopup();
+                    else
+                        popup.hide();
+                    event.stopPropagation();
+                    break;
+                case KeyCodes.KEY_TAB:
+                    break;
+                case KeyCodes.KEY_BACKSPACE:
+                    text = getText();
+                    if ( !text.equals(""))
+                        textbox.setText(text.substring(0, text.length() - 1));
+                default:
+                    text = getText();
+
+                    /*
+                     * Will hit this if backspaced to clear textbox. Call
+                     * setSelected 0 so that if user tabs off the value is
+                     * selected correctly
+                     */
+                    if (text.equals("")) {
+                        setSelectedIndex( -1);
+                        return;
+                    }
+
+                    cursorPos = text.length();
+                    index = findIndexByTextValue(text);
+
+                    if (index > -1)
+                        setSelectedIndex(index);
+                    else
+                        cursorPos-- ;
+
+                    /*
+                     * Call getText() here instead of text becaue it was changed
+                     * by setSelectedIndex(0);
+                     */
+                    textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
+
+            }
         }
     }
-    
-    private int getIndexByTextValue(String textValue) {
-    	textValue = textValue.toUpperCase();
-    	if(textValue.equals(""))
-    		return -1;
-    	ArrayList<TableDataRow> model = (ArrayList<TableDataRow>)this.getData();
-    	int index = -1;
 
-    	if(searchText == null) {
-    		searchText = new ArrayList<TableDataRow>();
-    		for(int i = 0; i < model.size(); i++) 
-    			searchText.add(new TableDataRow(i,((String)model.get(i).cells.get(0).getValue()).toUpperCase()));
-    		Collections.sort(searchText, new ColumnComparator(0,SortEvent.SortDirection.ASCENDING));
-    	}
-    	index = Collections.binarySearch(searchText,new TableDataRow(null,textValue),new MatchComparator());
-
-    	if(index < 0)
-    		return -1;
-    	else{
-    		//we need to do a linear search backwards to find the first entry that matches our search
-    		while(index > -1 && compareValue((String)searchText.get(index).getCells().get(0),textValue,textValue.length()) == 0)
-    			index--;
-
-    		return (((Integer)searchText.get(index+1).key)).intValue();
-    	}
-
-    }
-    
-    private int compareValue(String value, String textValue, int length) {
-        if(value.length() < length)
-            return value.compareTo(textValue.substring(0,value.length()));
-        return value.substring(0,length).compareTo(textValue);
-    }
-    
-    public void setModel(ArrayList<TableDataRow> model){
-        this.load((ArrayList<TableDataRow>)model);
-
-        
-    }
-    
-    public void enable(boolean enabled) {
-        this.enabled = enabled;
-        textbox.setReadOnly(!enabled);
-        icon.enable(enabled);
-        super.enable(enabled);
+    /**
+     * Private Default implementation of the Renderer interface.
+     * 
+     */
+    protected class DefaultRenderer implements Renderer {
+        public String getDisplay(TableDataRow row) {
+            return row.getCells().get(0).toString();
+        }
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    protected class SearchPair implements Comparable<SearchPair> {
+
+        public int    modelIndex;
+        public String display;
+
+        public SearchPair(int index, String display) {
+            this.modelIndex = index;
+            this.display = display;
+        }
+
+        public int compareTo(SearchPair o) {
+            return display.compareTo(o.display);
+        }
+
     }
-
-    public T getValue() {
-        if(getSelectedRow() > -1)
-            return (T)getRow(getSelectedRow()).key;
-        else
-            return null;
-    }
-
-    public void setValue(T value) {
-        setValue(value,false);
-    }
-
-    public void setValue(T value, boolean fireEvents) {
-        T old = getValue();
-       	setSelection(value);
-        if(fireEvents)
-            ValueChangeEvent.fireIfNotEqual(this, old, value);
-    }
-
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
-        return addHandler(handler,ValueChangeEvent.getType());
-    }
-    
-	@Override
-	public HandlerRegistration addFieldValueChangeHandler(
-			ValueChangeHandler handler) {
-		return addValueChangeHandler(handler);
-	}
-
-
-	public void addException(LocalizedException error) {
-		field.addException(error);
-		field.drawExceptions(this);
-	}
-
-	public void clearExceptions() {
-		field.clearExceptions(this);
-	}
-
-	public Field getField() {
-		return field;
-	}
-
-	public void setField(Field field) {
-		this.field = field;
-		//addValueChangeHandler(field);
-		addBlurHandler(field);
-		textbox.addMouseOutHandler(field);
-		textbox.addMouseOverHandler(field);
-	}
-	
-    @Override
-    public void setFocus(boolean focus) {
-    	textbox.setFocus(focus);
-    }
-
-	public void setQueryMode(boolean query) {
-		if(queryMode == query)
-			return;
-		queryMode = query;
-		if(query){
-			setMultiSelect(true);
-		}else
-			setMultiSelect(false);
-	}
-	
-	@Override
-	public void checkValue() {
-		if(!queryMode){
-			field.checkValue(this);
-		}
-	}
-	
-	public void getQuery(ArrayList list, String key) {
-		if(!queryMode)
-			return;
-		ArrayList<TableDataRow> selections = (ArrayList<TableDataRow>)getSelections();
-		if(selections.size() > 0) {
-			QueryData qd = new QueryData();
-			qd.key = key;
-			if(field instanceof StringField)
-				qd.type = QueryData.Type.STRING;
-			else if(field instanceof IntegerField)
-				qd.type = QueryData.Type.INTEGER;
-			qd.query = "";
-			for(TableDataRow row : selections) {
-				if(selections.indexOf(row) > 0)
-					qd.query += "|";
-				if(row.key == null)
-					qd.query += "NULL";
-				else
-					qd.query += row.key.toString();
-			}
-			list.add(qd);
-		}
-	}
-	
-	public void onBlur(BlurEvent event) {
-		textbox.removeStyleName("Focus");
-		if(!queryMode)
-			BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
-	}
-	
-	public void onFocus(FocusEvent event) {
-		if(event.getSource() instanceof ScreenPanel){
-			if(((ScreenPanel)event.getSource()).focused != this){
-				textbox.removeStyleName("Focus");
-				return;
-			}
-		}
-		if(isEnabled())
-			textbox.addStyleName("Focus");
-	}
-	
-	@Override
-	public void setWidth(String width) {
-		if(hp != null && width != null)
-			hp.setWidth(width);
-		int index = width.indexOf("px");
-		int wid = 0;
-		if(index > 0)
-			wid = Integer.parseInt(width.substring(0,index)) - 16;
-		else
-			wid = Integer.parseInt(width) - 16;
-		if(wid+16 > minWidth)
-			dropwidth = (wid+16)+"px";
-		else
-			dropwidth = minWidth+"px";
-		view.setWidth(dropwidth);
-		super.setWidth(wid+"px");
-	}
-	
-	@Override
-	public ArrayList<LocalizedException> getExceptions() {
-		return field.exceptions;
-	}
-	
-	@Override
-	public void complete() {
-		super.complete();
-		field.setValue(getValue());
-		ValueChangeEvent.fire(this, getValue());
-		field.clearExceptions(this);
-		checkValue();
-		textbox.setFocus(true);
-		activeWidget = null;
-	}
-	@Override
-	public void setFieldValue(Object value) {
-		setValue((T)value);
-	}
-	
-	@Override
-	public Object getFieldValue() {
-		return getValue();
-	}
-	
-	@Override
-	public void addExceptionStyle(String style) {
-		textbox.addStyleName(style);
-	}
-	
-	@Override
-	public void removeExceptionStyle(String style) {
-		textbox.removeStyleName(style);
-	}
-	
-	public Object getWidgetValue() {
-		return getValue();
-	}
-	
-	private class MatchComparator implements Comparator<TableDataRow> {
-		
-		public int compare(TableDataRow o1, TableDataRow o2) {
-			String value = (String)o1.cells.get(0).getValue();
-			String textValue = (String)o2.cells.get(0).getValue();
-			return compareValue(value,textValue,textValue.length());
-		}
-				
-	}
-	
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-	
-	public ArrayList<Object> getSelectionKeys() {
-		ArrayList<Object> ret = new ArrayList<Object>();
-		ArrayList<TableDataRow> selections = (ArrayList<TableDataRow>)getSelections();
-		for(TableDataRow row : selections) 
-			ret.add(row.key);
-		return ret;
-	}
-	
-	public void setSelectionKeys(ArrayList<Object> selections) {
-		if(multiSelect)
-			ctrlKey = true;
-		setSelections(selections);
-		ctrlKey = false; 
-		if(selections != null && selections.size() > 0)
-			field.setValue((T)selections.get(0));
-		else
-			field.setValue(null);
-	}
 
 }
-

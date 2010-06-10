@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.screen.ScreenDefInt;
 

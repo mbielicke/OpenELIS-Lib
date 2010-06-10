@@ -11,10 +11,11 @@ import org.openelis.gwt.common.data.QueryData;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class FileUploadWidget extends Composite implements HasField<ArrayList<String>> {
+public class FileUploadWidget extends Composite implements HasValue<ArrayList<String>> {
 	
 	protected ArrayList<String> files;
 	protected FTPMultiUploader defaultUploader; 
@@ -78,11 +79,6 @@ public class FileUploadWidget extends Composite implements HasField<ArrayList<St
 		return null;
 	}
 
-	public Field<ArrayList<String>> getField() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public ArrayList<String> getFieldValue() {
 		return files;
 	}
@@ -107,20 +103,26 @@ public class FileUploadWidget extends Composite implements HasField<ArrayList<St
 		
 	}
 
-	public void setField(Field<ArrayList<String>> field) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	public void setFieldValue(ArrayList<String> value) {
-		// TODO Auto-generated method stub
-		
-	}
+    public ArrayList<String> getValue() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public void setQueryMode(boolean query) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void setValue(ArrayList<String> value) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setValue(ArrayList<String> value, boolean fireEvents) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<ArrayList<String>> handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 	
 	
 

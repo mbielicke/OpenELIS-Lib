@@ -226,28 +226,50 @@ public class Datetime implements RPC, Comparable<Datetime> {
     }
 
     protected void parse() {
-        if (endCode < HOUR) {
-            year = timestamp.getYear();
-            month = timestamp.getMonth();
-            date = timestamp.getDate();
-            timestamp = null;
-        } else {
-        	if(startCode > YEAR)
-                timestamp.setYear(1);
-            if (startCode > MONTH)
-                timestamp.setMonth(0);
-            if (startCode > DAY)
-                timestamp.setDate(0);
-            if (startCode > HOUR)
-                timestamp.setHours(0);
-            if (startCode > MINUTE)
+        /*
+         * Clear out values past set endCode
+         */
+        switch(endCode) {
+            case YEAR :
+                year = timestamp.getYear();
+                month = -1;
+                date = -1;
+                timestamp = null;
+                break;
+            case MONTH :
+                year = timestamp.getYear();
+                month = timestamp.getMonth();
+                date = -1;
+                timestamp = null;
+                break;
+            case DAY :
+                year = timestamp.getYear();
+                month = timestamp.getMonth();
+                date =  timestamp.getDate();
+                timestamp = null;
+                break;
+            case HOUR :
                 timestamp.setMinutes(0);
-            if (startCode > SECOND)
+            case MINUTE :
                 timestamp.setSeconds(0);
-            if (endCode < SECOND)
-                timestamp.setSeconds(0);
-            if (endCode < MINUTE)
-                timestamp.setMinutes(0);
+        }
+        
+        /*
+         * Clear out values before set startCode
+         */
+        switch(startCode) {
+                case FRACTION :
+                    timestamp.setSeconds(0);
+                case SECOND :
+                    timestamp.setMinutes(0);
+                case MINUTE :
+                    timestamp.setHours(0);
+                case HOUR :
+                    timestamp.setDate(0);
+                case DAY :
+                    timestamp.setMonth(0);
+                case MONTH :
+                    timestamp.setYear(0);
         }
     }
 

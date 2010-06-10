@@ -1,9 +1,10 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
 import org.openelis.gwt.event.HasDataChangeHandlers;
+import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -15,15 +16,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
-public class UCalendarTable extends Composite implements HasSelectionHandlers<Datetime>, HasDataChangeHandlers{
+public class CalendarTable extends Composite implements HasSelectionHandlers<Datetime>, HasDataChangeHandlers{
     
     protected FlexTable table;
     protected Datetime[][] dates;
     
     protected int selectedRow, selectedCol;
     
-    public UCalendarTable() {
-    	final UCalendarTable source = this;
+    public CalendarTable() {
+    	final CalendarTable source = this;
     	
     	table = new FlexTable();
         table.insertRow(0);

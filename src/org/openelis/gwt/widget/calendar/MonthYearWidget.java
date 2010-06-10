@@ -1,19 +1,21 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
+import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-public class UMonthYearWidget extends Screen {
+public class MonthYearWidget extends Screen {
 	
     protected int month = -1,year  = -1;
     
     protected AppButton ok,cancel;
     
-	public UMonthYearWidget() {
+	public MonthYearWidget() {
 		super((ScreenDefInt)GWT.create(MonthYearDef.class));
 		initialize();
 	}
@@ -29,7 +31,7 @@ public class UMonthYearWidget extends Screen {
 	               setMonth(monthIndex);
 	           } 
 	        });
-	        button.enable(true);
+	        button.setEnabled(true);
 	    }
 
 	    for(int i = 0; i < 10; i++) {
@@ -40,7 +42,7 @@ public class UMonthYearWidget extends Screen {
 	                setYear(Integer.parseInt(((Label)def.getWidget("year"+yearIndex+"Text")).getText())-1900);
 	            }
 	        });
-	        button.enable(true);
+	        button.setEnabled(true);
 	    }
 	    
         final AppButton prevDecade = (AppButton)def.getWidget("prevDecade");
@@ -51,7 +53,7 @@ public class UMonthYearWidget extends Screen {
                toggleYear(-1);
             } 
         });
-        prevDecade.enable(true);
+        prevDecade.setEnabled(true);
         
         final AppButton nextDecade = (AppButton)def.getWidget("nextDecade");
         nextDecade.addClickHandler(new ClickHandler() {
@@ -61,13 +63,13 @@ public class UMonthYearWidget extends Screen {
                toggleYear(-1);
             } 
         });
-        nextDecade.enable(true);
+        nextDecade.setEnabled(true);
         
         ok = (AppButton)def.getWidget("ok");
-        ok.enable(true);
+        ok.setEnabled(true);
         
         cancel = (AppButton)def.getWidget("cancel");
-        cancel.enable(true);
+        cancel.setEnabled(true);
 	}
 	
 	private void setDecade(int yr) {
@@ -104,12 +106,12 @@ public class UMonthYearWidget extends Screen {
 	
 	private void toggleYear(int yr) {
 	    for(int i = 0; i < 10; i++) 
-	        ((AppButton)def.getWidget("year"+i)).setState(yr == i ? AppButton.ButtonState.PRESSED : AppButton.ButtonState.UNPRESSED);
+	        ((AppButton)def.getWidget("year"+i)).setPressed(yr == i);
 	}
 	
 	private void toggleMonth(int month) {
 	    for(int i = 0; i < 12; i++)
-	        ((AppButton)def.getWidget("month"+i)).setState(month == i ? AppButton.ButtonState.PRESSED : AppButton.ButtonState.UNPRESSED);
+	        ((AppButton)def.getWidget("month"+i)).setPressed(month == i);
 	}
 
 	

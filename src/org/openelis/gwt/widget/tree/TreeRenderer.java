@@ -31,8 +31,7 @@ import java.util.Stack;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.Field;
-import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.TableDataCell;
@@ -204,65 +203,75 @@ public class TreeRenderer {
 
     @SuppressWarnings("unchecked")
     public boolean stopEditing() {
-        if(controller.activeWidget != null && !(controller.activeWidget instanceof Label)){
-        	Object currVal = controller.rows.get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
-	        if(controller.activeWidget instanceof Focusable)
-    	    	((Focusable)controller.activeWidget).setFocus(false);
-	        Object newVal = null;
-        	if(controller.activeWidget instanceof Dropdown) {
-        		if(((Dropdown)controller.activeWidget).popup.isShowing()){
-        			((Dropdown)controller.activeWidget).popup.hide(true);	
-        		}
-        		newVal = ((Dropdown)controller.activeWidget).getSelectionKeys();
-        	}
-        	if(controller.activeWidget instanceof AutoComplete){
-        		if(((AutoComplete)controller.activeWidget).popup.isShowing())
-        			((AutoComplete)controller.activeWidget).popup.hide(true);
-        		if(((AutoComplete)controller.activeWidget).getField().queryMode)
-        			newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
-        		else
-        			newVal = ((AutoComplete)controller.activeWidget).getSelection();
-        	}else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown)){
-        		newVal = ((HasField)controller.activeWidget).getField().queryString;
-        	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
-        		if(//((HasField)controller.activeWidget).getFieldValue() == null &&
-        		   !((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
-        		     newVal = ((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText();
-        	}
-        	if(newVal == null){
-        		Field field = ((HasField)controller.activeWidget).getField();
-        		if(field.queryMode)
-        			newVal = field.queryString;
-        		else
-        			newVal = field.getValue();
-        	}
-        	controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
-        	if(newVal instanceof TableDataRow)
-        		newVal = ((TableDataRow)newVal).key;
-        	if(currVal instanceof TableDataRow)
-        		currVal = ((TableDataRow)currVal).key;
-        	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
-        	//if(changed) {
-        		Widget wid = controller.activeWidget;
-        		ArrayList<LocalizedException> exceps = null;
-				if(controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions != null)
-					exceps = controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions;
-				else
-					exceps =  new ArrayList<LocalizedException>(); 
-        		if(wid instanceof HasField){
-        			if(((HasField)wid).getExceptions() != null){	
-        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
-        					if(!exceps.contains(exc))
-        						exceps.add((LocalizedException)exc.clone());
-        				}
-        				
-        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
-        			}else
-        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
-        		}
-        	//}
-        	setCellDisplay(controller.selectedRow,controller.selectedCol);
-        	controller.activeWidget = null;
+        if(controller.activeWidget != null){
+            Object currVal = controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
+            if(controller.activeWidget instanceof Focusable)
+                ((Focusable)controller.activeWidget).setFocus(false);
+            Object newVal = null;
+            if(controller.activeWidget instanceof Dropdown) {
+                /*
+                if(((Dropdown)controller.activeWidget).popup.isShowing()){
+                    ((Dropdown)controller.activeWidget).popup.hide(true);   
+                }
+                
+                newVal = ((Dropdown)controller.activeWidget).getSelectionKeys();
+                */
+            }
+            if(controller.activeWidget instanceof AutoComplete){
+                /*
+                if(((AutoComplete)controller.activeWidget).popup.isShowing())
+                    ((AutoComplete)controller.activeWidget).popup.hide(true);
+                if(((AutoComplete)controller.activeWidget).getField().queryMode)
+                    newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
+                else
+                    newVal = ((AutoComplete)controller.activeWidget).getSelection();
+                */
+            }else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown)){
+                //newVal = (()controller.activeWidget).getField().queryString;
+            }else if(!controller.queryMode && controller.activeWidget instanceof TextBox){ 
+                /*
+                if(//((HasField)controller.activeWidget).getFieldValue() == null &&
+                   !((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
+                     newVal = ((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText();
+                */
+            }
+            if(newVal == null){
+                /*
+                Field field = ((HasField)controller.activeWidget).getField();
+                if(field.queryMode)
+                    newVal = field.queryString;
+                else if(!(controller.activeWidget instanceof AutoComplete))
+                    newVal = field.getValue();
+                */
+            }
+            controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
+            
+            if(newVal instanceof TableDataRow)
+                newVal = ((TableDataRow)newVal).key;
+            if(currVal instanceof TableDataRow)
+                currVal = ((TableDataRow)currVal).key;
+            boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
+            //if(changed) {
+            Widget wid = controller.activeWidget;
+            ArrayList<LocalizedException> exceps = null;
+            if(controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions != null)
+                exceps = controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions;
+            else
+                exceps =  new ArrayList<LocalizedException>(); 
+                if(wid instanceof HasExceptions){
+                    if(((HasExceptions)wid).hasExceptions()){
+                        for(LocalizedException exc : (ArrayList<LocalizedException>)((HasExceptions)wid).getValidateExceptions()){
+                            if(!exceps.contains(exc))
+                                exceps.add((LocalizedException)exc.clone());
+                        }
+                        
+                        controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
+                    }else
+                        controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+                }
+            //}
+            setCellDisplay(controller.selectedRow,controller.selectedCol);
+            controller.activeWidget = null;
             return changed;
         }
         return false;

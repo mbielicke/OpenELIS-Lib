@@ -152,9 +152,9 @@ public abstract class ScreenNavigator {
      */
     public void enable(boolean enable) {
         if (atozNext != null)
-            atozNext.enable(enable && result != null);
+            atozNext.setEnabled(enable && result != null);
         if (atozPrev != null)
-            atozPrev.enable(enable && result != null);
+            atozPrev.setEnabled(enable && result != null);
         this.enable = enable;
     }
 
@@ -217,9 +217,9 @@ public abstract class ScreenNavigator {
             if (table != null)
                 table.unselect(selection);
             if (atozNext != null)
-                atozNext.enable(false);
+                atozNext.setEnabled(false);
             if (atozPrev != null)
-                atozPrev.enable(false);
+                atozPrev.setEnabled(false);
         } else if (row > result.size() - 1) {
             setPage(query.getPage() + 1);
         } else if (row < 0) {
@@ -230,9 +230,9 @@ public abstract class ScreenNavigator {
                 if (table != null)
                     table.selectRow(selection);
                 if (atozNext != null)
-                    atozNext.enable(true);
+                    atozNext.setEnabled(true);
                 if (atozPrev != null)
-                    atozPrev.enable(true);
+                    atozPrev.setEnabled(true);
             } else {
                 selection = -1;
                 if (table != null)

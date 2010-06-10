@@ -25,49 +25,24 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.TabHandler;
-
 /**
- * This interface is used for widgets that are used in out Screen layout framework
- * and have the ability to be enabled/disabled, recieve/lose focus, defined in the
- * tab order and can have shortcuts defined to them. 
+ * This interface is implemented by widgets that can be used to enter query
+ * values.
+ * @author tschmidt
  *
  */
-
-public interface ScreenWidgetInt {
+public interface Queryable {
     
     /**
-     * Enables/Disables the screen widget. Disabled screen widgets will not
-     * allow input.
+     * Enables/disables the query mode mode on a widget. The effects of query
+     * mode is dependent on the type of widget.
      */
-    public void setEnabled(boolean enabled);
+    public void setQueryMode(boolean enabled);
 
     /**
-     * Returns the state of screen widget.
-     * 
-     * @return TRUE if the screen widget is enabled, FALSE otherwise.
+     * Returns either a query data object or a array list of query data objects
+     * that represents the query clause for ScreenWidget.
      */
-    public boolean isEnabled();
-  
+    public Object getQuery();
 
-    /**
-     * Adds a TabHandler to the widget to override the default browser tabing
-     * and use the tab order defined in the ScreenDef
-     * 
-     * @param handler
-     */
-    public void addTabHandler(TabHandler handler);
-    
-    /**
-     * Adds the Focus style to the widget
-     * @param style
-     */
-    public void addFocusStyle(String style);
-
-    /**
-     * Removes the Focus style from the widget.
-     * @param style
-     */
-    public void removeFocusStyle(String style);
-    
 }

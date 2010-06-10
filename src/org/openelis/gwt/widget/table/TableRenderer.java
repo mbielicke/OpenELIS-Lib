@@ -30,8 +30,7 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.Field;
-import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -218,31 +217,40 @@ public class TableRenderer  {
         		((Focusable)controller.activeWidget).setFocus(false);
         	Object newVal = null;
         	if(controller.activeWidget instanceof Dropdown) {
+        	    /*
         		if(((Dropdown)controller.activeWidget).popup.isShowing()){
         			((Dropdown)controller.activeWidget).popup.hide(true);	
         		}
+        		
         		newVal = ((Dropdown)controller.activeWidget).getSelectionKeys();
+        		*/
         	}
         	if(controller.activeWidget instanceof AutoComplete){
+        	    /*
         		if(((AutoComplete)controller.activeWidget).popup.isShowing())
         			((AutoComplete)controller.activeWidget).popup.hide(true);
         		if(((AutoComplete)controller.activeWidget).getField().queryMode)
         			newVal = ((AutoComplete)controller.activeWidget).textbox.getText();
         		else
         			newVal = ((AutoComplete)controller.activeWidget).getSelection();
+        		*/
         	}else if(controller.queryMode && !(controller.activeWidget instanceof Dropdown)){
-        		newVal = ((HasField)controller.activeWidget).getField().queryString;
-        	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){
+        		//newVal = (()controller.activeWidget).getField().queryString;
+        	}else if(!controller.queryMode && controller.activeWidget instanceof TextBox){ 
+        	    /*
         		if(//((HasField)controller.activeWidget).getFieldValue() == null &&
         		   !((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText().equals("") && !((HasField)controller.activeWidget).getField().valid)
         		     newVal = ((com.google.gwt.user.client.ui.TextBox)controller.activeWidget).getText();
+        		*/
         	}
         	if(newVal == null){
+        	    /*
         		Field field = ((HasField)controller.activeWidget).getField();
         		if(field.queryMode)
         			newVal = field.queryString;
         		else if(!(controller.activeWidget instanceof AutoComplete))
         			newVal = field.getValue();
+        	    */
         	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	
@@ -258,9 +266,9 @@ public class TableRenderer  {
 				exceps = controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions;
 			else
 				exceps =  new ArrayList<LocalizedException>(); 
-        		if(wid instanceof HasField){
-        			if(((HasField)wid).getExceptions() != null){
-        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
+        		if(wid instanceof HasExceptions){
+        			if(((HasExceptions)wid).hasExceptions()){
+        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasExceptions)wid).getValidateExceptions()){
         					if(!exceps.contains(exc))
         						exceps.add((LocalizedException)exc.clone());
         				}

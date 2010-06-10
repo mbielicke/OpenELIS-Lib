@@ -3,8 +3,6 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.openelis.gwt.widget.AppButton.ButtonState;
-
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -64,10 +62,7 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
      */
     public void enable(boolean enabled) {
         for (AppButton button : buttons) {
-            if ( !enabled)
-                button.setState(ButtonState.DISABLED);
-            else
-                button.setState(ButtonState.UNPRESSED);
+            button.setEnabled(enabled);
         }
     }
 }

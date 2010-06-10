@@ -3,128 +3,120 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 
-public class Label<T> extends com.google.gwt.user.client.ui.Label implements HasValue<String>, HasField<T> {
+public class Label<T> extends com.google.gwt.user.client.ui.Label implements HasValue<T>, HasExceptions, HasHelper<T> {
     
-    String value;
-    Field<T> field;
+    T value;
+    WidgetHelper<T> helper                         =(WidgetHelper<T>)new StringHelper();
+    
+    /**
+     * Exceptions list
+     */
+    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
     
     public Label() {
     	super();
     }
     
-    public Label(String text) {
-    	super(text);
+    public Label(T value) {
+    	super();
+    	setValue(value);
     }
 
-	public String getValue() {
+	public T getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(T value) {
 		setValue(value,false);
 	}
 	
 
-	public void setValue(String value, boolean fireEvents) {
-		String old = this.value;
+	public void setValue(T value, boolean fireEvents) {
 		this.value = value;
-		setText(value);
-		if(fireEvents)
-			ValueChangeEvent.fireIfNotEqual(this, old, value);
-		
+		setText(helper.format(value));
 	}
 
-	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<String> handler) {
-		return addHandler(handler,ValueChangeEvent.getType());
-	}
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public void addException(LocalizedException exception) {
-		// TODO Auto-generated method stub
-		
-	}
+    // ********** Implementation of HasException interface ***************
+    /**
+     * Convenience method to check if a widget has exceptions so we do not need
+     * to go through the cost of merging the logical and validation exceptions
+     * in the getExceptions method.
+     * 
+     * @return
+     */
+    public boolean hasExceptions() {
+        return endUserExceptions != null || validateExceptions != null;
+    }
 
-	public void checkValue() {
-		if(field != null)
-			field.checkValue(this);
-		
-	}
+    /**
+     * Adds a manual Exception to the widgets exception list.
+     */
+    public void addException(LocalizedException error) {
+        if (endUserExceptions == null)
+            endUserExceptions = new ArrayList<LocalizedException>();
+        endUserExceptions.add(error);
+        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+    }
 
-	public void clearExceptions() {
-		// TODO Auto-generated method stub
-		
-	}
+    protected void addValidateException(LocalizedException error) {
+        if (validateExceptions == null)
+            validateExceptions = new ArrayList<LocalizedException>();
+        validateExceptions.add(error);
+    }
 
-	public void enable(boolean enabled) {
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * Combines both exceptions list into a single list to be displayed on the
+     * screen.
+     */
+    public ArrayList<LocalizedException> getValidateExceptions() {
+        return validateExceptions;
+    }
 
-	public ArrayList<LocalizedException> getExceptions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public ArrayList<LocalizedException> getEndUserExceptions() {
+        return endUserExceptions;
+    }
 
-	public Field<T> getField() {
-		// TODO Auto-generated method stub
-		return field;
-	}
+    /**
+     * Clears all manual and validate exceptions from the widget.
+     */
+    public void clearExceptions() {
+        endUserExceptions = null;
+        validateExceptions = null;
+        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+    }
 
-	public T getFieldValue() {
-	    return field.getValue();    
-	}
+    /**
+     * Will add the style to the widget.
+     */
+    public void addExceptionStyle(String style) {
+        addStyleName(style);
+    }
 
-	public void getQuery(ArrayList<QueryData> list, String key) {
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * will remove the style from the widget
+     */
+    public void removeExceptionStyle(String style) {
+        removeStyleName(style);
+    }
+    
+    public void setHelper(WidgetHelper<T> helper) {
+        this.helper = helper;
+    }
+    
+    public WidgetHelper<T> getHelper() {
+        return helper;
+    }
 
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	public void setField(Field<T> field) {
-		this.field = field;
-		addMouseOverHandler(field);
-		addMouseOutHandler(field);
-		
-	}
-
-	public void setFieldValue(T value) {
-  		field.setValue(value);
-   		setValue(field.format());
-	}
-
-	public void setQueryMode(boolean query) {
-		
-	}
-	
-
-	public void addExceptionStyle(String style) {
-		addStyleName(style);
-		
-	}
-
-	public HandlerRegistration addFieldValueChangeHandler(
-			ValueChangeHandler<T> handler) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getWidgetValue() {
-		return getText();
-	}
-
-	public void removeExceptionStyle(String style) {
-		removeStyleName(style);
-	}
 
 }

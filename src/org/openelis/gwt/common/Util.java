@@ -25,14 +25,12 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Util {
 

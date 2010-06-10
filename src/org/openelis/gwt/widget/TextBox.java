@@ -27,7 +27,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
@@ -41,7 +40,7 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<T>, HasValue<T>,  HasExceptions {
+public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<T>, HasValue<T>, HasHelper<T>, HasExceptions {
 
     /**
      * Wrapped GWT TextBox
@@ -115,7 +114,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
      * This method is overwritten to implement case management. Use the
      * setValue/getValue methods for normal screen use.
      */
-    protected String getText() {
+    public String getText() {
         switch (textCase) {
             case UPPER:
                 return textbox.getText().toUpperCase();
@@ -238,6 +237,10 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt<T>, Focusab
      */
     public void setHelper(WidgetHelper<T> helper) {
         this.helper = helper;
+    }
+    
+    public WidgetHelper<T> getHelper() {
+        return helper;
     }
 
     /**

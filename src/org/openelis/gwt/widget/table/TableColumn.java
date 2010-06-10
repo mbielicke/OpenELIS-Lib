@@ -33,13 +33,14 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.widget.AutoComplete;
-import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.DropdownWidget;
-import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.HasExceptions;
+import org.openelis.gwt.widget.HasHelper;
 import org.openelis.gwt.widget.IconContainer;
 import org.openelis.gwt.widget.QueryFieldUtil;
+import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.calendar.Calendar;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
@@ -53,6 +54,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -109,12 +111,12 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		wid = new CheckBoxContainer();
     		IconContainer icon = new IconContainer();
-    		if(CheckBox.CHECKED.equals(cell.getValue()))
-    			icon.setStyleName(CheckBox.CHECKED_STYLE);
+    		if(CheckBox.CheckValue.CHECKED.getValue().equals(cell.getValue()))
+    			icon.setStyleName(CheckBox.CheckValue.CHECKED.getStyle());
     		else if(controller.queryMode && cell.getValue() == null)
-    			icon.setStyleName(CheckBox.UNKNOWN_STYLE);
+    			icon.setStyleName(CheckBox.CheckValue.UNKNOWN.getStyle());
     		else
-    			icon.setStyleName(CheckBox.UNCHECKED_STYLE);
+    			icon.setStyleName(CheckBox.CheckValue.UNCHECKED.getStyle());
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
     		((AbsolutePanel)wid).add(icon);
     		DOM.setStyleAttribute(wid.getElement(), "align", "center");
@@ -128,43 +130,49 @@ public class TableColumn {
     			}else{
     			    TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(vrow  != null)
-    					((AutoComplete)colWidget).setSelection(vrow);
+    					((AutoComplete)colWidget).setValue(vrow.key,vrow.display);
     				else
-    					((AutoComplete)colWidget).setSelection(null,"");
-    				val = ((AutoComplete)colWidget).getTextBoxDisplay();
+    					((AutoComplete)colWidget).setValue(null,"");
+    				val = ((AutoComplete)colWidget).getDisplay();
     			}
     		}else if(colWidget instanceof Dropdown){
     			if(cell.getValue() instanceof ArrayList)
-    				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+    				((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
     			else
-    				((Dropdown)colWidget).setSelection(cell.getValue());
-    			val = ((Dropdown)colWidget).getTextBoxDisplay();
+    				((Dropdown)colWidget).setValue(cell.getValue());
+    			val = ((Dropdown)colWidget).getDisplay();
     		}else{
-    			((HasField)colWidget).setFieldValue(cell.getValue());
+    			((HasValue)colWidget).setValue(cell.getValue());
     		}
     		if(val == null){
-    			if(((HasField)colWidget).getField().queryMode)
+    		    /*
+    			if(((ScreenWidgetInt)colWidget).queryMode
     				val = ((HasField)colWidget).getField().queryString;
     			else
-    				val = ((HasField)colWidget).getFieldValue();
+    			*/
+    			val = ((HasValue)colWidget).getValue();
     		}
     		Label label = new Label("");
     		label.setStyleName("ScreenLabel");
     		if(val != null) {
-    			if(colWidget instanceof CalendarLookUp) {
+    			if(colWidget instanceof Calendar) {
+    			    /*
     				if(((HasField)colWidget).getField().queryMode)
     					label.setText(((HasField)colWidget).getField().queryString);
     				else
-    					label.setText((((CalendarLookUp) colWidget).getField().format()));
+    				*/
+    				label.setText((((Calendar)colWidget).getHelper().format((Datetime)val)));
     			}else if(colWidget instanceof AutoComplete && controller.queryMode) {
     				label.setText((String)val);
-    			}else if(colWidget instanceof DropdownWidget) {
-    				label.setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+    			}else if(colWidget instanceof Dropdown) {
+    				label.setText(((Dropdown)colWidget).getDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
+    			    /*
     				if(((HasField)colWidget).getField().queryMode)
     					label.setText(((HasField)colWidget).getField().queryString);
     				else
-    					label.setText(((TextBoxBase)colWidget).getText());
+    				*/
+    			    label.setText(((TextBoxBase)colWidget).getText());
     			}else if(colWidget instanceof Label)
     				label.setText(((Label)colWidget).getText());
     		}
@@ -182,12 +190,12 @@ public class TableColumn {
     	if( columnIndex < row.cells.size())
     		cell = row.cells.get(columnIndex);
     	if(colWidget instanceof CheckBox){
-    		if(CheckBox.CHECKED.equals(cell.getValue()))
-    			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CHECKED_STYLE);
+    		if(CheckBox.CheckValue.CHECKED.getValue().equals(cell.getValue()))
+    			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CheckValue.CHECKED.getStyle());
     	    else if(controller.queryMode && cell.getValue() == null)
-    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNKNOWN_STYLE);
+    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CheckValue.UNKNOWN.getStyle());
     	    else
-    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNCHECKED_STYLE);
+    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CheckValue.UNCHECKED.getStyle());
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -195,35 +203,39 @@ public class TableColumn {
     			}else{
     				TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(vrow != null)
-    					((AutoComplete)colWidget).setSelection(vrow);
+    					((AutoComplete)colWidget).setValue(vrow.key, vrow.display);
     				else
-    					((AutoComplete)colWidget).setSelection(null,"");
+    					((AutoComplete)colWidget).setValue(null,"");
     			
-    				((Label)widget).setText(((AutoComplete)colWidget).getTextBoxDisplay());
+    				((Label)widget).setText(((AutoComplete)colWidget).getDisplay());
     			}
         	}else if(colWidget instanceof Dropdown){
         		if(cell.getValue() instanceof ArrayList)
-    				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+    				((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
     			else
-    				((Dropdown)colWidget).setSelection(cell.getValue());
-        		((Label)widget).setText(((Dropdown)colWidget).getTextBoxDisplay());
+    				((Dropdown)colWidget).setValue(cell.getValue());
+        		((Label)widget).setText(((Dropdown)colWidget).getDisplay());
     		}else{
-    			((HasField)colWidget).setFieldValue(cell.getValue());
-    			if(colWidget instanceof CalendarLookUp) {
+    			((HasValue)colWidget).setValue(cell.getValue());
+    			if(colWidget instanceof Calendar) {
+    			    /*
     				if(((HasField)colWidget).getField().queryMode)
     					((Label)widget).setText(((HasField)colWidget).getField().queryString);
     				else
-    					((Label)widget).setText(((CalendarLookUp)colWidget).getField().format());
-    			}else if(colWidget instanceof DropdownWidget) {
-    				((Label)widget).setText(((DropdownWidget)colWidget).getTextBoxDisplay());
+    				*/
+    			    ((Label)widget).setText(((Calendar)colWidget).getText());
+    			}else if(colWidget instanceof Dropdown) {
+    				((Label)widget).setText(((Dropdown)colWidget).getDisplay());
     			}else if(colWidget instanceof TextBoxBase) {
+    			    /*
     				if(((HasField)colWidget).getField().queryMode)
     					((Label)widget).setText(((HasField)colWidget).getField().queryString);
     				else
-    					((Label)widget).setText(((TextBoxBase)colWidget).getText());
+    				*/
+    				((Label)widget).setText(((TextBoxBase)colWidget).getText());
     			}else{
-    				if(((HasField)colWidget).getFieldValue() != null)
-    					((Label)widget).setText(((HasField)colWidget).getField().format());
+    				if(((HasValue)colWidget).getValue() != null)
+    					((Label)widget).setText(((HasHelper)colWidget).getHelper().format(cell.getValue()));
     				else
     					((Label)widget).setText("");
     			}
@@ -248,31 +260,31 @@ public class TableColumn {
     	editor.setWidth((currentWidth)+ "px");
     	if(colWidget instanceof AutoComplete){
     		if(controller.queryMode){
-    			((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
+    			//((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
     			TableDataRow vrow =  (TableDataRow)cell.getValue();
     			if(vrow != null)
-    				((AutoComplete)colWidget).setSelection(vrow);
+    				((AutoComplete)colWidget).setValue(vrow.key,vrow.display);
     			else
-    				((AutoComplete)colWidget).setSelection(null,"");
+    				((AutoComplete)colWidget).setValue(null,"");
     		}
     	}else if(colWidget instanceof Dropdown){
     		if(cell.getValue() instanceof ArrayList)
-				((Dropdown)colWidget).setSelectionKeys((ArrayList<Object>)cell.getValue());
+				((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
 			else
-				((Dropdown)colWidget).setSelection(cell.getValue());
+				((Dropdown)colWidget).setValue(cell.getValue());
     	}else
-    		((HasField)editor).setFieldValue(cell.getValue());
+    		((HasValue)editor).setValue(cell.getValue());
     	
-    	((HasField)editor).clearExceptions();
+    	((HasExceptions)editor).clearExceptions();
    		setExceptions(editor, cell.exceptions);
     	editor.addStyleName("TableWidget");
     	return editor;
     }
 
     public void enable(boolean enable) {
-    	if(colWidget instanceof HasField){
-    		((HasField)colWidget).enable(enable);
+    	if(colWidget instanceof ScreenWidgetInt){
+    		((ScreenWidgetInt)colWidget).setEnabled(enable);
     	}
     	this.enabled = enable;
     }
@@ -304,9 +316,9 @@ public class TableColumn {
     	}
     	errorPanel = new VerticalPanel();
 		String style = "InputWarning";
-		if(wid instanceof HasField){
-			((HasField)wid).clearExceptions();
-			((HasField)wid).getField().drawErrors = false;
+		if(wid instanceof HasExceptions){
+			((HasExceptions)wid).clearExceptions();
+			//((HasField)wid).getField().drawErrors = false;
 		}
 		for (LocalizedException error : exceptions) {
 			HorizontalPanel hp = new HorizontalPanel();
@@ -324,11 +336,11 @@ public class TableColumn {
 			}
 			hp.add(new Label(error.getMessage()));
 			errorPanel.add(hp);
-			if(wid instanceof HasField)
-				((HasField)wid).addException(error);
+			if(wid instanceof HasExceptions)
+				((HasExceptions)wid).addException(error);
 		}
-		if(wid instanceof HasField)
-			((HasField)wid).addExceptionStyle(style);
+		if(wid instanceof HasExceptions)
+			((HasExceptions)wid).addExceptionStyle(style);
 		else
 			wid.addStyleName(style);
     	

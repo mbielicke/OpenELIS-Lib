@@ -26,7 +26,6 @@
 package org.openelis.gwt.widget.richtext;
 
 import org.openelis.gwt.widget.AppButton;
-import org.openelis.gwt.widget.AppButton.ButtonState;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -103,30 +102,30 @@ public class RichTextToolbar extends Composite {
 		}
 
 		private void checkToggleStates() {
-			if(formatter.isBold() && bold.getState() != ButtonState.PRESSED)
-				bold.setState(ButtonState.PRESSED);
-			else if(!formatter.isBold() && bold.getState() == ButtonState.PRESSED)
-				bold.setState(ButtonState.UNPRESSED);
-			if(formatter.isItalic() && italic.getState() != ButtonState.PRESSED)
-				italic.setState(ButtonState.PRESSED);
-			else if(!formatter.isItalic() && italic.getState() == ButtonState.PRESSED)
-				italic.setState(ButtonState.UNPRESSED);
-			if(formatter.isUnderlined() && underline.getState() != ButtonState.PRESSED)
-				underline.setState(ButtonState.PRESSED);
-			else if(!formatter.isUnderlined() && underline.getState() == ButtonState.PRESSED)
-				underline.setState(ButtonState.UNPRESSED);
-			if(formatter.isSubscript() && subscript.getState() != ButtonState.PRESSED)
-				subscript.setState(ButtonState.PRESSED);
-			else if(!formatter.isSubscript() && subscript.getState() == ButtonState.PRESSED)
-				subscript.setState(ButtonState.UNPRESSED);
-			if(formatter.isSuperscript() && superscript.getState() != ButtonState.PRESSED)
-				superscript.setState(ButtonState.PRESSED);
-			else if(!formatter.isSuperscript() && superscript.getState() == ButtonState.PRESSED)
-				superscript.setState(ButtonState.UNPRESSED);
-			if(formatter.isStrikethrough() && strikethrough.getState() != ButtonState.PRESSED)
-				strikethrough.setState(ButtonState.PRESSED);
-			else if(!formatter.isStrikethrough() && strikethrough.getState() == ButtonState.PRESSED)
-				strikethrough.setState(ButtonState.UNPRESSED);
+			if(formatter.isBold() && !bold.isPressed())
+				bold.setPressed(true);
+			else if(!formatter.isBold() && bold.isPressed())
+				bold.setPressed(false);
+			if(formatter.isItalic() && !italic.isPressed())
+				italic.setPressed(true);
+			else if(!formatter.isItalic() && italic.isPressed())
+				italic.setPressed(false);
+			if(formatter.isUnderlined() && !underline.isPressed())
+				underline.setPressed(true);
+			else if(!formatter.isUnderlined() && underline.isPressed())
+				underline.setPressed(false);
+			if(formatter.isSubscript() && !subscript.isPressed())
+				subscript.setPressed(true);
+			else if(!formatter.isSubscript() && subscript.isPressed())
+				subscript.setPressed(false);
+			if(formatter.isSuperscript() && !superscript.isPressed())
+				superscript.setPressed(true);
+			else if(!formatter.isSuperscript() && superscript.isPressed())
+				superscript.setPressed(false);
+			if(formatter.isStrikethrough() && !strikethrough.isPressed())
+				strikethrough.setPressed(true);
+			else if(!formatter.isStrikethrough() && strikethrough.isPressed())
+				strikethrough.setPressed(false);
 		}
 
 	}
@@ -230,13 +229,13 @@ public class RichTextToolbar extends Composite {
 		ap.setStyleName(img);
 		ab.setWidget(ap);
 		ab.addClickHandler(listener);
-		ab.enable(true);
+		ab.setEnabled(true);
 		return ab;
 	}
 
 	private AppButton createToggleButton(String img, String title) {		
 		AppButton ab = createButton(img,title);
-		ab.setToggle(true);
+		ab.setToggles(true);
 		return ab;
 	}
 
@@ -245,12 +244,12 @@ public class RichTextToolbar extends Composite {
 	}
 
 	public void reset() {
-		bold.setState(ButtonState.UNPRESSED);
-		italic.setState(ButtonState.UNPRESSED);
-		superscript.setState(ButtonState.UNPRESSED);
-		subscript.setState(ButtonState.UNPRESSED);
-		strikethrough.setState(ButtonState.UNPRESSED);
-		underline.setState(ButtonState.UNPRESSED);
+		bold.setPressed(false);
+		italic.setPressed(false);
+		superscript.setPressed(false);
+		subscript.setPressed(false);
+		strikethrough.setPressed(false);
+		underline.setPressed(false);
 		richText.setHTML("");
 	}
 }

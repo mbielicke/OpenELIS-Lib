@@ -11,7 +11,15 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class RadioButton extends com.google.gwt.user.client.ui.RadioButton implements HasField{
+public class RadioButton extends com.google.gwt.user.client.ui.RadioButton {
+
+    public RadioButton(String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
+    
+   
+    /*
 	
 	public boolean enabled;
 
@@ -107,4 +115,5 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
 	public void removeExceptionStyle(String style) {
 		removeStyleName(style);
 	}
+	*/
 }

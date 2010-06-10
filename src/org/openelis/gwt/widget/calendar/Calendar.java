@@ -1,6 +1,9 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.DateHelper;
+import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -19,6 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 
@@ -28,7 +32,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * @author tschmidt
  *
  */
-public class UCalendar extends TextBox<Datetime> {
+public class Calendar extends TextBox<Datetime> {
 
     /**
      * Used for Calendar display
@@ -36,13 +40,13 @@ public class UCalendar extends TextBox<Datetime> {
     protected HorizontalPanel  hp;
     protected AppButton        button;
     protected PopupPanel       popup;
-    protected UCalendarWidget  calendar;
-    protected UMonthYearWidget monthYearWidget;
+    protected CalendarWidget  calendar;
+    protected MonthYearWidget monthYearWidget;
 
     /**
      * Default no-arg constructor
      */
-    public UCalendar() {
+    public Calendar() {
 
     }
 
@@ -54,7 +58,7 @@ public class UCalendar extends TextBox<Datetime> {
         /*
          * Final instance of this class used Anonymous handlers
          */
-        final UCalendar source = this;
+        final Calendar source = this;
 
         /*
          * Final instance of the private class KeyboardHandler
@@ -63,7 +67,11 @@ public class UCalendar extends TextBox<Datetime> {
 
         hp = new HorizontalPanel();
         textbox = new com.google.gwt.user.client.ui.TextBox();
-        button = new AppButton("CalendarButton");
+        
+        button = new AppButton();
+        AbsolutePanel image = new AbsolutePanel();
+        image.setStyleName("CalendarButton");
+        button.setWidget(image,false);
 
         hp.add(textbox);
         hp.add(button);
@@ -123,7 +131,7 @@ public class UCalendar extends TextBox<Datetime> {
         }
         try {
             if (calendar == null) {
-                calendar = new UCalendarWidget( ((DateHelper)helper).getBegin(),
+                calendar = new CalendarWidget( ((DateHelper)helper).getBegin(),
                                                ((DateHelper)helper).getEnd());
                 calendar.addValueChangeHandler(new ValueChangeHandler<Datetime>() {
                     public void onValueChange(ValueChangeEvent<Datetime> event) {
@@ -135,7 +143,7 @@ public class UCalendar extends TextBox<Datetime> {
                 calendar.addMonthSelectHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         if (monthYearWidget == null) {
-                            monthYearWidget = new UMonthYearWidget();
+                            monthYearWidget = new MonthYearWidget();
                             monthYearWidget.addOKHandler(new ClickHandler() {
                                 public void onClick(ClickEvent event) {
                                     calendar.drawMonth(monthYearWidget.getYear(),
@@ -167,7 +175,7 @@ public class UCalendar extends TextBox<Datetime> {
         
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                ((AppButton)calendar.getDefinition().getWidget("today")).setFocus();
+                ((AppButton)calendar.getDefinition().getWidget("today")).setFocus(true);
             }
         });
 
@@ -185,7 +193,7 @@ public class UCalendar extends TextBox<Datetime> {
 
     @Override
     public void setEnabled(boolean enabled) {
-        button.enable(enabled);
+        button.setEnabled(enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else

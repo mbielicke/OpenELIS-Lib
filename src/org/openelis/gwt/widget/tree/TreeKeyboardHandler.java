@@ -104,7 +104,7 @@ public class TreeKeyboardHandler implements KeyDownHandler, KeyUpHandler {
                 });
             }else if(controller.selectedCol > -1){
                 if(controller.columns.get(controller.getRow(controller.selectedRow).leafType).get(controller.selectedCol).getColumnWidget() instanceof CheckBox) {
-                    ((CheckBox)controller.view.table.getWidget(controller.selectedRow,controller.selectedCol)).setState("CHECKED");
+                    ((CheckBox)controller.view.table.getWidget(controller.selectedRow,controller.selectedCol)).setValue("Y");
                     controller.finishEditing();
             }
             }else {

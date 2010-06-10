@@ -19,8 +19,8 @@ import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasExceptions;
-import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.HasValue;
+import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.table.TableWidget;
 
@@ -102,13 +102,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         boolean valid = true;
 
         for (Widget wid : def.getWidgets().values()) {
-            if (wid instanceof HasField) {
-                ((HasField)wid).checkValue();
-                if ( ((HasField)wid).getExceptions() != null)
-                    valid = false;
-            }
-            if(wid instanceof ScreenWidgetInt) {
-                ((ScreenWidgetInt)wid).validateValue();
+            if(wid instanceof HasValue) {
+                ((HasValue)wid).validateValue();
                 if ( ((HasExceptions)wid).hasExceptions())
                     valid = false;
             }
@@ -123,11 +118,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         list = new ArrayList<QueryData>();
         keys = def.getWidgets().keySet();
         for (String key : def.getWidgets().keySet()) {
-            if (def.getWidget(key) instanceof HasField) {
-                ((HasField)def.getWidget(key)).getQuery(list, key);
-            }
-            if (def.getWidget(key) instanceof ScreenWidgetInt) {
-                Object query = ((ScreenWidgetInt)def.getWidget(key)).getQuery();
+            if (def.getWidget(key) instanceof Queryable) {
+                Object query = ((Queryable)def.getWidget(key)).getQuery();
                 if(query instanceof Object[]){
                     QueryData[] qds = (QueryData[])query;
                     for(int i = 0; i < qds.length; i++) {
@@ -151,7 +143,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         FormErrorException formE;
         FieldErrorException fieldE;
         TableWidget tableWid;
-        HasField field;
 
         formErrors = new ArrayList<LocalizedException>();
         for (Exception ex : errors.getErrorList()) {
@@ -164,10 +155,12 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 formErrors.add(formE);
             } else if (ex instanceof FieldErrorException) {
                 fieldE = (FieldErrorException)ex;
+                /*
                 field = (HasField)def.getWidget(fieldE.getFieldName());
                 
                 if(field != null)
                  field.addException(fieldE);
+                 */
             }
         }
 
@@ -203,8 +196,8 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 
     public void clearErrors() {
         for (Widget wid : def.getWidgets().values()) {
-            if (wid instanceof HasField)
-                ((HasField)wid).clearExceptions();
+            if (wid instanceof HasExceptions)
+                ((HasExceptions)wid).clearExceptions();
             if (wid instanceof HasExceptions)
                 ((HasExceptions)wid).clearExceptions();
         }
@@ -225,11 +218,9 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         screenHandler.target = wid;
         addDataChangeHandler(screenHandler);
         addStateChangeHandler(screenHandler);
-        if (wid instanceof HasField)
-            ((HasField)wid).addFieldValueChangeHandler(screenHandler);
         if (wid instanceof HasClickHandlers)
             ((HasClickHandlers)wid).addClickHandler(screenHandler);
-        if (wid instanceof ScreenWidgetInt) {
+        if (wid instanceof HasValueChangeHandlers) {
             ((HasValueChangeHandlers)wid).addValueChangeHandler(screenHandler);
         }
     }

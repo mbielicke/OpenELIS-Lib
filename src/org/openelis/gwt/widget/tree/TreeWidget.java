@@ -46,13 +46,12 @@ import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.Field;
-import org.openelis.gwt.widget.HasField;
+import org.openelis.gwt.widget.HasExceptions;
+import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Label;
-import org.openelis.gwt.widget.NavigationWidget;
+import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.table.ColumnComparator;
 import org.openelis.gwt.widget.table.TableDataCell;
-import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
@@ -111,7 +110,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -136,7 +134,6 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
 public class TreeWidget extends FocusPanel implements FocusHandler, 
 													  BlurHandler, 
 													  ClickHandler, 
-													  HasField, 
 													  MouseOverHandler, 
 													  MouseOutHandler,
 													  HasBeforeSelectionHandlers<TreeDataItem>,
@@ -425,18 +422,18 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         if(isEnabled() && canEditCell(row,col)){
         	if(byClick && columns.get(rows.get(row).leafType).get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
         		clearCellExceptions(row, col);
-        		if(CheckBox.CHECKED.equals(getCell(row,col).getValue())){
-        			setCell(row,col,CheckBox.UNCHECKED);
+        		if(CheckBox.CheckValue.CHECKED.getValue().equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.CheckValue.UNCHECKED.getValue());
         			if(fireEvents)
-        				CellEditedEvent.fire(this, row, col, CheckBox.UNCHECKED);
-        		}else if(queryMode && CheckBox.UNCHECKED.equals(getCell(row,col).getValue())){
-        			setCell(row,col,CheckBox.UNKNOWN);
+        				CellEditedEvent.fire(this, row, col, CheckBox.CheckValue.UNCHECKED.getValue());
+        		}else if(queryMode && CheckBox.CheckValue.UNCHECKED.getValue().equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.CheckValue.UNKNOWN.getValue());
         			if(fireEvents)
-        				CellEditedEvent.fire(this, row, col, CheckBox.UNKNOWN);
+        				CellEditedEvent.fire(this, row, col, CheckBox.CheckValue.UNKNOWN.getValue());
         		}else{
-        			setCell(row,col,CheckBox.CHECKED);
+        			setCell(row,col,CheckBox.CheckValue.CHECKED.getValue());
         			if(fireEvents)
-        				CellEditedEvent.fire(this, row, col, CheckBox.CHECKED);
+        				CellEditedEvent.fire(this, row, col, CheckBox.CheckValue.CHECKED.getValue());
         		}
            		selectedCol = -1;
            		sinkEvents(Event.ONKEYPRESS);
@@ -1509,14 +1506,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		for(int i = 0; i < rows.size(); i++) {
 			for(int j = 0; j < rows.get(i).cells.size(); j++){
 				Widget wid = columns.get(rows.get(i).leafType).get(j).getWidgetEditor(rows.get(i));
-				if(wid instanceof HasField){
-					((HasField)wid).checkValue();
+				if(wid instanceof ScreenWidgetInt){
+					((HasValue)wid).validateValue();
 					if(rows.get(i).cells.get(j).exceptions != null)
 						exceptions = rows.get(i).cells.get(j).exceptions;
-					if(((HasField)wid).getExceptions() != null) {
-						exceptions = ((HasField)wid).getExceptions();
+					if(((HasExceptions)wid).hasExceptions()) {
+						exceptions = ((HasExceptions)wid).getValidateExceptions();
 	        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
-	        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
+	        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasExceptions)wid).getValidateExceptions()){
 	        				exceps.add((LocalizedException)exc.clone());
 	        				if(rows.get(i).cells.get(j).exceptions != null){
 	        					if(!rows.get(i).cells.get(j).getExceptions().contains(exc))
@@ -1550,44 +1547,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		return exceptions;
 	}
 
-	/**
-	 * Stub method inherited from HasField interface
-	 */
-	public Field getField() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	/**
-	 * Stub method inherited from HasField interface
-	 */
-	public void getQuery(ArrayList list, String key) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * Stub method inherited from HasField interface
-	 */
-	public void setField(Field field) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * Stub method inherited from HasField interface
-	 */
-	public Object getFieldValue() {
-		return null;
-	}
-	
-	/**
-	 * Stub method inherited from HasField interface
-	 */
-	public void setQueryMode(boolean query) {
-		// TODO Auto-generated method stub
-		
-	}
 
     public void onMouseOver(MouseOverEvent event) {
         ((Widget)event.getSource()).addStyleName("TreeHighlighted");

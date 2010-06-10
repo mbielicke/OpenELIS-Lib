@@ -248,7 +248,7 @@ public class FTPFileUpload extends Composite implements HasText, HasName, HasCha
 		    		FTPStartUploadEvent.fire(source, text.getText());
 		    	}
 		    });
-		    ab.enable(true);
+		    ab.setEnabled(true);
 		    setButton(new Label("Choose file..."));
 		  }
 
