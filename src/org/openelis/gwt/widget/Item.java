@@ -16,8 +16,7 @@ import org.openelis.gwt.widget.table.TableDataRow;
  */
 public class Item<T> extends TableDataRow {
     
-    // Refactor to key when TableDataRow is changed and before merge
-    protected T itemKey;
+    protected T key;
 
     public Item() {
         
@@ -28,18 +27,27 @@ public class Item<T> extends TableDataRow {
     }
     
     public Item(T key, Object... display) {
-        this.itemKey = key;
-        cells = new ArrayList<TableDataCell>(display.length);
-        for (int i= 0; i < display.length; i++)
-            cells.add(new TableDataCell(display[i]));
+        super(display);
+        this.key = key;
     }
     
     public T getKey() {
-        return itemKey;
+        return key;
     }
 
-    public void setKey(T itemKey) {
-        this.itemKey = itemKey;
+    public void setKey(T key) {
+        this.key = key;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Item))
+            return false;
+        if(key == null && ((Item<T>)obj).key != null)
+            return false;
+        else if(key == null)
+            return true;
+        return key.equals(((Item<T>)obj).key);
     }
 
 }

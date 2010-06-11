@@ -1,7 +1,7 @@
 package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
 
@@ -38,7 +38,7 @@ public class Calendar extends TextBox<Datetime> {
      * Used for Calendar display
      */
     protected HorizontalPanel  hp;
-    protected AppButton        button;
+    protected Button        button;
     protected PopupPanel       popup;
     protected CalendarWidget  calendar;
     protected MonthYearWidget monthYearWidget;
@@ -68,10 +68,10 @@ public class Calendar extends TextBox<Datetime> {
         hp = new HorizontalPanel();
         textbox = new com.google.gwt.user.client.ui.TextBox();
         
-        button = new AppButton();
+        button = new Button();
         AbsolutePanel image = new AbsolutePanel();
         image.setStyleName("CalendarButton");
-        button.setWidget(image,false);
+        button.setDisplay(image,false);
 
         hp.add(textbox);
         hp.add(button);
@@ -175,7 +175,7 @@ public class Calendar extends TextBox<Datetime> {
         
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                ((AppButton)calendar.getDefinition().getWidget("today")).setFocus(true);
+                ((Button)calendar.getDefinition().getWidget("today")).setFocus(true);
             }
         });
 

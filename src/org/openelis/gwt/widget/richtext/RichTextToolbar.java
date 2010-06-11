@@ -25,7 +25,7 @@
  */
 package org.openelis.gwt.widget.richtext;
 
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Button;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -138,24 +138,24 @@ public class RichTextToolbar extends Composite {
 	private Grid outer = new Grid(2,1);
 	private HorizontalPanel topPanel = new HorizontalPanel();
 	private HorizontalPanel bottomPanel = new HorizontalPanel();
-	private AppButton bold;
-	private AppButton italic;
-	private AppButton underline;
-	private AppButton subscript;
-	private AppButton superscript;
-	private AppButton strikethrough;
-	private AppButton indent;
-	private AppButton outdent;
-	private AppButton justifyLeft;
-	private AppButton justifyCenter;
-	private AppButton justifyRight;
-	private AppButton hr;
-	private AppButton ol;
-	private AppButton ul;
-	private AppButton removeLink;
-	private AppButton removeFormat;
-	private AppButton undo;
-	private AppButton redo;
+	private Button bold;
+	private Button italic;
+	private Button underline;
+	private Button subscript;
+	private Button superscript;
+	private Button strikethrough;
+	private Button indent;
+	private Button outdent;
+	private Button justifyLeft;
+	private Button justifyCenter;
+	private Button justifyRight;
+	private Button hr;
+	private Button ol;
+	private Button ul;
+	private Button removeLink;
+	private Button removeFormat;
+	private Button undo;
+	private Button redo;
 
 	/**
 	 * Creates a new toolbar that drives the given rich text area.
@@ -221,8 +221,8 @@ public class RichTextToolbar extends Composite {
 		
 	}
 	
-	private AppButton createButton(String img, String title) {
-		AppButton ab = new AppButton();
+	private Button createButton(String img, String title) {
+		Button ab = new Button();
 		ab.setTitle(title);
 		ab.setStyleName("ButtonPanelButton");
 		AbsolutePanel ap = new AbsolutePanel();
@@ -233,8 +233,8 @@ public class RichTextToolbar extends Composite {
 		return ab;
 	}
 
-	private AppButton createToggleButton(String img, String title) {		
-		AppButton ab = createButton(img,title);
+	private Button createToggleButton(String img, String title) {		
+		Button ab = createButton(img,title);
 		ab.setToggles(true);
 		return ab;
 	}

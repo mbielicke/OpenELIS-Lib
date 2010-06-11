@@ -38,6 +38,7 @@ import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasHelper;
 import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.QueryFieldUtil;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.calendar.Calendar;
@@ -128,9 +129,9 @@ public class TableColumn {
     				if(val == null)
     					val = "";
     			}else{
-    			    TableDataRow vrow = (TableDataRow)cell.getValue();
+    			    Item vrow = (Item)cell.getValue();
     				if(vrow  != null)
-    					((AutoComplete)colWidget).setValue(vrow.key,vrow.display);
+    					((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
     				else
     					((AutoComplete)colWidget).setValue(null,"");
     				val = ((AutoComplete)colWidget).getDisplay();
@@ -201,9 +202,9 @@ public class TableColumn {
     			if(controller.queryMode){
     				((Label)widget).setText((String)cell.getValue());
     			}else{
-    				TableDataRow vrow = (TableDataRow)cell.getValue();
+    				Item vrow = (Item)cell.getValue();
     				if(vrow != null)
-    					((AutoComplete)colWidget).setValue(vrow.key, vrow.display);
+    					((AutoComplete)colWidget).setValue(vrow.getKey(), vrow.display);
     				else
     					((AutoComplete)colWidget).setValue(null,"");
     			
@@ -262,9 +263,9 @@ public class TableColumn {
     		if(controller.queryMode){
     			//((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
-    			TableDataRow vrow =  (TableDataRow)cell.getValue();
+    			Item vrow =  (Item)cell.getValue();
     			if(vrow != null)
-    				((AutoComplete)colWidget).setValue(vrow.key,vrow.display);
+    				((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
     			else
     				((AutoComplete)colWidget).setValue(null,"");
     		}

@@ -54,26 +54,28 @@ import com.google.gwt.user.client.ui.Widget;
  * All buttons are defaulted to enabled true. If a button needs to be ensured to
  * be disabled on the initial state of the screen set enable="false" in the xsl.
  */
-public class AppButton extends FocusPanel implements ScreenWidgetInt {
+public class Button extends FocusPanel implements ScreenWidgetInt {
 
     private boolean toggles, enabled, pressed, locked;
+    
+    protected String HOVER = "Hover",PRESSED = "Pressed", DISABLED = "DISABLED";
 
-    public AppButton() {
+    public Button() {
         init();
     }
 
     public void init() {
-        final AppButton source = this;
+        final Button source = this;
 
         addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                addStyleName("Hover");
+                addStyleName(HOVER);
             }
         });
 
         addMouseOutHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
-                removeStyleName("Hover");
+                removeStyleName(HOVER);
             }
         });
 
@@ -125,11 +127,11 @@ public class AppButton extends FocusPanel implements ScreenWidgetInt {
      * @param widget
      *        UI widget used for the display of this button
      */
-    public void setWidget(Widget widget) {
-        setWidget(widget, true);
+    public void setDisplay(Widget widget) {
+        setDisplay(widget, true);
     }
 
-    public void setWidget(Widget widget, boolean wrap) {
+    public void setDisplay(Widget widget, boolean wrap) {
         if (wrap) {
             AbsolutePanel content = new AbsolutePanel();
             content.add(widget);
@@ -142,9 +144,9 @@ public class AppButton extends FocusPanel implements ScreenWidgetInt {
             hp.getWidget(2).addStyleName("ButtonRightSide");
             FocusPanel classPanel = new FocusPanel();
             classPanel.add(hp);
-            super.setWidget(classPanel);
+            setWidget(classPanel);
         } else
-            super.setWidget(widget);
+            setWidget(widget);
 
     }
 
@@ -156,9 +158,9 @@ public class AppButton extends FocusPanel implements ScreenWidgetInt {
 
         this.pressed = pressed;
         if (pressed)
-            addStyleName("Pressed");
+            addStyleName(PRESSED);
         else
-            removeStyleName("Pressed");
+            removeStyleName(PRESSED);
     }
 
     /**
@@ -166,7 +168,7 @@ public class AppButton extends FocusPanel implements ScreenWidgetInt {
      * styling but removes functionality.
      */
     public void lock() {
-        removeStyleName("Hover");
+        removeStyleName(HOVER);
         unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
         locked = true;
     }
@@ -189,10 +191,10 @@ public class AppButton extends FocusPanel implements ScreenWidgetInt {
         this.enabled = enabled;
         if (enabled) {
             unlock();
-            removeStyleName("disabled");
+            removeStyleName(DISABLED);
         } else {
             lock();
-            addStyleName("disabled");
+            addStyleName(DISABLED);
         }
     }
 
@@ -218,10 +220,24 @@ public class AppButton extends FocusPanel implements ScreenWidgetInt {
     }
 
     public void addFocusStyle(String style) {
-       addStyleName("Hover");
+       addStyleName(HOVER);
     }
 
     public void removeFocusStyle(String style) {
-       removeStyleName("Hover");
+       removeStyleName(HOVER);
     }
+    
+    public void setHoverStyle(String style) {
+        HOVER = style;
+    }
+    
+    public void setPressedStyle(String style) {
+        PRESSED = style;
+    }
+    
+    public void setDisabledStyle(String style) {
+        DISABLED = style;
+    }
+    
+    
 }

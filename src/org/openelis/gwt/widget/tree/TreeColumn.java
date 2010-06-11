@@ -37,6 +37,7 @@ import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasHelper;
 import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.table.Filter;
@@ -129,9 +130,9 @@ public class TreeColumn {
     				if(val == null)
     					val = "";
     			}else{
-    				TableDataRow vrow = (TableDataRow)cell.getValue();
+    				Item vrow = (Item)cell.getValue();
     				if(vrow  != null)
-                        ((AutoComplete)colWidget).setValue(vrow.key,vrow.display);
+                        ((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
                     else
                         ((AutoComplete)colWidget).setValue(null,"");
                     val = ((AutoComplete)colWidget).getDisplay();
@@ -186,9 +187,9 @@ public class TreeColumn {
     			if(controller.queryMode){
     				((Label)widget).setText((String)cell.getValue());
     			}else{
-    				TableDataRow vrow = (TableDataRow)cell.getValue();
+    				Item vrow = (Item)cell.getValue();
     				if(vrow != null)
-                        ((AutoComplete)colWidget).setValue(vrow.key, vrow.display);
+                        ((AutoComplete)colWidget).setValue(vrow.getKey(), vrow.display);
                     else
                         ((AutoComplete)colWidget).setValue(null,"");
                 
@@ -237,9 +238,9 @@ public class TreeColumn {
             if(controller.queryMode){
                 //((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
             }else{
-                TableDataRow vrow =  (TableDataRow)cell.getValue();
+                Item vrow =  (Item)cell.getValue();
                 if(vrow != null)
-                    ((AutoComplete)colWidget).setValue(vrow.key,vrow.display);
+                    ((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
                 else
                     ((AutoComplete)colWidget).setValue(null,"");
     		}

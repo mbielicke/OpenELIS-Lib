@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class ButtonGroup extends Composite implements HasClickHandlers {
 
-    private ArrayList<AppButton> buttons = new ArrayList<AppButton>();
+    private ArrayList<Button> buttons = new ArrayList<Button>();
 
     public ButtonGroup() {
     }
@@ -38,8 +38,8 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
         Iterator<Widget> widsIt = hw.iterator();
         while (widsIt.hasNext()) {
             Widget wids = widsIt.next();
-            if (wids instanceof AppButton) {
-                buttons.add((AppButton)wids);
+            if (wids instanceof Button) {
+                buttons.add((Button)wids);
             } else if (wids instanceof HasWidgets) {
                 findButtons((HasWidgets)wids);
             }
@@ -50,7 +50,7 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
      * Registers all buttons in this group to handler that is passed to the method
      */
     public HandlerRegistration addClickHandler(ClickHandler handler) {
-        for (AppButton button : buttons) {
+        for (Button button : buttons) {
             button.addClickHandler(handler);
         }
         return null;
@@ -61,7 +61,7 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
      * @param enabled
      */
     public void enable(boolean enabled) {
-        for (AppButton button : buttons) {
+        for (Button button : buttons) {
             button.setEnabled(enabled);
         }
     }

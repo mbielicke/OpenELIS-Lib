@@ -2,7 +2,7 @@ package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.core.client.GWT;
@@ -13,7 +13,7 @@ public class MonthYearWidget extends Screen {
 	
     protected int month = -1,year  = -1;
     
-    protected AppButton ok,cancel;
+    protected Button ok,cancel;
     
 	public MonthYearWidget() {
 		super((ScreenDefInt)GWT.create(MonthYearDef.class));
@@ -21,11 +21,11 @@ public class MonthYearWidget extends Screen {
 	}
 	
 	private void initialize(){
-	    AppButton button;
+	    Button button;
 	    
 	    for(int i = 0; i < 12; i++) {
 	        final int monthIndex = i;
-	        button = (AppButton)def.getWidget("month"+i);
+	        button = (Button)def.getWidget("month"+i);
 	        button.addClickHandler(new ClickHandler() {
 	           public void onClick(ClickEvent event) {
 	               setMonth(monthIndex);
@@ -36,7 +36,7 @@ public class MonthYearWidget extends Screen {
 
 	    for(int i = 0; i < 10; i++) {
 	        final int yearIndex = i;
-	        button = (AppButton)def.getWidget("year"+i);
+	        button = (Button)def.getWidget("year"+i);
 	        button.addClickHandler(new ClickHandler() {
 	            public void onClick(ClickEvent event) {
 	                setYear(Integer.parseInt(((Label)def.getWidget("year"+yearIndex+"Text")).getText())-1900);
@@ -45,7 +45,7 @@ public class MonthYearWidget extends Screen {
 	        button.setEnabled(true);
 	    }
 	    
-        final AppButton prevDecade = (AppButton)def.getWidget("prevDecade");
+        final Button prevDecade = (Button)def.getWidget("prevDecade");
         prevDecade.addClickHandler(new ClickHandler() {
            public void onClick(ClickEvent event) {
                int yr = Integer.parseInt(((Label)def.getWidget("year0Text")).getText())-10;
@@ -55,7 +55,7 @@ public class MonthYearWidget extends Screen {
         });
         prevDecade.setEnabled(true);
         
-        final AppButton nextDecade = (AppButton)def.getWidget("nextDecade");
+        final Button nextDecade = (Button)def.getWidget("nextDecade");
         nextDecade.addClickHandler(new ClickHandler() {
            public void onClick(ClickEvent event) {
                int yr = Integer.parseInt(((Label)def.getWidget("year0Text")).getText())+10;
@@ -65,10 +65,10 @@ public class MonthYearWidget extends Screen {
         });
         nextDecade.setEnabled(true);
         
-        ok = (AppButton)def.getWidget("ok");
+        ok = (Button)def.getWidget("ok");
         ok.setEnabled(true);
         
-        cancel = (AppButton)def.getWidget("cancel");
+        cancel = (Button)def.getWidget("cancel");
         cancel.setEnabled(true);
 	}
 	
@@ -106,12 +106,12 @@ public class MonthYearWidget extends Screen {
 	
 	private void toggleYear(int yr) {
 	    for(int i = 0; i < 10; i++) 
-	        ((AppButton)def.getWidget("year"+i)).setPressed(yr == i);
+	        ((Button)def.getWidget("year"+i)).setPressed(yr == i);
 	}
 	
 	private void toggleMonth(int month) {
 	    for(int i = 0; i < 12; i++)
-	        ((AppButton)def.getWidget("month"+i)).setPressed(month == i);
+	        ((Button)def.getWidget("month"+i)).setPressed(month == i);
 	}
 
 	

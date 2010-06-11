@@ -156,9 +156,9 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
         if(active > -1){
-        	((AppButton)bp.getWidget(active)).setFocus(false);
+        	((Button)bp.getWidget(active)).setFocus(false);
         }
-        ((AppButton)bp.getWidget(0)).setFocus(true);
+        ((Button)bp.getWidget(0)).setFocus(true);
         active = 0;
         keyHandler = Event.addNativePreviewHandler(this);
         final Widget wid = this;
@@ -186,7 +186,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     private Widget createButtons(String[] buttons) {
     	bp = new HorizontalPanel();
     	for(int i = 0; i < buttons.length; i++) {
-    		AppButton ab = new AppButton();
+    		Button ab = new Button();
     		Label bl = new Label(buttons[i]);
     		bl.setStyleName("ScreenLabel");
     		ab.setWidget(bl);
@@ -212,11 +212,11 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 	public void onPreviewNativeEvent(NativePreviewEvent event) {
 		if(event.getTypeInt() == Event.ONKEYDOWN){
 			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB){
-				((AppButton)bp.getWidget(active)).setFocus(false);
+				((Button)bp.getWidget(active)).setFocus(false);
 				active++;
 				if(active == bp.getWidgetCount())
 					active = 0;
-				((AppButton)bp.getWidget(active)).setFocus(true);
+				((Button)bp.getWidget(active)).setFocus(true);
 			}
 			if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 				SelectionEvent.fire(this, active);

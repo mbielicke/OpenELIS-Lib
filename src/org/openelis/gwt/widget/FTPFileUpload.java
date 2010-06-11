@@ -27,7 +27,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.HasName;
@@ -236,11 +235,11 @@ public class FTPFileUpload extends Composite implements HasText, HasName, HasCha
 		    vp.add(hp);
 		    vp.add(container);
 		    impl.init(container, input);
-		    AppButton ab = new AppButton();
+		    Button ab = new Button();
 		    ab.setStyleName("Button");
 		    Label load = new Label("Load...");
 		    load.setStyleName("ScreenLabel");
-		    ab.setWidget(load);
+		    ab.setDisplay(load);
 		    hp.add(ab);
 		    final HasFTPStartUploadHandlers source = this;
 		    ab.addClickHandler(new ClickHandler() {
@@ -292,7 +291,8 @@ public class FTPFileUpload extends Composite implements HasText, HasName, HasCha
 		  public void onAttach() {
 		    super.onAttach();
 		    if (button == null) {
-		      button = new Button(strs.uploaderBrowse());
+		      button = new Button();
+		      ((Button)button).setDisplay(new Label(strs.uploaderBrowse()));
 		      setButton(button);
 		    } else {
 		      impl.resize();

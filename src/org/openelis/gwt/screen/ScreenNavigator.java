@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRow;
 import org.openelis.gwt.widget.table.TableWidget;
@@ -49,7 +49,7 @@ public abstract class ScreenNavigator {
     protected ArrayList   result;
     protected Query       query;
     protected TableWidget table;
-    protected AppButton   atozNext, atozPrev;
+    protected Button   atozNext, atozPrev;
 
     public ScreenNavigator(ScreenDefInt def) {
         oldPage = -1;
@@ -80,7 +80,7 @@ public abstract class ScreenNavigator {
             table.enable(false);
         }
 
-        atozNext = (AppButton)def.getWidget("atozNext");
+        atozNext = (Button)def.getWidget("atozNext");
         if (atozNext != null) {
             atozNext.addClickHandler(new ClickHandler() {
                 public void onClick(ClickEvent event) {
@@ -89,7 +89,7 @@ public abstract class ScreenNavigator {
             });
         }
 
-        atozPrev = (AppButton)def.getWidget("atozPrev");
+        atozPrev = (Button)def.getWidget("atozPrev");
         if (atozPrev != null) {
             atozPrev.addClickHandler(new ClickHandler() {
                 public void onClick(ClickEvent event) {

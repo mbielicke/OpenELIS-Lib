@@ -762,12 +762,12 @@ cursor:default;
     background:none;
 }*/
 
-/*
+
 .ButtonPanelButton .ButtonRightSide{
-width:2px;
+	 width:2px;
      background:none;
 }
-*/
+
 .Hover .ButtonPanelButton .ButtonRightSide,
 .Pressed .ButtonPanelButton .ButtonRightSide{
 background:url("../Images/screenbuttonrs.gif") no-repeat;
@@ -784,11 +784,11 @@ cursor:pointer;
 background:none;
     cursor:default;
 }
-/*
+
 .ButtonPanelButton .ButtonLeftSide{
     background:none;
 }
-*/
+
 .Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
 background:url("../Images/screenbuttonls.gif") no-repeat;
 }

@@ -3,7 +3,7 @@ package org.openelis.gwt.screen;
 import java.util.Arrays;
 import java.util.List;
 
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -45,8 +45,8 @@ public class ShortcutHandler implements KeyPressHandler {
 	
 	public void onKeyPress(final KeyPressEvent event) {
 		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getNativeEvent().getKeyCode() == key){
-			if(wid instanceof AppButton) {
-				if(((AppButton)wid).isEnabled() && !((AppButton)wid).isLocked()){
+			if(wid instanceof Button) {
+				if(((Button)wid).isEnabled() && !((Button)wid).isLocked()){
 					((Focusable)wid).setFocus(true);
 					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
 							wid.getAbsoluteLeft(), 
@@ -58,7 +58,7 @@ public class ShortcutHandler implements KeyPressHandler {
 							event.isShiftKeyDown(), 
 							event.isMetaKeyDown());
 					
-					ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
+					ClickEvent.fireNativeEvent(clickEvent, (Button)wid);
 					event.stopPropagation();
 				}
 				event.preventDefault();

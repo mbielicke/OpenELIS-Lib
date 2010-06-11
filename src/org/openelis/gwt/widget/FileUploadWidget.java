@@ -22,7 +22,7 @@ public class FileUploadWidget extends Composite implements HasValue<ArrayList<St
 	protected boolean enabled;
 	protected HorizontalPanel hp = new HorizontalPanel();
 	protected TextBox text = new TextBox();
-	protected AppButton load = new AppButton();
+	protected Button load = new Button();
 	protected String service;
 	
 	

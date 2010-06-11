@@ -15,7 +15,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="appButton" substitutionGroup="widgets">
+	<xsd:element name="button" substitutionGroup="widgets">
 		<xsd:complexType>
 			<xsd:choice>
 				<xsd:element ref="panels" minOccurs="1" maxOccurs="1" />

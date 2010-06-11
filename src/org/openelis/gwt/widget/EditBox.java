@@ -130,13 +130,13 @@ public class EditBox extends Composite implements ClickHandler,
 				if(editorDef == null) {
 					editorDef = new ScreenDef();
 					//editorDef.getPanel().add(UIUtil.createWidget(XMLParser.parse(editorScreen).getDocumentElement(),editorDef));
-					((AppButton)editorDef.getWidget("ok")).addClickHandler(new ClickHandler() {
+					((Button)editorDef.getWidget("ok")).addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
 							text.setText(((TextArea)editorDef.getWidget("editor")).getText());
 							win.close();
 						}
 					});
-					((AppButton)editorDef.getWidget("cancel")).addClickHandler(new ClickHandler() {
+					((Button)editorDef.getWidget("cancel")).addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
 							win.close();
 						}

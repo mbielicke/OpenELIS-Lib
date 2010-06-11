@@ -2118,9 +2118,9 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.tree.TreeView");
     		}
     	});
-    	factoryMap.put("appButton", new Factory() {
+    	factoryMap.put("button", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("AppButton wid"+id+" = new AppButton();");
+    			sw.println("Button wid"+id+" = new Button();");
     			
 				if(node.getAttributes().getNamedItem("tab") != null) {
 		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
@@ -2144,19 +2144,16 @@ public class UIGenerator extends Generator {
      	            	   continue;
      	               }
     	            	if(node.getAttributes().getNamedItem("wrap") != null)
-    	            		sw.println("wid"+id+".setWidget(wid"+child+","+node.getAttributes().getNamedItem("wrap").getNodeValue()+");");
+    	            		sw.println("wid"+id+".setDisplay(wid"+child+","+node.getAttributes().getNamedItem("wrap").getNodeValue()+");");
     	            	else
-    	                    sw.println("wid"+id+".setWidget(wid"+child+");");
+    	                    sw.println("wid"+id+".setDisplay(wid"+child+");");
     	            }
     	        }
 
     	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".setEnabled("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.AppButton");
+    			composer.addImport("org.openelis.gwt.widget.Button");
     		}
     	});  
     	/*

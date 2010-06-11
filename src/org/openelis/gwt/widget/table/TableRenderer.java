@@ -31,6 +31,7 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.HasExceptions;
+import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -254,10 +255,10 @@ public class TableRenderer  {
         	}
         	controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(newVal);
         	
-        	if(newVal instanceof TableDataRow)
-        		newVal = ((TableDataRow)newVal).key;
-        	if(currVal instanceof TableDataRow)
-        		currVal = ((TableDataRow)currVal).key;
+        	if(newVal instanceof Item)
+        		newVal = ((Item)newVal).getKey();
+        	if(currVal instanceof Item)
+        		currVal = ((Item)currVal).getKey();
         	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         	//if(changed) {
         	Widget wid = controller.activeWidget;

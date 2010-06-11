@@ -47,24 +47,24 @@ UIRF Software License are applicable instead of those above.
    	</HorizontalPanel>
    	</widget>
       <HorizontalPanel style="MonthBar">
-        <appButton action="prevMonth" key="prevMonth" style="Button">
+        <button action="prevMonth" key="prevMonth" style="Button">
           <AbsolutePanel style="PreviousMonth"/>
-        </appButton>
+        </button>
         <label key="MonthDisplay" style="MonthDisplay"></label>
-        <appButton action="monthSelect" key="monthSelect" style="Button">
+        <button action="monthSelect" key="monthSelect" style="Button">
 		  <AbsolutePanel style="MonthSelect"/>
-        </appButton>
-        <appButton action="nextMonth" key="nextMonth" style="Button">
+        </button>
+        <button action="nextMonth" key="nextMonth" style="Button">
 		  <AbsolutePanel style="NextMonth"/>
-        </appButton>
+        </button>
       </HorizontalPanel>
       <VerticalPanel width="100%" key="calContainer">
    </VerticalPanel>
 
    <AbsolutePanel style="TodayBar" width="100%" halign="center">
-     <appButton action="today" key="today" style="Button" width="75px">
+     <button action="today" key="today" style="Button" width="75px">
        <text>Today</text>
-     </appButton>
+     </button>
    </AbsolutePanel>
       <AbsolutePanel visible="false">
      <label key="month0" text="{resource:getString($constants,'month0')}"/>

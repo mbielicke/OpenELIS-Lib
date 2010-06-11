@@ -66,7 +66,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * Used for AutoComplete display
      */
     protected HorizontalPanel hp;
-    protected AppButton      button;
+    protected Button       button;
     protected TableWidget     table;
     protected PopupPanel      popup;
     protected int             cellHeight = 19, delay = 350;
@@ -115,10 +115,10 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          * New constructor in Button to drop the border and a div with the
          * passed style.
          */
-        button = new AppButton();
+        button = new Button();
         AbsolutePanel image = new AbsolutePanel();
         image.setStyleName("AutoDropdownButton");
-        button.setWidget(image, false);
+        button.setDisplay(image, false);
 
         hp.add(textbox);
         hp.add(button);
@@ -151,7 +151,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                 item = getSelectedItem();
 
                 if (item != null)
-                    setValue(item.itemKey, true);
+                    setValue(item.key, true);
             }
         });
 
@@ -160,8 +160,13 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          */
         button.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                GetMatchesEvent.fire(source, "*");
+                GetMatchesEvent.fire(source, getText());
+                /*
+                 * Call showPopup because the textbox will have lost focus so
+                 * showMatches will not call.
+                 */
                 showPopup();
+                textbox.setFocus(true);
             }
         });
 
@@ -195,7 +200,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                      */
                     item = getSelectedItem();
                     if (event.isAutoClosed() && item != null) {
-                        setValue(item.itemKey, true);
+                        setValue(item.key, true);
                     }
                 }
             });
@@ -447,6 +452,11 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     public void showAutoMatches(ArrayList<Item<T>> model) {
         setModel(model);
+        /*
+         * Call showPopup only if the textbox still has focus.  Otherwise the user has moved
+         * on from the widget so the first entry in the results will be selected and displayed
+         * 
+         */
         if (textbox.getStyleName().indexOf("Focus") > -1)
             showPopup();
     }
@@ -472,6 +482,14 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                         popup.hide();
                     event.stopPropagation();
                     break;
+                case KeyCodes.KEY_BACKSPACE:
+                    int selectLength;
+                    
+                    selectLength = textbox.getSelectionLength();
+                    if(selectLength > 0){
+                        selectLength++;
+                        textbox.setSelectionRange(getText().length() - selectLength, selectLength);
+                    }
             }
         }
 
@@ -518,7 +536,6 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          * This method handles all keyup events for the dropdown widget.
          */
         public void onKeyUp(KeyUpEvent event) {
-            int cursorPos;
             String text;
 
             switch (event.getNativeKeyCode()) {
@@ -541,8 +558,6 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                 case KeyCodes.KEY_ENTER:
                     if (popup == null || !popup.isShowing()) {
                         text = getText();
-                        if (text.equals(""))
-                            text = "*";
                         GetMatchesEvent.fire(source, text);
                     } else
                         popup.hide();
@@ -550,10 +565,6 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                     break;
                 case KeyCodes.KEY_TAB:
                     break;
-                case KeyCodes.KEY_BACKSPACE:
-                    text = getText();
-                    if ( !text.equals(""))
-                        textbox.setText(text.substring(0, text.length() - 1));
                 default:
                     text = getText();
 

@@ -74,7 +74,7 @@ public class Dropdown<T> extends TextBox<T> {
      * Used for Dropdown display
      */
     protected HorizontalPanel       hp;
-    protected AppButton             button;
+    protected Button             button;
     protected TableWidget           table;
     protected PopupPanel            popup;
     protected int                   cellHeight = 19;
@@ -131,10 +131,10 @@ public class Dropdown<T> extends TextBox<T> {
          * New constructor in Button to drop the border and a div with the
          * passed style.
          */
-        button = new AppButton();
+        button = new Button();
         AbsolutePanel image = new AbsolutePanel();
         image.setStyleName("AutoDropdownButton");
-        button.setWidget(image, false);
+        button.setDisplay(image, false);
 
         hp.add(textbox);
         hp.add(button);
@@ -167,7 +167,7 @@ public class Dropdown<T> extends TextBox<T> {
                 item = getSelectedItem();
 
                 if (item != null)
-                    setValue(item.itemKey, true);
+                    setValue(item.key, true);
             }
         });
 
@@ -209,7 +209,7 @@ public class Dropdown<T> extends TextBox<T> {
                      */
                     item = getSelectedItem();
                     if (event.isAutoClosed() && item != null) {
-                        setValue(item.itemKey, true);
+                        setValue(item.key, true);
                     }
                 }
             });
@@ -269,7 +269,7 @@ public class Dropdown<T> extends TextBox<T> {
         keyHash = new HashMap<T, Integer>();
 
         for (int i = 0; i < model.size(); i++ )
-            keyHash.put(model.get(i).itemKey, i);
+            keyHash.put(model.get(i).key, i);
 
     }
 
@@ -482,8 +482,8 @@ public class Dropdown<T> extends TextBox<T> {
     public void setValue(T value, boolean fireEvents) {
         boolean validKey;
 
-        if ( ! (this.value == null && value != null) ||
-            (this.value != null && !this.value.equals(value)))
+        if ( ! ((this.value == null && value != null) ||
+            (this.value != null && !this.value.equals(value))))
             return;
 
         if (value != null) {
@@ -562,7 +562,7 @@ public class Dropdown<T> extends TextBox<T> {
         for (int i = 0; i < items.size(); i++ ) {
             if (i > 0)
                 sb.append(" | ");
-            sb.append(items.get(i).itemKey);
+            sb.append(items.get(i).key);
         }
 
         qd.query = sb.toString();
@@ -648,6 +648,14 @@ public class Dropdown<T> extends TextBox<T> {
                         popup.hide();
                     event.stopPropagation();
                     break;
+                case KeyCodes.KEY_BACKSPACE:
+                    int selectLength;
+                    
+                    selectLength = textbox.getSelectionLength();
+                    if(selectLength > 0){
+                        selectLength++;
+                        textbox.setSelectionRange(getText().length() - selectLength, selectLength);
+                    }
             }
 
         }
@@ -725,10 +733,6 @@ public class Dropdown<T> extends TextBox<T> {
                     break;
                 case KeyCodes.KEY_TAB:
                     break;
-                case KeyCodes.KEY_BACKSPACE:
-                    text = getText();
-                    if ( !text.equals(""))
-                        textbox.setText(text.substring(0, text.length() - 1));
                 default:
                     text = getText();
 
@@ -751,7 +755,7 @@ public class Dropdown<T> extends TextBox<T> {
                         cursorPos-- ;
 
                     /*
-                     * Call getText() here instead of text becaue it was changed
+                     * Call getText() here instead of text because it was changed
                      * by setSelectedIndex(0);
                      */
                     textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);

@@ -8,7 +8,6 @@ public class TableDataRow {
     private static final long serialVersionUID = 1L;
     
     public ArrayList<TableDataCell> cells;
-    public Object key;
     public Object data;
     public String style;
     public String display;
@@ -36,8 +35,7 @@ public class TableDataRow {
     }
     
     
-    public TableDataRow(Object key, ArrayList<TableDataCell> cells) {
-    	this.key = key;
+    public TableDataRow(ArrayList<TableDataCell> cells) {
     	this.cells = cells;
     }
     
@@ -50,8 +48,7 @@ public class TableDataRow {
     }
     
     
-    public TableDataRow(Object key, Object... display) {
-    	this.key = key;
+    public TableDataRow(Object... display) {
         cells = new ArrayList<TableDataCell>(display.length);
     	for (int i= 0; i < display.length; i++)
     	    cells.add(new TableDataCell(display[i]));
@@ -74,16 +71,6 @@ public class TableDataRow {
     		list.add(tdc.getValue());
     	}
     	return list;
-    }
-    
-    public boolean equals(Object obj) {
-    	if(!(obj instanceof TableDataRow))
-    		return false;
-    	if(key == null && ((TableDataRow)obj).key != null)
-    		return false;
-    	else if(key == null)
-    		return true;
-    	return key.equals(((TableDataRow)obj).key);
     }
 
 }

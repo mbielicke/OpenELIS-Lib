@@ -34,7 +34,7 @@ import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.screen.ScreenEventHandler;
 import org.openelis.gwt.services.ScreenService;
-import org.openelis.gwt.widget.AppButton;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.core.client.GWT;
@@ -67,7 +67,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
     private int                 year;
     private int                 month;
 
-    protected AppButton         prevMonth, nextMonth, monthSelect, today;
+    protected Button         prevMonth, nextMonth, monthSelect, today;
 
     protected TextBox<Datetime> time;
     protected Label             monthDisplay;
@@ -96,6 +96,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
 
         addScreenHandler(table, new ScreenEventHandler<Object>() {
             public void onDataChange(DataChangeEvent event) {
+                selected = selected == null ? current : selected; 
                 table.setCalendar(year, month, selected, current);
             }
         });
@@ -114,10 +115,10 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
             }
         });
 
-        monthSelect = (AppButton)def.getWidget("monthSelect");
+        monthSelect = (Button)def.getWidget("monthSelect");
         monthSelect.setEnabled(true);
 
-        prevMonth = (AppButton)def.getWidget("prevMonth");
+        prevMonth = (Button)def.getWidget("prevMonth");
         prevMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 CalendarImpl cal = CalendarImpl.getInstance();
@@ -129,7 +130,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
         });
         prevMonth.setEnabled(true);
 
-        nextMonth = (AppButton)def.getWidget("nextMonth");
+        nextMonth = (Button)def.getWidget("nextMonth");
         nextMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 CalendarImpl cal = CalendarImpl.getInstance();
@@ -141,7 +142,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
         });
         nextMonth.setEnabled(true);
 
-        today = (AppButton)def.getWidget("today");
+        today = (Button)def.getWidget("today");
         today.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 try {

@@ -45,112 +45,112 @@ version="1.0">
 
 <!-- query button template -->
 <xsl:template name="queryButton">
-	<appButton key="query" action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="ctrl+q">	
+	<button key="query" action="query" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="query" shortcut="ctrl+q">	
 		<HorizontalPanel>
 		  <AbsolutePanel style="QueryButtonImage" width="20" height="20"/>
           <text><xsl:value-of select='resource:getString($constants,"query")'/></text>
 		</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<appButton key="previous" action="previous" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="ctrl+p">
+	<button key="previous" action="previous" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="ctrl+p">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="PreviousButtonImage" width="20" height="20"/>
            	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
 	 	</HorizontalPanel>
-	</appButton>	
+	</button>	
 </xsl:template>
 
 <!-- next button template -->
 <xsl:template name="nextButton">
-	<appButton key="next" action="next" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="ctrl+n">
+	<button key="next" action="next" style="ButtonPanelButton" enabledStates="display" lockedStates="" shortcut="ctrl+n">
 		 <HorizontalPanel>
 	  		<AbsolutePanel style="NextButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
 	 	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- update button template -->
 <xsl:template name="updateButton">
-	<appButton key="update" action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="ctrl+u">
+	<button key="update" action="update" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="update" shortcut="ctrl+u">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="UpdateButtonImage" width="20" height="20"/>
          	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>
 	 	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- add button template -->
 <xsl:template name="addButton">
-	<appButton key="add" action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add" shortcut="ctrl+a">
+	<button key="add" action="add" toggle="true" style="ButtonPanelButton" enabledStates="default,display" lockedStates="add" shortcut="ctrl+a">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AddButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
 	 	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- delete button template -->
 <xsl:template name="deleteButton">
-	<appButton key="delete" action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete" shortcut="ctrl+d">
+	<button key="delete" action="delete" toggle="true" style="ButtonPanelButton" enabledStates="display" lockedStates="delete" shortcut="ctrl+d">
 		<HorizontalPanel>
 	     	<AbsolutePanel style="DeleteButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"delete")'/></text>
 	 	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
-    <appButton key="commit" action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="ctrl+m">
+    <button key="commit" action="commit" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="ctrl+m">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- process button template -->
 <xsl:template name="processButton">
-    <appButton key="process" action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="ctrl+a">
+    <button key="process" action="add" style="ButtonPanelButton" enabledStates="display" lockedStates="add" shortcut="ctrl+a">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="ProcessButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
-	<appButton key="abort" action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="ctrl+o">
+	<button key="abort" action="abort" style="ButtonPanelButton" enabledStates="query,update,add,delete" lockedStates="" shortcut="ctrl+o">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AbortButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- ok button template -->
 <xsl:template name="okButton">
-	<appButton key="ok" action="ok" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+	<button key="ok" action="ok" style="ButtonPanelButton" enabledStates="display" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"ok")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- cancel button template -->
 <xsl:template name="cancelButton">
-	<appButton key="cancel" action="cancel" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+	<button key="cancel" action="cancel" style="ButtonPanelButton" enabledStates="display" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="AbortButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- duplicate menu item-->
@@ -173,32 +173,32 @@ version="1.0">
 
 <!-- popup transfer button template -->
 <xsl:template name="popupTransferButton">
-<appButton key="popupTransfer" action="commit" style="Button" enabledStates="default" lockedStates="">
+<button key="popupTransfer" action="commit" style="Button" enabledStates="default" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"transfer")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- select button template -->
 <xsl:template name="selectButton">
-	<appButton key="select" action="select" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+	<button key="select" action="select" style="ButtonPanelButton" enabledStates="display" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- print button template -->
 <xsl:template name="printButton">
-	<appButton key="print" action="print" style="ButtonPanelButton" enabledStates="display" lockedStates="">
+	<button key="print" action="print" style="ButtonPanelButton" enabledStates="display" lockedStates="">
 		<HorizontalPanel>
 	    	<AbsolutePanel style="PrintButtonImage" width="20" height="20"/>
         	<text><xsl:value-of select='resource:getString($constants,"print")'/></text>
 	  	</HorizontalPanel>
-	</appButton>
+	</button>
 </xsl:template>
 
 <!-- buttonpanel divider template -->
@@ -210,9 +210,9 @@ version="1.0">
 <xsl:template name="aToZButton">
 <xsl:param name="keyParam" />
 <xsl:param name="queryParam" />
-	<appButton key="{string($keyParam)}" action="{string($queryParam)}" alwaysEnabled="true" enabledStates="default,display" lockedStates="add,query,update,delete" style="smallButton">
+	<button key="{string($keyParam)}" action="{string($queryParam)}" alwaysEnabled="true" enabledStates="default,display" lockedStates="add,query,update,delete" style="smallButton">
        	<text><xsl:value-of select="string($keyParam)"/></text>
- 	</appButton>
+ 	</button>
 </xsl:template>
 
 <!-- Menu item template -->
