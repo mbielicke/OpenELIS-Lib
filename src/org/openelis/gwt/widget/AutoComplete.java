@@ -61,12 +61,20 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 
+/**
+ * This class is used by OpenELIS Screens to display and input values in forms
+ * and in table cells as an AutoComplete list selector. This class exteds TextBox
+ * which implements the ScreenWidgetInt and we override this implementation
+ * where needed.
+ * 
+ * @param <T>
+ */
 public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers {
     /**
      * Used for AutoComplete display
      */
     protected HorizontalPanel hp;
-    protected Button       button;
+    protected Button          button;
     protected TableWidget     table;
     protected PopupPanel      popup;
     protected int             cellHeight = 19, delay = 350;
@@ -209,8 +217,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
         if (popup.isShowing())
             return;
 
-        popup.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() + getOffsetHeight());
-        popup.show();
+        popup.showRelativeTo(this);
 
         /*
          * Scroll if needed to make selection visible
@@ -446,16 +453,17 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     }
 
     /**
-     * This method is called by the GetMatchesHandler to show the results of the 
+     * This method is called by the GetMatchesHandler to show the results of the
      * matching
+     * 
      * @param model
      */
     public void showAutoMatches(ArrayList<Item<T>> model) {
         setModel(model);
         /*
-         * Call showPopup only if the textbox still has focus.  Otherwise the user has moved
-         * on from the widget so the first entry in the results will be selected and displayed
-         * 
+         * Call showPopup only if the textbox still has focus. Otherwise the
+         * user has moved on from the widget so the first entry in the results
+         * will be selected and displayed
          */
         if (textbox.getStyleName().indexOf("Focus") > -1)
             showPopup();
@@ -484,54 +492,18 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                     break;
                 case KeyCodes.KEY_BACKSPACE:
                     int selectLength;
-                    
+                    /*
+                     * If text is selected we want to select one more position back so the correct 
+                     * text will be received in the key up event.
+                     */
                     selectLength = textbox.getSelectionLength();
-                    if(selectLength > 0){
-                        selectLength++;
+                    if (selectLength > 0) {
+                        selectLength++ ;
                         textbox.setSelectionRange(getText().length() - selectLength, selectLength);
                     }
             }
         }
-
-        /**
-         * Method to find the next selectable item in the Dropdown
-         * 
-         * @param index
-         * @return
-         */
-        private int findNextActive(int index) {
-            int next;
-
-            next = index + 1;
-            while (next < table.numRows() && !table.isEnabled(next))
-                next++ ;
-
-            if (next < table.numRows())
-                return next;
-
-            return index;
-
-        }
-
-        /**
-         * Method to find the previous selectable item in the Dropdown
-         * 
-         * @param index
-         * @return
-         */
-        private int findPrevActive(int index) {
-            int prev;
-
-            prev = index - 1;
-            while (prev > -1 && !table.isEnabled(prev))
-                prev-- ;
-
-            if (prev > -1)
-                return prev;
-
-            return index;
-        }
-
+        
         /**
          * This method handles all keyup events for the dropdown widget.
          */
@@ -581,6 +553,47 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                     new Delay(text);
             }
         }
+
+        /**
+         * Method to find the next selectable item in the Dropdown
+         * 
+         * @param index
+         * @return
+         */
+        private int findNextActive(int index) {
+            int next;
+
+            next = index + 1;
+            while (next < table.numRows() && !table.isEnabled(next))
+                next++ ;
+
+            if (next < table.numRows())
+                return next;
+
+            return index;
+
+        }
+
+        /**
+         * Method to find the previous selectable item in the Dropdown
+         * 
+         * @param index
+         * @return
+         */
+        private int findPrevActive(int index) {
+            int prev;
+
+            prev = index - 1;
+            while (prev > -1 && !table.isEnabled(prev))
+                prev-- ;
+
+            if (prev > -1)
+                return prev;
+
+            return index;
+        }
+
+
     }
 
     /**
@@ -611,10 +624,6 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
 
                         setSelectedIndex(0);
 
-                        /*
-                         * Call getText() here instead of text becaue it was
-                         * changed by setSelectedIndex(0);
-                         */
                         textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
                     }
                 }

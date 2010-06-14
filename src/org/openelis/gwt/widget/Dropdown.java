@@ -74,7 +74,7 @@ public class Dropdown<T> extends TextBox<T> {
      * Used for Dropdown display
      */
     protected HorizontalPanel       hp;
-    protected Button             button;
+    protected Button                button;
     protected TableWidget           table;
     protected PopupPanel            popup;
     protected int                   cellHeight = 19;
@@ -214,8 +214,8 @@ public class Dropdown<T> extends TextBox<T> {
                 }
             });
         }
-        popup.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() + getOffsetHeight());
-        popup.show();
+        
+        popup.showRelativeTo(this);
 
         /*
          * Scroll if needed to make selection visible
@@ -473,6 +473,7 @@ public class Dropdown<T> extends TextBox<T> {
         super.setEnabled(enabled);
     }
 
+    //********* Implementation of HasValue *************************
     /**
      * Overridden method to set the T value of this widget. Will fire a value
      * change event if fireEvents is true and the value is changed from its
@@ -516,6 +517,7 @@ public class Dropdown<T> extends TextBox<T> {
         ExceptionHelper.getInstance().checkExceptionHandlers(this);
     }
 
+    //************  Implementation of Queryable ***********************
     /**
      * Overridden method from TextBox for putting the Dropdown into query mode.
      */
@@ -614,6 +616,11 @@ public class Dropdown<T> extends TextBox<T> {
 
     }
 
+    /**
+     * Private class to implement partial match comparator when searching
+     * @author tschmidt
+     *
+     */
     private class MatchComparator implements Comparator<SearchPair> {
 
         public int compare(SearchPair o1, SearchPair o2) {
@@ -622,6 +629,13 @@ public class Dropdown<T> extends TextBox<T> {
 
     }
 
+    /**
+     * Compares two values by adjusting for length first.
+     * @param value
+     * @param textValue
+     * @param length
+     * @return
+     */
     private int compareValue(String value, String textValue, int length) {
         if (value.length() < length)
             return value.compareTo(textValue.substring(0, value.length()));
@@ -650,7 +664,10 @@ public class Dropdown<T> extends TextBox<T> {
                     break;
                 case KeyCodes.KEY_BACKSPACE:
                     int selectLength;
-                    
+                    /*
+                     * If text is selected we want to select one more position back so the correct 
+                     * text will be received in the key up event.
+                     */
                     selectLength = textbox.getSelectionLength();
                     if(selectLength > 0){
                         selectLength++;
@@ -659,46 +676,7 @@ public class Dropdown<T> extends TextBox<T> {
             }
 
         }
-
-        /**
-         * Method to find the next selectable item in the Dropdown
-         * 
-         * @param index
-         * @return
-         */
-        private int findNextActive(int index) {
-            int next;
-
-            next = index + 1;
-            while (next < table.numRows() && !table.isEnabled(next))
-                next++ ;
-
-            if (next < table.numRows())
-                return next;
-
-            return index;
-
-        }
-
-        /**
-         * Method to find the previous selectable item in the Dropdown
-         * 
-         * @param index
-         * @return
-         */
-        private int findPrevActive(int index) {
-            int prev;
-
-            prev = index - 1;
-            while (prev > -1 && !table.isEnabled(prev))
-                prev-- ;
-
-            if (prev > -1)
-                return prev;
-
-            return index;
-        }
-
+        
         /**
          * This method handles all keyup events for the dropdown widget.
          */
@@ -762,6 +740,47 @@ public class Dropdown<T> extends TextBox<T> {
 
             }
         }
+
+        /**
+         * Method to find the next selectable item in the Dropdown
+         * 
+         * @param index
+         * @return
+         */
+        private int findNextActive(int index) {
+            int next;
+
+            next = index + 1;
+            while (next < table.numRows() && !table.isEnabled(next))
+                next++ ;
+
+            if (next < table.numRows())
+                return next;
+
+            return index;
+
+        }
+
+        /**
+         * Method to find the previous selectable item in the Dropdown
+         * 
+         * @param index
+         * @return
+         */
+        private int findPrevActive(int index) {
+            int prev;
+
+            prev = index - 1;
+            while (prev > -1 && !table.isEnabled(prev))
+                prev-- ;
+
+            if (prev > -1)
+                return prev;
+
+            return index;
+        }
+
+
     }
 
     /**
@@ -774,6 +793,12 @@ public class Dropdown<T> extends TextBox<T> {
         }
     }
 
+    /** 
+     * This class is used to create a sortable and searchable ArrayList 
+     * for efficiently finding Items by display names when typing.
+     * @author tschmidt
+     *
+     */
     protected class SearchPair implements Comparable<SearchPair> {
 
         public int    modelIndex;

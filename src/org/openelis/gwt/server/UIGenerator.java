@@ -2134,6 +2134,8 @@ public class UIGenerator extends Generator {
     	        if(node.getAttributes().getNamedItem("toggles") != null)
    	                sw.println("wid"+id+".setToggle("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
     	        
+    	        if(node.getAttributes().getNamedItem("action") != null)
+    	            sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+"\");");
     	        
     	        NodeList widgets = node.getChildNodes();
     	        for (int l = 0; l < widgets.getLength(); l++) {

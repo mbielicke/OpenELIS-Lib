@@ -25,6 +25,15 @@
 */
 package org.openelis.gwt.widget;
 
+/**
+ * This interface extends the HasValue<T> interface found in the GWT library 
+ * and adds validateValue which is used by screen logic when committing a 
+ * screen.  It is used by widgets that accept user input and fire value change 
+ * events back to a Screen.
+ * @author tschmidt
+ *
+ * @param <T>
+ */
 public interface HasValue<T> extends com.google.gwt.user.client.ui.HasValue<T> {
 
     /**

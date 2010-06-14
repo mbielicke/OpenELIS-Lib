@@ -422,18 +422,18 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         if(isEnabled() && canEditCell(row,col)){
         	if(byClick && columns.get(rows.get(row).leafType).get(col).getColumnWidget() instanceof CheckBox && !shiftKey && !ctrlKey){
         		clearCellExceptions(row, col);
-        		if(CheckBox.CheckValue.CHECKED.getValue().equals(getCell(row,col).getValue())){
-        			setCell(row,col,CheckBox.CheckValue.UNCHECKED.getValue());
+        		if(CheckBox.Value.CHECKED.getValue().equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.Value.UNCHECKED.getValue());
         			if(fireEvents)
-        				CellEditedEvent.fire(this, row, col, CheckBox.CheckValue.UNCHECKED.getValue());
-        		}else if(queryMode && CheckBox.CheckValue.UNCHECKED.getValue().equals(getCell(row,col).getValue())){
-        			setCell(row,col,CheckBox.CheckValue.UNKNOWN.getValue());
+        				CellEditedEvent.fire(this, row, col, CheckBox.Value.UNCHECKED.getValue());
+        		}else if(queryMode && CheckBox.Value.UNCHECKED.getValue().equals(getCell(row,col).getValue())){
+        			setCell(row,col,CheckBox.Value.UNKNOWN.getValue());
         			if(fireEvents)
-        				CellEditedEvent.fire(this, row, col, CheckBox.CheckValue.UNKNOWN.getValue());
+        				CellEditedEvent.fire(this, row, col, CheckBox.Value.UNKNOWN.getValue());
         		}else{
-        			setCell(row,col,CheckBox.CheckValue.CHECKED.getValue());
+        			setCell(row,col,CheckBox.Value.CHECKED.getValue());
         			if(fireEvents)
-        				CellEditedEvent.fire(this, row, col, CheckBox.CheckValue.CHECKED.getValue());
+        				CellEditedEvent.fire(this, row, col, CheckBox.Value.CHECKED.getValue());
         		}
            		selectedCol = -1;
            		sinkEvents(Event.ONKEYPRESS);

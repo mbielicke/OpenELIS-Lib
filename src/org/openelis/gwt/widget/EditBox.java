@@ -1,35 +1,31 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is OpenELIS code.
-* 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
-*/
+/**
+ * Exhibit A - UIRF Open-source Based Public Software License.
+ * 
+ * The contents of this file are subject to the UIRF Open-source Based Public
+ * Software License(the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * openelis.uhl.uiowa.edu
+ * 
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is OpenELIS code.
+ * 
+ * The Initial Developer of the Original Code is The University of Iowa.
+ * Portions created by The University of Iowa are Copyright 2006-2008. All
+ * Rights Reserved.
+ * 
+ * Contributor(s): ______________________________________.
+ * 
+ * Alternatively, the contents of this file marked "Separately-Licensed" may be
+ * used under the terms of a UIRF Software license ("UIRF Software License"), in
+ * which case the provisions of a UIRF Software License are applicable instead
+ * of those above.
+ */
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
-
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.ScreenDef;
+import org.openelis.gwt.common.Util;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -37,240 +33,189 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.dom.client.HasMouseOutHandlers;
-import com.google.gwt.event.dom.client.HasMouseOverHandlers;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.xml.client.XMLParser;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class EditBox extends Composite implements ClickHandler, 
-												  HasValue<String>,
-												  HasBlurHandlers, 
-												  HasMouseOverHandlers, 
-												  HasMouseOutHandlers,
-												  HasFocusHandlers,
-												  Focusable{
-	
-	private TextBox text = new TextBox();
-	private IconContainer fp = new IconContainer();
-	private HorizontalPanel hp = new HorizontalPanel();
-	private static String editorScreen = "<VerticalPanel><textarea key='editor' tools='false' width='300px' height='200px' showError='false'/><HorizontalPanel halign='center'>"+
-										"<appButton action='ok' key='ok' onclick='this' style='Button'>"+
-									   		"<text>OK</text>"+
-									    "</appButton>" +
-									    "<appButton action='cancel' key='cancel' onclick='this' style='Button'>"+
-									       "<text>Cancel</text>" +
-	                                    "</appButton>" +
-	                                    "</HorizontalPanel>" +
-	                                    "</VerticalPanel>";
-	private ScreenWindow win;
-	private ScreenDef editorDef;
-	private boolean enabled;
-	
-	private class EditHandler implements FocusHandler,BlurHandler,MouseOutHandler,MouseOverHandler {
+public class EditBox extends TextBox<String> {
 
-		private EditBox source;
-		
-		public EditHandler(EditBox source) {
-			this.source = source;
-		}
-		
-		public void onFocus(FocusEvent event) {
-			//FocusEvent.fireNativeEvent(event.getNativeEvent(),source);
-		}
+    /**
+     * Used for EditBox display
+     */
+    protected HorizontalPanel hp;
+    protected Button          button;
+    protected PopupPanel      popup;
+    protected TextArea        ta;
+    
+    /**
+     * Default no-arg constructor
+     */
+    public EditBox() {
+    }
 
-		public void onBlur(BlurEvent event) {
-			BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-		}
+    public void init() {
 
-		public void onMouseOut(MouseOutEvent event) {
-			MouseOutEvent.fireNativeEvent(event.getNativeEvent(), source);
-		}
+        final EditBox source = this;
 
-		public void onMouseOver(MouseOverEvent event) {
-			MouseOverEvent.fireNativeEvent(event.getNativeEvent(), source);
-		}
-		
-	}
+        /*
+         * Final instance of the private class KeyboardHandler
+         */
+        final KeyboardHandler keyHandler = new KeyboardHandler();
 
-	public EditBox() {
-		initWidget(hp);
-		text.setStyleName("ScreenTextBox");
-		text.setHeight("18px");
-		EditHandler handler = new EditHandler(this);
-		text.addFocusHandler(handler);
-		text.addBlurHandler(handler);
-		text.addMouseOutHandler(handler);
-		text.addMouseOverHandler(handler);
-		hp.add(text);
-		hp.add(fp);
-		fp.setStyleName("DotsButton");
-		fp.addClickHandler(this);
-	}
+        hp = new HorizontalPanel();
+        textbox = new com.google.gwt.user.client.ui.TextBox();
 
-	public void onClick(ClickEvent sender) {
-		if(!isEnabled()) {
-			return;
-		}
-		if(sender.getSource() == fp){
-				win = new ScreenWindow(ScreenWindow.Mode.DIALOG);
-				if(editorDef == null) {
-					editorDef = new ScreenDef();
-					//editorDef.getPanel().add(UIUtil.createWidget(XMLParser.parse(editorScreen).getDocumentElement(),editorDef));
-					((Button)editorDef.getWidget("ok")).addClickHandler(new ClickHandler() {
-						public void onClick(ClickEvent event) {
-							text.setText(((TextArea)editorDef.getWidget("editor")).getText());
-							win.close();
-						}
-					});
-					((Button)editorDef.getWidget("cancel")).addClickHandler(new ClickHandler() {
-						public void onClick(ClickEvent event) {
-							win.close();
-						}
-					});
-				}
-				((TextArea)editorDef.getWidget("editor")).setText(text.getText());
-				win.setContent(editorDef.getPanel());
-				win.setVisible(true);
-		}	
-	}
-	
-	public void setText(String txt){
-		text.setText(txt);
-	}
-	
-	public String getText() {
-		return text.getText();
-	}
-		
-	public void setFocus(boolean focus){
-		text.setFocus(focus);
-	}
-		
-	public void setWidth(String width){
-		int wid;
-		if(width.indexOf("px") > -1)
-			wid = Integer.parseInt(width.substring(0,width.indexOf("px"))) - 16;
-		else 
-			wid = Integer.parseInt(width) - 16;
-		text.setWidth(wid+"px");
-	}
+        button = new Button();
+        AbsolutePanel image = new AbsolutePanel();
+        image.setStyleName("DotsButton");
+        button.setDisplay(image, false);
 
-	public String getValue() {
-		return text.getText();
-	}
+        hp.add(textbox);
+        hp.add(button);
 
-	public void setValue(String value) {
-		setValue(value,false);
-		
-	}
+        initWidget(hp);
 
-    public void onFocus(FocusEvent event) {
-        if (!text.isReadOnly()) {
-            if (event.getSource() == text) {
-                // we need to set the selected style name to the textbox
-                text.addStyleName("TextboxSelected");
-                text.removeStyleName("TextboxUnselected");
+        textbox.setStyleName("TextboxUnselected");
 
+        textbox.addFocusHandler(new FocusHandler() {
+            public void onFocus(FocusEvent event) {
+                FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
+            }
+        });
+
+        textbox.addBlurHandler(new BlurHandler() {
+            public void onBlur(BlurEvent event) {
+                BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+            }
+        });
+
+        button.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                showPopup();
+            }
+        });
+
+        addHandler(keyHandler, KeyDownEvent.getType());
+    }
+
+    private void showPopup() {
+        if (popup == null) {
+            popup = new PopupPanel(true);
+            popup.setPreviewingAllNativeEvents(false);
+            popup.addCloseHandler(new CloseHandler<PopupPanel>() {
+                public void onClose(CloseEvent<PopupPanel> event) {
+                    if (event.isAutoClosed()) {
+                        setValue(ta.getText(), true);
+                    }
+                }
+            });
+            VerticalPanel vp = new VerticalPanel();
+
+            ta = new TextArea();
+            ta.setStyleName("ScreenTextArea");
+            
+            Button ok = new Button();
+            Label okText = new Label("OK");
+            okText.setStyleName("ScreenLabel");
+            ok.setDisplay(okText);
+            ok.setStyleName("Button");
+            
+            Button cancel = new Button();
+            Label cancelText = new Label("Cancel");
+            cancelText.setStyleName("ScreenLabel");
+            cancel.setDisplay(cancelText);
+            cancel.setStyleName("Button");
+
+            ok.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    textbox.setText(ta.getText());
+                    popup.hide();
+                }
+            });
+
+            cancel.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    popup.hide();
+                }
+            });
+            
+            vp.add(ta);
+
+            HorizontalPanel hp = new HorizontalPanel();
+            hp.add(ok);
+            hp.add(cancel);
+
+            vp.add(hp);
+            vp.setCellHorizontalAlignment(hp, HasAlignment.ALIGN_CENTER);
+            vp.setStyleName("BlueContentPanel");
+            
+
+            popup.setWidget(vp);
+            popup.setStyleName("DropdownPopup");
+
+        }
+        ta.setText(getText());
+        popup.showRelativeTo(this);
+        ta.setFocus(true);
+
+    }
+
+    public void setWidth(String width) {
+        /*
+         * Set the outer panel to full width;
+         */
+        if (hp != null)
+            hp.setWidth(width);
+
+        /*
+         * set the Textbox to width - 16 to account for button.
+         */
+        textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
+    }
+
+
+    public void setEnabled(boolean enabled) {
+        if (isEnabled() == enabled)
+            return;
+        button.setEnabled(enabled);
+        if (enabled)
+            sinkEvents(Event.ONKEYDOWN);
+        else
+            unsinkEvents(Event.ONKEYDOWN);
+        super.setEnabled(enabled);
+    }
+
+    // ********** Table Keyboard Handling ****************************
+
+    protected class KeyboardHandler implements KeyDownHandler {
+        /**
+         * This method handles all key down events for this table
+         */
+        public void onKeyDown(KeyDownEvent event) {
+
+            switch (event.getNativeKeyCode()) {
+                case KeyCodes.KEY_TAB:
+                    if (popup != null && popup.isShowing())
+                        popup.hide();
+                    event.stopPropagation();
+                    break;
+                case KeyCodes.KEY_ENTER:
+                    if (popup == null || !popup.isShowing())
+                        showPopup();
+                    else
+                        popup.hide();
+                    event.stopPropagation();
+                    break;
             }
         }
-        
     }
-    
-    
-
-    public void onBlur(BlurEvent event) {
-        if (!text.isReadOnly()) {
-            if (event.getSource() == text) {
-                // we need to set the unselected style name to the textbox
-                text.addStyleName("TextboxUnselected");
-                text.removeStyleName("TextboxSelected");
-            }
-        }
-    }
-    
-	public void setValue(String value, boolean fireEvents) {
-		String old = getValue();
-		text.setText(value);
-		if(fireEvents)
-			ValueChangeEvent.fireIfNotEqual(this, old, value);
-		
-	}
-
-	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<String> handler) {
-		return addHandler(handler,ValueChangeEvent.getType());
-	}
-
-
-	public void enable(boolean enabled) {
-		this.enabled = enabled;
-		text.setReadOnly(!enabled);		
-	}
-
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-
-
-	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return addDomHandler(handler,BlurEvent.getType());
-	}
-
-	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-		return addDomHandler(handler,MouseOverEvent.getType());
-	}
-
-	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-		return addDomHandler(handler,MouseOutEvent.getType());
-	}
-
-	public int getTabIndex() {
-		// TODO Auto-generated method stub
-		return -1;
-	}
-
-	public void setAccessKey(char key) {
-		
-		
-	}
-
-	public void setTabIndex(int index) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public HandlerRegistration addFocusHandler(FocusHandler handler) {
-		return addDomHandler(handler,FocusEvent.getType());
-	}
-	
-
-
-	public void addExceptionStyle(String style) {
-		text.addStyleName(style);	
-	}
-
-	public Object getWidgetValue() {
-		return text.getText();
-	}
-
-	public void removeExceptionStyle(String style) {
-		text.removeStyleName(style);
-	}
-
 }

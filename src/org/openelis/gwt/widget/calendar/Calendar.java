@@ -5,7 +5,6 @@ import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,19 +26,20 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 /**
- * This class extends the TextBox<Datetime> and adds a button for using the CalendarWidget 
- * to pick Dates.
+ * This class extends the TextBox<Datetime> and adds a button for using the
+ * CalendarWidget to pick Dates.
+ * 
  * @author tschmidt
- *
+ * 
  */
 public class Calendar extends TextBox<Datetime> {
 
     /**
      * Used for Calendar display
      */
-    protected HorizontalPanel  hp;
-    protected Button        button;
-    protected PopupPanel       popup;
+    protected HorizontalPanel hp;
+    protected Button          button;
+    protected PopupPanel      popup;
     protected CalendarWidget  calendar;
     protected MonthYearWidget monthYearWidget;
 
@@ -51,7 +51,8 @@ public class Calendar extends TextBox<Datetime> {
     }
 
     /**
-     * This method 
+     * This method will set the display of the Calendar and set up Event
+     * Handlers
      */
     @Override
     public void init() {
@@ -67,11 +68,11 @@ public class Calendar extends TextBox<Datetime> {
 
         hp = new HorizontalPanel();
         textbox = new com.google.gwt.user.client.ui.TextBox();
-        
+
         button = new Button();
         AbsolutePanel image = new AbsolutePanel();
         image.setStyleName("CalendarButton");
-        button.setDisplay(image,false);
+        button.setDisplay(image, false);
 
         hp.add(textbox);
         hp.add(button);
@@ -88,13 +89,13 @@ public class Calendar extends TextBox<Datetime> {
          */
         textbox.addFocusHandler(new FocusHandler() {
             public void onFocus(FocusEvent event) {
-                FocusEvent.fireNativeEvent(Document.get().createFocusEvent(), source);
+                FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
             }
         });
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
-                BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), source);
+                BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
                 validateValue(true);
             }
         });
@@ -115,14 +116,14 @@ public class Calendar extends TextBox<Datetime> {
 
     }
 
-    /*
+    /**
      * This method will initialize and show the popup panel for this widget.
      */
     private void showPopup() {
-        
+
         if (popup == null) {
             popup = new PopupPanel(true);
-            //popup.setPreviewingAllNativeEvents(false);
+            popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
 
@@ -132,7 +133,7 @@ public class Calendar extends TextBox<Datetime> {
         try {
             if (calendar == null) {
                 calendar = new CalendarWidget( ((DateHelper)helper).getBegin(),
-                                               ((DateHelper)helper).getEnd());
+                                              ((DateHelper)helper).getEnd());
                 calendar.addValueChangeHandler(new ValueChangeHandler<Datetime>() {
                     public void onValueChange(ValueChangeEvent<Datetime> event) {
                         popup.hide();
@@ -170,9 +171,9 @@ public class Calendar extends TextBox<Datetime> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        popup.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() + getOffsetHeight());
-        popup.show();
-        
+
+        popup.showRelativeTo(this);
+
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 ((Button)calendar.getDefinition().getWidget("today")).setFocus(true);
@@ -181,6 +182,12 @@ public class Calendar extends TextBox<Datetime> {
 
     }
 
+    /**
+     * This private class will handle key events for this widget
+     * 
+     * @author tschmidt
+     * 
+     */
     private class KeyboardHandler implements KeyDownHandler {
 
         public void onKeyDown(KeyDownEvent event) {
@@ -191,6 +198,9 @@ public class Calendar extends TextBox<Datetime> {
         }
     }
 
+    /**
+     * Overridden method from TextBox for enabling and disabling the widget
+     */
     @Override
     public void setEnabled(boolean enabled) {
         button.setEnabled(enabled);
@@ -201,11 +211,17 @@ public class Calendar extends TextBox<Datetime> {
         super.setEnabled(enabled);
     }
 
+    /**
+     * Overridden method from TextBox for setting the Exception style.
+     */
     @Override
     public void addExceptionStyle(String style) {
         textbox.addStyleName(style);
     }
 
+    /**
+     * Overridden method from TextBox for removing the Exception style.
+     */
     @Override
     public void removeExceptionStyle(String style) {
         textbox.removeStyleName(style);

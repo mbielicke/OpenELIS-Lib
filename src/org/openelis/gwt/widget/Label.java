@@ -8,42 +8,96 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 
-public class Label<T> extends com.google.gwt.user.client.ui.Label implements HasValue<T>, HasExceptions, HasHelper<T> {
-    
-    T value;
-    WidgetHelper<T> helper                         =(WidgetHelper<T>)new StringHelper();
-    
-    /**
+/**
+ * This class extends the GWT Label class and adds HasValue, and HasHelper
+ * interfaces so that a Label can show formatted data. For instance a label that
+ * shows a timestamp would implement HasValue<Datetieme> and HasHelper<Datetime>
+ * so the screen in onDataChange can assign a Datetime value to the Label and
+ * the Label will use the helper to show a correctly localized date string.
+ * 
+ * @author tschmidt
+ * 
+ * @param <T>
+ */
+public class Label<T> extends com.google.gwt.user.client.ui.Label implements HasValue<T>,
+                                                                             HasHelper<T>,
+                                                                             HasExceptions {
+
+    /*
+     * value and helper fields
+     */
+    protected T               value;
+    protected WidgetHelper<T> helper = (WidgetHelper<T>)new StringHelper();
+
+    /*
      * Exceptions list
      */
-    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
-    
+    protected ArrayList<LocalizedException> endUserExceptions, validateExceptions;
+
+    /**
+     * Default no-arg constructor
+     */
     public Label() {
-    	super();
+        super();
     }
-    
+
+    /**
+     * Constructor that accepts a default value
+     * 
+     * @param value
+     */
     public Label(T value) {
-    	super();
-    	setValue(value);
+        super();
+        setValue(value);
     }
 
-	public T getValue() {
-		return value;
-	}
+    // *********** Implementaton of HasValue<T> ************
 
-	public void setValue(T value) {
-		setValue(value,false);
-	}
-	
+    /**
+     * Returns the currently set value
+     */
+    public T getValue() {
+        return value;
+    }
 
-	public void setValue(T value, boolean fireEvents) {
-		this.value = value;
-		setText(helper.format(value));
-	}
+    /**
+     * Sets the current value of the label.
+     */
+    public void setValue(T value) {
+        this.value = value;
+        setText(helper.format(value));
+    }
 
+    /**
+     * Sets the current value of the label. Label does not fire
+     * ValueChangeEvents so fireEvents param is ignored and method is only here
+     * to satisfy HasValue<T> interface.
+     */
+    public void setValue(T value, boolean fireEvents) {
+        setValue(value);
+    }
+
+    /**
+     * Stub method to satisfy HasValue interface.
+     */
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    // ********* Implementation of HasHelper *****************
+    /**
+     * Sets the Helper to be used by this widget
+     */
+    public void setHelper(WidgetHelper<T> helper) {
+        this.helper = helper;
+    }
+
+    /**
+     * Returns the Helper being used by this widget.
+     */
+    public WidgetHelper<T> getHelper() {
+        return helper;
     }
 
     // ********** Implementation of HasException interface ***************
@@ -108,15 +162,5 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
     public void removeExceptionStyle(String style) {
         removeStyleName(style);
     }
-    
-    public void setHelper(WidgetHelper<T> helper) {
-        this.helper = helper;
-    }
-    
-    public WidgetHelper<T> getHelper() {
-        return helper;
-    }
-
-
 
 }

@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.fileupload;
 
 import gwtupload.client.IUploader;
 import gwtupload.client.IUploader.OnFinishUploaderHandler;
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.widget.Button;
+import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;

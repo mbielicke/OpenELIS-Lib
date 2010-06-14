@@ -7,6 +7,12 @@ import org.openelis.gwt.common.LocalizedException;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 
+/**
+ * This interface will be implemented by widgets that need exceptions 
+ * to be assigned to them and displayed by the ExceptionHelper.
+ * @author tschmidt
+ *
+ */
 public interface HasExceptions extends HasMouseOverHandlers, HasMouseOutHandlers {
 
     /**

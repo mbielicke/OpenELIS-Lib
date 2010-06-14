@@ -21,7 +21,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -40,7 +39,14 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<T>, HasValue<T>, HasHelper<T>, HasExceptions {
+public class TextBox<T> extends Composite implements ScreenWidgetInt, 
+                                                     Queryable, 
+                                                     Focusable,
+                                                     HasBlurHandlers, 
+                                                     HasFocusHandlers,
+                                                     HasValue<T>, 
+                                                     HasHelper<T>,
+                                                     HasExceptions {
 
     /**
      * Wrapped GWT TextBox
@@ -62,14 +68,14 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
     /**
      * Data moved from Field to the widget
      */
-    protected boolean                               queryMode,required;
+    protected boolean                               queryMode, required;
     protected T                                     value;
 
     /**
      * This class replaces the functionality that Field used to provide but now
      * in a static way.
      */
-    protected WidgetHelper<T>                       helper = (WidgetHelper<T>)new StringHelper();
+    protected WidgetHelper<T>                       helper    = (WidgetHelper<T>)new StringHelper();
 
     /**
      * Reference to an Implementation of the private class MaskHandler.
@@ -88,7 +94,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
     public TextBox() {
         init();
     }
-    
+
     public void init() {
         textbox = new com.google.gwt.user.client.ui.TextBox();
         textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -105,7 +111,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
             }
 
         });
-    	initWidget(textbox);
+        initWidget(textbox);
     }
 
     // ************** Methods for TextBox attributes ***********************
@@ -180,6 +186,14 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
         maskHandler = new MaskHandler(mask);
     }
 
+    /**
+     * Method used to set if this widget is required to have a value inputed.
+     * @param required
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+    
     // ************** Implementation of ScreenWidgetInt ********************
 
     /**
@@ -201,7 +215,24 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
     }
 
     /**
-     * This method will toggle textbox into and from query mode and suspend or
+     * Adds the TabHandler from UIGenerator so that the widget will override
+     * default tabing in the browser and a use the Tab order defined in the XSL.
+     */
+    public void addTabHandler(TabHandler handler) {
+        addDomHandler(handler, KeyDownEvent.getType());
+    }
+
+    public void addFocusStyle(String style) {
+        textbox.addStyleName(style);
+    }
+
+    public void removeFocusStyle(String style) {
+        textbox.removeStyleName(style);
+    }
+
+    // ******** Implementation of Queryable *****************
+    /**
+     * This method will toggle TextBox into and from query mode and suspend or
      * resume any format restrictions
      */
     public void setQueryMode(boolean query) {
@@ -231,6 +262,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
         return helper.getQuery(textbox.getText());
     }
 
+    // ********** Implementation of HasHelper ***************************
     /**
      * Sets the implentation of the WidgetHelper<T> interface to be used by this
      * widget.
@@ -238,9 +270,49 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
     public void setHelper(WidgetHelper<T> helper) {
         this.helper = helper;
     }
-    
+
+    /**
+     * Returns the helper set for this widget
+     */
     public WidgetHelper<T> getHelper() {
         return helper;
+    }
+
+    // ************** Implementation of HasValue<T> interface ***************
+
+    /**
+     * Returns the current value for this widget.
+     */
+    public T getValue() {
+        return value;
+    }
+
+    /**
+     * Sets the current value of this widget without firing the
+     * ValueChangeEvent.
+     */
+    public void setValue(T value) {
+        setValue(value, false);
+    }
+
+    /**
+     * Sets the current value of this widget and will fire a ValueChangeEvent if
+     * the value is different than what is currently stored.
+     */
+    public void setValue(T value, boolean fireEvents) {
+        T old;
+
+        old = this.value;
+        this.value = value;
+        if (value != null) {
+            textbox.setText(helper.format(value));
+        } else {
+            textbox.setText("");
+        }
+
+        if (fireEvents) {
+            ValueChangeEvent.fireIfNotEqual(this, old, value);
+        }
     }
 
     /**
@@ -264,14 +336,14 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
         validateExceptions = null;
         try {
             setValue(helper.getValue(getText()), fireEvents);
-            if(required && value == null)
+            if (required && value == null)
                 addValidateException(new LocalizedException("fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
         }
         ExceptionHelper.getInstance().checkExceptionHandlers(this);
     }
-    
+
     /**
      * Method used to validate the inputed query string by the user.
      */
@@ -285,26 +357,6 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
         ExceptionHelper.getInstance().checkExceptionHandlers(this);
     }
 
-    /**
-     * Adds the TabHandler from UIGenerator so that the widget will override
-     * default tabing in the browser and a use the Tab order defined in the XSL.
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
-    }
-    
-    public void addFocusStyle(String style) {
-    	textbox.addStyleName(style);
-    }
-    
-    public void removeFocusStyle(String style) {
-    	textbox.removeStyleName(style);
-    }
-    
-    public void setRequired(boolean required) {
-        this.required = required;
-    }
-    
     // ********** Implementation of HasException interface ***************
     /**
      * Convenience method to check if a widget has exceptions so we do not need
@@ -368,75 +420,36 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt, Queryable,
         removeStyleName(style);
     }
 
-    // ************** Implementation of HasValue<T> interface ***************
-
-    /**
-     * Returns the current value for this widget.
-     */
-    public T getValue() {
-        return value;
-    }
-
-    /**
-     * Sets the current value of this widget without firing the
-     * ValueChangeEvent.
-     */
-    public void setValue(T value) {
-        setValue(value, false);
-    }
-
-    /**
-     * Sets the current value of this widget and will fire a ValueChangeEvent if
-     * the value is different than what is currently stored.
-     */
-    public void setValue(T value, boolean fireEvents) {
-        T old;
-
-        old = this.value;
-        this.value = value;
-        if (value != null) {
-            textbox.setText(helper.format(value));
-        } else {
-            textbox.setText("");
-        }
-
-        if (fireEvents) {
-            ValueChangeEvent.fireIfNotEqual(this, old, value);
-        }
-    }
-    
     // ************* Implementation of Focusable ******************
-    
+
     /**
-     * Method only implemented to satisfy Focusable interface. 
+     * Method only implemented to satisfy Focusable interface.
      */
     public int getTabIndex() {
         return -1;
     }
-    
+
     /**
-     * Method only implemented to satisfy Focusable interface. 
+     * Method only implemented to satisfy Focusable interface.
      */
     public void setTabIndex(int index) {
-        
+
     }
 
     /**
-     * Method only implemented to satisfy Focusable interface. 
+     * Method only implemented to satisfy Focusable interface.
      */
     public void setAccessKey(char key) {
-        
+
     }
 
     /**
-     * This is need for Focusable interface and to allow programmatic setting
-     * of focus to this widget.  We use the wrapped TextBox to make this work.
+     * This is need for Focusable interface and to allow programmatic setting of
+     * focus to this widget. We use the wrapped TextBox to make this work.
      */
     public void setFocus(boolean focused) {
         textbox.setFocus(true);
     }
-
-
 
     // ************ Handler Registration methods *********************
 

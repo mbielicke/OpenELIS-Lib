@@ -112,12 +112,12 @@ public class TableColumn {
     	if(colWidget instanceof CheckBox){
     		wid = new CheckBoxContainer();
     		IconContainer icon = new IconContainer();
-    		if(CheckBox.CheckValue.CHECKED.getValue().equals(cell.getValue()))
-    			icon.setStyleName(CheckBox.CheckValue.CHECKED.getStyle());
+    		if(CheckBox.Value.CHECKED.getValue().equals(cell.getValue()))
+    			icon.setStyleName(CheckBox.Value.CHECKED.getStyle());
     		else if(controller.queryMode && cell.getValue() == null)
-    			icon.setStyleName(CheckBox.CheckValue.UNKNOWN.getStyle());
+    			icon.setStyleName(CheckBox.Value.UNKNOWN.getStyle());
     		else
-    			icon.setStyleName(CheckBox.CheckValue.UNCHECKED.getStyle());
+    			icon.setStyleName(CheckBox.Value.UNCHECKED.getStyle());
     		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
     		((AbsolutePanel)wid).add(icon);
     		DOM.setStyleAttribute(wid.getElement(), "align", "center");
@@ -191,12 +191,12 @@ public class TableColumn {
     	if( columnIndex < row.cells.size())
     		cell = row.cells.get(columnIndex);
     	if(colWidget instanceof CheckBox){
-    		if(CheckBox.CheckValue.CHECKED.getValue().equals(cell.getValue()))
-    			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CheckValue.CHECKED.getStyle());
+    		if(CheckBox.Value.CHECKED.getValue().equals(cell.getValue()))
+    			((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.Value.CHECKED.getStyle());
     	    else if(controller.queryMode && cell.getValue() == null)
-    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CheckValue.UNKNOWN.getStyle());
+    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.Value.UNKNOWN.getStyle());
     	    else
-    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.CheckValue.UNCHECKED.getStyle());
+    	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.Value.UNCHECKED.getStyle());
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){

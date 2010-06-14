@@ -46,27 +46,36 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 
+/**
+ * This class is used to display and edit a CheckBox in Screen forms and
+ * TableCells
+ * 
+ * @author tschmidt
+ * 
+ */
 public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, HasBlurHandlers,
                                         HasFocusHandlers, HasValueChangeHandlers<String>,
                                         HasValue<String>, HasExceptions {
 
     /*
-     * Enum to define check state
+     * Enum to define checkbox modes.  This can be removed if it is decided that
+     * a chekbox can only have three states in query mode only and can do normal 
+     * input as a three state.
      */
-    public enum CheckMode {
+    public enum Mode {
         TWO_STATE, THREE_STATE
     };
 
     /*
      * Enum to define possible check values and styles
      */
-    public enum CheckValue {
+    public enum Value {
         UNCHECKED("N", "Unchecked"), CHECKED("Y", "Checked"), UNKNOWN(null, "Unknown");
 
         private String value;
         private String style;
 
-        CheckValue(String value, String style) {
+        Value(String value, String style) {
             this.value = value;
             this.style = style;
         }
@@ -79,21 +88,21 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
             return style;
         }
 
-        public static CheckValue getValue(String value) {
+        public static Value getValue(String value) {
             if ("Y".equals(value))
-                return CheckValue.CHECKED;
+                return Value.CHECKED;
             else if ("N".equals(value))
-                return CheckValue.UNCHECKED;
+                return Value.UNCHECKED;
             else
-                return CheckValue.UNKNOWN;
+                return Value.UNKNOWN;
         }
     };
 
     /*
      * Fields for state and value
      */
-    private CheckValue                      value = CheckValue.UNCHECKED;
-    private CheckMode                       mode  = CheckMode.TWO_STATE;
+    private Value                           value = Value.UNCHECKED;
+    private Mode                            mode  = Mode.TWO_STATE;
 
     /*
      * Fields for query mode
@@ -103,8 +112,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     /*
      * Fields used for Exceptions
      */
-    protected ArrayList<LocalizedException> endUserExceptions;
-    protected ArrayList<LocalizedException> validateExceptions;
+    protected ArrayList<LocalizedException> endUserExceptions, validateExceptions;
 
     /**
      * Default no-arg constructor
@@ -118,20 +126,31 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @param mode
      */
-    public CheckBox(CheckMode mode) {
+    public CheckBox(Mode mode) {
         init();
         setMode(mode);
     }
 
+    /**
+     * This method will set the Checkbox display and set Event handlers
+     */
     public void init() {
-        setValue(CheckValue.UNCHECKED.getValue());
+        setValue(Value.UNCHECKED.getValue());
 
+        /**
+         * If clicked call changeValue to rotate the state of the checkbox based
+         * on its mode.
+         */
         addHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 changeValue();
             }
         }, ClickEvent.getType());
 
+        /**
+         * If Enter key hit while focused call changeValue to rotate the state
+         * of the checkbox based on its mode.
+         */
         addHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -146,12 +165,12 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @param type
      */
-    public void setMode(CheckMode type) {
+    public void setMode(Mode type) {
         this.mode = type;
-        if (type == CheckMode.THREE_STATE)
-            setValue(CheckValue.UNKNOWN.getValue());
+        if (type == Mode.THREE_STATE)
+            setValue(Value.UNKNOWN.getValue());
         else
-            setValue(CheckValue.UNCHECKED.getValue());
+            setValue(Value.UNCHECKED.getValue());
     }
 
     /**
@@ -159,7 +178,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @return
      */
-    public CheckMode getMode() {
+    public Mode getMode() {
         return mode;
     }
 
@@ -169,16 +188,16 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     private void changeValue() {
         switch (value) {
             case CHECKED:
-                setValue(CheckValue.UNCHECKED.getValue(), true);
+                setValue(Value.UNCHECKED.getValue(), true);
                 break;
             case UNCHECKED:
-                if (mode == CheckMode.THREE_STATE || queryMode)
-                    setValue(CheckValue.UNKNOWN.getValue(), true);
+                if (mode == Mode.THREE_STATE || queryMode)
+                    setValue(Value.UNKNOWN.getValue(), true);
                 else
-                    setValue(CheckValue.CHECKED.getValue(), true);
+                    setValue(Value.CHECKED.getValue(), true);
                 break;
             case UNKNOWN:
-                setValue(CheckValue.CHECKED.getValue(), true);
+                setValue(Value.CHECKED.getValue(), true);
                 break;
         }
         ;
@@ -204,37 +223,6 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     }
 
     /**
-     * Puts query into and out of Query Mode
-     */
-    public void setQueryMode(boolean query) {
-        queryMode = query;
-    }
-
-    /**
-     * Returns a QueryData object of type string only if checkbox is set to "Y"
-     * or "N"
-     */
-    public Object getQuery() {
-        QueryData qd;
-
-        if (value == CheckValue.UNKNOWN)
-            return null;
-
-        qd = new QueryData();
-        qd.type = QueryData.Type.STRING;
-        qd.query = value.getValue();
-
-        return qd;
-    }
-
-    /**
-     * Stub
-     */
-    public void validateValue() {
-
-    }
-
-    /**
      * Adds Tab Handler to this widget
      */
     public void addTabHandler(TabHandler handler) {
@@ -255,10 +243,30 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         removeStyleName(style);
     }
 
+    // ********* Implementation of Queryable *****************
+
     /**
-     * Stub
+     * Puts Checkbox into and out of Query Mode
      */
-    public void setRequired(boolean required) {
+    public void setQueryMode(boolean query) {
+        queryMode = query;
+    }
+
+    /**
+     * Returns a QueryData object of type string only if checkbox is set to "Y"
+     * or "N"
+     */
+    public Object getQuery() {
+        QueryData qd;
+
+        if (value == Value.UNKNOWN)
+            return null;
+
+        qd = new QueryData();
+        qd.type = QueryData.Type.STRING;
+        qd.query = value.getValue();
+
+        return qd;
     }
 
     // ******* Implementation of HasValue<String> ******
@@ -285,11 +293,18 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         String old;
 
         old = value.getValue();
-        value = CheckValue.getValue(val);
+        value = Value.getValue(val);
         setStylePrimaryName(value.getStyle());
 
         if (fireEvents)
             ValueChangeEvent.fireIfNotEqual(this, old, value.getValue());
+    }
+
+    /**
+     * This is a stub becuase I don't think required applies to a checkbox
+     */
+    public void validateValue() {
+
     }
 
     // ***** Implementation of HasValueChangeHandler ***************

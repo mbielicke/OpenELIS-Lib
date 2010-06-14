@@ -25,12 +25,25 @@
 */
 package org.openelis.gwt.widget;
 
+/**
+ * This interface will be implemented by widgets that can have Helper classes
+ * for formating, validating and parsing data of different types T
+ * @author tschmidt
+ *
+ * @param <T>
+ */
 public interface HasHelper<T> {
     /**
      * Sets a Helper instance for this widget.
      */
     public void setHelper(WidgetHelper<T> helper);
     
+    /**
+     * This method will be used by widgets such as Table and Tree
+     * to get reference to the set helper for widget for formatting 
+     * and validating values set in model cells
+     * @return
+     */
     public WidgetHelper<T> getHelper();
 
 }

@@ -56,29 +56,52 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Button extends FocusPanel implements ScreenWidgetInt {
 
+    /*
+     * State variables for the button.
+     */
     private boolean toggles, enabled, pressed, locked;
+    private String  action;
     
+    /*
+     * Default styles used for the button
+     */
     protected String HOVER = "Hover",PRESSED = "Pressed", DISABLED = "DISABLED";
 
+    /**
+     * Default no-arg constructor
+     */
     public Button() {
         init();
     }
 
+    /**
+     * Sets up event handling for the button.
+     */
     public void init() {
         final Button source = this;
 
+        /**
+         * MouseOverHandler to add the Hover Style.
+         */
         addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
                 addStyleName(HOVER);
             }
         });
 
+        /**
+         * MouseOutHandler to remove the HoverStyle.
+         */
         addMouseOutHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
                 removeStyleName(HOVER);
             }
         });
 
+        /**
+         * Click Handler to check if the button toggles and to set the 
+         * Pressed Style.
+         */
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (toggles)
@@ -86,6 +109,9 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
             }
         });
 
+        /**
+         * Change the KeyEvent to ClickEvent and fire on this button.
+         */
         addKeyDownHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -131,6 +157,13 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         setDisplay(widget, true);
     }
 
+    /**
+     * This method will set the display of the button.  If the wrap parameter 
+     * is passed true then the passed widget will be wrapped in the button border
+     * styling, if false the passed widget is the only thing set as the display. 
+     * @param widget
+     * @param wrap
+     */
     public void setDisplay(Widget widget, boolean wrap) {
         if (wrap) {
             AbsolutePanel content = new AbsolutePanel();
@@ -150,9 +183,18 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 
     }
 
+    /**
+     * If pressed equals true the Pressed style will be applied to the button if the 
+     * button allows toggles
+     * @param pressed
+     */
     public void setPressed(boolean pressed) {
         assert toggles == true;
 
+        /*
+         * Do nothing if pressed state is the same as what 
+         * was passed to us
+         */
         if (this.pressed == pressed)
             return;
 
@@ -207,37 +249,87 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         return enabled;
     }
     
+    /**
+     * Method to check if the button is locked.
+     * @return
+     */
     public boolean isLocked() {
         return locked;
     }
     
+    /**
+     * Method to check if the button is pressed.
+     * @return
+     */
     public boolean isPressed() {
         return pressed;
     }
     
+    /**
+     * Method to set if this button toggles or not.
+     * @param toggles
+     */
     public void setToggles(boolean toggles) {
         this.toggles = toggles;
     }
 
+    /**
+     * Method to add a focus style to the button.
+     */
     public void addFocusStyle(String style) {
        addStyleName(HOVER);
     }
 
+    /**
+     * Method remove a focus style from the button.
+     */
     public void removeFocusStyle(String style) {
        removeStyleName(HOVER);
     }
     
+    /**
+     * Method used to set the style class to be used for Hovering over the button
+     * @param style
+     */
     public void setHoverStyle(String style) {
         HOVER = style;
     }
     
+    /**
+     * Method used to set the style class to be used for a Pressed button.
+     * @param style
+     */
     public void setPressedStyle(String style) {
         PRESSED = style;
     }
     
+    /**
+     * Method used to set the style class to be used for a disabled button.
+     * @param style
+     */
     public void setDisabledStyle(String style) {
         DISABLED = style;
     }
+    
+    /**
+     * This a string value that can be set to the button.  Used mostly for 
+     * query strings and useful for distinguishing buttons used in ButtonGroup 
+     * @param action
+     */
+    public void setAction(String action) {
+        this.action = action;
+    }
+    
+    /**
+     * Returns the action string set for this button.
+     * @param action
+     * @return
+     */
+    public String getAction(String action) {
+        return action;
+    }
+    
+    
     
     
 }

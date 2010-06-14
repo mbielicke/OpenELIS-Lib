@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -214,13 +215,12 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
      */
     public void onMouseOver(MouseOverEvent event) {
         if ( ((HasExceptions)event.getSource()).hasExceptions()) {
-            if (popPanel == null) {
-
-            }
             drawExceptions((HasExceptions)event.getSource());
+            
             popPanel.setPopupPosition( ((Widget)event.getSource()).getAbsoluteLeft() +
                                       ((Widget)event.getSource()).getOffsetWidth(),
                                       ((Widget)event.getSource()).getAbsoluteTop());
+            
             popPanel.show();
             Timer timer = new Timer() {
                 public void run() {

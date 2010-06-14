@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.fileupload;
 
 import gwtupload.client.BaseUploadStatus;
 import gwtupload.client.IFileInput;

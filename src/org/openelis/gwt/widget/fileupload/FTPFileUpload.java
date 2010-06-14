@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget;
+package org.openelis.gwt.widget.fileupload;
 
 
 import gwtupload.client.IFileInput;
@@ -9,6 +9,9 @@ import java.util.HashMap;
 import org.openelis.gwt.event.FTPStartUploadEvent;
 import org.openelis.gwt.event.FTPStartUploadHandler;
 import org.openelis.gwt.event.HasFTPStartUploadHandlers;
+import org.openelis.gwt.widget.Button;
+import org.openelis.gwt.widget.Label;
+import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
