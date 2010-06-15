@@ -38,6 +38,7 @@ UIRF Software License are applicable instead of those above.
     <xsl:variable name="props" select="props" />
     <xsl:variable name="constants" select="resource:getBundle(string('org.openelis.gwt.server.CalendarConstants'),locale:new(string($language)))" />
   <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <FocusPanel key="CalFocus">
     <VerticalPanel style="CalendarWidget">
             <widget halign="center">
    	<HorizontalPanel style="TimeBar" width="100%" key="TimeBar">
@@ -81,7 +82,7 @@ UIRF Software License are applicable instead of those above.
      <label key="month11" text="{resource:getString($constants,'month11')}"/>     
    </AbsolutePanel>
    </VerticalPanel>
-
+   </FocusPanel>
    </screen>
  </xsl:template>
  

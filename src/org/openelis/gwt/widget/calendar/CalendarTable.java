@@ -14,11 +14,19 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-
+/**
+ * This class is composite widget that displays a Calendar month.  
+ * @author tschmidt
+ *
+ */
 public class CalendarTable extends Composite implements HasSelectionHandlers<Datetime>, HasDataChangeHandlers{
     
-    protected FlexTable table;
+    /**
+     * Wrapped table for displaying the date cells
+     */
+    protected Grid table;
     protected Datetime[][] dates;
     
     protected int selectedRow, selectedCol;
@@ -26,8 +34,7 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
     public CalendarTable() {
     	final CalendarTable source = this;
     	
-    	table = new FlexTable();
-        table.insertRow(0);
+    	table = new Grid(7,7);
         table.getRowFormatter().setStyleName(0,"DayBar");
 
         table.setWidget(0, 0, new Label("S"));

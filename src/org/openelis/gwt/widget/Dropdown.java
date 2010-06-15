@@ -77,8 +77,7 @@ public class Dropdown<T> extends TextBox<T> {
     protected Button                button;
     protected TableWidget           table;
     protected PopupPanel            popup;
-    protected int                   cellHeight = 19;
-
+    protected int                   cellHeight = 19, itemCount;
     /**
      * Sorted list of display values for search
      */
@@ -124,7 +123,7 @@ public class Dropdown<T> extends TextBox<T> {
          * Final instance of the private class KeyboardHandler
          */
         final KeyboardHandler keyHandler = new KeyboardHandler();
-
+        
         hp = new HorizontalPanel();
         textbox = new com.google.gwt.user.client.ui.TextBox();
         /*
@@ -133,7 +132,7 @@ public class Dropdown<T> extends TextBox<T> {
          */
         button = new Button();
         AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName("AutoDropdownButton");
+        image.setStyleName("autoDropdownButton");
         button.setDisplay(image, false);
 
         hp.add(textbox);
@@ -144,7 +143,7 @@ public class Dropdown<T> extends TextBox<T> {
          */
         initWidget(hp);
 
-        setStyleName("AutoDropDown");
+        setStyleName("AutoDropdown");
         textbox.setStyleName("TextboxUnselected");
 
         /*
@@ -272,6 +271,7 @@ public class Dropdown<T> extends TextBox<T> {
             keyHash.put(model.get(i).key, i);
 
     }
+    
 
     // ******* End User Dropdown methods ***********************
     /**
@@ -329,6 +329,10 @@ public class Dropdown<T> extends TextBox<T> {
             }
         });
     }
+    
+    public void setVisibleItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
 
     /**
      * Sets the data model for the PopupContext of this widget.
@@ -338,14 +342,14 @@ public class Dropdown<T> extends TextBox<T> {
     public void setModel(ArrayList<Item<T>> model) {
         assert table != null;
 
-        table.setMaxRows(10);
         /*
          * If model is smaller than maxRows then we want to reset maxRows so the
          * table is the correct size.
          */
-        if (table.getMaxRows() > model.size()) {
+        if (itemCount > model.size()) 
             table.setMaxRows(model.size());
-        }
+        else
+            table.setMaxRows(itemCount);
 
         table.view.setHeight(table.getMaxRows() * cellHeight);
 

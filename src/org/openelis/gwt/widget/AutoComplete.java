@@ -77,7 +77,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     protected Button          button;
     protected TableWidget     table;
     protected PopupPanel      popup;
-    protected int             cellHeight = 19, delay = 350;
+    protected int             cellHeight = 21, delay = 350, itemCount = 10;
 
     final AutoComplete<T>     source;
 
@@ -249,6 +249,11 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
         textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
 
     }
+    
+    public void setVisibleItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
+    
 
     // ******* End User Dropdown methods ***********************
     /**
@@ -308,19 +313,19 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     public void setModel(ArrayList<Item<T>> model) {
         assert table != null;
 
-        table.setMaxRows(10);
         /*
          * If model is smaller than maxRows then we want to reset maxRows so the
          * table is the correct size.
          */
-        if (table.getMaxRows() > model.size()) {
+        if (itemCount > model.size()) 
             table.setMaxRows(model.size());
-        }
+        else
+            table.setMaxRows(itemCount);
 
         table.view.setHeight(table.getMaxRows() * cellHeight);
 
         table.load(model);
-
+        
     }
 
     /**

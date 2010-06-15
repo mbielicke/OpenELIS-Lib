@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 
@@ -174,11 +175,15 @@ public class Calendar extends TextBox<Datetime> {
 
         popup.showRelativeTo(this);
 
+        /*
+         * SetFocus to the popup so the calendar will take over the key events
+         */
         DeferredCommand.addCommand(new Command() {
             public void execute() {
-                ((Button)calendar.getDefinition().getWidget("today")).setFocus(true);
+                ((FocusPanel)calendar.getDefinition().getWidget("CalFocus")).setFocus(true);
             }
         });
+        
 
     }
 

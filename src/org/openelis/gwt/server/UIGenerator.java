@@ -272,21 +272,31 @@ public class UIGenerator extends Generator {
 					String key = node.getAttributes().getNamedItem("key").getNodeValue();
 					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
 				}
+                if (node.getAttributes().getNamedItem("case") != null){
+                    String fieldCase = node.getAttributes().getNamedItem("case")
+                    .getNodeValue().toUpperCase();
+                    sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
+                }
+                int maxRows = 10;
+                if (node.getAttributes().getNamedItem("visibleItems") != null) {
+                    maxRows= Integer.parseInt(node.getAttributes().getNamedItem("visibleItems").getNodeValue());
+                    sw.println("wid"+id+".setVisibleItemCount("+maxRows+");");
+                }
 				if(((Element)node).getElementsByTagName("table").getLength() == 0) {
 				    table = doc.createElement("table");
-				    table.setAttribute("maxRows", "10");
+				    table.setAttribute("maxRows", String.valueOf(maxRows));
 				    table.setAttribute("width", "auto");
 				    NodeList cols = ((Element)node).getElementsByTagName("col");
-				    if(cols.getLength() > 0){
-				        for(int i = 0; i < cols.getLength(); i++){
-				            if(!cols.item(i).hasChildNodes()) {
+				    int length = cols.getLength();
+				    if(length > 0){
+				        for(int i = 0; i < length; i++){
+				            if(!cols.item(0).hasChildNodes()) {
 				                Element label = doc.createElement("label");
 				                label.setAttribute("field", "String");
-				                cols.item(i).appendChild(label);
+				                cols.item(0).appendChild(label);
 				            }
-				            table.appendChild(cols.item(i));  
+				            table.appendChild(cols.item(0));  
 				        }
-				            
 				    }else{
 				        Element col = doc.createElement("col");
 				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
@@ -310,6 +320,8 @@ public class UIGenerator extends Generator {
         factoryMap.put("autoComplete", new Factory() {
             public void getNewInstance(Node node, int id) {
                 Element table = null; 
+                NodeList columns = null;
+                
                 if(node.getAttributes().getNamedItem("field") == null || node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) 
                 	sw.println("AutoComplete<Integer> wid"+id+" = new AutoComplete<Integer>();");
                 else
@@ -328,21 +340,29 @@ public class UIGenerator extends Generator {
                     .getNodeValue().toUpperCase();
                     sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
                 }
+                int maxRows = 10;
+                if (node.getAttributes().getNamedItem("visibleItems") != null) {
+                    maxRows= Integer.parseInt(node.getAttributes().getNamedItem("visibleItems").getNodeValue());
+                    sw.println("wid"+id+".setVisibleItemCount("+maxRows+");");
+                }
                 if(((Element)node).getElementsByTagName("table").getLength() == 0) {
                     table = doc.createElement("table");
-                    table.setAttribute("maxRows", "10");
+                    table.setAttribute("maxRows", String.valueOf(maxRows));
                     table.setAttribute("width", "auto");
-                    NodeList cols = ((Element)node).getElementsByTagName("col");
-                    if(cols.getLength() > 0){
-                        for(int i = 0; i < cols.getLength(); i++){
-                            if(!cols.item(i).hasChildNodes()) {
+                    columns = node.getChildNodes();
+                    int length = columns.getLength();
+                    if(length > 0) {
+                        for(int j = 0; j < length; j++) {
+                            Node col = columns.item(0);
+                            if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                                continue;
+                            if(!col.hasChildNodes()) {
                                 Element label = doc.createElement("label");
                                 label.setAttribute("field", "String");
-                                cols.item(i).appendChild(label);
+                                col.appendChild(label);
                             }
-                            table.appendChild(cols.item(i));  
+                            table.appendChild(col);
                         }
-                            
                     }else{
                         Element col = doc.createElement("col");
                         col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
@@ -448,63 +468,6 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.DateHelper");
                 composer.addImport("org.openelis.gwt.widget.StringHelper");
 			}
-    	});
-    	factoryMap.put("LayoutPanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("LayoutPanel wid"+id+" = new LayoutPanel();");
-    			NodeList widgets = node.getChildNodes();
-     	        for (int k = 0; k < widgets.getLength(); k++) {
-     	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-     	            	int child = ++count;
-     	                if(!loadWidget(widgets.item(k),child)){
-     	                	count--;
-     	                	continue;
-     	                }
-     	                sw.println("wid"+id+".add(wid"+child+");");
-     	                String left = widgets.item(k).getAttributes().getNamedItem("left").getNodeValue();
-     	                String width = widgets.item(k).getAttributes().getNamedItem("width").getNodeValue();
-     	                
-     	                sw.println("wid"+id+".setWidgetLeftWidth(wid"+child+","+Double.parseDouble(left)+", Unit.PCT,"+Double.parseDouble(width)+", Unit.PCT);");
-     	                /*
-     	                if (widgets.item(k).getAttributes().getNamedItem("halign") != null) {
-     	                    String align = widgets.item(k).getAttributes()
-     	                                         .getNamedItem("halign")
-     	                                         .getNodeValue();
-     	                    if (align.equals("right"))
-     	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_RIGHT);");
-     	                    if (align.equals("left"))
-     	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_LEFT);");
-     	                    if (align.equals("center"))
-     	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_CENTER);");
-     	                }
-     	                if (widgets.item(k).getAttributes().getNamedItem("valign") != null) {
-     	                    String align = widgets.item(k).getAttributes()
-     	                                         .getNamedItem("valign")
-     	                                         .getNodeValue();
-     	                    if (align.equals("top"))
-     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_TOP);");
-     	                    if (align.equals("middle"))
-     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_MIDDLE);");
-     	                    if (align.equals("bottom"))
-     	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_BOTTOM);");
-     	                }
-     	                if(widgets.item(k).getAttributes().getNamedItem("height") != null) {
-     	                	sw.println("wid"+id+".setCellHeight(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("height").getNodeValue()+"\");");
-     	                }
-     	                if(widgets.item(k).getAttributes().getNamedItem("width") != null) {
-     	                	if(!widgets.item(k).getAttributes().getNamedItem("width").getNodeValue().equals("auto"))
-     	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
-     	                }
-     	                */
-     	            }
-     	        }
-     	        sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
-     	        setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.LayoutPanel");
-    			composer.addImport("com.google.gwt.dom.client.Style.Unit");
-    		}
     	});
     	factoryMap.put("VerticalPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -700,6 +663,28 @@ public class UIGenerator extends Generator {
     			composer.addImport("com.google.gwt.user.client.DOM");
     		}
     	});
+        factoryMap.put("FocusPanel", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                sw.println("FocusPanel wid"+id+" = new FocusPanel();");
+                sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
+                NodeList widgets = node.getChildNodes();
+                for (int k = 0; k < widgets.getLength(); k++) {
+                    if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                        int child = ++count;
+                        if(!loadWidget(widgets.item(k),count)){
+                            count--;
+                            continue;
+                        }
+                        sw.println("wid"+id+".setWidget(wid"+child+");");
+                        break;
+                    }
+                }
+                setDefaults(node,"wid"+id);
+            }
+            public void addImport() {
+                composer.addImport("com.google.gwt.user.client.ui.FocusPanel");
+            }
+        });    	
     	factoryMap.put("ScrollPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("ScrollPanel wid"+id+" = new ScrollPanel();");
@@ -838,33 +823,6 @@ public class UIGenerator extends Generator {
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.CollapsePanel");
-    		}
-    	});
-    	factoryMap.put("SlidePanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("SlideOutPanel wid"+id+" = new SlideOutPanel();");
-    		    if (node.getChildNodes().getLength() > 0){
-    		       NodeList widgets = node.getChildNodes();
-    		       for (int k = 0; k < widgets.getLength(); k++) {
-    		           if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    		        	   int child = ++count;
-    		        	   if(!loadWidget(widgets.item(k),child)){
-        	            	   count--;
-        	            	   continue;
-        	               }
-    		               sw.println("wid"+child+".setHeight(\"100%\");");
-    		               sw.println("wid"+child+".setWidth(\"auto\");");
-    		               sw.println("wid"+id+".setContent(wid"+child+");");
-    		           }
-    		       }
-    		    }
-    		    if(node.getAttributes().getNamedItem("height") != null)
-    		       sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
-    		       
-    		    setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.SlideOutPanel");
     		}
     	});
     	factoryMap.put("DeckPanel", new Factory() {
@@ -1288,37 +1246,6 @@ public class UIGenerator extends Generator {
     		}
     		public void addImport(){
     			composer.addImport("org.openelis.gwt.widget.PassWordTextBox");
-    		}
-    	});
-    	factoryMap.put("radio", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-                sw.println("RadioButton wid"+id+" = new RadioButton(\""+node.getAttributes().getNamedItem("group").getNodeValue()+"\");");
-                
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    if (node.getFirstChild() != null)
-                	sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue()+"\");");
-                sw.println("wid"+id+".setStyleName(\"ScreenRadio\");");
-                setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-                //factoryMap.get("Check").getNewInstance(node, id);
-                //sw.println("wid"+id+".setField(field"+id+");");
-                
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-                
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.RadioButton");
     		}
     	});
     	factoryMap.put("richtext", new Factory() {
@@ -2131,8 +2058,8 @@ public class UIGenerator extends Generator {
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);			    
     			
-    	        if(node.getAttributes().getNamedItem("toggles") != null)
-   	                sw.println("wid"+id+".setToggle("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
+    	        if(node.getAttributes().getNamedItem("toggle") != null)
+   	                sw.println("wid"+id+".setToggles("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
     	        
     	        if(node.getAttributes().getNamedItem("action") != null)
     	            sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+"\");");
@@ -2304,7 +2231,9 @@ public class UIGenerator extends Generator {
         });
     }
 
-
+    public static void addFactory(String tag, Factory factory) {
+        factoryMap.put(tag,factory);
+    }
     
     
 }

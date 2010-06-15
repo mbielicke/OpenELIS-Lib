@@ -362,6 +362,11 @@ color:gray;
     padding:4px;
 }
 
+.BlueContentPanel{
+    background:#D9E8FB;
+    padding:2px;
+}
+
 .LeftSidePanel{
     background:white;
 }
