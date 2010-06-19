@@ -139,16 +139,16 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 
         switch (textCase) {
             case UPPER:
-                addStyleName("Upper");
-                removeStyleName("Lower");
+                textbox.addStyleName("Upper");
+                textbox.removeStyleName("Lower");
                 break;
             case LOWER:
-                addStyleName("Lower");
-                removeStyleName("Upper");
+                textbox.addStyleName("Lower");
+                textbox.removeStyleName("Upper");
                 break;
             default:
-                removeStyleName("Upper");
-                removeStyleName("Lower");
+                textbox.removeStyleName("Upper");
+                textbox.removeStyleName("Lower");
         }
     }
 
