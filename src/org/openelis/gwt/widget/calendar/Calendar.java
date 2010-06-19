@@ -133,8 +133,15 @@ public class Calendar extends TextBox<Datetime> {
         }
         try {
             if (calendar == null) {
+                /*
+                 * Set new CalendarWidget withe the precision used by this widget
+                 */
                 calendar = new CalendarWidget( ((DateHelper)helper).getBegin(),
                                               ((DateHelper)helper).getEnd());
+                /*
+                 * CalendarWidget will fire a ValueChangeEvent<Datetime> when the user selects
+                 * a date.
+                 */
                 calendar.addValueChangeHandler(new ValueChangeHandler<Datetime>() {
                     public void onValueChange(ValueChangeEvent<Datetime> event) {
                         popup.hide();
@@ -142,10 +149,18 @@ public class Calendar extends TextBox<Datetime> {
                         textbox.setFocus(true);
                     }
                 });
+                /*
+                 * Add a handler to the CalendarWidget for when the user selects the MonthSelect button.
+                 * We will then switch the popup view to the MonthYearWidget and setting it to the current 
+                 * month year displayed in the calendar widget. 
+                 */
                 calendar.addMonthSelectHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         if (monthYearWidget == null) {
                             monthYearWidget = new MonthYearWidget();
+                            /*
+                             * Set popup back to calendar with the selected month and year
+                             */
                             monthYearWidget.addOKHandler(new ClickHandler() {
                                 public void onClick(ClickEvent event) {
                                     calendar.drawMonth(monthYearWidget.getYear(),
@@ -153,6 +168,9 @@ public class Calendar extends TextBox<Datetime> {
                                     popup.setWidget(calendar);
                                 }
                             });
+                            /*
+                             * Set popup back to calendar with month and year it has set
+                             */
                             monthYearWidget.addCancelHandler(new ClickHandler() {
                                 public void onClick(ClickEvent event) {
                                     popup.setWidget(calendar);
@@ -165,7 +183,10 @@ public class Calendar extends TextBox<Datetime> {
                     }
                 });
             }
-
+            /*
+             * Sets the calendar to the current month and date entered in the widget.  If null 
+             * is passed then the current date from the server will be displayed and selected.
+             */
             calendar.setDate(helper.getValue(getText()));
             popup.setWidget(calendar);
 

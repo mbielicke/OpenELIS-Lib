@@ -1,9 +1,6 @@
 package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.event.DataChangeEvent;
-import org.openelis.gwt.event.DataChangeHandler;
-import org.openelis.gwt.event.HasDataChangeHandlers;
 import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,22 +18,37 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
  * @author tschmidt
  *
  */
-public class CalendarTable extends Composite implements HasSelectionHandlers<Datetime>, HasDataChangeHandlers{
+public class CalendarTable extends Composite implements HasSelectionHandlers<Datetime> {
     
-    /**
+    /*
      * Wrapped table for displaying the date cells
      */
     protected Grid table;
+    /*
+     * 2D array Holding dates for each cell in the calendar
+     */
     protected Datetime[][] dates;
     
+    /*
+     * Currently selected cell in the calendar
+     */
     protected int selectedRow, selectedCol;
     
+    /**
+     * Default no-arg constructor
+     */
     public CalendarTable() {
+        /*
+         * Final reference to this widget used in anon handlers
+         */
     	final CalendarTable source = this;
     	
     	table = new Grid(7,7);
         table.getRowFormatter().setStyleName(0,"DayBar");
 
+        /*
+         * Set the Week header bar
+         */
         table.setWidget(0, 0, new Label("S"));
         table.getCellFormatter().setStyleName(0,0,"DayCell");
         table.getWidget(0, 0).setStyleName("DayText");
@@ -65,6 +77,9 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
         table.getCellFormatter().setStyleName(0,6,"DayCell");
         table.getWidget(0, 6).setStyleName("DayText");
         
+        /*
+         * Set the base formatting for each cell.
+         */
         for(int i = 1; i < 7; i++) {
             for(int j = 0; j < 7; j++) {
                 table.setWidget(i, j, new Label(""));
@@ -79,24 +94,40 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
         table.setCellPadding(0);
         table.setCellSpacing(0);
         
+        /*
+         * Register ClickHandler for selection of date.
+         */
         table.addClickHandler(new ClickHandler() {
         	public void onClick(ClickEvent event) {
-        		Cell cell = ((FlexTable)event.getSource()).getCellForEvent(event);
+        		Cell cell = ((Grid)event.getSource()).getCellForEvent(event);
         		SelectionEvent.fire(source, dates[cell.getRowIndex()-1][cell.getCellIndex()]);
         	}
         });
         
     }
     
+    /**
+     * Draws the calendar to the month year passed and will use the selected and current Datetimes
+     * params for setting the correct style to those cells if present.
+     * @param year
+     * @param month
+     * @param selected
+     * @param current
+     */
     public void setCalendar(int year, int month, Datetime selected, Datetime current) {
         byte begin, end;
-        
+        /*
+         * Precision to be used for the Datetimes for each cell
+         */
         begin = current.getStartCode();
         end   = current.getEndCode();
         
         CalendarImpl cal = CalendarImpl.getInstance();
         cal.set(year,month,1,0,0,0);
 
+        /*
+         * Calculate the Date to be used for cell[0][0]
+         */
     	if(cal.get(CalendarImpl.DAY_OF_WEEK) > 0)
     	    cal.add(CalendarImpl.DATE, -cal.get(CalendarImpl.DAY_OF_WEEK));
         else
@@ -104,8 +135,16 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
     	
     	dates = new Datetime[6][7];
         
+    	/*
+    	 * Reset selected cell.
+    	 */
     	selectedRow = -1;
     	selectedCol = -1;
+    	
+    	/*
+    	 * Loop through for each cell adding 1 day to the begin date and add the needed style 
+    	 * for each cell based on the date of that cell.
+    	 */
     	for(int i = 0; i < 6; i++) {
             for(int j = 0; j < 7; j++) {
             	dates[i][j] = Datetime.getInstance(begin,end,cal.getTime());
@@ -132,14 +171,23 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
         }
     }
     
+    /**
+     * Returns the currently selected calendar row index
+     */
     public int getSelectedRow() {
         return selectedRow;
     }
     
+    /**
+     * Returns the currently selected calendar col index. 
+     */
     public int getSelectedCol() {
         return selectedCol;
     }
     
+    /**
+     * Set the selected calendar cell.
+     */
     public Datetime select(int row, int col) {
         if(selectedRow > -1)
             table.getWidget(selectedRow, selectedCol).removeStyleName("selected");
@@ -152,12 +200,12 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
         return dates[row -1][col];
     }
 
+    /**
+     * Adds a SelectionHandler<Datetime> to this widget.
+     */
 	public HandlerRegistration addSelectionHandler(
 			SelectionHandler<Datetime> handler) {
 		return addHandler(handler,SelectionEvent.getType());
 	}
 
-	public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
-		return addHandler(handler,DataChangeEvent.getType());
-	}
 }

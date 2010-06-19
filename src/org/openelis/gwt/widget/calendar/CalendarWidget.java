@@ -25,8 +25,6 @@
  */
 package org.openelis.gwt.widget.calendar;
 
-import java.util.Date;
-
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.screen.Calendar;
@@ -62,18 +60,34 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class CalendarWidget extends Screen implements HasValueChangeHandlers<Datetime> {
 
+    /*
+     * Currently selected date by the widget
+     */
     private Datetime            selected;
+    /*
+     * Todays date retrieved from server.
+     */
     private Datetime            current;
+    
+    /*
+     * Currently displayed year and month in the calendar
+     */
     private int                 year;
     private int                 month;
 
-    protected Button         prevMonth, nextMonth, monthSelect, today;
+    /*
+     * Buttons from xsl
+     */
+    protected Button            prevMonth, nextMonth, monthSelect, today;
 
     protected TextBox<Datetime> time;
     protected Label             monthDisplay;
 
     protected CalendarTable     table;
 
+    /*
+     * Constructor that takes the precision of the date to be used.
+     */
     public CalendarWidget(byte begin, byte end) throws Exception {
         super((ScreenDefInt)GWT.create(CalendarDef.class));
 
@@ -87,10 +101,19 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
         initialize();
     }
 
+    /*
+     * Initialize widgets on Screen.
+     */
     private void initialize() throws Exception {
 
+        /*
+         * Final reference to this class to be used by anon handlers
+         */
         final CalendarWidget source = this;
 
+        /*
+         * Create a CalendarTable and set in the screen
+         */
         table = new CalendarTable();
         ((VerticalPanel)def.getWidget("calContainer")).add(table);
 
@@ -156,6 +179,9 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
             }
         });
 
+        /*
+         * Show or hide time component based on the widget precision.
+         */
         if (current.endCode > Datetime.DAY) {
             time = (TextBox<Datetime>)def.getWidget("time");
             addScreenHandler(time, new ScreenEventHandler<Datetime>() {
@@ -166,31 +192,12 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
             def.getWidget("TimeBar").setVisible(true);
         } else
             def.getWidget("TimeBar").setVisible(false);
-
+        
+        /*
+         * KeyHandler to let the user arrow around the calendar
+         */
         addDomHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
-                if (table.selectedRow < 0) {
-                    switch (event.getNativeKeyCode()) {
-                        case KeyCodes.KEY_DOWN:
-                        case KeyCodes.KEY_UP:
-                        case KeyCodes.KEY_RIGHT:
-                        case KeyCodes.KEY_LEFT:
-                            selected = Datetime.getInstance(current.getStartCode(),
-                                                            current.getEndCode(), new Date(year,
-                                                                                           month,
-                                                                                           1, 0, 0,
-                                                                                           0));
-                            for (int i = 0; i < 2; i++ ) {
-                                for (int j = 0; j < 7; j++ ) {
-                                    if (table.dates[i][j].equals(selected)) {
-                                        selected = table.select(i + 1, j);
-                                        return;
-                                    }
-                                }
-                            }
-                    }
-                    return;
-                }
 
                 int row = table.getSelectedRow(), col = table.getSelectedCol();
 
@@ -218,10 +225,17 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
 
     }
 
+    /**
+     * Method registers a ValueChangeHandler<Datetime> to this widget
+     */
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Datetime> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
+    /**
+     * Sets the selected date for this calendar and will cause the month year in the 
+     * date to be displayed
+     */
     public void setDate(Datetime date) {
         selected = date;
         if (date != null) {
@@ -231,29 +245,38 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
         DataChangeEvent.fire(this);
     }
 
+    /**
+     *  Draws the passed month and year in the calendar without changing the selected
+     *  date.
+     */
     public void drawMonth(int year, int month) {
         this.year = year;
         this.month = month;
         DataChangeEvent.fire(this);
     }
 
+    /**
+     * Registers a ClickHandler for the monthSelect button from the parent widget 
+     * so that it can switch the view to the MonthYearWidget.
+     * @param handler
+     */
     public void addMonthSelectHandler(ClickHandler handler) {
         monthSelect.addClickHandler(handler);
     }
 
+    /**
+     * Returns the current year being displayed in the calendar
+     * @return
+     */
     public int getYear() {
         return year;
     }
 
+    /**
+     * Returns the current month being displayed in the calendar 
+     * @return
+     */
     public int getMonth() {
         return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 }
