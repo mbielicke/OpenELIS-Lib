@@ -25,14 +25,24 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
+import org.openelis.gwt.common.Util;
+import org.openelis.gwt.event.ScrollBarEvent;
+import org.openelis.gwt.event.ScrollBarHandler;
+import org.openelis.gwt.widget.HasHelper;
 import org.openelis.gwt.widget.ScrollBar;
+import org.openelis.gwt.widget.WidgetHelper;
 import org.openelis.gwt.widget.redesign.table.Table.Scrolling;
 
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class View extends Composite {
     /**
@@ -66,11 +76,27 @@ public class View extends Composite {
      * Constructor that takes a reference to the table that will use this view 
      * @param table
      */
-    public View(Table table) {
-        this.table = table;
+    public View(Table tbl) {
+        this.table = tbl;
         
         outer = new HorizontalPanel();
         initWidget(outer);
+        
+        addDomHandler(new MouseWheelHandler() {
+            public void onMouseWheel(MouseWheelEvent event) {
+                int pos, delta, height;
+
+                pos = scrollBar.getScrollPosition();
+                delta = event.getDeltaY();
+                height = table.getRowHeight();
+
+                if (delta < 0 && delta > - height)
+                    delta = -height;
+                if (delta > 0 && delta < height)
+                    delta = height;
+                scrollBar.setScrollPosition(pos + delta);
+            }
+        }, MouseWheelEvent.getType());
         
         draw();
     }
@@ -83,7 +109,7 @@ public class View extends Composite {
          */
         VerticalPanel vp = null;
         
-        //******** Setl layout of view ***************
+        //******** Set layout of view ***************
         outer.clear();
         scrollView = new ScrollPanel();
         cells      = new FlexTable();
@@ -101,8 +127,20 @@ public class View extends Composite {
         
         outer.add(scrollView);
         
+        
+        
         if(table.getVerticalScroll() != Scrolling.NEVER) {
             scrollBar = new ScrollBar();
+            scrollBar.addScrollBarHandler(new ScrollBarHandler() {
+                public void onScroll(ScrollBarEvent event) {
+                    int newFirstIndex;
+                    
+                    newFirstIndex = calcFirstIndex(scrollBar.getScrollPosition());
+                    
+                    renderView(newFirstIndex);
+                }
+            });
+            adjustScrollBar();
             outer.add(scrollBar);
         }
         
@@ -130,10 +168,31 @@ public class View extends Composite {
      * visibleRows will be created for the cells table.
      */
     private void createRows() {
+        int rowsToCreate, rowsPresent;
         
+        if(table.getModel().size() < table.getVisibleRows())
+            rowsToCreate = table.getModel().size();
+        else
+            rowsToCreate = table.getVisibleRows();
+        
+        rowsPresent = cells.getRowCount();
+        
+        if(rowsPresent < rowsToCreate){
+            for(int i = rowsPresent; i < rowsToCreate; i++) {
+                cells.insertRow(i);
+            }
+        }else {
+            for(int i = rowsPresent; i > rowsToCreate; i--) {
+                cells.removeRow(0);
+            }
+        }
+        
+        firstIndex = -1;
+        
+        renderView(0);
     }
     
-    public void renderView(int startIndex) {
+    protected void renderView(int startIndex) {
         if(firstIndex < 0 || (Math.abs(startIndex - firstIndex) > table.getVisibleRows() / 4))
             renderViewBySetAll(startIndex);
         else
@@ -141,11 +200,135 @@ public class View extends Composite {
     }
     
     private void renderViewByDeleteAdd(int startIndex) {
+        int rowsToScroll, newFirst = 0, modelStart, cellsStart;
         
+        /*
+         * Delete and add Rows from either Top or Bottom depending on direction of scroll. 
+         * Also calc and set indexes needed to render the new rows.
+         */
+        if(startIndex > firstIndex) {
+            rowsToScroll = startIndex - firstIndex;
+            newFirst = firstIndex + rowsToScroll;
+            for(int i = 0; i < rowsToScroll; i++) {
+                cells.removeRow(0);
+                cells.insertRow(cells.getRowCount());
+            }
+            modelStart = newFirst + table.getVisibleRows() - rowsToScroll;
+            cellsStart = table.getVisibleRows() - rowsToScroll;
+        }else{
+            rowsToScroll = firstIndex - startIndex;
+            newFirst = firstIndex - rowsToScroll;
+            for(int i = 0; i < rowsToScroll; i++) {
+                cells.removeRow(cells.getRowCount() -1);
+                cells.insertRow(0);
+            }
+            modelStart = newFirst;
+            cellsStart = 0;            
+        }
+        
+        /*
+         * Render the new rows with data from the model. 
+         */
+        for(int i = 0; i < rowsToScroll; i++) {
+            renderRow(cellsStart+i,modelStart+i);
+        }
+            
+        
+        firstIndex = newFirst;
     }
     
     private void renderViewBySetAll(int startIndex) {
+        for(int i = 0; i < cells.getRowCount(); i++) {
+            renderRow(i,startIndex+i);
+        }
+        firstIndex = startIndex;
+    }
+    
+    
+    protected void renderRow(int row) {
+        int cellsIndex;
         
+        cellsIndex = getCellsIndex(row);
+        /*
+         * If table has not reached srollable length yet make sure that a row is present for the index
+         * passed such as when a row is added. 
+         */
+        if(cellsIndex == cells.getRowCount())
+            cells.insertRow(row);
+        
+        renderRow(cellsIndex,row);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void renderRow(int cellsIndex, int modelIndex) {
+        for(int col = 0; col < table.getColumnCount(); col++) {
+            renderCell(cellsIndex,col,modelIndex);
+        }
+    }
+    
+    protected void renderCell(int row, int col) {
+        renderCell(getCellsIndex(row), col, row);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void renderCell(int cellsIndex, int col, int modelIndex) {
+        Column column;
+        WidgetHelper helper;
+        Label display;
+        
+        column = table.columnAt(col);
+        helper = ((HasHelper)column.getEditor()).getHelper();
+        
+        display = new Label(helper.format(table.getValueAt(modelIndex, col)));
+        display.setWordWrap(false);
+        display.setWidth(Util.addUnits(column.getWidth()));
+        
+        cells.setWidget(cellsIndex,col,display);
+        
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void switchToEditor(int row, int col) {
+        int cellsIndex;
+        Widget editor;
+        
+        cellsIndex = getCellsIndex(row);
+        
+        editor     = table.columnAt(col).getEditor();
+        ((HasValue)editor).setValue(table.getValueAt(row, col));
+        
+        cells.setWidget(cellsIndex, col, editor);
+    }
+    
+    public Object swtichToDisplay(int row, int col) {
+        int cellsIndex;
+        Object value;
+        HasValue editor; 
+        
+        cellsIndex = getCellsIndex(row);
+        
+        editor = (HasValue)cells.getWidget(cellsIndex, col);
+        value = editor.getValue();
+        
+        renderCell(cellsIndex,col,row);
+        
+        return value;
+    }
+    
+    private int getCellsIndex(int modelIndex) {
+        return modelIndex - firstIndex;
+    }
+    
+    private int calcFirstIndex(int scrollPos) {
+        return scrollPos / table.getRowHeight();
+    }
+    
+    public void adjustScrollBar() {
+        int height;
+        
+        height = table.getRowHeight();
+        
+        scrollBar.adjust(table.getVisibleRows() * height, table.getModel().size() * height);
     }
     
 

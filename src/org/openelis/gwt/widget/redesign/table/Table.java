@@ -62,6 +62,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Table extends Composite implements ScreenWidgetInt, Queryable,
                                                                  HasBeforeSelectionHandlers<Integer>,
@@ -451,12 +452,30 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
         rows.add(index,row);
         
-        refresh();
+        scrollToVisible(index);
         
         fireRowAddedEvent(index,row);
        
         return row;
         
+    }
+    
+    public Row deleteRowAt(int index) {
+        Row row;
+        
+        finishEditing();
+        
+        row = rows.get(index);
+        
+        if(!fireBeforeRowDeletedEvent(index,row))
+            return null;
+        
+        rows.remove(index);
+        
+        //Finish this **********************************
+           
+        return null;
+       
     }
     
     
@@ -618,10 +637,10 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param index
      * @return
      */
-    private boolean fireCellEditedEvent(int index) {
+    private boolean fireCellEditedEvent(int row, int col, Object value) {
         
         if(!queryMode)
-            SelectionEvent.fire(this,index);
+            CellEditedEvent.fire(this,row,col,value);
         
         return true;
     }    
@@ -634,7 +653,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param row
      * @return
      */
-    public boolean fireBeforeRowAddedEvent(int index, Row row) {
+    private boolean fireBeforeRowAddedEvent(int index, Row row) {
         BeforeRowAddedEvent event = null;
         
         if(!queryMode)
@@ -650,7 +669,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param row
      * @return
      */
-    public boolean fireRowAddedEvent(int index, Row row) {
+    private boolean fireRowAddedEvent(int index, Row row) {
         
         if(!queryMode) 
             RowAddedEvent.fire(this, index, row);
@@ -667,7 +686,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param row
      * @return
      */
-    public boolean fireBeforeRowDeletedEvent(int index, Row row) {
+    private boolean fireBeforeRowDeletedEvent(int index, Row row) {
         BeforeRowAddedEvent event = null;
         
         if(!queryMode)
@@ -683,7 +702,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param row
      * @return
      */
-    public boolean fireRowDeletedEvent(int index, Row row) {
+    private boolean fireRowDeletedEvent(int index, Row row) {
         
         if(!queryMode) 
             RowDeletedEvent.fire(this, index, row);
@@ -709,7 +728,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
     public void setValueAt(int row, int col, Object value) {
         finishEditing();
         rows.get(row).setCell(col,value);
-        refresh();
+        refreshCell(row,col);
     }
     
     /**
@@ -731,7 +750,18 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @return
      */
     public boolean startEditing(int row, int col) {
-        return false;
+        finishEditing();
+        
+        if(!fireBeforeCellEditedEvent(row, col, getValueAt(row,col))) 
+            return editing = false;
+        
+        view.switchToEditor(row, col);
+        
+        editingRow = row;
+        editingCol = col;
+        
+        return editing = true; 
+        
     }
         
     /**
@@ -739,30 +769,83 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * nothing a cell is not currently being edited.
      */
     public void finishEditing() {
+        Object newValue, oldValue;
+        
+        if(!editing)
+            return;
+        
+        newValue = view.swtichToDisplay(editingRow, editingCol);
+        oldValue = getValueAt(editingRow, editingCol); 
+            
+        if(Util.isDifferent(newValue,oldValue)) {
+            rows.get(editingRow).setCell(editingCol,newValue);
+            fireCellEditedEvent(editingRow,editingCol,newValue);
+        }
+        
+        editingRow = -1;
+        editingCol = -1;
+        editing    = false;
         
     }
 
     //********* Draw Scroll Methods ****************
     /**
-     * Scrolls the table in the required direction to make sure the passes index is visible.
+     * Scrolls the table in the required direction to make sure the passed index is visible.
+     * Or if the index passed is in the view range refresh the row to make sure that the latest data
+     * is shown (i.e. row Added before scroll size is hit).
      */
     public void scrollToVisible(int index) {
+        int newFirst = -1;
         
+        /*
+         * We do this here if table has not hit enough rows yet to scroll 
+         * to make sure the latest data in the model is displayed such as 
+         * when rows are added.
+         */
+        if(rows.size() < visibleRows) {
+            refreshRow(index);
+            return;
+        }
+        
+        if(index < view.firstIndex)
+            newFirst = index;
+        else if(index > view.firstIndex + visibleRows)
+            newFirst = index - visibleRows;
+       
+        if(newFirst > -1)
+            view.scrollBar.setScrollPosition(newFirst * rowHeight);
+       
     }
     
     /**
      * Redraws the table when any part of its physical definition is changed.
      */
     public void layout() {
-        
+        view.draw();
     }
     /**
      * Redraws data in the visible Rows of the table when model data is changed
      */
     public void refresh() {
-        
+       view.renderView(view.firstIndex); 
     }
 
+    /**
+     * Redraws data in the row passed
+     * @param row
+     */
+    public void refreshRow(int row) {
+        view.renderRow(row);
+    }
+    
+    /**
+     * redraws data in the cell passed
+     * @param row
+     * @param col
+     */
+    public void refreshCell(int row, int col) {
+        view.renderCell(row, col);
+    }
 
     // ************* Implementation of ScreenWidgetInt *************
 

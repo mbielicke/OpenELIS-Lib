@@ -86,4 +86,13 @@ public class Util {
         	}
         }
     }
+    
+    /**
+     * Compares the two parameters to see if they are different
+     * 
+     * @return true if object is the same; otherwise false
+     */
+    public static boolean isDifferent(Object a, Object b) {
+        return (a == null && b != null) || (a != null && !a.equals(b));
+    }
 }

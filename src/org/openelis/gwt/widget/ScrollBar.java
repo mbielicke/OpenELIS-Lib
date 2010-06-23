@@ -30,8 +30,6 @@ import org.openelis.gwt.event.HasScrollBarHandlers;
 import org.openelis.gwt.event.ScrollBarEvent;
 import org.openelis.gwt.event.ScrollBarHandler;
 
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -39,12 +37,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers, MouseWheelHandler {
+public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
 
     private AbsolutePanel ap;
-
-    private int           scrollIncrement = 20, scrollItems, visibleItems = 10, firstItem,
-                          lastItem;
 
     private boolean       horizontal;
 
@@ -60,7 +55,6 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers, Mous
         setWidget(ap);
         addScrollHandler(new ScrollHandler() {
             public void onScroll(ScrollEvent event) {
-                computeIndexes();
                 ScrollBarEvent.fire(source);
             }
         });
@@ -71,72 +65,36 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers, Mous
         this.horizontal = horizontal;
     }
 
-    public void setScrollIncrement(int increment) {
-        scrollIncrement = increment;
-        adjust();
-    }
-
-    public void setVisibleItems(int visibleItems) {
-        this.visibleItems = visibleItems;
-        adjust();
-    }
-
-    public void setScrollItems(int items) {
-        scrollItems = items;
-        adjust();
-    }
-
     public void setHorizontal(boolean horizontal) {
         this.horizontal = horizontal;
     }
 
-    private void adjust() {
-        int barSize, scrollSize;
-
-        barSize = visibleItems * scrollIncrement;
-        scrollSize = scrollItems * scrollIncrement;
+    public void adjust(int viewSize, int scrollSize) {
 
         if (horizontal) {
-            setWidth(Util.addUnits(barSize));
+            setWidth(Util.addUnits(viewSize));
             ap.setWidth(Util.addUnits(scrollSize));
         } else {
-            setHeight(Util.addUnits(barSize));
+            setHeight(Util.addUnits(viewSize));
             ap.setHeight(Util.addUnits(scrollSize));
         }
     }
 
-    public int getFirstItem() {
-        return firstItem;
-    }
 
-    public int getLastItem() {
-        return lastItem;
-    }
-
-    public void scrollTo(int index) {
-        setScrollPosition(index * scrollIncrement);
+    public void scrollTo(int position) {
+        setScrollPosition(position);
     }
 
     public HandlerRegistration addScrollBarHandler(ScrollBarHandler handler) {
         return addHandler(handler, ScrollBarEvent.getType());
     }
 
-    public void onMouseWheel(MouseWheelEvent event) {
-        int pos, delta;
-
-        pos = getScrollPosition();
-        delta = event.getDeltaY();
-
-        if (delta < 0 && delta > -scrollIncrement)
-            delta = -scrollIncrement;
-        if (delta > 0 && delta < scrollIncrement)
-            delta = scrollIncrement;
-        setScrollPosition(pos + delta);
-    }
-
-    private void computeIndexes() {
-        firstItem = getScrollPosition() / scrollIncrement;
-        lastItem = firstItem + visibleItems - 1;
+    
+    public int getScrollPosition() {
+        if(horizontal)
+            return getHorizontalScrollPosition();
+     
+        return super.getScrollPosition();
     }
 
 }
