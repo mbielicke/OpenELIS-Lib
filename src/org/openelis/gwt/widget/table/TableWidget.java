@@ -260,7 +260,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		for(TableColumn column : columns)
     			tw += column.getCurrentWidth()+3;
     	}else
-    		tw = Util.stripUnits(width,"px");    	
+    		tw = Util.stripUnits(width);    	
     	return tw;
     }
 
@@ -892,9 +892,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
     
     public boolean isEnabled(int index) {
-        if(index < numRows())
-            return model.get(index).enabled;
-        return false;
+        //if(index < numRows())
+          //  return model.get(index).enabled;
+        return true;
     }
 
     public TableDataRow getSelection() {

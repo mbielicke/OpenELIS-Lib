@@ -78,6 +78,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     protected TableWidget     table;
     protected PopupPanel      popup;
     protected int             cellHeight = 21, delay = 350, itemCount = 10;
+    protected Timer           timer;
 
     final AutoComplete<T>     source;
 
@@ -183,6 +184,24 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          */
         addHandler(keyHandler, KeyDownEvent.getType());
         addHandler(keyHandler, KeyUpEvent.getType());
+        
+        timer = new Timer() {
+            public void run() {
+                int cursorPos;
+                String text;
+                
+                text = getText();
+                
+                GetMatchesEvent.fire(source, text);
+
+                cursorPos = text.length();
+
+                setSelectedIndex(0);
+
+                textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
+                
+            }
+        };
 
     }
 
@@ -246,7 +265,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
         /*
          * set the Textbox to width - 16 to account for button.
          */
-        textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
+        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
 
     }
     
@@ -282,7 +301,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          */
         table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
             public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
-                if ( !event.getItem().row.enabled)
+                if ( !((Item)event.getItem().row).isEnabled())
                     event.cancel();
             }
         });
@@ -304,6 +323,15 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
             }
         });
     }
+    
+    /**
+     * Returns the Table being used by this Autocomplete to show matches. Note
+     * that Autocomplete always uses a table even for one column.
+     * @return
+     */
+    public TableWidget getPopupContext() {
+        return table;
+    }
 
     /**
      * Sets the data model for the PopupContext of this widget.
@@ -321,7 +349,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
             table.setMaxRows(model.size());
         else
             table.setMaxRows(itemCount);
-
+//TO-DO move calculation to Table method.
         table.view.setHeight(table.getMaxRows() * cellHeight);
 
         table.load(model);
@@ -346,7 +374,10 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     public void setSelectedIndex(int index) {
         table.selectRow(index);
-        textbox.setText(renderer.getDisplay(getSelectedItem()));
+        if(getSelectedIndex() > -1)
+            textbox.setText(renderer.getDisplay(getSelectedItem()));
+        else
+            textbox.setText("");
     }
 
     /**
@@ -545,18 +576,19 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                 default:
                     text = getText();
 
+                    timer.cancel();
                     /*
                      * Will hit this if backspaced to clear textbox. Call
                      * setSelected 0 so that if user tabs off the value is
                      * selected correctly
                      */
-                    if (text.equals("")) {
+                    if (text.equals("")){    
                         setSelectedIndex( -1);
-                        return;
-                    }
-
-                    new Delay(text);
-            }
+                        popup.hide();
+                    }else
+                        timer.schedule(delay);
+                    
+             }
         }
 
         /**
@@ -608,32 +640,6 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     protected class DefaultRenderer implements Renderer {
         public String getDisplay(TableDataRow row) {
             return row.getCells().get(0).toString();
-        }
-    }
-
-    private class Delay {
-
-        private String match;
-
-        public Delay(String text) {
-            this.match = text;
-
-            new Timer() {
-                public void run() {
-                    int cursorPos;
-
-                    if (match.equals(getText())) {
-                        GetMatchesEvent.fire(source, match);
-
-                        cursorPos = match.length();
-
-                        setSelectedIndex(0);
-
-                        textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
-                    }
-                }
-            }.schedule(delay);
-
         }
     }
 

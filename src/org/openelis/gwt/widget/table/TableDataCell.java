@@ -8,7 +8,6 @@ public class TableDataCell  {
 
 	public Object value;
 	public ArrayList<LocalizedException> exceptions;
-	public String style;
 	
 	public TableDataCell() {
 		value = null;

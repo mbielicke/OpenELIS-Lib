@@ -132,7 +132,7 @@ public class TreeColumn {
     			}else{
     				Item vrow = (Item)cell.getValue();
     				if(vrow  != null)
-                        ((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
+                        ((AutoComplete)colWidget).setValue(vrow.getKey(),"");
                     else
                         ((AutoComplete)colWidget).setValue(null,"");
                     val = ((AutoComplete)colWidget).getDisplay();
@@ -189,7 +189,8 @@ public class TreeColumn {
     			}else{
     				Item vrow = (Item)cell.getValue();
     				if(vrow != null)
-                        ((AutoComplete)colWidget).setValue(vrow.getKey(), vrow.display);
+                        ((AutoComplete)colWidget).setValue(vrow.getKey(), "");
+    				
                     else
                         ((AutoComplete)colWidget).setValue(null,"");
                 
@@ -240,7 +241,7 @@ public class TreeColumn {
             }else{
                 Item vrow =  (Item)cell.getValue();
                 if(vrow != null)
-                    ((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
+                    ((AutoComplete)colWidget).setValue(vrow.getKey(),"");
                 else
                     ((AutoComplete)colWidget).setValue(null,"");
     		}

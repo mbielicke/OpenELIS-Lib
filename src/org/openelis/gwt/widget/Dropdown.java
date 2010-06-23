@@ -254,7 +254,7 @@ public class Dropdown<T> extends TextBox<T> {
         /*
          * set the Textbox to width - 16 to account for button.
          */
-        textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
+        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
 
     }
 
@@ -301,7 +301,7 @@ public class Dropdown<T> extends TextBox<T> {
          */
         table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
             public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
-                if ( !event.getItem().row.enabled)
+                if ( !((Item)event.getItem().row).isEnabled())
                     event.cancel();
             }
         });

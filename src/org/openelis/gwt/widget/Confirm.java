@@ -38,6 +38,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This class will display a modal window with a message and buttons for 
+ * the user to confirm
+ * @author tschmidt
+ *
+ */
 public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>, ClickHandler, NativePreviewHandler {
 
     DecoratorPanel dp = new DecoratorPanel();
@@ -53,53 +59,27 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     private AbsolutePositionDropController dropController;
     Caption cap = new Caption();
     
-    private class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
 
-    	public String name;
-
-    	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-    		return addDomHandler(handler, MouseDownEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-    		return addDomHandler(handler,MouseUpEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-    		return addDomHandler(handler,MouseOutEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-    		return addDomHandler(handler,MouseOverEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-    		return addDomHandler(handler,MouseMoveEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseWheelHandler(
-    			MouseWheelHandler handler) {
-    		return addDomHandler(handler,MouseWheelEvent.getType());
-    	}
-    }
-    
     public Confirm(Type type, String caption, String message, String... buttons) {
     	VerticalPanel vp = new VerticalPanel();
     	cap.name = caption;
     	cap.setStyleName("ConfirmCaption");
     	AbsolutePanel ap = new AbsolutePanel();
     	HorizontalPanel hp = new HorizontalPanel();
-    	if(type == Type.WARN){
-    		ap.setStyleName("largeWarnIcon");
-    		if(caption == null || caption.equals(""))
-    			cap.name = "Warning";
-    	}else if(type == Type.ERROR){
-    		ap.setStyleName("largeErrorIcon");
-    		if(caption == null || caption.equals(""))
-    			cap.name = "Error";
-    	}else if(type == Type.QUESTION){
-    		ap.setStyleName("largeQuestionIcon");
-    		if(caption == null || caption.equals(""))
+    	switch(type) {
+    	    case WARN :
+    	        ap.setStyleName("largeWarnIcon");
+    	        if(caption == null || caption.equals(""))
+    	            cap.name = "Warning";
+    	        break;
+    	    case ERROR :
+    	        ap.setStyleName("largeErrorIcon");
+    	        if(caption == null || caption.equals(""))
+    	            cap.name = "Error";
+    	        break;
+    	    case QUESTION :
+    	        ap.setStyleName("largeQuestionIcon");
+    	        if(caption == null || caption.equals(""))
     			cap.name = "Question";
     	}
    	    
@@ -189,7 +169,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     		Button ab = new Button();
     		Label bl = new Label(buttons[i]);
     		bl.setStyleName("ScreenLabel");
-    		ab.setWidget(bl);
+    		ab.setDisplay(bl);
     		ab.setStyleName("Button");
     		ab.setEnabled(true);
     		bp.add(ab);
@@ -223,8 +203,6 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 				hide();
 			}
 		}
-		//if(event.getTypeInt() != Event.ONCLICK)
-			//event.cancel();
 	}
 	
 	public void setSize(int width, int height) {
@@ -239,5 +217,40 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 	public void setHeight(int height) {
 		this.height = height;
 	}
+	
+	/**
+	 * This private class is used to create a caption that can accept drag events
+	 * @author tschmidt
+	 *
+	 */
+    private class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
+
+        public String name;
+
+        public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+            return addDomHandler(handler, MouseDownEvent.getType());
+        }
+
+        public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+            return addDomHandler(handler,MouseUpEvent.getType());
+        }
+
+        public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+            return addDomHandler(handler,MouseOutEvent.getType());
+        }
+
+        public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+            return addDomHandler(handler,MouseOverEvent.getType());
+        }
+
+        public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+            return addDomHandler(handler,MouseMoveEvent.getType());
+        }
+
+        public HandlerRegistration addMouseWheelHandler(
+                MouseWheelHandler handler) {
+            return addDomHandler(handler,MouseWheelEvent.getType());
+        }
+    }
     
 }

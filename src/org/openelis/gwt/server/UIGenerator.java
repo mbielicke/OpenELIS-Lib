@@ -314,6 +314,7 @@ public class UIGenerator extends Generator {
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.Dropdown");
+    			composer.addImport("org.openelis.gwt.widget.table.TableWidget");
 
     		}
     	});
@@ -380,6 +381,7 @@ public class UIGenerator extends Generator {
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.AutoComplete");
+                composer.addImport("org.openelis.gwt.widget.table.TableWidget");
             }
         });
     	factoryMap.put("textbox",new Factory() {
@@ -420,19 +422,21 @@ public class UIGenerator extends Generator {
 				if (node.getAttributes().getNamedItem("textAlign") != null) {
 					String align = node.getAttributes().getNamedItem("textAlign").getNodeValue();
 					if(align.equalsIgnoreCase("center"))
-						sw.println("wid"+id+".alignment = TextBox.ALIGN_CENTER;");
+						sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_CENTER);");
 					if(align.equalsIgnoreCase("right"))
-						sw.println("wid"+id+".alignment = TextBox.ALIGN_RIGHT;");
+						sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_RIGHT);");
 					if(align.equalsIgnoreCase("left"))   
-						sw.println("wid"+id+".alignment = TextBox.ALIGN_LEFT;");
-					sw.println("wid"+id+".setTextAlignment(wid"+id+".alignment);");
+						sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_LEFT);");
+					//sw.println("wid"+id+".setTextAlignment(wid"+id+".alignment);");
 				}
 	        
+				/*
 				if (node.getAttributes().getNamedItem("autoNext") != null){
 					if(node.getAttributes().getNamedItem("autoNext").getNodeValue().equals("true")){
 						sw.println("wid"+id+".autoNext = true;");
 					}
 				}
+				*/
 				
 				if (node.getAttributes().getNamedItem("mask") != null) {
 					String mask = node.getAttributes().getNamedItem("mask").getNodeValue();
@@ -462,6 +466,7 @@ public class UIGenerator extends Generator {
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
 				composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+				composer.addImport("com.google.gwt.user.client.ui.TextBoxBase");
                 composer.addImport("org.openelis.gwt.widget.IntegerHelper");
                 composer.addImport("org.openelis.gwt.widget.DoubleHelper");
                 composer.addImport("org.openelis.gwt.widget.LongHelper");
@@ -1576,7 +1581,7 @@ public class UIGenerator extends Generator {
                 		sw.println(colClass+" column"+id+"_"+i+" = new "+colClass+"();");
                 	}else
                 		sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
-                	sw.println("column"+id+"_"+i+".controller = wid"+id+";");
+                	//sw.println("column"+id+"_"+i+".controller = wid"+id+";");
                 	if(col.getAttributes().getNamedItem("key") != null)
                 		sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
                 	if(col.getAttributes().getNamedItem("header") != null){
@@ -1653,6 +1658,119 @@ public class UIGenerator extends Generator {
     			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
     		}
     	});
+        factoryMap.put("tableRed", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                sw.println("TableWidgetRed wid"+id+" = new TableWidgetRed();");
+                
+                if(node.getAttributes().getNamedItem("tab") != null) {
+                    String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+                    String[] tabs = tab.split(",");
+                    String key = node.getAttributes().getNamedItem("key").getNodeValue();
+                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+                }
+                               
+                sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+                sw.println("wid"+id+".setMaxRows(Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\"));");
+
+                if(node.getAttributes().getNamedItem("title") != null){
+                        sw.println("wid"+id+".setTitle(\""+node.getAttributes().getNamedItem("title").getNodeValue() + "\");");
+                }
+                if(node.getAttributes().getNamedItem("showScroll") != null){
+                    String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
+                    sw.println("wid"+id+".setShowScroll(VerticalScroll.valueOf(\""+showScroll+"\"));");
+                }
+                if(node.getAttributes().getNamedItem("multiSelect") != null){
+                    if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
+                        sw.println("wid"+id+".enableMultiSelect(true);");
+                }
+                NodeList colList = node.getChildNodes();
+                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
+                for(int i = 0; i < colList.getLength(); i++) {
+                    Node col = colList.item(i);
+                    if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                        continue;
+                    if(col.getAttributes().getNamedItem("class") != null){
+                        String colClass = col.getAttributes().getNamedItem("class").getNodeValue();
+                        sw.println(colClass+" column"+id+"_"+i+" = new "+colClass+"();");
+                    }else
+                        sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
+                    sw.println("column"+id+"_"+i+".controller = wid"+id+";");
+                    if(col.getAttributes().getNamedItem("key") != null)
+                        sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
+                    if(col.getAttributes().getNamedItem("header") != null){
+                        sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
+                        sw.println("wid"+id+".showHeader(true);");
+                    }
+                    if(col.getAttributes().getNamedItem("width") != null)
+                        sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
+                    if(col.getAttributes().getNamedItem("minWidth") != null)
+                        sw.println("column"+id+"_"+i+".setMinWidth("+col.getAttributes().getNamedItem("minWidth").getNodeValue()+");");
+                    if(col.getAttributes().getNamedItem("fixedWidth") != null)
+                        sw.println("column"+id+"_"+i+".setFixedWidth("+col.getAttributes().getNamedItem("fixedWidth").getNodeValue()+");");
+                    if(col.getAttributes().getNamedItem("sort") != null)
+                        sw.println("column"+id+"_"+i+".setSortable("+col.getAttributes().getNamedItem("sort").getNodeValue()+");");
+                    if(col.getAttributes().getNamedItem("filter") != null)
+                        sw.println("column"+id+"_"+i+".setFilterable("+col.getAttributes().getNamedItem("filter").getNodeValue()+");");
+                    if(col.getAttributes().getNamedItem("query") != null)
+                        sw.println("column"+id+"_"+i+".setQuerayable("+col.getAttributes().getNamedItem("query").getNodeValue()+");");
+                    if(col.getAttributes().getNamedItem("align") != null){
+                        String align = col.getAttributes().getNamedItem("align").getNodeValue();
+                        if (align.equals("left"))
+                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
+                        if (align.equals("center"))
+                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
+                        if (align.equals("right"))
+                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
+                    }
+                    sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
+                    NodeList editor = col.getChildNodes();
+                    for(int j = 0; j < editor.getLength(); j++){
+                        if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            int child = ++count;
+                            if(!createWidget(editor.item(j),child)){
+                                count--;
+                                continue;
+                            }
+                            //sw.println("if(wid"+child+" instanceof HasBlurHandlers)");
+                            //sw.println("((HasBlurHandlers)wid"+child+").addBlurHandler(wid"+id+");");
+                            sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                            break;
+                        }
+                    }
+                    sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
+                }
+                sw.println("wid"+id+".setTableWidth(wid"+id+".getTableWidth()+\"px\");");
+                sw.println("wid"+id+".init();");
+                sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
+                //setDefaults(node,"wid"+id);
+                StringBuffer sb = new StringBuffer();
+                if (node.getAttributes().getNamedItem("style") != null){
+                    String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
+                    sw.println("wid"+id+".setStyleName(\""+styles[0]+"\");");
+                    for(int i = 1; i < styles.length; i++){
+                        sw.println("wid"+id+".addStyleName(\""+styles[i]+"\");");
+                    }
+                }
+                if (node.getAttributes().getNamedItem("enable") != null){
+                    sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+                }
+                
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+                sw.println("panel.addFocusHandler(wid"+id+");");
+                sw.println("wid"+id+".addFocusHandler(panel);");
+                
+                
+                //if(def != null)
+                    //def.panel.addClickHandler(table);
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.table.TableWidgetRed");
+                composer.addImport("org.openelis.gwt.widget.table.TableColumn");
+                composer.addImport("org.openelis.gwt.widget.table.TableView.VerticalScroll");
+                composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
+            }
+        });
     	/*
     	factoryMap.put("dropdown", new Factory(){
     		public void getNewInstance(Node node, int id){

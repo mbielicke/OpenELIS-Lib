@@ -134,7 +134,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 	}
 
 	public void setWidth(String width) {
-		intWidth = Util.stripUnits(width, "px");
+		intWidth = Util.stripUnits(width);
 		ap.setWidth(width);
 	}
 	

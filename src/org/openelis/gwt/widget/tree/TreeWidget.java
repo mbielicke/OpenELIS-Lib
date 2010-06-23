@@ -275,7 +275,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     		for(TreeColumn column : headers)
     			tw += column.getCurrentWidth();
     	}else
-    		tw = Util.stripUnits(width, "px");
+    		tw = Util.stripUnits(width);
     	
     	return tw;
     }
@@ -942,7 +942,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      */
     public boolean isEnabled(int index) {
         if(index < numRows())
-            return rows.get(index).enabled;
+            return true;
         return false;
     }
 

@@ -3,14 +3,14 @@ package org.openelis.gwt.widget.table;
 import java.util.ArrayList;
 
 
-public class TableDataRow {
+public class TableDataRow  {
     
     private static final long serialVersionUID = 1L;
     
     public ArrayList<TableDataCell> cells;
-    public Object data;
-    public String style;
-    public String display;
+    protected Object data;
+    protected String style;
+    protected String display;
     
 
     /**
@@ -19,11 +19,7 @@ public class TableDataRow {
      */
     public boolean shown = true;
     
-    /**
-     * Flag letting Widgets know if this DataSet is enabled and is available for
-     * selection by users.
-     */
-    public boolean enabled = true;
+
     
     /**
      * Default constructor

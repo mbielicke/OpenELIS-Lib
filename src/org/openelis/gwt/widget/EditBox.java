@@ -179,7 +179,7 @@ public class EditBox extends TextBox<String> {
         /*
          * set the Textbox to width - 16 to account for button.
          */
-        textbox.setWidth( (Util.stripUnits(width, "px") - 16) + "px");
+        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
     }
 
 

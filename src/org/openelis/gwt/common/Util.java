@@ -45,13 +45,22 @@ public class Util {
         return obj.toString();
     }
     
-    public static int stripUnits(String value, String... units) throws NumberFormatException {
-    	value = value.trim();
-    	for(String unit : units) {
-    		if(value.endsWith(unit))
-    			return Integer.parseInt(value.substring(0,value.length()-unit.length()));
+    public static int stripUnits(String value) throws NumberFormatException {
+        int i = 0;
+    	char ch;
+    	
+    	for(int j = 0 ; j < value.length(); j++) {
+    	    ch = value.substring(j,j).charAt(0);
+    		if(ch >= 0 && ch <= 9)
+    		    i = i * 10 + ch;
+    		else
+    		    break;
     	}
-    	return Integer.parseInt(value);
+    	return i;
+    }
+    
+    public static String addUnits(int value) {
+        return value+"px";
     }
     
     private static class UIFocusHandler implements FocusHandler, BlurHandler {

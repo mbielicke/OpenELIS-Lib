@@ -90,7 +90,7 @@ public class TreeDragController extends PickupDragController implements HasBefor
     
     @Override
     public void dragStart() {
-        ((TreeRow)context.draggable).dragItem.enabled = false;
+        //((TreeRow)context.draggable).dragItem.enabled = false;
         ((TreeRow)context.draggable).addStyleName(TreeView.disabledStyle);
         super.dragStart();
         ((TreeRow)context.draggable).removeStyleName("dragdrop-dragging");
@@ -109,7 +109,7 @@ public class TreeDragController extends PickupDragController implements HasBefor
     @Override
     public void dragEnd() {
         //context.draggable.removeStyleName("TreeHighlighted");
-        ((TreeRow)context.draggable).dragItem.enabled = true;
+        //((TreeRow)context.draggable).dragItem.enabled = true;
 		if(((TreeRow)context.draggable).controller.isRowDrawn(((TreeRow)context.draggable).dragModelIndex))
 			((TreeRow)context.draggable).controller.renderer.loadRow(((TreeRow)context.draggable).dragModelIndex);
         proxy = null;

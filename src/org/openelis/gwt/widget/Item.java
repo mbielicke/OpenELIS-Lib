@@ -17,6 +17,12 @@ import org.openelis.gwt.widget.table.TableDataRow;
 public class Item<T> extends TableDataRow {
     
     protected T key;
+    
+    /**
+     * Flag letting Widgets know if this DataSet is enabled and is available for
+     * selection by users.
+     */
+    protected boolean enabled = true;
 
     public Item() {
         
@@ -48,6 +54,14 @@ public class Item<T> extends TableDataRow {
         else if(key == null)
             return true;
         return key.equals(((Item<T>)obj).key);
+    }
+    
+    public boolean isEnabled() {
+        return enabled;
+    }
+    
+    public void setEnabled(boolean enabled) {
+        this.enabled =  enabled;
     }
 
 }
