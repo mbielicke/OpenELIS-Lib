@@ -45,10 +45,10 @@ import org.openelis.gwt.widget.redesign.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.RowDeletedHandler;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
-import org.openelis.gwt.widget.table.event.CellEditedEvent;
-import org.openelis.gwt.widget.table.event.CellEditedHandler;
+import org.openelis.gwt.widget.redesign.table.event.CellEditedEvent;
+import org.openelis.gwt.widget.redesign.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
-import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
+import org.openelis.gwt.widget.redesign.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
@@ -493,7 +493,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
         rows.remove(index);
         
-        view.refreshView(index, view.firstIndex+visibleRows);
+        //view.refreshView(index, view.firstVisibleRow+visibleRows);
         
         fireRowDeletedEvent(index, row);
            
@@ -867,27 +867,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Or if the index passed is in the view range refresh the row to make sure that the latest data
      * is shown (i.e. row Added before scroll size is hit).
      */
-    public void scrollToVisible(int index) {
-        int newFirst = -1;
-        
-        /*
-         * We do this here if table has not hit enough rows yet to scroll 
-         * to make sure the latest data in the model is displayed such as 
-         * when rows are added.
-         */
-        if(rows.size() < visibleRows) {
-            refreshRow(index);
-            return;
-        }
-        
-        if(index < view.firstIndex)
-            newFirst = index;
-        else if(index > view.firstIndex + visibleRows)
-            newFirst = index - visibleRows;
-       
-        if(newFirst > -1)
-            view.scrollBar.setScrollPosition(newFirst * rowHeight);
-       
+    public boolean scrollToVisible(int index) {
+        return view.scrollToVisible(index);
     }
     
     /**
@@ -900,7 +881,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Redraws data in the visible Rows of the table when model data is changed
      */
     public void refresh() {
-       view.refreshView(view.firstIndex,view.firstIndex+visibleRows); 
+       view.renderView(); 
     }
 
     /**

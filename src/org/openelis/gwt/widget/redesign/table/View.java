@@ -60,8 +60,8 @@ public class View extends Composite {
      */
     protected FlexTable       header;
     /**
-     * Scrollable area that contains flexTable and possibly header for horizontal
-     * scroll.
+     * Scrollable area that contains flexTable and possibly header for
+     * horizontal scroll.
      */
     protected ScrollPanel     scrollView;
     /**
@@ -73,7 +73,7 @@ public class View extends Composite {
      */
     protected HorizontalPanel outer;
 
-    protected int             firstVisibleRow,lastVisibleRow;
+    protected int             firstVisibleRow, lastVisibleRow;
 
     /**
      * Constructor that takes a reference to the table that will use this view
@@ -108,8 +108,8 @@ public class View extends Composite {
     protected void layout() {
         /*
          * This panel will be used only if the table contains a header. This is
-         * used to glue the Header and flexTable table together because ScrollPanel
-         * extends SimplePanel and can only have one widget.
+         * used to glue the Header and flexTable table together because
+         * ScrollPanel extends SimplePanel and can only have one widget.
          */
         VerticalPanel vp = null;
 
@@ -154,9 +154,9 @@ public class View extends Composite {
     }
 
     /**
-     * Will create the the necessary visible rows for the flexTable table depending
-     * on what is needed at the time. If model.size() < visibleRows then the
-     * number of rows created will equal model.size() else the number
+     * Will create the the necessary visible rows for the flexTable table
+     * depending on what is needed at the time. If model.size() < visibleRows
+     * then the number of rows created will equal model.size() else the number
      * visibleRows will be created for the flexTable table.
      */
     private void createRow() {
@@ -164,27 +164,28 @@ public class View extends Composite {
         for (int c = 0; c < table.getColumnCount(); c++ )
             flexTable.getColumnFormatter().setWidth(c, table.columnAt(c).getWidth() + "px");
     }
-    
 
-    private void renderView() {
+    protected void renderView() {
         int rc;
-        
+
         computeVisibleRows();
         /*
          * Create/Load Rows in the flexTable table
          */
         rc = 0;
-        for (int r = firstVisibleRow; r < lastVisibleRow; r++,rc++) {
+        for (int r = firstVisibleRow; r < lastVisibleRow; r++ , rc++ ) {
             /*
              * Create table row if needed
              */
             if (rc >= flexTable.getRowCount())
                 createRow();
-        
+
             for (int c = 0; c < table.getColumnCount(); c++ ) {
-                table.columnAt(c).getCellRenderer().render(flexTable, rc, c, table.getValueAt(r, c));
+                table.columnAt(c)
+                     .getCellRenderer()
+                     .render(flexTable, rc, c, table.getValueAt(r, c));
             }
-           
+
         }
 
         /*
@@ -198,14 +199,14 @@ public class View extends Composite {
 
     private void renderViewByDeleteAdd(int startIndex, int endIndex) {
         int rowsToScroll, newFirst = 0, modelStart, flexTableStart;
-
+        computeVisibleRows();
         /*
          * Delete and add Rows from either Top or Bottom depending on direction
          * of scroll. Also calc and set indexes needed to render the new rows.
          */
-        if (startIndex > firstIndex) {
-            rowsToScroll = startIndex - firstIndex;
-            newFirst = firstIndex + rowsToScroll;
+        if (startIndex > firstVisibleRow) {
+            rowsToScroll = startIndex - firstVisibleRow;
+            newFirst = firstVisibleRow + rowsToScroll;
             for (int i = 0; i < rowsToScroll; i++ ) {
                 flexTable.removeRow(0);
                 flexTable.insertRow(flexTable.getRowCount());
@@ -213,8 +214,8 @@ public class View extends Composite {
             modelStart = newFirst + table.getVisibleRows() - rowsToScroll;
             flexTableStart = table.getVisibleRows() - rowsToScroll;
         } else {
-            rowsToScroll = firstIndex - startIndex;
-            newFirst = firstIndex - rowsToScroll;
+            rowsToScroll = firstVisibleRow - startIndex;
+            newFirst = firstVisibleRow - rowsToScroll;
             for (int i = 0; i < rowsToScroll; i++ ) {
                 flexTable.removeRow(flexTable.getRowCount() - 1);
                 flexTable.insertRow(0);
@@ -230,7 +231,6 @@ public class View extends Composite {
             renderRow(flexTableStart + i, modelStart + i);
         }
 
-        firstIndex = newFirst;
     }
 
     private void renderViewBySetAll(int startIndex, int endIndex) {
@@ -247,7 +247,6 @@ public class View extends Composite {
 
             renderRow(i, startIndex + i);
         }
-        firstIndex = startIndex;
     }
 
     protected void renderRow(int row) {
@@ -316,8 +315,8 @@ public class View extends Composite {
 
         r = getFlexTableIndex(row);
 
-        table.columnAt(col).getCellEditor().startEditing(flexTable, r, col, table.getValueAt(row, col),
-                                                     event);
+        table.columnAt(col).getCellEditor().startEditing(flexTable, r, col,
+                                                         table.getValueAt(row, col), event);
     }
 
     protected Object finishEditing(int row, int col) {
@@ -336,10 +335,35 @@ public class View extends Composite {
 
         scrollBar.adjust(table.getVisibleRows() * height, table.getRowCount() * height);
     }
-    
+
     private void computeVisibleRows() {
         firstVisibleRow = scrollBar.getScrollPosition() / table.getRowHeight();
-        lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows(),table.getRowCount());
+        lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows(), table.getRowCount());
     }
 
+    protected boolean scrollToVisible(int modelIndex) {
+        int newFirst = -1;
+        computeVisibleRows();
+        /*
+         * We do this here if table has not hit enough rows yet to scroll to
+         * make sure the latest data in the model is displayed such as when rows
+         * are added.
+         */
+        if (table.getRowCount() < table.getVisibleRows()) {
+            renderRow(modelIndex);
+            return true;
+        }
+
+        if (modelIndex < firstVisibleRow)
+            newFirst = modelIndex;
+        else if (modelIndex > firstVisibleRow + table.getVisibleRows())
+            newFirst = modelIndex - table.getVisibleRows();
+
+        if (newFirst < 0)
+            return false;
+        
+        scrollBar.setScrollPosition(newFirst * table.getRowHeight());
+        
+        return true;
+    }
 }

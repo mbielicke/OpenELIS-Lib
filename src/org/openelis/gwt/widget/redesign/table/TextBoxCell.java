@@ -44,18 +44,16 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     
     public void render(FlexTable table, int row, int col, T value) {
         editor.setValue(value);
-        editor.getD
-        
+        table.setText(row, col, editor.getText());
     }
 
     public Object finishEditing() {
-        // TODO Auto-generated method stub
-        return null;
+        return editor.getValue();
     }
 
     public void startEditing(FlexTable table, int row, int col, T value, Event event) {
-        // TODO Auto-generated method stub
-        
+        editor.setValue(value);
+        table.setWidget(row, col, editor);
     }
 
 }
