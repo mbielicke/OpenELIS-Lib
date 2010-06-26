@@ -61,6 +61,7 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -80,7 +81,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     protected int editingRow, editingCol;
     
-    protected int rowHeight, visibleRows;
+    protected int rowHeight, visibleRows, width;
     /**
      * Model used by the Table
      */
@@ -138,6 +139,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setRowHeight(int rowHeight) {
         this.rowHeight = rowHeight;
+        layout();
     }
 
     /**
@@ -154,6 +156,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setVisibleRows(int visibleRows) {
         this.visibleRows = visibleRows;
+        layout();
     }
 
     /**
@@ -170,6 +173,11 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setModel(ArrayList<Row> model) {
         this.rows = model;
+        refresh();
+    }
+    
+    public int getRowCount() {
+        return rows.size();
     }
     
     /**
@@ -210,6 +218,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setVerticalScroll(Scrolling verticalScroll) {
         this.verticalScroll = verticalScroll;
+        layout();
     }
 
     /**
@@ -226,6 +235,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setHorizontalScroll(Scrolling horizontalScroll) {
         this.horizontalScroll = horizontalScroll;
+        layout();
     }
     
     /**
@@ -233,7 +243,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param width
      */
     public void setWidth(int width) {
-        //TODO
+        this.width = width;
+        layout();
         
     }
     
@@ -301,6 +312,10 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setHeader(boolean hasHeader) {
         this.hasHeader = hasHeader;
+    }
+    
+    public boolean hasHeader() {
+        return hasHeader;
     }
     
     /**
@@ -460,7 +475,13 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
     }
     
-    public Row deleteRowAt(int index) {
+    /**
+     * Method will delete a row from the model at the specified index and refersh the 
+     * view.
+     * @param index
+     * @return
+     */
+    public Row removeRowAt(int index) {
         Row row;
         
         finishEditing();
@@ -472,10 +493,24 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
         rows.remove(index);
         
-        //Finish this **********************************
+        view.refreshView(index, view.firstIndex+visibleRows);
+        
+        fireRowDeletedEvent(index, row);
            
-        return null;
+        return row;
        
+    }
+    
+    public void removeAllRows() {
+        finishEditing();
+        
+        clearRowSelection();
+        
+        rows = null;
+        
+        
+        
+        
     }
     
     
@@ -497,7 +532,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void selectRowAt(int index) {
         
-        if(index == -1 || !multiSelect) 
+        if(!multiSelect) 
             clearRowSelection();
         
         if(index > -1 && index < rows.size()) {
@@ -562,7 +597,19 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Clears all selections from the table.
      */
     public void clearRowSelection() {
+        int index;
+        if(!isAnyRowSelected())
+            return;
+                     
         finishEditing();
+        
+        index = selections.get(0);
+        if(isMultipleRowsSelected())
+            index = -1;
+        
+        if(!fireUnselectEvent(index))
+            return;
+        
         selections.clear();
     }
 
@@ -633,14 +680,14 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
     
     /**
      * Private method that will fire a CellEditedEvent after the value of a cell is 
-     * changed by a useer input.  Returns true as default.
+     * changed by a user input.  Returns true as default.
      * @param index
      * @return
      */
-    private boolean fireCellEditedEvent(int row, int col, Object value) {
+    private boolean fireCellEditedEvent(int row, int col) {
         
         if(!queryMode)
-            CellEditedEvent.fire(this,row,col,value);
+            CellEditedEvent.fire(this,row,col);
         
         return true;
     }    
@@ -731,6 +778,12 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         refreshCell(row,col);
     }
     
+    public void setRowAt(int index, Row row) {
+        finishEditing();
+        rows.set(index, row);
+        refreshRow(index);
+    }
+    
     /**
      * Returns the value of a cell in the model.
      * @param row
@@ -742,6 +795,10 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         return rows.get(row).getCell(col);
     }
     
+    public boolean startEditing(int row, int col) {
+        return startEditing(row,col,null);
+    }
+    
     /**
      * Method that sets focus to a cell in the Table and readies it
      * for user input.
@@ -749,18 +806,29 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param col
      * @return
      */
-    public boolean startEditing(int row, int col) {
+    private boolean startEditing(int row, int col, Event event) {
+        
+        if(!isRowSelected(row))
+            selectRowAt(row);
+        
+        if(!isRowSelected(row))
+            return false;
+        
         finishEditing();
         
-        if(!fireBeforeCellEditedEvent(row, col, getValueAt(row,col))) 
-            return editing = false;
+        if(!isEnabled())
+            return false;
         
-        view.switchToEditor(row, col);
+        if(!fireBeforeCellEditedEvent(row, col, getValueAt(row,col))) 
+            return false;
         
         editingRow = row;
         editingCol = col;
+        editing    = true;
         
-        return editing = true; 
+        view.startEditing(row, col, getValueAt(row,col), event);
+        
+        return true; 
         
     }
         
@@ -770,21 +838,26 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void finishEditing() {
         Object newValue, oldValue;
+        int row,col;
         
         if(!editing)
             return;
         
-        newValue = view.swtichToDisplay(editingRow, editingCol);
-        oldValue = getValueAt(editingRow, editingCol); 
-            
-        if(Util.isDifferent(newValue,oldValue)) {
-            rows.get(editingRow).setCell(editingCol,newValue);
-            fireCellEditedEvent(editingRow,editingCol,newValue);
-        }
+        editing    = false;
+        row        = editingRow;
+        col        = editingCol;
         
         editingRow = -1;
         editingCol = -1;
-        editing    = false;
+        
+        newValue = view.finishEditing(row, col);
+        oldValue = getValueAt(row, col); 
+            
+        if(Util.isDifferent(newValue,oldValue)) {
+            setValueAt(row, col, newValue);
+            fireCellEditedEvent(row,col);
+        }
+
         
     }
 
@@ -821,13 +894,13 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Redraws the table when any part of its physical definition is changed.
      */
     public void layout() {
-        view.draw();
+        view.layout();
     }
     /**
      * Redraws data in the visible Rows of the table when model data is changed
      */
     public void refresh() {
-       view.renderView(view.firstIndex); 
+       view.refreshView(view.firstIndex,view.firstIndex+visibleRows); 
     }
 
     /**

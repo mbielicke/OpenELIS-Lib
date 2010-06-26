@@ -28,6 +28,7 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
@@ -289,15 +290,16 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * Sets the value of this widget. Will fire a ValueChangeEvent if fireEvents
      * passed as true and the new value is not equals to old value
      */
-    public void setValue(String val, boolean fireEvents) {
-        String old;
+    public void setValue(String value, boolean fireEvents) {
 
-        old = value.getValue();
-        value = Value.getValue(val);
-        setStylePrimaryName(value.getStyle());
+        if(!Util.isDifferent(this.value, value))
+            return;
+        
+        this.value = Value.getValue(value);
+        setStylePrimaryName(this.value.getStyle());
 
         if (fireEvents)
-            ValueChangeEvent.fireIfNotEqual(this, old, value.getValue());
+            ValueChangeEvent.fire(this, this.value.getValue());
     }
 
     /**

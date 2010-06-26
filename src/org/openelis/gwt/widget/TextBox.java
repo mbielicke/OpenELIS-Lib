@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -300,9 +301,10 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * the value is different than what is currently stored.
      */
     public void setValue(T value, boolean fireEvents) {
-        T old;
 
-        old = this.value;
+        if(!Util.isDifferent(this.value, value))
+            return;
+
         this.value = value;
         if (value != null) {
             textbox.setText(helper.format(value));
@@ -311,7 +313,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         }
 
         if (fireEvents) {
-            ValueChangeEvent.fireIfNotEqual(this, old, value);
+            ValueChangeEvent.fire(this, value);
         }
     }
 

@@ -1,28 +1,28 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is OpenELIS code.
-* 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
-*/
+/**
+ * Exhibit A - UIRF Open-source Based Public Software License.
+ * 
+ * The contents of this file are subject to the UIRF Open-source Based Public
+ * Software License(the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * openelis.uhl.uiowa.edu
+ * 
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is OpenELIS code.
+ * 
+ * The Initial Developer of the Original Code is The University of Iowa.
+ * Portions created by The University of Iowa are Copyright 2006-2008. All
+ * Rights Reserved.
+ * 
+ * Contributor(s): ______________________________________.
+ * 
+ * Alternatively, the contents of this file marked "Separately-Licensed" may be
+ * used under the terms of a UIRF Software license ("UIRF Software License"), in
+ * which case the provisions of a UIRF Software License are applicable instead
+ * of those above.
+ */
 package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.common.Util;
@@ -35,6 +35,8 @@ import org.openelis.gwt.widget.redesign.table.Table.Scrolling;
 
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.gen2.table.event.client.TableEvent.Cell;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasValue;
@@ -50,15 +52,16 @@ public class View extends Composite {
      */
     protected Table           table;
     /**
-     * Table used to draw Table cells
+     * Table used to draw Table flexTable
      */
-    protected FlexTable       cells;
+    protected FlexTable       flexTable;
     /**
-     * Table used to draw Header cells for the table
+     * Table used to draw Header flexTable for the table
      */
     protected FlexTable       header;
     /**
-     * Scrollable area that contains cells and possibly header for horizontal scroll.
+     * Scrollable area that contains flexTable and possibly header for horizontal
+     * scroll.
      */
     protected ScrollPanel     scrollView;
     /**
@@ -69,19 +72,20 @@ public class View extends Composite {
      * Panel to hold Scrollable view area and ScrollBar together.
      */
     protected HorizontalPanel outer;
-    
-    protected int firstIndex;
-    
+
+    protected int             firstVisibleRow,lastVisibleRow;
+
     /**
-     * Constructor that takes a reference to the table that will use this view 
+     * Constructor that takes a reference to the table that will use this view
+     * 
      * @param table
      */
     public View(Table tbl) {
         this.table = tbl;
-        
+
         outer = new HorizontalPanel();
         initWidget(outer);
-        
+
         addDomHandler(new MouseWheelHandler() {
             public void onMouseWheel(MouseWheelEvent event) {
                 int pos, delta, height;
@@ -90,246 +94,252 @@ public class View extends Composite {
                 delta = event.getDeltaY();
                 height = table.getRowHeight();
 
-                if (delta < 0 && delta > - height)
+                if (delta < 0 && delta > -height)
                     delta = -height;
                 if (delta > 0 && delta < height)
                     delta = height;
                 scrollBar.setScrollPosition(pos + delta);
             }
         }, MouseWheelEvent.getType());
-        
-        draw();
+
+        layout();
     }
-    
-    public void draw() {
+
+    protected void layout() {
         /*
-         * This panel will be used only if the table contains a header.  This 
-         * is used to glue the Header and Cells table together because ScrollPanel 
+         * This panel will be used only if the table contains a header. This is
+         * used to glue the Header and flexTable table together because ScrollPanel
          * extends SimplePanel and can only have one widget.
          */
         VerticalPanel vp = null;
-        
-        //******** Set layout of view ***************
+
+        // ******** Set layout of view ***************
         outer.clear();
         scrollView = new ScrollPanel();
-        cells      = new FlexTable();
-        
-        if(table.hasHeader) {
-            vp     = new VerticalPanel();
-            header = new FlexTable();
-            cells  = new FlexTable();
+        flexTable = new FlexTable();
+
+        if (table.hasHeader()) {
+            vp = new VerticalPanel();
+            header = createHeader();
+            flexTable = new FlexTable();
             vp.add(header);
-            vp.add(cells);
+            vp.add(flexTable);
             vp.setSpacing(0);
             scrollView.setWidget(vp);
-        }else
-            scrollView.setWidget(cells);
-        
+        } else
+            scrollView.setWidget(flexTable);
+
         outer.add(scrollView);
-        
-        
-        
-        if(table.getVerticalScroll() != Scrolling.NEVER) {
+
+        if (table.getVerticalScroll() != Scrolling.NEVER) {
             scrollBar = new ScrollBar();
             scrollBar.addScrollBarHandler(new ScrollBarHandler() {
                 public void onScroll(ScrollBarEvent event) {
-                    int newFirstIndex;
-                    
-                    newFirstIndex = calcFirstIndex(scrollBar.getScrollPosition());
-                    
-                    renderView(newFirstIndex);
+                    renderView();
                 }
             });
             adjustScrollBar();
             outer.add(scrollBar);
         }
-        
-        //******* Create Header table if needed **************
-        if(table.hasHeader)
-            createHeader();
-        
-        //******* Create number of Rows needed to display ****
-        
-        createRows();
+
+        renderView();
     }
-    
+
     /**
-     * Method will create the Header table to be displayed by this view
-     * using information found in the Column list in the Table
+     * Method will create the Header table to be displayed by this view using
+     * information found in the Column list in the Table
      */
-    private void createHeader() {
-        
+    private FlexTable createHeader() {
+        return new FlexTable();
     }
-    
+
     /**
-     * Will create the the necessary visible rows for the cells table 
-     * depending on what is needed at the time.  If model.size() < visibleRows
-     * then the number of rows created will equal model.size() else the number 
-     * visibleRows will be created for the cells table.
+     * Will create the the necessary visible rows for the flexTable table depending
+     * on what is needed at the time. If model.size() < visibleRows then the
+     * number of rows created will equal model.size() else the number
+     * visibleRows will be created for the flexTable table.
      */
-    private void createRows() {
-        int rowsToCreate, rowsPresent;
-        
-        if(table.getModel().size() < table.getVisibleRows())
-            rowsToCreate = table.getModel().size();
-        else
-            rowsToCreate = table.getVisibleRows();
-        
-        rowsPresent = cells.getRowCount();
-        
-        if(rowsPresent < rowsToCreate){
-            for(int i = rowsPresent; i < rowsToCreate; i++) {
-                cells.insertRow(i);
-            }
-        }else {
-            for(int i = rowsPresent; i > rowsToCreate; i--) {
-                cells.removeRow(0);
-            }
-        }
-        
-        firstIndex = -1;
-        
-        renderView(0);
+    private void createRow() {
+        flexTable.insertRow(flexTable.getRowCount());
+        for (int c = 0; c < table.getColumnCount(); c++ )
+            flexTable.getColumnFormatter().setWidth(c, table.columnAt(c).getWidth() + "px");
     }
     
-    protected void renderView(int startIndex) {
-        if(firstIndex < 0 || (Math.abs(startIndex - firstIndex) > table.getVisibleRows() / 4))
-            renderViewBySetAll(startIndex);
-        else
-            renderViewByDeleteAdd(startIndex);
-    }
-    
-    private void renderViewByDeleteAdd(int startIndex) {
-        int rowsToScroll, newFirst = 0, modelStart, cellsStart;
+
+    private void renderView() {
+        int rc;
         
+        computeVisibleRows();
         /*
-         * Delete and add Rows from either Top or Bottom depending on direction of scroll. 
-         * Also calc and set indexes needed to render the new rows.
+         * Create/Load Rows in the flexTable table
          */
-        if(startIndex > firstIndex) {
+        rc = 0;
+        for (int r = firstVisibleRow; r < lastVisibleRow; r++,rc++) {
+            /*
+             * Create table row if needed
+             */
+            if (rc >= flexTable.getRowCount())
+                createRow();
+        
+            for (int c = 0; c < table.getColumnCount(); c++ ) {
+                table.columnAt(c).getCellRenderer().render(flexTable, rc, c, table.getValueAt(r, c));
+            }
+           
+        }
+
+        /*
+         * Remove extras at the end of the view if necessary
+         */
+        for (int i = flexTable.getRowCount() - 1; i > rc; i-- ) {
+            flexTable.removeRow(i);
+        }
+
+    }
+
+    private void renderViewByDeleteAdd(int startIndex, int endIndex) {
+        int rowsToScroll, newFirst = 0, modelStart, flexTableStart;
+
+        /*
+         * Delete and add Rows from either Top or Bottom depending on direction
+         * of scroll. Also calc and set indexes needed to render the new rows.
+         */
+        if (startIndex > firstIndex) {
             rowsToScroll = startIndex - firstIndex;
             newFirst = firstIndex + rowsToScroll;
-            for(int i = 0; i < rowsToScroll; i++) {
-                cells.removeRow(0);
-                cells.insertRow(cells.getRowCount());
+            for (int i = 0; i < rowsToScroll; i++ ) {
+                flexTable.removeRow(0);
+                flexTable.insertRow(flexTable.getRowCount());
             }
             modelStart = newFirst + table.getVisibleRows() - rowsToScroll;
-            cellsStart = table.getVisibleRows() - rowsToScroll;
-        }else{
+            flexTableStart = table.getVisibleRows() - rowsToScroll;
+        } else {
             rowsToScroll = firstIndex - startIndex;
             newFirst = firstIndex - rowsToScroll;
-            for(int i = 0; i < rowsToScroll; i++) {
-                cells.removeRow(cells.getRowCount() -1);
-                cells.insertRow(0);
+            for (int i = 0; i < rowsToScroll; i++ ) {
+                flexTable.removeRow(flexTable.getRowCount() - 1);
+                flexTable.insertRow(0);
             }
             modelStart = newFirst;
-            cellsStart = 0;            
+            flexTableStart = 0;
         }
-        
+
         /*
-         * Render the new rows with data from the model. 
+         * Render the new rows with data from the model.
          */
-        for(int i = 0; i < rowsToScroll; i++) {
-            renderRow(cellsStart+i,modelStart+i);
+        for (int i = 0; i < rowsToScroll; i++ ) {
+            renderRow(flexTableStart + i, modelStart + i);
         }
-            
-        
+
         firstIndex = newFirst;
     }
-    
-    private void renderViewBySetAll(int startIndex) {
-        for(int i = 0; i < cells.getRowCount(); i++) {
-            renderRow(i,startIndex+i);
+
+    private void renderViewBySetAll(int startIndex, int endIndex) {
+        for (int i = 0; i < table.getVisibleRows(); i++ ) {
+
+            if (i > endIndex) {
+                while (flexTable.getRowCount() > i)
+                    flexTable.removeRow(flexTable.getRowCount() - 1);
+                break;
+            }
+
+            if (i == flexTable.getRowCount())
+                createRow();
+
+            renderRow(i, startIndex + i);
         }
         firstIndex = startIndex;
     }
-    
-    
+
     protected void renderRow(int row) {
-        int cellsIndex;
-        
-        cellsIndex = getCellsIndex(row);
+        int flexTableIndex;
+
+        flexTableIndex = getFlexTableIndex(row);
         /*
-         * If table has not reached srollable length yet make sure that a row is present for the index
-         * passed such as when a row is added. 
+         * If table has not reached srollable length yet make sure that a row is
+         * present for the index passed such as when a row is added.
          */
-        if(cellsIndex == cells.getRowCount())
-            cells.insertRow(row);
-        
-        renderRow(cellsIndex,row);
+        if (flexTableIndex == flexTable.getRowCount())
+            flexTable.insertRow(row);
+
+        renderRow(flexTableIndex, row);
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void renderRow(int cellsIndex, int modelIndex) {
-        for(int col = 0; col < table.getColumnCount(); col++) {
-            renderCell(cellsIndex,col,modelIndex);
+    private void renderRow(int flexTableIndex, int modelIndex) {
+        for (int col = 0; col < table.getColumnCount(); col++ ) {
+            renderCell(flexTableIndex, col, modelIndex);
         }
     }
-    
+
     protected void renderCell(int row, int col) {
-        renderCell(getCellsIndex(row), col, row);
+        renderCell(getFlexTableIndex(row), col, row);
     }
-    
+
+    protected void refreshView(int startIndex, int endIndex) {
+        int flexTableIndex;
+        /*
+         * Adjust drawn rows if model size drops below the current rowCount
+         */
+        if (table.getRowCount() < flexTable.getRowCount())
+            flexTable.removeRow(flexTable.getRowCount() - 1);
+
+        /*
+         * adjust endIndex in case where last row is deleted
+         */
+        if (endIndex > table.getRowCount() - 1)
+            endIndex = table.getRowCount() - 1;
+
+        /*
+         * Loop through refreshing the drawn rows
+         */
+        for (int i = startIndex; i <= endIndex; i++ ) {
+            flexTableIndex = getFlexTableIndex(i);
+            if (flexTableIndex > -1 && flexTableIndex < flexTable.getRowCount())
+                renderRow(getFlexTableIndex(i), i);
+            else
+                break;
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
-    private void renderCell(int cellsIndex, int col, int modelIndex) {
-        Column column;
-        WidgetHelper helper;
-        Label display;
-        
-        column = table.columnAt(col);
-        helper = ((HasHelper)column.getEditor()).getHelper();
-        
-        display = new Label(helper.format(table.getValueAt(modelIndex, col)));
-        display.setWordWrap(false);
-        display.setWidth(Util.addUnits(column.getWidth()));
-        
-        cells.setWidget(cellsIndex,col,display);
-        
+    private void renderCell(int flexTableIndex, int col, int modelIndex) {
+
+        table.columnAt(col).getCellRenderer().render(flexTable, flexTableIndex, col,
+                                                     table.getValueAt(modelIndex, col));
+
     }
-    
+
     @SuppressWarnings("unchecked")
-    public void switchToEditor(int row, int col) {
-        int cellsIndex;
-        Widget editor;
-        
-        cellsIndex = getCellsIndex(row);
-        
-        editor     = table.columnAt(col).getEditor();
-        ((HasValue)editor).setValue(table.getValueAt(row, col));
-        
-        cells.setWidget(cellsIndex, col, editor);
+    public void startEditing(int row, int col, Object value, Event event) {
+        int r;
+
+        r = getFlexTableIndex(row);
+
+        table.columnAt(col).getCellEditor().startEditing(flexTable, r, col, table.getValueAt(row, col),
+                                                     event);
     }
-    
-    public Object swtichToDisplay(int row, int col) {
-        int cellsIndex;
-        Object value;
-        HasValue editor; 
-        
-        cellsIndex = getCellsIndex(row);
-        
-        editor = (HasValue)cells.getWidget(cellsIndex, col);
-        value = editor.getValue();
-        
-        renderCell(cellsIndex,col,row);
-        
-        return value;
+
+    protected Object finishEditing(int row, int col) {
+        return table.columnAt(col).getCellEditor().finishEditing();
     }
-    
-    private int getCellsIndex(int modelIndex) {
-        return modelIndex - firstIndex;
+
+    private int getFlexTableIndex(int modelIndex) {
+        computeVisibleRows();
+        return modelIndex - firstVisibleRow;
     }
-    
-    private int calcFirstIndex(int scrollPos) {
-        return scrollPos / table.getRowHeight();
-    }
-    
+
     public void adjustScrollBar() {
         int height;
-        
+
         height = table.getRowHeight();
-        
-        scrollBar.adjust(table.getVisibleRows() * height, table.getModel().size() * height);
+
+        scrollBar.adjust(table.getVisibleRows() * height, table.getRowCount() * height);
     }
     
+    private void computeVisibleRows() {
+        firstVisibleRow = scrollBar.getScrollPosition() / table.getRowHeight();
+        lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows(),table.getRowCount());
+    }
 
 }

@@ -487,8 +487,7 @@ public class Dropdown<T> extends TextBox<T> {
     public void setValue(T value, boolean fireEvents) {
         boolean validKey;
 
-        if ( ! ((this.value == null && value != null) ||
-            (this.value != null && !this.value.equals(value))))
+        if(!Util.isDifferent(this.value, value))
             return;
 
         if (value != null) {

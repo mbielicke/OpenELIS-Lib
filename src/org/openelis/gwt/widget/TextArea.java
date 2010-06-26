@@ -3,6 +3,7 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -293,9 +294,10 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
      * the value is different than what is currently stored.
      */
     public void setValue(String value, boolean fireEvents) {
-        String old;
 
-        old = this.value;
+        if(!Util.isDifferent(this.value, value))
+            return;
+        
         this.value = value;
         if (value != null) {
             textarea.setText(helper.format(value));
@@ -304,7 +306,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
         }
 
         if (fireEvents) {
-            ValueChangeEvent.fireIfNotEqual(this, old, value);
+            ValueChangeEvent.fire(this, value);
         }
     }
     

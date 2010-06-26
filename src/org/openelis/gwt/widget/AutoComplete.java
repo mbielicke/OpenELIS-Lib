@@ -458,8 +458,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     @Override
     public void setValue(T value, boolean fireEvents) {
 
-        if ( ! (this.value == null && value != null) ||
-            (this.value != null && !this.value.equals(value)))
+        if(!Util.isDifferent(this.value, value))
             return;
 
         if (value != null) {

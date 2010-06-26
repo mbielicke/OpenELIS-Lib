@@ -43,7 +43,9 @@ public class Column {
     /**
      * Editor widget used for this column
      */
-    protected Widget editor;
+    protected CellEditor editor;
+    
+    protected CellRenderer renderer;
     /**
      * name used to reference column and label for the Header 
      */
@@ -76,13 +78,13 @@ public class Column {
         resizable = true;
         width = 15;
         minWidth = 15;
-        editor = new TextBox<String>();
+       // editor = new TextBox<String>();
     }
 
     /**
      * Returns the Editor currently being used by this Column
      */
-    public Widget getEditor() {
+    public CellEditor getCellEditor() {
         return editor;
     }
 
@@ -90,7 +92,7 @@ public class Column {
      * Sets the Editor widget to be used by this Column.
      * @param editor
      */
-    public void setEditor(Widget editor) {
+    public void setCellEditor(CellEditor editor) {
         this.editor = editor;
     }
 
@@ -216,6 +218,10 @@ public class Column {
      */
     public void setResizable(boolean resizable) {
         this.resizable = resizable;
+    }
+    
+    public CellRenderer getCellRenderer() {
+        return renderer;
     }
 
 }
