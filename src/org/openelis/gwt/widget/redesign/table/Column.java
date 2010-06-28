@@ -149,18 +149,19 @@ public class Column {
      * @return
      */
     public int getWidth() {
+        /*
         int totalWidth,lastColumn;
        
         if(table == null)
             return minWidth;
         
         lastColumn = table.getColumnCount() - 1;
-        if(lastColumn >= 0 && table.columnAt(lastColumn) == this) {
+        if(lastColumn >= 0 && table.getColumnAt(lastColumn) == this) {
             totalWidth = table.getXofColumn(lastColumn);
             if(totalWidth + width < table.getTableWidth())
                 return table.getTableWidth() - totalWidth;
         }
-        
+        */
         return width;
     }
 
@@ -222,6 +223,10 @@ public class Column {
     
     public CellRenderer getCellRenderer() {
         return renderer;
+    }
+    
+    public void setCellRenderer(CellRenderer renderer) {
+        this.renderer = renderer;
     }
 
 }

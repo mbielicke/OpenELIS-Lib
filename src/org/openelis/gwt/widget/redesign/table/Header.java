@@ -25,36 +25,43 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import org.openelis.gwt.widget.TextBox;
-
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Label;
 
-public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
-
-    private TextBox<T> editor;
+public class Header extends Composite {
     
-    public TextBoxCell() {
+    protected FlexTable flexTable;
+    protected Table      table;
+    
+    
+    public Header(Table table) {
+        this.table = table;
+        flexTable = new FlexTable();
+        initWidget(flexTable);
+        layout();
+    }
+    
+    public void layout() {
+        int numCols,width = 0;
+        Column column;
         
-    }
-    
-    public void setEditor(TextBox<T> editor) {
-        this.editor = editor;
-    }
         
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
-        editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()+"px");
-        flexTable.setWidget(row, col, editor);
-    }
-
-    public T finishEditing() {
-        return editor.getValue();
-    }
-    
-    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
-        editor.setValue(value);
-        flexTable.setText(row, col, editor.getText());
+        numCols = table.getColumnCount();
+        
+        flexTable.insertRow(0);
+        
+        for(int i = 0; i < numCols; i++) {
+            column = table.getColumnAt(i);
+            flexTable.setText(0,i,column.getLabel());
+            flexTable.getColumnFormatter().setWidth(i,column.getWidth()+"px");
+            width += column.getWidth();
+            DOM.setStyleAttribute(flexTable.getCellFormatter().getElement(0, i), "overflow", "hidden");
+            
+        }
+        flexTable.setWidth(width+"px");
+        DOM.setElementProperty(flexTable.getRowFormatter().getElement(0), "height", table.getRowHeight()+"px");
     }
 
 }

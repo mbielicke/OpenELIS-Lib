@@ -29,6 +29,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 
 public interface CellRenderer<T> {
 
-    public void render(FlexTable table,int row,int col, T value);
+    public  void render(Table table, FlexTable flexTable,int row,int col, T value);
     
 }

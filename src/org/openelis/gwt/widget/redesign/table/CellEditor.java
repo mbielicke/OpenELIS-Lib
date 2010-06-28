@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 
 public interface CellEditor<T> {
     
-    public void startEditing(FlexTable table, int row, int col, T value, Event event);
+    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event);
     
-    public Object finishEditing();
+    public T finishEditing();
 }

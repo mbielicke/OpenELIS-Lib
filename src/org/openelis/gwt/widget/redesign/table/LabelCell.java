@@ -25,36 +25,35 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
 
-public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
-
-    private TextBox<T> editor;
+public class LabelCell<T> implements CellRenderer<T>, CellEditor<T> {
     
-    public TextBoxCell() {
-        
+    private Label<T>  editor;
+    
+    public LabelCell() {
+    
     }
     
-    public void setEditor(TextBox<T> editor) {
+    public void setEditor(Label<T> editor) {
         this.editor = editor;
     }
-        
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
+
+    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()+"px");
-        flexTable.setWidget(row, col, editor);
+        flexTable.setText(row,col,editor.getText());
     }
 
     public T finishEditing() {
         return editor.getValue();
     }
-    
-    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
+
+    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
         editor.setValue(value);
-        flexTable.setText(row, col, editor.getText());
+        flexTable.setText(row,col,editor.getText());
     }
 
 }

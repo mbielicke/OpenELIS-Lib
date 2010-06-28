@@ -122,6 +122,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         columns = new ArrayList<Column>(5);
         rows = null;
         view = new View(this);
+        initWidget(view);
         layout();
     }
     
@@ -173,11 +174,13 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setModel(ArrayList<Row> model) {
         this.rows = model;
-        refresh();
+        layout();
     }
     
     public int getRowCount() {
-        return rows.size();
+        if(rows != null)
+            return rows.size();
+        return 0;
     }
     
     /**
@@ -262,7 +265,9 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @return
      */
     public int getColumnCount() {
-        return columns.size();
+        if(columns != null)
+            return columns.size();
+        return 0;
     }
     
     /**
@@ -270,7 +275,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param index
      * @return
      */
-    public Column columnAt(int index) {
+    public Column getColumnAt(int index) {
         return columns.get(index);
     }
     
@@ -279,7 +284,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param index
      * @return
      */
-    public int columnByName(String name) {
+    public int getColumnByName(String name) {
         for(int i = 0; i < columns.size(); i++) {
             if(columns.get(i).name.equals(name))
                 return i;
@@ -303,8 +308,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @return
      */
     public int getTableWidth() {
-        //TODO
-        return -1;
+        return width;
     }
     
     /**
@@ -778,6 +782,11 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         refreshCell(row,col);
     }
     
+    /**
+     * Sets a row in the model at the passed index and refreshes the view.
+     * @param index
+     * @param row
+     */
     public void setRowAt(int index, Row row) {
         finishEditing();
         rows.set(index, row);
@@ -792,6 +801,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public Object getValueAt(int row, int col) {
         finishEditing();
+        if(rows == null)
+            return null;
         return rows.get(row).getCell(col);
     }
     
@@ -853,10 +864,13 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col); 
             
+        setValueAt(row, col, newValue);
+        
         if(Util.isDifferent(newValue,oldValue)) {
-            setValueAt(row, col, newValue);
             fireCellEditedEvent(row,col);
         }
+       
+
 
         
     }
@@ -889,7 +903,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param row
      */
     public void refreshRow(int row) {
-        view.renderRow(row);
+        //view.renderRow(row);
     }
     
     /**
@@ -898,7 +912,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param col
      */
     public void refreshCell(int row, int col) {
-        view.renderCell(row, col);
+       // view.renderCell(row, col);
     }
 
     // ************* Implementation of ScreenWidgetInt *************
