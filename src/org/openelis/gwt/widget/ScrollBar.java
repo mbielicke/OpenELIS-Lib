@@ -52,6 +52,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         setWidth("18px");
         setHeight("18px");
         setStyleName("TableVertScroll");
+        setAlwaysShowScrollBars(true);
         setWidget(ap);
         addScrollHandler(new ScrollHandler() {
             public void onScroll(ScrollEvent event) {
@@ -76,7 +77,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
             ap.setWidth(Util.addUnits(scrollSize));
         } else {
             setHeight(Util.addUnits(viewSize));
-            ap.setHeight(Util.addUnits(scrollSize));
+            ap.setHeight(Util.addUnits(Math.max(scrollSize,15)));
         }
     }
 

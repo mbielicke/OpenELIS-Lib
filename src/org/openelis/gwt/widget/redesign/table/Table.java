@@ -81,7 +81,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     protected int editingRow, editingCol;
     
-    protected int rowHeight, visibleRows, width;
+    protected int rowHeight, visibleRows, viewWidth, tableWidth;
     /**
      * Model used by the Table
      */
@@ -246,7 +246,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param width
      */
     public void setWidth(int width) {
-        this.width = width;
+        this.viewWidth = width;
         layout();
         
     }
@@ -258,6 +258,10 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
     @Override
     public void setWidth(String width) {
         setWidth(Util.stripUnits(width));
+    }
+    
+    public int getWidth() {
+        return viewWidth;
     }
     
     /**
@@ -307,8 +311,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Returns the width of the table
      * @return
      */
-    public int getTableWidth() {
-        return width;
+    protected int getTableWidth() {
+        return tableWidth;
     }
     
     /**
@@ -376,7 +380,6 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
         column = new Column(this,name,label);
         columns.add(index,column);
-        
         layout();
         
         return column;
@@ -398,7 +401,9 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param index
      */
     public void removeColumnAt(int index) {
-        columns.remove(index);
+        Column col;
+        
+        col = columns.remove(index);
         layout();
     }
     
@@ -512,8 +517,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
         rows = null;
         
-        
-        
+        view.renderView();
         
     }
     
@@ -889,6 +893,11 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Redraws the table when any part of its physical definition is changed.
      */
     public void layout() {
+        tableWidth = 0;
+        
+        for(Column column : columns)
+            tableWidth += column.getWidth();
+     
         view.layout();
     }
     /**

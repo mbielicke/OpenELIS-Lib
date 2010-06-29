@@ -25,43 +25,42 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Label;
 
 public class Header extends Composite {
     
-    protected FlexTable flexTable;
+    protected FlexTable  flexTable;
     protected Table      table;
     
     
     public Header(Table table) {
         this.table = table;
         flexTable = new FlexTable();
+        flexTable.setStyleName("Header");
         initWidget(flexTable);
         layout();
     }
     
     public void layout() {
-        int numCols,width = 0;
+        int numCols;
         Column column;
         
         
         numCols = table.getColumnCount();
         
-        flexTable.insertRow(0);
+        if(flexTable.getRowCount() <  1)
+            flexTable.insertRow(0);
+        
         
         for(int i = 0; i < numCols; i++) {
             column = table.getColumnAt(i);
             flexTable.setText(0,i,column.getLabel());
-            flexTable.getColumnFormatter().setWidth(i,column.getWidth()+"px");
-            width += column.getWidth();
-            DOM.setStyleAttribute(flexTable.getCellFormatter().getElement(0, i), "overflow", "hidden");
-            
+            flexTable.getColumnFormatter().setWidth(i,column.getWidth()+"px");            
         }
-        flexTable.setWidth(width+"px");
-        DOM.setElementProperty(flexTable.getRowFormatter().getElement(0), "height", table.getRowHeight()+"px");
+        flexTable.setWidth(table.getTableWidth()+"px");
+        flexTable.getCellFormatter().setHeight(0, 0, table.getRowHeight()+"px");
+        
     }
 
 }
