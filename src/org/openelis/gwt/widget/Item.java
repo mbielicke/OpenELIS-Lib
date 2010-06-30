@@ -1,9 +1,6 @@
 package org.openelis.gwt.widget;
 
-import java.util.ArrayList;
-
-import org.openelis.gwt.widget.table.TableDataCell;
-import org.openelis.gwt.widget.table.TableDataRow;
+import org.openelis.gwt.widget.redesign.table.Row;
 
 /**
  * This class is used by Dropdown and Autocomplete widgets. 
@@ -14,7 +11,7 @@ import org.openelis.gwt.widget.table.TableDataRow;
  *
  * @param <T>
  */
-public class Item<T> extends TableDataRow {
+public class Item<T> extends Row {
     
     protected T key;
     

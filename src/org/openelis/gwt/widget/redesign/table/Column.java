@@ -43,9 +43,9 @@ public class Column {
     /**
      * Editor widget used for this column
      */
-    protected CellEditor editor;
+    protected CellEditor editor = new LabelCell<String>();
     
-    protected CellRenderer renderer;
+    protected CellRenderer renderer = new LabelCell<String>();
     /**
      * name used to reference column and label for the Header 
      */

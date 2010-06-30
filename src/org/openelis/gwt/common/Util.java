@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.user.client.Window;
 
 public class Util {
 
@@ -50,9 +51,9 @@ public class Util {
     	char ch;
     	
     	for(int j = 0 ; j < value.length(); j++) {
-    	    ch = value.substring(j,j).charAt(0);
-    		if(ch >= 0 && ch <= 9)
-    		    i = i * 10 + ch;
+    	    ch = value.substring(j,j+1).charAt(0);
+    		if(ch >= '0' && ch <= '9')
+    		    i = i * 10 + Integer.parseInt(String.valueOf(ch));
     		else
     		    break;
     	}

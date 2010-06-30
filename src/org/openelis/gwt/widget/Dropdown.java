@@ -33,9 +33,8 @@ import java.util.HashMap;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.widget.table.TableDataRow;
-import org.openelis.gwt.widget.table.TableRow;
-import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.redesign.table.Row;
+import org.openelis.gwt.widget.redesign.table.Table;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -56,6 +55,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -75,7 +75,7 @@ public class Dropdown<T> extends TextBox<T> {
      */
     protected HorizontalPanel       hp;
     protected Button                button;
-    protected TableWidget           table;
+    protected Table                 table;
     protected PopupPanel            popup;
     protected int                   cellHeight = 19, itemCount;
     /**
@@ -99,7 +99,7 @@ public class Dropdown<T> extends TextBox<T> {
      * 
      */
     public interface Renderer {
-        public String getDisplay(TableDataRow row);
+        public String getDisplay(Row row);
     }
 
     /**
@@ -220,7 +220,7 @@ public class Dropdown<T> extends TextBox<T> {
          * Scroll if needed to make selection visible
          */
         if (getSelectedIndex() > 0)
-            table.scrollToVisible();
+            table.scrollToVisible(getSelectedIndex());
     }
 
     /**
@@ -254,6 +254,7 @@ public class Dropdown<T> extends TextBox<T> {
         /*
          * set the Textbox to width - 16 to account for button.
          */
+        
         textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
 
     }
@@ -291,17 +292,17 @@ public class Dropdown<T> extends TextBox<T> {
      * 
      * @param table
      */
-    public void setPopupContext(TableWidget tableDef) {
+    public void setPopupContext(Table tableDef) {
         this.table = tableDef;
-        table.isDropdown = true;
+        table.setTableStyle("DropdownTable");
 
         /*
          * This handler will will cancel the selection if the item has been
          * disabled.
          */
-        table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
-            public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
-                if ( !((Item)event.getItem().row).isEnabled())
+        table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+                if (!((Item)table.getModel().get(event.getItem())).isEnabled())
                     event.cancel();
             }
         });
@@ -310,13 +311,13 @@ public class Dropdown<T> extends TextBox<T> {
          * This handler will catch the events when the user clicks on rows in
          * the table.
          */
-        table.addSelectionHandler(new SelectionHandler<TableRow>() {
-            public void onSelection(SelectionEvent<TableRow> event) {
+        table.addSelectionHandler(new SelectionHandler<Integer>() {
+            public void onSelection(SelectionEvent<Integer> event) {
                 /*
                  * Close popup if not in multiSelect mode or if we are in
                  * multiSelect but the ctrl or shift is not held
                  */
-                if ( !table.multiSelect || ( !table.ctrlKey && !table.shiftKey))
+                if ( !table.isMultipleSelectionAllowed())// || ( !table.ctrlKey && !table.shiftKey))
                     popup.hide();
 
                 setDisplay();
@@ -342,18 +343,7 @@ public class Dropdown<T> extends TextBox<T> {
     public void setModel(ArrayList<Item<T>> model) {
         assert table != null;
 
-        /*
-         * If model is smaller than maxRows then we want to reset maxRows so the
-         * table is the correct size.
-         */
-        if (itemCount > model.size()) 
-            table.setMaxRows(model.size());
-        else
-            table.setMaxRows(itemCount);
-
-        table.view.setHeight(table.getMaxRows() * cellHeight);
-
-        table.load(model);
+        table.setModel(model);
 
         createKeyHash(model);
 
@@ -366,7 +356,7 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Item<T>> getModel() {
-        return (ArrayList<Item<T>>)table.getData();
+        return (ArrayList<Item<T>>)table.getModel();
     }
 
     /**
@@ -376,7 +366,7 @@ public class Dropdown<T> extends TextBox<T> {
      * @param index
      */
     public void setSelectedIndex(int index) {
-        table.selectRow(index);
+        table.selectRowAt(index);
         textbox.setText(renderer.getDisplay(getSelectedItem()));
     }
 
@@ -396,7 +386,7 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public Item<T> getSelectedItem() {
-        return (Item<T>)table.getSelection();
+        return (Item<T>)table.getModel().get(table.getSelectedRow());
     }
 
     /**
@@ -406,7 +396,16 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Item<T>> getSelectedItems() {
-        return (ArrayList<Item<T>>)table.getSelections();
+        ArrayList<Item<T>> items = null;
+        
+        if(!table.isAnyRowSelected())
+            return null;
+        
+        items = new ArrayList<Item<T>>();
+        for(int i = 0; i < table.getSelectedRows().length; i++) {
+            items.add((Item<T>)table.getModel().get(table.getSelectedRows()[i]));
+        }
+        return items;
     }
 
     /**
@@ -418,7 +417,7 @@ public class Dropdown<T> extends TextBox<T> {
     public void setValues(T... values) {
         StringBuffer sb;
         ArrayList<Item<T>> items;
-
+        /*
         if (table.multiSelect)
             table.ctrlKey = true;
         table.clearSelections();
@@ -437,6 +436,7 @@ public class Dropdown<T> extends TextBox<T> {
             textbox.setText("");
 
         table.ctrlKey = false;
+        */
     }
 
     /**
@@ -445,7 +445,7 @@ public class Dropdown<T> extends TextBox<T> {
      * @param multi
      */
     public void enableMultiSelect(boolean multi) {
-        table.multiSelect(multi);
+        table.setAllowMultipleSelection(multi);
     }
 
     /**
@@ -469,7 +469,7 @@ public class Dropdown<T> extends TextBox<T> {
         if (isEnabled() == enabled)
             return;
         button.setEnabled(enabled);
-        table.enable(enabled);
+        table.setEnabled(enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
@@ -494,10 +494,10 @@ public class Dropdown<T> extends TextBox<T> {
             validKey = keyHash.containsKey(value);
             assert validKey : "Key not found in Item list";
 
-            table.selectRow(keyHash.get(value));
+            table.selectRowAt(keyHash.get(value));
             textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
-            table.selectRow( -1);
+            table.selectRowAt( -1);
             textbox.setText("");
         }
 
@@ -655,10 +655,10 @@ public class Dropdown<T> extends TextBox<T> {
 
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_CTRL:
-                    table.ctrlKey = true;
+                    //table.ctrlKey = true;
                     break;
                 case KeyCodes.KEY_SHIFT:
-                    table.shiftKey = true;
+                    //table.shiftKey = true;
                     break;
                 case KeyCodes.KEY_TAB:
                     if (popup != null && popup.isShowing())
@@ -688,20 +688,20 @@ public class Dropdown<T> extends TextBox<T> {
             String text;
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_CTRL:
-                    table.ctrlKey = false;
+                    //table.ctrlKey = false;
                     break;
                 case KeyCodes.KEY_SHIFT:
-                    table.shiftKey = false;
+                    //table.shiftKey = false;
                     break;
                 case KeyCodes.KEY_DOWN:
-                    table.selectRow(findNextActive(table.getSelectedRow()));
-                    table.scrollToVisible();
+                    table.selectRowAt(findNextActive(table.getSelectedRow()));
+                    //table.scrollToVisible(table.get);
                     setDisplay();
                     event.stopPropagation();
                     break;
                 case KeyCodes.KEY_UP:
-                    table.selectRow(findPrevActive(table.getSelectedRow()));
-                    table.scrollToVisible();
+                    table.selectRowAt(findPrevActive(table.getSelectedRow()));
+                    //table.scrollToVisible();
                     setDisplay();
                     event.stopPropagation();
                     break;
@@ -754,10 +754,10 @@ public class Dropdown<T> extends TextBox<T> {
             int next;
 
             next = index + 1;
-            while (next < table.numRows() && !table.isEnabled(next))
+            while (next < table.getRowCount() && !((Item<T>)table.getModel().get(next)).isEnabled())
                 next++ ;
 
-            if (next < table.numRows())
+            if (next < table.getRowCount())
                 return next;
 
             return index;
@@ -774,7 +774,7 @@ public class Dropdown<T> extends TextBox<T> {
             int prev;
 
             prev = index - 1;
-            while (prev > -1 && !table.isEnabled(prev))
+            while (prev > -1 && !((Item<T>)table.getModel().get(prev)).isEnabled())
                 prev-- ;
 
             if (prev > -1)
@@ -791,7 +791,7 @@ public class Dropdown<T> extends TextBox<T> {
      * 
      */
     protected class DefaultRenderer implements Renderer {
-        public String getDisplay(TableDataRow row) {
+        public String getDisplay(Row row) {
             return row.getCells().get(0).toString();
         }
     }

@@ -32,9 +32,8 @@ import org.openelis.gwt.common.Util;
 import org.openelis.gwt.event.GetMatchesEvent;
 import org.openelis.gwt.event.GetMatchesHandler;
 import org.openelis.gwt.event.HasGetMatchesHandlers;
-import org.openelis.gwt.widget.table.TableDataRow;
-import org.openelis.gwt.widget.table.TableRow;
-import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.redesign.table.Row;
+import org.openelis.gwt.widget.redesign.table.Table;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -75,7 +74,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     protected HorizontalPanel hp;
     protected Button          button;
-    protected TableWidget     table;
+    protected Table           table;
     protected PopupPanel      popup;
     protected int             cellHeight = 21, delay = 350, itemCount = 10;
     protected Timer           timer;
@@ -93,7 +92,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * 
      */
     public interface Renderer {
-        public String getDisplay(TableDataRow row);
+        public String getDisplay(Row row);
     }
 
     /**
@@ -242,7 +241,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          * Scroll if needed to make selection visible
          */
         if (getSelectedIndex() > 0)
-            table.scrollToVisible();
+            table.scrollToVisible(getSelectedIndex());
     }
 
     /**
@@ -292,16 +291,16 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * 
      * @param table
      */
-    public void setPopupContext(TableWidget tableDef) {
+    public void setPopupContext(Table tableDef) {
         this.table = tableDef;
 
         /*
          * This handler will will cancel the selection if the item has been
          * disabled.
          */
-        table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
-            public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
-                if ( !((Item)event.getItem().row).isEnabled())
+        table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+                if ( !((Item<T>)table.getModel().get(event.getItem())).isEnabled())
                     event.cancel();
             }
         });
@@ -310,8 +309,8 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          * This handler will catch the events when the user clicks on rows in
          * the table.
          */
-        table.addSelectionHandler(new SelectionHandler<TableRow>() {
-            public void onSelection(SelectionEvent<TableRow> event) {
+        table.addSelectionHandler(new SelectionHandler<Integer>() {
+            public void onSelection(SelectionEvent<Integer> event) {
                 popup.hide();
                 setDisplay();
 
@@ -329,7 +328,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * that Autocomplete always uses a table even for one column.
      * @return
      */
-    public TableWidget getPopupContext() {
+    public Table getPopupContext() {
         return table;
     }
 
@@ -341,18 +340,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     public void setModel(ArrayList<Item<T>> model) {
         assert table != null;
 
-        /*
-         * If model is smaller than maxRows then we want to reset maxRows so the
-         * table is the correct size.
-         */
-        if (itemCount > model.size()) 
-            table.setMaxRows(model.size());
-        else
-            table.setMaxRows(itemCount);
-//TO-DO move calculation to Table method.
-        table.view.setHeight(table.getMaxRows() * cellHeight);
-
-        table.load(model);
+        table.setModel(model);
         
     }
 
@@ -363,7 +351,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Item<T>> getModel() {
-        return (ArrayList<Item<T>>)table.getData();
+        return (ArrayList<Item<T>>)table.getModel();
     }
 
     /**
@@ -373,7 +361,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * @param index
      */
     public void setSelectedIndex(int index) {
-        table.selectRow(index);
+        table.selectRowAt(index);
         if(getSelectedIndex() > -1)
             textbox.setText(renderer.getDisplay(getSelectedItem()));
         else
@@ -396,7 +384,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     @SuppressWarnings("unchecked")
     public Item<T> getSelectedItem() {
-        return (Item<T>)table.getSelection();
+        return (Item<T>)table.getModel().get(getSelectedIndex());
     }
 
     /**
@@ -430,7 +418,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
         if (isEnabled() == enabled)
             return;
         button.setEnabled(enabled);
-        table.enable(enabled);
+        table.setEnabled(enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
@@ -464,7 +452,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
         if (value != null) {
             textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
-            table.selectRow( -1);
+            table.selectRowAt( -1);
             textbox.setText("");
         }
 
@@ -548,16 +536,14 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_DOWN:
                     if (popup.isShowing()) {
-                        table.selectRow(findNextActive(table.getSelectedRow()));
-                        table.scrollToVisible();
+                        table.selectRowAt(findNextActive(table.getSelectedRow()));
                         setDisplay();
                         event.stopPropagation();
                     }
                     break;
                 case KeyCodes.KEY_UP:
                     if (popup.isShowing()) {
-                        table.selectRow(findPrevActive(table.getSelectedRow()));
-                        table.scrollToVisible();
+                        table.selectRowAt(findPrevActive(table.getSelectedRow()));
                         setDisplay();
                         event.stopPropagation();
                     }
@@ -600,10 +586,10 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
             int next;
 
             next = index + 1;
-            while (next < table.numRows() && !table.isEnabled(next))
+            while (next < table.getRowCount() && !((Item)table.getModel().get(next)).isEnabled())
                 next++ ;
 
-            if (next < table.numRows())
+            if (next < table.getRowCount())
                 return next;
 
             return index;
@@ -620,7 +606,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
             int prev;
 
             prev = index - 1;
-            while (prev > -1 && !table.isEnabled(prev))
+            while (prev > -1 && !((Item)table.getModel().get(prev)).isEnabled())
                 prev-- ;
 
             if (prev > -1)
@@ -637,7 +623,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * 
      */
     protected class DefaultRenderer implements Renderer {
-        public String getDisplay(TableDataRow row) {
+        public String getDisplay(Row row) {
             return row.getCells().get(0).toString();
         }
     }

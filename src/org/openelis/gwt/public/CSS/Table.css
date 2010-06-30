@@ -53,3 +53,28 @@
 	font-size: 10px;
 	padding: 1px 1px 0px;	
 }
+
+.DropdownTable {
+	background: #d8d8d8;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	table-layout : fixed;	
+	spacing : 1px;
+	padding : 0;
+	border-collapse : collapse;
+	
+}
+
+.DropdownTable tr {
+	background: white;
+}
+
+.DropdownTable td {
+	overflow : hidden;
+	white-space : nowrap;
+	color: black;
+	cursor: pointer;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	padding: 1px 1px 0px;
+}

@@ -117,8 +117,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         editing = false;
         hasFocus = false;
         queryMode = false;
-        verticalScroll = Scrolling.NEVER;
-        horizontalScroll = Scrolling.NEVER;
+        verticalScroll = Scrolling.ALWAYS;
+        horizontalScroll = Scrolling.ALWAYS;
         selections = new ArrayList<Integer>(5);
         columns = new ArrayList<Column>(5);
         rows = null;
@@ -165,7 +165,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Returns the data model currently being displayed by this table.
      * @return
      */
-    public ArrayList<Row> getModel() {
+    public ArrayList<? extends Row> getModel() {
         return rows;
     }
 
@@ -173,8 +173,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * Sets the data model to be displayed by this table.
      * @param model
      */
-    public void setModel(ArrayList<Row> model) {
-        this.rows = model;
+    public void setModel(ArrayList<? extends Row> model) {
+        this.rows = (ArrayList<Row>)model;
         layout();
     }
     
@@ -343,6 +343,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         layout();
     }
     
+   
+    
     /**
      * Creates and Adds a Column at the end of the column list with passed name
      * and header label in the params.
@@ -383,7 +385,9 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         Column column;
         
         column = new Column(this,name,label);
+                
         columns.add(index,column);
+        
         layout();
         
         return column;
@@ -795,7 +799,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param index
      * @param row
      */
-    public void setRowAt(int index, Row row) {
+    public  void setRowAt(int index, Row row) {
         finishEditing();
         rows.set(index, row);
         refreshRow(index);

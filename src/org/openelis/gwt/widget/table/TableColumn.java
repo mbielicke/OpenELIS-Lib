@@ -129,12 +129,14 @@ public class TableColumn {
     				if(val == null)
     					val = "";
     			}else{
-    			    Item vrow = (Item)cell.getValue();
+    			    /*
+    			    TableDataRow vrow = (TableDataRow)cell.getValue();
     				if(vrow  != null)
     					((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
     				else
     					((AutoComplete)colWidget).setValue(null,"");
     				val = ((AutoComplete)colWidget).getDisplay();
+    				*/
     			}
     		}else if(colWidget instanceof Dropdown){
     			if(cell.getValue() instanceof ArrayList)
@@ -202,6 +204,7 @@ public class TableColumn {
     			if(controller.queryMode){
     				((Label)widget).setText((String)cell.getValue());
     			}else{
+    			    /*
     				Item vrow = (Item)cell.getValue();
     				if(vrow != null)
     					((AutoComplete)colWidget).setValue(vrow.getKey(), vrow.display);
@@ -209,6 +212,7 @@ public class TableColumn {
     					((AutoComplete)colWidget).setValue(null,"");
     			
     				((Label)widget).setText(((AutoComplete)colWidget).getDisplay());
+    				*/
     			}
         	}else if(colWidget instanceof Dropdown){
         		if(cell.getValue() instanceof ArrayList)
@@ -263,11 +267,13 @@ public class TableColumn {
     		if(controller.queryMode){
     			//((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
     		}else{
+    		    /*
     			Item vrow =  (Item)cell.getValue();
     			if(vrow != null)
     				((AutoComplete)colWidget).setValue(vrow.getKey(),vrow.display);
     			else
     				((AutoComplete)colWidget).setValue(null,"");
+    		   */
     		}
     	}else if(colWidget instanceof Dropdown){
     		if(cell.getValue() instanceof ArrayList)

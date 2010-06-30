@@ -8,9 +8,9 @@ public class TableDataRow  {
     private static final long serialVersionUID = 1L;
     
     public ArrayList<TableDataCell> cells;
-    protected Object data;
-    protected String style;
-    protected String display;
+    public Object data;
+    public String style;
+    public String display;
     
 
     /**

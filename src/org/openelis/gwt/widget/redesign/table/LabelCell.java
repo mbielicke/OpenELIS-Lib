@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 
 public class LabelCell<T> implements CellRenderer<T>, CellEditor<T> {
     
-    private Label<T>  editor;
+    private Label<T>  editor = (Label<T>)new Label<String>();
     
     public LabelCell() {
     

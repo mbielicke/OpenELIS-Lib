@@ -157,19 +157,11 @@ public class View extends Composite {
             outer.setCellHorizontalAlignment(scrollBar, HasHorizontalAlignment.ALIGN_LEFT);
         }
 		if(scrollBar != null)
-			scrollView.setWidth(table.getWidth() - 18+"px");
+			scrollView.setWidth(Math.max(table.getWidth() - 18,0)+"px");
 		else
 			scrollView.setWidth(table.getWidth()+"px");
 		
         scrollView.setHeight("100%");
-    
-        DeferredCommand.addCommand(new Command() {
-        	public void execute() {
-        		scrollView.setHeight(scrollView.getOffsetHeight()+"px");
-        		if(scrollBar != null)
-        			scrollView.setWidth(table.getWidth() - scrollBar.getOffsetWidth()+"px");
-        	}
-        });
         
         renderView();
     }
@@ -287,10 +279,10 @@ public class View extends Composite {
     private void computeVisibleRows() {
         if(scrollBar != null) {
             firstVisibleRow = scrollBar.getScrollPosition() / table.getRowHeight();
-            lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows()-1, table.getRowCount() -1);
+            lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows()-1, table.getRowCount()-1);
         }else{
             firstVisibleRow = 0;
-            lastVisibleRow = Math.min(table.getVisibleRows() - 1,table.getRowCount());
+            lastVisibleRow = Math.min(table.getVisibleRows() - 1,table.getRowCount()-1);
         }
         
     
@@ -311,5 +303,15 @@ public class View extends Composite {
         scrollBar.setScrollPosition(newFirst * table.getRowHeight());
         
         return true;
+    }
+    
+    @Override
+    protected void onAttach() {
+        super.onAttach();
+        
+        scrollView.setHeight(scrollView.getOffsetHeight()+"px");
+        if(scrollBar != null)
+            scrollView.setWidth(table.getWidth() - scrollBar.getOffsetWidth()+"px");
+
     }
 }
