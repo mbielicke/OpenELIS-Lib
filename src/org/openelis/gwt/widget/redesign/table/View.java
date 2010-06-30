@@ -30,16 +30,21 @@ import org.openelis.gwt.event.ScrollBarHandler;
 import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.redesign.table.Table.Scrolling;
 
-import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 public class View extends Composite {
     /**
@@ -114,8 +119,15 @@ public class View extends Composite {
         scrollView = new ScrollPanel();
         
         flexTable = new FlexTable();
-        flexTable.setStyleName("Table");
+        flexTable.setStyleName(table.TABLE_STYLE);
         flexTable.setWidth(table.getTableWidth()+"px");
+        flexTable.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Cell cell = flexTable.getCellForEvent(event);
+				computeVisibleRows();
+				table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex());
+			}
+		});
         
         if (table.hasHeader()) {
             vp = new VerticalPanel();
@@ -138,16 +150,30 @@ public class View extends Composite {
             });
             adjustScrollBar();
             outer.add(scrollBar);
-            outer.setCellVerticalAlignment(scrollBar, HasVerticalAlignment.ALIGN_MIDDLE);
+            
+            if(table.hasHeader)
+            	outer.setCellVerticalAlignment(scrollBar, HasVerticalAlignment.ALIGN_MIDDLE);
+            
+            outer.setCellHorizontalAlignment(scrollBar, HasHorizontalAlignment.ALIGN_LEFT);
         }
+		if(scrollBar != null)
+			scrollView.setWidth(table.getWidth() - 18+"px");
+		else
+			scrollView.setWidth(table.getWidth()+"px");
+		
+        scrollView.setHeight("100%");
+    
+        DeferredCommand.addCommand(new Command() {
+        	public void execute() {
+        		scrollView.setHeight(scrollView.getOffsetHeight()+"px");
+        		if(scrollBar != null)
+        			scrollView.setWidth(table.getWidth() - scrollBar.getOffsetWidth()+"px");
+        	}
+        });
         
-        scrollView.setWidth(table.getWidth()+"px");
-        
-        scrollHeight = table.hasHeader ? (table.getVisibleRows() + 1) * table.getRowHeight() : table.getVisibleRows() * table.getRowHeight(); 
-        scrollView.setHeight(table.getWidth() < table.getTableWidth() ? scrollHeight + 18 +"px" : scrollHeight+"px");
-
         renderView();
     }
+    
 
     /**
      * Method will create the Header table to be displayed by this view using
@@ -205,6 +231,11 @@ public class View extends Composite {
         
         adjustScrollBar();
 
+    }
+    
+    protected void renderCell(int row, int col) {
+    	computeVisibleRows();	
+    	renderCell(getFlexTableIndex(row),col,row);
     }
     
     @SuppressWarnings("unchecked")
