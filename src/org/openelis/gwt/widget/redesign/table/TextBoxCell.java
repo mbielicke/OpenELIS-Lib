@@ -40,12 +40,14 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     
     public void setEditor(TextBox<T> editor) {
         this.editor = editor;
+        editor.setEnabled(true);
     }
         
     public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
         editor.setValue(value);
         editor.setWidth(table.getColumnAt(col).getWidth()+"px");
         flexTable.setWidget(row, col, editor);
+        editor.setFocus(true);
     }
 
     public T finishEditing() {
