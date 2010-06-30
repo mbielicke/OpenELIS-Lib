@@ -35,8 +35,11 @@ import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.redesign.table.event.CellEditedEvent;
+import org.openelis.gwt.widget.redesign.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.redesign.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasRowDeletedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.RowAddedEvent;
@@ -45,10 +48,7 @@ import org.openelis.gwt.widget.redesign.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.RowDeletedHandler;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
-import org.openelis.gwt.widget.redesign.table.event.CellEditedEvent;
-import org.openelis.gwt.widget.redesign.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
-import org.openelis.gwt.widget.redesign.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
@@ -63,7 +63,6 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Table extends Composite implements ScreenWidgetInt, Queryable,
                                                                  HasBeforeSelectionHandlers<Integer>,
@@ -74,7 +73,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
                                                                  HasBeforeRowAddedHandlers,
                                                                  HasRowAddedHandlers, 
                                                                  HasBeforeRowDeletedHandlers,
-                                                                 HasRowDeletedHandlers {
+                                                                 HasRowDeletedHandlers{
     
     /**
      * Cell that is currently being edited.
@@ -104,6 +103,8 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
     protected Scrolling horizontalScroll;
     
     protected View view;
+    
+    protected String TABLE_STYLE = "Table";
    
     
     public Table() {
@@ -264,6 +265,9 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         return viewWidth;
     }
     
+    public void setTableStyle(String style) {
+    	TABLE_STYLE = style;
+    }
     /**
      * Returns the number of columns used in this Table
      * @return
@@ -823,13 +827,14 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     private boolean startEditing(int row, int col, Event event) {
         
+    	finishEditing();
+    	
         if(!isRowSelected(row))
             selectRowAt(row);
         
         if(!isRowSelected(row))
             return false;
         
-        finishEditing();
         
         if(!isEnabled())
             return false;
@@ -839,9 +844,10 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         
         editingRow = row;
         editingCol = col;
-        editing    = true;
         
         view.startEditing(row, col, getValueAt(row,col), event);
+        
+        editing = true;
         
         return true; 
         
@@ -868,7 +874,10 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col); 
             
-        setValueAt(row, col, newValue);
+       // setValueAt(row, col, newValue);
+        
+        rows.get(row).setCell(col,newValue);
+        refreshCell(row,col);
         
         if(Util.isDifferent(newValue,oldValue)) {
             fireCellEditedEvent(row,col);
@@ -921,7 +930,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      * @param col
      */
     public void refreshCell(int row, int col) {
-       // view.renderCell(row, col);
+       view.renderCell(row, col);
     }
 
     // ************* Implementation of ScreenWidgetInt *************
@@ -931,6 +940,7 @@ public class Table extends Composite implements ScreenWidgetInt, Queryable,
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        
     }
     
     /**
