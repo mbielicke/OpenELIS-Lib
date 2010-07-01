@@ -348,7 +348,7 @@ public class UIGenerator extends Generator {
                 if(((Element)node).getElementsByTagName("table").getLength() == 0) {
                     table = doc.createElement("table");
                     table.setAttribute("visibleRows", String.valueOf(maxRows));
-                    //table.setAttribute("width", "");
+                    table.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
                     columns = node.getChildNodes();
                     int length = columns.getLength();
                     if(length > 0) {
