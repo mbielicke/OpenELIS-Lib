@@ -45,7 +45,7 @@ public class Column {
      */
     protected CellEditor editor = new LabelCell<String>();
     
-    protected CellRenderer renderer = new LabelCell<String>();
+    protected CellRenderer renderer = (CellRenderer)editor;
     /**
      * name used to reference column and label for the Header 
      */
@@ -56,7 +56,7 @@ public class Column {
      */
     protected int    width, minWidth;
     
-    protected boolean enabled, resizable;
+    protected boolean enabled, resizable, filterable = true;
 
     /**
      * Creates a default column that exist outside a table has 
@@ -89,11 +89,16 @@ public class Column {
     }
 
     /**
-     * Sets the Editor widget to be used by this Column.
+     * Sets the Editor widget to be used by this Column. This method will also
+     * set Cell Renderer if the passed editor also implements the CellRenderer interface.
+     * If you need a different Cell Renderer make sure to call setCellEditor first before
+     * calling setCellRenderer.
      * @param editor
      */
     public void setCellEditor(CellEditor editor) {
         this.editor = editor;
+        if(editor instanceof CellRenderer)
+            renderer = (CellRenderer)editor;
     }
 
     /**
@@ -171,6 +176,7 @@ public class Column {
      */
     public void setWidth(int width) {
         this.width = Math.max(width,minWidth);
+        table.layout();
     }
 
     /**
@@ -211,6 +217,14 @@ public class Column {
      */
     public boolean isResizable() {
         return resizable;
+    }
+
+    public boolean isFilterable() {
+        return filterable;
+    }
+
+    public void setFilterable(boolean filterable) {
+        this.filterable = filterable;
     }
 
     /**

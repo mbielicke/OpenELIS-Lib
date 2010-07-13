@@ -36,22 +36,10 @@ public class Row {
      */
     protected ArrayList<Object> cells;
     /*
-     * Addtional data can be attached to the row that is not 
+     * Additional data can be attached to the row that is not 
      * displayed in the table columns
      */
     protected Object data;
-    /*
-     * Used to add specific style to the row when rendered.
-     */
-    protected String style;
-    
-
-    /**
-     * Flag letting Widgets know if this DataSet should be shown on screen or 
-     * if it is currently hidden.  Used when filtering.
-     */
-    public boolean shown = true;
-  
     
     /**
      * Default constructor
@@ -139,5 +127,9 @@ public class Row {
      */
     public Object getData() {
         return data;
+    }
+    
+    public String getStyle(int index) {
+        return null;
     }
 }

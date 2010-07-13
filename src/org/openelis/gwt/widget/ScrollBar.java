@@ -47,11 +47,12 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         final ScrollBar source = this;
         ap = new AbsolutePanel();
         DOM.setStyleAttribute(getElement(), "overflowX", "hidden");
-        ap.setWidth("15px");
-        ap.setHeight("15px");
+        ap.setWidth("0px");
+        ap.setHeight("0px");
         setWidth("18px");
-        setHeight("18px");
-        setStyleName("TableVertScroll");
+        setHeight("0px");
+        
+       // setStyleName("TableVertScroll");
         setAlwaysShowScrollBars(true);
         setWidget(ap);
         addScrollHandler(new ScrollHandler() {
@@ -70,14 +71,12 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         this.horizontal = horizontal;
     }
 
-    public void adjust(int viewSize, int scrollSize) {
+    public void adjustScrollMax(int scrollMax) {
 
         if (horizontal) {
-            setWidth(Util.addUnits(viewSize));
-            ap.setWidth(Util.addUnits(scrollSize));
+            ap.setWidth(Util.addUnits(scrollMax));
         } else {
-            setHeight(Util.addUnits(viewSize));
-            ap.setHeight(Util.addUnits(Math.max(scrollSize,15)));
+            ap.setHeight(Util.addUnits(Math.max(scrollMax,15)));
         }
     }
 
@@ -98,4 +97,10 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         return super.getScrollPosition();
     }
 
+    @Override
+    protected void onAttach() {
+        super.onAttach();
+        DOM.setStyleAttribute(getElement(), "overflowX", "hidden");
+        //Window.alert( getOffsetHeight()+" : "+getOffsetWidth());        
+    }
 }

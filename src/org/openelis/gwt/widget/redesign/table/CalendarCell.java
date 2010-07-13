@@ -25,54 +25,51 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.widget.calendar.Calendar;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.TextBoxBase;
-import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
-public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
-
-    private TextBox<T> editor;
+public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime> {
     
-    public TextBoxCell(TextBox<T> editor) {
+    private Calendar editor;
+    
+    public CalendarCell() {
+        
+    }
+    
+    public void setEditor(Calendar editor) {
         this.editor = editor;
         editor.setEnabled(true);
-        editor.setStyleName("TableTextBox");
-    }
-     
-    public TextBox<T> getWidget() {
-        return editor;
+        editor.setStyleName("TableCalendar");
     }
     
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
+    public void startEditing(Table table,
+                             FlexTable flexTable,
+                             int row,
+                             int col,
+                             Datetime value,
+                             Event event) {
         editor.setValue(value);
-        editor.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
-        editor.setHeight((table.getRowHeight()-3)+"px");
+        editor.setWidth(table.getColumnAt(col).getWidth()+"px");
         flexTable.setWidget(row, col, editor);
-        /*
-         * This done in a deferred command otherwise IE will not set focus consistently 
-         */
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 editor.setFocus(true);
             }
         });
-        
     }
 
-    public T finishEditing() {
+    public Datetime finishEditing() {
         return editor.getValue();
     }
     
-    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
+    public void render(Table table, FlexTable flexTable, int row, int col, Datetime value) {
         editor.setValue(value);
         flexTable.setText(row, col, editor.getText());
     }
-    
- 
 
 }

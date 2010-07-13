@@ -53,7 +53,7 @@ public class Util {
     	for(int j = 0 ; j < value.length(); j++) {
     	    ch = value.substring(j,j+1).charAt(0);
     		if(ch >= '0' && ch <= '9')
-    		    i = i * 10 + Integer.parseInt(String.valueOf(ch));
+    		    i = i * 10 + (ch - '0');
     		else
     		    break;
     	}

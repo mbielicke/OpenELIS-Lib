@@ -295,6 +295,7 @@ public class Dropdown<T> extends TextBox<T> {
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
         table.setTableStyle("DropdownTable");
+        table.setRowHeight(16);
 
         /*
          * This handler will will cancel the selection if the item has been
