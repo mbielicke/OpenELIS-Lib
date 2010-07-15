@@ -48,7 +48,8 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
         return editor;
     }
     
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
+    public void startEditing(final Table table, FlexTable flexTable, int row, int col, T value, Event event) {
+        editor.setQueryMode(table.getQueryMode());
         editor.setValue(value);
         editor.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
         editor.setHeight((table.getRowHeight()-3)+"px");
@@ -69,6 +70,7 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     }
     
     public void render(Table table, FlexTable flexTable, int row, int col, T value) {
+        editor.setQueryMode(table.getQueryMode());
         editor.setValue(value);
         flexTable.setText(row, col, editor.getText());
     }

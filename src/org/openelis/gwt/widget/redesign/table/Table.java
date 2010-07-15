@@ -80,7 +80,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     protected int                editingRow, editingCol;
 
-    protected int                rowHeight, visibleRows, viewWidth = -1, tableWidth;
+    protected int                rowHeight, visibleRows, viewWidth = -1, totalColumnWidth;
     /**
      * Model used by the Table
      */
@@ -142,13 +142,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         view = new View(this);
         setWidget(view);
         layout();
+       
         addDomHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
                 int row, col;
 
-                event.preventDefault();
-                event.stopPropagation();
-                
                 if ( !isEnabled())
                     return;
 
@@ -187,12 +185,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                                     break;
                             }
                         }
+                      
                         break;
                     case (KeyCodes.KEY_DOWN):
+
                         if ( !isEditing()){
                             if(isAnyRowSelected()){
+                                row = getSelectedRow();
                                 while(true) {
-                                    row = getSelectedRow() + 1;
+                                    row++;
                                     if(row >= getRowCount())
                                         break;
                                     if(selectRowAt(row))
@@ -212,8 +213,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                     case (KeyCodes.KEY_UP):
                         if ( !isEditing()){
                             if(isAnyRowSelected()){
+                                row = getSelectedRow();
                                 while(true) {
-                                    row = getSelectedRow() - 1;
+                                    row--;
                                     if(row < 0)
                                         break;
                                     if(selectRowAt(row))
@@ -247,6 +249,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
             }
         }, KeyDownEvent.getType());
+        
     }
 
     // ********* Table Definition Methods *************
@@ -306,7 +309,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setModel(ArrayList<? extends Row> model) {
         this.rows = (ArrayList<Row>)model;
-        layout();
+        view.renderView(-1, -1);
     }
 
     /**
@@ -482,8 +485,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * 
      * @return
      */
-    protected int getTableWidth() {
-        return tableWidth;
+    protected int getTotalColumnWidth() {
+        return totalColumnWidth;
+    }
+    
+    protected int getWidthWithoutScrollbar() {
+        if(verticalScroll != Scrolling.NEVER)
+            return viewWidth - 18;
+        
+        return viewWidth;
     }
 
     /**
@@ -579,11 +589,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * 
      * @param index
      */
-    public void removeColumnAt(int index) {
+    public Column removeColumnAt(int index) {
         Column col;
 
         col = columns.remove(index);
+        
         layout();
+        
+        return col;
     }
 
     /**
@@ -1119,46 +1132,52 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return view.scrollToVisible(index);
     }
 
-    public void resize() {
-        tableWidth = 0;
 
-        for (Column column : columns)
-            tableWidth += column.getWidth();
-        
-        view.resize();
-    }
     
     /**
      * Redraws the table when any part of its physical definition is changed.
      */
-    public void layout() {
+    protected void layout() {
+        computeColumnsWidth();
+        view.layout();
+    }
+    
+    protected void resize() {
+        if(!isAttached())
+            return;
+        
+        computeColumnsWidth();
+       
+        if(hasHeader)
+            view.getHeader().resize();
+        
+        view.resize();
+        
+    }
+    
+    private void computeColumnsWidth() {
         int from, to;
- 
-
-        for (Column column : columns)
-            tableWidth += column.getWidth();
+        
 
         //
         // compute total width
         //
-        tableWidth = 0;
+        totalColumnWidth = 0;
         xForColumn = new short[getColumnCount()];
         for (int i = 0; i < getColumnCount(); i++) {
-            xForColumn[i] = (short)tableWidth;
-            tableWidth += getColumnAt(i).getWidth();
+            xForColumn[i] = (short)totalColumnWidth;
+            totalColumnWidth += getColumnAt(i).getWidth();
         }
         //
         // mark the array
         //
         from = 0;
-        columnForX = new short[tableWidth];
+        columnForX = new short[totalColumnWidth];
         for (int i = 0; i < getColumnCount(); i++) {
             to = from + getColumnAt(i).getWidth();
             while (from < to)
                 columnForX[from++] = (short)i;
         }
-        
-        view.layout();
     }
 
     /**
@@ -1240,9 +1259,25 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * Puts the table into and out of query mode.
      */
     public void setQueryMode(boolean query) {
+        ArrayList<Row> model;
+        Row            row;
+        
+        if(query == queryMode)
+            return;
+        
         this.queryMode = query;
-        // TODO Auto-generated method stub
+        if(query) {
+            model = new ArrayList<Row>();
+            row = new Row(getColumnCount());
+            model.add(row);
+            setModel(model);
+        }else
+            setModel(null);
 
+    }
+    
+    public boolean getQueryMode() {
+        return queryMode;
     }
 
     // ********* Registration of Handlers ******************

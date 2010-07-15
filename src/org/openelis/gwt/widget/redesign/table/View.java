@@ -34,7 +34,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -73,13 +75,14 @@ public class View extends Composite {
     /**
      * Computed first and last model indexes displayed in the table
      */
-    protected int             firstVisibleRow, lastVisibleRow,prevFirstVisibleRow,prevLastVisibleRow;
+    protected int             firstVisibleRow, lastVisibleRow, prevFirstVisibleRow,
+                    prevLastVisibleRow;
 
     /**
      * Flag used to determine if the table has been attached to know when to do
      * layout for the first time.
      */
-    protected boolean         attached,firstAttach;
+    protected boolean         attached, firstAttach,visibleChanged;
 
     /**
      * Computed Row Height used to calculate ScrollHeight and ScrollPosition
@@ -139,24 +142,24 @@ public class View extends Composite {
 
         // ******** Set layout of view ***************
         outer.clear();
+
         scrollView = new ScrollPanel();
+        outer.add(scrollView);
 
         // ********* Create the Cell body *********
         flexTable = new FlexTable();
-        flexTable.setStyleName(table.TABLE_STYLE);
-        flexTable.setWidth(table.getTableWidth() + "px");
-
-       
         flexTable.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
                 table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex());
             }
         });
+        flexTable.setStyleName(table.TABLE_STYLE);
+        flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
         if (table.hasHeader()) {
             vp = new VerticalPanel();
-            header = createHeader();
+            header = new Header(table);
             vp.add(header);
             vp.add(flexTable);
             vp.setSpacing(0);
@@ -164,34 +167,30 @@ public class View extends Composite {
         } else
             scrollView.setWidget(flexTable);
 
-        outer.add(scrollView);
-
-        
-        //**** Vertical ScrollBar **************
+        // **** Vertical ScrollBar **************
         if (table.getVerticalScroll() != Scrolling.NEVER) {
             scrollBar = new ScrollBar();
             scrollBar.addScrollBarHandler(new ScrollBarHandler() {
                 public void onScroll(ScrollBarEvent event) {
-                   computeVisibleRows();
-                   renderView(-1,-1);
+                    visibleChanged = true;
+                    //computeVisibleRows();
+                    renderView( -1, -1);
                 }
             });
-            outer.add(scrollBar);    
-            scrollView.setWidth(Math.max(table.getWidth() - scrollBar.getOffsetWidth(), 0) + "px");
-        }else 
-            scrollView.setWidth(table.getWidth() + "px");
+            outer.add(scrollBar);
+        }
+        scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar(), 0) + "px");
 
-       
         /*
-         * Setup so Horizontal scrollbar is include in the offsetHeight when drawn
+         * Setup so Horizontal scrollbar is include in the offsetHeight when
+         * drawn
          */
         scrollView.setAlwaysShowScrollBars(true);
         scrollView.setHeight("100%");
 
-        
         if (firstAttach) {
             firstAttach = false;
-            
+
             for (int i = 0; i < table.getVisibleRows(); i++ ) {
                 createRow(i);
             }
@@ -210,43 +209,32 @@ public class View extends Composite {
 
             for (int i = 0; i < table.getVisibleRows(); i++ ) {
                 flexTable.removeRow(0);
-            }   
-            
-            computeVisibleRows();
+            }
+            visibleChanged = true;
+            //computeVisibleRows();
         }
-        
-        //***  Horizontal ScrollBar *****************
-        if(table.getHorizontalScroll() == Scrolling.NEVER)
-            DOM.setStyleAttribute(scrollView.getElement(),"overflowX","hidden");
-        else if(table.getHorizontalScroll() == Scrolling.AS_NEEDED){
-            if(table.getTableWidth() > table.getWidth())
-                DOM.setStyleAttribute(scrollView.getElement(),"overflowX","scroll");
+
+        // *** Horizontal ScrollBar *****************
+        if (table.getHorizontalScroll() == Scrolling.NEVER)
+            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
+            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
             else
-                DOM.setStyleAttribute(scrollView.getElement(),"overflowX","hidden");
-        } 
-        DOM.setStyleAttribute(scrollView.getElement(),"overflowY","hidden");
-        
-        renderView(-1,-1);
-        
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        }
+        DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
+
+        renderView( -1, -1);
+
         adjustScrollBarHeight();
 
     }
-    
-    protected void resize() {
-        header.resize();
-        flexTable.setWidth(table.getTableWidth() + "px");
-        for (int c = 0; c < table.getColumnCount(); c++ ) {
-            flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
-        }
-    }
 
-    
-    /**
-     * Method will create the Header table to be displayed by this view using
-     * information found in the Column list in the Table
-     */
-    private Header createHeader() {
-        return new Header(table);
+    protected void resize() {
+        for (int c = 0; c < table.getColumnCount(); c++ )
+            flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
+        flexTable.setWidth(table.getTotalColumnWidth() + "px");
     }
 
     /**
@@ -256,38 +244,38 @@ public class View extends Composite {
      * visibleRows will be created for the flexTable table.
      */
     private void createRow(int r) {
-
         flexTable.insertRow(r);
-        for (int c = 0; c < table.getColumnCount(); c++ ) {
-            flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
-        }
-        flexTable.getCellFormatter().setHeight(r,0, table.getRowHeight()+"px");
-
+        flexTable.getCellFormatter().setHeight(r, 0, table.getRowHeight() + "px");
     }
 
     protected void renderView(int startR, int endR) {
         int rc, fr, lr, delta, i;
 
+        if ( !attached)
+            return;
+
+        computeVisibleRows();
+        
         fr = firstVisibleRow;
         lr = lastVisibleRow;
         delta = fr - prevFirstVisibleRow;
         rc = 0;
-        
-        if(startR >=0) {
-            if(startR > lr)
-                fr = lr+1;
-            else if(startR >= fr)
+
+        if (startR >= 0) {
+            if (startR > lr)
+                fr = lr + 1;
+            else if (startR >= fr)
                 fr = startR;
-            delta = (table.getVisibleRows() / 3) +1;
+            delta = (table.getVisibleRows() / 3) + 1;
             rc = fr - firstVisibleRow;
         }
-        if(endR >=0) {
-            if(endR < fr)
-                lr = fr -1;
-            else if(endR <= lr)
+        if (endR >= 0) {
+            if (endR < fr)
+                lr = fr - 1;
+            else if (endR <= lr)
                 lr = endR;
         }
-        
+
         if (Math.abs(delta) <= table.getVisibleRows() / 3) {
             i = delta;
             if (delta > 0) {
@@ -316,14 +304,17 @@ public class View extends Composite {
             /*
              * Create table row if needed
              */
-            if (rc >= flexTable.getRowCount())
+            if (rc >= flexTable.getRowCount()) {
                 createRow(flexTable.getRowCount());
+                if (rc == 0)
+                    resize();
+            }
 
             for (int c = 0; c < table.getColumnCount(); c++ ) {
                 renderCell(rc, c, r);
             }
-            
-            applyRowStyle(r,rc);
+
+            applyRowStyle(r, rc);
         }
         /*
          * Remove extras at the end of the view if necessary
@@ -332,51 +323,52 @@ public class View extends Composite {
             for (i = 0; i < flexTable.getRowCount() - rc; i++ )
                 flexTable.removeRow(i);
         }
-        
-        if(table.getVerticalScroll() == Scrolling.AS_NEEDED) {
-            if(table.getRowCount() > table.getVisibleRows()) 
+
+        if (table.getVerticalScroll() == Scrolling.AS_NEEDED) {
+            if (table.getRowCount() > table.getVisibleRows())
                 scrollBar.setVisible(true);
             else
                 scrollBar.setVisible(false);
         }
 
     }
-    
-    protected void applyRowStyle(int r,int rc) {
+
+    protected void applyRowStyle(int r, int rc) {
         String style;
-        
+
         style = table.getModel().get(r).getStyle(r);
         if (style != null)
             flexTable.getRowFormatter().setStyleName(rc, style);
-            
-        if(table.isRowSelected(r))
-            applySelectionStyle(r);//flexTable.getRowFormatter().addStyleName(rc, "Selection");
+
+        if (table.isRowSelected(r))
+            applySelectionStyle(r);// flexTable.getRowFormatter().addStyleName(rc,
+        // "Selection");
         else
-            applyUnselectionStyle(r);//flexTable.getRowFormatter().removeStyleName(rc,"Selection");
-   }
-    
+            applyUnselectionStyle(r);// flexTable.getRowFormatter().removeStyleName(rc,"Selection");
+    }
+
     protected void applySelectionStyle(int r) {
         int rc;
-        
+
         rc = getFlexTableIndex(r);
-        if(rc > -1)
-            flexTable.getRowFormatter().addStyleName(rc,"Selection");
+        if (rc > -1)
+            flexTable.getRowFormatter().addStyleName(rc, "Selection");
     }
-    
+
     protected void applyUnselectionStyle(int r) {
         int rc;
-        
+
         rc = getFlexTableIndex(r);
-        if(rc > -1)
+        if (rc > -1)
             flexTable.getRowFormatter().removeStyleName(rc, "Selection");
-        
+
     }
 
     protected void renderCell(int row, int col) {
         int rc;
-        
+
         rc = getFlexTableIndex(row);
-        if(rc > -1)
+        if (rc > -1)
             renderCell(getFlexTableIndex(row), col, row);
     }
 
@@ -387,14 +379,22 @@ public class View extends Composite {
     }
 
     @SuppressWarnings("unchecked")
-    public void startEditing(int row, int col, Object value, Event event) {
-        int r;
+    public void startEditing(int row, final int col, Object value, Event event) {
+        int r, x1, x2, v1, v2;
 
         r = getFlexTableIndex(row);
+        x1 = table.getXForColumn(col);
+        x2 = x1 + table.getColumnAt(col).getWidth();
+        v1 = scrollView.getHorizontalScrollPosition();
+        v2 = v1 + table.getWidthWithoutScrollbar();
+
+        if (x1 < v1)
+            scrollView.setHorizontalScrollPosition(x1);
+        else if (x2 > v2)
+            scrollView.setHorizontalScrollPosition(x2 - table.getWidthWithoutScrollbar());
 
         table.getColumnAt(col).getCellEditor().startEditing(table, flexTable, r, col,
                                                             table.getValueAt(row, col), event);
-
     }
 
     protected Object finishEditing(int row, int col) {
@@ -404,7 +404,7 @@ public class View extends Composite {
     }
 
     private int getFlexTableIndex(int modelIndex) {
-        if(modelIndex >= firstVisibleRow && modelIndex <= lastVisibleRow)
+        if (modelIndex >= firstVisibleRow && modelIndex <= lastVisibleRow)
             return modelIndex - firstVisibleRow;
         return -1;
     }
@@ -417,28 +417,30 @@ public class View extends Composite {
         scrollBar.adjustScrollMax(table.getRowCount() * rowHeight);
     }
 
-    private void computeVisibleRows() {
-        
-        prevFirstVisibleRow = firstVisibleRow;
-        prevLastVisibleRow  = lastVisibleRow;
-        
-        if (scrollBar != null) {
-            firstVisibleRow = (int) (scrollBar.getScrollPosition() / rowHeight);
-            lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows() - 1,
-                                      table.getRowCount() - 1);
-        } else {
-            firstVisibleRow = 0;
-            lastVisibleRow = Math.min(table.getVisibleRows() - 1, table.getRowCount() - 1);
+    protected void computeVisibleRows() {
+        if (visibleChanged) {
+            visibleChanged = false;
+            prevFirstVisibleRow = firstVisibleRow;
+            prevLastVisibleRow = lastVisibleRow;
+
+            if (scrollBar != null) {
+                firstVisibleRow = (int) (scrollBar.getScrollPosition() / rowHeight);
+                lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows() - 1,
+                                          table.getRowCount() - 1);
+            } else {
+                firstVisibleRow = 0;
+                lastVisibleRow = Math.min(table.getVisibleRows() - 1, table.getRowCount() - 1);
+            }
         }
 
     }
 
     protected boolean scrollToVisible(int r) {
         int fr;
-        
-        if(isRowVisible(r))
+
+        if (isRowVisible(r))
             return false;
-        
+
         if (r < firstVisibleRow)
             fr = r;
         else
@@ -448,11 +450,10 @@ public class View extends Composite {
 
         return true;
     }
-    
+
     protected boolean isRowVisible(int r) {
         return r >= firstVisibleRow && r <= lastVisibleRow;
     }
-    
 
     @Override
     protected void onAttach() {
@@ -464,5 +465,9 @@ public class View extends Composite {
         super.onAttach();
         layout();
 
+    }
+
+    protected Header getHeader() {
+        return header;
     }
 }

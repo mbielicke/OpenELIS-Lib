@@ -9,8 +9,7 @@
 	border-collapse : collapse;
 	-webkit-user-select : none;
 	-moz-user-select : none;
-	user-select : none;
-	
+	user-select : none;	
 }
 
 .Table tr {
@@ -57,28 +56,11 @@
 	border-color: #FFFFFF;
 	border-style: solid;
 	border-width: 0px 0px 0px 1px;
-	padding : 0px;
+	padding : 0px 2px 0px 2px;
 	color: black;
 	cursor: pointer;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
-}
-
-.HeaderWidget {
-	spacing : 0px;
-	padding : 0;
-	border-collapse : collapse;
-	table-layout : fixed;	
-}
-
-.HeaderWidget td {
-	padding : 0 2px;
-	spacing : 0px;
-	border-width : 0px;
-}
-
-.HeaderWidget td .Bar {
-	
 }
 
 .Header td.ResizeCol {

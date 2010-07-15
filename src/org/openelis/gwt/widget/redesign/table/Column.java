@@ -78,7 +78,6 @@ public class Column {
         resizable = true;
         width = 15;
         minWidth = 15;
-       // editor = new TextBox<String>();
     }
 
     /**
@@ -154,7 +153,7 @@ public class Column {
      * @return
      */
     public int getWidth() {
-        /*
+        
         int totalWidth,lastColumn;
        
         if(table == null)
@@ -162,11 +161,11 @@ public class Column {
         
         lastColumn = table.getColumnCount() - 1;
         if(lastColumn >= 0 && table.getColumnAt(lastColumn) == this) {
-            totalWidth = table.getXofColumn(lastColumn);
-            if(totalWidth + width < table.getTableWidth())
-                return table.getTableWidth() - totalWidth;
+            totalWidth = table.getXForColumn(lastColumn);
+            if(totalWidth + width < table.getWidthWithoutScrollbar())
+                return table.getWidthWithoutScrollbar() - totalWidth;
         }
-        */
+        
         return width;
     }
 
@@ -176,7 +175,7 @@ public class Column {
      */
     public void setWidth(int width) {
         this.width = Math.max(width,minWidth);
-        table.layout();
+        table.resize();
     }
 
     /**

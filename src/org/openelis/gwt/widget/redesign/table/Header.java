@@ -106,7 +106,7 @@ public class Header extends FocusPanel {
                     bar.addMouseMoveHandler(new MouseMoveHandler() {
                         public void onMouseMove(MouseMoveEvent event) {
                             popResize.setPopupPosition(
-                                                       popResize.getAbsoluteLeft() + (event.getX()),
+                                                       popResize.getAbsoluteLeft() + event.getX(),
                                                        popResize.getAbsoluteTop());
                         }
                     });
@@ -117,19 +117,18 @@ public class Header extends FocusPanel {
 
                             column = table.getColumnAt(resizeColumn);
 
-                            column.setWidth(Math.max(column.getWidth() +
-                                                     (popResize.getAbsoluteLeft() - startX),
-                                                     column.getMinWidth()));
+                            column.setWidth(column.getWidth() + (popResize.getAbsoluteLeft() - startX));
 
                             if (popResize != null)
                                 popResize.hide();
-
+                            
                         }
                     });
                 }
 
                 startX = table.getXForColumn(resizeColumn) +
-                         table.getColumnAt(resizeColumn).getWidth() - 1;
+                         table.getColumnAt(resizeColumn).getWidth() - 1 
+                         +getAbsoluteLeft();
                 popResize.setPopupPosition(startX, ((Widget)event.getSource()).getAbsoluteTop());
                 popResize.show();
                 DOM.setCapture(bar.getElement());
@@ -160,7 +159,7 @@ public class Header extends FocusPanel {
      * Method to draw the Header based on values set in the Columns of the
      * table.
      */
-    public void layout() {
+    protected void layout() {
         int numCols;
         Column column;
 
@@ -175,7 +174,7 @@ public class Header extends FocusPanel {
             flexTable.getColumnFormatter().setWidth(i, column.getWidth() + "px");
         }
 
-        flexTable.setWidth(table.getTableWidth() + "px");
+        flexTable.setWidth(table.getTotalColumnWidth() + "px");
         flexTable.getCellFormatter().setHeight(0, 0, table.getRowHeight() + "px");
     }
 
@@ -190,7 +189,7 @@ public class Header extends FocusPanel {
             flexTable.getColumnFormatter().setWidth(i, col.getWidth() + "px");
         }
 
-        flexTable.setWidth(table.getTableWidth() + "px");
+        flexTable.setWidth(table.getTotalColumnWidth() + "px");
     }
 
     private void showFilter(int column) {
@@ -209,9 +208,10 @@ public class Header extends FocusPanel {
             return;
 
         if (table.getColumnAt(column).isFilterable()) {
-            x = table.getXForColumn(column) + table.getColumnAt(column).getWidth() - 17;
-            if(x > table.getWidth()) 
+            x = table.getXForColumn(column) + table.getColumnAt(column).getWidth();
+            if(x > table.getWidthWithoutScrollbar() + table.view.scrollView.getHorizontalScrollPosition()) 
                 return;
+            x -= 17;
             if (popFilter == null) {
                 popFilter = new PopupPanel();
                 popFilter.setWidth("16px");
@@ -224,7 +224,7 @@ public class Header extends FocusPanel {
                 });
                 popFilter.add(filterButton);
             }
-            popFilter.setPopupPosition(x,getAbsoluteTop());
+            popFilter.setPopupPosition(x+getAbsoluteLeft(),getAbsoluteTop());
             popFilter.show();
             showingFilter = true;
             showingFilterFor = column;

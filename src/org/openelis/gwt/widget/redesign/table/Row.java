@@ -65,7 +65,7 @@ public class Row {
     public Row(int size) {
         cells = new ArrayList<Object>(size);
         for(int i = 0; i < size; i++) {
-            cells.add(new Object());
+            cells.add(null);
         }
     }
     
