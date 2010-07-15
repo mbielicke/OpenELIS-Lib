@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.redesign.table;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
@@ -67,33 +68,50 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class Table extends FocusPanel implements ScreenWidgetInt, Queryable, 
-                                    HasBeforeSelectionHandlers<Integer>,
-                                    HasSelectionHandlers<Integer>, HasUnselectionHandlers<Integer>,
-                                    HasBeforeCellEditedHandlers, HasCellEditedHandlers,
-                                    HasBeforeRowAddedHandlers, HasRowAddedHandlers,
-                                    HasBeforeRowDeletedHandlers, HasRowDeletedHandlers {
+/**
+ * This class is used by screens and widgets such as AutoComplete and Dropdown to display 
+ * information in a Table grid format
+ * @author tschmidt
+ *
+ */
+public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
+                                     HasBeforeSelectionHandlers<Integer>,
+                                     HasSelectionHandlers<Integer>,
+                                     HasUnselectionHandlers<Integer>, HasBeforeCellEditedHandlers,
+                                     HasCellEditedHandlers, HasBeforeRowAddedHandlers,
+                                     HasRowAddedHandlers, HasBeforeRowDeletedHandlers,
+                                     HasRowDeletedHandlers {
 
     /**
      * Cell that is currently being edited.
      */
     protected int                editingRow, editingCol;
 
+    /**
+     * Table dimensions
+     */
     protected int                rowHeight, visibleRows, viewWidth = -1, totalColumnWidth;
+    
     /**
      * Model used by the Table
      */
     protected ArrayList<Row>     rows;
+    
     /**
      * Columns used by the Table
      */
     protected ArrayList<Column>  columns;
+    
     /**
      * List of selected Rows by index in the table
      */
     protected ArrayList<Integer> selections;
 
+    /**
+     * Table state values
+     */
     protected boolean            enabled, multiSelect, editing, hasFocus, queryMode, hasHeader;
 
     /**
@@ -117,7 +135,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * Primary CSS style to be applied to this table.
      */
     protected String    TABLE_STYLE = "Table";
-    
+
+    /**
+     * Arrays for determining relative X positions for columns
+     */
     protected short[]   xForColumn, columnForX;
 
     /**
@@ -142,7 +163,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         view = new View(this);
         setWidget(view);
         layout();
-       
+
+        /*
+         * This Handler takes care of all key events on the table when editing
+         * and when only selection is on
+         */
         addDomHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
                 int row, col;
@@ -155,7 +180,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
                 switch (event.getNativeEvent().getKeyCode()) {
                     case (KeyCodes.KEY_TAB):
- 
+
                         if (col < 0)
                             break;
 
@@ -185,55 +210,55 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                                     break;
                             }
                         }
-                      
+
                         break;
                     case (KeyCodes.KEY_DOWN):
 
-                        if ( !isEditing()){
-                            if(isAnyRowSelected()){
+                        if ( !isEditing()) {
+                            if (isAnyRowSelected()) {
                                 row = getSelectedRow();
-                                while(true) {
-                                    row++;
-                                    if(row >= getRowCount())
+                                while (true) {
+                                    row++ ;
+                                    if (row >= getRowCount())
                                         break;
-                                    if(selectRowAt(row))
+                                    if (selectRowAt(row))
                                         break;
                                 }
                             }
                             break;
                         }
-                        while(true) {
-                            row++;
+                        while (true) {
+                            row++ ;
                             if (row >= getRowCount())
                                 break;
-                            if(startEditing(row, col))
+                            if (startEditing(row, col))
                                 break;
                         }
                         break;
                     case (KeyCodes.KEY_UP):
-                        if ( !isEditing()){
-                            if(isAnyRowSelected()){
+                        if ( !isEditing()) {
+                            if (isAnyRowSelected()) {
                                 row = getSelectedRow();
-                                while(true) {
-                                    row--;
-                                    if(row < 0)
+                                while (true) {
+                                    row-- ;
+                                    if (row < 0)
                                         break;
-                                    if(selectRowAt(row))
+                                    if (selectRowAt(row))
                                         break;
                                 }
                             }
                             break;
                         }
-                        while(true) {
-                            row--;
+                        while (true) {
+                            row-- ;
                             if (row < 0)
                                 break;
-                            if(startEditing(row, col))
+                            if (startEditing(row, col))
                                 break;
                         }
                         break;
                     case (KeyCodes.KEY_ENTER):
-                        
+
                         if (isEditing()) {
                             finishEditing();
                             return;
@@ -249,7 +274,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
             }
         }, KeyDownEvent.getType());
-        
+
     }
 
     // ********* Table Definition Methods *************
@@ -307,9 +332,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * 
      * @param model
      */
+    @SuppressWarnings("unchecked")
     public void setModel(ArrayList<? extends Row> model) {
         this.rows = (ArrayList<Row>)model;
-        view.renderView(-1, -1);
+        renderView( -1, -1);
     }
 
     /**
@@ -417,6 +443,30 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     public int getWidth() {
         return viewWidth;
     }
+    
+    /**
+     * Returns the view width of the table minus the the width of the 
+     * scrollbar if the scrollbar is visible or if space has been 
+     * reserved for it
+     * 
+     * @return
+     */
+    protected int getWidthWithoutScrollbar() {
+        if (verticalScroll != Scrolling.NEVER)
+            return viewWidth - 18;
+
+        return viewWidth;
+    }
+    
+    /**
+     * Returns the width of the all the column widths added together
+     * which is the physical width of the table
+     * 
+     * @return
+     */
+    protected int getTotalColumnWidth() {
+        return totalColumnWidth;
+    }
 
     /**
      * Sets the Primary CSS style to be used by this table
@@ -469,32 +519,24 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     protected int getXForColumn(int index) {
-        if(xForColumn != null && index >= 0 && index < xForColumn.length)
+        if (xForColumn != null && index >= 0 && index < xForColumn.length)
             return xForColumn[index];
         return -1;
     }
-    
-    protected int getColumnForX(int  x) {
-        if(columnForX != null && x >= 0 && x < columnForX.length)
+
+    /**
+     * Returns the Column for the current mouse x position passed in the header
+     * 
+     * @param x
+     * @return
+     */
+    protected int getColumnForX(int x) {
+        if (columnForX != null && x >= 0 && x < columnForX.length)
             return columnForX[x];
         return -1;
     }
- 
-    /**
-     * Returns the width of the table
-     * 
-     * @return
-     */
-    protected int getTotalColumnWidth() {
-        return totalColumnWidth;
-    }
-    
-    protected int getWidthWithoutScrollbar() {
-        if(verticalScroll != Scrolling.NEVER)
-            return viewWidth - 18;
-        
-        return viewWidth;
-    }
+
+
 
     /**
      * Sets whether the table as a header or not.
@@ -565,9 +607,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         Column column;
 
         column = new Column(this, name, label);
-
         columns.add(index, column);
-
         layout();
 
         return column;
@@ -593,9 +633,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         Column col;
 
         col = columns.remove(index);
-        
         layout();
-        
+
         return col;
     }
 
@@ -699,23 +738,21 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         rows.remove(index);
 
-        // view.refreshView(index, view.firstVisibleRow+visibleRows);
+        renderView(-1,-1);
 
         fireRowDeletedEvent(index, row);
 
         return row;
-
     }
 
+    /**
+     * Set the model for this table to null and redraws
+     */
     public void removeAllRows() {
         finishEditing();
-
         clearRowSelection();
-
         rows = null;
-
-        view.renderView( -1, -1);
-
+        renderView( -1, -1);
     }
 
     // ************ Selection Methods ***************
@@ -751,7 +788,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                 view.applySelectionStyle(index);
 
                 fireSelectionEvent(index);
-             
+
             }
         }
         return true;
@@ -1013,7 +1050,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     public void setRowAt(int index, Row row) {
         finishEditing();
         rows.set(index, row);
-        refreshRow(index);
+        renderView(index,index);
     }
 
     /**
@@ -1029,6 +1066,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return rows.get(row).getCell(col);
     }
 
+    /**
+     * Method to put a cell into edit mode.  If a cell can not be edited than false will be returned
+     * @param row
+     * @param col
+     * @return
+     */
     public boolean startEditing(int row, int col) {
         return startEditing(row, col, null);
     }
@@ -1068,15 +1111,17 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         if ( !willScroll)
             view.startEditing(row, col, getValueAt(row, col), event);
         else {
+            /*
+             * Call start editing in Deferred Command to make sure the table is scrolled
+             *  before setting the cell into edit mode
+             */
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
                     view.startEditing(row, col, getValueAt(row, col), event);
                 }
             });
         }
-
         return true;
-
     }
 
     /**
@@ -1099,24 +1144,31 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col);
-
-        // setValueAt(row, col, newValue);
-
         rows.get(row).setCell(col, newValue);
         refreshCell(row, col);
 
         if (Util.isDifferent(newValue, oldValue)) {
             fireCellEditedEvent(row, col);
         }
-        
+        /*
+         * Call setFocus(true) so that the KeyHandler will recieve
+         * events when no cell is being edited
+         */
         setFocus(true);
-
     }
 
+    /**
+     * Returns the current row where cell is being edited
+     * @return
+     */
     public int getEditingRow() {
         return editingRow;
     }
 
+    /**
+     * Returns the current column where cell is being edited
+     * @return
+     */
     public int getEditingCol() {
         return editingCol;
     }
@@ -1132,8 +1184,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return view.scrollToVisible(index);
     }
 
-
-    
     /**
      * Redraws the table when any part of its physical definition is changed.
      */
@@ -1141,30 +1191,44 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         computeColumnsWidth();
         view.layout();
     }
-    
+
+    /**
+     * Method called when a column width has been set to resize the table columns
+     */
     protected void resize() {
-        if(!isAttached())
+        if ( !isAttached())
             return;
-        
+
         computeColumnsWidth();
-       
-        if(hasHeader)
+
+        if (hasHeader)
             view.getHeader().resize();
-        
+
         view.resize();
-        
     }
-    
+
+    /**
+     * Method will have the view re-compute its visible rows and refresh the view
+     * @param startR
+     * @param endR
+     */
+    protected void renderView(int startR, int endR) {
+        view.setVisibleChanged(true);
+        view.renderView(startR, endR);
+    }
+
+    /**
+     * Method computes the XForColumn and ColumForX arrays and set the totoalColumnWidth
+     */
     private void computeColumnsWidth() {
         int from, to;
-        
 
         //
         // compute total width
         //
         totalColumnWidth = 0;
         xForColumn = new short[getColumnCount()];
-        for (int i = 0; i < getColumnCount(); i++) {
+        for (int i = 0; i < getColumnCount(); i++ ) {
             xForColumn[i] = (short)totalColumnWidth;
             totalColumnWidth += getColumnAt(i).getWidth();
         }
@@ -1173,27 +1237,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         //
         from = 0;
         columnForX = new short[totalColumnWidth];
-        for (int i = 0; i < getColumnCount(); i++) {
+        for (int i = 0; i < getColumnCount(); i++ ) {
             to = from + getColumnAt(i).getWidth();
             while (from < to)
-                columnForX[from++] = (short)i;
+                columnForX[from++ ] = (short)i;
         }
-    }
-
-    /**
-     * Redraws data in the visible Rows of the table when model data is changed
-     */
-    public void refresh() {
-        view.renderView( -1, -1);
-    }
-
-    /**
-     * Redraws data in the row passed
-     * 
-     * @param row
-     */
-    public void refreshRow(int row) {
-        // view.renderRow(row);
     }
 
     /**
@@ -1202,7 +1250,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param row
      * @param col
      */
-    public void refreshCell(int row, int col) {
+    protected void refreshCell(int row, int col) {
         view.renderCell(row, col);
     }
 
@@ -1251,8 +1299,26 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * have values and will participate in the query.
      */
     public Object getQuery() {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<Object> qds;
+        QueryData qd;
+        Widget editor;
+
+        if ( !queryMode)
+            return null;
+
+        qds = new ArrayList<Object>();
+
+        for (int i = 0; i < getColumnCount(); i++ ) {
+            editor = getColumnAt(i).getCellEditor().getWidget();
+            if (editor instanceof Queryable) {
+                qd = (QueryData) ((Queryable)editor).getQuery();
+                if (qd != null) {
+                    qd.key = getColumnAt(i).name;
+                    qds.add(qd);
+                }
+            }
+        }
+        return qds.toArray();
     }
 
     /**
@@ -1260,22 +1326,25 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setQueryMode(boolean query) {
         ArrayList<Row> model;
-        Row            row;
-        
-        if(query == queryMode)
+        Row row;
+
+        if (query == queryMode)
             return;
-        
+
         this.queryMode = query;
-        if(query) {
+        if (query) {
             model = new ArrayList<Row>();
             row = new Row(getColumnCount());
             model.add(row);
             setModel(model);
-        }else
+        } else
             setModel(null);
-
     }
-    
+
+    /**
+     * Method to determine if Table is in QueryMode
+     * @return
+     */
     public boolean getQueryMode() {
         return queryMode;
     }
@@ -1343,6 +1412,5 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     public HandlerRegistration addRowDeletedHandler(RowDeletedHandler handler) {
         return addHandler(handler, RowDeletedEvent.getType());
     }
-
 
 }

@@ -25,50 +25,52 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
-import org.openelis.gwt.widget.TextBox;
-
-import com.google.gwt.user.client.ui.Widget;
-
 /**
  * This is a logical class used to describe a column in a Table
+ * 
  * @author tschmidt
- *
+ * 
  */
 public class Column {
 
     /**
      * Reference to the Table containing this column
      */
-    protected Table  table;
+    protected Table        table;
+    
     /**
      * Editor widget used for this column
      */
-    protected CellEditor editor = new LabelCell<String>();
-    
+    @SuppressWarnings("unchecked")
+    protected CellEditor   editor   = new LabelCell<String>();
+
+    @SuppressWarnings("unchecked")
     protected CellRenderer renderer = (CellRenderer)editor;
-    /**
-     * name used to reference column and label for the Header 
-     */
-    protected String name, label;
-    /**
-     * width - default and current width
-     * minWidth - Minimum allowed width of the column
-     */
-    protected int    width, minWidth;
     
-    protected boolean enabled, resizable, filterable = true;
+    /**
+     * name used to reference column and label for the Header
+     */
+    protected String       name, label;
 
     /**
-     * Creates a default column that exist outside a table has 
-     * a TextBox<String> has the editor.
+     * width - default and current width minWidth - Minimum allowed width of the
+     * column
+     */
+    protected int          width, minWidth;
+
+    protected boolean      enabled, resizable, filterable;
+
+    /**
+     * Creates a default column that exist outside a table has a TextBox<String>
+     * has the editor.
      */
     public Column() {
         this(null, "", "");
     }
 
     /**
-     * Creates a column for the Table passed and defaults the editor
-     * to a TextBox<String>
+     * Creates a column for the Table passed and defaults the editor to a
+     * TextBox<String>
      */
     public Column(Table table, String name, String label) {
         this.table = table;
@@ -83,25 +85,47 @@ public class Column {
     /**
      * Returns the Editor currently being used by this Column
      */
+    @SuppressWarnings("unchecked")
     public CellEditor getCellEditor() {
         return editor;
     }
 
     /**
      * Sets the Editor widget to be used by this Column. This method will also
-     * set Cell Renderer if the passed editor also implements the CellRenderer interface.
-     * If you need a different Cell Renderer make sure to call setCellEditor first before
-     * calling setCellRenderer.
+     * set Cell Renderer if the passed editor also implements the CellRenderer
+     * interface. If you need a different Cell Renderer make sure to call
+     * setCellEditor first before calling setCellRenderer.
+     * 
      * @param editor
      */
+    @SuppressWarnings("unchecked")
     public void setCellEditor(CellEditor editor) {
         this.editor = editor;
-        if(editor instanceof CellRenderer)
+        if (editor instanceof CellRenderer)
             renderer = (CellRenderer)editor;
+    }
+    
+    /**
+     * Method will return the currently set Renderer for this column
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public CellRenderer getCellRenderer() {
+        return renderer;
+    }
+
+    /**
+     * Method will set the current renderer for this column
+     * @param renderer
+     */
+    @SuppressWarnings("unchecked")
+    public void setCellRenderer(CellRenderer renderer) {
+        this.renderer = renderer;
     }
 
     /**
      * Returns the Table that this Column is used in.
+     * 
      * @return
      */
     public Table getTable() {
@@ -110,6 +134,7 @@ public class Column {
 
     /**
      * Sets the Table that this Column is used in.
+     * 
      * @param table
      */
     public void setTable(Table table) {
@@ -118,6 +143,7 @@ public class Column {
 
     /**
      * Returns the name of set to this Column.
+     * 
      * @return
      */
     public String getName() {
@@ -126,6 +152,7 @@ public class Column {
 
     /**
      * Sets the name to be used by this Column
+     * 
      * @param name
      */
     public void setName(String name) {
@@ -134,6 +161,7 @@ public class Column {
 
     /**
      * Returns the string used as the header for this Column
+     * 
      * @return
      */
     public String getLabel() {
@@ -142,6 +170,7 @@ public class Column {
 
     /**
      * Sets the string to be used as the header for this Column
+     * 
      * @param label
      */
     public void setLabel(String label) {
@@ -150,36 +179,43 @@ public class Column {
 
     /**
      * Returns the width being used by this Column.
+     * 
      * @return
      */
     public int getWidth() {
-        
-        int totalWidth,lastColumn;
-       
-        if(table == null)
+
+        int totalWidth, lastColumn;
+
+        if (table == null)
             return minWidth;
-        
+
+        /*
+         * If this is the last colulmn calculate its width if the overall width 
+         * will be less then the set width of the table
+         */
         lastColumn = table.getColumnCount() - 1;
-        if(lastColumn >= 0 && table.getColumnAt(lastColumn) == this) {
+        if (lastColumn >= 0 && table.getColumnAt(lastColumn) == this) {
             totalWidth = table.getXForColumn(lastColumn);
-            if(totalWidth + width < table.getWidthWithoutScrollbar())
+            if (totalWidth + width < table.getWidthWithoutScrollbar())
                 return table.getWidthWithoutScrollbar() - totalWidth;
         }
-        
+     
         return width;
     }
 
     /**
      * Sets the width to be used by this Column
+     * 
      * @param width
      */
     public void setWidth(int width) {
-        this.width = Math.max(width,minWidth);
+        this.width = Math.max(width, minWidth);
         table.resize();
     }
 
     /**
      * Returns the Minimum width to be used by this Column.
+     * 
      * @return
      */
     public int getMinWidth() {
@@ -188,6 +224,7 @@ public class Column {
 
     /**
      * Sets the minimum width to be used by this Column.
+     * 
      * @param minWidth
      */
     public void setMinWidth(int minWidth) {
@@ -196,6 +233,7 @@ public class Column {
 
     /**
      * Method used to check if this Column is enabled for editing.
+     * 
      * @return
      */
     public boolean isEnabled() {
@@ -204,6 +242,7 @@ public class Column {
 
     /**
      * Method used to enable/disable this Column for editing.
+     * 
      * @param enabled
      */
     public void setEnabled(boolean enabled) {
@@ -211,35 +250,37 @@ public class Column {
     }
 
     /**
-//     * Method used to determine if this Column is allowed to be resized.
+     * Method used to determine if this Column is allowed to be resized.
+     * 
      * @return
      */
     public boolean isResizable() {
         return resizable;
     }
 
+    /**
+     * Method used to determine if this Column can be filtered
+     * @return
+     */
     public boolean isFilterable() {
         return filterable;
     }
 
+    /**
+     * Method used to set the filterable flag for this column
+     * @param filterable
+     */
     public void setFilterable(boolean filterable) {
         this.filterable = filterable;
     }
 
     /**
-     * Method used to allow/disallow this Column to be resized. 
+     * Method used to allow/disallow this Column to be resized.
+     * 
      * @param resizable
      */
     public void setResizable(boolean resizable) {
         this.resizable = resizable;
-    }
-    
-    public CellRenderer getCellRenderer() {
-        return renderer;
-    }
-    
-    public void setCellRenderer(CellRenderer renderer) {
-        this.renderer = renderer;
     }
 
 }

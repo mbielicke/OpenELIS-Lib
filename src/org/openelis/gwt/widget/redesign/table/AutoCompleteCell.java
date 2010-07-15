@@ -29,6 +29,7 @@ import org.openelis.gwt.widget.AutoComplete;
 
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Widget;
 
 public class AutoCompleteCell<T> implements CellRenderer<T>, CellEditor<T> {
     
@@ -65,6 +66,10 @@ public class AutoCompleteCell<T> implements CellRenderer<T>, CellEditor<T> {
         editor.setValue(value);
         flexTable.setText(row, col, editor.getDisplay());
         
+    }
+    
+    public Widget getWidget() {
+        return editor;
     }
 
 }

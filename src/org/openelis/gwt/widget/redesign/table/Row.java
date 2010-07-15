@@ -45,7 +45,6 @@ public class Row {
      * Default constructor
      *
      */
-    
     public Row() {
         cells = new ArrayList<Object>();
     }
@@ -129,6 +128,12 @@ public class Row {
         return data;
     }
     
+    /**
+     * Method that can be overridden by classes that extend Row
+     * to apply a specific style to each Row when drawn. 
+     * @param index
+     * @return
+     */
     public String getStyle(int index) {
         return null;
     }

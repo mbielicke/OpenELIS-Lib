@@ -54,26 +54,35 @@ public class Header extends FocusPanel {
      * Contains Header widgets and is the wrapped widget for this composite.
      */
     protected FlexTable flexTable;
+    
     /**
      * Reference to the Table this header is used for.
      */
     protected Table     table;
+    
     /**
      * Popuppanel used to display the resize bar.
      */
     protected PopupPanel popResize, popFilter;
+    
     /**
      * Position where the resize started.
      */
-    protected int        startX, resizeColumn, showingFilterFor;
+    protected int        startX, resizeColumn, showingFilterFor,headerHeight = 20;
+    
     /**
      * Widget that used to display a then position due to resizing.
      */
     protected FocusPanel bar, filterButton;
+    
     /**
      * The column that is being resized.
      */
     protected boolean    resizeColStyle, showingFilter;
+    
+    /**
+     * Reference to this object to be used in anonymous handlers
+     */
     protected Header     source = this;
 
     /**
@@ -87,15 +96,26 @@ public class Header extends FocusPanel {
         flexTable.setStyleName("Header");
         setWidget(flexTable);
 
+        /*
+         * Mouse handler for determining to allow resizing or filter based on 
+         * mouse position
+         */
         addMouseMoveHandler(new MouseMoveHandler() {
             public void onMouseMove(MouseMoveEvent event) {
                 checkForResizeFilter(event.getX());
             }
         });
 
+        /*
+         * MouseDown handler for doing resize of columns in a table
+         */
         addHandler(new MouseDownHandler() {
             public void onMouseDown(MouseDownEvent event) {
-                showFilter(-1);
+                showFilter( -1);
+                /*
+                 * Initial popResize and bar the first time a resize request
+                 * is received
+                 */
                 if (popResize == null) {
                     popResize = new PopupPanel();
                     bar = new FocusPanel();
@@ -103,55 +123,84 @@ public class Header extends FocusPanel {
                     bar.setHeight(table.getOffsetHeight() + "px");
                     DOM.setStyleAttribute(bar.getElement(), "background", "red");
                     popResize.add(bar);
+                    /*
+                     * Move resize bar if mouse moved
+                     */
                     bar.addMouseMoveHandler(new MouseMoveHandler() {
                         public void onMouseMove(MouseMoveEvent event) {
-                            popResize.setPopupPosition(
-                                                       popResize.getAbsoluteLeft() + event.getX(),
+                            popResize.setPopupPosition(popResize.getAbsoluteLeft() + event.getX(),
                                                        popResize.getAbsoluteTop());
                         }
                     });
 
+                    /*
+                     * Calculate new column size by comparing the startX to the last position of the 
+                     * resize bar.
+                     */
                     bar.addMouseUpHandler(new MouseUpHandler() {
                         public void onMouseUp(MouseUpEvent event) {
                             Column column;
 
                             column = table.getColumnAt(resizeColumn);
-
-                            column.setWidth(column.getWidth() + (popResize.getAbsoluteLeft() - startX));
+                            
+                            /*
+                             * Column will call table.resize() in the call to setWidth
+                             */
+                            column.setWidth(column.getWidth() +
+                                            (popResize.getAbsoluteLeft() - startX));
 
                             if (popResize != null)
                                 popResize.hide();
-                            
+
                         }
                     });
                 }
 
+                /*
+                 * Calc the start position of the resize bar
+                 */
                 startX = table.getXForColumn(resizeColumn) +
-                         table.getColumnAt(resizeColumn).getWidth() - 1 
-                         +getAbsoluteLeft();
+                         table.getColumnAt(resizeColumn).getWidth() - 1 + getAbsoluteLeft();
+                
                 popResize.setPopupPosition(startX, ((Widget)event.getSource()).getAbsoluteTop());
                 popResize.show();
+                /*
+                 * We set the capture of mouse events now to the resize bar itself.  This allows us
+                 * to simplify the logic of dragging the bar, as well as provide smoother dragging and 
+                 * allows the mouse to float outside of the header and still move the resize bar
+                 */
                 DOM.setCapture(bar.getElement());
+                /*
+                 * unsink mousedown from header.  Will sink mousedown again when resize is lit up next time
+                 */
                 source.unsinkEvents(Event.ONMOUSEDOWN);
             }
         }, MouseDownEvent.getType());
 
+        /*
+         * Handler to remove filter buttons from header if the mouse leaves the header
+         */
         addMouseOutHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
                 int relX, relY;
 
                 if (showingFilter) {
+                    /*
+                     * Moving the mouse over a filter button will cause this event to be fired.
+                     * We want to determine if the mouse is still in the header and to return out
+                     * if so
+                     */
                     relX = event.getRelativeX(getElement());
                     relY = event.getRelativeY(getElement());
-                    if (relX > -1 && relX < getOffsetWidth() &&
-                        relY > -1 && relY < getOffsetHeight())
+                    if (relX > -1 && relX < getOffsetWidth() && relY > -1 &&
+                        relY < getOffsetHeight())
                         return;
                     else
-                        showFilter(-1);
+                        showFilter( -1);
                 }
             }
         });
-
+        
         layout();
     }
 
@@ -175,11 +224,19 @@ public class Header extends FocusPanel {
         }
 
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
-        flexTable.getCellFormatter().setHeight(0, 0, table.getRowHeight() + "px");
+        flexTable.getCellFormatter().setHeight(0, 0, headerHeight + "px");
     }
 
     /**
-     * Resizes the header to the new column
+     * Method to set the height of the header.
+     * @param height
+     */
+    protected void setHeaderHeight(int height) {
+        headerHeight = height;
+    }
+    
+    /**
+     * Resizes the header to the new column widths
      */
     protected void resize() {
         Column col;
@@ -192,9 +249,13 @@ public class Header extends FocusPanel {
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
     }
 
+    /**
+     * Method to show the filter button to allow the user to click to show the filter menu
+     * 
+     */
     private void showFilter(int column) {
         int x;
-        
+
         if (showingFilter) {
             if (showingFilterFor != column) {
                 popFilter.hide();
@@ -209,9 +270,17 @@ public class Header extends FocusPanel {
 
         if (table.getColumnAt(column).isFilterable()) {
             x = table.getXForColumn(column) + table.getColumnAt(column).getWidth();
-            if(x > table.getWidthWithoutScrollbar() + table.view.scrollView.getHorizontalScrollPosition()) 
+            /*
+             * if the position of the filter button is off the currently scrolled view
+             * then just return
+             */
+            if (x > table.getWidthWithoutScrollbar() +
+                    table.view.scrollView.getHorizontalScrollPosition())
                 return;
             x -= 17;
+            /*
+             * Initialize the popFilter the first time.
+             */
             if (popFilter == null) {
                 popFilter = new PopupPanel();
                 popFilter.setWidth("16px");
@@ -224,13 +293,22 @@ public class Header extends FocusPanel {
                 });
                 popFilter.add(filterButton);
             }
-            popFilter.setPopupPosition(x+getAbsoluteLeft(),getAbsoluteTop());
+            
+            /*
+             * Position and show filter button
+             */
+            popFilter.setPopupPosition(x + getAbsoluteLeft(), getAbsoluteTop());
             popFilter.show();
             showingFilter = true;
             showingFilterFor = column;
         }
     }
 
+    /**
+     * Method to determine if the resize cursor or filter button should be shown based on
+     * the cursor position in the header 
+     * @param x
+     */
     private void checkForResizeFilter(int x) {
         int col1, col2;
 
@@ -256,7 +334,6 @@ public class Header extends FocusPanel {
             resizeColStyle = false;
             unsinkEvents(Event.ONMOUSEDOWN);
         }
-
     }
 
 }

@@ -11,5 +11,8 @@ public class QueryData implements RPC {
 	public String query;
 	public String key;
 	
+	public String toString() {
+	    return key+"("+type.toString() + ") = " + query;
+	}
 
 }

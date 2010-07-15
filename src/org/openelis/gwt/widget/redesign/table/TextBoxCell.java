@@ -28,32 +28,57 @@ package org.openelis.gwt.widget.redesign.table;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.TextBoxBase;
-import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
+/**
+ * This class implements the CellRenderer and CellEditor interfaces and is used 
+ * to edit and render cells in a Table using a TextBox<T>
+ * @author tschmidt
+ *
+ * @param <T>
+ */
 public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
 
+    /**
+     * Editor used by this cell
+     */
     private TextBox<T> editor;
+    private AbsolutePanel container;
     
+    /**
+     * Constructor that takes the editor to be used as a param
+     * @param editor
+     */
     public TextBoxCell(TextBox<T> editor) {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableTextBox");
+        container = new AbsolutePanel();
+        container.add(editor,0,1);
+        container.setStyleName("CellContainer");
     }
-     
+    
+    /**
+     * Method to return the editor set for this cell
+     */
     public TextBox<T> getWidget() {
         return editor;
     }
     
+    /**
+     * Will set the value passed into the editor and set the editor into the
+     * table cell passed
+     */
     public void startEditing(final Table table, FlexTable flexTable, int row, int col, T value, Event event) {
         editor.setQueryMode(table.getQueryMode());
         editor.setValue(value);
-        editor.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
-        editor.setHeight((table.getRowHeight()-3)+"px");
-        flexTable.setWidget(row, col, editor);
+        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
+        container.setHeight((table.getRowHeight()-3)+"px");
+        flexTable.setWidget(row, col, container);
         /*
          * This done in a deferred command otherwise IE will not set focus consistently 
          */
@@ -62,13 +87,19 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
                 editor.setFocus(true);
             }
         });
-        
     }
 
+    /**
+     * Returns the current value of the editor
+     */
     public T finishEditing() {
         return editor.getValue();
     }
-    
+
+    /**
+     * Uses the Editor for this cell to format the value passed based on editor settings
+     * and set the formatted data in the table cell passed
+     */
     public void render(Table table, FlexTable flexTable, int row, int col, T value) {
         editor.setQueryMode(table.getQueryMode());
         editor.setValue(value);

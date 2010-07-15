@@ -92,15 +92,19 @@
 	padding: 1px 1px 0px;
 }
 
-.TableTextBox {
+.CellContainer {
 	border:1px solid gold;
+	padding : 0px 0px 0px 0px;
+	margin-left : -2px;
+		
+}
+.TableTextBox {
+	border : none;
 	cursor:default;
 	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
 	font-size:10px;
 	font-weight:normal;
 	outline : none;
-	padding : 0px 0px 0px 0px;
-	margin-left : -2px;
 }	
 
 .FilterButton {

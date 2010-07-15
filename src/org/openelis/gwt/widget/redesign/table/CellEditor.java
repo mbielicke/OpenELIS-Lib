@@ -27,10 +27,13 @@ package org.openelis.gwt.widget.redesign.table;
 
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface CellEditor<T> {
     
     public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event);
     
     public T finishEditing();
+    
+    public Widget getWidget();
 }
