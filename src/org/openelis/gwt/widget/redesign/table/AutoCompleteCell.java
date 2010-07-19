@@ -27,45 +27,56 @@ package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.widget.AutoComplete;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 
 public class AutoCompleteCell<T> implements CellRenderer<T>, CellEditor<T> {
     
     private AutoComplete<T> editor;
+    private AbsolutePanel   container;
     
-    public AutoCompleteCell() {
-        
-    }
-    
-    public void setEditor(AutoComplete<T> editor) {
+    public AutoCompleteCell(AutoComplete<T> editor) {
         this.editor = editor;
         editor.setEnabled(true);
-        editor.setStyleName("TableAutoComplete");
+        editor.setStyleName("TableDropdown");
+        container = new AbsolutePanel();
+        container.add(editor);
+        container.setStyleName("CellContainer");
     }
-
+    
     public void startEditing(Table table,
                              FlexTable flexTable,
                              int row,
                              int col,
                              T value,
                              Event event) {
+        table.unsinkEvents(Event.ONKEYDOWN);
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()+"px");
-        flexTable.setWidget(row,col,editor);
+        editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
+        editor.setHeight(table.getRowHeight()-4 +"px");
+        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
+        container.setHeight((table.getRowHeight()-3)+"px");
+        flexTable.setWidget(row, col, container);
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                editor.setFocus(true);
+            }
+        });
         
     }
 
-    public T finishEditing() {
-        // TODO Auto-generated method stub
-        return null;
+    public T finishEditing() {   
+        return editor.getValue();
     }
     
     public void render(Table table, FlexTable flexTable, int row, int col, T value) {
+        table.sinkEvents(Event.ONKEYDOWN);
         editor.setValue(value);
-        flexTable.setText(row, col, editor.getDisplay());
-        
+        flexTable.setText(row,col,editor.getDisplay());
     }
     
     public Widget getWidget() {

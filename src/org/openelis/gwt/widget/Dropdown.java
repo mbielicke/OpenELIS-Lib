@@ -77,7 +77,7 @@ public class Dropdown<T> extends TextBox<T> {
     protected Button                button;
     protected Table                 table;
     protected PopupPanel            popup;
-    protected int                   cellHeight = 19, itemCount;
+    protected int                   cellHeight = 19, itemCount = 10, textWidth;
     /**
      * Sorted list of display values for search
      */
@@ -134,7 +134,7 @@ public class Dropdown<T> extends TextBox<T> {
         AbsolutePanel image = new AbsolutePanel();
         image.setStyleName("autoDropdownButton");
         button.setDisplay(image, false);
-
+        
         hp.add(textbox);
         hp.add(button);
 
@@ -245,6 +245,8 @@ public class Dropdown<T> extends TextBox<T> {
 
     @Override
     public void setWidth(String width) {
+        
+        textWidth = Util.stripUnits(width) - 16;
         /*
          * Set the outer panel to full width;
          */
@@ -255,8 +257,16 @@ public class Dropdown<T> extends TextBox<T> {
          * set the Textbox to width - 16 to account for button.
          */
         
-        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
-
+        textbox.setWidth(textWidth + "px");
+        
+        if(table != null) 
+            table.setWidth(width);
+    }
+    
+    @Override
+    public void setHeight(String height) {
+        textbox.setHeight(height);
+        button.setHeight(height);
     }
 
     /**
@@ -294,9 +304,10 @@ public class Dropdown<T> extends TextBox<T> {
      */
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
+        //table.setVisibleRows(itemCount);
         table.setTableStyle("DropdownTable");
         table.setRowHeight(16);
-
+        table.setEnabled(true);
         /*
          * This handler will will cancel the selection if the item has been
          * disabled.
@@ -318,8 +329,10 @@ public class Dropdown<T> extends TextBox<T> {
                  * Close popup if not in multiSelect mode or if we are in
                  * multiSelect but the ctrl or shift is not held
                  */
-                if ( !table.isMultipleSelectionAllowed())// || ( !table.ctrlKey && !table.shiftKey))
-                    popup.hide();
+                if ( !table.isMultipleSelectionAllowed()) {
+                    if(popup != null)
+                        popup.hide();
+                }
 
                 setDisplay();
 
@@ -345,6 +358,12 @@ public class Dropdown<T> extends TextBox<T> {
         assert table != null;
 
         table.setModel(model);
+        
+        if(model.size() < itemCount) {
+            table.setVisibleRows(model.size());
+        }else
+            table.setVisibleRows(itemCount);
+        
 
         createKeyHash(model);
 

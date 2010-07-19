@@ -25,38 +25,47 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.widget.calendar.Calendar;
+import org.openelis.gwt.widget.CheckBox;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime> {
-    
-    private Calendar editor;
+public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
+
+    private CheckBox editor;
     private AbsolutePanel container;
     
-    public CalendarCell(Calendar editor) {
+    public CheckBoxCell(CheckBox editor) {
         this.editor = editor;
         editor.setEnabled(true);
-        editor.setStyleName("TableCalendar");
         container = new AbsolutePanel();
-        container.add(editor,0,1);
         container.setStyleName("CellContainer");
-    }
+        container.add(editor);
+        DOM.setStyleAttribute(container.getElement(), "align", "center");
         
+    }
+    
+    public String finishEditing() {
+        return editor.getValue();
+    }
+
+    public Widget getWidget() {
+        return editor;
+    }
+
     public void startEditing(Table table,
                              FlexTable flexTable,
                              int row,
                              int col,
-                             Datetime value,
+                             String value,
                              Event event) {
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()-15+"px");
         container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
         container.setHeight((table.getRowHeight()-3)+"px");
         flexTable.setWidget(row, col, container);
@@ -67,17 +76,15 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         });
     }
 
-    public Datetime finishEditing() {
-        return editor.getValue();
-    }
-    
-    public void render(Table table, FlexTable flexTable, int row, int col, Datetime value) {
-        editor.setValue(value);
-        flexTable.setText(row, col, editor.getText());
-    }
-    
-    public Widget getWidget() {
-        return editor;
+    public void render(Table table, FlexTable flexTable, int row, int col, String value) {
+        String style;
+        AbsolutePanel div;
+        
+        style = CheckBox.Value.getValue(value).getStyle();
+        div = new AbsolutePanel();
+        div.setStyleName(style);
+        flexTable.setWidget(row, col, div);
+        flexTable.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
     }
 
 }

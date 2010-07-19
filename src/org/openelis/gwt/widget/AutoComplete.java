@@ -293,7 +293,8 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
-
+        table.setVisibleRows(itemCount);
+        
         /*
          * This handler will will cancel the selection if the item has been
          * disabled.
@@ -384,6 +385,8 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      */
     @SuppressWarnings("unchecked")
     public Item<T> getSelectedItem() {
+        if(table == null || table.getModel() == null)
+            return null;
         return (Item<T>)table.getModel().get(getSelectedIndex());
     }
 

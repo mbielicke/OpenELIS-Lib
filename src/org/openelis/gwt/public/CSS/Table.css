@@ -113,3 +113,70 @@
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
+
+
+.DropdownPopup{
+    /*border:none;*/
+    overflow:hidden;
+}
+
+.TableDropdown {
+	spacing : 0;
+	padding : 0px;
+	margin-left : -2px;
+}
+
+.TableDropdown .autoDropdownButton{
+    width:16px;
+    height:17px;
+    background: url(../Images/trigger.gif) 0px 0px no-repeat;
+    margin-left : -2px;
+}
+
+.TableDropdown .TextboxSelected{
+    border:none;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    cursor:default;
+}
+.TableDropdown .TextboxUnselected{
+    border:none;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    cursor:default;
+}
+
+.TableAutoDropdown .TextboxSelected{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    border: 0px;
+    cursor:default;
+}
+.TableAutoDropdown .TextboxUnselected{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    border: 0px;
+    cursor:default;
+}
+
+.TableAutoDropdownButton{
+width:16;
+height:17;
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.TableAutoDropdown .Hover{
+cursor:pointer;
+background: url(../Images/trigger.gif) -16px 0px no-repeat;
+}
+.TableAutoDropdown .Selected{
+background: url(../Images/trigger.gif) -64px 0px no-repeat;
+}
+.TableAutoDropdown .Pressed{
+background: url(../Images/trigger.gif) -48px 0px no-repeat;
+}

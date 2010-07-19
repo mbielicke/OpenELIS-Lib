@@ -1,6 +1,7 @@
 package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.Util;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
@@ -205,6 +206,21 @@ public class Calendar extends TextBox<Datetime> {
             }
         });
         
+    }
+    
+    @Override
+    public void setWidth(String width) {
+        /*
+         * Set the outer panel to full width;
+         */
+        if (hp != null)
+            hp.setWidth(width);
+
+        /*
+         * set the Textbox to width - 16 to account for button.
+         */
+        
+        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
 
     }
 

@@ -211,8 +211,9 @@ public class View extends Composite {
 
             scrollView.setHeight(scrollView.getOffsetHeight() + "px");
 
+            rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
+            
             if (scrollBar != null) {
-                rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
                 scrollBar.setHeight(flexTable.getOffsetHeight() + "px");
                 if (table.hasHeader)
                     DOM.setStyleAttribute(scrollBar.getElement(), "top", header.getOffsetHeight() +
@@ -547,6 +548,9 @@ public class View extends Composite {
     protected boolean scrollToVisible(int r) {
         int fr;
 
+        if (scrollBar == null)
+            return false;
+        
         if (isRowVisible(r))
             return false;
 

@@ -25,28 +25,27 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import java.util.ArrayList;
-
 import org.openelis.gwt.widget.Dropdown;
-import org.openelis.gwt.widget.Item;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 
 public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
     
     private Dropdown<T> editor;
-
-    public DropdownCell() {
-        
-    }
+    private AbsolutePanel container;
     
-    public void setEditor(Dropdown<T> editor) {
+    public DropdownCell(Dropdown<T> editor) {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableDropdown");
+        container = new AbsolutePanel();
+        container.add(editor);
+        container.setStyleName("CellContainer");
+      
     }
     
     public void startEditing(Table table,
@@ -56,8 +55,11 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
                              T value,
                              Event event) {
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()+"px");
-        flexTable.setWidget(row, col, editor);
+        editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
+        editor.setHeight(table.getRowHeight()-4 +"px");
+        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
+        container.setHeight((table.getRowHeight()-3)+"px");
+        flexTable.setWidget(row, col, container);
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 editor.setFocus(true);

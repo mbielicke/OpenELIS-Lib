@@ -92,7 +92,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Table dimensions
      */
-    protected int                rowHeight, visibleRows, viewWidth = -1, totalColumnWidth;
+    protected int                rowHeight, visibleRows = 10, viewWidth = -1, totalColumnWidth;
     
     /**
      * Model used by the Table
