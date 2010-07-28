@@ -34,6 +34,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
@@ -163,7 +164,7 @@ public class View extends Composite {
         flexTable.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
-                table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex());
+                table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex(),(GwtEvent)event);
             }
         });
         flexTable.setStyleName(table.TABLE_STYLE);
@@ -453,7 +454,7 @@ public class View extends Composite {
      * @param event
      */
     @SuppressWarnings("unchecked")
-    public void startEditing(int row, final int col, Object value, Event event) {
+    public void startEditing(int row, final int col, Object value, GwtEvent event) {
         int r, x1, x2, v1, v2;
 
         r = getFlexTableIndex(row);
@@ -489,7 +490,7 @@ public class View extends Composite {
      */
     protected Object finishEditing(int row, int col) {
 
-        return table.getColumnAt(col).getCellEditor().finishEditing();
+        return table.getColumnAt(col).getCellEditor().finishEditing(table,flexTable,row,col);
 
     }
 

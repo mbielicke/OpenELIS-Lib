@@ -27,6 +27,8 @@ package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.widget.CheckBox;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -51,8 +53,10 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
         
     }
     
-    public String finishEditing() {
+    public String finishEditing(Table table, FlexTable flexTable, int row, int col) {
+        table.ignoreReturn(false);
         return editor.getValue();
+        
     }
 
     public Widget getWidget() {
@@ -64,8 +68,11 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
                              int row,
                              int col,
                              String value,
-                             Event event) {
+                             GwtEvent event) {
+        table.ignoreReturn(true);
         editor.setValue(value);
+        if(event instanceof ClickEvent)
+            editor.changeValue();
         container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
         container.setHeight((table.getRowHeight()-3)+"px");
         flexTable.setWidget(row, col, container);
@@ -74,6 +81,7 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
                 editor.setFocus(true);
             }
         });
+        
     }
 
     public void render(Table table, FlexTable flexTable, int row, int col, String value) {

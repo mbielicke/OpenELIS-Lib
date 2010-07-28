@@ -131,10 +131,12 @@ public class TreeColumn {
     					val = "";
     			}else{
     				Item vrow = (Item)cell.getValue();
+    				/*
     				if(vrow  != null)
                         ((AutoComplete)colWidget).setValue(vrow.getKey(),"");
                     else
                         ((AutoComplete)colWidget).setValue(null,"");
+                    */
                     val = ((AutoComplete)colWidget).getDisplay();
     			}
     		}else if(colWidget instanceof Dropdown){
@@ -188,12 +190,13 @@ public class TreeColumn {
     				((Label)widget).setText((String)cell.getValue());
     			}else{
     				Item vrow = (Item)cell.getValue();
+    				/*
     				if(vrow != null)
                         ((AutoComplete)colWidget).setValue(vrow.getKey(), "");
     				
                     else
                         ((AutoComplete)colWidget).setValue(null,"");
-                
+                     */
                     ((Label)widget).setText(((AutoComplete)colWidget).getDisplay());
     			}
     		}else if(colWidget instanceof Dropdown){
@@ -240,10 +243,12 @@ public class TreeColumn {
                 //((AutoComplete)colWidget).textbox.setText((String)cell.getValue());
             }else{
                 Item vrow =  (Item)cell.getValue();
+                /*
                 if(vrow != null)
                     ((AutoComplete)colWidget).setValue(vrow.getKey(),"");
                 else
                     ((AutoComplete)colWidget).setValue(null,"");
+                */
     		}
 		}else if(colWidget instanceof Dropdown){
     		if(cell.getValue() instanceof ArrayList)

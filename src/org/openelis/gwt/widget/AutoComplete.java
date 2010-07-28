@@ -56,6 +56,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -68,7 +69,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * 
  * @param <T>
  */
-public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers {
+public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMatchesHandlers {
     /**
      * Used for AutoComplete display
      */
@@ -78,8 +79,9 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
     protected PopupPanel      popup;
     protected int             cellHeight = 21, delay = 350, itemCount = 10;
     protected Timer           timer;
+    protected boolean         keepPopup;
 
-    final AutoComplete<T>     source;
+    final AutoComplete        source;
 
     /**
      * Instance of the Renderer interface. Initially set to the DefaultRenderer
@@ -152,14 +154,14 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
-                Item<T> item;
+                Item<Integer> item;
 
                 BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
 
                 item = getSelectedItem();
 
                 if (item != null)
-                    setValue(item.key, true);
+                    setValue(item.key, renderer.getDisplay(item));
             }
         });
 
@@ -219,14 +221,14 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
-                    Item<T> item;
+                    Item<Integer> item;
                     /*
                      * Call set value if user arrowed down to select and clicked
                      * to another widget to close the Popup.
                      */
                     item = getSelectedItem();
                     if (event.isAutoClosed() && item != null) {
-                        setValue(item.key, true);
+                        setValue(item.key, renderer.getDisplay(item));
                     }
                 }
             });
@@ -301,7 +303,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          */
         table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-                if ( !((Item<T>)table.getModel().get(event.getItem())).isEnabled())
+                if ( !((Item<Integer>)table.getModel().get(event.getItem())).isEnabled())
                     event.cancel();
             }
         });
@@ -312,7 +314,9 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
          */
         table.addSelectionHandler(new SelectionHandler<Integer>() {
             public void onSelection(SelectionEvent<Integer> event) {
-                popup.hide();
+                if(!keepPopup)
+                    popup.hide();
+                
                 setDisplay();
 
                 /*
@@ -338,7 +342,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * 
      * @param model
      */
-    public void setModel(ArrayList<Item<T>> model) {
+    public void setModel(ArrayList<Item<Integer>> model) {
         assert table != null;
 
         table.setModel(model);
@@ -351,8 +355,8 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * @return
      */
     @SuppressWarnings("unchecked")
-    public ArrayList<Item<T>> getModel() {
-        return (ArrayList<Item<T>>)table.getModel();
+    public ArrayList<Item<Integer>> getModel() {
+        return (ArrayList<Item<Integer>>)table.getModel();
     }
 
     /**
@@ -362,7 +366,9 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * @param index
      */
     public void setSelectedIndex(int index) {
+        keepPopup = true;
         table.selectRowAt(index);
+        keepPopup = false;
         if(getSelectedIndex() > -1)
             textbox.setText(renderer.getDisplay(getSelectedItem()));
         else
@@ -384,10 +390,10 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * @return
      */
     @SuppressWarnings("unchecked")
-    public Item<T> getSelectedItem() {
-        if(table == null || table.getModel() == null)
+    public Item<Integer> getSelectedItem() {
+        if(table == null || table.getModel() == null || getSelectedIndex() < 0)
             return null;
-        return (Item<T>)table.getModel().get(getSelectedIndex());
+        return (Item<Integer>)table.getModel().get(getSelectedIndex());
     }
 
     /**
@@ -436,9 +442,12 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * @param value
      * @param display
      */
-    public void setValue(T value, String display) {
-        this.value = value;
-        textbox.setText(display);
+    public void setValue(Integer value, String display) {
+        setValue(new AutoCompleteValue(value,display),false);
+    }
+    
+    public void setValue(AutoCompleteValue av) {
+        setValue(av,false);
     }
 
     /**
@@ -447,13 +456,13 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * current value
      */
     @Override
-    public void setValue(T value, boolean fireEvents) {
+    public void setValue(AutoCompleteValue value, boolean fireEvents) {
 
         if(!Util.isDifferent(this.value, value))
             return;
 
         if (value != null) {
-            textbox.setText(renderer.getDisplay(getSelectedItem()));
+            textbox.setText(value.getDisplay());
         } else {
             table.selectRowAt( -1);
             textbox.setText("");
@@ -484,7 +493,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
      * 
      * @param model
      */
-    public void showAutoMatches(ArrayList<Item<T>> model) {
+    public void showAutoMatches(ArrayList<Item<Integer>> model) {
         setModel(model);
         /*
          * Call showPopup only if the textbox still has focus. Otherwise the
@@ -514,7 +523,7 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
                 case KeyCodes.KEY_TAB:
                     if (popup != null && popup.isShowing())
                         popup.hide();
-                    event.stopPropagation();
+                    //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_BACKSPACE:
                     int selectLength;
@@ -538,17 +547,17 @@ public class AutoComplete<T> extends TextBox<T> implements HasGetMatchesHandlers
 
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_DOWN:
-                    if (popup.isShowing()) {
+                    if (popup != null && popup.isShowing()) {
+                        keepPopup = true;
                         table.selectRowAt(findNextActive(table.getSelectedRow()));
-                        setDisplay();
-                        event.stopPropagation();
+                        keepPopup = false;
                     }
                     break;
                 case KeyCodes.KEY_UP:
-                    if (popup.isShowing()) {
+                    if (popup != null && popup.isShowing()) {
+                        keepPopup = true;
                         table.selectRowAt(findPrevActive(table.getSelectedRow()));
-                        setDisplay();
-                        event.stopPropagation();
+                        keepPopup = false;
                     }
                     break;
                 case KeyCodes.KEY_ENTER:

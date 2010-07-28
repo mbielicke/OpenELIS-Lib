@@ -82,6 +82,10 @@
 	background: white;
 }
 
+.DropdownTable tr.Selection {
+    background:#f0f0f0;
+}
+
 .DropdownTable td {
 	overflow : hidden;
 	white-space : nowrap;

@@ -78,6 +78,7 @@ public class Dropdown<T> extends TextBox<T> {
     protected Table                 table;
     protected PopupPanel            popup;
     protected int                   cellHeight = 19, itemCount = 10, textWidth;
+    protected boolean               keepPopup;
     /**
      * Sorted list of display values for search
      */
@@ -329,7 +330,7 @@ public class Dropdown<T> extends TextBox<T> {
                  * Close popup if not in multiSelect mode or if we are in
                  * multiSelect but the ctrl or shift is not held
                  */
-                if ( !table.isMultipleSelectionAllowed()) {
+                if (!keepPopup && !table.isMultipleSelectionAllowed()) {
                     if(popup != null)
                         popup.hide();
                 }
@@ -490,10 +491,12 @@ public class Dropdown<T> extends TextBox<T> {
             return;
         button.setEnabled(enabled);
         table.setEnabled(enabled);
+        
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
             unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
+        
         super.setEnabled(enabled);
     }
 
@@ -683,7 +686,7 @@ public class Dropdown<T> extends TextBox<T> {
                 case KeyCodes.KEY_TAB:
                     if (popup != null && popup.isShowing())
                         popup.hide();
-                    event.stopPropagation();
+                    //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_BACKSPACE:
                     int selectLength;
@@ -714,16 +717,20 @@ public class Dropdown<T> extends TextBox<T> {
                     //table.shiftKey = false;
                     break;
                 case KeyCodes.KEY_DOWN:
+                    keepPopup = true;
                     table.selectRowAt(findNextActive(table.getSelectedRow()));
+                    keepPopup = false;
                     //table.scrollToVisible(table.get);
-                    setDisplay();
-                    event.stopPropagation();
+                    //setDisplay();
+                    //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_UP:
+                    keepPopup = true;
                     table.selectRowAt(findPrevActive(table.getSelectedRow()));
+                    keepPopup = false;
                     //table.scrollToVisible();
-                    setDisplay();
-                    event.stopPropagation();
+                    //setDisplay();
+                    //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_ENTER:
                     if (popup == null || !popup.isShowing())

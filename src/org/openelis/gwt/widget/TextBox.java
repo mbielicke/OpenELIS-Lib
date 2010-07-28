@@ -69,7 +69,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     /**
      * Data moved from Field to the widget
      */
-    protected boolean                               queryMode, required;
+    protected boolean                               queryMode, required,enabled;
     protected T                                     value;
 
     /**
@@ -98,6 +98,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 
     public void init() {
         textbox = new com.google.gwt.user.client.ui.TextBox();
+        setEnabled(false);
         textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
             /*
              * This event calls validate(true) so that that the valueChangeEvent
@@ -201,6 +202,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * Enables or disables the textbox for editing.
      */
     public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
         textbox.setReadOnly( !enabled);
         /*
          * if ( !enabled) unsinkEvents(Event.KEYEVENTS); else
@@ -212,7 +214,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * Returns whether the text is enabled for editing
      */
     public boolean isEnabled() {
-        return !textbox.isReadOnly();
+        return enabled;
     }
 
     /**

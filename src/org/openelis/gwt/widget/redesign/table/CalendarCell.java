@@ -28,18 +28,31 @@ package org.openelis.gwt.widget.redesign.table;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.widget.calendar.Calendar;
 
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This class implements the CellRenderer and CellEditor interfaces and is used 
+ * to edit and render cells in a Table using a Calendar
+ * @author tschmidt
+ *
+ * @param <T>
+ */
 public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime> {
-    
+    /**
+     * Editor used by this cell
+     */
     private Calendar editor;
     private AbsolutePanel container;
     
+    /**
+     * Constructor that takes the editor to be used as a param
+     * @param editor
+     */
     public CalendarCell(Calendar editor) {
         this.editor = editor;
         editor.setEnabled(true);
@@ -48,13 +61,24 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         container.add(editor,0,1);
         container.setStyleName("CellContainer");
     }
-        
+    
+    /**
+     * Method to return the editor set for this cell
+     */
+    public Widget getWidget() {
+        return editor;
+    }
+    
+    /**
+     * Will set the value passed into the editor and set the editor into the
+     * table cell passed
+     */
     public void startEditing(Table table,
                              FlexTable flexTable,
                              int row,
                              int col,
                              Datetime value,
-                             Event event) {
+                             GwtEvent event) {
         editor.setValue(value);
         editor.setWidth(table.getColumnAt(col).getWidth()-15+"px");
         container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
@@ -67,7 +91,7 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         });
     }
 
-    public Datetime finishEditing() {
+    public Datetime finishEditing(Table table, FlexTable flexTable, int row, int col) {
         return editor.getValue();
     }
     
@@ -76,8 +100,6 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         flexTable.setText(row, col, editor.getText());
     }
     
-    public Widget getWidget() {
-        return editor;
-    }
+
 
 }

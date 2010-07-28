@@ -27,9 +27,9 @@ package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.widget.Dropdown;
 
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 
@@ -53,7 +53,9 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
                              int row,
                              int col,
                              T value,
-                             Event event) {
+                             GwtEvent event) {
+        table.ignoreUpDown(true);
+        table.ignoreReturn(true);
         editor.setValue(value);
         editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
         editor.setHeight(table.getRowHeight()-4 +"px");
@@ -67,7 +69,9 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
         });
     }
 
-    public T finishEditing() {
+    public T finishEditing(Table table, FlexTable flexTable, int row, int col) {
+        table.ignoreUpDown(false);
+        table.ignoreReturn(false);
         return editor.getValue();
     }
     

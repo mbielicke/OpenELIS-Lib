@@ -26,7 +26,9 @@
 package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.widget.AutoComplete;
+import org.openelis.gwt.widget.AutoCompleteValue;
 
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
@@ -34,12 +36,30 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AutoCompleteCell<T> implements CellRenderer<T>, CellEditor<T> {
+/**
+ * This class implements the CellRenderer and CellEditor interfaces and is used 
+ * to edit and render cells in a Table using an AutoComplete<T>
+ * @author tschmidt
+ *
+ * @param <T>
+ */
+public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>, CellEditor<AutoCompleteValue> {
     
-    private AutoComplete<T> editor;
+    /**
+     * Widget used to edit the cell
+     */
+    private AutoComplete editor;
+    
+    /**
+     * Container to hold the Autocomplete widget for formatting and spacing 
+     */
     private AbsolutePanel   container;
     
-    public AutoCompleteCell(AutoComplete<T> editor) {
+    /**
+     * Constructor that takes the editor to be used for the cell.
+     * @param editor
+     */
+    public AutoCompleteCell(AutoComplete editor) {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableDropdown");
@@ -48,39 +68,67 @@ public class AutoCompleteCell<T> implements CellRenderer<T>, CellEditor<T> {
         container.setStyleName("CellContainer");
     }
     
+    /**
+     * Sets the model value to the editor and then places the editor into the cell
+     * to be edited.
+     */
     public void startEditing(Table table,
                              FlexTable flexTable,
                              int row,
                              int col,
-                             T value,
-                             Event event) {
-        table.unsinkEvents(Event.ONKEYDOWN);
+                             AutoCompleteValue value,
+                             GwtEvent event) {
+        // Have table ignore Return and Arrow keys when editing cell
+        table.ignoreReturn(true);
+        table.ignoreUpDown(true);
+        
+        //Set value and formatting for editor.
         editor.setValue(value);
         editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
         editor.setHeight(table.getRowHeight()-4 +"px");
         container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
         container.setHeight((table.getRowHeight()-3)+"px");
+        
+        //Puts editor into cell
         flexTable.setWidget(row, col, container);
+        
+        /*
+         * This done in a deferred command otherwise IE will not set focus consistently 
+         */
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 editor.setFocus(true);
+                
             }
         });
         
     }
 
-    public T finishEditing() {   
+    /**
+     * Pulls value out of the editor returns it to the table
+     */
+    public AutoCompleteValue finishEditing(Table table, FlexTable flexTable, int row, int col) {
+        //Restore table to listen to Return and Arrow keys
+        table.ignoreReturn(false);
+        table.ignoreUpDown(false);
+        
         return editor.getValue();
     }
     
-    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
+    /**
+     * Gets Formatted value from editor and sets it as the cells display
+     */
+    public void render(Table table, FlexTable flexTable, int row, int col, AutoCompleteValue value) {
         table.sinkEvents(Event.ONKEYDOWN);
         editor.setValue(value);
         flexTable.setText(row,col,editor.getDisplay());
     }
-    
+
+    /**
+     * Returns the current widget set as this cells editor.
+     */
     public Widget getWidget() {
         return editor;
     }
-
+    
 }

@@ -27,9 +27,9 @@ package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.widget.TextBox;
 
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 
@@ -72,7 +72,7 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
      * Will set the value passed into the editor and set the editor into the
      * table cell passed
      */
-    public void startEditing(final Table table, FlexTable flexTable, int row, int col, T value, Event event) {
+    public void startEditing(final Table table, FlexTable flexTable, int row, int col, T value, GwtEvent event) {
         editor.setQueryMode(table.getQueryMode());
         editor.setValue(value);
         editor.setWidth(table.getColumnAt(col).getWidth()+"px");
@@ -92,7 +92,7 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     /**
      * Returns the current value of the editor
      */
-    public T finishEditing() {
+    public T finishEditing(Table table, FlexTable flexTable, int row, int col) {
         return editor.getValue();
     }
 

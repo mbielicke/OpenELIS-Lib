@@ -23,17 +23,36 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.redesign.table;
+package org.openelis.gwt.widget;
 
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Widget;
+public class AutoCompleteValue {
+    
+    protected Integer id;
+    protected String  display;
+    
+    public AutoCompleteValue() {
+        
+    }
+    
+    public AutoCompleteValue(Integer id, String display){
+        this.id = id;
+        this.display = display;
+    }
 
-public interface CellEditor<T> {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
+    }
     
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, GwtEvent event);
-    
-    public T finishEditing(Table table, FlexTable flexTable, int row, int col);
-    
-    public Widget getWidget();
 }

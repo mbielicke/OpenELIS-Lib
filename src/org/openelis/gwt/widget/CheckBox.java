@@ -156,6 +156,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     changeValue();
+                    //event.stopPropagation();
                 }
             }
         }, KeyDownEvent.getType());
@@ -186,7 +187,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     /**
      * Method called form event handlers to switch the value of the checkbox
      */
-    private void changeValue() {
+    public void changeValue() {
         switch (value) {
             case CHECKED:
                 setValue(Value.UNCHECKED.getValue(), true);

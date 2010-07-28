@@ -6,7 +6,6 @@ public class GetMatchesEvent extends GwtEvent<GetMatchesHandler>{
 	
 	private static Type<GetMatchesHandler> TYPE;
 	private String match;
-	private Object data;
 	private boolean failed;
 	
     public static GetMatchesEvent fire(HasGetMatchesHandlers source, String match) {

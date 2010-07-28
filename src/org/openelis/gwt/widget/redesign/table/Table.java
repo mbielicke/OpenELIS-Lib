@@ -54,6 +54,7 @@ import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -63,6 +64,7 @@ import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -112,7 +114,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Table state values
      */
-    protected boolean            enabled, multiSelect, editing, hasFocus, queryMode, hasHeader;
+    protected boolean            enabled, multiSelect, editing, hasFocus, queryMode, hasHeader,
+                                 ignoreTab, ignoreUpDown, ignoreReturn;
 
     /**
      * Enum representing the state of when the scroll bar should be shown.
@@ -180,7 +183,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
                 switch (event.getNativeEvent().getKeyCode()) {
                     case (KeyCodes.KEY_TAB):
-
+                        if(ignoreTab)
+                            break;
+                        
                         if (col < 0)
                             break;
 
@@ -213,8 +218,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
                         break;
                     case (KeyCodes.KEY_DOWN):
-
-                        if ( !isEditing()) {
+                        if(ignoreUpDown)
+                            break;
+                    
+                    if ( !isEditing()) {
                             if (isAnyRowSelected()) {
                                 row = getSelectedRow();
                                 while (true) {
@@ -236,7 +243,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                         }
                         break;
                     case (KeyCodes.KEY_UP):
-                        if ( !isEditing()) {
+                        if(ignoreUpDown)
+                            break;
+                    
+                    if ( !isEditing()) {
                             if (isAnyRowSelected()) {
                                 row = getSelectedRow();
                                 while (true) {
@@ -258,7 +268,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                         }
                         break;
                     case (KeyCodes.KEY_ENTER):
-
+                        if(ignoreReturn)
+                            break;
+                    
                         if (isEditing()) {
                             finishEditing();
                             return;
@@ -277,6 +289,18 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
     }
 
+    protected void ignoreTab(boolean ignore) {
+        ignoreTab = ignore;
+    }
+    
+    protected void ignoreUpDown(boolean ignore) {
+        ignoreUpDown = ignore;
+    }
+    
+    protected void ignoreReturn(boolean ignore) {
+        ignoreReturn = ignore;
+    }
+    
     // ********* Table Definition Methods *************
     /**
      * Returns the currently used Row Height for the table layout
@@ -1084,12 +1108,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param col
      * @return
      */
-    private boolean startEditing(final int row, final int col, final Event event) {
+    protected boolean startEditing(final int row, final int col, final GwtEvent event) {
         boolean willScroll;
 
-        if ( !isEnabled())
+        if ( !isEnabled() || (row == editingRow && col == editingCol))
             return false;
-
+        
         finishEditing();
 
         willScroll = view.isRowVisible(row);

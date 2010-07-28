@@ -27,7 +27,7 @@ package org.openelis.gwt.widget.redesign.table;
 
 import org.openelis.gwt.widget.Label;
 
-import com.google.gwt.user.client.Event;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -48,11 +48,11 @@ public class LabelCell<T> implements CellRenderer<T>, CellEditor<T> {
         flexTable.setText(row,col,editor.getText());
     }
 
-    public T finishEditing() {
+    public T finishEditing(Table table, FlexTable flexTable, int row, int col) {
         return editor.getValue();
     }
 
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, Event event) {
+    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, GwtEvent event) {
         editor.setValue(value);
         flexTable.setText(row,col,editor.getText());
     }

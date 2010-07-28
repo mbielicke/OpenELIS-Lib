@@ -27,6 +27,7 @@
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enable" type="xsd:boolean"/>
 			<xsd:attribute name="tab" type="xsd:string"/>
+			<xsd:attribute name="wrap" type="xsd:boolean"/>
 		</xsd:complexType>
 	</xsd:element>
 	
