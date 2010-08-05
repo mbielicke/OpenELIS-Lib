@@ -33,40 +33,79 @@ import com.google.gwt.user.client.ui.Widget;
 */
 public final class TableDropController extends SimpleDropController implements HasBeforeDropHandlers<DragItem>, HasDropHandlers<DragItem>,HasDropEnterHandlers<DragItem>, NativePreviewHandler {
 
+    /**
+     * String representing CSS class used for positioner
+     */
 	protected static final String CSS_DROP_POSITIONER = "DropPositioner";
 
+	/**
+	 * Table that this controller is setup for
+	 */
 	protected Table table;
 
-	protected boolean dropping;
-
+	/**
+	 * Boolean used to determine if the drag is over a valid drop area
+	 */
 	protected boolean validDrop;
 
+	/**
+	 * Widget used to show position of current drop
+	 */
 	protected Widget positioner;
 	
+	/**
+	 * Enumeration used to specify if the drop is above or below the targetRow
+	 */
 	protected DropPosition dropPos;
 	
+	/**
+	 * HandlerManager added to this class to be able to fire events
+	 */
 	protected HandlerManager handlerManager;
 
-	protected int targetRow;
-	protected int targetModelIndex;
+	/**
+	 * Indexes used to determine the drop row
+	 */
+	protected int targetRow,targetModelIndex;
 	
+	/**
+	 * Timers used to setup scrolling of table when dragged
+	 */
 	protected Timer scroll,startScroll;
+	
+	/**
+	 * Number of rows and direction to scroll
+	 */
 	protected int scrollRows;
-	protected boolean scrolling;
+	
+	/**
+	 * Registration of NativeEventPreview so that we can remove when not needed
+	 */
 	protected HandlerRegistration scrollEndHandler;
 
+	/**
+	 * Constructor that takes the Table widget to be used by this controller 
+	 * @param tbl
+	 */
 	public TableDropController(Table tbl) {
+	    /* Pass the Drop area to the base class */
 		super(tbl.view.flexTable);
 		this.table = tbl;
 		
+		/* Timer used to determine if the user has paused in the correct area to start 
+		 * a scroll of the table
+		 */
 		startScroll = new Timer() {
 		    public void run() {
 		        checkScroll(targetRow);
 		    }
 		};
 		
+		/*
+		 * Timer used to keep scrolling the table until the user lets up the mouse button or the 
+		 * user drags back into the table and drop target changes
+		 */
 		scroll = new Timer() {
-		    
 		    public void run() {
 	            table.scrollBy(scrollRows);
                 checkScroll(targetRow);
@@ -74,13 +113,18 @@ public final class TableDropController extends SimpleDropController implements H
 		    
 		};
 		
-	   positioner = new AbsolutePanel();
-	   positioner.addStyleName(CSS_DROP_POSITIONER);
-	   DOM.setStyleAttribute(positioner.getElement(), "zIndex", "1000");
+	    /*
+	     * Set up the positioner widget used to let the user know where the drop will occurr 
+	     */
+	    positioner = new AbsolutePanel();
+	    positioner.addStyleName(CSS_DROP_POSITIONER);
+	    DOM.setStyleAttribute(positioner.getElement(), "zIndex", "1000");
 	}
 	
-	
-
+	/**
+	 * Method overridden to fire a BeforeDropEvent to notify the user of the drop and allow 
+	 * them the chance to cancel 
+	 */
 	@Override
 	public void onPreviewDrop(DragContext context) throws VetoDragException {
 	    BeforeDropEvent<DragItem> event;
@@ -93,82 +137,94 @@ public final class TableDropController extends SimpleDropController implements H
 		event = BeforeDropEvent.fire(this, (DragItem)context.draggable, table.getModel().get(targetRow));
 		if(event != null && event.isCancelled()){
 			positioner.removeFromParent();
-			((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
+			((TableDragController)context.dragController).setDropIndicator(false);
 			throw new VetoDragException();
 		}
 		
 		super.onPreviewDrop(context);
 	}
 
-
-	@Override
-	public void onEnter(DragContext context) {
-		super.onEnter(context);
-		positioner = newPositioner(context);
-	}
-
+	/**
+	 * Method Overridden to fire the DropEvent and let the event handler to the drop.
+	 */
 	@Override
 	public void onDrop(DragContext context) {
 	    DragItem dragItem;
 	    
 	    dragItem = (DragItem)context.draggable;
 	    
-	    dropping = false;
         super.onDrop(context);
         DropEvent.fire(this, dragItem);
 	}
 
+	/**
+	 * Method overridden to cancel startScroll, remove postioner and set the dragIndicator to no drop 
+	 * when the user drags outside of this drop area. 
+	 * 
+	 */
 	@Override
 	public void onLeave(DragContext context) {
 	    startScroll.cancel();
 	    positioner.removeFromParent();
-		((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
+		((TableDragController)context.dragController).setDropIndicator(false);
 		super.onLeave(context);
 	}
 
 
+	/**
+	 * Method overridden to determine the current drop row that the mouse is currently 
+	 * dragged over.
+	 */
 	@Override
 	public void onMove(DragContext context) {
-	    int adjY,rowTop,rowBot,diff;
-	    double perc;
+	    int adjY,rowTop,posY;
 	    DropEnterEvent<DragItem> event;
 	    
 		super.onMove(context);
 		
+		/*
+		 * Cancel startScroll since user moved the mouse
+		 */
 		startScroll.cancel();
-		//scroll.cancel();
 		
+		/*
+		 * mouseY is based on overall window postion, we need to adjust it from 
+		 * the top of the flexTable
+		 */
 		adjY = context.mouseY - table.view.flexTable.getAbsoluteTop();
 		
+		/*
+		 * Calculate the physical row and model indexes
+		 */
 		targetRow = adjY / table.view.rowHeight;
 		targetModelIndex = table.view.firstVisibleRow + targetRow;
 	
+		/*
+		 * Start with assumption of a valid drop
+		 */
 		validDrop = true;
 		if(table.getRowCount() > 0){
+		    
 			rowTop = targetRow * table.view.rowHeight;
-			rowBot = rowTop + table.view.rowHeight;
-			diff = adjY - rowTop;
-			perc = ((double)diff)/((double)table.view.rowHeight);
 
-			if(perc <= 0.5)
+			if(adjY < (rowTop + (table.view.rowHeight/ 2)))
 				dropPos = DropPosition.ABOVE;
 			else 
 				dropPos = DropPosition.BELOW;
 
-			event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getModel().get(targetRow == -1 ? 0 : targetRow),dropPos);
+			event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getModel().get(targetRow),dropPos);
 			if(event != null && event.isCancelled())
 				validDrop = false;
 
 			if(validDrop) {
-				if(dropPos == DropPosition.BELOW) {
-					context.boundaryPanel.add(positioner, table.view.flexTable.getAbsoluteLeft(), rowTop + table.view.flexTable.getAbsoluteTop()
-							+ (targetRow == -1 ? 0 : table.view.rowHeight));
-				}else{
-					context.boundaryPanel.add(positioner, table.view.flexTable.getAbsoluteLeft(), rowTop + table.view.flexTable.getAbsoluteTop());
-				}
-				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
+			    posY = rowTop + table.view.flexTable.getAbsoluteTop();
+				if(dropPos == DropPosition.BELOW) 
+				    posY += table.view.rowHeight;
+				positioner.setPixelSize(table.getWidthWithoutScrollbar(), 1);
+				context.boundaryPanel.add(positioner, table.view.flexTable.getAbsoluteLeft(), posY);
+				((TableDragController)context.dragController).setDropIndicator(true);
 			}else{
-				((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus NoDrop");
+				((TableDragController)context.dragController).setDropIndicator(false);
 				positioner.removeFromParent();
 			}
 			
@@ -182,6 +238,11 @@ public final class TableDropController extends SimpleDropController implements H
 
 	}
 
+	/**
+	 * Method to keep scrolling on drag if needed
+	 * @param targetRow
+	 * @return
+	 */
 	public boolean checkScroll(final int targetRow) {
 		if(table.getRowCount() < table.getVisibleRows())
 			return false;
@@ -204,23 +265,42 @@ public final class TableDropController extends SimpleDropController implements H
 		return false;  
 	}
 	
+	/**
+	 * Returns the currently index of the targeted row
+	 * @return
+	 */
 	public int getDropIndex() {
 	    return targetModelIndex;
 	}
 	
+	/**
+	 * Returns if the drop is above or below the target row
+	 * @return
+	 */
 	public DropPosition getDropPosition() {
 	    return dropPos;
 	}
 
-	Widget newPositioner(DragContext context) {
-	    positioner.setPixelSize(table.getWidthWithoutScrollbar(), 1);
-	    return positioner;
-	}
-
+	/**
+	 * Method to stop the table from scrolling when a drag ocurrs above or below the
+	 * table.
+	 */
 	protected void stopScroll() {
 	    scroll.cancel();
 	}
-
+	
+	/**
+	 * When the scroll is on and the drag goes outside the drop area then the native preview
+	 * is the only way to catch the mouseup and stop the table from scrolling.  This preview 
+	 * is set when the scroll starts and is removed by the mouse up of the preview itself so 
+	 * it is only in force when needed.
+	 */
+    public void onPreviewNativeEvent(NativePreviewEvent event) {
+        if(event.getTypeInt() == Event.ONMOUSEUP) {
+            scroll.cancel();
+            scrollEndHandler.removeHandler();
+        }
+    }
 
 	protected final <H extends EventHandler> HandlerRegistration addHandler(
 			final H handler, GwtEvent.Type<H> type) {
@@ -251,7 +331,6 @@ public final class TableDropController extends SimpleDropController implements H
 		if(handlerManager == null)
 			return 0;
 		return handlerManager.getHandlerCount(type);
-
 	}
 
 	public HandlerRegistration addBeforeDropHandler(
@@ -267,14 +346,5 @@ public final class TableDropController extends SimpleDropController implements H
 			DropEnterHandler<DragItem> handler) {
 		return addHandler(handler, DropEnterEvent.getType());
 	}
-
-
-
-    public void onPreviewNativeEvent(NativePreviewEvent event) {
-        if(event.getTypeInt() == Event.ONMOUSEUP) {
-            scroll.cancel();
-            scrollEndHandler.removeHandler();
-        }
-    }
 
 }

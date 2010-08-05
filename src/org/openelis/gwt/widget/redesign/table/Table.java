@@ -32,31 +32,17 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.event.BeforeDragStartHandler;
-import org.openelis.gwt.event.BeforeDropHandler;
-import org.openelis.gwt.event.DragStartHandler;
-import org.openelis.gwt.event.DropEnterHandler;
-import org.openelis.gwt.event.DropHandler;
-import org.openelis.gwt.event.HasBeforeDragStartHandlers;
-import org.openelis.gwt.event.HasBeforeDropHandlers;
-import org.openelis.gwt.event.HasDragStartHandlers;
-import org.openelis.gwt.event.HasDropEnterHandlers;
-import org.openelis.gwt.event.HasDropHandlers;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.widget.DragItem;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedHandler;
-import org.openelis.gwt.widget.redesign.table.event.BeforeRowMovedEvent;
-import org.openelis.gwt.widget.redesign.table.event.BeforeRowMovedHandler;
 import org.openelis.gwt.widget.redesign.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.redesign.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowDeletedHandlers;
-import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowMovedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasRowDeletedHandlers;
@@ -64,16 +50,13 @@ import org.openelis.gwt.widget.redesign.table.event.RowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.RowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.RowDeletedHandler;
-import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
-import org.openelis.gwt.widget.table.event.RowMovedEvent;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
-import com.allen_sauer.gwt.dnd.client.DragController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -93,7 +76,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -139,6 +121,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     protected ArrayList<Integer> selections;
     
+    /**
+     * Exception lists for the table
+     */
     protected HashMap<String,ArrayList<LocalizedException>>  endUserExceptions, validateExceptions;
 
     /**
@@ -182,6 +167,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     protected final PopupPanel                                   balloonPanel;
     protected Timer                                              balloonTimer;
     
+    /**
+     * Drag and Drop controllers
+     */
     protected TableDragController  dragController;
     protected TableDropController dropController; 
 
@@ -347,14 +335,26 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         };
     }
 
+    /**
+     * Method to set the flag to ignore the tab key when editing a cell
+     * @param ignore
+     */
     protected void ignoreTab(boolean ignore) {
         ignoreTab = ignore;
     }
     
+    /**
+     * Method to set the flag to ignore the Up and Down arrow keys when editing a cell
+     * @param ignore
+     */
     protected void ignoreUpDown(boolean ignore) {
         ignoreUpDown = ignore;
     }
     
+    /**
+     * Method to set the flag to ignore the Return key when editing a cell
+     * @param ignore
+     */
     protected void ignoreReturn(boolean ignore) {
         ignoreReturn = ignore;
     }
@@ -500,10 +500,19 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         layout();
     }
     
+    /**
+     * Sets a flag to set the size of the table to always set room aside for scrollbars
+     * defaults to true
+     * @param fixScrollBar
+     */
     public void setFixScrollbar(boolean fixScrollBar) {
         this.fixScrollBar = fixScrollBar;
     }
     
+    /**
+     * Returns the flag indicating if the table reserves space for the scrollbar
+     * @return
+     */
     public boolean getFixScrollbar() {
         return fixScrollBar;
     }
@@ -1279,6 +1288,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return view.scrollToVisible(index);
     }
 
+    /**
+     * Method to scroll the table by the specified number of rows.  A negative value
+     * will cause the table to scroll up and a positive to scroll down.
+     * @param rows
+     */
     public void scrollBy(int rows) {
         view.scrollBy(rows);
     }
@@ -1474,7 +1488,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         renderView(row,row);
     }
     
-
+    /**
+     * Method to add a validation exception to the passed cell.
+     * @param row
+     * @param col
+     * @param error
+     */
     protected void addValidateException(int row, int col, LocalizedException error) {
         getValidateExceptionList(row, col).add(error);
         renderView(row,row);       
@@ -1490,6 +1509,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return null;
     }
 
+    /**
+     * Method used to get the set list of user exceptions for a cell.
+     * @param row
+     * @param col
+     * @return
+     */
     public ArrayList<LocalizedException> getEndUserExceptions(int row, int col) {
         if(endUserExceptions != null)
             return endUserExceptions.get(getExceptionKey(row, col));
@@ -1507,6 +1532,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         }
     }
     
+    /**
+     * Clears all exceptions from the table
+     * @param row
+     * @param col
+     */
     public void clearExceptions(int row, int col) {
         String key;
         
@@ -1521,11 +1551,23 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         
     }
     
+    /**
+     * Helper method to create the key to the Exception hash
+     * @param row
+     * @param col
+     * @return
+     */
     private String getExceptionKey(int row, int col) {
         return row +"," +col;
     }
     
-    
+    /**
+     * Method will get the list of the exceptions for a cell and will create a new list if
+     * no exceptions are currently on the cell.
+     * @param row
+     * @param col
+     * @return
+     */
     private ArrayList<LocalizedException> getEndUserExceptionList(int row, int col) {
         ArrayList<LocalizedException> list;
         String key;
@@ -1545,6 +1587,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         
     }
 
+    /**
+     * Method will get the list of the exceptions for a cell and will create a new list if
+     * no exceptions are currently on the cell. 
+     * @param row
+     * @param col
+     * @return
+     */
     private ArrayList<LocalizedException> getValidateExceptionList(int row, int col) {
         ArrayList<LocalizedException> list;
         String key;
@@ -1564,6 +1613,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         
     }
     
+    /**
+     * Method to draw the balloon display of the exceptions for a cell
+     * @param row
+     * @param col
+     * @param x
+     * @param y
+     */
     protected void drawExceptions(int row, int col, final int x, final int y) {
         ArrayList<LocalizedException> exceptions = null;
         Grid grid;
@@ -1628,28 +1684,51 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
     }
     
+    /**
+     * Method will enable the rows in the table to be dragged.  This must be called
+     * before the model is first set.
+     */
     public void enableDrag() {
         assert rows == null : "Drag must be set before model is loaded";
         
         dragController = new TableDragController(this,RootPanel.get());
     }
     
+    /**
+     * Method will enable this table to receive drop events from a drag
+     */
     public void enableDrop() {
         dropController = new TableDropController(this);
     }
     
+    /**
+     * Adds a DropController as a drop target for rows from this table
+     * @param target
+     */
     public void addDropTarget(DropController target) {
         dragController.registerDropController(target);
     }
     
+    /**
+     * Removes a DropController as a drop target for rows from this table
+     * @param target
+     */
     public void removeDropTarget(DropController target) {
         dragController.unregisterDropController(target);
     }
 
+    /**
+     * Returns the TableDragController for this Table.
+     * @return
+     */
     public TableDragController getDragController() {
         return dragController;
     }
     
+    /**
+     * Returns the TableDropController for this Table.
+     * @return
+     */
     public TableDropController getDropController() {
         return dropController;
     }
