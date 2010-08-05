@@ -13,11 +13,11 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,6 +38,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
     protected final PopupPanel                                   popPanel;
     protected final HashMap<HasExceptions,HandlerRegistration>   overHandlers;
     protected final HashMap<HasExceptions,HandlerRegistration>   outHandlers;
+    protected final Timer                                        timer;
 
     /**
      * Static Singleton instance of ExceptionUtil.
@@ -61,6 +62,12 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
 
         popPanel.setWidget(dp);
         popPanel.setStyleName("");
+        
+        timer = new Timer() {
+            public void run() {
+                popPanel.hide();
+            }
+        };
     }
 
     /**
@@ -152,9 +159,13 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
      */
     protected void drawExceptions(HasExceptions widget) {
         ArrayList<LocalizedException> exceptions = null;
+        Grid grid;
 
         // Clear panel and widget exception styling
         exceptionPanel.clear();
+        grid = new Grid(0,2);
+        exceptionPanel.add(grid);
+        
         clearExceptionStyle(widget);
 
         // Get out if widget has no exceptions to display;
@@ -185,18 +196,15 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
             }
 
             for (LocalizedException exception : exceptions) {
-                HorizontalPanel hp = new HorizontalPanel();
+                grid.insertRow(0);
                 if (exception instanceof Warning) {
-                    hp.add(new Image("openelis/Images/bullet_yellow.png"));
-                    hp.setStyleName("warnPopupLabel");
+                    grid.getCellFormatter().setStyleName(0, 0, "WarnIcon");
+                    grid.getCellFormatter().setStyleName(0,1,"warnPopupLabel");
                 } else {
-                    hp.add(new Image("openelis/Images/bullet_red.png"));
-                    hp.setStyleName("errorPopupLabel");
-                    style = "InputError";
+                    grid.getCellFormatter().setStyleName(0, 0, "ErrorIcon");
+                    grid.getCellFormatter().setStyleName(0,1,"errorPopupLabel");
                 }
-                hp.add(new Label(exception.getMessage()));
-
-                exceptionPanel.add(hp);
+                grid.setText(0, 1, exception.getMessage());
             }
         }
 
@@ -208,6 +216,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
      */
     public void onMouseOut(MouseOutEvent event) {
         popPanel.hide();
+        timer.cancel();
     }
 
     /**
@@ -222,11 +231,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
                                       ((Widget)event.getSource()).getAbsoluteTop());
             
             popPanel.show();
-            Timer timer = new Timer() {
-                public void run() {
-                    popPanel.hide();
-                }
-            };
+
             timer.schedule(5000);
         }
     }

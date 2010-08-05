@@ -19,6 +19,7 @@ import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.allen_sauer.gwt.dnd.client.util.WidgetLocation;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
@@ -170,7 +171,7 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			trow.removeStyleName("DropOnRow");
 		super.onDrop(context);
 		if(handlerManager.getHandlerCount(DropEvent.getType()) > 0)
-			handlerManager.fireEvent(new DropEvent<TreeRow>(dropRow, tree.getRow(targetRow)));
+			handlerManager.fireEvent(new DropEvent<TreeRow>(dropRow));
 		tree.select(item);
 	}
 
@@ -379,6 +380,11 @@ public class TreeIndexDropController extends AbstractPositioningDropController i
 			DropEnterHandler<TreeRow> handler) {
 		return handlerManager.addHandler(DropEnterEvent.getType(),handler);
 	}
+
+    public void fireEvent(GwtEvent<?> event) {
+        // TODO Auto-generated method stub
+        
+    }
 	
 	
 

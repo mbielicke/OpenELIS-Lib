@@ -6,22 +6,19 @@ public class DropEvent<I> extends GwtEvent<DropHandler<I>> {
 	
 	private static Type<DropHandler<?>> TYPE;
 	private I dragObject;
-	private Object dropTarget;
-	private boolean cancelled;
 	
-	public static <I> DropEvent<I> fire(HasDropHandlers<I> source, I dragObject, Object dropTarget) {
-		if(TYPE != null) {
-			DropEvent<I> event = new DropEvent<I>(dragObject,dropTarget);
-			//source.fireEvent(event);
+	public static <I> DropEvent<I> fire(HasDropHandlers<I> source, I dragObject) {
+	    if(TYPE != null) {
+			DropEvent<I> event = new DropEvent<I>(dragObject);
+			source.fireEvent(event);
 			return event;
 		}
 		return null;
 	}
 	
 	
-	public DropEvent(I dragObject,Object dropTarget) {
+	public DropEvent(I dragObject) {
 		this.dragObject = dragObject;
-		this.dropTarget = dropTarget;
 	}
 	
 	protected void dispatch(DropHandler<I> handler) {
@@ -41,21 +38,5 @@ public class DropEvent<I> extends GwtEvent<DropHandler<I>> {
 	
 	public I getDragObject() {
 		return dragObject;
-	}
-	
-	public Object getDropTarget() {
-		return dropTarget;
-	}
-	
-	public void cancel() {
-		cancelled = true;
-	}
-	
-	public boolean isCancelled() {
-		return cancelled;
-	}
-	
-	
-	
-
+	}	
 }

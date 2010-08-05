@@ -56,7 +56,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -77,9 +76,10 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
     protected Button          button;
     protected Table           table;
     protected PopupPanel      popup;
-    protected int             cellHeight = 21, delay = 350, itemCount = 10;
+    protected int             cellHeight = 21, delay = 350, itemCount = 10, width;
     protected Timer           timer;
     protected boolean         keepPopup;
+    protected String          prevText;
 
     final AutoComplete        source;
 
@@ -256,18 +256,34 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
     }
 
     @Override
-    public void setWidth(String width) {
+    public void setWidth(String w) {        
+        width = Util.stripUnits(w);
+
         /*
          * Set the outer panel to full width;
          */
         if (hp != null)
-            hp.setWidth(width);
+            hp.setWidth(width+"px");
 
         /*
          * set the Textbox to width - 16 to account for button.
          */
-        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
+        
+        textbox.setWidth((width - 16) + "px");
+        
+        if(table != null) 
+            table.setWidth(width+"px");
 
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    @Override
+    public void setHeight(String height) {
+        textbox.setHeight(height);
+        button.setHeight(height);
     }
     
     public void setVisibleItemCount(int itemCount) {
@@ -296,6 +312,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
         table.setVisibleRows(itemCount);
+        table.setFixScrollbar(false);
         
         /*
          * This handler will will cancel the selection if the item has been
@@ -344,7 +361,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     public void setModel(ArrayList<Item<Integer>> model) {
         assert table != null;
-
+        
+        table.setVisibleRows(Math.min(model.size(),itemCount));        
         table.setModel(model);
         
     }
@@ -518,7 +536,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          * This method handles all key down events for this table
          */
         public void onKeyDown(KeyDownEvent event) {
-
+            prevText = getText();
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_TAB:
                     if (popup != null && popup.isShowing())
@@ -571,6 +589,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 case KeyCodes.KEY_TAB:
                     break;
                 default:
+                    
                     text = getText();
 
                     timer.cancel();
@@ -582,7 +601,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                     if (text.equals("")){    
                         setSelectedIndex( -1);
                         popup.hide();
-                    }else
+                    }else if(!text.equals(prevText))
                         timer.schedule(delay);
                     
              }

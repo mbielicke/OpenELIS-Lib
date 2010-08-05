@@ -58,7 +58,8 @@ public class Column {
      */
     protected int          width, minWidth;
 
-    protected boolean      enabled, resizable, filterable;
+    protected boolean      enabled, resizable, filterable, filtered;
+
 
     /**
      * Creates a default column that exist outside a table has a TextBox<String>
@@ -272,6 +273,14 @@ public class Column {
      */
     public void setFilterable(boolean filterable) {
         this.filterable = filterable;
+    }
+    
+    public boolean isFiltered() {
+        return filtered;
+    }
+
+    public void setFiltered(boolean filtered) {
+        this.filtered = filtered;
     }
 
     /**

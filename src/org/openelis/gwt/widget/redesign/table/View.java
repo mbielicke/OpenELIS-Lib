@@ -25,21 +25,35 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
+import java.util.Date;
+
+import org.openelis.gwt.event.BeforeDragStartEvent;
+import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.ScrollBarEvent;
 import org.openelis.gwt.event.ScrollBarHandler;
+import org.openelis.gwt.widget.DragItem;
 import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.redesign.table.Table.Scrolling;
 
+import com.allen_sauer.gwt.dnd.client.DragEndEvent;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.DragStartEvent;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
@@ -75,12 +89,13 @@ public class View extends Composite {
     /**
      * Vertical ScrollBar
      */
-    protected ScrollBar       scrollBar;
+    protected ScrollBar       vertScrollBar;
     
     /**
      * Panel to hold Scrollable view area and ScrollBar together.
      */
     protected HorizontalPanel outer;
+    protected VerticalPanel   inner;
 
     /**
      * Computed first and last model indexes displayed in the table
@@ -97,14 +112,18 @@ public class View extends Composite {
      * Computed Row Height used to calculate ScrollHeight and ScrollPosition
      * since all browsers don't seem to draw rows to the same height
      */
-    protected int             rowHeight;
-
+    protected int             rowHeight,lastRow = -1,lastCol = -1, lastX = -1, lastY = -1;
+    
+    protected Timer           timer;
+    
     /**
      * Constructor that takes a reference to the table that will use this view
      * 
      * @param table
      */
     public View(Table tbl) {
+        FocusPanel fp;
+        
         this.table = tbl;
         /*
          * Create and set outer once here as the composite widget instead of in
@@ -112,6 +131,16 @@ public class View extends Composite {
          */
         outer = new HorizontalPanel();
         initWidget(outer);
+        
+        scrollView = new ScrollPanel();
+        
+        /*
+         * Setup so Horizontal scrollbar is include in the offsetHeight when
+         * drawn
+         */
+        scrollView.setAlwaysShowScrollBars(true);
+        
+        outer.add(scrollView);
 
         /*
          * Set MouseWheelHandler to the view and then adjust the scrollBar
@@ -121,16 +150,64 @@ public class View extends Composite {
             public void onMouseWheel(MouseWheelEvent event) {
                 int pos, delta;
 
-                pos = scrollBar.getScrollPosition();
+                pos = vertScrollBar.getScrollPosition();
                 delta = event.getDeltaY();
 
                 if (delta < 0 && delta > -rowHeight)
                     delta = -rowHeight;
                 if (delta > 0 && delta < rowHeight)
                     delta = rowHeight;
-                scrollBar.setScrollPosition(pos + delta);
+                vertScrollBar.setScrollPosition(pos + delta);
             }
         }, MouseWheelEvent.getType());
+        
+        flexTable = new FlexTable();
+        flexTable.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                Cell cell = flexTable.getCellForEvent(event);
+                table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex(),(GwtEvent)event);
+            }
+        });
+        
+        /*
+         * The FlexTable is placed in a FocusPanel to provide MouseMove events so mousing in and out of
+         * cells can be detected. 
+         */
+        fp = new FocusPanel();
+        fp.setWidget(flexTable);
+        
+        fp.addMouseMoveHandler(new MouseMoveHandler() {
+           public void onMouseMove(MouseMoveEvent event) {
+
+                int row, col;
+                
+                lastX = event.getClientX();
+                lastY = event.getClientY();
+                col = table.getColumnForX(event.getX());
+                row = firstVisibleRow + (event.getY() / rowHeight);
+                      
+                if(row == lastRow && col == lastCol)    
+                    return;
+              
+                timer.cancel();
+                
+                lastRow = row;
+                lastCol = col;
+                
+                timer.schedule(250);
+            } 
+        });
+        
+        inner = new VerticalPanel();
+        scrollView.setWidget(inner);
+        inner.add(fp);
+        inner.setSpacing(0);
+        
+        timer = new Timer() {
+            public void run() {
+                table.drawExceptions(lastRow, lastCol, lastX, lastY);
+            }
+        };
     }
 
     /**
@@ -138,13 +215,7 @@ public class View extends Composite {
      * when attributes affecting layout are changed in the table 
      */
     protected void layout() {
-        /*
-         * This panel will be used only if the table contains a header. This is
-         * used to glue the Header and flexTable table together because
-         * ScrollPanel extends SimplePanel and can only have one widget.
-         */
-        VerticalPanel vp = null;
-
+        
         /*
          * If View is not attached to DOM yet get out. onAttach will call
          * layout() the first time this widget attached.
@@ -153,73 +224,58 @@ public class View extends Composite {
         if ( !attached)
             return;
 
-        // ******** Set layout of view ***************
-        outer.clear();
-
-        scrollView = new ScrollPanel();
-        outer.add(scrollView);
-
-        // ********* Create the Cell body *********
-        flexTable = new FlexTable();
-        flexTable.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                Cell cell = flexTable.getCellForEvent(event);
-                table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex(),(GwtEvent)event);
-            }
-        });
         flexTable.setStyleName(table.TABLE_STYLE);
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
         // ********** Create and attach Header **************
-        if (table.hasHeader()) {
-            vp = new VerticalPanel();
+        if (table.hasHeader() && header == null) {
             header = new Header(table);
-            vp.add(header);
-            vp.add(flexTable);
-            vp.setSpacing(0);
-            scrollView.setWidget(vp);
-        } else
-            scrollView.setWidget(flexTable);
+            inner.insert(header,0);
+        }else if (!table.hasHeader() && header != null) {
+            inner.remove(0);
+            header = null;
+        }
 
         // **** Vertical ScrollBar **************
-        if (table.getVerticalScroll() != Scrolling.NEVER) {
-            scrollBar = new ScrollBar();
-            scrollBar.addScrollBarHandler(new ScrollBarHandler() {
+        if (table.getVerticalScroll() != Scrolling.NEVER && vertScrollBar == null) {
+            vertScrollBar = new ScrollBar();
+            vertScrollBar.addScrollBarHandler(new ScrollBarHandler() {
                 public void onScroll(ScrollBarEvent event) {
                     visibleChanged = true;
                     renderView( -1, -1);
                 }
             });
-            outer.add(scrollBar);
+            outer.add(vertScrollBar);
+        }else if(table.getVerticalScroll() == Scrolling.NEVER && vertScrollBar != null) {
+            outer.remove(1);
+            vertScrollBar = null;
         }
+        
         scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar(), 0) + "px");
-
-        /*
-         * Setup so Horizontal scrollbar is include in the offsetHeight when
-         * drawn
-         */
-        scrollView.setAlwaysShowScrollBars(true);
-        scrollView.setHeight("100%");
 
         /*
          * This code is executed the first time the Table is attached 
          */
         if (firstAttach) {
+         
             firstAttach = false;
 
             for (int i = 0; i < table.getVisibleRows(); i++ )
                 createRow(i);
-
-            scrollView.setHeight(scrollView.getOffsetHeight() + "px");
-
-            rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
             
-            if (scrollBar != null) {
-                scrollBar.setHeight(flexTable.getOffsetHeight() + "px");
+            rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
+
+            if(table.getFixScrollbar())
+                scrollView.setHeight(scrollView.getOffsetHeight() + "px");
+            else
+                scrollView.setHeight("100%");
+            
+            if (vertScrollBar != null) {
+                vertScrollBar.setHeight(flexTable.getOffsetHeight() + "px");
                 if (table.hasHeader)
-                    DOM.setStyleAttribute(scrollBar.getElement(), "top", header.getOffsetHeight() +
+                    DOM.setStyleAttribute(vertScrollBar.getElement(), "top", header.getOffsetHeight() +
                                                                          "px");
-                DOM.setStyleAttribute(scrollBar.getElement(), "left", "-2px");
+                DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
                 adjustScrollBarHeight();
             }
 
@@ -265,6 +321,9 @@ public class View extends Composite {
     private void createRow(int r) {
         flexTable.insertRow(r);
         flexTable.getCellFormatter().setHeight(r, 0, table.getRowHeight() + "px");
+        
+        if(table.getDragController() != null) 
+            table.dragController.makeDraggable(new DragItem(table,flexTable.getRowFormatter().getElement(r))); 
     }
 
     /**
@@ -275,7 +334,8 @@ public class View extends Composite {
      */
     protected void renderView(int startR, int endR) {
         int rc, fr, lr, delta, i;
-
+        Date time;
+        
         if ( !attached)
             return;
 
@@ -311,7 +371,7 @@ public class View extends Composite {
          * If delta is 1/3 or less of the table view we will delete and add new rows instead of
          * rendering all rows over. 
          */
-        if (delta > 0 && Math.abs(delta) <= table.getVisibleRows() / 3) {
+        if (delta != 0 && Math.abs(delta) <= table.getVisibleRows() / 3) {
             i = delta;
 
             if (delta > 0) {
@@ -334,7 +394,9 @@ public class View extends Composite {
         /*
          * Create/Load Rows in the flexTable table
          */
-
+        int totalCells = 0;
+        long totalTime = 0;
+        //System.out.println("fr = "+ fr+ " : lr = "+lr);
         for (int r = fr; r <= lr; r++ , rc++ ) {
             /*
              * Create table row if needed
@@ -350,18 +412,22 @@ public class View extends Composite {
             }
 
             for (int c = 0; c < table.getColumnCount(); c++ ) {
+                time = new Date();
                 renderCell(rc, c, r);
+                totalTime += new Date().getTime() - time.getTime();
+                totalCells++;
             }
 
             applyRowStyle(r, rc);
         }
+        //System.out.println("Cells rendered = "+totalCells + " : totalTime = "+totalTime +" : cell average = "+totalTime/totalCells);
 
         /*
          * Remove extra rows at the end of the view if necessary
          */
         if (table.getRowCount() < flexTable.getRowCount()) {
             int remove = flexTable.getRowCount() - rc;
-            for (i = rc; i <= remove; i++ )
+            while(remove-- > 0)
                 flexTable.removeRow(rc);
         }
 
@@ -370,9 +436,9 @@ public class View extends Composite {
          */
         if (table.getVerticalScroll() == Scrolling.AS_NEEDED) {
             if (table.getRowCount() > table.getVisibleRows())
-                scrollBar.setVisible(true);
+                vertScrollBar.setVisible(true);
             else
-                scrollBar.setVisible(false);
+                vertScrollBar.setVisible(false);
         }
 
     }
@@ -435,14 +501,20 @@ public class View extends Composite {
     /**
      * Method will get the columns cell renderer for the passed row and col and
      * redraw the cell based on the value in the tabel model for that cell.
-     * @param flexTableIndex
+     * @param r
      * @param col
-     * @param modelIndex
+     * @param row
      */
     @SuppressWarnings("unchecked")
-    private void renderCell(int flexTableIndex, int col, int modelIndex) {
-        table.getColumnAt(col).getCellRenderer().render(table, flexTable, flexTableIndex, col,
-                                                        table.getValueAt(modelIndex, col));
+    private void renderCell(int r, int col, int row) {
+        
+        table.getColumnAt(col).getCellRenderer().render(table, flexTable, r, col,
+                                                        table.getValueAt(row, col));
+
+        if(table.hasExceptions(row, col))
+            flexTable.getCellFormatter().addStyleName(r, col, "InputError");
+        else
+            flexTable.getCellFormatter().removeStyleName(r, col, "InputError");
     }
 
     /**
@@ -512,10 +584,10 @@ public class View extends Composite {
      */
     protected void adjustScrollBarHeight() {
 
-        if (scrollBar == null)
+        if (vertScrollBar == null)
             return;
 
-        scrollBar.adjustScrollMax(table.getRowCount() * rowHeight);
+        vertScrollBar.adjustScrollMax(table.getRowCount() * rowHeight);
     }
 
     /**
@@ -528,8 +600,8 @@ public class View extends Composite {
             prevFirstVisibleRow = firstVisibleRow;
             prevLastVisibleRow = lastVisibleRow;
 
-            if (scrollBar != null) {
-                firstVisibleRow = (int) (scrollBar.getScrollPosition() / rowHeight);
+            if (vertScrollBar != null) {
+                firstVisibleRow = (int) (vertScrollBar.getScrollPosition() / rowHeight);
                 lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows() - 1,
                                           table.getRowCount() - 1);
             } else {
@@ -549,7 +621,9 @@ public class View extends Composite {
     protected boolean scrollToVisible(int r) {
         int fr;
 
-        if (scrollBar == null)
+        computeVisibleRows();
+        
+        if (vertScrollBar == null)
             return false;
         
         if (isRowVisible(r))
@@ -560,9 +634,28 @@ public class View extends Composite {
         else
             fr = r - table.getVisibleRows() + 1;
 
-        scrollBar.setScrollPosition(fr * rowHeight);
+        vertScrollBar.setScrollPosition(fr * rowHeight);
 
         return true;
+    }
+    
+    protected void scrollBy(int rows) {
+        int fr;
+        
+        computeVisibleRows();
+        
+        if(vertScrollBar == null)
+            return;
+        
+        fr = firstVisibleRow + rows;
+        
+        if(fr < 0)
+            fr = 0;
+        else if(fr >= table.getRowCount())
+            fr = table.getRowCount() - table.getVisibleRows() + 1;
+        
+        vertScrollBar.setScrollPosition(fr * rowHeight);
+           
     }
 
     /**
@@ -584,9 +677,10 @@ public class View extends Composite {
         if ( !isOrWasAttached()) {
             attached = true;
             firstAttach = true;
+            layout();
         }
         super.onAttach();
-        layout();
+        
     }
 
     /**
@@ -604,5 +698,12 @@ public class View extends Composite {
      */
     protected void setVisibleChanged(boolean changed) {
         visibleChanged = changed;
+    }
+    
+    protected int getRowForY(int y) {
+        if(y < flexTable.getAbsoluteTop() || y > flexTable.getAbsoluteTop()+flexTable.getOffsetHeight())
+            return -1;
+        
+        return firstVisibleRow + ((y - flexTable.getAbsoluteTop()) / rowHeight);
     }
 }

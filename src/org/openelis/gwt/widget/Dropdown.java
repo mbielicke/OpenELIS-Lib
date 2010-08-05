@@ -77,7 +77,7 @@ public class Dropdown<T> extends TextBox<T> {
     protected Button                button;
     protected Table                 table;
     protected PopupPanel            popup;
-    protected int                   cellHeight = 19, itemCount = 10, textWidth;
+    protected int                   cellHeight = 19, itemCount = 10, width;
     protected boolean               keepPopup;
     /**
      * Sorted list of display values for search
@@ -133,7 +133,7 @@ public class Dropdown<T> extends TextBox<T> {
          */
         button = new Button();
         AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName("autoDropdownButton");
+        image.setStyleName("AutoDropdownButton");
         button.setDisplay(image, false);
         
         hp.add(textbox);
@@ -245,23 +245,28 @@ public class Dropdown<T> extends TextBox<T> {
     }
 
     @Override
-    public void setWidth(String width) {
-        
-        textWidth = Util.stripUnits(width) - 16;
+    public void setWidth(String w) {    
+        width = Util.stripUnits(w);
+
         /*
          * Set the outer panel to full width;
          */
         if (hp != null)
-            hp.setWidth(width);
+            hp.setWidth(width+"px");
 
         /*
          * set the Textbox to width - 16 to account for button.
          */
         
-        textbox.setWidth(textWidth + "px");
+        textbox.setWidth((width - 16) + "px");
         
         if(table != null) 
-            table.setWidth(width);
+            table.setWidth(width+"px");
+
+    }
+    
+    public int getWidth() {
+        return width;
     }
     
     @Override
@@ -307,6 +312,7 @@ public class Dropdown<T> extends TextBox<T> {
         this.table = tableDef;
         //table.setVisibleRows(itemCount);
         table.setTableStyle("DropdownTable");
+        table.setFixScrollbar(false);
         table.setRowHeight(16);
         table.setEnabled(true);
         /*
@@ -344,6 +350,10 @@ public class Dropdown<T> extends TextBox<T> {
                 textbox.setFocus(true);
             }
         });
+    }
+    
+    public Table getPopupContext() {
+        return table;
     }
     
     public void setVisibleItemCount(int itemCount) {

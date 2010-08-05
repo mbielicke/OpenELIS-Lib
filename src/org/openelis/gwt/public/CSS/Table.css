@@ -31,7 +31,15 @@
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 	padding: 0px 2px 0px 2px;
-}	
+}
+
+.Table td.InputError {
+      border-bottom : 1px red dashed;
+}
+
+.Table td.InputWarning {
+      border-bottom : 1px #f5d852 dashed;
+}
 
 .Header {
 	background: #d8d8d8;
@@ -122,6 +130,7 @@
 .DropdownPopup{
     /*border:none;*/
     overflow:hidden;
+    margin-left : 2px;
 }
 
 .TableDropdown {
@@ -130,9 +139,9 @@
 	margin-left : -2px;
 }
 
-.TableDropdown .autoDropdownButton{
+.TableDropdown .AutoDropdownButton{
     width:16px;
-    height:17px;
+    //height:17px;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
     margin-left : -2px;
 }
@@ -155,32 +164,45 @@
     cursor:default;
 }
 
-.TableAutoDropdown .TextboxSelected{
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+.TableCalendar {
+	spacing : 0;
+	padding : 0px;
+	margin-left : -2px;
+}
+
+.TableCalendar .CalendarButton{
+    width:16px;
+    //height:17px;
+    background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
+    margin-left : -2px;
+}
+
+.TableCalendar .TextboxSelected{
+    border:none;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
     font-size:10px;
-    border: 0px;
     cursor:default;
 }
-.TableAutoDropdown .TextboxUnselected{
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+.TableCalendar .TextboxUnselected{
+    border:none;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
     font-size:10px;
-    border: 0px;
     cursor:default;
 }
 
-.TableAutoDropdownButton{
-width:16;
-height:17;
-border-bottom: 1px solid #d8d8d8;
-background: url(../Images/trigger.gif) 0px 0px no-repeat;
+.WarnIcon {
+	width : 16px;
+	height : 17px;
+	background: url(../Images/bullet_yellow.png) 0px 0px no-repeat;
 }
-.TableAutoDropdown .Hover{
-cursor:pointer;
-background: url(../Images/trigger.gif) -16px 0px no-repeat;
-}
-.TableAutoDropdown .Selected{
-background: url(../Images/trigger.gif) -64px 0px no-repeat;
-}
-.TableAutoDropdown .Pressed{
-background: url(../Images/trigger.gif) -48px 0px no-repeat;
+
+.ErrorIcon {
+	width : 16px;
+	height : 17px;
+	background: url(../Images/bullet_red.png) 0px 0px no-repeat;
 }

@@ -39,6 +39,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -151,6 +152,8 @@ public class Header extends FocusPanel {
 
                             if (popResize != null)
                                 popResize.hide();
+                            
+                            DOM.releaseCapture(bar.getElement());
 
                         }
                     });
@@ -211,6 +214,7 @@ public class Header extends FocusPanel {
     protected void layout() {
         int numCols;
         Column column;
+        String header;
 
         numCols = table.getColumnCount();
 
@@ -219,8 +223,10 @@ public class Header extends FocusPanel {
 
         for (int i = 0; i < numCols; i++ ) {
             column = table.getColumnAt(i);
-            flexTable.setText(0, i, column.getLabel());
+            header = column.getLabel().replaceAll("\\n", "<br/>");
+            flexTable.setHTML(0, i, header);
             flexTable.getColumnFormatter().setWidth(i, column.getWidth() + "px");
+            flexTable.getCellFormatter().setVerticalAlignment(0, i, HasVerticalAlignment.ALIGN_BOTTOM);
         }
 
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
@@ -297,7 +303,7 @@ public class Header extends FocusPanel {
             /*
              * Position and show filter button
              */
-            popFilter.setPopupPosition(x + getAbsoluteLeft(), getAbsoluteTop());
+            popFilter.setPopupPosition(x + getAbsoluteLeft(), getAbsoluteTop()+getOffsetHeight()-20);
             popFilter.show();
             showingFilter = true;
             showingFilterFor = column;

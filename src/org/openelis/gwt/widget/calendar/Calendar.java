@@ -44,6 +44,7 @@ public class Calendar extends TextBox<Datetime> {
     protected PopupPanel      popup;
     protected CalendarWidget  calendar;
     protected MonthYearWidget monthYearWidget;
+    protected int             width;
 
     /**
      * Default no-arg constructor
@@ -125,6 +126,7 @@ public class Calendar extends TextBox<Datetime> {
 
         if (popup == null) {
             popup = new PopupPanel(true);
+            popup.setStyleName("DropdownPopup");
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
@@ -209,19 +211,30 @@ public class Calendar extends TextBox<Datetime> {
     }
     
     @Override
-    public void setWidth(String width) {
+    public void setWidth(String w) {
+        width = Util.stripUnits(w);
         /*
          * Set the outer panel to full width;
          */
         if (hp != null)
-            hp.setWidth(width);
+            hp.setWidth(width+"px");
 
         /*
          * set the Textbox to width - 16 to account for button.
          */
         
-        textbox.setWidth( (Util.stripUnits(width) - 16) + "px");
-
+        textbox.setWidth((width - 16) + "px");
+        
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    @Override
+    public void setHeight(String height) {
+        textbox.setHeight(height);
+        button.setHeight(height);
     }
 
     /**

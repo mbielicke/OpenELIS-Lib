@@ -25,6 +25,11 @@
 */
 package org.openelis.gwt.widget;
 
+/**
+ * Class used by AutoComplete to store its key-value pair
+ * @author tschmidt
+ *
+ */
 public class AutoCompleteValue {
     
     protected Integer id;

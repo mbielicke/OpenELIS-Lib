@@ -57,10 +57,12 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
         table.ignoreUpDown(true);
         table.ignoreReturn(true);
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
-        editor.setHeight(table.getRowHeight()-4 +"px");
-        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
-        container.setHeight((table.getRowHeight()-3)+"px");
+        if(table.getColumnAt(col).getWidth()-4 != editor.getWidth()) {
+            editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
+            editor.setHeight(table.getRowHeight()-4 +"px");
+            container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
+            container.setHeight((table.getRowHeight()-3)+"px");
+        }
         flexTable.setWidget(row, col, container);
         DeferredCommand.addCommand(new Command() {
             public void execute() {
@@ -72,6 +74,7 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
     public T finishEditing(Table table, FlexTable flexTable, int row, int col) {
         table.ignoreUpDown(false);
         table.ignoreReturn(false);
+        editor.setFocus(false);
         return editor.getValue();
     }
     

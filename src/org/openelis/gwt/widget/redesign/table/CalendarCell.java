@@ -79,8 +79,11 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
                              int col,
                              Datetime value,
                              GwtEvent event) {
+        table.ignoreUpDown(true);
+        table.ignoreReturn(true);
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()-15+"px");
+        editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
+        editor.setHeight(table.getRowHeight()-4 +"px");
         container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
         container.setHeight((table.getRowHeight()-3)+"px");
         flexTable.setWidget(row, col, container);
@@ -92,6 +95,8 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
     }
 
     public Datetime finishEditing(Table table, FlexTable flexTable, int row, int col) {
+        table.ignoreUpDown(false);
+        table.ignoreReturn(false);
         return editor.getValue();
     }
     

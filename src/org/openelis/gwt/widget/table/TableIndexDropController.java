@@ -139,7 +139,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 		dropping = false;
 		super.onDrop(context);
 		if(getHandlerCount(DropEvent.getType()) > 0)
-			DropEvent.fire(this, drop, table.getRow(targetRow));
+			DropEvent.fire(this, drop);
 	}
 
 	@Override

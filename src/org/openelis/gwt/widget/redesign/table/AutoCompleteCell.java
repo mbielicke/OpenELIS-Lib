@@ -66,6 +66,7 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>, CellEd
         container = new AbsolutePanel();
         container.add(editor);
         container.setStyleName("CellContainer");
+
     }
     
     /**
@@ -84,10 +85,13 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>, CellEd
         
         //Set value and formatting for editor.
         editor.setValue(value);
-        editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
-        editor.setHeight(table.getRowHeight()-4 +"px");
-        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
-        container.setHeight((table.getRowHeight()-3)+"px");
+        
+        if(table.getColumnAt(col).getWidth()-4 != editor.getWidth()) {
+            editor.setWidth(table.getColumnAt(col).getWidth()-4+"px");
+            editor.setHeight(table.getRowHeight()-4 +"px");
+            container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
+            container.setHeight((table.getRowHeight()-3)+"px");
+        }
         
         //Puts editor into cell
         flexTable.setWidget(row, col, container);

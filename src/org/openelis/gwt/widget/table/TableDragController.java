@@ -123,7 +123,8 @@ public class TableDragController extends PickupDragController implements HasBefo
 			hp = new HorizontalPanel();
 			
 			dropIndicator = new AbsolutePanel();
-			dropIndicator.setStyleName("DragStatus NoDrop");
+			dropIndicator.setStyleName("DragStatus");
+			dropIndicator.addStyleName("NoDrop");
 			hp.add(dropIndicator);
 			ap = new AbsolutePanel();
 			hp.add(ap);
@@ -155,23 +156,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 	}
 
 
-	/**
-	 * Save the selected widgets' current location in case they much
-	 * be restored due to a cancelled drop.
-	 * @see #restoreSelectedWidgetsLocation()
-	 */
-	protected void saveSelectedWidgetsLocationAndStyle() {
-		savedWidgetInfoMap = new HashMap<Widget, SavedWidgetInfo>();
-		for (Widget widget : context.selectedWidgets) {
-			SavedWidgetInfo info = new SavedWidgetInfo();
-			info.initialDraggableParent = widget.getParent();
 
-			//info.initialDraggableIndex = (() info.initialDraggableParent).getWidgetIndex(widget);
-			info.initialDraggableMargin = DOM.getStyleAttribute(widget.getElement(), "margin");
-			widget.getElement().getStyle().setProperty("margin", "0px");
-			savedWidgetInfoMap.put(widget, info);
-		}
-	}
 
 	public void setEnable(boolean enable) {
 		enabled = enable;

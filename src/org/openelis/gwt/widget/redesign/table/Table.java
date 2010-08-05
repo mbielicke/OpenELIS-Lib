@@ -26,20 +26,37 @@
 package org.openelis.gwt.widget.redesign.table;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.event.BeforeDragStartHandler;
+import org.openelis.gwt.event.BeforeDropHandler;
+import org.openelis.gwt.event.DragStartHandler;
+import org.openelis.gwt.event.DropEnterHandler;
+import org.openelis.gwt.event.DropHandler;
+import org.openelis.gwt.event.HasBeforeDragStartHandlers;
+import org.openelis.gwt.event.HasBeforeDropHandlers;
+import org.openelis.gwt.event.HasDragStartHandlers;
+import org.openelis.gwt.event.HasDropEnterHandlers;
+import org.openelis.gwt.event.HasDropHandlers;
 import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.widget.DragItem;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.redesign.table.event.BeforeRowMovedEvent;
+import org.openelis.gwt.widget.redesign.table.event.BeforeRowMovedHandler;
 import org.openelis.gwt.widget.redesign.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.redesign.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.redesign.table.event.HasBeforeRowMovedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.redesign.table.event.HasRowDeletedHandlers;
@@ -47,14 +64,17 @@ import org.openelis.gwt.widget.redesign.table.event.RowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.RowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.redesign.table.event.RowDeletedHandler;
+import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
+import org.openelis.gwt.widget.table.event.RowMovedEvent;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -68,9 +88,17 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 /**
  * This class is used by screens and widgets such as AutoComplete and Dropdown to display 
@@ -110,12 +138,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * List of selected Rows by index in the table
      */
     protected ArrayList<Integer> selections;
+    
+    protected HashMap<String,ArrayList<LocalizedException>>  endUserExceptions, validateExceptions;
 
     /**
      * Table state values
      */
     protected boolean            enabled, multiSelect, editing, hasFocus, queryMode, hasHeader,
-                                 ignoreTab, ignoreUpDown, ignoreReturn;
+                                 ignoreTab, ignoreUpDown, ignoreReturn,fixScrollBar = true;
 
     /**
      * Enum representing the state of when the scroll bar should be shown.
@@ -143,6 +173,17 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * Arrays for determining relative X positions for columns
      */
     protected short[]   xForColumn, columnForX;
+    
+    /**
+     * Final widgets used for displaying Exceptions in Popup
+     */
+    protected final VerticalPanel                                exceptionPanel;
+    protected final DecoratorPanel                               dp;
+    protected final PopupPanel                                   balloonPanel;
+    protected Timer                                              balloonTimer;
+    
+    protected TableDragController  dragController;
+    protected TableDropController dropController; 
 
     /**
      * Default no-arg constructor that initializes all needed fields so the
@@ -286,7 +327,24 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
             }
         }, KeyDownEvent.getType());
+        
+        // Creation of final widgets
+        exceptionPanel = new VerticalPanel();
+        balloonPanel       = new PopupPanel(true);
+        dp             = new DecoratorPanel();
 
+        dp.setStyleName("ErrorWindow");
+        dp.add(exceptionPanel);
+        dp.setVisible(true);
+
+        balloonPanel.setWidget(dp);
+        balloonPanel.setStyleName("");
+        
+       balloonTimer = new Timer() {
+            public void run() {
+                balloonPanel.hide();
+            }
+        };
     }
 
     protected void ignoreTab(boolean ignore) {
@@ -300,6 +358,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     protected void ignoreReturn(boolean ignore) {
         ignoreReturn = ignore;
     }
+    
+
     
     // ********* Table Definition Methods *************
     /**
@@ -359,7 +419,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     @SuppressWarnings("unchecked")
     public void setModel(ArrayList<? extends Row> model) {
         this.rows = (ArrayList<Row>)model;
-        renderView( -1, -1);
+        if(!scrollToVisible(0))
+            renderView( -1, -1);
     }
 
     /**
@@ -438,6 +499,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         this.horizontalScroll = horizontalScroll;
         layout();
     }
+    
+    public void setFixScrollbar(boolean fixScrollBar) {
+        this.fixScrollBar = fixScrollBar;
+    }
+    
+    public boolean getFixScrollbar() {
+        return fixScrollBar;
+    }
 
     /**
      * Sets the width of the table view
@@ -476,7 +545,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     protected int getWidthWithoutScrollbar() {
-        if (verticalScroll != Scrolling.NEVER)
+        if (verticalScroll != Scrolling.NEVER && fixScrollBar)
             return viewWidth - 18;
 
         return viewWidth;
@@ -560,7 +629,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return -1;
     }
 
-
+    protected int getRowForY(int y) {
+        return getRowForY(y);
+    }
 
     /**
      * Sets whether the table as a header or not.
@@ -742,7 +813,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return row;
 
     }
-
+   
     /**
      * Method will delete a row from the model at the specified index and
      * refersh the view.
@@ -1208,6 +1279,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return view.scrollToVisible(index);
     }
 
+    public void scrollBy(int rows) {
+        view.scrollBy(rows);
+    }
+    
     /**
      * Redraws the table when any part of its physical definition is changed.
      */
@@ -1222,6 +1297,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     protected void resize() {
         if ( !isAttached())
             return;
+        
+        finishEditing();
 
         computeColumnsWidth();
 
@@ -1371,6 +1448,210 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public boolean getQueryMode() {
         return queryMode;
+    }
+    
+    /**
+     * Convenience method to check if a widget has exceptions so we do not need
+     * to go through the cost of merging the logical and validation exceptions
+     * in the getExceptions method.
+     * 
+     * @return
+     */
+    public boolean hasExceptions(int row, int col) {
+        String key;
+        
+        key = getExceptionKey(row,col);
+        return (endUserExceptions != null && endUserExceptions.containsKey(key)) || 
+               (validateExceptions != null && validateExceptions.containsKey(key));
+    }
+
+
+    /**
+     * Adds a manual Exception to the widgets exception list.
+     */
+    public void addException(int row, int col, LocalizedException error) {
+        getEndUserExceptionList(row, col).add(error);
+        renderView(row,row);
+    }
+    
+
+    protected void addValidateException(int row, int col, LocalizedException error) {
+        getValidateExceptionList(row, col).add(error);
+        renderView(row,row);       
+    }
+
+    /**
+     * Combines both exceptions list into a single list to be displayed on the
+     * screen.
+     */
+    public ArrayList<LocalizedException> getValidateExceptions(int row, int col) {
+        if(validateExceptions != null)
+            return validateExceptions.get(getExceptionKey(row, col));
+        return null;
+    }
+
+    public ArrayList<LocalizedException> getEndUserExceptions(int row, int col) {
+        if(endUserExceptions != null)
+            return endUserExceptions.get(getExceptionKey(row, col));
+        return null;
+    }
+
+    /**
+     * Clears all manual and validate exceptions from the widget.
+     */
+    public void clearExceptions() {
+        if(endUserExceptions != null || validateExceptions != null) {
+            endUserExceptions = null;
+            validateExceptions = null;
+            renderView(-1,-1);
+        }
+    }
+    
+    public void clearExceptions(int row, int col) {
+        String key;
+        
+        key = getExceptionKey(row, col);
+        if(endUserExceptions != null) 
+            endUserExceptions.remove(key);
+    
+        if(validateExceptions != null)
+            validateExceptions.remove(key);
+        
+        renderView(row,row);
+        
+    }
+    
+    private String getExceptionKey(int row, int col) {
+        return row +"," +col;
+    }
+    
+    
+    private ArrayList<LocalizedException> getEndUserExceptionList(int row, int col) {
+        ArrayList<LocalizedException> list;
+        String key;
+        
+        key = getExceptionKey(row, col);
+        if (endUserExceptions == null)
+            endUserExceptions = new HashMap<String, ArrayList<LocalizedException>>();
+              
+        list = endUserExceptions.get(key);
+        
+        if(list == null){
+            list = new ArrayList<LocalizedException>();
+            endUserExceptions.put(key, list);
+        }   
+        
+        return list;
+        
+    }
+
+    private ArrayList<LocalizedException> getValidateExceptionList(int row, int col) {
+        ArrayList<LocalizedException> list;
+        String key;
+        
+        key = getExceptionKey(row, col);
+        if (validateExceptions == null)
+            validateExceptions = new HashMap<String, ArrayList<LocalizedException>>();
+              
+        list = validateExceptions.get(key);
+        
+        if(list == null){
+            list = new ArrayList<LocalizedException>();
+            validateExceptions.put(key, list);
+        }   
+        
+        return list;
+        
+    }
+    
+    protected void drawExceptions(int row, int col, final int x, final int y) {
+        ArrayList<LocalizedException> exceptions = null;
+        Grid grid;
+        
+        balloonPanel.hide();
+        balloonTimer.cancel();
+
+        if((editingRow == row && editingCol == col) || !hasExceptions(row, col))
+            return;
+        
+        exceptionPanel.clear();
+        grid = new Grid(0,2);
+        exceptionPanel.add(grid);
+
+        for (int i = 0; i < 2; i++ ) {
+            switch (i) {
+                /*
+                 * First iteration check EndUserException if no
+                 * EndUserExceptions do i++ and fall through to check
+                 * validatExceptions
+                 */
+                case 0:
+                    exceptions = getEndUserExceptions(row,col);
+                    if (exceptions == null)
+                        continue;
+                    break;
+                    /*
+                     * If no validation exceptions continue out of loop
+                     */
+                case 1:
+                    exceptions = getValidateExceptions(row,col);
+                    if (exceptions == null)
+                        continue;
+            }
+
+
+            for (LocalizedException exception : exceptions) {
+                grid.insertRow(0);
+                if (exception instanceof Warning) {
+                    grid.getCellFormatter().setStyleName(0, 0, "WarnIcon");
+                    grid.getCellFormatter().setStyleName(0,1,"warnPopupLabel");
+                } else {
+                    grid.getCellFormatter().setStyleName(0, 0, "ErrorIcon");
+                    grid.getCellFormatter().setStyleName(0,1,"errorPopupLabel");
+                }
+                grid.setText(0, 1, exception.getMessage());
+            }
+
+        }
+
+        balloonPanel.setPopupPositionAndShow(new PositionCallback() {
+            public void setPosition(int offsetWidth, int offsetHeight) {
+                int offset = x;
+                if(x+offsetWidth > Window.getClientWidth())  
+                    offset -= x + offsetWidth - Window.getClientWidth() - 10;
+
+                balloonPanel.setPopupPosition(offset,y);
+            }
+        });
+
+        balloonTimer.schedule(5000); 
+
+    }
+    
+    public void enableDrag() {
+        assert rows == null : "Drag must be set before model is loaded";
+        
+        dragController = new TableDragController(this,RootPanel.get());
+    }
+    
+    public void enableDrop() {
+        dropController = new TableDropController(this);
+    }
+    
+    public void addDropTarget(DropController target) {
+        dragController.registerDropController(target);
+    }
+    
+    public void removeDropTarget(DropController target) {
+        dragController.unregisterDropController(target);
+    }
+
+    public TableDragController getDragController() {
+        return dragController;
+    }
+    
+    public TableDropController getDropController() {
+        return dropController;
     }
 
     // ********* Registration of Handlers ******************
