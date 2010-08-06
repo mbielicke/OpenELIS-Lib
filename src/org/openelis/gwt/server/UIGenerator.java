@@ -323,9 +323,9 @@ public class UIGenerator extends Generator {
                 NodeList columns = null;
                 
                 if(node.getAttributes().getNamedItem("field") == null || node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) 
-                	sw.println("AutoComplete<Integer> wid"+id+" = new AutoComplete<Integer>();");
+                	sw.println("AutoComplete wid"+id+" = new AutoComplete();");
                 else
-                    sw.println("AutoComplete<String> wid"+id+" = new AutoComplete<String>();");
+                    sw.println("AutoComplete wid"+id+" = new AutoComplete();");
                 sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(panel);");
