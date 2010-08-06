@@ -450,7 +450,7 @@ public class View extends Composite {
     protected void applyRowStyle(int r, int rc) {
         String style;
 
-        style = table.getModel().get(r).getStyle(r);
+        style = table.getRowAt(r).getStyle(r);
         if (style != null)
             flexTable.getRowFormatter().setStyleName(rc, style);
 

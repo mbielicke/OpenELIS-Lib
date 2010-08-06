@@ -109,7 +109,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Model used by the Table
      */
-    protected ArrayList<Row>     rows;
+    protected ArrayList<Row>     rows, viewRows;
     
     /**
      * Columns used by the Table
@@ -192,6 +192,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         selections = new ArrayList<Integer>(5);
         columns = new ArrayList<Column>(5);
         rows = null;
+        viewRows = null;
         view = new View(this);
         setWidget(view);
         layout();
@@ -419,8 +420,34 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     @SuppressWarnings("unchecked")
     public void setModel(ArrayList<? extends Row> model) {
         this.rows = (ArrayList<Row>)model;
+        this.viewRows = rows;
+        view.adjustScrollBarHeight();
         if(!scrollToVisible(0))
             renderView( -1, -1);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void setViewModel(ArrayList<? extends Row> model) {
+        assert rows != null : "You must set initial model before setting a view model";
+        
+        viewRows = (ArrayList<Row>)model;
+        view.adjustScrollBarHeight();
+        if(!scrollToVisible(0))
+            renderView( -1, -1);
+    }
+    
+    protected int getModelIndex(int viewIndex) {
+        if(rows == viewRows)
+            return viewIndex;
+        
+        return rows.indexOf(viewRows.get(viewIndex));
+    }
+    
+    protected int getViewIndex(int modelIndex) {
+        if(rows == viewRows)
+            return modelIndex;
+        
+        return viewRows.indexOf(rows.get(modelIndex));
     }
 
     /**
@@ -430,8 +457,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public int getRowCount() {
-        if (rows != null)
-            return rows.size();
+        if (viewRows != null)
+            return viewRows.size();
         return 0;
     }
 
@@ -638,10 +665,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return -1;
     }
 
-    protected int getRowForY(int y) {
-        return getRowForY(y);
-    }
-
     /**
      * Sets whether the table as a header or not.
      */
@@ -756,7 +779,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Row addRow() {
-        return addRow(rows.size(), null);
+        return addRow(viewRows.size(), null);
     }
 
     /**
@@ -777,7 +800,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Row addRow(Row row) {
-        return addRow(rows.size(), row);
+        return addRow(viewRows.size(), row);
     }
 
     /**
@@ -812,8 +835,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         if ( !fireBeforeRowAddedEvent(index, row))
             return null;
-
-        rows.add(index, row);
+        
+        /* Add row to view and then to model */
+        
+        if(viewRows != rows)
+            rows.add(getModelIndex(index),row);
+        
+        viewRows.add(index, row);
+       
+        
         view.renderView(index, -1);
         view.adjustScrollBarHeight();
 
@@ -835,13 +865,16 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         finishEditing();
 
-        row = rows.get(index);
+        row = viewRows.get(index);
 
         if ( !fireBeforeRowDeletedEvent(index, row))
             return null;
 
-        rows.remove(index);
-
+        if(viewRows != rows)
+            rows.remove(getModelIndex(index));
+        
+        viewRows.remove(index);
+       
         renderView(-1,-1);
 
         fireRowDeletedEvent(index, row);
@@ -856,7 +889,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         finishEditing();
         clearRowSelection();
         rows = null;
+        viewRows = null;
         renderView( -1, -1);
+    }
+    
+    public Row getRowAt(int row) {
+        return viewRows.get(row);
     }
 
     // ************ Selection Methods ***************
@@ -881,7 +919,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         if ( !multiSelect)
             clearRowSelection();
 
-        if (index > -1 && index < rows.size()) {
+        if (index > -1 && index < viewRows.size()) {
             if ( !selections.contains(index)) {
                 if ( !fireBeforeSelectionEvent(index))
                     return false;
@@ -970,7 +1008,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         selections.clear();
     }
+    
 
+    
     // ********* Event Firing Methods ********************
 
     /**
@@ -1141,7 +1181,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setValueAt(int row, int col, Object value) {
         finishEditing();
-        rows.get(row).setCell(col, value);
+        viewRows.get(row).setCell(col, value);
         refreshCell(row, col);
     }
 
@@ -1153,7 +1193,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setRowAt(int index, Row row) {
         finishEditing();
-        rows.set(index, row);
+        viewRows.set(index, row);
         renderView(index,index);
     }
 
@@ -1165,9 +1205,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Object getValueAt(int row, int col) {
-        if (rows == null)
+        if (viewRows == null)
             return null;
-        return rows.get(row).getCell(col);
+        return viewRows.get(row).getCell(col);
     }
 
     /**
@@ -1248,7 +1288,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col);
-        rows.get(row).setCell(col, newValue);
+        viewRows.get(row).setCell(col, newValue);
         refreshCell(row, col);
 
         if (Util.isDifferent(newValue, oldValue)) {
