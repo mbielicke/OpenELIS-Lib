@@ -45,6 +45,8 @@ public class TableDragController extends PickupDragController implements HasBefo
     protected DecoratorPanel dragContainer;
     protected HorizontalPanel hp;
     protected Label proxyLabel;
+    
+    private HandlerManager handlerManager;
 
     /**
      * Constructor that takes the Table used by this controller and a panel used to contain the drag.  
@@ -171,7 +173,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	//******* Handler code ***************
 	
-	private HandlerManager handlerManager;
+	
 
 	protected final <H extends EventHandler> HandlerRegistration addHandler(
 			final H handler, GwtEvent.Type<H> type) {
