@@ -69,6 +69,10 @@ public class TableDragController extends PickupDragController implements HasBefo
 	public void previewDragStart() throws VetoDragException {
 	    BeforeDragStartEvent<DragItem> event;
 
+	    /* Select row before drag start and cancel drag if not selectable */
+	    if(!table.selectRowAt(table.view.lastRow))
+	        throw new VetoDragException();
+	    
 	    /* Set the index of row being dragged into the DragItem */
 	    ((DragItem)context.draggable).setIndex(table.view.lastRow);
 	    
@@ -93,7 +97,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 	@Override
 	public void dragMove() {
 		context.desiredDraggableX = context.mouseX;
-		context.desiredDraggableY = context.mouseY;
+		context.desiredDraggableY = context.mouseY + 16;
 		super.dragMove();
 	}
 

@@ -690,6 +690,13 @@ public class View extends Composite {
     protected Header getHeader() {
         return header;
     }
+    
+    /**
+     * 
+     */
+    protected int getRowHeight() {
+        return rowHeight;
+    }
 
     /**
      * Sets the visible changed to true so that computeVisibleRows() will
