@@ -650,9 +650,12 @@ public class EditTable extends TableController implements
                 if(autoAdd)
                     loadStart++;
             }
+        	start = -1;
         	for(int i = 0; i < rowsPer; i++){
                 while(loadStart+i < model.numRows() && !model.getRow(loadStart+i).show())
                     loadStart++;
+                if(start < 0)
+                	start = loadStart;
                 if(loadStart+i < model.numRows())
                     loadRow(i,model.getRow(loadStart+i));
                 else{
@@ -663,6 +666,7 @@ public class EditTable extends TableController implements
                     }
                 }
         	}
+        	
 
     }
 

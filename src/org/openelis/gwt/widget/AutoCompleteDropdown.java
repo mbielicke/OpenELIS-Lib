@@ -905,10 +905,12 @@ public class AutoCompleteDropdown extends Composite implements
 				 				+ (!"".equals(textValue) ? "|" : "") + textValue;
 			}else{
 				NumberObject select = (NumberObject)selected.get(i);
+				if(select != null){
+					String tempTextValue = (String)((DataObject)((DataSet)scrollList.getDataModel().get(select)).getObject(0)).getValue();
 				
-				String tempTextValue = (String)((DataObject)((DataSet)scrollList.getDataModel().get(select)).getObject(0)).getValue();
-				
-				textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
+					textValue = tempTextValue + (!"".equals(textValue) ? "|" : "") + textValue;
+				}else
+					textValue = "";
 			}
                
 		}	

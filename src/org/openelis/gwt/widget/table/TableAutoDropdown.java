@@ -206,7 +206,11 @@ public class TableAutoDropdown extends TableCellInputWidget implements ChangeLis
             else
                 display.setText("");
         }else{
-            display.setText((String)((DataSet)editor.getModel().get(field.getDataObject())).getObject(0).getValue());
+        	try {
+        		display.setText((String)((DataSet)editor.getModel().get(field.getDataObject())).getObject(0).getValue());
+        	}catch(Exception e) {
+        		display.setText("");
+        	}
         }
 		setWidget(display);		
         super.setDisplay();

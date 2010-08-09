@@ -107,8 +107,9 @@ public class FormCalendarWidget extends Composite implements
                                       .format(endDate.getDate());
             setText(from + " - " + to);
             weekDate = date.getDate();
-        } else
+        } else{
             setText(date.toString());
+        }
     }
 
     public String getText() {
@@ -203,9 +204,9 @@ public class FormCalendarWidget extends Composite implements
     }
 
     public void setValue(Object val) {
-        if (val != null)
+        if (val != null){
             setText(((DatetimeRPC)val).toString());
-        else
+        }else
             setText("");
     }
 

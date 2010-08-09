@@ -146,7 +146,8 @@ public class ScreenCalendar extends ScreenInputWidget implements FocusListener{
                    field.setValue(DatetimeRPC.getInstance(((DateField)field).getBegin(),
                 	       ((DateField)field).getEnd(),
                 			date));
-                }
+                }else
+                	field.setValue(null);
             }
             if(field instanceof QueryDateField && !entered.equals("")) {
             	field.setValue(entered);

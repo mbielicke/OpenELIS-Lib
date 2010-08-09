@@ -232,7 +232,7 @@ public class DatetimeRPC implements java.io.Serializable {
      * specified format
      */
     public String toString(String format) {
-        DateTimeFormat simpleFormat = DateTimeFormat.getFormat(format);
+    	DateTimeFormat simpleFormat = DateTimeFormat.getFormat(format);
         parse();
         return simpleFormat.format(date);
     }
