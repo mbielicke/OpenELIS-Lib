@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
 
     private AbsolutePanel ap;
+    protected int scrollMax;
 
     private boolean       horizontal;
 
@@ -60,6 +61,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
                 ScrollBarEvent.fire(source);
             }
         });
+        scrollMax = -1;
     }
 
     public ScrollBar(boolean horizontal) {
@@ -72,7 +74,10 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
     }
 
     public void adjustScrollMax(int scrollMax) {
-
+        if(scrollMax == this.scrollMax)
+            return;
+        
+        this.scrollMax = scrollMax;
         if (horizontal) {
             ap.setWidth(Util.addUnits(scrollMax));
         } else {

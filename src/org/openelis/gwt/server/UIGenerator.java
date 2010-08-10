@@ -288,7 +288,7 @@ public class UIGenerator extends Generator {
 				    if(length > 0){
 				        for(int i = 0; i < length; i++){
 				            if(!cols.item(0).hasChildNodes()) {
-				                Element label = doc.createElement("labelCell");
+				                Element label = doc.createElement("label");
 				                label.setAttribute("field", "String");
 				                cols.item(0).appendChild(label);
 				            }
@@ -297,7 +297,7 @@ public class UIGenerator extends Generator {
 				    }else{
 				        Element col = doc.createElement("col");
 				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-				        Element label = doc.createElement("labelCell");
+				        Element label = doc.createElement("label");
 				        label.setAttribute("field", "String");
 				        col.appendChild(label);
 				        table.appendChild(col);
@@ -357,7 +357,7 @@ public class UIGenerator extends Generator {
                             if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                                 continue;
                             if(!col.hasChildNodes()) {
-                                Element label = doc.createElement("labelCell");
+                                Element label = doc.createElement("label");
                                 label.setAttribute("field", "String");
                                 col.appendChild(label);
                             }
@@ -366,7 +366,7 @@ public class UIGenerator extends Generator {
                     }else{
                         Element col = doc.createElement("col");
                         col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-                        Element label = doc.createElement("labelCell");
+                        Element label = doc.createElement("label");
                         label.setAttribute("field", "String");
                         col.appendChild(label);
                         table.appendChild(col);
@@ -503,47 +503,55 @@ public class UIGenerator extends Generator {
                            }
                            //sw.println("if(wid"+child+" instanceof HasBlurHandlers)");
                            //sw.println("((HasBlurHandlers)wid"+child+").addBlurHandler(wid"+id+");");
-                           sw.println("column"+id+"_"+i+".setCellRenderer(wid"+child+");");
-                           sw.println("column"+id+"_"+i+".setCellEditor(wid"+child+");");
+                           String field = "String";
+                           if(editor.item(j).getAttributes().getNamedItem("field") != null)
+                               field = editor.item(j).getAttributes().getNamedItem("field").getNodeValue();
+                          
+                           if(editor.item(j).getNodeName().equals("dropdown")) 
+                               sw.println("DropdownCell<"+field+"> cell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                           else if(editor.item(j).getNodeName().equals("textbox")) 
+                               sw.println("TextBoxCell<"+field+"> cell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                           else if(editor.item(j).getNodeName().equals("autoComplete"))
+                               sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
+                           else if(editor.item(j).getNodeName().equals("checkbox"))
+                               sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
+                           else if(editor.item(j).getNodeName().equals("calendar"))
+                               sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                           else
+                               sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
+                           
+                           sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
+                           sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
                            break;
                        }
                    }
                }
+               
+               if(node.getAttributes().getNamedItem("tab") != null) {
+                   String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
+                   String[] tabs = tab.split(",");
+                   String key = node.getAttributes().getNamedItem("key").getNodeValue();
+                   sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+               }
+               
                if(node.getAttributes().getNamedItem("visibleRows") != null)
                    sw.println("wid"+id+".setVisibleRows("+node.getAttributes().getNamedItem("visibleRows").getNodeValue()+");");
                if(node.getAttributes().getNamedItem("width") != null)
                    sw.println("wid"+id+".setWidth("+node.getAttributes().getNamedItem("width").getNodeValue()+");");
                if(node.getAttributes().getNamedItem("scroll") != null)
-                   sw.println("wid"+id+".setVerticalScroll(Table.Scrolling.valueOf(\""+node.getAttributes().getNamedItem("scroll").getNodeValue()+"\");");
+                   sw.println("wid"+id+".setVerticalScroll(Table.Scrolling.valueOf(\""+node.getAttributes().getNamedItem("scroll").getNodeValue()+"\"));");
     	        
     	    }
     	   public void addImport() {
     	       composer.addImport("org.openelis.gwt.widget.redesign.table.Table");
     	       composer.addImport("org.openelis.gwt.widget.redesign.table.Column");
-    	        
+               composer.addImport("org.openelis.gwt.widget.redesign.table.LabelCell");
+               composer.addImport("org.openelis.gwt.widget.redesign.table.TextBoxCell");
+               composer.addImport("org.openelis.gwt.widget.redesign.table.AutoCompleteCell");
+               composer.addImport("org.openelis.gwt.widget.redesign.table.DropdownCell");
+               composer.addImport("org.openelis.gwt.widget.redesign.table.CheckBoxCell");
+               composer.addImport("org.openelis.gwt.widget.redesign.table.CalendarCell");    	        
      	   }
-    	});
-    	factoryMap.put("textboxCell", new Factory() {
-    	   public void getNewInstance(Node node, int id) {
-    	        sw.println("TextBoxCell<String> wid"+id+" = new TextBoxCell<String>();");
-    	        sw.println("TextBox<String> editor"+id+" = new TextBox<String>();");
-    	        sw.println("wid"+id+".setEditor(editor"+id+");");
-    	    }
-    	   public void addImport() {
-    	       composer.addImport("org.openelis.gwt.widget.redesign.table.TextBoxCell");
-    	       composer.addImport("org.openelis.gwt.widget.TextBox");
-    	    }
-    	});
-    	factoryMap.put("labelCell", new Factory() {
-    	    public void getNewInstance(Node node, int id) {
-                sw.println("LabelCell<String> wid"+id+" = new LabelCell<String>();");
-                sw.println("org.openelis.gwt.widget.Label<String> editor"+id+" = new org.openelis.gwt.widget.Label<String>();");
-                sw.println("wid"+id+".setEditor(editor"+id+");");
-    	    }
-    	    public void addImport() {
-    	        composer.addImport("org.openelis.gwt.widget.redesign.table.LabelCell");
-    	        composer.addImport("org.openelis.gwt.widget.Label");
-    	    }
     	});
     	factoryMap.put("VerticalPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {

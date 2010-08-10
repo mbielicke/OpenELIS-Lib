@@ -502,7 +502,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         if (required && value == null) {
             addValidateException(new LocalizedException("fieldRequiredException"));
         }
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**

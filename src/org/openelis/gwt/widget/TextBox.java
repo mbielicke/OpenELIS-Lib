@@ -345,7 +345,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         } catch (LocalizedException e) {
             addValidateException(e);
         }
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**
@@ -358,7 +358,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         } catch (LocalizedException e) {
             addValidateException(e);
         }
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     // ********** Implementation of HasException interface ***************
@@ -380,7 +380,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         if (endUserExceptions == null)
             endUserExceptions = new ArrayList<LocalizedException>();
         endUserExceptions.add(error);
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     protected void addValidateException(LocalizedException error) {
@@ -407,7 +407,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**

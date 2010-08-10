@@ -12,14 +12,12 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 /**
  * This is a Singleton class that will handle displaying exceptions that have
@@ -28,27 +26,24 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
+public class ExceptionHelper {
 
     /**
      * Final widgets used for displaying Exceptions in Popup
      */
-    protected final VerticalPanel                                exceptionPanel;
-    protected final DecoratorPanel                               dp;
-    protected final PopupPanel                                   popPanel;
-    protected final HashMap<HasExceptions,HandlerRegistration>   overHandlers;
-    protected final HashMap<HasExceptions,HandlerRegistration>   outHandlers;
-    protected final Timer                                        timer;
-
-    /**
-     * Static Singleton instance of ExceptionUtil.
-     */
-    private static ExceptionHelper   instance = new ExceptionHelper();
+    protected static final VerticalPanel                                exceptionPanel;
+    protected static final DecoratorPanel                               dp;
+    protected static final PopupPanel                                   popPanel;
+    protected static final HashMap<HasExceptions,HandlerRegistration>   overHandlers;
+    protected static final HashMap<HasExceptions,HandlerRegistration>   outHandlers;
+    protected static final Timer                                        timer;
+    
+    protected static final ExceptionHandlers                            handlers;
 
     /**
      * Private constructor used to delay creating final widgets until needed
      */
-    private ExceptionHelper() {
+    static {
         // Creation of final widgets
         exceptionPanel = new VerticalPanel();
         popPanel       = new PopupPanel(true);
@@ -68,15 +63,8 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
                 popPanel.hide();
             }
         };
-    }
-
-    /**
-     * Method get Singleton instance
-     * 
-     * @return
-     */
-    public static ExceptionHelper getInstance() {
-        return instance;
+        
+        handlers = new ExceptionHandlers();
     }
 
     /**
@@ -84,7 +72,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
      * 
      * @param widget
      */
-    private void clearExceptionStyle(HasExceptions widget) {
+    private static void clearExceptionStyle(HasExceptions widget) {
         widget.removeExceptionStyle("InputError");
         widget.removeExceptionStyle("InputWarning");
     }
@@ -94,7 +82,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
      * 
      * @param widget
      */
-    private void setExceptionStyle(HasExceptions widget) {
+    private static void setExceptionStyle(HasExceptions widget) {
         ArrayList<LocalizedException> exceptions = null;
     
         for (int i = 0; i < 2; i++ ) {
@@ -134,12 +122,12 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
     /**
      * Adds and removes Mouse handlers for displaying Exceptions as needed
      */
-    public void checkExceptionHandlers(HasExceptions widget) {
+    public static void checkExceptionHandlers(HasExceptions widget) {
         clearExceptionStyle(widget);
         if (widget.hasExceptions()) {
             if (!overHandlers.containsKey(widget)) { 
-                overHandlers.put(widget, widget.addMouseOverHandler(this));
-                outHandlers.put(widget, widget.addMouseOutHandler(this));
+                overHandlers.put(widget, widget.addMouseOverHandler(handlers));
+                outHandlers.put(widget, widget.addMouseOutHandler(handlers));
             }
             setExceptionStyle(widget);
         } else {
@@ -151,29 +139,20 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
         
     }
 
-    /**
-     * Method called from MouseOverHandler to draw and display exceptions in the
-     * PopupPanel.
-     * 
-     * @param widget
-     */
-    protected void drawExceptions(HasExceptions widget) {
+    public static void drawExceptions(ArrayList<LocalizedException> endUser, ArrayList<LocalizedException> valid,final int x, final int y) {
         ArrayList<LocalizedException> exceptions = null;
         Grid grid;
 
-        // Clear panel and widget exception styling
+        // Clear panel 
         exceptionPanel.clear();
         grid = new Grid(0,2);
         exceptionPanel.add(grid);
         
-        clearExceptionStyle(widget);
-
+       
         // Get out if widget has no exceptions to display;
-        if ( !widget.hasExceptions())
+        if (endUser == null && valid == null)
             return;
 
-        // Start at Warning level and override to error level if necessary
-        String style = "InputWarning";
         for (int i = 0; i < 2; i++ ) {
             switch (i) {
                 /*
@@ -182,7 +161,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
                  * validatExceptions
                  */
                 case 0:
-                    exceptions = widget.getEndUserExceptions();
+                    exceptions = endUser;
                     if (exceptions == null)
                         continue;
                     break;
@@ -190,7 +169,7 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
                      * If no validation exceptions continue out of loop
                      */
                 case 1:
-                    exceptions = widget.getValidateExceptions();
+                    exceptions = valid;
                     if (exceptions == null)
                         continue;
             }
@@ -204,35 +183,46 @@ public class ExceptionHelper implements MouseOverHandler, MouseOutHandler {
                     grid.getCellFormatter().setStyleName(0, 0, "ErrorIcon");
                     grid.getCellFormatter().setStyleName(0,1,"errorPopupLabel");
                 }
-                grid.setText(0, 1, exception.getMessage());
+                grid.setText(0, 1, "Field Required");//exception.getMessage());
             }
         }
+        
+        popPanel.setPopupPositionAndShow(new PositionCallback() {
+            public void setPosition(int offsetWidth, int offsetHeight) {
+                int offset = x;
+                if(x+offsetWidth > Window.getClientWidth())  
+                    offset -= x + offsetWidth - Window.getClientWidth() - 10;
 
-        widget.addExceptionStyle(style);
+                popPanel.setPopupPosition(offset,y);
+            }
+        });
+
+        timer.schedule(5000); 
     }
+    
+    protected static class ExceptionHandlers  implements MouseOverHandler, MouseOutHandler {
+        /**
+         * Handler to hide PopupPanel when user mouses off widget
+         */
+        public void onMouseOut(MouseOutEvent event) {
+            popPanel.hide();
+            timer.cancel();
+        }
 
-    /**
-     * Handler to hide PopupPanel when user mouses off widget
-     */
-    public void onMouseOut(MouseOutEvent event) {
-        popPanel.hide();
-        timer.cancel();
-    }
-
-    /**
-     * Handler to show Exceptions when a user mouses over a widget
-     */
-    public void onMouseOver(MouseOverEvent event) {
-        if ( ((HasExceptions)event.getSource()).hasExceptions()) {
-            drawExceptions((HasExceptions)event.getSource());
+        /**
+         * Handler to show Exceptions when a user mouses over a widget
+         */
+        public void onMouseOver(MouseOverEvent event) {
+            HasExceptions source;
             
-            popPanel.setPopupPosition( ((Widget)event.getSource()).getAbsoluteLeft() +
-                                      ((Widget)event.getSource()).getOffsetWidth(),
-                                      ((Widget)event.getSource()).getAbsoluteTop());
+            source = (HasExceptions)event.getSource();
             
-            popPanel.show();
-
-            timer.schedule(5000);
+            if (source.hasExceptions()) 
+                drawExceptions(source.getEndUserExceptions(),
+                               source.getValidateExceptions(),
+                               event.getClientX(),event.getClientY());
+            
         }
     }
+
 }

@@ -25,6 +25,8 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
+import org.openelis.gwt.widget.Label;
+
 /**
  * This is a logical class used to describe a column in a Table
  * 
@@ -42,7 +44,7 @@ public class Column {
      * Editor widget used for this column
      */
     @SuppressWarnings("unchecked")
-    protected CellEditor   editor   = new LabelCell<String>();
+    protected CellEditor   editor   = new LabelCell<String>(new Label<String>());
 
     @SuppressWarnings("unchecked")
     protected CellRenderer renderer = (CellRenderer)editor;

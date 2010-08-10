@@ -233,7 +233,7 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
         setValue(area.getHTML(), fireEvents);
         if(required && value == null)
             addValidateException(new LocalizedException("fieldRequiredException"));
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
     
     /**
@@ -281,7 +281,7 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
         if (endUserExceptions == null)
             endUserExceptions = new ArrayList<LocalizedException>();
         endUserExceptions.add(error);
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     protected void addValidateException(LocalizedException error) {
@@ -308,7 +308,7 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**

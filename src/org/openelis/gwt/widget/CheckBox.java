@@ -339,7 +339,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         if (endUserExceptions == null)
             endUserExceptions = new ArrayList<LocalizedException>();
         endUserExceptions.add(error);
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     protected void addValidateException(LocalizedException error) {
@@ -366,7 +366,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**

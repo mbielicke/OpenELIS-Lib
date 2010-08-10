@@ -550,7 +550,7 @@ public class Dropdown<T> extends TextBox<T> {
         if (required && value == null) {
             addValidateException(new LocalizedException("fieldRequiredException"));
         }
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     //************  Implementation of Queryable ***********************

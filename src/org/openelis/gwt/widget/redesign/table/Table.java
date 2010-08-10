@@ -30,9 +30,9 @@ import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
-import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedEvent;
@@ -71,16 +71,9 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 /**
  * This class is used by screens and widgets such as AutoComplete and Dropdown to display 
@@ -109,7 +102,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Model used by the Table
      */
-    protected ArrayList<Row>     rows, viewRows;
+    protected ArrayList<Row>     rows; 
+    protected ArrayList<Integer> filteredRows;
     
     /**
      * Columns used by the Table
@@ -160,14 +154,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     protected short[]   xForColumn, columnForX;
     
     /**
-     * Final widgets used for displaying Exceptions in Popup
-     */
-    protected final VerticalPanel                                exceptionPanel;
-    protected final DecoratorPanel                               dp;
-    protected final PopupPanel                                   balloonPanel;
-    protected Timer                                              balloonTimer;
-    
-    /**
      * Drag and Drop controllers
      */
     protected TableDragController  dragController;
@@ -192,7 +178,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         selections = new ArrayList<Integer>(5);
         columns = new ArrayList<Column>(5);
         rows = null;
-        viewRows = null;
+        filteredRows = null;
         view = new View(this);
         setWidget(view);
         layout();
@@ -317,23 +303,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
             }
         }, KeyDownEvent.getType());
         
-        // Creation of final widgets
-        exceptionPanel = new VerticalPanel();
-        balloonPanel       = new PopupPanel(true);
-        dp             = new DecoratorPanel();
-
-        dp.setStyleName("ErrorWindow");
-        dp.add(exceptionPanel);
-        dp.setVisible(true);
-
-        balloonPanel.setWidget(dp);
-        balloonPanel.setStyleName("");
-        
-       balloonTimer = new Timer() {
-            public void run() {
-                balloonPanel.hide();
-            }
-        };
     }
 
     /**
@@ -420,36 +389,44 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     @SuppressWarnings("unchecked")
     public void setModel(ArrayList<? extends Row> model) {
         this.rows = (ArrayList<Row>)model;
-        this.viewRows = rows;
-        view.adjustScrollBarHeight();
+        this.filteredRows = null;
         if(!scrollToVisible(0))
             renderView( -1, -1);
     }
     
     @SuppressWarnings("unchecked")
-    public void setViewModel(ArrayList<? extends Row> model) {
+    public void setViewModel(ArrayList<Integer> filteredRows) {
         assert rows != null : "You must set initial model before setting a view model";
         
-        viewRows = (ArrayList<Row>)model;
-        view.adjustScrollBarHeight();
+        this.filteredRows = filteredRows;
         if(!scrollToVisible(0))
             renderView( -1, -1);
     }
     
-    protected int getModelIndex(int viewIndex) {
-        if(rows == viewRows)
-            return viewIndex;
-        
-        return rows.indexOf(viewRows.get(viewIndex));
+    protected int convertRowIndexToModel(int rowIndex) {  
+        if(filteredRows != null)
+            return filteredRows.get(rowIndex);
+        return rowIndex;
     }
     
-    protected int getViewIndex(int modelIndex) {
-        if(rows == viewRows)
-            return modelIndex;
-        
-        return viewRows.indexOf(rows.get(modelIndex));
+    protected int convertModelIndexToView(int modelIndex) {
+        if(filteredRows != null)
+            return filteredRows.indexOf(modelIndex);
+        return modelIndex;
     }
 
+    protected void resetFilterIndexes(int index, int adj) {
+        if(filteredRows == null)
+            return;
+        /*
+        if(adj < 0)
+            filteredRows.remove(index);
+        else
+            filteredRows.add(index, element)
+       
+        for(int i = 0; i < filteredRows.s)
+        */
+    }
     /**
      * Returns the current size of the held model. Returns zero if a model has
      * not been set.
@@ -457,9 +434,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public int getRowCount() {
-        if (viewRows != null)
-            return viewRows.size();
-        return 0;
+        if(rows == null)
+            return 0;
+        
+        if (filteredRows != null)
+            return filteredRows.size();
+        return rows.size();
     }
 
     /**
@@ -779,7 +759,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Row addRow() {
-        return addRow(viewRows.size(), null);
+        return addRow(getRowCount(), null);
     }
 
     /**
@@ -800,7 +780,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Row addRow(Row row) {
-        return addRow(viewRows.size(), row);
+        return addRow(getRowCount(), row);
     }
 
     /**
@@ -838,14 +818,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         
         /* Add row to view and then to model */
         
-        if(viewRows != rows)
-            rows.add(getModelIndex(index),row);
+        rows.add(index,row);
+        resetFilterIndexes(index,1);
         
-        viewRows.add(index, row);
-       
-        
-        view.renderView(index, -1);
-        view.adjustScrollBarHeight();
+        renderView(index, -1);
 
         fireRowAddedEvent(index, row);
 
@@ -865,16 +841,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         finishEditing();
 
-        row = viewRows.get(index);
+        row = getRowAt(index);
 
         if ( !fireBeforeRowDeletedEvent(index, row))
             return null;
 
-        if(viewRows != rows)
-            rows.remove(getModelIndex(index));
-        
-        viewRows.remove(index);
-       
+        rows.remove(convertRowIndexToModel(index));
+        resetFilterIndexes(index,-1);
+             
         renderView(-1,-1);
 
         fireRowDeletedEvent(index, row);
@@ -889,12 +863,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         finishEditing();
         clearRowSelection();
         rows = null;
-        viewRows = null;
+        filteredRows = null;
         renderView( -1, -1);
     }
     
     public Row getRowAt(int row) {
-        return viewRows.get(row);
+        return rows.get(convertRowIndexToModel(row));
     }
 
     // ************ Selection Methods ***************
@@ -919,7 +893,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         if ( !multiSelect)
             clearRowSelection();
 
-        if (index > -1 && index < viewRows.size()) {
+        if (index > -1 && index < getRowCount()) {
             if ( !selections.contains(index)) {
                 if ( !fireBeforeSelectionEvent(index))
                     return false;
@@ -1181,7 +1155,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setValueAt(int row, int col, Object value) {
         finishEditing();
-        viewRows.get(row).setCell(col, value);
+        rows.get(convertRowIndexToModel(row)).setCell(col, value);
         refreshCell(row, col);
     }
 
@@ -1193,7 +1167,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setRowAt(int index, Row row) {
         finishEditing();
-        viewRows.set(index, row);
+        rows.set(convertRowIndexToModel(index), row);
         renderView(index,index);
     }
 
@@ -1205,9 +1179,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Object getValueAt(int row, int col) {
-        if (viewRows == null)
+        if (rows == null)
             return null;
-        return viewRows.get(row).getCell(col);
+        return rows.get(convertRowIndexToModel(row)).getCell(col);
     }
 
     /**
@@ -1228,6 +1202,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param col
      * @return
      */
+    @SuppressWarnings("unchecked")
     protected boolean startEditing(final int row, final int col, final GwtEvent event) {
         boolean willScroll;
 
@@ -1288,7 +1263,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col);
-        viewRows.get(row).setCell(col, newValue);
+        rows.get(convertRowIndexToModel(row)).setCell(col, newValue);
         refreshCell(row, col);
 
         if (Util.isDifferent(newValue, oldValue)) {
@@ -1369,6 +1344,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     protected void renderView(int startR, int endR) {
         view.setVisibleChanged(true);
+        view.adjustScrollBarHeight();
         view.renderView(startR, endR);
     }
 
@@ -1660,68 +1636,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param x
      * @param y
      */
-    protected void drawExceptions(int row, int col, final int x, final int y) {
-        ArrayList<LocalizedException> exceptions = null;
-        Grid grid;
+    protected void drawExceptions(int row, int col, int x, int y) {
         
-        balloonPanel.hide();
-        balloonTimer.cancel();
-
-        if((editingRow == row && editingCol == col) || !hasExceptions(row, col))
-            return;
-        
-        exceptionPanel.clear();
-        grid = new Grid(0,2);
-        exceptionPanel.add(grid);
-
-        for (int i = 0; i < 2; i++ ) {
-            switch (i) {
-                /*
-                 * First iteration check EndUserException if no
-                 * EndUserExceptions do i++ and fall through to check
-                 * validatExceptions
-                 */
-                case 0:
-                    exceptions = getEndUserExceptions(row,col);
-                    if (exceptions == null)
-                        continue;
-                    break;
-                    /*
-                     * If no validation exceptions continue out of loop
-                     */
-                case 1:
-                    exceptions = getValidateExceptions(row,col);
-                    if (exceptions == null)
-                        continue;
-            }
-
-
-            for (LocalizedException exception : exceptions) {
-                grid.insertRow(0);
-                if (exception instanceof Warning) {
-                    grid.getCellFormatter().setStyleName(0, 0, "WarnIcon");
-                    grid.getCellFormatter().setStyleName(0,1,"warnPopupLabel");
-                } else {
-                    grid.getCellFormatter().setStyleName(0, 0, "ErrorIcon");
-                    grid.getCellFormatter().setStyleName(0,1,"errorPopupLabel");
-                }
-                grid.setText(0, 1, exception.getMessage());
-            }
-
-        }
-
-        balloonPanel.setPopupPositionAndShow(new PositionCallback() {
-            public void setPosition(int offsetWidth, int offsetHeight) {
-                int offset = x;
-                if(x+offsetWidth > Window.getClientWidth())  
-                    offset -= x + offsetWidth - Window.getClientWidth() - 10;
-
-                balloonPanel.setPopupPosition(offset,y);
-            }
-        });
-
-        balloonTimer.schedule(5000); 
-
+        ExceptionHelper.drawExceptions(getEndUserExceptions(row, col),
+                                                     getValidateExceptions(row, col), 
+                                                     x, y);
     }
     
     /**

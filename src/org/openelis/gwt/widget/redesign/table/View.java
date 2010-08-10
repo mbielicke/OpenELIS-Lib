@@ -27,18 +27,12 @@ package org.openelis.gwt.widget.redesign.table;
 
 import java.util.Date;
 
-import org.openelis.gwt.event.BeforeDragStartEvent;
-import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.ScrollBarEvent;
 import org.openelis.gwt.event.ScrollBarHandler;
 import org.openelis.gwt.widget.DragItem;
 import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.redesign.table.Table.Scrolling;
 
-import com.allen_sauer.gwt.dnd.client.DragEndEvent;
-import com.allen_sauer.gwt.dnd.client.DragHandler;
-import com.allen_sauer.gwt.dnd.client.DragStartEvent;
-import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -52,8 +46,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
@@ -163,6 +155,7 @@ public class View extends Composite {
         
         flexTable = new FlexTable();
         flexTable.addClickHandler(new ClickHandler() {
+            @SuppressWarnings("unchecked")
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
                 table.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex(),(GwtEvent)event);

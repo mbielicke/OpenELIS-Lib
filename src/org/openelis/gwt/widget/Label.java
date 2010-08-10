@@ -119,7 +119,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
         if (endUserExceptions == null)
             endUserExceptions = new ArrayList<LocalizedException>();
         endUserExceptions.add(error);
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     protected void addValidateException(LocalizedException error) {
@@ -146,7 +146,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**

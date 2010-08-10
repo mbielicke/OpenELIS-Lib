@@ -91,7 +91,7 @@ public final class TableDropController extends SimpleDropController implements H
 		scroll = new Timer() {
 		    public void run() {
 	            table.scrollBy(scrollRows);
-                checkScroll();
+                scroll();
 		    }
 		    
 		};
@@ -136,7 +136,12 @@ public final class TableDropController extends SimpleDropController implements H
 	    dragItem = (DragItem)context.draggable;
 	    
         super.onDrop(context);
+        
+        table.unselectRowAt(dragItem.getIndex());
+        
         DropEvent.fire(this, dragItem);
+        
+        
 	}
 
 	/**
@@ -210,7 +215,7 @@ public final class TableDropController extends SimpleDropController implements H
 			}
 			
 			if((targetRow == 0 && dropPos == DropPosition.ABOVE) || (targetRow == table.getVisibleRows() -1 && dropPos == DropPosition.BELOW))
-			    checkScroll();
+			    scroll();
 		}else{
 			RootPanel.get().add(positioner,table.view.flexTable.getAbsoluteLeft(),table.view.flexTable.getAbsoluteTop());
 		}
@@ -222,7 +227,7 @@ public final class TableDropController extends SimpleDropController implements H
 	 * @param targetRow
 	 * @return
 	 */
-	private boolean checkScroll() {
+	private boolean scroll() {
 		if(table.getRowCount() < table.getVisibleRows())
 			return false;
 		

@@ -23,38 +23,18 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.redesign.table;
+package org.openelis.gwt.widget;
 
-import org.openelis.gwt.widget.Label;
+import org.openelis.gwt.widget.redesign.table.Table;
 
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Composite;
 
-public class LabelCell<T> implements CellRenderer<T>, CellEditor<T> {
+public class UMenuPanel extends Composite {
     
-    private Label<T>  editor;
+    Table table;
     
-    public LabelCell(Label<T> editor) {
-        this.editor = editor;
-    }
-
-    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
-        editor.setValue(value);
-        flexTable.setText(row,col,editor.getText());
-    }
-
-    public T finishEditing(Table table, FlexTable flexTable, int row, int col) {
-        return editor.getValue();
-    }
-
-    public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, GwtEvent event) {
-        editor.setValue(value);
-        flexTable.setText(row,col,editor.getText());
-    }
-    
-    public Widget getWidget() {
-        return editor;
+    public UMenuPanel() {
+        
     }
 
 }

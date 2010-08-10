@@ -183,7 +183,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
         } catch (LocalizedException e) {
             addValidateException(e);
         }
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
     
     /**
@@ -196,7 +196,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
         } catch (LocalizedException e) {
             addValidateException(e);
         }
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**
@@ -238,7 +238,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
         if (endUserExceptions == null)
             endUserExceptions = new ArrayList<LocalizedException>();
         endUserExceptions.add(error);
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     protected void addValidateException(LocalizedException error) {
@@ -265,7 +265,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.getInstance().checkExceptionHandlers(this);
+        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**
