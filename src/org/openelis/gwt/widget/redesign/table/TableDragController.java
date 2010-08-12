@@ -22,199 +22,212 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * This classes is used by the Table widget to enable and handle dragging of table rows
+ * This classes is used by the Table widget to enable and handle dragging of
+ * table rows
+ * 
  * @author tschmidt
- *
+ * 
  */
-public class TableDragController extends PickupDragController implements HasBeforeDragStartHandlers<DragItem>, HasDragStartHandlers<DragItem> {
+public class TableDragController extends PickupDragController implements
+                                                             HasBeforeDragStartHandlers<DragItem>,
+                                                             HasDragStartHandlers<DragItem> {
 
     /**
      * Widget displayed when a row is being dragged;
      */
-	protected Widget proxy;
-	
-	/**
-	 * The Table widget that this controller is registered to.
-	 */
-	protected Table table;
-	
-	/**
-	 * Widgets used to display the drag
-	 */
-    protected AbsolutePanel proxyContainer,dropIndicator;
-    protected DecoratorPanel dragContainer;
-    protected HorizontalPanel hp;
-    protected Label proxyLabel;
-    
-    private HandlerManager handlerManager;
+    protected Widget          proxy;
 
     /**
-     * Constructor that takes the Table used by this controller and a panel used to contain the drag.  
-     * The boundaryPanel is usually set to RootPanel.get().
+     * The Table widget that this controller is registered to.
+     */
+    protected Table           table;
+
+    /**
+     * Widgets used to display the drag
+     */
+    protected AbsolutePanel   proxyContainer, dropIndicator;
+    protected DecoratorPanel  dragContainer;
+    protected HorizontalPanel hp;
+    protected Label           proxyLabel;
+
+    /**
+     * Used to fire events to registered handlers
+     */
+    private HandlerManager    handlerManager;
+
+    /**
+     * Constructor that takes the Table used by this controller and a panel used
+     * to contain the drag. The boundaryPanel is usually set to RootPanel.get().
+     * 
      * @param table
      * @param boundaryPanel
      */
-	public TableDragController(Table table,AbsolutePanel boundaryPanel){
-		super(boundaryPanel,false);
-		this.table = table;
-		setBehaviorDragProxy(true);
-		
-		/* Drag will not start until mouse moved 5 pixels */
-		setBehaviorDragStartSensitivity(5);
-	}
+    public TableDragController(Table table, AbsolutePanel boundaryPanel) {
+        super(boundaryPanel, false);
+        this.table = table;
+        setBehaviorDragProxy(true);
 
-	/**
-	 * This method is overridden from PickupDragController so that BeforeDragStartEvent can be fired.
-	 * If the user cancels the event the Drag will be aborted.
-	 */
-	@Override
-	public void previewDragStart() throws VetoDragException {
-	    BeforeDragStartEvent<DragItem> event;
+        /* Drag will not start until mouse moved 5 pixels */
+        setBehaviorDragStartSensitivity(5);
+    }
 
-	    /* Select row before drag start and cancel drag if not selectable */
-	    if(!table.selectRowAt(table.view.lastRow))
-	        throw new VetoDragException();
-	    
-	    /* Set the index of row being dragged into the DragItem */
-	    ((DragItem)context.draggable).setIndex(table.view.lastRow);
-	    
-	    /* Notify the user that a Drag is to be started */
-	    event = BeforeDragStartEvent.fire(this, (DragItem)context.draggable);
-	    
-	    /* Check if user canceled event */
-	    if(event != null && event.isCancelled())
-	        throw new VetoDragException();
-	    
-	    /* Set Proxy from event if not null */
-	    if(event != null && event.getProxy() != null)
-	        proxy = event.getProxy();
+    /**
+     * This method is overridden from PickupDragController so that
+     * BeforeDragStartEvent can be fired. If the user cancels the event the Drag
+     * will be aborted.
+     */
+    @Override
+    public void previewDragStart() throws VetoDragException {
+        BeforeDragStartEvent<DragItem> event;
 
-	    super.previewDragStart();
-	}
+        /* Select row before drag start and cancel drag if not selectable */
+        if ( !table.selectRowAt(table.view.lastRow))
+            throw new VetoDragException();
 
-	/**
-	 * This method is overridden from PickupDragController to make the Drag widget start
-	 * and drag from the cursor instead of the left side of the table row.
-	 */
-	@Override
-	public void dragMove() {
-		context.desiredDraggableX = context.mouseX;
-		context.desiredDraggableY = context.mouseY + 16;
-		super.dragMove();
-	}
+        /* Set the index of row being dragged into the DragItem */
+        ((DragItem)context.draggable).setIndex(table.view.lastRow);
 
-	/**
-	 * This method is overridden to remove the default drag style form the dragged widget and also 
-	 * to fire the DragStartEvent to the user.
-	 */
-	@Override
-	public void dragStart() {
-	    super.dragStart();
-		((DragItem)context.draggable).removeStyleName("dragdrop-dragging");
+        /* Notify the user that a Drag is to be started */
+        event = BeforeDragStartEvent.fire(this, (DragItem)context.draggable);
 
-		DragStartEvent.fire(this, (DragItem)context.draggable);
-	}
+        /* Check if user canceled event */
+        if (event != null && event.isCancelled())
+            throw new VetoDragException();
 
-	/**
-	 * This method is overridden to use a custom drag proxy instead of the default
-	 */
-	@Override
-	protected Widget newDragProxy(DragContext context) {
-	    DragItem item;
+        /* Set Proxy from event if not null */
+        if (event != null && event.getProxy() != null)
+            proxy = event.getProxy();
 
-	    /**
-	     * Create Drag container first time used
-	     */
-	    if(dragContainer == null) {
+        super.previewDragStart();
+    }
+
+    /**
+     * This method is overridden from PickupDragController to make the Drag
+     * widget start and drag from the cursor instead of the left side of the
+     * table row.
+     */
+    @Override
+    public void dragMove() {
+        context.desiredDraggableX = context.mouseX;
+        context.desiredDraggableY = context.mouseY + 16;
+        super.dragMove();
+    }
+
+    /**
+     * This method is overridden to remove the default drag style form the
+     * dragged widget and also to fire the DragStartEvent to the user.
+     */
+    @Override
+    public void dragStart() {
+        super.dragStart();
+        ((DragItem)context.draggable).removeStyleName("dragdrop-dragging");
+
+        DragStartEvent.fire(this, (DragItem)context.draggable);
+    }
+
+    /**
+     * This method is overridden to use a custom drag proxy instead of the
+     * default
+     */
+    @Override
+    protected Widget newDragProxy(DragContext context) {
+        DragItem item;
+
+        /**
+         * Create Drag container first time used
+         */
+        if (dragContainer == null) {
             dragContainer = new DecoratorPanel();
-			hp = new HorizontalPanel();
-			dropIndicator = new AbsolutePanel();
-			dropIndicator.setStyleName("DragStatus NoDrop");
-			hp.add(dropIndicator);
-			proxyContainer = new AbsolutePanel();
-			proxyContainer.setWidth("100%");
-			hp.add(proxyContainer);
-			hp.setStyleName("DragProxy");
-			dragContainer.add(hp);
-			proxyLabel = new Label();
-			proxyLabel.setStyleName("ScreenLabel");
-		}
+            hp = new HorizontalPanel();
+            dropIndicator = new AbsolutePanel();
+            dropIndicator.setStyleName("DragStatus NoDrop");
+            hp.add(dropIndicator);
+            proxyContainer = new AbsolutePanel();
+            proxyContainer.setWidth("100%");
+            hp.add(proxyContainer);
+            hp.setStyleName("DragProxy");
+            dragContainer.add(hp);
+            proxyLabel = new Label();
+            proxyLabel.setStyleName("ScreenLabel");
+        }
 
-	    proxyContainer.clear();
-	    if(proxy != null){
+        proxyContainer.clear();
+        if (proxy != null) {
             proxyContainer.add(proxy);
-        }else{
+        } else {
             /* Default proxy if not set by user */
             item = (DragItem)context.draggable;
-            proxyLabel.setText(table.getValueAt(item.getIndex(),0).toString());
+            proxyLabel.setText(table.getValueAt(item.getIndex(), 0).toString());
             proxyContainer.add(proxyLabel);
         }
-		
-	    return dragContainer;
-	}
-	
-	/**
-	 * Sets the proxy to be used when dragging a row with this container
-	 * @param proxy
-	 */
-	public void setProxy(Widget proxy) {
-	    this.proxy = proxy;
-	}
-	
-	/**
-	 * Sets the indicator image depending id the row can be dropped or not.
-	 */
-	public void setDropIndicator(boolean drop) {
-	    if(drop)
-	        dropIndicator.setStyleName("DragStatus Drop");
-	    else
-	        dropIndicator.setStyleName("DragStatus NoDrop");
-	}
 
-	//******* Handler code ***************
-	
-	
+        return dragContainer;
+    }
 
-	protected final <H extends EventHandler> HandlerRegistration addHandler(
-			final H handler, GwtEvent.Type<H> type) {
-		return ensureHandlers().addHandler(type, handler);
-	}
+    /**
+     * Sets the proxy to be used when dragging a row with this container
+     * 
+     * @param proxy
+     */
+    public void setProxy(Widget proxy) {
+        this.proxy = proxy;
+    }
 
-	/**
-	 * Ensures the existence of the handler manager.
-	 * 
-	 * @return the handler manager
-	 * */
-	HandlerManager ensureHandlers() {
-		return handlerManager == null ? handlerManager = new HandlerManager(this)
-		: handlerManager;
-	}
+    /**
+     * Sets the indicator image depending id the row can be dropped or not.
+     */
+    public void setDropIndicator(boolean drop) {
+        if (drop)
+            dropIndicator.setStyleName("DragStatus Drop");
+        else
+            dropIndicator.setStyleName("DragStatus NoDrop");
+    }
 
-	HandlerManager getHandlerManager() {
-		return handlerManager;
-	}
+    // ******* Handler code ***************
 
-	public void fireEvent(GwtEvent<?> event) {
-		if (handlerManager != null) {
-			handlerManager.fireEvent(event);
-		}
-	}
+    /**
+     * Method to register a beforeStartHandler to this controller
+     */
+    public HandlerRegistration addBeforeStartHandler(BeforeDragStartHandler<DragItem> handler) {
+        return addHandler(handler, BeforeDragStartEvent.getType());
+    }
 
-	public int getHandlerCount(GwtEvent.Type<?> type){
-		if(handlerManager == null)
-			return 0;
-		return handlerManager.getHandlerCount(type);
+    /**
+     * Method to register a StartHAndler to this controller
+     */
+    public HandlerRegistration addStartHandler(DragStartHandler<DragItem> handler) {
+        return addHandler(handler, DragStartEvent.getType());
+    }
 
-	}
+    protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler,
+                                                                            GwtEvent.Type<H> type) {
+        return ensureHandlers().addHandler(type, handler);
+    }
 
-	public HandlerRegistration addBeforeStartHandler(
-			BeforeDragStartHandler<DragItem> handler) {
-		return addHandler(handler,BeforeDragStartEvent.getType());
-	}
+    /**
+     * Ensures the existence of the handler manager.
+     * 
+     * @return the handler manager
+     * */
+    HandlerManager ensureHandlers() {
+        return handlerManager == null ? handlerManager = new HandlerManager(this) : handlerManager;
+    }
 
-	public HandlerRegistration addStartHandler(
-			DragStartHandler<DragItem> handler) {
-		return addHandler(handler,DragStartEvent.getType());
-	}
+    HandlerManager getHandlerManager() {
+        return handlerManager;
+    }
+
+    public void fireEvent(GwtEvent<?> event) {
+        if (handlerManager != null) {
+            handlerManager.fireEvent(event);
+        }
+    }
+
+    public int getHandlerCount(GwtEvent.Type<?> type) {
+        if (handlerManager == null)
+            return 0;
+        return handlerManager.getHandlerCount(type);
+
+    }
 
 }

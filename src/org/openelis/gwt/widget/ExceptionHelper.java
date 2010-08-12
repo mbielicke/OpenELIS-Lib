@@ -193,7 +193,7 @@ public class ExceptionHelper {
                 if(x+offsetWidth > Window.getClientWidth())  
                     offset -= x + offsetWidth - Window.getClientWidth() - 10;
 
-                popPanel.setPopupPosition(offset,y);
+                popPanel.setPopupPosition(offset,y+10);
             }
         });
 
@@ -223,6 +223,10 @@ public class ExceptionHelper {
                                event.getClientX(),event.getClientY());
             
         }
+    }
+    
+    public static void closePopup() {
+        popPanel.hide();
     }
 
 }

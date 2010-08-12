@@ -25,15 +25,58 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
+import org.openelis.gwt.common.data.QueryData;
+
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This interface is implemented by classes that will provide editing functionality to Table cells
+ * @author tschmidt
+ *
+ * @param <T>
+ */
 public interface CellEditor<T> {
-    
+   
+    /**
+     * Sets the passed value in the cell's editor and places the editor into the flexTable for editing
+     * @param table
+     * @param flexTable
+     * @param row
+     * @param col
+     * @param value
+     * @param event
+     */
+    @SuppressWarnings("unchecked")
     public void startEditing(Table table, FlexTable flexTable, int row, int col, T value, GwtEvent event);
     
-    public T finishEditing(Table table, FlexTable flexTable, int row, int col);
+    /**
+     * Puts the cells editor into Query mode and sets the passed QueryData as the value and places the editor
+     * into the flexTable for query entry
+     * @param table
+     * @param flexTable
+     * @param row
+     * @param col
+     * @param query
+     * @param event
+     */
+    @SuppressWarnings("unchecked")
+    public void startQueryEditing(Table table, FlexTable flexTable, int row, int col, QueryData query, GwtEvent event);
     
+    /**
+     * Pulls the edited value from the editor and returns it.  If in Query mode and QueryData object will be returned 
+     * @param table
+     * @param flexTable
+     * @param row
+     * @param col
+     * @return
+     */
+    public Object finishEditing(Table table, FlexTable flexTable, int row, int col);
+        
+    /**
+     * Returns the widget used as the editor for this cell
+     * @return
+     */
     public Widget getWidget();
 }

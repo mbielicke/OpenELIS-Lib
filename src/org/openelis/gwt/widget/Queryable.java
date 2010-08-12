@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.data.QueryData;
+
 /**
  * This interface is implemented by widgets that can be used to enter query
  * values.
@@ -44,5 +46,10 @@ public interface Queryable {
      * that represents the query clause for ScreenWidget.
      */
     public Object getQuery();
+    
+    /**
+     * This method will set the a query string into the widget
+     */
+    public void setQuery(QueryData qd);
 
 }

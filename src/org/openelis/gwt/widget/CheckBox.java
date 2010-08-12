@@ -270,6 +270,16 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
 
         return qd;
     }
+    
+    /**
+     * This method is called when setting a query value in a table.  
+     */
+    public void setQuery(QueryData qd) {
+        if(qd != null)
+            setValue(qd.query);
+        else
+            setValue(null);
+    }
 
     // ******* Implementation of HasValue<String> ******
 

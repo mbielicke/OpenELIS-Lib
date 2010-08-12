@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -131,6 +132,10 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
             default:
                 return textbox.getText();
         }
+    }
+    
+    public void setText(String text) {
+        textbox.setText(text);
     }
 
     /**
@@ -264,6 +269,16 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     public Object getQuery() {
         return helper.getQuery(textbox.getText());
     }
+    
+    /**
+     * Sets a query string to this widget when loaded from a table model
+     */
+    public void setQuery(QueryData qd) {
+        if(qd != null)
+            textbox.setText(qd.query);
+        else
+            textbox.setText("");
+    }
 
     // ********** Implementation of HasHelper ***************************
     /**
@@ -344,6 +359,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
                 addValidateException(new LocalizedException("fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
+            setValue(null,fireEvents);
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }
@@ -351,7 +367,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     /**
      * Method used to validate the inputed query string by the user.
      */
-    protected void validateQuery() {
+    public void validateQuery() {
         try {
             validateExceptions = null;
             helper.validateQuery(getText());

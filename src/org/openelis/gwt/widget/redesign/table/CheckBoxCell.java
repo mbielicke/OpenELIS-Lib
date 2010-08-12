@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.CheckBox;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,67 +33,140 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This class is used by Table to edit and render columns that use CheckBox 
+ * @author tschmidt
+ *
+ */
 public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
 
+    /**
+     * Widget used to edit the cell
+     */
     private CheckBox editor;
+    
+    /**
+     * Container to hold the widget for formatting and spacing
+     */
     private AbsolutePanel container;
     
+    /**
+     * Constructor that takes the editor to be used for the cell.
+     * 
+     * @param editor
+     */
     public CheckBoxCell(CheckBox editor) {
         this.editor = editor;
         editor.setEnabled(true);
         container = new AbsolutePanel();
         container.setStyleName("CellContainer");
         container.add(editor);
-        DOM.setStyleAttribute(container.getElement(), "align", "center");
-        
+        DOM.setStyleAttribute(container.getElement(), "align", "center");       
     }
     
-    public String finishEditing(Table table, FlexTable flexTable, int row, int col) {
+    /**
+     * Pulls value out of the editor returns it to the table. Will pass back a
+     * QueryData object if in QueryMode or the editor value if in edit mode
+     */
+    public Object finishEditing(Table table, FlexTable flexTable, int row, int col) {
         table.ignoreReturn(false);
+        if(table.getQueryMode()){
+            return editor.getQuery();
+        }
         return editor.getValue();
-        
     }
 
+    /**
+     * Returns the current widget set as this cells editor.
+     */
     public Widget getWidget() {
         return editor;
     }
 
+    /**
+     * Sets the model value to the editor and then places the editor into the
+     * cell to be edited.
+     */
+    @SuppressWarnings("unchecked")
     public void startEditing(Table table,
                              FlexTable flexTable,
                              int row,
                              int col,
                              String value,
                              GwtEvent event) {
-        table.ignoreReturn(true);
+        editor.setQueryMode(false);
         editor.setValue(value);
         if(event instanceof ClickEvent)
             editor.changeValue();
-        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
-        container.setHeight((table.getRowHeight()-3)+"px");
-        flexTable.setWidget(row, col, container);
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                editor.setFocus(true);
-            }
-        });
-        
+        placeWidget(table,flexTable,row,col);
+    }
+    
+    /**
+     * Makes sure the widget is in query mode and will set its value to the
+     * passed QueryData and will place the widget in the table for editing
+     */
+    @SuppressWarnings("unchecked")
+    public void startQueryEditing(Table table,
+                           FlexTable flexTable,
+                           int row,
+                           int col,
+                           QueryData qd,
+                           GwtEvent event) {
+        editor.setQueryMode(true);
+        editor.setQuery(qd);
+        if(event instanceof ClickEvent)
+            editor.changeValue();
+        placeWidget(table,flexTable,row,col);
     }
 
+    /**
+     * Gets Formatted value from editor and sets it as the cells display
+     */
     public void render(Table table, FlexTable flexTable, int row, int col, String value) {
         String style;
         AbsolutePanel div;
-        
+        editor.setQueryMode(table.getQueryMode());
         style = CheckBox.Value.getValue(value).getStyle();
         div = new AbsolutePanel();
         div.setStyleName(style);
         flexTable.setWidget(row, col, div);
         flexTable.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
     }
+
+    /**
+     * Sets the QueryData to the editor and sets the Query string into the cell
+     * text
+     */
+    public void renderQuery(Table table, FlexTable flexTable, int row, int col, QueryData qd) {
+        render(table,flexTable,row,col,qd!=null?qd.query:null);   
+    }
+    
+    /**
+     * Sizes and places the editor into the passed cell into the table.
+     * 
+     * @param table
+     * @param flexTable
+     * @param row
+     * @param col
+     */
+    private void placeWidget(Table table, FlexTable flexTable, int row, int col) {
+        table.ignoreReturn(true);
+       
+        container.setWidth((table.getColumnAt(col).getWidth()-3)+"px");
+        container.setHeight((table.getRowHeight()-3)+"px");
+        flexTable.setWidget(row, col, container);
+       
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                editor.setFocus(true);
+            }
+        });
+    }
+    
 
 }

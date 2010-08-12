@@ -162,7 +162,7 @@ public class QueryFieldUtil {
             for (int i = 0; i < vals.length; i++ ) {
                 if ( !vals[i].equalsIgnoreCase("null")) {
                     try {
-                        Integer.parseInt(vals[i]);
+                        Integer.parseInt(vals[i].trim());
                     } catch (Exception e) {
                         throw new LocalizedException("fieldNumericException");
                     }

@@ -140,9 +140,9 @@ public class TreeColumn {
                     val = ((AutoComplete)colWidget).getDisplay();
     			}
     		}else if(colWidget instanceof Dropdown){
-                if(cell.getValue() instanceof ArrayList)
-                    ((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
-                else
+                if(cell.getValue() instanceof ArrayList){
+                 //   ((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
+                }else
                     ((Dropdown)colWidget).setValue(cell.getValue());
                 val = ((Dropdown)colWidget).getDisplay();
     		}else{
@@ -200,9 +200,9 @@ public class TreeColumn {
                     ((Label)widget).setText(((AutoComplete)colWidget).getDisplay());
     			}
     		}else if(colWidget instanceof Dropdown){
-        		if(cell.getValue() instanceof ArrayList)
-                    ((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
-                else
+        		if(cell.getValue() instanceof ArrayList){
+                 //   ((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
+        		}else
                     ((Dropdown)colWidget).setValue(cell.getValue());
                 ((Label)widget).setText(((Dropdown)colWidget).getDisplay());
     		}else{
@@ -251,9 +251,9 @@ public class TreeColumn {
                 */
     		}
 		}else if(colWidget instanceof Dropdown){
-    		if(cell.getValue() instanceof ArrayList)
-                ((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
-            else
+    		if(cell.getValue() instanceof ArrayList){
+             //   ((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
+    		}else
                 ((Dropdown)colWidget).setValue(cell.getValue());
         }else
             ((HasValue)editor).setValue(cell.getValue());

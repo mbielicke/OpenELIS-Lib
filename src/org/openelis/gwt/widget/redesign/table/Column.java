@@ -46,6 +46,9 @@ public class Column {
     @SuppressWarnings("unchecked")
     protected CellEditor   editor   = new LabelCell<String>(new Label<String>());
 
+    /**
+     * Render widget used for this column
+     */
     @SuppressWarnings("unchecked")
     protected CellRenderer renderer = (CellRenderer)editor;
     
@@ -60,7 +63,10 @@ public class Column {
      */
     protected int          width, minWidth;
 
-    protected boolean      enabled, resizable, filterable, filtered;
+    /**
+     * Boolean flags used by column
+     */
+    protected boolean      enabled, resizable, filterable, filtered, required;
 
 
     /**
@@ -277,10 +283,18 @@ public class Column {
         this.filterable = filterable;
     }
     
+    /**
+     * Method used to determine if this column currently has a filter applied 
+     * @return
+     */
     public boolean isFiltered() {
         return filtered;
     }
 
+    /**
+     * Method to set the flag indicating that a filter is set for this column
+     * @param filtered
+     */
     public void setFiltered(boolean filtered) {
         this.filtered = filtered;
     }
@@ -292,6 +306,22 @@ public class Column {
      */
     public void setResizable(boolean resizable) {
         this.resizable = resizable;
+    }
+    
+    /**
+     * Method used to set the required flag for this column
+     * @param required
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+    
+    /**
+     * Method to determine if this column is required to have a value set in each row
+     * @return
+     */
+    public boolean isRequired() {
+        return required;
     }
 
 }

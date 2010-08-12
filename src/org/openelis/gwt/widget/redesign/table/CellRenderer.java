@@ -25,10 +25,36 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
+import org.openelis.gwt.common.data.QueryData;
+
 import com.google.gwt.user.client.ui.FlexTable;
 
+/**
+ * This interface is implemented by classes the provide rendering functionality for Table cells
+ * @author tschmidt
+ *
+ * @param <T>
+ */
 public interface CellRenderer<T> {
 
+    /**
+     * Formats the value passed and places the text into the cell passed
+     * @param table
+     * @param flexTable
+     * @param row
+     * @param col
+     * @param value
+     */
     public void render(Table table, FlexTable flexTable,int row,int col, T value);
+    
+    /**
+     * Formats the QueryData passed and places the text into the cell passed
+     * @param table
+     * @param flexTable
+     * @param row
+     * @param col
+     * @param qd
+     */
+    public void renderQuery(Table table, FlexTable flexTable, int row, int col, QueryData qd);
     
 }

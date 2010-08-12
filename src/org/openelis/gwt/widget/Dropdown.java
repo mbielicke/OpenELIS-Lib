@@ -55,7 +55,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -417,7 +416,9 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public Item<T> getSelectedItem() {
-        return (Item<T>)table.getModel().get(table.getSelectedRow());
+        if(table.isAnyRowSelected())
+            return (Item<T>)table.getModel().get(table.getSelectedRow());
+        return null;
     }
 
     /**
@@ -437,46 +438,6 @@ public class Dropdown<T> extends TextBox<T> {
             items.add((Item<T>)table.getModel().get(table.getSelectedRows()[i]));
         }
         return items;
-    }
-
-    /**
-     * This method is used to set multiple selections in the widget by key when
-     * the widget is in multiSelect mode.
-     * 
-     * @param values
-     */
-    public void setValues(T... values) {
-        StringBuffer sb;
-        ArrayList<Item<T>> items;
-        /*
-        if (table.multiSelect)
-            table.ctrlKey = true;
-        table.clearSelections();
-        if (values != null) {
-            for (T key : values)
-                table.selectRow(keyHash.get(key));
-            sb = new StringBuffer();
-            items = getSelectedItems();
-            for (int i = 0; i < items.size(); i++ ) {
-                if (i > 0)
-                    sb.append(" | ");
-                sb.append(renderer.getDisplay(items.get(i)));
-            }
-            textbox.setText(sb.toString());
-        } else
-            textbox.setText("");
-
-        table.ctrlKey = false;
-        */
-    }
-
-    /**
-     * Puts the widget into multiSelect mode.
-     * 
-     * @param multi
-     */
-    public void enableMultiSelect(boolean multi) {
-        table.setAllowMultipleSelection(multi);
     }
 
     /**
@@ -528,7 +489,8 @@ public class Dropdown<T> extends TextBox<T> {
             assert validKey : "Key not found in Item list";
 
             table.selectRowAt(keyHash.get(value));
-            textbox.setText(renderer.getDisplay(getSelectedItem()));
+            setDisplay();
+            //textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
             table.selectRowAt( -1);
             textbox.setText("");
@@ -562,7 +524,7 @@ public class Dropdown<T> extends TextBox<T> {
         if (query == queryMode)
             return;
         queryMode = query;
-        enableMultiSelect(query);
+        table.setAllowMultipleSelection(query);
     }
 
     /**
@@ -606,6 +568,32 @@ public class Dropdown<T> extends TextBox<T> {
         qd.query = sb.toString();
 
         return qd;
+    }
+    
+    @Override
+    public void setQuery(QueryData qd) {
+        String[] params;
+        T key;
+        
+        if(!queryMode)
+            return;
+        
+        setValue(null);
+        
+        if(qd == null)
+            return;
+        
+        params = qd.query.split(" \\| ");
+        for(int i = 0; i < params.length; i++) {
+            if(qd.type == QueryData.Type.INTEGER) 
+                key = (T)new Integer(params[i]);  
+            else
+                key = (T)params[i];
+           
+            table.selectRowAt(keyHash.get(key),true);
+           
+        }
+        setDisplay();
     }
 
     // *************** Search methods ******************

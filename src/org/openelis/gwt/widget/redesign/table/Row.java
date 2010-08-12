@@ -31,11 +31,12 @@ import java.util.ArrayList;
  *  This class represents a Row in a table.
  */
 public class Row {
-    /*
+    /**
      * ArrayList of values representing column values.
      */
     protected ArrayList<Object> cells;
-    /*
+    
+    /**
      * Additional data can be attached to the row that is not 
      * displayed in the table columns
      */
