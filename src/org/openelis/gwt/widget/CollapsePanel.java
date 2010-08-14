@@ -58,7 +58,7 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         panel.setCellPadding(0);
         panel.setCellSpacing(0);
       
-        content.setVisible(false);
+        panel.setWidth("100%");
         panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickHandler(this);
@@ -127,8 +127,21 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     
     @Override
     protected void onAttach() {
-        panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+       // panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
         super.onAttach();
+        /*
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                content.setVisible(false);
+            }
+        });
+        */
+    }
+    
+    @Override
+    protected void onLoad() {
+        content.setVisible(false);
+        super.onLoad();
     }
 
 	public HandlerRegistration addResizeHandler(ResizeHandler handler) {

@@ -51,5 +51,7 @@ public interface Queryable {
      * This method will set the a query string into the widget
      */
     public void setQuery(QueryData qd);
+    
+    public void validateQuery();
 
 }

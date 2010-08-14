@@ -35,6 +35,7 @@ import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.redesign.table.Table.Scrolling;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -114,7 +115,15 @@ public class View extends Composite {
      * Timer used to determine if over cell should try and diplay errors
      */
     protected Timer           timer;
-
+    
+    private static int rowHeightAdj = 0;
+    /*
+    static {
+        if(getUserAgent().indexOf("WebKit") > -1) 
+            rowHeightAdj = 1;
+        
+    }
+*/
     /**
      * Constructor that takes a reference to the table that will use this view
      * 
@@ -265,7 +274,8 @@ public class View extends Composite {
 
             for (int i = 0; i < table.getVisibleRows(); i++ )
                 createRow(i);
-
+            
+            //rowHeight = table.getRowHeight() + rowHeightAdj;
             rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
 
             if (table.getFixScrollbar())
@@ -710,7 +720,9 @@ public class View extends Composite {
      */
     @Override
     protected void onAttach() {
+        System.out.println(" on load "+table.getVisibleRows());
 
+        
         if ( !isOrWasAttached()) {
             attached = true;
             firstAttach = true;
@@ -745,5 +757,11 @@ public class View extends Composite {
     protected void setVisibleChanged(boolean changed) {
         visibleChanged = changed;
     }
+   
+    /*
+    private static native String getUserAgent()/*- {
+        return user.agent;
+    }-*/
+    
 
 }

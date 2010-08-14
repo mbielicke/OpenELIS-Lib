@@ -393,4 +393,9 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         removeStyleName(style);
     }
 
+    public void validateQuery() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

@@ -102,10 +102,18 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         boolean valid = true;
 
         for (Widget wid : def.getWidgets().values()) {
-            if(wid instanceof HasValue) {
-                ((HasValue)wid).validateValue();
-                if ( ((HasExceptions)wid).hasExceptions())
-                    valid = false;
+            if(state == State.QUERY) {
+                if(wid instanceof Queryable) {
+                    ((Queryable)wid).validateQuery();
+                    if ( ((HasExceptions)wid).hasExceptions())
+                        valid = false;
+                }
+            }else {
+                if(wid instanceof HasValue) {
+                    ((HasValue)wid).validateValue();
+                    if ( ((HasExceptions)wid).hasExceptions())
+                        valid = false;
+                }
             }
         }
         return valid;
@@ -123,7 +131,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                 if(query instanceof Object[]){
                     QueryData[] qds = (QueryData[])query;
                     for(int i = 0; i < qds.length; i++) {
-                        ((QueryData)qds[i]).key = key;
+                       // ((QueryData)qds[i]).key = key;
                         list.add(qds[i]);
                     }
                 }else if(query != null) {

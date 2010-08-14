@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,15 +40,21 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	}
 	
 	@Override
-	public void add(Widget wid, String tabText) {
-		ScrollPanel scroll = new ScrollPanel();
+	public void add(Widget wid, final String tabText) {
+		final ScrollPanel scroll = new ScrollPanel();
 		scroll.setWidget(wid);
-		super.add(scroll, tabText);
 		scroll.setWidth(width);
-		scroll.setHeight(height);
+        scroll.setHeight(height);
+        super.add(scroll, tabText);
+		if(!isAttached()) {
+		    UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).getElement()),true);
+		    getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).setVisible(true);
+		}
+		
 		if(isAttached()) {
 			DeferredCommand.addCommand(new Command() {
 				public void execute() {
+				   
 					barScroller.checkScroll();
 				}
 			});
@@ -89,12 +97,20 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	
 	@Override
 	protected void onAttach() {
+	    boolean firstAttach = !isOrWasAttached();
 		super.onAttach();
+		
 		DeferredCommand.addCommand(new Command() {
 			public void execute() {
 				barScroller.checkScroll();
 			}
 		});
+		if(firstAttach) {
+		    for(int i = 1; i < getDeckPanel().getWidgetCount(); i++) {
+		        UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(i).getElement()),false);
+		        getDeckPanel().getWidget(i).setVisible(false);
+		    }
+		}
 	}
 	
 	public void checkScroll() {

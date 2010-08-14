@@ -34,6 +34,7 @@ import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.ExceptionHelper;
+import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
@@ -92,7 +93,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                                      HasUnselectionHandlers<Integer>, HasBeforeCellEditedHandlers,
                                      HasCellEditedHandlers, HasBeforeRowAddedHandlers,
                                      HasRowAddedHandlers, HasBeforeRowDeletedHandlers,
-                                     HasRowDeletedHandlers, HasValue<ArrayList<? extends Row>> {
+                                     HasRowDeletedHandlers, HasValue<ArrayList<? extends Row>>,
+                                     HasExceptions {
 
     /**
      * Cell that is currently being edited.
@@ -409,7 +411,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         finishEditing();
         this.rows = (ArrayList<Row>)model;
         this.filteredRows = null;
-        if ( !scrollToVisible(0))
+        //if ( !scrollToVisible(0))
             renderView( -1, -1);
     }
 
@@ -1546,13 +1548,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * have values and will participate in the query.
      */
     public Object getQuery() {
-        ArrayList<Object> qds;
+        ArrayList<QueryData> qds;
         QueryData qd;
 
         if ( !queryMode)
             return null;
 
-        qds = new ArrayList<Object>();
+        qds = new ArrayList<QueryData>();
 
         for (int i = 0; i < getColumnCount(); i++ ) {
             qd = (QueryData)getValueAt(0, i);
@@ -1561,7 +1563,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                 qds.add(qd);
             }
         }
-        return qds.toArray();
+        return qds.toArray(new QueryData[]{});
     }
 
     public void setQuery(QueryData query) {
@@ -1598,6 +1600,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         return queryMode;
     }
 
+    public void validateQuery() {
+        
+    }
     /**
      * Convenience method to check if a widget has exceptions so we do not need
      * to go through the cost of merging the logical and validation exceptions
@@ -1953,6 +1958,36 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<ArrayList<? extends Row>> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
+    }
+
+    public void addException(LocalizedException exception) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void addExceptionStyle(String style) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public ArrayList<LocalizedException> getEndUserExceptions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public ArrayList<LocalizedException> getValidateExceptions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean hasExceptions() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public void removeExceptionStyle(String style) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

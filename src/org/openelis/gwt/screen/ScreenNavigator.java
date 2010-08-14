@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.widget.Button;
-import org.openelis.gwt.widget.table.TableDataRow;
-import org.openelis.gwt.widget.table.TableRow;
-import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.Item;
+import org.openelis.gwt.widget.redesign.table.Table;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 
@@ -48,7 +47,7 @@ public abstract class ScreenNavigator {
     protected boolean     byRow, enable;
     protected ArrayList   result;
     protected Query       query;
-    protected TableWidget table;
+    protected Table       table;
     protected Button   atozNext, atozPrev;
 
     public ScreenNavigator(ScreenDefInt def) {
@@ -58,15 +57,15 @@ public abstract class ScreenNavigator {
     }
 
     protected void initialize(ScreenDefInt def) {
-        table = (TableWidget)def.getWidget("atozTable");
+        table = (Table)def.getWidget("atozTable");
         if (table != null) {
-            table.addBeforeSelectionHandler(new BeforeSelectionHandler<TableRow>() {
-                public void onBeforeSelection(BeforeSelectionEvent<TableRow> event) {
+            table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+                public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                     // since we don't know if the fetch will succeed, we are
                     // going
                     // cancel this selection and select the table row ourselves.
-                    if (enable)
-                        select(event.getItem().modelIndex);
+                    if (enable && selection != event.getItem())
+                        select(event.getItem());
                     event.cancel();
                 }
             });
@@ -77,7 +76,7 @@ public abstract class ScreenNavigator {
             });
             // we don't want the table to get focus; we can still select because
             // we will get the onBeforeSelection event.
-            table.enable(false);
+            table.setEnabled(false);
         }
 
         atozNext = (Button)def.getWidget("atozNext");
@@ -130,7 +129,7 @@ public abstract class ScreenNavigator {
         row = 0;
         this.result = result;
         if (table != null)
-            table.load(getModel());
+            table.setModel(getModel());
         //
         // we are going back a page and we want to select the last row in
         // in the list
@@ -156,6 +155,7 @@ public abstract class ScreenNavigator {
         if (atozPrev != null)
             atozPrev.setEnabled(enable && result != null);
         this.enable = enable;
+        table.setEnabled(true);
     }
 
     /**
@@ -198,7 +198,7 @@ public abstract class ScreenNavigator {
      * 
      * @return model that is used to set the atoz table; This model cannot be null.
      */
-    public abstract ArrayList<TableDataRow> getModel();
+    public abstract ArrayList<Item<Integer>> getModel();
 
     /**
      * Select a row within the result set
@@ -215,7 +215,7 @@ public abstract class ScreenNavigator {
                 selection = -1;
             }
             if (table != null)
-                table.unselect(selection);
+                table.unselectRowAt(selection);
             if (atozNext != null)
                 atozNext.setEnabled(false);
             if (atozPrev != null)
@@ -228,7 +228,7 @@ public abstract class ScreenNavigator {
             if (fetch((RPC)result.get(row))) {
                 selection = row;
                 if (table != null)
-                    table.selectRow(selection);
+                    table.selectRowAt(selection);
                 if (atozNext != null)
                     atozNext.setEnabled(true);
                 if (atozPrev != null)
@@ -236,7 +236,7 @@ public abstract class ScreenNavigator {
             } else {
                 selection = -1;
                 if (table != null)
-                    table.unselect(selection);
+                    table.unselectRowAt(selection);
             }
         }
     }
