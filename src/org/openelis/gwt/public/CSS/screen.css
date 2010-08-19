@@ -1825,6 +1825,11 @@ border:none;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
 }
+.ScreenLabelLink{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:25px;
+    background:#e6eaf6;
+}
 .StatusBar a.header{
     text-decoration:none;
 }
