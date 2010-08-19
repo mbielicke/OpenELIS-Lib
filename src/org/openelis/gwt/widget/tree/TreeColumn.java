@@ -145,7 +145,10 @@ public class TreeColumn {
     			val = ((HasField)colWidget).getFieldValue();
     		Label label = new Label("");
     		
-    		label.setStyleName(colWidget.getStyleName());
+    		if(colWidget instanceof org.openelis.gwt.widget.Label)
+    			label.setStyleName(colWidget.getStyleName());
+    		else
+    			label.setStyleName("ScreenLabel");
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				label.setText((((CalendarLookUp) colWidget).getField().format()));
