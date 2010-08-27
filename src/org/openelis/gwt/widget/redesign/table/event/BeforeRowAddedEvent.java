@@ -4,6 +4,11 @@ import org.openelis.gwt.widget.redesign.table.Row;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+/**
+ * 
+ * @author tschmidt
+ *
+ */
 public class BeforeRowAddedEvent extends GwtEvent<BeforeRowAddedHandler> {
 	
 	private static Type<BeforeRowAddedHandler> TYPE;

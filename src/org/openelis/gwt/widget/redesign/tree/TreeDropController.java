@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget.redesign.table;
+package org.openelis.gwt.widget.redesign.tree;
 
 import org.openelis.gwt.event.BeforeDropEvent;
 import org.openelis.gwt.event.BeforeDropHandler;
@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Allows one or more table rows to be dropped into an existing table.
  */
-public final class TableDropController extends SimpleDropController implements
+public final class TreeDropController extends SimpleDropController implements
                                                                    HasBeforeDropHandlers<DragItem>,
                                                                    HasDropHandlers<DragItem>,
                                                                    HasDropEnterHandlers<DragItem> {
@@ -41,7 +41,7 @@ public final class TableDropController extends SimpleDropController implements
     /**
      * Table that this controller is setup for
      */
-    protected Table               table;
+    protected Tree               tree;
 
     /**
      * Boolean used to determine if the drag is over a valid drop area
@@ -66,7 +66,7 @@ public final class TableDropController extends SimpleDropController implements
     /**
      * Indexes used to determine the drop row
      */
-    protected int                 targetRow, targetViewIndex;
+    protected int                 targetRow, targetModelIndex;
 
     /**
      * Timers used to setup scrolling of table when dragged
@@ -83,10 +83,10 @@ public final class TableDropController extends SimpleDropController implements
      * 
      * @param tbl
      */
-    public TableDropController(Table tbl) {
+    public TreeDropController(Tree tre) {
         /* Pass the Drop area to the base class */
-        super(tbl.view.flexTable);
-        this.table = tbl;
+        super(tre.view.flexTable);
+        this.tree = tre;
 
         /*
          * Timer used to keep scrolling the table until the user lets up the
@@ -95,7 +95,7 @@ public final class TableDropController extends SimpleDropController implements
          */
         scroll = new Timer() {
             public void run() {
-                table.scrollBy(scrollRows);
+                tree.scrollBy(scrollRows);
                 scroll();
             }
 
@@ -123,7 +123,8 @@ public final class TableDropController extends SimpleDropController implements
         if ( !validDrop)
             throw new VetoDragException();
 
-        event = BeforeDropEvent.fire(this, (DragItem)context.draggable, table.getRowAt(table.convertViewIndexToModel(targetRow)));
+        event = BeforeDropEvent.fire(this, (DragItem)context.draggable, tree.getModel()
+                                                                             .children.get(targetRow));
         if (event != null && event.isCancelled()) {
             positioner.removeFromParent();
             throw new VetoDragException();
@@ -144,7 +145,7 @@ public final class TableDropController extends SimpleDropController implements
 
         super.onDrop(context);
 
-        table.unselectRowAt(dragItem.getIndex());
+        tree.unselectItemAt(dragItem.getIndex());
 
         DropEvent.fire(this, dragItem);
 
@@ -159,7 +160,7 @@ public final class TableDropController extends SimpleDropController implements
     public void onLeave(DragContext context) {
         scroll.cancel();
         positioner.removeFromParent();
-        ((TableDragController)context.dragController).setDropIndicator(false);
+        ((TreeDragController)context.dragController).setDropIndicator(false);
         super.onLeave(context);
     }
 
@@ -183,50 +184,50 @@ public final class TableDropController extends SimpleDropController implements
          * mouseY is based on overall window position, we need to adjust it from
          * the top of the flexTable
          */
-        adjY = context.mouseY - table.view.flexTable.getAbsoluteTop();
+        adjY = context.mouseY - tree.view.flexTable.getAbsoluteTop();
 
         /*
          * Calculate the physical row and model indexes
          */
-        targetRow = adjY / table.view.getRowHeight();
-        targetViewIndex = table.view.firstVisibleRow + targetRow;
-     
+        targetRow = adjY / tree.view.getRowHeight();
+        targetModelIndex = tree.view.firstVisibleItem + targetRow;
 
         /*
          * Start with assumption of a valid drop
          */
         validDrop = true;
-        if (table.getRowCount() > 0) {
+        if (tree.getItemCount() > 0) {
 
-            rowTop = targetRow * table.view.getRowHeight();
+            rowTop = targetRow * tree.view.getRowHeight();
 
-            if (adjY < (rowTop + (table.view.getRowHeight() / 2)))
+            if (adjY < (rowTop + (tree.view.getRowHeight() / 2)))
                 dropPos = DropPosition.ABOVE;
             else
                 dropPos = DropPosition.BELOW;
 
-            event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getRowAt(table.convertViewIndexToModel(targetViewIndex)),
+            event = DropEnterEvent.fire(this, (DragItem)context.draggable, tree.getModel()
+                                                                                .children.get(targetRow),
                                         dropPos);
 
             if (event != null && event.isCancelled()) {
                 validDrop = false;
-                ((TableDragController)context.dragController).setDropIndicator(false);
+                ((TreeDragController)context.dragController).setDropIndicator(false);
                 positioner.removeFromParent();
             } else {
-                posY = rowTop + table.view.flexTable.getAbsoluteTop();
+                posY = rowTop + tree.view.flexTable.getAbsoluteTop();
                 if (dropPos == DropPosition.BELOW)
-                    posY += table.view.rowHeight;
-                positioner.setPixelSize(table.getWidthWithoutScrollbar(), 1);
-                context.boundaryPanel.add(positioner, table.view.flexTable.getAbsoluteLeft(), posY);
-                ((TableDragController)context.dragController).setDropIndicator(true);
+                    posY += tree.view.rowHeight;
+                positioner.setPixelSize(tree.getWidthWithoutScrollbar(), 1);
+                context.boundaryPanel.add(positioner, tree.view.flexTable.getAbsoluteLeft(), posY);
+                ((TreeDragController)context.dragController).setDropIndicator(true);
             }
 
             if ( (targetRow == 0 && dropPos == DropPosition.ABOVE) ||
-                (targetRow == table.getVisibleRows() - 1 && dropPos == DropPosition.BELOW))
+                (targetRow == tree.getVisibleRows() - 1 && dropPos == DropPosition.BELOW))
                 scroll();
         } else {
-            RootPanel.get().add(positioner, table.view.flexTable.getAbsoluteLeft(),
-                                table.view.flexTable.getAbsoluteTop());
+            RootPanel.get().add(positioner, tree.view.flexTable.getAbsoluteLeft(),
+                                tree.view.flexTable.getAbsoluteTop());
         }
 
     }
@@ -238,15 +239,15 @@ public final class TableDropController extends SimpleDropController implements
      * @return
      */
     private boolean scroll() {
-        if (table.getViewRowCount() < table.getVisibleRows())
+        if (tree.getItemCount() < tree.getVisibleRows())
             return false;
 
         scrollRows = 0;
 
-        if (targetRow <= 0 && targetViewIndex > 0)
+        if (targetRow <= 0 && targetModelIndex > 0)
             scrollRows = -1;
-        else if (targetRow >= table.getVisibleRows() - 1 &&
-                 targetViewIndex < table.getViewRowCount() - 1)
+        else if (targetRow >= tree.getVisibleRows() - 1 &&
+                 targetModelIndex < tree.getItemCount() - 1)
             scrollRows = 1;
 
         if (scrollRows != 0) {
@@ -265,7 +266,7 @@ public final class TableDropController extends SimpleDropController implements
      * @return
      */
     public int getDropIndex() {
-        return table.convertViewIndexToModel(targetViewIndex);
+        return targetModelIndex;
     }
 
     /**

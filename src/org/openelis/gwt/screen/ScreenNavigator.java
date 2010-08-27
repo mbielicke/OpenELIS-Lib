@@ -66,7 +66,8 @@ public abstract class ScreenNavigator {
                     // cancel this selection and select the table row ourselves.
                     if (enable && selection != event.getItem())
                         select(event.getItem());
-                    event.cancel();
+                    else
+                        event.cancel();
                 }
             });
             table.addBeforeCellEditedHandler(new BeforeCellEditedHandler() {
@@ -227,7 +228,7 @@ public abstract class ScreenNavigator {
         } else {
             if (fetch((RPC)result.get(row))) {
                 selection = row;
-                if (table != null)
+                if (table != null) 
                     table.selectRowAt(selection);
                 if (atozNext != null)
                     atozNext.setEnabled(true);

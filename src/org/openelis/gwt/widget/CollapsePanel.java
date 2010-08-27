@@ -48,7 +48,6 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     
     private Grid panel = new Grid(1,2);
     private HorizontalPanel content = new HorizontalPanel();
-    private FocusPanel middleBar = new FocusPanel();
     private FocusPanel arrow = new FocusPanel();
     public boolean isOpen;
     
@@ -74,7 +73,6 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
                 panel.getCellFormatter().removeStyleName(0,1,"Hover");
         	}
         });
-        //middleBar.add(arrow);
         panel.setWidget(0, 0, content);
         panel.setWidget(0,1,arrow);
         panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
@@ -127,23 +125,16 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     
     @Override
     protected void onAttach() {
+        boolean firstAttach = !isOrWasAttached();
        // panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
         super.onAttach();
-        /*
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                content.setVisible(false);
-            }
-        });
-        */
+        
+        if(firstAttach) 
+            content.setVisible(false);   
+        
+     
     }
     
-    @Override
-    protected void onLoad() {
-        content.setVisible(false);
-        super.onLoad();
-    }
-
 	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
 		return addHandler(handler,ResizeEvent.getType());
 	}

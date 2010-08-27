@@ -25,16 +25,125 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.widget.redesign.table.Table;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.google.gwt.user.client.ui.Composite;
-
-public class UMenuPanel extends Composite {
+public class UMenuPanel extends PopupPanel {
     
-    Table table;
+    protected VerticalPanel panel;
+    protected AbsolutePanel ap;
+    protected FocusPanel up = new FocusPanel();
+    protected FocusPanel down = new FocusPanel();
+    protected Timer upTimer, downTimer;
     
     public UMenuPanel() {
-        
+        super(true);
+        VerticalPanel outer = new VerticalPanel();
+        up.addMouseOverHandler(new MouseOverHandler() {
+            public void onMouseOver(MouseOverEvent event) {
+                upTimer.scheduleRepeating(50);
+            }
+        });
+        up.addMouseOutHandler(new MouseOutHandler() {
+            public void onMouseOut(MouseOutEvent event) {
+                upTimer.cancel();
+            }
+        });
+        up.setStyleName("MenuUp");
+        up.addStyleName("MenuDisabled");
+        up.setVisible(false);
+        outer.add(up);
+        ap = new AbsolutePanel();
+        DOM.setStyleAttribute(ap.getElement(),"overflow","hidden");
+        panel = new VerticalPanel();
+        ap.add(panel);
+        outer.add(ap);
+        down.addMouseOverHandler(new MouseOverHandler() {
+            public void onMouseOver(MouseOverEvent event) {
+                downTimer.scheduleRepeating(50);
+            }
+        });
+        down.addMouseOutHandler(new MouseOutHandler() {
+            public void onMouseOut(MouseOutEvent event) {
+                downTimer.cancel();
+            }
+        });
+        down.setStyleName("MenuDown");
+        down.setVisible(false);
+        outer.add(down);
+        setWidget(outer);
+       
+        addDomHandler(new MouseWheelHandler() {
+            public void onMouseWheel(MouseWheelEvent event) {
+                if(event.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1){
+                    if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
+                        down.addStyleName("MenuDisabled");
+                    }else{
+                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
+                        up.removeStyleName("MenuDisabled");
+                    }
+                }
+                if(event.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1){
+                    if(ap.getWidgetTop(panel) >= 0){
+                        up.addStyleName("MenuDisabled");
+                    }else{
+                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
+                        down.removeStyleName("MenuDisabled");
+                    }
+                }
+                
+            }
+        },MouseWheelEvent.getType());
+        downTimer = new Timer() {
+            public void run() {
+                if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
+                    down.addStyleName("MenuDisabled");
+                    cancel();
+                }else{
+                    ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
+                    up.removeStyleName("MenuDisabled");
+                }
+            }
+        };
+        upTimer = new Timer() {
+            public void run() {
+                if(ap.getWidgetTop(panel) >= 0){
+                     up.addStyleName("MenuDisabled");
+                    cancel();
+                }else{
+                    ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
+                    down.removeStyleName("MenuDisabled");
+                }
+             }
+        };
     }
-
+    
+    public void add(Widget wid){
+        ((VerticalPanel)ap.getWidget(0)).add(wid);
+    }
+    
+    public void clear(){
+        panel.clear();
+    }
+    
+    public void show(int x, int y) {
+        setPopupPosition(x, y);
+        show();
+    }
+    
+    public void hide() {
+        hide();
+    }
+    
 }

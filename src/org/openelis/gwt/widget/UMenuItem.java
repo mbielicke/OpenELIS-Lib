@@ -25,10 +25,50 @@
 */
 package org.openelis.gwt.widget;
 
-public class UMenuItem  {
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+public class UMenuItem  extends FocusPanel {
+    
     
     public UMenuItem() {
-      
+       
+        addMouseOverHandler(new MouseOverHandler() {
+            public void onMouseOver(MouseOverEvent event) {
+                addStyleName("Hover");
+            }
+        });
+        
+        addMouseOutHandler(new MouseOutHandler() {
+            public void onMouseOut(MouseOutEvent event) {
+                removeStyleName("Hover");
+            }
+        });
+             
     }
+    
+    public void setDisplay(Widget display) {
+        setWidget(display);
+    }
+    
+    public void addChildPanel(final UMenuPanel panel, final boolean below) {
+        addClickHandler(new ClickHandler() {
+           public void onClick(ClickEvent event) {
+               if(below)
+                   panel.show(getAbsoluteLeft(), getAbsoluteTop()+getOffsetHeight());
+                else
+                   panel.show(getAbsoluteLeft() + getOffsetWidth(), getAbsoluteTop());
+           } 
+        });
+        
+    }
+    
+    
 
 }

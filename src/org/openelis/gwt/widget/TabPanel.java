@@ -2,8 +2,6 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -32,8 +30,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		panel.add(deck);
 		
 	}
-	
-	
+
 	public void add(Widget wid, String text, String tab) {
 		keyTabList.add(tab);
 		add(wid,text);
@@ -58,8 +55,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 					barScroller.checkScroll();
 				}
 			});
-		}
-		
+		}		
 	
 	}
 	
@@ -75,13 +71,13 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	public void setWidth(String width) {
 		this.width = width;
 		barScroller.setWidth(width);
-		//super.setWidth(width);
+		super.setWidth(width);
 	}
 	
 	@Override
 	public void setHeight(String height) {
 		this.height = height;
-		//super.setHeight(height);
+		super.setHeight(height);
 	}
 	
 	public void setTabVisible(int index, boolean visible) {
@@ -105,6 +101,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 				barScroller.checkScroll();
 			}
 		});
+		
 		if(firstAttach) {
 		    for(int i = 1; i < getDeckPanel().getWidgetCount(); i++) {
 		        UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(i).getElement()),false);
