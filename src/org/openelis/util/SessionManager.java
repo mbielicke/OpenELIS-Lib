@@ -50,12 +50,10 @@ public class SessionManager implements HttpSessionListener, HttpSessionAttribute
     private static String appName ="Not Set"; 
 
     public static HttpSession getSession() {
-        String tName = Thread.currentThread().getName();
-        if (threads.containsKey(tName)) {
-            return (HttpSession)sessions.get((String)threads.get(tName));
-        } else {
-            return null;
-        }
+        String tName;
+        
+        tName = Thread.currentThread().getName();
+        return (HttpSession)sessions.get((String)threads.get(tName));
     }
 
     public static void setSession(HttpSession session) {
@@ -80,16 +78,17 @@ public class SessionManager implements HttpSessionListener, HttpSessionAttribute
     }
 
     public static void setAuto() {
-        String tName = Thread.currentThread().getName();
+        String tName;
+        
+        tName = Thread.currentThread().getName();
         sessions.put(tName, "Auto");
     }
 
     public static boolean isAuto() {
-        String tName = Thread.currentThread().getName();
-        if (sessions.get(tName) instanceof String)
-            return true;
-        else
-            return false;
+        String tName;
+        
+        tName = Thread.currentThread().getName();
+        return sessions.get(tName) instanceof String;
     }
 
     public static Iterator iterator() {
