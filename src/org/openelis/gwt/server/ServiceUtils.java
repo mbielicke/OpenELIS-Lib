@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.transform.stream.StreamResult;
 
 import org.openelis.util.SessionManager;
@@ -41,8 +42,10 @@ public class ServiceUtils {
     public static String props;
 
     public static String getXML(String url) throws Exception {
+        Document doc;
+
         try {
-            Document doc = XMLUtil.createNew("doc");
+            doc = XMLUtil.createNew("doc");
             return getXML(url, doc);
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,39 +54,50 @@ public class ServiceUtils {
     }
 
     public static String getGeneratorXML(InputStream xsl, String props, String language) throws Exception {
-        Document doc = XMLUtil.createNew("doc");
-        String loc = "en";
-        Element root = doc.getDocumentElement();
+        Document doc;
+        Element root, l;
+        String locale = "en";
+        ByteArrayOutputStream output;
+
+        doc = XMLUtil.createNew("doc");
+        root = doc.getDocumentElement();
+
         if ( !language.equals("default"))
-            loc = language;
-        Element locale = doc.createElement("locale");
-        locale.appendChild(doc.createTextNode(loc));
-        root.appendChild(locale);
-        Element propsEL = doc.createElement("props");
-        propsEL.appendChild(doc.createTextNode(props));
-        root.appendChild(propsEL);
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        StreamResult result = new StreamResult(bytes);
-        XMLUtil.transformXML(doc, xsl, result);
-        return new String(bytes.toByteArray(), "UTF-8");
+            locale = language;
+        l = doc.createElement("locale");
+        l.appendChild(doc.createTextNode(locale));
+        root.appendChild(l);
+
+        l = doc.createElement("props");
+        l.appendChild(doc.createTextNode(props));
+        root.appendChild(l);
+
+        output = new ByteArrayOutputStream();
+        XMLUtil.transformXML(doc, xsl, new StreamResult(output));
+
+        return new String(output.toByteArray(), "UTF-8");
     }
 
     public static String getXML(String url, Document doc) throws Exception {
+        Element root, l;
+        String locale = "en";
+        ByteArrayOutputStream output;
+
         try {
-            String loc = "en";
-            if (SessionManager.getSession().getAttribute("locale") != null)
-                loc = (String)SessionManager.getSession().getAttribute("locale");
-            Element root = doc.getDocumentElement();
-            Element locale = doc.createElement("locale");
-            locale.appendChild(doc.createTextNode(loc));
-            root.appendChild(locale);
-            Element propsEL = doc.createElement("props");
-            propsEL.appendChild(doc.createTextNode(props));
-            root.appendChild(propsEL);
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            StreamResult result = new StreamResult(bytes);
-            XMLUtil.transformXML(doc, new File(url), result);
-            return new String(bytes.toByteArray(), "UTF-8");
+            locale = getLocale();
+            root = doc.getDocumentElement();
+            l = doc.createElement("locale");
+            l.appendChild(doc.createTextNode(locale));
+            root.appendChild(l);
+
+            l = doc.createElement("props");
+            l.appendChild(doc.createTextNode(props));
+            root.appendChild(l);
+            
+            output = new ByteArrayOutputStream();
+            XMLUtil.transformXML(doc, new File(url), new StreamResult(output));
+        
+            return new String(output.toByteArray(), "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
@@ -91,25 +105,42 @@ public class ServiceUtils {
     }
 
     public static String getXML(InputStream is, Document doc) throws Exception {
+        Element root, l;
+        String locale = "en";
+        ByteArrayOutputStream output;
+
         try {
-            String loc = "en";
-            if (SessionManager.getSession().getAttribute("locale") != null)
-                loc = (String)SessionManager.getSession().getAttribute("locale");
-            Element root = doc.getDocumentElement();
-            Element locale = doc.createElement("locale");
-            locale.appendChild(doc.createTextNode(loc));
-            root.appendChild(locale);
-            Element propsEL = doc.createElement("props");
-            propsEL.appendChild(doc.createTextNode(props));
-            root.appendChild(propsEL);
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            StreamResult result = new StreamResult(bytes);
-            XMLUtil.transformXML(doc, is, result);
-            return new String(bytes.toByteArray(), "UTF-8");
+            locale = getLocale();
+            root = doc.getDocumentElement();
+            l = doc.createElement("locale");
+            l.appendChild(doc.createTextNode(locale));
+            root.appendChild(l);
+
+            l = doc.createElement("props");
+            l.appendChild(doc.createTextNode(props));
+            root.appendChild(l);
+            
+            output = new ByteArrayOutputStream();
+            XMLUtil.transformXML(doc, is, new StreamResult(output));
+        
+            return new String(output.toByteArray(), "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
 
+    private static String getLocale() {
+        String l;
+        HttpSession s;
+        
+        l = null;
+        s = SessionManager.getSession();
+        if (s != null)
+            l = (String) s.getAttribute("locale");
+        if (l == null)
+            l = "en";
+        
+        return l;
+    }
 }
