@@ -38,6 +38,8 @@ import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.UMenuItem;
+import org.openelis.gwt.widget.UMenuPanel;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedEvent;
@@ -78,6 +80,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -1899,7 +1902,32 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         ExceptionHelper.drawExceptions(getEndUserExceptions(row, col), getValidateExceptions(row, col), x, y);
     }
+    
+    protected UMenuPanel getMenuForColumn(int col) {
+        UMenuPanel panel;
+        UMenuItem  item;
+        
+        panel = new UMenuPanel();
+        panel.setStyleName("MenuPanel");
+        
+        if(getColumnAt(col).isSortable()) {
+            item = new UMenuItem(UMenuItem.createAppMenuItem("Ascending", "Ascending","",false));
+            panel.add(item);
+            item = new UMenuItem(UMenuItem.createAppMenuItem("Descending", "Descending", "", false));
+            panel.add(item);
+            if(getColumnAt(col).isFilterable())
+                panel.add(new HTML("<hr/>"));
+        }
+        
+        if(getColumnAt(col).isFilterable()) {
+            item = new UMenuItem(UMenuItem.createFilterMenuItem("All"));
+            panel.add(item);
+        }
+        
+        return panel;
 
+    }
+    //******************** Drag and Drop methods ****************************************
     /**
      * Method will enable the rows in the table to be dragged. This must be
      * called before the model is first set.

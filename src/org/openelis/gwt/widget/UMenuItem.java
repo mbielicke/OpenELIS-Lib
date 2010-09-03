@@ -32,11 +32,28 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This clas is used by MenuBar and MenuPanel to display menu options 
+ *
+ */
 public class UMenuItem  extends FocusPanel {
+  
+    /**
+     * Reference to the open child menu if present
+     */
+    protected UMenuPanel childMenu;
     
+    /**
+     * Flags used for checking if this item has a child Menu and it's position 
+     */
+    protected boolean hasChild, showBelow;
     
+    /**
+     * No-Arg constructor that sets up Hovering
+     */
     public UMenuItem() {
        
         addMouseOverHandler(new MouseOverHandler() {
@@ -50,25 +67,135 @@ public class UMenuItem  extends FocusPanel {
                 removeStyleName("Hover");
             }
         });
-             
+        
     }
     
+    /**
+     * Constructor that takes a Widget as a param to be used as the display widget
+     * @param display
+     */
+    public UMenuItem(Widget display) {
+        this();
+        setDisplay(display);
+    }
+    
+    /**
+     * Method used to set the widget used for displaying this item
+     * @param display
+     */
     public void setDisplay(Widget display) {
         setWidget(display);
     }
     
-    public void addChildPanel(final UMenuPanel panel, final boolean below) {
-        addClickHandler(new ClickHandler() {
-           public void onClick(ClickEvent event) {
-               if(below)
-                   panel.show(getAbsoluteLeft(), getAbsoluteTop()+getOffsetHeight());
-                else
-                   panel.show(getAbsoluteLeft() + getOffsetWidth(), getAbsoluteTop());
-           } 
-        });
-        
+    /**
+     * Adds a child menu to this item 
+     * @param panel
+     * @param showBelow
+     */
+    public void addChildPanel(UMenuPanel panel, final boolean showBelow) {
+        childMenu = panel;
+        hasChild = true;
+        this.showBelow = showBelow;
+    }
+   
+    /**
+     * Method used to determine if this item has a child menu
+     * @return
+     */
+    protected boolean hasChildMenu() {
+        return hasChild;
     }
     
+    /**
+     * Method called to show the child menu
+     * @return
+     */
+    protected UMenuPanel showChild() {
+        if(childMenu == null || childMenu.isShowing())
+            return null;
+        
+        if(showBelow)
+            childMenu.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop()+getOffsetHeight());
+         else
+            childMenu.setPopupPosition(getAbsoluteLeft() + getOffsetWidth(), getAbsoluteTop());
+        
+        childMenu.show();
+        
+        return childMenu;
+    }
+        
+    /**
+     * Static method that can be used by other classes to create the display for a default MenuBar Item 
+     * @param text
+     * @return
+     */
+    public static Widget createMenuBarItem(String text) {
+        Label label;
+        
+        label = new Label(text);
+        label.setStyleName("ScreenLabel");
+        return label;
+    }
     
-
+    /**
+     * Static method that can be called by other classed to create the display for a default Application
+     * Menu item
+     * @param icon
+     * @param text
+     * @param description
+     * @param hasChild
+     * @return
+     */
+    public static Widget createAppMenuItem(String icon, String text, String description, boolean hasChild) {
+        Grid grid = new Grid(2,4);
+        grid.setStyleName("TopMenuRowContainer");
+        
+        grid.getCellFormatter().setStylePrimaryName(0,0,"topMenuIcon");
+        grid.getCellFormatter().setStylePrimaryName(0,1,"topMenuItemMiddle");
+        if(!"".equals(icon))
+            grid.getCellFormatter().addStyleName(0, 0, icon);
+        grid.setText(0,1,text);
+        grid.getCellFormatter().addStyleName(0,1,"topMenuItemTitle");
+        grid.getCellFormatter().addStyleName(0,1,"locked");
+        
+        if(hasChild) 
+            grid.getCellFormatter().setStyleName(0,3,"MenuArrow");
+        
+        if("".equals(description))
+            grid.removeRow(1);
+        else{
+            grid.setText(1,1,description);
+            grid.getCellFormatter().setStylePrimaryName(1,1,"topMenuItemMiddle");
+            grid.getCellFormatter().addStyleName(1,1,"topMenuItemDesc");
+        }
+       
+        return grid;
+    }
+    
+    /**
+     * Static method that can be called by other classes to create the display for a default FilterMenu;
+     * @param text
+     * @return
+     */
+    public static Widget createFilterMenuItem(String text) {
+        Grid grid;
+        CheckBox check;
+        
+        grid = new Grid(1,2);
+        grid.setStyleName("TopMenuRowContainer");
+        
+        grid.getCellFormatter().setStylePrimaryName(0,0,"topMenuIcon");
+        grid.getCellFormatter().setStylePrimaryName(0,1,"topMenuItemMiddle");
+        
+        check = new CheckBox();
+        check.setEnabled(true);
+        grid.setWidget(0, 0, check);
+        
+        grid.setText(0, 1, text);
+        grid.getCellFormatter().addStyleName(0,1,"topMenuItemTitle");
+        grid.getCellFormatter().addStyleName(0,1,"locked");
+        
+        return grid;
+    }
+    
 }

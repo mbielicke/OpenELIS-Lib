@@ -66,7 +66,7 @@ public class Column {
     /**
      * Boolean flags used by column
      */
-    protected boolean      enabled, resizable, filterable, filtered, required;
+    protected boolean      enabled, resizable, filterable, filtered, sortable, sorted, required;
 
 
     /**
@@ -297,6 +297,38 @@ public class Column {
      */
     public void setFiltered(boolean filtered) {
         this.filtered = filtered;
+    }
+    
+    /**
+     * Method used to determine if this Column can be sorted
+     * @return
+     */
+    public boolean isSortable() {
+        return sortable;
+    }
+
+    /**
+     * Method used to set the sortable flag for this column
+     * @param filterable
+     */
+    public void setSortable(boolean sortable) {
+        this.sortable = sortable;
+    }
+    
+    /**
+     * Method used to determine if this column currently sorted 
+     * @return
+     */
+    public boolean isSorted() {
+        return sorted;
+    }
+
+    /**
+     * Method to set the flag indicating that a filter is set for this column
+     * @param filtered
+     */
+    public void setSorted(boolean sorted) {
+        this.sorted = sorted;
     }
 
     /**

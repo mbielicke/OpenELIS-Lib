@@ -25,20 +25,67 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-
+/**
+ *  This class will display MenuItems in Horizontal row and display Menu 
+ *  panels below the items
+ * 
+ */
 public class UMenuBar extends Composite {
-    
+   
+    /**
+     * Panel that holds the MenuItems
+     */
     protected HorizontalPanel panel;
     
+    /**
+     * Reference to currently displayed child menu 
+     */
+    protected UMenuPanel popMenu;
+    
+    /**
+     * No-Arg constructor 
+     */
     public UMenuBar() {
+        AbsolutePanel ap;
+       
         panel = new HorizontalPanel();
+        
+        /* Add empty div and set to 100% width so items added before will align to the right */
+        ap = new AbsolutePanel();
+        panel.add(ap);
+        panel.setCellWidth(ap, "100%");
+        
         initWidget(panel);
     }
-    
-    public void addItem(UMenuItem item) {
-        panel.add(item);
+
+    /**
+     * Method will add a MenuItem to the bar to be displayed.
+     * @param item
+     */
+    public void addItem(final UMenuItem item) {
+        panel.insert(item,panel.getWidgetCount()-1);
+        item.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                popMenu = item.showChild();
+            }
+        });
+        item.addMouseOverHandler(new MouseOverHandler() {
+            public void onMouseOver(MouseOverEvent event) {
+                item.addStyleName("Hover");
+                if(popMenu != null && popMenu.isShowing()) {
+                    popMenu.hide();
+                    if(item.hasChildMenu())
+                        popMenu = item.showChild();
+                }
+            }
+        });
     }
     
 

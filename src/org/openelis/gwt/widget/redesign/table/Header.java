@@ -64,7 +64,7 @@ public class Header extends FocusPanel {
     /**
      * Popuppanel used to display the resize bar.
      */
-    protected PopupPanel popResize, popFilter;
+    protected PopupPanel popResize, popFilter,popMenu;
     
     /**
      * Position where the resize started.
@@ -259,7 +259,7 @@ public class Header extends FocusPanel {
      * Method to show the filter button to allow the user to click to show the filter menu
      * 
      */
-    private void showFilter(int column) {
+    private void showFilter(final int column) {
         int x;
 
         if (showingFilter) {
@@ -294,7 +294,10 @@ public class Header extends FocusPanel {
                 filterButton.setStyleName("FilterButton");
                 filterButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        // TODO Auto-generated method stub
+                        if(popMenu == null || !popMenu.isShowing()) {
+                            popMenu = table.getMenuForColumn(column);
+                            popMenu.showRelativeTo(filterButton);
+                        }
                     }
                 });
                 popFilter.add(filterButton);
@@ -307,6 +310,12 @@ public class Header extends FocusPanel {
             popFilter.show();
             showingFilter = true;
             showingFilterFor = column;
+            if(popMenu != null && popMenu.isShowing()) {
+                popMenu.hide();
+                popMenu = table.getMenuForColumn(column);
+                popMenu.showRelativeTo(filterButton);
+            }
+                
         }
     }
 
