@@ -259,9 +259,6 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
     
     public void setScrollHeight(int scrollHeight) {
         try {
-        	DeferredCommand.addCommand(new Command() {
-        		
-        	public void execute() {
             scrollBar.getWidget().setHeight(scrollHeight+"px");
             if(showScroll == showScroll.NEEDED){
                 if(scrollHeight > (this.height+1) && controller.numRows() > controller.maxRows){
@@ -274,9 +271,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                         ft.getFlexCellFormatter().removeStyleName(0,1,"Header");
                 }
             }
-        	}
-        	});
-            
+        	            
         }catch(Exception e){
             Window.alert("set scroll height"+e.getMessage());
         }
