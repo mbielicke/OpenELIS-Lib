@@ -207,8 +207,17 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 	}
 	
 	public void onClick(ClickEvent event) {
+		int clicked;
+		
+		clicked = new Integer(((AppButton)event.getSource()).action).intValue();
 		SelectionEvent.fire(this,new Integer(((AppButton)event.getSource()).action));
 		hide();
+        if(active > -1)
+           	((AppButton)bp.getWidget(active)).blur();
+        active = -1;
+        ((AppButton)bp.getWidget(clicked)).blur();
+           
+		
 	}
 
 	public void onPreviewNativeEvent(NativePreviewEvent event) {
