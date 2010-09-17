@@ -213,6 +213,13 @@ public class TableRenderer  {
     @SuppressWarnings("unchecked")
 	public boolean stopEditing() {
         if(controller.activeWidget != null){
+            /*
+            if(controller.activeWidget instanceof CalendarLookUp && ((CalendarLookUp)controller.activeWidget).getField().queryMode) {
+                setCellDisplay(controller.selectedRow,controller.selectedCol);
+                controller.activeWidget = null;
+                return true;
+            }
+            */
         	Object currVal = controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).getValue();
         	if(controller.activeWidget instanceof Focusable)
         		((Focusable)controller.activeWidget).setFocus(false);

@@ -325,7 +325,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * @param action
      * @return
      */
-    public String getAction(String action) {
+    public String getAction() {
         return action;
     }
     

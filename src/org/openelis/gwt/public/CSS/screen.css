@@ -1834,6 +1834,11 @@ border:none;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
 }
+.ScreenLabelLink{
+color:blue;
+text-decoration:underline;
+cursor:pointer;
+}
 .StatusBar a.header{
     text-decoration:none;
 }

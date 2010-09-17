@@ -42,6 +42,7 @@ import org.openelis.gwt.event.NavigationSelectionEvent;
 import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
+
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
@@ -1019,7 +1020,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 				if(model != null && model.size() > 0 && model.get(0).cells.get(columns.indexOf(col)).value != null){
 					if(col.colWidget instanceof Dropdown) {
 						((Dropdown)col.colWidget).setSelectionKeys((ArrayList<Object>)model.get(0).cells.get(columns.indexOf(col)).value);
-					}else {
+					}else if(!(col.colWidget instanceof CalendarLookUp)){
 						((HasField)col.getColumnWidget()).setFieldValue(model.get(0).cells.get(columns.indexOf(col)).value);
 					}
 					((HasField)col.getColumnWidget()).getQuery(list, col.key);

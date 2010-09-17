@@ -498,7 +498,13 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     @Override
     protected void validateValue(boolean fireEvents) {
+        Item<Integer> item;
         validateExceptions = null;
+        
+        item = getSelectedItem();
+        if (item != null)
+            setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),fireEvents);
+        
         if (required && value == null) {
             addValidateException(new LocalizedException("fieldRequiredException"));
         }

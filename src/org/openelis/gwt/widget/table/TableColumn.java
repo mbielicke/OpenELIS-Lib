@@ -144,7 +144,12 @@ public class TableColumn {
     			}else
     				((Dropdown)colWidget).setValue(cell.getValue());
     			val = ((Dropdown)colWidget).getDisplay();
-    		}else{
+    		/*	
+    		}else if(colWidget instanceof CalendarLookUp && ((CalendarLookUp)colWidget).getField().queryMode){
+    		    val = ((HasField)colWidget).getField().queryString;
+    		*/
+    		}else {
+    		
     			((HasValue)colWidget).setValue(cell.getValue());
     		}
     		if(val == null){
@@ -280,6 +285,11 @@ public class TableColumn {
 				//((Dropdown)colWidget).setValues((ArrayList<Object>)cell.getValue());
     		}else
 				((Dropdown)colWidget).setValue(cell.getValue());
+    	/*	
+    	}else if(colWidget instanceof CalendarLookUp && ((CalendarLookUp)colWidget).getField().queryMode){
+            // do nothing;
+          
+        */
     	}else
     		((HasValue)editor).setValue(cell.getValue());
     	

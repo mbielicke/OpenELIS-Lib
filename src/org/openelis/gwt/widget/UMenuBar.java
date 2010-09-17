@@ -67,22 +67,22 @@ public class UMenuBar extends Composite {
 
     /**
      * Method will add a MenuItem to the bar to be displayed.
-     * @param item
+     * @param menu
      */
-    public void addItem(final UMenuItem item) {
-        panel.insert(item,panel.getWidgetCount()-1);
-        item.addClickHandler(new ClickHandler() {
+    public void addMenu(final UMenu menu) {
+        panel.insert(menu,panel.getWidgetCount()-1);
+        menu.showBelow(true);
+        menu.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                popMenu = item.showChild();
+                popMenu = menu.showSubMenu();
             }
         });
-        item.addMouseOverHandler(new MouseOverHandler() {
+        menu.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                item.addStyleName("Hover");
+                menu.addStyleName("Hover");
                 if(popMenu != null && popMenu.isShowing()) {
                     popMenu.hide();
-                    if(item.hasChildMenu())
-                        popMenu = item.showChild();
+                    popMenu = menu.showSubMenu();
                 }
             }
         });

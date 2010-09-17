@@ -23,38 +23,37 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.redesign.tree;
-
-import org.openelis.gwt.common.data.QueryData;
-
-import com.google.gwt.user.client.ui.FlexTable;
+package org.openelis.gwt.widget;
 
 /**
- * This interface is implemented by classes the provide rendering functionality for Table cells
- * @author tschmidt
+ * This Class is used to provide a comparable search and sort object for Dropdown Models 
  *
- * @param <T>
  */
-public interface CellRenderer<T> {
+public class SearchPair implements Comparable<SearchPair>{
+
+    /*
+     * Index of the entry into the model of Dropdown
+     */
+    public int    modelIndex;
+    /*
+     * Display string of the entry in the Dropdown model.
+     */
+    public String display;
 
     /**
-     * Formats the value passed and places the text into the cell passed
-     * @param table
-     * @param flexTable
-     * @param row
-     * @param col
-     * @param value
+     * Constructor the takes the index of the entry and the display of the entry
+     * @param index
+     * @param display
      */
-    public void render(Tree tree, FlexTable flexTable,int row,int col, T value);
-    
+    public SearchPair(int index, String display) {
+        this.modelIndex = index;
+        this.display = display;
+    }
+
     /**
-     * Formats the QueryData passed and places the text into the cell passed
-     * @param table
-     * @param flexTable
-     * @param row
-     * @param col
-     * @param qd
+     * Method compares the display of the entry with display of the entry passed
      */
-    public void renderQuery(Tree tree, FlexTable flexTable, int row, int col, QueryData qd);
-    
+    public int compareTo(SearchPair o) {
+        return display.compareTo(o.display);
+    }
 }

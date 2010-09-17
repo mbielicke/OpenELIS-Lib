@@ -25,18 +25,32 @@
 */
 package org.openelis.gwt.widget.redesign.table;
 
-import java.util.ArrayList;
-
-public interface Filter {
+/**
+ *  This class is used to present a list of filter choices to the user.
+ *  The FilterChoice is displayed as a list of options in a TableHeader menu. 
+ */
+public class FilterChoice {
     
-    public boolean include(Object value);
-    
-    public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model);
-    
-    public void setChoices(ArrayList<FilterChoice> choices);
-    
-    public void setColumn(int column);
-    
-    public int getColumn();
-    
+    protected Object value;
+    protected String display;
+    protected boolean selected;
+   
+    public Object getValue() {
+        return value;
+    }
+    public void setValue(Object value) {
+        this.value = value;
+    }
+    public String getDisplay() {
+        return display;
+    }
+    public void setDisplay(String display) {
+        this.display = display;
+    }
+    public boolean isSelected() {
+        return selected;
+    }
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

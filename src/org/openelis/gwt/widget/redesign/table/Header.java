@@ -25,6 +25,13 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
+import org.openelis.gwt.widget.CheckMenuItem;
+import org.openelis.gwt.widget.UMenuItem;
+import org.openelis.gwt.widget.UMenuPanel;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -35,6 +42,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -80,7 +89,7 @@ public class Header extends FocusPanel {
      * The column that is being resized.
      */
     protected boolean    resizeColStyle, showingFilter;
-    
+        
     /**
      * Reference to this object to be used in anonymous handlers
      */
@@ -212,25 +221,49 @@ public class Header extends FocusPanel {
      * table.
      */
     protected void layout() {
-        int numCols;
-        Column column;
-        String header;
-
-        numCols = table.getColumnCount();
-
+        
         if (flexTable.getRowCount() < 1)
             flexTable.insertRow(0);
-
-        for (int i = 0; i < numCols; i++ ) {
+        
+        renderView(-1,-1);
+        
+        flexTable.setWidth(table.getTotalColumnWidth() + "px");
+        flexTable.getCellFormatter().setHeight(0, 0, headerHeight + "px");
+    }
+    
+    protected void renderView(int start, int end) {
+        Column column;
+        String header;
+        
+        if(start < 0)
+            start = 0;
+        
+        if(end < 0)
+            end = table.getColumnCount()-1;
+        
+        for (int i = start; i <= end; i++ ) {
             column = table.getColumnAt(i);
             header = column.getLabel().replaceAll("\\n", "<br/>");
+            
             flexTable.setHTML(0, i, header);
             flexTable.getColumnFormatter().setWidth(i, column.getWidth() + "px");
             flexTable.getCellFormatter().setVerticalAlignment(0, i, HasVerticalAlignment.ALIGN_BOTTOM);
+            
+            if(column.isFiltered())
+                flexTable.getCellFormatter().addStyleName(0,i,"Filtered");
+            else
+                flexTable.getCellFormatter().removeStyleName(0, i, "Filtered");
+            
+            if(column.isSorted()) 
+                flexTable.getCellFormatter().addStyleName(0,i,"Sorted");
+            else
+                flexTable.getCellFormatter().removeStyleName(0, i, "Sorted");
         }
+        
+        if(popFilter != null)
+            popFilter.hide();
 
-        flexTable.setWidth(table.getTotalColumnWidth() + "px");
-        flexTable.getCellFormatter().setHeight(0, 0, headerHeight + "px");
+        
     }
 
     /**
@@ -259,7 +292,7 @@ public class Header extends FocusPanel {
      * Method to show the filter button to allow the user to click to show the filter menu
      * 
      */
-    private void showFilter(final int column) {
+    private void showFilter(int column) {
         int x;
 
         if (showingFilter) {
@@ -274,7 +307,7 @@ public class Header extends FocusPanel {
         if (column < 0)
             return;
 
-        if (table.getColumnAt(column).isFilterable()) {
+        if (table.getColumnAt(column).isFilterable() || table.getColumnAt(column).isSortable) {
             x = table.getXForColumn(column) + table.getColumnAt(column).getWidth();
             /*
              * if the position of the filter button is off the currently scrolled view
@@ -288,14 +321,14 @@ public class Header extends FocusPanel {
              * Initialize the popFilter the first time.
              */
             if (popFilter == null) {
-                popFilter = new PopupPanel();
+                popFilter = new PopupPanel(true);
                 popFilter.setWidth("16px");
                 filterButton = new FocusPanel();
                 filterButton.setStyleName("FilterButton");
                 filterButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         if(popMenu == null || !popMenu.isShowing()) {
-                            popMenu = table.getMenuForColumn(column);
+                            popMenu = getMenuForColumn(showingFilterFor);
                             popMenu.showRelativeTo(filterButton);
                         }
                     }
@@ -312,7 +345,7 @@ public class Header extends FocusPanel {
             showingFilterFor = column;
             if(popMenu != null && popMenu.isShowing()) {
                 popMenu.hide();
-                popMenu = table.getMenuForColumn(column);
+                popMenu = getMenuForColumn(showingFilterFor);
                 popMenu.showRelativeTo(filterButton);
             }
                 
@@ -350,5 +383,144 @@ public class Header extends FocusPanel {
             unsinkEvents(Event.ONMOUSEDOWN);
         }
     }
+    
+    /**
+     * This method will create a Menu panel for a table column in order to do 
+     * sorting and filtering.
+     * @param col
+     * @return
+     */
+    protected UMenuPanel getMenuForColumn(final int col) {
+        final UMenuPanel panel;
+        UMenuItem  item;
+        CheckMenuItem filterItem;        
+        final Column column;
+        final ArrayList<FilterChoice> choices;
+               
+        panel = new UMenuPanel();
+        panel.setStyleName("MenuPanel");
+        
+        column = table.getColumnAt(col);
+        /*
+         * Set the Sort Options if column is sortable.
+         */
+        if(column.isSortable()) {
+            /*
+             * Create Item for Ascending sort.  We override the hide() instead of using a 
+             * ClickHandler to make sure sortChanged and sortDesc are set before the closeHandler 
+             * is called for the menu.
+             */
+            item = new UMenuItem("Ascending", "Ascending","");
+            item.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    doSort(col,Table.SORT_ASCENDING);
+                }
+            });
+            panel.addItem(item);
+            
+            /*
+             * Create Sort Descending menu Item. We override the hide() instead of using a 
+             * ClickHandler to make sure sortChanged and sortDesc are set before the closeHandler 
+             * is called for the menu. 
+             */
+            item = new UMenuItem("Descending", "Descending", "");
+            item.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    doSort(col,Table.SORT_DESCENDING);
+                }
+            });
+            panel.addItem(item);
+            
+            
+            /*
+             * if Column is filterable add separator between sort and filter items
+             */
+            if(column.isFilterable())
+                panel.addMenuSeparator();
+        }
+        
+        if(column.getFilter() != null) {
+            choices = column.getFilter().getChoices(table.getModel());
+            for(final FilterChoice choice : choices) {
+                filterItem = new CheckMenuItem(choice.getDisplay(),"",false);
+                
+                /*
+                 * Listen for Filter Value change and set the change in the choices list 
+                 * and set the filterSChanged flag to true;
+                 */
+                filterItem.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                        choice.setSelected(event.getValue());
+                        doFilter(column, choices);
+                    } 
+                });
+                
+                /*
+                 * If fileter is in force already set the filterMenu to checked.
+                 */
+                filterItem.setCheck(choice.selected);
+                
+                panel.addItem(filterItem);
+            }
+        }
+        
+        return panel;
+    }
+    
+    private void doFilter(Column column, ArrayList<FilterChoice> choices) {
+        boolean filtered = false;
+        
+        /*
+         * Check if all fitlers were removed or if a new filter was applied
+         */
+        for(int i = 0; i < choices.size(); i++){
+            if(choices.get(i).isSelected()) {
+                filtered = true;
+                break;
+            }       
+        }
+
+        /*
+         * Set the Filtered state of the column
+         */
+        column.isFiltered = filtered;
+        
+        /*
+         * Reset all columns to not sorted since the filter will remove it
+         */
+        for(int i = 0; i < table.getColumnCount(); i++)
+            table.getColumnAt(i).isSorted = false;
+        
+        /*
+         * Changed to call for all columns so sorts and filter indicators will be synced
+         */
+        renderView(-1, -1);
+        
+        table.applyFilters();
+    }
+    
+    private void doSort(int col, int dir) {
+        
+        table.applySort(col,dir,table.getColumnAt(col).sort);
+        
+        /*
+         * We only sort for one column so remove the isSortd for any column that is currently sorted
+         */
+        for(int i = 0; i < table.getColumnCount(); i++)
+            table.getColumnAt(i).isSorted = false;
+        
+        /*
+         * Set sorted state for column
+         */
+        table.getColumnAt(col).isSorted = true;
+        
+        /*
+         * 
+         * Changed to call for all columns so sorts and filter indicators will be synced
+         */
+        renderView(-1, -1);
+    }
+    
+
 
 }

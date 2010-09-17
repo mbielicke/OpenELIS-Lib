@@ -71,6 +71,14 @@
 	font-size: 10px;
 }
 
+.Header td.Filtered {
+	text-decoration : underline;
+}
+
+.Header td.Sorted {
+	font-style : italic;
+}
+
 .Header td.ResizeCol {
 	cursor : col-resize; 
 }

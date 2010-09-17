@@ -45,7 +45,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
-                             CellEditor<AutoCompleteValue> {
+                                         CellEditor<AutoCompleteValue> {
 
     /**
      * Widget used to edit the cell
@@ -69,7 +69,6 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
         container = new AbsolutePanel();
         container.add(editor);
         container.setStyleName("CellContainer");
-
     }
 
     /**

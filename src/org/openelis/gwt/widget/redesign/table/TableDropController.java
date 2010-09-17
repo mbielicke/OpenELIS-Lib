@@ -66,7 +66,7 @@ public final class TableDropController extends SimpleDropController implements
     /**
      * Indexes used to determine the drop row
      */
-    protected int                 targetRow, targetViewIndex;
+    protected int                 targetRow, targetIndex;
 
     /**
      * Timers used to setup scrolling of table when dragged
@@ -123,7 +123,7 @@ public final class TableDropController extends SimpleDropController implements
         if ( !validDrop)
             throw new VetoDragException();
 
-        event = BeforeDropEvent.fire(this, (DragItem)context.draggable, table.getRowAt(table.convertViewIndexToModel(targetRow)));
+        event = BeforeDropEvent.fire(this, (DragItem)context.draggable, table.getRowAt(targetIndex));
         if (event != null && event.isCancelled()) {
             positioner.removeFromParent();
             throw new VetoDragException();
@@ -189,7 +189,7 @@ public final class TableDropController extends SimpleDropController implements
          * Calculate the physical row and model indexes
          */
         targetRow = adjY / table.view.getRowHeight();
-        targetViewIndex = table.view.firstVisibleRow + targetRow;
+        targetIndex = table.view.firstVisibleRow + targetRow;
      
 
         /*
@@ -205,7 +205,7 @@ public final class TableDropController extends SimpleDropController implements
             else
                 dropPos = DropPosition.BELOW;
 
-            event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getRowAt(table.convertViewIndexToModel(targetViewIndex)),
+            event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getRowAt(targetIndex),
                                         dropPos);
 
             if (event != null && event.isCancelled()) {
@@ -238,15 +238,15 @@ public final class TableDropController extends SimpleDropController implements
      * @return
      */
     private boolean scroll() {
-        if (table.getViewRowCount() < table.getVisibleRows())
+        if (table.getRowCount() < table.getVisibleRows())
             return false;
 
         scrollRows = 0;
 
-        if (targetRow <= 0 && targetViewIndex > 0)
+        if (targetRow <= 0 && targetIndex > 0)
             scrollRows = -1;
         else if (targetRow >= table.getVisibleRows() - 1 &&
-                 targetViewIndex < table.getViewRowCount() - 1)
+                 targetIndex < table.getRowCount() - 1)
             scrollRows = 1;
 
         if (scrollRows != 0) {
@@ -265,7 +265,7 @@ public final class TableDropController extends SimpleDropController implements
      * @return
      */
     public int getDropIndex() {
-        return table.convertViewIndexToModel(targetViewIndex);
+        return targetIndex;
     }
 
     /**

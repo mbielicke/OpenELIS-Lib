@@ -66,7 +66,6 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -77,7 +76,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -88,66 +86,7 @@ import com.google.gwt.user.client.ui.Widget;
  *
  */
 public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow>, ResizeHandler {
-        /**
-         * Inner class used to create the Draggable Caption portion of the Window.
-         * @author tschmidt
-         *
-         */
-        private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
 
-        	public String name;
-
-        	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-        		return addDomHandler(handler, MouseDownEvent.getType());
-        	}
-
-        	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-        		return addDomHandler(handler,MouseUpEvent.getType());
-        	}
-
-        	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-        		return addDomHandler(handler,MouseOutEvent.getType());
-        	}
-
-        	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-        		return addDomHandler(handler,MouseOverEvent.getType());
-        	}
-
-        	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-        		return addDomHandler(handler,MouseMoveEvent.getType());
-        	}
-
-        	public HandlerRegistration addMouseWheelHandler(
-        			MouseWheelHandler handler) {
-        		return addDomHandler(handler,MouseWheelEvent.getType());
-        	}
-    }
-        
-    private class ProgressBar extends AbsolutePanel {
-    		
-    		AbsolutePanel prog = new AbsolutePanel();
-    		Label pct = new Label();
-    		
-    		public ProgressBar() {
-    			setSize("75px","12px");
-    			add(prog,0,0);
-    			add(pct,30,0);
-    			setStyleName("ProgressBarOuter");
-     			prog.setHeight("100%");
-    			prog.setWidth("0%");
-    			setWidgetPosition(prog, 0, 0);
-    			prog.setStyleName("ProgressBar");
-    			pct.setStyleName("ProgressBarPct");
-    			DOM.setStyleAttribute(pct.getElement(), "zIndex","1000");
-    			
-    		}
-    		
-    		public void setProgress(int percent) {
-    			prog.setWidth(percent+"%");
-    			pct.setText(percent+"%");
-    		}
-    		
-    	}
         
     private Caption cap = new Caption();
     protected VerticalPanel messagePanel;
@@ -535,6 +474,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     }
     
     public void setError(String message) {
+        clearMessagePopup(message);
         setStatus(message,"ErrorPanel");
         unlockWindow();
     }
@@ -643,6 +583,67 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 		}else
 			progressBar.setVisible(false);
 	}
+	
+    /**
+     * Inner class used to create the Draggable Caption portion of the Window.
+     * @author tschmidt
+     *
+     */
+    private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
+
+        public String name;
+
+        public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+            return addDomHandler(handler, MouseDownEvent.getType());
+        }
+
+        public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+            return addDomHandler(handler,MouseUpEvent.getType());
+        }
+
+        public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+            return addDomHandler(handler,MouseOutEvent.getType());
+        }
+
+        public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+            return addDomHandler(handler,MouseOverEvent.getType());
+        }
+
+        public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+            return addDomHandler(handler,MouseMoveEvent.getType());
+        }
+
+        public HandlerRegistration addMouseWheelHandler(
+                MouseWheelHandler handler) {
+            return addDomHandler(handler,MouseWheelEvent.getType());
+        }
+    }
+    
+    private class ProgressBar extends AbsolutePanel {
+        
+        AbsolutePanel prog = new AbsolutePanel();
+        Label pct = new Label();
+        
+        public ProgressBar() {
+            setSize("75px","12px");
+            add(prog,0,0);
+            add(pct,30,0);
+            setStyleName("ProgressBarOuter");
+            prog.setHeight("100%");
+            prog.setWidth("0%");
+            setWidgetPosition(prog, 0, 0);
+            prog.setStyleName("ProgressBar");
+            pct.setStyleName("ProgressBarPct");
+            DOM.setStyleAttribute(pct.getElement(), "zIndex","1000");
+            
+        }
+        
+        public void setProgress(int percent) {
+            prog.setWidth(percent+"%");
+            pct.setText(percent+"%");
+        }
+        
+    }
 	
 
 }

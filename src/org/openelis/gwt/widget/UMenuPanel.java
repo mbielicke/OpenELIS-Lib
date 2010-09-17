@@ -41,9 +41,9 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class will display a group of MenuItems in a vertical display that pops up over 
@@ -190,57 +190,40 @@ public class UMenuPanel extends PopupPanel {
                     popMenu.hide();
             }
         });
+        
     }
     
     /**
      * This method will add MenuItem and other widgets to the display of this panel
      */
-    public void add(Widget wid){
-        final UMenuItem item;
-        
-        panel.add(wid);
+    public void addItem(UMenuItem item){
+        panel.add(item);
         
         /*
          * Setup MouseOver on MenuItem to open child Menus if necessary
          */
-        if(wid instanceof UMenuItem) {
-            item = (UMenuItem)wid;
-            item.addMouseOverHandler(new MouseOverHandler() {
-               public void onMouseOver(MouseOverEvent event) {
-                   /*
-                    * Hide any currently shown ChildMenu and remove CloseHandlerRegistration
-                    */
-                   if(popMenu != null && popMenu.isShowing()){  
-                       /*
-                        * IMPORTANT!!!!! removeHandler first so we don't collapse menu tree
-                        */
-                       popReg.removeHandler();
-                       popMenu.hide();
-                   }
-                   
-                   /*
-                    * Show child Menu child and register a CloseHandler so this Parent menu can 
-                    * be closed and propagated up if an item in child is clicked
-                    */
-                   if(item.hasChildMenu()){
-                       popMenu = item.showChild();
-                       popReg = popMenu.addCloseHandler(new CloseHandler<PopupPanel>() {
-                           public void onClose(CloseEvent<PopupPanel> event) {
-                               hide();
-                           }
-                       });
-                   }
-                } 
-            });
-            /*
-             * Hide this panel if one of it's items is clicked
-             */
-            item.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
-                    hide();
-                }
-            });
-        }
+        item.addMouseOverHandler(new MouseOverHandler() {
+           public void onMouseOver(MouseOverEvent event) {
+               /*
+                * Hide any currently shown ChildMenu
+                */
+               if(popMenu != null && popMenu.isShowing())  
+                   popMenu.hide();
+            } 
+        });   
+    }
+    
+    public void addItem(final UMenu menu) {
+        panel.add(menu);
+        
+        menu.addMouseOverHandler(new MouseOverHandler() {
+            public void onMouseOver(MouseOverEvent event) {
+                if(popMenu != null && popMenu.isShowing())
+                    popMenu.hide();
+                
+                popMenu = menu.showSubMenu();
+            }
+        });
     }
     
     /**
@@ -249,6 +232,13 @@ public class UMenuPanel extends PopupPanel {
     public void clear(){
         panel.clear();
     } 
+    
+    /**
+     * Adds a line separating items int the panel
+     */
+    public void addMenuSeparator() {
+        panel.add(new HTML("<hr/>"));
+    }
     
     /**
      * Method overridden to check if the Menu's height needs to be adjusted and 

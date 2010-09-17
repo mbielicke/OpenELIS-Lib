@@ -28,9 +28,10 @@ package org.openelis.gwt.widget.redesign.table;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.Dropdown;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 
@@ -80,6 +81,7 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
                              int col,
                              T value,
                              GwtEvent event) {
+        System.out.println("Value = "+value);
         editor.setQueryMode(false);
         editor.setValue(value);
         placeWidget(table, flexTable, row, col);
@@ -110,7 +112,6 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
     public Object finishEditing(Table table, FlexTable flexTable, int row, int col) {
         table.ignoreUpDown(false);
         table.ignoreReturn(false);
-        
         if(table.getQueryMode()){
             editor.validateQuery();
             table.setValidateException(row, col, editor.getValidateExceptions());
@@ -118,9 +119,10 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
             return editor.getQuery();
         }
         
+        editor.setFocus(false);
         editor.validateValue();
         table.setValidateException(row, col, editor.getValidateExceptions());
-        editor.setFocus(false);
+       
         return editor.getValue();
     }
     
@@ -168,10 +170,10 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
             container.setHeight((table.getRowHeight()-3)+"px");
         }
         flexTable.setWidget(row, col, container);
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
+        //DeferredCommand.addCommand(new Command() {
+          //  public void execute() {
                 editor.setFocus(true);
-            }
-        });
+           // }
+       // });
     }
 }

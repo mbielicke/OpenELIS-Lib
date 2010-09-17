@@ -25,8 +25,6 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
-import java.util.Date;
-
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.ScrollBarEvent;
 import org.openelis.gwt.event.ScrollBarHandler;
@@ -165,8 +163,7 @@ public class View extends Composite {
             @SuppressWarnings("unchecked")
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
-                table.startEditing(table.convertViewIndexToModel(firstVisibleRow +
-                                                                 cell.getRowIndex()),
+                table.startEditing(firstVisibleRow + cell.getRowIndex(),
                                    cell.getCellIndex(), (GwtEvent)event);
             }
         });
@@ -186,7 +183,7 @@ public class View extends Composite {
                 lastX = event.getClientX();
                 lastY = event.getClientY();
                 c = table.getColumnForX(event.getX());
-                mr = table.convertViewIndexToModel(firstVisibleRow + (event.getY() / rowHeight));
+                mr = firstVisibleRow + (event.getY() / rowHeight);
 
                 if (mr == lastRow && c == lastCol)
                     return;
@@ -358,7 +355,7 @@ public class View extends Composite {
         /*
          * Determine new fr and rc if startR is set
          */
-        smr = table.convertModelIndexToView(smr);
+
         if (smr >= 0) {
             if (smr > lvr)
                 fvr = lvr + 1;
@@ -370,7 +367,7 @@ public class View extends Composite {
         /*
          * Determine new lr if endR is set
          */
-        emr = table.convertModelIndexToView(emr);
+
         if (emr >= 0) {
             if (emr < fvr)
                 lvr = fvr - 1;
@@ -428,7 +425,7 @@ public class View extends Composite {
         /*
          * Remove extra rows at the end of the view if necessary
          */
-        if (table.getViewRowCount() < flexTable.getRowCount()) {
+        if (table.getRowCount() < flexTable.getRowCount()) {
             int remove = flexTable.getRowCount() - rc;
             while (remove-- > 0)
                 flexTable.removeRow(rc);
@@ -438,7 +435,7 @@ public class View extends Composite {
          * Check if scrollbar needs to be made visible or hidden
          */
         if (table.getVerticalScroll() == Scrolling.AS_NEEDED) {
-            if (table.getViewRowCount() > table.getVisibleRows())
+            if (table.getRowCount() > table.getVisibleRows())
                 vertScrollBar.setVisible(true);
             else
                 vertScrollBar.setVisible(false);
@@ -450,17 +447,14 @@ public class View extends Composite {
      * This method will apply either a style that is set in the Row getStyle
      * method or the selection style if the row is selected
      */
-    protected void applyRowStyle(int vr, int rc) {
-        int mr;
+    protected void applyRowStyle(int r, int rc) {
         String style;
 
-        mr = table.convertViewIndexToModel(vr);
-
-        style = table.getRowAt(mr).getStyle(mr);
+        style = table.getRowAt(r).getStyle(r);
         if (style != null)
             flexTable.getRowFormatter().setStyleName(rc, style);
 
-        if (table.isRowSelected(mr))
+        if (table.isRowSelected(r))
             flexTable.getRowFormatter().addStyleName(rc, "Selection");
         else
             flexTable.getRowFormatter().removeStyleName(rc, "Selection");
@@ -469,12 +463,12 @@ public class View extends Composite {
     /**
      * Applies the selection style to a table row
      * 
-     * @param mr
+     * @param r
      */
-    protected void applySelectionStyle(int mr) {
+    protected void applySelectionStyle(int r) {
         int rc;
 
-        rc = getFlexTableIndex(table.convertModelIndexToView(mr));
+        rc = getFlexTableIndex(r);
         if (rc > -1)
             flexTable.getRowFormatter().addStyleName(rc, "Selection");
     }
@@ -482,12 +476,12 @@ public class View extends Composite {
     /**
      * Removes the Selection style from a table row
      * 
-     * @param mr
+     * @param r
      */
-    protected void applyUnselectionStyle(int mr) {
+    protected void applyUnselectionStyle(int r) {
         int rc;
 
-        rc = getFlexTableIndex(table.convertModelIndexToView(mr));
+        rc = getFlexTableIndex(r);
         if (rc > -1)
             flexTable.getRowFormatter().removeStyleName(rc, "Selection");
     }
@@ -499,40 +493,27 @@ public class View extends Composite {
      * @param row
      * @param col
      */
-    protected void renderCell(int mr, int c) {
-        int rc, vr;
+    protected void renderCell(int r, int c) {
+        int rc;
 
-        vr = table.convertModelIndexToView(mr);
-        rc = getFlexTableIndex(vr);
+        rc = getFlexTableIndex(r);
 
         if (rc > -1)
-            renderCell(rc, c, vr, mr);
+            renderCell(rc, c, r);
     }
 
-    /**
-     * Method will get the columns cell renderer for the passed row and col and
-     * redraw the cell based on the value in the tabel model for that cell.
-     * 
-     * @param rc
-     * @param c
-     * @param vr
-     */
-   
-    private void renderCell(int rc, int c, int vr) {
-        renderCell(rc, c, vr, table.convertViewIndexToModel(vr));
-    }
     
     @SuppressWarnings("unchecked")
-    private void renderCell(int rc, int c, int vr, int mr) {
+    private void renderCell(int rc, int c, int r) {
 
         if (table.getQueryMode())
             table.getColumnAt(c).getCellRenderer().renderQuery(table, flexTable, rc, c,
-                                                               (QueryData)table.getValueAt(mr, c));
+                                                               (QueryData)table.getValueAt(r, c));
         else
             table.getColumnAt(c).getCellRenderer().render(table, flexTable, rc, c,
-                                                          table.getValueAt(mr, c));
+                                                          table.getValueAt(r, c));
 
-        if (table.hasExceptions(mr, c))
+        if (table.hasExceptions(r, c))
             flexTable.getCellFormatter().addStyleName(rc, c, "InputError");
         else
             flexTable.getCellFormatter().removeStyleName(rc, c, "InputError");
@@ -542,16 +523,16 @@ public class View extends Composite {
      * Will put the passed cell into edit mode making sure the the cell is
      * compeltely visible first
      * 
-     * @param mr
+     * @param r
      * @param c
      * @param value
      * @param event
      */
     @SuppressWarnings("unchecked")
-    public void startEditing(int mr, final int c, Object value, GwtEvent event) {
+    public void startEditing(int r, final int c, Object value, GwtEvent event) {
         int rc, x1, x2, v1, v2;
 
-        rc = getFlexTableIndex(table.convertModelIndexToView(mr));
+        rc = getFlexTableIndex(r);
         /*
          * Get X coord of the column in the table
          */
@@ -575,22 +556,22 @@ public class View extends Composite {
         if (table.getQueryMode())
             table.getColumnAt(c)
                  .getCellEditor()
-                 .startQueryEditing(table, flexTable, rc, c, (QueryData)table.getValueAt(mr, c),
+                 .startQueryEditing(table, flexTable, rc, c, (QueryData)table.getValueAt(r, c),
                                     event);
         else
             table.getColumnAt(c).getCellEditor().startEditing(table, flexTable, rc, c,
-                                                              table.getValueAt(mr, c), event);
+                                                              table.getValueAt(r, c), event);
     }
 
     /**
      * Returns the value of the CellEditor
      * 
-     * @param mr
+     * @param r
      * @param c
      * @return
      */
-    protected Object finishEditing(int mr, int c) {
-        return table.getColumnAt(c).getCellEditor().finishEditing(table, flexTable, mr, c);
+    protected Object finishEditing(int r, int c) {
+        return table.getColumnAt(c).getCellEditor().finishEditing(table, flexTable, r, c);
     }
 
     /**
@@ -600,9 +581,9 @@ public class View extends Composite {
      * @param viewIndex
      * @return
      */
-    private int getFlexTableIndex(int vr) {
-        if (isRowVisible(vr))
-            return vr - firstVisibleRow;
+    private int getFlexTableIndex(int r) {
+        if (isRowVisible(r))
+            return r - firstVisibleRow;
         return -1;
     }
 
@@ -615,7 +596,7 @@ public class View extends Composite {
         if (vertScrollBar == null)
             return;
 
-        vertScrollBar.adjustScrollMax(table.getViewRowCount() * rowHeight);
+        vertScrollBar.adjustScrollMax(table.getRowCount() * rowHeight);
     }
 
     /**
@@ -631,10 +612,10 @@ public class View extends Composite {
             if (vertScrollBar != null) {
                 firstVisibleRow = (int) (vertScrollBar.getScrollPosition() / rowHeight);
                 lastVisibleRow = Math.min(firstVisibleRow + table.getVisibleRows() - 1,
-                                          table.getViewRowCount() - 1);
+                                          table.getRowCount() - 1);
             } else {
                 firstVisibleRow = 0;
-                lastVisibleRow = Math.min(table.getVisibleRows() - 1, table.getViewRowCount() - 1);
+                lastVisibleRow = Math.min(table.getVisibleRows() - 1, table.getRowCount() - 1);
             }
         }
 
@@ -647,23 +628,20 @@ public class View extends Composite {
      * @param r
      * @return
      */
-    protected boolean scrollToVisible(int mr) {
-        int vr;
-
-        vr = table.convertModelIndexToView(mr);
+    protected boolean scrollToVisible(int r) {
 
         computeVisibleRows();
 
         if (vertScrollBar == null)
             return false;
 
-        if (isRowVisible(vr))
+        if (isRowVisible(r))
             return false;
 
-        if (vr >= firstVisibleRow)     
-            vr -= table.getVisibleRows() + 1;
+        if (r >= firstVisibleRow)     
+            r -= table.getVisibleRows() + 1;
 
-        vertScrollBar.setScrollPosition(vr * rowHeight);
+        vertScrollBar.setScrollPosition(r * rowHeight);
 
         return true;
     }
@@ -686,8 +664,8 @@ public class View extends Composite {
 
         if (fr < 0)
             fr = 0;
-        else if (fr >= table.getViewRowCount())
-            fr = table.getViewRowCount() - table.getVisibleRows() + 1;
+        else if (fr >= table.getRowCount())
+            fr = table.getRowCount() - table.getVisibleRows() + 1;
 
         vertScrollBar.setScrollPosition(fr * rowHeight);
 
@@ -696,11 +674,11 @@ public class View extends Composite {
     /**
      * Returns true if the passed row is drawn in the current view
      * 
-     * @param vr
+     * @param r
      * @return
      */
-    protected boolean isRowVisible(int vr) {
-        return vr >= firstVisibleRow && vr <= lastVisibleRow;
+    protected boolean isRowVisible(int r) {
+        return r >= firstVisibleRow && r <= lastVisibleRow;
     }
 
     /**
@@ -709,7 +687,6 @@ public class View extends Composite {
      */
     @Override
     protected void onAttach() {
-        System.out.println(" on load " + table.getVisibleRows());
 
         if ( !isOrWasAttached()) {
             attached = true;

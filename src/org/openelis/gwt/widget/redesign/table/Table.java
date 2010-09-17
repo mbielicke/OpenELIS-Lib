@@ -27,12 +27,14 @@ package org.openelis.gwt.widget.redesign.table;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
@@ -64,11 +66,14 @@ import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -80,7 +85,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -112,12 +119,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Model used by the Table
      */
-    protected ArrayList<Row>               model;
-    protected ArrayList<Row>               modelView;
+    protected ArrayList<Row>               model, modelView, modelSort;
     protected HashMap<Row, RowIndexes>     rowIndex;
     
-    protected ArrayList<Filter>            filters;
-
     /**
      * Columns used by the Table
      */
@@ -172,6 +176,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     protected TableDragController dragController;
     protected TableDropController dropController;
+    
+    public static final int SORT_ASCENDING = 1,
+                            SORT_DESCENDING = -1;
 
     /**
      * Default no-arg constructor that initializes all needed fields so the
@@ -209,7 +216,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                 if ( !isEnabled())
                     return;
 
-                row = convertModelIndexToView(editingRow);
+                row = editingRow;
                 col = editingCol;
 
                 switch (event.getNativeEvent().getKeyCode()) {
@@ -228,11 +235,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                                 if (col >= getColumnCount()) {
                                     col = 0;
                                     row++ ;
-                                    if (row >= getViewRowCount())
+                                    if (row >= getRowCount())
                                         break;
 
                                 }
-                                if (startEditing(convertViewIndexToModel(row), col))
+                                if (startEditing(row,col))
                                     break;
                             }
                         } else {
@@ -244,7 +251,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                                     if (row < 0)
                                         break;
                                 }
-                                if (startEditing(convertViewIndexToModel(row), col))
+                                if (startEditing(row,col))
                                     break;
                             }
                         }
@@ -259,9 +266,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                                 row = getSelectedRow();
                                 while (true) {
                                     row++ ;
-                                    if (row >= getViewRowCount())
+                                    if (row >= getRowCount())
                                         break;
-                                    if (selectRowAt(convertViewIndexToModel(row)))
+                                    if (selectRowAt(row))
                                         break;
                                 }
                             }
@@ -270,9 +277,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                         // If editing set focus to the same col cell in the next selectable row below
                         while (true) {
                             row++ ;
-                            if (row >= getViewRowCount())
+                            if (row >= getRowCount())
                                 break;
-                            if (startEditing(convertViewIndexToModel(row), col))
+                            if (startEditing(row,col))
                                 break;
                         }
                         break;
@@ -282,12 +289,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                         // If Not editing select the next row above the current selection 
                         if ( !isEditing()) {
                             if (isAnyRowSelected()) {
-                                row = convertModelIndexToView(getSelectedRow());
+                                row = getSelectedRow();
                                 while (true) {
                                     row-- ;
                                     if (row < 0)
                                         break;
-                                    if (selectRowAt(convertViewIndexToModel(row)))
+                                    if (selectRowAt(row))
                                         break;
                                 }
                             }
@@ -298,7 +305,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                             row-- ;
                             if (row < 0)
                                 break;
-                            if (startEditing(convertViewIndexToModel(row), col))
+                            if (startEditing(row,col))
                                 break;
                         }
                         break;
@@ -312,10 +319,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                         }
                         // If not editing and a row is selected, focus on first editable cell
                         if (isAnyRowSelected()) {
-                            row = convertModelIndexToView(getSelectedRow());
+                            row = getSelectedRow();
                             col = 0;
                             while(col < getColumnCount()) {
-                                if(startEditing(convertViewIndexToModel(row), col))
+                                if(startEditing(row,col))
                                     break;
                                 col++;
                                 
@@ -417,100 +424,183 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     public void setModel(ArrayList<? extends Row> model) {
         finishEditing();
         this.model = (ArrayList<Row>)model;
-        modelView = null;
+        modelView = this.model;
         rowIndex = null;
         //if ( !scrollToVisible(0))
             renderView( -1, -1);
 
+    }
+    
+    /**
+     * This method will filter the table by any filters that are in force and 
+     * maintain any sort order of the table.
+     */
+    public void applyFilters() {
+        boolean include, filtersApplied = false;
+        Filter filter;
+               
+        if(model == null)
+            return;
+        
+        finishEditing();
+
+        /*
+         * Check if any filters are in force
+         */
+        for(int i = 0; i < getColumnCount(); i++) {
+            if(getColumnAt(i).isFiltered()) {
+                filtersApplied = true;
+                break;
+            }
+        }
+ 
+        /*
+         * if no filters are in force revert modelView back to model and return;
+         */
+        if(!filtersApplied) {
+            modelView = model;
+            rowIndex = null;
+            renderView( -1, -1);
+            return;
+        }
+        
+        /*
+         * Reset the modelView and the rowIndex hash
+         */
+        modelView = new ArrayList<Row>();
+        rowIndex = new HashMap<Row,RowIndexes>();
+        for(int i = 0; i < model.size(); i++) 
+            rowIndex.put(model.get(i),new RowIndexes(i,-1));
+        
+        
+        /*
+         * Run through model and filter out rows
+         */
+        for(int i = 0; i < model.size(); i++) {
+            include = true;
+            for(int j = 0; j < columns.size(); j++) {
+                filter = getColumnAt(j).getFilter();
+                
+                if(filter != null && !filter.include(model.get(i).getCell(j))) {
+                    include = false;
+                    break;
+                }
+            }
+            if(include) {
+                modelView.add(model.get(i));
+                rowIndex.get(model.get(i)).view = modelView.size()-1;
+            }
+        }
+
+        /*
+         * If nodel is not sorted and no rows were filtered reset the modelView back to model
+         */
+        if(modelView.size() == model.size()) {
+           modelView = model;
+           rowIndex = null;
+        }
+        
+        //if ( !scrollToVisible(0))
+            renderView( -1, -1);
     }
 
     /**
-     * Method for testing only.  This will be done by applying filter
-     * 
-     * @param rowsView
+     * This method will take the passed view index and return the corresponding original 
+     * model index of the row.
+     * @param index
+     * @return
      */
-    public void setViewModel(ArrayList<Row> rowsView) {
-        assert model != null : "You must set initial model before setting a view model";
+    public int convertViewIndexToModel(int index) {
+        int i = index;
         
-        this.modelView = rowsView;
-        rowIndex = new HashMap<Row, RowIndexes>();
-        for(int i = 0; i < model.size(); i++) 
-            rowIndex.put(model.get(i), new RowIndexes(i,-1));
+        if (rowIndex != null && index >= 0)   
+            i = rowIndex.get(modelView.get(index)).model;        
         
-        for(int i = 0; i < rowsView.size(); i++) 
-            rowIndex.get(rowsView.get(i)).view = i;
-        
-        //if ( !scrollToVisible(0))
-            renderView( -1, -1);
+        return i;
+    }
 
-    }
-    
-    public void addFilter(Filter filter) {
-        if(filters == null) 
-            filters = new ArrayList<Filter>();
+    /**
+     * This method will take the passed model index of a row and return the corresponding 
+     * view index for the row.  If the model row is currently not in the view then the a 
+     * value of -1 will be returned.
+     * @param modelIndex
+     * @return
+     */
+    public int convertModelIndexToView(int modelIndex) {
+        int i = modelIndex;
+        RowIndexes rowInd;
         
-        filters.add(filter);
+        if (rowIndex != null && modelIndex >= 0) {  
+            rowInd = rowIndex.get(model.get(modelIndex));
+            if(rowInd != null)
+                i = rowInd.view;
+            else 
+                i = -1;
+        }
         
-        applyFilter(filter);
+        return i;
     }
-    
-    public void removeFilter(Filter filter) {
-        if(filters == null)
+
+    /**
+     * This method will adjust the RowIndexes when a row is added to or removed from the 
+     * table when a view is applied.
+     * @param modelIndex
+     * @param row
+     * @param adj
+     */
+    private void adjustRowIndexes(int modelIndex, int row, int adj) {
+        RowIndexes r;
+        
+        if(rowIndex == null)
             return;
         
-        filters.remove(filter);
-        
-        modelView = null;
-        rowIndex = null;
-        
-        if(!filters.isEmpty()) { 
-            for(Filter filt : filters)
-                applyFilter(filt);
-        }
-        
-        renderView(-1,-1);        
-    }
-    
-    protected void applyFilter(Filter filter) {
-        assert model != null : "You must set initial model before setting a view model";
-        
-        if(modelView == null) {    
-            modelView = new ArrayList<Row>();
-            rowIndex = new HashMap<Row, RowIndexes>();
-            for(int i = 0; i < model.size(); i++) 
-                rowIndex.put(model.get(i), new RowIndexes(i,-1));
-                
-            for(int i = 0; i < model.size(); i++) {
-                if(filter.applyFilter(model.get(i))) {
-                    modelView.add(model.get(i));
-                    rowIndex.get(model.get(i)).view = modelView.size()-1;
-                }
-            }
-        }
-        //if ( !scrollToVisible(0))
-            renderView( -1, -1);
-    }
-
-    protected int convertViewIndexToModel(int index) {
-        if (rowIndex != null && index >= 0)
-            return rowIndex.get(modelView.get(index)).model;
-        return index;
-    }
-
-    protected int convertModelIndexToView(int modelIndex) {
-        if (rowIndex != null && modelIndex >= 0)
-            return rowIndex.get(model.get(modelIndex)).view;
-        return modelIndex;
-    }
-
-    private void adjustRowIndexes(int modelIndex, int row, int adj) {
         for(int i = row; i < modelView.size(); i++) 
             rowIndex.get(modelView.get(i)).view += adj;
         
-        for(int i = modelIndex; i < model.size(); i++) 
-            rowIndex.get(model.get(i)).model += adj;
+        for(int i = modelIndex; i < model.size(); i++) {
+            r = rowIndex.get(model.get(i));
+            if(r != null)
+                r.model += adj;
+        }
+        
+        for(int i = 0; i < selections.size(); i++) {
+            if(selections.get(i) >= row)
+                selections.set(i, selections.get(i)+adj);
+        }
     }
-
+    
+    /**
+     * This method will apply the passed sort and sort direction passed to the 
+     * table model.
+     * @param sort
+     * @param desc
+     */
+    @SuppressWarnings("unchecked")
+    public void applySort(int col, int dir, Comparator comp) {       
+        /*
+         * Setup the modelView as its own object if not already
+         */
+        if(modelView == model) {
+            modelView = new ArrayList<Row>(model.size());
+            rowIndex = new HashMap<Row, RowIndexes>();
+            for(int i = 0; i < model.size(); i++) {
+                modelView.add(model.get(i));
+                rowIndex.put(model.get(i), new RowIndexes(i,-1));
+            }                
+        }
+        
+        Collections.sort(modelView, new Sort(col,dir,comp));
+        
+        /*
+         * Set the view index of the hash based on the sort
+         */
+        for(int i = 0; i < modelView.size(); i++) 
+            rowIndex.get(modelView.get(i)).view = i;
+                
+        renderView(-1,-1);
+    }
+    
+ 
     /**
      * Returns the current size of the held model. Returns zero if a model has
      * not been set.
@@ -518,19 +608,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public int getRowCount() {
-        if (model == null)
+        if (modelView == null)
             return 0;
 
-        return model.size();
-    }
-    
-    public int getViewRowCount() {
-        if(modelView == null)
-            return getRowCount();
-        
         return modelView.size();
     }
-
+ 
     /**
      * Used to determine the table has more than one row currently selected.
      * 
@@ -709,6 +792,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                 return i;
         }
         return -1;
+    }
+    
+    public int getColumn(Column col) {
+        return columns.indexOf(col);
     }
 
     /**
@@ -898,7 +985,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      *         returned or if a Row is passed to the method it will echoed back.
      */
     private Row addRow(int index, Row row) {
-        int viewIndex;
+        int modelIndex;
         
         finishEditing();
 
@@ -910,16 +997,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         /* Add row to model and then to view */
        
-        if(modelView != null) {
-            viewIndex = convertModelIndexToView(index);
-            if(viewIndex < 0)
-                viewIndex = getViewRowCount();
-            modelView.add(viewIndex, row);
-            rowIndex.put(row,new RowIndexes(index,viewIndex));
-            model.add(index,row);
-            adjustRowIndexes(index+1, viewIndex+1, 1);
-        }else
-            model.add(index, row);
+        if(rowIndex != null) {
+            modelIndex = convertViewIndexToModel(index);
+            model.add(modelIndex,row);
+            rowIndex.put(row,new RowIndexes(modelIndex,index));
+            adjustRowIndexes(modelIndex+1, index, 1);
+        }
+        modelView.add(index,row);
        
         renderView(index, -1);
 
@@ -937,7 +1021,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Row removeRowAt(int index) {
-        int viewIndex;
+        int modelIndex;
         Row row;
 
         finishEditing();
@@ -947,16 +1031,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         if ( !fireBeforeRowDeletedEvent(index, row))
             return null;
 
-      
-        if(modelView != null) {
-            viewIndex = convertModelIndexToView(index);
+       
+        if(rowIndex != null) {
+            modelIndex = convertViewIndexToModel(index);
+            model.remove(modelIndex);
             rowIndex.remove(row);
-            modelView.remove(viewIndex);
-            model.remove(index);
-            adjustRowIndexes(index, viewIndex, -1);
-        }else
-            model.remove(index);
-
+            adjustRowIndexes(modelIndex,index+1,-1);
+        }
+        modelView.remove(index);
+        
         renderView(index, -1);
 
         fireRowDeletedEvent(index, row);
@@ -982,7 +1065,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Row getRowAt(int row) {
-        return model.get(row);
+        return modelView.get(row);
     }
 
     // ************ Selection Methods ***************
@@ -1050,8 +1133,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         i = new Integer(index);
         if (selections.contains(i)) {
             finishEditing();
-            if ( !fireUnselectEvent(index))
-                return;
+            fireUnselectEvent(index);
             selections.remove(i);
             view.applyUnselectionStyle(index);
         }
@@ -1101,8 +1183,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         if (isMultipleRowsSelected())
             index = -1;
 
-        if ( !fireUnselectEvent(index))
-            return;
+        fireUnselectEvent(index);
 
         for (int i = 0; i < selections.size(); i++ )
             view.applyUnselectionStyle(selections.get(i));
@@ -1150,13 +1231,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param index
      * @return
      */
-    public boolean fireUnselectEvent(int index) {
+    public void fireUnselectEvent(int index) {
         UnselectionEvent<Integer> event = null;
 
         if ( !queryMode)
             event = UnselectionEvent.fire(this, index, -1);
-
-        return event == null || !event.isCanceled();
     }
 
     /**
@@ -1280,7 +1359,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setValueAt(int row, int col, Object value) {
         finishEditing();
-        model.get(row).setCell(col, value);
+        modelView.get(row).setCell(col, value);
         refreshCell(row, col);
     }
 
@@ -1292,7 +1371,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setRowAt(int index, Row row) {
         finishEditing();
-        model.set(index, row);
+        modelView.set(index, row);
         renderView(index, index);
     }
 
@@ -1304,9 +1383,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Object getValueAt(int row, int col) {
-        if (model == null)
+        if (modelView == null)
             return null;
-        return model.get(row).getCell(col);
+        return modelView.get(row).getCell(col);
     }
 
     /**
@@ -1461,7 +1540,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
          */
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col);
-        model.get(row).setCell(col, newValue);
+        modelView.get(row).setCell(col, newValue);
         refreshCell(row, col);
 
         /*
@@ -1903,30 +1982,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         ExceptionHelper.drawExceptions(getEndUserExceptions(row, col), getValidateExceptions(row, col), x, y);
     }
     
-    protected UMenuPanel getMenuForColumn(int col) {
-        UMenuPanel panel;
-        UMenuItem  item;
-        
-        panel = new UMenuPanel();
-        panel.setStyleName("MenuPanel");
-        
-        if(getColumnAt(col).isSortable()) {
-            item = new UMenuItem(UMenuItem.createAppMenuItem("Ascending", "Ascending","",false));
-            panel.add(item);
-            item = new UMenuItem(UMenuItem.createAppMenuItem("Descending", "Descending", "", false));
-            panel.add(item);
-            if(getColumnAt(col).isFilterable())
-                panel.add(new HTML("<hr/>"));
-        }
-        
-        if(getColumnAt(col).isFilterable()) {
-            item = new UMenuItem(UMenuItem.createFilterMenuItem("All"));
-            panel.add(item);
-        }
-        
-        return panel;
 
-    }
     //******************** Drag and Drop methods ****************************************
     /**
      * Method will enable the rows in the table to be dragged. This must be
@@ -2140,6 +2196,28 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
             this.model = model;
             this.view = view;
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private class Sort implements Comparator<Row> {
+        int col,dir;       
+        Comparator comparator;
+        
+
+        public Sort(int col, int dir, Comparator comparator) {
+            this.col = col;
+            this.dir = dir;
+            this.comparator = comparator;
+        }
+        
+        public int compare(Row o1, Row o2) {
+            if(comparator != null)
+                return dir * comparator.compare(o1.getCell(col), o2.getCell(col));
+            return dir * ((Comparable)o1.getCell(col)).compareTo((Comparable)o2.getCell(col));
+        };
+        
+        
+        
     }
 
 }

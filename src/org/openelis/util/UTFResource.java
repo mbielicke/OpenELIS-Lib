@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
 public class UTFResource {
     
     private PropertyResourceBundle bundle;
-    private static final String OPENELIS_CONSTANTS = "org.openelis.modules.main.server.constants.OpenELISConstants";
+    private static final String OPENELIS_CONSTANTS = "org.openelis.constants.OpenELISConstants";
     public static String DEFAULT_LANG = "en";
     private static HashMap<String, UTFResource> cache = new HashMap<String,UTFResource>();
     

@@ -25,6 +25,8 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
+import java.util.Comparator;
+
 import org.openelis.gwt.widget.Label;
 
 /**
@@ -39,6 +41,9 @@ public class Column {
      * Reference to the Table containing this column
      */
     protected Table        table;
+    
+    protected Filter       filter;
+    protected Comparator   sort;
     
     /**
      * Editor widget used for this column
@@ -66,7 +71,7 @@ public class Column {
     /**
      * Boolean flags used by column
      */
-    protected boolean      enabled, resizable, filterable, filtered, sortable, sorted, required;
+    protected boolean      enabled, resizable, isFiltered, isSorted, isSortable, required;
 
 
     /**
@@ -272,15 +277,7 @@ public class Column {
      * @return
      */
     public boolean isFilterable() {
-        return filterable;
-    }
-
-    /**
-     * Method used to set the filterable flag for this column
-     * @param filterable
-     */
-    public void setFilterable(boolean filterable) {
-        this.filterable = filterable;
+        return filter != null;
     }
     
     /**
@@ -288,15 +285,17 @@ public class Column {
      * @return
      */
     public boolean isFiltered() {
-        return filtered;
+        return isFiltered;
     }
-
-    /**
-     * Method to set the flag indicating that a filter is set for this column
-     * @param filtered
-     */
-    public void setFiltered(boolean filtered) {
-        this.filtered = filtered;
+    
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+        isFiltered = false;
+        
+    }
+    
+    public Filter getFilter() {
+        return filter;
     }
     
     /**
@@ -304,15 +303,21 @@ public class Column {
      * @return
      */
     public boolean isSortable() {
-        return sortable;
+        return isSortable;
+    }
+    
+    public void setSortable(boolean isSortable) {
+        this.isSortable = isSortable;
     }
 
     /**
      * Method used to set the sortable flag for this column
      * @param filterable
      */
-    public void setSortable(boolean sortable) {
-        this.sortable = sortable;
+    public void setSort(Comparator sort) {
+        this.sort = sort;
+        isSorted = false;
+        isSortable = true;
     }
     
     /**
@@ -320,15 +325,7 @@ public class Column {
      * @return
      */
     public boolean isSorted() {
-        return sorted;
-    }
-
-    /**
-     * Method to set the flag indicating that a filter is set for this column
-     * @param filtered
-     */
-    public void setSorted(boolean sorted) {
-        this.sorted = sorted;
+        return isSorted;
     }
 
     /**

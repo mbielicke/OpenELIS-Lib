@@ -319,9 +319,11 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      */
     public void setValue(T value, boolean fireEvents) {
 
-        if(!Util.isDifferent(this.value, value))
+        if(!Util.isDifferent(this.value, value)) {
+            
             return;
-
+        }
+        
         this.value = value;
         if (value != null) {
             textbox.setText(helper.format(value));

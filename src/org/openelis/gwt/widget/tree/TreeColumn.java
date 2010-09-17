@@ -151,7 +151,11 @@ public class TreeColumn {
     		if(val == null)
     		    val = ((HasValue)colWidget).getValue();
     		Label label = new Label("");
-    		label.setStyleName("ScreenLabel");
+    		
+    		if(colWidget instanceof org.openelis.gwt.widget.Label)
+    			label.setStyleName(colWidget.getStyleName());
+    		else
+    			label.setStyleName("ScreenLabel");
     		if(val != null) {
     			if(colWidget instanceof Calendar) {
     			    label.setText((((Calendar)colWidget).getHelper().format((Datetime)val)));

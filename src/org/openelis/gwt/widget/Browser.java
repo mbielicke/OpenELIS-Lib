@@ -32,12 +32,15 @@ import org.openelis.gwt.screen.Screen;
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -52,7 +55,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  * @author tschmidt
  *
  */
-public class WindowBrowser extends Composite {// implements HasKeyPressHandlers, KeyPressHandler {
+public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPressHandler {
     
     /*
      * The main panel used to contain and display windows
@@ -62,7 +65,8 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
     /*
      * Hash of all currently displayed windows
      */
-    protected HashMap<String,ScreenWindow> windows;
+    protected HashMap<Window,WindowValues> windows;
+    protected HashMap<String,Window> windowsByKey;
     
     /*
      * Integers for current zIndex and limit of windows shown
@@ -87,9 +91,9 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
      * @param size
      * @param limit
      */
-    public WindowBrowser(boolean size, int limit) {
+    public Browser(boolean size, int limit) {
         browser = new AbsolutePanel();
-        windows = new HashMap<String,ScreenWindow>();
+        windows = new HashMap<Window, WindowValues>();
         
         dragController = new PickupDragController(browser,true);
         
@@ -111,7 +115,7 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
                               "overflow",
                               "auto");
         if(size){
-            Window.addResizeHandler(new ResizeHandler() {
+            com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler() {
 
 				public void onResize(ResizeEvent event) {
 					 resize();
@@ -148,7 +152,7 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
            key = screen.getClass().getName();
         
         if(windows.size() == limit){
-            Window.alert("Please close at least one window before opening another.");
+            com.google.gwt.user.client.Window.alert("Please close at least one window before opening another.");
             return;
         }
         
@@ -169,9 +173,9 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
          * Create a ScreenWindow and add the passed Screen to it to be added to the
          * browser.
          */
-        ScreenWindow window = new ScreenWindow(this, key);
+        Window window = new Window();
         window.setContent(screen);
-        screen.setWindow(window);
+        //screen.setWindow(window);
         addWindow(window,key);
     }
     
@@ -180,10 +184,28 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
      * @param window
      * @param key
      */
-    public void addWindow(ScreenWindow window, String key) {
+    public void addWindow(Window window, String key) {
+        WindowValues wv;
+        
     	index++;
     	browser.add(window,(windows.size()*25),(windows.size()*25));
-    	windows.put(key, window);
+    	wv = new WindowValues();
+    	wv.key = key;
+    	wv.zIndex = index;
+    	windows.put(window,wv);
+    	windowsByKey.put(key,window);
+    	window.addCloseHandler(new CloseHandler<Window>() {
+    	    public void onClose(CloseEvent<Window> event) {
+    	       windowsByKey.remove(windows.remove(event.getSource()).key);
+    	       setFocusedWindow();
+    	    }
+    	});
+    	window.addFocusHandler(new FocusHandler() {
+    	    public void onFocus(FocusEvent event) {
+    	        selectScreen(windows.get(event.getSource()).key);
+    	        
+    	    }
+    	});
     	setFocusedWindow();
     }
     
@@ -193,20 +215,19 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
      * @return
      */
     public boolean selectScreen(String key) {
-    	if (windows.containsKey(key)) {
-    		ScreenWindow wid = windows.get(key);
-    		if(index != wid.zIndex){
+        Window wid;
+        WindowValues wv;
+        
+    	if (windowsByKey.containsKey(key)) {
+    	    wid = windowsByKey.get(key);
+    		wv = windows.get(wid);
+    		
+    		if(index != wv.zIndex){
     			index++;
-    			wid.zIndex = index;
+    			wv.zIndex = index;
     			int top = browser.getWidgetTop(wid);
     			int left = browser.getWidgetLeft(wid);
-    			if(wid.content instanceof ReportFrame){
-    				//browser.setWidgetPosition(wid, left, top);
-    				DOM.setStyleAttribute(wid.getElement(), "zIndex", String.valueOf(index));
-    				DOM.setStyleAttribute(wid.content.getElement(), "zIndex", String.valueOf(index));
-    				
-    			}else
-    				browser.add(wid, left, top);
+  				browser.add(wid, left, top);
     			setFocusedWindow();
     		}
     		return true;
@@ -219,8 +240,8 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
      */
     public void resize() {
         if (browser.isVisible()) {
-            browser.setHeight((Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
-            browser.setWidth((Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
+            browser.setHeight((com.google.gwt.user.client.Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
+            browser.setWidth((com.google.gwt.user.client.Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
         }
     }
     
@@ -229,8 +250,8 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
      * top and focused.
      */
     public void setFocusedWindow() {
-    	for(ScreenWindow wid : windows.values()) {
-    		if(wid.zIndex != index){
+    	for(Window wid : windowsByKey.values()) {
+    		if(windows.get(wid).zIndex != index){
     			if(wid.getStyleName().indexOf("unfocused") < 0){	
     				wid.addStyleName("unfocused");
     			}
@@ -239,6 +260,11 @@ public class WindowBrowser extends Composite {// implements HasKeyPressHandlers,
     			focusedWindow = wid;
     		}
     	}
+    }
+    
+    private class WindowValues {
+        protected String key;
+        protected int zIndex;
     }
 
     /*

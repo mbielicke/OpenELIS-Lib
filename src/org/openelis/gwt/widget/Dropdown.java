@@ -481,14 +481,17 @@ public class Dropdown<T> extends TextBox<T> {
     public void setValue(T value, boolean fireEvents) {
         boolean validKey;
 
-        if(!Util.isDifferent(this.value, value))
+        if(!Util.isDifferent(this.value, value)) {
+            System.out.println("this.value = "+this.value+" : value = "+value);
             return;
+        }
 
         if (value != null) {
             validKey = keyHash.containsKey(value);
             assert validKey : "Key not found in Item list";
 
             table.selectRowAt(keyHash.get(value));
+            
             setDisplay();
             //textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
@@ -508,7 +511,13 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     protected void validateValue(boolean fireEvents) {
+        Item<T> item;
         validateExceptions = null;
+        
+        item = getSelectedItem();
+        if (item != null)
+            setValue(item.key, fireEvents);
+
         if (required && value == null) {
             addValidateException(new LocalizedException("fieldRequiredException"));
         }
@@ -821,13 +830,14 @@ public class Dropdown<T> extends TextBox<T> {
         }
     }
 
+    /*
     /** 
      * This class is used to create a sortable and searchable ArrayList 
      * for efficiently finding Items by display names when typing.
      * @author tschmidt
      *
-     */
-    protected class SearchPair implements Comparable<SearchPair> {
+     
+    private class SearchPair implements Comparable<SearchPair> {
 
         public int    modelIndex;
         public String display;
@@ -842,5 +852,5 @@ public class Dropdown<T> extends TextBox<T> {
         }
 
     }
-
+     */
 }
