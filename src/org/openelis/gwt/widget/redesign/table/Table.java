@@ -34,14 +34,11 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
-import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
-import org.openelis.gwt.widget.UMenuItem;
-import org.openelis.gwt.widget.UMenuPanel;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.redesign.table.event.BeforeRowDeletedEvent;
@@ -66,14 +63,11 @@ import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -85,9 +79,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -432,32 +423,37 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
     }
     
     /**
-     * This method will filter the table by any filters that are in force and 
-     * maintain any sort order of the table.
+     * This method will pull all filters in force from the columns and apply them to the 
+     * table model.
      */
     public void applyFilters() {
-        boolean include, filtersApplied = false;
-        Filter filter;
+        ArrayList<Filter> filters;
+        
+        filters = new ArrayList<Filter>();
+        for(Column col : columns) {
+            if(col.getFilter() != null && col.isFiltered)
+                filters.add(col.getFilter());
+        }
+        
+        applyFilters(filters);
+    }
+    
+    
+    /**
+     * This method will filter the table by the filter list that is passed as param
+     */
+    public void applyFilters(ArrayList<Filter> filters) {
+        boolean include;
                
         if(model == null)
             return;
         
         finishEditing();
-
-        /*
-         * Check if any filters are in force
-         */
-        for(int i = 0; i < getColumnCount(); i++) {
-            if(getColumnAt(i).isFiltered()) {
-                filtersApplied = true;
-                break;
-            }
-        }
  
         /*
          * if no filters are in force revert modelView back to model and return;
          */
-        if(!filtersApplied) {
+        if(filters.size() == 0) {
             modelView = model;
             rowIndex = null;
             renderView( -1, -1);
@@ -478,10 +474,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
          */
         for(int i = 0; i < model.size(); i++) {
             include = true;
-            for(int j = 0; j < columns.size(); j++) {
-                filter = getColumnAt(j).getFilter();
-                
-                if(filter != null && !filter.include(model.get(i).getCell(j))) {
+            for(Filter filter : filters) {
+                if(filter != null && !filter.include(model.get(i).getCell(filter.getColumn()))) {
                     include = false;
                     break;
                 }
@@ -493,7 +487,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
         }
 
         /*
-         * If nodel is not sorted and no rows were filtered reset the modelView back to model
+         * If no rows were filtered reset the modelView back to model
          */
         if(modelView.size() == model.size()) {
            modelView = model;
@@ -2215,9 +2209,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
                 return dir * comparator.compare(o1.getCell(col), o2.getCell(col));
             return dir * ((Comparable)o1.getCell(col)).compareTo((Comparable)o2.getCell(col));
         };
-        
-        
-        
     }
 
 }

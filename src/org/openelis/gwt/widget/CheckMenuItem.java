@@ -25,12 +25,11 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Grid;
 
 /**
@@ -39,7 +38,7 @@ import com.google.gwt.user.client.ui.Grid;
  * @author tschmidt
  *
  */
-public class CheckMenuItem extends UMenuItem implements HasValueChangeHandlers<Boolean> {
+public class CheckMenuItem extends MenuItem implements HasValueChangeHandlers<Boolean> {
     
     /**
      * Check box to apply/remove filter  
@@ -60,8 +59,8 @@ public class CheckMenuItem extends UMenuItem implements HasValueChangeHandlers<B
          * Setting this click handler lets the user click anywhere in the menu
          * to toggle the checkbox
          */
-        addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
+        addCommand(new Command() {
+            public void execute() {
                 setCheck(!checked);
                 ValueChangeEvent.fire(source, checked);           
             }

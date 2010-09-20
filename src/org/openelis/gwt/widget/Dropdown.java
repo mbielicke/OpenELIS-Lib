@@ -481,10 +481,9 @@ public class Dropdown<T> extends TextBox<T> {
     public void setValue(T value, boolean fireEvents) {
         boolean validKey;
 
-        if(!Util.isDifferent(this.value, value)) {
-            System.out.println("this.value = "+this.value+" : value = "+value);
+        if(!Util.isDifferent(this.value, value)) 
             return;
-        }
+
 
         if (value != null) {
             validKey = keyHash.containsKey(value);
@@ -493,7 +492,6 @@ public class Dropdown<T> extends TextBox<T> {
             table.selectRowAt(keyHash.get(value));
             
             setDisplay();
-            //textbox.setText(renderer.getDisplay(getSelectedItem()));
         } else {
             table.selectRowAt( -1);
             textbox.setText("");

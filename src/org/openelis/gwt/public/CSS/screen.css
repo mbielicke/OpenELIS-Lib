@@ -154,7 +154,7 @@ width:100%;
     font-weight : bold;
     color:white;
 }
-.Hover .topMenuBarItem, .Selected .topMenuBarItem{
+.topMenuBarItem.Hover, .Selected .topMenuBarItem{
     color:black;
     cursor:pointer;
     padding:3px;
@@ -233,7 +233,7 @@ color:gray;
 .FavMenuRowContainer{
     width:200px;
 }
-.Hover .TopMenuRowContainer, .Hover .FavMenuRowContainer{
+.TopMenuRowContainer.Hover, .FavMenuRowContainer.Hover{
     cursor:pointer;
     padding:0;
     background:url('../Images/white-top-bottom.gif') #d9e8fb repeat-x 0px 0px;

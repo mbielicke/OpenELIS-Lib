@@ -136,7 +136,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
         }
         if(controller.showHeader){
             header = new TableHeaderBar();
-            header.init(controller);
+           // header.init(controller);
             headerView.add(header);
         }
         if(showScroll == VerticalScroll.ALWAYS)

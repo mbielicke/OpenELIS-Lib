@@ -658,7 +658,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		return;
     	}
     	view.header = new TableHeaderBar();
-    	view.header.init(this);
+    	//view.header.init(this);
     	view.table.clear();
     	renderer.dataChanged(false);
     }

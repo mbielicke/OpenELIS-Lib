@@ -31,9 +31,7 @@ import org.openelis.gwt.event.ActionEvent;
 import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
 import org.openelis.gwt.widget.QueryFieldUtil;
-import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.event.SortEvent;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -75,13 +73,13 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TableHeaderBar extends Composite implements MouseMoveHandler, 
-															 MouseDownHandler, 
-															 MouseUpHandler,  
-															 CloseHandler<PopupPanel>, 
-															 ActionHandler<MenuItem.Action>,
-															 ClickHandler,
-															 HasMouseOutHandlers {
+public class TableHeaderBar extends Composite {//implements //MouseMoveHandler, 
+															 //MouseDownHandler, 
+															 //MouseUpHandler,  
+															 //CloseHandler<PopupPanel>, 
+															 //ActionHandler<MenuItem.Action>,
+															 //ClickHandler {
+															// HasMouseOutHandlers {
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
@@ -163,13 +161,14 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
          * Catches mouses Events for resizing columns.
          */
         public void onMouseOut(MouseOutEvent event) {
-        	//Window.alert(""+event.getRelativeY(getElement()));
+        	/*Window.alert(""+event.getRelativeY(getElement()));
             if(pop.isShowing() && !menuItem.popShowing && ((event.getRelativeX(((Widget)event.getSource()).getElement()) <= 0 || event.getRelativeX(((Widget)event.getSource()).getElement()) >= getOffsetWidth())
             		                || (event.getRelativeY(((Widget)event.getSource()).getElement()) <= 0 || event.getRelativeY(((Widget)event.getSource()).getElement()) >= getOffsetHeight()))){
             	//RootPanel.get().remove(menuItem);
             	pop.hide();
             	menuItem = null;
             }
+            */
         }
 
         public void onClose(CloseEvent<PopupPanel> event) {
@@ -198,7 +197,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
 		}
     }
     
-    
+    /*
     public void init(TableWidget controller) {
         
         setStyleName("topHeaderBar");
@@ -279,7 +278,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseDown(MouseDownEvent event) {
     	Widget sender = (Widget)event.getSource();
     	// TODO Auto-generated method stub
@@ -315,7 +314,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseMove(MouseMoveEvent event) {
     	Widget sender = (Widget)event.getSource();
         if(resizing) {
@@ -331,7 +330,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
 
     /**
      * Catches mouses Events for resizing columns.
-     */
+     
     public void onMouseUp(MouseUpEvent event) {
         	Widget sender = (Widget)event.getSource();
             if (resizing) {
@@ -563,11 +562,11 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
     
     public static native String getUserAgent() /*-{
         return navigator.userAgent.toLowerCase();
-     }-*/;
-
+     }-*/
+ /*
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
 		return addDomHandler(handler,MouseOutEvent.getType());
 	}
     
-
+*/
 }

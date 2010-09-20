@@ -26,11 +26,10 @@
 package org.openelis.gwt.widget.redesign.table;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import org.openelis.gwt.widget.CheckMenuItem;
-import org.openelis.gwt.widget.UMenuItem;
-import org.openelis.gwt.widget.UMenuPanel;
+import org.openelis.gwt.widget.MenuItem;
+import org.openelis.gwt.widget.PopupMenuPanel;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -42,8 +41,11 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -207,8 +209,10 @@ public class Header extends FocusPanel {
                     if (relX > -1 && relX < getOffsetWidth() && relY > -1 &&
                         relY < getOffsetHeight())
                         return;
-                    else
-                        showFilter( -1);
+                    else{ 
+                        if(popMenu == null || !popMenu.isShowing())
+                            showFilter( -1);
+                    }
                 }
             }
         });
@@ -260,10 +264,6 @@ public class Header extends FocusPanel {
                 flexTable.getCellFormatter().removeStyleName(0, i, "Sorted");
         }
         
-        if(popFilter != null)
-            popFilter.hide();
-
-        
     }
 
     /**
@@ -298,8 +298,7 @@ public class Header extends FocusPanel {
         if (showingFilter) {
             if (showingFilterFor != column) {
                 popFilter.hide();
-                showingFilter = false;
-                showingFilterFor = -1;
+               
             } else
                 return;
         }
@@ -332,6 +331,18 @@ public class Header extends FocusPanel {
                             popMenu.showRelativeTo(filterButton);
                         }
                     }
+                });
+                filterButton.addMouseOutHandler(new MouseOutHandler() {
+                    public void onMouseOut(MouseOutEvent event) {
+                        if(popMenu == null || !popMenu.isShowing())
+                            popFilter.hide();
+                    }
+                });
+                popFilter.addCloseHandler(new CloseHandler<PopupPanel>() {
+                   public void onClose(CloseEvent<PopupPanel> event) {
+                       showingFilter = false;
+                       showingFilterFor = -1;
+                    } 
                 });
                 popFilter.add(filterButton);
             }
@@ -390,14 +401,14 @@ public class Header extends FocusPanel {
      * @param col
      * @return
      */
-    protected UMenuPanel getMenuForColumn(final int col) {
-        final UMenuPanel panel;
-        UMenuItem  item;
+    protected PopupMenuPanel getMenuForColumn(final int col) {
+        final PopupMenuPanel panel;
+        MenuItem  item;
         CheckMenuItem filterItem;        
         final Column column;
         final ArrayList<FilterChoice> choices;
                
-        panel = new UMenuPanel();
+        panel = new PopupMenuPanel();
         panel.setStyleName("MenuPanel");
         
         column = table.getColumnAt(col);
@@ -406,31 +417,28 @@ public class Header extends FocusPanel {
          */
         if(column.isSortable()) {
             /*
-             * Create Item for Ascending sort.  We override the hide() instead of using a 
-             * ClickHandler to make sure sortChanged and sortDesc are set before the closeHandler 
-             * is called for the menu.
+             * Create Item for Ascending sort.  
              */
-            item = new UMenuItem("Ascending", "Ascending","");
-            item.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
+            item = new MenuItem("Ascending", "Ascending","");
+            item.addCommand(new Command() {
+                public void execute() {
                     doSort(col,Table.SORT_ASCENDING);
+                    popFilter.hide();
                 }
             });
             panel.addItem(item);
             
             /*
-             * Create Sort Descending menu Item. We override the hide() instead of using a 
-             * ClickHandler to make sure sortChanged and sortDesc are set before the closeHandler 
-             * is called for the menu. 
+             * Create Sort Descending menu Item. 
              */
-            item = new UMenuItem("Descending", "Descending", "");
-            item.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
+            item = new MenuItem("Descending", "Descending", "");
+            item.addCommand(new Command() {
+                public void execute() {
                     doSort(col,Table.SORT_DESCENDING);
+                    popFilter.hide();
                 }
             });
             panel.addItem(item);
-            
             
             /*
              * if Column is filterable add separator between sort and filter items
@@ -468,22 +476,18 @@ public class Header extends FocusPanel {
     }
     
     private void doFilter(Column column, ArrayList<FilterChoice> choices) {
-        boolean filtered = false;
         
+        column.isFiltered = false;
+  
         /*
          * Check if all fitlers were removed or if a new filter was applied
          */
         for(int i = 0; i < choices.size(); i++){
             if(choices.get(i).isSelected()) {
-                filtered = true;
+                column.isFiltered = true;
                 break;
             }       
         }
-
-        /*
-         * Set the Filtered state of the column
-         */
-        column.isFiltered = filtered;
         
         /*
          * Reset all columns to not sorted since the filter will remove it
@@ -504,7 +508,7 @@ public class Header extends FocusPanel {
         table.applySort(col,dir,table.getColumnAt(col).sort);
         
         /*
-         * We only sort for one column so remove the isSortd for any column that is currently sorted
+         * We only sort for one column so remove the isSorted for any column that is currently sorted
          */
         for(int i = 0; i < table.getColumnCount(); i++)
             table.getColumnAt(i).isSorted = false;

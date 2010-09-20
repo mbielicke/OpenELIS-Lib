@@ -81,7 +81,6 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
                              int col,
                              T value,
                              GwtEvent event) {
-        System.out.println("Value = "+value);
         editor.setQueryMode(false);
         editor.setValue(value);
         placeWidget(table, flexTable, row, col);

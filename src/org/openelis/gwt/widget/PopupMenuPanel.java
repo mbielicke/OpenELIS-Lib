@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -36,6 +34,7 @@ import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -49,7 +48,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * This class will display a group of MenuItems in a vertical display that pops up over 
  * all other widgets on the screen 
  */
-public class UMenuPanel extends PopupPanel {
+public class PopupMenuPanel extends PopupPanel {
     
     /**
      * Panel used to display Menus
@@ -74,17 +73,17 @@ public class UMenuPanel extends PopupPanel {
     /**
      * Reference to the current items child menu displayed
      */
-    protected PopupPanel popMenu;
+    protected PopupPanel openChildMenu;
     
     /**
-     * Reference to CloseHandler<PopupPanel> for child 
+     * Enum to set the Dir to scroll the menu
      */
-    protected HandlerRegistration popReg;
+    protected enum SCROLL_DIR {UP,DOWN};
     
     /**
      * No-Arg constructor
      */
-    public UMenuPanel() {
+    public PopupMenuPanel() {
         super(true);
        
         VerticalPanel outer;
@@ -135,49 +134,24 @@ public class UMenuPanel extends PopupPanel {
         /* Add MouseWheel scrolling to menu */
         addDomHandler(new MouseWheelHandler() {
             public void onMouseWheel(MouseWheelEvent event) {
-                if(event.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1){
-                    if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
-                        down.addStyleName("MenuDisabled");
-                    }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
-                        up.removeStyleName("MenuDisabled");
-                    }
-                }
-                if(event.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1){
-                    if(ap.getWidgetTop(panel) >= 0){
-                        up.addStyleName("MenuDisabled");
-                    }else{
-                        ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
-                        down.removeStyleName("MenuDisabled");
-                    }
-                }
-                
+                if(event.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1)
+                  scroll(SCROLL_DIR.DOWN);
+                if(event.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1)
+                  scroll(SCROLL_DIR.UP);
             }
         },MouseWheelEvent.getType());
         
         /* Setup Timer to scroll the menu down repeatedly */
         downTimer = new Timer() {
             public void run() {
-                if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
-                    down.addStyleName("MenuDisabled");
-                    cancel();
-                }else{
-                    ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
-                    up.removeStyleName("MenuDisabled");
-                }
+                scroll(SCROLL_DIR.DOWN);
             }
         };
         
         /* Setup Timer to scroll the menu up repeatedly */
         upTimer = new Timer() {
             public void run() {
-                if(ap.getWidgetTop(panel) >= 0){
-                     up.addStyleName("MenuDisabled");
-                    cancel();
-                }else{
-                    ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
-                    down.removeStyleName("MenuDisabled");
-                }
+                scroll(SCROLL_DIR.UP);
              }
         };
         
@@ -186,42 +160,57 @@ public class UMenuPanel extends PopupPanel {
          */
         addCloseHandler(new CloseHandler<PopupPanel>() {
             public void onClose(CloseEvent<PopupPanel> event) {
-                if(popMenu != null && popMenu.isShowing())
-                    popMenu.hide();
+                if(openChildMenu != null && openChildMenu.isShowing())
+                    openChildMenu.hide();
             }
         });
         
     }
     
     /**
-     * This method will add MenuItem and other widgets to the display of this panel
+     * This method will add MenuItem to the display of this panel
      */
-    public void addItem(UMenuItem item){
+    public void addItem(MenuItem item){
         panel.add(item);
+    
+        /**
+         * Add command to item to close this menu when the item is clicked when autoClose is true
+         */
+        if(item.autoClose()) {
+            item.addCommand(new Command() {
+                public void execute() {
+                    hide();
+                }
+            });
+        }
         
         /*
-         * Setup MouseOver on MenuItem to open child Menus if necessary
+         * Setup MouseOver on MenuItem to hide an openChildMenu if necessary
          */
         item.addMouseOverHandler(new MouseOverHandler() {
            public void onMouseOver(MouseOverEvent event) {
                /*
                 * Hide any currently shown ChildMenu
                 */
-               if(popMenu != null && popMenu.isShowing())  
-                   popMenu.hide();
+               if(openChildMenu != null && openChildMenu.isShowing())  
+                   openChildMenu.hide();
             } 
         });   
     }
     
-    public void addItem(final UMenu menu) {
+    /**
+     * This method will add a Menu to the display of this Panel.
+     * @param menu
+     */
+    public void addItem(final Menu menu) {
         panel.add(menu);
         
         menu.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                if(popMenu != null && popMenu.isShowing())
-                    popMenu.hide();
+                if(openChildMenu != null && openChildMenu.isShowing())
+                    openChildMenu.hide();
                 
-                popMenu = menu.showSubMenu();
+                openChildMenu = menu.showSubMenu();
             }
         });
     }
@@ -234,7 +223,7 @@ public class UMenuPanel extends PopupPanel {
     } 
     
     /**
-     * Adds a line separating items int the panel
+     * Adds a line separating items in the panel
      */
     public void addMenuSeparator() {
         panel.add(new HTML("<hr/>"));
@@ -258,6 +247,32 @@ public class UMenuPanel extends PopupPanel {
             ap.setWidgetPosition(panel, 0, 0);
             up.setVisible(false);
             down.setVisible(false);
+        }
+    }
+    
+    /**
+     * This method will scroll the menu up or down depending on when the mouse is placed over the up or down
+     * panels or if the Mouse wheel is used.
+     * @param dir
+     */
+    private void scroll(SCROLL_DIR dir) {
+        if(dir == SCROLL_DIR.DOWN && down.getStyleName().indexOf("MenuDisabled") == -1){
+            if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
+                down.addStyleName("MenuDisabled");
+                downTimer.cancel();
+            }else{
+                ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
+                up.removeStyleName("MenuDisabled");
+            }
+        }
+        if(dir == SCROLL_DIR.UP && up.getStyleName().indexOf("MenuDisabled") == -1){
+            if(ap.getWidgetTop(panel) >= 0){
+                up.addStyleName("MenuDisabled");
+                upTimer.cancel();
+            }else{
+                ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
+                down.removeStyleName("MenuDisabled");
+            }
         }
     }
     

@@ -25,10 +25,9 @@
 */
 package org.openelis.gwt.widget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -37,7 +36,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
  *  panels below the items
  * 
  */
-public class UMenuBar extends Composite {
+public class MenuBar extends Composite {
    
     /**
      * Panel that holds the MenuItems
@@ -47,12 +46,12 @@ public class UMenuBar extends Composite {
     /**
      * Reference to currently displayed child menu 
      */
-    protected UMenuPanel popMenu;
+    protected PopupMenuPanel popMenu;
     
     /**
      * No-Arg constructor 
      */
-    public UMenuBar() {
+    public MenuBar() {
         AbsolutePanel ap;
        
         panel = new HorizontalPanel();
@@ -63,20 +62,25 @@ public class UMenuBar extends Composite {
         panel.setCellWidth(ap, "100%");
         
         initWidget(panel);
+        
+        setStyleName("topMenuBar");
     }
 
     /**
      * Method will add a MenuItem to the bar to be displayed.
      * @param menu
      */
-    public void addMenu(final UMenu menu) {
+    public void addMenu(final Menu menu) {
         panel.insert(menu,panel.getWidgetCount()-1);
+        menu.setStyleName("topMenuBarItem");
         menu.showBelow(true);
-        menu.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
+       
+        menu.addCommand(new Command() {
+            public void execute() {
                 popMenu = menu.showSubMenu();
             }
         });
+        
         menu.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
                 menu.addStyleName("Hover");

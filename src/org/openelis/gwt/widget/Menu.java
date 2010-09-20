@@ -31,63 +31,81 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * This clas is used by MenuBar and MenuPanel to display menu options
+ * This class is will create a display entry that is placed into a MenuBar or into 
+ * a Menu to display a sub menu of MenuItems when either moused over or clicked.
  * 
  */
-public class UMenu extends FocusPanel {
+public class Menu extends Composite {
 
     /**
      * Reference to the open child menu if present
      */
-    protected UMenuPanel panel;
+    protected PopupMenuPanel panel;
 
     /**
      * Flags used for checking if this item has a child Menu and it's position
+     * and if enabled
      */
-    protected boolean    showBelow;
+    protected boolean         showBelow, enabled;
 
     /**
      * Reference to Parent Menu
      */
-    protected UMenu      parent;
+    protected Menu           parent;
 
     /**
      * No-Arg constructor that sets up Hovering
      */
-    public UMenu() {
+    public Menu() {
 
-        panel = new UMenuPanel();
+        panel = new PopupMenuPanel();
         panel.addStyleName("MenuPanel");
 
-        addMouseOverHandler(new MouseOverHandler() {
+        addHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
                 addStyleName("Hover");
             }
-        });
+        }, MouseOverEvent.getType());
 
-        addMouseOutHandler(new MouseOutHandler() {
+        addHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
                 removeStyleName("Hover");
             }
-        });
-
+        }, MouseOutEvent.getType());
+        
     }
 
-    public UMenu(String display) {
+    /**
+     * This constructor is used to display top level MenuItems in MenuBar.  The String passed
+     * will be created into a Label and set as the display for this menu.
+     * @param display
+     */
+    public Menu(String display) {
         this();
         Label label;
 
         label = new Label(display);
         label.setStyleName("ScreenLabel");
-        setWidget(label);
+        initWidget(label);
+        setEnabled(true);
     }
 
-    public UMenu(String icon, String display, String description) {
+    /**
+     * This constructor will create a MenuItem entry that will contain a MenuArrow to show that
+     * this item has a sub menu associated with it.
+     * @param icon
+     * @param display
+     * @param description
+     */
+    public Menu(String icon, String display, String description) {
         this();
         Grid grid = new Grid(2, 4);
         grid.setStyleName("TopMenuRowContainer");
@@ -112,7 +130,9 @@ public class UMenu extends FocusPanel {
 
         grid.getCellFormatter().setStyleName(0, 3, "MenuArrow");
 
-        setWidget(grid);
+        initWidget(grid);
+        
+        setEnabled(true);
     }
 
     /**
@@ -121,34 +141,69 @@ public class UMenu extends FocusPanel {
      * 
      * @param display
      */
-    public UMenu(Widget display) {
+    public Menu(Widget display) {
         this();
-        setDisplay(display);
+        initWidget(display);
+        setEnabled(true);
     }
 
     /**
-     * Method used to set the widget used for displaying this item
-     * 
-     * @param display
+     * The Command passed will be executed when a user clicks on it.  This method can be called more than once
+     * to add multiple commands to the Menu.  The Commands will be executed in the order they are added.
+     * @param command
      */
-    public void setDisplay(Widget display) {
-        setWidget(display);
+    public void addCommand(final Command command) {
+        addHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                command.execute();
+            }
+        }, ClickEvent.getType());
     }
 
     /**
-     * Adds a child menu to this item
+     * This method will enable/disable the menu depending on value of the passsed param
+     * @param enabled
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if ( !enabled) {
+            unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
+            addStyleName("disabled");
+        } else {
+            sinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
+            removeStyleName("disabled");
+        }
+    }
+    
+    /**
+     * Method used to determine if the Menu is enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * This method allows containing widgets to addd a MouseOverHandler to this menu
+     * @param handler
+     * @return
+     */
+    protected HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+        return addHandler(handler, MouseOverEvent.getType());
+    }
+
+    /**
+     * Adds a child item to this item
      * 
      * @param panel
      * @param showBelow
      */
-    public void addItem(UMenuItem item) {
+    public void addItem(MenuItem item) {
         panel.addItem(item);
         if (item.autoClose()) {
-            item.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
-                    UMenu pMenu;
+            item.addCommand(new Command() {
+                public void execute() {
+                    Menu pMenu;
 
-                    panel.hide();
                     pMenu = parent;
                     while (pMenu != null) {
                         pMenu.panel.hide();
@@ -160,7 +215,11 @@ public class UMenu extends FocusPanel {
 
     }
 
-    public void addItem(UMenu menu) {
+    /**
+     * Adds a Menu as ant entry to this Menu.
+     * @param menu
+     */
+    public void addItem(Menu menu) {
         panel.addItem(menu);
         menu.setParentMenu(this);
     }
@@ -187,7 +246,7 @@ public class UMenu extends FocusPanel {
      * 
      * @return
      */
-    protected UMenuPanel showSubMenu() {
+    protected PopupMenuPanel showSubMenu() {
         if (panel.isShowing())
             return panel;
 
@@ -201,12 +260,30 @@ public class UMenu extends FocusPanel {
         return panel;
     }
 
-    protected void setParentMenu(UMenu parent) {
+    /**
+     * Method to set the containing Menu of this Menu
+     * @param parent
+     */
+    protected void setParentMenu(Menu parent) {
         this.parent = parent;
     }
 
-    protected UMenu getParentMenu() {
+    /**
+     * Method to return the containing Menu of this menu
+     * @return
+     */
+    protected Menu getParentMenu() {
         return parent;
+    }
+    
+    /**
+     * We override onAttach to call setEnabled() because of a bug in GWT that will not correctly
+     * sink or unsink the events until the widget is attached to the DOM.
+     */
+    @Override
+    protected void onAttach() {
+        super.onAttach();
+        setEnabled(enabled);
     }
 
 }

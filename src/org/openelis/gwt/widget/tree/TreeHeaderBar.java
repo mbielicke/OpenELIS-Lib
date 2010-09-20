@@ -27,12 +27,8 @@ package org.openelis.gwt.widget.tree;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.event.ActionEvent;
-import org.openelis.gwt.event.ActionHandler;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.MenuPanel;
-import org.openelis.gwt.widget.table.event.SortEvent;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -69,13 +65,14 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TreeHeaderBar extends Composite implements MouseMoveHandler, 
+public class TreeHeaderBar extends Composite {/* implements MouseMoveHandler, 
 															 MouseDownHandler, 
 															 MouseUpHandler,  
 															 CloseHandler<PopupPanel>, 
 															 ActionHandler<MenuItem.Action>,
 															 ClickHandler,
 															 HasMouseOutHandlers {
+															 */
     
     public static String headerStyle = "Header";
     public static String headerCellStyle = "HeaderCell";
@@ -157,13 +154,14 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     	 * Catches mouses Events for resizing columns.
     	 */
     	public void onMouseOut(MouseOutEvent event) {
-    		//Window.alert(""+event.getRelativeY(getElement()));
+    		/*Window.alert(""+event.getRelativeY(getElement()));
     		if(pop.isShowing() && !menuItem.popShowing && ((event.getRelativeX(((Widget)event.getSource()).getElement()) <= 0 || event.getRelativeX(((Widget)event.getSource()).getElement()) >= getOffsetWidth())
     				|| (event.getRelativeY(((Widget)event.getSource()).getElement()) <= 0 || event.getRelativeY(((Widget)event.getSource()).getElement()) >= getOffsetHeight()))){
     			//RootPanel.get().remove(menuItem);
     			pop.hide();
     			menuItem = null;
     		}
+    		*/
     	}
 
     	public void onClose(CloseEvent<PopupPanel> event) {
@@ -220,6 +218,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             header.add(headerLabel);
             MenuItem menuItem = null;
             if(column.getSortable()){
+                /*
                 AbsolutePanel wid = new AbsolutePanel();
                 wid.setHeight("18px");
                 wid.setWidth("16px");
@@ -233,12 +232,13 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
                 menuItem.pop.addCloseHandler(header);
                 menuItem.enable(true);
                 menuItem.setStyleName("HeaderDropdownButton");
+                */
             }
             hMenus.add(menuItem);
         	BarContainer barc = new BarContainer(); 
-        	barc.addMouseDownHandler(this);
-        	barc.addMouseUpHandler(this);
-        	barc.addMouseMoveHandler(this);
+        	//barc.addMouseDownHandler(this);
+        	//barc.addMouseUpHandler(this);
+        	//barc.addMouseMoveHandler(this);
         	AbsolutePanel ap3 = new AbsolutePanel();
         	ap3.addStyleName("HeaderBarPad");
         	barc.add(ap3);
@@ -292,9 +292,9 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
     		menuItem =  null;
     	}
     	FocusPanel bar = new FocusPanel();
-    	bar.addMouseUpHandler(this);
-    	bar.addMouseDownHandler(this);
-    	bar.addMouseMoveHandler(this);
+    	//bar.addMouseUpHandler(this);
+    	//bar.addMouseDownHandler(this);
+    	//bar.addMouseMoveHandler(this);
     	bar.setHeight((controller.view.table.getOffsetHeight()+17)+"px");
     	bar.setWidth("1px");
     	DOM.setStyleAttribute(bar.getElement(), "background", "red");
@@ -382,8 +382,8 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
         
     }
 
-
-
+   
+    /*
     public void onAction(ActionEvent<MenuItem.Action> event) {
         if(event.getAction() == MenuItem.Action.OPENING) {         
             final int index = hMenus.indexOf((MenuItem)event.getData());
@@ -411,7 +411,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             }
         }
     }
-
+*/
     public void onClose(CloseEvent<PopupPanel> event) {
     	
     }

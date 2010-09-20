@@ -107,7 +107,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 if(view.header != null)
-                   view.header.sizeHeader();
+                   //view.header.sizeHeader();
                 scrollToSelection();
             }
         });
@@ -123,7 +123,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
         DeferredCommand.addCommand(new Command() {
             public void execute() {
                 if(view.header != null)
-                   view.header.sizeHeader();
+                   //view.header.sizeHeader();
                 scrollToSelection();
             }
         });
