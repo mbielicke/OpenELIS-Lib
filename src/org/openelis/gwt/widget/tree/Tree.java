@@ -36,24 +36,23 @@ import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
-import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
-import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
-import org.openelis.gwt.widget.table.event.BeforeRowAddedHandler;
-import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
-import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.tree.event.BeforeNodeAddedEvent;
+import org.openelis.gwt.widget.tree.event.BeforeNodeAddedHandler;
+import org.openelis.gwt.widget.tree.event.BeforeNodeDeletedEvent;
+import org.openelis.gwt.widget.tree.event.BeforeNodeDeletedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
-import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
-import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.tree.event.HasBeforeNodeAddedHandlers;
+import org.openelis.gwt.widget.tree.event.HasBeforeNodeDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
-import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
-import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
-import org.openelis.gwt.widget.table.event.RowAddedEvent;
-import org.openelis.gwt.widget.table.event.RowAddedHandler;
-import org.openelis.gwt.widget.table.event.RowDeletedEvent;
-import org.openelis.gwt.widget.table.event.RowDeletedHandler;
+import org.openelis.gwt.widget.tree.event.HasNodeAddedHandlers;
+import org.openelis.gwt.widget.tree.event.HasNodeDeletedHandlers;
+import org.openelis.gwt.widget.tree.event.NodeAddedEvent;
+import org.openelis.gwt.widget.tree.event.NodeAddedHandler;
+import org.openelis.gwt.widget.tree.event.NodeDeletedEvent;
+import org.openelis.gwt.widget.tree.event.NodeDeletedHandler;
 import org.openelis.gwt.widget.tree.event.BeforeNodeCloseEvent;
 import org.openelis.gwt.widget.tree.event.BeforeNodeCloseHandler;
 import org.openelis.gwt.widget.tree.event.BeforeNodeOpenEvent;
@@ -105,8 +104,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                                     HasBeforeSelectionHandlers<Integer>,
                                     HasSelectionHandlers<Integer>, HasUnselectionHandlers<Integer>,
                                     HasBeforeCellEditedHandlers, HasCellEditedHandlers,
-                                    HasBeforeRowAddedHandlers, HasRowAddedHandlers,
-                                    HasBeforeRowDeletedHandlers, HasRowDeletedHandlers,
+                                    HasBeforeNodeAddedHandlers, HasNodeAddedHandlers,
+                                    HasBeforeNodeDeletedHandlers, HasNodeDeletedHandlers,
                                     HasBeforeNodeOpenHandlers, HasNodeClosedHandlers,
                                     HasBeforeNodeCloseHandlers, HasNodeOpenedHandlers,
                                     HasValue<Node>, HasExceptions {
@@ -1042,7 +1041,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         if (node == null)
             node = new Node(columns.size());
 
-        if ( !fireBeforeRowAddedEvent(index, node))
+        if ( !fireBeforeNodeAddedEvent(index, parent, node))
             return null;
         
         if(parent.isOpen) {
@@ -1070,7 +1069,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         }else
             parent.add(node,index);
         
-        fireRowAddedEvent(index, node);
+        fireRowAddedEvent(index, parent, node);
        
         return node;
     }
@@ -1491,11 +1490,11 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param row
      * @return
      */
-    private boolean fireBeforeRowAddedEvent(int index, Node row) {
-        BeforeRowAddedEvent event = null;
+    private boolean fireBeforeNodeAddedEvent(int index, Node parent, Node node) {
+        BeforeNodeAddedEvent event = null;
 
         if ( !queryMode)
-            BeforeRowAddedEvent.fire(this, index, row);
+            BeforeNodeAddedEvent.fire(this, index, parent, node);
 
         return event == null || !event.isCancelled();
     }
@@ -1508,10 +1507,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param row
      * @return
      */
-    private boolean fireRowAddedEvent(int index, Node row) {
+    private boolean fireRowAddedEvent(int index, Node parent, Node node) {
 
         if ( !queryMode)
-            RowAddedEvent.fire(this, index, row);
+            NodeAddedEvent.fire(this, index, parent, node);
 
         return true;
 
@@ -1527,10 +1526,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     private boolean fireBeforeRowDeletedEvent(int index, Node row) {
-        BeforeRowAddedEvent event = null;
+        BeforeNodeAddedEvent event = null;
 
         if ( !queryMode)
-            BeforeRowDeletedEvent.fire(this, index, row);
+            BeforeNodeDeletedEvent.fire(this, index, row);
 
         return event == null || event.isCancelled();
     }
@@ -1546,7 +1545,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     private boolean fireRowDeletedEvent(int index, Node row) {
 
         if ( !queryMode)
-            RowDeletedEvent.fire(this, index, row);
+            NodeDeletedEvent.fire(this, index, row);
 
         return true;
 
@@ -2348,29 +2347,29 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Registers a BeforeRowAddedHandler to this Tree
      */
-    public HandlerRegistration addBeforeRowAddedHandler(BeforeRowAddedHandler handler) {
-        return addHandler(handler, BeforeRowAddedEvent.getType());
+    public HandlerRegistration addBeforeNodeAddedHandler(BeforeNodeAddedHandler handler) {
+        return addHandler(handler, BeforeNodeAddedEvent.getType());
     }
 
     /**
      * Registers a RowAddedHandler to this Tree
      */
-    public HandlerRegistration addRowAddedHandler(RowAddedHandler handler) {
-        return addHandler(handler, RowAddedEvent.getType());
+    public HandlerRegistration addNodeAddedHandler(NodeAddedHandler handler) {
+        return addHandler(handler, NodeAddedEvent.getType());
     }
 
     /**
      * Registers a BeforeRowDeletedHandler to this Tree
      */
-    public HandlerRegistration addBeforeRowDeletedHandler(BeforeRowDeletedHandler handler) {
-        return addHandler(handler, BeforeRowDeletedEvent.getType());
+    public HandlerRegistration addBeforeNodeDeletedHandler(BeforeNodeDeletedHandler handler) {
+        return addHandler(handler, BeforeNodeDeletedEvent.getType());
     }
 
     /**
      * Registers a RowDeletedHandler to this Tree
      */
-    public HandlerRegistration addRowDeletedHandler(RowDeletedHandler handler) {
-        return addHandler(handler, RowDeletedEvent.getType());
+    public HandlerRegistration addNodeDeletedHandler(NodeDeletedHandler handler) {
+        return addHandler(handler, NodeDeletedEvent.getType());
     }
     
     /**

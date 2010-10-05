@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.HasHandlers;
 
 public interface HasNodeDeletedHandlers extends HasHandlers {
 	
-	public HandlerRegistration addRowDeletedHandler(RowDeletedHandler handler);
+	public HandlerRegistration addNodeDeletedHandler(NodeDeletedHandler handler);
 	
 
 }

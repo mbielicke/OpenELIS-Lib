@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.HasHandlers;
 
 public interface HasNodeAddedHandlers extends HasHandlers {
 	
-	public HandlerRegistration addRowAddedHandler(RowAddedHandler handler);
+	public HandlerRegistration addNodeAddedHandler(NodeAddedHandler handler);
 	
 
 }
