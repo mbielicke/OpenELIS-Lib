@@ -25,17 +25,16 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteValue;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTMLTable;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
@@ -45,17 +44,14 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
-                                         CellEditor<AutoCompleteValue> {
+                             CellEditor<AutoCompleteValue> {
 
     /**
      * Widget used to edit the cell
      */
-    private AutoComplete  editor;
+    private AutoComplete editor;
 
-    /**
-     * Container to hold the AutoComplete widget for formatting and spacing
-     */
-    private AbsolutePanel container;
+    private boolean      query;
 
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -66,125 +62,82 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableDropdown");
-        container = new AbsolutePanel();
-        container.add(editor);
-        container.setStyleName("CellContainer");
     }
 
-    /**
-     * Sets the model value to the editor and then places the editor into the
-     * cell to be edited.
-     */
-    @SuppressWarnings("unchecked")
-    public void startEditing(Table table,
-                             FlexTable flexTable,
-                             int row,
-                             int col,
-                             AutoCompleteValue value,
-                             GwtEvent event) {
-        editor.clearExceptions();
-        editor.setQueryMode(false);
-        editor.setValue((AutoCompleteValue)value);
-        placeWidget(table, flexTable, row, col);
-
-    }
-
-    /**
-     * Makes sure the widget is in query mode and will set its value to the
-     * passed QueryData and will place the widget in the table for editing
-     */
-    @SuppressWarnings("unchecked")
-    public void startQueryEditing(Table table,
-                                  FlexTable flexTable,
-                                  int row,
-                                  int col,
-                                  QueryData qd,
-                                  GwtEvent event) {
-        editor.setQueryMode(true);
-        editor.setQuery(qd);
-        placeWidget(table, flexTable, row, col);
-    }
-
-    /**
-     * Pulls value out of the editor returns it to the table. Will pass back a
-     * QueryData object if in QueryMode or the editor value if in edit mode
-     */
-    public Object finishEditing(Table table, FlexTable flexTable, int row, int col) {
-        // Restore table to listen to Return and Arrow keys
-        table.ignoreReturn(false);
-        table.ignoreUpDown(false);
-
-        if (table.getQueryMode()) {
+    public Object finishEditing() {
+        if (query) {
             editor.validateQuery();
-            table.setValidateException(row, col, editor.getValidateExceptions());
             return editor.getQuery();
         }
 
         editor.validateValue();
-        table.setValidateException(row, col, editor.getValidateExceptions());
         return editor.getValue();
+    }
+
+    public ArrayList<LocalizedException> validate() {
+        if (query) {
+            editor.validateQuery();
+            return editor.getValidateExceptions();
+        }
+        editor.validateValue();
+        return editor.getValidateExceptions();
     }
 
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(Table table, FlexTable flexTable, int row, int col, AutoCompleteValue value) {
+    public void render(HTMLTable table, int row, int col, AutoCompleteValue value) {
+        query = false;
         editor.setQueryMode(false);
-        table.sinkEvents(Event.ONKEYDOWN);
         editor.setValue(value);
-        flexTable.setText(row, col, editor.getDisplay());
+        table.setText(row, col, editor.getDisplay());
+    }
+
+    public String display(AutoCompleteValue value) {
+        editor.setQueryMode(false);
+        editor.setValue(value);
+        return editor.getDisplay();
     }
 
     /**
      * Sets the QueryData to the editor and sets the Query string into the cell
      * text
      */
-    public void renderQuery(Table table, FlexTable flexTable, int row, int col, QueryData qd) {
+    public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
+        query = true;
         editor.setQueryMode(true);
-        table.sinkEvents(Event.ONKEYDOWN);
         editor.setQuery(qd);
-        flexTable.setText(row, col, editor.getDisplay());
+        table.setText(row, col, editor.getDisplay());
     }
 
     /**
      * Returns the current widget set as this cells editor.
      */
-    public Widget getWidget() {
-        return editor;
+    public void startEditing(AutoCompleteValue value, Container container, GwtEvent event) {
+        query = false;
+        editor.setQueryMode(false);
+        editor.setValue(value);
+        editor.setWidth(container.getWidth()+"px");
+        container.setEditor(editor);
     }
 
-    /**
-     * Sizes and places the editor into the passed cell into the table.
-     * 
-     * @param table
-     * @param flexTable
-     * @param row
-     * @param col
-     */
-    private void placeWidget(Table table, FlexTable flexTable, int row, int col) {
-        // Have table ignore Return and Arrow keys when editing cell
-        table.ignoreReturn(true);
-        table.ignoreUpDown(true);
+    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
+        query = true;
+        editor.setQueryMode(true);
+        editor.setQuery(qd);
+        editor.setWidth(container.getWidth()+"px");
+        container.setEditor(editor);
+    }
 
-        if (table.getColumnAt(col).getWidth() - 4 != editor.getWidth()) {
-            editor.setWidth(table.getColumnAt(col).getWidth() - 4 + "px");
-            editor.setHeight(table.getRowHeight() - 4 + "px");
-            container.setWidth( (table.getColumnAt(col).getWidth() - 3) + "px");
-            container.setHeight( (table.getRowHeight() - 3) + "px");
+    public boolean ignoreKey(int keyCode) {
+        switch(keyCode) {
+            case KeyCodes.KEY_ENTER :
+            case KeyCodes.KEY_DOWN :
+            case KeyCodes.KEY_UP :
+                return true;
+            default :
+                return false;
         }
-
-        // Puts editor into cell
-        flexTable.setWidget(row, col, container);
-
-        /*
-         * This done in a deferred command otherwise IE will not set focus
-         * consistently
-         */
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                editor.setFocus(true);
-
-            }
-        });
     }
+
 }

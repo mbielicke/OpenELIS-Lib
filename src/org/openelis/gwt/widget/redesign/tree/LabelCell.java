@@ -23,23 +23,55 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.widget.redesign.table;
+package org.openelis.gwt.widget.redesign.tree;
 
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.user.client.ui.HTMLTable;
 
 /**
- * This interface is implemented by classes the provide rendering functionality for Table cells
+ * This class implements the CellRenderer and CellEditor interfaces and is used
+ * to edit and render cells in a Table that is text only
+ * 
  * @author tschmidt
- *
- * @param <T>
+ * 
  */
-public interface CellRenderer<T> {
+public class LabelCell<T> implements CellRenderer<T> {
+    
+    /**
+     * Widget used to edit the cell
+     */
+    private Label<T>  editor;
+    
+    /**
+     * Constructor that takes the editor to be used for the cell.
+     * 
+     * @param editor
+     */
+    public LabelCell(Label<T> editor) {
+        this.editor = editor;
+    }
+    
+    /**
+     * Gets Formatted value from editor and sets it as the cells display
+     */
+    public void render(HTMLTable table, int row, int col, T value) {
+        editor.setValue(value);
+        table.setText(row,col,editor.getText());
+    }
+    
+    public String display(T value) {
+        editor.setValue(value);
+        return editor.getText();
+    }
 
-    public String display(T value);
+    public void renderQuery(HTMLTable table,
+                            int frow,
+                            int col,
+                            QueryData qd) {
+        // TODO Auto-generated method stub
+        
+    }
     
-    public void render(HTMLTable table, int row, int col, T value);
-    
-    public void renderQuery(HTMLTable table, int row, int col, QueryData qd);
 }

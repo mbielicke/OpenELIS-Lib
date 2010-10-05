@@ -23,77 +23,68 @@
  * which case the provisions of a UIRF Software License are applicable instead
  * of those above.
  */
-package org.openelis.gwt.widget.redesign.table;
+package org.openelis.gwt.widget.redesign.tree;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.widget.calendar.Calendar;
+import org.openelis.gwt.widget.TextBox;
 
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
- * to edit and render cells in a Table using a Calendar
+ * to edit and render cells in a Table using a TextBox<T>
  * 
  * @author tschmidt
  * 
  * @param <T>
  */
-public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime> {
+public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
+
     /**
      * Editor used by this cell
      */
-    private Calendar editor;
-    private boolean  query;
+    private TextBox<T> editor;
 
-    /**
-     * Container to hold the AutoComplete widget for formatting and spacing
-     */
-    // private AbsolutePanel container;
+    private boolean    query;
+
     /**
      * Constructor that takes the editor to be used as a param
      * 
      * @param editor
      */
-    public CalendarCell(Calendar editor) {
+    public TextBoxCell(TextBox<T> editor) {
         this.editor = editor;
         editor.setEnabled(true);
-        editor.setStyleName("TableCalendar");
+        editor.setStyleName("TableTextBox");
+    }
+
+    public String display(T value) {
+        editor.setQueryMode(false);
+        editor.setValue(value);
+        return editor.getText();
     }
 
     /**
-     * Method to return the editor set for this cell
+     * Returns the current widget set as this cells editor.
      */
-    public void startEditing(Datetime value, Container container, GwtEvent event) {
-        query = false;
-        editor.setQueryMode(false);
+    public void startEditing(T value, Container container, GwtEvent event) {
         editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
     }
 
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
-        query = true;
-        editor.setQueryMode(true);
-        editor.setQuery(qd);
-        editor.setWidth(container.getWidth()+"px");
-        container.setEditor(editor);
+    public void render(HTMLTable table, int row, int col, T value) {
+        table.setText(row, col, display(value));
     }
 
-    public Object finishEditing() {
-        if (query) {
-            editor.validateQuery();
-            return editor.getQuery();
-        }
-
-        editor.validateValue();
-        return editor.getValue();
+    public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
+        editor.setQueryMode(true);
+        editor.setQuery(qd);
+        table.setText(row, col, editor.getText());
     }
 
     public ArrayList<LocalizedException> validate() {
@@ -105,43 +96,23 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         return editor.getValidateExceptions();
     }
 
-    /**
-     * Gets Formatted value from editor and sets it as the cells display
-     */
-    public void render(HTMLTable table, int row, int col, Datetime value) {
-        query = false;
-        editor.setQueryMode(false);
-        editor.setValue(value);
-        table.setText(row, col, editor.getText());
+    public Object finishEditing() {
+        if (query)
+            return editor.getQuery();
+
+        return editor.getValue();
     }
 
-    public String display(Datetime value) {
-        query = false;
-        editor.setQueryMode(false);
-        editor.setValue(value);
-        return editor.getText();
-    }
-
-    /**
-     * Sets the QueryData to the editor and sets the Query string into the cell
-     * text
-     */
-    public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
+    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
         query = true;
         editor.setQueryMode(true);
         editor.setQuery(qd);
-        table.setText(row, col, editor.getText());
+        editor.setWidth(container.getWidth()+"px");
+        container.setEditor(editor);
     }
 
     public boolean ignoreKey(int keyCode) {
-        switch(keyCode) {
-            case KeyCodes.KEY_ENTER :
-            case KeyCodes.KEY_DOWN :
-            case KeyCodes.KEY_UP :
-                return true;
-            default :
-                return false;
-        }
+        return false;
     }
 
 }

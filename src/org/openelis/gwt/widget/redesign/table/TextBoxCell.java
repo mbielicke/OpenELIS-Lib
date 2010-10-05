@@ -25,14 +25,14 @@
  */
 package org.openelis.gwt.widget.redesign.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLTable;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
@@ -47,12 +47,9 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     /**
      * Editor used by this cell
      */
-    private TextBox<T>    editor;
-    
-    /**
-     * Container to hold the widget for formatting and spacing
-     */
-    private AbsolutePanel container;
+    private TextBox<T> editor;
+
+    private boolean    query;
 
     /**
      * Constructor that takes the editor to be used as a param
@@ -63,109 +60,59 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableTextBox");
-        container = new AbsolutePanel();
-        container.add(editor, 0, 1);
-        container.setStyleName("CellContainer");
     }
 
-    /**
-     * Will set the value passed into the editor and set the editor into the
-     * table cell passed
-     */
-    @SuppressWarnings("unchecked")
-    public void startEditing(final Table table,
-                             FlexTable flexTable,
-                             int row,
-                             int col,
-                             T value,
-                             GwtEvent event) {
-        editor.setQueryMode(false);
-        editor.clearExceptions();
-        editor.setValue(value);
-        placeWidget(table, flexTable, row, col);
-    }
-
-    /**
-     * Makes sure the widget is in query mode and will set its value to the
-     * passed QueryData and will place the widget in the table for editing
-     */
-    @SuppressWarnings("unchecked")
-    public void startQueryEditing(Table table,
-                                  FlexTable flexTable,
-                                  int row,
-                                  int col,
-                                  QueryData qd,
-                                  GwtEvent event) {
-        editor.setQueryMode(true);
-        editor.setQuery(qd);
-        placeWidget(table, flexTable, row, col);
-    }
-
-    /**
-     * Pulls value out of the editor returns it to the table. Will pass back a
-     * QueryData object if in QueryMode or the editor value if in edit mode
-     */
-    public Object finishEditing(Table table, FlexTable flexTable, int row, int col) {
-        
-        if (table.getQueryMode()){
-            editor.validateQuery();
-            table.setValidateException(row, col, editor.getValidateExceptions());
-            return editor.getQuery();
-        }
-        
-        editor.validateValue();
-        table.setValidateException(row, col, editor.getValidateExceptions());
-        return editor.getValue();
-    }
-
-    /**
-     * Gets Formatted value from editor and sets it as the cells display
-     */
-    public void render(Table table, FlexTable flexTable, int row, int col, T value) {
+    public String display(T value) {
         editor.setQueryMode(false);
         editor.setValue(value);
-        flexTable.setText(row, col, editor.getText());
-    }
-
-    /**
-     * Sets the QueryData to the editor and sets the Query string into the cell
-     * text
-     */
-    public void renderQuery(Table table, FlexTable flexTable, int row, int col, QueryData qd) {
-        editor.setQueryMode(true);
-        editor.setQuery(qd);
-        flexTable.setText(row, col, editor.getText());
+        return editor.getText();
     }
 
     /**
      * Returns the current widget set as this cells editor.
      */
-    public TextBox<T> getWidget() {
-        return editor;
+    public void startEditing(T value, Container container, GwtEvent event) {
+        editor.setValue(value);
+        editor.setWidth(container.getWidth()+"px");
+        container.setEditor(editor);
     }
-    
-    /**
-     * Sizes and places the editor into the passed cell into the table.
-     * 
-     * @param table
-     * @param flexTable
-     * @param row
-     * @param col
-     */
-    private void placeWidget(Table table, FlexTable flexTable, int row, int col) {
-        editor.setWidth(table.getColumnAt(col).getWidth() + "px");
-        container.setWidth( (table.getColumnAt(col).getWidth() - 3) + "px");
-        container.setHeight( (table.getRowHeight() - 3) + "px");
-        flexTable.setWidget(row, col, container);
-        /*
-         * This done in a deferred command otherwise IE will not set focus
-         * consistently
-         */
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                editor.setFocus(true);
-            }
-        });
+
+    public void render(HTMLTable table, int row, int col, T value) {
+        table.setText(row, col, display(value));
+    }
+
+    public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
+        editor.setQueryMode(true);
+        editor.setQuery(qd);
+        table.setText(row, col, editor.getText());
+    }
+
+    public ArrayList<LocalizedException> validate() {
+        if (query) {
+            editor.validateQuery();
+            return editor.getValidateExceptions();
+        }
+        editor.validateValue();
+        return editor.getValidateExceptions();
+    }
+
+    public Object finishEditing() {
+        if (query)
+            return editor.getQuery();
+
+        return editor.getValue();
+    }
+
+    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
+        query = true;
+        editor.setQueryMode(true);
+        editor.setQuery(qd);
+        editor.setWidth(container.getWidth()+"px");
+        container.setEditor(editor);
+    }
+
+    public boolean ignoreKey(int keyCode) {
+        return false;
     }
 
 }

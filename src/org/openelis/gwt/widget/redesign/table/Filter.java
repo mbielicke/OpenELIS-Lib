@@ -27,16 +27,36 @@ package org.openelis.gwt.widget.redesign.table;
 
 import java.util.ArrayList;
 
+/**
+ * This interface is for classes that will implement a Column Filter in the Table.
+ */
 public interface Filter {
-    
+   
+    /**
+     * Method called to determine if the Row should be included in the Filtered Model
+     * @param value
+     * @return
+     */
     public boolean include(Object value);
     
+    /**
+     * Method called by Header to get the list of FilterChoices when displaying a FilterMenu to 
+     * user
+     * @param model
+     * @return
+     */
     public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model);
     
-    public void setChoices(ArrayList<FilterChoice> choices);
-    
+    /**
+     * Method used to set the column that this Filter should be applied to
+     * @param column
+     */
     public void setColumn(int column);
     
+    /**
+     * Method used to return the Column that this Filter should be applied to
+     * @return
+     */
     public int getColumn();
     
 }

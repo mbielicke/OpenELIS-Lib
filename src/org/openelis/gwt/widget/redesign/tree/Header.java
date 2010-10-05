@@ -23,29 +23,14 @@
  * which case the provisions of a UIRF Software License are applicable instead
  * of those above.
  */
-package org.openelis.gwt.widget.redesign.table;
+package org.openelis.gwt.widget.redesign.tree;
 
-import java.util.ArrayList;
-
-import org.openelis.gwt.widget.CheckMenuItem;
-import org.openelis.gwt.widget.MenuItem;
-import org.openelis.gwt.widget.PopupMenuPanel;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -70,7 +55,7 @@ public class Header extends FocusPanel {
     /**
      * Reference to the Table this header is used for.
      */
-    protected Table     table;
+    protected Tree     tree;
     
     /**
      * Popuppanel used to display the resize bar.
@@ -102,8 +87,8 @@ public class Header extends FocusPanel {
      * 
      * @param table
      */
-    public Header(final Table table) {
-        this.table = table;
+    public Header(final Tree tree) {
+        this.tree = tree;
         flexTable = new FlexTable();
         flexTable.setStyleName("Header");
         setWidget(flexTable);
@@ -123,7 +108,7 @@ public class Header extends FocusPanel {
          */
         addHandler(new MouseDownHandler() {
             public void onMouseDown(MouseDownEvent event) {
-                showFilter( -1);
+                //showFilter( -1);
                 /*
                  * Initial popResize and bar the first time a resize request
                  * is received
@@ -132,7 +117,7 @@ public class Header extends FocusPanel {
                     popResize = new PopupPanel();
                     bar = new FocusPanel();
                     bar.setWidth("1px");
-                    bar.setHeight((table.view.flexTable.getOffsetHeight() + getOffsetHeight())+"px");
+                    bar.setHeight((tree.view.flexTable.getOffsetHeight() + getOffsetHeight())+"px");
                     DOM.setStyleAttribute(bar.getElement(), "background", "red");
                     popResize.add(bar);
                     /*
@@ -153,7 +138,7 @@ public class Header extends FocusPanel {
                         public void onMouseUp(MouseUpEvent event) {
                             Column column;
 
-                            column = table.getColumnAt(resizeColumn);
+                            column = tree.getColumnAt(resizeColumn);
                             
                             /*
                              * Column will call table.resize() in the call to setWidth
@@ -173,8 +158,8 @@ public class Header extends FocusPanel {
                 /*
                  * Calc the start position of the resize bar
                  */
-                startX = table.getXForColumn(resizeColumn) +
-                         table.getColumnAt(resizeColumn).getWidth() - 1 + getAbsoluteLeft();
+                startX = tree.getXForColumn(resizeColumn) +
+                         tree.getColumnAt(resizeColumn).getWidth() - 1 + getAbsoluteLeft();
                 
                 popResize.setPopupPosition(startX, ((Widget)event.getSource()).getAbsoluteTop());
                 popResize.show();
@@ -184,13 +169,12 @@ public class Header extends FocusPanel {
                  * allows the mouse to float outside of the header and still move the resize bar
                  */
                 DOM.setCapture(bar.getElement());
-               
             }
         }, MouseDownEvent.getType());
 
         /*
          * Handler to remove filter buttons from header if the mouse leaves the header
-         */
+         
         addMouseOutHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
                 int relX, relY;
@@ -200,7 +184,7 @@ public class Header extends FocusPanel {
                      * Moving the mouse over a filter button will cause this event to be fired.
                      * We want to determine if the mouse is still in the header and to return out
                      * if so
-                     */
+                     
                     relX = event.getRelativeX(getElement());
                     relY = event.getRelativeY(getElement());
                     if (relX > -1 && relX < getOffsetWidth() && relY > -1 &&
@@ -208,12 +192,12 @@ public class Header extends FocusPanel {
                         return;
                     else{ 
                         if(popMenu == null || !popMenu.isShowing())
-                            showFilter( -1);
+                            //showFilter( -1);
                     }
                 }
             }
         });
-        
+        */
         layout();
     }
 
@@ -228,7 +212,7 @@ public class Header extends FocusPanel {
         
         renderView(-1,-1);
         
-        flexTable.setWidth(table.getTotalColumnWidth() + "px");
+        flexTable.setWidth(tree.getTotalColumnWidth() + "px");
         flexTable.getCellFormatter().setHeight(0, 0, headerHeight + "px");
     }
     
@@ -246,16 +230,17 @@ public class Header extends FocusPanel {
             start = 0;
         
         if(end < 0)
-            end = table.getColumnCount()-1;
+            end = tree.getColumnCount()-1;
         
         for (int i = start; i <= end; i++ ) {
-            column = table.getColumnAt(i);
+            column = tree.getColumnAt(i);
             header = column.getLabel().replaceAll("\\n", "<br/>");
             
             flexTable.setHTML(0, i, header);
             flexTable.getColumnFormatter().setWidth(i, column.getWidth() + "px");
             flexTable.getCellFormatter().setVerticalAlignment(0, i, HasVerticalAlignment.ALIGN_BOTTOM);
             
+            /*
             if(column.isFiltered())
                 flexTable.getCellFormatter().addStyleName(0,i,"Filtered");
             else
@@ -265,6 +250,7 @@ public class Header extends FocusPanel {
                 flexTable.getCellFormatter().addStyleName(0,i,"Sorted");
             else
                 flexTable.getCellFormatter().removeStyleName(0, i, "Sorted");
+           */
         }
     }
 
@@ -282,18 +268,18 @@ public class Header extends FocusPanel {
     protected void resize() {
         Column col;
 
-        for (int i = 0; i < table.getColumnCount(); i++ ) {
-            col = table.getColumnAt(i);
+        for (int i = 0; i < tree.getColumnCount(); i++ ) {
+            col = tree.getColumnAt(i);
             flexTable.getColumnFormatter().setWidth(i, col.getWidth() + "px");
         }
 
-        flexTable.setWidth(table.getTotalColumnWidth() + "px");
+        flexTable.setWidth(tree.getTotalColumnWidth() + "px");
     }
 
-    /**
+    /*
      * Method to show the filter button to allow the user to click to show the filter menu
      * 
-     */
+     
     private void showFilter(int column) {
         int x;
 
@@ -307,19 +293,19 @@ public class Header extends FocusPanel {
         if (column < 0)
             return;
 
-        if (table.getColumnAt(column).isFilterable() || table.getColumnAt(column).isSortable) {
-            x = table.getXForColumn(column) + table.getColumnAt(column).getWidth();
+        if (tree.getColumnAt(column).isFilterable() || tree.getColumnAt(column).isSortable) {
+            x = tree.getXForColumn(column) + tree.getColumnAt(column).getWidth();
             /*
              * if the position of the filter button is off the currently scrolled view
              * then just return
-             */
-            if (x > table.getWidthWithoutScrollbar() +
-                    table.view.scrollView.getHorizontalScrollPosition())
+             
+            if (x > tree.getWidthWithoutScrollbar() +
+                    tree.view.scrollView.getHorizontalScrollPosition())
                 return;
             x -= 17;
             /*
              * Initialize the popFilter the first time.
-             */
+             
             if (popFilter == null) {
                 popFilter = new PopupPanel(true);
                 popFilter.setWidth("16px");
@@ -328,11 +314,11 @@ public class Header extends FocusPanel {
                 
                 /*
                  * Show filter menu relative to filterButton if clicked
-                 */
+                 
                 filterButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         if(popMenu == null || !popMenu.isShowing()) {
-                            table.finishEditing();
+                            tree.finishEditing();
                             popMenu = getMenuForColumn(showingFilterFor);
                             popMenu.showRelativeTo(filterButton);
                         }
@@ -342,7 +328,7 @@ public class Header extends FocusPanel {
                 /*
                  * This is added so that when the user mouses out of header directly form 
                  * the button we will hide the filter button if not currently showing a menu
-                 */
+                 
                 filterButton.addMouseOutHandler(new MouseOutHandler() {
                     public void onMouseOut(MouseOutEvent event) {
                         if(popMenu == null || !popMenu.isShowing())
@@ -352,7 +338,7 @@ public class Header extends FocusPanel {
                 
                 /*
                  * When popFilter is closed reset the showingFilter and the column being shown for
-                 */
+                 
                 popFilter.addCloseHandler(new CloseHandler<PopupPanel>() {
                    public void onClose(CloseEvent<PopupPanel> event) {
                        showingFilter = false;
@@ -364,7 +350,7 @@ public class Header extends FocusPanel {
             
             /*
              * Position and show filter button
-             */
+             
             popFilter.setPopupPosition(x + getAbsoluteLeft(), getAbsoluteTop()+getOffsetHeight()-20);
             popFilter.show();
             showingFilter = true;
@@ -372,17 +358,17 @@ public class Header extends FocusPanel {
             
             /*
              * If filterMenu is currently being shown, hide it, and show the menu for the current column
-             */
+             
             if(popMenu != null && popMenu.isShowing()) {
                 popMenu.hide();
-                table.finishEditing();
+                tree.finishEditing();
                 popMenu = getMenuForColumn(showingFilterFor);
                 popMenu.showRelativeTo(filterButton);
             }
                 
         }
     }
-
+   */
     /**
      * Method to determine if the resize cursor or filter button should be shown based on
      * the cursor position in the header 
@@ -391,11 +377,11 @@ public class Header extends FocusPanel {
     private void checkForResizeFilter(int x) {
         int col1, col2;
 
-        col1 = table.getColumnForX(x - 4);
-        col2 = table.getColumnForX(x + 4);
+        col1 = tree.getColumnForX(x - 4);
+        col2 = tree.getColumnForX(x + 4);
 
         if (col1 != col2 && col1 >= 0) {
-            if (table.getColumnAt(col1).isResizable()) {
+            if (tree.getColumnAt(col1).isResizable()) {
                 flexTable.getCellFormatter().addStyleName(0, col1, "ResizeCol");
                 flexTable.getCellFormatter().addStyleName(0, col2, "ResizeCol");
                 resizeColStyle = true;
@@ -404,7 +390,7 @@ public class Header extends FocusPanel {
                 return;
             }
         } else if (col1 >= 0) {
-            showFilter(col1);
+           // showFilter(col1);
         }
 
         if (resizeColStyle) {
@@ -415,12 +401,12 @@ public class Header extends FocusPanel {
         }
     }
     
-    /**
+    /*
      * This method will create a Menu panel for a table column in order to do 
      * sorting and filtering.
      * @param col
      * @return
-     */
+     
     protected PopupMenuPanel getMenuForColumn(final int col) {
         final PopupMenuPanel panel;
         MenuItem  item;
@@ -432,18 +418,18 @@ public class Header extends FocusPanel {
         panel = new PopupMenuPanel();
         panel.setStyleName("MenuPanel");
         
-        column = table.getColumnAt(col);
+        column = tree.getColumnAt(col);
         /*
          * Set the Sort Options if column is sortable.
-         */
+         
         if(column.isSortable()) {
             /*
              * Create Item for Ascending sort.  
-             */
+             
             item = new MenuItem("Ascending", "Ascending","");
             item.addCommand(new Command() {
                 public void execute() {
-                    doSort(col,Table.SORT_ASCENDING);
+                    doSort(col,Tree.SORT_ASCENDING);
                     popFilter.hide();
                 }
             });
@@ -451,11 +437,11 @@ public class Header extends FocusPanel {
             
             /*
              * Create Sort Descending menu Item. 
-             */
+             
             item = new MenuItem("Descending", "Descending", "");
             item.addCommand(new Command() {
                 public void execute() {
-                    doSort(col,Table.SORT_DESCENDING);
+                    doSort(col,Tree.SORT_DESCENDING);
                     popFilter.hide();
                 }
             });
@@ -463,25 +449,25 @@ public class Header extends FocusPanel {
             
             /*
              * if Column is filterable add separator between sort and filter items
-             */
+             
             if(column.isFilterable())
                 panel.addMenuSeparator();
         }
         
         if(column.isFilterable()) {
             if(column.getFilter() == null) {
-                filter = table.new UniqueFilter();
+                filter = tree.new UniqueFilter();
                 filter.setColumn(col);
                 column.setFilter(filter);
             }
-            choices = column.getFilter().getChoices(table.getModel());
+            choices = column.getFilter().getChoices(tree.getModel());
             for(final FilterChoice choice : choices) {
                 filterItem = new CheckMenuItem(choice.getDisplay(),"",false);
                 
                 /*
                  * Listen for Filter Value change and set the change in the choices list 
                  * and set the filterSChanged flag to true;
-                 */
+                 
                 filterItem.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         choice.setSelected(event.getValue());
@@ -491,7 +477,7 @@ public class Header extends FocusPanel {
                 
                 /*
                  * If fileter is in force already set the filterMenu to checked.
-                 */
+                 
                 filterItem.setCheck(choice.selected);
                 
                 panel.addItem(filterItem);
@@ -500,18 +486,18 @@ public class Header extends FocusPanel {
         return panel;
     }
     
-    /**
+    /*
      * This method will apply the currently selected filter for the table
      * @param column
      * @param choices
-     */
+     
     private void doFilter(Column column, ArrayList<FilterChoice> choices) {
         
         column.isFiltered = false;
   
         /*
          * Check if all fitlers were removed or if a new filter was applied
-         */
+         
         for(int i = 0; i < choices.size(); i++){
             if(choices.get(i).isSelected()) {
                 column.isFiltered = true;
@@ -521,43 +507,43 @@ public class Header extends FocusPanel {
         
         /*
          * Reset all columns to not sorted since the filter will remove it
-         */
-        for(int i = 0; i < table.getColumnCount(); i++)
-            table.getColumnAt(i).isSorted = false;
+         
+        for(int i = 0; i < tree.getColumnCount(); i++)
+            tree.getColumnAt(i).isSorted = false;
         
         /*
          * Changed to call for all columns so sorts and filter indicators will be synced
-         */
+         
         renderView(-1, -1);
         
-        table.applyFilters();
+        tree.applyFilters();
     }
     
     /**
      * This method will execute the sort for the column selected on the table
      * @param col
      * @param dir
-     */
+     
     private void doSort(int col, int dir) {
         
-        table.applySort(col,dir,table.getColumnAt(col).sort);
+        tree.applySort(col,dir,tree.getColumnAt(col).sort);
         
         /*
          * We only sort for one column so remove the isSorted for any column that is currently sorted
-         */
-        for(int i = 0; i < table.getColumnCount(); i++)
-            table.getColumnAt(i).isSorted = false;
+         
+        for(int i = 0; i < tree.getColumnCount(); i++)
+            tree.getColumnAt(i).isSorted = false;
         
         /*
          * Set sorted state for column
-         */
-        table.getColumnAt(col).isSorted = true;
+        
+        tree.getColumnAt(col).isSorted = true;
         
         /*
          * 
          * Changed to call for all columns so sorts and filter indicators will be synced
-         */
+         
         renderView(-1, -1);
     }
-
+   */
 }

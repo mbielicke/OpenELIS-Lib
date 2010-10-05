@@ -307,7 +307,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      * Dropdown. Will set the isDropdown flag in the Table so the correct
      * styling is used.
      * 
-     * @param table
+     * @param tree
      */
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;

@@ -23,9 +23,7 @@
  * which case the provisions of a UIRF Software License are applicable instead
  * of those above.
  */
-package org.openelis.gwt.widget.redesign.table;
-
-import java.util.Comparator;
+package org.openelis.gwt.widget.redesign.tree;
 
 import org.openelis.gwt.widget.Label;
 
@@ -40,19 +38,9 @@ public class Column {
     /**
      * Reference to the Table containing this column
      */
-    protected Table        table;
+    protected Tree        tree;
     
-    /**
-     * Filter used for this column
-     */
-    protected Filter       filter;
-    
-    /**
-     * Comparator implementation to use when sorting this column
-     */
-    @SuppressWarnings("unchecked")
-    protected Comparator   sort;
-    
+
     /**
      * Editor widget used for this column
      */
@@ -94,8 +82,8 @@ public class Column {
      * Creates a column for the Table passed and defaults the editor to a
      * TextBox<String>
      */
-    public Column(Table table, String name, String label) {
-        this.table = table;
+    public Column(Tree table, String name, String label) {
+        this.tree = table;
         this.name = name;
         this.label = label;
         enabled = true;
@@ -150,17 +138,17 @@ public class Column {
      * 
      * @return
      */
-    public Table getTable() {
-        return table;
+    public Tree getTree() {
+        return tree;
     }
 
     /**
      * Sets the Table that this Column is used in.
      * 
-     * @param table
+     * @param tree
      */
-    public void setTable(Table table) {
-        this.table = table;
+    public void setTree(Tree tree) {
+        this.tree = tree;
     }
 
     /**
@@ -208,18 +196,18 @@ public class Column {
 
         int totalWidth, lastColumn;
 
-        if (table == null)
+        if (tree == null)
             return minWidth;
 
         /*
          * If this is the last column calculate its width if the overall width 
          * will be less then the set width of the table
          */
-        lastColumn = table.getColumnCount() - 1;
-        if (lastColumn >= 0 && table.getColumnAt(lastColumn) == this) {
-            totalWidth = table.getXForColumn(lastColumn);
-            if (totalWidth + width < table.getWidthWithoutScrollbar())
-                return table.getWidthWithoutScrollbar() - totalWidth;
+        lastColumn = tree.getColumnCount() - 1;
+        if (lastColumn >= 0 && tree.getColumnAt(lastColumn) == this) {
+            totalWidth = tree.getXForColumn(lastColumn);
+            if (totalWidth + width < tree.getWidthWithoutScrollbar())
+                return tree.getWidthWithoutScrollbar() - totalWidth;
         }
      
         return width;
@@ -232,7 +220,7 @@ public class Column {
      */
     public void setWidth(int width) {
         this.width = Math.max(width, minWidth);
-        table.resize();
+        tree.resize();
     }
 
     /**
@@ -290,88 +278,6 @@ public class Column {
     }
     
     /**
-     * Method used to set the flag indicating that this column is currently
-     * being filtered.
-     * @param isFiltered
-     */
-    public void setFiltered(boolean isFiltered) {
-        this.isFiltered = isFiltered;
-    }
-
-    /**
-     * Method used to determine if this Column can be filtered
-     * @return
-     */
-    public boolean isFilterable() {
-        return isFilterable;
-    }
-    
-    public void setFilterable(boolean filterable) {
-        isFilterable = filterable;
-    }
-    
-    /**
-     * Method used to determine if this column currently has a filter applied 
-     * @return
-     */
-    public boolean isFiltered() {
-        return isFiltered;
-    }
-    
-    /**
-     * Sets the filter to be used when filtering this column
-     * @param filter
-     */
-    public void setFilter(Filter filter) {
-        this.filter = filter;
-        isFiltered = false;
-        isSortable = true;
-    }
-    
-    /**
-     * Returns the Filter to be used for this column
-     * @return
-     */
-    public Filter getFilter() {
-        return filter;
-    }
-    
-    /**
-     * Method used to determine if this Column can be sorted
-     * @return
-     */
-    public boolean isSortable() {
-        return isSortable;
-    }
-    
-    /**
-     * Method used to set the flag if this column is allowed to be sorted
-     * @param isSortable
-     */
-    public void setSortable(boolean isSortable) {
-        this.isSortable = isSortable;
-    }
-
-    /**
-     * Method used to set the sortable flag for this column
-     * @param filterable
-     */
-    @SuppressWarnings("unchecked")
-    public void setSort(Comparator sort) {
-        this.sort = sort;
-        isSorted = false;
-        isSortable = true;
-    }
-    
-    /**
-     * Method used to determine if this column currently sorted 
-     * @return
-     */
-    public boolean isSorted() {
-        return isSorted;
-    }
-    
-    /**
      * Method used to set the required flag for this column
      * @param required
      */
@@ -386,8 +292,9 @@ public class Column {
     public boolean isRequired() {
         return required;
     }
-
+    
     public boolean hasEditor() {
         return editor != null;
     }
+
 }

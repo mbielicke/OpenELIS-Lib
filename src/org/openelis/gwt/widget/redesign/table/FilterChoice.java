@@ -31,25 +31,65 @@ package org.openelis.gwt.widget.redesign.table;
  */
 public class FilterChoice {
     
+    /**
+     * Value to filter for in the Table model.
+     */
     protected Object value;
+    
+    /**
+     * Diplay String to use in the Filter Menu 
+     */
     protected String display;
+    
+    /**
+     * Flag indicating if this choice has been selected
+     */
     protected boolean selected;
    
+    /**
+     * Method used to return the Value to filter by for this choice
+     * @return
+     */
     public Object getValue() {
         return value;
     }
+    
+    /**
+     * Method used to set the Value to filter by for this choice
+     * @param value
+     */
     public void setValue(Object value) {
         this.value = value;
     }
+    
+    /**
+     * Method used to return the display to be used by this choice
+     * @return
+     */
     public String getDisplay() {
         return display;
     }
+    
+    /**
+     * Method used to set the display to be used by this choice
+     * @param display
+     */
     public void setDisplay(String display) {
         this.display = display;
     }
+    
+    /**
+     * Method used to determine if this choice is currently selected
+     * @return
+     */
     public boolean isSelected() {
         return selected;
     }
+    
+    /**
+     * Method used to set if this choice is currently selected
+     * @param selected
+     */
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
