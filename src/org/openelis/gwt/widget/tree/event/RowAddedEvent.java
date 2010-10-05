@@ -10,7 +10,7 @@ public class RowAddedEvent extends GwtEvent<RowAddedHandler> {
 	private int index;
 	private Row row;
 	
-	public static void fire(HasRowAddedHandlers source, int index, Row row) {
+	public static void fire(HasNodeAddedHandlers source, int index, Row row) {
 		if(TYPE != null) {
 			RowAddedEvent event = new RowAddedEvent(index, row);
 			source.fireEvent(event);

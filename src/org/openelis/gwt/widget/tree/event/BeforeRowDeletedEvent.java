@@ -11,7 +11,7 @@ public class BeforeRowDeletedEvent extends GwtEvent<BeforeRowDeletedHandler> {
 	private Row row;
 	private boolean cancelled;
 	
-	public static BeforeRowDeletedEvent fire(HasBeforeRowDeletedHandlers source, int index, Row row) {
+	public static BeforeRowDeletedEvent fire(HasBeforeNodeDeletedHandlers source, int index, Row row) {
 		if(TYPE != null) {
 			BeforeRowDeletedEvent event = new BeforeRowDeletedEvent(index, row);
 			source.fireEvent(event);

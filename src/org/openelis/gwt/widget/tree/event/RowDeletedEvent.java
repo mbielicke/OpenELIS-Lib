@@ -10,7 +10,7 @@ public class RowDeletedEvent extends GwtEvent<RowDeletedHandler> {
 	private int index;
 	private Row row;
 	
-	public static void fire(HasRowDeletedHandlers source, int index, Row row) {
+	public static void fire(HasNodeDeletedHandlers source, int index, Row row) {
 		if(TYPE != null) {
 			RowDeletedEvent event = new RowDeletedEvent(index, row);
 			source.fireEvent(event);

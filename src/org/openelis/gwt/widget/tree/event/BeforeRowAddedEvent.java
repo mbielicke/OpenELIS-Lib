@@ -16,7 +16,7 @@ public class BeforeRowAddedEvent extends GwtEvent<BeforeRowAddedHandler> {
 	private Row row;
 	private boolean cancelled;
 	
-	public static BeforeRowAddedEvent fire(HasBeforeRowAddedHandlers source, int index, Row row) {
+	public static BeforeRowAddedEvent fire(HasBeforeNodeAddedHandlers source, int index, Row row) {
 		if(TYPE != null) {
 			BeforeRowAddedEvent event = new BeforeRowAddedEvent(index, row);
 			source.fireEvent(event);
