@@ -25,38 +25,53 @@
 */
 package org.openelis.gwt.widget.table;
 
-import java.util.ArrayList;
+import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.widget.Label;
+
+import com.google.gwt.user.client.ui.HTMLTable;
 
 /**
- * This interface is for classes that will implement a Column Filter in the Table.
+ * This class implements the CellRenderer and CellEditor interfaces and is used
+ * to edit and render cells in a Table that is text only
+ * 
+ * @author tschmidt
+ * 
  */
-public interface Filter {
-   
-    /**
-     * Method called to determine if the Row should be included in the Filtered Model
-     * @param value
-     * @return
-     */
-    public boolean include(Object value);
+public class LabelCell<T> implements CellRenderer<T> {
     
     /**
-     * Method called by Header to get the list of FilterChoices when displaying a FilterMenu to 
-     * user
-     * @param model
-     * @return
+     * Widget used to edit the cell
      */
-    public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model);
+    private Label<T>  editor;
     
     /**
-     * Method used to set the column that this Filter should be applied to
-     * @param column
+     * Constructor that takes the editor to be used for the cell.
+     * 
+     * @param editor
      */
-    public void setColumn(int column);
+    public LabelCell(Label<T> editor) {
+        this.editor = editor;
+    }
     
     /**
-     * Method used to return the Column that this Filter should be applied to
-     * @return
+     * Gets Formatted value from editor and sets it as the cells display
      */
-    public int getColumn();
+    public void render(HTMLTable table, int row, int col, T value) {
+        editor.setValue(value);
+        table.setText(row,col,editor.getText());
+    }
+    
+    public String display(T value) {
+        editor.setValue(value);
+        return editor.getText();
+    }
+
+    public void renderQuery(HTMLTable table,
+                            int frow,
+                            int col,
+                            QueryData qd) {
+        // TODO Auto-generated method stub
+        
+    }
     
 }

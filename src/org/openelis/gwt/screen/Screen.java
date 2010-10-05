@@ -22,7 +22,7 @@ import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWindow;
-import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
@@ -150,14 +150,14 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         TableFieldErrorException tableE;
         FormErrorException formE;
         FieldErrorException fieldE;
-        TableWidget tableWid;
+        Table tableWid;
 
         formErrors = new ArrayList<LocalizedException>();
         for (Exception ex : errors.getErrorList()) {
             if (ex instanceof TableFieldErrorException) {
                 tableE = (TableFieldErrorException) ex;
-                tableWid = (TableWidget)def.getWidget(tableE.getTableKey());
-                tableWid.setCellException(tableE.getRowIndex(), tableE.getFieldName(), tableE);
+                tableWid = (Table)def.getWidget(tableE.getTableKey());
+                //tableWid.setCellException(tableE.getRowIndex(), tableE.getFieldName(), tableE);
             } else if (ex instanceof FormErrorException) {
                 formE = (FormErrorException)ex;
                 formErrors.add(formE);

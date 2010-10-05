@@ -25,38 +25,21 @@
 */
 package org.openelis.gwt.widget.table;
 
-import java.util.ArrayList;
+import org.openelis.gwt.common.data.QueryData;
+
+import com.google.gwt.user.client.ui.HTMLTable;
 
 /**
- * This interface is for classes that will implement a Column Filter in the Table.
+ * This interface is implemented by classes the provide rendering functionality for Table cells
+ * @author tschmidt
+ *
+ * @param <T>
  */
-public interface Filter {
-   
-    /**
-     * Method called to determine if the Row should be included in the Filtered Model
-     * @param value
-     * @return
-     */
-    public boolean include(Object value);
+public interface CellRenderer<T> {
+
+    public String display(T value);
     
-    /**
-     * Method called by Header to get the list of FilterChoices when displaying a FilterMenu to 
-     * user
-     * @param model
-     * @return
-     */
-    public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model);
+    public void render(HTMLTable table, int row, int col, T value);
     
-    /**
-     * Method used to set the column that this Filter should be applied to
-     * @param column
-     */
-    public void setColumn(int column);
-    
-    /**
-     * Method used to return the Column that this Filter should be applied to
-     * @return
-     */
-    public int getColumn();
-    
+    public void renderQuery(HTMLTable table, int row, int col, QueryData qd);
 }

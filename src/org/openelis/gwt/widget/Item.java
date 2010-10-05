@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.widget.redesign.table.Row;
+import org.openelis.gwt.widget.table.Row;
 
 /**
  * This class is used by Dropdown and Autocomplete widgets. 

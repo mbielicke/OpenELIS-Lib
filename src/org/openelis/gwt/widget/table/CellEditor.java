@@ -27,36 +27,50 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.common.data.QueryData;
+
+import com.google.gwt.event.shared.GwtEvent;
+
 /**
- * This interface is for classes that will implement a Column Filter in the Table.
+ * This interface is implemented by classes that will provide editing functionality to Table cells
+ * @author tschmidt
+ *
+ * @param <T>
  */
-public interface Filter {
-   
+public interface CellEditor<T> {    
+    
     /**
-     * Method called to determine if the Row should be included in the Filtered Model
-     * @param value
+     * Returns the widget used as the editor for this cell
      * @return
      */
-    public boolean include(Object value);
+    public void startEditing(T value, Container container, GwtEvent event);
     
     /**
-     * Method called by Header to get the list of FilterChoices when displaying a FilterMenu to 
-     * user
-     * @param model
+     * Returns the widget used for querying this cell
+     * @param qd
      * @return
      */
-    public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model);
+    public void startEditingQuery(QueryData qd, Container container, GwtEvent event); 
     
     /**
-     * Method used to set the column that this Filter should be applied to
-     * @param column
-     */
-    public void setColumn(int column);
-    
-    /**
-     * Method used to return the Column that this Filter should be applied to
+     * Pulls the edited value from the editor and returns it.  If in Query mode and QueryData object will be returned 
      * @return
      */
-    public int getColumn();
+    public Object finishEditing();
     
+    /**
+     * Validates the entered value in the cell and will return a list of exceptions or null
+     * @return
+     */
+    public ArrayList<LocalizedException> validate();
+    
+    /**
+     * Returns whether the passed key should be ignored by the KeyHandler when editing;
+     * @param keyCode
+     * @return
+     */
+    public boolean ignoreKey(int keyCode);
+        
+
 }

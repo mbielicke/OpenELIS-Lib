@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget.table.event;
+package org.openelis.gwt.widget.tree.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 

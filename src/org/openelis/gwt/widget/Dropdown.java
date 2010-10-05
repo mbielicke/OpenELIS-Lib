@@ -33,8 +33,8 @@ import java.util.HashMap;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.widget.redesign.table.Row;
-import org.openelis.gwt.widget.redesign.table.Table;
+import org.openelis.gwt.widget.table.Row;
+import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;

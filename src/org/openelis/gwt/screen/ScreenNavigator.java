@@ -6,7 +6,7 @@ import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.Item;
-import org.openelis.gwt.widget.redesign.table.Table;
+import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 

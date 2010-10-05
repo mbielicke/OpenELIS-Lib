@@ -1,4 +1,4 @@
-package org.openelis.gwt.widget.table.event;
+package org.openelis.gwt.widget.tree.event;
 
 import org.openelis.gwt.widget.table.Row;
 
