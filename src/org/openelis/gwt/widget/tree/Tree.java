@@ -750,7 +750,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         if (verticalScroll != Scrolling.NEVER && fixScrollBar)
             return viewWidth - 18;
 
-        return viewWidth;
+        return viewWidth == -1 ? totalColumnWidth : viewWidth;
     }
 
     /**
@@ -1869,8 +1869,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * columns
      */
     protected void resize() {
-        if ( !isAttached())
+        if ( !isAttached()){
+        	layout();
             return;
+        }
 
         finishEditing();
 

@@ -38,6 +38,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by Table to edit and render columns that use CheckBox 
@@ -209,6 +210,10 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
             default :
                 return false;
         }
+    }
+    
+    public Widget getWidget() {
+    	return editor;
     }
     
     /**

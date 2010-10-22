@@ -37,9 +37,12 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -72,6 +75,11 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      */
     public Button() {
         init();
+    }
+    
+    public Button(String icon,String label) {
+    	init();
+    	setDisplay(icon,label);
     }
 
     /**
@@ -146,6 +154,18 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     public void addTabHandler(TabHandler handler) {
         addDomHandler(handler, KeyDownEvent.getType());
     }
+    
+    public void setDisplay(String icon,String label) {
+    	Grid grid;
+    	grid = new Grid(1,2);
+    	grid.setCellPadding(0);
+    	grid.setCellSpacing(0);
+    	grid.getCellFormatter().setStyleName(0, 0, icon);
+    	grid.setText(0, 1, label); 
+    	grid.getCellFormatter().setStyleName(0, 1, "ScreenLabel");
+    	DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,1),"paddingBottom","3px");
+    	setDisplay(grid,true);
+    }
 
     /**
      * Can be used to set the look of the Button on the screen.
@@ -175,6 +195,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
             hp.add(content);
             hp.add(new AbsolutePanel());
             hp.getWidget(2).addStyleName("ButtonRightSide");
+            
             FocusPanel classPanel = new FocusPanel();
             classPanel.add(hp);
             setWidget(classPanel);

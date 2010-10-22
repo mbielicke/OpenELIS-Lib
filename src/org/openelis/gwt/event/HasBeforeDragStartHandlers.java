@@ -5,5 +5,5 @@ import com.google.gwt.event.shared.HasHandlers;
 
 public interface HasBeforeDragStartHandlers<I> extends HasHandlers {
 
-	public HandlerRegistration addBeforeStartHandler(BeforeDragStartHandler<I> handler);
+	public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<I> handler);
 }

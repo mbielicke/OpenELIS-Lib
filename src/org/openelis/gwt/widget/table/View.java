@@ -320,6 +320,7 @@ public class View extends Composite {
         for (int c = 0; c < table.getColumnCount(); c++ )
             flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
+      // scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar(), 0) + "px");
     }
 
     /**

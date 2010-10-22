@@ -143,5 +143,9 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
                 return false;
         }
     }
+    
+    public Widget getWidget() {
+    	return editor;
+    }
 
 }

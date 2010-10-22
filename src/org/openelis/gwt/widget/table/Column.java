@@ -123,8 +123,6 @@ public class Column {
     @SuppressWarnings("unchecked")
     public void setCellEditor(CellEditor editor) {
         this.editor = editor;
-        if (editor instanceof CellRenderer)
-            renderer = (CellRenderer)editor;
     }
     
     /**
@@ -143,6 +141,8 @@ public class Column {
     @SuppressWarnings("unchecked")
     public void setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
+        if (renderer instanceof CellEditor)
+            editor = (CellEditor)renderer;
     }
 
     /**

@@ -21,7 +21,6 @@ import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
-import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -44,7 +43,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
     };
 
     public State                          state        = null;
-    public ScreenWindow                   window;
+    public org.openelis.gwt.widget.Window               window;
 
     protected ScreenDefInt                def;
     protected ScreenService               service;
@@ -67,11 +66,11 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         screenpanel.add(def.getPanel());
     }
 
-    public void setWindow(ScreenWindow window) {
+    public void setWindow(org.openelis.gwt.widget.Window window) {
         this.window = window;
     }
 
-    public ScreenWindow getWindow() {
+    public org.openelis.gwt.widget.Window getWindow() {
         return window;
     }
 

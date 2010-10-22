@@ -31,6 +31,7 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This interface is implemented by classes that will provide editing functionality to Table cells
@@ -72,5 +73,6 @@ public interface CellEditor<T> {
      */
     public boolean ignoreKey(int keyCode);
         
+    public Widget getWidget();
 
 }

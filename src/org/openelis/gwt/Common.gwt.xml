@@ -44,7 +44,6 @@ UIRF Software License are applicable instead of those above.
 	<source path="services"/>
     <public path="public"/>
     <stylesheet src="CSS/Table.css"/>
-    <stylesheet src="CSS/EditTree.css"/>
     <stylesheet src="CSS/calendar.css"/>    
     <stylesheet src="CSS/popwindow.css"/>
     <stylesheet src="CSS/menu.css"/>

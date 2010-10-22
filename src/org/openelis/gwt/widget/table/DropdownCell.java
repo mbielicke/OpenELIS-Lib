@@ -146,4 +146,8 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
                 return false;
         }
     }
+    
+    public Widget getWidget() {
+    	return editor;
+    }
 }

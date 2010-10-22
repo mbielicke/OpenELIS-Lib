@@ -35,6 +35,7 @@ import org.openelis.gwt.widget.AutoCompleteValue;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
@@ -140,4 +141,7 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
         }
     }
 
+    public Widget getWidget() {
+    	return editor;
+    }
 }

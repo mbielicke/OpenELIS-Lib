@@ -19,7 +19,9 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -186,8 +188,10 @@ public final class TreeDropController extends SimpleDropController implements
          * the top of the flexTable
          */
         adjY = context.mouseY - tree.view.flexTable.getAbsoluteTop();
-        if(targetRow > -1)
+        if(targetRow > -1){
             tree.view.flexTable.getRowFormatter().removeStyleName(targetRow, "DropOnRow");
+            positioner.removeFromParent();
+        }
         /*
          * Calculate the physical row and model indexes
          */
@@ -234,7 +238,8 @@ public final class TreeDropController extends SimpleDropController implements
                     context.boundaryPanel.add(positioner, tree.view.flexTable.getAbsoluteLeft(), posY);
                     ((TreeDragController)context.dragController).setDropIndicator(true);
                 }else {
-                    positioner.removeFromParent();
+                	positioner.removeFromParent();
+                	((TreeDragController)context.dragController).setDropIndicator(true);
                     tree.view.flexTable.getRowFormatter().addStyleName(targetRow, "DropOnRow");
                 }
                     

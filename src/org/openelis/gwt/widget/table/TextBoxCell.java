@@ -33,6 +33,7 @@ import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
@@ -113,6 +114,10 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
 
     public boolean ignoreKey(int keyCode) {
         return false;
+    }
+    
+    public Widget getWidget() {
+    	return editor;
     }
 
 }

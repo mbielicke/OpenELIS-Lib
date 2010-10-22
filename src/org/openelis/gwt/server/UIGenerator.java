@@ -18,7 +18,6 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -26,7 +25,6 @@ public class UIGenerator extends Generator {
 	
 	private String className;
 	private String packageName;
-	private String typeName;
 	private Document doc;
 	private SourceWriter sw;
 	private int count;
@@ -34,15 +32,15 @@ public class UIGenerator extends Generator {
 	private String lang;
 	
 	@Override
-	public String generate(TreeLogger logger, GeneratorContext context,
-			String typeName) throws UnableToCompleteException {
+	public String generate(TreeLogger logger, GeneratorContext context,	String typeName) throws UnableToCompleteException {
 		try {
 			lang = context.getPropertyOracle().getSelectionProperty(logger,"locale").getCurrentValue();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		this.typeName = typeName;
+		
 		TypeOracle typeOracle = context.getTypeOracle();
+		
 		try {
 			JClassType classType = typeOracle.getType(typeName);
 			packageName = classType.getPackage().getName();
@@ -51,15 +49,20 @@ public class UIGenerator extends Generator {
 		}catch(Exception e) {
 			logger.log(TreeLogger.ERROR,"Screen ERROR",e);
 		}
+		
 		return packageName+"."+className+"_"+lang;
 	}
 	
 	private void generateClass(TreeLogger logger, GeneratorContext context) throws Exception {
 		PrintWriter printWriter = null;
+		
 		printWriter = context.tryCreate(logger, packageName, className+"_"+lang);
+		
 		if(printWriter == null)
 			return;
+		
 		System.out.println("Generating "+className+".xsl");
+		
 		InputStream  xsl = context.getResourcesOracle().getResourceMap().get(packageName.replaceAll("\\.","/")+"/"+className+".xsl").openContents();
 		String props = context.getPropertyOracle().getSelectionProperty(logger,"props").getCurrentValue().replaceAll("_","\\.");
     	doc = XMLUtil.parse(ServiceUtils.getGeneratorXML(xsl,props,lang));
@@ -126,12 +129,14 @@ public class UIGenerator extends Generator {
 		sw.println("this.name = name;");
 		sw.println("}");
 		sw.println("private void createPanel() {");
-	    try {
+	    
+		try {
 	    	count = 0;
 	    	createWidgets();
 	    }catch(Exception e) {
 	    	e.printStackTrace();
 	    }
+	    
 	    sw.println("}");
 	    sw.println("}");
 	    
@@ -141,17 +146,26 @@ public class UIGenerator extends Generator {
 
      
     public void createWidgets() throws Exception{
-    	Node screen = doc.getElementsByTagName("screen").item(0);
-    	if(screen.getAttributes().getNamedItem("name") != null) {
-    		sw.println("name = \""+screen.getAttributes().getNamedItem("name").getNodeValue()+"\";");
-    	}
-        //Node display = doc.getElementsByTagName("display").item(0);
-        NodeList widgets = screen.getChildNodes();
+    	String name,key;
+    	Node attrib,screen,widget;
+    	NodeList widgets;
+    	
+    	screen = doc.getElementsByTagName("screen").item(0);
+    	name = (attrib = screen.getAttributes().getNamedItem("name")) != null ? attrib.getNodeValue() : null;
+    	
+    	if(name != null) 
+    		sw.println("name = \""+name+"\";");
+    	
+        widgets = screen.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
-            if (widgets.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                createWidget(widgets.item(i),0);
-                if(widgets.item(i).getAttributes().getNamedItem("key") != null)
-                	sw.println("setWidget(wid0, \""+widgets.item(i).getAttributes().getNamedItem("key").getNodeValue()+"\");");
+        	widget = widgets.item(i);
+            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+                createWidget(widget,0);
+                key = (attrib = widget.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+                
+                if(key != null)
+                	sw.println("setWidget(wid0, \""+key+"\");");
+                
                 sw.println("panel.add(wid0);");
                 break;
             }
@@ -159,10 +173,14 @@ public class UIGenerator extends Generator {
     }
     
     public void findImports(Node node) {
-        NodeList widgets = node.getChildNodes();
+        NodeList widgets;
+        Node widget;
+        
+        widgets = node.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
-            if (widgets.item(i).getNodeType() == Node.ELEMENT_NODE) {
-            	String widName = widgets.item(i).getNodeName();
+        	widget = widgets.item(i);
+            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+            	String widName = widget.getNodeName();
             	if(factoryMap.containsKey(widName)){
             		factoryMap.get(widName).addImport();
             	}
@@ -175,57 +193,70 @@ public class UIGenerator extends Generator {
     
     
     public boolean createWidget(Node node, int id) {
+    	String key,widName;
+    	Node attrib;
+    	
     	if(node.getNodeName().equals("code")){
     		sw.println(node.getTextContent());
     		return false;
     	}
-        String widName = node.getNodeName();
+    	
+        widName = node.getNodeName();
         factoryMap.get(widName).getNewInstance(node,id);
-        if(node.getAttributes().getNamedItem("key") != null) 
-        	sw.println("widgets.put(\""+node.getAttributes().getNamedItem("key").getNodeValue()+"\", wid"+id+");");
+        
+        key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null; 
+        if(key != null) 
+        	sw.println("widgets.put(\""+key+"\", wid"+id+");");
+        
         return true;
     }
     
     private boolean loadWidget(Node node, int id){
+    	NodeList inputs;
         Node input = null;
+        int i = 0;
+        
         if (node.getNodeName().equals("widget")) {
-            NodeList inputList = node.getChildNodes();
-            for (int m = 0; m < inputList.getLength(); m++) {
-                if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-                    input = inputList.item(m);
-                    m = 100;
-                }
-            }
+            inputs = node.getChildNodes();
+            while(inputs.item(i).getNodeType() != Node.ELEMENT_NODE) 
+            	i++;
+            input = inputs.item(i);
         } else
             input = node;
+
         return createWidget(input,id);
         
     }
     
     private void setDefaults(Node node, String wid) {
-    	StringBuffer sb = new StringBuffer();
-        if (node.getAttributes().getNamedItem("style") != null){
-            String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
-            sw.println(wid+".setStyleName(\""+styles[0]+"\");");
-            for(int i = 1; i < styles.length; i++){
-                sw.println(wid+".addStyleName(\""+styles[i]+"\");");
+    	String[] style;
+    	String width,height,tip,visible;
+    	Node attrib;
+    	
+    	style = (attrib = node.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue().split(",") : null;
+    	width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+    	height = (attrib = node.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : null;
+    	tip = (attrib = node.getAttributes().getNamedItem("tip")) != null ? attrib.getNodeValue() : null;
+    	visible = (attrib = node.getAttributes().getNamedItem("visible")) != null ? attrib.getNodeValue() : "true";
+    	
+        if (style != null){
+            sw.println(wid+".setStyleName(\""+style[0]+"\");");
+            for(int i = 1; i < style.length; i++){
+                sw.println(wid+".addStyleName(\""+style[i]+"\");");
             }
         }
-        if (node.getAttributes().getNamedItem("width") != null)
-            sw.println(wid+".setWidth(\""+node.getAttributes()
-                                     .getNamedItem("width")
-                                     .getNodeValue()+"\");");
-        if (node.getAttributes().getNamedItem("height") != null)
-            sw.println(wid+".setHeight(\""+node.getAttributes()
-                                      .getNamedItem("height")
-                                      .getNodeValue()+"\");");
-        if (node.getAttributes().getNamedItem("tip") != null){
-            sw.println(wid+".setTitle(\""+node.getAttributes().getNamedItem("tip").getNodeValue()+"\");");
-        }
-        if (node.getAttributes().getNamedItem("visible") != null){
-            if(node.getAttributes().getNamedItem("visible").getNodeValue().equals("false"))
-                sw.println(wid+".setVisible(false);");
-        }
+        
+        if (width != null)
+            sw.println(wid+".setWidth(\""+width+"\");");
+        
+        if (height != null)
+            sw.println(wid+".setHeight(\""+height+"\");");
+        
+        if (tip != null)
+            sw.println(wid+".setTitle(\""+tip+"\");");
+        
+        sw.println(wid+".setVisible("+visible+");");
+        
     }
     
     private interface Factory {
@@ -234,200 +265,1599 @@ public class UIGenerator extends Generator {
     }
     
     public void addShortcutHandler(Node node, String wid) {
-    	String ctrl = "false";
-    	String shift = "false";
-    	String alt = "false";
+    	String ctrl = "false",shift = "false", alt = "false", shortcut;
     	char key;
-    	String shortcut = node.getAttributes().getNamedItem("shortcut").getNodeValue();
+    	
+    	shortcut = node.getAttributes().getNamedItem("shortcut").getNodeValue();
     	List<String> keys = Arrays.asList(shortcut.split("\\+"));
+    	
     	if(keys.contains("ctrl"))
     		ctrl = "true";
     	if(keys.contains("shift"))
     		shift = "true";
     	if(keys.contains("alt"))
     		alt = "true";
+    	
     	key = shortcut.charAt(shortcut.length()-1);
+    	
     	sw.println("panel.addShortcutHandler(new ShortcutHandler("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
     }	
     
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
     
     {
-    	factoryMap.put("dropdown", new Factory() {
+
+    	factoryMap.put("AbsolutePanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    		    Element table = null; 
-    		    if(node.getAttributes().getNamedItem("field") == null || node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) 
-    		        sw.println("Dropdown<Integer> wid"+id+" = new Dropdown<Integer>();");
-    		    else
-    		        sw.println("Dropdown<String> wid"+id+" = new Dropdown<String>();");
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-                if (node.getAttributes().getNamedItem("case") != null){
-                    String fieldCase = node.getAttributes().getNamedItem("case")
-                    .getNodeValue().toUpperCase();
-                    sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
-                }
-                int maxRows = 10;
-                if (node.getAttributes().getNamedItem("visibleItems") != null) {
-                    maxRows= Integer.parseInt(node.getAttributes().getNamedItem("visibleItems").getNodeValue());
-                    sw.println("wid"+id+".setVisibleItemCount("+maxRows+");");
-                }
-				if(((Element)node).getElementsByTagName("table").getLength() == 0) {
-				    table = doc.createElement("table");
-				    table.setAttribute("visibleRows", String.valueOf(maxRows));
-				    table.setAttribute("width",node.getAttributes().getNamedItem("width").getNodeValue());
-				    NodeList cols = ((Element)node).getElementsByTagName("col");
-				    int length = cols.getLength();
-				    if(length > 0){
-				        for(int i = 0; i < length; i++){
-				            if(!cols.item(0).hasChildNodes()) {
-				                Element label = doc.createElement("label");
-				                label.setAttribute("field", "String");
-				                cols.item(0).appendChild(label);
-				            }
-				            table.appendChild(cols.item(0));  
-				        }
-				    }else{
-				        Element col = doc.createElement("col");
-				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-				        Element label = doc.createElement("label");
-				        label.setAttribute("field", "String");
-				        col.appendChild(label);
-				        table.appendChild(col);
-				    }
-				}else{
-				    table = (Element)((Element)node).getElementsByTagName("table").item(0);
-				}
-				factoryMap.get("tablered").getNewInstance(table,1000+id);
-				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
-				setDefaults(node,"wid"+id);
+    			String overflow,x,y,align;
+    			NodeList widgets;
+    			Node attrib,widget;
+    			
+    			overflow = (attrib = node.getAttributes().getNamedItem("overflow")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("AbsolutePanel wid"+id+" = new AbsolutePanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
+    	        
+    	        if(overflow != null)
+    	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),\"overflow\","+overflow+");");
+    	        
+    	        widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	                if(!loadWidget(widget,child)){
+    	                	count--;
+    	                	continue;
+    	                }
+    	                x = (attrib = widget.getAttributes().getNamedItem("x")) != null ? attrib.getNodeValue() : "-1";
+    	                y = (attrib = widget.getAttributes().getNamedItem("y")) != null ? attrib.getNodeValue() : "-1";
+    	                align = (attrib = widget.getAttributes().getNamedItem("align")) != null ? attrib.getNodeValue() : null;
+    	                
+    	                if(align != null)
+    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\",\""+align+"\");");
+    	                
+    	                sw.println("wid"+id+".add(wid"+child+","+x+","+y+");");
+    	            }
+    	        }
+    	        setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.Dropdown");
-                composer.addImport("org.openelis.gwt.widget.redesign.table.Table");
-                composer.addImport("org.openelis.gwt.widget.redesign.table.Column");
-                composer.addImport("org.openelis.gwt.widget.redesign.table.LabelCell");
-
+    			composer.addImport("com.google.gwt.user.client.ui.AbsolutePanel");
+    			composer.addImport("com.google.gwt.user.client.DOM");
     		}
     	});
+    	
         factoryMap.put("autoComplete", new Factory() {
             public void getNewInstance(Node node, int id) {
-                Element table = null; 
-                NodeList columns = null;
+            	String[] tab;
+            	String fcase,visibleItems,key,width,enabled,delay,required;
+                Element table,label,col; 
+                NodeList cols,list;
+                Node attrib;
                 
-                if(node.getAttributes().getNamedItem("field") == null || node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) 
-                	sw.println("AutoComplete wid"+id+" = new AutoComplete();");
-                else
-                    sw.println("AutoComplete wid"+id+" = new AutoComplete();");
+    		    visibleItems = (attrib = node.getAttributes().getNamedItem("visibleItems")) != null ? attrib.getNodeValue() : "10";
+    		    fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
+    		    tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    		    key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
+    		    width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
+    		    enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    		    delay = (attrib = node.getAttributes().getNamedItem("delay")) != null ? attrib.getNodeValue() : null;
+    		    required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
+    		    
+                sw.println("AutoComplete wid"+id+" = new AutoComplete();");
                 sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(panel);");
-                if(node.getAttributes().getNamedItem("tab") != null) {
-                    String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-                    String[] tabs = tab.split(",");
-                    String key = node.getAttributes().getNamedItem("key").getNodeValue();
-                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-                }
-                if (node.getAttributes().getNamedItem("case") != null){
-                    String fieldCase = node.getAttributes().getNamedItem("case")
-                    .getNodeValue().toUpperCase();
-                    sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
-                }
-                int maxRows = 10;
-                if (node.getAttributes().getNamedItem("visibleItems") != null) {
-                    maxRows= Integer.parseInt(node.getAttributes().getNamedItem("visibleItems").getNodeValue());
-                    sw.println("wid"+id+".setVisibleItemCount("+maxRows+");");
-                }
-                if(((Element)node).getElementsByTagName("table").getLength() == 0) {
+                
+                if(tab != null) 
+                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+                
+                sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");
+                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
+ 
+                if(table == null) {
                     table = doc.createElement("table");
-                    table.setAttribute("visibleRows", String.valueOf(maxRows));
-                    table.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-                    columns = node.getChildNodes();
-                    int length = columns.getLength();
-                    if(length > 0) {
-                        for(int j = 0; j < length; j++) {
-                            Node col = columns.item(0);
-                            if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                    table.setAttribute("rows", visibleItems);
+                    table.setAttribute("width", width);
+                    cols = ((Element)node).getElementsByTagName("col");
+				    int length = cols.getLength();
+				    if(length > 0){
+				        for(int i = 0; i < length; i++){
+				        	col = (Element)cols.item(0);
+				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                                 continue;
-                            if(!col.hasChildNodes()) {
-                                Element label = doc.createElement("label");
-                                label.setAttribute("field", "String");
-                                col.appendChild(label);
-                            }
-                            table.appendChild(col);
-                        }
+				        	/*
+				            if(!col.hasChildNodes()) {
+				                label = doc.createElement("label");
+				                label.setAttribute("field", "String");
+				                cols.item(0).appendChild(label);
+				            }
+				            */
+				            table.appendChild(col);  
+				        }
                     }else{
-                        Element col = doc.createElement("col");
+                        col = doc.createElement("col");
                         col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-                        Element label = doc.createElement("label");
+                        label = doc.createElement("label");
                         label.setAttribute("field", "String");
                         col.appendChild(label);
                         table.appendChild(col);
                     }
-                }else{
-                    table = (Element)((Element)node).getElementsByTagName("table").item(0);
                 }
-                factoryMap.get("tablered").getNewInstance(table,1000+id);
+                factoryMap.get("table").getNewInstance(table,1000+id);
                 sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
+                
+                if(enabled != null)
+                	sw.println("wid"+id+".setEnabled("+enabled+");");
+                
+                if(delay != null)
+                	sw.println("wid"+id+".setDelay("+delay+");");
+                
+                if(required != null)
+                	sw.println("wid"+id+".setRequired("+required+");");
+                
                 setDefaults(node,"wid"+id);
+               
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.AutoComplete");
-                composer.addImport("org.openelis.gwt.widget.table.TableWidget");
+                composer.addImport("org.openelis.gwt.widget.table.Table");
             }
         });
+        
+    	factoryMap.put("browser", new Factory(){
+    		public void getNewInstance(Node node, int id) {
+    			String sizeToWindow,limit;
+    			Node attrib;
+    			
+    			sizeToWindow = (attrib = node.getAttributes().getNamedItem("sizeToWindow")) != null ? attrib.getNodeValue() : "false";
+    			limit = (attrib = node.getAttributes().getNamedItem("winLimit")) != null ? attrib.getNodeValue() : "10";
+    			
+    			sw.println("Browser wid"+id+" = new Browser("+sizeToWindow+","+limit+");");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenWindowBrowser\");");
+    	        setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.Browser");
+    		}
+    	});
+    	
+    	factoryMap.put("button", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String[] tab;
+    			String key,shortcut,toggle,action,enabled,wrap,icon,text;
+    			NodeList widgets;
+    			Node attrib,widget;
+    			
+    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+    			toggle = (attrib = node.getAttributes().getNamedItem("toggle")) != null ? attrib.getNodeValue() : "false";
+    			action = (attrib = node.getAttributes().getNamedItem("action")) != null ? attrib.getNodeValue() : null;
+    			wrap = (attrib = node.getAttributes().getNamedItem("wrap")) != null ? attrib.getNodeValue() : "true";
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			icon = (attrib = node.getAttributes().getNamedItem("icon")) != null ? attrib.getNodeValue() : "";
+    			text = (attrib = node.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : "";
+    			
+    			if(text.equals("") && icon.equals(""))
+    				sw.println("Button wid"+id+" = new Button();");
+    			else
+    				sw.println("Button wid"+id+" = new Button(\""+icon+"\",\""+text+"\");");
+
+    			
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				
+				if(shortcut != null)
+					addShortcutHandler(node,"wid"+id);			    
+    			
+                sw.println("wid"+id+".setToggles("+toggle+");");
+    	        
+    	        if(action != null)
+    	            sw.println("wid"+id+".setAction(\""+action+"\");");
+    	        
+    	        widgets = node.getChildNodes();
+    	        for (int l = 0; l < widgets.getLength(); l++) {
+    	        	widget = widgets.item(l);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	            	if(!loadWidget(widget,child)){
+    	            		count--;
+     	            	    continue;
+     	                }
+   	            		sw.println("wid"+id+".setDisplay(wid"+child+","+wrap+");");
+    	            }
+    	        }
+
+    	        if(enabled != null)
+    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+    	        
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.Button");
+    		}
+    	});      	
+        
+    	factoryMap.put("buttonGroup", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String enabled;
+    			NodeList widgets;
+    			Node attrib,widget;
+    			
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("ButtonGroup wid"+id+" = new ButtonGroup();");
+    	        
+    			widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	        	widget = widgets.item(k);
+    	            if(widget.getNodeType() == Node.ELEMENT_NODE){
+    	               int child = ++count;
+    	               if(!loadWidget(widget,child)){
+    	            	   count--;
+    	            	   continue;
+    	               }
+    	               sw.println("wid"+id+".setButtons(wid"+child+");");
+    	               break;
+    	            }
+    	        }
+    	        setDefaults(node,"wid"+id);
+    	        
+    	        if (enabled != null)
+    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+    	        
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.ButtonGroup");
+    		}
+    	});        
+
+        factoryMap.put("calendar", new Factory() {
+            public void getNewInstance(Node node, int id) {
+            	String tab[];
+            	String key,shortcut,enabled;
+            	Node attrib;
+            	
+            	tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+            	key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+            	shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+            	enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+            	
+                sw.println("Calendar wid"+id+" = new Calendar();");
+                
+                if (tab != null) 
+                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+
+                if (shortcut != null)
+                    addShortcutHandler(node,"wid"+id);
+
+                setDefaults(node,"wid"+id);
+
+                factoryMap.get("Date").getNewInstance(node, id);
+                sw.println("wid"+id+".setHelper(field"+id+");");
+                
+                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+                sw.println("wid"+id+".addFocusHandler(panel);");
+                
+                if(enabled != null)
+                	sw.println("wid"+id+".setEnabled("+enabled+");");
+
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.calendar.Calendar");
+            }
+        });
+        
+    	factoryMap.put("check", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+            	String tab[];
+            	String key,shortcut,threeState;
+            	Node attrib;
+            	
+            	tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+            	key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+            	shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+            	threeState = (attrib = node.getAttributes().getNamedItem("threeState")) != null ? attrib.getNodeValue() : null;
+            	
+    			sw.println("CheckBox wid"+id+" = new CheckBox();");
+    			
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+
+				if (shortcut != null)
+					addShortcutHandler(node,"wid"+id);
+					
+    	        if(threeState != null)
+    	            sw.println("wid"+id+".setType(CheckBox.CheckType.THREE_STATE);");
+    	        
+    	        setDefaults(node, "wid"+id);
+    	            	        
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+    	        
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.CheckBox");
+    		}
+    	});
+    	
+    	factoryMap.put("CollapsePanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String open;
+    			NodeList widgets;
+    			Node attrib,widget;
+    			
+    			open = (attrib = node.getAttributes().getNamedItem("open")) != null ? attrib.getNodeValue() : "false";
+    			
+  				sw.println("CollapsePanel wid"+id+" = new CollapsePanel("+open+");");
+
+  				if (node.getChildNodes().getLength() > 0){
+    		       widgets = node.getChildNodes();
+    		       for (int k = 0; k < widgets.getLength(); k++) {
+    		    	   widget = widgets.item(k);
+    		           if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    		        	   int child = ++count;
+    		        	   if(!loadWidget(widget,child)){
+        	            	   count--;
+        	            	   continue;
+        	               }
+    		               sw.println("wid"+child+".setHeight(\"100%\");");
+    		               sw.println("wid"+child+".setWidth(\"auto\");");
+    		               sw.println("wid"+id+".setContent(wid"+child+");");
+    		           }
+    		       }
+    		    }
+  				
+    		    setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.CollapsePanel");
+    		}
+    	});
+    	
+        factoryMap.put("Date", new Factory() {
+            public void getNewInstance(Node node, int id){
+            	String begin,end,pattern;
+            	Node attrib;
+            	
+            	begin = (attrib = node.getAttributes().getNamedItem("begin")) != null ? attrib.getNodeValue() : "0";
+            	end = (attrib = node.getAttributes().getNamedItem("end")) != null ? attrib.getNodeValue() : "2";
+            	pattern = (attrib = node.getAttributes().getNamedItem("pattern")) != null ? attrib.getNodeValue() : "yyyy-MM-dd";
+            	
+                sw.println("DateHelper field"+id+" = new DateHelper();");
+                sw.println("field"+id+".setBegin((byte)"+begin+");");
+                sw.println("field"+id+".setEnd((byte)"+end+");");
+                sw.println("field"+id+".setPattern(\""+pattern+"\");");
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.DateHelper");
+            }
+        });    	
+    	
+    	factoryMap.put("DeckPanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String tab;
+    			NodeList decks,widgets;
+    			Node attrib,deck,widget;
+    			
+    			sw.println("DeckPanel wid"+id+" = new DeckPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"gwt-TabPanelBottom\");");
+
+    	        decks = ((Element)node).getElementsByTagName("deck");
+    	        for (int k = 0; k < decks.getLength(); k++) {
+    	        	deck = decks.item(k);
+    	        	tab = (attrib = deck.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue() : "null";
+    	            widgets = decks.item(k).getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	if(!loadWidget(widget,child)){
+    	                		count--;
+    	    	            	continue;
+    	    	            }
+   	                		sw.println("wid"+id+".add(wid"+child+",\""+tab+"\");");
+    	                }
+    	            }
+    	        }
+    	        sw.println("wid"+id+".showWidget(0);");
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.DeckPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
+    		}
+    	});
+    	
+    	factoryMap.put("DecoratorPanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			NodeList widgets;
+    			Node widget;
+    			
+    			sw.println("DecoratorPanel wid"+id+" = new DecoratorPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ConfirmWindow\");");
+
+    	        widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	                if(!loadWidget(widget,count)){
+    	                	count--;
+    	                	continue;
+    	                }
+    	                sw.println("wid"+id+".add(wid"+child+");");
+    	                break;
+    	            }
+    	        }
+    	        setDefaults(node,"wid"+id);    	       
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.DecoratorPanel");
+    			composer.addImport("com.google.gwt.user.client.DOM");
+    		}
+    	});    	    	    	
+    	
+    	factoryMap.put("diagram", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("Diagram wid"+id+" = new Diagram();");
+    	        setDefaults(node, "wid"+id);
+    	        if (node.getAttributes().getNamedItem("enable") != null){
+    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
+    	        }
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.Diagram");
+    		}
+    	});
+
+    	factoryMap.put("DockPanel", new Factory() {
+    		public void getNewInstance(Node node, int id){
+    			String spacing,dir,halign,valign;
+    			NodeList widgets;
+    			Node attrib,widget;
+    			
+    			spacing = (attrib = node.getAttributes().getNamedItem("spacing")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("DockPanel wid"+id+" = new DockPanel();");
+    	        sw.println("wid"+id+".addStyleName(\"ScreenDock\");");
+    	        
+    	        if (spacing != null)
+    	            sw.println("wid"+id+".setSpacing("+spacing+");");
+    	        
+    	        widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	            	if(!loadWidget(widget,child)){
+    	            		count--;
+     	            	    continue;
+     	                }
+    	                dir = (attrib = widget.getAttributes().getNamedItem("dir")) != null ? attrib.getNodeValue() : "CENTER";
+    	                halign = (attrib = widget.getAttributes().getNamedItem("align")) != null ? attrib.getNodeValue() : "LEFT";
+    	                valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue() : "MIDDLE";
+
+   	                    sw.println("wid"+id+".add(wid"+child+", DockPanel."+dir.toUpperCase()+");");
+                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_"+halign+");");
+                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+",HasAlignment.ALIGN_"+valign+");");    	               
+    	            }
+    	        }
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.DockPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
+    		}
+    	});
+    	
+        factoryMap.put("Double", new Factory() {
+            public void getNewInstance(Node node, int id) {
+            	String pattern;
+            	Node attrib;
+            	 
+            	pattern = (attrib = node.getAttributes().getNamedItem("pattern")) != null ? attrib.getNodeValue() : null;
+
+                sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
+                
+                if (pattern != null) 
+                    sw.println("field"+id+".setPattern(\""+pattern+"\");");
+                
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.DoubleHelper");
+            }
+        });
+    	
+    	factoryMap.put("dropdown", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String[] tab;
+    			String fcase,visibleItems,field,key,width,enabled,required;
+    			Node attrib;
+    			NodeList list,cols;
+    		    Element table,label,col;
+    		    
+    		    field = (attrib = node.getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : "Integer";
+    		    visibleItems = (attrib = node.getAttributes().getNamedItem("visibleItems")) != null ? attrib.getNodeValue() : "10";
+    		    fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
+    		    tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    		    key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
+    		    width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
+    		    enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    		    required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
+    		    
+    		    if(field.equals("Integer")) 
+    		        sw.println("Dropdown<Integer> wid"+id+" = new Dropdown<Integer>();");
+    		    else
+    		        sw.println("Dropdown<String> wid"+id+" = new Dropdown<String>();");
+    		    
+				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+				
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				
+                sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
+                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
+
+				if(table == null) {
+				    table = doc.createElement("table");
+				    table.setAttribute("rows", visibleItems);
+				    table.setAttribute("width",width);
+				    cols = ((Element)node).getElementsByTagName("col");
+				    int length = cols.getLength();
+				    if(length > 0){
+				        for(int i = 0; i < length; i++){
+				        	col = (Element)cols.item(0);
+				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                                continue;
+				        	/*
+				            if(!col.hasChildNodes()) {
+				                label = doc.createElement("label");
+				                label.setAttribute("field", "String");
+				                cols.item(0).appendChild(label);
+				            }
+				            */
+				            table.appendChild(col);  
+				        }
+				    }else{
+				        col = doc.createElement("col");
+				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
+				        label = doc.createElement("label");
+				        label.setAttribute("field", "String");
+				        col.appendChild(label);
+				        table.appendChild(col);
+				    }
+				}
+				factoryMap.get("table").getNewInstance(table,1000+id);
+				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
+				
+				if(enabled != null)
+					sw.println("wid"+id+".setEnabled("+enabled+");");
+				
+				if(required != null)
+					sw.println("wid"+id+".setRequired("+required+");");
+				
+				setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.Dropdown");
+                composer.addImport("org.openelis.gwt.widget.table.Table");
+                composer.addImport("org.openelis.gwt.widget.table.Column");
+                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+
+    		}
+    	});
+    	
+    	factoryMap.put("editbox",new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String[] tab;
+    			String key,shortcut,enabled;
+    			Node attrib;
+    			
+    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : "true";
+    			
+    			sw.println("EditBox wid"+id+" = new EditBox();");
+    			factoryMap.get("String").getNewInstance(node, id);
+    			sw.println("wid"+id+".setHelper(field"+id+");");
+    			
+				if(tab != null)
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+
+				if(shortcut != null)
+					addShortcutHandler(node,"wid"+id);
+					
+    			setDefaults(node,"wid"+id);
+    	        
+   	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+
+    			sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    			sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+    			
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.EditBox");
+    		}
+    	});            	
+    	
+    	factoryMap.put("fileUpload", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String service;
+    			Node attrib;
+    			
+    			service = (attrib = node.getAttributes().getNamedItem("service")) != null ? attrib.getNodeValue() : "";
+    			sw.println("FileUploadWidget wid"+id+" = new FileUploadWidget(\""+service+"\");");
+    			setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.FileUploadWidget");
+    		}
+    	});   
+    	
+        factoryMap.put("FocusPanel", new Factory() {
+            public void getNewInstance(Node node, int id) {
+            	NodeList widgets;
+            	Node widget;
+            	
+                sw.println("FocusPanel wid"+id+" = new FocusPanel();");
+                sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
+                
+                widgets = node.getChildNodes();
+                for (int k = 0; k < widgets.getLength(); k++) {
+                	widget = widgets.item(k);
+                    if (widget.getNodeType() == Node.ELEMENT_NODE) {
+                        int child = ++count;
+                        if(!loadWidget(widget,count)){
+                            count--;
+                            continue;
+                        }
+                        sw.println("wid"+id+".setWidget(wid"+child+");");
+                        break;
+                    }
+                }
+                setDefaults(node,"wid"+id);
+            }
+            public void addImport() {
+                composer.addImport("com.google.gwt.user.client.ui.FocusPanel");
+            }
+        });  
+    	
+    	factoryMap.put("Grid", new Factory() {			
+			public void getNewInstance(Node node, int id) {
+				String numRows,numCols,style,align,valign,text,padding,spacing;
+				Node attrib,widget;
+				NodeList rows,widgets;
+				String[] styles;
+				
+				numRows = (attrib = node.getAttributes().getNamedItem("rows")) != null ? attrib.getNodeValue() : "1";
+				numCols = (attrib = node.getAttributes().getNamedItem("cols")) != null ? attrib.getNodeValue() : "1";
+				padding = (attrib = node.getAttributes().getNamedItem("padding")) != null ? attrib.getNodeValue() : "0";
+				spacing = (attrib = node.getAttributes().getNamedItem("spacing")) != null ? attrib.getNodeValue() : "0";
+				
+				sw.println("Grid wid"+id+" = new Grid("+numRows+","+numCols+");");
+				sw.println("wid"+id+".setCellPadding("+padding+");");
+				sw.println("wid"+id+".setCellSpacing("+spacing+");");
+				
+    	        rows = ((Element)node).getElementsByTagName("row");
+    	        for (int k = 0; k < rows.getLength(); k++) {
+    	            widgets = rows.item(k).getChildNodes();
+    	            int w = -1;
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                    w++;
+    	                    if(widget.getNodeName().equals("cell")) {
+    	                    	styles = (attrib = widget.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue().split(",") : null;
+    	                    	text = (attrib = widget.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue().trim() : null;
+    	                    	align   = (attrib = widget.getAttributes().getNamedItem("halign"))   != null ? attrib.getNodeValue() : null;
+        	                    valign  = (attrib = widget.getAttributes().getNamedItem("valign"))  != null ? attrib.getNodeValue() : null;
+    	                    	
+    	                    	 if (styles != null){
+    	                             sw.println("wid"+id+".getCellFormatter().setStyleName("+k+","+w+","+"\""+styles[0]+"\");");
+    	                             for(int i = 1; i < styles.length; i++){
+    	                            	 sw.println("wid"+id+".getCellFormatter().addStyleName("+k+","+w+","+"\""+styles[i]+"\");");
+    	                             }
+    	                         }
+    	                    	
+    	                    	if(text != null && !text.equals(""))
+    	                    		sw.println("wid"+id+".setText("+k+","+w+",\""+text+"\");");
+    	                    	
+    	                      	if (align != null) 
+  	                    			sw.println("wid"+id+".getCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_"+align.toUpperCase()+");");
+
+    	                    	if (valign != null) 
+  	                    			sw.println("wid"+id+".getCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_"+valign.toUpperCase()+");");
+    	                    	
+    	                    	continue;
+    	                    }
+    	                    
+    	                    int child = ++count;
+    	                    if(!loadWidget(widget,child)){
+    	                    	count--;
+    	                    	continue;
+    	                    }
+    	                    
+    	                    style   = (attrib = widget.getAttributes().getNamedItem("style"))   != null ? attrib.getNodeValue() : null;
+    	                    align   = (attrib = widget.getAttributes().getNamedItem("halign"))   != null ? attrib.getNodeValue() : null;
+    	                    valign  = (attrib = widget.getAttributes().getNamedItem("valign"))  != null ? attrib.getNodeValue() : null;
+    	                    
+  	                    	sw.println("wid"+id+".setWidget("+k+","+w+",wid"+child+");");
+    	                    
+    	                    if(widget.getNodeName().equals("widget")) {    	                    	
+    	                    	if (style != null)
+    	                    		sw.println("wid"+id+".getCellFormatter().addStyleName("+k+","+w+","+"\""+style+"\");");
+    	                    	
+    	                    	if (align != null) 
+  	                    			sw.println("wid"+id+".getCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_"+align.toUpperCase()+");");
+
+    	                    	if (valign != null) 
+  	                    			sw.println("wid"+id+".getCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_"+valign.toUpperCase()+");");
+    	                    }
+    	                }
+    	            }
+    	            
+    	            style = (attrib = rows.item(k).getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue() : null;
+    	            if (style != null) 
+    	            	sw.println("wid"+id+".getRowFormatter().addStyleName("+k+",\""+style+"\");");
+    	  
+    	        }
+    	        setDefaults(node,"wid"+id);
+				
+			}
+			
+			public void addImport() {
+				composer.addImport("com.google.gwt.user.client.ui.Grid");
+			}
+		});
+    	
+    	factoryMap.put("HorizontalPanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String spacing,halign,valign,style;
+    			NodeList widgets;
+    			Node attrib,widget;
+    			
+    			spacing = (attrib = node.getAttributes().getNamedItem("spacing")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("HorizontalPanel wid"+id+" = new HorizontalPanel();");
+    			
+    			if (spacing != null)
+    				sw.println("wid"+id+".setSpacing("+spacing+");");
+    			
+    			widgets = node.getChildNodes();
+    			for (int k = 0; k < widgets.getLength(); k++) {
+    				widget = widgets.item(k);
+    				if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    					int child = ++count;
+    					if(!loadWidget(widget,child)){
+     	            	   count--;
+     	            	   continue;
+     	                }
+    				    halign = (attrib = widget.getAttributes().getNamedItem("halign")) != null ? attrib.getNodeValue().toUpperCase() : "LEFT";
+    				    valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue().toUpperCase() : "MIDDLE";
+    				    style = (attrib = widget.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue() : null;
+    				    
+    					sw.println("wid"+id+".add(wid"+child+");");
+						sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_"+halign+");");
+						sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_"+valign+");");
+    				}
+    			}
+    			sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
+    			setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.HorizontalPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
+    		}
+    	});
+    	
+    	factoryMap.put("HorizontalSplitPanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String splitPos;
+    			NodeList sections,widgets;
+    			Node attrib,section,widget;
+    			
+    			splitPos = (attrib = node.getAttributes().getNamedItem("splitpos")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("final HorizontalSplitPanel wid"+id+" = new HorizontalSplitPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
+    	        sections = ((Element)node).getElementsByTagName("section");
+    	        for (int k = 0; k < sections.getLength(); k++) {
+    	        	section = sections.item(k);
+    	            widgets = section.getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	if(!loadWidget(widget,child)){
+    	                		count--;
+    	    	            	continue;
+    	    	            }
+    	                    if (k == 0) 
+    	                    	sw.println("wid"+id+".setLeftWidget(wid"+child+");");        		
+    	                    else
+   	                            sw.println("wid"+id+".setRightWidget(wid"+child+");");
+    	                }
+    	            }
+    	        }
+    	        
+    	        if (splitPos != null) 
+   	                sw.println("wid"+id+".setSplitPosition("+splitPos+");");
+    	        
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.HorizontalSplitPanel");
+    		}
+    	});
+    	
+    	factoryMap.put("html", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("HTML wid"+id+" = new HTML();");
+    	        if(node.getFirstChild() != null)
+    	            sw.println("wid"+id+".setHTML(\""+node.getFirstChild().getNodeValue()+"\");");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenHTML\");");
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.HTML");
+    		}
+    	});
+    	
+        factoryMap.put("Integer", new Factory(){
+            public void getNewInstance(Node node, int id) {
+            	String pattern;
+            	Node attrib;
+            	
+            	pattern = (attrib = node.getAttributes().getNamedItem("pattern")) != null ? attrib.getNodeValue() : null;
+            	
+                sw.println("IntegerHelper field"+id+" = new IntegerHelper();");
+                
+                if (pattern != null) 
+                    sw.println("field"+id+".setPattern(\""+pattern+"\");");
+                
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.IntegerHelper");
+            }
+        });    	
+    	
+    	factoryMap.put("label", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String field,text,wordwrap;
+    			Node attrib;
+    			
+    			field = (attrib = node.getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : "String";
+    			text = (attrib = node.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : null;
+    			wordwrap = (attrib = node.getAttributes().getNamedItem("wordwrap")) != null ? attrib.getNodeValue() : "false";
+    			
+    			factoryMap.get(field).getNewInstance(node, id);
+    			
+    			if(field.equals("Date"))
+    				field = "Datetime";
+    			
+    			sw.println("org.openelis.gwt.widget.Label<"+field+"> wid"+id+" = new org.openelis.gwt.widget.Label<"+field+">();");
+   				sw.println("wid"+id+".setHelper(field"+id+");");
+
+    	        if (text != null)
+    	            sw.println("wid"+id+".setText(\""+text+"\");");
+    	        
+   	            sw.println("wid"+id+".setWordWrap("+wordwrap+");");
+
+    	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    		}
+    	});
+    	
+        factoryMap.put("Long", new Factory(){
+            public void getNewInstance(Node node,int id) {
+            	String pattern;
+            	Node attrib;
+            	
+            	pattern = (attrib = node.getAttributes().getNamedItem("pattern")) != null ? attrib.getNodeValue() : null;
+            	
+                sw.println("LongHelper field"+id+" = new LongHelper();");
+                
+                if (pattern != null) 
+                    sw.println("field"+id+".setPattern(\""+pattern+"\");");
+                
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.LongHelper");
+            }
+        });
+    	
+    	factoryMap.put("menu",new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String icon,display,description,showBelow;
+    			boolean selfShow;
+    			Node attrib;
+    			NodeList items,wid;
+    			int child = 0;
+    			
+    			wid = ((Element)node).getElementsByTagName("menuDisplay");
+    			if(wid.getLength() > 0) {
+    				items = wid.item(0).getChildNodes();
+    				for(int i = 0; i < items.getLength(); i++) {
+    					if(items.item(i).getNodeType() == Node.ELEMENT_NODE) {
+    						child = ++count;
+    						loadWidget(items.item(i),child);
+    						break;
+    					}
+    				}
+				   sw.println("Menu wid"+id+"= new Menu(wid"+child+");");
+    			}else {
+    				icon = (attrib = node.getAttributes().getNamedItem("icon")) != null ? attrib.getNodeValue() : "";
+    				display = (attrib = node.getAttributes().getNamedItem("display")) != null ? attrib.getNodeValue() : "";
+    				description = (attrib = node.getAttributes().getNamedItem("description")) != null ? attrib.getNodeValue().replaceAll("\"","'") : "";
+    			
+    				sw.println("Menu wid"+id+"= new Menu(\""+icon+"\",\""+display+"\",\""+description+"\");");
+    			}
+    			
+    			
+    			selfShow = (attrib = node.getAttributes().getNamedItem("selfShow")) != null ? Boolean.parseBoolean(attrib.getNodeValue()) : false; 
+    			showBelow = (attrib = node.getAttributes().getNamedItem("showBelow")) != null ? attrib.getNodeValue() : "false";
+    			
+    			if(selfShow) 
+    				sw.println("wid"+id+".setSelfShow();");
+    			
+    			sw.println("wid"+id+".showBelow("+showBelow+");");
+    			
+    			items = node.getChildNodes();
+    			for(int i = 0; i < items.getLength(); i++) {
+    				if(items.item(i).getNodeType() == Node.ELEMENT_NODE) {
+    					if(items.item(i).getNodeName().equals("separator"))
+    						sw.println("wid"+id+".addMenuSeparator();");
+    					else if(items.item(i).getNodeName().equals("menuDisplay")){
+    						continue;
+    					}else{
+    						child = ++count;
+        					if(!loadWidget(items.item(i),child)){
+         	            	   count--;
+         	            	   continue;
+         	               }
+        				   sw.println("wid"+id+".addItem(wid"+child+");");
+    					}
+    				}
+    			}
+    	        
+    	        setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.Menu");
+    		}
+    	});
+    	
+    	factoryMap.put("menuItem", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String icon,display,description,enabled,shortcut,autoClose;
+    			Node attrib;
+    			
+    			icon = (attrib = node.getAttributes().getNamedItem("icon")) != null ? attrib.getNodeValue() : "";
+    			display = (attrib = node.getAttributes().getNamedItem("display")) != null ? attrib.getNodeValue() : "";
+    			description = (attrib = node.getAttributes().getNamedItem("description")) != null ? attrib.getNodeValue().replaceAll("\"","'") : "";
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+    			autoClose = (attrib = node.getAttributes().getNamedItem("autoClose")) != null ? attrib.getNodeValue() : "true";
+    			
+    			sw.println("MenuItem wid"+id+"= new MenuItem(\""+icon+"\",\""+display+"\",\""+description+"\","+autoClose+");");
+    			
+    			if(enabled != null) 
+    				sw.println("wid"+id+".setEnabled("+enabled+");");
+    			
+    			if(shortcut != null)
+    				addShortcutHandler(node,"wid"+id);
+    	        
+    	        setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.MenuItem");
+    			composer.addImport("com.google.gwt.user.client.ui.Widget");
+    		}
+    	});    	
+    	
+    	factoryMap.put("menuBar", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			NodeList menus;
+    			
+    			sw.println("MenuBar wid"+id+"= new MenuBar();");
+    			
+    			menus = node.getChildNodes();
+    			for(int i = 0; i < menus.getLength(); i++) {
+    				if(menus.item(i).getNodeType() == Node.ELEMENT_NODE) {
+    					int child = ++count;
+    					if(!loadWidget(menus.item(i),child)){
+    						count--;
+    						continue;
+    					}
+    					sw.println("wid"+id+".addMenu(wid"+child+");");
+    				}
+    			}
+
+    	        setDefaults(node,"wid"+id);
+    		}
+
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.MenuBar");
+    		}
+    	});
+    	
+    	factoryMap.put("notes", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("NotesPanel wid"+id+" = new NotesPanel();");
+    			sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
+    			setDefaults(node,"wid"+id);
+    		}
+    		public void addImport(){
+    			composer.addImport("org.openelis.gwt.widget.NotesPanel");
+    		}
+    	});    	
+    	
+    	factoryMap.put("password", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String[] tab;
+    			String key,enabled,shortcut,required;
+    			Node attrib;
+    			
+    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    			required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("PassWordTextBox wid"+id+" = new PassWordTextBox();");
+    			
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				
+				if(shortcut != null)
+					addShortcutHandler(node,"wid"+id);
+			    
+    	        sw.println("wid"+id+".setStyleName(\"ScreenPassword\");");
+    	        setDefaults(node, "wid"+id);
+    	        
+    	        if(enabled != null)
+    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+    	        
+    	        if(required != null)
+    	        	sw.println("wid"+id+".setRequired("+required+");");
+    	        
+    	        factoryMap.get("String").getNewInstance(node, id);
+    	        sw.println("wid"+id+".setHelper(field"+id+");");
+    	        
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+    	        
+    		}
+    		public void addImport(){
+    			composer.addImport("org.openelis.gwt.widget.PassWordTextBox");
+    		}
+    	});    	
+    	
+    	factoryMap.put("richtext", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String[] tab;
+    			String tools,shortcut,width,height,enabled,key;
+    			Node attrib;
+    			
+    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "100%";
+    			height = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "300px";
+    			tools = (attrib = node.getAttributes().getNamedItem("tools")) != null ? attrib.getNodeValue() : "true";
+    			
+    			sw.println("RichTextWidget wid"+id+" = new RichTextWidget();"); 
+    	        
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+
+				if(shortcut != null)
+					addShortcutHandler(node,"wid"+id);
+				
+    	        sw.println("wid"+id+".init("+tools+");");
+    	        sw.println("wid"+id+".area.setSize(\""+width+"\",\""+height+"\");");
+    	        
+    	        sw.println("wid"+id+".area.setStyleName(\"ScreenTextArea\");");
+    	        setDefaults(node, "wid"+id);
+    	        if(enabled != null){
+    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+    	        }
+    	        
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+    	        
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.richtext.RichTextWidget");
+    		}
+    	});
+    	
+    	factoryMap.put("ScrollPanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			NodeList widgets;
+    			Node widget;
+    			
+    			sw.println("ScrollPanel wid"+id+" = new ScrollPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
+
+    	        widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	                if(!loadWidget(widget,count)){
+    	                	count--;
+    	                	continue;
+    	                }
+    	                sw.println("wid"+id+".setWidget(wid"+child+");");
+    	                break;
+    	            }
+    	        }
+    	        setDefaults(node,"wid"+id);    	       
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
+    			composer.addImport("com.google.gwt.user.client.DOM");
+    		}
+    	});    	
+    	
+    	factoryMap.put("ScrollTabBar", new Factory(){
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("ScrollableTabBar wid"+id+" = new ScrollableTabBar();");
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.ScrollableTabBar");
+    		}
+    	});    	
+    	
+    	factoryMap.put("StackPanel", new Factory(){
+    		public void getNewInstance(Node node, int id) {
+    			String text;
+    			Node attrib,stack,widget;
+    			NodeList stacks,widgets;
+    			
+    			sw.println("StackPanel wid"+id+" = new StackPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenStack\");");
+    	        stacks = ((Element)node).getElementsByTagName("stack");
+    	        for (int k = 0; k < stacks.getLength(); k++) {
+    	        	stack = stacks.item(k);
+    	            widgets = stack.getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	if(!loadWidget(widget,child)){
+    	                		count--;
+    	    	            	continue;
+    	    	            }
+    	                	text = (attrib = widget.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : "";
+    	                    sw.println("wid"+id+".add(wid"+child+", \""+text+"\");");
+    	                }
+    	            }
+    	        }
+    	        sw.println("wid"+id+".showStack(0);");
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport(){
+    			composer.addImport("com.google.gwt.user.client.ui.StackPanel");
+    		}
+    	});
+    	
+        factoryMap.put("String", new Factory() {
+            public void getNewInstance(Node node, int id) {
+                sw.println("StringHelper field"+id+" = new StringHelper();");
+            }
+            public void addImport() {
+                composer.addImport("org.openelis.gwt.widget.StringHelper");
+            }
+        });    	
+    	
+    	factoryMap.put("TabBar", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String text,visible;
+    			Node attrib,tab;
+    			NodeList tabs;
+    			
+    			sw.println("TabBar wid"+id+" = new TabBar();");
+    			tabs = ((Element)node).getElementsByTagName("tab");
+      	        
+    			for (int k = 0; k < tabs.getLength(); k++) {
+    				tab = tabs.item(k);
+    				text = (attrib = tab.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : "";
+    				visible = (attrib = tab.getAttributes().getNamedItem("visible")) != null ? attrib.getNodeValue() : "true";
+    				
+      	        	sw.println("wid"+id+".addTab(\""+text+"\");");
+   	        		sw.println("wid"+id+".setTabVisible(wid"+id+".getTabCount() -1, "+visible+");");
+      	        }
+      	        
+    			if(tabs.getLength() > 0)
+      	        	sw.println("wid"+id+".selectTab(0);");
+    			
+    			setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.TabBar");
+    		}
+    	});
+    	
+    	factoryMap.put("table", new Factory() {
+     	   public void getNewInstance(Node node, int id) {
+     		   String rows,width,hscroll,vscroll,key,header,minWidth,name,field,rowHeight,filter,sort,align,multiSelect;
+     		   String[] tab;
+     		   Node attrib,col;
+     		   NodeList cols,editor;
+     		   
+     		   rows = (attrib = node.getAttributes().getNamedItem("rows")) != null ? attrib.getNodeValue() : "10";
+     		   width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+     		   vscroll = (attrib = node.getAttributes().getNamedItem("vscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
+     		   hscroll = (attrib = node.getAttributes().getNamedItem("hscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
+     		   tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+     		   key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+     		   rowHeight = (attrib = node.getAttributes().getNamedItem("rowHeight")) != null ? attrib.getNodeValue() : null;
+     		   multiSelect = (attrib = node.getAttributes().getNamedItem("multiSelect")) != null ? attrib.getNodeValue() : null;
+     		   
+     	       sw.println("Table wid"+id+" = new Table();");
+     		   
+                if(tab != null) 
+                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+                
+                sw.println("wid"+id+".setVisibleRows("+rows+");");
+                
+                if(width != null)
+             	   sw.println("wid"+id+".setWidth("+width+");");
+                
+                sw.println("wid"+id+".setVerticalScroll(Table.Scrolling.valueOf(\""+vscroll+"\"));");
+                sw.println("wid"+id+".setHorizontalScroll(Table.Scrolling.valueOf(\""+hscroll+"\"));");
+                
+                if(rowHeight != null) 
+             	   sw.println("wid"+id+".setRowHeight("+rowHeight+");");
+                
+                if(multiSelect != null) 
+             	   sw.println("wid"+id+".setAllowMultipleSelection("+multiSelect+");");
+                
+     	       
+                cols = node.getChildNodes();
+                for(int i = 0; i < cols.getLength(); i++) {
+                    col = cols.item(i);
+                    if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                        continue;
+                    key = (attrib = col.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+                    header = (attrib = col.getAttributes().getNamedItem("header")) != null ? attrib.getNodeValue() : null;
+                    width = (attrib = col.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+                    minWidth = (attrib = col.getAttributes().getNamedItem("minWidth")) != null ? attrib.getNodeValue() : null;
+                    filter = (attrib = col.getAttributes().getNamedItem("filter")) != null ? attrib.getNodeValue() : null;
+                    sort = (attrib = col.getAttributes().getNamedItem("sort")) != null ? attrib.getNodeValue() : null;
+                    align = (attrib = col.getAttributes().getNamedItem("align")) != null ? attrib.getNodeValue() : null;
+                    
+                    sw.println("Column column"+id+"_"+i+" = wid"+id+".addColumn();");
+                    
+                    if(key != null)
+                        sw.println("column"+id+"_"+i+".setName(\""+key+"\");");
+                    
+                    if(header != null){
+                        sw.println("column"+id+"_"+i+".setLabel(\""+header+"\");");
+                        sw.println("wid"+id+".setHeader(true);");
+                    }
+                    
+                    if(width != null)
+                        sw.println("column"+id+"_"+i+".setWidth("+width+");");
+                    
+                    if(minWidth != null)
+                        sw.println("column"+id+"_"+i+".setMinWidth("+minWidth+");");
+                    
+                    if(sort != null)
+                        sw.println("column"+id+"_"+i+".setSortable("+sort+");");
+                    
+                    if(filter != null)
+                 	   sw.println("column"+id+"_"+i+".setFilterable("+filter+");");
+                    
+                    //if(align != null)
+                 	 //  sw.println("column"+id+"_"+i+".setAlignment(\")
+                    
+                    editor = col.getChildNodes();
+                    for(int j = 0; j < editor.getLength(); j++){
+                        if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            int child = ++count;
+                            if(!createWidget(editor.item(j),child)){
+                                count--;
+                                continue;
+                            }
+                            
+                            name = editor.item(j).getNodeName();
+                            field = (attrib = editor.item(j).getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : name.equals("dropdown") ? "Integer" : "String";
+                            
+                            if(field.equals("Date"))
+                                field = "Datetime";
+                           
+                            if(name.equals("dropdown"))    
+                                sw.println("DropdownCell<"+field+"> cell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                            else if(name.equals("textbox")) 
+                                sw.println("TextBoxCell<"+field+"> cell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                            else if(name.equals("autoComplete"))
+                                sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
+                            else if(name.equals("check"))
+                                sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
+                            else if(name.equals("calendar"))
+                                sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                            else
+                                sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
+                            
+                            sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
+                            //sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
+                            break;
+                        }
+                    }
+                }
+     	        
+     	    }
+     	   public void addImport() {
+     	       composer.addImport("org.openelis.gwt.widget.table.Table");
+     	       composer.addImport("org.openelis.gwt.widget.table.Column");
+                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+                composer.addImport("org.openelis.gwt.widget.table.TextBoxCell");
+                composer.addImport("org.openelis.gwt.widget.table.AutoCompleteCell");
+                composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
+                composer.addImport("org.openelis.gwt.widget.table.CheckBoxCell");
+                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");    	        
+      	   }
+     	});    	
+    	
+    	factoryMap.put("TabPanel", new Factory() {
+    		public void getNewInstance(Node node, int id){
+    			String width,height,text,tabKey,visible;
+    			NodeList tabs,widgets;
+    			Node attrib,tab,widget;
+    			
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "auto";
+    			height = (attrib = node.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : "auto";
+    			
+    			sw.println("TabPanel wid"+id+" = new TabPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");    	        
+   	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
+   	        	sw.println("wid"+id+".setHeight(\""+height+"\");");
+
+    	        tabs = ((Element)node).getElementsByTagName("tab");
+    	        for (int k = 0; k < tabs.getLength(); k++) {
+    	        	tab = tabs.item(k);
+    	            widgets = tabs.item(k).getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	
+    	                    if(!loadWidget(widget,child)){
+    	    	               count--;
+    	    	               continue;    	    	            
+    	    	            }
+    	                    
+    	                    tabKey = (attrib = tab.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue() : null;
+    	                    text = (attrib = tab.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : "";
+    	                    visible = (attrib = tab.getAttributes().getNamedItem("visible")) != null ? attrib.getNodeValue() : "true";
+    	                    
+    	                    if(tabKey != null)
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+text+"\",\""+tabKey+"\");");
+    	                    else
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+text+"\");");
+
+                    		sw.println("wid"+id+".setTabVisible(wid"+id+".getTabBar().getTabCount() -1,"+visible+");");
+    	                }
+    	            }
+    	            sw.println("wid"+id+".selectTab(0);");
+    	    		sw.println("wid"+id+".addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {");
+    	    			sw.println("public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {");
+    	    				sw.println("panel.setFocusWidget(null);");
+    	    			sw.println("}");	
+    	    		sw.println("});");
+    	        }
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.TabPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionEvent");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionHandler");
+    		}
+    	});
+    	
+    	factoryMap.put("TablePanel", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String spacing,padding,colSpan,rowSpan,align,valign,style,text;
+    			NodeList rows,widgets;
+    			Node attrib,widget;
+    			String[] styles;
+    			
+    			spacing = (attrib = node.getAttributes().getNamedItem("spacing")) != null ? attrib.getNodeValue() : null;
+    			padding = (attrib = node.getAttributes().getNamedItem("padding")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("FlexTable wid"+id+" = new FlexTable();");
+
+    	        if (spacing != null)
+    	            sw.println("wid"+id+".setCellSpacing("+spacing+");");
+    	        
+    	        if (padding != null)
+    	            sw.println("wid"+id+".setCellPadding("+padding+");");
+    	        
+    	        rows = ((Element)node).getElementsByTagName("row");
+    	        for (int k = 0; k < rows.getLength(); k++) {
+    	            widgets = rows.item(k).getChildNodes();
+    	            int w = -1;
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                    w++;
+    	                    if(widget.getNodeName().equals("text")) {
+    	                    	styles = (attrib = widget.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue().split(",") : null;
+    	                    	text = (attrib = widget.getFirstChild()) != null ? attrib.getNodeValue().trim() : null;
+    	                    	
+    	                    	 if (styles != null){
+    	                             sw.println("wid"+id+".getCellFormatter().setStyleName("+k+","+w+","+"\""+styles[0]+"\");");
+    	                             for(int i = 1; i < styles.length; i++){
+    	                            	 sw.println("wid"+id+".getCellFormatter().addStyleName("+k+","+w+","+"\""+styles[i]+"\");");
+    	                             }
+    	                         }
+    	                    	
+    	                    	if(text != null && !text.equals(""))
+    	                    		sw.println("wid"+id+".setText("+k+","+w+",\""+text+"\");");
+    	                    	
+    	                    	continue;	
+    	                    }
+    	                    int child = ++count;
+    	                    if(!loadWidget(widgets.item(l),child)){
+    	                    	count--;
+    	                    	continue;
+    	                    }
+    	                    colSpan = (attrib = widget.getAttributes().getNamedItem("colspan")) != null ? attrib.getNodeValue() : null;
+    	                    rowSpan = (attrib = widget.getAttributes().getNamedItem("rowspan")) != null ? attrib.getNodeValue() : null;
+    	                    style   = (attrib = widget.getAttributes().getNamedItem("style"))   != null ? attrib.getNodeValue() : null;
+    	                    align   = (attrib = widget.getAttributes().getNamedItem("halign"))   != null ? attrib.getNodeValue() : null;
+    	                    valign  = (attrib = widget.getAttributes().getNamedItem("valign"))  != null ? attrib.getNodeValue() : null;
+    	                    
+    	                    sw.println("wid"+id+".setWidget("+k+","+w+",wid"+child+");");
+    	                    
+    	                    if(widget.getNodeName().equals("widget")) {
+    	                    	if (colSpan != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setColSpan("+k+","+w+","+colSpan+");");
+    	                    	
+    	                    	if (rowSpan != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setRowSpan("+k+","+w+","+rowSpan+");");
+    	                    	
+    	                    	if (style != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().addStyleName("+k+","+w+","+"\""+style+"\");");
+    	                    	
+    	                    	if (align != null) 
+  	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_"+align.toUpperCase()+");");
+
+    	                    	if (valign != null) 
+  	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_"+valign.toUpperCase()+");");
+    	                    }
+    	                }
+    	            }
+    	            
+    	            style = (attrib = rows.item(k).getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue() : null;
+    	            if (style != null) 
+    	            	sw.println("wid"+id+".getRowFormatter().addStyleName("+k+",\""+style+"\");");
+    	  
+    	        }
+    	        setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.FlexTable");
+    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
+    		}
+    	});    	
+    	
+    	factoryMap.put("text",new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String wordwrap,text;
+    			Node attrib;
+    			
+    			wordwrap = (attrib = node.getAttributes().getNamedItem("wordwrap")) != null ? attrib.getNodeValue() : "false";
+    			text = node.hasChildNodes() ? node.getFirstChild().getNodeValue().trim() : "";
+    			
+    			sw.println("Label wid"+id+" = new Label();");
+  	            sw.println("wid"+id+".setWordWrap("+wordwrap+");");
+  	            sw.println("wid"+id+".setText(\""+text+"\");");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
+
+    	        setDefaults(node, "wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.Label");
+    		}
+    	});    		
+    	
+    	factoryMap.put("textarea", new Factory(){
+    		public void getNewInstance(Node node, int id) {
+    			String[] tab;
+    			String key,shortcut,enabled,required;
+    			Node attrib;
+    			
+    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("TextArea wid"+id+" = new TextArea();");
+    			
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+
+				if(shortcut != null)
+					addShortcutHandler(node,"wid"+id);
+			    
+    	        sw.println("wid"+id+".setStyleName(\"ScreenTextArea\");");
+    	        
+    	        setDefaults(node, "wid"+id);
+    	        
+    	        if(enabled != null)
+    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+    	        
+    	        if(required != null)
+    	        	sw.println("wid"+id+".setRequired("+required+");");
+    	        
+    	        factoryMap.get("String").getNewInstance(node, id);
+    	        sw.println("wid"+id+".setHelper(field"+id+");");
+    	        
+    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+    	        
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.TextArea");
+    		}
+    	});    	
+
     	factoryMap.put("textbox",new Factory() {
 			public void getNewInstance(Node node, int id) {
-				if(node.getAttributes().getNamedItem("field") != null){
-					if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer"))
-						sw.println("TextBox<Integer> wid"+id+" = new TextBox<Integer>();");
-					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Double"))
-						sw.println("TextBox<Double> wid"+id+" = new TextBox<Double>();");
-					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long")) 
-						sw.println("TextBox<Long> wid"+id+" = new TextBox<Long>();");
-					else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Date"))
-						sw.println("TextBox<Datetime> wid"+id+" = new TextBox<Datetime>();");
-					else
-						sw.println("TextBox<String> wid"+id+" = new TextBox<String>();");
-				}else
-					sw.println("TextBox<String> wid"+id+" = new TextBox<String>();");
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-				sw.println("wid"+id+".setStyleName(\"ScreenTextBox\");");
-				if (node.getAttributes().getNamedItem("case") != null){
-				    String fieldCase = node.getAttributes().getNamedItem("case")
-				    .getNodeValue().toUpperCase();
-				    sw.println("wid"+id+".setCase(Case.valueOf(\""+fieldCase+"\"));");
-	        	}
+				String[] tab;
+				String field,fcase,shortcut,max,textAlign,mask,required,enabled,key,cField;
+				Node attrib;
+				
+				cField = (field = (attrib = node.getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : "String").equals("Date") ? "Datetime" : field;
+				tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+				fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
+				shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
+				max = (attrib = node.getAttributes().getNamedItem("max")) != null ? attrib.getNodeValue() : null;
+				textAlign = (attrib = node.getAttributes().getNamedItem("textAlign")) != null ? attrib.getNodeValue() : "LEFT";
+				mask = (attrib = node.getAttributes().getNamedItem("mask")) != null ? attrib.getNodeValue() : null;
+				required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
+				enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+				key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+				
+				sw.println("TextBox<"+cField+"> wid"+id+" = new TextBox<"+cField+">();");
+				
+				if(tab != null) 
+					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
 
-				if (node.getAttributes().getNamedItem("max") != null) {
-					int length = Integer.parseInt(node.getAttributes().getNamedItem("max").getNodeValue());
-					sw.println("wid"+id+".setMaxLength("+length+");");
-				}
-	        
-				if (node.getAttributes().getNamedItem("textAlign") != null) {
-					String align = node.getAttributes().getNamedItem("textAlign").getNodeValue();
-					if(align.equalsIgnoreCase("center"))
-						sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_CENTER);");
-					if(align.equalsIgnoreCase("right"))
-						sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_RIGHT);");
-					if(align.equalsIgnoreCase("left"))   
-						sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_LEFT);");
-					//sw.println("wid"+id+".setTextAlignment(wid"+id+".alignment);");
-				}
+				if (shortcut != null)
+					addShortcutHandler(node,"wid"+id);
+				
+				sw.println("wid"+id+".setStyleName(\"ScreenTextBox\");");
+				
+				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");
+
+				if (max != null) 
+					sw.println("wid"+id+".setMaxLength("+max+");");
+
+				sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_"+textAlign.toUpperCase()+");");
 	        
 				/*
 				if (node.getAttributes().getNamedItem("autoNext") != null){
@@ -437,26 +1867,19 @@ public class UIGenerator extends Generator {
 				}
 				*/
 				
-				if (node.getAttributes().getNamedItem("mask") != null) {
-					String mask = node.getAttributes().getNamedItem("mask").getNodeValue();
+				if (mask != null) 
 					sw.println("wid"+id+".setMask(\""+mask+"\");");
-				}
 				
-				if (node.getAttributes().getNamedItem("required") != null) {
-				    sw.println("wid"+id+".setRequired("+node.getAttributes().getNamedItem("required").getNodeValue()+");");
-				}
+				if(required != null)
+					sw.println("wid"+id+".setRequired("+required+");");
 				
 				setDefaults(node,"wid"+id);
-		        if (node.getAttributes().getNamedItem("enable") != null){
-		        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-		        }
-				if (node.getAttributes().getNamedItem("field") != null) {
-					factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, id);
-					sw.println("wid"+id+".setHelper(field"+id+");");
-				}else{
-					factoryMap.get("String").getNewInstance(node, id);
-					sw.println("wid"+id+".setHelper(field"+id+");");
-				}
+
+				if(enabled != null)
+					sw.println("wid"+id+".setEnabled("+enabled+");");
+
+				factoryMap.get(field).getNewInstance(node, id);
+				sw.println("wid"+id+".setHelper(field"+id+");");
 				
 				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
@@ -473,1078 +1896,21 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.StringHelper");
 			}
     	});
-    	factoryMap.put("tablered", new Factory() {
-    	   public void getNewInstance(Node node, int id) {
-    	       sw.println("Table wid"+id+" = new Table();");
-    	       
-               NodeList colList = node.getChildNodes();
-               for(int i = 0; i < colList.getLength(); i++) {
-                   Node col = colList.item(i);
-                   if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                       continue;
-                   sw.println("Column column"+id+"_"+i+" = wid"+id+".addColumn();");
-                   if(col.getAttributes().getNamedItem("key") != null)
-                       sw.println("column"+id+"_"+i+".setName(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                   if(col.getAttributes().getNamedItem("header") != null){
-                       sw.println("column"+id+"_"+i+".setLabel(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                       sw.println("wid"+id+".setHeader(true);");
-                   }
-                   if(col.getAttributes().getNamedItem("width") != null)
-                       sw.println("column"+id+"_"+i+".setWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
-                   if(col.getAttributes().getNamedItem("minWidth") != null)
-                       sw.println("column"+id+"_"+i+".setMinWidth("+col.getAttributes().getNamedItem("minWidth").getNodeValue()+");");
-                   NodeList editor = col.getChildNodes();
-                   for(int j = 0; j < editor.getLength(); j++){
-                       if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                           int child = ++count;
-                           if(!createWidget(editor.item(j),child)){
-                               count--;
-                               continue;
-                           }
-                           //sw.println("if(wid"+child+" instanceof HasBlurHandlers)");
-                           //sw.println("((HasBlurHandlers)wid"+child+").addBlurHandler(wid"+id+");");
-                           String field = "String";
-                           if(editor.item(j).getAttributes().getNamedItem("field") != null)
-                               field = editor.item(j).getAttributes().getNamedItem("field").getNodeValue();
-                          
-                           if(editor.item(j).getNodeName().equals("dropdown")) 
-                               sw.println("DropdownCell<"+field+"> cell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
-                           else if(editor.item(j).getNodeName().equals("textbox")) 
-                               sw.println("TextBoxCell<"+field+"> cell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
-                           else if(editor.item(j).getNodeName().equals("autoComplete"))
-                               sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
-                           else if(editor.item(j).getNodeName().equals("checkbox"))
-                               sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
-                           else if(editor.item(j).getNodeName().equals("calendar"))
-                               sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
-                           else
-                               sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
-                           
-                           sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
-                           sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
-                           break;
-                       }
-                   }
-               }
-               
-               if(node.getAttributes().getNamedItem("tab") != null) {
-                   String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-                   String[] tabs = tab.split(",");
-                   String key = node.getAttributes().getNamedItem("key").getNodeValue();
-                   sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-               }
-               
-               if(node.getAttributes().getNamedItem("visibleRows") != null)
-                   sw.println("wid"+id+".setVisibleRows("+node.getAttributes().getNamedItem("visibleRows").getNodeValue()+");");
-               if(node.getAttributes().getNamedItem("width") != null)
-                   sw.println("wid"+id+".setWidth("+node.getAttributes().getNamedItem("width").getNodeValue()+");");
-               if(node.getAttributes().getNamedItem("scroll") != null)
-                   sw.println("wid"+id+".setVerticalScroll(Table.Scrolling.valueOf(\""+node.getAttributes().getNamedItem("scroll").getNodeValue()+"\"));");
-    	        
-    	    }
-    	   public void addImport() {
-    	       composer.addImport("org.openelis.gwt.widget.redesign.table.Table");
-    	       composer.addImport("org.openelis.gwt.widget.redesign.table.Column");
-               composer.addImport("org.openelis.gwt.widget.redesign.table.LabelCell");
-               composer.addImport("org.openelis.gwt.widget.redesign.table.TextBoxCell");
-               composer.addImport("org.openelis.gwt.widget.redesign.table.AutoCompleteCell");
-               composer.addImport("org.openelis.gwt.widget.redesign.table.DropdownCell");
-               composer.addImport("org.openelis.gwt.widget.redesign.table.CheckBoxCell");
-               composer.addImport("org.openelis.gwt.widget.redesign.table.CalendarCell");    	        
-     	   }
-    	});
-    	factoryMap.put("VerticalPanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("VerticalPanel wid"+id+" = new VerticalPanel();");
-    	        if (node.getAttributes().getNamedItem("spacing") != null)
-    	            sw.println("wid"+id+".setSpacing("+Integer.parseInt(node.getAttributes()
-    	                                                  .getNamedItem("spacing")
-    	                                                  .getNodeValue())+");");
-  
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	                if(!loadWidget(widgets.item(k),child)){
-    	                	count--;
-    	                	continue;
-    	                }
-    	                sw.println("wid"+id+".add(wid"+child+");");
-    	                if (widgets.item(k).getAttributes().getNamedItem("halign") != null) {
-    	                    String align = widgets.item(k).getAttributes()
-    	                                         .getNamedItem("halign")
-    	                                         .getNodeValue();
-    	                    if (align.equals("right"))
-    	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_RIGHT);");
-    	                    if (align.equals("left"))
-    	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_LEFT);");
-    	                    if (align.equals("center"))
-    	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_CENTER);");
-    	                }
-    	                if (widgets.item(k).getAttributes().getNamedItem("valign") != null) {
-    	                    String align = widgets.item(k).getAttributes()
-    	                                         .getNamedItem("valign")
-    	                                         .getNodeValue();
-    	                    if (align.equals("top"))
-    	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_TOP);");
-    	                    if (align.equals("middle"))
-    	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_MIDDLE);");
-    	                    if (align.equals("bottom"))
-    	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_BOTTOM);");
-    	                }
-    	                if(widgets.item(k).getAttributes().getNamedItem("height") != null) {
-    	                	sw.println("wid"+id+".setCellHeight(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("height").getNodeValue()+"\");");
-    	                }
-    	                if(widgets.item(k).getAttributes().getNamedItem("width") != null) {
-    	                	if(!widgets.item(k).getAttributes().getNamedItem("width").getNodeValue().equals("auto"))
-    	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
-    	                }
-    	            }
-    	        }
-    	        sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
-    	        setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.VerticalPanel");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    		}
-    	});
-    	factoryMap.put("TablePanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			StringBuffer sb = new StringBuffer();
-    			sw.println("FlexTable wid"+id+" = new FlexTable();");
-    	        if (node.getAttributes().getNamedItem("visible") != null && node.getAttributes().getNamedItem("visible").getNodeValue().equals("false")){
-    	            sw.println("wid"+id+".setVisible(false);");
-    	        }
-    	        if (node.getAttributes().getNamedItem("spacing") != null)
-    	            sw.println("wid"+id+".setCellSpacing("+Integer.parseInt(node.getAttributes()
-    	                                                      .getNamedItem("spacing")
-    	                                                      .getNodeValue())+");");
-    	        if (node.getAttributes().getNamedItem("padding") != null)
-    	            sw.println("wid"+id+".setCellPadding("+Integer.parseInt(node.getAttributes()
-    	                                                      .getNamedItem("padding")
-    	                                                      .getNodeValue())+");");
-    	        if (node.getAttributes().getNamedItem("style") != null){
-    	            sw.println("wid"+id+".addStyleName(\""+node.getAttributes().getNamedItem("style").getNodeValue()+"\");");
-    	        }
-    	        
-    	        NodeList rows = ((Element)node).getElementsByTagName("row");
-    	        for (int k = 0; k < rows.getLength(); k++) {
-    	        	
-    	            NodeList widgets = rows.item(k).getChildNodes();
-    	            int w = -1;
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	                if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	                    w++;
-    	                    int child = ++count;
-    	                    if(!loadWidget(widgets.item(l),child)){
-    	                    	count--;
-    	                    	continue;
-    	                    }
-    	                    sw.println("wid"+id+".setWidget("+k+","+w+",wid"+child+");");
-    	                    if(widgets.item(l).getNodeName().equals("widget")) {
-    	                    	if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
-    	                    		sw.println("wid"+id+".getFlexCellFormatter().setColSpan("+k+","+w+","+
-    	                    				Integer.parseInt(widgets.item(l)
-    	                    						.getAttributes()
-    	                    						.getNamedItem("colspan")
-    	                    						.getNodeValue())+");");
-    	                    	if (widgets.item(l).getAttributes().getNamedItem("rowspan") != null)
-    	                    		sw.println("wid"+id+".getFlexCellFormatter().setRowSpan("+k+","+w+","+
-    	                    				Integer.parseInt(widgets.item(l)
-    	                    						.getAttributes()
-    	                    						.getNamedItem("rowspan")
-    	                    						.getNodeValue())+");");
-    	                    	if (widgets.item(l).getAttributes().getNamedItem("style") != null)
-    	                    		sw.println("wid"+id+".getFlexCellFormatter().addStyleName("+k+","+w+","+"\""+
-    	                    				widgets.item(l)
-    	                    				.getAttributes()
-    	                    				.getNamedItem("style")
-    	                    				.getNodeValue()+"\");");
-    	                    	if (widgets.item(l).getAttributes().getNamedItem("align") != null) {
-    	                    		String align = widgets.item(l)
-    	                    			.getAttributes()
-    	                    			.getNamedItem("align")
-    	                    			.getNodeValue();
-    	                    		if (align.equals("right"))
-    	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_RIGHT);");
-    	                    		if (align.equals("left"))
-    	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_LEFT);");
-    	                    		if (align.equals("center"))
-    	                    			sw.println("wid"+id+".getFlexCellFormatter().setHorizontalAlignment("+k+","+w+",HasAlignment.ALIGN_CENTER);");
-    	                    	}
-    	                    	if (widgets.item(l).getAttributes().getNamedItem("valign") != null) {
-    	                    		String align = widgets.item(l)
-    	                    			.getAttributes()
-    	                    			.getNamedItem("valign")
-    	                    			.getNodeValue();
-    	                    		if (align.equals("top"))
-    	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_TOP);");
-    	                    		if (align.equals("bottom"))
-    	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_BOTTOM);");
-    	                    		if (align.equals("middle"))
-    	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_MIDDLE);");
-    	                    	}
-    	                    }
-    	                }
-    	            }
-    	            
-    	            if (rows.item(k).getAttributes().getNamedItem("style") != null) {
-    	            	sw.println("wid"+id+".getRowFormatter().addStyleName("+k+",\""+rows.item(k).getAttributes().getNamedItem("style").getNodeValue()+"\");");
-    	            }
-    	        }
-    	        setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.FlexTable");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    		}
-    	});
-    	factoryMap.put("fileUpload", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("FileUploadWidget wid"+id+" = new FileUploadWidget(\""+node.getAttributes().getNamedItem("service").getNodeValue()+"\");");
-    			setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.FileUploadWidget");
-    		}
-    	});
-    	factoryMap.put("AbsolutePanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("AbsolutePanel wid"+id+" = new AbsolutePanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
-    	        if(node.getAttributes().getNamedItem("overflow") != null)
-    	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),\"overflow\","+node.getAttributes().getNamedItem("overflow").getNodeValue()+");");
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	                if(!loadWidget(widgets.item(k),child)){
-    	                	count--;
-    	                	continue;
-    	                }
-    	                int x = -1;
-    	                if (widgets.item(k).getAttributes().getNamedItem("x") != null)
-    	                    x = Integer.parseInt(widgets.item(k)
-    	                                                .getAttributes()
-    	                                                .getNamedItem("x")
-    	                                                .getNodeValue());
-    	                int y = -1;
-    	                if (widgets.item(k).getAttributes().getNamedItem("y") != null)
-    	                    y = Integer.parseInt(widgets.item(k)
-    	                                                .getAttributes()
-    	                                                .getNamedItem("y")
-    	                                                .getNodeValue());
-    	                if(node.getAttributes().getNamedItem("align") != null)
-    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\",\""+node.getAttributes().getNamedItem("align").getNodeValue()+"\");");
-    	                sw.println("wid"+id+".add(wid"+child+","+x+","+y+");");
-    	            }
-    	        }
-    	        setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.AbsolutePanel");
-    			composer.addImport("com.google.gwt.user.client.DOM");
-    		}
-    	});
-        factoryMap.put("FocusPanel", new Factory() {
-            public void getNewInstance(Node node, int id) {
-                sw.println("FocusPanel wid"+id+" = new FocusPanel();");
-                sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
-                NodeList widgets = node.getChildNodes();
-                for (int k = 0; k < widgets.getLength(); k++) {
-                    if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                        int child = ++count;
-                        if(!loadWidget(widgets.item(k),count)){
-                            count--;
-                            continue;
-                        }
-                        sw.println("wid"+id+".setWidget(wid"+child+");");
-                        break;
-                    }
-                }
-                setDefaults(node,"wid"+id);
-            }
-            public void addImport() {
-                composer.addImport("com.google.gwt.user.client.ui.FocusPanel");
-            }
-        });    	
-    	factoryMap.put("ScrollPanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("ScrollPanel wid"+id+" = new ScrollPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
-    	        if(node.getAttributes().getNamedItem("overflow") != null)
-    	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),\"overflow\","+node.getAttributes().getNamedItem("overflow").getNodeValue()+");");
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	                if(!loadWidget(widgets.item(k),count)){
-    	                	count--;
-    	                	continue;
-    	                }
-    	                sw.println("wid"+id+".setWidget(wid"+child+");");
-    	                break;
-    	            }
-    	        }
-    	        setDefaults(node,"wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
-    			composer.addImport("com.google.gwt.user.client.DOM");
-    		}
-    	});
-    	factoryMap.put("buttonGroup", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			StringBuffer sb = new StringBuffer();
-    			sw.println("ButtonGroup wid"+id+" = new ButtonGroup();");
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if(widgets.item(k).getNodeType() == Node.ELEMENT_NODE){
-    	               int child = ++count;
-    	               if(!loadWidget(widgets.item(k),child)){
-    	            	   count--;
-    	            	   continue;
-    	               }
-    	               sw.println("wid"+id+".setButtons(wid"+child+");");
-    	               break;
-    	            }
-    	        }
-    	        setDefaults(node,"wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".setEnabled("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.ButtonGroup");
-    		}
-    	});
-        factoryMap.put("calendar", new Factory() {
-            public void getNewInstance(Node node, int id) {
-                sw.println("Calendar wid"+id+" = new Calendar();");
-                
-                if(node.getAttributes().getNamedItem("tab") != null) {
-                    String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-                    String[] tabs = tab.split(",");
-                    String key = node.getAttributes().getNamedItem("key").getNodeValue();
-                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-                }
-                if (node.getAttributes().getNamedItem("shortcut") != null)
-                    addShortcutHandler(node,"wid"+id);
-
-                setDefaults(node,"wid"+id);
-
-                factoryMap.get("Date").getNewInstance(node, id);
-                sw.println("wid"+id+".setHelper(field"+id+");");
-                
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(panel);");
-
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.calendar.Calendar");
-            }
-        });
- 
-    	factoryMap.put("check", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("CheckBox wid"+id+" = new CheckBox();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-					
-    	        if(node.getAttributes().getNamedItem("threeState") != null){
-    	            sw.println("wid"+id+".setType(CheckBox.CheckType.THREE_STATE);");
-    	            //defaultType = CheckBox.CheckType.THREE_STATE;
-    	        }
-    	        
-    	        setDefaults(node, "wid"+id);
-    	            	        
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-    	        
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.CheckBox");
-    		}
-    	});
-    	factoryMap.put("CollapsePanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			if(node.getAttributes().getNamedItem("open") != null) {
-    				sw.println("CollapsePanel wid"+id+" = new CollapsePanel("+node.getAttributes().getNamedItem("open").getNodeValue()+");");
-    			}else
-    				sw.println("CollapsePanel wid"+id+" = new CollapsePanel(false);");
-    		    if (node.getChildNodes().getLength() > 0){
-    		       NodeList widgets = node.getChildNodes();
-    		       for (int k = 0; k < widgets.getLength(); k++) {
-    		           if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    		        	   int child = ++count;
-    		        	   if(!loadWidget(widgets.item(k),child)){
-        	            	   count--;
-        	            	   continue;
-        	               }
-    		               sw.println("wid"+child+".setHeight(\"100%\");");
-    		               sw.println("wid"+child+".setWidth(\"auto\");");
-    		               sw.println("wid"+id+".setContent(wid"+child+");");
-    		           }
-    		       }
-    		    }
-    		    if(node.getAttributes().getNamedItem("height") != null)
-    		       sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
-    		       
-    		    setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.CollapsePanel");
-    		}
-    	});
-    	factoryMap.put("DeckPanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("DeckPanel wid"+id+" = new DeckPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"gwt-TabPanelBottom\");");
-    	        if(node.getAttributes().getNamedItem("height") != null)
-                	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
-                if(node.getAttributes().getNamedItem("width") != null)
-                	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-    	        NodeList decks = ((Element)node).getElementsByTagName("deck");
-    	        for (int k = 0; k < decks.getLength(); k++) {
-    	            NodeList widgets = decks.item(k).getChildNodes();
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	                if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	                	int child = ++count;
-    	                	if(!loadWidget(widgets.item(l),child)){
-    	    	            	   count--;
-    	    	            	   continue;
-    	    	               }
-    	                	if(decks.item(k).getAttributes().getNamedItem("tab") != null) 
-    	                		sw.println("wid"+id+".add(wid"+child+",\""+decks.item(k).getAttributes().getNamedItem("tab").getNodeValue()+"\");");
-    	                	else
-    	                		sw.println("wid"+id+".add(wid"+child+",null);");
-    	                }
-    	            }
-    	        }
-    	        sw.println("wid"+id+".showWidget(0);");
-    	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable")+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.DeckPanel");
-    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
-    		}
-    	});
-    	factoryMap.put("diagram", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("Diagram wid"+id+" = new Diagram();");
-    	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.Diagram");
-    		}
-    	});
-    	factoryMap.put("disclosure", new Factory() {
-    		public void getNewInstance(Node node, int id){
-    			sw.println("DisclosurePanel wid"+id+" = new DisclosurePanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenDisclosure\");");
-    	        Element header = (Element) ((Element)node).getElementsByTagName("header").item(0);
-    	        NodeList widgets = header.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	            	if(!loadWidget(widgets.item(k),child)){
-     	            	   count--;
-     	            	   continue;
-     	               }
-    	                sw.println("wid"+id+".setHeader(wid"+child+");");
-    	            }
-    	        }
-    	        Element content = (Element) ((Element)node).getElementsByTagName("content").item(0);
-    	        widgets = content.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	                Node input = null;
-    	                if (widgets.item(k).getNodeName().equals("widget")) {
-    	                    NodeList inputList = widgets.item(k).getChildNodes();
-    	                    for (int m = 0; m < inputList.getLength(); m++) {
-    	                        if (inputList.item(m).getNodeType() == Node.ELEMENT_NODE) {
-    	                            input = inputList.item(m);
-    	                            m = 100;
-    	                        }
-    	                    }
-    	                } else
-    	                    input = widgets.item(k);
-    	                int child = ++count;
-    	                if(!createWidget(input,child)){
-    	                	count--;
-    	                	continue;
-    	                }
-    	                sw.println("wid"+id+".setContent(wid"+child+");");
-    	            }
-    	        }
-    	        setDefaults(node, "wid"+id);
-
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.DisclosurePanel");
-    		}
-    	});
-    	factoryMap.put("DockPanel", new Factory() {
-    		public void getNewInstance(Node node, int id){
-    			sw.println("DockPanel wid"+id+" = new DockPanel();");
-    	        sw.println("wid"+id+".addStyleName(\"ScreenDock\");");
-    	        if (node.getAttributes().getNamedItem("spacing") != null)
-    	            sw.println("wid"+id+".setSpacing(Integer.parseInt(\""+node.getAttributes().getNamedItem("spacing").getNodeValue()+"\"));");
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	            	if(!loadWidget(widgets.item(k),child)){
-     	            	   count--;
-     	            	   continue;
-     	               }
-    	                String dir = widgets.item(k)
-    	                                    .getAttributes()
-    	                                    .getNamedItem("dir")
-    	                                    .getNodeValue();
-    	                if (dir.equals("north"))
-    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel.NORTH);");
-    	                else if (dir.equals("south"))
-    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel.SOUTH);");
-    	                else if (dir.equals("east"))
-    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel.EAST);");
-    	                else if (dir.equals("west"))
-    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel.WEST);");
-    	                else if (dir.equals("center"))
-    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel.CENTER);");
-    	                if (widgets.item(k).getAttributes().getNamedItem("halign") != null) {
-    	                    String align = widgets.item(k)
-    	                                          .getAttributes()
-    	                                          .getNamedItem("align")
-    	                                          .getNodeValue();
-    	                    if (align.equals("right"))
-    	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_RIGHT);");
-    	                    if (align.equals("left"))
-    	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_LEFT);");
-    	                    if (align.equals("center"))
-    	                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_CENTER);");
-    	                }
-    	                if (widgets.item(k).getAttributes().getNamedItem("valign") != null) {
-    	                    String align = widgets.item(k)
-    	                                          .getAttributes()
-    	                                          .getNamedItem("valign")
-    	                                          .getNodeValue();
-    	                    if (align.equals("top"))
-    	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+",HasAlignment.ALIGN_TOP);");
-    	                    if (align.equals("middle"))
-    	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+",HasAlignment.ALIGN_MIDDLE);");
-    	                    if (align.equals("bottom"))
-    	                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+",HasAlignment.ALIGN_BOTTOM);");
-    	                }
-    	               
-    	            }
-    	        }
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.DockPanel");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    		}
-    	});
-    	factoryMap.put("editbox",new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("EditBox wid"+id+" = new EditBox();");
-    			factoryMap.get("String").getNewInstance(node, id);
-    			sw.println("wid"+id+".setHelper(field"+id+");");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-					
-    			setDefaults(node,"wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".setEnabled("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    			sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    			sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-    			
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.EditBox");
-    		}
-    	});
-    	factoryMap.put("HorizontalPanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("HorizontalPanel wid"+id+" = new HorizontalPanel();");
-    			if (node.getAttributes().getNamedItem("spacing") != null)
-    				sw.println("wid"+id+".setSpacing("+node.getAttributes().getNamedItem("spacing").getNodeValue()+");");
-    			NodeList widgets = node.getChildNodes();
-    			for (int k = 0; k < widgets.getLength(); k++) {
-    				if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
-    					int child = ++count;
-    					if(!loadWidget(widgets.item(k),child)){
-     	            	   count--;
-     	            	   continue;
-     	               }
-    					sw.println("wid"+id+".add(wid"+child+");");
-    					if (widgets.item(k).getAttributes().getNamedItem("halign") != null) {
-    						String align = widgets.item(k).getAttributes()
-    						.getNamedItem("halign")
-    						.getNodeValue();
-    						if (align.equals("right"))
-    							sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_RIGHT);");
-    						if (align.equals("left"))
-    							sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_LEFT);");
-    						if (align.equals("center"))
-    							sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_CENTER);");
-    					}
-    					if (widgets.item(k).getAttributes().getNamedItem("valign") != null) {
-    						String align = widgets.item(k).getAttributes()
-    						.getNamedItem("valign")
-    						.getNodeValue();
-    						if (align.equals("top"))
-    							sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_TOP);");
-    						if (align.equals("middle"))
-    							sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_MIDDLE);");
-    						if (align.equals("bottom"))
-    							sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_BOTTOM);");
-    					}
-    				}
-    			}
-    			sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
-    			setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.HorizontalPanel");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    		}
-    	});
-    	factoryMap.put("HorizontalSplitPanel", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("final HorizontalSplitPanel wid"+id+" = new HorizontalSplitPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
-    	        NodeList sections = ((Element)node).getElementsByTagName("section");
-    	        for (int k = 0; k < sections.getLength(); k++) {
-    	            NodeList widgets = sections.item(k).getChildNodes();
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	                if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	                	int child = ++count;
-    	                	if(!loadWidget(widgets.item(l),child)){
-    	    	            	   count--;
-    	    	            	   continue;
-    	    	               }
-    	                    if (k == 0) {
-    	                            sw.println("wid"+id+".setLeftWidget(wid"+child+");");        		
-    	                    }
-    	                    if (k == 1) {
-    	                            sw.println("wid"+id+".setRightWidget(wid"+child+");");
-    	                    }
-    	                }
-    	            }
-    	        }
-    	        if (node.getAttributes().getNamedItem("splitpos") != null) {
-    	            String splitpos = node.getAttributes()
-    	                                  .getNamedItem("splitpos")
-    	                                  .getNodeValue();
-    	                sw.println("wid"+id+".setSplitPosition(splitpos);");
-    	        }
-    	                
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.HorizontalSplitPanel");
-    		}
-    	});
-    	factoryMap.put("html", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("HTML wid"+id+" = new HTML();");
-    	        if(node.getFirstChild() != null)
-    	            sw.println("wid"+id+".setHTML(\""+node.getFirstChild().getNodeValue()+"\");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenHTML\");");
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.HTML");
-    		}
-    	});
-    	factoryMap.put("label", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			if(node.getAttributes().getNamedItem("field") != null){
-    				factoryMap.get(node.getAttributes().getNamedItem("field").getNodeValue()).getNewInstance(node, id);
-    				if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer"))
-    					sw.println("org.openelis.gwt.widget.Label<Integer> wid"+id+" = new org.openelis.gwt.widget.Label<Integer>();");
-    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Double"))
-    					sw.println("org.openelis.gwt.widget.Label<Double> wid"+id+" = new org.openelis.gwt.widget.Label<Double>();");
-    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long"))
-    					sw.println("org.openelis.gwt.widget.Label<Long> wid"+id+" = new org.openelis.gwt.widget.Label<Long>();");
-    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Date"))
-    					sw.println("org.openelis.gwt.widget.Label<Date> wid"+id+" = new org.openelis.gwt.widget.Label<Date>();");
-    				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String"))
-    					sw.println("org.openelis.gwt.widget.Label<String> wid"+id+" = new org.openelis.gwt.widget.Label<String>();");
-    				sw.println("wid"+id+".setHelper(field"+id+");");
-    			}else{
-    				sw.println("org.openelis.gwt.widget.Label<String> wid"+id+" = new org.openelis.gwt.widget.Label<String>();");
-    				factoryMap.get("String").getNewInstance(node, id);
-    				sw.println("wid"+id+".setHelper(field"+id+");");
-    			}
-    				
-    	        if (node.getAttributes().getNamedItem("text") != null){
-    	            sw.println("wid"+id+".setText(\""+node.getAttributes().getNamedItem("text").getNodeValue()+"\");");
-    	        } 
-    	        if (node.getAttributes().getNamedItem("wordwrap") != null)
-    	            sw.println("wid"+id+".setWordWrap("+node.getAttributes().getNamedItem("wordwrap").getNodeValue()+");");
-    	        else
-    	            sw.println("wid"+id+".setWordWrap(false);");
-    	        if (node.hasChildNodes())
-    	            sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue()+"\");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    		}
-    	});
-    	factoryMap.put("menuItem", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("MenuItem wid"+id+"= new MenuItem();");
-    			Widget wid = null;
-    			String label;
-    	        if(((Element)node).getElementsByTagName("menuDisplay").getLength() > 0 &&  ((Element)node).getElementsByTagName("menuDisplay").item(0).getParentNode().equals(node)){
-    	            NodeList displayList = ((Element)node).getElementsByTagName("menuDisplay").item(0).getChildNodes();
-    	            int i = 0; 
-    	            while(displayList.item(i).getNodeType() != Node.ELEMENT_NODE)
-    	                i++;
-    	            int child = ++count;
-    	            loadWidget(displayList.item(i),child);
-    	            sw.println("wid"+id+".init(wid"+child+");");
-    	        }else if(node.getAttributes().getNamedItem("header") != null){
-    	            sw.println("Widget header = MenuItem.createTableHeader(\"\", new Label(\""+node.getAttributes().getNamedItem("label").getNodeValue()+"\"));");
-    	            sw.println("wid"+id+".init(header);");
-    	        }else{
-    	            sw.println("wid"+id+".init(\""+node.getAttributes().getNamedItem("icon").getNodeValue()+"\",\""+ 
-    	                                         node.getAttributes().getNamedItem("label").getNodeValue()+"\",\""+ 
-    	                                         node.getAttributes().getNamedItem("description").getNodeValue().replaceAll("\"","'")+"\");");
-    	            //label = node.getAttributes().getNamedItem("label").getNodeValue();
-    	        }
-
-    	        Node popup = ((Element)node).getElementsByTagName("menuPanel").item(0);
-    	        if(node.getAttributes().getNamedItem("enable") != null){
-    	            if(node.getAttributes().getNamedItem("enable").getNodeValue().equals("true"))
-    	                sw.println("wid"+id+".enable(true);");
-    	            else
-    	                sw.println("wid"+id+".enable(false);");
-    	        }else
-    	            sw.println("wid"+id+".enable(true);");
-    	        
-    	        if(popup != null){
-    	        	int child = ++count;
-    	        	loadWidget(popup, child);
-    	            if(popup.getAttributes().getNamedItem("position") != null)
-    	                sw.println("wid"+id+".setMenuPopup((MenuPanel)wid"+child+", MenuItem.PopPosition.valueOf(\""+popup.getAttributes().getNamedItem("position").getNodeValue().toUpperCase()+"\"));");
-    	            else
-    	            	sw.println("wid"+id+".setMenuPopup((MenuPanel)wid"+child+", MenuItem.PopPosition.BESIDE);");
-    	        }
-
-    	        if(node.getAttributes().getNamedItem("key") != null){
-    	            sw.println("wid"+id+".key = \""+node.getAttributes().getNamedItem("key").getNodeValue()+"\";");
-    	        }
-    	        
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    
-    	        setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.MenuItem");
-    			composer.addImport("org.openelis.gwt.widget.MenuPanel");
-    			composer.addImport("com.google.gwt.user.client.ui.Widget");
-    		}
-    	});
-    	factoryMap.put("menuPanel",new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("MenuPanel wid"+id+" = new MenuPanel();");
-    		       String layout = node.getAttributes().getNamedItem("layout").getNodeValue();
-    		        sw.println("wid"+id+".init(\""+layout+"\");");
-    		        NodeList items = node.getChildNodes();
-    		        for (int i = 0; i < items.getLength(); i++) {
-    		            if (items.item(i).getNodeType() == Node.ELEMENT_NODE) {
-    		            	int child = ++count;
-    		            	if(!loadWidget(items.item(i),child)){
-    	    	            	   count--;
-    	    	            	   continue;
-    	    	            }
-   		                    sw.println("wid"+id+".add(wid"+child+");");
-    		            }
-    		        }
-    		        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.MenuPanel");
-    		}
-    	});
-    	factoryMap.put("password", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			StringBuffer sb = new StringBuffer();
-    			sw.println("PassWordTextBox wid"+id+" = new PassWordTextBox();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    
-    	        sw.println("wid"+id+".setStyleName(\"ScreenPassword\");");
-    	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    	        factoryMap.get("String").getNewInstance(node, id);
-    	        sw.println("wid"+id+".setHelper(field"+id+");");
-    	        
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-    	        
-    		}
-    		public void addImport(){
-    			composer.addImport("org.openelis.gwt.widget.PassWordTextBox");
-    		}
-    	});
-    	factoryMap.put("richtext", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("RichTextWidget wid"+id+" = new RichTextWidget();"); 
-    			boolean tools = true;
-    	        if(node.getAttributes().getNamedItem("tools") != null){
-    	            if(node.getAttributes().getNamedItem("tools").getNodeValue().equals("false")){
-    	                tools = false;
-    	            }
-    	        }
-    	        
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-				
-    	        String width = "100%";
-    	        String height = "300px";
-    	        if(node.getAttributes().getNamedItem("width") != null){
-    	            width = node.getAttributes().getNamedItem("width").getNodeValue();
-    	        }
-    	        if(node.getAttributes().getNamedItem("height") != null) {
-    	            height = node.getAttributes().getNamedItem("height").getNodeValue();
-    	        }
-    	        sw.println("wid"+id+".init("+tools+");");
-    	        sw.println("wid"+id+".area.setSize(\""+width+"\",\""+height+"\");");
-    	        
-    	        sw.println("wid"+id+".area.setStyleName(\"ScreenTextArea\");");
-    	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".setEnabled("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    	        //factoryMap.get("String").getNewInstance(node, id);
-    	        //sw.println("wid"+id+".setHelper(field"+id+");");
-    	        
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-    	        
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.richtext.RichTextWidget");
-    		}
-    	});
-    	factoryMap.put("ScrollTabBar", new Factory(){
-    		public void getNewInstance(Node node, int id) {
-    			StringBuffer sb = new StringBuffer();
-    			sw.println("ScrollableTabBar wid"+id+" = new ScrollableTabBar();");
-    	        //scrollableTabBar.setStyleName("ScreenTab");        
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.ScrollableTabBar");
-    		}
-    	});
-    	factoryMap.put("TabBar", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("TabBar wid"+id+" = new TabBar();");
-    			NodeList tabs = ((Element)node).getElementsByTagName("tab");
-      	        for (int k = 0; k < tabs.getLength(); k++) {
-      	        	sw.println("wid"+id+".addTab(\""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
-      	        	if(tabs.item(k).getAttributes().getNamedItem("visible") != null) {
-      	        		sw.println("wid"+id+".setTabVisible(wid"+id+".getTabCount() -1, "+tabs.item(k).getAttributes().getNamedItem("visible").getNodeValue()+");");
-      	        	}
-      	        }
-      	        if(tabs.getLength() > 0)
-      	        	sw.println("wid"+id+".selectTab(0);");
-    			setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.TabBar");
-    		}
-    	});
-    	factoryMap.put("StackPanel", new Factory(){
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("StackPanel wid"+id+" = new StackPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenStack\");");
-    	        NodeList stacks = ((Element)node).getElementsByTagName("stack");
-    	        for (int k = 0; k < stacks.getLength(); k++) {
-    	            NodeList widgets = stacks.item(k).getChildNodes();
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	                if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	                	int child = ++count;
-    	                	if(!loadWidget(widgets.item(l),child)){
-    	    	            	   count--;
-    	    	            	   continue;
-    	    	               }
-    	                    sw.println("wid"+id+".add(wid"+child+", \""+stacks.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
-    	                }
-    	            }
-    	        }
-    	        sw.println("wid"+id+".showStack(0);");
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport(){
-    			composer.addImport("com.google.gwt.user.client.ui.StackPanel");
-    		}
-    	});
-    	factoryMap.put("TabPanel", new Factory() {
-    		public void getNewInstance(Node node, int id){
-    			sw.println("TabPanel wid"+id+" = new TabPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
-    	        if(node.getAttributes().getNamedItem("width") != null)
-    	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-    	        else
-    	        	sw.println("wid"+id+".setWidth(\"auto\");");
-    	        if(node.getAttributes().getNamedItem("height") != null)
-    	        	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
-    	        else
-    	        	sw.println("wid"+id+".setHeight(\"auto\");");
-    	        NodeList tabs = ((Element)node).getElementsByTagName("tab");
-    	        boolean visible = false;
-    	        for (int k = 0; k < tabs.getLength(); k++) {
-    	            NodeList widgets = tabs.item(k).getChildNodes();
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	                if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	                	int child = ++count;
-    	                	if(!loadWidget(widgets.item(l),child)){
-    	    	            	   count--;
-    	    	            	   continue;
-    	    	               }
-    	                    if(tabs.item(k).getAttributes().getNamedItem("tab") != null)
-    	                    	sw.println("wid"+id+".add(wid"+child+", \""+
-    	                    			                  tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\",\""+
-    	                    			                  tabs.item(k).getAttributes().getNamedItem("tab").getNodeValue()+"\");");
-    	                    else
-    	                    	sw.println("wid"+id+".add(wid"+child+", \""+tabs.item(k).getAttributes().getNamedItem("text").getNodeValue()+"\");");
-    	                    if(tabs.item(k).getAttributes().getNamedItem("visible") != null) {
-    	                    	if(tabs.item(k).getAttributes().getNamedItem("visible").getNodeValue().equals("true"))
-    	                    			visible= true;
-    	                    	else
-    	                    		sw.println("wid"+id+".setTabVisible(wid"+id+".getTabBar().getTabCount() -1, false);");
-    	      	        	}else
-    	      	        		visible= true;
-    	                }
-    	            }
-    	            if(!visible)
-    	            	sw.println("wid"+id+".getTabBar().setStyleName(\"None\");");
-    	            sw.println("wid"+id+".selectTab(0);");
-    	    		sw.println("wid"+id+".addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {");
-    	    			sw.println("public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {");
-    	    				sw.println("panel.setFocusWidget(null);");
-    	    			sw.println("}");	
-    	    		sw.println("});");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.TabPanel");
-    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
-    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionEvent");
-    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionHandler");
-    		}
-    	});
-    	factoryMap.put("text",new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("Label wid"+id+" = new Label();");
-    	        if (node.getAttributes().getNamedItem("wordwrap") != null)
-    	            sw.println("wid"+id+".setWordWrap("+node.getAttributes().getNamedItem("wordwrap").getNodeValue().trim()+");");
-    	        else
-    	            sw.println("wid"+id+".setWordWrap(false);");
-    	        if (node.hasChildNodes())
-    	            sw.println("wid"+id+".setText(\""+node.getFirstChild().getNodeValue().trim()+"\");");
-    	        else
-    	            sw.println("wid"+id+".setText(\"\");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.Label");
-    		}
-    	});
-    	factoryMap.put("textarea", new Factory(){
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("TextArea wid"+id+" = new TextArea();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    
-    	        sw.println("wid"+id+".setStyleName(\"ScreenTextArea\");");
-    	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".setEnabled("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    	        factoryMap.get("String").getNewInstance(node, id);
-    	        sw.println("wid"+id+".setHelper(field"+id+");");
-    	        
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-    	        
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.TextArea");
-    		}
-    	});
+    	
     	factoryMap.put("TitledPanel", new Factory(){
     		public void getNewInstance(Node node, int id) {
+    			Element legend;
+    			NodeList widgets;
+    			Node widget;
+    			
     			sw.println("TitledPanel wid"+id+" = new TitledPanel();");
-    	        Element legend = (Element) ((Element)node).getElementsByTagName("legend").item(0);
-    	        NodeList widgets = legend.getChildNodes();
+    	        legend = (Element) ((Element)node).getElementsByTagName("legend").item(0);
+    	        widgets = legend.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
     	            	int child = ++count;
-    	            	if(!loadWidget(widgets.item(k),child)){
+    	            	if(!loadWidget(widget,child)){
      	            	   count--;
      	            	   continue;
      	               }
@@ -1555,9 +1921,10 @@ public class UIGenerator extends Generator {
     	        legend = (Element) ((Element)node).getElementsByTagName("content").item(0);
     	        widgets = legend.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
     	            	int child = ++count;
-    	            	if(!loadWidget(widgets.item(k),child)){
+    	            	if(!loadWidget(widget,child)){
      	            	   count--;
      	            	   continue;
      	               }
@@ -1566,643 +1933,132 @@ public class UIGenerator extends Generator {
     	        }
     	        setDefaults(node, "wid"+id);
     		}
+    		
     		public void addImport() {
     			composer.addImport("org.openelis.widget.TitledPanel");
-    		}
-    		
+    		}	
     	});
-    	factoryMap.put("VerticalSplitPanel", new Factory(){
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("VerticalSplitPanel wid"+id+" = new VerticalSplitPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
-    	        NodeList sections = ((Element)node).getElementsByTagName("section");
-    	        for (int k = 0; k < sections.getLength(); k++) {
-    	            NodeList widgets = sections.item(k).getChildNodes();
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	                if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	                	int child = ++count;
-    	                	if(!loadWidget(widgets.item(l),child)){
-    	    	            	   count--;
-    	    	            	   continue;
-    	    	               }
-    	                    if (k == 0) {
-    	                             sw.println("wid"+id+".setTopWidget(wid"+child+");");
-    	                    }
-    	                    if (k == 1) {
-    	                             sw.println("wid"+id+".setBottomWidget(wid"+child+");");
-    	                    }
-    	                }
-    	            }
-    	        }
-    	        if (node.getAttributes().getNamedItem("splitpos") != null) {
-    	            String splitpos = node.getAttributes()
-    	                                  .getNamedItem("splitpos")
-    	                                  .getNodeValue();
-    	                 sw.println("wid"+id+".setSplitPosition(splitpos);");
-    	        }
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("com.google.gwt.user.client.ui.VerticalSplitPanel");
-    		}
-    	});
-    	factoryMap.put("winbrowser", new Factory(){
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("WindowBrowser wid"+id+" = new WindowBrowser();");
-    	        int limit = 10;
-    	        if(node.getAttributes().getNamedItem("winLimit") != null){
-    	            limit = Integer.parseInt(node.getAttributes().getNamedItem("winLimit").getNodeValue());
-    	        }
-    	        if(node.getAttributes().getNamedItem("sizeToWindow") != null)
-    	            sw.println("wid"+id+".init(true,"+limit+");");
-    	        else
-    	            sw.println("wid"+id+".init(false,"+limit+");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenWindowBrowser\");");
-    	        setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.WindowBrowser");
-    		}
-    	});
-    	factoryMap.put("table", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("TableWidget wid"+id+" = new TableWidget();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-			                   
-                sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-                sw.println("wid"+id+".setMaxRows(Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\"));");
-
-                if(node.getAttributes().getNamedItem("title") != null){
-                        sw.println("wid"+id+".setTitle(\""+node.getAttributes().getNamedItem("title").getNodeValue() + "\");");
-                }
-                if(node.getAttributes().getNamedItem("showScroll") != null){
-                	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    sw.println("wid"+id+".setShowScroll(VerticalScroll.valueOf(\""+showScroll+"\"));");
-                }
-                if(node.getAttributes().getNamedItem("multiSelect") != null){
-                    if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-                        sw.println("wid"+id+".enableMultiSelect(true);");
-                }
-                NodeList colList = node.getChildNodes();
-                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
-                for(int i = 0; i < colList.getLength(); i++) {
-                	Node col = colList.item(i);
-                	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                		continue;
-                	if(col.getAttributes().getNamedItem("class") != null){
-                		String colClass = col.getAttributes().getNamedItem("class").getNodeValue();
-                		sw.println(colClass+" column"+id+"_"+i+" = new "+colClass+"();");
-                	}else
-                		sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
-                	//sw.println("column"+id+"_"+i+".controller = wid"+id+";");
-                	if(col.getAttributes().getNamedItem("key") != null)
-                		sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                	if(col.getAttributes().getNamedItem("header") != null){
-                		sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                		sw.println("wid"+id+".showHeader(true);");
-                	}
-                	if(col.getAttributes().getNamedItem("width") != null)
-                		sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
-                	if(col.getAttributes().getNamedItem("minWidth") != null)
-                		sw.println("column"+id+"_"+i+".setMinWidth("+col.getAttributes().getNamedItem("minWidth").getNodeValue()+");");
-                	if(col.getAttributes().getNamedItem("fixedWidth") != null)
-                		sw.println("column"+id+"_"+i+".setFixedWidth("+col.getAttributes().getNamedItem("fixedWidth").getNodeValue()+");");
-                	if(col.getAttributes().getNamedItem("sort") != null)
-                		sw.println("column"+id+"_"+i+".setSortable("+col.getAttributes().getNamedItem("sort").getNodeValue()+");");
-                	if(col.getAttributes().getNamedItem("filter") != null)
-                		sw.println("column"+id+"_"+i+".setFilterable("+col.getAttributes().getNamedItem("filter").getNodeValue()+");");
-                	if(col.getAttributes().getNamedItem("query") != null)
-                		sw.println("column"+id+"_"+i+".setQuerayable("+col.getAttributes().getNamedItem("query").getNodeValue()+");");
-    	            if(col.getAttributes().getNamedItem("align") != null){
-                		String align = col.getAttributes().getNamedItem("align").getNodeValue();
-                        if (align.equals("left"))
-                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
-                        if (align.equals("center"))
-                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
-                        if (align.equals("right"))
-                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
-                	}
-    	            sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                	NodeList editor = col.getChildNodes();
-                	for(int j = 0; j < editor.getLength(); j++){
-                		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                			int child = ++count;
-                			if(!createWidget(editor.item(j),child)){
-                				count--;
-                				continue;
-                			}
-                			//sw.println("if(wid"+child+" instanceof HasBlurHandlers)");
-                			//sw.println("((HasBlurHandlers)wid"+child+").addBlurHandler(wid"+id+");");
-                			sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                			break;
-                		}
-                	}
-                	sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
-                }
-                sw.println("wid"+id+".setTableWidth(wid"+id+".getTableWidth()+\"px\");");
-                sw.println("wid"+id+".init();");
-                sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
-                //setDefaults(node,"wid"+id);
-            	StringBuffer sb = new StringBuffer();
-                if (node.getAttributes().getNamedItem("style") != null){
-                    String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
-                    sw.println("wid"+id+".setStyleName(\""+styles[0]+"\");");
-                    for(int i = 1; i < styles.length; i++){
-                        sw.println("wid"+id+".addStyleName(\""+styles[i]+"\");");
-                    }
-                }
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-                
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-                sw.println("panel.addFocusHandler(wid"+id+");");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				
-                
-                //if(def != null)
-                	//def.panel.addClickHandler(table);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.table.TableWidget");
-    			composer.addImport("org.openelis.gwt.widget.table.TableColumn");
-    			composer.addImport("org.openelis.gwt.widget.table.TableView.VerticalScroll");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    		}
-    	});
-        factoryMap.put("tableRed", new Factory() {
-            public void getNewInstance(Node node, int id) {
-                sw.println("TableWidgetRed wid"+id+" = new TableWidgetRed();");
-                
-                if(node.getAttributes().getNamedItem("tab") != null) {
-                    String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-                    String[] tabs = tab.split(",");
-                    String key = node.getAttributes().getNamedItem("key").getNodeValue();
-                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-                }
-                               
-                sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-                sw.println("wid"+id+".setMaxRows(Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\"));");
-
-                if(node.getAttributes().getNamedItem("title") != null){
-                        sw.println("wid"+id+".setTitle(\""+node.getAttributes().getNamedItem("title").getNodeValue() + "\");");
-                }
-                if(node.getAttributes().getNamedItem("showScroll") != null){
-                    String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    sw.println("wid"+id+".setShowScroll(VerticalScroll.valueOf(\""+showScroll+"\"));");
-                }
-                if(node.getAttributes().getNamedItem("multiSelect") != null){
-                    if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-                        sw.println("wid"+id+".enableMultiSelect(true);");
-                }
-                NodeList colList = node.getChildNodes();
-                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
-                for(int i = 0; i < colList.getLength(); i++) {
-                    Node col = colList.item(i);
-                    if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                        continue;
-                    if(col.getAttributes().getNamedItem("class") != null){
-                        String colClass = col.getAttributes().getNamedItem("class").getNodeValue();
-                        sw.println(colClass+" column"+id+"_"+i+" = new "+colClass+"();");
-                    }else
-                        sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
-                    sw.println("column"+id+"_"+i+".controller = wid"+id+";");
-                    if(col.getAttributes().getNamedItem("key") != null)
-                        sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                    if(col.getAttributes().getNamedItem("header") != null){
-                        sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                        sw.println("wid"+id+".showHeader(true);");
-                    }
-                    if(col.getAttributes().getNamedItem("width") != null)
-                        sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
-                    if(col.getAttributes().getNamedItem("minWidth") != null)
-                        sw.println("column"+id+"_"+i+".setMinWidth("+col.getAttributes().getNamedItem("minWidth").getNodeValue()+");");
-                    if(col.getAttributes().getNamedItem("fixedWidth") != null)
-                        sw.println("column"+id+"_"+i+".setFixedWidth("+col.getAttributes().getNamedItem("fixedWidth").getNodeValue()+");");
-                    if(col.getAttributes().getNamedItem("sort") != null)
-                        sw.println("column"+id+"_"+i+".setSortable("+col.getAttributes().getNamedItem("sort").getNodeValue()+");");
-                    if(col.getAttributes().getNamedItem("filter") != null)
-                        sw.println("column"+id+"_"+i+".setFilterable("+col.getAttributes().getNamedItem("filter").getNodeValue()+");");
-                    if(col.getAttributes().getNamedItem("query") != null)
-                        sw.println("column"+id+"_"+i+".setQuerayable("+col.getAttributes().getNamedItem("query").getNodeValue()+");");
-                    if(col.getAttributes().getNamedItem("align") != null){
-                        String align = col.getAttributes().getNamedItem("align").getNodeValue();
-                        if (align.equals("left"))
-                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
-                        if (align.equals("center"))
-                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
-                        if (align.equals("right"))
-                            sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
-                    }
-                    sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                    NodeList editor = col.getChildNodes();
-                    for(int j = 0; j < editor.getLength(); j++){
-                        if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                            int child = ++count;
-                            if(!createWidget(editor.item(j),child)){
-                                count--;
-                                continue;
-                            }
-                            //sw.println("if(wid"+child+" instanceof HasBlurHandlers)");
-                            //sw.println("((HasBlurHandlers)wid"+child+").addBlurHandler(wid"+id+");");
-                            sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                            break;
-                        }
-                    }
-                    sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
-                }
-                sw.println("wid"+id+".setTableWidth(wid"+id+".getTableWidth()+\"px\");");
-                sw.println("wid"+id+".init();");
-                sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
-                //setDefaults(node,"wid"+id);
-                StringBuffer sb = new StringBuffer();
-                if (node.getAttributes().getNamedItem("style") != null){
-                    String[] styles = node.getAttributes().getNamedItem("style").getNodeValue().split(",");
-                    sw.println("wid"+id+".setStyleName(\""+styles[0]+"\");");
-                    for(int i = 1; i < styles.length; i++){
-                        sw.println("wid"+id+".addStyleName(\""+styles[i]+"\");");
-                    }
-                }
-                if (node.getAttributes().getNamedItem("enable") != null){
-                    sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-                }
-                
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-                sw.println("panel.addFocusHandler(wid"+id+");");
-                sw.println("wid"+id+".addFocusHandler(panel);");
-                
-                
-                //if(def != null)
-                    //def.panel.addClickHandler(table);
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.table.TableWidgetRed");
-                composer.addImport("org.openelis.gwt.widget.table.TableColumn");
-                composer.addImport("org.openelis.gwt.widget.table.TableView.VerticalScroll");
-                composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-            }
-        });
-    	/*
-    	factoryMap.put("dropdown", new Factory(){
-    		public void getNewInstance(Node node, int id){
-    		    if(node.getAttributes().getNamedItem("field") != null){
-    		        if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String")){
-    		            sw.println("Dropdown<String> wid"+id+" = new Dropdown<String>();");
-    		            factoryMap.get("String").getNewInstance(node,id);
-    		        }else {
-    		            sw.println("Dropdown<Integer> wid"+id+" = new Dropdown<Integer>();");
-    		            factoryMap.get("Integer").getNewInstance(node,id);
-    		        }
-    		    }else{
-    		        sw.println("Dropdown<Integer> wid"+id+"= new Dropdown<Integer>();");
-    		        factoryMap.get("Integer").getNewInstance(node,id);
-    		    }
-    		    
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    
-    		    sw.println("wid"+id+".setField(field"+id+");");
-    		    		
-    		    sw.println("wid"+id+".setMultiSelect(false);");
-    		        	                
-    	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-    	        	sw.println("wid"+id+".setMultiSelect(true);");
-    	        
-    	        if (node.getAttributes().getNamedItem("text") != null)
-    	        	sw.println("wid"+id+".textBoxDefault = \""+node.getAttributes().getNamedItem("text").getNodeValue()+"\";");
-    	        
-    	        if (node.getAttributes().getNamedItem("width") != null){
-    	        	sw.println("wid"+id+".dropwidth = \""+node.getAttributes().getNamedItem("width").getNodeValue()+"\";");
-    	        }
-    	        
-    	        if (node.getAttributes().getNamedItem("delay") != null) {
-    	        	sw.println("wid"+id+".setDelay("+node.getAttributes().getNamedItem("delay").getNodeValue()+");");
-    	        }
-    	        
-    	        if (node.getAttributes().getNamedItem("popWidth") != null)
-    	            sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("popWidth").getNodeValue()+"\");");
-    	        else
-    	        	sw.println("wid"+id+".setTableWidth(\"auto\");");
-                NodeList colList = ((Element)node).getElementsByTagName("col");
-                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
-                if(colList.getLength() > 0){
-                	for(int i = 0; i < colList.getLength(); i++) {
-                		Node col = colList.item(i);
-                		sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
-                		sw.println("column"+id+"_"+i+".controller = drop;");
-                		if(col.getAttributes().getNamedItem("key") != null)
-                			sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                		if(col.getAttributes().getNamedItem("header") != null){
-                			sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			sw.println("wid"+id+".showHeader(true);");
-                		}
-                		if(col.getAttributes().getNamedItem("width") != null)
-                			sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("sort") != null)
-                			sw.println("column"+id+"_"+i+".setSortable("+col.getAttributes().getNamedItem("sort").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("filter") != null)
-                			sw.println("column"+id+"_"+i+".setFilterable("+col.getAttributes().getNamedItem("filter").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("align") != null){
-                			String align = col.getAttributes().getNamedItem("align").getNodeValue();
-                			if (align.equals("left"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
-                			if (align.equals("center"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
-                			if (align.equals("right"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
-                		}
-                		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                		boolean widgetDefined = false;
-                    	NodeList editor = col.getChildNodes();
-                    	for(int j = 0; j < editor.getLength(); j++){
-                    		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                    			int child = count++;
-                    			if(!createWidget(editor.item(j),child)){
-                    				count--;
-                    				continue;
-                    			}
-                    			widgetDefined = true;
-                    			sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                    			break;
-                    		}
-                    	}
-                    	if(!widgetDefined){
-                    		int child = count++;
-                    		factoryMap.get("label").getNewInstance(colList.item(i),child);
-                    		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                    	}
-                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");	
-                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
-                	}
-                }else{
-                	sw.println("TableColumn column"+id+" = new TableColumn();");
-                	sw.println("column"+id+".controller = wid"+id+";");
-                	 if (node.getAttributes().getNamedItem("width") != null) {
-         	        	String width  = node.getAttributes().getNamedItem("width").getNodeValue();
-         	        	int wid = 0;
-         	        	if(width.indexOf("px") > -1)
-         	        		wid = Integer.parseInt(width.substring(0,width.indexOf("px")));
-            			else
-            				wid = Integer.parseInt(width);
-         	        	sw.println("column"+id+".setCurrentWidth("+wid+");");
-                	 }else{
-                		 sw.println("column"+id+".setCurrentWidth(100);");
-                	 }
-                	sw.println("org.openelis.gwt.widget.Label label"+id+" = new org.openelis.gwt.widget.Label();");
-                	sw.println("label"+id+".setField(new StringField());");
-                	sw.println("column"+id+".setColumnWidget(label"+id+");");
-                	sw.println("wid"+id+".getColumns().add(column"+id+");");
-                }
-                sw.println("wid"+id+".setup();");
-				//if (node.getAttributes().getNamedItem("case") != null){
-				//	String fieldCase = node.getAttributes().getNamedItem("case")
-				//	.getNodeValue().toUpperCase();
-				//	sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
-	        	//}
-				sw.println("panel.addFocusHandler(wid"+id+");");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				setDefaults(node,"wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.Dropdown");
-    			composer.addImport("org.openelis.gwt.widget.table.TableColumn");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    			composer.addImport("org.openelis.gwt.widget.TextBox");
-    		}
-    	});
-    	factoryMap.put("autoComplete", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-                if(node.getAttributes().getNamedItem("field") != null){
-                    if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String")){
-                        sw.println("AutoComplete<String> wid"+id+" = new AutoComplete<String>();");
-                        factoryMap.get("String").getNewInstance(node,id);
-                    }else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Integer")) {
-                        sw.println("AutoComplete<Integer> wid"+id+" = new AutoComplete<Integer>();");
-                        factoryMap.get("Integer").getNewInstance(node,id);
-                    }else {
-    					sw.println("AutoComplete<Long> wid"+id+" = new AutoComplete<Long>();");
-    					factoryMap.get("Long").getNewInstance(node,id);
-    				}
-                }else{
-                    sw.println("AutoComplete<Integer> wid"+id+" = new AutoComplete<Integer>();");
-                    factoryMap.get("Long").getNewInstance(node,id);
-                }
-                sw.println("wid"+id+".setField(field"+id+");");
-                
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    
-    	        if (node.getAttributes().getNamedItem("multiSelect") != null && node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-    	        	sw.println("wid"+id+".multiSelect(true);");
-    	        
-    	        if (node.getAttributes().getNamedItem("text") != null)
-    	        	sw.println("wid"+id+".textBoxDefault = \""+node.getAttributes().getNamedItem("text").getNodeValue()+"\";");
-    	        else
-    	            sw.println("wid"+id+".textBoxDefault = \"\";");
-    	        
-    	        if (node.getAttributes().getNamedItem("max") != null)
-    	        	sw.println("wid"+id+".textbox.setLength("+node.getAttributes().getNamedItem("max").getNodeValue()+");");
-    	        
-    	        if (node.getAttributes().getNamedItem("width") != null)
-    	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-    	        
-    	        if (node.getAttributes().getNamedItem("delay") != null) 
-    	        	sw.println("wid"+id+".setDelay("+node.getAttributes().getNamedItem("delay").getNodeValue()+");");
-    	        
-    	        if (node.getAttributes().getNamedItem("popWidth") != null)
-    	            sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("popWidth").getNodeValue()+"\");");
-    	        else
-    	        	sw.println("wid"+id+".setTableWidth(\"auto\");");
-    	      //  if(node.getAttributes().getNamedItem("case") != null){
-    	      //      String textCase = node.getAttributes().getNamedItem("case").getNodeValue().toUpperCase();
-    	       //     sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+textCase+"\"));");
-    	       // }
-                NodeList colList = ((Element)node).getElementsByTagName("col");
-                sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
-                if(colList.getLength() > 0){
-                	for(int i = 0; i < colList.getLength(); i++) {
-                		Node col = colList.item(i);
-                		sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
-                		sw.println("column"+id+"_"+i+".controller = wid"+id+";");
-                		if(col.getAttributes().getNamedItem("key") != null)
-                			sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                		if(col.getAttributes().getNamedItem("header") != null) {
-                			sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			sw.println("wid"+id+".showHeader(true);");
-                		}
-                		if(col.getAttributes().getNamedItem("width") != null)
-                			sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("sort") != null)
-                			sw.println("column"+id+"_"+i+".setSortable(\""+col.getAttributes().getNamedItem("sort").getNodeValue()+"\");");
-                		if(col.getAttributes().getNamedItem("filter") != null)
-                			sw.println("column"+id+"_"+i+".setFilterable(\""+col.getAttributes().getNamedItem("filter").getNodeValue()+"\");");
-                		if(col.getAttributes().getNamedItem("align") != null){
-                			String align = col.getAttributes().getNamedItem("align").getNodeValue();
-                			if (align.equals("left"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
-                			if (align.equals("center"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
-                			if (align.equals("right"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
-                		}
-                		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                		boolean widgetDefined = false;
-                    	NodeList editor = col.getChildNodes();
-                    	for(int j = 0; j < editor.getLength(); j++){
-                    		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                    			int child = ++count;
-                    			if(!createWidget(editor.item(j),child)){
-                    				count--;
-                    				continue;
-                    			}
-                    			widgetDefined = true;
-                    			sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                    			break;
-                    		}
-                    	}
-                    	if(!widgetDefined){
-                    		int child = ++count;
-                    		factoryMap.get("label").getNewInstance(colList.item(i),child);
-                    		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                    	}
-                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");	
-                	}
-                }else{
-                	sw.println("TableColumn column"+id+" = new TableColumn();");
-                	sw.println("column"+id+".setCurrentWidth(100);");
-                	sw.println("org.openelis.gwt.widget.Label label"+id+" = new org.openelis.gwt.widget.Label();");
-                	sw.println("label"+id+".setField(new StringField());");
-                	sw.println("column"+id+".setColumnWidget(label"+id+");");
-                	sw.println("column"+id+".controller = wid"+id+";");
-                	sw.println("wid"+id+".getColumns().add(column"+id+");");
-                }
-                sw.println("wid"+id+".init();");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				//if (node.getAttributes().getNamedItem("case") != null){
-				//	String fieldCase = node.getAttributes().getNamedItem("case")
-				//	.getNodeValue().toUpperCase();
-				//	sw.println("wid"+id+".textbox.setCase(TextBox.Case.valueOf(\""+fieldCase+"\"));");
-	        	//}
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.AutoComplete");
-    			composer.addImport("org.openelis.gwt.widget.table.TableColumn");
-    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    			composer.addImport("org.openelis.gwt.widget.TextBox");
-    		}
-    	});
-    	*/
+    	
     	factoryMap.put("tree", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("TreeWidget wid"+id+" = new TreeWidget();");
+    			String width,rows,vscroll,hscroll,multiSelect,key,header,minWidth,rowHeight,enabled;
+    			String[] tabs;
+    			Node attrib,columns,col;
+    			NodeList colList,editor,leafList;
     			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
+    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : "";
+    			tabs = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "";
+    			rows = (attrib = node.getAttributes().getNamedItem("rows")) != null ? attrib.getNodeValue() : "10";
+    			vscroll = (attrib = node.getAttributes().getNamedItem("vscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
+    			hscroll = (attrib = node.getAttributes().getNamedItem("hscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
+    			multiSelect = (attrib = node.getAttributes().getNamedItem("multiSelect")) != null ? attrib.getNodeValue() : null;
+    			rowHeight = (attrib = node.getAttributes().getNamedItem("rowHeight")) != null ? attrib.getNodeValue() : null;
+    			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
+    			
+    			sw.println("Tree wid"+id+" = new Tree();");
+    			
+				if(tabs != null) 
 					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
+				
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
                 
-                sw.println("wid"+id+".setTreeWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
-                sw.println("wid"+id+".setMaxRows("+node.getAttributes().getNamedItem("maxRows").getNodeValue()+");");
-
-                if(node.getAttributes().getNamedItem("title") != null){
-                        sw.println("wid"+id+".title = \""+node.getAttributes().getNamedItem("title").getNodeValue()+"\";");
-                }
-                if(node.getAttributes().getNamedItem("showScroll") != null){
-                	String showScroll = node.getAttributes().getNamedItem("showScroll").getNodeValue();
-                    sw.println("wid"+id+".setShowScroll(TreeView.VerticalScroll.valueOf(\""+showScroll+"\"));");
-                }
-                if(node.getAttributes().getNamedItem("multiSelect") != null){
-                    if(node.getAttributes().getNamedItem("multiSelect").getNodeValue().equals("true"))
-                        sw.println("wid"+id+".enableMultiSelect(true);");
-                }
-                Node header  = ((Element)node).getElementsByTagName("header").item(0);
-                if(header != null){
-                	boolean showHeader = false;
-                    NodeList colList = ((Element)header).getElementsByTagName("col");
-                    sw.println("wid"+id+".setHeaders(new ArrayList<TreeColumn>("+colList.getLength()+"));");
+                sw.println("wid"+id+".setWidth(\""+width+"\");");
+                sw.println("wid"+id+".setVisibleRows("+rows+");");
+                sw.println("wid"+id+".setVerticalScroll(Tree.Scrolling.valueOf(\""+vscroll+"\"));");
+                sw.println("wid"+id+".setHorizontalScroll(Tree.Scrolling.valueOf(\""+hscroll+"\"));");
+                
+                if(rowHeight != null) 
+                	sw.println("wid"+id+".setRowHeight("+rowHeight+");");
+                
+                if(multiSelect != null)
+                	sw.println("wid"+id+".setAllowMultipleSelection("+multiSelect+");");
+                
+                if(enabled != null)
+                	sw.println("wid"+id+".setEnabled("+enabled+");");
+                
+                columns  = ((Element)node).getElementsByTagName("columns").item(0);
+                if(columns != null){
+                	colList = columns.getChildNodes();
                     for(int i = 0; i < colList.getLength(); i++) {
-                    	sw.println("TreeColumn col"+id+"_"+i+" = new TreeColumn();");
-                		if(colList.item(i).getAttributes().getNamedItem("header") != null){
-                			sw.println("col"+id+"_"+i+".setHeader(\""+colList.item(i).getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			//sw.println("wid"+id+".showHeader(true);");
-                			showHeader = true;
-                		}
-                		if(colList.item(i).getAttributes().getNamedItem("width") != null)
-                			sw.println("col"+id+"_"+i+".setCurrentWidth("+colList.item(i).getAttributes().getNamedItem("width").getNodeValue()+");");
-                    	if(colList.item(i).getAttributes().getNamedItem("minWidth") != null)
-                    		sw.println("col"+id+"_"+i+".setMinWidth("+colList.item(i).getAttributes().getNamedItem("minWidth").getNodeValue()+");");
-                    	if(colList.item(i).getAttributes().getNamedItem("fixedWidth") != null)
-                    		sw.println("col"+id+"_"+i+".setFixedWidth("+colList.item(i).getAttributes().getNamedItem("fixedWidth").getNodeValue()+");");
-                		if(colList.item(i).getAttributes().getNamedItem("sort") != null){
-                			sw.println("col"+id+"_"+i+".setSortable(true);");
-                			String[] sortLeaves = colList.item(i).getAttributes().getNamedItem("sort").getNodeValue().split(",");
-                			sw.println("col"+id+"_"+i+".sortLeaves = new ArrayList<String>();");
-                			for(String leaf : sortLeaves) 
-                				sw.println("col"+id+"_"+i+".sortLeaves.add(\""+leaf+"\");");
-                		}
-                		sw.println("wid"+id+".getHeaders().add(col"+id+"_"+i+");");
-                				
+                        col = colList.item(i);
+                        if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                            continue;
+                        key = (attrib = col.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+                        header = (attrib = col.getAttributes().getNamedItem("header")) != null ? attrib.getNodeValue() : null;
+                        width = (attrib = col.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+                        minWidth = (attrib = col.getAttributes().getNamedItem("minWidth")) != null ? attrib.getNodeValue() : null;
+                        
+                        sw.println("org.openelis.gwt.widget.tree.Column column"+id+"_"+i+" = wid"+id+".addColumn();");
+                        
+                        if(key != null)
+                            sw.println("column"+id+"_"+i+".setName(\""+key+"\");");
+                        
+                        if(header != null){
+                            sw.println("column"+id+"_"+i+".setLabel(\""+header+"\");");
+                            sw.println("wid"+id+".setHeader(true);");
+                        }
+                        
+                        if(width != null)
+                            sw.println("column"+id+"_"+i+".setWidth("+width+");");
+                        
+                        if(minWidth != null)
+                            sw.println("column"+id+"_"+i+".setMinWidth("+minWidth+");");
+                        
+                        editor = col.getChildNodes();
+                        for(int j = 0; j < editor.getLength(); j++){
+                            if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                int child = ++count;
+                                if(!createWidget(editor.item(j),child)){
+                                    count--;
+                                    continue;
+                                }
+                                
+                                String name = editor.item(j).getNodeName();
+                                String field = (attrib = editor.item(j).getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : name.equals("Dropdown") ? "Integer" : "String";
+                                
+                                if(field.equals("Date"))
+                                	field = "Datetime";
+                                                               
+                                if(editor.item(j).getNodeName().equals("dropdown")) 
+                                    sw.println("DropdownCell<"+field+"> cell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                                else if(editor.item(j).getNodeName().equals("textbox")) 
+                                    sw.println("TextBoxCell<"+field+"> cell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                                else if(editor.item(j).getNodeName().equals("autoComplete"))
+                                    sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
+                                else if(editor.item(j).getNodeName().equals("check"))
+                                    sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
+                                else if(editor.item(j).getNodeName().equals("calendar"))
+                                    sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                                else
+                                	sw.println("LabelCell<String> cell"+child+" = new LabelCell<String>(wid"+child+");");
+                                
+                                sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
+                                //sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
+                                break;
+                            }
+                        }
                     }
-                    if(showHeader)
-                    	sw.println("wid"+id+".showHeader(true);");
                 }
-                NodeList leafList = ((Element)node).getElementsByTagName("leaf");
-                sw.println("wid"+id+".setColumns(new HashMap<String,ArrayList<TreeColumn>>());");
-                for(int h = 0; h < leafList.getLength(); h++) {
-                	NodeList colList = leafList.item(h).getChildNodes();
-                	sw.println("ArrayList<TreeColumn> cols"+id+"_"+h+" = new ArrayList<TreeColumn>();");
-                	int colIndex = -1;
-                	for(int i = 0; i < colList.getLength(); i++) {
-                    	Node col = colList.item(i);
-                    	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                    		continue;
-                    	colIndex++;
-                		sw.println("TreeColumn column"+id+"_"+h+"_"+i+" = new TreeColumn();");
-                		if(col.getAttributes().getNamedItem("key") != null)
-                			sw.println("column"+id+"_"+h+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                		if(header != null) {
-                			sw.println("column"+id+"_"+h+"_"+i+".setCurrentWidth(wid"+id+".getHeaders().get("+i+").currentWidth);");		
-                		}
-                		if(col.getAttributes().getNamedItem("align") != null){
-                			String align = col.getAttributes().getNamedItem("align").getNodeValue();
-                			if (align.equals("left"))
-                				sw.println("column"+id+"_"+h+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
-                			if (align.equals("center"))
-                				sw.println("column"+id+"_"+h+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
-                			if (align.equals("right"))
-                				sw.println("column"+id+"_"+h+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
-                		}
-                		NodeList editor = col.getChildNodes();
+                
+                leafList = ((Element)node).getElementsByTagName("node");
+                for(int i = 0; i < leafList.getLength(); i++) {
+                	sw.println("ArrayList<org.openelis.gwt.widget.tree.Column> leafDef"+id+"_"+i+" = new ArrayList<org.openelis.gwt.widget.tree.Column>();");
+                	colList = leafList.item(i).getChildNodes();
+                	for(int h = 0; h < colList.getLength(); h++) {
+                		col = colList.item(h);
+                		if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                			continue;
+                		sw.println("org.openelis.gwt.widget.tree.Column leafCol"+id+"_"+i+"_"+h+" = new org.openelis.gwt.widget.tree.Column();");
+                		sw.println("leafDef"+id+"_"+i+".add(leafCol"+id+"_"+i+"_"+h+");");
+                		
+                		key = (attrib = col.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+                		
+                		if(key != null)
+                			sw.println("leafCol"+id+"_"+i+"_"+h+".setName(\""+key+"\");");
+                		
+                		editor = col.getChildNodes();
                 		for(int j = 0; j < editor.getLength(); j++){
                 			if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
                 				int child = ++count;
@@ -2210,227 +2066,159 @@ public class UIGenerator extends Generator {
                 					count--;
                 					continue;
                 				}
-                				//sw.println("if(wid"+child+" instanceof HasBlurHandlers)");
-                					//sw.println("((HasBlurHandlers)wid"+child+").addBlurHandler(wid"+id+");");
-                				sw.println("column"+id+"_"+h+"_"+i+".setColumnWidget(wid"+child+");");
+                				String name = editor.item(j).getNodeName();
+                				String field = (attrib = editor.item(j).getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : name.equals("Dropdown") ? "Integer" : "String";
+                				
+                				if(field.equals("Date"))
+                					field = "Datetime";
+                				
+                				if(name.equals("dropdown")) 
+                					sw.println("DropdownCell<"+field+"> leafCell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                				else if(name.equals("textbox")) 
+                					sw.println("TextBoxCell<"+field+"> leafCell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                				else if(name.equals("autoComplete"))
+                					sw.println("AutoCompleteCell leafCell"+child+" = new AutoCompleteCell(wid"+child+");");
+                				else if(name.equals("check"))
+                					sw.println("CheckBoxCell leafCell"+child+" = new CheckBoxCell(wid"+child+");");
+                				else if(name.equals("calendar"))
+                					sw.println("CalendarCell leafCell"+child+" = new CalendarCell(wid"+child+");");
+                				else
+                                	sw.println("LabelCell<String> leafCell"+child+" = new LabelCell<String>(wid"+child+");");
+
+                				sw.println("leafCol"+id+"_"+i+"_"+h+".setCellRenderer(leafCell"+child+");");
+                				//sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
                 				break;
                 			}
                 		}
-                		sw.println("column"+id+"_"+h+"_"+i+".controller = wid"+id+";");
-                		sw.println("column"+id+"_"+h+"_"+i+".columnIndex = "+colIndex+";");
-                		sw.println("cols"+id+"_"+h+".add(column"+id+"_"+h+"_"+i+");");
                 	}
-                	sw.println("wid"+id+".getColumns().put(\""+leafList.item(h).getAttributes().getNamedItem("key").getNodeValue()+"\", cols"+id+"_"+h+");");
+                	key = leafList.item(i).getAttributes().getNamedItem("key").getNodeValue();
+                	sw.println("wid"+id+".addNodeDefinition(\""+key+"\",leafDef"+id+"_"+i+");");
                 }
-                sw.println("wid"+id+".init();");
-                sw.println("wid"+id+".setStyleName(\"ScreenTree\");");
                 setDefaults(node,"wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
                 sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-                sw.println("panel.addFocusHandler(wid"+id+");");
+               // sw.println("panel.addFocusHandler(wid"+id+");");
 				sw.println("wid"+id+".addFocusHandler(panel);");
-                
-                
     		}
+    	
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.tree.TreeWidget");
-    			composer.addImport("org.openelis.gwt.widget.tree.TreeColumn");
+    			composer.addImport("org.openelis.gwt.widget.tree.Tree");
     			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
-    			composer.addImport("org.openelis.gwt.widget.tree.TreeView");
+    			composer.addImport("org.openelis.gwt.widget.tree.View");
+    			composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+                composer.addImport("org.openelis.gwt.widget.table.TextBoxCell");
+                composer.addImport("org.openelis.gwt.widget.table.AutoCompleteCell");
+                composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
+                composer.addImport("org.openelis.gwt.widget.table.CheckBoxCell");
+                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");    
     		}
-    	});
-    	factoryMap.put("button", new Factory() {
+    	});    	
+    	
+    	factoryMap.put("VerticalPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("Button wid"+id+" = new Button();");
+    			String spacing,halign,valign,height,width;
+    			NodeList widgets;
+    			Node attrib,widget;
     			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);			    
+    			spacing = (attrib = node.getAttributes().getNamedItem("spacing")) != null ? attrib.getNodeValue() : null;
     			
-    	        if(node.getAttributes().getNamedItem("toggle") != null)
-   	                sw.println("wid"+id+".setToggles("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
+    			sw.println("VerticalPanel wid"+id+" = new VerticalPanel();");
     	        
-    	        if(node.getAttributes().getNamedItem("action") != null)
-    	            sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+"\");");
-    	        
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int l = 0; l < widgets.getLength(); l++) {
-    	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	            	if(!loadWidget(widgets.item(l),child)){
-     	            	   count--;
-     	            	   continue;
-     	               }
-    	            	if(node.getAttributes().getNamedItem("wrap") != null)
-    	            		sw.println("wid"+id+".setDisplay(wid"+child+","+node.getAttributes().getNamedItem("wrap").getNodeValue()+");");
-    	            	else
-    	                    sw.println("wid"+id+".setDisplay(wid"+child+");");
-    	            }
-    	        }
-
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.Button");
-    		}
-    	});  
-    	/*
-    	factoryMap.put("appButton", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("AppButton wid"+id+" = new AppButton();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-			    
-    			if(node.getAttributes().getNamedItem("action") != null) 
-    				sw.println("wid"+id+".setAction(\""+node.getAttributes().getNamedItem("action").getNodeValue()+"\");");
-    			
-    	        if(node.getAttributes().getNamedItem("toggle") != null)
-   	                sw.println("wid"+id+".setToggle("+node.getAttributes().getNamedItem("toggle").getNodeValue()+");");
-    	        
-    	        NodeList widgets = node.getChildNodes();
-    	        for (int l = 0; l < widgets.getLength(); l++) {
-    	            if (widgets.item(l).getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	            	if(!loadWidget(widgets.item(l),child)){
-     	            	   count--;
-     	            	   continue;
-     	               }
-    	                sw.println("wid"+id+".setWidget(wid"+child+");");
-    	            }
-    	        }
-
-    	        setDefaults(node, "wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.AppButton");
-    		}
-    	});
-    	*/
-    	factoryMap.put("icon", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			sw.println("IconContainer wid"+id+"= new IconContainer();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) {
-		    		String tab = node.getAttributes().getNamedItem("tab").getNodeValue();
-					String[] tabs = tab.split(",");
-					String key = node.getAttributes().getNamedItem("key").getNodeValue();
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
-				}
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
-    	        NodeList widgets = node.getChildNodes();
+    			if (spacing != null)
+    	            sw.println("wid"+id+".setSpacing("+spacing+");");
+  
+    	        widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
-    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    	        	widget = widgets.item(k);
+    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
     	            	int child = ++count;
     	                if(!loadWidget(widgets.item(k),child)){
     	                	count--;
     	                	continue;
     	                }
-    	                if(node.getAttributes().getNamedItem("align") != null)
-    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\","+node.getAttributes().getNamedItem("align").getNodeValue()+");");
-    	                sw.println("wid"+id+".add(wid"+child+");");
+    	                halign = (attrib = widget.getAttributes().getNamedItem("halign")) != null ? attrib.getNodeValue() : "LEFT";
+    	                valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue() : "MIDDLE";
+    	                height = (attrib = widget.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : null;
+    	                width = (attrib = widget.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+    	                
+     	                sw.println("wid"+id+".add(wid"+child+");");
+    	                
+                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_"+halign.toUpperCase()+");");
+                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_"+valign.toUpperCase()+");");
+
+    	                if(height != null) 
+    	                	sw.println("wid"+id+".setCellHeight(wid"+child+",\""+height+"\");");
+    	                
+    	                if(width != null && !width.equals("auto"))
+   	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+width+"\");");
     	            }
     	        }
+    	        sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
     	        setDefaults(node,"wid"+id);
-    	        if (node.getAttributes().getNamedItem("enable") != null){
-    	        	sw.println("wid"+id+".enable("+node.getAttributes().getNamedItem("enable").getNodeValue()+");");
-    	        }
-    	        
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.IconContainer");
+    			composer.addImport("com.google.gwt.user.client.ui.VerticalPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.HasAlignment");
     		}
     	});
-    	factoryMap.put("notes", new Factory() {
+
+    	factoryMap.put("VerticalSplitPanel", new Factory(){
     		public void getNewInstance(Node node, int id) {
-    			sw.println("NotesPanel wid"+id+" = new NotesPanel();");
-    			sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
-    			setDefaults(node,"wid"+id);
+    			String splitpos;
+    			NodeList sections,widgets;
+    			Node attrib, section, widget;
+    			
+    			sw.println("VerticalSplitPanel wid"+id+" = new VerticalSplitPanel();");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
+    	        sections = ((Element)node).getElementsByTagName("section");
+    	        for (int k = 0; k < sections.getLength(); k++) {
+    	        	section = sections.item(k);
+    	            widgets = section.getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	if(!loadWidget(widget,child)){
+    	                		count--;
+    	    	                continue;
+    	    	            }
+    	                    if (k == 0) 
+    	                             sw.println("wid"+id+".setTopWidget(wid"+child+");");
+    	                    
+    	                    if (k == 1) 
+    	                             sw.println("wid"+id+".setBottomWidget(wid"+child+");");
+    	                    
+    	                }
+    	            }
+    	        }
+    	        splitpos = (attrib = node.getAttributes().getNamedItem("splitpos")) != null ? attrib.getNodeValue() : null;
+    	        if(splitpos != null) 
+   	                 sw.println("wid"+id+".setSplitPosition("+splitpos+");");
+    	        
+    	        setDefaults(node, "wid"+id);
     		}
-    		public void addImport(){
-    			composer.addImport("org.openelis.gwt.widget.NotesPanel");
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.VerticalSplitPanel");
     		}
     	});
-        factoryMap.put("String", new Factory() {
-            public void getNewInstance(Node node, int id) {
-                sw.println("StringHelper field"+id+" = new StringHelper();");
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.StringHelper");
-            }
-        });
-        factoryMap.put("Date", new Factory() {
-            public void getNewInstance(Node node, int id){
-                sw.println("DateHelper field"+id+" = new DateHelper();");
-                if (node.getAttributes().getNamedItem("begin") != null)
-                    sw.println("field"+id+".setBegin(Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\"));");
-                if (node.getAttributes().getNamedItem("end") != null)
-                    sw.println("field"+id+".setEnd(Byte.parseByte(\""+node.getAttributes().getNamedItem("end").getNodeValue()+"\"));");
-                if(node.getAttributes().getNamedItem("pattern") != null){
-                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
-                }   
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.DateHelper");
-            }
-        });
-        factoryMap.put("Integer", new Factory(){
-            public void getNewInstance(Node node, int id) {
-                sw.println("IntegerHelper field"+id+" = new IntegerHelper();");
-                if (node.getAttributes().getNamedItem("pattern") != null) {
-                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
-                }
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.IntegerHelper");
-            }
-        });
-        factoryMap.put("Long", new Factory(){
-            public void getNewInstance(Node node,int id) {
-                sw.println("LongHelper field"+id+" = new LongHelper();");
-                if (node.getAttributes().getNamedItem("pattern") != null) {
-                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
-                }
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.LongHelper");
-            }
-        });
-        factoryMap.put("Double", new Factory() {
-            public void getNewInstance(Node node, int id) {
-                StringBuffer sb = new StringBuffer();
-                sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
-                if (node.getAttributes().getNamedItem("pattern") != null) {
-                    sw.println("field"+id+".setPattern(\""+node.getAttributes().getNamedItem("pattern").getNodeValue()+"\");");
-                }
-            }
-            public void addImport() {
-                composer.addImport("org.openelis.gwt.widget.DoubleHelper");
-            }
-        });
+
+    	factoryMap.put("webButton", new Factory() {    		
+    		public void getNewInstance(Node node, int id) {
+    			String icon,label;
+    			Node attrib;
+    			
+    			icon = (attrib = node.getAttributes().getNamedItem("icon")) != null ? attrib.getNodeValue() : "";
+    			label = (attrib = node.getAttributes().getNamedItem("label")) != null ? attrib.getNodeValue() : "";
+    			
+    			sw.println("org.openelis.gwt.widget.web.MenuButton wid"+id+" = new org.openelis.gwt.widget.web.MenuButton(\""+icon+"\",\""+label+"\");");
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.web.MenuButton");
+    		}
+    	});
     }
 
     public static void addFactory(String tag, Factory factory) {
         factoryMap.put(tag,factory);
     }
-    
-    
 }

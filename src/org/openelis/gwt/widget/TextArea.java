@@ -94,6 +94,14 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
         textarea.setTextAlignment(alignment);
     }
     
+    public int getCursorPos() {
+    	return textarea.getCursorPos();
+    }
+    
+    public void setSelectionRange(int pos, int length) {
+    	textarea.setSelectionRange(pos, length);
+    }
+    
     // ************** Implementation of ScreenWidgetInt ********************
 
     /**

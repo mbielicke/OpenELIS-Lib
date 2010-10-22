@@ -27,10 +27,14 @@ package org.openelis.gwt.widget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
@@ -97,6 +101,12 @@ public class MenuItem extends Composite {
                 removeStyleName("Hover");
             }
         },MouseOutEvent.getType());
+        
+        addHandler(new MouseDownHandler() {
+        	public void onMouseDown(MouseDownEvent event) {
+        		removeStyleName("Hover");
+        	}
+        },MouseDownEvent.getType());
                 
         this.autoClose = autoClose;   
         
@@ -118,6 +128,10 @@ public class MenuItem extends Composite {
         }
     }
     
+    public boolean isEnabled() {
+    	return enabled;
+    }
+    
     /**
      * The Command passed will be executed when a user clicks on it.  This method can be called more than once
      * to add multiple commands to the MenuItem.  The Commands will be executed in the order they are added.
@@ -126,6 +140,7 @@ public class MenuItem extends Composite {
     public void addCommand(final Command command) {
         addHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
+            	removeStyleName("Hover");
                 command.execute();
             }
         }, ClickEvent.getType());

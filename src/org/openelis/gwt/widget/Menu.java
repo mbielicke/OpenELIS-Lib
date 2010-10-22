@@ -31,11 +31,14 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -77,7 +80,8 @@ public class Menu extends Composite {
 
         addHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
-                removeStyleName("Hover");
+            	if(!panel.isShowing())
+            		removeStyleName("Hover");
             }
         }, MouseOutEvent.getType());
         
@@ -133,6 +137,12 @@ public class Menu extends Composite {
         initWidget(grid);
         
         setEnabled(true);
+        
+        panel.addCloseHandler(new CloseHandler<PopupPanel>() {
+			public void onClose(CloseEvent<PopupPanel> event) {
+				removeStyleName("Hover");
+			}
+		});
     }
 
     /**
@@ -158,6 +168,14 @@ public class Menu extends Composite {
                 command.execute();
             }
         }, ClickEvent.getType());
+    }
+    
+    public void setSelfShow() {
+    	addDomHandler(new ClickHandler() {
+    		public void onClick(ClickEvent event) {
+    			showSubMenu();
+    		}
+    	},ClickEvent.getType()); 
     }
 
     /**

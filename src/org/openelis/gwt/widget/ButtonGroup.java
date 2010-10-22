@@ -60,7 +60,7 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
      * enables or disables the buttons in this group based on the boolean passed
      * @param enabled
      */
-    public void enable(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         for (Button button : buttons) {
             button.setEnabled(enabled);
         }

@@ -784,7 +784,9 @@ cursor:pointer;
     cursor:default;
 }
 
-.Pressed .ButtonRightSide{cursor:default;}
+.Pressed .ButtonRightSide{cursor:default;background:url("../Images/screenbuttonrs.gif") no-repeat;}
+
+.Hover .ButtonRightSide{cursor:pointer;background:url("../Images/screenbuttonrs.gif") no-repeat;}
 .Disabled .ButtonPanelButton .ButtonRightSide{
 background:none;
     cursor:default;
@@ -802,11 +804,17 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:url("../Images/screenbuttonls.gif") no-repeat;
     cursor:default;
 }
- .Pressed  .ButtonLeftSide{cursor:default;}
+.Pressed  .ButtonLeftSide{cursor:default;background:url("../Images/screenbuttonls.gif") no-repeat;}
+.Hover  .ButtonLeftSide{cursor:pointer;background:url("../Images/screenbuttonls.gif") no-repeat;}
 .Disabled .ButtonPanelButton .ButtonLeftSide{
 background:none;
     cursor:default;
 }
+
+.ButtonAdj {
+	padding-bottom : 3px;
+}
+
 .addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
     width:20px;
     height:20px;
@@ -870,7 +878,7 @@ background:none;
 .AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
 .disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
 
-.OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat center;}
+.OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat center;width :20px;height : 20px;}
 .disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
 
 .duplicateRecordIcon{

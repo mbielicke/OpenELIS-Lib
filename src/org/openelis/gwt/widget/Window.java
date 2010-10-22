@@ -34,15 +34,23 @@ import org.openelis.gwt.event.BeforeCloseHandler;
 import org.openelis.gwt.event.HasBeforeCloseHandlers;
 import org.openelis.gwt.screen.Screen;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.HasCloseHandlers;
@@ -268,7 +276,7 @@ public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasB
         this.content = content;
         body.insert(content, 0);
         if(content instanceof Screen) {
-            //((Screen)content).setWindow(this);
+            ((Screen)content).setWindow(this);
             setName(((Screen)content).getDefinition().getName());
             setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
@@ -437,18 +445,42 @@ public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasB
             progressBar.setVisible(false);
     }
     
+    protected void makeDragable(DragController controller) {
+    	controller.makeDraggable(this,cap);
+    }
+    
     /**
      * Inner class used to create the Draggable Caption portion of the Window.
      * @author tschmidt
      *
      */
-    private class Caption extends HorizontalPanel implements HasMouseDownHandlers { 
+    private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
 
         public String name;
 
         public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
             return addDomHandler(handler, MouseDownEvent.getType());
         }
+
+		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+			return addDomHandler(handler, MouseUpEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+			return addDomHandler(handler, MouseOutEvent.getType());
+		}
+
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+			return addDomHandler(handler, MouseOverEvent.getType());
+		}
+
+		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+			return addDomHandler(handler, MouseMoveEvent.getType());
+		}
+
+		public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+			return addDomHandler(handler, MouseWheelEvent.getType());
+		}
     }
     
     private class ProgressBar extends AbsolutePanel {

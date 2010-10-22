@@ -35,6 +35,7 @@ public class Node extends Row {
     protected Node parent;
     protected boolean isOpen,loaded = true;
     protected String type;
+    protected Integer key;
     
     public Node(int columns) {
         super(columns);
@@ -42,6 +43,14 @@ public class Node extends Row {
     
     public Node() {
         super();
+    }
+    
+    public void setKey(Integer key) {
+    	this.key = key;
+    }
+    
+    public Integer getKey() {
+    	return key;
     }
     
     public void setType(String type) {

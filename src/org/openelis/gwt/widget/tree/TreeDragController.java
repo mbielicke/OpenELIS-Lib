@@ -188,7 +188,7 @@ public class TreeDragController extends PickupDragController implements
     /**
      * Method to register a beforeStartHandler to this controller
      */
-    public HandlerRegistration addBeforeStartHandler(BeforeDragStartHandler<DragItem> handler) {
+    public HandlerRegistration addBeforeDragStartHandler(BeforeDragStartHandler<DragItem> handler) {
         return addHandler(handler, BeforeDragStartEvent.getType());
     }
 

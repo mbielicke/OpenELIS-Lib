@@ -94,6 +94,7 @@ public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPr
     public Browser(boolean size, int limit) {
         browser = new AbsolutePanel();
         windows = new HashMap<Window, WindowValues>();
+        windowsByKey = new HashMap<String,Window>();
         
         dragController = new PickupDragController(browser,true);
         
@@ -102,7 +103,7 @@ public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPr
             public void onDrop(DragContext context) {
                 // TODO Auto-generated method stub
                 super.onDrop(context);
-                ((ScreenWindow)context.draggable).positionGlass();
+                ((Window)context.draggable).positionGlass();
             }
         };
         
@@ -175,7 +176,7 @@ public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPr
          */
         Window window = new Window();
         window.setContent(screen);
-        //screen.setWindow(window);
+        screen.setWindow(window);
         addWindow(window,key);
     }
     
@@ -206,6 +207,7 @@ public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPr
     	        
     	    }
     	});
+    	window.makeDragable(dragController);
     	setFocusedWindow();
     }
     
