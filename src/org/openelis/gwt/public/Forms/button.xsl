@@ -46,124 +46,56 @@ version="1.0">
 <!-- query button template -->
 <xsl:template name="queryButton">
 	<button key="query" icon="QueryButtonImage" text="{resource:getString($constants,'query')}" action="query" toggle="true" style="ButtonPanelButton" shortcut="ctrl+q"/>	
-		<!-- 
-		<HorizontalPanel>
-		  <AbsolutePanel style="QueryButtonImage" width="20" height="20"/>
-          <text><xsl:value-of select='resource:getString($constants,"query")'/></text>
-		</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
 	<button key="previous" icon="PreviousButtonImage" text="{resource:getString($constants,'previous')}" action="previous" style="ButtonPanelButton" shortcut="ctrl+p"/>
-		<!-- 
-		<HorizontalPanel>
-	    	<AbsolutePanel style="PreviousButtonImage" width="20" height="20"/>
-           	<text><xsl:value-of select='resource:getString($constants,"previous")'/></text>
-	 	</HorizontalPanel>
-	</button>
-	-->	
 </xsl:template>
 
 <!-- next button template -->
 <xsl:template name="nextButton">
 	<button key="next" icon="NextButtonImage" text="{resource:getString($constants,'next')}" action="next" style="ButtonPanelButton" shortcut="ctrl+n"/>
-		 <!-- <HorizontalPanel>
-	  		<AbsolutePanel style="NextButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"next")'/></text>
-	 	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- update button template -->
 <xsl:template name="updateButton">
 	<button key="update" icon="UpdateButtonImage" text="{resource:getString($constants,'update')}" action="update" toggle="true" style="ButtonPanelButton" shortcut="ctrl+u"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="UpdateButtonImage" width="20" height="20"/>
-         	<text><xsl:value-of select='resource:getString($constants,"update")'/></text>
-	 	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- add button template -->
 <xsl:template name="addButton">
 	<button key="add" icon="AddButtonImage" text="{resource:getString($constants,'add')}" action="add" toggle="true" style="ButtonPanelButton" shortcut="ctrl+a"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="AddButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"add")'/></text>
-	 	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- delete button template -->
 <xsl:template name="deleteButton">
 	<button key="delete" icon="DeleteButtonImage" text="{resource:getString($constants,'delete')}" action="delete" toggle="true" style="ButtonPanelButton" shortcut="ctrl+d"/>
-		<!-- <HorizontalPanel>
-	     	<AbsolutePanel style="DeleteButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"delete")'/></text>
-	 	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
     <button key="commit" icon="CommitButtonImage" text="{resource:getString($constants,'commit')}" action="commit" style="ButtonPanelButton" shortcut="ctrl+m"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"commit")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- process button template -->
 <xsl:template name="processButton">
     <button key="process" icon="ProcessButtonImage" text="{resource:getString($constants,'process')}" action="add" style="ButtonPanelButton" shortcut="ctrl+a"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="ProcessButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"process")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
 	<button key="abort" icon="AbortButtonImage" text="{resource:getString($constants,'abort')}" action="abort" style="ButtonPanelButton" shortcut="ctrl+o"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="AbortButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"abort")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- ok button template -->
 <xsl:template name="okButton">
 	<button key="ok" icon="CommitButtonImage" text="{resource:getString($constants,'ok')}" action="ok" style="ButtonPanelButton"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"ok")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- cancel button template -->
 <xsl:template name="cancelButton">
 	<button key="cancel" icon="AbortButtonImage" text="{resource:getString($constants,'cancel')}" action="cancel" style="ButtonPanelButton"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="AbortButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"cancel")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- duplicate menu item-->
@@ -186,35 +118,17 @@ version="1.0">
 
 <!-- popup transfer button template -->
 <xsl:template name="popupTransferButton">
-<button key="popupTransfer" icon="CommitButtonImage" text="{resource:getString($constants,'transfer')}" action="commit" style="Button"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"transfer")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
+   <button key="popupTransfer" icon="CommitButtonImage" text="{resource:getString($constants,'transfer')}" action="commit" style="Button"/>
 </xsl:template>
 
 <!-- select button template -->
 <xsl:template name="selectButton">
 	<button key="select" icon="CommitButtonImage" text="{resource:getString($constants,'select')}" action="select" style="ButtonPanelButton" />
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="CommitButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"select")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- print button template -->
 <xsl:template name="printButton">
 	<button key="print" icon="PrintButtonImage" text="{resource:getString($constants,'print')}" action="print" style="ButtonPanelButton"/>
-		<!-- <HorizontalPanel>
-	    	<AbsolutePanel style="PrintButtonImage" width="20" height="20"/>
-        	<text><xsl:value-of select='resource:getString($constants,"print")'/></text>
-	  	</HorizontalPanel>
-	</button>
-	-->
 </xsl:template>
 
 <!-- buttonpanel divider template -->
@@ -227,9 +141,6 @@ version="1.0">
 <xsl:param name="keyParam" />
 <xsl:param name="queryParam" />
 	<button key="{string($keyParam)}" text="{string($keyParam)}" action="{string($queryParam)}" alwaysEnabled="true" style="smallButton"/>
-       	<!-- <text><xsl:value-of select="string($keyParam)"/></text>
- 	</button>
- 	-->
 </xsl:template>
 
 <!-- Menu item template -->

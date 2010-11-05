@@ -35,6 +35,7 @@ import org.openelis.gwt.event.HasBeforeCloseHandlers;
 import org.openelis.gwt.screen.Screen;
 
 import com.allen_sauer.gwt.dnd.client.DragController;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
@@ -57,6 +58,7 @@ import com.google.gwt.event.logical.shared.HasCloseHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -80,11 +82,13 @@ public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasB
     protected Caption cap = new Caption();
     protected VerticalPanel messagePanel;
     protected PopupPanel pop;
+    protected Window source;
     private VerticalPanel outer = new VerticalPanel() {
        public void onBrowserEvent(Event event) {
            switch (DOM.eventGetType(event)) {
                case Event.ONCLICK: {
-                   setFocus(true);
+            	   //FocusEvent.fireNativeEvent(Document.get().createFocusEvent(),source);
+                   //setFocus(true);
                    break;
                }
            }

@@ -260,7 +260,7 @@ public class View extends Composite {
             vertScrollBar = null;
         }
 
-        scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar(), 0) + "px");
+        scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
 
         /*
          * This code is executed the first time the Table is attached

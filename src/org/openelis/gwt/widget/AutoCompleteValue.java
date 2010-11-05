@@ -34,6 +34,7 @@ public class AutoCompleteValue {
     
     protected Integer id;
     protected String  display;
+    protected Object  data;
     
     public AutoCompleteValue() {
         
@@ -58,6 +59,14 @@ public class AutoCompleteValue {
 
     public void setDisplay(String display) {
         this.display = display;
+    }
+    
+    public Object getData() {
+    	return data;
+    }
+    
+    public void setData(Object data) {
+    	this.data = data;
     }
     
 }

@@ -1605,6 +1605,8 @@ public class UIGenerator extends Generator {
                         }
                     }
                 }
+                
+                setDefaults(node,"wid"+id);
      	        
      	    }
      	   public void addImport() {

@@ -60,5 +60,11 @@ public class Item<T> extends Row {
     public void setEnabled(boolean enabled) {
         this.enabled =  enabled;
     }
+    
+    public Object clone() {
+    	Item<T> clone = (Item<T>)super.clone();
+    	clone.setKey(key);
+    	return clone;
+    }
 
 }

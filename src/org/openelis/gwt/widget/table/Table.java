@@ -82,6 +82,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by screens and widgets such as AutoComplete and Dropdown
@@ -709,7 +710,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	protected int getWidthWithoutScrollbar() {
-		if (verticalScroll != Scrolling.NEVER && fixScrollBar)
+		if (verticalScroll != Scrolling.NEVER && fixScrollBar && viewWidth > -1)
 			return viewWidth - 18;
 
 		return viewWidth == -1 ? totalColumnWidth : viewWidth;
@@ -771,6 +772,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 	public int getColumn(Column col) {
 		return columns.indexOf(col);
+	}
+	
+	public Widget getColumnWidget(int index) {
+		return getColumnAt(index).getCellEditor().getWidget();
+	}
+	
+	public Widget getColumnWidget(String name) {
+		return getColumnWidget(getColumnByName(name));
 	}
 
 	/**
@@ -1093,6 +1102,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			}
 		}
 		return true;
+	}
+	
+	public void selectAll() {
+		if(isMultipleSelectionAllowed()) {
+			selections = new ArrayList<Integer>();
+			for(int i = 0; i < getRowCount(); i++)
+    			selections.add(i);
+			renderView(-1,-1);
+		}
 	}
 
 	/**
@@ -1581,7 +1599,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	/**
 	 * Redraws the table when any part of its physical definition is changed.
 	 */
-	protected void layout() {
+	public void layout() {
 		computeColumnsWidth();
 		view.layout();
 	}
@@ -1641,7 +1659,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		columnForX = new short[totalColumnWidth];
 		for (int i = 0; i < getColumnCount(); i++) {
 			to = from + getColumnAt(i).getWidth();
-			while (from < to)
+			while (from < to && from + 1 < totalColumnWidth)
 				columnForX[from++] = (short) i;
 		}
 	}
@@ -1781,6 +1799,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 						.containsKey(key) && validateExceptions.get(key)
 						.containsKey(col)));
 	}
+	
+	public void addException(Row row, int col, LocalizedException error) {
+		if(rowIndex != null && rowIndex.containsKey(row))
+			addException(rowIndex.get(row).model,col,error);
+		else 
+			addException(model.indexOf(row),col,error);
+	}
 
 	/**
 	 * Adds a manual Exception to the widgets exception list.
@@ -1858,6 +1883,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			validateExceptions = null;
 			renderView(-1, -1);
 		}
+	}
+	
+	public void clearExceptions(Row row, int col) {
+		if(rowIndex != null && rowIndex.containsKey(row))
+			clearExceptions(rowIndex.get(row).model,col);
+		else
+			clearExceptions(model.indexOf(row),col);
 	}
 
 	/**

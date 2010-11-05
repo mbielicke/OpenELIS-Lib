@@ -452,6 +452,17 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
             unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         super.setEnabled(enabled);
     }
+    
+    @Override
+    public void setQueryMode(boolean query) {
+    	if(query == queryMode)
+    		return;
+    	super.setQueryMode(query);
+    	if(query)
+    		unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
+    	else if(isEnabled())
+    		sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
+    }
 
     /**
      * Method used to set an Autocomplete from OnDataChangeEvents from the

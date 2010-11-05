@@ -138,4 +138,16 @@ public class Row {
     public String getStyle(int index) {
         return null;
     }
+    
+    public Object clone() {
+    	Row clone;
+    
+    	clone = new Row(cells.size());
+    	for(int i = 0; i < cells.size(); i++) {
+    		clone.setCell(i,cells.get(i));
+    	}
+    	clone.setData(data);
+    	
+    	return clone;
+    }
 }

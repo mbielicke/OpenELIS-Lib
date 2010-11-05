@@ -75,8 +75,8 @@
 	<xsd:element name="button" substitutionGroup="widgets">
 		<xsd:complexType>
 			<xsd:choice>
-				<xsd:element ref="panels" minOccurs="1" maxOccurs="1" />
-				<xsd:element ref="widgets" minOccurs="1" maxOccurs="1" />
+				<xsd:element ref="panels" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
 			</xsd:choice>
 			<xsd:attribute name="action" type="xsd:string" />
 			<xsd:attribute name="toggle" type="xsd:boolean" />
@@ -85,6 +85,8 @@
 			<xsd:attribute name="enabled" type="xsd:boolean"/>
 			<xsd:attribute name="tab" type="xsd:string"/>
 			<xsd:attribute name="wrap" type="xsd:boolean"/>
+			<xsd:attribute name="icon" type="xsd:string"/>
+			<xsd:attribute name="text" type="xsd:string"/>
 		</xsd:complexType>
 	</xsd:element>
 	
@@ -534,6 +536,7 @@
 						<xsd:attribute name="text" type="xsd:string" />
 						<xsd:attribute name="tab" type="xsd:string"/>
 						<xsd:attribute name="visible" type="xsd:boolean"/>
+						<xsd:attribute name="key" type="xsd:string"/>
 				    </xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>

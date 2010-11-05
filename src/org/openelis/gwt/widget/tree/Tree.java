@@ -127,8 +127,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Root for the Tree and currently displayed rows
      */
-    protected Node                   root;
-    protected ArrayList<Node>        modelView;
+    protected Node                     root;
+    protected ArrayList<Node>          modelView;
     protected HashMap<Node, NodeIndex> nodeIndex;
 
     /**
@@ -592,6 +592,65 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         fireNodeCloseEvent(row);
         
         renderView(row,-1);
+    }
+    
+    public void collapse() {
+    	ArrayList<Node> nodes;
+        int pos,adj;
+          
+    	finishEditing();
+    	
+    	nodes = (ArrayList<Node>)modelView.clone();
+    	
+    	for(Node node : nodes) {
+    		adj = 0;
+
+            if (node.isLeaf() || !node.isOpen)
+                continue;
+            
+            node.setOpen(false);
+            
+            pos = nodeIndex.get(node).index + 1;
+            
+            while (pos < modelView.size() && node.isNodeDescendent(getNodeAt(pos))) {
+                nodeIndex.remove(modelView.remove(pos));
+                adj--;
+            }
+           
+            adjustNodeIndexes(pos,adj);
+    	}
+    	
+    	renderView(-1,-1);
+    }
+    
+    public void expand() {
+        finishEditing();
+        ArrayList<Node> nodes;
+        
+        int pos;
+        
+        nodes = (ArrayList<Node>)modelView.clone();
+
+        for(Node node :nodes) {
+        	
+        	if (node.isLeaf() || node.isOpen)
+        		return;
+                
+        	node.setOpen(true);
+        
+        	pos = nodeIndex.get(node).index + 1;
+        
+        	ArrayList<Node> children = getDisplayedChildren(node);
+        	for (int j = 0; j < children.size(); j++ ) {
+        		modelView.add(pos + j, children.get(j));
+        		nodeIndex.put(children.get(j), new NodeIndex(pos + j));
+        	}
+        
+        	if(children.size() > 0)
+        		adjustNodeIndexes(pos + children.size(),children.size());
+        }
+        
+        renderView(-1, -1);
     }
 
     /**
@@ -2058,6 +2117,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                                                                                                         .containsKey(
                                                                                                                      col)));
     }
+    
+    public void addException(Node node, int col, LocalizedException error) {
+    	addException(nodeIndex.get(node).index,col,error);
+    }
 
     /**
      * Adds a manual Exception to the widgets exception list.
@@ -2134,6 +2197,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             validateExceptions = null;
             renderView( -1, -1);
         }
+    }
+    
+    public void clearExceptions(Node node, int col) {
+    	clearExceptions(nodeIndex.get(node).index,col);
     }
 
     /**
