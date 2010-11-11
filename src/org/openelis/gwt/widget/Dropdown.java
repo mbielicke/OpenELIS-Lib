@@ -540,6 +540,9 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     public Object getQuery() {
+    	if(!queryMode)
+    		return null;
+    	
         QueryData qd;
         StringBuffer sb;
         ArrayList<Item<T>> items;
@@ -826,6 +829,16 @@ public class Dropdown<T> extends TextBox<T> {
         public String getDisplay(Row row) {
             return row.getCells().get(0).toString();
         }
+    }
+    
+    @Override
+    public void addExceptionStyle(String style) {
+    	textbox.addStyleName(style);
+    }
+    
+    @Override
+    public void removeExceptionStyle(String style) {
+    	textbox.removeStyleName(style);
     }
 
     /*

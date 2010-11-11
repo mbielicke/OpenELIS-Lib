@@ -87,7 +87,7 @@ public class Node extends Row {
     }
     
     public int getChildCount() {
-        return children.size();
+        return children != null ? children.size() : 0;
     }
     
     public Node getFirstChild() {

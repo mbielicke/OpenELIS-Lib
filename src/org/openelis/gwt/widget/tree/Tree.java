@@ -441,7 +441,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     private ArrayList<Node> getDisplayedChildren(Node node) {
         ArrayList<Node> children = new ArrayList<Node>();
 
-        if (node.isOpen) {
+        if (node.isOpen && node.getChildCount() > 0) {
             for (Node child : node.children) {
                 children.add(child);
                 if ( !child.isLeaf())
@@ -806,7 +806,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     protected int getWidthWithoutScrollbar() {
-        if (verticalScroll != Scrolling.NEVER && fixScrollBar)
+        if (verticalScroll != Scrolling.NEVER && fixScrollBar  && viewWidth > -1)
             return viewWidth - 18;
 
         return viewWidth == -1 ? totalColumnWidth : viewWidth;
@@ -1104,8 +1104,9 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             return null;
         
         if(parent.isOpen) {
-            
-            if(index >= parent.getChildCount())
+            if(parent.getChildCount() == 0)
+            	pos = nodeIndex.get(parent).index +1;
+            else if(index >= parent.getChildCount())
                 pos = nodeIndex.get(parent.getLastChild()).index + 1;
             else
                 pos = nodeIndex.get(parent.getChildAt(index)).index;

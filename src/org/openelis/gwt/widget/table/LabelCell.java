@@ -70,7 +70,7 @@ public class LabelCell<T> implements CellRenderer<T> {
                             int frow,
                             int col,
                             QueryData qd) {
-        // TODO Auto-generated method stub
+    	table.setText(frow, col, "");
         
     }
     

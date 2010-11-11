@@ -392,6 +392,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	@SuppressWarnings("unchecked")
 	public void setModel(ArrayList<? extends Row> model) {
 		finishEditing();
+		clearRowSelection();
 		this.model = (ArrayList<Row>) model;
 		modelView = this.model;
 		rowIndex = null;
@@ -1846,8 +1847,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			validateExceptions.put(getRowAt(row), cellExceptions);
 		}
 
-		if (cellExceptions == null)
-			cellExceptions = validateExceptions.get(getRowAt(row));
+		if (cellExceptions == null) {
+			if(!validateExceptions.containsKey(getRowAt(row))) {
+				cellExceptions = new HashMap<Integer, ArrayList<LocalizedException>>();
+				validateExceptions.put(getRowAt(row), cellExceptions);
+			}else
+				cellExceptions = validateExceptions.get(getRowAt(row));
+		}
 
 		cellExceptions.put(col, errors);
 	}
@@ -1856,8 +1862,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * Gets the ValidateExceptions list to be displayed on the screen.
 	 */
 	public ArrayList<LocalizedException> getValidateExceptions(int row, int col) {
-		if (validateExceptions != null)
-			return validateExceptions.get(getRowAt(row)).get(col);
+		if (validateExceptions != null) {
+			if(validateExceptions.containsKey(getRowAt(row)))
+				return validateExceptions.get(getRowAt(row)).get(col);
+		}
 		return null;
 	}
 
@@ -1869,8 +1877,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	public ArrayList<LocalizedException> getEndUserExceptions(int row, int col) {
-		if (endUserExceptions != null)
-			return endUserExceptions.get(getRowAt(row)).get(col);
+		if (endUserExceptions != null){
+			if(endUserExceptions.containsKey(getRowAt(row)))
+				return endUserExceptions.get(getRowAt(row)).get(col);
+		}
 		return null;
 	}
 

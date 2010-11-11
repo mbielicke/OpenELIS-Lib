@@ -70,6 +70,7 @@ public class Calendar extends TextBox<Datetime> {
         final KeyboardHandler keyHandler = new KeyboardHandler();
 
         hp = new HorizontalPanel();
+        hp.setSpacing(0);
         textbox = new com.google.gwt.user.client.ui.TextBox();
 
         button = new Button();
@@ -223,7 +224,7 @@ public class Calendar extends TextBox<Datetime> {
          * set the Textbox to width - 16 to account for button.
          */
         
-        textbox.setWidth((width - 16) + "px");
+        textbox.setWidth((width - 14) + "px");
         
     }
     

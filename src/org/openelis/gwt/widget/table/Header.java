@@ -397,7 +397,8 @@ public class Header extends FocusPanel {
         if (col1 != col2 && col1 >= 0) {
             if (table.getColumnAt(col1).isResizable()) {
                 flexTable.getCellFormatter().addStyleName(0, col1, "ResizeCol");
-                flexTable.getCellFormatter().addStyleName(0, col2, "ResizeCol");
+                if(col2 > -1)
+                	flexTable.getCellFormatter().addStyleName(0, col2, "ResizeCol");
                 resizeColStyle = true;
                 resizeColumn = col1;
                 sinkEvents(Event.ONMOUSEDOWN);

@@ -741,7 +741,7 @@ public class UIGenerator extends Generator {
      	                }
     	                dir = (attrib = widget.getAttributes().getNamedItem("dir")) != null ? attrib.getNodeValue() : "CENTER";
     	                halign = (attrib = widget.getAttributes().getNamedItem("align")) != null ? attrib.getNodeValue() : "LEFT";
-    	                valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue() : "MIDDLE";
+    	                valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue() : "TOP";
 
    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel."+dir.toUpperCase()+");");
                         sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_"+halign+");");
@@ -1044,7 +1044,7 @@ public class UIGenerator extends Generator {
      	            	   continue;
      	                }
     				    halign = (attrib = widget.getAttributes().getNamedItem("halign")) != null ? attrib.getNodeValue().toUpperCase() : "LEFT";
-    				    valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue().toUpperCase() : "MIDDLE";
+    				    valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue().toUpperCase() : "TOP";
     				    style = (attrib = widget.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue() : null;
     				    
     					sw.println("wid"+id+".add(wid"+child+");");
@@ -1950,7 +1950,7 @@ public class UIGenerator extends Generator {
     			
     			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : "";
     			tabs = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "";
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
     			rows = (attrib = node.getAttributes().getNamedItem("rows")) != null ? attrib.getNodeValue() : "10";
     			vscroll = (attrib = node.getAttributes().getNamedItem("vscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
     			hscroll = (attrib = node.getAttributes().getNamedItem("hscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
@@ -1966,7 +1966,7 @@ public class UIGenerator extends Generator {
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
                 
-                sw.println("wid"+id+".setWidth(\""+width+"\");");
+                sw.println("wid"+id+".setWidth("+width+");");
                 sw.println("wid"+id+".setVisibleRows("+rows+");");
                 sw.println("wid"+id+".setVerticalScroll(Tree.Scrolling.valueOf(\""+vscroll+"\"));");
                 sw.println("wid"+id+".setHorizontalScroll(Tree.Scrolling.valueOf(\""+hscroll+"\"));");
@@ -2139,7 +2139,7 @@ public class UIGenerator extends Generator {
     	                	continue;
     	                }
     	                halign = (attrib = widget.getAttributes().getNamedItem("halign")) != null ? attrib.getNodeValue() : "LEFT";
-    	                valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue() : "MIDDLE";
+    	                valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue() : "TOP";
     	                height = (attrib = widget.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : null;
     	                width = (attrib = widget.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
     	                

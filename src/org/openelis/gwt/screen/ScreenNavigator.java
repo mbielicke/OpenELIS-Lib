@@ -66,8 +66,8 @@ public abstract class ScreenNavigator {
                     // cancel this selection and select the table row ourselves.
                     if (enable && selection != event.getItem())
                         select(event.getItem());
-                    else
-                        event.cancel();
+                    //else
+                       // event.cancel();
                 }
             });
             table.addBeforeCellEditedHandler(new BeforeCellEditedHandler() {

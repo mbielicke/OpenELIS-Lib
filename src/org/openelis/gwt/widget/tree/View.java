@@ -278,7 +278,7 @@ public class View extends Composite {
             vertScrollBar = null;
         }
 
-        scrollView.setWidth(Math.max(tree.getWidthWithoutScrollbar(), 0) + "px");
+        scrollView.setWidth(Math.max(tree.getWidthWithoutScrollbar()+2, 0) + "px");
 
         /*
          * This code is executed the first time the Table is attached
@@ -549,7 +549,7 @@ public class View extends Composite {
         row = rc;
         col = c;
 
-        if (c == 0 && ( !node.isLeaf() || node.getImage() != null)) {
+        if (c == 0) {
             table = getTreeCell(node, rc, c);
             row = 0;
             col = 2;

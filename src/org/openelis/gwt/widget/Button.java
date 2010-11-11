@@ -210,7 +210,8 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * @param pressed
      */
     public void setPressed(boolean pressed) {
-        assert toggles == true;
+        if(!toggles)
+        	return;
 
         /*
          * Do nothing if pressed state is the same as what 
@@ -252,6 +253,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        setPressed(false);
         if (enabled) {
             unlock();
             removeStyleName(DISABLED);
