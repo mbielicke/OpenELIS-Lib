@@ -1504,7 +1504,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         UnselectionEvent<Integer> event = null;
 
         if ( !queryMode)
-            event = UnselectionEvent.fire(this, index, -1);
+            event = UnselectionEvent.fire(this, index);
     }
 
     /**

@@ -9,7 +9,6 @@ public class UnselectionEvent<I>  extends GwtEvent<UnselectionHandler<I>> {
 	   */
 	  private static Type<UnselectionHandler<?>> TYPE;
 	  private final I unselectedItem;
-	  private final I proposedSelect;
 	  private boolean canceled;
 
 	  /**
@@ -20,9 +19,9 @@ public class UnselectionEvent<I>  extends GwtEvent<UnselectionHandler<I>> {
 	   * @param source the source of the handlers
 	   * @param selectedItem the selected item
 	   */
-	  public static <I> UnselectionEvent<I> fire(HasUnselectionHandlers<I> source, I unselectedItem, I proposedSelect) {
+	  public static <I> UnselectionEvent<I> fire(HasUnselectionHandlers<I> source, I unselectedItem) {
 	    if (TYPE != null) {
-	      UnselectionEvent<I> event = new UnselectionEvent<I>(unselectedItem, proposedSelect);
+	      UnselectionEvent<I> event = new UnselectionEvent<I>(unselectedItem);
 	      source.fireEvent(event);
 	      return event;
 	    }
@@ -46,9 +45,8 @@ public class UnselectionEvent<I>  extends GwtEvent<UnselectionHandler<I>> {
 	   * 
 	   * @param selectedItem selected item
 	   */
-	  protected UnselectionEvent(I unselectedItem, I proposedSelect) {
+	  protected UnselectionEvent(I unselectedItem) {
 	    this.unselectedItem = unselectedItem;
-	    this.proposedSelect = proposedSelect;
 	  }
 
 	  // The instance knows its BeforeSelectionHandler is of type I, but the TYPE
@@ -66,10 +64,6 @@ public class UnselectionEvent<I>  extends GwtEvent<UnselectionHandler<I>> {
 	   */
 	  public I getUnselectedItem() {
 	    return unselectedItem;
-	  }
-	  
-	  public I getProposedSelect() {
-		  return proposedSelect;
 	  }
 	  
 	  public void cancel() {

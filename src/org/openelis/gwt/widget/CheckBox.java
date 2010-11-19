@@ -260,6 +260,8 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      */
     public Object getQuery() {
         QueryData qd;
+        if(!queryMode)
+        	return null;
 
         if (value == Value.UNKNOWN)
             return null;

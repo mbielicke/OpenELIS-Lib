@@ -34,6 +34,7 @@ import java.util.HashSet;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
@@ -65,6 +66,8 @@ import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -79,6 +82,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -96,7 +100,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		HasUnselectionHandlers<Integer>, HasBeforeCellEditedHandlers,
 		HasCellEditedHandlers, HasBeforeRowAddedHandlers, HasRowAddedHandlers,
 		HasBeforeRowDeletedHandlers, HasRowDeletedHandlers,
-		HasValue<ArrayList<? extends Row>>, HasExceptions {
+		HasValue<ArrayList<? extends Row>>, HasExceptions, FocusHandler {
 
 	/**
 	 * Cell that is currently being edited.
@@ -775,8 +779,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return columns.indexOf(col);
 	}
 	
+	public void setColumnAt(int index, Column col) {
+		columns.set(index, col);
+		layout();
+	}
+	
 	public Widget getColumnWidget(int index) {
-		return getColumnAt(index).getCellEditor().getWidget();
+		return index > -1 ? getColumnAt(index).getCellEditor().getWidget() : null;
 	}
 	
 	public Widget getColumnWidget(String name) {
@@ -1229,7 +1238,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		UnselectionEvent<Integer> event = null;
 
 		if (!queryMode)
-			event = UnselectionEvent.fire(this, index, -1);
+			event = UnselectionEvent.fire(this, index);
 	}
 
 	/**
@@ -1511,12 +1520,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		}
 		return true;
 	}
-
+	
+	public void finishEditing() {
+		finishEditing(true);
+	}
 	/**
 	 * Method called to complete editing of any cell in the table. Method does
 	 * nothing a cell is not currently being edited.
 	 */
-	public void finishEditing() {
+	public void finishEditing(boolean keepFocus) {
 		Object newValue, oldValue;
 		int row, col;
 
@@ -1555,7 +1567,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		 * Call setFocus(true) so that the KeyHandler will receive events when
 		 * no cell is being edited
 		 */
-		setFocus(true);
+		if(keepFocus)
+			setFocus(true);
 	}
 
 	/**
@@ -1713,6 +1726,16 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public void removeFocusStyle(String style) {
 		removeStyleName(style);
 	}
+	
+	public void onFocus(FocusEvent event) {
+		Widget focused;
+		
+		focused = ((ScreenPanel)event.getSource()).focused;
+		
+		if(focused == null || !DOM.isOrHasChild(getElement(),focused.getElement()))
+			finishEditing(false);
+		
+	}
 
 	// ********** Implementation of Queryable *******************
 	/**
@@ -1835,7 +1858,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		// If hash is not null, but errors passed is null then make sure the
 		// passed cell entry removed
 		if (validateExceptions != null && errors == null) {
-			validateExceptions.get(getRowAt(row)).remove(col);
+			if(validateExceptions.containsKey(getRowAt(row)))
+				validateExceptions.get(getRowAt(row)).remove(col);
 			return;
 		}
 

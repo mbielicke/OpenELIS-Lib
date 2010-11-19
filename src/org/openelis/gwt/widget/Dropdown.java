@@ -487,8 +487,9 @@ public class Dropdown<T> extends TextBox<T> {
 
         if (value != null) {
             validKey = keyHash.containsKey(value);
-            assert validKey : "Key not found in Item list";
-
+           // assert validKey : "Key not found in Item list";
+            if(!validKey)
+            	value = null;
             table.selectRowAt(keyHash.get(value));
             
             setDisplay();

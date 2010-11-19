@@ -331,7 +331,7 @@ public class UIGenerator extends Generator {
         factoryMap.put("autoComplete", new Factory() {
             public void getNewInstance(Node node, int id) {
             	String[] tab;
-            	String fcase,visibleItems,key,width,enabled,delay,required;
+            	String fcase,visibleItems,key,width,enabled,delay,required,tableWidth;
                 Element table,label,col; 
                 NodeList cols,list;
                 Node attrib;
@@ -345,6 +345,7 @@ public class UIGenerator extends Generator {
     		    enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
     		    delay = (attrib = node.getAttributes().getNamedItem("delay")) != null ? attrib.getNodeValue() : null;
     		    required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
+    		    tableWidth = (attrib = node.getAttributes().getNamedItem("tableWidth")) != null ? attrib.getNodeValue() : null;
     		    
                 sw.println("AutoComplete wid"+id+" = new AutoComplete();");
                 sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
@@ -360,7 +361,8 @@ public class UIGenerator extends Generator {
                 if(table == null) {
                     table = doc.createElement("table");
                     table.setAttribute("rows", visibleItems);
-                    table.setAttribute("width", width);
+                    if(tableWidth != null)
+                    	table.setAttribute("width", tableWidth);
                     cols = ((Element)node).getElementsByTagName("col");
 				    int length = cols.getLength();
 				    if(length > 0){
@@ -404,6 +406,7 @@ public class UIGenerator extends Generator {
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.AutoComplete");
                 composer.addImport("org.openelis.gwt.widget.table.Table");
+                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
             }
         });
         
@@ -1605,7 +1608,7 @@ public class UIGenerator extends Generator {
                         }
                     }
                 }
-                
+                sw.println("panel.addFocusHandler(wid"+id+");");
                 setDefaults(node,"wid"+id);
      	        
      	    }
@@ -2034,7 +2037,7 @@ public class UIGenerator extends Generator {
                                 else if(editor.item(j).getNodeName().equals("calendar"))
                                     sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
                                 else
-                                	sw.println("LabelCell<String> cell"+child+" = new LabelCell<String>(wid"+child+");");
+                                	sw.println("LabelCell<"+field+"> cell"+child+" = new LabelCell<"+field+">(wid"+child+");");
                                 
                                 sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
                                 //sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
@@ -2085,7 +2088,7 @@ public class UIGenerator extends Generator {
                 				else if(name.equals("calendar"))
                 					sw.println("CalendarCell leafCell"+child+" = new CalendarCell(wid"+child+");");
                 				else
-                                	sw.println("LabelCell<String> leafCell"+child+" = new LabelCell<String>(wid"+child+");");
+                                	sw.println("LabelCell<"+field+"> leafCell"+child+" = new LabelCell<"+field+">(wid"+child+");");
 
                 				sw.println("leafCol"+id+"_"+i+"_"+h+".setCellRenderer(leafCell"+child+");");
                 				//sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");

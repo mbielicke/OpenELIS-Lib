@@ -271,8 +271,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         
         textbox.setWidth((width - 16) + "px");
         
-        if(table != null) 
-            table.setWidth(width+"px");
+        //if(table != null) 
+        //    table.setWidth(width+"px");
 
     }
     
@@ -498,6 +498,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         }
 
         this.value = value;
+        
+        table.setModel(null);
 
         if (fireEvents) {
             ValueChangeEvent.fire(this, value);
