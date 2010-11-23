@@ -256,6 +256,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         setValue(value,false);
     }
 
+    public void clearSelection() {
+    	unselect(-1);
+    	textbox.setText("");
+    }
+    
     public void setValue(T value, boolean fireEvents) {
         T old = getValue();
        	setSelection(value);
