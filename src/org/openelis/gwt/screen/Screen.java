@@ -74,8 +74,6 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
 
     public void setDefinition(ScreenDefInt def) {
         this.def = def;
-        screenpanel.clear();
-        screenpanel.add(def.getPanel());
     }
 
     public ScreenDefInt getDefinition() {
