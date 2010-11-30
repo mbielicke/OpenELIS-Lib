@@ -516,10 +516,10 @@ public class View extends Composite {
     private void renderCell(int rc, int c, int r) {
 
         if (table.getQueryMode())
-            table.getColumnAt(c).getCellRenderer().renderQuery(flexTable, rc, c,
+            table.getColumnAt(c).getCellRenderer(r).renderQuery(flexTable, rc, c,
                                                                (QueryData)table.getValueAt(r, c));
         else
-            table.getColumnAt(c).getCellRenderer().render(flexTable, rc, c,
+            table.getColumnAt(c).getCellRenderer(r).render(flexTable, rc, c,
                                                           table.getValueAt(r, c));
 
         if (table.hasExceptions(r, c))
@@ -568,11 +568,11 @@ public class View extends Composite {
 
         if (table.getQueryMode())
             table.getColumnAt(c)
-                 .getCellEditor()
+                 .getCellEditor(r)
                  .startEditingQuery((QueryData)table.getValueAt(r, c),container,
                                     event);
         else
-            table.getColumnAt(c).getCellEditor().startEditing(table.getValueAt(r, c), container, event);
+            table.getColumnAt(c).getCellEditor(r).startEditing(table.getValueAt(r, c), container, event);
     }
 
     /**
@@ -585,7 +585,7 @@ public class View extends Composite {
     protected Object finishEditing(int r, int c) {
         CellEditor cellEditor;
 
-        cellEditor = table.getColumnAt(c).getCellEditor();
+        cellEditor = table.getColumnAt(c).getCellEditor(r);
 
         table.setValidateException(r, c, cellEditor.validate());
 

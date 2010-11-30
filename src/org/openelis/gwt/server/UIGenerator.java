@@ -407,6 +407,13 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.AutoComplete");
                 composer.addImport("org.openelis.gwt.widget.table.Table");
                 composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+                composer.addImport("org.openelis.gwt.widget.table.Column");
+                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+                composer.addImport("org.openelis.gwt.widget.table.TextBoxCell");
+                composer.addImport("org.openelis.gwt.widget.table.AutoCompleteCell");
+                composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
+                composer.addImport("org.openelis.gwt.widget.table.CheckBoxCell");
+                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");
             }
         });
         
@@ -855,7 +862,7 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.table.Table");
                 composer.addImport("org.openelis.gwt.widget.table.Column");
                 composer.addImport("org.openelis.gwt.widget.table.LabelCell");
-
+                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
     		}
     	});
     	
@@ -1630,13 +1637,15 @@ public class UIGenerator extends Generator {
     			NodeList tabs,widgets;
     			Node attrib,tab,widget;
     			
-    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "auto";
-    			height = (attrib = node.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : "auto";
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+    			height = (attrib = node.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : null;
     			
     			sw.println("TabPanel wid"+id+" = new TabPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");    	        
-   	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
-   	        	sw.println("wid"+id+".setHeight(\""+height+"\");");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
+    	        if(width != null)
+    	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
+    	        if(height != null)
+    	        	sw.println("wid"+id+".setHeight(\""+height+"\");");
 
     	        tabs = ((Element)node).getElementsByTagName("tab");
     	        for (int k = 0; k < tabs.getLength(); k++) {

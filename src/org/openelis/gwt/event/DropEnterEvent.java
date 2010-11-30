@@ -14,7 +14,7 @@ public class DropEnterEvent<I> extends GwtEvent<DropEnterHandler<I>> {
 	public static <I> DropEnterEvent<I> fire(HasDropEnterHandlers<I> source, I dragObject, Object dropTarget, DropPosition pos) {
 		if(TYPE != null) {
 			DropEnterEvent<I> event = new DropEnterEvent<I>(dragObject, dropTarget, pos);
-			//source.fireEvent(event);
+			source.fireEvent(event);
 			return event;
 		}
 		return null;

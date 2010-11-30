@@ -223,7 +223,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				row = editingRow;
 				col = editingCol;
 				
-				 if(isEditing() && getColumnAt(col).getCellEditor().ignoreKey(keyCode))
+				 if(isEditing() && getColumnAt(col).getCellEditor(row).ignoreKey(keyCode))
 	                    return;
 
 				switch (keyCode) {
@@ -780,12 +780,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	}
 	
 	public void setColumnAt(int index, Column col) {
+		col.setTable(this);
 		columns.set(index, col);
 		layout();
 	}
 	
 	public Widget getColumnWidget(int index) {
-		return index > -1 ? getColumnAt(index).getCellEditor().getWidget() : null;
+		return index > -1 ? getColumnAt(index).getCellEditor(-1).getWidget() : null;
 	}
 	
 	public Widget getColumnWidget(String name) {
@@ -2315,7 +2316,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				choices = new ArrayList<FilterChoice>();
 			}
 
-			renderer = getColumnAt(column).getCellRenderer();
+			renderer = getColumnAt(column).getCellRenderer(-1);
 			for (Row row : model) {
 				value = row.getCell(column);
 				if (!values.containsKey(value)) {

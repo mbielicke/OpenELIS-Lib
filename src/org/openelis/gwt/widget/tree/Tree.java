@@ -93,6 +93,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * This class is used by screens to display information in a Tree.
@@ -417,6 +418,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         modelView = new ArrayList<Node>();
         nodeIndex = new HashMap<Node,NodeIndex>();
+        
+        if(root == null)
+        	return;
+        
         if (showRoot) {
             modelView.add(root);
             nodeIndex.put(root, new NodeIndex(0));
@@ -594,63 +599,50 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         renderView(row,-1);
     }
     
-    public void collapse() {
-    	ArrayList<Node> nodes;
-        int pos,adj;
-          
-    	finishEditing();
-    	
-    	nodes = (ArrayList<Node>)modelView.clone();
-    	
-    	for(Node node : nodes) {
-    		adj = 0;
+    /**
+     * This method will expand the tree to the level specified by the param starting at the root.
+     * @param level
+     */
+    public void expand(int level) {
+        finishEditing();
+     
+        expand(root,level);
+     
+        getDisplayedRows();
 
-            if (node.isLeaf() || !node.isOpen)
-                continue;
-            
-            node.setOpen(false);
-            
-            pos = nodeIndex.get(node).index + 1;
-            
-            while (pos < modelView.size() && node.isNodeDescendent(getNodeAt(pos))) {
-                nodeIndex.remove(modelView.remove(pos));
-                adj--;
-            }
-           
-            adjustNodeIndexes(pos,adj);
-    	}
-    	
-    	renderView(-1,-1);
+        renderView( -1, -1);
     }
     
-    public void expand() {
-        finishEditing();
-        ArrayList<Node> nodes;
-        
-        int pos;
-        
-        nodes = (ArrayList<Node>)modelView.clone();
-
-        for(Node node :nodes) {
-        	
-        	if (node.isLeaf() || node.isOpen)
-        		return;
-                
-        	node.setOpen(true);
-        
-        	pos = nodeIndex.get(node).index + 1;
-        
-        	ArrayList<Node> children = getDisplayedChildren(node);
-        	for (int j = 0; j < children.size(); j++ ) {
-        		modelView.add(pos + j, children.get(j));
-        		nodeIndex.put(children.get(j), new NodeIndex(pos + j));
-        	}
-        
-        	if(children.size() > 0)
-        		adjustNodeIndexes(pos + children.size(),children.size());
-        }
-        
-        renderView(-1, -1);
+    /**
+     * Private method used to recurse through the tree setting the specified expand level
+     * @param node
+     * @param level
+     */
+    private void expand(Node node, int level) {
+    	if (node.isLeaf())
+    		return;
+    	
+    	if(node.getLevel() > level) { 
+    		node.setOpen(false);
+    		return;
+    	}
+            
+    	node.setOpen(true);
+    	
+    	if(!node.hasChildren())
+    		return;
+    	
+    	for(Node child : node.children) 
+        	expand(child,level);
+    	
+    }
+    
+    /**
+     * This method will close all nodes in the tree down to the root or if the root is not shown
+     * then the root children.
+     */
+    public void collapse() {
+    	expand(0);
     }
 
     /**
@@ -1226,6 +1218,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public Node getNodeAt(int index) {
+    	if(index < 0 || index >= getRowCount())
+    		return null;
         return modelView.get(index);
     }
 

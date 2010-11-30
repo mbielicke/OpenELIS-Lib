@@ -41,6 +41,14 @@
       border-bottom : 1px #f5d852 dashed;
 }
 
+.Table tr.SubHeader td{
+	border: 1px solid #B5B8C8;
+	border-right: 1px solid grey;
+	border-width: 1 1 1 0;
+	background: #B5B8C8;
+	color: white;
+}
+
 .Header {
 	background: #d8d8d8;
 	font-family: Verdana, Arial, Helvetica, sans-serif;

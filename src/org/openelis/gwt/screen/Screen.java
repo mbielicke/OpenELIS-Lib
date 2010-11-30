@@ -126,6 +126,7 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         keys = def.getWidgets().keySet();
         for (String key : def.getWidgets().keySet()) {
             if (def.getWidget(key) instanceof Queryable) {
+            	System.out.println("key = "+key);
                 Object query = ((Queryable)def.getWidget(key)).getQuery();
                 if(query instanceof Object[]){
                     QueryData[] qds = (QueryData[])query;

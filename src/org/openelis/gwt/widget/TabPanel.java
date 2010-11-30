@@ -40,9 +40,9 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	public void add(Widget wid, final String tabText) {
 		final ScrollPanel scroll = new ScrollPanel();
 		scroll.setWidget(wid);
+        super.add(scroll, tabText);
 		scroll.setWidth(width);
         scroll.setHeight(height);
-        super.add(scroll, tabText);
 		if(!isAttached()) {
 		    UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).getElement()),true);
 		    getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).setVisible(true);

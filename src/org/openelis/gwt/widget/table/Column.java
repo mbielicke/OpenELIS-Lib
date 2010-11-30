@@ -103,12 +103,17 @@ public class Column {
         width = 15;
         minWidth = 15;
     }
+    
+    @SuppressWarnings("unchecked")
+    public CellEditor getCellEditor() {
+        return editor;
+    }
 
     /**
      * Returns the Editor currently being used by this Column
      */
     @SuppressWarnings("unchecked")
-    public CellEditor getCellEditor() {
+    public CellEditor getCellEditor(int row) {
         return editor;
     }
 
@@ -125,12 +130,17 @@ public class Column {
         this.editor = editor;
     }
     
+    
+    @SuppressWarnings("unchecked")
+    public CellRenderer getCellRenderer() {
+        return renderer;
+    }
     /**
      * Method will return the currently set Renderer for this column
      * @return
      */
     @SuppressWarnings("unchecked")
-    public CellRenderer getCellRenderer() {
+    public CellRenderer getCellRenderer(int row) {
         return renderer;
     }
 

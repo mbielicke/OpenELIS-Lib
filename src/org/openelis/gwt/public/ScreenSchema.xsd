@@ -48,7 +48,7 @@
 						</xsd:sequence>
 						<xsd:attribute name="key" type="xsd:string" />
 						<xsd:attribute name="header" type="xsd:string" />
-						<xsd:attribute name="width" type="xsd:integer" use="required" />
+						<xsd:attribute name="width" type="xsd:integer" />
 						<xsd:attributeGroup ref="align" />
 					</xsd:complexType>
 				</xsd:element>

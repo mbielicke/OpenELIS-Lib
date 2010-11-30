@@ -74,7 +74,7 @@ public class ModalWindow extends Window {
             removeFromParent();
             RootPanel.get().remove(modalGlass);
             RootPanel.get().remove(modalPanel);
-            return;
+            //return;
         }
         super.close();
     }

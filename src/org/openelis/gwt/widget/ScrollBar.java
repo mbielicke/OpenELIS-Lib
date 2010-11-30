@@ -48,7 +48,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         final ScrollBar source = this;
         ap = new AbsolutePanel();
         DOM.setStyleAttribute(getElement(), "overflowX", "hidden");
-        ap.setWidth("0px");
+        ap.setWidth("18px");
         ap.setHeight("0px");
         setWidth("18px");
         setHeight("0px");
