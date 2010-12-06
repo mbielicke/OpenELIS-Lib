@@ -1,51 +1,85 @@
 package org.openelis.gwt.server;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.openelis.gwt.common.DataBaseUtil;
+import org.openelis.util.SessionManager;
 
 public class ReportServlet extends HttpServlet {
 
-	@Override
+    private static final long serialVersionUID = 1L;        
+
+    @Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String service = req.getParameter("service");
-		String method = req.getParameter("method");
-		Class[] paramTypes = {HttpServletRequest.class, HttpServletResponse.class};
-		Object[] params = {req,resp};
-		try {
-			Object serviceInst = Class.forName(service).newInstance();
-		    serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
-		
-		} catch(InvocationTargetException e){
-			if(e.getCause() != null)
-				throw (ServletException)e.getCause();
-			else
-				throw (ServletException)e.getTargetException();
-		} catch (NoSuchMethodException e) {
-            throw new ServletException("NoSuchMethodException: "+e.getMessage());
-		} catch(Exception e){
-            e.printStackTrace();
+        int c;        
+        String tempFileName, contentType, attachmentFileName;
+        File tempFile;
+        FileInputStream fileStream;
+        ServletOutputStream outStream;
+        
+        fileStream = null;
+        outStream = null;
+        try {
+            tempFileName = req.getParameter("tempfile");
+            contentType = req.getParameter("contentType");
+            attachmentFileName = req.getParameter("attachmentFileName");            
+            
+            if (DataBaseUtil.isEmpty(tempFileName) || DataBaseUtil.isEmpty(contentType))
+                error(resp, "Missing file name or content type parameter; please report this error to your sysadmin");
+            
+            if (SessionManager.getSession().getAttribute(tempFileName) == null)
+                error(resp, "Specified file name is not valid; please report this error to your sysadmin");
+                        
+            tempFile = new File("/tmp", tempFileName);
+            fileStream = new FileInputStream(tempFile);
+            outStream = resp.getOutputStream();
+            
+            resp.setContentType(contentType);    
+            if (!DataBaseUtil.isEmpty(attachmentFileName))
+                resp.setHeader("Content-Disposition", "attachment;filename=\""+ attachmentFileName + "\""); 
+                    
+            while ((c = fileStream.read()) != -1) 
+                outStream.write(c);
+            
+            tempFile.delete();
+        } catch (Exception e) {
             throw new ServletException(e.getMessage());
+        } finally {
+            if (fileStream != null)
+                fileStream.close();
+            if (outStream != null)
+                outStream.close();
         }
-		//super.doGet(req, resp);
-	}
+    }
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		doGet(req,resp);
-		//super.doPost(req, resp);
+		doGet(req,resp);		
 	}
+	
+	private void error (HttpServletResponse resp, String message) {	    
+	    String htmlMessage;
+	    	    
+	    htmlMessage = "<html>\n" +
+	    		      "<header>Error in generating report:</header>" +
+	    		      "<body>"+message+"</body>"+
+	    		      "</html>";
+	    resp.setContentType("text/html");
+	    try {
+	        resp.getWriter().println(htmlMessage);
+	    } catch (Exception e) {
+            e.printStackTrace();
+        }
+	} 
 	
 }
