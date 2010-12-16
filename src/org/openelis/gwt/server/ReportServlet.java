@@ -11,8 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openelis.gwt.common.DataBaseUtil;
+import org.openelis.gwt.common.ReportStatus;
 import org.openelis.util.SessionManager;
 
+/**
+ * This servlet streams report files back to the requester.
+ */
 public class ReportServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;        
@@ -20,44 +24,68 @@ public class ReportServlet extends HttpServlet {
     @Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-        int c;        
-        String tempFileName, contentType, attachmentFileName;
-        File tempFile;
-        FileInputStream fileStream;
-        ServletOutputStream outStream;
+        int l;
+        byte b[];
+        File file;
+        FileInputStream in;
+        ServletOutputStream out;
+        ReportStatus status;
+        String filename, contentType, attachment;
         
-        fileStream = null;
-        outStream = null;
+        in = null;
+        out = null;
+        filename = null;
         try {
-            tempFileName = req.getParameter("tempfile");
-            contentType = req.getParameter("contentType");
-            attachmentFileName = req.getParameter("attachmentFileName");            
-            
-            if (DataBaseUtil.isEmpty(tempFileName) || DataBaseUtil.isEmpty(contentType))
-                error(resp, "Missing file name or content type parameter; please report this error to your sysadmin");
-            
-            if (SessionManager.getSession().getAttribute(tempFileName) == null)
-                error(resp, "Specified file name is not valid; please report this error to your sysadmin");
+            /*
+             * make sure the requested file is in user session (we have generated the file)
+             */
+            filename = req.getParameter("file");
+            if (DataBaseUtil.isEmpty(filename)) {
+                error(resp, "Missing file name; please report this error to your sysadmin");
+                return;
+            }
+
+            status = (ReportStatus) SessionManager.getSession().getAttribute(filename);
+            if (status == null || status.getStatus() != ReportStatus.Status.SAVED) {
+                error(resp, "Specified file key is not valid; please report this error to your sysadmin");
+                return;
+            }
+
+            file = new File(status.getPath(), status.getMessage());
+            if (! file.exists()) {
+                error(resp, "Specified file is not valid; please report this error to your sysadmin");
+                System.out.println("File "+file.getAbsolutePath()+" not found");
+                return;
+            }
                         
-            tempFile = new File("/tmp", tempFileName);
-            fileStream = new FileInputStream(tempFile);
-            outStream = resp.getOutputStream();
-            
+            /*
+             * stream the file 
+             */
+            contentType = getContentType(filename);
             resp.setContentType(contentType);    
-            if (!DataBaseUtil.isEmpty(attachmentFileName))
-                resp.setHeader("Content-Disposition", "attachment;filename=\""+ attachmentFileName + "\""); 
-                    
-            while ((c = fileStream.read()) != -1) 
-                outStream.write(c);
+
+            attachment = req.getParameter("attachment");            
+            if (!DataBaseUtil.isEmpty(attachment))
+                resp.setHeader("Content-Disposition", "attachment;filename=\""+ attachment + "\""); 
+            else
+                resp.setHeader("Content-Disposition", "filename=\""+ filename + "\""); 
+            in = new FileInputStream(file);
+            out = resp.getOutputStream();
+
+            b = new byte[1024];
+            while ((l = in.read(b)) > 0) 
+                out.write(b, 0, l);
             
-            tempFile.delete();
+            file.delete();
         } catch (Exception e) {
             throw new ServletException(e.getMessage());
         } finally {
-            if (fileStream != null)
-                fileStream.close();
-            if (outStream != null)
-                outStream.close();
+            if (in != null)
+                in.close();
+            if (out != null)
+                out.close();
+            if (filename != null)
+                SessionManager.getSession().removeAttribute(filename);
         }
     }
 	
@@ -67,13 +95,17 @@ public class ReportServlet extends HttpServlet {
 		doGet(req,resp);		
 	}
 	
-	private void error (HttpServletResponse resp, String message) {	    
+	/**
+	 * Displays the specified message in html 
+	 */
+	private void error(HttpServletResponse resp, String message) {
 	    String htmlMessage;
 	    	    
 	    htmlMessage = "<html>\n" +
 	    		      "<header>Error in generating report:</header>" +
 	    		      "<body>"+message+"</body>"+
 	    		      "</html>";
+	    
 	    resp.setContentType("text/html");
 	    try {
 	        resp.getWriter().println(htmlMessage);
@@ -82,4 +114,23 @@ public class ReportServlet extends HttpServlet {
         }
 	} 
 	
+	/**
+	 * Returns a mime type based on the filename extension
+	 */
+	protected String getContentType(String filename) {
+	    if (DataBaseUtil.isEmpty(filename))
+	        return "text/html";
+	    else if (filename.endsWith(".pdf"))
+	        return "application/pdf";
+        else if (filename.endsWith(".xls"))
+            return "application/vnd.ms-excel";
+        else if (filename.endsWith(".xlsx"))
+            return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        else if (filename.endsWith(".doc"))
+            return "application/msword";
+        else if (filename.endsWith(".docx"))
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        else
+            return "application/octet-stream";
+	}
 }

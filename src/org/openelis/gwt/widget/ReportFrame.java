@@ -1,6 +1,5 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.ReportProgress;
 import org.openelis.gwt.services.ScreenService;
 
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -57,7 +56,8 @@ public class ReportFrame extends Composite {
 	}
 	
 	public void getFileProgress(final String id) {
-		service.call("fileProgress", id, new AsyncCallback<ReportProgress>() {
+/*
+	    service.call("fileProgress", id, new AsyncCallback<ReportProgress>() {
 			public void onSuccess(ReportProgress progress) {
 				if(!bar.isVisible())
 					bar.setVisible(true);
@@ -89,6 +89,7 @@ public class ReportFrame extends Composite {
 				Window.alert(caught.getMessage());
 			}
 		});
+*/
 	}
 	
 	private String getSize(long size) {
