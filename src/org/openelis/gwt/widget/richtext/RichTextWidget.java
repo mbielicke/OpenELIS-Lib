@@ -28,7 +28,6 @@ package org.openelis.gwt.widget.richtext;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.ScreenWidgetInt;
@@ -40,7 +39,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -240,14 +238,6 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
      * Method used to validate the inputed query string by the user.
      */
     protected void validateQuery() {
-    }
-
-    /**
-     * Adds the TabHandler from UIGenerator so that the widget will override
-     * default tabing in the browser and a use the Tab order defined in the XSL.
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
     }
     
     public void addFocusStyle(String style) {

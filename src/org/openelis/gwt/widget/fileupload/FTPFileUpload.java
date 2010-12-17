@@ -45,7 +45,7 @@ public class FTPFileUpload extends Composite implements HasText, HasName, HasCha
 		  /**
 		   * An abstract class which is the base for specific browser implementations.
 		   */
-		  private abstract static class DecoratedFileUploadImpl {
+		  private static class DecoratedFileUploadImpl {
 
 		    protected Widget button;
 		    protected AbsolutePanel container;

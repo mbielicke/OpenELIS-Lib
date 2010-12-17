@@ -24,16 +24,40 @@ import org.openelis.gwt.services.ScreenServiceInt;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
+/**
+ * This class is the main Servlet for applications and can handle all request coded in ScreenServiceInt.
+ *
+ */
 public class ScreenControllerServlet extends AppServlet implements ScreenServiceInt {
 
     private static final long serialVersionUID = 1L;
     
+    /**
+     * Method used to invoke service methods that do not have params
+     * @param service
+     * @param method
+     * @return
+     * @throws Exception
+     */
     private Object invoke(String service, String method) throws Exception {
     	return invoke(service,method,new Class[]{},new Object[]{});
     }
     
-    @SuppressWarnings("unchecked")
-	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
+    /**
+     * This method will invoke the the method in the requeseted service passing any params and returning the result.
+     * If an exception is thrown from the mehtod call, the SerializationPolicy will checked to make sure it can be serialized
+     * back to the client.  If not in the Policy file list, the exception message will be wrapped into an exception that can.
+     * 
+     * If the method is not found in the service, then a NoSuchMethod exception will be thrown.
+     * @param service
+     * @param method
+     * @param paramTypes
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("rawtypes")
+	private Object invoke(String service, String method,  Class[] paramTypes, Object[] params) throws Exception {
     	
 		try {
 			Object serviceInst = Class.forName(service).newInstance();

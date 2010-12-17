@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -225,13 +224,6 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     }
 
     /**
-     * Adds Tab Handler to this widget
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
-    }
-
-    /**
      * Sets the focus stlye to this widget
      */
     public void addFocusStyle(String style) {
@@ -259,18 +251,13 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * or "N"
      */
     public Object getQuery() {
-        QueryData qd;
         if(!queryMode)
         	return null;
 
         if (value == Value.UNKNOWN)
             return null;
 
-        qd = new QueryData();
-        qd.type = QueryData.Type.STRING;
-        qd.query = value.getValue();
-
-        return qd;
+        return new QueryData(QueryData.Type.STRING,value.getValue());
     }
     
     /**
@@ -278,7 +265,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      */
     public void setQuery(QueryData qd) {
         if(qd != null)
-            setValue(qd.query);
+            setValue(qd.getQuery());
         else
             setValue(null);
     }

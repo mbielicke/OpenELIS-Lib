@@ -32,17 +32,11 @@ public class DoubleHelper implements WidgetHelper<Double> {
 	 * the setting the type to QueryData.Type.Double.
 	 */
 	public QueryData getQuery(String input) {
-		QueryData qd;
-
 		// Do nothing and return if passed null or empty string
 		if (input == null || "".equals(input))
 			return null;
 
-		qd = new QueryData();
-		qd.query = input;
-		qd.type = QueryData.Type.DOUBLE;
-
-		return qd;
+		return new QueryData(QueryData.Type.DOUBLE,input);
 
 	}
 

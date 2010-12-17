@@ -146,14 +146,14 @@ public class QueryBuilderV2 {
      */
     public void constructWhere(ArrayList<QueryData> fields) throws Exception{
     	for (QueryData field : fields){
-            boolean columnFound = meta.hasColumn(field.key);
+            boolean columnFound = meta.hasColumn(field.getKey());
 
             if(!columnFound)
-                throw new Exception("column not found [" + field.key + "]");    	
+                throw new Exception("column not found [" + field.getKey() + "]");    	
             
             QueryFieldUtil qField = new QueryFieldUtil();
-            qField.parse(field.query);
-            String whereClause = getQueryNoOperand(qField, field.key);
+            qField.parse(field.getQuery());
+            String whereClause = getQueryNoOperand(qField, field.getKey());
             if(!"".equals(whereClause)){
                 whereOperands.add(whereClause);		
             }
@@ -185,17 +185,22 @@ public class QueryBuilderV2 {
         for (QueryData field : fields) {//int i = 0; i < keys.length; i++) {
         	QueryFieldUtil qField = new QueryFieldUtil();
         	try {
-        	    qField.parse(field.query);
+        	    qField.parse(field.getQuery());
         	}catch(Exception e){}
         	
-            if(field.type == QueryData.Type.DOUBLE)
-                setDoubleParameters(qField, field.key, query);
-			else if(field.type == QueryData.Type.STRING) 	
-			    setStringParameters(qField, field.key, query);
-			else if(field.type== QueryData.Type.INTEGER) 
-			    setIntegerParameters(qField, field.key, query);
-            else if(field.type == QueryData.Type.DATE)
-                setDateParameters(qField, field.key, query);
+        	switch(field.getType()) {
+        		case DOUBLE :
+        			setDoubleParameters(qField, field.getKey(), query);
+        			break;
+        		case STRING : 	
+        			setStringParameters(qField, field.getKey(), query);
+        			break;
+        		case INTEGER : 
+        			setIntegerParameters(qField, field.getKey(), query);
+        			break;
+        		case DATE :
+        			setDateParameters(qField, field.getKey(), query);
+        	}
         }
     }
     

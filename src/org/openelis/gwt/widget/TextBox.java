@@ -6,7 +6,6 @@ import java.util.HashSet;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -222,14 +221,6 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         return enabled;
     }
 
-    /**
-     * Adds the TabHandler from UIGenerator so that the widget will override
-     * default tabing in the browser and a use the Tab order defined in the XSL.
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
-    }
-
     public void addFocusStyle(String style) {
         textbox.addStyleName(style);
     }
@@ -275,7 +266,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      */
     public void setQuery(QueryData qd) {
         if(qd != null)
-            textbox.setText(qd.query);
+            textbox.setText(qd.getQuery());
         else
             textbox.setText("");
     }

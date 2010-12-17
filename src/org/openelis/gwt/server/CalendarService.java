@@ -25,18 +25,13 @@
 */
 package org.openelis.gwt.server;
 
-import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Locale;
-
-import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
-import org.openelis.util.SessionManager;
 import org.openelis.util.UTFResource;
-import org.openelis.util.XMLUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
+/**
+ * This class provides a service to the client to pull the current time from the server.
+ *
+ */
 public class CalendarService {
 
     private static final long serialVersionUID = 1L;
@@ -45,48 +40,12 @@ public class CalendarService {
     
     private static UTFResource resource;
     
-    
-    public CalendarRPC getMonth(CalendarRPC form) throws Exception {
-        try {
-        	if(resource == null)
-        	resource = UTFResource.getBundle("org.openelis.gwt.server.CalendarConstants",new Locale(((SessionManager.getSession() == null  || (String)SessionManager.getSession().getAttribute("locale") == null) 
-                    ? "en" : (String)SessionManager.getSession().getAttribute("locale"))));
-            Calendar cal = Calendar.getInstance();
-            if(form.date != null && !form.date.equals("")){
-                cal.setTime(form.date.getDate());
-            }else{
-                form.date = Datetime.getInstance(form.begin,form.end,cal.getTime());
-            }
-            if(form.month == -1)
-            	form.month = cal.get(Calendar.MONTH);
-            else
-            	cal.set(Calendar.MONTH, form.month);
-            if(form.year == -1)
-            	form.year = cal.get(Calendar.YEAR);
-            else
-            	cal.set(Calendar.YEAR, form.year);
-            
-            cal.set(Calendar.DATE, 1);
-            if(cal.get(Calendar.DAY_OF_WEEK) > 1)
-                cal.add(Calendar.DATE, -cal.get(Calendar.DAY_OF_WEEK)+1);
-            else
-                cal.add(Calendar.DATE, -8);
-            
-            for(int i = 0; i < 6; i++) {
-            	for(int j = 0; j < 7; j++) {
-        			form.cells[i][j] = Datetime.getInstance(Datetime.YEAR,Datetime.DAY,cal.getTime());
-        			cal.add(Calendar.DATE, 1);
-            	}
-            }
-            form.monthDisplay = resource.getString("month"+form.month) + " " +(form.year);
-            return form;
-        }catch(Exception e){
-            e.printStackTrace();
-            throw new Exception(e.getMessage());
-        }
-        
-    }
-
+    /**
+     * Returns the current Datetime with the given precision
+     * @param begin
+     * @param end
+     * @return
+     */
     public Datetime getCurrentDatetime(byte begin, byte end) {
     	return Datetime.getInstance(begin,end);
     }

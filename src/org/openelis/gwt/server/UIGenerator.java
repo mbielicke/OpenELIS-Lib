@@ -89,7 +89,7 @@ public class UIGenerator extends Generator {
         findImports(doc.getElementsByTagName("screen").item(0));
 
         composer.addImport("org.openelis.gwt.screen.Screen");
-        composer.addImport("org.openelis.gwt.screen.TabHandler");
+        composer.addImport("org.openelis.gwt.screen.Tab");
         composer.addImport("org.openelis.gwt.screen.ShortcutHandler");
         composer.addImport("com.google.gwt.event.dom.client.HasFocusHandlers");
         composer.addImplementedInterface("ScreenDefInt");
@@ -98,11 +98,15 @@ public class UIGenerator extends Generator {
 	  
 		sw.println("protected ScreenPanel panel;");
 		sw.println("protected HashMap<String,Widget> widgets;");
+		sw.println("protected HashMap<Widget,Tab> tabs;");
+		sw.println("protected ArrayList<ShortcutHandler> shortcuts;");
 		sw.println("public String name;");
 		
 		sw.println("");
 		sw.println("public "+className+"_"+lang+"() {");
 		sw.println("widgets = new HashMap<String,Widget>();");
+		sw.println("tabs = new HashMap<Widget,Tab>();");
+		sw.println("shortcuts = new ArrayList<ShortcutHandler>();");
 		sw.println("panel = new ScreenPanel();");
 		sw.println("createPanel();");
 		sw.println("}");
@@ -127,6 +131,12 @@ public class UIGenerator extends Generator {
 		sw.println("}");
 		sw.println("public void setName(String name) {");
 		sw.println("this.name = name;");
+		sw.println("}");
+		sw.println("public ArrayList<ShortcutHandler> getShortcuts() {");
+		sw.println("return shortcuts;");
+		sw.println("}");
+		sw.println("public HashMap<Widget,Tab> getTabs() {");
+		sw.println("return tabs;");
 		sw.println("}");
 		sw.println("private void createPanel() {");
 	    
@@ -264,7 +274,7 @@ public class UIGenerator extends Generator {
     	public void addImport();
     }
     
-    public void addShortcutHandler(Node node, String wid) {
+    public void addShortcutHandler(Node node,String wid) {
     	String ctrl = "false",shift = "false", alt = "false", shortcut;
     	char key;
     	
@@ -280,8 +290,20 @@ public class UIGenerator extends Generator {
     	
     	key = shortcut.charAt(shortcut.length()-1);
     	
-    	sw.println("panel.addShortcutHandler(new ShortcutHandler("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
+    	sw.println("shortcuts.add(new ShortcutHandler("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
     }	
+    
+    public void addTabHandler(Node node,String wid) {
+    	String[] tab;
+    	String key;
+    	Node attrib;
+    	
+    	tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
+    	key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
+    	
+    	sw.println("tabs.put("+wid+",new Tab(\""+key+"\",\""+tab[0]+"\",\""+tab[1]+"\"));");
+    	 
+    }
     
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
     
@@ -330,16 +352,13 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("autoComplete", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String[] tab;
-            	String fcase,visibleItems,key,width,enabled,delay,required,tableWidth;
+            	String fcase,visibleItems,width,enabled,delay,required,tableWidth;
                 Element table,label,col; 
                 NodeList cols,list;
                 Node attrib;
                 
     		    visibleItems = (attrib = node.getAttributes().getNamedItem("visibleItems")) != null ? attrib.getNodeValue() : "10";
     		    fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
-    		    tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    		    key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
     		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
     		    width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
     		    enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
@@ -352,8 +371,8 @@ public class UIGenerator extends Generator {
                 sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(panel);");
                 
-                if(tab != null) 
-                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+                if(node.getAttributes().getNamedItem("tab") != null) 
+                	addTabHandler(node,"wid"+id);
                 
                 sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");
                 sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
@@ -435,15 +454,11 @@ public class UIGenerator extends Generator {
     	});
     	
     	factoryMap.put("button", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			String[] tab;
-    			String key,shortcut,toggle,action,enabled,wrap,icon,text;
+    		public void getNewInstance(Node node, int id) {    			
+    			String toggle,action,enabled,wrap,icon,text;
     			NodeList widgets;
     			Node attrib,widget;
     			
-    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
-    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
     			toggle = (attrib = node.getAttributes().getNamedItem("toggle")) != null ? attrib.getNodeValue() : "false";
     			action = (attrib = node.getAttributes().getNamedItem("action")) != null ? attrib.getNodeValue() : null;
     			wrap = (attrib = node.getAttributes().getNamedItem("wrap")) != null ? attrib.getNodeValue() : "true";
@@ -457,10 +472,10 @@ public class UIGenerator extends Generator {
     				sw.println("Button wid"+id+" = new Button(\""+icon+"\",\""+text+"\");");
 
     			
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 				
-				if(shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);			    
     			
                 sw.println("wid"+id+".setToggles("+toggle+");");
@@ -527,21 +542,17 @@ public class UIGenerator extends Generator {
 
         factoryMap.put("calendar", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String tab[];
-            	String key,shortcut,enabled;
+            	String enabled;
             	Node attrib;
             	
-            	tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-            	key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
-            	shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
             	enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
             	
                 sw.println("Calendar wid"+id+" = new Calendar();");
                 
-                if (tab != null) 
-                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+                if (node.getAttributes().getNamedItem("tab") != null) 
+                	addTabHandler(node,"wid"+id);
 
-                if (shortcut != null)
+                if (node.getAttributes().getNamedItem("shortcut") != null)
                     addShortcutHandler(node,"wid"+id);
 
                 setDefaults(node,"wid"+id);
@@ -564,21 +575,17 @@ public class UIGenerator extends Generator {
         
     	factoryMap.put("check", new Factory() {
     		public void getNewInstance(Node node, int id) {
-            	String tab[];
-            	String key,shortcut,threeState;
+            	String threeState;
             	Node attrib;
             	
-            	tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-            	key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
-            	shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
             	threeState = (attrib = node.getAttributes().getNamedItem("threeState")) != null ? attrib.getNodeValue() : null;
             	
     			sw.println("CheckBox wid"+id+" = new CheckBox();");
     			
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null)
+					addTabHandler(node,"wid"+id);
 
-				if (shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 					
     	        if(threeState != null)
@@ -786,8 +793,7 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("dropdown", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String[] tab;
-    			String fcase,visibleItems,field,key,width,enabled,required;
+    			String fcase,visibleItems,field,width,enabled,required;
     			Node attrib;
     			NodeList list,cols;
     		    Element table,label,col;
@@ -795,8 +801,6 @@ public class UIGenerator extends Generator {
     		    field = (attrib = node.getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : "Integer";
     		    visibleItems = (attrib = node.getAttributes().getNamedItem("visibleItems")) != null ? attrib.getNodeValue() : "10";
     		    fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
-    		    tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    		    key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
     		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
     		    width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
     		    enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
@@ -811,10 +815,13 @@ public class UIGenerator extends Generator {
 				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 				
-                sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
+				if(node.getAttributes().getNamedItem("shortcut") != null)
+					addShortcutHandler(node, "wid"+id);
+				
+				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
                 sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
 
 				if(table == null) {
@@ -868,23 +875,19 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("editbox",new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String[] tab;
-    			String key,shortcut,enabled;
+    			String enabled;
     			Node attrib;
     			
-    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
-    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
     			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : "true";
     			
     			sw.println("EditBox wid"+id+" = new EditBox();");
     			factoryMap.get("String").getNewInstance(node, id);
     			sw.println("wid"+id+".setHelper(field"+id+");");
     			
-				if(tab != null)
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null)
+					addTabHandler(node,"wid"+id);
 
-				if(shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 					
     			setDefaults(node,"wid"+id);
@@ -911,7 +914,7 @@ public class UIGenerator extends Generator {
     			setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.FileUploadWidget");
+    			composer.addImport("org.openelis.gwt.widget.fileupload.FileUploadWidget");
     		}
     	});   
     	
@@ -1317,22 +1320,18 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("password", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String[] tab;
-    			String key,enabled,shortcut,required;
+    			String enabled,required;
     			Node attrib;
     			
-    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
     			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
-    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
     			required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
     			
     			sw.println("PassWordTextBox wid"+id+" = new PassWordTextBox();");
     			
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 				
-				if(shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 			    
     	        sw.println("wid"+id+".setStyleName(\"ScreenPassword\");");
@@ -1359,24 +1358,20 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("richtext", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String[] tab;
-    			String tools,shortcut,width,height,enabled,key;
+    			String tools,width,height,enabled;
     			Node attrib;
     			
-    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
     			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
-    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
     			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "100%";
     			height = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "300px";
     			tools = (attrib = node.getAttributes().getNamedItem("tools")) != null ? attrib.getNodeValue() : "true";
     			
     			sw.println("RichTextWidget wid"+id+" = new RichTextWidget();"); 
     	        
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 
-				if(shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 				
     	        sw.println("wid"+id+".init("+tools+");");
@@ -1509,8 +1504,7 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("table", new Factory() {
      	   public void getNewInstance(Node node, int id) {
-     		   String rows,width,hscroll,vscroll,key,header,minWidth,name,field,rowHeight,filter,sort,align,multiSelect;
-     		   String[] tab;
+     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,align,multiSelect;
      		   Node attrib,col;
      		   NodeList cols,editor;
      		   
@@ -1518,15 +1512,13 @@ public class UIGenerator extends Generator {
      		   width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
      		   vscroll = (attrib = node.getAttributes().getNamedItem("vscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
      		   hscroll = (attrib = node.getAttributes().getNamedItem("hscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
-     		   tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-     		   key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
      		   rowHeight = (attrib = node.getAttributes().getNamedItem("rowHeight")) != null ? attrib.getNodeValue() : null;
      		   multiSelect = (attrib = node.getAttributes().getNamedItem("multiSelect")) != null ? attrib.getNodeValue() : null;
      		   
      	       sw.println("Table wid"+id+" = new Table();");
      		   
-                if(tab != null) 
-                    sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+                if(node.getAttributes().getNamedItem("tab") != null) 
+                	addTabHandler(node,"wid"+id);
                 
                 sw.println("wid"+id+".setVisibleRows("+rows+");");
                 
@@ -1798,22 +1790,18 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("textarea", new Factory(){
     		public void getNewInstance(Node node, int id) {
-    			String[] tab;
-    			String key,shortcut,enabled,required;
+    			String enabled,required;
     			Node attrib;
     			
-    			tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
-    			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
-    			shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
     			enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
     			required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
     			
     			sw.println("TextArea wid"+id+" = new TextArea();");
     			
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 
-				if(shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 			    
     	        sw.println("wid"+id+".setStyleName(\"ScreenTextArea\");");
@@ -1841,27 +1829,23 @@ public class UIGenerator extends Generator {
 
     	factoryMap.put("textbox",new Factory() {
 			public void getNewInstance(Node node, int id) {
-				String[] tab;
-				String field,fcase,shortcut,max,textAlign,mask,required,enabled,key,cField;
+				String field,fcase,max,textAlign,mask,required,enabled,cField;
 				Node attrib;
 				
 				cField = (field = (attrib = node.getAttributes().getNamedItem("field")) != null ? attrib.getNodeValue() : "String").equals("Date") ? "Datetime" : field;
-				tab = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
 				fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
-				shortcut = (attrib = node.getAttributes().getNamedItem("shortcut")) != null ? attrib.getNodeValue() : null;
 				max = (attrib = node.getAttributes().getNamedItem("max")) != null ? attrib.getNodeValue() : null;
 				textAlign = (attrib = node.getAttributes().getNamedItem("textAlign")) != null ? attrib.getNodeValue() : "LEFT";
 				mask = (attrib = node.getAttributes().getNamedItem("mask")) != null ? attrib.getNodeValue() : null;
 				required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
 				enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
-				key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
 				
 				sw.println("TextBox<"+cField+"> wid"+id+" = new TextBox<"+cField+">();");
 				
-				if(tab != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tab[0]+"\",\""+tab[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 
-				if (shortcut != null)
+				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 				
 				sw.println("wid"+id+".setStyleName(\"ScreenTextBox\");");
@@ -1956,12 +1940,10 @@ public class UIGenerator extends Generator {
     	factoryMap.put("tree", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			String width,rows,vscroll,hscroll,multiSelect,key,header,minWidth,rowHeight,enabled;
-    			String[] tabs;
     			Node attrib,columns,col;
     			NodeList colList,editor,leafList;
     			
     			key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : "";
-    			tabs = (attrib = node.getAttributes().getNamedItem("tab")) != null ? attrib.getNodeValue().split(",") : null;
     			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
     			rows = (attrib = node.getAttributes().getNamedItem("rows")) != null ? attrib.getNodeValue() : "10";
     			vscroll = (attrib = node.getAttributes().getNamedItem("vscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
@@ -1972,8 +1954,8 @@ public class UIGenerator extends Generator {
     			
     			sw.println("Tree wid"+id+" = new Tree();");
     			
-				if(tabs != null) 
-					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
 				
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);

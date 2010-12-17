@@ -35,7 +35,6 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenPanel;
-import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
@@ -1707,14 +1706,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	}
 
 	/**
-	 * Sets a TabHandler to this widget to be used in the containing Screen tab
-	 * order.
-	 */
-	public void addTabHandler(TabHandler handler) {
-		addDomHandler(handler, KeyDownEvent.getType());
-	}
-
-	/**
 	 * Sets the Focus style to the Table
 	 */
 	public void addFocusStyle(String style) {
@@ -1731,7 +1722,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public void onFocus(FocusEvent event) {
 		Widget focused;
 		
-		focused = ((ScreenPanel)event.getSource()).focused;
+		focused = ((ScreenPanel)event.getSource()).getFocused();
 		
 		if(focused == null || !DOM.isOrHasChild(getElement(),focused.getElement()))
 			finishEditing(false);
@@ -1755,7 +1746,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		for (int i = 0; i < getColumnCount(); i++) {
 			qd = (QueryData) getValueAt(0, i);
 			if (qd != null) {
-				qd.key = getColumnAt(i).name;
+				qd.setKey(getColumnAt(i).name);
 				qds.add(qd);
 			}
 		}

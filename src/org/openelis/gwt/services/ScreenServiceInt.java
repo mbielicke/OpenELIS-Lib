@@ -41,26 +41,39 @@ import com.google.gwt.user.client.rpc.RemoteService;
  *
  */
 public interface ScreenServiceInt extends RemoteService {
-
-
     public String            callString(String method) throws Exception;
-    public String            callString(String method, String param) throws Exception;
-    public Integer           callInteger(String method) throws Exception;
-    public Boolean           callBoolean(String method) throws Exception;
-    public Datetime          callDatetime(String method, byte begin, byte end) throws Exception;
-    public Double            callDouble(String method) throws Exception;
-    public <T extends RPC>  T call(String method) throws Exception;
-    public void callVoid(String method) throws Exception;
-    public <T extends RPC> T call(String method, Integer param) throws Exception;
-    public <T extends RPC> T call(String method, RPC param) throws Exception;
-    public <T extends RPC> T call(String method, Double param) throws Exception;
-    public <T extends RPC> T call(String method, String param) throws Exception;
-    public <T extends RPC> T call(String method, Datetime param) throws Exception;
-    public <T extends RPC> T call(String method, Long param) throws Exception;
-    public <T extends ArrayList<? extends RPC>> T  callList(String method, RPC param) throws Exception; 
-    public <T extends ArrayList<? extends RPC>> T  callList(String method) throws Exception; 
-    public <T extends ArrayList<? extends RPC>> T  callList(String method, String param) throws Exception;
-    public <T extends ArrayList<? extends RPC>> T  callList(String method, Integer param) throws Exception; 
-
     
+    public String            callString(String method, String param) throws Exception;
+    
+    public Integer           callInteger(String method) throws Exception;
+    
+    public Boolean           callBoolean(String method) throws Exception;
+    
+    public Datetime          callDatetime(String method, byte begin, byte end) throws Exception;
+    
+    public Double            callDouble(String method) throws Exception;
+    
+    public <T extends RPC>  T call(String method) throws Exception;
+    
+    public void callVoid(String method) throws Exception;
+    
+    public <T extends RPC> T call(String method, Integer param) throws Exception;
+    
+    public <T extends RPC> T call(String method, RPC param) throws Exception;
+    
+    public <T extends RPC> T call(String method, Double param) throws Exception;
+    
+    public <T extends RPC> T call(String method, String param) throws Exception;
+    
+    public <T extends RPC> T call(String method, Datetime param) throws Exception;
+    
+    public <T extends RPC> T call(String method, Long param) throws Exception;
+    
+    public <T extends ArrayList<? extends RPC>> T  callList(String method, RPC param) throws Exception; 
+    
+    public <T extends ArrayList<? extends RPC>> T  callList(String method) throws Exception; 
+    
+    public <T extends ArrayList<? extends RPC>> T  callList(String method, String param) throws Exception;
+    
+    public <T extends ArrayList<? extends RPC>> T  callList(String method, Integer param) throws Exception; 
 }

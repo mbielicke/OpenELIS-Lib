@@ -39,24 +39,39 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface ScreenServiceIntAsync {
-
     public Request callString(String method, AsyncCallback<String> callback);
-    public Request callString(String method, String param, AsyncCallback<String> callback);
-    public Request callInteger(String method, AsyncCallback<Integer> callback);
-    public Request callBoolean(String method, AsyncCallback<Boolean> callback);
-    public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);
-    public Request callDouble(String method, AsyncCallback<Double> callback);
-    public Request call(String method, AsyncCallback<? extends RPC> callback);
-    public Request callVoid(String method, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, Integer param, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, RPC param, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, Double param, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, String param, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, Datetime param, AsyncCallback<? extends RPC> callback);
-    public Request call(String method, Long param, AsyncCallback<? extends RPC> callback);
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, RPC param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
     
+    public Request callString(String method, String param, AsyncCallback<String> callback);
+    
+    public Request callInteger(String method, AsyncCallback<Integer> callback);
+    
+    public Request callBoolean(String method, AsyncCallback<Boolean> callback);
+    
+    public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);
+    
+    public Request callDouble(String method, AsyncCallback<Double> callback);
+    
+    public Request call(String method, AsyncCallback<? extends RPC> callback);
+    
+    public Request callVoid(String method, AsyncCallback<? extends RPC> callback);
+    
+    public Request call(String method, Integer param, AsyncCallback<? extends RPC> callback);
+    
+    public Request call(String method, RPC param, AsyncCallback<? extends RPC> callback);
+    
+    public Request call(String method, Double param, AsyncCallback<? extends RPC> callback);
+    
+    public Request call(String method, String param, AsyncCallback<? extends RPC> callback);
+    
+    public Request call(String method, Datetime param, AsyncCallback<? extends RPC> callback);
+    
+    public Request call(String method, Long param, AsyncCallback<? extends RPC> callback);
+    
+    public <T extends ArrayList<? extends RPC>> Request callList(String method, RPC param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    
+    public <T extends ArrayList<? extends RPC>> Request callList(String method, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    
+    public <T extends ArrayList<? extends RPC>> Request callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    
+    public <T extends ArrayList<? extends RPC>> Request callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
 }

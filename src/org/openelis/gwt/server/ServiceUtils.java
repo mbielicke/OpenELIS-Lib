@@ -37,6 +37,10 @@ import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * Set of static utility methods used on the Server side mostly related to XML  
+ *
+ */
 public class ServiceUtils {
 
     public static String props;

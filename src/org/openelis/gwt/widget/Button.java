@@ -25,8 +25,6 @@
  */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.TabHandler;
-
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -42,7 +40,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -141,18 +138,6 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
             }
         });
 
-    }
-
-    /**
-     * Sinks a KeyPressEvent for this widget attaching a TabHandler that will
-     * override the default browser tab order for the tab order defined by the
-     * screen for this widget.
-     * 
-     * @param handler
-     *        Instance of TabHandler that controls tabing logic for widget.
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
     }
     
     public void setDisplay(String icon,String label) {

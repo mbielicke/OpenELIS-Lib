@@ -34,10 +34,14 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
@@ -55,7 +59,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  * @author tschmidt
  *
  */
-public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPressHandler {
+public class Browser extends Composite {
     
     /*
      * The main panel used to contain and display windows
@@ -130,6 +134,16 @@ public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPr
                 }
             });
         }
+        
+        /**
+         * This handler is added to forward the key press event on to the focused window if received by the browser
+         */
+        addDomHandler(new KeyPressHandler() {
+        	public void onKeyPress(KeyPressEvent event) {
+        		KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+        		
+        	}
+        },KeyPressEvent.getType());
     } 
     
     /**
@@ -268,15 +282,5 @@ public class Browser extends Composite {// implements HasKeyPressHandlers, KeyPr
         protected String key;
         protected int zIndex;
     }
-
-    /*
-	public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-		return addDomHandler(handler,KeyPressEvent.getType());
-	}
-
-	public void onKeyPress(KeyPressEvent event) {
-		KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
-		
-	}
-	*/
+	
 }

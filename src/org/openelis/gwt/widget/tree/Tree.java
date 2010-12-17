@@ -32,47 +32,46 @@ import java.util.HashMap;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
-import org.openelis.gwt.widget.tree.event.BeforeNodeAddedEvent;
-import org.openelis.gwt.widget.tree.event.BeforeNodeAddedHandler;
-import org.openelis.gwt.widget.tree.event.BeforeNodeDeletedEvent;
-import org.openelis.gwt.widget.tree.event.BeforeNodeDeletedHandler;
-import org.openelis.gwt.widget.table.event.CellEditedEvent;
-import org.openelis.gwt.widget.table.event.CellEditedHandler;
-import org.openelis.gwt.widget.tree.event.HasBeforeNodeAddedHandlers;
-import org.openelis.gwt.widget.tree.event.HasBeforeNodeDeletedHandlers;
-import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
-import org.openelis.gwt.widget.tree.event.HasNodeAddedHandlers;
-import org.openelis.gwt.widget.tree.event.HasNodeDeletedHandlers;
-import org.openelis.gwt.widget.tree.event.NodeAddedEvent;
-import org.openelis.gwt.widget.tree.event.NodeAddedHandler;
-import org.openelis.gwt.widget.tree.event.NodeDeletedEvent;
-import org.openelis.gwt.widget.tree.event.NodeDeletedHandler;
-import org.openelis.gwt.widget.tree.event.BeforeNodeCloseEvent;
-import org.openelis.gwt.widget.tree.event.BeforeNodeCloseHandler;
-import org.openelis.gwt.widget.tree.event.BeforeNodeOpenEvent;
-import org.openelis.gwt.widget.tree.event.BeforeNodeOpenHandler;
-import org.openelis.gwt.widget.tree.event.HasBeforeNodeCloseHandlers;
-import org.openelis.gwt.widget.tree.event.HasBeforeNodeOpenHandlers;
-import org.openelis.gwt.widget.tree.event.HasNodeClosedHandlers;
-import org.openelis.gwt.widget.tree.event.HasNodeOpenedHandlers;
-import org.openelis.gwt.widget.tree.event.NodeClosedEvent;
-import org.openelis.gwt.widget.tree.event.NodeClosedHandler;
-import org.openelis.gwt.widget.tree.event.NodeOpenedEvent;
-import org.openelis.gwt.widget.tree.event.NodeOpenedHandler;
 import org.openelis.gwt.widget.table.CellEditor;
 import org.openelis.gwt.widget.table.CellRenderer;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
+import org.openelis.gwt.widget.table.event.CellEditedEvent;
+import org.openelis.gwt.widget.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
+import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
+import org.openelis.gwt.widget.tree.event.BeforeNodeAddedEvent;
+import org.openelis.gwt.widget.tree.event.BeforeNodeAddedHandler;
+import org.openelis.gwt.widget.tree.event.BeforeNodeCloseEvent;
+import org.openelis.gwt.widget.tree.event.BeforeNodeCloseHandler;
+import org.openelis.gwt.widget.tree.event.BeforeNodeDeletedEvent;
+import org.openelis.gwt.widget.tree.event.BeforeNodeDeletedHandler;
+import org.openelis.gwt.widget.tree.event.BeforeNodeOpenEvent;
+import org.openelis.gwt.widget.tree.event.BeforeNodeOpenHandler;
+import org.openelis.gwt.widget.tree.event.HasBeforeNodeAddedHandlers;
+import org.openelis.gwt.widget.tree.event.HasBeforeNodeCloseHandlers;
+import org.openelis.gwt.widget.tree.event.HasBeforeNodeDeletedHandlers;
+import org.openelis.gwt.widget.tree.event.HasBeforeNodeOpenHandlers;
+import org.openelis.gwt.widget.tree.event.HasNodeAddedHandlers;
+import org.openelis.gwt.widget.tree.event.HasNodeClosedHandlers;
+import org.openelis.gwt.widget.tree.event.HasNodeDeletedHandlers;
+import org.openelis.gwt.widget.tree.event.HasNodeOpenedHandlers;
+import org.openelis.gwt.widget.tree.event.NodeAddedEvent;
+import org.openelis.gwt.widget.tree.event.NodeAddedHandler;
+import org.openelis.gwt.widget.tree.event.NodeClosedEvent;
+import org.openelis.gwt.widget.tree.event.NodeClosedHandler;
+import org.openelis.gwt.widget.tree.event.NodeDeletedEvent;
+import org.openelis.gwt.widget.tree.event.NodeDeletedHandler;
+import org.openelis.gwt.widget.tree.event.NodeOpenedEvent;
+import org.openelis.gwt.widget.tree.event.NodeOpenedHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -93,7 +92,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * This class is used by screens to display information in a Tree.
@@ -2006,14 +2004,6 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     }
 
     /**
-     * Sets a TabHandler to this widget to be used in the containing Screen tab
-     * order.
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
-    }
-
-    /**
      * Sets the Focus style to the Tree
      */
     public void addFocusStyle(String style) {
@@ -2044,7 +2034,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         for (int i = 0; i < getColumnCount(); i++ ) {
             qd = (QueryData)getValueAt(0, i);
             if (qd != null) {
-                qd.key = getColumnAt(i).name;
+                qd.setKey(getColumnAt(i).name);
                 qds.add(qd);
             }
         }

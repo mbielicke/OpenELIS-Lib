@@ -27,6 +27,10 @@ package org.openelis.gwt.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+/**
+ *  This class will fire events to registered objects for ScrollBar actions 
+ *
+ */
 public class ScrollBarEvent extends GwtEvent<ScrollBarHandler>{
     
     private static Type<ScrollBarHandler> TYPE;

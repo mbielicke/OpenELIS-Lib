@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.common;
 
+/**
+ * This marks an exception as being a warning only
+ */
 public interface  Warning extends RPC {
 
 }

@@ -3,7 +3,6 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -197,14 +196,6 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
             addValidateException(e);
         }
         ExceptionHelper.checkExceptionHandlers(this);
-    }
-
-    /**
-     * Adds the TabHandler from UIGenerator so that the widget will override
-     * default tabing in the browser and a use the Tab order defined in the XSL.
-     */
-    public void addTabHandler(TabHandler handler) {
-        addDomHandler(handler, KeyDownEvent.getType());
     }
     
     public void addFocusStyle(String style) {

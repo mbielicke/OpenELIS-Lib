@@ -1,3 +1,28 @@
+/** Exhibit A - UIRF Open-source Based Public Software License.
+* 
+* The contents of this file are subject to the UIRF Open-source Based
+* Public Software License(the "License"); you may not use this file except
+* in compliance with the License. You may obtain a copy of the License at
+* openelis.uhl.uiowa.edu
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+* 
+* The Original Code is OpenELIS code.
+* 
+* The Initial Developer of the Original Code is The University of Iowa.
+* Portions created by The University of Iowa are Copyright 2006-2008. All
+* Rights Reserved.
+* 
+* Contributor(s): ______________________________________.
+* 
+* Alternatively, the contents of this file marked
+* "Separately-Licensed" may be used under the terms of a UIRF Software
+* license ("UIRF Software License"), in which case the provisions of a
+* UIRF Software License are applicable instead of those above. 
+*/
 package org.openelis.gwt.screen;
 
 import java.util.ArrayList;
@@ -18,85 +43,272 @@ import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.services.ScreenService;
+import org.openelis.gwt.widget.Button;
+import org.openelis.gwt.widget.DeckPanel;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
+import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.TabPanel;
+import org.openelis.gwt.widget.Window;
 import org.openelis.gwt.widget.table.Table;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Screen extends Composite implements HasStateChangeHandlers<Screen.State>,
+/**
+ * This class is used to bring together widgets into a logical unit of work that is presented 
+ * to the user. 
+ *
+ */
+public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen.State>,
                                      HasDataChangeHandlers, HasResizeHandlers {
 
+	/**
+	 * Enumeration of states for a Screen
+	 */
     public enum State {
         DEFAULT, DISPLAY, UPDATE, ADD, QUERY, DELETE
     };
 
-    public State                          state        = null;
-    public org.openelis.gwt.widget.Window               window;
+    /**
+     * Current state of the screen
+     */
+    protected State                          state        = null;
+    
+    /**
+     * Reference to the window this screen is displayed in
+     */
+    protected Window                         window;
 
+    /**
+     * Definition of the screen containing the layout and a hash of all widgets
+     */
     protected ScreenDefInt                def;
+    
+    /**
+     * Default service for the screen
+     */
     protected ScreenService               service;
+    
     protected String                      fatalError;
 
-    public final AbsolutePanel            screenpanel  = new AbsolutePanel();
     public static HashMap<String, String> consts;
 
     /**
      * No arg constructor will initiate a blank panel and new FormRPC
      */
     public Screen() {
-        initWidget(screenpanel);
-        sinkEvents(Event.ONKEYPRESS);
+		addDomHandler(new KeyPressHandler() {
+			public void onKeyPress(final KeyPressEvent event) {
+				boolean ctrl,alt,shift;
+				char key;
+				
+				/*
+				 * If no modifier is pressed then return out
+				 */
+				if(!event.isAnyModifierKeyDown())
+					return;
+				
+				ctrl = event.isControlKeyDown();
+				alt = event.isAltKeyDown();
+				shift = event.isShiftKeyDown();
+				key = event.getCharCode();
+				
+				for(Shortcut handler : def.getShortcuts()) {
+					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && handler.key == key){
+						if(handler.wid instanceof Button) {
+							if(((Button)handler.wid).isEnabled() && !((Button)handler.wid).isLocked()){
+								((Focusable)handler.wid).setFocus(true);
+								NativeEvent clickEvent = Document.get().createClickEvent(0, 
+										handler.wid.getAbsoluteLeft(), 
+										handler.wid.getAbsoluteTop(), 
+										-1, 
+										-1, 
+										ctrl, 
+										alt, 
+										shift, 
+										event.isMetaKeyDown());
+							    
+								ClickEvent.fireNativeEvent(clickEvent, (Button)handler.wid);
+								event.stopPropagation();
+							}
+							event.preventDefault();
+							event.stopPropagation();		
+						}else if(((ScreenWidgetInt)handler.wid).isEnabled()){ 
+							((Focusable)handler.wid).setFocus(true);
+							event.preventDefault();
+							event.stopPropagation();
+						}
+					}
+				}
+			}
+		},KeyPressEvent.getType());
+		
+		addDomHandler(new KeyDownHandler() {
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				Widget focused;
+				Tab tab;
+				Widget nextWid = null;
+				boolean shift;
+				
+				focused = def.getPanel().getFocused();
+				shift = event.isShiftKeyDown();
+				
+				if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB && focused != null){
+					tab = def.getTabs().get(focused);
+
+					while(true) {
+						if(shift){
+							nextWid = def.getWidget(tab.getPrev());
+							if(nextWid instanceof TabPanel)
+								nextWid = def.getWidget(((TabPanel)nextWid).getPrevTabWidget());
+							else if(nextWid instanceof DeckPanel)
+								nextWid = def.getWidget(((DeckPanel)nextWid).getPrevTabWidget());
+						}else{
+							nextWid = def.getWidget(tab.getNext());
+							if(nextWid instanceof TabPanel)
+								nextWid = def.getWidget(((TabPanel)nextWid).getNextTabWidget());
+							else if(nextWid instanceof DeckPanel) 
+								nextWid = def.getWidget(((DeckPanel)nextWid).getNextTabWidget());	
+						}
+						if(((ScreenWidgetInt)nextWid).isEnabled()) { 
+							def.getPanel().setFocusWidget((Widget)nextWid);
+							break;
+						}else{
+							tab = def.getTabs().get(nextWid);
+							if(shift){
+								if(def.getWidget(tab.getPrev()) == focused)
+									break;
+							}else {
+								if(def.getWidget(tab.getNext()) == focused)
+									break;
+							}
+						}
+					}
+					event.preventDefault();
+					event.stopPropagation();
+				}
+			}
+		},KeyDownEvent.getType());
     }
 
-    public Screen(ScreenDefInt def) {
-        initWidget(screenpanel);
+    /**
+     * Constructor that creates the Screen with the passed Defintion
+     * @param def
+     */
+    public Screen(final ScreenDefInt definition) {
+    	this();
+    	try {
+    		drawScreen(definition);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		com.google.gwt.user.client.Window.alert(e.getMessage());
+    	}
+    }
+    
+    /**
+     * This method will set the screen definition to the screen passed and also 
+     * redraw the screen from the new definition.
+     * @param def
+     * @throws Exception
+     */
+    public void drawScreen(ScreenDefInt def) throws Exception {
         this.def = def;
-        screenpanel.add(def.getPanel());
+        setWidget(def.getPanel());
     }
 
-    public void setWindow(org.openelis.gwt.widget.Window window) {
+
+    /**
+     * Sets a reference to the window this screen is contained in
+     * @param window
+     */
+    public void setWindow(Window window) {
         this.window = window;
     }
 
-    public org.openelis.gwt.widget.Window getWindow() {
+    /**
+     * Method returns a reference to the Window this screen is in
+     * @return
+     */
+    public Window getWindow() {
         return window;
     }
 
+    /**
+     * Sets the ScreenDefintion that this screen uses
+     * @param def
+     */
     public void setDefinition(ScreenDefInt def) {
         this.def = def;
     }
 
+    /**
+     * Returns the ScreenDefintion used by this screen
+     * @return
+     */
     public ScreenDefInt getDefinition() {
         return def;
     }
 
+    /**
+     * Sets the name that this screen displays in the Window caption
+     * @param name
+     */
     public void setName(String name) {
         def.setName(name);
     }
 
+    /**
+     * Returns the name used by this screen
+     * @return
+     */
     public String getName() {
         return def.getName();
     }
 
+    /**
+     * Sets the current state of this screen to the passed param and will fire a StateChangeEvent if the
+     * state has changed
+     * @param state
+     */
     public void setState(Screen.State state) {
         if (state != this.state) {
             this.state = state;
             StateChangeEvent.fire(this, state);
         }
     }
+    
+    /**
+     * Returns the current State of the screen.
+     * @return
+     */
+    public State getState() {
+    	return state;
+    }
 
+    /**
+     * This method will ask all widgets in the screen to validate themselves and to
+     * display any errors.  If any widget goes into error then the method will return 
+     * false.
+     * @return
+     */
     public boolean validate() {
         boolean valid = true;
 
@@ -118,6 +330,13 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         return valid;
     }
 
+    /**
+     * This method will ask all widgets for any Query values that were entered by the user,
+     * and will return an ArrayList of QueryData objects to send back to the server to 
+     * execute the query.
+     * 
+     * @return
+     */
     public ArrayList<QueryData> getQueryFields() {
         Set<String> keys;
         ArrayList<QueryData> list;
@@ -135,16 +354,19 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
                         list.add(qds[i]);
                     }
                 }else if(query != null) {
-                    ((QueryData)query).key = key;
+                    ((QueryData)query).setKey(key);
                     list.add((QueryData)query);
-                }
-                    
+                }       
             }
-            
         }
         return list;
     }
 
+    /**
+     * This method is used to display a list of errors returned from the server on the widgets
+     * they belonfg to. 
+     * @param errors
+     */
     public void showErrors(ValidationErrorsList errors) {
         ArrayList<LocalizedException> formErrors;
         TableFieldErrorException tableE;
@@ -183,6 +405,11 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         }
     }
 
+    /**
+     * This method presents the user with a confirm dialog with a list of warnings on the screen 
+     * and asks to confirm if they want to commit the current action.
+     * @param warnings
+     */
     protected void showWarningsDialog(ValidationErrorsList warnings) {
         String warningText = consts.get("warningDialogLine1") + "\n";
 
@@ -192,16 +419,22 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         }
         warningText += "\n" + consts.get("warningDialogLastLine");
 
-        if (Window.confirm(warningText))
+        if (com.google.gwt.user.client.Window.confirm(warningText))
             commitWithWarnings();
     }
 
+    /**
+     *by default this method does nothing
+     *but it can be overridden by screens to do screen
+     *specific actions 
+     */
     protected void commitWithWarnings() {
-        // by default this method does nothing
-        // but it can be overridden by screens to do screen
-        // specific actions
+
     }
 
+    /**
+     * This method will clear all errors on the screen.
+     */
     public void clearErrors() {
         for (Widget wid : def.getWidgets().values()) {
             if (wid instanceof HasExceptions)
@@ -212,13 +445,12 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         window.clearStatus();
         window.clearMessagePopup("");
     }
-
-    public void drawScreen(ScreenDefInt def) throws Exception {
-        this.def = def;
-        screenpanel.clear();
-        screenpanel.add(def.getPanel());
-    }
-
+    
+    /**
+     * Registers the widgets event handlers to the screen.
+     * @param wid
+     * @param screenHandler
+     */
     @SuppressWarnings("unchecked")
     public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
         assert wid != null : "addScreenHandler received a null widget";
@@ -233,18 +465,32 @@ public class Screen extends Composite implements HasStateChangeHandlers<Screen.S
         }
     }
 
+    /**
+     * Registers a DataChangeHandler to the Screen.
+     */
     public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
         return addHandler(handler, DataChangeEvent.getType());
     }
 
+    /**
+     * Registers a StateChangeHandler to the Screen.
+     */
     public HandlerRegistration addStateChangeHandler(StateChangeHandler<org.openelis.gwt.screen.Screen.State> handler) {
         return addHandler(handler, StateChangeEvent.getType());
     }
 
+    /**
+     * Registers a ResizeHandler to the Screen.
+     */
     public HandlerRegistration addResizeHandler(ResizeHandler handler) {
         return addHandler(handler, ResizeEvent.getType());
     }
 
+    /**
+     * This method will set the Focus of the screen to the passed widget or
+     * remove focus altogether if passed null.
+     * @param widget
+     */
     protected void setFocus(Widget widget) {
         def.getPanel().setFocusWidget(widget);
     }

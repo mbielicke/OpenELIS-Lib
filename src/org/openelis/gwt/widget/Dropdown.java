@@ -561,9 +561,9 @@ public class Dropdown<T> extends TextBox<T> {
          * Since there is no helper we need to do an instance check here
          */
         if (value instanceof Integer)
-            qd.type = QueryData.Type.INTEGER;
+            qd.setType(QueryData.Type.INTEGER);
         else
-            qd.type = QueryData.Type.STRING;
+            qd.setType(QueryData.Type.STRING);
 
         /*
          * Create the query from the selected values
@@ -576,7 +576,7 @@ public class Dropdown<T> extends TextBox<T> {
             sb.append(items.get(i).key);
         }
 
-        qd.query = sb.toString();
+        qd.setQuery(sb.toString());
 
         return qd;
     }
@@ -594,9 +594,9 @@ public class Dropdown<T> extends TextBox<T> {
         if(qd == null)
             return;
         
-        params = qd.query.split(" \\| ");
+        params = qd.getQuery().split(" \\| ");
         for(int i = 0; i < params.length; i++) {
-            if(qd.type == QueryData.Type.INTEGER) 
+            if(qd.getType() == QueryData.Type.INTEGER) 
                 key = (T)new Integer(params[i]);  
             else
                 key = (T)params[i];

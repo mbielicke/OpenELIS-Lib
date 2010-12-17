@@ -1,6 +1,5 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -33,10 +32,6 @@ public class IconContainer extends FocusPanel implements HasAllMouseHandlers, Ha
     public IconContainer() {
         addMouseOverHandler(this);
         addMouseOutHandler(this);
-    }
-    
-    public void addTabHandler(TabHandler handler) {
-    	addDomHandler(handler,KeyDownEvent.getType());
     }
     
     public IconContainer(String style) {

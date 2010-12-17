@@ -73,6 +73,8 @@ public class MenuItem extends Composite {
         
         if(!"".equals(icon))
             grid.getCellFormatter().addStyleName(0, 0, icon);
+        else
+        	grid.getCellFormatter().setVisible(0, 0, false);
         
         grid.setText(0,1,display);
         grid.getCellFormatter().addStyleName(0,1,"topMenuItemTitle");

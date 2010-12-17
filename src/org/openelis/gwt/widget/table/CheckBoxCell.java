@@ -196,7 +196,7 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
         
         query = true;
         editor.setQueryMode(true);
-        style = CheckBox.Value.getValue(qd!=null?qd.query:null).getStyle();
+        style = CheckBox.Value.getValue(qd!=null?qd.getQuery():null).getStyle();
         div = new AbsolutePanel();
         div.setStyleName(style);
         table.setWidget(row, col, div);

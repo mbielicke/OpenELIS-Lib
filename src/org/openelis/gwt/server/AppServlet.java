@@ -33,16 +33,17 @@ import org.openelis.util.SessionManager;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.gwt.user.server.rpc.SerializationPolicy;
 
+/**
+ * This class extends RemoteServiceServlet from GWT and adds
+ * some functionality for Session management and application logging 
+ *
+ */
 public class AppServlet extends RemoteServiceServlet {
     
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     protected static SerializationPolicy sPolicy;
 
-    /*
-     * (non-Javadoc)
+    /**
      * @see com.google.gwt.user.server.rpc.RemoteServiceServlet#doGetSerializationPolicy(javax.servlet.http.HttpServletRequest, java.lang.String, java.lang.String)
      * 
      *  This method was overridden so that data could be returned to a CASified Hosted Browser.
@@ -56,7 +57,7 @@ public class AppServlet extends RemoteServiceServlet {
     		return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
     }
 
-    /*
+    /**
      * This method was overridden to ensure that the SessionManager is updated with the current thread and Session.
      * @see com.google.gwt.user.server.rpc.RemoteServiceServlet#onBeforeRequestDeserialized(java.lang.String)
      */
@@ -74,7 +75,6 @@ public class AppServlet extends RemoteServiceServlet {
         }
     }
     
-
     protected void onAfterResponseSerialized(String serializedResponse) {
         // TODO Auto-generated method stub
         super.onAfterResponseSerialized(serializedResponse);
@@ -84,6 +84,4 @@ public class AppServlet extends RemoteServiceServlet {
         getThreadLocalResponse().setDateHeader("Expires", 0 );
     }
     
-
-
 }

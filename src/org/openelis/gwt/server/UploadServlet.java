@@ -1,5 +1,29 @@
+/** Exhibit A - UIRF Open-source Based Public Software License.
+* 
+* The contents of this file are subject to the UIRF Open-source Based
+* Public Software License(the "License"); you may not use this file except
+* in compliance with the License. You may obtain a copy of the License at
+* openelis.uhl.uiowa.edu
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+* 
+* The Original Code is OpenELIS code.
+* 
+* The Initial Developer of the Original Code is The University of Iowa.
+* Portions created by The University of Iowa are Copyright 2006-2008. All
+* Rights Reserved.
+* 
+* Contributor(s): ______________________________________.
+* 
+* Alternatively, the contents of this file marked
+* "Separately-Licensed" may be used under the terms of a UIRF Software
+* license ("UIRF Software License"), in which case the provisions of a
+* UIRF Software License are applicable instead of those above. 
+*/
 package org.openelis.gwt.server;
-
 
 import gwtupload.client.IUploader.Utils;
 import gwtupload.server.UploadAction;
@@ -10,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +41,6 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.vfs.FileObject;
@@ -27,12 +49,15 @@ import org.apache.commons.vfs.FileSystemOptions;
 import org.apache.commons.vfs.VFS;
 import org.apache.commons.vfs.auth.StaticUserAuthenticator;
 import org.apache.commons.vfs.impl.DefaultFileSystemConfigBuilder;
-import org.apache.commons.vfs.provider.ftp.FtpFileSystemConfigBuilder;
 import org.apache.commons.vfs.provider.sftp.SftpFileSystemConfigBuilder;
 import org.openelis.gwt.common.FtpRPC;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.util.SessionManager;
 
+/**
+ * This class is used to upload files using the GWTUpload lib
+ *
+ */
 public class UploadServlet extends UploadAction {
 
 	private static final long serialVersionUID = 1L;

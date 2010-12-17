@@ -25,7 +25,6 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.screen.TabHandler;
 
 /**
  * This interface is used for widgets that are used in out Screen layout framework
@@ -48,15 +47,6 @@ public interface ScreenWidgetInt {
      * @return TRUE if the screen widget is enabled, FALSE otherwise.
      */
     public boolean isEnabled();
-  
-
-    /**
-     * Adds a TabHandler to the widget to override the default browser tabing
-     * and use the tab order defined in the ScreenDef
-     * 
-     * @param handler
-     */
-    public void addTabHandler(TabHandler handler);
     
     /**
      * Adds the Focus style to the widget

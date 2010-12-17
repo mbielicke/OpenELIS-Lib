@@ -23,13 +23,50 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.event;
+package org.openelis.gwt.screen;
 
-@Deprecated
-public interface CommandListener {
-    
-    public void performCommand(Enum action, Object obj);
-    
-    public boolean canPerformCommand(Enum action, Object obj);
+import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * This class sets up a listener for a combination of keys to use a shortcut to widgets on a screen
+ *
+ */
+public class Shortcut  {
+
+	/**
+	 * Flag if ctrl key is part of combination
+	 */
+	protected boolean ctrl;
+	/**
+	 * Flag if shift key is part of combination
+	 */
+	protected boolean shift;
+	/**
+	 * Flag if alt key is part of combination
+	 */
+	protected boolean alt;
+	/**
+	 * Key used in combiniation
+	 */
+	protected char key;
+	/**
+	 * Widget used for the shortcut
+	 */
+	protected Widget wid;
+	
+	/**
+	 * Constructor
+	 * @param ctrl
+	 * @param shift
+	 * @param alt
+	 * @param key
+	 * @param wid
+	 */
+	public Shortcut(boolean ctrl,boolean shift,boolean alt,char key,Widget wid) {
+		this.ctrl = ctrl;
+		this.shift = shift;
+		this.alt = alt;
+		this.key = key;
+		this.wid = wid;
+	}
 }
