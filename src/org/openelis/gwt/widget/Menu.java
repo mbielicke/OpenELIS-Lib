@@ -111,10 +111,13 @@ public class Menu extends Composite {
      */
     public Menu(String icon, String display, String description) {
         this();
-        Grid grid = new Grid(2, 4);
+        Grid grid = new Grid(2, 3);
+        grid.setCellPadding(0);
+        grid.setCellSpacing(0);
         grid.setStyleName("TopMenuRowContainer");
 
         grid.getCellFormatter().setStylePrimaryName(0, 0, "topMenuIcon");
+        grid.setText(0, 0, "");
         grid.getCellFormatter().setStylePrimaryName(0, 1, "topMenuItemMiddle");
 
         if ( !"".equals(icon))
@@ -134,7 +137,8 @@ public class Menu extends Composite {
             grid.getCellFormatter().addStyleName(1, 1, "topMenuItemDesc");
         }
 
-        grid.getCellFormatter().setStyleName(0, 3, "MenuArrow");
+        grid.getCellFormatter().setStyleName(0, 2, "MenuArrow");
+        grid.setText(0,2,"");
 
         initWidget(grid);
         
@@ -305,5 +309,12 @@ public class Menu extends Composite {
         super.onAttach();
         setEnabled(enabled);
     }
+    
+    public void hideArrow() {
+    	((Grid)getWidget()).getCellFormatter().setVisible(0, 2, false);
+    }
 
+    public void showArrow() {
+    	((Grid)getWidget()).getCellFormatter().setVisible(0, 2, true);
+    }
 }

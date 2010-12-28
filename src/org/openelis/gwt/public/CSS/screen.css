@@ -153,6 +153,8 @@ width:100%;
     font-size:10px;
     font-weight : bold;
     color:white;
+    cell-padding : 0px;
+    cell-spacing : 0px;
 }
 .topMenuBarItem.Hover, .Selected .topMenuBarItem{
     color:black;
@@ -194,10 +196,16 @@ width:100%;
     padding:4px;
 }
 
-.topMenuItemMiddle{
+.TopMenuRowContainer .topMenuItemMiddle{
     padding:0 0 0 8px;
-
+    height : 16px;
 }
+
+.topMenuBarItem .topMenuItemMiddle {
+	padding: 0;
+	height :16px;
+}
+
 .topMenuItemTitle{
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
@@ -217,7 +225,7 @@ color:gray;
 }
 .TopMenuRowContainer{
     width:200px;
-    padding:1px;
+    padding:5px;
 }
 
 .Ascending{
@@ -238,6 +246,7 @@ color:gray;
     padding:0;
     background:url('../Images/white-top-bottom.gif') #d9e8fb repeat-x 0px 0px;
     border:1px solid #aaccf6;
+    padding : 4px;
 }
 .FavoritesTitlePanel{
     background:#99bbe8 url("../Images/headersprite.gif") repeat-x;
@@ -246,13 +255,14 @@ color:gray;
     font-size:11px;
     border:1px solid #99bbe8;
 }
+
  .MenuArrow, .summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
 .fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
 .systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon {
-    width:16px;
-    height:16px;
+    width:20px;
+    height:20px;
 }
 
 .preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
@@ -348,6 +358,7 @@ color:gray;
 }
 .MenuArrow{
 	background:url('../Images/nextbuttonimage.gif') no-repeat;
+
 }
 .arrowIcon{
    background:url('../Images/nextbuttonimage.gif') no-repeat center;

@@ -230,6 +230,8 @@ public class Header extends FocusPanel {
         
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
         flexTable.getCellFormatter().setHeight(0, 0, headerHeight + "px");
+        
+        flexTable.getCellFormatter().addStyleName(0, 0, "First");
     }
     
     /**

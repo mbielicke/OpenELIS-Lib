@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 /**
  *  This class will display MenuItems in Horizontal row and display Menu 
@@ -74,6 +75,7 @@ public class MenuBar extends Composite {
         panel.insert(menu,panel.getWidgetCount()-1);
         menu.setStyleName("topMenuBarItem");
         menu.showBelow(true);
+        menu.hideArrow();
        
         menu.addCommand(new Command() {
             public void execute() {

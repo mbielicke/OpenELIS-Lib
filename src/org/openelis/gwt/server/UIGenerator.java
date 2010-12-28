@@ -90,7 +90,7 @@ public class UIGenerator extends Generator {
 
         composer.addImport("org.openelis.gwt.screen.Screen");
         composer.addImport("org.openelis.gwt.screen.Tab");
-        composer.addImport("org.openelis.gwt.screen.ShortcutHandler");
+        composer.addImport("org.openelis.gwt.screen.Shortcut");
         composer.addImport("com.google.gwt.event.dom.client.HasFocusHandlers");
         composer.addImplementedInterface("ScreenDefInt");
         
@@ -99,14 +99,14 @@ public class UIGenerator extends Generator {
 		sw.println("protected ScreenPanel panel;");
 		sw.println("protected HashMap<String,Widget> widgets;");
 		sw.println("protected HashMap<Widget,Tab> tabs;");
-		sw.println("protected ArrayList<ShortcutHandler> shortcuts;");
+		sw.println("protected ArrayList<Shortcut> shortcuts;");
 		sw.println("public String name;");
 		
 		sw.println("");
 		sw.println("public "+className+"_"+lang+"() {");
 		sw.println("widgets = new HashMap<String,Widget>();");
 		sw.println("tabs = new HashMap<Widget,Tab>();");
-		sw.println("shortcuts = new ArrayList<ShortcutHandler>();");
+		sw.println("shortcuts = new ArrayList<Shortcut>();");
 		sw.println("panel = new ScreenPanel();");
 		sw.println("createPanel();");
 		sw.println("}");
@@ -132,7 +132,7 @@ public class UIGenerator extends Generator {
 		sw.println("public void setName(String name) {");
 		sw.println("this.name = name;");
 		sw.println("}");
-		sw.println("public ArrayList<ShortcutHandler> getShortcuts() {");
+		sw.println("public ArrayList<Shortcut> getShortcuts() {");
 		sw.println("return shortcuts;");
 		sw.println("}");
 		sw.println("public HashMap<Widget,Tab> getTabs() {");
@@ -290,7 +290,7 @@ public class UIGenerator extends Generator {
     	
     	key = shortcut.charAt(shortcut.length()-1);
     	
-    	sw.println("shortcuts.add(new ShortcutHandler("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
+    	sw.println("shortcuts.add(new Shortcut("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
     }	
     
     public void addTabHandler(Node node,String wid) {

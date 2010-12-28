@@ -36,8 +36,7 @@ public class EJBFactory {
     public static Object lookup(String bean){
         try{
             Properties props = (Properties)SessionManager.getSession().getAttribute("jndiProps");
-            InitialContext ctx = null;
-            ctx = new InitialContext(props);
+            InitialContext ctx = new InitialContext(props);
             return ctx.lookup(bean);
         }catch(Exception e){
             e.printStackTrace();

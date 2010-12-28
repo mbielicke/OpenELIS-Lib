@@ -334,6 +334,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				}
 			}
 		}, KeyDownEvent.getType());
+		
+		setStyleName("ScreenTable");
 
 	}
 

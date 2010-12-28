@@ -10,6 +10,7 @@
 	-webkit-user-select : none;
 	-moz-user-select : none;
 	user-select : none;	
+	border : 1px solid white;
 }
 
 .Table tr {
@@ -72,11 +73,15 @@
 	border-color: #FFFFFF;
 	border-style: solid;
 	border-width: 0px 0px 0px 1px;
-	padding : 0px 2px 0px 2px;
+	padding : 0px 2px 4px 2px;
 	color: black;
 	cursor: pointer;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
+}
+
+.Header td.First {
+	border-width: 0px 0px 0px 0px;
 }
 
 .Header td.Filtered {

@@ -65,10 +65,13 @@ public class MenuItem extends Composite {
      * @param autoClose
      */
     public MenuItem(String icon, String display, String description, boolean autoClose) {
-        Grid grid = new Grid(2,4);
+        Grid grid = new Grid(2,2);
         grid.setStyleName("TopMenuRowContainer");
+        grid.setCellPadding(0);
+        grid.setCellSpacing(0);
         
         grid.getCellFormatter().setStylePrimaryName(0,0,"topMenuIcon");
+        grid.setText(0, 0, "");
         grid.getCellFormatter().setStylePrimaryName(0,1,"topMenuItemMiddle");
         
         if(!"".equals(icon))
