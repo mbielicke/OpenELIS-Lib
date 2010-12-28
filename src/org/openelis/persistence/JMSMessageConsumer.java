@@ -18,39 +18,42 @@ import javax.naming.InitialContext;
  * Class creates a session within servlet context and starts listening for
  * messages. OpenELIS uses this service to update caches from backend J2EE (JBOSS)
  * to servlet (TOMCAT).
+ * 
+ * Please note that Tomcat will complain about several threads not being stopped even after
+ * we close/stop all the listeners.
  */
-public class JMSMessageConsumer implements MessageListener {
+public class JMSMessageConsumer {
 
-    static Connection      connect;
-    static Session         session;
-    static MessageConsumer consumer;
-
-    public JMSMessageConsumer() {
-    }
-
-    public void onMessage(Message arg0) {
-        String h;
-        org.openelis.persistence.Message m;
-        
-        try {
-            m = (org.openelis.persistence.Message) ((ObjectMessage)arg0).getObject();
-            h = m.getHandler();
-            ((MessageHandler<org.openelis.persistence.Message>)Class.forName(h).newInstance()).handle(m);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+    private static Connection      connect;
+    private static Session         session;
+    private static MessageConsumer consumer;
 
     public static void startListener(String destination) {
+        InitialContext jndiContext;
+        ConnectionFactory factory;
+        Topic topic;
+        
         try {
-            InitialContext jndiContext = getInitialContext();
-            ConnectionFactory factory = (ConnectionFactory)jndiContext.lookup("ConnectionFactory");
-            Topic topic = (Topic)jndiContext.lookup(destination);
+            jndiContext = getInitialContext();
+            factory = (ConnectionFactory)jndiContext.lookup("ConnectionFactory");
+            topic = (Topic)jndiContext.lookup(destination);
             connect = factory.createConnection();
             session = connect.createSession(false, Session.AUTO_ACKNOWLEDGE);
             consumer = session.createConsumer(topic);
-            consumer.setMessageListener(new JMSMessageConsumer());
+            consumer.setMessageListener(new MessageListener() {
+                public void onMessage(Message arg0) {
+                    String h;
+                    org.openelis.persistence.Message m;
+                    
+                    try {
+                        m = (org.openelis.persistence.Message) ((ObjectMessage)arg0).getObject();
+                        h = m.getHandler();
+                        ((MessageHandler<org.openelis.persistence.Message>)Class.forName(h).newInstance()).handle(m);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             connect.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,10 +62,14 @@ public class JMSMessageConsumer implements MessageListener {
 
     public static void stopListener() {
         try {
-            connect.stop();
-            session.close();
-            consumer.close();
-            connect.close();
+            if (consumer != null)
+                consumer.close();
+            if (session != null)
+                session.close();
+            if (connect != null) {
+                connect.stop();
+                connect.close();
+            }
             connect = null;
             session = null;
             consumer = null;
