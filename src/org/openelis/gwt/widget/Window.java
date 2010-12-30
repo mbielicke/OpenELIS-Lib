@@ -40,6 +40,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -292,11 +294,11 @@ public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasB
              * This handler is added to forward the key press event if received by the window 
              * down to the screen.
              */
-            addDomHandler(new KeyPressHandler() {
-            	 public void onKeyPress(KeyPressEvent event) {
-            		 KeyPressEvent.fireNativeEvent(event.getNativeEvent(), content);   
+            addDomHandler(new KeyDownHandler() {
+             	 public void onKeyDown(KeyDownEvent event) {
+            		 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), content);   
             	 }
-            },KeyPressEvent.getType());
+            },KeyDownEvent.getType());
             
         }
         

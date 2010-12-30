@@ -114,8 +114,8 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * No arg constructor will initiate a blank panel and new FormRPC
      */
     public Screen() {
-		addDomHandler(new KeyPressHandler() {
-			public void onKeyPress(final KeyPressEvent event) {
+		addDomHandler(new KeyDownHandler() {
+			public void onKeyDown(final KeyDownEvent event) {
 				boolean ctrl,alt,shift;
 				char key;
 				
@@ -128,10 +128,10 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 				ctrl = event.isControlKeyDown();
 				alt = event.isAltKeyDown();
 				shift = event.isShiftKeyDown();
-				key = event.getCharCode();
+				key = (char)event.getNativeKeyCode();
 				
 				for(Shortcut handler : def.getShortcuts()) {
-					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && handler.key == key){
+					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
 						if(handler.wid instanceof Button) {
 							if(((Button)handler.wid).isEnabled() && !((Button)handler.wid).isLocked()){
 								((Focusable)handler.wid).setFocus(true);
@@ -158,7 +158,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 					}
 				}
 			}
-		},KeyPressEvent.getType());
+		},KeyDownEvent.getType());
 		
 		addDomHandler(new KeyDownHandler() {
 			@Override

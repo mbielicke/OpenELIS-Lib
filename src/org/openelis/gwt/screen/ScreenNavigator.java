@@ -143,6 +143,8 @@ public abstract class ScreenNavigator {
      */
     public void setQueryResult(ArrayList result) {
         int row;
+
+        enable(true);
         //
         // if next page failed, reset the query page # to the old page #
         //
@@ -189,9 +191,11 @@ public abstract class ScreenNavigator {
      * list, attempt is made to fetch the next page.
      */
     public void next() {
-        byRow = true;
-        if (selection != -1)
-            select(selection + 1);
+        if (enable) {
+            byRow = true;
+            if (selection != -1)
+                select(selection + 1);
+        }
     }
 
     /**
@@ -200,9 +204,11 @@ public abstract class ScreenNavigator {
      * page.
      */
     public void previous() {
-        byRow = true;
-        if (selection != -1)
-            select(selection - 1);
+        if (enable) {
+            byRow = true;
+            if (selection != -1)
+                select(selection - 1);
+        }
     }
 
     /**
@@ -274,6 +280,8 @@ public abstract class ScreenNavigator {
     protected void setPage(int page) {
         if (page < 0)
             return;
+
+        enable(false);
 
         oldPage = query.getPage();
         query.setPage(page);

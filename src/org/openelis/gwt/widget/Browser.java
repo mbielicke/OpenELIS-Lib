@@ -35,8 +35,9 @@ import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -138,12 +139,12 @@ public class Browser extends Composite {
         /**
          * This handler is added to forward the key press event on to the focused window if received by the browser
          */
-        addDomHandler(new KeyPressHandler() {
-        	public void onKeyPress(KeyPressEvent event) {
-        		KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+        addDomHandler(new KeyDownHandler() {
+        	public void onKeyDown(KeyDownEvent event) {
+        		KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
         		
         	}
-        },KeyPressEvent.getType());
+        },KeyDownEvent.getType());
     } 
     
     /**
