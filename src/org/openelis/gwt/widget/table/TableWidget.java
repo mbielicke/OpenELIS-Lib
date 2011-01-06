@@ -395,7 +395,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(multiSelect && ctrlKey && isSelected(row)){
         	unselect(row);
         	selectedCol = -1;
-       		sinkEvents(Event.ONKEYPRESS);
+       		sinkEvents(Event.KEYEVENTS);
         	return;
         }
         if(selectedRow != row){
@@ -420,15 +420,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         				CellEditedEvent.fire(this, row, col, CheckBox.CHECKED);
         		}
            		selectedCol = -1;
-           		sinkEvents(Event.ONKEYPRESS);
+           		sinkEvents(Event.KEYEVENTS);
         	}else{
         		selectedCol = col;
         		renderer.setCellEditor(row, col);
-        		unsinkEvents(Event.ONKEYPRESS);
+        		unsinkEvents(Event.KEYEVENTS);
         	}
         }else{
        		selectedCol = -1;
-       		sinkEvents(Event.ONKEYPRESS);
+       		sinkEvents(Event.KEYEVENTS);
        	}
     }
     
