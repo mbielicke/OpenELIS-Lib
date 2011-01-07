@@ -207,7 +207,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         view.setWidth(width);
         view.setHeight(maxRows*cellHeight);
         setWidget(view);
-        addDomHandler(keyboardHandler,KeyUpEvent.getType());
+        //addDomHandler(keyboardHandler,KeyUpEvent.getType());
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
     }
         
@@ -395,7 +395,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(multiSelect && ctrlKey && isSelected(row)){
         	unselect(row);
         	selectedCol = -1;
-       		sinkEvents(Event.KEYEVENTS);
+       		//sinkEvents(Event.KEYEVENTS);
         	return;
         }
         if(selectedRow != row){
@@ -420,15 +420,15 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         				CellEditedEvent.fire(this, row, col, CheckBox.CHECKED);
         		}
            		selectedCol = -1;
-           		sinkEvents(Event.KEYEVENTS);
+           		//sinkEvents(Event.KEYEVENTS);
         	}else{
         		selectedCol = col;
         		renderer.setCellEditor(row, col);
-        		unsinkEvents(Event.KEYEVENTS);
+        		//unsinkEvents(Event.KEYEVENTS);
         	}
         }else{
        		selectedCol = -1;
-       		sinkEvents(Event.KEYEVENTS);
+       		//sinkEvents(Event.KEYEVENTS);
        	}
     }
     
@@ -458,7 +458,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         	if(renderer.stopEditing() && fireEvents)
         		CellEditedEvent.fire(this, selectedRow, selectedCol, getRow(selectedRow).cells.get(selectedCol).value);
             selectedCol = -1;
-            sinkEvents(Event.KEYEVENTS);
+            //sinkEvents(Event.KEYEVENTS);
         }
     }
     
@@ -750,7 +750,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         if(multiSelect && ctrlKey && isSelected(index)){
         	unselect(index);
         	selectedCol = -1;
-       		sinkEvents(Event.ONKEYPRESS);
+       		//sinkEvents(Event.ONKEYPRESS);
         	return;
         }
 		selectRow(index,true);
