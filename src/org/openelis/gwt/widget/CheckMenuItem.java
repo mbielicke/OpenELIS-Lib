@@ -80,6 +80,10 @@ public class CheckMenuItem extends MenuItem implements HasValueChangeHandlers<Bo
             grid.getCellFormatter().addStyleName(0, 0, "Unchecked");
         }
     }
+    
+    public boolean isChecked() {
+    	return checked;
+    }
 
     /**
      * Method to register ValueChangeHandler

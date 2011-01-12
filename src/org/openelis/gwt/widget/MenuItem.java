@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -40,6 +42,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 
 public class MenuItem extends Composite {
+	
+	protected String icon,display,description;
+	
+	protected ArrayList<Command> commands;
 
     /**
      * Flags to determine if the MenuItem should autoClose all menus and 
@@ -65,6 +71,10 @@ public class MenuItem extends Composite {
      * @param autoClose
      */
     public MenuItem(String icon, String display, String description, boolean autoClose) {
+    	this.icon = icon;
+    	this.display = display;
+    	this.description = description;
+    	
         Grid grid = new Grid(2,2);
         grid.setStyleName("TopMenuRowContainer");
         grid.setCellPadding(0);
@@ -141,12 +151,25 @@ public class MenuItem extends Composite {
      * @param command
      */
     public void addCommand(final Command command) {
-        addHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-            	removeStyleName("Hover");
-                command.execute();
-            }
-        }, ClickEvent.getType());
+    	if(commands == null) {
+    		commands = new ArrayList<Command>();
+    		addHandler(new ClickHandler() {
+    			public void onClick(ClickEvent event) {
+    				execute();
+    			}
+    		}, ClickEvent.getType());
+    	}
+    	commands.add(command);
+    }
+    
+    public void execute() {
+    	removeStyleName("Hover");
+		for(Command comm : commands) 
+			comm.execute();
+    }
+    
+    public ArrayList<Command> getCommands() {
+    	return commands;
     }
     
     /**
@@ -155,6 +178,18 @@ public class MenuItem extends Composite {
      */
     protected boolean autoClose() {
         return autoClose;
+    }
+    
+    public String getIcon() {
+    	return icon;
+    }
+    
+    public String getDisplay() {
+    	return display;
+    }
+    
+    public String getDescription() {
+    	return description;
     }
     
     /**
