@@ -25,11 +25,13 @@
  */
 package org.openelis.persistence;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
+import org.openelis.gwt.server.ScreenControllerServlet;
 import org.openelis.util.SessionManager;
 
 /**
@@ -40,27 +42,64 @@ import org.openelis.util.SessionManager;
 public class EJBFactory {
     private static Logger log = Logger.getLogger(EJBFactory.class.getName());
 
-    public static Object lookup(String bean) {
+    /**
+     * This class provides a caching EJB bean factory. All cached beans are stored in
+     * user's session and are removed when the session expires.
+     * 
+     * Note that this method caches a single instance of each bean. Returned beans
+     * are marked as busy until the servlet thread is complete. If another thread
+     * for the same user requests for a bean that is busy, ie. used in another thread,
+     * a new bean with initial context will be created and returned. Subsequent bean will
+     * not be cached.
+     * 
+     * @see ScreenControllerServlet for how the busy pool is cleared. 
+     */
+    @SuppressWarnings("unchecked")
+	public static Object lookup(String bean) {
+        boolean isBusy;
+        Object object;
         InitialContext c;
         Properties p = null;
+        HashMap<String, Object> availPool, busyPool; 
 
-        try {
-            p = (Properties)SessionManager.getSession().getAttribute("jndiProps");
-            if (p == null) {
-                log.error("Failed to get user properties for thread id " + Thread.currentThread());
-            } else {
-                c = new InitialContext(p);
-                if (c == null)
-                    log.error("Failed to get the initial context for thread id "+ Thread.currentThread());
-                else {
-                    return c.lookup(bean);
-                }
-            }
-        } catch (Exception e) {
-            log.error("Failed to lookup "+ bean +" for thread id "+ Thread.currentThread()+": " + e.getMessage());
-            e.printStackTrace();
+        availPool = (HashMap) SessionManager.getSession().getAttribute("availableBeanPool");
+        busyPool = (HashMap) SessionManager.getSession().getAttribute("busyBeanPool");
+        
+        if (availPool == null || busyPool == null) {
+            availPool = new HashMap<String, Object>();
+            busyPool = new HashMap<String, Object>();
+            SessionManager.getSession().setAttribute("availableBeanPool", availPool);
+            SessionManager.getSession().setAttribute("busyBeanPool", busyPool);
         }
 
-        return null;
+        object = (Object) availPool.get(bean);
+        isBusy = busyPool.containsKey(bean);
+        if (object == null || isBusy) {
+            try {
+                p = (Properties)SessionManager.getSession().getAttribute("jndiProps");
+                if (p == null) {
+                    log.error("Failed to get user properties for thread id " + Thread.currentThread());
+                    return null;
+                }
+
+                c = new InitialContext(p);
+                if (c == null) {
+                    log.error("Failed to get the initial context for thread id "+ Thread.currentThread());
+                    return null;
+                }
+
+                object = c.lookup(bean);
+            } catch (Exception e) {
+                log.error("Failed to lookup "+ bean +" for thread id "+ Thread.currentThread()+": " +
+                          e.getMessage());
+                e.printStackTrace();
+            }
+            if (! isBusy) {
+                availPool.put(bean, object);
+                busyPool.put(bean, object);
+            }
+        }
+
+        return object;
     }
 }
