@@ -62,9 +62,11 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
             e.printStackTrace();
             throw new Exception(e.getMessage());
         } finally {
-            busyPool = (HashMap)SessionManager.getSession().getAttribute("busyBeanPool");
-            if (busyPool != null)
-            	busyPool.clear();
+        	if(SessionManager.getSession() != null) {
+        		busyPool = (HashMap)SessionManager.getSession().getAttribute("busyBeanPool");
+        		if (busyPool != null)
+        			busyPool.clear();
+        	}
         }
     }
 
