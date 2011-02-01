@@ -33,191 +33,239 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Screen extends Composite implements HasStateChangeHandlers<Screen.State>,
-                                     HasDataChangeHandlers, HasResizeHandlers {
+/**
+ * This is the base class for every OpenELIS screen.
+ */
+public class Screen extends Composite implements
+		HasStateChangeHandlers<Screen.State>, HasDataChangeHandlers,
+		HasResizeHandlers {
 
-    public enum State {
-        DEFAULT, DISPLAY, UPDATE, ADD, QUERY, DELETE
-    };
+	public enum State {
+		DEFAULT, DISPLAY, UPDATE, ADD, QUERY, DELETE
+	};
 
-    public State                          state        = null;
-    public ScreenWindow                   window;
+	public State state = null;
+	public ScreenWindow window;
 
-    protected ScreenDefInt                def;
-    protected ScreenService               service;
-    protected String                      fatalError;
+	protected ScreenDefInt def;
+	protected ScreenService service;
 
-    public final AbsolutePanel            screenpanel  = new AbsolutePanel();
-    public static HashMap<String, String> consts;
+	public final AbsolutePanel screenpanel = new AbsolutePanel();
+	public static HashMap<String, String> consts;
 
-    /**
-     * No arg constructor will initiate a blank panel and new FormRPC
-     */
-    public Screen() {
-        initWidget(screenpanel);
-        sinkEvents(Event.ONKEYPRESS);
-    }
+	/**
+	 * No arg constructor will initiate a blank panel
+	 */
+	public Screen() {
+		initWidget(screenpanel);
+		sinkEvents(Event.ONKEYPRESS);
+	}
 
-    public Screen(ScreenDefInt def) {
-        initWidget(screenpanel);
-        this.def = def;
-        screenpanel.add(def.getPanel());
-    }
+	/**
+	 * Constructor will initiate a screen using the screen definition
+	 */
+	public Screen(ScreenDefInt def) {
+		initWidget(screenpanel);
+		this.def = def;
+		screenpanel.add(def.getPanel());
+	}
 
-    public void setWindow(ScreenWindow window) {
-        this.window = window;
-    }
+	/**
+	 * ? 
+	 */
+	public void drawScreen(ScreenDefInt def) throws Exception {
+		this.def = def;
+		screenpanel.clear();
+		screenpanel.add(def.getPanel());
+	}
 
-    public ScreenWindow getWindow() {
-        return window;
-    }
+	/**
+	 * Sets the parent window for this screen.
+	 */
+	public void setWindow(ScreenWindow window) {
+		this.window = window;
+	}
 
-    public void setDefinition(ScreenDefInt def) {
-        this.def = def;
-    }
+	public ScreenWindow getWindow() {
+		return window;
+	}
 
-    public ScreenDefInt getDefinition() {
-        return def;
-    }
+	/**
+	 * Set the definition for this screen. Use this method to associate this
+	 * screen with given definition (often used in tabs).
+	 */
+	public void setDefinition(ScreenDefInt def) {
+		this.def = def;
+	}
 
-    public void setName(String name) {
-        def.setName(name);
-    }
+	public ScreenDefInt getDefinition() {
+		return def;
+	}
 
-    public String getName() {
-        return def.getName();
-    }
+	/**
+	 * Sets the screen's name that appears in the screen title
+	 */
+	public void setName(String name) {
+		def.setName(name);
+	}
 
-    public void setState(Screen.State state) {
-        if (state != this.state) {
-            this.state = state;
-            StateChangeEvent.fire(this, state);
-        }
-    }
+	public String getName() {
+		return def.getName();
+	}
 
-    public boolean validate() {
-        boolean valid = true;
+	/**
+	 * Sets the screen's state and fires the state change event if state was
+	 * changed.
+	 */
+	public void setState(Screen.State state) {
+		if (state != this.state) {
+			this.state = state;
+			StateChangeEvent.fire(this, state);
+		}
+	}
 
-        for (Widget wid : def.getWidgets().values()) {
-            if (wid instanceof HasField) {
-                ((HasField)wid).checkValue();
-                if ( ((HasField)wid).getExceptions() != null)
-                    valid = false;
-            }
-        }
-        return valid;
-    }
+	/**
+	 * Validates all the screen widgets for required/formating/... and returns
+	 * true if all the widgets have valid values, false otherwise.
+	 */
+	public boolean validate() {
+		boolean valid = true;
 
-    public ArrayList<QueryData> getQueryFields() {
-        Set<String> keys;
-        ArrayList<QueryData> list;
+		for (Widget wid : def.getWidgets().values()) {
+			if (wid instanceof HasField) {
+				((HasField) wid).checkValue();
+				if (((HasField) wid).getExceptions() != null)
+					valid = false;
+			}
+		}
+		return valid;
+	}
 
-        list = new ArrayList<QueryData>();
-        keys = def.getWidgets().keySet();
-        for (String key : def.getWidgets().keySet()) {
-            if (def.getWidget(key) instanceof HasField) {
-                ((HasField)def.getWidget(key)).getQuery(list, key);
-            }
-        }
-        return list;
-    }
+	/**
+	 * Returns the widget's data in form of query. The list is suitable for
+	 * being used as parameters in a query.
+	 */
+	public ArrayList<QueryData> getQueryFields() {
+		Set<String> keys;
+		ArrayList<QueryData> list;
 
-    public void showErrors(ValidationErrorsList errors) {
-        ArrayList<LocalizedException> formErrors;
-        TableFieldErrorException tableE;
-        FormErrorException formE;
-        FieldErrorException fieldE;
-        TableWidget tableWid;
-        HasField field;
+		list = new ArrayList<QueryData>();
+		keys = def.getWidgets().keySet();
+		for (String key : def.getWidgets().keySet()) {
+			if (def.getWidget(key) instanceof HasField) {
+				((HasField) def.getWidget(key)).getQuery(list, key);
+			}
+		}
+		return list;
+	}
 
-        formErrors = new ArrayList<LocalizedException>();
-        for (Exception ex : errors.getErrorList()) {
-            if (ex instanceof TableFieldErrorException) {
-                tableE = (TableFieldErrorException) ex;
-                tableWid = (TableWidget)def.getWidget(tableE.getTableKey());
-                tableWid.setCellException(tableE.getRowIndex(), tableE.getFieldName(), tableE);
-            } else if (ex instanceof FormErrorException) {
-                formE = (FormErrorException)ex;
-                formErrors.add(formE);
-            } else if (ex instanceof FieldErrorException) {
-                fieldE = (FieldErrorException)ex;
-                field = (HasField)def.getWidget(fieldE.getFieldName());
-                
-                if(field != null)
-                 field.addException(fieldE);
-            }
-        }
+	/**
+	 * Shows a list of validation errors specified for individual widgets. Depending on
+	 * the error type, the error is either added to a widget or the screen.
+	 */
+	public void showErrors(ValidationErrorsList errors) {
+		ArrayList<LocalizedException> formErrors;
+		TableFieldErrorException tableE;
+		FormErrorException formE;
+		FieldErrorException fieldE;
+		TableWidget tableWid;
+		HasField field;
 
-        if (formErrors.size() == 0)
-            window.setError(consts.get("correctErrors"));
-        else if (formErrors.size() == 1)
-            window.setError(formErrors.get(0).getMessage());
-        else {
-            window.setError("(Error 1 of " + formErrors.size() + ") " +
-                            formErrors.get(0).getMessage());
-            window.setMessagePopup(formErrors, "ErrorPanel");
-        }
-    }
+		formErrors = new ArrayList<LocalizedException>();
+		for (Exception ex : errors.getErrorList()) {
+			if (ex instanceof TableFieldErrorException) {
+				tableE = (TableFieldErrorException) ex;
+				tableWid = (TableWidget) def.getWidget(tableE.getTableKey());
+				tableWid.setCellException(tableE.getRowIndex(),
+						tableE.getFieldName(), tableE);
+			} else if (ex instanceof FormErrorException) {
+				formE = (FormErrorException) ex;
+				formErrors.add(formE);
+			} else if (ex instanceof FieldErrorException) {
+				fieldE = (FieldErrorException) ex;
+				field = (HasField) def.getWidget(fieldE.getFieldName());
+				if (field != null)
+					field.addException(fieldE);
+			}
+		}
+		if (formErrors.size() == 0)
+			window.setError(consts.get("correctErrors"));
+		else if (formErrors.size() == 1)
+			window.setError(formErrors.get(0).getMessage());
+		else {
+			window.setError("(Error 1 of " + formErrors.size() + ") "
+					+ formErrors.get(0).getMessage());
+			window.setMessagePopup(formErrors, "ErrorPanel");
+		}
+	}
 
-    protected void showWarningsDialog(ValidationErrorsList warnings) {
-        String warningText = consts.get("warningDialogLine1") + "\n";
+	/**
+	 * Shows a list of warnings in the form of a confirm dialog. Specific screens
+	 * need to override the commitWithWarnings() method to catch the user's response.
+	 */
+	protected void showWarningsDialog(ValidationErrorsList warnings) {
+		String warningText = consts.get("warningDialogLine1") + "\n";
 
-        for (Exception ex : warnings.getErrorList()) {
-            if (ex instanceof Warning)
-                warningText += " * " + ex.getMessage() + "\n";
-        }
-        warningText += "\n" + consts.get("warningDialogLastLine");
+		for (Exception ex : warnings.getErrorList()) {
+			if (ex instanceof Warning)
+				warningText += " * " + ex.getMessage() + "\n";
+		}
+		warningText += "\n" + consts.get("warningDialogLastLine");
 
-        if (Window.confirm(warningText))
-            commitWithWarnings();
-    }
+		if (Window.confirm(warningText))
+			commitWithWarnings();
+	}
 
-    protected void commitWithWarnings() {
-        // by default this method does nothing
-        // but it can be overridden by screens to do screen
-        // specific actions
-    }
+	/**
+	 * Override this method to handle user's confirmation for showWarningDialog.
+	 */
+	protected void commitWithWarnings() {
+	}
 
-    public void clearErrors() {
-        for (Widget wid : def.getWidgets().values()) {
-            if (wid instanceof HasField)
-                ((HasField)wid).clearExceptions();
-        }
-        window.clearStatus();
-        window.clearMessagePopup("");
-    }
+	/**
+	 * Clears widget errors and the screen form error area.
+	 */
+	public void clearErrors() {
+		for (Widget wid : def.getWidgets().values()) {
+			if (wid instanceof HasField)
+				((HasField) wid).clearExceptions();
+		}
+		window.clearStatus();
+		window.clearMessagePopup("");
+	}
 
-    public void drawScreen(ScreenDefInt def) throws Exception {
-        this.def = def;
-        screenpanel.clear();
-        screenpanel.add(def.getPanel());
-    }
+	public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
+		assert wid != null : "addScreenHandler received a null widget";
 
-    public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
-        assert wid != null : "addScreenHandler received a null widget";
+		screenHandler.target = wid;
+		addDataChangeHandler(screenHandler);
+		addStateChangeHandler(screenHandler);
+		if (wid instanceof HasField)
+			((HasField) wid).addFieldValueChangeHandler(screenHandler);
+		if (wid instanceof HasClickHandlers)
+			((HasClickHandlers) wid).addClickHandler(screenHandler);
+	}
+	
+	/**
+	 * Sets the screen focus to specified widget.  
+	 */
+	protected void setFocus(Widget widget) {
+		def.getPanel().setFocusWidget(widget);
+	}
 
-        screenHandler.target = wid;
-        addDataChangeHandler(screenHandler);
-        addStateChangeHandler(screenHandler);
-        if (wid instanceof HasField)
-            ((HasField)wid).addFieldValueChangeHandler(screenHandler);
-        if (wid instanceof HasClickHandlers)
-            ((HasClickHandlers)wid).addClickHandler(screenHandler);
-    }
+	/**
+	 * Event handlers inherited methods 
+	 */
+	public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
+		return addHandler(handler, DataChangeEvent.getType());
+	}
 
-    public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
-        return addHandler(handler, DataChangeEvent.getType());
-    }
+	public HandlerRegistration addStateChangeHandler(
+			StateChangeHandler<org.openelis.gwt.screen.Screen.State> handler) {
+		return addHandler(handler, StateChangeEvent.getType());
+	}
 
-    public HandlerRegistration addStateChangeHandler(StateChangeHandler<org.openelis.gwt.screen.Screen.State> handler) {
-        return addHandler(handler, StateChangeEvent.getType());
-    }
-
-    public HandlerRegistration addResizeHandler(ResizeHandler handler) {
-        return addHandler(handler, ResizeEvent.getType());
-    }
-
-    protected void setFocus(Widget widget) {
-        def.getPanel().setFocusWidget(widget);
-    }
+	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
+		return addHandler(handler, ResizeEvent.getType());
+	}
 }

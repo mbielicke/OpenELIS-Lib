@@ -33,13 +33,19 @@ public class LocalizedException extends Exception implements Cloneable {
 
 	@Override
 	public String getMessage() {
-		String message = Screen.consts.get(key);
-		if (params != null) {
-			for (int i = 0; i < params.length; i++) {
-				message = message.replaceFirst("\\{" + i + "\\}", params[i]);
+		String m;
+
+		m = Screen.consts.get(key);
+		if (m != null) {
+			if (params != null) {
+				for (int i = 0; i < params.length; i++) {
+					m = m.replaceFirst("\\{" + i + "\\}", params[i]);
+				}
 			}
+		} else {
+			m = key;
 		}
-		return message;
+		return m;
 	}
 
 	public Object clone() {
@@ -51,5 +57,4 @@ public class LocalizedException extends Exception implements Cloneable {
 			return ((LocalizedException) obj).key.equals(key);
 		return false;
 	}
-
 }
