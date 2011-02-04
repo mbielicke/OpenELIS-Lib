@@ -725,7 +725,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     
 	public void load(ArrayList<TableDataRow> model) {
         selections.clear();
-        renderer.rowUnselected(-1);
+        if(isAttached())
+        	renderer.rowUnselected(-1);
         this.model = model;
         shownRows = 0;
         selectedRow = -1;
@@ -743,7 +744,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             searchKey.put(model.get(i).key,i);
         }
         
-        renderer.dataChanged(false);        
+        if(isAttached())
+        	renderer.dataChanged(false);        
     }
 	
 	public void navSelect(int index) {
