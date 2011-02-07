@@ -142,9 +142,12 @@ public class TableColumn {
     		}else if(colWidget instanceof CalendarLookUp && ((CalendarLookUp)colWidget).getField().queryMode){
     		    val = ((HasField)colWidget).getField().queryString;
     		}else {
-    			if(cell.getValue() instanceof ArrayList)
-    				((HasField)colWidget).setFieldValue(((ArrayList)cell.getValue()).get(0).toString());
-    			else
+    			if(cell.getValue() instanceof ArrayList) {
+    				if(((ArrayList)cell.getValue()).size() > 0)
+    					((HasField)colWidget).setFieldValue(((ArrayList)cell.getValue()).get(0).toString());
+    				else
+    					((HasField)colWidget).setFieldValue("");
+    			}else
     				((HasField)colWidget).setFieldValue(cell.getValue());
     		}
     		if(val == null){
@@ -227,9 +230,9 @@ public class TableColumn {
     				else
     					((Label)widget).setText(((TextBoxBase)colWidget).getText());
     			}else{
-    				if(cell.getValue() instanceof ArrayList){
+    				if(cell.getValue() instanceof ArrayList && ((ArrayList)cell.getValue()).size() > 0)
     					((Label)widget).setText(((ArrayList)cell.getValue()).get(0).toString());
-    				}else if(((HasField)colWidget).getFieldValue() != null)
+    				else if(((HasField)colWidget).getFieldValue() != null)
     					((Label)widget).setText(((HasField)colWidget).getField().format());
     				else
     					((Label)widget).setText("");
