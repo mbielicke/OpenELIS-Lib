@@ -142,7 +142,10 @@ public class TableColumn {
     		}else if(colWidget instanceof CalendarLookUp && ((CalendarLookUp)colWidget).getField().queryMode){
     		    val = ((HasField)colWidget).getField().queryString;
     		}else {
-    			((HasField)colWidget).setFieldValue(cell.getValue());
+    			if(cell.getValue() instanceof ArrayList)
+    				((HasField)colWidget).setFieldValue(((ArrayList)cell.getValue()).get(0).toString());
+    			else
+    				((HasField)colWidget).setFieldValue(cell.getValue());
     		}
     		if(val == null){
     			if(((HasField)colWidget).getField().queryMode)
@@ -224,7 +227,9 @@ public class TableColumn {
     				else
     					((Label)widget).setText(((TextBoxBase)colWidget).getText());
     			}else{
-    				if(((HasField)colWidget).getFieldValue() != null)
+    				if(cell.getValue() instanceof ArrayList){
+    					((Label)widget).setText(((ArrayList)cell.getValue()).get(0).toString());
+    				}else if(((HasField)colWidget).getFieldValue() != null)
     					((Label)widget).setText(((HasField)colWidget).getField().format());
     				else
     					((Label)widget).setText("");
