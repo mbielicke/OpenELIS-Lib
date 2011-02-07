@@ -230,9 +230,12 @@ public class TableColumn {
     				else
     					((Label)widget).setText(((TextBoxBase)colWidget).getText());
     			}else{
-    				if(cell.getValue() instanceof ArrayList && ((ArrayList)cell.getValue()).size() > 0)
-    					((Label)widget).setText(((ArrayList)cell.getValue()).get(0).toString());
-    				else if(((HasField)colWidget).getFieldValue() != null)
+    				if(cell.getValue() instanceof ArrayList) {
+    					if(((ArrayList)cell.getValue()).size() > 0)
+    						((Label)widget).setText(((ArrayList)cell.getValue()).get(0).toString());
+    					else
+    						((Label)widget).setText("");
+    				}else if(((HasField)colWidget).getFieldValue() != null)
     					((Label)widget).setText(((HasField)colWidget).getField().format());
     				else
     					((Label)widget).setText("");
