@@ -744,8 +744,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             searchKey.put(model.get(i).key,i);
         }
         
-        if(isAttached())
-        	renderer.dataChanged(false);        
+        //if(isAttached())
+        renderer.dataChanged(false);        
     }
 	
 	public void navSelect(int index) {
