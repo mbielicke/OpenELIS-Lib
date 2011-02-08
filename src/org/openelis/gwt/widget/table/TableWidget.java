@@ -675,6 +675,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	if(obj instanceof ArrayList) {
     		if(((ArrayList)obj).size() == 1)
     			return ((ArrayList)obj).get(0);
+    		else if(((ArrayList)obj).size() == 0)
+    			return null;
     	}
     	return obj;
     
