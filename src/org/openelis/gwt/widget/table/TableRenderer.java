@@ -272,8 +272,8 @@ public class TableRenderer  {
         			}
         			
         			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
-        		}//else
-        			//controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        		}else if(changed)
+        			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
         	}
         	//}
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
