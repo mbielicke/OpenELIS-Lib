@@ -29,8 +29,11 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.event.BeforeGetMatchesEvent;
+import org.openelis.gwt.event.BeforeGetMatchesHandler;
 import org.openelis.gwt.event.GetMatchesEvent;
 import org.openelis.gwt.event.GetMatchesHandler;
+import org.openelis.gwt.event.HasBeforeGetMatchesHandlers;
 import org.openelis.gwt.event.HasGetMatchesHandlers;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
@@ -68,7 +71,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * 
  * @param <T>
  */
-public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMatchesHandlers {
+public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMatchesHandlers,HasBeforeGetMatchesHandlers {
     /**
      * Used for AutoComplete display
      */
@@ -170,6 +173,12 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          */
         button.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
+            	BeforeGetMatchesEvent bgme;
+            	
+            	bgme = BeforeGetMatchesEvent.fire(source, getText());
+            	if(bgme != null && bgme.isCancelled())
+            		return;
+            	
                 GetMatchesEvent.fire(source, getText());
                 /*
                  * Call showPopup because the textbox will have lost focus so
@@ -188,10 +197,15 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         
         timer = new Timer() {
             public void run() {
+            	BeforeGetMatchesEvent bgme;
                 int cursorPos;
                 String text;
                 
                 text = getText();
+                
+            	bgme = BeforeGetMatchesEvent.fire(source, getText());
+            	if(bgme != null && bgme.isCancelled())
+            		return;
                 
                 GetMatchesEvent.fire(source, text);
 
@@ -540,6 +554,15 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         if (textbox.getStyleName().indexOf("Focus") > -1)
             showPopup();
     }
+    
+	/**
+	 * This method will register the passed BeforeGetMatchesHandler to this widget.
+	 * @param handler
+	 * @return
+	 */
+    public HandlerRegistration addBeforeGetMatchesHandler(BeforeGetMatchesHandler handler) {
+		return addHandler(handler,BeforeGetMatchesEvent.getType());
+	}
 
     /**
      * This method will register the passed GetMatchesHandler to this widget.
@@ -677,5 +700,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
             return row.getCells().get(0).toString();
         }
     }
+
+
 
 }

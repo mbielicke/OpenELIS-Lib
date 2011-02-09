@@ -54,27 +54,26 @@ public class EJBFactory {
      * 
      * @see ScreenControllerServlet for how the busy pool is cleared. 
      */
-    @SuppressWarnings("unchecked")
-	public static Object lookup(String bean) {
+    public static Object lookup(String bean) {
         boolean isBusy;
         Object object;
         InitialContext c;
         Properties p = null;
         HashMap<String, Object> availPool, busyPool; 
 
-        availPool = (HashMap) SessionManager.getSession().getAttribute("availableBeanPool");
-        busyPool = (HashMap) SessionManager.getSession().getAttribute("busyBeanPool");
+//        availPool = (HashMap) SessionManager.getSession().getAttribute("availableBeanPool");
+//        busyPool = (HashMap) SessionManager.getSession().getAttribute("busyBeanPool");
         
-        if (availPool == null || busyPool == null) {
-            availPool = new HashMap<String, Object>();
-            busyPool = new HashMap<String, Object>();
-            SessionManager.getSession().setAttribute("availableBeanPool", availPool);
-            SessionManager.getSession().setAttribute("busyBeanPool", busyPool);
-        }
+//        if (availPool == null || busyPool == null) {
+//            availPool = new HashMap<String, Object>();
+//            busyPool = new HashMap<String, Object>();
+//            SessionManager.getSession().setAttribute("availableBeanPool", availPool);
+//            SessionManager.getSession().setAttribute("busyBeanPool", busyPool);
+//        }
 
-        object = (Object) availPool.get(bean);
-        isBusy = busyPool.containsKey(bean);
-        if (object == null || isBusy) {
+//        object = (Object) availPool.get(bean);
+//        isBusy = busyPool.containsKey(bean);
+//        if (object == null || isBusy) {
             try {
                 p = (Properties)SessionManager.getSession().getAttribute("jndiProps");
                 if (p == null) {
@@ -83,22 +82,18 @@ public class EJBFactory {
                 }
 
                 c = new InitialContext(p);
-                if (c == null) {
-                    log.error("Failed to get the initial context for thread id "+ Thread.currentThread());
-                    return null;
-                }
-
                 object = c.lookup(bean);
             } catch (Exception e) {
                 log.error("Failed to lookup "+ bean +" for thread id "+ Thread.currentThread()+": " +
                           e.getMessage());
                 e.printStackTrace();
+                object = null;
             }
-            if (! isBusy) {
-                availPool.put(bean, object);
-                busyPool.put(bean, object);
-            }
-        }
+//            if (! isBusy) {
+//                availPool.put(bean, object);
+//                busyPool.put(bean, object);
+//            }
+//        }
 
         return object;
     }

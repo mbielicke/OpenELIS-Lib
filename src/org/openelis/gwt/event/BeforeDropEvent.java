@@ -43,7 +43,7 @@ public class BeforeDropEvent<I> extends GwtEvent<BeforeDropHandler<I>> {
 	public static <I> BeforeDropEvent<I> fire(HasBeforeDropHandlers<I> source, I dragObject, Object dropTarget) {
 		if(TYPE != null) {
 			BeforeDropEvent<I> event = new BeforeDropEvent<I>(dragObject, dropTarget);
-			source.fireEvent(event);
+			//source.fireEvent(event);
 			return event;
 		}
 		return null;
