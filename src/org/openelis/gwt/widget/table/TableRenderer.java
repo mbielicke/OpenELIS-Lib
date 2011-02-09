@@ -264,17 +264,17 @@ public class TableRenderer  {
 				exceps = controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions;
 			else
 				exceps =  new ArrayList<LocalizedException>(); 
-        		if(wid instanceof HasField){
-        			if(((HasField)wid).getExceptions() != null){
-        				for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
-        					if(!exceps.contains(exc))
-        						exceps.add((LocalizedException)exc.clone());
-        				}
-        				
-        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
-        			}else
-        				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
-        		}
+        	if(wid instanceof HasField){
+        		if(((HasField)wid).getExceptions() != null){
+        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
+        				if(!exceps.contains(exc))
+        					exceps.add((LocalizedException)exc.clone());
+        			}
+        			
+        			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
+        		}//else
+        			//controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
+        	}
         	//}
         	setCellDisplay(controller.selectedRow,controller.selectedCol);
         	controller.activeWidget = null;
