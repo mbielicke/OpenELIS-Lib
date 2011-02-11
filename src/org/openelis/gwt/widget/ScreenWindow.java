@@ -203,8 +203,10 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
     private HorizontalPanel titleButtonsContainer;
-    public enum Mode {SCREEN,DIALOG,LOOK_UP};
+    public enum Mode {SCREEN,DIALOG,LOOK_UP,WEB};
+    private Mode mode;
     private ProgressBar progressBar = new ProgressBar();
+    private DecoratorPanel dp;
     
     
     public ScreenWindow(Mode mode) {
@@ -217,8 +219,26 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     	init(Mode.SCREEN);
     }
     
-    public void init(Mode mode) {      
-        setWidget(outer);
+    public void init(Mode mode) {   
+    	this.mode = mode;
+    	
+    	if(mode == Mode.WEB) {
+    		dp = new DecoratorPanel();
+    		dp.setStyleName("ConfirmWindow");
+    		status.setStyleName("StatusBar");
+    		status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+    		status.add(statusImg);
+    		status.add(message);
+    		status.setWidth("100%");
+    		status.setCellWidth(message, "100%");
+    		message.setStyleName("ScreenWindowLabel");
+    		dp.add(status);
+    		setWidget(dp);
+    		setVisible(false);
+    		return;
+    	}
+        
+    	setWidget(outer);
         setVisible(false);
         
         if(browser != null)
@@ -419,30 +439,32 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
         
     }
     
-    public void close() { 
+    public void close() {
+    	if(mode == Mode.WEB)
+    		return;
     	if(getHandlerCount(BeforeCloseEvent.getType()) > 0) {
     		BeforeCloseEvent<ScreenWindow> event = BeforeCloseEvent.fire(this, this);
     		if(event != null && event.isCancelled())
     			return;
     	}
         if(modalGlass != null) {
-            removeFromParent();
-            RootPanel.get().remove(modalGlass);
-            RootPanel.get().remove(modalPanel);
-            return;
-        }
-        removeFromParent();
-        if(browser != null){
+           removeFromParent();
+           RootPanel.get().remove(modalGlass);
+           RootPanel.get().remove(modalPanel);
+        }else {
+        	removeFromParent();
+        	if(browser != null){
             browser.browser.remove(this);
             browser.windows.remove(key);
-        }
-        if(popupPanel != null){
-            popupPanel.hide();
-        }
-        destroy();
-        if(browser != null){
-            browser.index--;
-            browser.setFocusedWindow();
+        	}
+        	if(popupPanel != null){
+        		popupPanel.hide();
+        	}
+        	destroy();
+        	if(browser != null){
+        		browser.index--;
+        		browser.setFocusedWindow();
+        	}
         }
         CloseEvent.fire(this, this);
     }
@@ -514,30 +536,48 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     
     public void setBusy() {
         setStatus("","spinnerIcon");
-        lockWindow();
+        if(mode == Mode.WEB)
+        	showWebWindow();
+        else
+        	lockWindow();
+        
 
     }
     
     public void setBusy(String message) {
         setStatus(message,"spinnerIcon");
-        lockWindow();
+        if(mode == Mode.WEB)
+        	showWebWindow();
+        else
+        	lockWindow();
     }
     
     public void clearStatus() {
         setStatus("","");
-        unlockWindow();
+        if(mode == Mode.WEB)
+        	hideWebWindow();
+        else
+        	unlockWindow();
         
     }
     
     public void setDone(String message) {
         setStatus(message,"");
-        unlockWindow();
+        if(mode == Mode.WEB)
+        	hideWebWindow();
+        else
+        	unlockWindow();
     }
     
     public void setError(String message) {
-        clearMessagePopup(message);
-        setStatus(message,"ErrorPanel");
-        unlockWindow();
+    	if(mode == Mode.WEB) {
+    		setStatus(message,"ErrorPanel");
+    		showWebWindow();
+    	}else {
+    		clearMessagePopup(message);
+        	setStatus(message,"ErrorPanel");
+        	unlockWindow();
+    	}
     }
 
     public boolean onEventPreview(Event event) {
@@ -643,6 +683,34 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 			progressBar.setProgress(percent);
 		}else
 			progressBar.setVisible(false);
+	}
+	
+	private void showWebWindow(){
+		hideWebWindow();
+        modalGlass = new AbsolutePanel();
+        modalGlass.setStyleName("GlassPanel");
+        modalGlass.setHeight(Window.getClientHeight()+"px");
+        modalGlass.setWidth(Window.getClientWidth()+"px");
+        
+        RootPanel.get().add(modalGlass);
+        RootPanel.get().setWidgetPosition(modalGlass, 0, 0);
+        modalPanel = new AbsolutePanel();
+        modalPanel.setStyleName("ModalPanel");
+        modalPanel.setHeight(Window.getClientHeight()+"px");
+        modalPanel.setWidth(Window.getClientWidth()+"px");
+        modalPanel.add(this,Window.getClientWidth()/2 -100, 100);
+        RootPanel.get().add(modalPanel); 
+        RootPanel.get().setWidgetPosition(modalPanel,0,0);
+        setVisible(true);
+	}
+	
+	private void hideWebWindow() {
+		if(modalGlass != null && modalGlass.isAttached()) {
+			removeFromParent();
+			RootPanel.get().remove(modalGlass);
+			RootPanel.get().remove(modalPanel);
+		}
+        return;
 	}
 	
 
