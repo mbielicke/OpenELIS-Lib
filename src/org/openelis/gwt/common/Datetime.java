@@ -216,7 +216,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
 		if (endCode >= SECOND)
 			b.append(":").append(d2(timestamp.getSeconds()));
 
-		return timestamp.toString();
+		return b.toString();
 	}
 
 	public int compareTo(Datetime o) {
