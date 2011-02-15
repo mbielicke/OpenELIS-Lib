@@ -152,6 +152,13 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     	setFocusedWindow();
     }
     
+    public void addWindow(ScreenWindow window, String key, int x, int y) {
+    	index++;
+    	browser.add(window,x,y);
+    	windows.put(key, window);
+    	setFocusedWindow();
+    }
+    
     public boolean selectScreen(String text) {
     	if (windows.containsKey(text)) {
     		ScreenWindow wid = windows.get(text);
