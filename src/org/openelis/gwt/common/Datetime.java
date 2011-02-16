@@ -206,15 +206,21 @@ public class Datetime implements RPC, Comparable<Datetime> {
 		StringBuffer b;
 		
 		b = new StringBuffer();
-		b.append(year+1900).append("-")
-		 .append(d2(month+1)).append("-")
-		 .append(d2(date));
-		if (endCode >= HOUR)
-			b.append(" ").append(d2(timestamp.getHours()));
-		if (endCode >= MINUTE)
-			b.append(":").append(d2(timestamp.getMinutes()));
-		if (endCode >= SECOND)
-			b.append(":").append(d2(timestamp.getSeconds()));
+		if (endCode < HOUR) {
+    		b.append(year+1900).append("-")
+    		 .append(d2(month+1)).append("-")
+    		 .append(d2(date));
+		} else {
+            b.append(timestamp.getYear()+1900)
+              .append("-").append(d2(timestamp.getMonth()+1))
+              .append("-").append(d2(timestamp.getDate()));
+    		if (endCode >= HOUR)
+    			b.append(" ").append(d2(timestamp.getHours()));
+    		if (endCode >= MINUTE)
+    			b.append(":").append(d2(timestamp.getMinutes()));
+    		if (endCode >= SECOND)
+    			b.append(":").append(d2(timestamp.getSeconds()));
+		}
 
 		return b.toString();
 	}
