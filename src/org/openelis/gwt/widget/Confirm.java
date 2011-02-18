@@ -46,9 +46,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     int active = -1;
     HorizontalPanel bp;
     HandlerRegistration keyHandler;
-    public enum Type {WARN,ERROR,QUESTION};
-    private int width = 400;
-    private int height = -1;
+    public enum Type {WARN,ERROR,QUESTION,BUSY};
+    private int width = 400,height = -1,top = -1, left = -1;
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
     Caption cap = new Caption();
@@ -89,18 +88,31 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	cap.setStyleName("ConfirmCaption");
     	AbsolutePanel ap = new AbsolutePanel();
     	HorizontalPanel hp = new HorizontalPanel();
-    	if(type == Type.WARN){
-    		ap.setStyleName("largeWarnIcon");
-    		if(caption == null || caption.equals(""))
-    			cap.name = "Warning";
-    	}else if(type == Type.ERROR){
-    		ap.setStyleName("largeErrorIcon");
-    		if(caption == null || caption.equals(""))
-    			cap.name = "Error";
-    	}else if(type == Type.QUESTION){
-    		ap.setStyleName("largeQuestionIcon");
-    		if(caption == null || caption.equals(""))
-    			cap.name = "Question";
+    	switch(type) {
+    		case WARN : {
+    			ap.setStyleName("largeWarnIcon");
+    			if(caption == null || caption.equals(""))
+    				cap.name = "Warning";
+    			break;
+    		}
+    		case ERROR : {
+        		ap.setStyleName("largeErrorIcon");
+        		if(caption == null || caption.equals(""))
+        			cap.name = "Error";
+        		break;
+        	}
+    		case QUESTION : {
+        		ap.setStyleName("largeQuestionIcon");
+        		if(caption == null || caption.equals(""))
+        			cap.name = "Question";
+        		break;
+        	}
+    		case BUSY : {
+    			ap.setStyleName("spinnerIcon");
+    			if(caption == null || caption.equals(""))
+    				cap.name = "Busy";
+    			break;
+    		}
     	}
    	    
         Label winLabel = new Label();
@@ -117,16 +129,18 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	lb.setStyleName("Form ScreenLabel");
     	hp.add(lb);
     	vp.add(hp);
-    	createButtons(buttons);
-    	vp.add(bp);
-    	vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
+    	if(buttons != null){
+    		createButtons(buttons);
+    		vp.add(bp);
+    		vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
+    	}
     	dp.add(vp);
     	dp.setStyleName("ConfirmWindow");
     	dp.setVisible(false);
     	setWidget(dp);
     }
     
-    private void hide() {
+    public void hide() {
     	dragController.unregisterDropController(dropController);
     	dragController.makeNotDraggable(this);
     	dragController = null;
@@ -136,6 +150,12 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	modalGlass.removeFromParent();
     	keyHandler.removeHandler();
     	dp.setVisible(false);
+    }
+    
+    public void show(int left, int top) {
+    	this.left = left;
+    	this.top = top;
+    	show();
     }
     
     public void show() {
@@ -152,7 +172,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         modalPanel.setStyleName("ModalPanel");
         modalPanel.setHeight(Window.getClientHeight()+"px");
         modalPanel.setWidth(Window.getClientWidth()+"px");
-        modalPanel.add(this,Window.getClientWidth()/2 - 400/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+        modalPanel.add(this, left > -1 ? left : Window.getClientWidth()/2 - 400/2,
+        		             top > -1 ? top : Window.getClientHeight()/2 - this.getOffsetHeight()/2);
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
 
@@ -180,7 +201,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	dp.setVisible(true);
     	if(bp.getOffsetWidth() > width)
     		setWidth((bp.getOffsetWidth()+50)+"px");
-    	modalPanel.setWidgetPosition(this, Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+    	modalPanel.setWidgetPosition(this, left > -1 ? left : Window.getClientWidth()/2 - this.getOffsetWidth()/2,
+    									   top > -1 ? top :  Window.getClientHeight()/2 - this.getOffsetHeight()/2);
     	
     }
     

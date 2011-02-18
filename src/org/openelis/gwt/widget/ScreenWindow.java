@@ -66,7 +66,6 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -77,7 +76,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -87,7 +85,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow>, ResizeHandler {
+public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow>, ResizeHandler {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -203,7 +201,7 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
     private HorizontalPanel titleButtonsContainer;
-    public enum Mode {SCREEN,DIALOG,LOOK_UP,WEB};
+    public enum Mode {SCREEN,DIALOG,LOOK_UP};
     private Mode mode;
     private ProgressBar progressBar = new ProgressBar();
     private DecoratorPanel dp;
@@ -221,22 +219,6 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     
     public void init(Mode mode) {   
     	this.mode = mode;
-    	
-    	if(mode == Mode.WEB) {
-    		dp = new DecoratorPanel();
-    		dp.setStyleName("ConfirmWindow");
-    		status.setStyleName("StatusBar");
-    		status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-    		status.add(statusImg);
-    		status.add(message);
-    		status.setWidth("100%");
-    		status.setCellWidth(message, "100%");
-    		message.setStyleName("ScreenWindowLabel");
-    		dp.add(status);
-    		setWidget(dp);
-    		setVisible(false);
-    		return;
-    	}
         
     	setWidget(outer);
         setVisible(false);
@@ -440,8 +422,6 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     }
     
     public void close() {
-    	if(mode == Mode.WEB)
-    		return;
     	if(getHandlerCount(BeforeCloseEvent.getType()) > 0) {
     		BeforeCloseEvent<ScreenWindow> event = BeforeCloseEvent.fire(this, this);
     		if(event != null && event.isCancelled())
@@ -536,48 +516,31 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
     
     public void setBusy() {
         setStatus("","spinnerIcon");
-        if(mode == Mode.WEB)
-        	showWebWindow();
-        else
-        	lockWindow();
+        lockWindow();
         
 
     }
     
     public void setBusy(String message) {
         setStatus(message,"spinnerIcon");
-        if(mode == Mode.WEB)
-        	showWebWindow();
-        else
-        	lockWindow();
+       	lockWindow();
     }
     
     public void clearStatus() {
         setStatus("","");
-        if(mode == Mode.WEB)
-        	hideWebWindow();
-        else
-        	unlockWindow();
+        unlockWindow();
         
     }
     
     public void setDone(String message) {
         setStatus(message,"");
-        if(mode == Mode.WEB)
-        	hideWebWindow();
-        else
-        	unlockWindow();
+        unlockWindow();
     }
     
     public void setError(String message) {
-    	if(mode == Mode.WEB) {
-    		setStatus(message,"ErrorPanel");
-    		showWebWindow();
-    	}else {
-    		clearMessagePopup(message);
-        	setStatus(message,"ErrorPanel");
-        	unlockWindow();
-    	}
+   		clearMessagePopup(message);
+       	setStatus(message,"ErrorPanel");
+       	unlockWindow();
     }
 
     public boolean onEventPreview(Event event) {
@@ -683,34 +646,6 @@ public class ScreenWindow extends FocusPanel implements ClickHandler, MouseOverH
 			progressBar.setProgress(percent);
 		}else
 			progressBar.setVisible(false);
-	}
-	
-	private void showWebWindow(){
-		hideWebWindow();
-        modalGlass = new AbsolutePanel();
-        modalGlass.setStyleName("GlassPanel");
-        modalGlass.setHeight(Window.getClientHeight()+"px");
-        modalGlass.setWidth(Window.getClientWidth()+"px");
-        
-        RootPanel.get().add(modalGlass);
-        RootPanel.get().setWidgetPosition(modalGlass, 0, 0);
-        modalPanel = new AbsolutePanel();
-        modalPanel.setStyleName("ModalPanel");
-        modalPanel.setHeight(Window.getClientHeight()+"px");
-        modalPanel.setWidth(Window.getClientWidth()+"px");
-        modalPanel.add(this,Window.getClientWidth()/2 -100, 100);
-        RootPanel.get().add(modalPanel); 
-        RootPanel.get().setWidgetPosition(modalPanel,0,0);
-        setVisible(true);
-	}
-	
-	private void hideWebWindow() {
-		if(modalGlass != null && modalGlass.isAttached()) {
-			removeFromParent();
-			RootPanel.get().remove(modalGlass);
-			RootPanel.get().remove(modalPanel);
-		}
-        return;
 	}
 	
 
