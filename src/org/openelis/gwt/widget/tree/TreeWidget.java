@@ -1173,6 +1173,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param row
      */
     public void toggle(int row) {
+    	finishEditing();
        	if(selectedRow != row) {
        		if(!multiSelect || (multiSelect && !shiftKey && !ctrlKey)) {
        			while(selections.size() > 0) {
@@ -1192,11 +1193,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
        				return;
        		}else if(!isEnabled())
        			return;
+           	selections.add(row);
+     		rows.get(row).selected = true;
+     		renderer.rowSelected(row);
+         	selectedRow = row;
        	}
- 		selections.add(row);
- 		rows.get(row).selected = true;
- 		renderer.rowSelected(row);
-     	selectedRow = row;
+       	
    		if(fireEvents)
    			SelectionEvent.fire(this, rows.get(row));
 
