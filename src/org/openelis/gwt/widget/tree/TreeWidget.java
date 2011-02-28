@@ -884,7 +884,14 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @return
      */
     public Object getObject(int row, int col) {
-        return rows.get(row).cells.get(col).getValue();
+    	Object obj = rows.get(row).cells.get(col).getValue();
+    	if(obj instanceof ArrayList) {
+    		if(((ArrayList)obj).size() == 1)
+    			return ((ArrayList)obj).get(0);
+    		else if(((ArrayList)obj).size() == 0)
+    			return null;
+    	}
+        return obj;
     }
 
 

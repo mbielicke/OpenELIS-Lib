@@ -257,7 +257,7 @@ public class TreeRenderer {
         				}
         				
         				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;
-        			}else
+        			}else if(changed)
         				controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = null;
         		}
         	//}
