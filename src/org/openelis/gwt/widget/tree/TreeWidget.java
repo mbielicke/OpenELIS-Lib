@@ -969,6 +969,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * Loads a new model of TopLevel tree nodes into the tree completly replacing any existing model
      */
     public void load(ArrayList<TreeDataItem> data) {
+    	finishEditing();
         this.data = data;
         shownRows = 0;
         getReachableRows();
