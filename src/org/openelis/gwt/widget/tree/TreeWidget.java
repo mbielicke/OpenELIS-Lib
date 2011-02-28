@@ -45,12 +45,15 @@ import org.openelis.gwt.event.NavigationSelectionEvent;
 import org.openelis.gwt.event.NavigationSelectionHandler;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
+import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.NavigationWidget;
 import org.openelis.gwt.widget.table.ColumnComparator;
+import org.openelis.gwt.widget.table.TableColumn;
 import org.openelis.gwt.widget.table.TableDataCell;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
@@ -1572,8 +1575,22 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	 * Stub method inherited from HasField interface
 	 */
 	public void getQuery(ArrayList list, String key) {
-		// TODO Auto-generated method stub
+		ArrayList<TreeColumn> cols;
 		
+		if(queryMode){
+			cols = columns.get(rows.get(0).leafType);
+			for(TreeColumn col : cols) {
+				if(rows != null && rows.size() > 0 && rows.get(0).cells.get(cols.indexOf(col)).value != null){
+					if(col.colWidget instanceof Dropdown) {
+						((Dropdown)col.colWidget).setSelectionKeys((ArrayList<Object>)rows.get(0).cells.get(cols.indexOf(col)).value);
+					}else if(!(col.colWidget instanceof CalendarLookUp)){
+						((HasField)col.getColumnWidget()).setFieldValue(rows.get(0).cells.get(cols.indexOf(col)).value);
+					}
+					((HasField)col.getColumnWidget()).getQuery(list, col.key);
+					
+				}
+			}
+		}
 	}
 
 	/**
@@ -1595,8 +1612,17 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	 * Stub method inherited from HasField interface
 	 */
 	public void setQueryMode(boolean query) {
-		// TODO Auto-generated method stub
-		
+		if(query == queryMode)
+			return;
+		if(query)
+			fireEvents = false;
+		else
+			fireEvents = true;
+		queryMode = query;
+		for(ArrayList<TreeColumn> cols : columns.values())
+		for(TreeColumn col : cols) {
+			((HasField)col.getColumnWidget()).setQueryMode(query);
+		}
 	}
 
     public void onMouseOver(MouseOverEvent event) {
