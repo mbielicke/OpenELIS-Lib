@@ -366,7 +366,7 @@ public class TreeHeaderBar extends Composite implements MouseMoveHandler,
             	for(int i = 0; i <  headers.size(); i++) {
             		scrollWidth += columns.get(i).getCurrentWidth();
             		HorizontalPanel header = headers.get(i);
-            		header.setWidth((columns.get(i).currentWidth)+"px");
+            		header.setWidth((columns.get(i).currentWidth+2)+"px");
             		int pad = 5;
                     if(columns.get(i).sortable)
                     	pad = 5;
