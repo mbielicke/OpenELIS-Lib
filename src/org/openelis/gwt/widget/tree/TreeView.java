@@ -226,12 +226,20 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
 
     public void setWidth(String width) {
         this.width = width.trim();
-        cellView.setWidth(width);
-        titlePanel.setWidth(width);
+        if(!width.equals("auto"))
+        	cellView.setWidth(width);
+        else{
+
+        }
         headerView.setWidth(width);
-        rows.setWidth("25px");
-        titleLabel.setWidth(width);
         titlePanel.setWidth(width);
+        titleLabel.setWidth(width);
+        vp.setCellWidth(titlePanel, width);
+        rows.setWidth("25px");
+        if(controller.title != null && !controller.title.equals("")){
+        	titleLabel.setWidth(width);
+        	titlePanel.setWidth(width);
+        }
     }
 
     public void setCell(Widget widget, int row, int col) {
