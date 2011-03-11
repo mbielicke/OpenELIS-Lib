@@ -1575,6 +1575,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	 * Stub method inherited from HasField interface
 	 */
 	public void getQuery(ArrayList list, String key) {
+		/*
 		ArrayList<TreeColumn> cols;
 		
 		if(queryMode){
@@ -1591,6 +1592,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 				}
 			}
 		}
+		*/
 	}
 
 	/**
@@ -1619,10 +1621,12 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 		else
 			fireEvents = true;
 		queryMode = query;
+		/*
 		for(ArrayList<TreeColumn> cols : columns.values())
 		for(TreeColumn col : cols) {
 			((HasField)col.getColumnWidget()).setQueryMode(query);
 		}
+		*/
 	}
 
     public void onMouseOver(MouseOverEvent event) {
