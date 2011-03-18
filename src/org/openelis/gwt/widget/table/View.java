@@ -110,7 +110,7 @@ public class View extends Composite {
     protected int             rowHeight, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1;
 
     /**
-     * Timer used to determine if over cell should try and diplay errors
+     * Timer used to determine if over cell should try and display errors
      */
     protected Timer           timer;
     
@@ -200,8 +200,9 @@ public class View extends Composite {
 
                 lastRow = mr;
                 lastCol = c;
-
-                timer.schedule(250);
+                
+                if(lastRow < table.getRowCount())
+                	timer.schedule(250);
             }
         });
 
@@ -614,7 +615,7 @@ public class View extends Composite {
         if (vertScrollBar == null)
             return;
 
-        vertScrollBar.adjustScrollMax(table.getRowCount() * rowHeight);
+        vertScrollBar.adjustScrollMax(table.getRowCount() * rowHeight + 1);
     }
 
     /**
@@ -657,7 +658,7 @@ public class View extends Composite {
             return false;
 
         if (r >= firstVisibleRow)     
-            r -= table.getVisibleRows() + 1;
+            r = table.getVisibleRows() + 1 - r;
 
         vertScrollBar.setScrollPosition(r * rowHeight);
 

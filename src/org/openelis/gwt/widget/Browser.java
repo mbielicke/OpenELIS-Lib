@@ -196,7 +196,7 @@ public class Browser extends Composite {
     }
     
     /**
-     * Adds a ScreenWindow directly to the browser indexing it by the passed key
+     * Adds a Window directly to the browser indexing it by the passed key
      * @param window
      * @param key
      */
@@ -210,8 +210,8 @@ public class Browser extends Composite {
     	wv.zIndex = index;
     	windows.put(window,wv);
     	windowsByKey.put(key,window);
-    	window.addCloseHandler(new CloseHandler<Window>() {
-    	    public void onClose(CloseEvent<Window> event) {
+    	window.addCloseHandler(new CloseHandler<WindowInt>() {
+    	    public void onClose(CloseEvent<WindowInt> event) {
     	       windowsByKey.remove(windows.remove(event.getSource()).key);
     	       setFocusedWindow();
     	    }

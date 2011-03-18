@@ -21,7 +21,6 @@ import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.SyncCallback;
@@ -119,22 +118,22 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
     /**
      * Asynchronous call to the method passed expecting an Integer parameter
      */
-    public Request call(String method, Integer param, AsyncCallback<? extends RPC> callback) {
-        return service.call(method, param, callback);
+    public void call(String method, Integer param, AsyncCallback<? extends RPC> callback) {
+        service.call(method, param, callback);
     }
 
     /**
      * Asynchronous call to the method passed expecting a parameter the implements RPC
      */
-    public Request call(String method, RPC param, AsyncCallback<? extends RPC> callback) {
-        return service.call(method, param, callback);
+    public void call(String method, RPC param, AsyncCallback<? extends RPC> callback) {
+        service.call(method, param, callback);
     }
 
     /**
      * Asynchronous call to the method passed expecting a String parameter
      */
-    public Request call(String method, String param, AsyncCallback<? extends RPC> callback) {
-        return service.call(method, param, callback);
+    public void call(String method, String param, AsyncCallback<? extends RPC> callback) {
+        service.call(method, param, callback);
     }
 
     /**
@@ -212,57 +211,57 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	/**
 	 * Asynchronous call to the method passed that expects a Double parameter
 	 */
-	public Request call(String method, Double param, AsyncCallback<? extends RPC> callback) {
-		return service.call(method,param,callback);
+	public void call(String method, Double param, AsyncCallback<? extends RPC> callback) {
+		service.call(method,param,callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that expects a Datetime parameter
 	 */
-	public Request call(String method, Datetime param, AsyncCallback<? extends RPC> callback) {
-		return service.call(method, param, callback);
+	public void call(String method, Datetime param, AsyncCallback<? extends RPC> callback) {
+		service.call(method, param, callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that returns a Boolean value
 	 */
-	public Request callBoolean(String method, AsyncCallback<Boolean> callback) {
-		return service.callBoolean(method, callback);
+	public void callBoolean(String method, AsyncCallback<Boolean> callback) {
+		service.callBoolean(method, callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that returns a Datetime value
 	 */
-	public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback) {
-		return service.callDatetime(method, begin, end, callback);
+	public void callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback) {
+		service.callDatetime(method, begin, end, callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that returns a Double value
 	 */
-	public Request callDouble(String method, AsyncCallback<Double> callback) {
-		return service.callDouble(method, callback);
+	public void callDouble(String method, AsyncCallback<Double> callback) {
+		service.callDouble(method, callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that returns an Integer value
 	 */
-	public Request callInteger(String method, AsyncCallback<Integer> callback) {
-		return service.callInteger(method, callback);
+	public void callInteger(String method, AsyncCallback<Integer> callback) {
+		service.callInteger(method, callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that returns a String value
 	 */
-	public Request callString(String method, AsyncCallback<String> callback) {
-		return service.callString(method, callback);
+	public void callString(String method, AsyncCallback<String> callback) {
+		service.callString(method, callback);
 	}
 	
 	/**
 	 * Asynchronous call to the method passed that expects a String parameter and returns a String value
 	 */
-	public Request callString(String method, String param, AsyncCallback<String> callback) {
-		return service.callString(method, param, callback);
+	public void callString(String method, String param, AsyncCallback<String> callback) {
+		service.callString(method, param, callback);
 	}
 
 	/**
@@ -286,15 +285,15 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	/**
 	 * Asynchronous call to the method passed that expects no parameter
 	 */
-	public Request call(String method, AsyncCallback<? extends RPC> callback) {
-		return service.call(method,callback);
+	public void call(String method, AsyncCallback<? extends RPC> callback) {
+		service.call(method,callback);
 	}
 
 	/**
 	 * Asynchronous call to the method passed that expects no parameter and returns void
 	 */
-	public Request callVoid(String method, AsyncCallback<? extends RPC> callback) {
-		return service.callVoid(method,callback);
+	public void callVoid(String method, AsyncCallback<? extends RPC> callback) {
+		service.callVoid(method,callback);
 	}
 
 	/**
@@ -310,8 +309,8 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	/**
 	 * Asynchronous call to the method passed that expects a Long parameter 
 	 */
-	public Request call(String method, Long param,AsyncCallback<? extends RPC> callback) {
-		return service.call(method,param, callback);
+	public void call(String method, Long param,AsyncCallback<? extends RPC> callback) {
+		service.call(method,param, callback);
 	}
 
 	/**
@@ -326,15 +325,15 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	/**
 	 * Asynchronous call to the method passed that expects a String parameter and returns a List of RPC
 	 */
-	public <T extends ArrayList<? extends RPC>> Request callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-		return service.callList(method, param, callback);
+	public <T extends ArrayList<? extends RPC>> void callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		service.callList(method, param, callback);
 	}
 	
 	/**
 	 * Asynchronous call to the method passed that expects a parameter that implements RPC and returns a List of RPC
 	 */
-	public <T extends ArrayList<? extends RPC>> Request callList(String method, RPC param,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-		return service.callList(method,param, callback);
+	public <T extends ArrayList<? extends RPC>> void callList(String method, RPC param,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		service.callList(method,param, callback);
 	}
 	
 	/**
@@ -349,8 +348,8 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	/**
 	 * Asynchronous call to the method passed that returns a List of RPC
 	 */
-	public <T extends ArrayList<? extends RPC>> Request callList(String method,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-		return service.callList(method, callback);
+	public <T extends ArrayList<? extends RPC>> void callList(String method,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		service.callList(method, callback);
 	}
 
 	/**
@@ -374,8 +373,8 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
     /**
      * Asynchronous call to the method passed that expects an Integer parameter and returns a List of RPC 
      */
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-        return service.callList(method,param, callback);
+    public <T extends ArrayList<? extends RPC>> void callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+        service.callList(method,param, callback);
     }
 
 }

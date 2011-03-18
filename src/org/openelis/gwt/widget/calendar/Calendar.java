@@ -244,7 +244,7 @@ public class Calendar extends TextBox<Datetime> {
             hp.setWidth(width+"px");
 
         /*
-         * set the Textbox to width - 16 to account for button.
+         * set the Textbox to width - 14 to account for button.
          */
         
         textbox.setWidth((width - 14) + "px");

@@ -1683,7 +1683,7 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("TablePanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String spacing,padding,colSpan,rowSpan,align,valign,style,text;
+    			String spacing,padding,colSpan,rowSpan,align,valign,style,text,height,width;
     			NodeList rows,widgets;
     			Node attrib,widget;
     			String[] styles;
@@ -1731,8 +1731,10 @@ public class UIGenerator extends Generator {
     	                    colSpan = (attrib = widget.getAttributes().getNamedItem("colspan")) != null ? attrib.getNodeValue() : null;
     	                    rowSpan = (attrib = widget.getAttributes().getNamedItem("rowspan")) != null ? attrib.getNodeValue() : null;
     	                    style   = (attrib = widget.getAttributes().getNamedItem("style"))   != null ? attrib.getNodeValue() : null;
-    	                    align   = (attrib = widget.getAttributes().getNamedItem("halign"))   != null ? attrib.getNodeValue() : null;
+    	                    align   = (attrib = widget.getAttributes().getNamedItem("halign"))  != null ? attrib.getNodeValue() : null;
     	                    valign  = (attrib = widget.getAttributes().getNamedItem("valign"))  != null ? attrib.getNodeValue() : null;
+    	                    width   = (attrib = widget.getAttributes().getNamedItem("width"))   != null ? attrib.getNodeValue() : null;
+    	                    height  = (attrib = widget.getAttributes().getNamedItem("height"))  != null ? attrib.getNodeValue() : null;
     	                    
     	                    sw.println("wid"+id+".setWidget("+k+","+w+",wid"+child+");");
     	                    
@@ -1751,6 +1753,12 @@ public class UIGenerator extends Generator {
 
     	                    	if (valign != null) 
   	                    			sw.println("wid"+id+".getFlexCellFormatter().setVerticalAlignment("+k+","+w+",HasAlignment.ALIGN_"+valign.toUpperCase()+");");
+    	                    	
+    	                    	if (width != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setWidth("+k+","+w+",\""+width+"\");");
+    	                    	
+    	                    	if (height != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setHeight("+k+","+w+",\""+height+"\");");
     	                    }
     	                }
     	            }

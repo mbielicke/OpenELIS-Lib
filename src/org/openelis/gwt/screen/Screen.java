@@ -51,6 +51,7 @@ import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.TabPanel;
 import org.openelis.gwt.widget.Window;
+import org.openelis.gwt.widget.WindowInt;
 import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.dom.client.Document;
@@ -94,7 +95,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
     /**
      * Reference to the window this screen is displayed in
      */
-    protected Window                         window;
+    protected WindowInt                      window;
 
     /**
      * Definition of the screen containing the layout and a hash of all widgets
@@ -239,7 +240,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * Sets a reference to the window this screen is contained in
      * @param window
      */
-    public void setWindow(Window window) {
+    public void setWindow(WindowInt window) {
         this.window = window;
     }
 
@@ -247,7 +248,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * Method returns a reference to the Window this screen is in
      * @return
      */
-    public Window getWindow() {
+    public WindowInt getWindow() {
         return window;
     }
 

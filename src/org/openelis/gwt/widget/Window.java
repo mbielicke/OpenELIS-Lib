@@ -81,7 +81,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasBeforeCloseHandlers<Window> {
+public class Window extends FocusPanel implements WindowInt {
     
     protected Caption cap = new Caption();
     protected VerticalPanel messagePanel;
@@ -318,7 +318,7 @@ public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasB
     
     public void close() { 
         if(getHandlerCount(BeforeCloseEvent.getType()) > 0) {
-            BeforeCloseEvent<Window> event = BeforeCloseEvent.fire(this, this);
+            BeforeCloseEvent<WindowInt> event = BeforeCloseEvent.fire(this, this);
             if(event != null && event.isCancelled())
                 return;
         }
@@ -425,11 +425,11 @@ public class Window extends FocusPanel implements HasCloseHandlers<Window>, HasB
         }
     }
 
-    public HandlerRegistration addCloseHandler(CloseHandler<Window> handler) {
+    public HandlerRegistration addCloseHandler(CloseHandler<WindowInt> handler) {
         return addHandler(handler, CloseEvent.getType());
     }
 
-    public HandlerRegistration addBeforeClosedHandler(BeforeCloseHandler<Window> handler) {
+    public HandlerRegistration addBeforeClosedHandler(BeforeCloseHandler<WindowInt> handler) {
         return addHandler(handler, BeforeCloseEvent.getType());
     }
 

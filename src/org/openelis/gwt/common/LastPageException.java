@@ -25,7 +25,9 @@
 */
 package org.openelis.gwt.common;
 
+import javax.ejb.ApplicationException;
 
+@ApplicationException(rollback=true)
 public class LastPageException extends LocalizedException {
 
 	private static final long serialVersionUID = 1L;

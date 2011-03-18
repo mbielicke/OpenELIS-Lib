@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 
-import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 /**
  * ScreenServiceIntAsync is the Asynchronous version of
@@ -39,39 +38,39 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface ScreenServiceIntAsync {
-    public Request callString(String method, AsyncCallback<String> callback);
+    public void callString(String method, AsyncCallback<String> callback);
     
-    public Request callString(String method, String param, AsyncCallback<String> callback);
+    public void callString(String method, String param, AsyncCallback<String> callback);
     
-    public Request callInteger(String method, AsyncCallback<Integer> callback);
+    public void callInteger(String method, AsyncCallback<Integer> callback);
     
-    public Request callBoolean(String method, AsyncCallback<Boolean> callback);
+    public void callBoolean(String method, AsyncCallback<Boolean> callback);
     
-    public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);
+    public void callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);
     
-    public Request callDouble(String method, AsyncCallback<Double> callback);
+    public void callDouble(String method, AsyncCallback<Double> callback);
     
-    public Request call(String method, AsyncCallback<? extends RPC> callback);
+    public void call(String method, AsyncCallback<? extends RPC> callback);
     
-    public Request callVoid(String method, AsyncCallback<? extends RPC> callback);
+    public void callVoid(String method, AsyncCallback<? extends RPC> callback);
     
-    public Request call(String method, Integer param, AsyncCallback<? extends RPC> callback);
+    public void call(String method, Integer param, AsyncCallback<? extends RPC> callback);
     
-    public Request call(String method, RPC param, AsyncCallback<? extends RPC> callback);
+    public void call(String method, RPC param, AsyncCallback<? extends RPC> callback);
     
-    public Request call(String method, Double param, AsyncCallback<? extends RPC> callback);
+    public void call(String method, Double param, AsyncCallback<? extends RPC> callback);
     
-    public Request call(String method, String param, AsyncCallback<? extends RPC> callback);
+    public void call(String method, String param, AsyncCallback<? extends RPC> callback);
     
-    public Request call(String method, Datetime param, AsyncCallback<? extends RPC> callback);
+    public void call(String method, Datetime param, AsyncCallback<? extends RPC> callback);
     
-    public Request call(String method, Long param, AsyncCallback<? extends RPC> callback);
+    public void call(String method, Long param, AsyncCallback<? extends RPC> callback);
     
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, RPC param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    public <T extends ArrayList<? extends RPC>> void callList(String method, RPC param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
     
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    public <T extends ArrayList<? extends RPC>> void callList(String method, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
     
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    public <T extends ArrayList<? extends RPC>> void callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
     
-    public <T extends ArrayList<? extends RPC>> Request callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
+    public <T extends ArrayList<? extends RPC>> void callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback);
 }

@@ -49,10 +49,10 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     DecoratorPanel dp = new DecoratorPanel();
     AbsolutePanel modalGlass;
     AbsolutePanel modalPanel;
-    int active = -1;
+    int active = -1, left = -1, top = -1;
     HorizontalPanel bp;
     HandlerRegistration keyHandler;
-    public enum Type {WARN,ERROR,QUESTION};
+    public enum Type {WARN,ERROR,QUESTION,BUSY};
     private int width = 400;
     private int height = -1;
     private PickupDragController dragController;
@@ -80,7 +80,13 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	    case QUESTION :
     	        ap.setStyleName("largeQuestionIcon");
     	        if(caption == null || caption.equals(""))
-    			cap.name = "Question";
+    	        	cap.name = "Question";
+    	        break;
+    	    case BUSY :
+    	    	ap.setStyleName("spinningIcon");
+    	    	if(caption == null || caption.equals(""))
+    	    		cap.name = "Busy";
+    	    	break;
     	}
    	    
         Label winLabel = new Label();
@@ -97,16 +103,18 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	lb.setStyleName("Form ScreenLabel");
     	hp.add(lb);
     	vp.add(hp);
-    	createButtons(buttons);
-    	vp.add(bp);
-    	vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
+    	if(buttons != null && buttons[0] != null ){
+    		createButtons(buttons);
+    		vp.add(bp);
+    		vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
+    	}
     	dp.add(vp);
     	dp.setStyleName("ConfirmWindow");
     	dp.setVisible(false);
     	setWidget(dp);
     }
     
-    private void hide() {
+    public void hide() {
     	dragController.unregisterDropController(dropController);
     	dragController.makeNotDraggable(this);
     	dragController = null;
@@ -116,6 +124,12 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	modalGlass.removeFromParent();
     	keyHandler.removeHandler();
     	dp.setVisible(false);
+    }
+    
+    public void show(int left, int top) {
+    	this.left = left;
+    	this.top = top;
+    	show();
     }
     
     public void show() {
@@ -132,7 +146,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         modalPanel.setStyleName("ModalPanel");
         modalPanel.setHeight(Window.getClientHeight()+"px");
         modalPanel.setWidth(Window.getClientWidth()+"px");
-        modalPanel.add(this,Window.getClientWidth()/2 - 400/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+        modalPanel.add(this, left > -1 ? left : Window.getClientWidth()/2 - 400/2,
+	             top > -1 ? top : Window.getClientHeight()/2 - this.getOffsetHeight()/2);
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
         keyHandler = Event.addNativePreviewHandler(this);

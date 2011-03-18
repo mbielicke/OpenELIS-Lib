@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
@@ -38,28 +37,27 @@ import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
-import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
+import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
+import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.RowAddedEvent;
 import org.openelis.gwt.widget.table.event.RowAddedHandler;
 import org.openelis.gwt.widget.table.event.RowDeletedEvent;
 import org.openelis.gwt.widget.table.event.RowDeletedHandler;
-import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
-import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
-import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
-import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
@@ -991,14 +989,18 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		if (!fireBeforeRowAddedEvent(index, row))
 			return null;
 
+		/* if a model has not been set need to create an empty model */
+		if(model == null) 
+			setModel(new ArrayList<Row>());
+		
 		/* Add row to model and then to view */
-
 		if (rowIndex != null) {
 			modelIndex = convertViewIndexToModel(index);
 			model.add(modelIndex, row);
 			rowIndex.put(row, new RowIndexes(modelIndex, index));
 			adjustRowIndexes(modelIndex + 1, index, 1);
 		}
+		
 		modelView.add(index, row);
 
 		renderView(index, -1);
