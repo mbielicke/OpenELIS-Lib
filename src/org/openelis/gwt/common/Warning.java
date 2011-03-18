@@ -25,6 +25,5 @@
 */
 package org.openelis.gwt.common;
 
-public interface  Warning extends RPC {
-
+public interface Warning {
 }

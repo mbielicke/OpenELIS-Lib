@@ -8,7 +8,7 @@ public class DatabaseException extends LocalizedException {
     private static final long serialVersionUID = 1L;
 
     public DatabaseException() {
-        super();
+        super("Unknown database ERROR");
     }
 
     public DatabaseException(String msg) {

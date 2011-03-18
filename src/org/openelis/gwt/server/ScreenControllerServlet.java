@@ -17,7 +17,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.ejb.EJBException;
+
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.NotFoundException;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.services.ScreenServiceInt;
 import org.openelis.util.SessionManager;
@@ -34,6 +37,7 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 
     @SuppressWarnings("unchecked")
     private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
+        Throwable t;
         Object serviceInst;
         HashMap<String, Object> busyPool;
 
@@ -41,20 +45,14 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
             serviceInst = Class.forName(service).newInstance();
             return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
         } catch (InvocationTargetException e) {
-            if (e.getCause() != null) {
-                try {
-                    sPolicy.validateSerialize(e.getCause().getClass());
-                    throw (Exception)e.getCause();
-                } catch (SerializationException se) {
-                    throw new Exception(e.getCause().toString());
-                }
-            } else {
-                try {
-                    sPolicy.validateSerialize(e.getTargetException().getClass());
-                    throw (Exception)e.getTargetException();
-                } catch (SerializationException se) {
-                    throw new Exception(e.getTargetException().toString());
-                }
+            t = e;
+            while (t.getCause() != null)
+                t = t.getCause();
+            try {
+                sPolicy.validateSerialize(t.getClass());
+                throw (Exception) t;
+            } catch (SerializationException se) {
+                throw new Exception(t.toString());
             }
         } catch (NoSuchMethodException e) {
             throw new Exception("NoSuchMethodException: " + e.getMessage());
@@ -62,11 +60,15 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
             e.printStackTrace();
             throw new Exception(e.getMessage());
         } finally {
-        	if(SessionManager.getSession() != null) {
+            /*
+             * Part of remote service caching -- commented for now 
+             *
+            if(SessionManager.getSession() != null) {
         		busyPool = (HashMap)SessionManager.getSession().getAttribute("busyBeanPool");
         		if (busyPool != null)
         			busyPool.clear();
         	}
+        	*/
         }
     }
 

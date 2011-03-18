@@ -5,7 +5,7 @@ public class NotFoundException extends LocalizedException {
     private static final long serialVersionUID = 1L;
 
     public NotFoundException(){
-        super();
+        super("noRecordsFound");
     }
     
     public NotFoundException(String msg){

@@ -5,7 +5,7 @@ package org.openelis.gwt.common;
  * impossible has happened. This error is usually due to incorrect program
  * logic.
  */
-public class InconsistencyException extends Exception {
+public class InconsistencyException extends LocalizedException {
 
     private static final long serialVersionUID = 1L;
 

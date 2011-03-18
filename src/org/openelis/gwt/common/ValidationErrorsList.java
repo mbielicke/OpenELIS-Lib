@@ -2,7 +2,7 @@ package org.openelis.gwt.common;
 
 import java.util.ArrayList;
 
-public class ValidationErrorsList extends Exception {
+public class ValidationErrorsList extends RuntimeException {
     
     private static final long serialVersionUID = 1L;
     private ArrayList<Exception> errors;

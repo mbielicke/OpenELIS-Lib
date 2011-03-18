@@ -2,7 +2,7 @@ package org.openelis.gwt.common;
 
 import org.openelis.gwt.screen.Screen;
 
-public class LocalizedException extends Exception implements Cloneable {
+public class LocalizedException extends RuntimeException implements Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,11 @@ public class LocalizedException extends Exception implements Cloneable {
 	public String getMessage() {
 		String m;
 
-		m = Screen.consts.get(key);
+		try {
+		    m = Screen.consts.get(key);
+        } catch (Throwable any) {
+            m = null;
+        }
 		if (m != null) {
 			if (params != null) {
 				for (int i = 0; i < params.length; i++) {
