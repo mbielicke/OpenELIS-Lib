@@ -9,7 +9,6 @@
 	<classpathentry kind="lib" path="/usr/share/java/commons-fileupload-1.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-vfs-1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ehcache-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence.jar"/>
 	<classpathentry kind="lib" path="/usr/local/java/jboss/common/lib/jboss-javaee.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js.jar"/>
